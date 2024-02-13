@@ -113,9 +113,6 @@
   <string name="too_complex_form">هذه الاستمارة معقدة جدًا لهذا الجهاز. حاول تبسيط التعبيرات أو طلب المساعدة في المنتدى.</string>
   <string name="survey_internal_error">خطأ داخلي: فشل الخطأ الموجه.</string>
   <string name="save_enter_data_description">إنّك في نهاية الـ%s.</string>
-  <string name="form_edits_warning_only_finalize_enabled">لن تتمكن من تعديل هذه الاستمارة عندما تقوم بإرسالها.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">لن تتمكن من تعديل هذه الإستمارة عند ارسالها. اذا اردت التعديل يمكنك حفظها كمسودة إلى حين أن تكون جاهز للإرسال.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">إذا قمت بعملية الإرسال فلن تتمكن من اجراء أي تعديلات. إذا اردت اجراء المزيد من التعديلات \"فقم بحفظ النموذج كمسودة\" حتا يصبح النموذج جهازاً للإرسال.</string>
   <string name="save_as_draft">حفظ كمسودة</string>
   <string name="finalize">إنهاء</string>
   <string name="send">إرسال</string>

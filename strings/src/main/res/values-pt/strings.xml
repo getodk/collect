@@ -115,9 +115,6 @@
   <string name="too_complex_form">Este formulário é complexo demais para este dispositivo. Tente simplificar expressões ou peça ajuda no fórum.</string>
   <string name="survey_internal_error">Erro interno: falha ao abrir a questão.</string>
   <string name="save_enter_data_description">Você está no fim de \"%s\".</string>
-  <string name="form_edits_warning_only_finalize_enabled">Você não poderá fazer alterações após marcar o formulário como finalizado. </string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">Você não poderá fazer alterações após marcar o formulário como finalizado. Se você precisa fazer alterações, utilize \"Salvar como rascunho\" até que você esteja pronto para enviar.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">Você não poderá fazer alterações após o envio. Se você precisa fazer alterações, utilize \"Salvar como rascunho\" até que você esteja pronto para enviar.</string>
   <string name="save_as_draft">Salvar como rascunho</string>
   <string name="finalize">Finalizar</string>
   <string name="send">Enviar</string>

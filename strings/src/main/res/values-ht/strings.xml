@@ -99,8 +99,6 @@
   <string name="invalid_answer_error">Dezole, repons sa pa valid!</string>
   <string name="required_answer_error">Dezole repons sa nesesè!</string>
   <string name="success_form_validation">Siksè! Pa gen erè nan fòmilè a.</string>
-  <string name="form_edits_warning_only_finalize_enabled">Ou pa p ka modifye lè w fini.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">Ou pa p ka modifye lè w fini. Si w vle fè kèk chanjman,  \"Sovgade tankou bouyon\" jiskaske w pare pou w voye ale.</string>
   <string name="save_as_draft">Sovgade tankou bouyon</string>
   <string name="finalize">Finalize</string>
   <string name="send">Voye ale</string>

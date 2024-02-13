@@ -115,9 +115,6 @@
   <string name="too_complex_form">Tento formulář je pro toto zařízení příliš složitý. Zkuste zjednodušit výrazy nebo požádat o pomoc na fóru.</string>
   <string name="survey_internal_error">Vnitřní chyba: přechod k otázce selhal.</string>
   <string name="save_enter_data_description">Jste na konci %s.</string>
-  <string name="form_edits_warning_only_finalize_enabled">Po dokončení nebudete moci provádět úpravy.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">Po dokončení nebudete moci provádět úpravy. Pokud potřebujete provést změny, \"Uložit jako návrh\", dokud nebudete připraveni k odeslání.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">Po odeslání již nebude možné provádět úpravy. Pokud potřebujete provést změny, \"Uložit jako návrh\", dokud nebudete připraveni k odeslání.</string>
   <string name="save_as_draft">Uložit jako návrh</string>
   <string name="finalize">Dokončit</string>
   <string name="send">Odeslat</string>

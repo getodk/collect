@@ -115,9 +115,6 @@
   <string name="too_complex_form">Эта форма слишком сложна для этого устройства. Попробуйте упростить структуру или обратитесь за помощью на форум.</string>
   <string name="survey_internal_error">Внутренняя ошибка: step to prompt failed.</string>
   <string name="save_enter_data_description">Вы в конце опросника \"%s\"</string>
-  <string name="form_edits_warning_only_finalize_enabled">Вы не сможете вносить изменения после финализирования.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">Вы не сможете вносить изменения после завершения. Если вам нужно внести изменения, сохраните как черновик, пока вы не будете готовы к отправке.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">Вы не сможете вносить изменения после отправки. Если вам нужно внести изменения, выберите «Сохранить как черновик», пока вы не будете готовы к отправке.</string>
   <string name="save_as_draft">Сохранить как черновик</string>
   <string name="finalize">Завершить</string>
   <string name="send">Отправить</string>
