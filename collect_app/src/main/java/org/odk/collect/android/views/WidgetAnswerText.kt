@@ -144,7 +144,7 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
 
     fun setAnswer(answer: String?) {
         binding.editText.setText(answer)
-        binding.textView.text = answer
+        binding.textView.text = binding.editText.text
         Selection.setSelection(binding.editText.text, binding.editText.text.toString().length)
 
         if (answer == null && !isEditableState()) {
