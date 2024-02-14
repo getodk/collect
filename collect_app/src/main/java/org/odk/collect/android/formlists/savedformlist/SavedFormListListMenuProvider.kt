@@ -9,6 +9,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
 import org.odk.collect.android.R
 import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog
+import org.odk.collect.android.formlists.sorting.FormListSortingOption
 
 class SavedFormListListMenuProvider(private val context: Context, private val viewModel: SavedFormListViewModel) : MenuProvider {
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -45,13 +46,38 @@ class SavedFormListListMenuProvider(private val context: Context, private val vi
             R.id.menu_sort -> {
                 FormListSortingBottomSheetDialog(
                     context,
-                    emptyList(),
-                    0
-                ) {}.show()
+                    SavedFormListViewModel.SortOrder.entries.map { getFormListSortingOption(it) },
+                    viewModel.sortOrder.ordinal
+                ) {
+                    viewModel.sortOrder = SavedFormListViewModel.SortOrder.entries[it]
+                }.show()
                 true
             }
 
             else -> false
         }
     }
+
+    private fun getFormListSortingOption(it: SavedFormListViewModel.SortOrder) =
+        when (it) {
+            SavedFormListViewModel.SortOrder.NAME_ASC -> FormListSortingOption(
+                R.drawable.ic_sort_by_alpha,
+                org.odk.collect.strings.R.string.sort_by_name_asc
+            )
+
+            SavedFormListViewModel.SortOrder.NAME_DESC -> FormListSortingOption(
+                R.drawable.ic_sort_by_alpha,
+                org.odk.collect.strings.R.string.sort_by_name_desc
+            )
+
+            SavedFormListViewModel.SortOrder.DATE_DESC -> FormListSortingOption(
+                R.drawable.ic_access_time,
+                org.odk.collect.strings.R.string.sort_by_date_desc
+            )
+
+            SavedFormListViewModel.SortOrder.DATE_ASC -> FormListSortingOption(
+                R.drawable.ic_access_time,
+                org.odk.collect.strings.R.string.sort_by_date_asc
+            )
+        }
 }
