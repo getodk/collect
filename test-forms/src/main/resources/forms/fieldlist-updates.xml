@@ -160,6 +160,17 @@
             <source15/>
             <target15/>
           </search_in_field_list_group>
+          <long_list_of_questions>
+            <question1/>
+            <question2/>
+            <question3/>
+            <question4/>
+            <question5/>
+            <question6/>
+            <question7/>
+            <question8/>
+            <question9/>
+          </long_list_of_questions>
           <meta>
             <instanceID/>
           </meta>
@@ -324,6 +335,15 @@
       <bind nodeset="/fieldlist-updates/external_app/target14" relevant=" /fieldlist-updates/external_app/source14  != ''" type="string"/>
       <bind nodeset="/fieldlist-updates/search_in_field_list_group/source15" type="select1"/>
       <bind nodeset="/fieldlist-updates/search_in_field_list_group/target15" relevant=" /fieldlist-updates/search_in_field_list_group/source15  != ''" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question1" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question2" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question3" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question4" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question5" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question6" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question7" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question8" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question9" type="integer"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/fieldlist-updates/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -607,6 +627,36 @@
       </select1>
       <input ref="/fieldlist-updates/search_in_field_list_group/target15">
         <label>Target15</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/long_list_of_questions">
+      <label>Long list of questions</label>
+      <input ref="/fieldlist-updates/long_list_of_questions/question1">
+        <label>Question1</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question2">
+        <label>Question2</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question3">
+        <label>Question3</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question4">
+        <label>Question4</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question5">
+        <label>Question5</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question6">
+        <label>Question6</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question7">
+        <label>Question7</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question8">
+        <label>Question8</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question9">
+        <label>Question9</label>
       </input>
     </group>
   </h:body>
