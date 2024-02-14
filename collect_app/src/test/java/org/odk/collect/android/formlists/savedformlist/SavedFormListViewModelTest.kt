@@ -34,12 +34,7 @@ class SavedFormListViewModelTest {
     fun `setting filterText filters forms on display name`() {
         val myForm = InstanceFixtures.instance(displayName = "My form")
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
-        saveForms(
-            listOf(
-                myForm,
-                yourForm
-            )
-        )
+        saveForms(listOf(myForm, yourForm))
 
         val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
 
@@ -60,12 +55,7 @@ class SavedFormListViewModelTest {
     fun `clearing filterText does not filter forms`() {
         val myForm = InstanceFixtures.instance(displayName = "My form")
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
-        saveForms(
-            listOf(
-                myForm,
-                yourForm
-            )
-        )
+        saveForms(listOf(myForm, yourForm))
 
         val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
 
@@ -86,12 +76,7 @@ class SavedFormListViewModelTest {
     fun `filtering forms is not case sensitive`() {
         val myForm = InstanceFixtures.instance(displayName = "My form")
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
-        saveForms(
-            listOf(
-                myForm,
-                yourForm
-            )
-        )
+        saveForms(listOf(myForm, yourForm))
 
         val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
 
@@ -99,6 +84,66 @@ class SavedFormListViewModelTest {
         assertThat(
             viewModel.formsToDisplay.getOrAwaitValue(scheduler),
             contains(myForm)
+        )
+    }
+
+    @Test
+    fun `can sort forms by ascending name`() {
+        val a = InstanceFixtures.instance(displayName = "A")
+        val b = InstanceFixtures.instance(displayName = "B")
+        saveForms(listOf(b, a))
+
+        val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
+
+        viewModel.sortOrder = SavedFormListViewModel.SortOrder.NAME_ASC
+        assertThat(
+            viewModel.formsToDisplay.getOrAwaitValue(scheduler),
+            contains(a, b)
+        )
+    }
+
+    @Test
+    fun `can sort forms by descending name`() {
+        val a = InstanceFixtures.instance(displayName = "A")
+        val b = InstanceFixtures.instance(displayName = "B")
+        saveForms(listOf(a, b))
+
+        val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
+
+        viewModel.sortOrder = SavedFormListViewModel.SortOrder.NAME_DESC
+        assertThat(
+            viewModel.formsToDisplay.getOrAwaitValue(scheduler),
+            contains(b, a)
+        )
+    }
+
+    @Test
+    fun `can sort forms by descending date`() {
+        val a = InstanceFixtures.instance(displayName = "A", lastStatusChangeDate = 0)
+        val b = InstanceFixtures.instance(displayName = "B", lastStatusChangeDate = 1)
+        saveForms(listOf(a, b))
+
+        val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
+
+        viewModel.sortOrder = SavedFormListViewModel.SortOrder.DATE_DESC
+        assertThat(
+            viewModel.formsToDisplay.getOrAwaitValue(scheduler),
+            contains(b, a)
+        )
+    }
+
+    @Test
+    fun `can sort forms by ascending date`() {
+        val a = InstanceFixtures.instance(displayName = "A", lastStatusChangeDate = 0)
+        val b = InstanceFixtures.instance(displayName = "B", lastStatusChangeDate = 1)
+        saveForms(listOf(b, a))
+
+        val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
+
+        viewModel.sortOrder = SavedFormListViewModel.SortOrder.DATE_ASC
+        assertThat(
+            viewModel.formsToDisplay.getOrAwaitValue(scheduler),
+            contains(a, b)
         )
     }
 

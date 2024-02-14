@@ -15,6 +15,13 @@ class SavedFormListViewModel(
     private val instancesDataService: InstancesDataService
 ) : ViewModel() {
 
+    private val _sortOrder = MutableStateFlow(SortOrder.NAME_ASC)
+    var sortOrder: SortOrder = _sortOrder.value
+        set(value) {
+            _sortOrder.value = value
+            field = value
+        }
+
     private val _filterText = MutableStateFlow("")
     var filterText: String = ""
         set(value) {
@@ -23,7 +30,25 @@ class SavedFormListViewModel(
         }
 
     val formsToDisplay: LiveData<List<Instance>> = instancesDataService.instances
-        .combine(_filterText) { instances, filter ->
+        .combine(_sortOrder) { instances, order ->
+            when (order) {
+                SortOrder.NAME_DESC -> {
+                    instances.sortedByDescending { it.displayName }
+                }
+
+                SortOrder.DATE_DESC -> {
+                    instances.sortedByDescending { it.lastStatusChangeDate }
+                }
+
+                SortOrder.NAME_ASC -> {
+                    instances.sortedBy { it.displayName }
+                }
+
+                SortOrder.DATE_ASC -> {
+                    instances.sortedBy { it.lastStatusChangeDate }
+                }
+            }
+        }.combine(_filterText) { instances, filter ->
             instances.filter { it.displayName.contains(filter, ignoreCase = true) }
         }.flowOnBackground(scheduler).asLiveData()
 
@@ -31,5 +56,12 @@ class SavedFormListViewModel(
         scheduler.immediate(background = true) {
             databaseIds.forEach { instancesDataService.deleteInstance(it) }
         }
+    }
+
+    enum class SortOrder {
+        NAME_ASC,
+        NAME_DESC,
+        DATE_ASC,
+        DATE_DESC
     }
 }
