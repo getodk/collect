@@ -83,7 +83,7 @@
   <string name="launch_app">Ilunsad</string>
   <string name="activity_not_found">Hindi mapangasiwaan: %s</string>
   <string name="no_app">Ang hiniling na application ay nawawala. Paki-pasok ng mano-mano ang detalye.</string>
-  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
+  <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="get_barcode">Kunin ang Barcode</string>
@@ -377,9 +377,15 @@
   <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
   <!--Message displayed when the list of questions is empty-->
   <!--Message displayed when the list of blank forms is empty-->
+  <!--Subtext displayed when the list of blank forms is empty-->
   <!--Message displayed when the list of drafts is empty-->
+  <!--Subtext displayed when the list of drafts is empty-->
   <!--Message displayed when the list of ready to send forms is empty-->
+  <!--Subtext displayed when the list of ready to send forms is empty-->
   <!--Message displayed when the list of sent forms is empty-->
+  <!--Subtext of message displayed when the list of sent forms is empty-->
   <!--Message displayed when the list of forms to download is empty-->
   <!--Message displayed when the list of forms to delete is empty-->
+  <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <!--Subtext displayed when the list of filled forms to delete is empty-->
 </resources>

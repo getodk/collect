@@ -115,6 +115,10 @@
   <string name="too_complex_form">Este formulario es muy complejo para este dispositivo. Intente simplificar las expresiones o busque ayuda en el Foro.</string>
   <string name="survey_internal_error">Error interno: Ha fallado la entrada de datos.</string>
   <string name="save_enter_data_description">Esta al final de \"%s\".</string>
+  <string name="form_edits_warning_title">Los formularios finalizados no pueden ser editados.</string>
+  <string name="form_edits_warning_title_auto_send_enabled">Los formularios enviados no pueden ser editados.</string>
+  <string name="form_edits_warning_message">Si necesita hacer cambios, \"Guardar como borrador\" hasta que esté listo para enviar.</string>
+  <string name="form_edits_warning_learn_more">Aprende más</string>
   <string name="save_as_draft">Guardar como borrador</string>
   <string name="finalize">Finalizar</string>
   <string name="send">Enviar</string>
@@ -170,7 +174,7 @@
   <string name="activity_not_found">No se encontró actividad para manejar: %s</string>
   <string name="no_app">Esta aplicación no está. Por favor ingrese el dato manualmente.</string>
   <string name="null_intent_value">La aplicación externa no suministra la información esperada</string>
-  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
+  <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="launch_printer">Iniciar Impresión</string>
   <string name="no_printer">La impresora solicitado no está instalada. Por favor, instale la impresora.</string>
   <string name="open_url">Abrir URL</string>
@@ -971,15 +975,21 @@
   <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">No hay nada disponible para mostrar.</string>
   <!--Message displayed when the list of blank forms is empty-->
+  <!--Subtext displayed when the list of blank forms is empty-->
   <!--Message displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_title">Nada en borradores</string>
+  <!--Subtext displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_subtitle">Cuando guardes como borrador, los formularios aparecerán aquí</string>
   <!--Message displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_title">Nada listo para enviar</string>
+  <!--Subtext displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_subtitle">Cuando finalices los borradores, aparecerán aquí.</string>
   <!--Message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_title">No hay nada enviado</string>
+  <!--Subtext of message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_subtitle">Cuando envíe formularios finalizados, aparecerán aquí</string>
   <!--Message displayed when the list of forms to download is empty-->
   <!--Message displayed when the list of forms to delete is empty-->
+  <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <!--Subtext displayed when the list of filled forms to delete is empty-->
 </resources>

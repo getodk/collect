@@ -93,7 +93,7 @@
   <string name="launch_app">ເລີ້ມຕົ້ນການນຳໃຊ້</string>
   <string name="activity_not_found">ບໍ່ມີກິດຈະກຳໃຫ້ດຳເນີນການ: %s</string>
   <string name="no_app">ບໍ່ພົບ​ໂປ​ແກມ​ທີ່​ຕ້ອງ​ການ ກະລຸນາປ້ອນຂໍ້ມູນໃໝ່ດ້ວຍຕົນເອງ</string>
-  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
+  <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="launch_printer">ເລີ່ມຕົ້ນການພີມ</string>
   <string name="no_printer">ເຄື່ອງພີມທີ່ເລືອກຍັງບໍ່ໄດ້ຕິດຕັ້ງ. ກະລຸນາຕິດຕັ້ງເຄື່ອງພີມ.</string>
   <string name="open_url">ເປີດ​ທີ່​ຢູ່​ເວັ​ບ​ໄຊ Url</string>
@@ -420,9 +420,15 @@
   <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
   <!--Message displayed when the list of questions is empty-->
   <!--Message displayed when the list of blank forms is empty-->
+  <!--Subtext displayed when the list of blank forms is empty-->
   <!--Message displayed when the list of drafts is empty-->
+  <!--Subtext displayed when the list of drafts is empty-->
   <!--Message displayed when the list of ready to send forms is empty-->
+  <!--Subtext displayed when the list of ready to send forms is empty-->
   <!--Message displayed when the list of sent forms is empty-->
+  <!--Subtext of message displayed when the list of sent forms is empty-->
   <!--Message displayed when the list of forms to download is empty-->
   <!--Message displayed when the list of forms to delete is empty-->
+  <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <!--Subtext displayed when the list of filled forms to delete is empty-->
 </resources>

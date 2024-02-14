@@ -115,6 +115,10 @@
   <string name="too_complex_form">Tämä lomake on liian monimutkainen tälle laitteelle. Yritä lausekkeiden yksinkertaistamista tai pyydä apua verkon keskusteluryhmästä.</string>
   <string name="survey_internal_error">Sisäinen virhe: siirtyminen kehotteeseen epäonnistui.</string>
   <string name="save_enter_data_description">Olet lomakkeen %s lopussa.</string>
+  <string name="form_edits_warning_title">Viimeistellyt lomakkeet eivät ole muokattavia.</string>
+  <string name="form_edits_warning_title_auto_send_enabled">Lähetetyt lomakkeet eivät ole muokattavia.</string>
+  <string name="form_edits_warning_message">Jos sinun tarvitsee tehdä muutoksia lomakkeeseesi, \"Tallenna luonnoksena\" kunnes olet valmis lähettämään.</string>
+  <string name="form_edits_warning_learn_more">Lisätietoja</string>
   <string name="save_as_draft">Tallenna luonnoksena</string>
   <string name="finalize">Viimeistele</string>
   <string name="send">Lähetä</string>
@@ -170,7 +174,7 @@
   <string name="activity_not_found">Ei toimintoa tunnuksella: %s</string>
   <string name="no_app">Toivottu sovellus puuttuu. Ole hyvä ja syötä lukema manuaalisesti.</string>
   <string name="null_intent_value">Ulkoinen sovellus ei toimittanut odotettua tietoa.</string>
-  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
+  <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="print">Tulosta</string>
   <string name="launch_printer">Käynnistä tulostus</string>
   <string name="no_printer">Pyydettyä tulostinta ei ole asennettu. Asenna tulostin.</string>
@@ -1008,21 +1012,27 @@
   <string name="empty_list_of_questions">Ei näytettävää</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">Ei tyhjiä lomakkeita</string>
+  <!--Subtext displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_subtitle">Lataa lomake aloittaaksesi</string>
   <!--Message displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_title">Ei luonnoksia</string>
+  <!--Subtext displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_subtitle">Kun tallennat luonnoksen, lomakkeet näkyvät tässä</string>
   <!--Message displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_title">Ei valmista lähetettävää</string>
+  <!--Subtext displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_subtitle">Kun viimeistelet luonnoksia, ne näkyvät tässä</string>
   <!--Message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_title">Ei lähetettyjä lomakkeita</string>
+  <!--Subtext of message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_subtitle">Kun lähetät viimeisteltyjä lomakkeita, ne näkyvät tässä</string>
   <!--Message displayed when the list of forms to download is empty-->
   <string name="empty_list_of_forms_to_download_title">Ei ladattavia lomakkeita</string>
   <string name="empty_list_of_forms_to_download_subtitle">Lataa lomake aloittaaksesi</string>
   <!--Message displayed when the list of forms to delete is empty-->
   <string name="empty_list_of_forms_to_delete_title">Ei lomakkeita poistettavaksi</string>
+  <!--Subtext displayed when the list of blank forms to delete is empty-->
   <string name="empty_list_of_blank_forms_to_delete_subtitle">Kun olet ladannut tyhjiä lomakkeita ne tulevat ilmestymään tänne</string>
+  <!--Subtext displayed when the list of filled forms to delete is empty-->
   <string name="empty_list_of_saved_forms_to_delete_subtitle">Kun olet tallentanut lomakkeita ne tulevat ilmestymään tänne</string>
 </resources>

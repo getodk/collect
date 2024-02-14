@@ -170,7 +170,7 @@
   <string name="activity_not_found">Случилось что-то страшное: %s</string>
   <string name="no_app">Запрошенное приложение отсутствует. Пожалуйста, выполните ручной ввод.</string>
   <string name="null_intent_value">Внешнее приложение не предоставило ожидаемую информацию</string>
-  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
+  <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="launch_printer">Распечатать</string>
   <string name="no_printer">Принтер не установлен или не подключен.</string>
   <string name="open_url">Открыть адрес</string>
@@ -908,12 +908,18 @@
   <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">Ничего недоступно для отображения</string>
   <!--Message displayed when the list of blank forms is empty-->
+  <!--Subtext displayed when the list of blank forms is empty-->
   <!--Message displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_title">В черновиках ничего нет</string>
+  <!--Subtext displayed when the list of drafts is empty-->
   <!--Message displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_title">Нет готовых к отправке</string>
+  <!--Subtext displayed when the list of ready to send forms is empty-->
   <!--Message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_title">Нет выгруженных</string>
+  <!--Subtext of message displayed when the list of sent forms is empty-->
   <!--Message displayed when the list of forms to download is empty-->
   <!--Message displayed when the list of forms to delete is empty-->
+  <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <!--Subtext displayed when the list of filled forms to delete is empty-->
 </resources>

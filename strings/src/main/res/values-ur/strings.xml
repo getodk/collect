@@ -115,6 +115,10 @@
   <string name="too_complex_form">یہ فارم اس فون کے لئے بہت پیچیدہ ہے۔ اس کو سادہ کرنے کی کوشش کریں، یا پھر فورم پہ مدد حاصل کریں۔</string>
   <string name="survey_internal_error">اندرونی خرابی: فوری طور پر سیٹ اپ ناکام ہوگیا</string>
   <string name="save_enter_data_description">آپ ‎%s‏ کے آخر پر ہیں۔</string>
+  <string name="form_edits_warning_title">فائنل فارم میں تبدیلی نہیں کی جاسکتی۔</string>
+  <string name="form_edits_warning_title_auto_send_enabled">بھیجیں گئے فارم میں تبدیلی نہیں کی جاسکتی۔</string>
+  <string name="form_edits_warning_message">اگر آپ فارم میں تبدیلی کرنا چاہتے ہیں تو فارم کو \"ڈرافٹ میں محفوط\" رکھے، جب تک فارم جمع کرانے کے لئے تیار نہیں۔</string>
+  <string name="form_edits_warning_learn_more">مزید جانیں</string>
   <string name="save_as_draft">ڈرافٹ میں محفوظ کریں</string>
   <string name="finalize">فائنل کریں</string>
   <string name="send">بھیجیں</string>
@@ -171,7 +175,7 @@
   <string name="activity_not_found">‎%s‏    کوئی سرگرمی نہی پا ئ گئ</string>
   <string name="no_app">درخواست کی گئی ایپلیکیشن موجود نہیں ہے۔ براو مہربانی اعداد و شمار کو خود درج کریں۔</string>
   <string name="null_intent_value">ایکسٹرنل اپلیکیشن  نے متوقع معلومات فراہم نہیں کی.</string>
-  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
+  <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="launch_printer">پرنٹنگ کا آغاز کریں</string>
   <string name="no_printer">مطلوبہ پرینٹر انسٹال نہیں ہے۔ براہ مہربانی پرینٹر انسٹال کریں۔</string>
   <string name="open_url">یوآرایل کھولیں </string>
@@ -1019,15 +1023,21 @@ Constraint processing</string>
   <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">یہاں دکھانے کو کچھ نہیں ہے</string>
   <!--Message displayed when the list of blank forms is empty-->
+  <!--Subtext displayed when the list of blank forms is empty-->
   <!--Message displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_title">ڈرافٹس میں کچھ موجود نہیں</string>
+  <!--Subtext displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_subtitle">آپ کے ڈرافٹس میں محفوظ کئیے گئیے فارم یہاں نظر آیئں گے</string>
   <!--Message displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_title">بھیجنے کے لئے کچھ تیار نہیں</string>
+  <!--Subtext displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_subtitle">آپ کے Finalized کئے گئے ڈرافٹس یہاں نظر آیئں گے۔</string>
   <!--Message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_title">بھیجے گئے فارمز میں کچھ نہیں ہے۔</string>
+  <!--Subtext of message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_subtitle">آپ کے بھیجے گئے Finalized فارمز یہاں نظر آیئں گے۔</string>
   <!--Message displayed when the list of forms to download is empty-->
   <!--Message displayed when the list of forms to delete is empty-->
+  <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <!--Subtext displayed when the list of filled forms to delete is empty-->
 </resources>
