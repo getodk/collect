@@ -40,6 +40,9 @@ public class StringNumberWidgetTest extends GeneralStringWidgetTest<StringNumber
     public void separatorsShouldBeAddedWhenEnabled() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn(THOUSANDS_SEP);
         getWidget().widgetAnswerText.setAnswer("123456789123456789123456789123456789");
+
         assertEquals("123,456,789,123,456,789,123,456,789,123,456,789", getWidget().widgetAnswerText.getAnswer());
+        assertEquals("123,456,789,123,456,789,123,456,789,123,456,789", getWidget().widgetAnswerText.getBinding().editText.getText().toString());
+        assertEquals("123,456,789,123,456,789,123,456,789,123,456,789", getWidget().widgetAnswerText.getBinding().textView.getText().toString());
     }
 }
