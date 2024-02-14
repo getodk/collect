@@ -11,11 +11,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.instancemanagement.InstancesDataService
-import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.testshared.FakeScheduler
+import org.odk.collect.testshared.getOrAwaitValue
 
 @RunWith(AndroidJUnit4::class)
 class SavedFormListViewModelTest {
@@ -25,28 +26,32 @@ class SavedFormListViewModelTest {
 
     private val scheduler = FakeScheduler()
 
-    private val instances = MutableStateFlow<List<Instance>>(emptyList())
     private val instancesDataService: InstancesDataService = mock {
-        on { instances } doReturn instances
+        on { instances } doReturn MutableStateFlow(emptyList())
     }
 
     @Test
     fun `setting filterText filters forms on display name`() {
         val myForm = InstanceFixtures.instance(displayName = "My form")
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
-        instances.value = listOf(myForm, yourForm)
+        saveForms(
+            listOf(
+                myForm,
+                yourForm
+            )
+        )
 
         val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
 
         viewModel.filterText = "Your"
         assertThat(
-            viewModel.formsToDisplay.getOrAwaitValue(),
+            viewModel.formsToDisplay.getOrAwaitValue(scheduler),
             contains(yourForm)
         )
 
         viewModel.filterText = "form"
         assertThat(
-            viewModel.formsToDisplay.getOrAwaitValue(),
+            viewModel.formsToDisplay.getOrAwaitValue(scheduler),
             contains(myForm, yourForm)
         )
     }
@@ -55,19 +60,24 @@ class SavedFormListViewModelTest {
     fun `clearing filterText does not filter forms`() {
         val myForm = InstanceFixtures.instance(displayName = "My form")
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
-        instances.value = listOf(myForm, yourForm)
+        saveForms(
+            listOf(
+                myForm,
+                yourForm
+            )
+        )
 
         val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
 
         viewModel.filterText = "blah"
         assertThat(
-            viewModel.formsToDisplay.getOrAwaitValue(),
+            viewModel.formsToDisplay.getOrAwaitValue(scheduler),
             equalTo(emptyList())
         )
 
         viewModel.filterText = ""
         assertThat(
-            viewModel.formsToDisplay.getOrAwaitValue(),
+            viewModel.formsToDisplay.getOrAwaitValue(scheduler),
             contains(myForm, yourForm)
         )
     }
@@ -76,14 +86,23 @@ class SavedFormListViewModelTest {
     fun `filtering forms is not case sensitive`() {
         val myForm = InstanceFixtures.instance(displayName = "My form")
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
-        instances.value = listOf(myForm, yourForm)
+        saveForms(
+            listOf(
+                myForm,
+                yourForm
+            )
+        )
 
         val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
 
         viewModel.filterText = "my"
         assertThat(
-            viewModel.formsToDisplay.getOrAwaitValue(),
+            viewModel.formsToDisplay.getOrAwaitValue(scheduler),
             contains(myForm)
         )
+    }
+
+    private fun saveForms(instances: List<Instance>) {
+        whenever(instancesDataService.instances).doReturn(MutableStateFlow(instances))
     }
 }
