@@ -184,7 +184,7 @@ class BlankFormListViewModelTest {
 
         createViewModel()
 
-        viewModel.sortingOrder = 0
+        viewModel.sortingOrder = BlankFormListViewModel.SortOrder.NAME_ASC
 
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[0], form(dbId = 1, formId = "1", formName = "1Form"))
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[1], form(dbId = 5, formId = "5", formName = "2Form"))
@@ -205,7 +205,7 @@ class BlankFormListViewModelTest {
 
         createViewModel()
 
-        viewModel.sortingOrder = 1
+        viewModel.sortingOrder = BlankFormListViewModel.SortOrder.NAME_DESC
 
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[0], form(dbId = 2, formId = "2", formName = "BForm"))
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[1], form(dbId = 3, formId = "3", formName = "aForm"))
@@ -226,7 +226,7 @@ class BlankFormListViewModelTest {
 
         createViewModel()
 
-        viewModel.sortingOrder = 2
+        viewModel.sortingOrder = BlankFormListViewModel.SortOrder.DATE_DESC
 
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[0], form(dbId = 4, formId = "4", formName = "AForm", lastDetectedAttachmentsUpdateDate = 7))
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[1], form(dbId = 2, formId = "2", formName = "BForm", lastDetectedAttachmentsUpdateDate = 6))
@@ -247,7 +247,7 @@ class BlankFormListViewModelTest {
 
         createViewModel()
 
-        viewModel.sortingOrder = 3
+        viewModel.sortingOrder = BlankFormListViewModel.SortOrder.DATE_ASC
 
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[0], form(dbId = 1, formId = "1", formName = "1Form"))
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[1], form(dbId = 3, formId = "3", formName = "aForm"))
@@ -276,7 +276,7 @@ class BlankFormListViewModelTest {
 
         createViewModel()
 
-        viewModel.sortingOrder = 4
+        viewModel.sortingOrder = BlankFormListViewModel.SortOrder.LAST_SAVED
 
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[0], form(dbId = 2, formId = "2", formName = "BForm"), 5L)
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[1], form(dbId = 4, formId = "4", formName = "AForm"), 4L)
@@ -297,7 +297,7 @@ class BlankFormListViewModelTest {
 
         createViewModel()
 
-        viewModel.sortingOrder = 4
+        viewModel.sortingOrder = BlankFormListViewModel.SortOrder.LAST_SAVED
 
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[0], form(dbId = 1, formId = "1", formName = "1Form"))
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[1], form(dbId = 2, formId = "2", formName = "BForm"))
@@ -323,7 +323,7 @@ class BlankFormListViewModelTest {
 
         createViewModel()
 
-        viewModel.sortingOrder = 4
+        viewModel.sortingOrder = BlankFormListViewModel.SortOrder.LAST_SAVED
 
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[0], form(dbId = 3, formId = "3", formName = "aForm"), 2L)
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[1], form(dbId = 1, formId = "1", formName = "1Form"), 1L)
@@ -348,7 +348,7 @@ class BlankFormListViewModelTest {
 
         createViewModel(showAllVersions = true)
 
-        viewModel.sortingOrder = 4
+        viewModel.sortingOrder = BlankFormListViewModel.SortOrder.LAST_SAVED
 
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[0], form(dbId = 2, formId = "1", formName = "AForm v2", version = "2"), 3L)
         assertFormItem(viewModel.formsToDisplay.getOrAwaitValue(scheduler)[1], form(dbId = 3, formId = "2", formName = "BForm"), 2L)
@@ -411,7 +411,7 @@ class BlankFormListViewModelTest {
             form(dbId = 3, formId = "3", formName = "Form 2x")
         )
 
-        viewModel.sortingOrder = 1
+        viewModel.sortingOrder = BlankFormListViewModel.SortOrder.NAME_DESC
 
         assertThat(viewModel.formsToDisplay.getOrAwaitValue(scheduler).size, `is`(2))
         assertFormItem(

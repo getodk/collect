@@ -15,6 +15,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
@@ -32,7 +33,10 @@ import org.robolectric.shadows.ShadowToast
 class BlankFormListMenuProviderTest {
     private lateinit var activity: FragmentActivity
 
-    private val viewModel: BlankFormListViewModel = mock()
+    private val viewModel: BlankFormListViewModel = mock {
+        on { sortingOrder } doReturn BlankFormListViewModel.SortOrder.NAME_ASC
+    }
+
     private val networkStateProvider: NetworkStateProvider = mock()
 
     private val menuInflater: SupportMenuInflater
