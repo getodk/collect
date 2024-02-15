@@ -115,6 +115,7 @@
   <string name="too_complex_form">Tento formulář je pro toto zařízení příliš složitý. Zkuste zjednodušit výrazy nebo požádat o pomoc na fóru.</string>
   <string name="survey_internal_error">Vnitřní chyba: přechod k otázce selhal.</string>
   <string name="save_enter_data_description">Jste na konci %s.</string>
+  <string name="form_edits_warning_learn_more">Více informací</string>
   <string name="save_as_draft">Uložit jako návrh</string>
   <string name="finalize">Dokončit</string>
   <string name="send">Odeslat</string>
@@ -170,7 +171,7 @@
   <string name="activity_not_found">Nenalezena žádná aktivita k řešení: %s</string>
   <string name="no_app">Požadovaná aplikace chybí. Zadejte prosím údaje ručně.</string>
   <string name="null_intent_value">Externí aplikace neposkytla očekávané informace.</string>
-  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
+  <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="launch_printer">Tisknout</string>
   <string name="no_printer">Vybraná tiskárna není nainstalována. Nejdříve ji nainstalujte.</string>
   <string name="open_url">Otevřít URL</string>
@@ -981,16 +982,20 @@
   <string name="empty_list_of_questions">Nic není  k zobrazení</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">Žádné prázdné formuláře</string>
+  <!--Subtext displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_subtitle">Stáhněte si formulář, abyste mohli začít.</string>
   <!--Message displayed when the list of drafts is empty-->
+  <!--Subtext displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_subtitle">Když uložíte jako koncept, formuláře se zde zobrazí.</string>
   <!--Message displayed when the list of ready to send forms is empty-->
+  <!--Subtext displayed when the list of ready to send forms is empty-->
   <!--Message displayed when the list of sent forms is empty-->
+  <!--Subtext of message displayed when the list of sent forms is empty-->
   <!--Message displayed when the list of forms to download is empty-->
   <string name="empty_list_of_forms_to_download_title">Žádné formuláře ke stažení</string>
   <string name="empty_list_of_forms_to_download_subtitle">Stáhněte si formulář, abyste mohli začít.</string>
   <!--Message displayed when the list of forms to delete is empty-->
   <string name="empty_list_of_forms_to_delete_title">Žádné formuláře k odstranění.</string>
-  <string name="empty_list_of_blank_forms_to_delete_subtitle">Když si stáhnete prázdné formuláře, objeví se zde.</string>
-  <string name="empty_list_of_saved_forms_to_delete_subtitle">Jakmile uložíte formuláře, objeví se zde.</string>
+  <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <!--Subtext displayed when the list of filled forms to delete is empty-->
 </resources>

@@ -146,7 +146,7 @@
     <string name="save_enter_data_description">You are at the end of %s.</string>
     <string name="form_edits_warning_title">Finalized forms are not editable.</string>
     <string name="form_edits_warning_title_auto_send_enabled">Sent forms are not editable.</string>
-    <string name="form_edits_warning_message">If you need to make edits to your form, \“Save as draft\” until you\’re ready to send.</string>
+    <string name="form_edits_warning_message">If you need to make edits to your form, \"Save as draft\" until you\'re ready to send.</string>
     <string name="form_edits_warning_learn_more">Learn more</string>
     <string name="save_as_draft">Save as draft</string>
     <string name="finalize">Finalize</string>

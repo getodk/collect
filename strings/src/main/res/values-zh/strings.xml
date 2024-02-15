@@ -159,7 +159,7 @@
   <string name="activity_not_found">没找到与 %s 对应的活动</string>
   <string name="no_app">请求的应用不可用. 请手动填入相应值.</string>
   <string name="null_intent_value">外部应用程序未提供预期信息。</string>
-  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
+  <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="launch_printer">初始化打印</string>
   <string name="no_printer">请求的打印机未被安装. 请安装打印机.</string>
   <string name="open_url">打开Url</string>
@@ -929,9 +929,15 @@
   <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
   <!--Message displayed when the list of questions is empty-->
   <!--Message displayed when the list of blank forms is empty-->
+  <!--Subtext displayed when the list of blank forms is empty-->
   <!--Message displayed when the list of drafts is empty-->
+  <!--Subtext displayed when the list of drafts is empty-->
   <!--Message displayed when the list of ready to send forms is empty-->
+  <!--Subtext displayed when the list of ready to send forms is empty-->
   <!--Message displayed when the list of sent forms is empty-->
+  <!--Subtext of message displayed when the list of sent forms is empty-->
   <!--Message displayed when the list of forms to download is empty-->
   <!--Message displayed when the list of forms to delete is empty-->
+  <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <!--Subtext displayed when the list of filled forms to delete is empty-->
 </resources>

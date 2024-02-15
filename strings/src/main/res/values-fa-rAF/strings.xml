@@ -115,6 +115,7 @@
   <string name="too_complex_form">این فرم برای این دستگاه بسیار پیچیده است. سعی کنید برای ساده سازی فرم  یا اصطلاحات کمک بخواهید.</string>
   <string name="survey_internal_error">خطای داخلی: گام به اعلان ناموفق بود.</string>
   <string name="save_enter_data_description">شما در پایان %sقرار دارید.</string>
+  <string name="form_edits_warning_learn_more">بیشتر بدانید</string>
   <string name="save_as_draft">ذخیره پیش نویس</string>
   <string name="finalize">نهایی</string>
   <string name="send">ارسال شد</string>
@@ -169,7 +170,7 @@
   <string name="activity_not_found">برای انجام %s هیچ فعالیتی دریافت نشد:</string>
   <string name="no_app"> درخواستی برای فورمه موجود نیست. لطفاً خواندن را به صورت دستی وارد کنید.</string>
   <string name="null_intent_value">درخواست نامه خارجی اطلاعات مورد انتظار را ارائه نکرد.</string>
-  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
+  <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="launch_printer">چاپ را آغاز کنید</string>
   <string name="no_printer">چاپ کننده درخواستی نصب نشده است. لطفا چاپ کننده را نصب کنید.</string>
   <string name="open_url">باز نمودن آدرس انترنتی</string>
@@ -966,15 +967,21 @@
   <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">چیزی برای نمایش در دسترس نیست</string>
   <!--Message displayed when the list of blank forms is empty-->
+  <!--Subtext displayed when the list of blank forms is empty-->
   <!--Message displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_title">هیچ چیزی در پیش نویس ها وجود ندارد</string>
+  <!--Subtext displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_subtitle">وقتی به عنوان پیش‌نویس ذخیره می‌کنید، فرم‌ها در اینجا ظاهر می‌شوند</string>
   <!--Message displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_title">چیزی برای ارسال آماده نیست</string>
+  <!--Subtext displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_subtitle">وقتی پیش‌نویس‌ها را نهایی کردید، در اینجا ظاهر می‌شوند</string>
   <!--Message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_title">چیزی ارسال نشد</string>
+  <!--Subtext of message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_subtitle">هنگامی که فرم های نهایی شده را ارسال می کنید، آنها در اینجا ظاهر می شوند</string>
   <!--Message displayed when the list of forms to download is empty-->
   <!--Message displayed when the list of forms to delete is empty-->
+  <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <!--Subtext displayed when the list of filled forms to delete is empty-->
 </resources>

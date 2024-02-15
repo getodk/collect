@@ -115,6 +115,10 @@
   <string name="too_complex_form">Ce formulaire est trop complexe pour cet appareil. Essayez de simplifier les expressions ou demandez de l\'aide sur le forum.</string>
   <string name="survey_internal_error">Erreur interne : un ou plusieurs champs de saisie peuvent avoir été ignorés.</string>
   <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
+  <string name="form_edits_warning_title">Les formulaires finalisés ne peuvent pas être modifiés.</string>
+  <string name="form_edits_warning_title_auto_send_enabled">Les formulaires envoyés ne peuvent pas être modifiés.</string>
+  <string name="form_edits_warning_message">Si vous devrez modifier ce formulaire prochainement, choisissez \"Enregistrer comme ébauche\" jusqu\'à ce que vous soyez prêt à l\'envoyer.</string>
+  <string name="form_edits_warning_learn_more">En savoir plus</string>
   <string name="save_as_draft">Enregistrer comme ébauche</string>
   <string name="finalize">Finaliser</string>
   <string name="send">Envoyer</string>
@@ -170,7 +174,7 @@
   <string name="activity_not_found">Aucune activité à gérer: %s</string>
   <string name="no_app">L\'application demandée n\'existe pas. Saisissez les informations manuellement.</string>
   <string name="null_intent_value">L\'application externe n\'a pas fourni les informations attendues.</string>
-  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
+  <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="print">Imprimer</string>
   <string name="launch_printer">Lancer l\'impression</string>
   <string name="no_printer">L\'imprimante demandée n\'est pas installée. Merci d\'installer l\'imprimante.</string>
@@ -613,7 +617,7 @@
   <!--Subtext of a settings section-->
   <string name="user_and_device_identity_settings_subtext">Nom d\'utilisateur, numéro de téléphone et ID de l\'appareil</string>
   <!--Title of a settings section only available in beta or development builds.-->
-  <string name="experimental">Experimental</string>
+  <string name="experimental">Expérimental </string>
   <string name="protected_settings">Protégé</string>
   <!--Title of a settings section-->
   <string name="unlock_protected_settings_section_title">Déverrouiller les paramètres du projet</string>
@@ -1019,21 +1023,27 @@
   <string name="empty_list_of_questions">Rien à afficher</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">Aucun Formulaire Vierge</string>
+  <!--Subtext displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_subtitle">Télécharger un formulaire pour démarrer</string>
   <!--Message displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_title">Il n\'y a rien dans les ébauches</string>
+  <!--Subtext displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_subtitle">Quand vous enregistrez comme ébauche, les formulaires apparaissent ici</string>
   <!--Message displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_title">Rien qui soit prêt à envoyer</string>
+  <!--Subtext displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_subtitle">Quand vous finalisez les ébauches, elles apparaissent ici.</string>
   <!--Message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_title">Rien à envoyer</string>
+  <!--Subtext of message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_subtitle">Quand vous envoyez des formulaires finalisés, ils apparaissent ici</string>
   <!--Message displayed when the list of forms to download is empty-->
   <string name="empty_list_of_forms_to_download_title">Pas de formulaire à télécharger </string>
   <string name="empty_list_of_forms_to_download_subtitle">Télécharger un formulaire pour démarrer</string>
   <!--Message displayed when the list of forms to delete is empty-->
   <string name="empty_list_of_forms_to_delete_title">Pas de formulaire à supprimer</string>
-  <string name="empty_list_of_blank_forms_to_delete_subtitle">Quand vous aurez téléchargé des formulaires vierges, ils apparaitront ici</string>
-  <string name="empty_list_of_saved_forms_to_delete_subtitle">Quand vous aurez enregistré des formulaires vierges ils apparaitront ici</string>
+  <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <string name="empty_list_of_blank_forms_to_delete_subtitle">Quand vous aurez téléchargé des formulaires vierges, ils apparaîtront ici</string>
+  <!--Subtext displayed when the list of filled forms to delete is empty-->
+  <string name="empty_list_of_saved_forms_to_delete_subtitle">Quand vous aurez enregistré des formulaires, ils apparaîtront ici</string>
 </resources>

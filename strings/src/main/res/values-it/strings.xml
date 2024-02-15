@@ -115,6 +115,10 @@
   <string name="too_complex_form">Questo modulo è troppo complesso per questo dispositivo. Prova a semplificare le espressioni o chiedi aiuto sul forum. </string>
   <string name="survey_internal_error">Errore interno: invio suggerimento fallito.</string>
   <string name="save_enter_data_description">Ti trovi alla fine di \"%s\".</string>
+  <string name="form_edits_warning_title">I moduli finalizzati non possono essere modificati.</string>
+  <string name="form_edits_warning_title_auto_send_enabled">I moduli inviati non possono essere modificati.</string>
+  <string name="form_edits_warning_message">Se devi apportare modifiche al modulo, \"Salva come bozza\" finché non sei pronto per l\'invio.</string>
+  <string name="form_edits_warning_learn_more">Saperne di più</string>
   <string name="save_as_draft">Salva come bozza</string>
   <string name="finalize">Finalizzare</string>
   <string name="send">Invia</string>
@@ -170,7 +174,7 @@
   <string name="activity_not_found">Nessuna attività trovata da gestire: %s</string>
   <string name="no_app">L\'applicazione richiesta è mancante. Per piacere inserisci manualmente la lettura.</string>
   <string name="null_intent_value">L\'applicativo esterno non ha fornito l\'informazione attesa.</string>
-  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
+  <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="launch_printer">Inizio Stampa</string>
   <string name="no_printer">La stampante richiesta non è installata. Per piacere installa la stampante.</string>
   <string name="open_url">Apri URL</string>
@@ -1012,15 +1016,21 @@
   <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">Niente disponibile da visualizzare</string>
   <!--Message displayed when the list of blank forms is empty-->
+  <!--Subtext displayed when the list of blank forms is empty-->
   <!--Message displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_title">Niente nelle bozze</string>
+  <!--Subtext displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_subtitle">Quando salvi come bozza, i formulari verranno visualizzati qui</string>
   <!--Message displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_title">Niente di pronto per l\'invio</string>
+  <!--Subtext displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_subtitle">Una volta finalizzate le bozze, queste verranno visualizzate qui</string>
   <!--Message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_title">Non è stato inviato nulla</string>
+  <!--Subtext of message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_subtitle">Quando invii formulari finalizzati, verranno visualizzati qui</string>
   <!--Message displayed when the list of forms to download is empty-->
   <!--Message displayed when the list of forms to delete is empty-->
+  <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <!--Subtext displayed when the list of filled forms to delete is empty-->
 </resources>

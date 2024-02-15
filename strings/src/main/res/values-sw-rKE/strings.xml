@@ -99,7 +99,7 @@
   <string name="launch_app">zindua</string>
   <string name="activity_not_found">Hakuna shughuli iliyopatikana kushughulikia: %s</string>
   <string name="no_app">Application unayotaka haipo. Tafadhali wasilisha matokeo</string>
-  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
+  <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="launch_printer">Anzisha uchapishaji</string>
   <string name="no_printer">Printer utakayo haipo. Tafadhali weka Printer</string>
   <string name="open_url">Url wazi</string>
@@ -417,9 +417,15 @@
   <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
   <!--Message displayed when the list of questions is empty-->
   <!--Message displayed when the list of blank forms is empty-->
+  <!--Subtext displayed when the list of blank forms is empty-->
   <!--Message displayed when the list of drafts is empty-->
+  <!--Subtext displayed when the list of drafts is empty-->
   <!--Message displayed when the list of ready to send forms is empty-->
+  <!--Subtext displayed when the list of ready to send forms is empty-->
   <!--Message displayed when the list of sent forms is empty-->
+  <!--Subtext of message displayed when the list of sent forms is empty-->
   <!--Message displayed when the list of forms to download is empty-->
   <!--Message displayed when the list of forms to delete is empty-->
+  <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <!--Subtext displayed when the list of filled forms to delete is empty-->
 </resources>

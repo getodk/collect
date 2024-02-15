@@ -115,6 +115,10 @@
   <string name="too_complex_form">Dieses Formular ist zu komplex für dieses Gerät. Versuche Ausdrücke zu vereinfachen oder bitte im Forum um Hilfe.</string>
   <string name="survey_internal_error">Interner Fehler: Sprung zur Eingabe fehlgeschlagen.</string>
   <string name="save_enter_data_description">Sie sind am Ende von \"%s\" angelangt.</string>
+  <string name="form_edits_warning_title">Abgeschlossene Formulare sind nicht bearbeitbar.</string>
+  <string name="form_edits_warning_title_auto_send_enabled">Übermittelte Formulare sind nicht bearbeitbar.</string>
+  <string name="form_edits_warning_message">Wenn Sie Änderungen an Ihrem Formular vornehmen müssen, \"Als Entwurf speichern\", bis Sie bereit sind, es zu senden.</string>
+  <string name="form_edits_warning_learn_more">Mehr erfahren</string>
   <string name="save_as_draft">Als Entwurf speichern</string>
   <string name="finalize">Abschließen</string>
   <string name="send">Senden</string>
@@ -170,7 +174,8 @@
   <string name="activity_not_found">Folgende App wurde nicht gefunden: %s</string>
   <string name="no_app">Die gewünschte App steht nicht zur Verfügung. Bitte tragen sie den Wert manuell ein.</string>
   <string name="null_intent_value">Die externe App hat die erwartete Information nicht geliefert.</string>
-  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
+  <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
+  <string name="print">Drucken</string>
   <string name="launch_printer">Drucken starten</string>
   <string name="no_printer">Der gewählte Drucker ist nicht installiert. Bitte installieren Sie den Drucker.</string>
   <string name="open_url">URL öffnen</string>
@@ -1007,21 +1012,27 @@
   <string name="empty_list_of_questions">Keine Inhalte vorhanden.</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">Keine leeren Formulare</string>
+  <!--Subtext displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_subtitle">Formular herunterladen um zu starten</string>
   <!--Message displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_title">Keine Inhalte vorhanden.</string>
+  <!--Subtext displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_subtitle">Nach dem Speichern als Entwurf, erscheinen die Formulare hier</string>
   <!--Message displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_title">Keine Inhalte vorhanden.</string>
+  <!--Subtext displayed when the list of ready to send forms is empty-->
   <string name="empty_list_of_finalized_forms_subtitle">Nach dem Abschließen, erscheinen die Formulare hier</string>
   <!--Message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_title">Keine Inhalte vorhanden.</string>
+  <!--Subtext of message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_subtitle">Nach dem Versenden abgeschlossener Formulare, erscheinen die Formulare hier</string>
   <!--Message displayed when the list of forms to download is empty-->
   <string name="empty_list_of_forms_to_download_title">Keine Formulare zum Download</string>
   <string name="empty_list_of_forms_to_download_subtitle">Formular herunterladen um zu starten</string>
   <!--Message displayed when the list of forms to delete is empty-->
   <string name="empty_list_of_forms_to_delete_title">Keine Formulare zum Löschen</string>
-  <string name="empty_list_of_blank_forms_to_delete_subtitle">Wenn Sie leere Formulare heruntergeladen haben, erscheinen sie hier</string>
-  <string name="empty_list_of_saved_forms_to_delete_subtitle">Sobald Sie gespeicherte Formulare haben, erscheinen sie hier</string>
+  <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <string name="empty_list_of_blank_forms_to_delete_subtitle">Wenn sie Leerformulare heruntergeladen haben, erscheinen sie hier.</string>
+  <!--Subtext displayed when the list of filled forms to delete is empty-->
+  <string name="empty_list_of_saved_forms_to_delete_subtitle">Wenn Sie gespeicherte Formulare haben, erscheinen sie hier.</string>
 </resources>
