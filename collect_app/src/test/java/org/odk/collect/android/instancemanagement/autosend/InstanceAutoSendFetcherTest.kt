@@ -1,8 +1,7 @@
 package org.odk.collect.android.instancemanagement.autosend
 
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.core.Is.`is`
-import org.junit.Assert.assertTrue
+import org.hamcrest.Matchers.contains
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -81,17 +80,17 @@ class InstanceAutoSendFetcherTest {
         }
 
         val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(projectId, instancesRepository, formsRepository)
-
-        assertThat(instancesToSend.size, `is`(6))
-
-        assertTrue(instancesToSend.contains(instanceOfFormWithEnabledAutoSendComplete))
-        assertTrue(instancesToSend.contains(instanceOfFormWithEnabledAutoSendSubmissionFailed))
-
-        assertTrue(instancesToSend.contains(instanceOfFormWithoutSpecifiedAutoSendComplete))
-        assertTrue(instancesToSend.contains(instanceOfFormWithoutSpecifiedAutoSendSubmissionFailed))
-
-        assertTrue(instancesToSend.contains(instanceOfFormWithCustomAutoSendComplete))
-        assertTrue(instancesToSend.contains(instanceOfFormWithCustomAutoSendSubmissionFailed))
+        assertThat(
+            instancesToSend.map { it.instanceFilePath },
+            contains(
+                instanceOfFormWithEnabledAutoSendComplete.instanceFilePath,
+                instanceOfFormWithEnabledAutoSendSubmissionFailed.instanceFilePath,
+                instanceOfFormWithoutSpecifiedAutoSendComplete.instanceFilePath,
+                instanceOfFormWithoutSpecifiedAutoSendSubmissionFailed.instanceFilePath,
+                instanceOfFormWithCustomAutoSendComplete.instanceFilePath,
+                instanceOfFormWithCustomAutoSendSubmissionFailed.instanceFilePath
+            )
+        )
     }
 
     @Test
@@ -126,10 +125,13 @@ class InstanceAutoSendFetcherTest {
         }
 
         val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(projectId, instancesRepository, formsRepository)
-
-        assertThat(instancesToSend.size, `is`(2))
-        assertTrue(instancesToSend.contains(instanceOfFormWithEnabledAutoSendComplete))
-        assertTrue(instancesToSend.contains(instanceOfFormWithEnabledAutoSendSubmissionFailed))
+        assertThat(
+            instancesToSend.map { it.instanceFilePath },
+            contains(
+                instanceOfFormWithEnabledAutoSendComplete.instanceFilePath,
+                instanceOfFormWithEnabledAutoSendSubmissionFailed.instanceFilePath
+            )
+        )
     }
 
     @Test
@@ -149,8 +151,11 @@ class InstanceAutoSendFetcherTest {
         }
 
         val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(projectId, instancesRepository, formsRepository)
-
-        assertThat(instancesToSend.size, `is`(1))
-        assertTrue(instancesToSend.contains(instanceOfFormWithEnabledAutoSendCompleteV2))
+        assertThat(
+            instancesToSend.map { it.instanceFilePath },
+            contains(
+                instanceOfFormWithEnabledAutoSendCompleteV2.instanceFilePath
+            )
+        )
     }
 }
