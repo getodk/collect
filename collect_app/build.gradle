@@ -287,8 +287,6 @@ dependencies {
     implementation Dependencies.firebase_analytics
     implementation Dependencies.firebase_crashlytics
 
-    implementation Dependencies.guava
-
     implementation Dependencies.squareup_okhttp
     implementation Dependencies.squareup_okhttp_tls
     implementation Dependencies.burgstaller_okhttp_digest

@@ -46,7 +46,6 @@ dependencies {
     implementation(project(":strings"))
     implementation(Dependencies.play_services_location)
     implementation(Dependencies.androidx_preference_ktx)
-    implementation(Dependencies.guava)
     implementation(Dependencies.mapbox_android_sdk)
     implementation(Dependencies.timber)
     implementation(Dependencies.androidx_startup)

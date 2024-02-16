@@ -2,6 +2,7 @@ package org.odk.collect.googlemaps;
 
 import static org.odk.collect.androidshared.ui.PrefUtils.createListPref;
 import static org.odk.collect.androidshared.ui.PrefUtils.getInt;
+import static kotlin.collections.SetsKt.setOf;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -12,7 +13,6 @@ import android.os.Bundle;
 import androidx.preference.Preference;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.ToastUtils;
@@ -88,8 +88,8 @@ public class GoogleMapConfigurator implements MapConfigurator {
     }
 
     @Override public Set<String> getPrefKeys() {
-        return prefKey.isEmpty() ? ImmutableSet.of(ProjectKeys.KEY_REFERENCE_LAYER) :
-            ImmutableSet.of(prefKey, ProjectKeys.KEY_REFERENCE_LAYER);
+        return prefKey.isEmpty() ? setOf(ProjectKeys.KEY_REFERENCE_LAYER) :
+                setOf(prefKey, ProjectKeys.KEY_REFERENCE_LAYER);
     }
 
     @Override public Bundle buildConfig(Settings prefs) {

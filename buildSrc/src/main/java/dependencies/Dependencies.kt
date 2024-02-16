@@ -25,7 +25,6 @@ object Dependencies {
     const val play_services_oss_licenses = "com.google.android.gms:play-services-oss-licenses:17.0.1"
     const val mapbox_android_sdk = "com.mapbox.maps:android:10.16.4"
     const val osmdroid = "org.osmdroid:osmdroid-android:6.1.18"
-    const val guava = "com.google.guava:guava:33.0.0-android"
     const val squareup_okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp3}"
     const val squareup_okhttp_tls = "com.squareup.okhttp3:okhttp-tls:${Versions.okhttp3}"
     const val burgstaller_okhttp_digest = "io.github.rburgst:okhttp-digest:3.1.0"
