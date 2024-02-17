@@ -393,7 +393,7 @@ class FormUriActivityTest {
         val expectedMessage = context.getString(
             org.odk.collect.strings.R.string.parent_form_not_present,
             "${instance.formId}\n${
-            context.getString(org.odk.collect.strings.R.string.version)
+                context.getString(org.odk.collect.strings.R.string.version)
             } ${instance.formVersion}"
         )
 
