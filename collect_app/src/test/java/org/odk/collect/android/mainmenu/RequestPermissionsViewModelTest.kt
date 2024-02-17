@@ -18,7 +18,7 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 class RequestPermissionsViewModelTest {
 
-    private val permissionChecker = mock<PermissionsChecker>() {
+    private val permissionChecker = mock<PermissionsChecker> {
         on { isPermissionGranted(any()) } doReturn false
     }
 

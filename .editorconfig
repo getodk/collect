@@ -24,4 +24,3 @@ ktlint_standard_enum-wrapping = disabled
 ktlint_standard_statement-wrapping = disabled
 ktlint_standard_try-catch-finally-spacing = disabled
 ktlint_standard_wrapping = disabled
-ktlint_standard_unnecessary-parentheses-before-trailing-lambda = disabled

@@ -68,7 +68,7 @@ class MainMenuActivityTest {
         on { currentProject } doReturn MutableNonNullLiveData(project)
     }
 
-    private val permissionsViewModel = mock<RequestPermissionsViewModel>() {
+    private val permissionsViewModel = mock<RequestPermissionsViewModel> {
         on { shouldAskForPermissions() } doReturn false
     }
 

@@ -28,7 +28,7 @@ import java.util.Locale
 @Config(shadows = [ShadowAndroidXAlertDialog::class])
 class QuitFormDialogTest {
 
-    private val formSaveViewModel = mock<FormSaveViewModel>() {
+    private val formSaveViewModel = mock<FormSaveViewModel> {
         on { lastSavedTime } doReturn null
     }
 

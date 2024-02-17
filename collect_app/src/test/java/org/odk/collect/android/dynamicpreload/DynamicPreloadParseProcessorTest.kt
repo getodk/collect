@@ -70,7 +70,7 @@ class DynamicPreloadParseProcessorTest {
     }
 
     private fun createQuestion(appearance: String): QuestionDef {
-        return mock() {
+        return mock {
             on { appearanceAttr } doReturn appearance
         }
     }
