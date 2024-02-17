@@ -116,7 +116,6 @@ class ProjectDisplayPreferencesFragmentTest {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_ICON_KEY)!!.title,
                 `is`(
-
                     ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(
                         org.odk.collect.strings.R.string.project_icon
                     )
