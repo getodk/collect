@@ -106,10 +106,6 @@ public class AuditEventLogger {
      * used on the UI thread.
      */
     public synchronized void flush() {
-        internalFlush();
-    }
-
-    private void internalFlush() {
         if (isAuditEnabled()) {
             finalizeEvents();
             writeEvents();
