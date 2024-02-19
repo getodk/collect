@@ -144,6 +144,7 @@ class DeleteFormsActivity : LocalizedActivity() {
 
                 SavedFormListViewModel::class.java -> SavedFormListViewModel(
                     scheduler,
+                    generalSettings,
                     instancesDataService
                 )
 

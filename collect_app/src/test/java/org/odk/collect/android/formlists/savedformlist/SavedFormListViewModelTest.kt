@@ -12,9 +12,11 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
+import org.odk.collect.android.formlists.savedformlist.SavedFormListViewModel.SortOrder
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InstanceFixtures
+import org.odk.collect.shared.settings.InMemSettings
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.getOrAwaitValue
 
@@ -25,6 +27,7 @@ class SavedFormListViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val scheduler = FakeScheduler()
+    private val settings = InMemSettings()
 
     private val instancesDataService: InstancesDataService = mock {
         on { instances } doReturn MutableStateFlow(emptyList())
@@ -36,7 +39,7 @@ class SavedFormListViewModelTest {
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
         saveForms(listOf(myForm, yourForm))
 
-        val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
+        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
 
         viewModel.filterText = "Your"
         assertThat(
@@ -57,7 +60,7 @@ class SavedFormListViewModelTest {
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
         saveForms(listOf(myForm, yourForm))
 
-        val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
+        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
 
         viewModel.filterText = "blah"
         assertThat(
@@ -78,7 +81,7 @@ class SavedFormListViewModelTest {
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
         saveForms(listOf(myForm, yourForm))
 
-        val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
+        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
 
         viewModel.filterText = "my"
         assertThat(
@@ -93,9 +96,9 @@ class SavedFormListViewModelTest {
         val b = InstanceFixtures.instance(displayName = "B")
         saveForms(listOf(b, a))
 
-        val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
+        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
 
-        viewModel.sortOrder = SavedFormListViewModel.SortOrder.NAME_ASC
+        viewModel.sortOrder = SortOrder.NAME_ASC
         assertThat(
             viewModel.formsToDisplay.getOrAwaitValue(scheduler),
             contains(a, b)
@@ -108,9 +111,9 @@ class SavedFormListViewModelTest {
         val b = InstanceFixtures.instance(displayName = "B")
         saveForms(listOf(a, b))
 
-        val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
+        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
 
-        viewModel.sortOrder = SavedFormListViewModel.SortOrder.NAME_DESC
+        viewModel.sortOrder = SortOrder.NAME_DESC
         assertThat(
             viewModel.formsToDisplay.getOrAwaitValue(scheduler),
             contains(b, a)
@@ -123,9 +126,9 @@ class SavedFormListViewModelTest {
         val b = InstanceFixtures.instance(displayName = "B", lastStatusChangeDate = 1)
         saveForms(listOf(a, b))
 
-        val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
+        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
 
-        viewModel.sortOrder = SavedFormListViewModel.SortOrder.DATE_DESC
+        viewModel.sortOrder = SortOrder.DATE_DESC
         assertThat(
             viewModel.formsToDisplay.getOrAwaitValue(scheduler),
             contains(b, a)
@@ -138,11 +141,28 @@ class SavedFormListViewModelTest {
         val b = InstanceFixtures.instance(displayName = "B", lastStatusChangeDate = 1)
         saveForms(listOf(b, a))
 
-        val viewModel = SavedFormListViewModel(scheduler, instancesDataService)
+        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
 
-        viewModel.sortOrder = SavedFormListViewModel.SortOrder.DATE_ASC
+        viewModel.sortOrder = SortOrder.DATE_ASC
         assertThat(
             viewModel.formsToDisplay.getOrAwaitValue(scheduler),
+            contains(a, b)
+        )
+    }
+
+    @Test
+    fun `sort order is retained between view models`() {
+        val a = InstanceFixtures.instance(displayName = "A", lastStatusChangeDate = 0)
+        val b = InstanceFixtures.instance(displayName = "B", lastStatusChangeDate = 1)
+        saveForms(listOf(b, a))
+
+        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        viewModel.sortOrder = SortOrder.DATE_ASC
+
+        val newViewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        assertThat(newViewModel.sortOrder, equalTo(SortOrder.DATE_ASC))
+        assertThat(
+            newViewModel.formsToDisplay.getOrAwaitValue(scheduler),
             contains(a, b)
         )
     }

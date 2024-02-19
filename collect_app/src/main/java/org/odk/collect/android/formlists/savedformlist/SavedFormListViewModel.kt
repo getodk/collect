@@ -9,15 +9,20 @@ import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.flowOnBackground
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.settings.Settings
 
 class SavedFormListViewModel(
     private val scheduler: Scheduler,
+    private val settings: Settings,
     private val instancesDataService: InstancesDataService
 ) : ViewModel() {
 
-    private val _sortOrder = MutableStateFlow(SortOrder.NAME_ASC)
+    private val _sortOrder =
+        MutableStateFlow(SortOrder.entries[settings.getInt(ProjectKeys.KEY_SAVED_FORM_SORT_ORDER)])
     var sortOrder: SortOrder = _sortOrder.value
         set(value) {
+            settings.save(ProjectKeys.KEY_SAVED_FORM_SORT_ORDER, value.ordinal)
             _sortOrder.value = value
             field = value
         }

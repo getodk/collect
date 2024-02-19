@@ -69,6 +69,7 @@ import org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModel;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.Arrays;
@@ -90,7 +91,6 @@ import timber.log.Timber;
 public class InstanceUploaderListActivity extends LocalizedActivity implements
         OnLongClickListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String SHOW_ALL_MODE = "showAllMode";
-    private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
     private static final String SEARCH_TEXT = "searchText";
@@ -432,7 +432,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     }
 
     private String getSortingOrderKey() {
-        return INSTANCE_UPLOADER_LIST_SORTING_ORDER;
+        return ProjectKeys.KEY_SAVED_FORM_SORT_ORDER;
     }
 
     private void updateAdapter() {
