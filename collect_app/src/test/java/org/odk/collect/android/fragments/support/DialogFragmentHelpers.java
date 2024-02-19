@@ -63,34 +63,34 @@ public class DialogFragmentHelpers {
     public static void assertDialogShowsCorrectDateForYearMode(int year, String date) {
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
 
-        assertDatePickerValue(dialog, year, 0, 0);
+        assertDatePickerValue(dialog, year, 0, 1);
         assertThat(((TextView) dialog.findViewById(R.id.date_gregorian)).getText().toString(), equalTo(date));
     }
 
     public static void assertDialogShowsCorrectDateForMonthMode(int year, int month, String date) {
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
 
-        assertDatePickerValue(dialog, year, month, 0);
+        assertDatePickerValue(dialog, year, month, 1);
         assertThat(((TextView) dialog.findViewById(R.id.date_gregorian)).getText().toString(), equalTo(date));
     }
 
-    public static void assertDialogTextViewUpdatesDate(String date) {
+    public static void assertDialogTextViewUpdatesDate(String date, int year, int month, int day) {
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-        setDatePickerValue(dialog, 2020, 5, 12);
+        setDatePickerValue(dialog, year, month, day);
 
         assertThat(((TextView) dialog.findViewById(R.id.date_gregorian)).getText().toString(), equalTo(date));
     }
 
     public static void assertDateUpdateInActivity(DatePickerTestActivity activity, int year, int month, int day) {
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-        setDatePickerValue(dialog, 2020, 5, 12);
+        setDatePickerValue(dialog, year, month, day);
 
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
         RobolectricHelpers.runLooper();
 
-        assertThat(activity.selectedDate.getYear(), equalTo(year));
-        assertThat(activity.selectedDate.getMonthOfYear(), equalTo(month));
-        assertThat(activity.selectedDate.getDayOfMonth(), equalTo(day));
+        assertThat(activity.selectedDate.getYear(), equalTo(2020));
+        assertThat(activity.selectedDate.getMonthOfYear(), equalTo(5));
+        assertThat(activity.selectedDate.getDayOfMonth(), equalTo(12));
     }
 
     public static void assertDialogIsDismissedOnButtonClick(int dialogButton) {
@@ -104,21 +104,21 @@ public class DialogFragmentHelpers {
      * @deprecated should use {@link FragmentScenario#recreate()} instead of Robolectric for this
      */
     @Deprecated
-    public static <T extends DialogFragment> void assertDialogRetainsDateOnScreenRotation(T dialogFragment, String date) {
+    public static <T extends DialogFragment> void assertDialogRetainsDateOnScreenRotation(T dialogFragment, String date, int year, int month, int day) {
         ActivityController<FragmentActivity> activityController = Robolectric.buildActivity(FragmentActivity.class);
         activityController.setup();
 
         dialogFragment.show(activityController.get().getSupportFragmentManager(), "TAG");
         RobolectricHelpers.runLooper();
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-        setDatePickerValue(dialog, 2020, 5, 12);
+        setDatePickerValue(dialog, year, month, day);
 
         activityController.recreate();
 
         T restoredFragment = (T) activityController.get().getSupportFragmentManager().findFragmentByTag("TAG");
         AlertDialog restoredDialog = (AlertDialog) restoredFragment.getDialog();
 
-        assertDatePickerValue(restoredDialog, 2020, 5, 12);
+        assertDatePickerValue(restoredDialog, year, month, day);
         assertThat(((TextView) restoredDialog.findViewById(R.id.date_gregorian)).getText().toString(), equalTo(date));
     }
 

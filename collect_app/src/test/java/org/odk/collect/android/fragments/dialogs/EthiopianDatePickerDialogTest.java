@@ -73,12 +73,12 @@ public class EthiopianDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("4 Ginbot 2012 (May 12, 2020)");
+        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("4 Ginbot 2012 (May 12, 2020)", 2012, 8, 4);
     }
 
     @Test
     public void whenScreenIsRotated_dialogShouldRetainDateInDatePickerAndTextView() {
-        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "12 Yekatit 2020 (Feb 20, 2028)");
+        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "4 Ginbot 2012 (May 12, 2020)", 2012, 8, 4);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class EthiopianDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 2028, 2, 20);
+        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 2012, 8, 4);
     }
 
     @Test

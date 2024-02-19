@@ -73,12 +73,12 @@ public class CopticDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("4 Pashons 1736 (May 12, 2020)");
+        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("4 Pashons 1736 (May 12, 2020)", 1736, 8, 4);
     }
 
     @Test
     public void whenScreenIsRotated_dialogShouldRetainDateInDatePickerAndTextView() {
-        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "12 Meshir 2020 (Feb 23, 2304)");
+        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "4 Pashons 1736 (May 12, 2020)", 1736, 8, 4);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class CopticDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 2304, 2, 23);
+        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 1736, 8, 4);
     }
 
     @Test

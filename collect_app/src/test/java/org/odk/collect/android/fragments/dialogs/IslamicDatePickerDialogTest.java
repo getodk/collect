@@ -73,12 +73,12 @@ public class IslamicDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("19 Ramadan 1441 (May 12, 2020)");
+        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("19 Ramadan 1441 (May 12, 2020)", 1441, 8, 19);
     }
 
     @Test
     public void whenScreenIsRotated_dialogShouldRetainDateInDatePickerAndTextView() {
-        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "12 Jumada al-thani 2020 (Nov 10, 2581)");
+        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "19 Ramadan 1441 (May 12, 2020)", 1441, 8, 19);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class IslamicDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 2581, 11, 10);
+        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 1441, 8, 19);
     }
 
     @Test

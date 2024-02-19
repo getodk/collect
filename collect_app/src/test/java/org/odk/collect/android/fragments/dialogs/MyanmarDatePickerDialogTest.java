@@ -65,7 +65,7 @@ public class MyanmarDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(1382, 1, "တန်ခူး 1382 (Apr 2020)");
+        DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(1382, 1, "ကဆုန် 1382 (Apr 2020)");
     }
 
     @Test
@@ -73,12 +73,12 @@ public class MyanmarDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("21 ကဆုန် 1382 (May 12, 2020)");
+        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("21 ကဆုန် 1382 (May 12, 2020)", 1382, 1, 21);
     }
 
     @Test
     public void whenScreenIsRotated_dialogShouldRetainDateInDatePickerAndTextView() {
-        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "12 တော်သလင်း 2020 (Sep 30, 2658)");
+        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "21 ကဆုန် 1382 (May 12, 2020)", 1382, 1, 21);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class MyanmarDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 2658, 9, 30);
+        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 1382, 1, 21);
     }
 
     @Test
