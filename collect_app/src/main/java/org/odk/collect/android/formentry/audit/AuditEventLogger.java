@@ -129,7 +129,7 @@ public class AuditEventLogger {
      * Finalizes and writes events. Can safely be used on a background thread, but should not be
      * used on the UI thread.
      */
-    public void flushSynchronized() {
+    public synchronized void flushSynchronized() {
         internalFlush();
     }
 
