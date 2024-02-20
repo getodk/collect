@@ -391,6 +391,18 @@ public class FieldListUpdateTest {
                 .assertSelectMinimalDialogAnswer("Strawberries");
     }
 
+    @Test
+    public void listOfQuestionsShouldNotBeScrolledToTheLastEditedQuestionAfterClickingOnAQuestion() {
+        new FormEntryPage("fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Long list of questions")
+                .clickOnQuestion("Question1")
+                .answerQuestion(0, "X")
+                .activateTextQuestion(19)
+                .checkIsTranslationDisplayed("Question20");
+    }
+
     // Scroll down until the desired group name is visible. This is needed to make the tests work
     // on devices with screens of different heights.
     private void jumpToGroupWithText(String text) {
