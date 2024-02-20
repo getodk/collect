@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleCursorAdapter;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.database.DatabaseObjectMapper;
 import org.odk.collect.android.instancemanagement.InstanceListItemView;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -47,21 +46,5 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
 
         InstanceListItemView.setInstance(view, instance, shouldCheckDisabled);
         return view;
-    }
-
-    public static int getFormStateImageResourceIdForStatus(String formStatus) {
-        switch (formStatus) {
-            case Instance.STATUS_INCOMPLETE:
-            case Instance.STATUS_INVALID:
-                return R.drawable.ic_form_state_saved;
-            case Instance.STATUS_COMPLETE:
-                return R.drawable.ic_form_state_finalized;
-            case Instance.STATUS_SUBMITTED:
-                return R.drawable.ic_form_state_submitted;
-            case Instance.STATUS_SUBMISSION_FAILED:
-                return R.drawable.ic_form_state_submission_failed;
-        }
-
-        throw new IllegalArgumentException();
     }
 }

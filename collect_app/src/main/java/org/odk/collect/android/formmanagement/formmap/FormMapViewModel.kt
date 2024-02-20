@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.R
+import org.odk.collect.android.formlists.savedformlist.SavedFormUtils
 import org.odk.collect.android.instancemanagement.getStatusDescription
 import org.odk.collect.android.instancemanagement.showAsEditable
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
@@ -121,7 +122,7 @@ class FormMapViewModel(
                 instance.displayName,
                 listOf(
                     MappableSelectItem.IconifiedText(
-                        getSubmissionSummaryStatusIcon(instance.status),
+                        SavedFormUtils.getIcon(instance.status),
                         instanceLastStatusChangeDate
                     )
                 ),
@@ -143,7 +144,7 @@ class FormMapViewModel(
                 instance.displayName,
                 listOf(
                     MappableSelectItem.IconifiedText(
-                        getSubmissionSummaryStatusIcon(instance.status),
+                        SavedFormUtils.getIcon(instance.status),
                         instanceLastStatusChangeDate
                     )
                 ),
@@ -166,7 +167,7 @@ class FormMapViewModel(
                 instance.displayName,
                 listOf(
                     MappableSelectItem.IconifiedText(
-                        getSubmissionSummaryStatusIcon(instance.status),
+                        SavedFormUtils.getIcon(instance.status),
                         instanceLastStatusChangeDate
                     )
                 ),
@@ -199,15 +200,6 @@ class FormMapViewModel(
             Instance.STATUS_SUBMITTED -> if (enlarged) R.drawable.ic_room_form_state_submitted_48dp else R.drawable.ic_room_form_state_submitted_24dp
             Instance.STATUS_SUBMISSION_FAILED -> if (enlarged) R.drawable.ic_room_form_state_submission_failed_48dp else R.drawable.ic_room_form_state_submission_failed_24dp
             else -> org.odk.collect.icons.R.drawable.ic_map_point
-        }
-    }
-
-    private fun getSubmissionSummaryStatusIcon(instanceStatus: String?): Int {
-        return when (instanceStatus) {
-            Instance.STATUS_COMPLETE -> R.drawable.ic_form_state_finalized
-            Instance.STATUS_SUBMITTED -> R.drawable.ic_form_state_submitted
-            Instance.STATUS_SUBMISSION_FAILED -> R.drawable.ic_form_state_submission_failed
-            else -> R.drawable.ic_form_state_saved
         }
     }
 }

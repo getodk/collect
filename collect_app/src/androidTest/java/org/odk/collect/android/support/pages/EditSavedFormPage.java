@@ -35,7 +35,7 @@ import android.widget.RelativeLayout;
 import androidx.appcompat.widget.Toolbar;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.InstanceListCursorAdapter;
+import org.odk.collect.android.formlists.savedformlist.SavedFormUtils;
 
 public class EditSavedFormPage extends Page<EditSavedFormPage> {
     private final boolean firstOpen;
@@ -59,7 +59,7 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
     }
 
     public EditSavedFormPage checkInstanceState(String instanceName, String desiredStatus) {
-        int desiredImageId = InstanceListCursorAdapter.getFormStateImageResourceIdForStatus(desiredStatus);
+        int desiredImageId = SavedFormUtils.getIcon(desiredStatus);
 
         onView(allOf(instanceOf(RelativeLayout.class),
                 hasDescendant(withText(instanceName)),

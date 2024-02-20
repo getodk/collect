@@ -29,11 +29,7 @@ class SavedFormListItemView(context: Context) : FrameLayout(context) {
                     getStatusDescription(context, status, Date(lastStatusChangeDate))
 
                 val statusIcon = binding.root.findViewById<ImageView>(R.id.image)
-                when (status) {
-                    Instance.STATUS_SUBMISSION_FAILED -> statusIcon.setImageResource(R.drawable.ic_form_state_submission_failed)
-                    Instance.STATUS_SUBMITTED -> statusIcon.setImageResource(R.drawable.ic_form_state_submitted)
-                    else -> statusIcon.setImageResource(R.drawable.ic_form_state_finalized)
-                }
+                statusIcon.setImageResource(SavedFormUtils.getIcon(value))
             }
         }
 }
