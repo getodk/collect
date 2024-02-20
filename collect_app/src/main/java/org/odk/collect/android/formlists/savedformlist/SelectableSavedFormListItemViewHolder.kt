@@ -7,9 +7,10 @@ import org.odk.collect.android.R
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectAdapter
 import org.odk.collect.forms.instances.Instance
 
-class SavedFormListItemViewHolder(parent: ViewGroup) : MultiSelectAdapter.ViewHolder<Instance>(
-    SavedFormListItemView(parent.context)
-) {
+class SelectableSavedFormListItemViewHolder(parent: ViewGroup) :
+    MultiSelectAdapter.ViewHolder<Instance>(
+        SavedFormListItemView(parent.context)
+    ) {
     private var selectView = itemView
 
     init {

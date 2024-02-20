@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 
 import org.odk.collect.android.database.DatabaseObjectMapper;
-import org.odk.collect.android.formlists.savedformlist.SavedFormListItemViewHolder;
+import org.odk.collect.android.formlists.savedformlist.SelectableSavedFormListItemViewHolder;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.forms.instances.Instance;
@@ -27,14 +27,14 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        SavedFormListItemViewHolder viewHolder = new SavedFormListItemViewHolder(parent);
+        SelectableSavedFormListItemViewHolder viewHolder = new SelectableSavedFormListItemViewHolder(parent);
         viewHolder.itemView.setTag(viewHolder);
         return viewHolder.itemView;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        SavedFormListItemViewHolder viewHolder = (SavedFormListItemViewHolder) view.getTag();
+        SelectableSavedFormListItemViewHolder viewHolder = (SelectableSavedFormListItemViewHolder) view.getTag();
         Instance instance = DatabaseObjectMapper.getInstanceFromCurrentCursorPosition(cursor, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES));
         viewHolder.setItem(instance);
 

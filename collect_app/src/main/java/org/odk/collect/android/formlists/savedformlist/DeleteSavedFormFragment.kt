@@ -73,7 +73,7 @@ class DeleteSavedFormFragment(
         val binding = DeleteBlankFormLayoutBinding.bind(view)
         val recyclerView = binding.list
         val adapter = MultiSelectAdapter(multiSelectViewModel) { parent ->
-            SavedFormListItemViewHolder(parent)
+            SelectableSavedFormListItemViewHolder(parent)
         }
 
         recyclerView.adapter = adapter
