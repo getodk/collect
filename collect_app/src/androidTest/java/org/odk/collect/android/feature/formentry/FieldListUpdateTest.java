@@ -392,7 +392,7 @@ public class FieldListUpdateTest {
     }
 
     @Test
-    public void listOfQuestionsShouldNotBeScrolledToTheLastEditedQuestionAfterUpdatingTheLayout() {
+    public void listOfQuestionsShouldNotBeScrolledToTheLastEditedQuestionAfterClickingOnAQuestion() {
         new FormEntryPage("fieldlist-updates")
                 .clickGoToArrow()
                 .clickGoUpIcon()
