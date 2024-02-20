@@ -399,8 +399,8 @@ public class FieldListUpdateTest {
                 .clickOnGroup("Long list of questions")
                 .clickOnQuestion("Question1")
                 .answerQuestion(0, "X")
-                .activateTextQuestion(8)
-                .checkIsTranslationDisplayed("Question9");
+                .activateTextQuestion(19)
+                .checkIsTranslationDisplayed("Question20");
     }
 
     // Scroll down until the desired group name is visible. This is needed to make the tests work

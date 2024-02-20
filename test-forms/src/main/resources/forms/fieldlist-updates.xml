@@ -170,6 +170,17 @@
             <question7/>
             <question8/>
             <question9/>
+            <question10/>
+            <question11/>
+            <question12/>
+            <question13/>
+            <question14/>
+            <question15/>
+            <question16/>
+            <question17/>
+            <question18/>
+            <question19/>
+            <question20/>
           </long_list_of_questions>
           <meta>
             <instanceID/>
@@ -343,7 +354,18 @@
       <bind nodeset="/fieldlist-updates/long_list_of_questions/question6" type="string"/>
       <bind nodeset="/fieldlist-updates/long_list_of_questions/question7" type="string"/>
       <bind nodeset="/fieldlist-updates/long_list_of_questions/question8" type="string"/>
-      <bind nodeset="/fieldlist-updates/long_list_of_questions/question9" type="integer"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question9" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question10" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question11" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question12" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question13" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question14" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question15" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question16" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question17" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question18" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question19" type="string"/>
+      <bind nodeset="/fieldlist-updates/long_list_of_questions/question20" type="integer"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/fieldlist-updates/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -657,6 +679,39 @@
       </input>
       <input ref="/fieldlist-updates/long_list_of_questions/question9">
         <label>Question9</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question10">
+        <label>Question10</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question11">
+        <label>Question11</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question12">
+        <label>Question12</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question13">
+        <label>Question13</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question14">
+        <label>Question14</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question15">
+        <label>Question15</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question16">
+        <label>Question16</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question17">
+        <label>Question17</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question18">
+        <label>Question18</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question19">
+        <label>Question19</label>
+      </input>
+      <input ref="/fieldlist-updates/long_list_of_questions/question20">
+        <label>Question20</label>
       </input>
     </group>
   </h:body>
