@@ -1,70 +1,25 @@
 package org.odk.collect.android.formlists.blankformlist
 
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.FrameLayout
-import org.odk.collect.android.R
-import org.odk.collect.android.databinding.BlankFormListItemBinding
-import org.odk.collect.androidshared.ui.multiselect.MultiSelectAdapter
-import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.util.Locale
+import androidx.recyclerview.widget.RecyclerView
 
-class BlankFormListItemViewHolder(parent: ViewGroup) : MultiSelectAdapter.ViewHolder<BlankFormListItem>(
-    BlankFormListItemBinding.inflate(
-        LayoutInflater.from(parent.context),
-        parent,
-        false
-    ).root
+class BlankFormListItemViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+    BlankFormListItemView(parent.context)
 ) {
-
-    val binding = BlankFormListItemBinding.bind(this.itemView)
-
     var blankFormListItem: BlankFormListItem? = null
         set(value) {
             field = value
-
-            field?.let {
-                binding.formTitle.text = it.formName
-
-                binding.formVersion.text =
-                    binding.root.context.getString(org.odk.collect.strings.R.string.version_number, it.formVersion)
-                binding.formVersion.visibility =
-                    if (it.formVersion.isNotBlank()) View.VISIBLE else View.GONE
-
-                binding.formId.text =
-                    binding.root.context.getString(org.odk.collect.strings.R.string.id_number, it.formId)
-
-                binding.formHistory.text = try {
-                    if (it.dateOfLastDetectedAttachmentsUpdate != null) {
-                        SimpleDateFormat(
-                            binding.root.context.getString(org.odk.collect.strings.R.string.updated_on_date_at_time),
-                            Locale.getDefault()
-                        ).format(it.dateOfLastDetectedAttachmentsUpdate)
-                    } else {
-                        SimpleDateFormat(
-                            binding.root.context.getString(org.odk.collect.strings.R.string.added_on_date_at_time),
-                            Locale.getDefault()
-                        ).format(it.dateOfCreation)
-                    }
-                } catch (e: IllegalArgumentException) {
-                    Timber.e(e)
-                    ""
-                }
-            }
+            (itemView as BlankFormListItemView).blankFormListItem = field
         }
 
+    init {
+        itemView.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+    }
+
     fun setTrailingView(layoutId: Int) {
-        FrameLayout.inflate(itemView.context, layoutId, binding.trailingView)
-    }
-
-    override fun setItem(item: BlankFormListItem) {
-        blankFormListItem = item
-    }
-
-    override fun getCheckbox(): CheckBox {
-        return itemView.findViewById(R.id.checkbox)
+        (itemView as BlankFormListItemView).setTrailingView(layoutId)
     }
 }

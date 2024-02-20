@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.core.view.MenuHost
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -68,9 +69,7 @@ class DeleteBlankFormFragment(
         val binding = DeleteBlankFormLayoutBinding.bind(view)
         val recyclerView = binding.list
         val adapter = MultiSelectAdapter(multiSelectViewModel) { parent ->
-            BlankFormListItemViewHolder(parent).also {
-                it.setTrailingView(R.layout.checkbox)
-            }
+            SelectableBlankFormListItemViewHolder(parent)
         }
 
         recyclerView.adapter = adapter
@@ -106,5 +105,28 @@ class DeleteBlankFormFragment(
             }
             .setNegativeButton(getString(org.odk.collect.strings.R.string.delete_no), null)
             .show()
+    }
+}
+
+private class SelectableBlankFormListItemViewHolder(parent: ViewGroup) :
+    MultiSelectAdapter.ViewHolder<BlankFormListItem>(
+        BlankFormListItemView(parent.context).also {
+            it.setTrailingView(R.layout.checkbox)
+        }
+    ) {
+
+    init {
+        itemView.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+    }
+
+    override fun setItem(item: BlankFormListItem) {
+        (itemView as BlankFormListItemView).blankFormListItem = item
+    }
+
+    override fun getCheckbox(): CheckBox {
+        return itemView.findViewById(R.id.checkbox)
     }
 }
