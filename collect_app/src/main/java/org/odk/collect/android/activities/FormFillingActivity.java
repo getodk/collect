@@ -613,8 +613,13 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         RecordingHandler recordingHandler = new RecordingHandler(formSaveViewModel, this, audioRecorder, new AMRAppender(), new M4AAppender());
         audioRecorder.getCurrentSession().observe(this, session -> {
             if (session != null && session.getFile() != null) {
-                recordingHandler.handle(getFormController(), session, success -> {
-                    if (success) {
+                recordingHandler.handle(getFormController(), session, file -> {
+                    if (file != null) {
+                        if (session.getId() instanceof FormIndex) {
+                            waitingForDataRegistry.waitForData((FormIndex) session.getId());
+                            setWidgetData(file);
+                            session.getFile().delete();
+                        }
                         formSaveViewModel.resumeSave();
                     } else {
                         String path = session.getFile().getAbsolutePath();
