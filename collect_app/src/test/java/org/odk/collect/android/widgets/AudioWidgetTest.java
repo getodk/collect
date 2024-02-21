@@ -41,9 +41,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.testshared.RobolectricHelpers.setupMediaPlayerDataSource;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
@@ -379,45 +377,6 @@ public class AudioWidgetTest {
         assertThat(widget.binding.audioPlayer.waveform.getVisibility(), is(GONE));
         assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
         assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
-    }
-
-    @Test
-    public void whenRecordingFinished_callValueChangeListenersIfAnswerIsNotNull() throws Exception {
-        File answerFile = questionMediaManager.addAnswerFile(File.createTempFile("blah", ".mp3"));
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(answerFile.getName()));
-        AudioWidget widget = createWidget(prompt);
-        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-
-        recordingRequester.setDuration(prompt.getIndex().toString(), 5);
-        recordingRequester.reset();
-
-        verify(valueChangedListener).widgetValueChanged(widget);
-    }
-
-    @Test
-    public void whenRecordingFinished_doNotCallValueChangeListenersIfAnswerIsNull() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        AudioWidget widget = createWidget(prompt);
-        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-
-        recordingRequester.setDuration(prompt.getIndex().toString(), 5);
-        recordingRequester.reset();
-
-        verifyNoInteractions(valueChangedListener);
-    }
-
-    @Test
-    public void whenRecordingFinished_doNotCallValueChangeListenersIfAnswerRecordingHasBeenAlreadyStopped() throws Exception {
-        File answerFile = questionMediaManager.addAnswerFile(File.createTempFile("blah", ".mp3"));
-        FormEntryPrompt prompt = promptWithAnswer(new StringData(answerFile.getName()));
-        AudioWidget widget = createWidget(prompt);
-        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-
-        recordingRequester.setDuration(prompt.getIndex().toString(), 5);
-        recordingRequester.reset();
-        recordingRequester.reset();
-
-        verify(valueChangedListener, times(1)).widgetValueChanged(widget);
     }
 
     @Test
