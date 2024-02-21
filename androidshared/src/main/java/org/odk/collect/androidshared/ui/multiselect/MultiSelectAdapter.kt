@@ -5,6 +5,9 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * An adapter for creating multi select lists with `MultiSelectViewModel` and `RecyclerView`.
+ */
 class MultiSelectAdapter<T, VH : MultiSelectAdapter.ViewHolder<T>>(
     private val multiSelectViewModel: MultiSelectViewModel<*>,
     private val viewHolderFactory: (ViewGroup) -> VH

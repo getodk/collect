@@ -11,6 +11,9 @@ import org.odk.collect.androidshared.livedata.LiveDataUtils
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 
+/**
+ * A `ViewModel` for holding state around selected items (identified by `Long` ids). This can optionally also handle the data for the list which allows the `ViewModel` to perform a select all and determine whether all items are selected or not.
+ */
 class MultiSelectViewModel<T>(
     private val data: LiveData<List<MultiSelectItem<T>>> = MutableLiveData(emptyList())
 ) : ViewModel() {
