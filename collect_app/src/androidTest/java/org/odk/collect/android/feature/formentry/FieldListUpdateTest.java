@@ -403,6 +403,22 @@ public class FieldListUpdateTest {
                 .checkIsTranslationDisplayed("Question20");
     }
 
+    @Test
+    public void recordingAudio_ShouldChangeRelevanceOfRelatedField() {
+        new FormEntryPage("fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Audio")
+                .clickOnQuestion("Source16")
+                .assertTextDoesNotExist("Target16")
+                .clickOnString(org.odk.collect.strings.R.string.capture_audio)
+                .clickOnContentDescription(org.odk.collect.strings.R.string.stop_recording)
+                .checkIsTranslationDisplayed("Target16")
+                .clickOnString(org.odk.collect.strings.R.string.delete_answer_file)
+                .clickOnButtonInDialog(org.odk.collect.strings.R.string.delete_answer_file, new FormEntryPage("fieldlist-updates"))
+                .assertTextDoesNotExist("Target16");
+    }
+
     // Scroll down until the desired group name is visible. This is needed to make the tests work
     // on devices with screens of different heights.
     private void jumpToGroupWithText(String text) {
