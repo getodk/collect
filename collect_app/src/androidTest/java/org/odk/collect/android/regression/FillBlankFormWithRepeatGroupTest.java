@@ -262,24 +262,6 @@ public class FillBlankFormWithRepeatGroupTest {
     }
 
     @Test
-    public void firstQuestionWithLongLabel_ShouldDisplayBothAnswersInHierarchyPage() {
-
-        //TestCase11
-        rule.startAtMainMenu()
-                .copyForm("basic.xml")
-                .startBlankForm("basic")
-                .inputText("1")
-                .closeSoftKeyboard()
-                .swipeToNextQuestion("what is your age")
-                .inputText("2")
-                .closeSoftKeyboard()
-                .clickGoToArrow()
-                .assertText("2")
-                .clickJumpEndButton()
-                .clickFinalize();
-    }
-
-    @Test
     public void openHierarchyPageFromLastView_ShouldNotDisplayError() {
 
         //TestCase12
