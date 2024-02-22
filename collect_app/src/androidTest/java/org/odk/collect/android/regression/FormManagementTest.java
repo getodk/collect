@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
-import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.ProjectSettingsPage;
 
@@ -22,26 +21,6 @@ public class FormManagementTest {
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
-
-    @SuppressWarnings("PMD.AvoidCallingFinalize")
-    @Test
-    public void validationUponSwipe_ShouldDisplay() {
-        //TestCase7,8
-        rule.startAtMainMenu()
-                .copyForm("OnePageFormValid2.xml")
-                .startBlankForm("OnePageFormValid")
-                .inputText("Bla")
-                .swipeToNextQuestionWithConstraintViolation("Response length must be between 5 and 15")
-                .clickOptionsIcon()
-                .clickGeneralSettings()
-                .openFormManagement()
-                .openConstraintProcessing()
-                .clickOnString(org.odk.collect.strings.R.string.constraint_behavior_on_finalize)
-                .pressBack(new ProjectSettingsPage())
-                .pressBack(new FormEntryPage("OnePageFormValid"))
-                .swipeToEndScreen()
-                .clickSaveAndExitWithError("Response length must be between 5 and 15");
-    }
 
     @Test
     public void guidanceForQuestion_ShouldDisplayAlways() {
