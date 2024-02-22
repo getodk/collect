@@ -14,7 +14,6 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.entities.InMemEntitiesRepository;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
@@ -74,7 +73,7 @@ public class FormLoaderTaskTest {
         final Uri formUri = FormsContract.getUri("DEMO", form.getDbId());
 
         // initial load with side effects
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), new InMemEntitiesRepository(), mock());
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), mock());
         FormLoaderTask.FECWrapper wrapper = formLoaderTask.executeSynchronously();
         Assert.assertNotNull(wrapper);
         Assert.assertNotNull(wrapper.getController());
@@ -85,7 +84,7 @@ public class FormLoaderTaskTest {
         long dbLastModified = dbFile.lastModified();
 
         // subsequent load should succeed despite side effects from import
-        formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), new InMemEntitiesRepository(), mock());
+        formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), mock());
         wrapper = formLoaderTask.executeSynchronously();
         Assert.assertNotNull(wrapper);
         Assert.assertNotNull(wrapper.getController());

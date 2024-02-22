@@ -29,8 +29,6 @@ import com.opencsv.exceptions.CsvValidationException;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.data.StringData;
-import org.javarosa.core.model.instance.DataInstance;
 import org.javarosa.core.model.instance.InstanceInitializationFactory;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
@@ -58,8 +56,6 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.ZipUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.SchedulerAsyncTaskMimic;
-import org.odk.collect.entities.EntitiesRepository;
-import org.odk.collect.entities.Entity;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.savepoints.Savepoint;
@@ -70,11 +66,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 import timber.log.Timber;
 
@@ -96,7 +89,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
     private final String xpath;
     private final String waitingXPath;
     private FormEntryControllerFactory formEntryControllerFactory;
-    private final EntitiesRepository entitiesRepository;
     private boolean pendingActivityResult;
     private int requestCode;
     private int resultCode;
@@ -149,14 +141,13 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
 
     FECWrapper data;
 
-    public FormLoaderTask(Uri uri, String uriMimeType, String xpath, String waitingXPath, FormEntryControllerFactory formEntryControllerFactory, Scheduler scheduler, EntitiesRepository entitiesRepository, SavepointsRepository savepointsRepository) {
+    public FormLoaderTask(Uri uri, String uriMimeType, String xpath, String waitingXPath, FormEntryControllerFactory formEntryControllerFactory, Scheduler scheduler, SavepointsRepository savepointsRepository) {
         super(scheduler);
         this.uri = uri;
         this.uriMimeType = uriMimeType;
         this.xpath = xpath;
         this.waitingXPath = waitingXPath;
         this.formEntryControllerFactory = formEntryControllerFactory;
-        this.entitiesRepository = entitiesRepository;
         this.savepointsRepository = savepointsRepository;
     }
 
@@ -239,8 +230,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
 
         boolean usedSavepoint = false;
 
-        addOfflineEntititesToSecondaryInstances(fec);
-
         try {
             Timber.i("Initializing form.");
             final long start = System.currentTimeMillis();
@@ -282,35 +271,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         }
         data = new FECWrapper(fc, usedSavepoint);
         return data;
-    }
-
-    private void addOfflineEntititesToSecondaryInstances(FormEntryController fec) {
-        Enumeration<DataInstance> nonMainInstances = fec.getModel().getForm().getNonMainInstances();
-        List<DataInstance> entityListInstances = Collections.list(nonMainInstances)
-                .stream()
-                .filter((instance) -> entitiesRepository.getDatasets().contains(instance.getName()))
-                .collect(Collectors.toList());
-
-        entityListInstances.stream().forEach((instance) -> {
-            TreeElement root = (TreeElement) instance.getRoot();
-            int startingMultiplicity = root.getNumChildren();
-
-            List<Entity> entities = entitiesRepository.getEntities(instance.getName());
-            for (int i = 0; i < entities.size(); i++) {
-                Entity entity = entities.get(i);
-                TreeElement name = new TreeElement("name");
-                name.setValue(new StringData(entity.getId()));
-
-                TreeElement label = new TreeElement("label");
-                label.setValue(new StringData(entity.getLabel()));
-
-                TreeElement item = new TreeElement("item", startingMultiplicity + i);
-                item.addChild(name);
-                item.addChild(label);
-
-                root.addChild(item);
-            }
-        });
     }
 
     private static void unzipMediaFiles(File formMediaDir) {

@@ -8,6 +8,7 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.application.initialization.upgrade.UpgradeInitializer
+import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -22,7 +23,8 @@ class ApplicationInitializer(
     private val analyticsInitializer: AnalyticsInitializer,
     private val mapsInitializer: MapsInitializer,
     private val projectsRepository: ProjectsRepository,
-    private val settingsProvider: SettingsProvider
+    private val settingsProvider: SettingsProvider,
+    private val entitiesRepositoryProvider: EntitiesRepositoryProvider
 ) {
     fun initialize() {
         initializeLocale()
@@ -40,7 +42,7 @@ class ApplicationInitializer(
             context
         ).initialize()
         mapsInitializer.initialize()
-        JavaRosaInitializer(propertyManager).initialize()
+        JavaRosaInitializer(propertyManager, entitiesRepositoryProvider).initialize()
         SystemThemeMismatchFixInitializer(context).initialize()
     }
 
