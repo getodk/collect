@@ -4,6 +4,7 @@ import android.app.Application
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.androidshared.data.getState
 import org.odk.collect.entities.EntitiesRepository
+import org.odk.collect.entities.InMemEntitiesRepository
 
 class EntitiesRepositoryProvider(application: Application, private val projectsDataService: ProjectsDataService) {
 

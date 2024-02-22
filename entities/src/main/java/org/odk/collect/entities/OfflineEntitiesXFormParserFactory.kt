@@ -20,25 +20,52 @@ class OfflineEntitiesXFormParserFactory(
     }
 }
 
-private class OfflineEntitiesExternalDataInstanceProcessor(private val entitiesRepository: EntitiesRepository) :
+internal class OfflineEntitiesExternalDataInstanceProcessor(private val entitiesRepository: EntitiesRepository) :
     XFormParser.ExternalDataInstanceProcessor {
     override fun processInstance(id: String, root: TreeElement) {
         if (entitiesRepository.getDatasets().contains(id)) {
-            val startingMultiplicity = root.numChildren
+            val items = root.getChildrenWithName(ITEM_ELEMENT)
+            val startingMultiplicity = items.size
 
             entitiesRepository.getEntities(id).forEachIndexed { index, entity ->
-                val name = TreeElement("name")
-                name.value = StringData(entity.id)
+                val duplicateIndex =
+                    items.indexOfFirst { it.getFirstChild(ID_ELEMENT)?.value?.value == entity.id }
 
-                val label = TreeElement("label")
-                label.value = StringData(entity.label)
+                if (duplicateIndex == -1) {
+                    val name = TreeElement(ID_ELEMENT)
+                    name.value = StringData(entity.id)
 
-                val item = TreeElement("item", startingMultiplicity + index)
-                item.addChild(name)
-                item.addChild(label)
+                    val label = TreeElement(LABEL_ELEMENT)
+                    label.value = StringData(entity.label)
 
-                root.addChild(item)
+                    val item = TreeElement(ITEM_ELEMENT, startingMultiplicity + index)
+                    item.addChild(name)
+                    item.addChild(label)
+
+                    root.addChild(item)
+                } else {
+                    val duplicateElement = root.getChildAt(duplicateIndex)
+                    duplicateElement.getFirstChild(LABEL_ELEMENT)!!.value = StringData(entity.label)
+                    entity.properties.forEach { property ->
+                        val propertyElement = duplicateElement.getFirstChild(property.first)
+                        if (propertyElement != null) {
+                            propertyElement.value = StringData(property.second)
+                        } else {
+                            duplicateElement.addChild(
+                                TreeElement(property.first).also {
+                                    it.value = StringData(property.second)
+                                }
+                            )
+                        }
+                    }
+                }
             }
         }
+    }
+
+    companion object {
+        private const val ID_ELEMENT = "name"
+        private const val LABEL_ELEMENT = "label"
+        private const val ITEM_ELEMENT = "item"
     }
 }

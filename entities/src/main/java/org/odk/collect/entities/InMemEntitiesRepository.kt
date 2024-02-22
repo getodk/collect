@@ -1,7 +1,4 @@
-package org.odk.collect.android.entities
-
-import org.odk.collect.entities.EntitiesRepository
-import org.odk.collect.entities.Entity
+package org.odk.collect.entities
 
 class InMemEntitiesRepository : EntitiesRepository {
 
