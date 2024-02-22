@@ -53,6 +53,10 @@ dependencies {
     implementation(project(":androidshared"))
 
     implementation(Dependencies.kotlin_stdlib)
+    implementation(Dependencies.javarosa) {
+        exclude(group = "joda-time")
+        exclude(group = "org.hamcrest", module = "hamcrest-all")
+    }
     implementation(Dependencies.androidx_appcompat)
     implementation(Dependencies.android_material)
     implementation(Dependencies.androidx_navigation_fragment_ktx)
