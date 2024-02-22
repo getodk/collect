@@ -42,25 +42,37 @@ internal class OfflineEntitiesExternalDataInstanceProcessor(private val entities
                     item.addChild(name)
                     item.addChild(label)
 
+                    entity.properties.forEach { property ->
+                        addChild(item, property)
+                    }
+
                     root.addChild(item)
                 } else {
                     val duplicateElement = root.getChildAt(duplicateIndex)
+
                     duplicateElement.getFirstChild(LABEL_ELEMENT)!!.value = StringData(entity.label)
                     entity.properties.forEach { property ->
                         val propertyElement = duplicateElement.getFirstChild(property.first)
                         if (propertyElement != null) {
                             propertyElement.value = StringData(property.second)
                         } else {
-                            duplicateElement.addChild(
-                                TreeElement(property.first).also {
-                                    it.value = StringData(property.second)
-                                }
-                            )
+                            addChild(duplicateElement, property)
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun addChild(
+        element: TreeElement,
+        nameAndValue: Pair<String, String>
+    ) {
+        element.addChild(
+            TreeElement(nameAndValue.first).also {
+                it.value = StringData(nameAndValue.second)
+            }
+        )
     }
 
     companion object {

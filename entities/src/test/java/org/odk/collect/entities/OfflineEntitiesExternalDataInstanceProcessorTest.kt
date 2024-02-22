@@ -8,9 +8,29 @@ import org.junit.Test
 
 class OfflineEntitiesExternalDataInstanceProcessorTest {
 
+    private val entitiesRepository = InMemEntitiesRepository()
+
+    @Test
+    fun `includes properties in offline entity elements`() {
+        val entity =
+            Entity("people", "1", "Shiv Roy", listOf(Pair("age", "35"), Pair("born", "England")))
+        entitiesRepository.save(entity)
+
+        val processor =
+            OfflineEntitiesExternalDataInstanceProcessor(entitiesRepository)
+
+        val instance = TreeElement("root")
+        processor.processInstance("people", instance)
+        assertThat(instance.numChildren, equalTo(1))
+
+        val item = instance.getChildAt(0)!!
+        assertThat(item.numChildren, equalTo(4))
+        assertThat(item.getFirstChild("age")?.value?.value, equalTo("35"))
+        assertThat(item.getFirstChild("born")?.value?.value, equalTo("England"))
+    }
+
     @Test
     fun `uses offline entity when there is a duplicate in online entities`() {
-        val entitiesRepository = InMemEntitiesRepository()
         val entity = Entity("people", "1", "Shiv Roy", listOf(Pair("age", "35")))
         entitiesRepository.save(entity)
 
@@ -52,7 +72,6 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
 
     @Test
     fun `retains properties in the offline entity if they don't exist in the online duplicate`() {
-        val entitiesRepository = InMemEntitiesRepository()
         val entity = Entity("people", "1", "Shiv Roy", listOf(Pair("age", "35")))
         entitiesRepository.save(entity)
 
