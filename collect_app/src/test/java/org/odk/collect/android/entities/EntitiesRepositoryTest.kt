@@ -14,8 +14,8 @@ abstract class EntitiesRepositoryTest {
     fun `getEntities returns entities for dataset`() {
         val repository = buildSubject()
 
-        val wine = Entity("wines", emptyList())
-        val whisky = Entity("whiskys", emptyList())
+        val wine = Entity("wines", "1", "Léoville Barton 2008", emptyList())
+        val whisky = Entity("whiskys", "1", "Lagavulin 16", emptyList())
         repository.save(wine)
         repository.save(whisky)
 
