@@ -7,14 +7,17 @@ import org.javarosa.xform.parse.XFormParser
 
 class OfflineEntitiesXFormParserFactory(
     base: IXFormParserFactory,
-    private val entitiesRepositoryProvider: () -> EntitiesRepository
+    private val entitiesRepositoryProvider: () -> EntitiesRepository,
+    private val enabled: () -> Boolean
 ) : IXFormParserFactory.Wrapper(base) {
     override fun apply(xFormParser: XFormParser): XFormParser {
-        xFormParser.addProcessor(
-            OfflineEntitiesExternalDataInstanceProcessor(
-                entitiesRepositoryProvider()
+        if (enabled()) {
+            xFormParser.addProcessor(
+                OfflineEntitiesExternalDataInstanceProcessor(
+                    entitiesRepositoryProvider()
+                )
             )
-        )
+        }
 
         return xFormParser
     }

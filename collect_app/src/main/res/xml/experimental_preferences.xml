@@ -4,14 +4,19 @@
 
     <Preference
         android:icon="@drawable/ic_person_24dp"
-        android:title="@string/entities_title"
         android:key="entities"
-        app:persistent="false"/>
+        android:title="@string/entities_title"
+        app:persistent="false" />
 
     <Preference
         android:icon="@drawable/ic_outline_settings_applications_accent_24"
-        android:title="@string/dev_tools"
         android:key="dev_tools"
-        app:persistent="false"/>
+        android:title="@string/dev_tools"
+        app:persistent="false" />
+
+    <SwitchPreferenceCompat
+        android:key="experimental_local_entities"
+        android:title="Include local entities in forms"
+        app:iconSpaceReserved="false" />
 
 </PreferenceScreen>

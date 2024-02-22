@@ -42,7 +42,7 @@ class ApplicationInitializer(
             context
         ).initialize()
         mapsInitializer.initialize()
-        JavaRosaInitializer(propertyManager, entitiesRepositoryProvider).initialize()
+        JavaRosaInitializer(propertyManager, entitiesRepositoryProvider, settingsProvider).initialize()
         SystemThemeMismatchFixInitializer(context).initialize()
     }
 
