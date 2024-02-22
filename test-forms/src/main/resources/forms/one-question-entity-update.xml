@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:entities="http://www.opendatakit.org/xforms/entities">
+	<h:head>
+		<h:title>One Question Entity Update</h:title>
+		<model odk:xforms-version="1.0.0" entities:entities-version="2023.1.0">
+			<instance>
+				<data id="one_question_entity_update" version="1">
+					<person/>
+					<age/>
+					<meta>
+						<instanceID/>
+						<instanceName/>
+						<entity dataset="people" update="true" id="">
+							<label/>
+						</entity>
+					</meta>
+				</data>
+			</instance>
+
+			<instance id="people" src="jr://file-csv/people.csv"/>
+
+			<bind nodeset="/data/person" type="string"/>
+			<bind nodeset="/data/age" type="int" entities:saveto="age"/>
+
+			<bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+
+			<bind nodeset="/data/meta/entity/@id" type="string" calculate="/data/person"/>
+		</model>
+	</h:head>
+	<h:body>
+		<select1 ref="/data/person">
+			<label>Select person</label>
+			<itemset nodeset="instance('people')/root/item">
+				<value ref="name"/>
+				<label ref="label"/>
+			</itemset>
+		</select1>
+		<input ref="/data/age">
+			<label>Age</label>
+		</input>
+	</h:body>
+</h:html>

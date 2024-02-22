@@ -19,13 +19,33 @@ class EntityFormTest {
         .around(rule)
 
     @Test
-    fun fillingFormWithEntityCreateElement_createsAnEntity() {
+    fun fillingEntityRegistrationForm_createsEntityInTheBrowser() {
         rule.startAtMainMenu()
-            .copyForm("one-question-entity.xml")
-            .startBlankForm("One Question Entity")
+            .copyForm("one-question-entity-registration.xml")
+            .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
             .openEntityBrowser()
             .clickOnDataset("people")
             .assertEntity("full_name: Logan Roy")
+    }
+
+    @Test
+    fun fillingEntityRegistrationForm_createsEntityForFollowUpForms() {
+        rule.startAtMainMenu()
+            .copyForm("one-question-entity-registration.xml")
+            .copyForm("one-question-entity-update.xml", listOf("people.csv"))
+
+            .startBlankForm("One Question Entity Registration")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+
+            .startBlankForm("One Question Entity Update")
+            .assertQuestion("Select person")
+            .assertText("Roman Roy")
+            .assertText("Logan Roy")
+            .clickOnText("Logan Roy")
+            .swipeToNextQuestion("Age")
+            .answerQuestion("Age", "82")
+            .swipeToEndScreen()
+            .clickFinalize()
     }
 }

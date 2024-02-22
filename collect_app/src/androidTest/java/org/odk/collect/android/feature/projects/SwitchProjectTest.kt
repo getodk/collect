@@ -47,7 +47,7 @@ class SwitchProjectTest {
 
     @Test
     fun switchingProject_switchesSettingsFormsInstancesAndEntities() {
-        testDependencies.server.addForm("One Question Entity", "one-question-entity", "1", "one-question-entity.xml")
+        testDependencies.server.addForm("One Question Entity", "one-question-entity", "1", "one-question-entity-registration.xml")
 
         rule.startAtMainMenu()
             // Copy and fill form

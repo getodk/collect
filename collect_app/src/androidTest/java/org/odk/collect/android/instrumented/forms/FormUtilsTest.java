@@ -16,6 +16,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.entities.InMemEntitiesRepository;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -60,7 +61,7 @@ public class FormUtilsTest {
         final Uri formUri = FormsContract.getUri("DEMO", form.getDbId());
 
         // Load the form in order to populate the ReferenceManager
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), mock());
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), new InMemEntitiesRepository(), mock());
         formLoaderTask.executeSynchronously();
 
         final File formXml = new File(formPath);
