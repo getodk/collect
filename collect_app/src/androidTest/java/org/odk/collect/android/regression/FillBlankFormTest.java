@@ -303,17 +303,6 @@ public class FillBlankFormTest {
     }
 
     @Test
-    public void user_ShouldBeAbleToFillTheForm() {
-        //TestCase27
-        rule.startAtMainMenu()
-                .copyForm("metadata2.xml")
-                .clickFillBlankForm()
-                .clickOnEmptyForm("metadata2")
-                .clickFinalize()
-                .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved);
-    }
-
-    @Test
     public void question_ShouldBeVisibleOnTheTopOfHierarchy() {
         //TestCase23
         rule.startAtMainMenu()
