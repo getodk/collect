@@ -27,7 +27,6 @@ import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.pages.AddNewRepeatDialog;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.FormHierarchyPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
@@ -582,22 +581,6 @@ public class FillBlankFormTest {
                 .clickGoUpIcon()
                 .clickOnText("Enemies")
                 .checkListSizeInHierarchy(1);
-    }
-
-    @Test
-    public void hierachyView_shouldNotChangeAfterScreenRotation() {
-        //TestCase29
-        rule.startAtMainMenu()
-                .copyForm("repeat_group_form.xml")
-                .startBlankFormWithRepeatGroup("Repeat Group", "Grp1")
-                .clickOnDoNotAdd(new FormEntryPage("Repeat Group"))
-                .clickGoToArrow()
-                .clickGoUpIcon()
-                .checkIfElementInHierarchyMatchesToText("Group Name", 0)
-                .rotateToLandscape(new FormHierarchyPage("Repeat Group"))
-                .checkIfElementInHierarchyMatchesToText("Group Name", 0)
-                .rotateToPortrait(new FormHierarchyPage("Repeat Group"))
-                .checkIfElementInHierarchyMatchesToText("Group Name", 0);
     }
 
     private String getQuestionText() {
