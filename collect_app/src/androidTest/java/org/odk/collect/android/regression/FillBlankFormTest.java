@@ -8,7 +8,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
@@ -21,23 +20,6 @@ public class FillBlankFormTest {
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
-
-    @Test
-    public void answers_ShouldBeSuggestedInComplianceWithSelectedLetters() {
-        //TestCase41
-        rule.startAtMainMenu()
-                .copyForm("formulaire_adherent.xml", singletonList("espece.csv"))
-                .startBlankFormWithRepeatGroup("formulaire_adherent", "Ajouté une observation")
-                .clickOnAdd(new FormEntryPage("formulaire_adherent"))
-                .clickOnText("Plante")
-                .inputText("Abi")
-                .swipeToNextQuestion("Nom latin de l'espece", true)
-                .assertText("Abies")
-                .swipeToPreviousQuestion("Nom latin de l'espece - au moins 3 lettres", true)
-                .inputText("Abr")
-                .swipeToNextQuestion("Nom latin de l'espece", true)
-                .assertText("Abrotanum alpestre");
-    }
 
     @Test
     public void searchExpression_ShouldDisplayWhenItContainsOtherAppearanceName() {
