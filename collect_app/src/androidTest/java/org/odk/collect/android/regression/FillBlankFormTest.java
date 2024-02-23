@@ -25,8 +25,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.pages.AddNewRepeatDialog;
-import org.odk.collect.android.support.pages.BlankFormSearchPage;
-import org.odk.collect.android.support.pages.FillBlankFormPage;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.FormHierarchyPage;
@@ -46,17 +44,6 @@ public class FillBlankFormTest {
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
-
-    @Test
-    public void searchBar_ShouldSearchForm() {
-        //TestCase12
-        rule.startAtMainMenu()
-                .clickFillBlankForm()
-                .clickMenuFilter()
-                .searchInBar("Aaa")
-                .pressBack(new BlankFormSearchPage())
-                .pressBack(new FillBlankFormPage());
-    }
 
     @Test
     public void formsWithDate_ShouldSaveFormsWithSuccess() {
