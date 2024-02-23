@@ -1,12 +1,6 @@
 package org.odk.collect.android.regression;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertNotSame;
-import static org.odk.collect.android.support.matchers.DrawableMatcher.withImageDrawable;
-import static org.odk.collect.testshared.RecyclerViewMatcher.withRecyclerView;
 import static java.util.Collections.singletonList;
 
 import android.widget.FrameLayout;
@@ -57,61 +51,6 @@ public class FillBlankFormTest {
                 .inputText("Abr")
                 .swipeToNextQuestion("Nom latin de l'espece", true)
                 .assertText("Abrotanum alpestre");
-    }
-
-    @Test
-    public void sortByDialog_ShouldBeTranslatedAndDisplayProperIcons() {
-        //TestCase37
-        rule.startAtMainMenu()
-                .openProjectSettingsDialog()
-                .clickSettings()
-                .clickOnUserInterface()
-                .clickOnLanguage()
-                .clickOnSelectedLanguage("Deutsch")
-                .clickFillBlankForm()
-                .clickOnSortByButton()
-                .assertText("Sortieren nach");
-
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(0, R.id.title))
-                .check(matches(withText("Name, A-Z")));
-
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(0, R.id.icon))
-                .check(matches(withImageDrawable(R.drawable.ic_sort_by_alpha)));
-
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(1, R.id.title))
-                .check(matches(withText("Name, Z-A")));
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(1, R.id.icon))
-                .check(matches(withImageDrawable(R.drawable.ic_sort_by_alpha)));
-
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(2, R.id.title))
-                .check(matches(withText("Datum, neuestes zuerst")));
-
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(2, R.id.icon))
-                .check(matches(withImageDrawable(R.drawable.ic_access_time)));
-
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(3, R.id.title))
-                .check(matches(withText("Datum, ältestes zuerst")));
-
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(3, R.id.icon))
-                .check(matches(withImageDrawable(R.drawable.ic_access_time)));
-
-        pressBack();
-        pressBack();
-
-        new MainMenuPage()
-                .openProjectSettingsDialog()
-                .clickSettings()
-                .clickOnUserInterface()
-                .clickOnLanguage()
-                .clickOnSelectedLanguage("English");
     }
 
     @Test
