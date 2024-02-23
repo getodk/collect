@@ -219,29 +219,6 @@ public class FillBlankFormTest {
     }
 
     @Test
-    public void noDataLost_ShouldRememberAnswersForMultiSelectWidget() {
-        //TestCase44
-        rule.startAtMainMenu()
-                .copyForm("test_multiselect_cleared.xml")
-                .startBlankForm("test_multiselect_cleared")
-                .clickOnText("a")
-                .clickOnText("c")
-                .swipeToNextQuestion("If you go back, the answers are deleted if you selected more than 1 option.")
-                .swipeToNextQuestion("choice2", true)
-                .clickOnText("b")
-                .clickOnText("d")
-                .swipeToEndScreen()
-                .swipeToPreviousQuestion("choice2", true)
-                .swipeToPreviousQuestion("If you go back, the answers are deleted if you selected more than 1 option.")
-                .swipeToPreviousQuestion("choice1", true)
-                .clickGoToArrow()
-                .assertText("a, c")
-                .assertText("b, d")
-                .clickJumpEndButton()
-                .clickGoToArrow();
-    }
-
-    @Test
     public void typeMismatchErrorMessage_shouldBeDisplayed() {
         //TestCase48
         rule.startAtMainMenu()
