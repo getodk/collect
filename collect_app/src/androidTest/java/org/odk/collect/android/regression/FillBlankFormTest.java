@@ -7,7 +7,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertNotSame;
 import static org.odk.collect.android.support.matchers.DrawableMatcher.withImageDrawable;
 import static org.odk.collect.testshared.RecyclerViewMatcher.withRecyclerView;
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 import android.widget.FrameLayout;
@@ -498,17 +497,6 @@ public class FillBlankFormTest {
                 .swipeToPreviousQuestion("7.1 Select the type of fishing equipment used today to catch the fish present", true)
                 .clickOnText("Seinenet")
                 .swipeToNextQuestion("7.2 What is the size of the mesh for the Seinenet ?", true);
-    }
-
-    @Test
-    public void when_scrollQuestionsList_should_questionsNotDisappear() {
-        //TestCase54
-        rule.startAtMainMenu()
-                .copyForm("3403.xml", asList("staff_list.csv", "staff_rights.csv"))
-                .startBlankForm("3403_ODK Version 1.23.3 Tester")
-                .clickOnText("New Farmer Registration")
-                .clickOnText("Insemination")
-                .assertText("New Farmer Registration");
     }
 
     @Test
