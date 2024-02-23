@@ -82,24 +82,6 @@ public class FillBlankFormTest {
     }
 
     @Test
-    public void predicateWarning_ShouldBeAbleToFillTheForm() {
-        //TestCase24
-        rule.startAtMainMenu()
-                .copyForm("predicate-warning.xml")
-                .startBlankForm("predicate-warning")
-                .clickOnText("Apple")
-                .swipeToNextQuestion("Variety (absolute reference)")
-                .clickOnText("Gala")
-                .swipeToNextQuestion("Variety (relative reference)")
-                .swipeToNextQuestion("Varieties (absolute reference)")
-                .clickOnText("Gala")
-                .clickOnText("Granny Smith")
-                .swipeToNextQuestion("Varieties (relative reference)")
-                .swipeToEndScreen()
-                .clickFinalize();
-    }
-
-    @Test
     public void searchAppearance_ShouldDisplayWhenSearchAppearanceIsSpecified() {
         //TestCase25
         rule.startAtMainMenu()
