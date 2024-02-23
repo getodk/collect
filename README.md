@@ -1,6 +1,6 @@
 # Field Task
 
-Field Task is an Android app that can be used for collecting data for Monitoring and Evaluation from outside the office including locations without data connectivity. It also has task management functionality which enables it to be used for work force management applications.  Further details on installing and testing Field Task on an Android device can be found [here](https://www.smap.com.au/docs/fieldTask.html).  You will need to [set up an account](https://www.smap.com.au/docs/getting-started.html#create-an-account-on-the-hosted-server) on the free hosted server to test the app.
+Field Task is an Android app that can be used for collecting data for Monitoring and Evaluation from outside the office including locations without data connectivity. It is part of the Smap framework for M&E and Case Management which means it can be used for digitilisation projects.  Further details on installing and testing Field Task on an Android device can be found [here](https://www.smap.com.au/docs/fieldTask.html).  You will need to [set up an account](https://www.smap.com.au/docs/getting-started.html#create-an-account-on-the-hosted-server) on the free hosted server to test the app.
  
 
 ## Table of Contents
@@ -84,11 +84,11 @@ in the table below.
 
 |Name          |Github                                        |Purpose    |
 |------------- |--------------------------------------------- |-----------|
-|FieldTas4k    |https://github.com/smap-consulting/fieldTask4 |FieldTask  |
+|FieldTask     |https://github.com/smap-consulting/fieldTask4 |FieldTask  |
 |JavaRosa      |https://github.com/smap-consulting/javarosa   |FieldTask  |
-|Smap Server 2 |https://github.com/smap-consulting/smapserver2|Server     |
-|WebForm       |https://github.com/nap2000/enketo-core        |Server     |
-|Smap Client   |https://github.com/nap2000/prop-smapserver    |Server     |
+|SmapServer    |https://github.com/smap-consulting/smapserver2|Back end Server code     |
+|WebForm       |https://github.com/nap2000/enketo-core        |Browser client    |
+|SmapClient    |https://github.com/nap2000/prop-smapserver    |Administrative client     |
 |Documentation |https://github.com/nap2000/docs               |Documentation |
 
 Acknowledgements
