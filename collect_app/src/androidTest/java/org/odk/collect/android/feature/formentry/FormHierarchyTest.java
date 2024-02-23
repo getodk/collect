@@ -200,4 +200,16 @@ public class FormHierarchyTest {
                 .assertPath("Outer")
                 .assertNotRemovableGroup();
     }
+
+    @Test
+    public void when_openHierarchyViewFromLastPage_should_mainGroupViewBeVisible() {
+        rule.startAtMainMenu()
+                .copyForm("repeat_group_form.xml")
+                .startBlankFormWithRepeatGroup("Repeat Group", "Grp1")
+                .clickOnDoNotAdd(new FormEntryPage("Repeat Group"))
+                .clickGoToArrow()
+                .clickJumpEndButton()
+                .clickGoToArrow()
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0);
+    }
 }

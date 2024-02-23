@@ -600,19 +600,6 @@ public class FillBlankFormTest {
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0);
     }
 
-    @Test
-    public void when_openHierarchyViewFromLastPage_should_mainGroupViewBeVisible() {
-        //TestCase30
-        rule.startAtMainMenu()
-                .copyForm("repeat_group_form.xml")
-                .startBlankFormWithRepeatGroup("Repeat Group", "Grp1")
-                .clickOnDoNotAdd(new FormEntryPage("Repeat Group"))
-                .clickGoToArrow()
-                .clickJumpEndButton()
-                .clickGoToArrow()
-                .checkIfElementInHierarchyMatchesToText("Group Name", 0);
-    }
-
     private String getQuestionText() {
         FormFillingActivity formFillingActivity = (FormFillingActivity) ActivityHelpers.getActivity();
         FrameLayout questionContainer = formFillingActivity.findViewById(R.id.text_container);
