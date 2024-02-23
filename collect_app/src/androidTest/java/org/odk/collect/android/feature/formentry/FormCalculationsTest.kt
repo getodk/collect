@@ -19,14 +19,13 @@ class FormCalculationsTest {
     private val rule = CollectTestRule()
 
     @get:Rule
-    val ruleChain: RuleChain = TestRuleChain.chain()
-            .around(rule)
+    val ruleChain: RuleChain = TestRuleChain.chain().around(rule)
 
     @Test
     fun randomFunction_ShouldWorkCorrectly() {
         rule.startAtMainMenu()
-                .copyForm("random.xml")
-                .copyForm("randomTest_broken.xml")
+            .copyForm("random.xml")
+            .copyForm("randomTest_broken.xml")
 
         val firstQuestionAnswers: MutableList<String> = ArrayList()
         val secondQuestionAnswers: MutableList<String> = ArrayList()
