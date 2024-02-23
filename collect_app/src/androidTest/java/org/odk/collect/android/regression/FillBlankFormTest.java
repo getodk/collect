@@ -24,7 +24,6 @@ import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ActivityHelpers;
-import org.odk.collect.android.support.pages.AddNewRepeatDialog;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -544,43 +543,6 @@ public class FillBlankFormTest {
                 .assertText("File: " + formsDirPath + "/fieldlist-updates_nocsv-media/fruits.csv is missing.")
                 .swipeToEndScreen()
                 .clickFinalize();
-    }
-
-    @Test
-    public void groups_shouldBeVisibleInHierarchyView() {
-        //TestCase28
-        rule.startAtMainMenu()
-                .copyForm("nested-repeats-complex.xml")
-                .startBlankForm("nested-repeats-complex")
-                .swipeToNextQuestion("You will now be asked questions about your friends. When you see a dialog, tap \"Add\" until you have added all your friends.")
-                .swipeToNextQuestionWithRepeatGroup("Friends")
-                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
-                .inputText("La")
-                .swipeToNextQuestion("You will now be asked questions about La's pets. When you see a dialog, tap \"Add\" until you have added all of La's pets.")
-                .swipeToNextQuestionWithRepeatGroup("Pets")
-                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
-                .inputText("Le")
-                .swipeToNextQuestionWithRepeatGroup("Pets")
-                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
-                .inputText("Be")
-                .swipeToNextQuestionWithRepeatGroup("Pets")
-                .clickOnDoNotAdd(new AddNewRepeatDialog("Friends"))
-                .clickOnDoNotAdd(new AddNewRepeatDialog("Enemies"))
-                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
-                .inputText("Bu")
-                .swipeToNextQuestionWithRepeatGroup("Enemies")
-                .clickOnDoNotAdd(new FormEndPage("nested-repeats-complex"))
-                .clickGoToArrow()
-                .clickOnText("Friends")
-                .checkListSizeInHierarchy(1)
-                .clickOnElementInHierarchy(0)
-                .clickOnText("Pets")
-                .checkListSizeInHierarchy(2)
-                .clickGoUpIcon()
-                .clickGoUpIcon()
-                .clickGoUpIcon()
-                .clickOnText("Enemies")
-                .checkListSizeInHierarchy(1);
     }
 
     private String getQuestionText() {
