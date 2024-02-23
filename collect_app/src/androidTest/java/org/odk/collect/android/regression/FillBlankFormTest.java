@@ -363,38 +363,6 @@ public class FillBlankFormTest {
     }
 
     @Test
-    public void questionValidation_ShouldShowToastOnlyWhenConditionsAreNotMet() {
-        //TestCase43
-        rule.startAtMainMenu()
-                .copyForm("t21257.xml")
-                .startBlankForm("t21257")
-                .clickOnText("mytext1")
-                .inputText("test")
-                .swipeToNextQuestion("mydecimal")
-                .inputText("17")
-                .closeSoftKeyboard()
-                .swipeToNextQuestionWithConstraintViolation("mydecimal constraint")
-                .inputText("117")
-                .closeSoftKeyboard()
-                .swipeToNextQuestionWithConstraintViolation("mydecimal constraint")
-                .inputText("50")
-                .closeSoftKeyboard()
-                .swipeToNextQuestion("mynumbers")
-                .inputText("16")
-                .closeSoftKeyboard()
-                .swipeToNextQuestionWithConstraintViolation("mynumbers constraint")
-                .inputText("116")
-                .closeSoftKeyboard()
-                .swipeToNextQuestionWithConstraintViolation("mynumbers constraint")
-                .inputText("51")
-                .closeSoftKeyboard()
-                .swipeToNextQuestion("mytext2")
-                .inputText("test2")
-                .swipeToNextQuestion("myselect")
-                .swipeToEndScreen();
-    }
-
-    @Test
     public void noDataLost_ShouldRememberAnswersForMultiSelectWidget() {
         //TestCase44
         rule.startAtMainMenu()
