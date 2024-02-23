@@ -251,4 +251,17 @@ public class FormHierarchyTest {
                 .clickOnText("Enemies")
                 .checkListSizeInHierarchy(1);
     }
+
+    @Test
+    public void theListOfQuestionsShouldBeScrolledToTheLastDisplayedQuestionAfterOpeningTheHierarchy() {
+        rule.startAtMainMenu()
+                .copyForm("manyQ.xml")
+                .startBlankForm("manyQ")
+                .swipeToNextQuestion("t2")
+                .swipeToNextQuestion("n1")
+                .clickGoToArrow()
+                .assertText("n1")
+                .assertTextDoesNotExist("t1")
+                .assertTextDoesNotExist("t2");
+    }
 }
