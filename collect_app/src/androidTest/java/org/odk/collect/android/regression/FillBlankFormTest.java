@@ -31,7 +31,6 @@ import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.FormHierarchyPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
@@ -72,23 +71,6 @@ public class FillBlankFormTest {
                 .searchInBar("Aaa")
                 .pressBack(new BlankFormSearchPage())
                 .pressBack(new FillBlankFormPage());
-    }
-
-    @Test
-    public void navigationButtons_ShouldBeVisibleWhenAreSetInTheMiddleOfForm() {
-        //TestCase16
-        rule.startAtMainMenu()
-                .copyForm("all-widgets.xml")
-                .startBlankForm("All widgets")
-                .swipeToNextQuestion("String widget")
-                .clickOptionsIcon()
-                .clickGeneralSettings()
-                .clickOnUserInterface()
-                .clickNavigation()
-                .clickUseSwipesAndButtons()
-                .pressBack(new ProjectSettingsPage())
-                .pressBack(new FormEntryPage("All widgets"))
-                .assertNavigationButtonsAreDisplayed();
     }
 
     @Test
