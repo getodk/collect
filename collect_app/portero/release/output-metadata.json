@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "org.smap.smapTask.android.portero",
+  "variantName": "porteroRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 6814,
+      "versionName": "6.814-portero",
+      "outputFile": "fieldTask-portero-release-null.apk"
+    }
+  ],
+  "elementType": "File"
+}

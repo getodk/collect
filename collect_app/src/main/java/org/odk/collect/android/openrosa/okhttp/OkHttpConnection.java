@@ -416,15 +416,16 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         ByteArrayOutputStream os = null;
 
         if (statusCode != HttpURLConnection.HTTP_OK) {
-            discardEntityBytes(response);
-            String errMsg = response.message() +  " : " + String.valueOf(statusCode) +  " : " + uri.toString();
-            //String errMsg = Collect
-            //        .getInstance()
-            //        .getString(R.string.file_fetch_failed, uri.toString(), response.message(), String.valueOf(statusCode));
+            String mainMsg = "";
+            ResponseBody body = response.body();
+            if(body != null) {
+                mainMsg = body.string();
+            }
 
+            String errMsg = response.message() +  " : " + String.valueOf(statusCode) +  " : " + uri.toString() + " : " + mainMsg;
+            discardEntityBytes(response);
             Timber.e(errMsg);
             throw new Exception(errMsg);    // smap
-            //return new HttpGetResult(null, new HashMap<String, String>(), "", statusCode);    // smap
         }
 
         ResponseBody body = response.body();
