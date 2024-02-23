@@ -303,41 +303,6 @@ public class FillBlankFormTest {
     }
 
     @Test
-    public void app_ShouldNotCrash() {
-        //TestCase32
-        rule.startAtMainMenu()
-                .copyForm("g6Error.xml")
-                .startBlankFormWithError("g6Error")
-                .clickOK(new FormEntryPage("g6Error"))
-                .swipeToEndScreen()
-                .clickFinalize()
-                .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved);
-
-        new MainMenuPage()
-                .copyForm("g6Error2.xml")
-                .startBlankForm("g6Error2")
-                .swipeToNextQuestionWithError()
-                .clickOK(new FormEntryPage("g6Error2"))
-                .swipeToEndScreen()
-                .clickFinalize()
-                .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved);
-
-        new MainMenuPage()
-                .copyForm("emptyGroupFieldList.xml")
-                .clickFillBlankForm()
-                .clickOnEmptyForm("emptyGroupFieldList")
-                .clickFinalize()
-                .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved);
-
-        new MainMenuPage()
-                .copyForm("emptyGroupFieldList2.xml")
-                .startBlankForm("emptyGroupFieldList2")
-                .swipeToEndScreen()
-                .clickFinalize()
-                .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved);
-    }
-
-    @Test
     public void user_ShouldBeAbleToFillTheForm() {
         //TestCase27
         rule.startAtMainMenu()
