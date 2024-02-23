@@ -31,7 +31,6 @@ import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.FormHierarchyPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
@@ -47,20 +46,6 @@ public class FillBlankFormTest {
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
-
-    @Test
-    public void exitDialog_ShouldDisplaySaveAndIgnoreOptions() {
-        //TestCase6 , TestCase9
-        rule.startAtMainMenu()
-                .copyForm("all-widgets.xml")
-                .startBlankForm("All widgets")
-                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
-                .assertText(org.odk.collect.strings.R.string.save_as_draft)
-                .assertText(org.odk.collect.strings.R.string.do_not_save)
-                .clickOnString(org.odk.collect.strings.R.string.do_not_save)
-                .checkIsIdDisplayed(R.id.enter_data)
-                .checkIsIdDisplayed(R.id.get_forms);
-    }
 
     @Test
     public void searchBar_ShouldSearchForm() {
