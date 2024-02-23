@@ -29,7 +29,6 @@ import com.opencsv.exceptions.CsvValidationException;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.instance.ExternalDataInstance;
 import org.javarosa.core.model.instance.InstanceInitializationFactory;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
@@ -67,7 +66,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -316,16 +314,10 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
                     (System.currentTimeMillis() - start) / 1000F);
             formDef = formDefFromXml;
 
-            boolean hasExternalDataInstances = Collections.list(formDef.getNonMainInstances())
-                    .stream()
-                    .anyMatch((instance) -> instance instanceof ExternalDataInstance);
-
-            if (!hasExternalDataInstances) {
-                try {
-                    new ExternalizableFormDefCache().writeCache(formDef, formXml.getPath());
-                } catch (IOException e) {
-                    Timber.e(e);
-                }
+            try {
+                new ExternalizableFormDefCache().writeCache(formDef, formXml.getPath());
+            } catch (IOException e) {
+                Timber.e(e);
             }
 
             return formDefFromXml;

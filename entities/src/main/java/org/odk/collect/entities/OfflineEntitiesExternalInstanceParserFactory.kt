@@ -2,29 +2,30 @@ package org.odk.collect.entities
 
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.instance.TreeElement
-import org.javarosa.xform.parse.IXFormParserFactory
-import org.javarosa.xform.parse.XFormParser
+import org.javarosa.xform.parse.ExternalInstanceParser
+import org.javarosa.xform.parse.ExternalInstanceParserFactory
 
-class OfflineEntitiesXFormParserFactory(
-    base: IXFormParserFactory,
+class OfflineEntitiesExternalInstanceParserFactory(
     private val entitiesRepositoryProvider: () -> EntitiesRepository,
     private val enabled: () -> Boolean
-) : IXFormParserFactory.Wrapper(base) {
-    override fun apply(xFormParser: XFormParser): XFormParser {
+) : ExternalInstanceParserFactory {
+    override fun getExternalInstanceParser(): ExternalInstanceParser {
+        val parser = ExternalInstanceParser()
+
         if (enabled()) {
-            xFormParser.addProcessor(
+            parser.addProcessor(
                 OfflineEntitiesExternalDataInstanceProcessor(
                     entitiesRepositoryProvider()
                 )
             )
         }
 
-        return xFormParser
+        return parser
     }
 }
 
 internal class OfflineEntitiesExternalDataInstanceProcessor(private val entitiesRepository: EntitiesRepository) :
-    XFormParser.ExternalDataInstanceProcessor {
+    ExternalInstanceParser.ExternalDataInstanceProcessor {
     override fun processInstance(id: String, root: TreeElement) {
         if (entitiesRepository.getDatasets().contains(id)) {
             val items = root.getChildrenWithName(ITEM_ELEMENT)
