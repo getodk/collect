@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.testshared.RecyclerViewMatcher;
@@ -213,5 +214,41 @@ public class FormHierarchyTest {
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0)
                 .rotateToPortrait(new FormHierarchyPage("Repeat Group"))
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0);
+    }
+
+    @Test
+    public void groups_shouldBeVisibleInHierarchyView() {
+        rule.startAtMainMenu()
+                .copyForm("nested-repeats-complex.xml")
+                .startBlankForm("nested-repeats-complex")
+                .swipeToNextQuestion("You will now be asked questions about your friends. When you see a dialog, tap \"Add\" until you have added all your friends.")
+                .swipeToNextQuestionWithRepeatGroup("Friends")
+                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
+                .inputText("La")
+                .swipeToNextQuestion("You will now be asked questions about La's pets. When you see a dialog, tap \"Add\" until you have added all of La's pets.")
+                .swipeToNextQuestionWithRepeatGroup("Pets")
+                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
+                .inputText("Le")
+                .swipeToNextQuestionWithRepeatGroup("Pets")
+                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
+                .inputText("Be")
+                .swipeToNextQuestionWithRepeatGroup("Pets")
+                .clickOnDoNotAdd(new AddNewRepeatDialog("Friends"))
+                .clickOnDoNotAdd(new AddNewRepeatDialog("Enemies"))
+                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
+                .inputText("Bu")
+                .swipeToNextQuestionWithRepeatGroup("Enemies")
+                .clickOnDoNotAdd(new FormEndPage("nested-repeats-complex"))
+                .clickGoToArrow()
+                .clickOnText("Friends")
+                .checkListSizeInHierarchy(1)
+                .clickOnElementInHierarchy(0)
+                .clickOnText("Pets")
+                .checkListSizeInHierarchy(2)
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickOnText("Enemies")
+                .checkListSizeInHierarchy(1);
     }
 }
