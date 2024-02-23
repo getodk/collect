@@ -19,7 +19,17 @@ class GuidanceTest {
     var copyFormChain: RuleChain = chain().around(rule)
 
     @Test
-    fun guidanceForQuestion_ShouldDisplayAlways() {
+    fun guidanceForQuestion_ShouldBeHiddenByDefault() {
+        rule.startAtMainMenu()
+            .copyForm("hints_textq.xml")
+            .startBlankForm("hints textq")
+            .assertText("Hint 1")
+            .checkIfElementIsGone(R.id.help_icon)
+            .assertTextDoesNotExist("1 very very very very very very very very very very long text")
+    }
+
+    @Test
+    fun guidanceForQuestion_ShouldBeFullyDisplayedIfAlwaysShownEnabledInSettings() {
         rule.startAtMainMenu()
             .copyForm("hints_textq.xml")
             .openProjectSettingsDialog()
@@ -30,13 +40,13 @@ class GuidanceTest {
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
             .startBlankForm("hints textq")
+            .assertText("Hint 1")
+            .checkIfElementIsGone(R.id.help_icon)
             .assertText("1 very very very very very very very very very very long text")
-            .swipeToEndScreen()
-            .clickFinalize()
     }
 
     @Test
-    fun guidanceForQuestion_ShouldBeCollapsed() {
+    fun guidanceForQuestion_ShouldBeCollapsedIfCollapsedEnabledInSettings() {
         rule.startAtMainMenu()
             .copyForm("hints_textq.xml")
             .openProjectSettingsDialog()
@@ -47,10 +57,10 @@ class GuidanceTest {
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
             .startBlankForm("hints textq")
+            .assertText("Hint 1")
             .checkIsIdDisplayed(R.id.help_icon)
+            .assertTextDoesNotExist("1 very very very very very very very very very very long text")
             .clickOnText("Hint 1")
             .assertText("1 very very very very very very very very very very long text")
-            .swipeToEndScreen()
-            .clickFinalize()
     }
 }
