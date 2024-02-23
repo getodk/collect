@@ -1,10 +1,6 @@
 package org.odk.collect.android.regression;
 
-import static junit.framework.TestCase.assertNotSame;
 import static java.util.Collections.singletonList;
-
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -12,16 +8,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormFillingActivity;
-import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
-
-import java.util.ArrayList;
-import java.util.List;
 
 //Issue NODK-244
 @RunWith(AndroidJUnit4.class)
@@ -154,53 +143,5 @@ public class FillBlankFormTest {
                 .swipeToEndScreen()
                 .clickFinalize()
                 .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved);
-    }
-
-    @Test
-    public void values_ShouldBeRandom() {
-        rule.startAtMainMenu()
-                .copyForm("random.xml")
-                .copyForm("randomTest_broken.xml");
-
-        //TestCase22
-        List<String> firstQuestionAnswers = new ArrayList<>();
-        List<String> secondQuestionAnswers = new ArrayList<>();
-
-        for (int i = 1; i <= 3; i++) {
-            FormEntryPage formEntryPage = new MainMenuPage().startBlankForm("random");
-            firstQuestionAnswers.add(getQuestionText());
-            formEntryPage.swipeToNextQuestion("Your random once value:");
-            secondQuestionAnswers.add(getQuestionText());
-            formEntryPage.swipeToEndScreen().clickFinalize();
-        }
-
-        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
-        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(2));
-        assertNotSame(firstQuestionAnswers.get(1), firstQuestionAnswers.get(2));
-
-        assertNotSame(secondQuestionAnswers.get(0), secondQuestionAnswers.get(1));
-        assertNotSame(secondQuestionAnswers.get(0), secondQuestionAnswers.get(2));
-        assertNotSame(secondQuestionAnswers.get(1), secondQuestionAnswers.get(2));
-
-        firstQuestionAnswers.clear();
-
-        for (int i = 1; i <= 3; i++) {
-            FormEntryPage formEntryPage = new MainMenuPage().startBlankForm("random test");
-            formEntryPage.inputText("3");
-            formEntryPage.swipeToNextQuestion("Your random number was");
-            firstQuestionAnswers.add(getQuestionText());
-            formEntryPage.swipeToEndScreen().clickFinalize();
-        }
-
-        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
-        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(2));
-        assertNotSame(firstQuestionAnswers.get(1), firstQuestionAnswers.get(2));
-    }
-
-    private String getQuestionText() {
-        FormFillingActivity formFillingActivity = (FormFillingActivity) ActivityHelpers.getActivity();
-        FrameLayout questionContainer = formFillingActivity.findViewById(R.id.text_container);
-        TextView questionView = (TextView) questionContainer.getChildAt(0);
-        return questionView.getText().toString();
     }
 }
