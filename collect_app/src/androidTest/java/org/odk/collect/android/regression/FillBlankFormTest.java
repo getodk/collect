@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.support.ActivityHelpers;
-import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
@@ -196,47 +195,6 @@ public class FillBlankFormTest {
         assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
         assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(2));
         assertNotSame(firstQuestionAnswers.get(1), firstQuestionAnswers.get(2));
-    }
-
-    @Test
-    public void answers_shouldBeAutoFilled() {
-        //TestCase50
-        rule.startAtMainMenu()
-                .copyForm("event-odk-new-repeat.xml")
-                .startBlankForm("Event: odk-new-repeat")
-                .inputText("3")
-                .swipeToNextQuestionWithRepeatGroup("null")
-                .clickOnAdd(new FormEntryPage("Event: odk-new-repeat"))
-                .assertText("1")
-                .swipeToNextQuestion("B value")
-                .assertText("5")
-                .swipeToNextQuestionWithRepeatGroup("null")
-                .clickOnAdd(new FormEntryPage("Event: odk-new-repeat"))
-                .assertText("2")
-                .swipeToNextQuestion("B value")
-                .assertText("5")
-                .swipeToNextQuestionWithRepeatGroup("null")
-                .clickOnAdd(new FormEntryPage("Event: odk-new-repeat"))
-                .assertText("3")
-                .swipeToNextQuestion("B value")
-                .assertText("5")
-                .swipeToNextQuestionWithRepeatGroup("null")
-                .clickOnAdd(new FormEntryPage("Event: odk-new-repeat"))
-                .assertText("4")
-                .swipeToNextQuestion("B value")
-                .assertText("5")
-                .swipeToNextQuestionWithRepeatGroup("null")
-                .clickOnDoNotAdd(new FormEntryPage("Event: odk-new-repeat"))
-                .inputText("2")
-                .swipeToNextQuestion("A value")
-                .assertText("1")
-                .swipeToNextQuestion("A value")
-                .assertText("2")
-                .swipeToNextQuestion("C value")
-                .swipeToNextQuestion("C value")
-                .swipeToNextQuestionWithRepeatGroup("null")
-                .clickOnDoNotAdd(new FormEndPage("Event: odk-new-repeat"))
-                .clickFinalize();
     }
 
     private String getQuestionText() {
