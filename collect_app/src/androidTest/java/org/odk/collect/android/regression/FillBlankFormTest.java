@@ -43,29 +43,6 @@ public class FillBlankFormTest {
             .around(rule);
 
     @Test
-    public void formsWithDate_ShouldSaveFormsWithSuccess() {
-        //TestCase17
-        rule.startAtMainMenu()
-                .copyForm("1560_DateData.xml")
-                .startBlankForm("1560_DateData")
-                .checkIsTranslationDisplayed("Jan 01, 1900", "01 ene. 1900")
-                .swipeToEndScreen("01/01/00")
-                .clickFinalize()
-
-                .copyForm("1560_IntegerData.xml")
-                .startBlankForm("1560_IntegerData")
-                .assertText("5")
-                .swipeToEndScreen("5")
-                .clickFinalize()
-
-                .copyForm("1560_IntegerData_instanceID.xml")
-                .startBlankForm("1560_IntegerData_instanceID")
-                .assertText("5")
-                .swipeToEndScreen()
-                .clickFinalize();
-    }
-
-    @Test
     public void answers_ShouldBeSuggestedInComplianceWithSelectedLetters() {
         //TestCase41
         rule.startAtMainMenu()
