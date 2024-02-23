@@ -12,6 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.StringContains.containsString;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.TestScheduler;
@@ -281,6 +282,16 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickOnString(org.odk.collect.strings.R.string.entities_title);
 
         return new EntitiesPage().assertOnPage();
+    }
+
+    @NotNull
+    public MainMenuPage enableLocalEntitiesInForms() {
+        return openProjectSettingsDialog()
+                .clickSettings()
+                .clickExperimental()
+                .clickOnString(org.odk.collect.strings.R.string.include_local_entities_setting)
+                .pressBack(new ProjectSettingsPage())
+                .pressBack(new MainMenuPage());
     }
 }
 

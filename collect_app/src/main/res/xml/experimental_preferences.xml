@@ -16,7 +16,7 @@
 
     <SwitchPreferenceCompat
         android:key="experimental_local_entities"
-        android:title="Include local entities in forms"
+        android:title="@string/include_local_entities_setting"
         app:iconSpaceReserved="false" />
 
 </PreferenceScreen>

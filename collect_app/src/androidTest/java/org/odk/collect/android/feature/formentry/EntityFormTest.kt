@@ -32,6 +32,7 @@ class EntityFormTest {
     @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpForms() {
         rule.startAtMainMenu()
+            .enableLocalEntitiesInForms()
             .copyForm("one-question-entity-registration.xml")
             .copyForm("one-question-entity-update.xml", listOf("people.csv"))
 
@@ -47,6 +48,7 @@ class EntityFormTest {
     @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpFormsWithCachedFormDefs() {
         rule.startAtMainMenu()
+            .enableLocalEntitiesInForms()
             .copyForm("one-question-entity-registration.xml")
             .copyForm("one-question-entity-update.xml", listOf("people.csv"))
 
