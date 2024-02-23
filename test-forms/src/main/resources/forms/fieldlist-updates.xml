@@ -182,6 +182,10 @@
             <question19/>
             <question20/>
           </long_list_of_questions>
+          <audio>
+            <source16/>
+            <target16/>
+          </audio>
           <meta>
             <instanceID/>
           </meta>
@@ -366,6 +370,8 @@
       <bind nodeset="/fieldlist-updates/long_list_of_questions/question18" type="string"/>
       <bind nodeset="/fieldlist-updates/long_list_of_questions/question19" type="string"/>
       <bind nodeset="/fieldlist-updates/long_list_of_questions/question20" type="integer"/>
+      <bind nodeset="/fieldlist-updates/audio/source16" type="binary"/>
+      <bind nodeset="/fieldlist-updates/audio/target16" relevant=" /fieldlist-updates/audio/source16  != ''" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/fieldlist-updates/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -712,6 +718,15 @@
       </input>
       <input ref="/fieldlist-updates/long_list_of_questions/question20">
         <label>Question20</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/audio">
+      <label>Audio</label>
+      <upload mediatype="audio/*" ref="/fieldlist-updates/audio/source16">
+        <label>Source16</label>
+      </upload>
+      <input ref="/fieldlist-updates/audio/target16">
+        <label>Target16</label>
       </input>
     </group>
   </h:body>
