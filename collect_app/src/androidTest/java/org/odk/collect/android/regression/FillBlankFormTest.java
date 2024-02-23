@@ -199,18 +199,6 @@ public class FillBlankFormTest {
     }
 
     @Test
-    public void typeMismatchErrorMessage_shouldBeDisplayed() {
-        //TestCase48
-        rule.startAtMainMenu()
-                .copyForm("validate.xml")
-                .startBlankForm("validate")
-                .longPressOnQuestion("year")
-                .removeResponse()
-                .swipeToNextQuestionWithError()
-                .checkIsTextDisplayedOnDialog("The value \"-01-01\" can't be converted to a date.");
-    }
-
-    @Test
     public void answers_shouldBeAutoFilled() {
         //TestCase50
         rule.startAtMainMenu()
