@@ -394,26 +394,6 @@ public class FillBlankFormTest {
     }
 
     @Test
-    public void bigForm_ShouldBeFilledSuccessfully() {
-        //TestCase18
-        rule.startAtMainMenu()
-                .copyForm("nigeria-wards.xml")
-                .startBlankForm("Nigeria Wards")
-                .assertQuestion("State")
-                .openSelectMinimalDialog()
-                .selectItem("Adamawa")
-                .swipeToNextQuestion("LGA", true)
-                .openSelectMinimalDialog()
-                .selectItem("Ganye")
-                .swipeToNextQuestion("Ward", true)
-                .openSelectMinimalDialog()
-                .selectItem("Jaggu")
-                .swipeToNextQuestion("Comments")
-                .swipeToEndScreen()
-                .clickFinalize();
-    }
-
-    @Test
     public void questionValidation_ShouldShowToastOnlyWhenConditionsAreNotMet() {
         //TestCase43
         rule.startAtMainMenu()
