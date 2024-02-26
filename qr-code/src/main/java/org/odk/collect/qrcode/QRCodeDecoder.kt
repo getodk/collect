@@ -28,6 +28,7 @@ class QRCodeDecoderImpl : QRCodeDecoder {
             val bitmap = BitmapFactory.decodeStream(inputStream)
 
             val decodedQrCode = try {
+                // There are QR codes that can't be decoded if DecodeHintType.PURE_BARCODE is present
                 QRCodeMultiReader()
                     .decode(
                         getBinaryBitmap(bitmap),
@@ -37,6 +38,7 @@ class QRCodeDecoderImpl : QRCodeDecoder {
                         )
                     )
             } catch (e: NotFoundException) {
+                // There are QR codes that can't be decoded if DecodeHintType.PURE_BARCODE is not present
                 QRCodeMultiReader()
                     .decode(
                         getBinaryBitmap(bitmap),
