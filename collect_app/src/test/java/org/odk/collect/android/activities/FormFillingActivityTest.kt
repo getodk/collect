@@ -15,6 +15,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.android.external.FormUriActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formhierarchy.FormHierarchyActivity
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
@@ -25,6 +26,8 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.CollectHelpers.resetProcess
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
+import org.odk.collect.androidtest.ActivityScenarioExtensions.isFinishing
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.async.Scheduler
 import org.odk.collect.externalapp.ExternalAppUtils
@@ -34,8 +37,10 @@ import org.odk.collect.strings.R
 import org.odk.collect.testshared.ActivityControllerRule
 import org.odk.collect.testshared.AssertIntentsHelper
 import org.odk.collect.testshared.EspressoHelpers.assertText
+import org.odk.collect.testshared.EspressoHelpers.assertTextInDialog
 import org.odk.collect.testshared.EspressoHelpers.clickOnContentDescription
 import org.odk.collect.testshared.EspressoHelpers.clickOnText
+import org.odk.collect.testshared.EspressoHelpers.clickOnTextInDialog
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.RobolectricHelpers.recreateWithProcessRestore
 import org.robolectric.Shadows.shadowOf
@@ -52,6 +57,9 @@ class FormFillingActivityTest {
 
     @get:Rule
     val activityControllerRule = ActivityControllerRule()
+
+    @get:Rule
+    val scenarioLauncherRule = ActivityScenarioLauncherRule()
 
     private val assertIntentsHelper = AssertIntentsHelper()
 
@@ -231,6 +239,28 @@ class FormFillingActivityTest {
         assertText("Two Question")
         assertText("What is your age?")
         assertText("159")
+    }
+
+    /**
+     * This case will usually be protected by [FormUriActivity], but it could be possible when
+     * restoring the app/backstack.
+     */
+    @Test
+    fun whenFormDoesNotExist_showsFatalError() {
+        val projectId = CollectHelpers.setupDemoProject()
+
+        val intent = FormFillingIntentFactory.newInstanceIntent(
+            application,
+            FormsContract.getUri(projectId, 101),
+            FormFillingActivity::class
+        )
+
+        val scenario = scenarioLauncherRule.launch<FormFillingActivity>(intent)
+        scheduler.flush()
+        assertTextInDialog("This form no longer exists, please email support@getodk.org with a description of what you were doing when this happened.")
+
+        clickOnTextInDialog(R.string.ok)
+        assertThat(scenario.isFinishing, equalTo(true))
     }
 
     private fun setupForm(testFormPath: String): Form? {
