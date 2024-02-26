@@ -2279,7 +2279,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     try {
                         updateFieldListQuestions(changedWidget.getFormEntryPrompt().getIndex());
                         odkView.post(() -> {
-                            if (!odkView.isDisplayed(changedWidget)) {
+                            if (odkView != null && !odkView.isDisplayed(changedWidget)) {
                                 odkView.scrollToTopOf(changedWidget);
                             }
                         });
