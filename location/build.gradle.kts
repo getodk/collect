@@ -53,7 +53,7 @@ dependencies {
 
     testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))
-    testImplementation(project(":servicetest"))
+    testImplementation(project(":service-test"))
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockito_kotlin)
     testImplementation(Dependencies.hamcrest)
