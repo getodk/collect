@@ -6,6 +6,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
@@ -23,12 +24,22 @@ object EspressoHelpers {
             .check(matches(not(doesNotExist())))
     }
 
+    fun assertTextInDialog(text: String) {
+        onView(allOf(withText(text), withEffectiveVisibility(VISIBLE)))
+            .inRoot(isDialog())
+            .check(matches(not(doesNotExist())))
+    }
+
     fun clickOnContentDescription(string: Int) {
         onView(withContentDescription(string)).perform(click())
     }
 
     fun clickOnText(string: Int) {
         onView(withText(string)).perform(click())
+    }
+
+    fun clickOnTextInDialog(string: Int) {
+        onView(withText(string)).inRoot(isDialog()).perform(click())
     }
 
     fun assertIntents(vararg matchers: Matcher<Intent>) {

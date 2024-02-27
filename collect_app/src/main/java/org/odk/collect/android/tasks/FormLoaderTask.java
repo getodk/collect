@@ -165,6 +165,11 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
             form = candidateForms.get(0);
         } else if (uriMimeType != null && uriMimeType.equals(FormsContract.CONTENT_ITEM_TYPE)) {
             form = new FormsRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
+            if (form == null) {
+                Timber.e(new Error("form is null"));
+                errorMsg = "This form no longer exists, please email support@getodk.org with a description of what you were doing when this happened.";
+                return null;
+            }
 
             /**
              * This is the fill-blank-form code path.See if there is a savepoint for this form
