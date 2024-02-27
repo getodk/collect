@@ -5,6 +5,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
@@ -12,16 +13,18 @@ import org.odk.collect.android.support.rules.TestRuleChain
 @RunWith(AndroidJUnit4::class)
 class EntityFormTest {
 
-    private val rule = CollectTestRule()
+    private val rule = CollectTestRule(useDemoProject = false)
+    private val testDependencies = TestDependencies()
 
     @get:Rule
-    val ruleChain: RuleChain = TestRuleChain.chain()
+    val ruleChain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(rule)
 
     @Test
     fun fillingEntityRegistrationForm_createsEntityInTheBrowser() {
-        rule.startAtMainMenu()
-            .copyForm("one-question-entity-registration.xml")
+        testDependencies.server.addForm("one-question-entity-registration.xml")
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
             .openEntityBrowser()
@@ -31,10 +34,11 @@ class EntityFormTest {
 
     @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpForms() {
-        rule.startAtMainMenu()
+        testDependencies.server.addForm("one-question-entity-registration.xml")
+        testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
             .enableLocalEntitiesInForms()
-            .copyForm("one-question-entity-registration.xml")
-            .copyForm("one-question-entity-update.xml", listOf("people.csv"))
 
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
@@ -47,10 +51,11 @@ class EntityFormTest {
 
     @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpFormsWithCachedFormDefs() {
-        rule.startAtMainMenu()
+        testDependencies.server.addForm("one-question-entity-registration.xml")
+        testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
             .enableLocalEntitiesInForms()
-            .copyForm("one-question-entity-registration.xml")
-            .copyForm("one-question-entity-update.xml", listOf("people.csv"))
 
             .startBlankForm("One Question Entity Update") // Open to create cached form def
             .pressBackAndDiscardForm()
@@ -66,9 +71,10 @@ class EntityFormTest {
 
     @Test
     fun fillingEntityUpdateForm_updatesEntityForFollowUpForms() {
-        rule.startAtMainMenu()
+        testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
             .enableLocalEntitiesInForms()
-            .copyForm("one-question-entity-update.xml", listOf("people.csv"))
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
@@ -85,9 +91,13 @@ class EntityFormTest {
 
     @Test
     fun fillingEntityUpdateForm_whenFormDoesNotUpdateLabel_updatesEntityForFollowUpForms() {
-        rule.startAtMainMenu()
+        testDependencies.server.addForm(
+            "one-question-entity-update-no-label.xml",
+            listOf("people.csv")
+        )
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
             .enableLocalEntitiesInForms()
-            .copyForm("one-question-entity-update-no-label.xml", listOf("people.csv"))
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")

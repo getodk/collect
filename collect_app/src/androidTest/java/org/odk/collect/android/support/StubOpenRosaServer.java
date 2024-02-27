@@ -136,6 +136,14 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         forms.add(new XFormItem(formLabel, formXML, id, version, mediaFiles));
     }
 
+    public void addForm(String formXML, List<String> mediaFiles) {
+        forms.add(new XFormItem(formXML, formXML, formXML, "1", mediaFiles));
+    }
+
+    public void addForm(String formXML) {
+        forms.add(new XFormItem(formXML, formXML, formXML, "1"));
+    }
+
     public void removeForm(String formLabel) {
         forms.removeIf(xFormItem -> xFormItem.getFormLabel().equals(formLabel));
     }
