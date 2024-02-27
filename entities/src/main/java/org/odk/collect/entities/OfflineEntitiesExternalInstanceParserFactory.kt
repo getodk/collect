@@ -40,7 +40,7 @@ internal class OfflineEntitiesExternalDataInstanceProcessor(private val entities
                     name.value = StringData(entity.id)
 
                     val label = TreeElement(LABEL_ELEMENT)
-                    label.value = StringData(entity.label)
+                    label.value = StringData(entity.label ?: "")
 
                     val item = TreeElement(ITEM_ELEMENT, startingMultiplicity + index)
                     item.addChild(name)
@@ -54,7 +54,11 @@ internal class OfflineEntitiesExternalDataInstanceProcessor(private val entities
                 } else {
                     val duplicateElement = root.getChildAt(duplicateIndex)
 
-                    duplicateElement.getFirstChild(LABEL_ELEMENT)!!.value = StringData(entity.label)
+                    if (entity.label != null) {
+                        duplicateElement.getFirstChild(LABEL_ELEMENT)!!.value =
+                            StringData(entity.label)
+                    }
+
                     entity.properties.forEach { property ->
                         val propertyElement = duplicateElement.getFirstChild(property.first)
                         if (propertyElement != null) {

@@ -11,7 +11,6 @@
 						<instanceID/>
 						<instanceName/>
 						<entity dataset="people" update="true" id="" baseVersion="">
-							<label/>
 						</entity>
 					</meta>
 				</data>
@@ -25,7 +24,6 @@
 			<bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
 
 			<bind nodeset="/data/meta/entity/@id" type="string" calculate="/data/person"/>
-			<bind calculate="/data/name" nodeset="/data/meta/entity/label" type="string"/>
 			<bind nodeset="/data/meta/entity/@baseVersion" calculate="instance('people')/root/item[name=/data/people]/__version" type="string"/>
 		</model>
 	</h:head>

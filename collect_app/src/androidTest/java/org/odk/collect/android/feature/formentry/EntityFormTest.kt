@@ -82,4 +82,23 @@ class EntityFormTest {
             .assertText("Romulus Roy")
             .assertTextDoesNotExist("Roman Roy")
     }
+
+    @Test
+    fun fillingEntityUpdateForm_whenFormDoesNotUpdateLabel_updatesEntityForFollowUpForms() {
+        rule.startAtMainMenu()
+            .enableLocalEntitiesInForms()
+            .copyForm("one-question-entity-update-no-label.xml", listOf("people.csv"))
+
+            .startBlankForm("One Question Entity Update")
+            .assertQuestion("Select person")
+            .clickOnText("Roman Roy")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Romulus Roy")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .startBlankForm("One Question Entity Update")
+            .assertText("Roman Roy")
+            .assertTextDoesNotExist("Romulus Roy")
+    }
 }

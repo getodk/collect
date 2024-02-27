@@ -105,4 +105,52 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
             equalTo(entity.properties[0].second)
         )
     }
+
+    @Test
+    fun `uses online label if offline entity does not have one`() {
+        val entity = Entity("people", "1", null, emptyList())
+        entitiesRepository.save(entity)
+
+        val processor =
+            OfflineEntitiesExternalDataInstanceProcessor(entitiesRepository)
+
+        val instance = TreeElement("root").also { root ->
+            root.addChild(
+                TreeElement("item", 0).also { item ->
+                    item.addChild(
+                        TreeElement("name").also { value ->
+                            value.value = StringData(entity.id)
+                        }
+                    )
+                    item.addChild(
+                        TreeElement("label").also { label ->
+                            label.value = StringData("Siobhan Roy")
+                        }
+                    )
+                }
+            )
+        }
+
+        processor.processInstance("people", instance)
+        assertThat(instance.numChildren, equalTo(1))
+
+        val firstItem = instance.getChildAt(0)
+        assertThat(firstItem.getFirstChild("label")?.value?.value, equalTo("Siobhan Roy"))
+    }
+
+    @Test
+    fun `uses blank label if offline entity does not have one`() {
+        val entity = Entity("people", "1", null, emptyList())
+        entitiesRepository.save(entity)
+
+        val processor =
+            OfflineEntitiesExternalDataInstanceProcessor(entitiesRepository)
+
+        val instance = TreeElement("root")
+        processor.processInstance("people", instance)
+        assertThat(instance.numChildren, equalTo(1))
+
+        val firstItem = instance.getChildAt(0)
+        assertThat(firstItem.getFirstChild("label")?.value?.value, equalTo(""))
+    }
 }

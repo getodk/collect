@@ -12,7 +12,7 @@ abstract class EntitiesRepositoryTest {
     abstract fun buildSubject(): EntitiesRepository
 
     @Test
-    fun `getEntities returns entities for dataset`() {
+    fun `getEntities() returns entities for dataset`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008", emptyList())
@@ -30,7 +30,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save updates existing entity with matching id`() {
+    fun `save() updates existing entity with matching id`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008", emptyList())
@@ -45,7 +45,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save does not update existing entity with matching id but not dataset`() {
+    fun `save() does not update existing entity with matching id but not dataset`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008", emptyList())
@@ -66,7 +66,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save only changes properties in new entity for existing entity`() {
+    fun `save() only changes properties in new entity for existing entity`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008", listOf("window" to "2019-2038"))
@@ -81,7 +81,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save updates existing properties in new entity for existing entity`() {
+    fun `save() updates existing properties in new entity for existing entity`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008", listOf("window" to "2019-2038"))
@@ -94,5 +94,21 @@ abstract class EntitiesRepositoryTest {
         val wines = repository.getEntities("wines")
         assertThat(wines.size, equalTo(1))
         assertThat(wines[0].properties, contains("window" to "2019-2042"))
+    }
+
+    @Test
+    fun `save() does not update existing label if new one is null`() {
+        val repository = buildSubject()
+
+        val wine = Entity("wines", "1", "Léoville Barton 2008", listOf("window" to "2019-2038"))
+        repository.save(wine)
+
+        val updatedWine =
+            Entity("wines", wine.id, null, listOf("window" to "2019-2042"))
+        repository.save(updatedWine)
+
+        val wines = repository.getEntities("wines")
+        assertThat(wines.size, equalTo(1))
+        assertThat(wines[0].label, equalTo("Léoville Barton 2008"))
     }
 }

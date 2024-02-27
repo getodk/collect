@@ -28,7 +28,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
                 Entity(
                     entity.dataset,
                     entity.id,
-                    entity.label,
+                    entity.label ?: existing.label,
                     mergeProperties(existing, entity)
                 )
             )
