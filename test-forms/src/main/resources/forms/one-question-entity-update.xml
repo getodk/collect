@@ -6,7 +6,7 @@
 			<instance>
 				<data id="one_question_entity_update" version="1">
 					<person/>
-					<age/>
+					<name/>
 					<meta>
 						<instanceID/>
 						<instanceName/>
@@ -20,11 +20,12 @@
 			<instance id="people" src="jr://file-csv/people.csv"/>
 
 			<bind nodeset="/data/person" type="string"/>
-			<bind nodeset="/data/age" type="int" entities:saveto="age"/>
+			<bind nodeset="/data/name" type="int" entities:saveto="name"/>
 
 			<bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
 
 			<bind nodeset="/data/meta/entity/@id" type="string" calculate="/data/person"/>
+			<bind calculate="/data/name" nodeset="/data/meta/entity/label" type="string"/>
 		</model>
 	</h:head>
 	<h:body>
@@ -35,8 +36,8 @@
 				<label ref="label"/>
 			</itemset>
 		</select1>
-		<input ref="/data/age">
-			<label>Age</label>
+		<input ref="/data/name">
+			<label>Name</label>
 		</input>
 	</h:body>
 </h:html>
