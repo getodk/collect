@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class StubOpenRosaServer implements OpenRosaHttpInterface {
@@ -145,6 +146,11 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
     public void addForm(String formXML) {
         forms.add(new XFormItem(formXML, formXML, formXML, "1"));
+    }
+
+    public void updateMediaFile(String formXML, String name, String newFile) {
+        Optional<XFormItem> formToUpdate = forms.stream().filter((form) -> form.formXML.equals(formXML)).findFirst();
+        formToUpdate.get().getMediaFiles().put(name, newFile);
     }
 
     public void removeForm(String formLabel) {

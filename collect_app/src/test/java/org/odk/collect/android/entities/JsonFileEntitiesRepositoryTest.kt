@@ -21,13 +21,13 @@ class JsonFileEntitiesRepositoryTest : EntitiesRepositoryTest() {
         val two = JsonFileEntitiesRepository(directory)
         val three = JsonFileEntitiesRepository(File(TempFiles.getPathInTempDir()))
 
-        val entity = Entity("stuff", "1", "A thing", emptyList())
+        val entity = Entity("stuff", "1", "A thing")
         one.save(entity)
         assertThat(two.getDatasets(), contains("stuff"))
         assertThat(two.getEntities("stuff"), contains(entity))
         assertThat(three.getDatasets().size, equalTo(0))
 
-        val anotherEntity = Entity("otherStuff", "2", "Another thing", emptyList())
+        val anotherEntity = Entity("otherStuff", "2", "Another thing")
         two.save(anotherEntity)
         assertThat(one.getDatasets(), contains("stuff", "otherStuff"))
         assertThat(two.getEntities("otherStuff"), contains(anotherEntity))

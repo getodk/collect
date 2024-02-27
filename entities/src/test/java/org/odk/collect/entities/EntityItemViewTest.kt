@@ -21,7 +21,7 @@ class EntityItemViewTest {
                 "songs",
                 "1",
                 "S.D.O.S",
-                listOf(Pair("name", "S.D.O.S"), Pair("length", "2:50"))
+                properties = listOf(Pair("name", "S.D.O.S"), Pair("length", "2:50"))
             )
         )
 

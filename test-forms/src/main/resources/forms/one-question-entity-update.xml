@@ -26,7 +26,7 @@
 
 			<bind nodeset="/data/meta/entity/@id" type="string" calculate="/data/person"/>
 			<bind calculate="/data/name" nodeset="/data/meta/entity/label" type="string"/>
-			<bind nodeset="/data/meta/entity/@baseVersion" calculate="instance('people')/root/item[name=/data/people]/__version" type="string"/>
+			<bind nodeset="/data/meta/entity/@baseVersion" calculate="instance('people')/root/item[name=/data/person]/__version" type="string"/>
 		</model>
 	</h:head>
 	<h:body>

@@ -54,17 +54,20 @@ internal class OfflineEntitiesExternalDataInstanceProcessor(private val entities
                 } else {
                     val duplicateElement = root.getChildAt(duplicateIndex)
 
-                    if (entity.label != null) {
-                        duplicateElement.getFirstChild(LABEL_ELEMENT)!!.value =
-                            StringData(entity.label)
-                    }
+                    val version = (duplicateElement.getFirstChild(VERSION_ELEMENT)!!.value!!.value as String).toInt()
+                    if (entity.version >= version) {
+                        if (entity.label != null) {
+                            duplicateElement.getFirstChild(LABEL_ELEMENT)!!.value =
+                                StringData(entity.label)
+                        }
 
-                    entity.properties.forEach { property ->
-                        val propertyElement = duplicateElement.getFirstChild(property.first)
-                        if (propertyElement != null) {
-                            propertyElement.value = StringData(property.second)
-                        } else {
-                            addChild(duplicateElement, property)
+                        entity.properties.forEach { property ->
+                            val propertyElement = duplicateElement.getFirstChild(property.first)
+                            if (propertyElement != null) {
+                                propertyElement.value = StringData(property.second)
+                            } else {
+                                addChild(duplicateElement, property)
+                            }
                         }
                     }
                 }
@@ -87,5 +90,6 @@ internal class OfflineEntitiesExternalDataInstanceProcessor(private val entities
         private const val ID_ELEMENT = "name"
         private const val LABEL_ELEMENT = "label"
         private const val ITEM_ELEMENT = "item"
+        private const val VERSION_ELEMENT = "__version"
     }
 }

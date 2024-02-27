@@ -13,7 +13,12 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
     @Test
     fun `includes properties in offline entity elements`() {
         val entity =
-            Entity("people", "1", "Shiv Roy", listOf(Pair("age", "35"), Pair("born", "England")))
+            Entity(
+                "people",
+                "1",
+                "Shiv Roy",
+                properties = listOf(Pair("age", "35"), Pair("born", "England"))
+            )
         entitiesRepository.save(entity)
 
         val processor =
@@ -31,7 +36,7 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
 
     @Test
     fun `uses offline entity when there is a duplicate in online entities`() {
-        val entity = Entity("people", "1", "Shiv Roy", listOf(Pair("age", "35")))
+        val entity = Entity("people", "1", "Shiv Roy", version = 1, properties = listOf(Pair("age", "35")))
         entitiesRepository.save(entity)
 
         val processor =
@@ -55,6 +60,11 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
                             label.value = StringData("34")
                         }
                     )
+                    item.addChild(
+                        TreeElement("__version").also { label ->
+                            label.value = StringData("1")
+                        }
+                    )
                 }
             )
         }
@@ -72,7 +82,7 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
 
     @Test
     fun `retains properties in the offline entity if they don't exist in the online duplicate`() {
-        val entity = Entity("people", "1", "Shiv Roy", listOf(Pair("age", "35")))
+        val entity = Entity("people", "1", "Shiv Roy", properties = listOf(Pair("age", "35")))
         entitiesRepository.save(entity)
 
         val processor =
@@ -89,6 +99,11 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
                     item.addChild(
                         TreeElement("label").also { label ->
                             label.value = StringData("Siobhan Roy")
+                        }
+                    )
+                    item.addChild(
+                        TreeElement("__version").also { label ->
+                            label.value = StringData("1")
                         }
                     )
                 }
@@ -108,7 +123,7 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
 
     @Test
     fun `uses online label if offline entity does not have one`() {
-        val entity = Entity("people", "1", null, emptyList())
+        val entity = Entity("people", "1", null)
         entitiesRepository.save(entity)
 
         val processor =
@@ -127,6 +142,11 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
                             label.value = StringData("Siobhan Roy")
                         }
                     )
+                    item.addChild(
+                        TreeElement("__version").also { label ->
+                            label.value = StringData("1")
+                        }
+                    )
                 }
             )
         }
@@ -140,7 +160,7 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
 
     @Test
     fun `uses blank label if offline entity does not have one`() {
-        val entity = Entity("people", "1", null, emptyList())
+        val entity = Entity("people", "1", null)
         entitiesRepository.save(entity)
 
         val processor =
