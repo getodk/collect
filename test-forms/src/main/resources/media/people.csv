@@ -1,2 +1,2 @@
-name,label,full_name
-123abc,Roman Roy,Roman Roy
+name,label,full_name,__version
+123abc,Roman Roy,Roman Roy,1

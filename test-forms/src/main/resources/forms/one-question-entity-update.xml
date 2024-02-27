@@ -10,7 +10,7 @@
 					<meta>
 						<instanceID/>
 						<instanceName/>
-						<entity dataset="people" update="true" id="">
+						<entity dataset="people" update="true" id="" baseVersion="">
 							<label/>
 						</entity>
 					</meta>
@@ -20,12 +20,13 @@
 			<instance id="people" src="jr://file-csv/people.csv"/>
 
 			<bind nodeset="/data/person" type="string"/>
-			<bind nodeset="/data/name" type="int" entities:saveto="name"/>
+			<bind nodeset="/data/name" type="string" entities:saveto="name"/>
 
 			<bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
 
 			<bind nodeset="/data/meta/entity/@id" type="string" calculate="/data/person"/>
 			<bind calculate="/data/name" nodeset="/data/meta/entity/label" type="string"/>
+			<bind nodeset="/data/meta/entity/@baseVersion" calculate="instance('people')/root/item[name=/data/people]/__version" type="string"/>
 		</model>
 	</h:head>
 	<h:body>
