@@ -240,7 +240,7 @@ dependencies {
     implementation project(':analytics')
     implementation project(':audioclips')
     implementation project(':forms')
-    implementation project(':audiorecorder')
+    implementation project(':audio-recorder')
     implementation project(':projects')
     implementation project(':location')
     implementation project(':geo')
