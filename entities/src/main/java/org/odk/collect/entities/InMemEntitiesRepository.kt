@@ -13,6 +13,32 @@ class InMemEntitiesRepository : EntitiesRepository {
     }
 
     override fun save(entity: Entity) {
-        entities.add(entity)
+        val existing = entities.find { it.id == entity.id && it.dataset == entity.dataset }
+
+        if (existing != null) {
+            entities.remove(existing)
+            entities.add(
+                Entity(
+                    entity.dataset,
+                    entity.id,
+                    entity.label,
+                    mergeProperties(existing, entity)
+                )
+            )
+        } else {
+            entities.add(entity)
+        }
+    }
+
+    private fun mergeProperties(
+        existing: Entity,
+        new: Entity
+    ): List<Pair<String, String>> {
+        val existingProperties = mutableMapOf(*existing.properties.toTypedArray())
+        new.properties.forEach {
+            existingProperties[it.first] = it.second
+        }
+
+        return existingProperties.map { Pair(it.key, it.value) }
     }
 }

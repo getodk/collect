@@ -27,7 +27,7 @@ class JsonFileEntitiesRepositoryTest : EntitiesRepositoryTest() {
         assertThat(two.getEntities("stuff"), contains(entity))
         assertThat(three.getDatasets().size, equalTo(0))
 
-        val anotherEntity = Entity("otherStuff", "1", "Another thing", emptyList())
+        val anotherEntity = Entity("otherStuff", "2", "Another thing", emptyList())
         two.save(anotherEntity)
         assertThat(one.getDatasets(), contains("stuff", "otherStuff"))
         assertThat(two.getEntities("otherStuff"), contains(anotherEntity))

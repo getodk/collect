@@ -19,8 +19,24 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
     }
 
     override fun save(entity: Entity) {
-        val updatedEntities = getEntities() + entity
-        val json = Gson().toJson(updatedEntities)
+        val entities = getEntities()
+        val existing = entities.find { it.id == entity.id && it.dataset == entity.dataset }
+
+        if (existing != null) {
+            entities.remove(existing)
+            entities.add(
+                Entity(
+                    entity.dataset,
+                    entity.id,
+                    entity.label,
+                    mergeProperties(existing, entity)
+                )
+            )
+        } else {
+            entities.add(entity)
+        }
+
+        val json = Gson().toJson(entities)
         entitiesFile.writeText(json)
     }
 
@@ -33,5 +49,17 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         val typeToken = TypeToken.getParameterized(MutableList::class.java, Entity::class.java)
         return Gson().fromJson(entitiesFile.readText(), typeToken.type)
             ?: mutableListOf()
+    }
+
+    private fun mergeProperties(
+        existing: Entity,
+        new: Entity
+    ): List<Pair<String, String>> {
+        val existingProperties = mutableMapOf(*existing.properties.toTypedArray())
+        new.properties.forEach {
+            existingProperties[it.first] = it.second
+        }
+
+        return existingProperties.map { Pair(it.key, it.value) }
     }
 }
