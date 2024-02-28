@@ -341,7 +341,7 @@ dependencies {
 
     implementation Dependencies.splashscreen
 
-    testImplementation project(':formstest')
+    testImplementation project(':forms-test')
 
     // Testing-only dependencies
     testImplementation Dependencies.junit
