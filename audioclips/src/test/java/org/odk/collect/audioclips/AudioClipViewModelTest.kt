@@ -46,14 +46,33 @@ class AudioClipViewModelTest {
     }
 
     @Test
-    fun play_whenAlreadyingPlayingClip_startsMediaPlayer() {
+    fun play_whenAlreadyingPlayingClip_restartsMediaPlayer() {
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         fakeScheduler.flush()
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         fakeScheduler.flush()
 
-        verify(mediaPlayer, times(1)).reset()
-        verify(mediaPlayer, times(2)).start()
+        val inOrder = inOrder(mediaPlayer)
+        inOrder.verify(mediaPlayer).reset()
+        inOrder.verify(mediaPlayer).start()
+        inOrder.verify(mediaPlayer).stop()
+        inOrder.verify(mediaPlayer).reset()
+        inOrder.verify(mediaPlayer).start()
+    }
+
+    @Test
+    fun play_whenAlreadyingPlayingAnotherClip_restartsMediaPlayer() {
+        viewModel.play(Clip("clip1", "file://audio.mp3"))
+        fakeScheduler.flush()
+        viewModel.play(Clip("clip2", "file://audio2.mp3"))
+        fakeScheduler.flush()
+
+        val inOrder = inOrder(mediaPlayer)
+        inOrder.verify(mediaPlayer).reset()
+        inOrder.verify(mediaPlayer).start()
+        inOrder.verify(mediaPlayer).stop()
+        inOrder.verify(mediaPlayer).reset()
+        inOrder.verify(mediaPlayer).start()
     }
 
     @Test
@@ -322,7 +341,7 @@ class AudioClipViewModelTest {
     }
 
     @Test
-    fun position_worksWhenMultipleClipsArePlayed() {
+    fun position_ofAlreadyPlayedClipIsRestartedWhenANewOneIsStarted() {
         `when`(mediaPlayer.currentPosition).thenReturn(0)
         val position1 = viewModel.getPosition("clip1")
         val position2 = viewModel.getPosition("clip2")
@@ -340,7 +359,7 @@ class AudioClipViewModelTest {
 
         `when`(mediaPlayer.currentPosition).thenReturn(2500)
         fakeScheduler.runForeground()
-        assertThat(position1.getOrAwaitValue(), equalTo(1000))
+        assertThat(position1.getOrAwaitValue(), equalTo(0))
         assertThat(position2.getOrAwaitValue(), equalTo(2500))
     }
 
