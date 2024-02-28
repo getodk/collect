@@ -36,9 +36,7 @@ import org.odk.collect.android.formhierarchy.FormHierarchyActivity;
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormsDataService;
-import org.odk.collect.android.fragments.AppListFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
-import org.odk.collect.android.fragments.SavedFormListFragment;
 import org.odk.collect.android.fragments.dialogs.FormsDownloadResultDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.instancemanagement.send.InstanceUploaderActivity;
@@ -138,8 +136,6 @@ public interface AppDependencyComponent {
 
     void inject(AboutActivity aboutActivity);
 
-    void inject(SavedFormListFragment savedFormListFragment);
-
     void inject(FormFillingActivity formFillingActivity);
 
     void inject(InstanceServerUploaderTask uploader);
@@ -225,8 +221,6 @@ public interface AppDependencyComponent {
     void inject(InstanceProvider instanceProvider);
 
     void inject(BackgroundAudioPermissionDialogFragment backgroundAudioPermissionDialogFragment);
-
-    void inject(AppListFragment appListFragment);
 
     void inject(ChangeAdminPasswordDialog changeAdminPasswordDialog);
 
