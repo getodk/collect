@@ -12,7 +12,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectAdapter
@@ -114,10 +116,22 @@ class DeleteSavedFormFragment(
                 )
             )
             .setPositiveButton(getString(string.delete_yes)) { _, _ ->
+                logDelete(selected.size)
+
                 savedFormListViewModel.deleteForms(selected)
                 multiSelectViewModel.unselectAll()
             }
             .setNegativeButton(getString(string.delete_no), null)
             .show()
+    }
+
+    private fun logDelete(size: Int) {
+        val event = when {
+            size >= 100 -> AnalyticsEvents.DELETE_SAVED_FORM_HUNDREDS
+            size >= 10 -> AnalyticsEvents.DELETE_SAVED_FORM_TENS
+            else -> AnalyticsEvents.DELETE_SAVED_FORM_FEW
+        }
+
+        Analytics.log(event)
     }
 }

@@ -159,4 +159,11 @@ object AnalyticsEvents {
      * Tracks how often printing with the old ExPrinterWidget is triggered
      */
     const val ZEBRA_PRINTER_STARTED = "ZebraPrinterStarted"
+
+    /**
+     * Tracks how often saved forms are manually deleted and in what number
+     */
+    const val DELETE_SAVED_FORM_FEW = "DeleteSavedFormFew"
+    const val DELETE_SAVED_FORM_TENS = "DeleteSavedFormTens"
+    const val DELETE_SAVED_FORM_HUNDREDS = "DeleteSavedFormHundreds"
 }
