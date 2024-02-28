@@ -128,12 +128,7 @@ class FormUriActivity : ComponentActivity() {
             formsRepositoryProvider.get(),
             instanceRepositoryProvider.get(),
             savepointsRepositoryProvider.get()
-        )?.let {
-            if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
-                intent.data = FormsContract.getUri(projectsDataService.getCurrentProject().uuid, it.formDbId)
-            }
-            it
-        }
+        )
     }
 
     private fun displaySavePointRecoveryDialog(savepoint: Savepoint) {
@@ -141,6 +136,11 @@ class FormUriActivity : ComponentActivity() {
             .setTitle(string.savepoint_recovery_dialog_title)
             .setMessage(SimpleDateFormat(getString(string.savepoint_recovery_dialog_message), Locale.getDefault()).format(File(savepoint.savepointFilePath).lastModified()))
             .setPositiveButton(string.recover) { _, _ ->
+                val uri = intent.data!!
+                val uriMimeType = contentResolver.getType(uri)!!
+                if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
+                    intent.data = FormsContract.getUri(projectsDataService.getCurrentProject().uuid, savepoint.formDbId)
+                }
                 startForm()
             }
             .setNegativeButton(string.do_not_recover) { _, _ ->

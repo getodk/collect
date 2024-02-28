@@ -895,7 +895,7 @@ class FormUriActivityTest {
     }
 
     @Test
-    fun `If there is a savepoint for older version of the blank form, display a recovery dialog and start the old version of the blank form`() {
+    fun `If there is a savepoint for older version of the blank form, display a recovery dialog and start the old version of the blank form if a user accepts`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
         whenever(projectsDataService.getCurrentProject()).thenReturn(project)
@@ -927,6 +927,42 @@ class FormUriActivityTest {
         assertSavepointRecoveryDialog(savepointFile)
         onView(withText(org.odk.collect.strings.R.string.recover)).perform(click())
         assertStartBlankFormIntent(project.uuid, formV1.dbId)
+    }
+
+    @Test
+    fun `If there is a savepoint for older version of the blank form, display a recovery dialog and start the new version of the blank form if a user declines`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        val formV1 = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
+
+        val formV2 = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "2",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
+
+        val savepointFile = TempFiles.createTempFile()
+        val savepoint = Savepoint(formV1.dbId, null, savepointFile.absolutePath, TempFiles.createTempFile().absolutePath)
+
+        whenever(savepointFinder.getSavepoint(any(), any(), any(), any(), any())).thenReturn(savepoint)
+
+        launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, formV2.dbId))
+        fakeScheduler.flush()
+
+        assertSavepointRecoveryDialog(savepointFile)
+        onView(withText(org.odk.collect.strings.R.string.do_not_recover)).perform(click())
+        fakeScheduler.flush()
+        assertStartBlankFormIntent(project.uuid, formV2.dbId)
     }
 
     private fun getBlankFormIntent(projectId: String?, dbId: Long) =
