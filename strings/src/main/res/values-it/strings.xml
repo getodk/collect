@@ -578,11 +578,8 @@
   <string name="delete_file">Elimina Selezionato</string>
   <string name="delete_no">Non Eliminare</string>
   <string name="delete_yes">Elimina moduli</string>
-  <string name="file_deleted_error">Spiacenti, eliminazione di %1$s su %2$s modulo(i) fallita!</string>
-  <string name="form_delete_message">Elimina i moduli selezionati</string>
-  <string name="deleting_form_dialog_update_message">Eliminazione moduli: %1$d di %2$d </string>
+    <string name="form_delete_message">Elimina i moduli selezionati</string>
   <string name="file_deleted_ok">%s modulo(i) cancellato(i) con successo!</string>
-  <string name="file_delete_in_progress">Spiacenti, eliminazione modulo già in corso!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

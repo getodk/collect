@@ -351,9 +351,7 @@
   <string name="delete_file">Slet valgte</string>
   <string name="delete_no">Undlad at slette</string>
   <string name="delete_yes">Fjern formularer</string>
-  <string name="file_deleted_error">Desværre, 1%1$s af 2%2$s valgte formularer fejlede ved sletning  </string>
-  <string name="file_deleted_ok">1%s formular slettet </string>
-  <string name="file_delete_in_progress">Der er allerede en sletning af formular i gang</string>
+    <string name="file_deleted_ok">1%s formular slettet </string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

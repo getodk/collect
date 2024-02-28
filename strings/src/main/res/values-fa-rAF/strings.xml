@@ -540,11 +540,8 @@
   <string name="delete_file">حذف مورد انتخاب شده</string>
   <string name="delete_no">حذف نکنید</string>
   <string name="delete_yes">حذف فورم ها</string>
-  <string name="file_deleted_error">متأسفیم، %1$s از %2$s فورم(های) انتخابی حذف نشد!</string>
-  <string name="form_delete_message">حذف کردن فورم های انتخاب شده</string>
-  <string name="deleting_form_dialog_update_message">در حال حذف فورم: %1$d از %2$d</string>
+    <string name="form_delete_message">حذف کردن فورم های انتخاب شده</string>
   <string name="file_deleted_ok">%sفورم(ها) موفقانه حذف گردید!</string>
-  <string name="file_delete_in_progress">با معذرت، پروسه حذف فورم از قبل در جریان است!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

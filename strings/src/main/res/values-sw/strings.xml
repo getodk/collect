@@ -457,11 +457,8 @@
   <string name="delete_file">Futa iliyochaguliwa</string>
   <string name="delete_no">Usifute</string>
   <string name="delete_yes">Futa fomu</string>
-  <string name="file_deleted_error">Samahani, %1$s kati ya %2$s fomu(s)  ulizochagua hazikufutika!</string>
-  <string name="form_delete_message">Inafuta fomu zilizochaguliwa</string>
-  <string name="deleting_form_dialog_update_message">Inafuta fomu: %1$d kati ya %2$d</string>
+    <string name="form_delete_message">Inafuta fomu zilizochaguliwa</string>
   <string name="file_deleted_ok">%s fomu(s) zimefanikiwa kufutwa!</string>
-  <string name="file_delete_in_progress">Samahani, kitendo cha kufuta fomu kinaendelea!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

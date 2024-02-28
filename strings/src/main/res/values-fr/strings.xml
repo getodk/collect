@@ -583,11 +583,8 @@
   <string name="delete_file">Supprimer la sélection</string>
   <string name="delete_no">Ne pas supprimer</string>
   <string name="delete_yes">Supprimer ces formulaires</string>
-  <string name="file_deleted_error">Désolé, %1$s de %2$s formulaires sélectionnés ont échoué la suppression.</string>
-  <string name="form_delete_message">Supprimer les formulaires sélectionnés</string>
-  <string name="deleting_form_dialog_update_message">Suppression du formulaire: %1$d sur %2$d </string>
+    <string name="form_delete_message">Supprimer les formulaires sélectionnés</string>
   <string name="file_deleted_ok">%s formulaire(s) supprimé(s) avec succès.</string>
-  <string name="file_delete_in_progress">Désolé, une action de suppression d\'un formulaire est en cours.</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

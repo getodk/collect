@@ -442,11 +442,8 @@
   <string name="delete_file">លុប​អ្វី​ដែល​បាន​ជ្រើស</string>
   <string name="delete_no">កុំ​លុប</string>
   <string name="delete_yes">លុប​សំណុំបែបបទ</string>
-  <string name="file_deleted_error">សំុទោស សំណុំ​បែប​បទ​ %1$s នៃ %2$s ដែលបានជ្រើសរើស​មិន​អាច​លុប​បាន​ទេ!</string>
-  <string name="form_delete_message">កំពុងលុបទម្រង់ដែលបានជ្រើសរើសរួច</string>
-  <string name="deleting_form_dialog_update_message"> កំពុងលុបទម្រង់: %1$d នៃ %2$d </string>
+    <string name="form_delete_message">កំពុងលុបទម្រង់ដែលបានជ្រើសរើសរួច</string>
   <string name="file_deleted_ok">%s សំណុំបែបបទបានលុបដោយជោគជ័យ ! </string>
-  <string name="file_delete_in_progress">សុំទោស, សកម្មភាពនៃការលុបសំណុំបែបបទគឺបានដំណើរការ!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

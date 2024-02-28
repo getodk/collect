@@ -436,11 +436,8 @@
   <string name="delete_file">Видалити обране</string>
   <string name="delete_no">Не видаляти</string>
   <string name="delete_yes">Видалити анкети</string>
-  <string name="file_deleted_error">Вибачте, %1$s з %2$s обраних(ої) анкет(и) не вдалось видалити!</string>
-  <string name="form_delete_message">Видалення обраних анкет</string>
-  <string name="deleting_form_dialog_update_message">Видалення анкет: %1$d з %2$d</string>
+    <string name="form_delete_message">Видалення обраних анкет</string>
   <string name="file_deleted_ok">%s анкет(у) успішно видалено!</string>
-  <string name="file_delete_in_progress">Вибачте! Видалення анкети наразі виконується!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

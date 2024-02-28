@@ -578,11 +578,8 @@
   <string name="delete_file">Smazat označené</string>
   <string name="delete_no">Nemazat</string>
   <string name="delete_yes">Smazat dotazníky</string>
-  <string name="file_deleted_error">%1$s z %2$s vybraných dotazníků se nepodařilo smazat!</string>
-  <string name="form_delete_message">Smazání vybraných formulářů</string>
-  <string name="deleting_form_dialog_update_message">Vymazání formuláře: %1$d z %2$d</string>
+    <string name="form_delete_message">Smazání vybraných formulářů</string>
   <string name="file_deleted_ok">%s dotazníků úspěšně smazáno!</string>
-  <string name="file_delete_in_progress">Mazání dotazníku už probíhá!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

@@ -472,11 +472,8 @@
   <string name="delete_file">ఎంచుకున్నదాన్ని తొలగించండి</string>
   <string name="delete_no">తొలగించవద్దు </string>
   <string name="delete_yes">ఫారంలను తొలగించు </string>
-  <string name="file_deleted_error">క్షమించండి, ఎంచుకున్న ఫారం(లు) %1$s of %2$sడిలిట్ అవ్వలేదు!</string>
-  <string name="form_delete_message">ఎంచుకున్న ఫారమ్‌లను తొలగిస్తోంది</string>
-  <string name="deleting_form_dialog_update_message">%2$dలో %1$dవ ఫారమ్ ని తొలగిస్తుంది </string>
+    <string name="form_delete_message">ఎంచుకున్న ఫారమ్‌లను తొలగిస్తోంది</string>
   <string name="file_deleted_ok">%sఫారం(లు) విజయవంతంగా తొలగించబడ్డాయి!</string>
-  <string name="file_delete_in_progress">క్షమించండి, ఫారం తొలగింపు చర్య ఇప్పటికే పురోగతిలో ఉంది!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

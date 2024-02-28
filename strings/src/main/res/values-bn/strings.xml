@@ -224,9 +224,7 @@
   <string name="delete_file">ফাইল ডিলিট</string>
   <string name="delete_no">মুছবেন না</string>
   <string name="delete_yes">ফরম মুছে দিন </string>
-  <string name="file_deleted_error">দুঃখিত, %1$s এর %2$s নির্বাচিত/ (নির্বাচিতগুলো) মুছে ফেলতে ব্যার্থ হয়েছে!</string>
-  <string name="file_deleted_ok">%s ফরম/(ফরমগুলি) সফলভাবে মুছে গেছে!</string>
-  <string name="file_delete_in_progress">দুঃখিত, একটি ফরম মুছে ফেলার প্রক্রিয়া ইতিমধ্যে চলমান!</string>
+    <string name="file_deleted_ok">%s ফরম/(ফরমগুলি) সফলভাবে মুছে গেছে!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

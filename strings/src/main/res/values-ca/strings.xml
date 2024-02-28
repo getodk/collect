@@ -297,9 +297,7 @@
   <string name="delete_file">Eliminar seleccionats</string>
   <string name="delete_no">No eliminar</string>
   <string name="delete_yes">Esborrar formularis</string>
-  <string name="file_deleted_error">Ho sentim, %1$s de %2$s formulari(s) seleccionat(s) no s\'han pogut eliminar!</string>
-  <string name="file_deleted_ok">%s formularis(s) eliminats correctament!</string>
-  <string name="file_delete_in_progress">Ho sentim, s\'está eliminant el formulari!</string>
+    <string name="file_deleted_ok">%s formularis(s) eliminats correctament!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

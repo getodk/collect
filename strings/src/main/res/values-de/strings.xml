@@ -580,11 +580,8 @@
   <string name="delete_file">Auswahl löschen</string>
   <string name="delete_no">Nicht löschen</string>
   <string name="delete_yes">Formulare löschen</string>
-  <string name="file_deleted_error">%1$s von %2$s Formular(en) konnte(n) nicht gelöscht werden!</string>
-  <string name="form_delete_message">Ausgewählte Formulare löschen</string>
-  <string name="deleting_form_dialog_update_message">Lösche Formular: %1$d von %2$d</string>
+    <string name="form_delete_message">Ausgewählte Formulare löschen</string>
   <string name="file_deleted_ok">%s Formular(e) erfolgreich gelöscht!</string>
-  <string name="file_delete_in_progress">Ein Formularlöschvorgang ist bereits aktiv!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

@@ -287,10 +287,8 @@
   <string name="delete_file">Izbriši izbrano</string>
   <string name="delete_no">Ne briši</string>
   <string name="delete_yes">Izbriši obrazce</string>
-  <string name="file_deleted_error">Napaka. %1$s od %2$s izbranih obrazcev nisem uspel zbrisati.</string>
-  <string name="form_delete_message">Izbriši izbrane obrazce</string>
+    <string name="form_delete_message">Izbriši izbrane obrazce</string>
   <string name="file_deleted_ok">%s obrazcev uspešno zbrisanih!</string>
-  <string name="file_delete_in_progress">Brisanje obrazca že poteka!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

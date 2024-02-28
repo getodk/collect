@@ -293,9 +293,7 @@
   <string name="delete_file">ลบแบบสำรวจที่เลือกไว้</string>
   <string name="delete_no">ไม่ลบ</string>
   <string name="delete_yes">ลบแบบสำรวจ</string>
-  <string name="file_deleted_error">ขออภัย ไม่สามารถลบแบบสำรวจ %1$s จาก %2$s ที่เลือกไว้ได้</string>
-  <string name="file_deleted_ok">ลบแบบสำรวจ %s เรียบร้อยแล้ว</string>
-  <string name="file_delete_in_progress">ขออภัย กำลังทำการลบแบบสำรวจ</string>
+    <string name="file_deleted_ok">ลบแบบสำรวจ %s เรียบร้อยแล้ว</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

@@ -323,9 +323,7 @@
   <string name="delete_file">चयन मिटाएं</string>
   <string name="delete_no">न मिटाएं</string>
   <string name="delete_yes">फॉर्म मिटाएं</string>
-  <string name="file_deleted_error">क्षमा करें, चयनित %2$sफॉर्म() का %1$sमिटाने में असफल!</string>
-  <string name="file_deleted_ok">%s फॉर्म(s) सफलतापूर्वक मिटाये!</string>
-  <string name="file_delete_in_progress">क्षमा करें, फॉर्म मिटाने की कार्रवाई पहले से ही प्रगति में है!</string>
+    <string name="file_deleted_ok">%s फॉर्म(s) सफलतापूर्वक मिटाये!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

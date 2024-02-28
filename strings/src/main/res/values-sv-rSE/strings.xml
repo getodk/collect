@@ -415,11 +415,8 @@
   <string name="delete_file">Radera vald</string>
   <string name="delete_no">Radera inte</string>
   <string name="delete_yes">Radera formulär</string>
-  <string name="file_deleted_error">Tyvärr, %1$s av %2$s valda formulär kunde inte raderas!</string>
-  <string name="form_delete_message">Raderar valda formulär</string>
-  <string name="deleting_form_dialog_update_message">Raderar formulär %1$d av %2$d</string>
+    <string name="form_delete_message">Raderar valda formulär</string>
   <string name="file_deleted_ok">%s formulär har raderats!</string>
-  <string name="file_delete_in_progress">Tyvärr, radering av formulär pågår redan!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

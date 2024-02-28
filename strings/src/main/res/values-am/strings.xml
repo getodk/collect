@@ -269,9 +269,7 @@
   <string name="delete_file">የተመረጠውን ሰርዝ</string>
   <string name="delete_no">አትሰርዝ</string>
   <string name="delete_yes">ቅጾችን ሰርዝ</string>
-  <string name="file_deleted_error">እናዝናለን፣ የተመረጠው 1 %1$s የ 2 %2$s ቅጽ (ዎች) መሰረዝ አልተሳካም!</string>
-  <string name="file_deleted_ok">1 %s ቅጽ (ዎች) በተሳካ ሁኔታ ተሰርዘዋል!</string>
-  <string name="file_delete_in_progress">ይቅርታ፣ ቅጽ የመሰረዝ እርምጃ አስቀድሞ በሂደት ላይ ነው!</string>
+    <string name="file_deleted_ok">1 %s ቅጽ (ዎች) በተሳካ ሁኔታ ተሰርዘዋል!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

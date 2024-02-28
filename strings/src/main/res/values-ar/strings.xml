@@ -552,11 +552,8 @@
   <string name="delete_file">إحذف الخيارات المحددة</string>
   <string name="delete_no">لا تحذف</string>
   <string name="delete_yes">حذف الاستمارات</string>
-  <string name="file_deleted_error">عذرا, فشل حذف %1$s من %2$s من الاستمارة/ات المحددة!</string>
-  <string name="form_delete_message">جاري حذف الاستمارات المحددة</string>
-  <string name="deleting_form_dialog_update_message">حذف الاستمارة : %1$d من أصل %2$d</string>
+    <string name="form_delete_message">جاري حذف الاستمارات المحددة</string>
   <string name="file_deleted_ok">%s تم حذف الاستمارة /ت!</string>
-  <string name="file_delete_in_progress">عذراً، يوجد حاليا استمارة يتم حذفها!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

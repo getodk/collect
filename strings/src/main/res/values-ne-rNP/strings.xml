@@ -301,9 +301,7 @@
   <string name="delete_file">छानिएका डिलिट गर्नुहोस</string>
   <string name="delete_no">डिलिट नगर्नुहोस</string>
   <string name="delete_yes">फारमहरू डिलिट गर्नुहोस्</string>
-  <string name="file_deleted_error">माफ गर्नुहोस्, छानिएका %2$s मध्येको %1$s फारम(हरु) डिलिट गर्न सकिएन ! </string>
-  <string name="file_deleted_ok">%s फारम (हरु) डिलिट भयो !</string>
-  <string name="file_delete_in_progress">माफ गर्नुहोला, फारम डिलिट गर्ने प्रक्रिया सुरु भैसक्यो!</string>
+    <string name="file_deleted_ok">%s फारम (हरु) डिलिट भयो !</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

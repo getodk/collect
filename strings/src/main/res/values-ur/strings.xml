@@ -576,11 +576,8 @@
   <string name="delete_file">منتخب شدہ کو مٹادیں</string>
   <string name="delete_no">نہ مٹا ئیں</string>
   <string name="delete_yes">فارم کو مٹا دیں</string>
-  <string name="file_deleted_error">معذرت، منتخب شدہ ‎‏%1$s آف%2$s  فارم(ز) آف ‎‏ ڈیلیٹ نہیں ہو سکے</string>
-  <string name="form_delete_message">منتخب کردہ فارم کو ڈیلیٹ کیا جارہا ہے</string>
-  <string name="deleting_form_dialog_update_message">فارم ڈیلیٹ کیے جا رہے ہیں:%1$d آوؑٹ آف%2$d</string>
+    <string name="form_delete_message">منتخب کردہ فارم کو ڈیلیٹ کیا جارہا ہے</string>
   <string name="file_deleted_ok">%s‏فارم (ز )‎‏ کامیابی سےڈیلیٹ کر دیے گئے</string>
-  <string name="file_delete_in_progress">معافی، فارم مٹانے کا عمل پہلے سے جاری ہے</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

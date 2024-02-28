@@ -252,9 +252,7 @@
   <string name="delete_file">Futa/Ondoa zilizochaguliwa</string>
   <string name="delete_no">USIFUTE</string>
   <string name="delete_yes">Futa/Ondoa Fomu</string>
-  <string name="file_deleted_error">Samahani, %1$s kati ya fomu() %2$s zilizochaguliwa hazikufutwa!</string>
-  <string name="file_deleted_ok">Fomu() %s zimefutwa vilivyo!</string>
-  <string name="file_delete_in_progress">samahani, kuna fomu tayari inafutwa!</string>
+    <string name="file_deleted_ok">Fomu() %s zimefutwa vilivyo!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

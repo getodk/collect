@@ -289,9 +289,7 @@
   <string name="delete_file">არჩეულის წაშლა</string>
   <string name="delete_no">არ წაშალოთ</string>
   <string name="delete_yes">ფორმის წაშლა</string>
-  <string name="file_deleted_error">უკაცრავად, არჩეული %2$s ფორმიდან %1$s ვერ წაიშალა</string>
-  <string name="file_deleted_ok">%s ფორმა წარმატებით წაიშალა</string>
-  <string name="file_delete_in_progress">უკაცრავად, ფორმის წაშლის პროცესი ამჟამად მიმდინარეობს!</string>
+    <string name="file_deleted_ok">%s ფორმა წარმატებით წაიშალა</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

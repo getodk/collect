@@ -720,11 +720,8 @@
     <string name="delete_file">Delete Selected</string>
     <string name="delete_no">Do Not Delete</string>
     <string name="delete_yes">Delete Forms</string>
-    <string name="file_deleted_error">Sorry, %1$s of %2$s selected form(s) failed to delete!</string>
     <string name="form_delete_message">Deleting selected forms</string>
-    <string name="deleting_form_dialog_update_message">Deleting form: %1$d out of %2$d </string>
     <string name="file_deleted_ok">%s form(s) successfully deleted!</string>
-    <string name="file_delete_in_progress">Sorry, a form delete action is already in progress!</string>
 
     <!--
     ##############################################
