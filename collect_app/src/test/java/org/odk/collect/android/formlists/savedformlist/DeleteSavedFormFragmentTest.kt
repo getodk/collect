@@ -7,9 +7,9 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.RootMatchers
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.not
@@ -26,6 +26,7 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
+import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.ViewActions.clickOnItemWith
 import org.odk.collect.testshared.ViewMatchers.recyclerView
@@ -36,8 +37,10 @@ class DeleteSavedFormFragmentTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
 
     private val formsToDisplay = MutableLiveData<List<Instance>>(emptyList())
+    private val isDeleting = MutableLiveData(false)
     private val savedFormListViewModel = mock<SavedFormListViewModel> {
         on { formsToDisplay } doReturn formsToDisplay
+        on { isDeleting } doReturn isDeleting
     }
 
     private val viewModelFactory = viewModelFactory {
@@ -63,12 +66,12 @@ class DeleteSavedFormFragmentTest {
         onView(recyclerView()).perform(clickOnItemWith(withText("Form 1")))
         onView(recyclerView()).perform(clickOnItemWith(withText("Form 2")))
 
-        onView(withText(org.odk.collect.strings.R.string.delete_file)).perform(click())
-        onView(withText(context.getString(org.odk.collect.strings.R.string.delete_confirm, 2)))
-            .inRoot(RootMatchers.isDialog())
-            .check(matches(ViewMatchers.isDisplayed()))
-        onView(withText(org.odk.collect.strings.R.string.delete_no))
-            .inRoot(RootMatchers.isDialog())
+        onView(withText(string.delete_file)).perform(click())
+        onView(withText(context.getString(string.delete_confirm, 2)))
+            .inRoot(isDialog())
+            .check(matches(isDisplayed()))
+        onView(withText(string.delete_no))
+            .inRoot(isDialog())
             .perform(click())
 
         verify(savedFormListViewModel, never()).deleteForms(any())
@@ -84,12 +87,12 @@ class DeleteSavedFormFragmentTest {
 
         onView(recyclerView()).perform(clickOnItemWith(withText("Form 1")))
 
-        onView(withText(org.odk.collect.strings.R.string.delete_file)).perform(click())
-        onView(withText(context.getString(org.odk.collect.strings.R.string.delete_confirm, 1)))
-            .inRoot(RootMatchers.isDialog())
-            .check(matches(ViewMatchers.isDisplayed()))
-        onView(withText(org.odk.collect.strings.R.string.delete_yes))
-            .inRoot(RootMatchers.isDialog())
+        onView(withText(string.delete_file)).perform(click())
+        onView(withText(context.getString(string.delete_confirm, 1)))
+            .inRoot(isDialog())
+            .check(matches(isDisplayed()))
+        onView(withText(string.delete_yes))
+            .inRoot(isDialog())
             .perform(click())
 
         onView(withRecyclerView(R.id.list).atPositionOnView(0, R.id.form_title))
@@ -114,5 +117,16 @@ class DeleteSavedFormFragmentTest {
             .check(matches(withText("Form 2")))
         onView(withRecyclerView(R.id.list).atPositionOnView(1, R.id.checkbox))
             .check(matches(isChecked()))
+    }
+
+    @Test
+    fun `shows progress while deleting forms`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteSavedFormFragment::class.java)
+
+        isDeleting.value = true
+        onView(withText(string.form_delete_message)).inRoot(isDialog()).check(matches(isDisplayed()))
+
+        isDeleting.value = false
+        onView(withText(string.delete_file)).check(matches(isDisplayed()))
     }
 }

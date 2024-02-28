@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import org.odk.collect.android.instancemanagement.InstancesDataService
+import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.flowOnBackground
 import org.odk.collect.forms.instances.Instance
@@ -13,7 +14,7 @@ import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 
 class SavedFormListViewModel(
-    private val scheduler: Scheduler,
+    scheduler: Scheduler,
     private val settings: Settings,
     private val instancesDataService: InstancesDataService
 ) : ViewModel() {
@@ -57,8 +58,11 @@ class SavedFormListViewModel(
             instances.filter { it.displayName.contains(filter, ignoreCase = true) }
         }.flowOnBackground(scheduler).asLiveData()
 
+    private val worker = TrackableWorker(scheduler)
+    val isDeleting: LiveData<Boolean> = worker.isWorking
+
     fun deleteForms(databaseIds: LongArray) {
-        scheduler.immediate(background = true) {
+        worker.immediate {
             databaseIds.forEach { instancesDataService.deleteInstance(it) }
         }
     }

@@ -20,6 +20,7 @@ import org.odk.collect.androidshared.ui.multiselect.MultiSelectControlsFragment
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectItem
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModel
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.strings.R.string
 
 class DeleteSavedFormFragment(
@@ -91,6 +92,16 @@ class DeleteSavedFormFragment(
             viewLifecycleOwner,
             Lifecycle.State.RESUMED
         )
+
+        MaterialProgressDialogFragment.showOn(
+            viewLifecycleOwner,
+            savedFormListViewModel.isDeleting,
+            childFragmentManager
+        ) {
+            MaterialProgressDialogFragment().also {
+                it.message = getString(string.form_delete_message)
+            }
+        }
     }
 
     private fun onDeleteSelected(selected: LongArray) {

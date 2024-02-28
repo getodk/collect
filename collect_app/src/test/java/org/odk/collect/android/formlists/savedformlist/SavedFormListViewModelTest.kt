@@ -167,6 +167,18 @@ class SavedFormListViewModelTest {
         )
     }
 
+    @Test
+    fun `isDeleting is true while deleting forms`() {
+        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        assertThat(viewModel.isDeleting.getOrAwaitValue(), equalTo(false))
+
+        viewModel.deleteForms(longArrayOf(1))
+        assertThat(viewModel.isDeleting.getOrAwaitValue(), equalTo(true))
+
+        scheduler.flush()
+        assertThat(viewModel.isDeleting.getOrAwaitValue(), equalTo(false))
+    }
+
     private fun saveForms(instances: List<Instance>) {
         whenever(instancesDataService.instances).doReturn(MutableStateFlow(instances))
     }
