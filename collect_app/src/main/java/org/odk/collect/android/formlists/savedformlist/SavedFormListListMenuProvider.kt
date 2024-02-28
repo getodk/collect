@@ -17,12 +17,12 @@ class SavedFormListListMenuProvider(private val context: Context, private val vi
 
         menu.findItem(R.id.menu_filter).apply {
             setOnActionExpandListener(object : OnActionExpandListener {
-                override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
+                override fun onMenuItemActionExpand(menuItem: MenuItem): Boolean {
                     menu.findItem(R.id.menu_sort).isVisible = false
                     return true
                 }
 
-                override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
+                override fun onMenuItemActionCollapse(menuItem: MenuItem): Boolean {
                     menu.findItem(R.id.menu_sort).isVisible = true
                     return true
                 }
