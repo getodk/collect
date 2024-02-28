@@ -238,7 +238,7 @@ dependencies {
     implementation project(':material')
     implementation project(':async')
     implementation project(':analytics')
-    implementation project(':audioclips')
+    implementation project(':audio-clips')
     implementation project(':forms')
     implementation project(':audio-recorder')
     implementation project(':projects')
