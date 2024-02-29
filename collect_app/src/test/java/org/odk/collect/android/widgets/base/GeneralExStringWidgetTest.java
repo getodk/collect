@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.widgets.ExStringWidget;
-import org.odk.collect.android.widgets.StringWidget;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -31,17 +30,17 @@ public abstract class GeneralExStringWidgetTest<W extends ExStringWidget, A exte
     // TODO we should have such tests for every widget like we have to confirm readOnly option
     @Test
     public void testElementsVisibilityAndAvailability() {
-        assertThat(getSpyWidget().launchIntentButton.getVisibility(), is(View.VISIBLE));
-        assertThat(getSpyWidget().launchIntentButton.isEnabled(), is(Boolean.TRUE));
-        assertThat(getSpyWidget().widgetAnswerText.isEditableState(), is(false));
+        assertThat(getSpyWidget().binding.launchAppButton.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().binding.launchAppButton.isEnabled(), is(Boolean.TRUE));
+        assertThat(getSpyWidget().binding.widgetAnswerText.isEditableState(), is(false));
     }
 
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getSpyWidget().launchIntentButton.getVisibility(), is(View.GONE));
-        assertThat(getSpyWidget().widgetAnswerText.isEditableState(), is(false));
+        assertThat(getSpyWidget().binding.launchAppButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.widgetAnswerText.isEditableState(), is(false));
     }
 
     /**
@@ -52,7 +51,7 @@ public abstract class GeneralExStringWidgetTest<W extends ExStringWidget, A exte
      */
     @Test
     public void widgetShouldBeRegisteredForContextMenu() {
-        StringWidget widget = createWidget();
+        ExStringWidget widget = createWidget();
         List<View> viewsRegisterForContextMenu = ((WidgetTestActivity) activity).viewsRegisterForContextMenu;
 
         assertThat(viewsRegisterForContextMenu.size(), is(3));

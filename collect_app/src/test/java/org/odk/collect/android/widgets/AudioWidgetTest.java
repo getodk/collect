@@ -310,7 +310,7 @@ public class AudioWidgetTest {
         widget.displayError("Required question!");
 
         assertThat(widget.errorLayout.getVisibility(), equalTo(VISIBLE));
-        widget.binding.captureButton.performClick();
+        widget.binding.recordAudioButton.performClick();
         assertThat(widget.errorLayout.getVisibility(), equalTo(GONE));
     }
 

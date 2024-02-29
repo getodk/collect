@@ -72,20 +72,20 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
 
         ExDecimalWidget exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), stringRequester);
 
-        assertThat(exDecimalWidget.getAnswerText(), is(equalTo(fifteenDigitString)));
+        assertThat(exDecimalWidget.binding.widgetAnswerText.getAnswer(), is(equalTo(fifteenDigitString)));
 
         exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), stringRequester);
 
-        assertThat(exDecimalWidget.getAnswerText(), is(equalTo(fifteenDigitString)));
+        assertThat(exDecimalWidget.binding.widgetAnswerText.getAnswer(), is(equalTo(fifteenDigitString)));
     }
 
     @Test
     public void separatorsShouldBeAddedWhenEnabled() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn(THOUSANDS_SEP);
-        getWidget().widgetAnswerText.setAnswer("123456789.54");
+        getWidget().binding.widgetAnswerText.setAnswer("123456789.54");
 
-        assertEquals("123,456,789.54", getWidget().widgetAnswerText.getAnswer());
-        assertEquals("123,456,789.54", getWidget().widgetAnswerText.getBinding().editText.getText().toString());
-        assertEquals("123,456,789.54", getWidget().widgetAnswerText.getBinding().textView.getText().toString());
+        assertEquals("123,456,789.54", getWidget().binding.widgetAnswerText.getAnswer());
+        assertEquals("123,456,789.54", getWidget().binding.widgetAnswerText.getBinding().editText.getText().toString());
+        assertEquals("123,456,789.54", getWidget().binding.widgetAnswerText.getBinding().textView.getText().toString());
     }
 }

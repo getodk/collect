@@ -3,7 +3,7 @@
     <style name="Widget.Collect.Button.QuestionWidget" parent="Widget.Material3.Button">
         <item name="android:paddingTop">@dimen/margin_small</item>
         <item name="android:paddingBottom">@dimen/margin_small</item>
-        <item name="android:textAppearance">?textAppearanceBodyLarge</item>
+        <item name="android:textAppearance">?textAppearanceHeadline1</item>
     </style>
 
     <style name="Widget.Collect.Button" parent="Widget.Material3.Button">
