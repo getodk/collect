@@ -15,9 +15,11 @@ class RetryOnDeviceErrorRule : TestRule {
                 } catch (e: Exception) {
                     if (e is PerformException) {
                         Timber.w("RetryOnDeviceErrorRule: Retrying due to PerformException!")
+                        Timber.e(e)
                         base.evaluate()
                     } else if (e::class.simpleName == "RootViewWithoutFocusException") {
                         Timber.w("RetryOnDeviceErrorRule: Retrying due to RootViewWithoutFocusException!")
+                        Timber.e(e)
                         base.evaluate()
                     } else {
                         throw e
