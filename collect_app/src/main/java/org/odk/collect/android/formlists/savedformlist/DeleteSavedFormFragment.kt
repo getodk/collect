@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -12,11 +13,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.databinding.DeleteFormLayoutBinding
+import org.odk.collect.androidshared.databinding.MultiSelectListBinding
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils.SnackbarPresenterObserver
@@ -69,20 +72,29 @@ class DeleteSavedFormFragment(
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(
-            R.layout.delete_form_layout,
+            org.odk.collect.androidshared.R.layout.multi_select_list,
             container,
             false
         )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val binding = DeleteFormLayoutBinding.bind(view)
+        val binding = MultiSelectListBinding.bind(view)
 
         binding.empty.setIcon(R.drawable.ic_baseline_delete_72)
         binding.empty.setTitle(getString(string.empty_list_of_forms_to_delete_title))
         binding.empty.setSubtitle(getString(string.empty_list_of_saved_forms_to_delete_subtitle))
 
-        val recyclerView = binding.list
+        val recyclerView = binding.list.also {
+            it.layoutManager = LinearLayoutManager(context)
+            val itemDecoration =
+                DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+            val divider =
+                ContextCompat.getDrawable(requireContext(), R.drawable.list_item_divider)!!
+            itemDecoration.setDrawable(divider)
+            it.addItemDecoration(itemDecoration)
+        }
+
         val adapter = MultiSelectAdapter(multiSelectViewModel) { parent ->
             SelectableSavedFormListItemViewHolder(parent)
         }

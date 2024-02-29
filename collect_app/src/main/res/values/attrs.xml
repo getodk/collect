@@ -16,15 +16,4 @@
         <attr name="name" format="string" />
         <attr name="highlightable" format="boolean" />
     </declare-styleable>
-
-    <!--  These attributes are extensions to Material 3  -->
-    <declare-styleable name="Material3Custom">
-        <attr name="textAppearanceLabelExtraLarge" format="reference" />
-    </declare-styleable>
-
-    <declare-styleable name="EmptyListView">
-        <attr name="icon" />
-        <attr name="title" format="string" />
-        <attr name="subtitle" format="string" />
-    </declare-styleable>
 </resources>

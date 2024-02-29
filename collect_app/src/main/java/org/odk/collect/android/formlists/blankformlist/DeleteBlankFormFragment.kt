@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -13,9 +14,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle.State
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
-import org.odk.collect.android.databinding.DeleteFormLayoutBinding
+import org.odk.collect.androidshared.databinding.MultiSelectListBinding
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectAdapter
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectControlsFragment
@@ -67,17 +70,26 @@ class DeleteBlankFormFragment(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val binding = DeleteFormLayoutBinding.bind(view)
-        val recyclerView = binding.list
+        val binding = MultiSelectListBinding.bind(view)
+
+        val recyclerView = binding.list.also {
+            it.layoutManager = LinearLayoutManager(context)
+            val itemDecoration =
+                DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+            val divider =
+                ContextCompat.getDrawable(requireContext(), R.drawable.list_item_divider)!!
+            itemDecoration.setDrawable(divider)
+            it.addItemDecoration(itemDecoration)
+        }
+
         val adapter = MultiSelectAdapter(multiSelectViewModel) { parent ->
             SelectableBlankFormListItemViewHolder(parent)
         }
+        recyclerView.adapter = adapter
 
         binding.empty.setIcon(R.drawable.ic_baseline_delete_72)
         binding.empty.setTitle(getString(string.empty_list_of_forms_to_delete_title))
         binding.empty.setSubtitle(getString(string.empty_list_of_blank_forms_to_delete_subtitle))
-
-        recyclerView.adapter = adapter
 
         multiSelectViewModel.getData().observe(viewLifecycleOwner) {
             adapter.data = it
