@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import org.odk.collect.androidshared.databinding.MultiSelectControlsLayoutBinding
 
 /**
- * A control UI for performing "select all" and "clear all" on multi select lists using `MultiSelectViewModel`. Also supports an action that's text can be defined (via the constructor) and can be reacted to by responding to the `"action"` Fragment result.
+ * A control UI for performing "select all" and "clear all" on multi select lists using
+ * `MultiSelectViewModel`. Also supports an action that's text can be defined (via the
+ * constructor) and can be reacted to by responding to the `"action"` Fragment result.
  */
 class MultiSelectControlsFragment(
     private val actionText: String,
