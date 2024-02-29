@@ -10,6 +10,7 @@ import androidx.core.view.MenuProvider
 import org.odk.collect.android.R
 import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog
 import org.odk.collect.android.formlists.sorting.FormListSortingOption
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 class SavedFormListListMenuProvider(private val context: Context, private val viewModel: SavedFormListViewModel) : MenuProvider {
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -42,6 +43,10 @@ class SavedFormListListMenuProvider(private val context: Context, private val vi
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        if (!MultiClickGuard.allowClick(javaClass.name)) {
+            return true
+        }
+
         return when (menuItem.itemId) {
             R.id.menu_sort -> {
                 FormListSortingBottomSheetDialog(
