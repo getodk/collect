@@ -8,14 +8,12 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle.State
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.androidshared.databinding.MultiSelectListBinding
@@ -23,6 +21,7 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectAdapter
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectControlsFragment
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectItem
+import org.odk.collect.androidshared.ui.multiselect.MultiSelectListView
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModel
 import org.odk.collect.strings.R.string
 
@@ -72,8 +71,11 @@ class DeleteBlankFormFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = MultiSelectListBinding.bind(view)
 
-        val recyclerView = binding.list.also {
-            it.layoutManager = LinearLayoutManager(context)
+        binding.empty.setIcon(R.drawable.ic_baseline_delete_72)
+        binding.empty.setTitle(getString(string.empty_list_of_forms_to_delete_title))
+        binding.empty.setSubtitle(getString(string.empty_list_of_blank_forms_to_delete_subtitle))
+
+        binding.list.also {
             val itemDecoration =
                 DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
             val divider =
@@ -82,24 +84,8 @@ class DeleteBlankFormFragment(
             it.addItemDecoration(itemDecoration)
         }
 
-        val adapter = MultiSelectAdapter(multiSelectViewModel) { parent ->
-            SelectableBlankFormListItemViewHolder(parent)
-        }
-        recyclerView.adapter = adapter
-
-        binding.empty.setIcon(R.drawable.ic_baseline_delete_72)
-        binding.empty.setTitle(getString(string.empty_list_of_forms_to_delete_title))
-        binding.empty.setSubtitle(getString(string.empty_list_of_blank_forms_to_delete_subtitle))
-
-        multiSelectViewModel.getData().observe(viewLifecycleOwner) {
-            adapter.data = it
-
-            binding.empty.isVisible = it.isEmpty()
-            binding.buttons.isVisible = it.isNotEmpty()
-        }
-
-        multiSelectViewModel.getSelected().observe(viewLifecycleOwner) {
-            adapter.selected = it
+        MultiSelectListView.setup(requireContext(), viewLifecycleOwner, binding, multiSelectViewModel) {
+            SelectableBlankFormListItemViewHolder(it)
         }
 
         val blankFormListMenuProvider =
