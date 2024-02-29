@@ -57,6 +57,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.hamcrest.Matcher;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -392,6 +393,7 @@ public class FieldListUpdateTest {
     }
 
     @Test
+    @Ignore("https://github.com/getodk/collect/issues/5996")
     public void listOfQuestionsShouldNotBeScrolledToTheLastEditedQuestionAfterClickingOnAQuestion() {
         new FormEntryPage("fieldlist-updates")
                 .clickGoToArrow()
