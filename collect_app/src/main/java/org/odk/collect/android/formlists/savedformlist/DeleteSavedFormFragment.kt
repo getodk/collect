@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuHost
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -76,15 +77,20 @@ class DeleteSavedFormFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = DeleteBlankFormLayoutBinding.bind(view)
+
+        binding.empty.setSubtitle(getString(string.empty_list_of_saved_forms_to_delete_subtitle))
+
         val recyclerView = binding.list
         val adapter = MultiSelectAdapter(multiSelectViewModel) { parent ->
             SelectableSavedFormListItemViewHolder(parent)
         }
-
         recyclerView.adapter = adapter
 
         multiSelectViewModel.getData().observe(viewLifecycleOwner) {
             adapter.data = it
+
+            binding.empty.isVisible = it.isEmpty()
+            binding.buttons.isVisible = it.isNotEmpty()
         }
 
         multiSelectViewModel.getSelected().observe(viewLifecycleOwner) {
