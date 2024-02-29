@@ -138,10 +138,12 @@ class DeleteBlankFormFragmentTest {
     fun `empty message shows when there are no forms`() {
         launchFragment()
 
+        onView(withText(org.odk.collect.strings.R.string.empty_list_of_forms_to_delete_title)).check(matches(isDisplayed()))
         onView(withText(org.odk.collect.strings.R.string.empty_list_of_blank_forms_to_delete_subtitle)).check(matches(isDisplayed()))
 
         formsToDisplay.value = listOf(blankFormListItem(databaseId = 1, formName = "Form 1"))
 
+        onView(withText(org.odk.collect.strings.R.string.empty_list_of_forms_to_delete_title)).check(matches(not(isDisplayed())))
         onView(withText(org.odk.collect.strings.R.string.empty_list_of_blank_forms_to_delete_subtitle)).check(matches(not(isDisplayed())))
     }
 

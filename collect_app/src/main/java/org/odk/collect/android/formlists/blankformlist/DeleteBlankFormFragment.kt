@@ -15,12 +15,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
-import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
+import org.odk.collect.android.databinding.DeleteFormLayoutBinding
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectAdapter
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectControlsFragment
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectItem
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModel
+import org.odk.collect.strings.R.string
 
 class DeleteBlankFormFragment(
     private val viewModelFactory: ViewModelProvider.Factory,
@@ -42,7 +43,7 @@ class DeleteBlankFormFragment(
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(MultiSelectControlsFragment::class) {
                 MultiSelectControlsFragment(
-                    getString(org.odk.collect.strings.R.string.delete_file),
+                    getString(string.delete_file),
                     multiSelectViewModel
                 )
             }
@@ -62,15 +63,19 @@ class DeleteBlankFormFragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.delete_blank_form_layout, container, false)
+        return inflater.inflate(R.layout.delete_form_layout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val binding = DeleteBlankFormLayoutBinding.bind(view)
+        val binding = DeleteFormLayoutBinding.bind(view)
         val recyclerView = binding.list
         val adapter = MultiSelectAdapter(multiSelectViewModel) { parent ->
             SelectableBlankFormListItemViewHolder(parent)
         }
+
+        binding.empty.setIcon(R.drawable.ic_baseline_delete_72)
+        binding.empty.setTitle(getString(string.empty_list_of_forms_to_delete_title))
+        binding.empty.setSubtitle(getString(string.empty_list_of_blank_forms_to_delete_subtitle))
 
         recyclerView.adapter = adapter
 
@@ -92,18 +97,18 @@ class DeleteBlankFormFragment(
 
     private fun onDeleteSelected(selected: LongArray) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(org.odk.collect.strings.R.string.delete_file)
+            .setTitle(string.delete_file)
             .setMessage(
                 getString(
-                    org.odk.collect.strings.R.string.delete_confirm,
+                    string.delete_confirm,
                     selected.size.toString()
                 )
             )
-            .setPositiveButton(getString(org.odk.collect.strings.R.string.delete_yes)) { _, _ ->
+            .setPositiveButton(getString(string.delete_yes)) { _, _ ->
                 blankFormListViewModel.deleteForms(*selected)
                 multiSelectViewModel.unselectAll()
             }
-            .setNegativeButton(getString(org.odk.collect.strings.R.string.delete_no), null)
+            .setNegativeButton(getString(string.delete_no), null)
             .show()
     }
 }

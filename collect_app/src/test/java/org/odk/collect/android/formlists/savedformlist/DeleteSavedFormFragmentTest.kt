@@ -136,9 +136,11 @@ class DeleteSavedFormFragmentTest {
     @Test
     fun `empty message shows when there are no forms`() {
         fragmentScenarioLauncherRule.launchInContainer(DeleteSavedFormFragment::class.java)
+        onView(withText(string.empty_list_of_forms_to_delete_title)).check(matches(isDisplayed()))
         onView(withText(string.empty_list_of_saved_forms_to_delete_subtitle)).check(matches(isDisplayed()))
 
         formsToDisplay.value = listOf(InstanceFixtures.instance(dbId = 1))
+        onView(withText(string.empty_list_of_forms_to_delete_title)).check(matches(not(isDisplayed())))
         onView(withText(string.empty_list_of_saved_forms_to_delete_subtitle)).check(matches(not(isDisplayed())))
     }
 

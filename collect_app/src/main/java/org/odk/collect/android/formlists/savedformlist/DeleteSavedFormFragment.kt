@@ -16,7 +16,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
+import org.odk.collect.android.databinding.DeleteFormLayoutBinding
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils.SnackbarPresenterObserver
@@ -69,15 +69,17 @@ class DeleteSavedFormFragment(
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(
-            R.layout.delete_blank_form_layout,
+            R.layout.delete_form_layout,
             container,
             false
         )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val binding = DeleteBlankFormLayoutBinding.bind(view)
+        val binding = DeleteFormLayoutBinding.bind(view)
 
+        binding.empty.setIcon(R.drawable.ic_baseline_delete_72)
+        binding.empty.setTitle(getString(string.empty_list_of_forms_to_delete_title))
         binding.empty.setSubtitle(getString(string.empty_list_of_saved_forms_to_delete_subtitle))
 
         val recyclerView = binding.list

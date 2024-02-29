@@ -16,9 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        app:icon="@drawable/ic_baseline_delete_72"
-        app:subtitle="@string/empty_list_of_blank_forms_to_delete_subtitle"
-        app:title="@string/empty_list_of_forms_to_delete_title" />
+        app:icon="@drawable/ic_baseline_delete_72" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/buttons"
