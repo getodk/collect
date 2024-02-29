@@ -54,7 +54,7 @@ class BlankFormListViewModel(
 
         set(value) {
             field = value
-            generalSettings.save("formChooserListSortingOrder", value.ordinal)
+            generalSettings.save(ProjectKeys.KEY_BLANK_FORM_SORT_ORDER, value.ordinal)
             _sortingOrder.value = value
         }
 
@@ -156,7 +156,7 @@ class BlankFormListViewModel(
     }
 
     private fun getSortOrder() =
-        SortOrder.entries[generalSettings.getInt("formChooserListSortingOrder")]
+        SortOrder.entries[generalSettings.getInt(ProjectKeys.KEY_BLANK_FORM_SORT_ORDER)]
 
     class Factory(
         private val instancesRepository: InstancesRepository,
