@@ -17,6 +17,8 @@ import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidshared.ui.SnackbarUtils
+import org.odk.collect.androidshared.ui.SnackbarUtils.SnackbarPresenterObserver
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectAdapter
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectControlsFragment
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectItem
@@ -118,8 +120,20 @@ class DeleteSavedFormFragment(
             .setPositiveButton(getString(string.delete_yes)) { _, _ ->
                 logDelete(selected.size)
 
-                savedFormListViewModel.deleteForms(selected)
                 multiSelectViewModel.unselectAll()
+                savedFormListViewModel.deleteForms(selected).observe(
+                    viewLifecycleOwner,
+                    object : SnackbarPresenterObserver<Int>(requireView()) {
+                        override fun getSnackbarDetails(value: Int): SnackbarUtils.SnackbarDetails {
+                            return SnackbarUtils.SnackbarDetails(
+                                getString(
+                                    string.file_deleted_ok,
+                                    value.toString()
+                                )
+                            )
+                        }
+                    }
+                )
             }
             .setNegativeButton(getString(string.delete_no), null)
             .show()

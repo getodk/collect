@@ -133,12 +133,12 @@ object SnackbarUtils {
     data class Action(val text: String, val listener: () -> Unit)
 
     abstract class SnackbarPresenterObserver<T : Any?>(private val parentView: View) :
-        Observer<Consumable<T>> {
+        Observer<Consumable<T>?> {
 
         abstract fun getSnackbarDetails(value: T): SnackbarDetails
 
-        override fun onChanged(consumable: Consumable<T>) {
-            if (!consumable.isConsumed()) {
+        override fun onChanged(consumable: Consumable<T>?) {
+            if (consumable != null && !consumable.isConsumed()) {
                 showLongSnackbar(parentView, getSnackbarDetails(consumable.value))
                 consumable.consume()
             }

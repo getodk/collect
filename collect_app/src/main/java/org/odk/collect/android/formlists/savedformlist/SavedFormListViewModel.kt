@@ -1,12 +1,14 @@
 package org.odk.collect.android.formlists.savedformlist
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.androidshared.async.TrackableWorker
+import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.flowOnBackground
 import org.odk.collect.forms.instances.Instance
@@ -61,10 +63,18 @@ class SavedFormListViewModel(
     private val worker = TrackableWorker(scheduler)
     val isDeleting: LiveData<Boolean> = worker.isWorking
 
-    fun deleteForms(databaseIds: LongArray) {
-        worker.immediate {
-            databaseIds.forEach { instancesDataService.deleteInstance(it) }
-        }
+    fun deleteForms(databaseIds: LongArray): LiveData<Consumable<Int>?> {
+        val result = MutableLiveData<Consumable<Int>?>(null)
+        worker.immediate(
+            background = {
+                databaseIds.forEach { instancesDataService.deleteInstance(it) }
+            },
+            foreground = {
+                result.value = Consumable(databaseIds.count())
+            }
+        )
+
+        return result
     }
 
     enum class SortOrder {
