@@ -1,10 +1,10 @@
 shared
-formstest
+forms-test
 androidshared
 async
 strings
-audioclips
-audiorecorder
+audio-clips
+audio-recorder
 projects
 location
 geo
