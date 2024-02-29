@@ -16,7 +16,7 @@ class MultiSelectListFragment<T, VH : MultiSelectAdapter.ViewHolder<T>>(
     private val actionText: String,
     private val multiSelectViewModel: MultiSelectViewModel<T>,
     private val viewHolderFactory: (ViewGroup) -> VH,
-    private val onViewCreated: (MultiSelectListBinding) -> Unit
+    private val onViewCreated: (MultiSelectListBinding) -> Unit = {}
 ) : Fragment() {
 
     override fun onAttach(context: Context) {

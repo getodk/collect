@@ -12,7 +12,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <org.odk.collect.androidshared.ui.EmptyListView
-        android:id="@android:id/empty"
+        android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />

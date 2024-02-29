@@ -18,7 +18,6 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
@@ -135,28 +134,6 @@ class DeleteBlankFormFragmentTest {
     }
 
     @Test
-    fun `empty message shows when there are no forms`() {
-        launchFragment()
-
-        onView(withText(org.odk.collect.strings.R.string.empty_list_of_forms_to_delete_title)).check(matches(isDisplayed()))
-        onView(withText(org.odk.collect.strings.R.string.empty_list_of_blank_forms_to_delete_subtitle)).check(matches(isDisplayed()))
-
-        formsToDisplay.value = listOf(blankFormListItem(databaseId = 1, formName = "Form 1"))
-
-        onView(withText(org.odk.collect.strings.R.string.empty_list_of_forms_to_delete_title)).check(matches(not(isDisplayed())))
-        onView(withText(org.odk.collect.strings.R.string.empty_list_of_blank_forms_to_delete_subtitle)).check(matches(not(isDisplayed())))
-    }
-
-    @Test
-    fun `bottom buttons are hidden when there are no forms`() {
-        launchFragment()
-        onView(withId(R.id.buttons)).check(matches(not(isDisplayed())))
-
-        formsToDisplay.value = listOf(blankFormListItem(databaseId = 1, formName = "Form 1"))
-        onView(withId(R.id.buttons)).check(matches(isDisplayed()))
-    }
-
-    @Test
     fun `provides blank form menu`() {
         launchFragment()
 
@@ -164,21 +141,6 @@ class DeleteBlankFormFragmentTest {
         assertThat(menuProviders.size, equalTo(1))
         assertThat(menuProviders[0].first, equalTo(Lifecycle.State.RESUMED))
         assertThat(menuProviders[0].second, instanceOf(BlankFormListMenuProvider::class.java))
-    }
-
-    @Test
-    fun `recreating maintains selection`() {
-        val fragmentScenario = launchFragment()
-        formsToDisplay.value = listOf(
-            blankFormListItem(databaseId = 1, formName = "Form 1"),
-            blankFormListItem(databaseId = 2, formName = "Form 2")
-        )
-
-        onView(recyclerView()).perform(clickOnItemWith(withText("Form 2")))
-
-        fragmentScenario.recreate()
-        onView(withRecyclerView(R.id.list).atPositionOnView(1, R.id.form_title)).check(matches(withText("Form 2")))
-        onView(withRecyclerView(R.id.list).atPositionOnView(1, R.id.checkbox)).check(matches(isChecked()))
     }
 
     private fun launchFragment(): FragmentScenario<*> {

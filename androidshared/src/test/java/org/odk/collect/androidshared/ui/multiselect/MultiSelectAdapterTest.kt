@@ -1,9 +1,7 @@
 package org.odk.collect.androidshared.ui.multiselect
 
 import android.content.Context
-import android.widget.CheckBox
 import android.widget.FrameLayout
-import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -13,6 +11,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.androidshared.ui.multiselect.support.TextAndCheckBoxViewHolder
 
 @RunWith(AndroidJUnit4::class)
 class MultiSelectAdapterTest {
@@ -96,25 +95,5 @@ class MultiSelectAdapterTest {
                 adapter.onBindViewHolder(holder, position)
             }
         }
-    }
-}
-
-private class TextAndCheckBoxView(context: Context) : FrameLayout(context) {
-
-    val textView = TextView(context).also { addView(it) }
-    val checkBox = CheckBox(context).also { addView(it) }
-}
-
-private class TextAndCheckBoxViewHolder<T>(context: Context) :
-    MultiSelectAdapter.ViewHolder<T>(TextAndCheckBoxView(context)) {
-
-    val view = itemView as TextAndCheckBoxView
-
-    override fun setItem(item: T) {
-        view.textView.text = item.toString()
-    }
-
-    override fun getCheckbox(): CheckBox {
-        return view.checkBox
     }
 }

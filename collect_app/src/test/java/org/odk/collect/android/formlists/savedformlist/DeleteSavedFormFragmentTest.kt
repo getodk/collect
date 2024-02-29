@@ -8,7 +8,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -104,24 +103,6 @@ class DeleteSavedFormFragmentTest {
     }
 
     @Test
-    fun `recreating maintains selection`() {
-        val fragmentScenario =
-            fragmentScenarioLauncherRule.launchInContainer(DeleteSavedFormFragment::class.java)
-        formsToDisplay.value = listOf(
-            InstanceFixtures.instance(dbId = 1, displayName = "Form 1"),
-            InstanceFixtures.instance(dbId = 2, displayName = "Form 2")
-        )
-
-        onView(recyclerView()).perform(clickOnItemWith(withText("Form 2")))
-
-        fragmentScenario.recreate()
-        onView(withRecyclerView(R.id.list).atPositionOnView(1, R.id.form_title))
-            .check(matches(withText("Form 2")))
-        onView(withRecyclerView(R.id.list).atPositionOnView(1, R.id.checkbox))
-            .check(matches(isChecked()))
-    }
-
-    @Test
     fun `shows progress while deleting forms`() {
         fragmentScenarioLauncherRule.launchInContainer(DeleteSavedFormFragment::class.java)
         formsToDisplay.value = listOf(InstanceFixtures.instance(dbId = 1))
@@ -131,25 +112,5 @@ class DeleteSavedFormFragmentTest {
 
         isDeleting.value = false
         onView(withText(string.delete_file)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun `empty message shows when there are no forms`() {
-        fragmentScenarioLauncherRule.launchInContainer(DeleteSavedFormFragment::class.java)
-        onView(withText(string.empty_list_of_forms_to_delete_title)).check(matches(isDisplayed()))
-        onView(withText(string.empty_list_of_saved_forms_to_delete_subtitle)).check(matches(isDisplayed()))
-
-        formsToDisplay.value = listOf(InstanceFixtures.instance(dbId = 1))
-        onView(withText(string.empty_list_of_forms_to_delete_title)).check(matches(not(isDisplayed())))
-        onView(withText(string.empty_list_of_saved_forms_to_delete_subtitle)).check(matches(not(isDisplayed())))
-    }
-
-    @Test
-    fun `bottom buttons are hidden when there are no forms`() {
-        fragmentScenarioLauncherRule.launchInContainer(DeleteSavedFormFragment::class.java)
-        onView(ViewMatchers.withId(R.id.buttons)).check(matches(not(isDisplayed())))
-
-        formsToDisplay.value = listOf(InstanceFixtures.instance(dbId = 1))
-        onView(ViewMatchers.withId(R.id.buttons)).check(matches(isDisplayed()))
     }
 }
