@@ -17,13 +17,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.androidshared.databinding.MultiSelectListBinding
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils.SnackbarPresenterObserver
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectControlsFragment
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectItem
-import org.odk.collect.androidshared.ui.multiselect.MultiSelectListView
+import org.odk.collect.androidshared.ui.multiselect.MultiSelectListFragment
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModel
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.material.MaterialProgressDialogFragment
@@ -47,11 +46,21 @@ class DeleteSavedFormFragment(
         super.onAttach(context)
 
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(MultiSelectControlsFragment::class) {
-                MultiSelectControlsFragment(
-                    getString(string.delete_file),
-                    multiSelectViewModel
-                )
+            .forClass(MultiSelectListFragment::class) {
+                MultiSelectListFragment(getString(string.delete_file), multiSelectViewModel, ::SelectableSavedFormListItemViewHolder) {
+                    it.empty.setIcon(R.drawable.ic_baseline_delete_72)
+                    it.empty.setTitle(getString(string.empty_list_of_forms_to_delete_title))
+                    it.empty.setSubtitle(getString(string.empty_list_of_saved_forms_to_delete_subtitle))
+
+                    it.list.also {
+                        val itemDecoration =
+                            DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+                        val divider =
+                            ContextCompat.getDrawable(requireContext(), R.drawable.list_item_divider)!!
+                        itemDecoration.setDrawable(divider)
+                        it.addItemDecoration(itemDecoration)
+                    }
+                }
             }
             .build()
 
@@ -70,32 +79,13 @@ class DeleteSavedFormFragment(
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(
-            org.odk.collect.androidshared.R.layout.multi_select_list,
+            R.layout.delete_form_layout,
             container,
             false
         )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val binding = MultiSelectListBinding.bind(view)
-
-        binding.empty.setIcon(R.drawable.ic_baseline_delete_72)
-        binding.empty.setTitle(getString(string.empty_list_of_forms_to_delete_title))
-        binding.empty.setSubtitle(getString(string.empty_list_of_saved_forms_to_delete_subtitle))
-
-        binding.list.also {
-            val itemDecoration =
-                DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
-            val divider =
-                ContextCompat.getDrawable(requireContext(), R.drawable.list_item_divider)!!
-            itemDecoration.setDrawable(divider)
-            it.addItemDecoration(itemDecoration)
-        }
-
-        MultiSelectListView.setup(requireContext(), viewLifecycleOwner, binding, multiSelectViewModel) {
-            SelectableSavedFormListItemViewHolder(it)
-        }
-
         menuHost?.addMenuProvider(
             SavedFormListListMenuProvider(requireContext(), savedFormListViewModel),
             viewLifecycleOwner,
