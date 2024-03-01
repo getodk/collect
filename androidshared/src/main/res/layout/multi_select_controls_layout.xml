@@ -7,10 +7,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?colorSurface"
-    android:elevation="4dp"
-    android:paddingTop="@dimen/margin_extra_small"
-    android:paddingBottom="@dimen/margin_extra_small">
+    style="@style/Widget.AndroidShared.ButtonBar">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/select_all"

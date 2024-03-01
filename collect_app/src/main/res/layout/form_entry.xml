@@ -60,7 +60,7 @@ the License.
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonholder"
-        style="@style/Widget.Collect.ButtonBar"
+        style="@style/Widget.AndroidShared.ButtonBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

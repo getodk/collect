@@ -56,7 +56,7 @@ the License.
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/buttonholder"
-            style="@style/Widget.Collect.ButtonBar"
+            style="@style/Widget.AndroidShared.ButtonBar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
