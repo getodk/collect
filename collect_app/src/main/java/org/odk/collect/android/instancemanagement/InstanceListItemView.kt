@@ -6,7 +6,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.color.MaterialColors
 import org.odk.collect.android.R
-import org.odk.collect.android.formlists.savedformlist.SavedFormUtils
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.forms.instances.Instance
@@ -128,8 +127,7 @@ object InstanceListItemView {
     }
 
     private fun setImageFromStatus(imageView: ImageView, instance: Instance) {
-        val formStatus = instance.status
-        val imageResourceId = SavedFormUtils.getIcon(formStatus)
+        val imageResourceId = instance.getIcon()
         imageView.setImageResource(imageResourceId)
         imageView.tag = imageResourceId
     }

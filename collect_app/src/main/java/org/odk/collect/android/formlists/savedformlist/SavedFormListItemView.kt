@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.FormChooserListItemMultipleChoiceBinding
+import org.odk.collect.android.instancemanagement.getIcon
 import org.odk.collect.android.instancemanagement.getStatusDescription
 import org.odk.collect.forms.instances.Instance
 import java.util.Date
@@ -25,6 +26,6 @@ class SavedFormListItemView(context: Context) : FrameLayout(context) {
             getStatusDescription(context, status, Date(lastStatusChangeDate))
 
         val statusIcon = binding.root.findViewById<ImageView>(R.id.image)
-        statusIcon.setImageResource(SavedFormUtils.getIcon(value))
+        statusIcon.setImageResource(value.getIcon())
     }
 }

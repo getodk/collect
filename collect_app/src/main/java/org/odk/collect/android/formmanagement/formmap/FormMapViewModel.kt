@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.R
-import org.odk.collect.android.formlists.savedformlist.SavedFormUtils
+import org.odk.collect.android.instancemanagement.getIcon
 import org.odk.collect.android.instancemanagement.getStatusDescription
 import org.odk.collect.android.instancemanagement.showAsEditable
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
@@ -122,7 +122,7 @@ class FormMapViewModel(
                 instance.displayName,
                 listOf(
                     MappableSelectItem.IconifiedText(
-                        SavedFormUtils.getIcon(instance.status),
+                        instance.getIcon(),
                         instanceLastStatusChangeDate
                     )
                 ),
@@ -144,7 +144,7 @@ class FormMapViewModel(
                 instance.displayName,
                 listOf(
                     MappableSelectItem.IconifiedText(
-                        SavedFormUtils.getIcon(instance.status),
+                        instance.getIcon(),
                         instanceLastStatusChangeDate
                     )
                 ),
@@ -167,7 +167,7 @@ class FormMapViewModel(
                 instance.displayName,
                 listOf(
                     MappableSelectItem.IconifiedText(
-                        SavedFormUtils.getIcon(instance.status),
+                        instance.getIcon(),
                         instanceLastStatusChangeDate
                     )
                 ),
