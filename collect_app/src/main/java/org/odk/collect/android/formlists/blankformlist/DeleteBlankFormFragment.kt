@@ -6,17 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle.State
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidshared.ui.RecyclerViewUtils
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectAdapter
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectControlsFragment
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectItem
@@ -48,14 +47,7 @@ class DeleteBlankFormFragment(
                     it.empty.setTitle(getString(string.empty_list_of_forms_to_delete_title))
                     it.empty.setSubtitle(getString(string.empty_list_of_blank_forms_to_delete_subtitle))
 
-                    it.list.also {
-                        val itemDecoration =
-                            DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
-                        val divider =
-                            ContextCompat.getDrawable(requireContext(), R.drawable.list_item_divider)!!
-                        itemDecoration.setDrawable(divider)
-                        it.addItemDecoration(itemDecoration)
-                    }
+                    it.list.addItemDecoration(RecyclerViewUtils.verticalLineDivider(context))
                 }
             }
             .build()
