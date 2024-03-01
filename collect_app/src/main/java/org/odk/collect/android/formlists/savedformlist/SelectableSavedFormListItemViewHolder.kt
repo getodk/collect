@@ -21,7 +21,7 @@ class SelectableSavedFormListItemViewHolder(parent: ViewGroup) :
     }
 
     override fun setItem(item: Instance) {
-        (itemView as SavedFormListItemView).instance = item
+        (itemView as SavedFormListItemView).setItem(item)
     }
 
     override fun getCheckbox(): CheckBox {

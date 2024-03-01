@@ -116,7 +116,7 @@ private class SelectableBlankFormListItemViewHolder(parent: ViewGroup) :
     }
 
     override fun setItem(item: BlankFormListItem) {
-        (itemView as BlankFormListItemView).blankFormListItem = item
+        (itemView as BlankFormListItemView).setItem(item)
     }
 
     override fun getCheckbox(): CheckBox {

@@ -16,20 +16,15 @@ class SavedFormListItemView(context: Context) : FrameLayout(context) {
     val binding =
         FormChooserListItemMultipleChoiceBinding.inflate(LayoutInflater.from(context), this, true)
 
-    var instance: Instance? = null
-        set(value) {
-            field = value
+    fun setItem(value: Instance) {
+        val lastStatusChangeDate = value.lastStatusChangeDate
+        val status = value.status
 
-            if (value != null) {
-                val lastStatusChangeDate = value.lastStatusChangeDate
-                val status = value.status
+        binding.root.findViewById<TextView>(R.id.form_title).text = value.displayName
+        binding.root.findViewById<TextView>(R.id.form_subtitle).text =
+            getStatusDescription(context, status, Date(lastStatusChangeDate))
 
-                binding.root.findViewById<TextView>(R.id.form_title).text = value.displayName
-                binding.root.findViewById<TextView>(R.id.form_subtitle).text =
-                    getStatusDescription(context, status, Date(lastStatusChangeDate))
-
-                val statusIcon = binding.root.findViewById<ImageView>(R.id.image)
-                statusIcon.setImageResource(SavedFormUtils.getIcon(value))
-            }
-        }
+        val statusIcon = binding.root.findViewById<ImageView>(R.id.image)
+        statusIcon.setImageResource(SavedFormUtils.getIcon(value))
+    }
 }

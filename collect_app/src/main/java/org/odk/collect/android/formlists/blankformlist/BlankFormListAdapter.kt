@@ -23,7 +23,7 @@ class BlankFormListAdapter(
 
     override fun onBindViewHolder(holder: BlankFormListItemWithMapViewHolder, position: Int) {
         val item = formItems[position]
-        holder.blankFormListItem = item
+        holder.setItem(item)
 
         holder.itemView.setOnClickListener {
             if (MultiClickGuard.allowClick(javaClass.name)) {
@@ -58,11 +58,9 @@ class BlankFormListAdapter(
             it.setTrailingView(R.layout.map_button)
         }
     ) {
-        var blankFormListItem: BlankFormListItem? = null
-            set(value) {
-                field = value
-                (itemView as BlankFormListItemView).blankFormListItem = field
-            }
+        fun setItem(item: BlankFormListItem) {
+            (itemView as BlankFormListItemView).setItem(item)
+        }
 
         init {
             itemView.layoutParams = ViewGroup.LayoutParams(

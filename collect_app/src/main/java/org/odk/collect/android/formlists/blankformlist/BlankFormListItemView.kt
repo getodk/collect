@@ -2,7 +2,6 @@ package org.odk.collect.android.formlists.blankformlist
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
 import org.odk.collect.android.databinding.BlankFormListItemBinding
 import org.odk.collect.strings.R.string
@@ -14,45 +13,40 @@ class BlankFormListItemView(context: Context) : FrameLayout(context) {
 
     val binding = BlankFormListItemBinding.inflate(LayoutInflater.from(context), this, true)
 
-    var blankFormListItem: BlankFormListItem? = null
-        set(value) {
-            field = value
+    fun setItem(item: BlankFormListItem) {
+        binding.formTitle.text = item.formName
 
-            field?.let {
-                binding.formTitle.text = it.formName
+        binding.formVersion.text =
+            binding.root.context.getString(
+                string.version_number,
+                item.formVersion
+            )
+        binding.formVersion.visibility =
+            if (item.formVersion.isNotBlank()) VISIBLE else GONE
 
-                binding.formVersion.text =
-                    binding.root.context.getString(
-                        string.version_number,
-                        it.formVersion
-                    )
-                binding.formVersion.visibility =
-                    if (it.formVersion.isNotBlank()) View.VISIBLE else View.GONE
+        binding.formId.text =
+            binding.root.context.getString(
+                string.id_number,
+                item.formId
+            )
 
-                binding.formId.text =
-                    binding.root.context.getString(
-                        string.id_number,
-                        it.formId
-                    )
-
-                binding.formHistory.text = try {
-                    if (it.dateOfLastDetectedAttachmentsUpdate != null) {
-                        SimpleDateFormat(
-                            binding.root.context.getString(string.updated_on_date_at_time),
-                            Locale.getDefault()
-                        ).format(it.dateOfLastDetectedAttachmentsUpdate)
-                    } else {
-                        SimpleDateFormat(
-                            binding.root.context.getString(string.added_on_date_at_time),
-                            Locale.getDefault()
-                        ).format(it.dateOfCreation)
-                    }
-                } catch (e: IllegalArgumentException) {
-                    Timber.e(e)
-                    ""
-                }
+        binding.formHistory.text = try {
+            if (item.dateOfLastDetectedAttachmentsUpdate != null) {
+                SimpleDateFormat(
+                    binding.root.context.getString(string.updated_on_date_at_time),
+                    Locale.getDefault()
+                ).format(item.dateOfLastDetectedAttachmentsUpdate)
+            } else {
+                SimpleDateFormat(
+                    binding.root.context.getString(string.added_on_date_at_time),
+                    Locale.getDefault()
+                ).format(item.dateOfCreation)
             }
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e)
+            ""
         }
+    }
 
     fun setTrailingView(layoutId: Int) {
         inflate(context, layoutId, binding.trailingView)
