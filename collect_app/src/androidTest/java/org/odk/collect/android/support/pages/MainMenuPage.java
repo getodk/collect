@@ -279,7 +279,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
         openProjectSettingsDialog()
                 .clickSettings()
                 .clickExperimental()
-                .clickOnString(org.odk.collect.strings.R.string.entities_title);
+                .clickOnString(org.odk.collect.strings.R.string.entity_browser_button);
 
         return new EntitiesPage().assertOnPage();
     }

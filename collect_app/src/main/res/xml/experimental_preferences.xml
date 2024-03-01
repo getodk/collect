@@ -3,20 +3,28 @@
     android:title="@string/experimental">
 
     <Preference
-        android:icon="@drawable/ic_person_24dp"
-        android:key="entities"
-        android:title="@string/entities_title"
-        app:persistent="false" />
-
-    <Preference
         android:icon="@drawable/ic_outline_settings_applications_accent_24"
         android:key="dev_tools"
         android:title="@string/dev_tools"
         app:persistent="false" />
 
-    <SwitchPreferenceCompat
-        android:key="experimental_local_entities"
-        android:title="@string/include_local_entities_setting"
-        app:iconSpaceReserved="false" />
+    <PreferenceCategory
+        android:title="@string/entities_title"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:key="experimental_local_entities"
+            android:title="@string/include_local_entities_setting"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="entities"
+            android:title="@string/entity_browser_button"
+            app:iconSpaceReserved="false"
+            app:persistent="false" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
