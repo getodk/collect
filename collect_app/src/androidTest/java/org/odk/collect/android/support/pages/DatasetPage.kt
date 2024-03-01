@@ -7,8 +7,9 @@ class DatasetPage(private val datasetName: String) : Page<DatasetPage>() {
         return this
     }
 
-    fun assertEntity(fields: String): DatasetPage {
-        assertText(fields)
+    fun assertEntity(label: String, properties: String): DatasetPage {
+        assertText(label)
+        assertText(properties)
         return this
     }
 }

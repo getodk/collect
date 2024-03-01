@@ -51,6 +51,7 @@ dependencies {
     implementation(project(":strings"))
     implementation(project(":shared"))
     implementation(project(":androidshared"))
+    implementation(project(":material"))
 
     implementation(Dependencies.kotlin_stdlib)
     implementation(Dependencies.javarosa) {

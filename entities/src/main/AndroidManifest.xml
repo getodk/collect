@@ -3,8 +3,7 @@
 
     <application>
         <activity
-            android:name=".EntityBrowserActivity"
-            android:theme="@style/Theme.MaterialComponents" />
+            android:name=".EntityBrowserActivity" />
     </application>
 
 </manifest>

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import org.odk.collect.entities.databinding.ListItemLayoutBinding
+import org.odk.collect.entities.databinding.DatasetItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding
 import javax.inject.Inject
 
@@ -33,7 +33,7 @@ class DatasetsFragment : Fragment() {
         val binding = ListLayoutBinding.bind(view)
 
         entitiesRepository.getDatasets().forEach { dataset ->
-            val item = ListItemLayoutBinding.inflate(layoutInflater)
+            val item = DatasetItemLayoutBinding.inflate(layoutInflater)
             item.content.text = dataset
 
             item.root.setOnClickListener {
