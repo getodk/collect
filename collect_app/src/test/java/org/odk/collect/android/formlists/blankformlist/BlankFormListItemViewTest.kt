@@ -18,7 +18,7 @@ class BlankFormListItemViewTest {
     @Test
     fun `displays form version`() {
         val view = BlankFormListItemView(context)
-        view.blankFormListItem = blankFormListItem(formId = "myId", formVersion = "myVersion")
+        view.setItem(blankFormListItem(formId = "myId", formVersion = "myVersion"))
 
         assertThat(
             view.binding.formVersion.text,
@@ -29,7 +29,7 @@ class BlankFormListItemViewTest {
     @Test
     fun `hides version when form version is blank`() {
         val view = BlankFormListItemView(context)
-        view.blankFormListItem = blankFormListItem(formId = "myId", formVersion = "")
+        view.setItem(blankFormListItem(formId = "myId", formVersion = ""))
 
         assertThat(view.binding.formVersion.visibility, equalTo(View.GONE))
     }
@@ -37,7 +37,7 @@ class BlankFormListItemViewTest {
     @Test
     fun `displays form id`() {
         val view = BlankFormListItemView(context)
-        view.blankFormListItem = blankFormListItem(formId = "myId")
+        view.setItem(blankFormListItem(formId = "myId"))
 
         assertThat(
             view.binding.formId.text,
