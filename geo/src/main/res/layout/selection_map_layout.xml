@@ -104,6 +104,7 @@
         android:background="?colorSurface"
         app:behavior_hideable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        style="@style/Widget.Material3.BottomSheet"
         tools:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
