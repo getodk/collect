@@ -113,19 +113,13 @@ class FormMapViewModel(
                 Locale.getDefault()
             )
 
-            val info = dateFormat.format(instance.deletedDate)
+            val info = "$instanceLastStatusChangeDate\n${dateFormat.format(instance.deletedDate)}"
             MappableSelectItem(
                 instance.dbId,
                 listOf(MapPoint(latitude, longitude)),
                 getDrawableIdForStatus(instance.status, false),
                 getDrawableIdForStatus(instance.status, true),
                 instance.displayName,
-                listOf(
-                    IconifiedText(
-                        getSubmissionSummaryStatusIcon(instance.status),
-                        instanceLastStatusChangeDate
-                    )
-                ),
                 info = info
             )
         } else if (!instance.canEditWhenComplete() && listOf(
@@ -134,19 +128,13 @@ class FormMapViewModel(
                 Instance.STATUS_SUBMITTED
             ).contains(instance.status)
         ) {
-            val info = resources.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form)
+            val info = "$instanceLastStatusChangeDate\n${resources.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form)}"
             MappableSelectItem(
                 instance.dbId,
                 listOf(MapPoint(latitude, longitude)),
                 getDrawableIdForStatus(instance.status, false),
                 getDrawableIdForStatus(instance.status, true),
                 instance.displayName,
-                listOf(
-                    IconifiedText(
-                        getSubmissionSummaryStatusIcon(instance.status),
-                        instanceLastStatusChangeDate
-                    )
-                ),
                 info = info
             )
         } else {
@@ -163,12 +151,7 @@ class FormMapViewModel(
                 getDrawableIdForStatus(instance.status, false),
                 getDrawableIdForStatus(instance.status, true),
                 instance.displayName,
-                listOf(
-                    IconifiedText(
-                        getSubmissionSummaryStatusIcon(instance.status),
-                        instanceLastStatusChangeDate
-                    )
-                ),
+                info = instanceLastStatusChangeDate,
                 action = action
             )
         }

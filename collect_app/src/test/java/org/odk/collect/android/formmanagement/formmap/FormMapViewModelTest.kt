@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -110,18 +111,13 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_incomplete_24dp,
             R.drawable.ic_room_form_state_incomplete_48dp,
             instanceWithPoint.displayName,
-            listOf(
-                IconifiedText(
-                    R.drawable.ic_form_state_saved,
-                    formatDate(
-                        org.odk.collect.strings.R.string.saved_on_date_at_time,
-                        instanceWithPoint.lastStatusChangeDate
-                    )
-                )
-            ),
             action = IconifiedText(
                 R.drawable.ic_edit,
                 application.getString(org.odk.collect.strings.R.string.edit_data)
+            ),
+            info = formatDate(
+                org.odk.collect.strings.R.string.saved_on_date_at_time,
+                instanceWithPoint.lastStatusChangeDate
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
@@ -153,18 +149,13 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_incomplete_24dp,
             R.drawable.ic_room_form_state_incomplete_48dp,
             instance.displayName,
-            listOf(
-                IconifiedText(
-                    R.drawable.ic_form_state_saved,
-                    formatDate(
-                        org.odk.collect.strings.R.string.saved_on_date_at_time,
-                        instance.lastStatusChangeDate
-                    )
-                )
-            ),
             action = IconifiedText(
                 R.drawable.ic_edit,
                 application.getString(org.odk.collect.strings.R.string.edit_data)
+            ),
+            info = formatDate(
+                org.odk.collect.strings.R.string.saved_on_date_at_time,
+                instance.lastStatusChangeDate
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
@@ -196,18 +187,13 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_incomplete_24dp,
             R.drawable.ic_room_form_state_incomplete_48dp,
             instance.displayName,
-            listOf(
-                IconifiedText(
-                    R.drawable.ic_form_state_saved,
-                    formatDate(
-                        org.odk.collect.strings.R.string.saved_on_date_at_time,
-                        instance.lastStatusChangeDate
-                    )
-                )
-            ),
             action = IconifiedText(
                 R.drawable.ic_edit,
                 application.getString(org.odk.collect.strings.R.string.edit_data)
+            ),
+            info = formatDate(
+                org.odk.collect.strings.R.string.saved_on_date_at_time,
+                instance.lastStatusChangeDate
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
@@ -239,18 +225,13 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_complete_24dp,
             R.drawable.ic_room_form_state_complete_48dp,
             instance.displayName,
-            listOf(
-                IconifiedText(
-                    R.drawable.ic_form_state_finalized,
-                    formatDate(
-                        org.odk.collect.strings.R.string.finalized_on_date_at_time,
-                        instance.lastStatusChangeDate
-                    )
-                )
-            ),
             action = IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(org.odk.collect.strings.R.string.view_data)
+            ),
+            info = formatDate(
+                org.odk.collect.strings.R.string.finalized_on_date_at_time,
+                instance.lastStatusChangeDate
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
@@ -284,18 +265,13 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_complete_24dp,
             R.drawable.ic_room_form_state_complete_48dp,
             instance.displayName,
-            listOf(
-                IconifiedText(
-                    R.drawable.ic_form_state_finalized,
-                    formatDate(
-                        org.odk.collect.strings.R.string.finalized_on_date_at_time,
-                        instance.lastStatusChangeDate
-                    )
-                )
-            ),
             action = IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(org.odk.collect.strings.R.string.view_data)
+            ),
+            info = formatDate(
+                org.odk.collect.strings.R.string.finalized_on_date_at_time,
+                instance.lastStatusChangeDate
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
@@ -327,16 +303,14 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_incomplete_24dp,
             R.drawable.ic_room_form_state_incomplete_48dp,
             instance.displayName,
-            listOf(
-                IconifiedText(
-                    R.drawable.ic_form_state_saved,
-                    formatDate(
-                        org.odk.collect.strings.R.string.saved_on_date_at_time,
-                        instance.lastStatusChangeDate
-                    )
+            info = formatDate(
+                org.odk.collect.strings.R.string.saved_on_date_at_time,
+                instance.lastStatusChangeDate
+            ) + "\n" +
+                formatDate(
+                    org.odk.collect.strings.R.string.deleted_on_date_at_time,
+                    123L
                 )
-            ),
-            info = formatDate(org.odk.collect.strings.R.string.deleted_on_date_at_time, 123L)
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
     }
@@ -367,18 +341,13 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_submitted_24dp,
             R.drawable.ic_room_form_state_submitted_48dp,
             instance.displayName,
-            listOf(
-                IconifiedText(
-                    R.drawable.ic_form_state_submitted,
-                    formatDate(
-                        org.odk.collect.strings.R.string.sent_on_date_at_time,
-                        instance.lastStatusChangeDate
-                    )
-                )
-            ),
             action = IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(org.odk.collect.strings.R.string.view_data)
+            ),
+            info = formatDate(
+                org.odk.collect.strings.R.string.sent_on_date_at_time,
+                instance.lastStatusChangeDate
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
@@ -410,18 +379,13 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_submission_failed_24dp,
             R.drawable.ic_room_form_state_submission_failed_48dp,
             instance.displayName,
-            listOf(
-                IconifiedText(
-                    R.drawable.ic_form_state_submission_failed,
-                    formatDate(
-                        org.odk.collect.strings.R.string.sending_failed_on_date_at_time,
-                        instance.lastStatusChangeDate
-                    )
-                )
-            ),
             action = IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(org.odk.collect.strings.R.string.view_data)
+            ),
+            info = formatDate(
+                org.odk.collect.strings.R.string.sending_failed_on_date_at_time,
+                instance.lastStatusChangeDate
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
@@ -475,17 +439,17 @@ class FormMapViewModelTest {
 
         assertThat(
             items!![0].info,
-            equalTo(application.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form))
+            containsString(application.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form))
         )
 
         assertThat(
             items[1].info,
-            equalTo(application.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form))
+            containsString(application.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form))
         )
 
         assertThat(
             items[2].info,
-            equalTo(application.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form))
+            containsString(application.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form))
         )
     }
 

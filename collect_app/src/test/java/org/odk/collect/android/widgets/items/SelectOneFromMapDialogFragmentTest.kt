@@ -189,7 +189,6 @@ class SelectOneFromMapDialogFragmentTest {
                             org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small,
                             org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big,
                             "A",
-                            emptyList(),
                             action = IconifiedText(
                                 org.odk.collect.icons.R.drawable.ic_save,
                                 application.getString(org.odk.collect.strings.R.string.select_item)
@@ -208,7 +207,6 @@ class SelectOneFromMapDialogFragmentTest {
                             org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small,
                             org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big,
                             "B",
-                            emptyList(),
                             action = IconifiedText(
                                 org.odk.collect.icons.R.drawable.ic_save,
                                 application.getString(org.odk.collect.strings.R.string.select_item)

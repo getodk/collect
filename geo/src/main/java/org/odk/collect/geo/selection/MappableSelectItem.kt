@@ -8,7 +8,7 @@ data class MappableSelectItem(
     val smallIcon: Int,
     val largeIcon: Int,
     val name: String,
-    val properties: List<IconifiedText>,
+    val properties: List<IconifiedText> = emptyList(),
     val selected: Boolean = false,
     val color: String? = null,
     val symbol: String? = null,
