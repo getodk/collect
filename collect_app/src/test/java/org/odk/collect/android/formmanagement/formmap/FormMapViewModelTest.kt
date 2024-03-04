@@ -14,7 +14,9 @@ import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceUtils
+import org.odk.collect.geo.selection.IconifiedText
 import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.maps.MapPoint
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
@@ -102,15 +104,14 @@ class FormMapViewModelTest {
         val viewModel = createAndLoadViewModel(form)
         assertThat(viewModel.getMappableItems().value!!.size, equalTo(1))
 
-        val expectedItem = MappableSelectItem.WithAction(
+        val expectedItem = MappableSelectItem(
             instanceWithPoint.dbId,
-            2.0,
-            1.0,
+            listOf(MapPoint(2.0, 1.0)),
             R.drawable.ic_room_form_state_incomplete_24dp,
             R.drawable.ic_room_form_state_incomplete_48dp,
             instanceWithPoint.displayName,
             listOf(
-                MappableSelectItem.IconifiedText(
+                IconifiedText(
                     R.drawable.ic_form_state_saved,
                     formatDate(
                         org.odk.collect.strings.R.string.saved_on_date_at_time,
@@ -118,7 +119,7 @@ class FormMapViewModelTest {
                     )
                 )
             ),
-            action = MappableSelectItem.IconifiedText(
+            action = IconifiedText(
                 R.drawable.ic_edit,
                 application.getString(org.odk.collect.strings.R.string.edit_data)
             )
@@ -146,15 +147,14 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.WithAction(
+        val expectedItem = MappableSelectItem(
             instance.dbId,
-            2.0,
-            1.0,
+            listOf(MapPoint(2.0, 1.0)),
             R.drawable.ic_room_form_state_incomplete_24dp,
             R.drawable.ic_room_form_state_incomplete_48dp,
             instance.displayName,
             listOf(
-                MappableSelectItem.IconifiedText(
+                IconifiedText(
                     R.drawable.ic_form_state_saved,
                     formatDate(
                         org.odk.collect.strings.R.string.saved_on_date_at_time,
@@ -162,7 +162,7 @@ class FormMapViewModelTest {
                     )
                 )
             ),
-            action = MappableSelectItem.IconifiedText(
+            action = IconifiedText(
                 R.drawable.ic_edit,
                 application.getString(org.odk.collect.strings.R.string.edit_data)
             )
@@ -190,15 +190,14 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.WithAction(
+        val expectedItem = MappableSelectItem(
             instance.dbId,
-            2.0,
-            1.0,
+            listOf(MapPoint(2.0, 1.0)),
             R.drawable.ic_room_form_state_incomplete_24dp,
             R.drawable.ic_room_form_state_incomplete_48dp,
             instance.displayName,
             listOf(
-                MappableSelectItem.IconifiedText(
+                IconifiedText(
                     R.drawable.ic_form_state_saved,
                     formatDate(
                         org.odk.collect.strings.R.string.saved_on_date_at_time,
@@ -206,7 +205,7 @@ class FormMapViewModelTest {
                     )
                 )
             ),
-            action = MappableSelectItem.IconifiedText(
+            action = IconifiedText(
                 R.drawable.ic_edit,
                 application.getString(org.odk.collect.strings.R.string.edit_data)
             )
@@ -234,15 +233,14 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.WithAction(
+        val expectedItem = MappableSelectItem(
             instance.dbId,
-            2.0,
-            1.0,
+            listOf(MapPoint(2.0, 1.0)),
             R.drawable.ic_room_form_state_complete_24dp,
             R.drawable.ic_room_form_state_complete_48dp,
             instance.displayName,
             listOf(
-                MappableSelectItem.IconifiedText(
+                IconifiedText(
                     R.drawable.ic_form_state_finalized,
                     formatDate(
                         org.odk.collect.strings.R.string.finalized_on_date_at_time,
@@ -250,7 +248,7 @@ class FormMapViewModelTest {
                     )
                 )
             ),
-            action = MappableSelectItem.IconifiedText(
+            action = IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(org.odk.collect.strings.R.string.view_data)
             )
@@ -280,15 +278,14 @@ class FormMapViewModelTest {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.WithAction(
+        val expectedItem = MappableSelectItem(
             instance.dbId,
-            2.0,
-            1.0,
+            listOf(MapPoint(2.0, 1.0)),
             R.drawable.ic_room_form_state_complete_24dp,
             R.drawable.ic_room_form_state_complete_48dp,
             instance.displayName,
             listOf(
-                MappableSelectItem.IconifiedText(
+                IconifiedText(
                     R.drawable.ic_form_state_finalized,
                     formatDate(
                         org.odk.collect.strings.R.string.finalized_on_date_at_time,
@@ -296,7 +293,7 @@ class FormMapViewModelTest {
                     )
                 )
             ),
-            action = MappableSelectItem.IconifiedText(
+            action = IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(org.odk.collect.strings.R.string.view_data)
             )
@@ -324,15 +321,14 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.WithInfo(
+        val expectedItem = MappableSelectItem(
             instance.dbId,
-            2.0,
-            1.0,
+            listOf(MapPoint(2.0, 1.0)),
             R.drawable.ic_room_form_state_incomplete_24dp,
             R.drawable.ic_room_form_state_incomplete_48dp,
             instance.displayName,
             listOf(
-                MappableSelectItem.IconifiedText(
+                IconifiedText(
                     R.drawable.ic_form_state_saved,
                     formatDate(
                         org.odk.collect.strings.R.string.saved_on_date_at_time,
@@ -365,15 +361,14 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.WithAction(
+        val expectedItem = MappableSelectItem(
             instance.dbId,
-            2.0,
-            1.0,
+            listOf(MapPoint(2.0, 1.0)),
             R.drawable.ic_room_form_state_submitted_24dp,
             R.drawable.ic_room_form_state_submitted_48dp,
             instance.displayName,
             listOf(
-                MappableSelectItem.IconifiedText(
+                IconifiedText(
                     R.drawable.ic_form_state_submitted,
                     formatDate(
                         org.odk.collect.strings.R.string.sent_on_date_at_time,
@@ -381,7 +376,7 @@ class FormMapViewModelTest {
                     )
                 )
             ),
-            action = MappableSelectItem.IconifiedText(
+            action = IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(org.odk.collect.strings.R.string.view_data)
             )
@@ -409,15 +404,14 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem.WithAction(
+        val expectedItem = MappableSelectItem(
             instance.dbId,
-            2.0,
-            1.0,
+            listOf(MapPoint(2.0, 1.0)),
             R.drawable.ic_room_form_state_submission_failed_24dp,
             R.drawable.ic_room_form_state_submission_failed_48dp,
             instance.displayName,
             listOf(
-                MappableSelectItem.IconifiedText(
+                IconifiedText(
                     R.drawable.ic_form_state_submission_failed,
                     formatDate(
                         org.odk.collect.strings.R.string.sending_failed_on_date_at_time,
@@ -425,7 +419,7 @@ class FormMapViewModelTest {
                     )
                 )
             ),
-            action = MappableSelectItem.IconifiedText(
+            action = IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(org.odk.collect.strings.R.string.view_data)
             )
@@ -480,17 +474,17 @@ class FormMapViewModelTest {
         val items = viewModel.getMappableItems().value
 
         assertThat(
-            (items!![0] as MappableSelectItem.WithInfo).info,
+            items!![0].info,
             equalTo(application.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form))
         )
 
         assertThat(
-            (items[1] as MappableSelectItem.WithInfo).info,
+            items[1].info,
             equalTo(application.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form))
         )
 
         assertThat(
-            (items[2] as MappableSelectItem.WithInfo).info,
+            items[2].info,
             equalTo(application.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form))
         )
     }

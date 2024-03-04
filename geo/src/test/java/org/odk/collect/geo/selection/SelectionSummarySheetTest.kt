@@ -38,11 +38,11 @@ class SelectionSummarySheetTest {
         selectionSummarySheet.setItem(
             Fixtures.actionMappableSelectItem().copy(
                 properties = listOf(
-                    MappableSelectItem.IconifiedText(
+                    IconifiedText(
                         android.R.drawable.ic_btn_speak_now,
                         "Emotion"
                     ),
-                    MappableSelectItem.IconifiedText(
+                    IconifiedText(
                         android.R.drawable.ic_dialog_info,
                         "Mystery"
                     )
@@ -69,7 +69,7 @@ class SelectionSummarySheetTest {
         selectionSummarySheet.setItem(
             Fixtures.actionMappableSelectItem().copy(
                 properties = listOf(
-                    MappableSelectItem.IconifiedText(
+                    IconifiedText(
                         null,
                         "Emotion"
                     )
@@ -88,7 +88,7 @@ class SelectionSummarySheetTest {
         selectionSummarySheet.setItem(
             Fixtures.actionMappableSelectItem().copy(
                 properties = listOf(
-                    MappableSelectItem.IconifiedText(
+                    IconifiedText(
                         android.R.drawable.ic_btn_speak_now,
                         "Emotion"
                     )
@@ -99,7 +99,7 @@ class SelectionSummarySheetTest {
         selectionSummarySheet.setItem(
             Fixtures.actionMappableSelectItem().copy(
                 properties = listOf(
-                    MappableSelectItem.IconifiedText(
+                    IconifiedText(
                         android.R.drawable.ic_dialog_info,
                         "Mystery"
                     )
@@ -135,7 +135,7 @@ class SelectionSummarySheetTest {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
             Fixtures.actionMappableSelectItem().copy(
-                action = MappableSelectItem.IconifiedText(
+                action = IconifiedText(
                     android.R.drawable.ic_btn_speak_now,
                     "Come on in"
                 )

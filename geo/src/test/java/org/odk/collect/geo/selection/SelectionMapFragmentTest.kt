@@ -666,7 +666,7 @@ class SelectionMapFragmentTest {
             Fixtures.actionMappableSelectItem().copy(
                 id = 0,
                 name = "Item",
-                action = MappableSelectItem.IconifiedText(null, "Action")
+                action = IconifiedText(null, "Action")
             )
         )
         whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))

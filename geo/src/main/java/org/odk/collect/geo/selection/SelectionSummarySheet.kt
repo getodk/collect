@@ -67,23 +67,19 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
             binding.properties.addView(property.root)
         }
 
-        when (item) {
-            is MappableSelectItem.WithAction -> {
-                binding.action.text = item.action.text
+        item.action?.let {
+            binding.action.text = item.action.text
 
-                if (item.action.icon != null) {
-                    binding.action.icon = ContextCompat.getDrawable(context, item.action.icon)
-                }
-
-                binding.action.visibility = View.VISIBLE
-                binding.info.visibility = View.GONE
+            if (item.action.icon != null) {
+                binding.action.icon = ContextCompat.getDrawable(context, item.action.icon)
             }
 
-            is MappableSelectItem.WithInfo -> {
-                binding.info.text = item.info
-                binding.info.visibility = View.VISIBLE
-                binding.action.visibility = View.GONE
-            }
+            binding.action.visibility = View.VISIBLE
+        }
+
+        item.info?.let {
+            binding.info.text = item.info
+            binding.info.visibility = View.VISIBLE
         }
     }
 
