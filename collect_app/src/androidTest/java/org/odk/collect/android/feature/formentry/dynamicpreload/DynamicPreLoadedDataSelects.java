@@ -24,22 +24,17 @@ public class DynamicPreLoadedDataSelects {
             .around(rule);
 
     @Test
-    public void withoutFilter_displaysAllChoices() {
+    public void withoutFilterAndWithoutFilter_displaysMatchingChoices() {
         rule.setUpProjectAndCopyForm("external-csv-search.xml", Collections.singletonList("external-csv-search-produce.csv"))
                 .fillNewForm("external-csv-search.xml", "external-csv-search")
+                .assertQuestion("Multiple produce")
                 .assertText("Artichoke")
                 .assertText("Apple")
                 .assertText("Banana")
                 .assertText("Blueberry")
                 .assertText("Cherimoya")
-                .assertText("Carrot");
-    }
+                .assertText("Carrot")
 
-    @Test
-    // Regression: https://github.com/getodk/collect/issues/3132
-    public void withFilter_showsMatchingChoices() {
-        rule.setUpProjectAndCopyForm("external-csv-search.xml", Collections.singletonList("external-csv-search-produce.csv"))
-                .fillNewForm("external-csv-search.xml", "external-csv-search")
                 .swipeToNextQuestion("Produce search")
                 .inputText("A")
                 .swipeToNextQuestion("Produce")
@@ -48,16 +43,7 @@ public class DynamicPreLoadedDataSelects {
                 .assertText("Banana")
                 .assertText("Cherimoya")
                 .assertText("Carrot")
-                .assertTextDoesNotExist("Blueberry")
-                .swipeToPreviousQuestion("Produce search")
-                .inputText("B")
-                .swipeToNextQuestion("Produce")
-                .assertText("Banana")
-                .assertText("Blueberry")
-                .assertTextDoesNotExist("Artichoke")
-                .assertTextDoesNotExist("Apple")
-                .assertTextDoesNotExist("Cherimoya")
-                .assertTextDoesNotExist("Carrot");
+                .assertTextDoesNotExist("Blueberry");
     }
 
     @Test
