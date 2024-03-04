@@ -47,11 +47,20 @@ public class DynamicPreLoadedDataSelects {
     }
 
     @Test
-    public void shouldDisplayFriendlyMessageWhenFilesAreMissing() {
+    public void displayErrorWhenFilesAreMissing() {
         rule.setUpProjectAndCopyForm("external_data_questions.xml")
                 .fillNewForm("external_data_questions.xml", "externalDataQuestions")
                 .assertText(org.odk.collect.strings.R.string.file_missing, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/external_data_questions-media/fruits.csv")
                 .swipeToNextQuestion("External csv")
                 .assertText(org.odk.collect.strings.R.string.file_missing, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/external_data_questions-media/itemsets.csv");
+    }
+
+    @Test
+    public void displayWarningWhenQueryIsBad() {
+        rule.setUpProjectAndCopyForm("external-csv-search-broken.xml", Collections.singletonList("external-csv-search-produce.csv"))
+                .fillNewForm("external-csv-search-broken.xml", "external-csv-search")
+                .answerQuestion("Produce search", "blah")
+                .swipeToNextQuestion("Produce")
+                .assertText("no such column: c_wat (code 1 SQLITE_ERROR): , while compiling: SELECT c_name, c_label FROM externalData WHERE c_wat LIKE ?");
     }
 }
