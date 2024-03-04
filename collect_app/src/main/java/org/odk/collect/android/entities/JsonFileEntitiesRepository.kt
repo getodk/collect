@@ -1,5 +1,6 @@
 package org.odk.collect.android.entities
 
+import android.os.StrictMode
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.odk.collect.entities.EntitiesRepository
@@ -11,15 +12,15 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
     private val entitiesFile = File(directory, "entities.json")
 
     override fun getDatasets(): Set<String> {
-        return getEntities().map { it.dataset }.toSet()
+        return readEntities().map { it.dataset }.toSet()
     }
 
     override fun getEntities(dataset: String): List<Entity> {
-        return getEntities().filter { it.dataset == dataset }
+        return readEntities().filter { it.dataset == dataset }
     }
 
     override fun save(entity: Entity) {
-        val entities = getEntities()
+        val entities = readEntities()
         val existing = entities.find { it.id == entity.id && it.dataset == entity.dataset }
 
         if (existing != null) {
@@ -37,11 +38,19 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             entities.add(entity)
         }
 
+        writeEntities(entities)
+    }
+
+    private fun writeEntities(entities: MutableList<Entity>) {
+        StrictMode.noteSlowCall("Writing to JSON file")
+
         val json = Gson().toJson(entities)
         entitiesFile.writeText(json)
     }
 
-    private fun getEntities(): MutableList<Entity> {
+    private fun readEntities(): MutableList<Entity> {
+        StrictMode.noteSlowCall("Reading from JSON file")
+
         if (!entitiesFile.exists()) {
             entitiesFile.parentFile.mkdirs()
             entitiesFile.createNewFile()

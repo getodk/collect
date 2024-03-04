@@ -1,11 +1,12 @@
 package org.odk.collect.entities
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,19 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.odk.collect.entities.databinding.DatasetItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding
-import javax.inject.Inject
 
-class DatasetsFragment : Fragment() {
+class DatasetsFragment(private val viewModelFactory: ViewModelProvider.Factory) : Fragment() {
 
-    @Inject
-    lateinit var entitiesRepository: EntitiesRepository
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        (context.applicationContext as EntitiesDependencyComponentProvider).entitiesDependencyComponent.inject(
-            this
-        )
-    }
+    private val entitiesViewModel by viewModels<EntitiesViewModel> { viewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,11 +28,12 @@ class DatasetsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val datasets = entitiesRepository.getDatasets().toList()
-
         val binding = ListLayoutBinding.bind(view)
         binding.list.layoutManager = LinearLayoutManager(requireContext())
-        binding.list.adapter = DatasetsAdapter(datasets, findNavController())
+
+        entitiesViewModel.datasets.observe(viewLifecycleOwner) {
+            binding.list.adapter = DatasetsAdapter(it, findNavController())
+        }
     }
 }
 
