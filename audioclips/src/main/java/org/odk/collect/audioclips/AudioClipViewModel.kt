@@ -85,6 +85,7 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
     private fun playNext(playlist: Queue<Clip>) {
         val nextClip = playlist.poll()
         if (nextClip != null) {
+            stop()
             if (!isCurrentPlayingClip(nextClip.clipID, currentlyPlaying.value)) {
                 loadNewClip(
                     nextClip.uRI,
