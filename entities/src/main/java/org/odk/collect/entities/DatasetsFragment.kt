@@ -6,7 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.odk.collect.entities.databinding.DatasetItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding
 import javax.inject.Inject
@@ -18,7 +22,9 @@ class DatasetsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (context.applicationContext as EntitiesDependencyComponentProvider).entitiesDependencyComponent.inject(this)
+        (context.applicationContext as EntitiesDependencyComponentProvider).entitiesDependencyComponent.inject(
+            this
+        )
     }
 
     override fun onCreateView(
@@ -30,17 +36,48 @@ class DatasetsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val datasets = entitiesRepository.getDatasets().toList()
+
         val binding = ListLayoutBinding.bind(view)
+        binding.list.layoutManager = LinearLayoutManager(requireContext())
+        binding.list.adapter = DatasetsAdapter(datasets, findNavController())
+    }
+}
 
-        entitiesRepository.getDatasets().forEach { dataset ->
-            val item = DatasetItemLayoutBinding.inflate(layoutInflater)
-            item.content.text = dataset
+private class DatasetsAdapter(
+    private val data: List<String>,
+    private val navController: NavController
+) : RecyclerView.Adapter<DatasetViewHolder>() {
 
-            item.root.setOnClickListener {
-                view.findNavController().navigate(R.id.datasets_to_entities, EntitiesFragmentArgs(dataset).toBundle())
-            }
+    override fun onCreateViewHolder(parent: ViewGroup, position: Int): DatasetViewHolder {
+        return DatasetViewHolder(parent)
+    }
 
-            binding.list.addView(item.root)
+    override fun getItemCount(): Int {
+        return data.size
+    }
+
+    override fun onBindViewHolder(viewHolder: DatasetViewHolder, position: Int) {
+        val dataset = data[position]
+        viewHolder.setDataset(dataset)
+        viewHolder.itemView.setOnClickListener {
+            navController.navigate(
+                R.id.datasets_to_entities,
+                EntitiesFragmentArgs(dataset).toBundle()
+            )
         }
+    }
+}
+
+private class DatasetViewHolder(parent: ViewGroup) : ViewHolder(
+    DatasetItemLayoutBinding.inflate(
+        LayoutInflater.from(parent.context),
+        parent,
+        false
+    ).root
+) {
+
+    fun setDataset(dataset: String) {
+        DatasetItemLayoutBinding.bind(itemView).name.text = dataset
     }
 }
