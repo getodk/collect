@@ -17,7 +17,41 @@ import org.odk.collect.testshared.RobolectricHelpers.getCreatedFromResId
 class SelectionSummarySheetTest {
 
     private val application = getApplicationContext<Application>().also {
-        it.setTheme(com.google.android.material.R.style.Theme_MaterialComponents)
+        it.setTheme(com.google.android.material.R.style.Theme_Material3_Light)
+    }
+
+    @Test
+    fun `setItem shows status with errors`() {
+        val selectionSummarySheet = SelectionSummarySheet(application)
+        selectionSummarySheet.setItem(
+            Fixtures.actionMappableSelectItem().copy(
+                status = Status.ERRORS
+            )
+        )
+
+        assertThat(selectionSummarySheet.binding.statusChip.visibility, equalTo(View.VISIBLE))
+        assertThat(selectionSummarySheet.binding.statusChip.text, equalTo(application.getString(org.odk.collect.strings.R.string.draft_errors)))
+    }
+
+    @Test
+    fun `setItem shows status with no errors`() {
+        val selectionSummarySheet = SelectionSummarySheet(application)
+        selectionSummarySheet.setItem(
+            Fixtures.actionMappableSelectItem().copy(
+                status = Status.NO_ERRORS
+            )
+        )
+
+        assertThat(selectionSummarySheet.binding.statusChip.visibility, equalTo(View.VISIBLE))
+        assertThat(selectionSummarySheet.binding.statusChip.text, equalTo(application.getString(org.odk.collect.strings.R.string.draft_no_errors)))
+    }
+
+    @Test
+    fun `setItem does not show status if it is null`() {
+        val selectionSummarySheet = SelectionSummarySheet(application)
+        selectionSummarySheet.setItem(Fixtures.actionMappableSelectItem())
+
+        assertThat(selectionSummarySheet.binding.statusChip.visibility, equalTo(View.GONE))
     }
 
     @Test

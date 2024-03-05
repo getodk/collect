@@ -8,6 +8,8 @@ import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.view.size
+import com.google.android.material.color.MaterialColors
+import org.odk.collect.androidshared.system.ContextUtils
 import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.PropertyBinding
 import org.odk.collect.geo.databinding.SelectionSummarySheetLayoutBinding
@@ -46,6 +48,26 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
 
     fun setItem(item: MappableSelectItem) {
         itemId = item.id
+
+        when (item.status) {
+            Status.ERRORS -> {
+                binding.statusChip.visibility = View.VISIBLE
+                binding.statusChip.setIcon(org.odk.collect.icons.R.drawable.ic_baseline_rule_24)
+                binding.statusChip.setText(org.odk.collect.strings.R.string.draft_errors)
+                binding.statusChip.setPillBackgroundColor(MaterialColors.getColor(binding.statusChip, com.google.android.material.R.attr.colorErrorContainer))
+                binding.statusChip.setTextColor(ContextUtils.getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnErrorContainer))
+                binding.statusChip.setIconTint(ContextUtils.getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnErrorContainer))
+            }
+            Status.NO_ERRORS -> {
+                binding.statusChip.visibility = View.VISIBLE
+                binding.statusChip.setIcon(org.odk.collect.icons.R.drawable.ic_baseline_check_24)
+                binding.statusChip.setText(org.odk.collect.strings.R.string.draft_no_errors)
+                binding.statusChip.setPillBackgroundColor(MaterialColors.getColor(binding.statusChip, com.google.android.material.R.attr.colorSurfaceContainerHighest))
+                binding.statusChip.setTextColor(ContextUtils.getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))
+                binding.statusChip.setIconTint(ContextUtils.getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))
+            }
+            else -> binding.statusChip.visibility = View.GONE
+        }
 
         binding.name.text = item.name
 

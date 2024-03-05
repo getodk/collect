@@ -17,6 +17,7 @@ import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceUtils
 import org.odk.collect.geo.selection.IconifiedText
 import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.geo.selection.Status
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
@@ -118,7 +119,8 @@ class FormMapViewModelTest {
             info = formatDate(
                 org.odk.collect.strings.R.string.saved_on_date_at_time,
                 instanceWithPoint.lastStatusChangeDate
-            )
+            ),
+            status = Status.ERRORS
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
     }
@@ -156,13 +158,14 @@ class FormMapViewModelTest {
             info = formatDate(
                 org.odk.collect.strings.R.string.saved_on_date_at_time,
                 instance.lastStatusChangeDate
-            )
+            ),
+            status = Status.NO_ERRORS
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
     }
 
     @Test
-    fun `invalid drafts with geometry have proper icons, actions and no info`() {
+    fun `invalid drafts with geometry have proper icons, actions, status and no info`() {
         val form = formsRepository.save(
             FormUtils.buildForm("id", "version", TempFiles.createTempDir().absolutePath)
                 .build()
@@ -194,7 +197,8 @@ class FormMapViewModelTest {
             info = formatDate(
                 org.odk.collect.strings.R.string.saved_on_date_at_time,
                 instance.lastStatusChangeDate
-            )
+            ),
+            status = Status.ERRORS
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
     }

@@ -19,6 +19,7 @@ import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.geo.selection.IconifiedText
 import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.geo.selection.SelectionMapData
+import org.odk.collect.geo.selection.Status
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
@@ -152,8 +153,17 @@ class FormMapViewModel(
                 getDrawableIdForStatus(instance.status, true),
                 instance.displayName,
                 info = instanceLastStatusChangeDate,
-                action = action
+                action = action,
+                status = instanceStatusToMappableSelectionItemStatus(instance)
             )
+        }
+    }
+
+    private fun instanceStatusToMappableSelectionItemStatus(instance: Instance): Status? {
+        return when (instance.status) {
+            Instance.STATUS_INVALID, Instance.STATUS_INCOMPLETE -> Status.ERRORS
+            Instance.STATUS_VALID -> Status.NO_ERRORS
+            else -> null
         }
     }
 

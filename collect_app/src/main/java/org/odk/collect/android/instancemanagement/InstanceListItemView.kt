@@ -42,7 +42,7 @@ object InstanceListItemView {
                 }
                 Instance.STATUS_VALID -> {
                     pill.visibility = View.VISIBLE
-                    pill.setIcon(R.drawable.baseline_check_24)
+                    pill.setIcon(org.odk.collect.icons.R.drawable.ic_baseline_check_24)
                     pill.setText(string.draft_no_errors)
                     pill.setPillBackgroundColor(MaterialColors.getColor(pill, com.google.android.material.R.attr.colorSurfaceContainerHighest))
                     pill.setTextColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))

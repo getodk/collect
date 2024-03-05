@@ -13,7 +13,10 @@ data class MappableSelectItem(
     val color: String? = null,
     val symbol: String? = null,
     val info: String? = null,
-    val action: IconifiedText? = null
+    val action: IconifiedText? = null,
+    val status: Status? = null
 )
 
 data class IconifiedText(val icon: Int?, val text: String)
+
+enum class Status { ERRORS, NO_ERRORS }
