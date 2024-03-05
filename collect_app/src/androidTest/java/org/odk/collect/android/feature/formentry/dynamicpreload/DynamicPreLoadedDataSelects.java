@@ -24,7 +24,7 @@ public class DynamicPreLoadedDataSelects {
             .around(rule);
 
     @Test
-    public void withoutFilterAndWithoutFilter_displaysMatchingChoices() {
+    public void withoutFilterAndWithFilter_displaysMatchingChoices() {
         rule.setUpProjectAndCopyForm("external-csv-search.xml", Collections.singletonList("external-csv-search-produce.csv"))
                 .fillNewForm("external-csv-search.xml", "external-csv-search")
                 .assertQuestion("Multiple produce")
