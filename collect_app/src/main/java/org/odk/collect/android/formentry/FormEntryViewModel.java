@@ -386,8 +386,12 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             FormEntryPrompt prompt = formController.getQuestionPrompt();
 
             if (prompt != null) {
-                List<SelectChoice> selectChoices = SelectChoiceUtils.loadSelectChoices(prompt, formController);
-                choices.put(prompt.getIndex(), selectChoices);
+                try {
+                    List<SelectChoice> selectChoices = SelectChoiceUtils.loadSelectChoices(prompt, formController);
+                    choices.put(prompt.getIndex(), selectChoices);
+                } catch (Exception e) {
+                    // Let the widget load choices and handle the error
+                }
             }
         }
     }

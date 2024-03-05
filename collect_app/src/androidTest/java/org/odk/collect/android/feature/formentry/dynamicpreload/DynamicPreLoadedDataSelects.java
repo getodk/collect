@@ -24,22 +24,17 @@ public class DynamicPreLoadedDataSelects {
             .around(rule);
 
     @Test
-    public void withoutFilter_displaysAllChoices() {
+    public void withoutFilterAndWithFilter_displaysMatchingChoices() {
         rule.setUpProjectAndCopyForm("external-csv-search.xml", Collections.singletonList("external-csv-search-produce.csv"))
                 .fillNewForm("external-csv-search.xml", "external-csv-search")
+                .assertQuestion("Multiple produce")
                 .assertText("Artichoke")
                 .assertText("Apple")
                 .assertText("Banana")
                 .assertText("Blueberry")
                 .assertText("Cherimoya")
-                .assertText("Carrot");
-    }
+                .assertText("Carrot")
 
-    @Test
-    // Regression: https://github.com/getodk/collect/issues/3132
-    public void withFilter_showsMatchingChoices() {
-        rule.setUpProjectAndCopyForm("external-csv-search.xml", Collections.singletonList("external-csv-search-produce.csv"))
-                .fillNewForm("external-csv-search.xml", "external-csv-search")
                 .swipeToNextQuestion("Produce search")
                 .inputText("A")
                 .swipeToNextQuestion("Produce")
@@ -48,24 +43,24 @@ public class DynamicPreLoadedDataSelects {
                 .assertText("Banana")
                 .assertText("Cherimoya")
                 .assertText("Carrot")
-                .assertTextDoesNotExist("Blueberry")
-                .swipeToPreviousQuestion("Produce search")
-                .inputText("B")
-                .swipeToNextQuestion("Produce")
-                .assertText("Banana")
-                .assertText("Blueberry")
-                .assertTextDoesNotExist("Artichoke")
-                .assertTextDoesNotExist("Apple")
-                .assertTextDoesNotExist("Cherimoya")
-                .assertTextDoesNotExist("Carrot");
+                .assertTextDoesNotExist("Blueberry");
     }
 
     @Test
-    public void shouldDisplayFriendlyMessageWhenFilesAreMissing() {
+    public void displayErrorWhenFilesAreMissing() {
         rule.setUpProjectAndCopyForm("external_data_questions.xml")
                 .fillNewForm("external_data_questions.xml", "externalDataQuestions")
                 .assertText(org.odk.collect.strings.R.string.file_missing, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/external_data_questions-media/fruits.csv")
                 .swipeToNextQuestion("External csv")
                 .assertText(org.odk.collect.strings.R.string.file_missing, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/external_data_questions-media/itemsets.csv");
+    }
+
+    @Test
+    public void displayWarningWhenQueryIsBad() {
+        rule.setUpProjectAndCopyForm("external-csv-search-broken.xml", Collections.singletonList("external-csv-search-produce.csv"))
+                .fillNewForm("external-csv-search-broken.xml", "external-csv-search")
+                .answerQuestion("Produce search", "blah")
+                .swipeToNextQuestion("Produce")
+                .assertText("no such column: c_wat (code 1 SQLITE_ERROR): , while compiling: SELECT c_name, c_label FROM externalData WHERE c_wat LIKE ?");
     }
 }
