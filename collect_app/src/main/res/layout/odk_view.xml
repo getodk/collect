@@ -28,6 +28,7 @@ limitations under the License.
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_extra_small"
+            android:layout_marginBottom="@dimen/margin_extra_small"
             android:layout_marginHorizontal="@dimen/margin_standard"
             android:visibility="gone"
             style="@style/TextAppearance.Collect.Subtitle1.MediumEmphasis"
