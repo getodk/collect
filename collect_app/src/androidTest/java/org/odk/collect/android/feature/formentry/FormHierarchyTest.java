@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.testshared.RecyclerViewMatcher;
@@ -186,5 +187,81 @@ public class FormHierarchyTest {
                 .clickGoUpIcon()
                 .clickGoUpIcon()
                 .assertTexts("Repeat", "Repeatable Group");
+    }
+
+    @Test
+    public void when_openHierarchyViewFromLastPage_should_mainGroupViewBeVisible() {
+        rule.startAtMainMenu()
+                .copyForm("repeat_group_form.xml")
+                .startBlankFormWithRepeatGroup("Repeat Group", "Grp1")
+                .clickOnDoNotAdd(new FormEntryPage("Repeat Group"))
+                .clickGoToArrow()
+                .clickJumpEndButton()
+                .clickGoToArrow()
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0);
+    }
+
+    @Test
+    public void hierachyView_shouldNotChangeAfterScreenRotation() {
+        rule.startAtMainMenu()
+                .copyForm("repeat_group_form.xml")
+                .startBlankFormWithRepeatGroup("Repeat Group", "Grp1")
+                .clickOnDoNotAdd(new FormEntryPage("Repeat Group"))
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0)
+                .rotateToLandscape(new FormHierarchyPage("Repeat Group"))
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0)
+                .rotateToPortrait(new FormHierarchyPage("Repeat Group"))
+                .checkIfElementInHierarchyMatchesToText("Group Name", 0);
+    }
+
+    @Test
+    public void groups_shouldBeVisibleInHierarchyView() {
+        rule.startAtMainMenu()
+                .copyForm("nested-repeats-complex.xml")
+                .startBlankForm("nested-repeats-complex")
+                .swipeToNextQuestion("You will now be asked questions about your friends. When you see a dialog, tap \"Add\" until you have added all your friends.")
+                .swipeToNextQuestionWithRepeatGroup("Friends")
+                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
+                .inputText("La")
+                .swipeToNextQuestion("You will now be asked questions about La's pets. When you see a dialog, tap \"Add\" until you have added all of La's pets.")
+                .swipeToNextQuestionWithRepeatGroup("Pets")
+                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
+                .inputText("Le")
+                .swipeToNextQuestionWithRepeatGroup("Pets")
+                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
+                .inputText("Be")
+                .swipeToNextQuestionWithRepeatGroup("Pets")
+                .clickOnDoNotAdd(new AddNewRepeatDialog("Friends"))
+                .clickOnDoNotAdd(new AddNewRepeatDialog("Enemies"))
+                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
+                .inputText("Bu")
+                .swipeToNextQuestionWithRepeatGroup("Enemies")
+                .clickOnDoNotAdd(new FormEndPage("nested-repeats-complex"))
+                .clickGoToArrow()
+                .clickOnText("Friends")
+                .checkListSizeInHierarchy(1)
+                .clickOnElementInHierarchy(0)
+                .clickOnText("Pets")
+                .checkListSizeInHierarchy(2)
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .clickOnText("Enemies")
+                .checkListSizeInHierarchy(1);
+    }
+
+    @Test
+    public void theListOfQuestionsShouldBeScrolledToTheLastDisplayedQuestionAfterOpeningTheHierarchy() {
+        rule.startAtMainMenu()
+                .copyForm("manyQ.xml")
+                .startBlankForm("manyQ")
+                .swipeToNextQuestion("t2")
+                .swipeToNextQuestion("n1")
+                .clickGoToArrow()
+                .assertText("n1")
+                .assertTextDoesNotExist("t1")
+                .assertTextDoesNotExist("t2");
     }
 }
