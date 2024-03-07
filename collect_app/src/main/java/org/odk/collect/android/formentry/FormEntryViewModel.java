@@ -372,11 +372,9 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                     if (result instanceof FailedValidationResult) {
                         updateIndex(true);
                     }
-
-                    return result;
-                }, result -> {
-                    validationResult.setValue(new Consumable<>(result));
-                }
+                    validationResult.postValue(new Consumable<>(result));
+                    return null;
+                }, ignored -> {}
         );
     }
 
