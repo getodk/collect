@@ -372,6 +372,35 @@ public class FormEntryViewModelTest {
     }
 
     @Test
+    public void doNotUpdateCurrentIndex_whenValidationFails_butTheIndexOfAQuestionThatWeShouldBeMovedToIsTheOneWeCurrentlyDisplay() {
+        Consumable<FailedValidationResult> failedValidationResult =
+                new Consumable<>(new FailedValidationResult(formController.getFormIndex(), 0, null, org.odk.collect.strings.R.string.invalid_answer_error));
+        formController.setFailedConstraint(failedValidationResult.getValue());
+
+        FormIndex oldIndex = viewModel.getCurrentIndex().getValue();
+        viewModel.validate();
+        scheduler.flush();
+
+        FormIndex newIndex = viewModel.getCurrentIndex().getValue();
+        assertThat(oldIndex == newIndex, is(true));
+    }
+
+    @Test
+    public void updateCurrentIndex_whenValidationFails_butTheIndexOfAQuestionThatWeShouldBeMovedToIsNotTheOneWeCurrentlyDisplay() {
+        FormIndex index = new FormIndex(null, formController.getFormIndex().getLocalIndex() + 2, 0, new TreeReference());
+        Consumable<FailedValidationResult> failedValidationResult =
+                new Consumable<>(new FailedValidationResult(index, 0, null, org.odk.collect.strings.R.string.invalid_answer_error));
+        formController.setFailedConstraint(failedValidationResult.getValue());
+
+        FormIndex oldIndex = viewModel.getCurrentIndex().getValue();
+        viewModel.validate();
+        scheduler.flush();
+
+        FormIndex newIndex = viewModel.getCurrentIndex().getValue();
+        assertThat(oldIndex == newIndex, is(false));
+    }
+
+    @Test
     public void refresh_whenThereIsASelectOnePrompt_preloadsSelectChoices() {
         formController.setCurrentEvent(FormEntryController.EVENT_QUESTION);
 

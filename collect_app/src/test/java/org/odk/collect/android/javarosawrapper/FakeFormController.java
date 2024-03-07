@@ -116,6 +116,8 @@ public class FakeFormController extends StubFormController {
     public ValidationResult validateAnswers(boolean markCompleted, boolean moveToInvalidIndex) throws JavaRosaException {
         if (validationError != null) {
             throw validationError;
+        } else if (failedConstraint != null) {
+            return failedConstraint;
         } else {
             return SuccessValidationResult.INSTANCE;
         }
