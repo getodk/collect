@@ -33,7 +33,7 @@ public class FormControllerTest {
         formController.stepToNextScreenEvent();
 
         assertThat(formController.getFormIndex().toString(), equalTo("0, "));
-        formController.validateAnswers(true, false);
+        formController.validateAnswers(false);
         assertThat(formController.getFormIndex().toString(), equalTo("0, "));
     }
 
@@ -48,7 +48,7 @@ public class FormControllerTest {
         formController.stepToNextScreenEvent();
 
         assertThat(formController.getFormIndex().toString(), equalTo("0, "));
-        formController.validateAnswers(true, true);
+        formController.validateAnswers(true);
         assertThat(formController.getFormIndex().toString(), equalTo("1, "));
     }
 

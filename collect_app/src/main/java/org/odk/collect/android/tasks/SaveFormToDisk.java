@@ -115,7 +115,7 @@ public class SaveFormToDisk {
 
         ValidationResult validationResult;
         try {
-            validationResult = formController.validateAnswers(true, shouldFinalize);
+            validationResult = formController.validateAnswers(shouldFinalize);
             if (shouldFinalize && validationResult instanceof FailedValidationResult) {
                 // validation failed, pass specific failure
                 saveToDiskResult.setSaveResult(((FailedValidationResult) validationResult).getStatus(), shouldFinalize);
