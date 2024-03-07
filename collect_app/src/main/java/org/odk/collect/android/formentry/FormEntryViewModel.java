@@ -361,6 +361,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     public void validate() {
         worker.immediate(
                 () -> {
+                    FormIndex originalIndex = formController.getFormIndex();
                     ValidationResult result = null;
                     try {
                         result = formController.validateAnswers(true, true);
@@ -369,7 +370,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                     }
 
                     // JavaRosa moves to the index where the contraint failed
-                    if (result instanceof FailedValidationResult) {
+                    if (result instanceof FailedValidationResult && !((FailedValidationResult) result).getIndex().equals(originalIndex)) {
                         updateIndex(true);
                     }
                     validationResult.postValue(new Consumable<>(result));
