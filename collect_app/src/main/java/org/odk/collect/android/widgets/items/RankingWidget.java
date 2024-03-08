@@ -16,51 +16,68 @@
 
 package org.odk.collect.android.widgets.items;
 
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
-
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
+import android.util.TypedValue;
+import android.view.View;
+import androidx.annotation.NonNull;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormFillingActivity;
+import org.odk.collect.android.databinding.RankingWidgetBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressLint("ViewConstructor")
-public class RankingWidget extends QuestionWidget implements WidgetDataReceiver, ButtonClickListener {
+public class RankingWidget extends QuestionWidget implements WidgetDataReceiver {
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private List<SelectChoice> savedItems;
-    Button showRankingDialogButton;
-    private TextView answerTextView;
     private final List<SelectChoice> items;
+    RankingWidgetBinding binding;
 
     public RankingWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry, SelectChoiceLoader selectChoiceLoader) {
         super(context, prompt);
-        render();
-
         this.waitingForDataRegistry = waitingForDataRegistry;
         items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt(), selectChoiceLoader);
+        readSavedItems();
+        render();
+    }
 
-        setUpLayout(getOrderedItems());
+    @Override
+    protected View onCreateAnswerView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
+        binding = RankingWidgetBinding.inflate(((Activity) context).getLayoutInflater());
+
+        binding.rankItemsButton.setOnClickListener(v -> {
+            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
+            RankingWidgetDialog rankingWidgetDialog = new RankingWidgetDialog(savedItems == null ? items : savedItems, getFormEntryPrompt());
+            rankingWidgetDialog.show(((FormFillingActivity) getContext()).getSupportFragmentManager(), "RankingDialog");
+        });
+        binding.answer.setText(getAnswerText());
+        binding.answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.answer.setVisibility(binding.answer.getText().toString().isBlank() ? GONE : VISIBLE);
+
+        if (questionDetails.isReadOnly()) {
+            binding.rankItemsButton.setVisibility(View.GONE);
+        }
+
+        SpacesInUnderlyingValuesWarning
+                .forQuestionWidget(this)
+                .renderWarningIfNecessary(savedItems == null ? items : savedItems);
+
+        return binding.getRoot();
     }
 
     @Override
@@ -78,47 +95,39 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
     @Override
     public void clearAnswer() {
         savedItems = null;
-        answerTextView.setText(getAnswerText());
-        answerTextView.setVisibility(GONE);
+        binding.answer.setText(null);
+        binding.answer.setVisibility(GONE);
         widgetValueChanged();
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        showRankingDialogButton.setOnLongClickListener(l);
+        binding.rankItemsButton.setOnLongClickListener(l);
+        binding.answer.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        showRankingDialogButton.cancelLongPress();
+        binding.rankItemsButton.cancelLongPress();
+        binding.answer.cancelLongPress();
     }
 
     @Override
     public void setData(Object values) {
         savedItems = (List<SelectChoice>) values;
-        answerTextView.setText(getAnswerText());
-        answerTextView.setVisibility(answerTextView.getText().toString().isBlank() ? GONE : VISIBLE);
+        binding.answer.setText(getAnswerText());
+        binding.answer.setVisibility(binding.answer.getText().toString().isBlank() ? GONE : VISIBLE);
         widgetValueChanged();
     }
 
-    @Override
-    public void onButtonClick(int buttonId) {
-        waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-
-        RankingWidgetDialog rankingWidgetDialog = new RankingWidgetDialog(savedItems == null ? items : savedItems, getFormEntryPrompt());
-        rankingWidgetDialog.show(((FormFillingActivity) getContext()).getSupportFragmentManager(), "RankingDialog");
-    }
-
-    private List<SelectChoice> getOrderedItems() {
+    private void readSavedItems() {
         List<Selection> savedOrderedItems =
                 getFormEntryPrompt().getAnswerValue() == null
                 ? new ArrayList<>()
                 : (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
 
-        if (savedOrderedItems.isEmpty()) {
-            return items;
-        } else {
+        if (!savedOrderedItems.isEmpty()) {
             savedItems = new ArrayList<>();
             for (Selection selection : savedOrderedItems) {
                 for (SelectChoice selectChoice : items) {
@@ -134,25 +143,7 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
                     savedItems.add(selectChoice);
                 }
             }
-
-            return savedItems;
         }
-    }
-
-    private void setUpLayout(List<SelectChoice> items) {
-        showRankingDialogButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.rank_items), this, false);
-        answerTextView = createAnswerTextView(getContext(), getAnswerText(), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6));
-        answerTextView.setVisibility(answerTextView.getText().toString().isBlank() ? GONE : VISIBLE);
-
-        LinearLayout widgetLayout = new LinearLayout(getContext());
-        widgetLayout.setOrientation(LinearLayout.VERTICAL);
-        widgetLayout.addView(showRankingDialogButton);
-        widgetLayout.addView(answerTextView);
-
-        addAnswerView(widgetLayout);
-        SpacesInUnderlyingValuesWarning
-                .forQuestionWidget(this)
-                .renderWarningIfNecessary(items);
     }
 
     private CharSequence getAnswerText() {

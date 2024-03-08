@@ -89,14 +89,14 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     public void buttonsShouldLaunchCorrectIntentsWhenThereIsNoCustomPackage() {
         stubAllRuntimePermissionsGranted(true);
 
-        Intent intent = getIntentLaunchedByClick(R.id.capture_image);
+        Intent intent = getIntentLaunchedByClick(R.id.capture_button);
         assertActionEquals(MediaStore.ACTION_IMAGE_CAPTURE, intent);
         assertThat(intent.getPackage(), equalTo(null));
 
-        intent = getIntentLaunchedByClick(R.id.choose_image);
+        intent = getIntentLaunchedByClick(R.id.choose_button);
         assertActionEquals(Intent.ACTION_GET_CONTENT, intent);
 
-        intent = getIntentLaunchedByClick(R.id.markup_image);
+        intent = getIntentLaunchedByClick(R.id.annotate_button);
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE, intent);
     }
@@ -109,11 +109,11 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
         stubAllRuntimePermissionsGranted(true);
 
-        Intent intent = getIntentLaunchedByClick(R.id.capture_image);
+        Intent intent = getIntentLaunchedByClick(R.id.capture_button);
         assertActionEquals(MediaStore.ACTION_IMAGE_CAPTURE, intent);
         assertThat(intent.getPackage(), equalTo("com.customcameraapp"));
 
-        intent = getIntentLaunchedByClick(R.id.choose_image);
+        intent = getIntentLaunchedByClick(R.id.choose_button);
         assertActionEquals(Intent.ACTION_GET_CONTENT, intent);
         assertTypeEquals("image/*", intent);
     }
@@ -122,16 +122,16 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
         stubAllRuntimePermissionsGranted(false);
 
-        assertNull(getIntentLaunchedByClick(R.id.capture_image));
+        assertNull(getIntentLaunchedByClick(R.id.capture_button));
     }
 
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getSpyWidget().captureButton.getVisibility(), is(View.GONE));
-        assertThat(getSpyWidget().chooseButton.getVisibility(), is(View.GONE));
-        assertThat(getSpyWidget().annotateButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.captureButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.chooseButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.annotateButton.getVisibility(), is(View.GONE));
     }
 
     @Test
@@ -139,9 +139,9 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         readOnlyOverride = true;
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
-        assertThat(getSpyWidget().captureButton.getVisibility(), is(View.GONE));
-        assertThat(getSpyWidget().chooseButton.getVisibility(), is(View.GONE));
-        assertThat(getSpyWidget().annotateButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.captureButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.chooseButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.annotateButton.getVisibility(), is(View.GONE));
     }
 
     @Test
@@ -262,13 +262,13 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
                 .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
                 .build();
 
-        assertThat(getWidget().annotateButton.isEnabled(), is(false));
+        assertThat(getWidget().binding.annotateButton.isEnabled(), is(false));
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withAnswerDisplayText(DrawWidgetTest.USER_SPECIFIED_IMAGE_ANSWER)
                 .build();
 
-        assertThat(getWidget().annotateButton.isEnabled(), is(false));
+        assertThat(getWidget().binding.annotateButton.isEnabled(), is(false));
     }
 
     @Test
@@ -295,7 +295,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
                 .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
                 .build();
 
-        Intent intent = getIntentLaunchedByClick(R.id.markup_image);
+        Intent intent = getIntentLaunchedByClick(R.id.annotate_button);
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE, intent);
         assertExtraEquals(DrawActivity.REF_IMAGE, Uri.fromFile(file), intent);
@@ -317,7 +317,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
                 .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
                 .build();
 
-        Intent intent = getIntentLaunchedByClick(R.id.markup_image);
+        Intent intent = getIntentLaunchedByClick(R.id.annotate_button);
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE, intent);
         assertThat(intent.hasExtra(DrawActivity.REF_IMAGE), is(false));
@@ -325,7 +325,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
     @Test
     public void whenThereIsNoAnswer_doNotPassUriToDrawActivity() {
-        Intent intent = getIntentLaunchedByClick(R.id.markup_image);
+        Intent intent = getIntentLaunchedByClick(R.id.annotate_button);
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE, intent);
         assertThat(intent.hasExtra(DrawActivity.REF_IMAGE), is(false));

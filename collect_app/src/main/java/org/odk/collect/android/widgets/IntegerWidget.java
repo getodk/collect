@@ -30,7 +30,6 @@ public class IntegerWidget extends StringWidget {
 
     public IntegerWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-        render();
 
         boolean useThousandSeparator = Appearances.useThousandSeparator(questionDetails.getPrompt());
         Integer answer = StringWidgetUtils.getIntegerAnswerValueFromIAnswerData(questionDetails.getPrompt().getAnswerValue());

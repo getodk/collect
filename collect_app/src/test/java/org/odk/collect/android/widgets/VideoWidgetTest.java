@@ -66,15 +66,15 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
 
         stubAllRuntimePermissionsGranted(true);
 
-        Intent intent = getIntentLaunchedByClick(R.id.capture_video);
+        Intent intent = getIntentLaunchedByClick(R.id.record_video_button);
         assertActionEquals(MediaStore.ACTION_VIDEO_CAPTURE, intent);
 
-        intent = getIntentLaunchedByClick(R.id.choose_video);
+        intent = getIntentLaunchedByClick(R.id.choose_video_button);
         assertActionEquals(Intent.ACTION_GET_CONTENT, intent);
         assertTypeEquals("video/*", intent);
 
         getWidget().setData(TempFiles.createTempFile(TempFiles.createTempDir()));
-        getIntentLaunchedByClick(R.id.play_video);
+        getIntentLaunchedByClick(R.id.play_video_button);
         verify(mediaUtils).openFile(any(), any(), any());
     }
 
@@ -82,18 +82,18 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
         stubAllRuntimePermissionsGranted(false);
 
-        assertNull(getIntentLaunchedByClick(R.id.capture_video));
+        assertNull(getIntentLaunchedByClick(R.id.record_video_button));
     }
 
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getSpyWidget().captureButton.getVisibility(), is(View.GONE));
-        assertThat(getSpyWidget().chooseButton.getVisibility(), is(View.GONE));
-        assertThat(getSpyWidget().playButton.getVisibility(), is(View.VISIBLE));
-        assertThat(getSpyWidget().playButton.isEnabled(), is(Boolean.FALSE));
-        assertThat(getSpyWidget().playButton.getText(), is("Play Video"));
+        assertThat(getSpyWidget().binding.recordVideoButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.chooseVideoButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.playVideoButton.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().binding.playVideoButton.isEnabled(), is(Boolean.FALSE));
+        assertThat(getSpyWidget().binding.playVideoButton.getText(), is("Play Video"));
     }
 
     @Test
@@ -101,10 +101,10 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         readOnlyOverride = true;
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
-        assertThat(getSpyWidget().captureButton.getVisibility(), is(View.GONE));
-        assertThat(getSpyWidget().chooseButton.getVisibility(), is(View.GONE));
-        assertThat(getSpyWidget().playButton.getVisibility(), is(View.VISIBLE));
-        assertThat(getSpyWidget().playButton.isEnabled(), is(Boolean.FALSE));
-        assertThat(getSpyWidget().playButton.getText(), is("Play Video"));
+        assertThat(getSpyWidget().binding.recordVideoButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.chooseVideoButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.playVideoButton.getVisibility(), is(View.VISIBLE));
+        assertThat(getSpyWidget().binding.playVideoButton.isEnabled(), is(Boolean.FALSE));
+        assertThat(getSpyWidget().binding.playVideoButton.getText(), is("Play Video"));
     }
 }

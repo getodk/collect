@@ -78,8 +78,8 @@ public class AudioWidgetTest {
         assertThat(widget.binding.audioPlayer.audioController.getVisibility(), is(GONE));
         assertThat(widget.binding.audioPlayer.recordingDuration.getVisibility(), is(GONE));
         assertThat(widget.binding.audioPlayer.waveform.getVisibility(), is(GONE));
-        assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
-        assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.recordAudioButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.chooseAudioButton.getVisibility(), is(VISIBLE));
     }
 
     @Test
@@ -87,8 +87,8 @@ public class AudioWidgetTest {
         File answerFile = questionMediaManager.addAnswerFile(File.createTempFile("blah", ".mp3"));
         AudioWidget widget = createWidget(promptWithAnswer(new StringData(answerFile.getName())));
 
-        assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
-        assertThat(widget.binding.chooseButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.recordAudioButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.chooseAudioButton.getVisibility(), is(GONE));
         assertThat(widget.binding.audioPlayer.waveform.getVisibility(), is(GONE));
         assertThat(widget.binding.audioPlayer.recordingDuration.getVisibility(), is(GONE));
         assertThat(widget.binding.audioPlayer.audioController.getVisibility(), is(VISIBLE));
@@ -97,8 +97,8 @@ public class AudioWidgetTest {
     @Test
     public void usingReadOnlyOption_doesNotShowCaptureAndChooseButtons() {
         AudioWidget widget = createWidget(promptWithReadOnly());
-        assertThat(widget.binding.captureButton.getVisibility(), equalTo(GONE));
-        assertThat(widget.binding.chooseButton.getVisibility(), equalTo(GONE));
+        assertThat(widget.binding.recordAudioButton.getVisibility(), equalTo(GONE));
+        assertThat(widget.binding.chooseAudioButton.getVisibility(), equalTo(GONE));
     }
 
     @Test
@@ -120,7 +120,7 @@ public class AudioWidgetTest {
         when(prompt.getAppearanceHint()).thenReturn(Appearances.NEW);
         AudioWidget widget = createWidget(prompt);
 
-        assertThat(widget.binding.chooseButton.getVisibility(), equalTo(GONE));
+        assertThat(widget.binding.chooseAudioButton.getVisibility(), equalTo(GONE));
     }
 
     @Test
@@ -266,8 +266,8 @@ public class AudioWidgetTest {
         File answerFile = questionMediaManager.addAnswerFile(File.createTempFile("blah", ".mp3"));
         widget.setData(answerFile);
 
-        assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
-        assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.recordAudioButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.recordAudioButton.getVisibility(), is(GONE));
         assertThat(widget.binding.audioPlayer.audioController.getVisibility(), is(VISIBLE));
     }
 
@@ -277,11 +277,11 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
 
-        widget.binding.captureButton.performLongClick();
-        widget.binding.chooseButton.performLongClick();
+        widget.binding.recordAudioButton.performLongClick();
+        widget.binding.chooseAudioButton.performLongClick();
 
-        verify(listener).onLongClick(widget.binding.captureButton);
-        verify(listener).onLongClick(widget.binding.chooseButton);
+        verify(listener).onLongClick(widget.binding.recordAudioButton);
+        verify(listener).onLongClick(widget.binding.chooseAudioButton);
     }
 
     @Test
@@ -289,7 +289,7 @@ public class AudioWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(null);
         AudioWidget widget = createWidget(prompt);
 
-        widget.binding.chooseButton.performClick();
+        widget.binding.chooseAudioButton.performClick();
         verify(audioFileRequester).requestFile(prompt);
     }
 
@@ -299,7 +299,7 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
 
         recordingRequester.setAmplitude(prompt.getIndex().toString(), 11);
-        widget.binding.captureButton.performClick();
+        widget.binding.recordAudioButton.performClick();
         assertThat(widget.binding.audioPlayer.waveform.getLatestAmplitude(), nullValue());
     }
 
@@ -310,7 +310,7 @@ public class AudioWidgetTest {
         widget.displayError("Required question!");
 
         assertThat(widget.errorLayout.getVisibility(), equalTo(VISIBLE));
-        widget.binding.captureButton.performClick();
+        widget.binding.recordAudioButton.performClick();
         assertThat(widget.errorLayout.getVisibility(), equalTo(GONE));
     }
 
@@ -319,12 +319,12 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(promptWithAnswer(null));
 
         recordingRequester.startRecording();
-        assertThat(widget.binding.captureButton.isEnabled(), is(false));
-        assertThat(widget.binding.chooseButton.isEnabled(), is(false));
+        assertThat(widget.binding.recordAudioButton.isEnabled(), is(false));
+        assertThat(widget.binding.chooseAudioButton.isEnabled(), is(false));
 
         recordingRequester.stopRecording();
-        assertThat(widget.binding.captureButton.isEnabled(), is(true));
-        assertThat(widget.binding.chooseButton.isEnabled(), is(true));
+        assertThat(widget.binding.recordAudioButton.isEnabled(), is(true));
+        assertThat(widget.binding.chooseAudioButton.isEnabled(), is(true));
     }
 
     @Test
@@ -333,8 +333,8 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(prompt);
 
         recordingRequester.setDuration(prompt.getIndex().toString(), 0);
-        assertThat(widget.binding.captureButton.getVisibility(), is(GONE));
-        assertThat(widget.binding.chooseButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.recordAudioButton.getVisibility(), is(GONE));
+        assertThat(widget.binding.chooseAudioButton.getVisibility(), is(GONE));
         assertThat(widget.binding.audioPlayer.audioController.getVisibility(), is(GONE));
         assertThat(widget.binding.audioPlayer.recordingDuration.getVisibility(), is(VISIBLE));
         assertThat(widget.binding.audioPlayer.waveform.getVisibility(), is(VISIBLE));
@@ -375,8 +375,8 @@ public class AudioWidgetTest {
         assertThat(widget.binding.audioPlayer.audioController.getVisibility(), is(GONE));
         assertThat(widget.binding.audioPlayer.recordingDuration.getVisibility(), is(GONE));
         assertThat(widget.binding.audioPlayer.waveform.getVisibility(), is(GONE));
-        assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
-        assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.recordAudioButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.chooseAudioButton.getVisibility(), is(VISIBLE));
     }
 
     @Test
@@ -469,8 +469,8 @@ public class AudioWidgetTest {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
         RobolectricHelpers.runLooper();
         assertThat(widget.binding.audioPlayer.audioController.getVisibility(), is(GONE));
-        assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
-        assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.recordAudioButton.getVisibility(), is(VISIBLE));
+        assertThat(widget.binding.chooseAudioButton.getVisibility(), is(VISIBLE));
     }
 
     @Test
@@ -479,8 +479,8 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(promptWithReadOnlyAndAnswer(new StringData(answerFile.getName())));
         widget.binding.audioPlayer.audioController.binding.remove.performClick();
 
-        assertThat(widget.binding.captureButton.getVisibility(), is(View.GONE));
-        assertThat(widget.binding.chooseButton.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.recordAudioButton.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.chooseAudioButton.getVisibility(), is(View.GONE));
     }
 
     @Test
@@ -489,8 +489,8 @@ public class AudioWidgetTest {
         AudioWidget widget = createWidget(promptWithAnswer(new StringData(answerFile.getName())), true);
         widget.binding.audioPlayer.audioController.binding.remove.performClick();
 
-        assertThat(widget.binding.captureButton.getVisibility(), is(View.GONE));
-        assertThat(widget.binding.chooseButton.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.recordAudioButton.getVisibility(), is(View.GONE));
+        assertThat(widget.binding.chooseAudioButton.getVisibility(), is(View.GONE));
     }
 
     public AudioWidget createWidget(FormEntryPrompt prompt) {

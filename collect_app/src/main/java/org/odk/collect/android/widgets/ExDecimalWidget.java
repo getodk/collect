@@ -41,11 +41,10 @@ public class ExDecimalWidget extends ExStringWidget {
 
     public ExDecimalWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, StringRequester stringRequester) {
         super(context, questionDetails, waitingForDataRegistry, stringRequester);
-        render();
 
         boolean useThousandSeparator = Appearances.useThousandSeparator(questionDetails.getPrompt());
         Double answer = StringWidgetUtils.getDoubleAnswerValueFromIAnswerData(questionDetails.getPrompt().getAnswerValue());
-        widgetAnswerText.setDecimalType(useThousandSeparator, answer);
+        binding.widgetAnswerText.setDecimalType(useThousandSeparator, answer);
     }
 
     @Override
@@ -60,12 +59,12 @@ public class ExDecimalWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return StringWidgetUtils.getDecimalData(widgetAnswerText.getAnswer(), getFormEntryPrompt());
+        return StringWidgetUtils.getDecimalData(binding.widgetAnswerText.getAnswer(), getFormEntryPrompt());
     }
 
     @Override
     public void setData(Object answer) {
         DecimalData decimalData = ExternalAppsUtils.asDecimalData(answer);
-        widgetAnswerText.setAnswer(decimalData == null ? null : decimalData.getValue().toString());
+        binding.widgetAnswerText.setAnswer(decimalData == null ? null : decimalData.getValue().toString());
     }
 }

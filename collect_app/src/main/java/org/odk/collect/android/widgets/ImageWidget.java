@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 import android.annotation.SuppressLint;
@@ -22,20 +21,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.widget.Button;
-
-import org.odk.collect.android.R;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.databinding.ImageWidgetBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.ImageCaptureIntentCreator;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.selfiecamera.CaptureSelfieActivity;
-
 import java.util.Locale;
 
 /**
@@ -46,41 +42,43 @@ import java.util.Locale;
  */
 
 @SuppressLint("ViewConstructor")
-public class ImageWidget extends BaseImageWidget implements ButtonClickListener {
-
-    Button captureButton;
-    Button chooseButton;
+public class ImageWidget extends BaseImageWidget {
+    ImageWidgetBinding binding;
 
     private boolean selfie;
 
     public ImageWidget(Context context, final QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, String tmpImageFilePath) {
         super(context, prompt, questionMediaManager, waitingForDataRegistry, tmpImageFilePath);
-        render();
-
         imageClickHandler = new ViewImageClickHandler();
         imageCaptureHandler = new ImageCaptureHandler();
-        setUpLayout();
+
+        render();
         updateAnswer();
-        addAnswerView(answerLayout);
     }
 
     @Override
-    protected void setUpLayout() {
-        super.setUpLayout();
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        binding = ImageWidgetBinding.inflate(((Activity) context).getLayoutInflater());
 
-        String appearance = getFormEntryPrompt().getAppearanceHint();
-        selfie = Appearances.isFrontCameraAppearance(getFormEntryPrompt());
+        String appearance = prompt.getAppearanceHint();
+        selfie = Appearances.isFrontCameraAppearance(prompt);
+        if (selfie || ((appearance != null && appearance.toLowerCase(Locale.ENGLISH).contains(Appearances.NEW)))) {
+            binding.chooseButton.setVisibility(View.GONE);
+        }
 
-        captureButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_image),  this, false, R.id.capture_image);
+        binding.captureButton.setOnClickListener(v -> getPermissionsProvider().requestCameraPermission((Activity) getContext(), this::captureImage));
+        binding.chooseButton.setOnClickListener(v -> imageCaptureHandler.chooseImage(org.odk.collect.strings.R.string.choose_image));
+        binding.image.setOnClickListener(v -> imageClickHandler.clickImage("viewImage"));
 
-        chooseButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_image), this, true, R.id.choose_image);
+        if (questionDetails.isReadOnly()) {
+            binding.captureButton.setVisibility(View.GONE);
+            binding.chooseButton.setVisibility(View.GONE);
+        }
 
-        answerLayout.addView(captureButton);
-        answerLayout.addView(chooseButton);
-        answerLayout.addView(errorTextView);
-        answerLayout.addView(imageView);
+        errorTextView = binding.errorMessage;
+        imageView = binding.image;
 
-        hideButtonsIfNeeded(appearance);
+        return binding.getRoot();
     }
 
     @Override
@@ -96,38 +94,21 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
     @Override
     public void clearAnswer() {
         super.clearAnswer();
-        // reset buttons
-        captureButton.setText(getContext().getString(org.odk.collect.strings.R.string.capture_image));
+        binding.captureButton.setText(getContext().getString(org.odk.collect.strings.R.string.capture_image));
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        captureButton.setOnLongClickListener(l);
-        chooseButton.setOnLongClickListener(l);
+        binding.captureButton.setOnLongClickListener(l);
+        binding.chooseButton.setOnLongClickListener(l);
         super.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        captureButton.cancelLongPress();
-        chooseButton.cancelLongPress();
-    }
-
-    @Override
-    public void onButtonClick(int buttonId) {
-        if (buttonId == R.id.capture_image) {
-            getPermissionsProvider().requestCameraPermission((Activity) getContext(), this::captureImage);
-        } else if (buttonId == R.id.choose_image) {
-            imageCaptureHandler.chooseImage(org.odk.collect.strings.R.string.choose_image);
-        }
-    }
-
-    private void hideButtonsIfNeeded(String appearance) {
-        if (selfie || ((appearance != null
-                && appearance.toLowerCase(Locale.ENGLISH).contains(Appearances.NEW)))) {
-            chooseButton.setVisibility(View.GONE);
-        }
+        binding.captureButton.cancelLongPress();
+        binding.chooseButton.cancelLongPress();
     }
 
     private void captureImage() {
@@ -140,5 +121,4 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
             imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, org.odk.collect.strings.R.string.capture_image);
         }
     }
-
 }

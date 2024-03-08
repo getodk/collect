@@ -30,7 +30,6 @@ public class DecimalWidget extends StringWidget {
 
     public DecimalWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-        render();
 
         boolean useThousandSeparator = Appearances.useThousandSeparator(questionDetails.getPrompt());
         Double answer = StringWidgetUtils.getDoubleAnswerValueFromIAnswerData(questionDetails.getPrompt().getAnswerValue());

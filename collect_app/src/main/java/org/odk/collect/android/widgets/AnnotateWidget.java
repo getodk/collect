@@ -16,7 +16,6 @@ package org.odk.collect.android.widgets;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 import android.annotation.SuppressLint;
@@ -26,19 +25,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
-import android.widget.Button;
-
-import org.odk.collect.android.R;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.databinding.AnnotateWidgetBinding;
 import org.odk.collect.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.ImageCaptureIntentCreator;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
-
 import java.io.File;
 import java.util.Locale;
 
@@ -50,47 +46,60 @@ import java.util.Locale;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class AnnotateWidget extends BaseImageWidget implements ButtonClickListener {
-
-    Button captureButton;
-    Button chooseButton;
-    Button annotateButton;
+public class AnnotateWidget extends BaseImageWidget {
+    AnnotateWidgetBinding binding;
 
     public AnnotateWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, String tmpImageFilePath) {
         super(context, prompt, questionMediaManager, waitingForDataRegistry, tmpImageFilePath);
-        render();
-
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_ANNOTATE, RequestCodes.ANNOTATE_IMAGE, org.odk.collect.strings.R.string.annotate_image);
         imageCaptureHandler = new ImageCaptureHandler();
-        setUpLayout();
-        updateAnswer();
-        adjustAnnotateButtonAvailability();
-        addAnswerView(answerLayout);
+
+        render();
     }
 
     @Override
-    protected void setUpLayout() {
-        super.setUpLayout();
-        captureButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_image), this, false, R.id.capture_image);
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        binding = AnnotateWidgetBinding.inflate(((Activity) context).getLayoutInflater());
+        errorTextView = binding.errorMessage;
+        imageView = binding.image;
+        updateAnswer();
 
-        chooseButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_image), this, true, R.id.choose_image);
+        if (getFormEntryPrompt().getAppearanceHint() != null && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(Appearances.NEW)) {
+            binding.chooseButton.setVisibility(View.GONE);
+        }
 
-        annotateButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.markup_image), this, true, R.id.markup_image);
+        if (binaryName == null || binding.image.getVisibility() == GONE) {
+            binding.annotateButton.setEnabled(false);
+        }
 
-        annotateButton.setOnClickListener(v -> imageClickHandler.clickImage("annotateButton"));
+        binding.captureButton.setOnClickListener(v -> getPermissionsProvider().requestCameraPermission((Activity) getContext(), () -> {
+            Intent intent = ImageCaptureIntentCreator.imageCaptureIntent(getFormEntryPrompt(), getContext(), tmpImageFilePath);
+            imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, org.odk.collect.strings.R.string.annotate_image);
+        }));
+        binding.chooseButton.setOnClickListener(v -> imageCaptureHandler.chooseImage(org.odk.collect.strings.R.string.annotate_image));
+        binding.annotateButton.setOnClickListener(v -> imageClickHandler.clickImage("annotateButton"));
+        binding.image.setOnClickListener(v -> imageClickHandler.clickImage("viewImage"));
 
-        answerLayout.addView(captureButton);
-        answerLayout.addView(chooseButton);
-        answerLayout.addView(annotateButton);
-        answerLayout.addView(errorTextView);
-        answerLayout.addView(imageView);
+        if (questionDetails.isReadOnly()) {
+            binding.captureButton.setVisibility(View.GONE);
+            binding.chooseButton.setVisibility(View.GONE);
+            binding.annotateButton.setVisibility(View.GONE);
+        }
 
-        hideButtonsIfNeeded();
+        return binding.getRoot();
     }
 
     @Override
     public Intent addExtrasToIntent(Intent intent) {
-        intent.putExtra(DrawActivity.SCREEN_ORIENTATION, calculateScreenOrientation());
+        Bitmap bmp = null;
+        if (binding.image.getDrawable() != null) {
+            bmp = ((BitmapDrawable) binding.image.getDrawable()).getBitmap();
+        }
+
+        int screenOrientation =  bmp != null && bmp.getHeight() > bmp.getWidth() ?
+                SCREEN_ORIENTATION_PORTRAIT : SCREEN_ORIENTATION_LANDSCAPE;
+
+        intent.putExtra(DrawActivity.SCREEN_ORIENTATION, screenOrientation);
         return intent;
     }
 
@@ -102,63 +111,24 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
     @Override
     public void clearAnswer() {
         super.clearAnswer();
-        annotateButton.setEnabled(false);
-
-        // reset buttons
-        captureButton.setText(getContext().getString(org.odk.collect.strings.R.string.capture_image));
+        binding.annotateButton.setEnabled(false);
+        binding.captureButton.setText(getContext().getString(org.odk.collect.strings.R.string.capture_image));
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        captureButton.setOnLongClickListener(l);
-        chooseButton.setOnLongClickListener(l);
-        annotateButton.setOnLongClickListener(l);
+        binding.captureButton.setOnLongClickListener(l);
+        binding.chooseButton.setOnLongClickListener(l);
+        binding.annotateButton.setOnLongClickListener(l);
         super.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        captureButton.cancelLongPress();
-        chooseButton.cancelLongPress();
-        annotateButton.cancelLongPress();
-    }
-
-    @Override
-    public void onButtonClick(int buttonId) {
-        if (buttonId == R.id.capture_image) {
-            getPermissionsProvider().requestCameraPermission((Activity) getContext(), this::captureImage);
-        } else if (buttonId == R.id.choose_image) {
-            imageCaptureHandler.chooseImage(org.odk.collect.strings.R.string.annotate_image);
-        }
-    }
-
-    private void adjustAnnotateButtonAvailability() {
-        if (binaryName == null || imageView.getVisibility() == GONE) {
-            annotateButton.setEnabled(false);
-        }
-    }
-
-    private void hideButtonsIfNeeded() {
-        if (getFormEntryPrompt().getAppearanceHint() != null
-                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains(Appearances.NEW)) {
-            chooseButton.setVisibility(View.GONE);
-        }
-    }
-
-    private int calculateScreenOrientation() {
-        Bitmap bmp = null;
-        if (imageView.getDrawable() != null) {
-            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        }
-
-        return bmp != null && bmp.getHeight() > bmp.getWidth() ?
-                SCREEN_ORIENTATION_PORTRAIT : SCREEN_ORIENTATION_LANDSCAPE;
-    }
-
-    private void captureImage() {
-        Intent intent = ImageCaptureIntentCreator.imageCaptureIntent(getFormEntryPrompt(), getContext(), tmpImageFilePath);
-        imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, org.odk.collect.strings.R.string.annotate_image);
+        binding.captureButton.cancelLongPress();
+        binding.chooseButton.cancelLongPress();
+        binding.annotateButton.cancelLongPress();
     }
 
     @Override
@@ -169,7 +139,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
                 ToastUtils.showLongToast(getContext(), org.odk.collect.strings.R.string.gif_not_supported);
             } else {
                 super.setData(newImageObj);
-                annotateButton.setEnabled(binaryName != null);
+                binding.annotateButton.setEnabled(binaryName != null);
             }
         }
     }

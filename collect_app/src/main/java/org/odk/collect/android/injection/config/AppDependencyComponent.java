@@ -80,7 +80,6 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.ProjectResetter;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
@@ -161,8 +160,6 @@ public interface AppDependencyComponent {
     void inject(InstanceUploaderListActivity activity);
 
     void inject(QuestionWidget questionWidget);
-
-    void inject(ExStringWidget exStringWidget);
 
     void inject(ODKView odkView);
 

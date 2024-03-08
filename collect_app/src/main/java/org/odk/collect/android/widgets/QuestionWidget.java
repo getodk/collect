@@ -145,7 +145,15 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         );
 
         if (answerView != null) {
-            addAnswerView(answerView);
+            ViewGroup answerContainer = findViewById(R.id.answer_container);
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+
+            answerContainer.addView(answerView, params);
+
+            adjustButtonFontSize(answerContainer);
         }
     }
 
@@ -303,22 +311,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
             helpText.setVisibility(View.GONE);
             return helpText;
         }
-    }
-
-    /**
-     * Widget should use {@link #onCreateAnswerView} to define answer view
-     */
-    @Deprecated
-    protected final void addAnswerView(View v) {
-        ViewGroup answerContainer = findViewById(R.id.answer_container);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-
-        answerContainer.addView(v, params);
-
-        adjustButtonFontSize(answerContainer);
     }
 
     private void hideAnswerContainerIfNeeded() {

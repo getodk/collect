@@ -41,11 +41,10 @@ public class ExIntegerWidget extends ExStringWidget {
 
     public ExIntegerWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, StringRequester stringRequester) {
         super(context, questionDetails, waitingForDataRegistry, stringRequester);
-        render();
 
         boolean useThousandSeparator = Appearances.useThousandSeparator(questionDetails.getPrompt());
         Integer answer = StringWidgetUtils.getIntegerAnswerValueFromIAnswerData(questionDetails.getPrompt().getAnswerValue());
-        widgetAnswerText.setIntegerType(useThousandSeparator, answer);
+        binding.widgetAnswerText.setIntegerType(useThousandSeparator, answer);
     }
 
     @Override
@@ -60,12 +59,12 @@ public class ExIntegerWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return StringWidgetUtils.getIntegerData(widgetAnswerText.getAnswer(), getFormEntryPrompt());
+        return StringWidgetUtils.getIntegerData(binding.widgetAnswerText.getAnswer(), getFormEntryPrompt());
     }
 
     @Override
     public void setData(Object answer) {
         IntegerData integerData = ExternalAppsUtils.asIntegerData(answer);
-        widgetAnswerText.setAnswer(integerData == null ? null : integerData.getValue().toString());
+        binding.widgetAnswerText.setAnswer(integerData == null ? null : integerData.getValue().toString());
     }
 }

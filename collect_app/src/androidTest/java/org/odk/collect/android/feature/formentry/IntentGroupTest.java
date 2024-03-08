@@ -208,8 +208,8 @@ public class IntentGroupTest {
 
     private void assertImageWidgetWithoutAnswer() {
         onView(allOf(withTagValue(is("ImageView")), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist());
-        onView(withId(R.id.capture_image)).check(doesNotExist());
-        onView(withId(R.id.choose_image)).check(doesNotExist());
+        onView(withId(R.id.capture_button)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.choose_button)).check(matches(not(isDisplayed())));
     }
 
     private void assertAudioWidgetWithoutAnswer() {
@@ -218,7 +218,7 @@ public class IntentGroupTest {
 
     private void assertVideoWidgetWithoutAnswer() {
         onView(withText(is("Video external"))).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.play_video)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.play_video_button)).check(matches(not(isDisplayed())));
     }
 
     private void assertFileWidgetWithoutAnswer() {
@@ -227,8 +227,8 @@ public class IntentGroupTest {
 
     private void assertImageWidgetWithAnswer() {
         onView(allOf(withTagValue(is("ImageView")), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(not(doesNotExist())));
-        onView(withId(R.id.capture_image)).check(doesNotExist());
-        onView(withId(R.id.choose_image)).check(doesNotExist());
+        onView(withId(R.id.capture_button)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.choose_button)).check(matches(not(isDisplayed())));
     }
 
     private void assertAudioWidgetWithAnswer() {
@@ -236,8 +236,8 @@ public class IntentGroupTest {
     }
 
     private void assertVideoWidgetWithAnswer() {
-        onView(withId(R.id.play_video)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withId(R.id.play_video)).check(matches(isEnabled()));
+        onView(withId(R.id.play_video_button)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.play_video_button)).check(matches(isEnabled()));
     }
 
     private void assertFileWidgetWithAnswer() {

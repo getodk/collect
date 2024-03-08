@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDrawingDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
@@ -31,14 +32,14 @@ public class SignatureWidgetTest {
                 .clickGoToArrow()
                 .clickOnText("Image widgets")
                 .clickOnQuestion("Signature widget")
-                .clickWidgetButton()
+                .clickOnId(R.id.sign_button)
                 .waitForRotationToEnd()
                 .pressBack(new SaveOrIgnoreDrawingDialog<>("Gather Signature", new FormEntryPage("All widgets")))
                 .checkIsTranslationDisplayed("Exit Gather Signature", "Salir Adjuntar firma")
                 .assertText(org.odk.collect.strings.R.string.keep_changes)
                 .clickDiscardChanges()
                 .waitForRotationToEnd()
-                .clickWidgetButton()
+                .clickOnId(R.id.sign_button)
                 .waitForRotationToEnd()
                 .pressBack(new SaveOrIgnoreDrawingDialog<>("Gather Signature", new FormEntryPage("All widgets")))
                 .clickSaveChanges()
@@ -58,7 +59,7 @@ public class SignatureWidgetTest {
                 .clickGoToArrow()
                 .clickOnText("Image widgets")
                 .clickOnQuestion("Signature widget")
-                .clickWidgetButton()
+                .clickOnId(R.id.sign_button)
                 .waitForRotationToEnd()
                 .clickOnId(org.odk.collect.draw.R.id.fab_actions)
                 .checkIsIdDisplayed(org.odk.collect.draw.R.id.fab_save_and_close)

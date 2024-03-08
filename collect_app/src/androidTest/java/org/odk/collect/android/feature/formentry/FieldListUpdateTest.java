@@ -317,10 +317,10 @@ public class FieldListUpdateTest {
 
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
 
-        onView(withId(R.id.capture_image)).perform(click());
+        onView(withId(R.id.capture_button)).perform(click());
 
         onView(withText("Target10-15")).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-        onView(withId(R.id.capture_image)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.capture_button)).check(matches(isCompletelyDisplayed()));
     }
 
     @Test

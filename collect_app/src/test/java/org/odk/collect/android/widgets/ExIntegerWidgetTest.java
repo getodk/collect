@@ -47,17 +47,17 @@ public class ExIntegerWidgetTest extends GeneralExStringWidgetTest<ExIntegerWidg
 
     @Test
     public void digitsAboveLimitOfNineShouldBeTruncatedFromRight() {
-        getWidget().widgetAnswerText.setAnswer("123456789123");
-        assertEquals("123456789", getWidget().getAnswerText());
+        getWidget().binding.widgetAnswerText.setAnswer("123456789123");
+        assertEquals("123456789", getWidget().binding.widgetAnswerText.getAnswer());
     }
 
     @Test
     public void separatorsShouldBeAddedWhenEnabled() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn(THOUSANDS_SEP);
-        getWidget().widgetAnswerText.setAnswer("123456789");
+        getWidget().binding.widgetAnswerText.setAnswer("123456789");
 
-        assertEquals("123,456,789", getWidget().widgetAnswerText.getAnswer());
-        assertEquals("123,456,789", getWidget().widgetAnswerText.getBinding().editText.getText().toString());
-        assertEquals("123,456,789", getWidget().widgetAnswerText.getBinding().textView.getText().toString());
+        assertEquals("123,456,789", getWidget().binding.widgetAnswerText.getAnswer());
+        assertEquals("123,456,789", getWidget().binding.widgetAnswerText.getBinding().editText.getText().toString());
+        assertEquals("123,456,789", getWidget().binding.widgetAnswerText.getBinding().textView.getText().toString());
     }
 }
