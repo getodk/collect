@@ -87,6 +87,7 @@ object Appearances {
     const val NUMBERS = "numbers"
     const val URL = "url"
     const val RATING = "rating"
+    const val MASKED = "masked"
 
     // Get appearance hint and clean it up so it is lower case, without the search function and never null.
     @JvmStatic
@@ -189,5 +190,11 @@ object Appearances {
     fun isAutocomplete(prompt: FormEntryPrompt): Boolean {
         val appearance = getSanitizedAppearanceHint(prompt)
         return appearance.contains(SEARCH) || appearance.contains(AUTOCOMPLETE)
+    }
+
+    @JvmStatic
+    fun isMasked(prompt: FormEntryPrompt): Boolean {
+        val appearance = getSanitizedAppearanceHint(prompt)
+        return appearance.contains(MASKED)
     }
 }

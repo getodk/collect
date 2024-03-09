@@ -28,6 +28,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.views.WidgetAnswerText;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
@@ -47,6 +48,7 @@ public class StringWidget extends QuestionWidget {
                 QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6),
                 questionDetails.isReadOnly(),
                 StringWidgetUtils.getNumberOfRows(questionDetails.getPrompt()),
+                Appearances.isMasked(questionDetails.getPrompt()),
                 this::widgetValueChanged
         );
 
