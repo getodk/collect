@@ -77,7 +77,7 @@ Most dependencies are managed using gradle, however some Field Task functionalit
 The variant in the github repository that you will want to start with is "standard".  This contains some resources and Java code to handle customisable processing around location change.  Background location recording can be enabled on FieldTask and by default this is used only for geo fencing and the location data is not stored.   The register function in the LocationRegister file can be modified to do additional processing of location changes if you need that. 
 
 Related Repositories
--------------------
+--------------------
 
 FieldTask is designed to work with Smap server, the code for which is included in other GitHub repositories.  The complete list of repositories is shown 
 in the table below.
@@ -90,6 +90,13 @@ in the table below.
 |WebForm       |https://github.com/nap2000/enketo-core        |Browser client    |
 |SmapClient    |https://github.com/nap2000/prop-smapserver    |Administrative client     |
 |Documentation |https://github.com/nap2000/docs               |Documentation |
+
+Downloads
+---------
+
+|Name          |Github                                                        |Version    |
+|------------- |------------------------------------------------------------- |-----------|
+|Server        |https://smap-master.s3.amazonaws.com/smap_24_03_04_719.tgz    |23.03.04   |
 
 Acknowledgements
 ----------------
