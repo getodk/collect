@@ -94,7 +94,7 @@ in the table below.
 Downloads
 ---------
 
-|Name          |Github                                                        |Version    |
+|Name          |Link                                                          |Version    |
 |------------- |------------------------------------------------------------- |-----------|
 |Server        |https://smap-master.s3.amazonaws.com/smap_24_03_04_719.tgz    |23.03.04   |
 
