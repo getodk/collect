@@ -27,7 +27,7 @@ class EntityBrowserActivity : LocalizedActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(DatasetsFragment::class) { DatasetsFragment(viewModelFactory) }
+            .forClass(DatasetsFragment::class) { DatasetsFragment(viewModelFactory, this) }
             .forClass(EntitiesFragment::class) { EntitiesFragment(viewModelFactory) }
             .build()
 
@@ -44,5 +44,6 @@ class EntityBrowserActivity : LocalizedActivity() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         val toolbar = findViewById<Toolbar>(org.odk.collect.androidshared.R.id.toolbar)
         toolbar.setupWithNavController(navController, appBarConfiguration)
+        setSupportActionBar(toolbar)
     }
 }

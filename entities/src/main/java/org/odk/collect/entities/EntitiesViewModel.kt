@@ -27,4 +27,11 @@ class EntitiesViewModel(
 
         return result
     }
+
+    fun clearAll() {
+        scheduler.immediate(background = true) {
+            entitiesRepository.clear()
+            _datasets.postValue(entitiesRepository.getDatasets().toList())
+        }
+    }
 }

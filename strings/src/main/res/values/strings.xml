@@ -1125,6 +1125,9 @@
     <!-- Text for button that leads to browser for the user to view and manage local entites -->
     <string name="entity_browser_button">View local entities</string>
 
+    <!-- Text for button that deletes all entities for the project -->
+    <string name="clear_entities">Clear all</string>
+
     <!--
     ##############################################
     # Crash handling

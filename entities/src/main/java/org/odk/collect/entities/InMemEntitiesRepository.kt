@@ -12,6 +12,10 @@ class InMemEntitiesRepository : EntitiesRepository {
         return entities.filter { it.dataset == dataset }
     }
 
+    override fun clear() {
+        entities.clear()
+    }
+
     override fun save(entity: Entity) {
         val existing = entities.find { it.id == entity.id && it.dataset == entity.dataset }
 

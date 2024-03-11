@@ -132,4 +132,19 @@ abstract class EntitiesRepositoryTest {
         assertThat(wines.size, equalTo(1))
         assertThat(wines[0].label, equalTo("Léoville Barton 2008"))
     }
+
+    @Test
+    fun `clear() deletes all entities`() {
+        val repository = buildSubject()
+
+        val wine = Entity("wines", "1", "Léoville Barton 2008")
+        val whisky = Entity("whiskys", "2", "Lagavulin 16")
+        repository.save(wine)
+        repository.save(whisky)
+
+        repository.clear()
+        assertThat(repository.getDatasets().size, equalTo(0))
+        assertThat(repository.getEntities("wines").size, equalTo(0))
+        assertThat(repository.getEntities("whiskys").size, equalTo(0))
+    }
 }

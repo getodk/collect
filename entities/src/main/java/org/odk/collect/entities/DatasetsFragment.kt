@@ -2,8 +2,13 @@ package org.odk.collect.entities
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.odk.collect.entities.databinding.DatasetItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding
 
-class DatasetsFragment(private val viewModelFactory: ViewModelProvider.Factory) : Fragment() {
+class DatasetsFragment(private val viewModelFactory: ViewModelProvider.Factory, private val menuHost: MenuHost) : Fragment() {
 
     private val entitiesViewModel by viewModels<EntitiesViewModel> { viewModelFactory }
 
@@ -34,6 +39,19 @@ class DatasetsFragment(private val viewModelFactory: ViewModelProvider.Factory) 
         entitiesViewModel.datasets.observe(viewLifecycleOwner) {
             binding.list.adapter = DatasetsAdapter(it, findNavController())
         }
+
+        menuHost.addMenuProvider(DatasetsMenuProvider(entitiesViewModel), viewLifecycleOwner)
+    }
+}
+
+private class DatasetsMenuProvider(private val entitiesViewModel: EntitiesViewModel) : MenuProvider {
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.datasets, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        entitiesViewModel.clearAll()
+        return true
     }
 }
 

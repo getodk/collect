@@ -41,6 +41,11 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         writeEntities(entities)
     }
 
+    override fun clear() {
+        StrictMode.noteSlowCall("Writing to JSON file")
+        entitiesFile.delete()
+    }
+
     private fun writeEntities(entities: MutableList<Entity>) {
         StrictMode.noteSlowCall("Writing to JSON file")
 

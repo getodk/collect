@@ -3,7 +3,8 @@
 
     <application>
         <activity
-            android:name=".EntityBrowserActivity" />
+            android:name=".EntityBrowserActivity"
+            android:theme="@style/Theme.Material3.DayNight"/>
     </application>
 
 </manifest>
