@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets.base;
 
 import static junit.framework.Assert.assertTrue;
 
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 
 import org.javarosa.core.model.QuestionDef;
@@ -10,10 +11,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.WidgetTestActivity;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.StringWidget;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -101,5 +105,19 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
 
         assertThat(viewsRegisterForContextMenu.get(0).getId(), is(widget.getId()));
         assertThat(viewsRegisterForContextMenu.get(1).getId(), is(widget.getId()));
+    }
+
+    @Test
+    public void answersShouldNotBeMaskedIfMaskedAppearanceIsNotUsed() {
+        assertThat(getSpyWidget().widgetAnswerText.getBinding().editText.getTransformationMethod(), is(not(instanceOf(PasswordTransformationMethod.class))));
+        assertThat(getSpyWidget().widgetAnswerText.getBinding().textView.getTransformationMethod(), is(not(instanceOf(PasswordTransformationMethod.class))));
+    }
+
+    @Test
+    public void answersShouldBeMaskedIfMaskedAppearanceIsUsed() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn(Appearances.MASKED);
+
+        assertThat(getSpyWidget().widgetAnswerText.getBinding().editText.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
+        assertThat(getSpyWidget().widgetAnswerText.getBinding().textView.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
     }
 }
