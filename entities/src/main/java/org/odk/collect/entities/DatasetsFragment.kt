@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.odk.collect.entities.databinding.DatasetItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding
 
-class DatasetsFragment(private val viewModelFactory: ViewModelProvider.Factory, private val menuHost: MenuHost) : Fragment() {
+class DatasetsFragment(private val viewModelFactory: ViewModelProvider.Factory, private val menuHost: () -> MenuHost) : Fragment() {
 
     private val entitiesViewModel by viewModels<EntitiesViewModel> { viewModelFactory }
 
@@ -40,7 +40,7 @@ class DatasetsFragment(private val viewModelFactory: ViewModelProvider.Factory, 
             binding.list.adapter = DatasetsAdapter(it, findNavController())
         }
 
-        menuHost.addMenuProvider(DatasetsMenuProvider(entitiesViewModel), viewLifecycleOwner)
+        menuHost().addMenuProvider(DatasetsMenuProvider(entitiesViewModel), viewLifecycleOwner)
     }
 }
 
