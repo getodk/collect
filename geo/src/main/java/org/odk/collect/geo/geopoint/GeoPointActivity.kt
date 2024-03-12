@@ -47,7 +47,7 @@ class GeoPointActivity : LocalizedActivity(), GeoPointDialogFragment.Listener {
                 this.intent.extras?.get(
                     EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD
                 ) as? Float
-                )
+            )
         )
     }
 

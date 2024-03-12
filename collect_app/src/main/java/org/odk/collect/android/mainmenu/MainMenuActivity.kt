@@ -37,7 +37,7 @@ class MainMenuActivity : LocalizedActivity() {
         /*
         Don't reopen if the app is already open - allows entry points like notifications to use
         this Activity as a target to reopen the app without interrupting an ongoing session
-        */
+         */
         if (!isTaskRoot) {
             super.onCreate(null)
             finish()
@@ -89,7 +89,7 @@ class MainMenuActivity : LocalizedActivity() {
         We don't need the `installSplashScreen` call on Android 12+ (the system handles the
         splash screen for us) and it causes problems if we later switch between dark/light themes
         with the ThemeUtils#setDarkModeForCurrentProject call.
-        */
+         */
         if (Build.VERSION.SDK_INT < 31) {
             installSplashScreen()
         } else {

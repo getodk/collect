@@ -56,7 +56,6 @@ dependencies {
     implementation(project(":icons"))
 
     implementation(Dependencies.androidx_preference_ktx)
-    implementation(Dependencies.guava)
     implementation(Dependencies.play_services_maps)
     implementation(Dependencies.play_services_location)
     implementation(Dependencies.timber)

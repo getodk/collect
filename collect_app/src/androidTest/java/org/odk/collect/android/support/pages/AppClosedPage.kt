@@ -1,10 +1,10 @@
 package org.odk.collect.android.support.pages
 
 import android.app.Activity
-import androidx.test.espresso.core.internal.deps.guava.collect.Iterables
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
+import com.google.common.collect.Iterables
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 

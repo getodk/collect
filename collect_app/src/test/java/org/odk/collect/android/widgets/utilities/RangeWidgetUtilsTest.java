@@ -241,7 +241,7 @@ public class RangeWidgetUtilsTest {
     @Test
     public void clickingPickerButton_showsNumberPickerDialog() {
         WidgetTestActivity activity = CollectHelpers.createThemedActivity(WidgetTestActivity.class);
-        RangeWidgetUtils.showNumberPickerDialog(activity, new String[]{}, 0, 0);
+        RangeWidgetUtils.showNumberPickerDialog(activity, new String[]{"1", "2", "3"}, 0, 0);
         RobolectricHelpers.runLooper();
         NumberPickerDialog numberPickerDialog = (NumberPickerDialog) activity.getSupportFragmentManager()
                 .findFragmentByTag(NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);

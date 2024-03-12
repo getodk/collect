@@ -1,13 +1,13 @@
 package org.odk.collect.mapbox;
 
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
+import static kotlin.collections.SetsKt.setOf;
 
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
 
-import com.google.common.collect.ImmutableSet;
 import com.mapbox.maps.Style;
 
 import org.odk.collect.androidshared.ui.PrefUtils;
@@ -66,8 +66,8 @@ public class MapboxMapConfigurator implements MapConfigurator {
     }
 
     @Override public Set<String> getPrefKeys() {
-        return prefKey.isEmpty() ? ImmutableSet.of(ProjectKeys.KEY_REFERENCE_LAYER) :
-            ImmutableSet.of(prefKey, ProjectKeys.KEY_REFERENCE_LAYER);
+        return prefKey.isEmpty() ? setOf(ProjectKeys.KEY_REFERENCE_LAYER) :
+                setOf(prefKey, ProjectKeys.KEY_REFERENCE_LAYER);
     }
 
     @Override public Bundle buildConfig(Settings prefs) {

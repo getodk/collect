@@ -583,7 +583,7 @@ class MapboxMapFragment :
                 tileSet.minZoom(mbtiles.getMetadata("minzoom").toInt())
                 tileSet.maxZoom(mbtiles.getMetadata("maxzoom").toInt())
             } catch (e: NumberFormatException) {
-                /* ignore */
+                // ignore
             }
             var parts = mbtiles.getMetadata("center").split(",").toTypedArray()
             if (parts.size == 3) { // latitude, longitude, zoom
@@ -596,7 +596,7 @@ class MapboxMapFragment :
                         )
                     )
                 } catch (e: NumberFormatException) {
-                    /* ignore */
+                    // ignore
                 }
             }
             parts = mbtiles.getMetadata("bounds").split(",").toTypedArray()
@@ -611,7 +611,7 @@ class MapboxMapFragment :
                         )
                     )
                 } catch (e: NumberFormatException) {
-                    /* ignore */
+                    // ignore
                 }
             }
         } catch (e: MbtilesFile.MbtilesException) {

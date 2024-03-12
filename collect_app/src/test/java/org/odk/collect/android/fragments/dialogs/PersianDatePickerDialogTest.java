@@ -73,12 +73,12 @@ public class PersianDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("23 Ordibehesht 1399 (May 12, 2020)");
+        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("23 Ordibehesht 1399 (May 12, 2020)", 1399, 1, 23);
     }
 
     @Test
     public void whenScreenIsRotated_dialogShouldRetainDateInDatePickerAndTextView() {
-        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "12 Shahrivar 2020 (Sep 03, 2641)");
+        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "23 Ordibehesht 1399 (May 12, 2020)", 1399, 1, 23);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class PersianDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 2641, 9, 3);
+        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 1399, 1, 23);
     }
 
     @Test

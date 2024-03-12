@@ -153,7 +153,6 @@ class ImageCompressorTest {
             ExifInterface.TAG_GPS_SATELLITES to "8",
             ExifInterface.TAG_GPS_STATUS to "A",
             ExifInterface.TAG_ORIENTATION to "1",
-
             // unsupported exif tags
             ExifInterface.TAG_THUMBNAIL_IMAGE_LENGTH to "5",
             ExifInterface.TAG_DNG_VERSION to "100"

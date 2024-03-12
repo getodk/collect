@@ -150,12 +150,12 @@ object ImageFileUtils {
         }
         if (sourceFileExif == null ||
             !EXIF_ORIENTATION_ROTATIONS.contains(
-                    sourceFileExif
-                        .getAttributeInt(
-                                ExifInterface.TAG_ORIENTATION,
-                                ExifInterface.ORIENTATION_UNDEFINED
-                            )
-                )
+                sourceFileExif
+                    .getAttributeInt(
+                        ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED
+                    )
+            )
         ) {
             // Source Image doesn't have any EXIF Rotations, so a normal file copy will suffice
             sourceFile.copyTo(destFile, true)

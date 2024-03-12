@@ -37,7 +37,5 @@ dependencies {
     implementation(Dependencies.kotlin_stdlib)
     implementation(Dependencies.androidx_core_ktx)
     implementation(Dependencies.firebase_crashlytics)
-    implementation(Dependencies.firebase_analytics) {
-        exclude(group = "com.google.guava")
-    }
+    implementation(Dependencies.firebase_analytics)
 }

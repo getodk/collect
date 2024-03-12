@@ -23,7 +23,7 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 class PermissionsDialogFragmentTest {
 
     private val permissionsProvider = FakePermissionsProvider()
-    private val requestPermissionsViewModel = mock<RequestPermissionsViewModel>() {
+    private val requestPermissionsViewModel = mock<RequestPermissionsViewModel> {
         on { permissions } doReturn arrayOf("blah")
         on { shouldAskForPermissions() } doReturn true
     }
