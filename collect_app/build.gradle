@@ -238,9 +238,9 @@ dependencies {
     implementation project(':material')
     implementation project(':async')
     implementation project(':analytics')
-    implementation project(':audioclips')
+    implementation project(':audio-clips')
     implementation project(':forms')
-    implementation project(':audiorecorder')
+    implementation project(':audio-recorder')
     implementation project(':projects')
     implementation project(':location')
     implementation project(':geo')
@@ -339,7 +339,7 @@ dependencies {
 
     implementation Dependencies.splashscreen
 
-    testImplementation project(':formstest')
+    testImplementation project(':forms-test')
 
     // Testing-only dependencies
     testImplementation Dependencies.junit
