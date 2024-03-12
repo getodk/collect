@@ -23,7 +23,7 @@ import android.view.View;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
+import org.odk.collect.android.databinding.GeotraceQuestionBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
@@ -37,7 +37,7 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
  */
 @SuppressLint("ViewConstructor")
 public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver {
-    GeoWidgetAnswerBinding binding;
+    GeotraceQuestionBinding binding;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final MapConfigurator mapConfigurator;
@@ -55,7 +55,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        binding = GeotraceQuestionBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+        android:id="@+id/simple_button"
+        style="?widgetButtonIconQuestionWidgetStyle"
+        android:text="@string/get_trace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/geo_answer_text"
+        style="@style/Widget.Collect.TextView.WidgetAnswer" />
+
+</LinearLayout>
