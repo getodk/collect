@@ -178,11 +178,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new FormHierarchyPage(formName).assertOnPage();
     }
 
-    public FormEntryPage clickWidgetButton() {
-        onView(withId(R.id.simple_button)).perform(click());
-        return this;
-    }
-
     public FormEntryPage clickRankingButton() {
         onView(withId(R.id.rank_items_button)).perform(click());
         return this;

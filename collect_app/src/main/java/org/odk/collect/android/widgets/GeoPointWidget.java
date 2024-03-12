@@ -54,20 +54,20 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         if (prompt.isReadOnly()) {
-            binding.simpleButton.setVisibility(GONE);
+            binding.getLocationButton.setVisibility(GONE);
         } else {
-            binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(prompt, answerText, waitingForDataRegistry));
+            binding.getLocationButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(prompt, answerText, waitingForDataRegistry));
         }
 
         answerText = prompt.getAnswerText();
 
         String answerToDisplay = GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText);
         if (answerToDisplay.isEmpty()) {
-            binding.simpleButton.setText(org.odk.collect.strings.R.string.get_location);
+            binding.getLocationButton.setText(org.odk.collect.strings.R.string.get_location);
             answerText = null;
         } else {
             binding.geoAnswerText.setText(answerToDisplay);
-            binding.simpleButton.setText(org.odk.collect.strings.R.string.view_or_change_location);
+            binding.getLocationButton.setText(org.odk.collect.strings.R.string.view_or_change_location);
         }
         binding.geoAnswerText.setVisibility(binding.geoAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
 
@@ -87,20 +87,20 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         answerText = null;
         binding.geoAnswerText.setText(null);
         binding.geoAnswerText.setVisibility(GONE);
-        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_location);
+        binding.getLocationButton.setText(org.odk.collect.strings.R.string.get_location);
         widgetValueChanged();
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        binding.simpleButton.setOnLongClickListener(l);
+        binding.getLocationButton.setOnLongClickListener(l);
         binding.geoAnswerText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        binding.simpleButton.cancelLongPress();
+        binding.getLocationButton.cancelLongPress();
         binding.geoAnswerText.cancelLongPress();
     }
 
@@ -111,12 +111,12 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
             answerText = null;
             binding.geoAnswerText.setText("");
             binding.geoAnswerText.setVisibility(GONE);
-            binding.simpleButton.setText(org.odk.collect.strings.R.string.get_location);
+            binding.getLocationButton.setText(org.odk.collect.strings.R.string.get_location);
         } else {
             answerText = answer.toString();
             binding.geoAnswerText.setText(answerToDisplay);
             binding.geoAnswerText.setVisibility(VISIBLE);
-            binding.simpleButton.setText(org.odk.collect.strings.R.string.view_or_change_location);
+            binding.getLocationButton.setText(org.odk.collect.strings.R.string.view_or_change_location);
         }
         widgetValueChanged();
     }

@@ -55,23 +55,23 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(prompt, answerText, waitingForDataRegistry));
+        binding.getLocationButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(prompt, answerText, waitingForDataRegistry));
 
         answerText = prompt.getAnswerText();
         String answerToDisplay = GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText);
 
         if (answerToDisplay.isEmpty()) {
             if (getFormEntryPrompt().isReadOnly()) {
-                binding.simpleButton.setVisibility(View.GONE);
+                binding.getLocationButton.setVisibility(View.GONE);
             } else {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.get_location);
+                binding.getLocationButton.setText(org.odk.collect.strings.R.string.get_location);
             }
             answerText = null;
         } else {
             if (getFormEntryPrompt().isReadOnly()) {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_location);
+                binding.getLocationButton.setText(org.odk.collect.strings.R.string.view_location);
             } else {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_or_change_location);
+                binding.getLocationButton.setText(org.odk.collect.strings.R.string.view_or_change_location);
             }
 
             binding.geoAnswerText.setText(answerToDisplay);
@@ -94,20 +94,20 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
         answerText = null;
         binding.geoAnswerText.setText(null);
         binding.geoAnswerText.setVisibility(GONE);
-        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_location);
+        binding.getLocationButton.setText(org.odk.collect.strings.R.string.get_location);
         widgetValueChanged();
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        binding.simpleButton.setOnLongClickListener(l);
+        binding.getLocationButton.setOnLongClickListener(l);
         binding.geoAnswerText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        binding.simpleButton.cancelLongPress();
+        binding.getLocationButton.cancelLongPress();
         binding.geoAnswerText.cancelLongPress();
     }
 
@@ -118,12 +118,12 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
             answerText = null;
             binding.geoAnswerText.setText("");
             binding.geoAnswerText.setVisibility(GONE);
-            binding.simpleButton.setText(org.odk.collect.strings.R.string.get_location);
+            binding.getLocationButton.setText(org.odk.collect.strings.R.string.get_location);
         } else {
             answerText = answer.toString();
             binding.geoAnswerText.setText(answerToDisplay);
             binding.geoAnswerText.setVisibility(VISIBLE);
-            binding.simpleButton.setText(org.odk.collect.strings.R.string.view_or_change_location);
+            binding.getLocationButton.setText(org.odk.collect.strings.R.string.view_or_change_location);
         }
         widgetValueChanged();
     }

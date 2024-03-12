@@ -59,7 +59,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        binding.simpleButton.setOnClickListener(v -> {
+        binding.getPolylineButton.setOnClickListener(v -> {
             if (mapConfigurator.isAvailable(context)) {
                 geoDataRequester.requestGeoTrace(prompt, getAnswerText(), waitingForDataRegistry);
             } else {
@@ -75,15 +75,15 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
 
         if (getFormEntryPrompt().isReadOnly()) {
             if (dataAvailable) {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_polyline);
+                binding.getPolylineButton.setText(org.odk.collect.strings.R.string.view_polyline);
             } else {
-                binding.simpleButton.setVisibility(View.GONE);
+                binding.getPolylineButton.setVisibility(View.GONE);
             }
         } else {
             if (dataAvailable) {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_or_change_polyline);
+                binding.getPolylineButton.setText(org.odk.collect.strings.R.string.view_or_change_polyline);
             } else {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.get_polyline);
+                binding.getPolylineButton.setText(org.odk.collect.strings.R.string.get_polyline);
             }
         }
 
@@ -97,7 +97,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        binding.simpleButton.setOnLongClickListener(l);
+        binding.getPolylineButton.setOnLongClickListener(l);
         binding.geoAnswerText.setOnLongClickListener(l);
     }
 
@@ -105,14 +105,14 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
     public void clearAnswer() {
         binding.geoAnswerText.setText(null);
         binding.geoAnswerText.setVisibility(GONE);
-        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_polyline);
+        binding.getPolylineButton.setText(org.odk.collect.strings.R.string.get_polyline);
         widgetValueChanged();
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        binding.simpleButton.cancelLongPress();
+        binding.getPolylineButton.cancelLongPress();
         binding.geoAnswerText.cancelLongPress();
     }
 
@@ -120,7 +120,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
     public void setData(Object answer) {
         binding.geoAnswerText.setText(answer.toString());
         binding.geoAnswerText.setVisibility(binding.geoAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
-        binding.simpleButton.setText(answer.toString().isEmpty() ? org.odk.collect.strings.R.string.get_polyline : org.odk.collect.strings.R.string.view_or_change_polyline);
+        binding.getPolylineButton.setText(answer.toString().isEmpty() ? org.odk.collect.strings.R.string.get_polyline : org.odk.collect.strings.R.string.view_or_change_polyline);
         widgetValueChanged();
     }
 

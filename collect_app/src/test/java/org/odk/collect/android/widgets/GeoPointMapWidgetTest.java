@@ -63,7 +63,7 @@ public class GeoPointMapWidgetTest {
     public void creatingWidgetWithInvalidValue_doesNotUpdateWidgetDisplayedAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         assertEquals(widget.binding.geoAnswerText.getText(), "");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
     }
 
     @Test
@@ -75,25 +75,25 @@ public class GeoPointMapWidgetTest {
     @Test
     public void whenPromptIsReadOnlyAndDoesNotHaveAnswer_geoButtonIsNotDisplayed() {
         GeoPointMapWidget widget = createWidget(promptWithReadOnly());
-        assertEquals(widget.binding.simpleButton.getVisibility(), View.GONE);
+        assertEquals(widget.binding.getLocationButton.getVisibility(), View.GONE);
     }
 
     @Test
     public void whenPromptIsReadOnlyAndHasAnswer_viewGeoPointButtonIsShown() {
         GeoPointMapWidget widget = createWidget(promptWithReadOnlyAndAnswer(answer));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.geopoint_view_read_only));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.geopoint_view_read_only));
     }
 
     @Test
     public void whenPromptIsNotReadOnlyAndDoesNotHaveAnswer_startGeoPointButtonIsShown() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
     }
 
     @Test
     public void whenPromptIsNotReadOnlyAndHasAnswer_viewOrChangeLocationButtonIsShown() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_change_location));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_change_location));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class GeoPointMapWidgetTest {
         widget.clearAnswer();
 
         assertEquals(widget.binding.geoAnswerText.getText(), "");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
     }
 
     @Test
@@ -140,21 +140,21 @@ public class GeoPointMapWidgetTest {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
         widget.setData("blah");
         assertEquals(widget.binding.geoAnswerText.getText(), "");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
     }
 
     @Test
     public void setData_whenDataIsNull_updatesButtonLabel() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
         widget.setData("");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
     }
 
     @Test
     public void setData_whenDataIsNotNull_updatesButtonLabel() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
         widget.setData(answer.getDisplayText());
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_change_location));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_change_location));
     }
 
     @Test
@@ -172,10 +172,10 @@ public class GeoPointMapWidgetTest {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
 
         widget.setOnLongClickListener(listener);
-        widget.binding.simpleButton.performLongClick();
+        widget.binding.getLocationButton.performLongClick();
         widget.binding.geoAnswerText.performLongClick();
 
-        verify(listener).onLongClick(widget.binding.simpleButton);
+        verify(listener).onLongClick(widget.binding.getLocationButton);
         verify(listener).onLongClick(widget.binding.geoAnswerText);
     }
 
@@ -183,7 +183,7 @@ public class GeoPointMapWidgetTest {
     public void buttonClick_requestsGeoPoint() {
         FormEntryPrompt prompt = promptWithAnswer(answer);
         GeoPointMapWidget widget = createWidget(prompt);
-        widget.binding.simpleButton.performClick();
+        widget.binding.getLocationButton.performClick();
         verify(geoDataRequester).requestGeoPoint(prompt, answer.getDisplayText(), waitingForDataRegistry);
     }
 
@@ -192,7 +192,7 @@ public class GeoPointMapWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(answer);
         GeoPointMapWidget widget = createWidget(prompt);
         widget.clearAnswer();
-        widget.binding.simpleButton.performClick();
+        widget.binding.getLocationButton.performClick();
 
         verify(geoDataRequester).requestGeoPoint(prompt, null, waitingForDataRegistry);
     }
@@ -202,7 +202,7 @@ public class GeoPointMapWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoPointMapWidget widget = createWidget(prompt);
         widget.setData(answer);
-        widget.binding.simpleButton.performClick();
+        widget.binding.getLocationButton.performClick();
 
         verify(geoDataRequester).requestGeoPoint(prompt, answer.getDisplayText(), waitingForDataRegistry);
     }

@@ -52,7 +52,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
-        binding.simpleButton.setOnClickListener(v ->
+        binding.getPolygonButton.setOnClickListener(v ->
                 geoDataRequester.requestGeoShape(prompt, getAnswerText(), waitingForDataRegistry));
 
         String stringAnswer = GeoWidgetUtils.getGeoPolyAnswerToDisplay(prompt.getAnswerText());
@@ -63,15 +63,15 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
 
         if (getFormEntryPrompt().isReadOnly()) {
             if (dataAvailable) {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_polygon);
+                binding.getPolygonButton.setText(org.odk.collect.strings.R.string.view_polygon);
             } else {
-                binding.simpleButton.setVisibility(View.GONE);
+                binding.getPolygonButton.setVisibility(View.GONE);
             }
         } else {
             if (dataAvailable) {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_or_change_polygon);
+                binding.getPolygonButton.setText(org.odk.collect.strings.R.string.view_or_change_polygon);
             } else {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.get_polygon);
+                binding.getPolygonButton.setText(org.odk.collect.strings.R.string.get_polygon);
             }
         }
 
@@ -87,20 +87,20 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     public void clearAnswer() {
         binding.geoAnswerText.setText(null);
         binding.geoAnswerText.setVisibility(GONE);
-        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_polygon);
+        binding.getPolygonButton.setText(org.odk.collect.strings.R.string.get_polygon);
         widgetValueChanged();
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        binding.simpleButton.setOnLongClickListener(l);
+        binding.getPolygonButton.setOnLongClickListener(l);
         binding.geoAnswerText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        binding.simpleButton.cancelLongPress();
+        binding.getPolygonButton.cancelLongPress();
         binding.geoAnswerText.cancelLongPress();
     }
 
@@ -108,7 +108,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     public void setData(Object answer) {
         binding.geoAnswerText.setText(answer.toString());
         binding.geoAnswerText.setVisibility(binding.geoAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
-        binding.simpleButton.setText(answer.toString().isEmpty() ? org.odk.collect.strings.R.string.get_polygon : org.odk.collect.strings.R.string.view_or_change_polygon);
+        binding.getPolygonButton.setText(answer.toString().isEmpty() ? org.odk.collect.strings.R.string.get_polygon : org.odk.collect.strings.R.string.view_or_change_polygon);
         widgetValueChanged();
     }
 
