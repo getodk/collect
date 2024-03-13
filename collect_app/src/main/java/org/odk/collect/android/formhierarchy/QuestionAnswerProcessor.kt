@@ -20,7 +20,7 @@ import java.util.Date
 object QuestionAnswerProcessor {
     @JvmStatic
     fun getQuestionAnswer(fep: FormEntryPrompt, context: Context, formController: FormController): String {
-        val appearance: String? = fep.question.appearanceAttr
+        val appearance: String? = fep.appearanceHint
         if (appearance == Appearances.PRINTER) {
             return ""
         }

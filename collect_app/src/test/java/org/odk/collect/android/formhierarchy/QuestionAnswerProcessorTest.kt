@@ -8,6 +8,7 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
+import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.utilities.Appearances
 
 // TODO: Add tests for other question/data types
@@ -15,11 +16,12 @@ class QuestionAnswerProcessorTest {
 
     @Test
     fun noAnswerShouldBeDisplayedForThePrinterWidget() {
-        val prompt = mock<FormEntryPrompt>()
         val question = mock<QuestionDef>()
-        whenever(prompt.answerText).thenReturn("<html>blah</html>>")
-        whenever(prompt.question).thenReturn(question)
-        whenever(question.appearanceAttr).thenReturn(Appearances.PRINTER)
+        val prompt = MockFormEntryPromptBuilder()
+            .withQuestion(question)
+            .withAnswerDisplayText("<html>blah</html>>")
+            .withAppearance(Appearances.PRINTER)
+            .build()
 
         val answer = QuestionAnswerProcessor.getQuestionAnswer(prompt, mock(), mock())
 
@@ -53,13 +55,14 @@ class QuestionAnswerProcessorTest {
             Constants.DATATYPE_INTEGER,
             Constants.DATATYPE_DECIMAL
         ).forEach {
-            val prompt = mock<FormEntryPrompt>()
             val question = mock<QuestionDef>()
-            whenever(prompt.answerText).thenReturn("")
-            whenever(prompt.controlType).thenReturn(Constants.CONTROL_INPUT)
-            whenever(prompt.dataType).thenReturn(it)
-            whenever(prompt.question).thenReturn(question)
-            whenever(prompt.appearanceHint).thenReturn(Appearances.MASKED)
+            val prompt = MockFormEntryPromptBuilder()
+                .withQuestion(question)
+                .withAnswerDisplayText("")
+                .withAppearance(Appearances.MASKED)
+                .withControlType(Constants.CONTROL_INPUT)
+                .withDataType(it)
+                .build()
 
             val answer = QuestionAnswerProcessor.getQuestionAnswer(prompt, mock(), mock())
 
@@ -74,13 +77,14 @@ class QuestionAnswerProcessorTest {
             Constants.DATATYPE_INTEGER,
             Constants.DATATYPE_DECIMAL
         ).forEach {
-            val prompt = mock<FormEntryPrompt>()
             val question = mock<QuestionDef>()
-            whenever(prompt.answerText).thenReturn("blah")
-            whenever(prompt.controlType).thenReturn(Constants.CONTROL_INPUT)
-            whenever(prompt.dataType).thenReturn(it)
-            whenever(prompt.question).thenReturn(question)
-            whenever(prompt.appearanceHint).thenReturn(Appearances.MASKED)
+            val prompt = MockFormEntryPromptBuilder()
+                .withQuestion(question)
+                .withAnswerDisplayText("blah")
+                .withAppearance(Appearances.MASKED)
+                .withControlType(Constants.CONTROL_INPUT)
+                .withDataType(it)
+                .build()
 
             val answer = QuestionAnswerProcessor.getQuestionAnswer(prompt, mock(), mock())
 
@@ -101,13 +105,14 @@ class QuestionAnswerProcessorTest {
             Constants.DATATYPE_BARCODE,
             Constants.DATATYPE_BARCODE
         ).forEach {
-            val prompt = mock<FormEntryPrompt>()
             val question = mock<QuestionDef>()
-            whenever(prompt.answerText).thenReturn("blah")
-            whenever(prompt.controlType).thenReturn(Constants.CONTROL_INPUT)
-            whenever(prompt.dataType).thenReturn(it)
-            whenever(prompt.question).thenReturn(question)
-            whenever(prompt.appearanceHint).thenReturn(Appearances.MASKED)
+            val prompt = MockFormEntryPromptBuilder()
+                .withQuestion(question)
+                .withAnswerDisplayText("blah")
+                .withAppearance(Appearances.MASKED)
+                .withControlType(Constants.CONTROL_INPUT)
+                .withDataType(it)
+                .build()
 
             val answer = QuestionAnswerProcessor.getQuestionAnswer(prompt, mock(), mock())
 
@@ -129,13 +134,14 @@ class QuestionAnswerProcessorTest {
             Constants.CONTROL_IMAGE_CHOOSE,
             Constants.CONTROL_FILE_CAPTURE
         ).forEach {
-            val prompt = mock<FormEntryPrompt>()
             val question = mock<QuestionDef>()
-            whenever(prompt.answerText).thenReturn("blah")
-            whenever(prompt.controlType).thenReturn(it)
-            whenever(prompt.dataType).thenReturn(Constants.DATATYPE_TEXT)
-            whenever(prompt.question).thenReturn(question)
-            whenever(prompt.appearanceHint).thenReturn(Appearances.MASKED)
+            val prompt = MockFormEntryPromptBuilder()
+                .withQuestion(question)
+                .withAnswerDisplayText("blah")
+                .withAppearance(Appearances.MASKED)
+                .withControlType(it)
+                .withDataType(Constants.DATATYPE_TEXT)
+                .build()
 
             val answer = QuestionAnswerProcessor.getQuestionAnswer(prompt, mock(), mock())
 
