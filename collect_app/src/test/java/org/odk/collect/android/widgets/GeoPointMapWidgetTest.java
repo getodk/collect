@@ -63,7 +63,7 @@ public class GeoPointMapWidgetTest {
     public void creatingWidgetWithInvalidValue_doesNotUpdateWidgetDisplayedAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         assertEquals(widget.binding.geoAnswerText.getText(), "");
-        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_location));
     }
 
     @Test
@@ -81,19 +81,19 @@ public class GeoPointMapWidgetTest {
     @Test
     public void whenPromptIsReadOnlyAndHasAnswer_viewGeoPointButtonIsShown() {
         GeoPointMapWidget widget = createWidget(promptWithReadOnlyAndAnswer(answer));
-        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.geopoint_view_read_only));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_location));
     }
 
     @Test
     public void whenPromptIsNotReadOnlyAndDoesNotHaveAnswer_startGeoPointButtonIsShown() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
-        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_location));
     }
 
     @Test
     public void whenPromptIsNotReadOnlyAndHasAnswer_viewOrChangeLocationButtonIsShown() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
-        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_change_location));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_location));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class GeoPointMapWidgetTest {
         widget.clearAnswer();
 
         assertEquals(widget.binding.geoAnswerText.getText(), "");
-        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_location));
     }
 
     @Test
@@ -140,21 +140,21 @@ public class GeoPointMapWidgetTest {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
         widget.setData("blah");
         assertEquals(widget.binding.geoAnswerText.getText(), "");
-        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_location));
     }
 
     @Test
     public void setData_whenDataIsNull_updatesButtonLabel() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
         widget.setData("");
-        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_point));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_location));
     }
 
     @Test
     public void setData_whenDataIsNotNull_updatesButtonLabel() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
         widget.setData(answer.getDisplayText());
-        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_change_location));
+        assertEquals(widget.binding.getLocationButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_location));
     }
 
     @Test
