@@ -112,7 +112,7 @@ public class DaylightSavingTest {
         when(iformElementStub.getAdditionalAttribute(anyString(), anyString())).thenReturn(null);
         when(formEntryPromptStub.getQuestion()).thenReturn(questionDefStub);
         when(formEntryPromptStub.getFormElement()).thenReturn(iformElementStub);
-        when(formEntryPromptStub.getQuestion().getAppearanceAttr()).thenReturn("no-calendar");
+        when(formEntryPromptStub.getAppearanceHint()).thenReturn("no-calendar");
 
         DatePickerDialog datePickerDialog = mock(DatePickerDialog.class);
         DatePicker datePicker = mock(DatePicker.class);
@@ -135,7 +135,7 @@ public class DaylightSavingTest {
         when(iformElementStub.getAdditionalAttribute(anyString(), anyString())).thenReturn(null);
         when(formEntryPromptStub.getQuestion()).thenReturn(questionDefStub);
         when(formEntryPromptStub.getFormElement()).thenReturn(iformElementStub);
-        when(formEntryPromptStub.getQuestion().getAppearanceAttr()).thenReturn("no-calendar");
+        when(formEntryPromptStub.getAppearanceHint()).thenReturn("no-calendar");
 
         DateTimeWidget dateTimeWidget = new DateTimeWidget(widgetActivity, new QuestionDetails(formEntryPromptStub), widgetUtils, null);
         dateTimeWidget.setData(new LocalDateTime().withDate(year, month, day));

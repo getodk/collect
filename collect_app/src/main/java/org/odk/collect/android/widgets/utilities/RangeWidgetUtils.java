@@ -62,7 +62,7 @@ public class RangeWidgetUtils {
         TextView minValue;
         TextView maxValue;
 
-        String appearance = prompt.getQuestion().getAppearanceAttr();
+        String appearance = prompt.getAppearanceHint();
 
         if (appearance != null && appearance.contains(VERTICAL_APPEARANCE)) {
             RangeWidgetVerticalBinding rangeWidgetVerticalBinding = RangeWidgetVerticalBinding
@@ -127,7 +127,7 @@ public class RangeWidgetUtils {
                 slider.setValueTo(rangeStart.floatValue());
             }
 
-            if (prompt.getQuestion().getAppearanceAttr() == null || !prompt.getQuestion().getAppearanceAttr().contains(NO_TICKS_APPEARANCE)) {
+            if (prompt.getAppearanceHint() == null || !prompt.getAppearanceHint().contains(NO_TICKS_APPEARANCE)) {
                 if (isIntegerType) {
                     slider.setStepSize(rangeStep.intValue());
                 } else {
@@ -177,7 +177,7 @@ public class RangeWidgetUtils {
         }
 
         BigDecimal actualValue = BigDecimal.valueOf(value);
-        if (prompt.getQuestion().getAppearanceAttr() != null && prompt.getQuestion().getAppearanceAttr().contains(NO_TICKS_APPEARANCE)) {
+        if (prompt.getAppearanceHint() != null && prompt.getAppearanceHint().contains(NO_TICKS_APPEARANCE)) {
             int progress = (actualValue.subtract(rangeStart).abs().divide(rangeStep)).intValue();
             actualValue = rangeStart.add(rangeStep.multiply(new BigDecimal(String.valueOf(progress))));
 
