@@ -306,10 +306,7 @@
   <string name="delete_file">Kustuta valitu</string>
   <string name="delete_no">Ei kustuta</string>
   <string name="delete_yes">Kustuta vormid</string>
-  <string name="file_deleted_error">Kahjuks ei õnnestunud kustutada %1$s / %2$s valitud vormidest.
-</string>
-  <string name="file_deleted_ok">%s vorm(id) edukalt kustutatud!</string>
-  <string name="file_delete_in_progress">Kahjuks kustutamise tegevus on juba töös!</string>
+    <string name="file_deleted_ok">%s vorm(id) edukalt kustutatud!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

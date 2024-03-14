@@ -223,9 +223,7 @@
   <string name="delete_file">منتخب شدہ کو مٹادیں</string>
   <string name="delete_no">نہ مٹا ئیں</string>
   <string name="delete_yes">فارم کو مٹا دیں</string>
-  <string name="file_deleted_error">منتخب شدہ ‎%1$s‏ فارم(ز) کا ‎%2$s‏ نہ مٹ سکا</string>
-  <string name="file_deleted_ok">فارم ‎%s‏ کامیابی سے مٹادئے گئے</string>
-  <string name="file_delete_in_progress">معافی، فارم مٹانے کا عمل پہلے سے جاری ہے</string>
+    <string name="file_deleted_ok">فارم ‎%s‏ کامیابی سے مٹادئے گئے</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

@@ -216,9 +216,7 @@
   <string name="delete_file">Ištrinti pažymėtas</string>
   <string name="delete_no">Neištrinti</string>
   <string name="delete_yes">Ištrinti formas</string>
-  <string name="file_deleted_error">Deja, nepavyko ištrinti %1$s iš %2$s parinktų formų!</string>
-  <string name="file_deleted_ok">%s forma(-os) sėkmingai ištrintos!</string>
-  <string name="file_delete_in_progress">Deja, šiuo metu vyksta formos trynimo procesas!</string>
+    <string name="file_deleted_ok">%s forma(-os) sėkmingai ištrintos!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

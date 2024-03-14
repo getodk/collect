@@ -127,20 +127,8 @@ object InstanceListItemView {
     }
 
     private fun setImageFromStatus(imageView: ImageView, instance: Instance) {
-        val formStatus = instance.status
-        val imageResourceId = getFormStateImageResourceIdForStatus(formStatus)
+        val imageResourceId = instance.getIcon()
         imageView.setImageResource(imageResourceId)
         imageView.tag = imageResourceId
-    }
-
-    private fun getFormStateImageResourceIdForStatus(formStatus: String?): Int {
-        when (formStatus) {
-            Instance.STATUS_INCOMPLETE, Instance.STATUS_INVALID, Instance.STATUS_VALID -> return R.drawable.ic_form_state_saved
-            Instance.STATUS_COMPLETE -> return R.drawable.ic_form_state_finalized
-            Instance.STATUS_SUBMITTED -> return R.drawable.ic_form_state_submitted
-            Instance.STATUS_SUBMISSION_FAILED -> return R.drawable.ic_form_state_submission_failed
-        }
-
-        throw java.lang.IllegalArgumentException()
     }
 }

@@ -544,11 +544,8 @@
   <string name="delete_file">Удалить выбранные</string>
   <string name="delete_no">Не удалять</string>
   <string name="delete_yes">Удалить бланки</string>
-  <string name="file_deleted_error">Не удалось удалить %1$s бланк(а/ов) из %2$s</string>
-  <string name="form_delete_message">Удаляю выбранные опросники</string>
-  <string name="deleting_form_dialog_update_message">Удаляю опросник: %1$d из %2$d</string>
+    <string name="form_delete_message">Удаляю выбранные опросники</string>
   <string name="file_deleted_ok">Бланк опросника успешно удалён: %s шт.</string>
-  <string name="file_delete_in_progress">Удаление бланка опросника уже выполняется</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

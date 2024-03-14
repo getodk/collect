@@ -18,6 +18,8 @@ package org.odk.collect.forms.instances;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 /**
  * A filled form stored on the device.
  * <p>
@@ -213,13 +215,21 @@ public final class Instance {
     }
 
     @Override
-    public boolean equals(Object other) {
-        return other == this || other instanceof Instance
-                && this.instanceFilePath.equals(((Instance) other).instanceFilePath);
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Instance instance = (Instance) o;
+        return canEditWhenComplete == instance.canEditWhenComplete && Objects.equals(displayName, instance.displayName) && Objects.equals(submissionUri, instance.submissionUri) && Objects.equals(instanceFilePath, instance.instanceFilePath) && Objects.equals(formId, instance.formId) && Objects.equals(formVersion, instance.formVersion) && Objects.equals(status, instance.status) && Objects.equals(lastStatusChangeDate, instance.lastStatusChangeDate) && Objects.equals(deletedDate, instance.deletedDate) && Objects.equals(geometryType, instance.geometryType) && Objects.equals(geometry, instance.geometry) && Objects.equals(dbId, instance.dbId);
     }
 
     @Override
     public int hashCode() {
-        return instanceFilePath.hashCode();
+        return Objects.hash(displayName, submissionUri, canEditWhenComplete, instanceFilePath, formId, formVersion, status, lastStatusChangeDate, deletedDate, geometryType, geometry, dbId);
     }
 }

@@ -5,14 +5,12 @@ import android.app.Application;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.AppListActivity;
-import org.odk.collect.android.activities.DeleteSavedFormActivity;
+import org.odk.collect.android.activities.DeleteFormsActivity;
 import org.odk.collect.android.activities.FirstLaunchActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormFillingActivity;
-import org.odk.collect.android.formhierarchy.FormHierarchyActivity;
 import org.odk.collect.android.activities.FormMapActivity;
 import org.odk.collect.android.activities.InstanceChooserList;
-import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
@@ -24,7 +22,6 @@ import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
 import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
-import org.odk.collect.draw.DrawActivity;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.AndroidShortcutsActivity;
 import org.odk.collect.android.external.FormUriActivity;
@@ -35,12 +32,11 @@ import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
+import org.odk.collect.android.formhierarchy.FormHierarchyActivity;
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormsDataService;
-import org.odk.collect.android.fragments.AppListFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
-import org.odk.collect.android.fragments.SavedFormListFragment;
 import org.odk.collect.android.fragments.dialogs.FormsDownloadResultDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.instancemanagement.send.InstanceUploaderActivity;
@@ -84,6 +80,7 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.draw.DrawActivity;
 import org.odk.collect.googlemaps.GoogleMapFragment;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.MapFragmentFactory;
@@ -138,10 +135,6 @@ public interface AppDependencyComponent {
     void inject(Collect collect);
 
     void inject(AboutActivity aboutActivity);
-
-    void inject(InstanceUploaderAdapter instanceUploaderAdapter);
-
-    void inject(SavedFormListFragment savedFormListFragment);
 
     void inject(FormFillingActivity formFillingActivity);
 
@@ -211,7 +204,7 @@ public interface AppDependencyComponent {
 
     void inject(ProjectPreferencesFragment projectPreferencesFragment);
 
-    void inject(DeleteSavedFormActivity deleteSavedFormActivity);
+    void inject(DeleteFormsActivity deleteFormsActivity);
 
     void inject(SelectMinimalDialog selectMinimalDialog);
 
@@ -228,8 +221,6 @@ public interface AppDependencyComponent {
     void inject(InstanceProvider instanceProvider);
 
     void inject(BackgroundAudioPermissionDialogFragment backgroundAudioPermissionDialogFragment);
-
-    void inject(AppListFragment appListFragment);
 
     void inject(ChangeAdminPasswordDialog changeAdminPasswordDialog);
 

@@ -238,9 +238,7 @@
   <string name="delete_file">ေရြးခ်ယ္ထားသည္မ်ားကို ဖ်က္ရန္</string>
   <string name="delete_no">မဖ်က္ရန္</string>
   <string name="delete_yes">ပုံစံကို ဖယ်ရှားရန်</string>
-  <string name="file_deleted_error">%1$s ၊ %2$s ေရြးခ်ယ္ထားေသာပံုစံမ်ားအားဖ်က္၍ မရပါ</string>
-  <string name="file_deleted_ok">%s ပံုစံမ်ားဖ်က္ၿပီးျဖစ္ပါသည္</string>
-  <string name="file_delete_in_progress">ပုံစံမ်ား ဖ်က္ေနဆဲ ျဖစ္ပါသည္</string>
+    <string name="file_deleted_ok">%s ပံုစံမ်ားဖ်က္ၿပီးျဖစ္ပါသည္</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

@@ -232,9 +232,7 @@
   <string name="delete_file">Susa okukhethiwe</string>
   <string name="delete_no">Ungasusi</string>
   <string name="delete_yes">Susa amafomu</string>
-  <string name="file_deleted_error">Uxoli, %1$s of %2$s ifomu elikhethiwe lihlulekile ukususwa</string>
-  <string name="file_deleted_ok">%s ifomu lisuswe ngempumelelo</string>
-  <string name="file_delete_in_progress">Uxolo ukususwa kwefomu kusaqhubeka</string>
+    <string name="file_deleted_ok">%s ifomu lisuswe ngempumelelo</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

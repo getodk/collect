@@ -10,19 +10,20 @@ import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 class BlankFormListAdapter(
     val listener: OnFormItemClickListener
-) : RecyclerView.Adapter<BlankFormListItemViewHolder>() {
+) : RecyclerView.Adapter<BlankFormListAdapter.BlankFormListItemWithMapViewHolder>() {
 
     private var formItems = emptyList<BlankFormListItem>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlankFormListItemViewHolder {
-        return BlankFormListItemViewHolder(parent).also {
-            it.setTrailingView(R.layout.map_button)
-        }
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): BlankFormListItemWithMapViewHolder {
+        return BlankFormListItemWithMapViewHolder(parent)
     }
 
-    override fun onBindViewHolder(holder: BlankFormListItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BlankFormListItemWithMapViewHolder, position: Int) {
         val item = formItems[position]
-        holder.blankFormListItem = item
+        holder.setItem(item)
 
         holder.itemView.setOnClickListener {
             if (MultiClickGuard.allowClick(javaClass.name)) {
@@ -50,6 +51,23 @@ class BlankFormListAdapter(
     fun setData(blankFormItems: List<BlankFormListItem>) {
         this.formItems = blankFormItems.toList()
         notifyDataSetChanged()
+    }
+
+    class BlankFormListItemWithMapViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+        BlankFormListItemView(parent.context).also {
+            it.setTrailingView(R.layout.map_button)
+        }
+    ) {
+        fun setItem(item: BlankFormListItem) {
+            (itemView as BlankFormListItemView).setItem(item)
+        }
+
+        init {
+            itemView.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        }
     }
 }
 

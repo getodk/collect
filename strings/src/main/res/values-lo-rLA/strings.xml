@@ -251,9 +251,7 @@
   <string name="delete_file">ລຶບສະເພາະແບບຟອມທີ່ໄດ້ເລືອກ</string>
   <string name="delete_no">ບໍ່ຕ້ອງການລຶບ</string>
   <string name="delete_yes">ລຶບແບບຟອມ</string>
-  <string name="file_deleted_error">ຄຳສັ່ງລຶບແບບຟອມ %1$s %2$s ກຳລັງດຳເນີນງານ!</string>
-  <string name="file_deleted_ok">ລຶບແບບຟອມ%s ສຳເລັດແລ້ວ!</string>
-  <string name="file_delete_in_progress">ຄຳສັ່ງລຶບແບບຟອມກຳລັງດຳເນີນງານ</string>
+    <string name="file_deleted_ok">ລຶບແບບຟອມ%s ສຳເລັດແລ້ວ!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

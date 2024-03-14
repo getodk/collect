@@ -7,12 +7,12 @@
 
     <include layout="@layout/app_bar_with_progress_bar_layout" />
 
-    <org.odk.collect.android.formlists.FormListRecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/form_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <org.odk.collect.android.views.EmptyListView
+    <org.odk.collect.androidshared.ui.EmptyListView
         android:id="@+id/empty_list_message"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

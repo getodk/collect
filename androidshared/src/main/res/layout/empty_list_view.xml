@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/title"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:src="@drawable/ic_baseline_edit_72" />
+        tools:src="@drawable/ic_baseline_qr_code_2_add_24" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"

@@ -2,7 +2,6 @@ package org.odk.collect.android.instancemanagement
 
 import android.content.Context
 import android.view.View
-import org.odk.collect.android.formmanagement.FinalizeAllResult
 import org.odk.collect.androidshared.ui.SnackbarUtils.SnackbarDetails
 import org.odk.collect.androidshared.ui.SnackbarUtils.SnackbarPresenterObserver
 import org.odk.collect.strings.R

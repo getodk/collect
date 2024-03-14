@@ -507,11 +507,8 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="delete_file">Siba icyo utoranije</string>
   <string name="delete_no">Ntubisibe</string>
   <string name="delete_yes">Siba ifishi</string>
-  <string name="file_deleted_error">Ihangane, %1$s muri %2$s z\' Ifishi wahisemo ntizabashije gusibwa.</string>
-  <string name="form_delete_message">Ifishi wahisemo ziri gusibwa</string>
-  <string name="deleting_form_dialog_update_message">Ifishi zimaze gusibwa ni %1$d muri %2$d</string>
+    <string name="form_delete_message">Ifishi wahisemo ziri gusibwa</string>
   <string name="file_deleted_ok">Ifishi %s zamaze gusibwa</string>
-  <string name="file_delete_in_progress">Ihangane, Igikorwa cyo gusiba ifishi kiracyari gukorwa</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

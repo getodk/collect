@@ -1,12 +1,12 @@
-package org.odk.collect.android.views
+package org.odk.collect.androidshared.ui
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.annotation.DrawableRes
-import org.odk.collect.android.R
-import org.odk.collect.android.databinding.EmptyListViewBinding
+import org.odk.collect.androidshared.R
+import org.odk.collect.androidshared.databinding.EmptyListViewBinding
 
 class EmptyListView(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
     constructor(context: Context) : this(context, null)

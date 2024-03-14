@@ -29,13 +29,13 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.not;
+import static org.odk.collect.android.instancemanagement.InstanceExtKt.getInstanceIcon;
 
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.widget.Toolbar;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 
 public class EditSavedFormPage extends Page<EditSavedFormPage> {
     private final boolean firstOpen;
@@ -59,7 +59,7 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
     }
 
     public EditSavedFormPage checkInstanceState(String instanceName, String desiredStatus) {
-        int desiredImageId = InstanceListCursorAdapter.getFormStateImageResourceIdForStatus(desiredStatus);
+        int desiredImageId = getInstanceIcon(desiredStatus);
 
         onView(allOf(instanceOf(RelativeLayout.class),
                 hasDescendant(withText(instanceName)),

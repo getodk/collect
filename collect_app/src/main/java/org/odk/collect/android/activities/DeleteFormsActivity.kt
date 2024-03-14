@@ -20,16 +20,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import org.odk.collect.android.adapters.DeleteFormsTabsAdapter
 import org.odk.collect.android.databinding.TabsLayoutBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment
+import org.odk.collect.android.formlists.savedformlist.DeleteSavedFormFragment
+import org.odk.collect.android.formlists.savedformlist.SavedFormListViewModel
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
-import org.odk.collect.androidshared.ui.MultiSelectViewModel
+import org.odk.collect.androidshared.ui.ListFragmentStateAdapter
 import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.instances.InstancesRepository
@@ -37,7 +39,7 @@ import org.odk.collect.shared.settings.Settings
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class DeleteSavedFormActivity : LocalizedActivity() {
+class DeleteFormsActivity : LocalizedActivity() {
     @Inject
     lateinit var projectDependencyProviderFactory: ProjectDependencyProviderFactory
 
@@ -49,6 +51,9 @@ class DeleteSavedFormActivity : LocalizedActivity() {
 
     @Inject
     lateinit var scheduler: Scheduler
+
+    @Inject
+    lateinit var instanceDataService: InstancesDataService
 
     private lateinit var binding: TabsLayoutBinding
 
@@ -64,7 +69,8 @@ class DeleteSavedFormActivity : LocalizedActivity() {
             formsDataService,
             scheduler,
             projectDependencyProvider.generalSettings,
-            projectId
+            projectId,
+            instanceDataService
         )
 
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
@@ -73,6 +79,9 @@ class DeleteSavedFormActivity : LocalizedActivity() {
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(DeleteBlankFormFragment::class) {
                 DeleteBlankFormFragment(viewModelFactory, this)
+            }
+            .forClass(DeleteSavedFormFragment::class.java) {
+                DeleteSavedFormFragment(viewModelFactory, this)
             }
             .build()
 
@@ -84,11 +93,21 @@ class DeleteSavedFormActivity : LocalizedActivity() {
     }
 
     private fun setUpViewPager(viewModel: BlankFormListViewModel) {
-        val viewPager = binding.viewPager.apply {
-            adapter = DeleteFormsTabsAdapter(
-                this@DeleteSavedFormActivity,
-                viewModel.isMatchExactlyEnabled()
+        val fragments = if (viewModel.isMatchExactlyEnabled()) {
+            listOf(DeleteSavedFormFragment::class.java)
+        } else {
+            listOf(
+                DeleteSavedFormFragment::class.java,
+                DeleteBlankFormFragment::class.java
             )
+        }
+
+        val viewPager = binding.viewPager.also {
+            it.adapter =
+                ListFragmentStateAdapter(
+                    this,
+                    fragments
+                )
         }
 
         TabLayoutMediator(binding.tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->
@@ -106,7 +125,8 @@ class DeleteSavedFormActivity : LocalizedActivity() {
         private val formsDataService: FormsDataService,
         private val scheduler: Scheduler,
         private val generalSettings: Settings,
-        private val projectId: String
+        private val projectId: String,
+        private val instancesDataService: InstancesDataService
     ) :
         ViewModelProvider.Factory {
 
@@ -122,7 +142,12 @@ class DeleteSavedFormActivity : LocalizedActivity() {
                     showAllVersions = true
                 )
 
-                MultiSelectViewModel::class.java -> MultiSelectViewModel()
+                SavedFormListViewModel::class.java -> SavedFormListViewModel(
+                    scheduler,
+                    generalSettings,
+                    instancesDataService
+                )
+
                 else -> throw IllegalArgumentException()
             } as T
         }

@@ -218,9 +218,7 @@
   <string name="delete_file">Burahin ang mga napili</string>
   <string name="delete_no">Huwag burahin</string>
   <string name="delete_yes">Oo, Burahin</string>
-  <string name="file_deleted_error">Paumanhin, %1$s of %2$s ang mga piniling form(s) ay nabigong ma-i-karga!</string>
-  <string name="file_deleted_ok">%s na (mga) form ay matagumpay na binura!</string>
-  <string name="file_delete_in_progress">Paumanhin, ang form ay kasalukuyang binubura!</string>
+    <string name="file_deleted_ok">%s na (mga) form ay matagumpay na binura!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

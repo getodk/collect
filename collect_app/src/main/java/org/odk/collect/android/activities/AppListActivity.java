@@ -140,7 +140,7 @@ public abstract class AppListActivity extends LocalizedActivity {
         llParent = findViewById(R.id.llParent);
 
         // Use the nicer-looking drawable with Material Design insets.
-        listView.setDivider(ContextCompat.getDrawable(this, R.drawable.list_item_divider));
+        listView.setDivider(ContextCompat.getDrawable(this, org.odk.collect.androidshared.R.drawable.list_item_divider));
         listView.setDividerHeight(1);
 
         setSupportActionBar(findViewById(R.id.toolbar));
@@ -175,7 +175,7 @@ public abstract class AppListActivity extends LocalizedActivity {
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(R.menu.form_list_menu, menu);
+        getMenuInflater().inflate(R.menu.blank_form_list_menu, menu);
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);

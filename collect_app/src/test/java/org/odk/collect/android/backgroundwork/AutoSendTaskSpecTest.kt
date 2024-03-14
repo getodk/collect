@@ -13,8 +13,8 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.formmanagement.FormSourceProvider
-import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSender
 import org.odk.collect.android.notifications.Notifier

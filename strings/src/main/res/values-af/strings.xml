@@ -253,9 +253,7 @@
   <string name="delete_file">Verwyder Geselekteerde</string>
   <string name="delete_no">Moenie Verwyder Nie</string>
   <string name="delete_yes">Verwyder Vorms</string>
-  <string name="file_deleted_error">Jammer, verwydering van %1$s van %2$s geselekteerde vorm(s) het misluk!</string>
-  <string name="file_deleted_ok">%s vorm(s) suksesvol verwyder!</string>
-  <string name="file_delete_in_progress">Jammer, daar is klaar \'n aksie aan die gang om \'n vorm te verwyder!</string>
+    <string name="file_deleted_ok">%s vorm(s) suksesvol verwyder!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

@@ -67,4 +67,8 @@ object ProjectKeys {
     const val BASEMAP_SOURCE_OSM = "osm"
     const val BASEMAP_SOURCE_USGS = "usgs"
     const val BASEMAP_SOURCE_CARTO = "carto"
+
+    // remembered defaults
+    const val KEY_SAVED_FORM_SORT_ORDER = "instanceUploaderListSortingOrder"
+    const val KEY_BLANK_FORM_SORT_ORDER = "formChooserListSortingOrder"
 }

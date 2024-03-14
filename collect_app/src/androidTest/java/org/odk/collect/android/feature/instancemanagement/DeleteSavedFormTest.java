@@ -11,6 +11,7 @@ import org.odk.collect.android.support.pages.DeleteSavedFormPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.strings.R.string;
 
 @RunWith(AndroidJUnit4.class)
 public class DeleteSavedFormTest {
@@ -34,6 +35,7 @@ public class DeleteSavedFormTest {
                 .clickForm("One Question")
                 .clickDeleteSelected(1)
                 .clickDeleteForms()
+                .checkIsSnackbarWithMessageDisplayed(string.file_deleted_ok, 1)
                 .assertTextDoesNotExist("One Question")
                 .pressBack(new MainMenuPage())
                 .assertNumberOfFinalizedForms(0);
@@ -50,6 +52,6 @@ public class DeleteSavedFormTest {
                 .clickDeleteSavedForm()
                 .rotateToLandscape(new DeleteSavedFormPage())
                 .clickOnId(R.id.menu_sort)
-                .assertText(org.odk.collect.strings.R.string.sort_by);
+                .assertText(string.sort_by);
     }
 }

@@ -358,10 +358,8 @@
   <string name="delete_file">Verwijder selectie</string>
   <string name="delete_no">Niet verwijderen</string>
   <string name="delete_yes">Verwijderen</string>
-  <string name="file_deleted_error">Sorry, %1$s van de %2$s geselecteerde formulier(en) kon niet worden verwijderd!</string>
-  <string name="form_delete_message">Verwijderen van geselecteerde formulieren</string>
+    <string name="form_delete_message">Verwijderen van geselecteerde formulieren</string>
   <string name="file_deleted_ok">%s formulier(en) verwijderd!</string>
-  <string name="file_delete_in_progress">Sorry, er is nog een verwijder opdracht actief!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

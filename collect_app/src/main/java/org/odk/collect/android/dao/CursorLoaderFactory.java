@@ -64,22 +64,6 @@ public class CursorLoaderFactory {
         return cursorLoader;
     }
 
-    public CursorLoader createSavedInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
-        CursorLoader cursorLoader;
-        if (charSequence.length() == 0) {
-            String selection = DatabaseInstanceColumns.DELETED_DATE + " IS NULL ";
-            cursorLoader = getInstancesCursorLoader(selection, null, sortOrder);
-        } else {
-            String selection =
-                    DatabaseInstanceColumns.DELETED_DATE + " IS NULL and "
-                            + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
-            String[] selectionArgs = {"%" + charSequence + "%"};
-            cursorLoader = getInstancesCursorLoader(selection, selectionArgs, sortOrder);
-        }
-
-        return cursorLoader;
-    }
-
     public CursorLoader createFinalizedInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
         CursorLoader cursorLoader;
         if (charSequence.length() == 0) {

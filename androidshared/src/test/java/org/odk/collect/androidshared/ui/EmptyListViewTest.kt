@@ -1,4 +1,4 @@
-package org.odk.collect.android.views
+package org.odk.collect.androidshared.ui
 
 import android.app.Application
 import android.graphics.drawable.VectorDrawable
@@ -11,7 +11,7 @@ import com.google.android.material.textview.MaterialTextView
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
+import org.odk.collect.androidshared.R
 import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
@@ -30,11 +30,11 @@ class EmptyListViewTest {
 
     @Test
     fun `when icon attribute is used then it is set correctly`() {
-        val attrs = Robolectric.buildAttributeSet().addAttribute(R.attr.icon, "@drawable/ic_baseline_edit_72").build()
+        val attrs = Robolectric.buildAttributeSet().addAttribute(R.attr.icon, "@drawable/ic_baseline_warning_24").build()
         val emptyListView = EmptyListView(context, attrs)
 
         assertThat(
-            (emptyListView.findViewById<ImageView>(R.id.icon).drawable as VectorDrawable).toBitmap().sameAs((context.getDrawable(R.drawable.ic_baseline_edit_72) as VectorDrawable).toBitmap()),
+            (emptyListView.findViewById<ImageView>(R.id.icon).drawable as VectorDrawable).toBitmap().sameAs((context.getDrawable(R.drawable.ic_baseline_warning_24) as VectorDrawable).toBitmap()),
             equalTo(true)
         )
     }
@@ -72,10 +72,10 @@ class EmptyListViewTest {
     @Test
     fun `icon can be set programmatically`() {
         val emptyListView = EmptyListView(context)
-        emptyListView.setIcon(R.drawable.ic_baseline_edit_72)
+        emptyListView.setIcon(R.drawable.ic_baseline_warning_24)
 
         assertThat(
-            (emptyListView.findViewById<ImageView>(R.id.icon).drawable as VectorDrawable).toBitmap().sameAs((context.getDrawable(R.drawable.ic_baseline_edit_72) as VectorDrawable).toBitmap()),
+            (emptyListView.findViewById<ImageView>(R.id.icon).drawable as VectorDrawable).toBitmap().sameAs((context.getDrawable(R.drawable.ic_baseline_warning_24) as VectorDrawable).toBitmap()),
             equalTo(true)
         )
     }

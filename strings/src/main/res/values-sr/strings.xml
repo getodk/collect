@@ -436,11 +436,8 @@
   <string name="delete_file">Obriši označeno</string>
   <string name="delete_no">Ne briši!</string>
   <string name="delete_yes">Obriši formulare</string>
-  <string name="file_deleted_error">%1$s od %2$s odabranog(ih) formulara ne može biti obrisan.</string>
-  <string name="form_delete_message">Brišem odabrane formulare</string>
-  <string name="deleting_form_dialog_update_message">Brišem formular: %1$d od %2$d</string>
+    <string name="form_delete_message">Brišem odabrane formulare</string>
   <string name="file_deleted_ok">%s formular(i) su uspješno obrisani!</string>
-  <string name="file_delete_in_progress">Brisanje formulara je već u toku!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

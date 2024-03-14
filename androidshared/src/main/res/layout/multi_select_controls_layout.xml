@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Using a LinearLayout rather than ConstraintLayout allows the items to grow to the height
+    of the tallest item (not possible with the latter currently).
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/Widget.AndroidShared.ButtonBar">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/select_all"
+        style="?materialButtonOutlinedStyle"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_weight="1"
+        android:text="@string/select_all" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/action"
+        style="?materialButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_weight="1" />
+</LinearLayout>

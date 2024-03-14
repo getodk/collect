@@ -554,11 +554,8 @@
   <string name="delete_file">删除选中</string>
   <string name="delete_no">不删除</string>
   <string name="delete_yes">删除表格</string>
-  <string name="file_deleted_error">%2$s 中的 %1$s 个选定的表格不能被删除!</string>
-  <string name="form_delete_message">删除所选表单</string>
-  <string name="deleting_form_dialog_update_message">正在删除表单: %1$d /%2$d </string>
+    <string name="form_delete_message">删除所选表单</string>
   <string name="file_deleted_ok">%s 表格被成功删除!</string>
-  <string name="file_delete_in_progress">正在删除表格!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

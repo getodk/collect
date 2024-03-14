@@ -20,7 +20,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
-import static org.odk.collect.androidshared.ui.MultiSelectViewModelKt.updateSelectAll;
+import static org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModelKt.updateSelectAll;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -65,10 +65,11 @@ import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.androidshared.ui.MenuExtKt;
-import org.odk.collect.androidshared.ui.MultiSelectViewModel;
+import org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModel;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.Arrays;
@@ -90,7 +91,6 @@ import timber.log.Timber;
 public class InstanceUploaderListActivity extends LocalizedActivity implements
         OnLongClickListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String SHOW_ALL_MODE = "showAllMode";
-    private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
     private static final String SEARCH_TEXT = "searchText";
@@ -127,7 +127,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     private ProgressBar progressBar;
     private String filterText;
 
-    private MultiSelectViewModel multiSelectViewModel;
+    private MultiSelectViewModel<Object> multiSelectViewModel;
     private ReadyToSendViewModel readyToSendViewModel;
     private boolean allSelected;
 
@@ -201,7 +201,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         progressBar = findViewById(R.id.progressBar);
 
         // Use the nicer-looking drawable with Material Design insets.
-        listView.setDivider(ContextCompat.getDrawable(this, R.drawable.list_item_divider));
+        listView.setDivider(ContextCompat.getDrawable(this, org.odk.collect.androidshared.R.drawable.list_item_divider));
         listView.setDividerHeight(1);
 
         setSupportActionBar(findViewById(R.id.toolbar));
@@ -289,7 +289,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.instance_uploader_menu, menu);
 
-        getMenuInflater().inflate(R.menu.form_list_menu, menu);
+        getMenuInflater().inflate(R.menu.blank_form_list_menu, menu);
         MenuExtKt.enableIconsVisibility(menu);
 
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
@@ -432,7 +432,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     }
 
     private String getSortingOrderKey() {
-        return INSTANCE_UPLOADER_LIST_SORTING_ORDER;
+        return ProjectKeys.KEY_SAVED_FORM_SORT_ORDER;
     }
 
     private void updateAdapter() {

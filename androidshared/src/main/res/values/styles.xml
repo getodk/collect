@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.AndroidShared.ButtonBar" parent="">
+        <item name="android:background">?colorSurface</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:paddingTop">@dimen/margin_extra_small</item>
+        <item name="android:paddingBottom">@dimen/margin_extra_small</item>
+    </style>
+</resources>

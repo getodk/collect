@@ -122,9 +122,9 @@ class FakeScheduler : Scheduler {
 }
 
 fun <T> LiveData<T>.getOrAwaitValue(
-    scheduler: FakeScheduler
+    scheduler: FakeScheduler? = null
 ): T {
-    return this.getOrAwaitValue { scheduler.flush() }
+    return this.getOrAwaitValue { scheduler?.flush() }
 }
 
 private data class RepeatTask(val interval: Long, val runnable: Runnable, var lastRun: Long?)

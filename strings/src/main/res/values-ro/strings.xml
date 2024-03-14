@@ -274,9 +274,7 @@
   <string name="delete_file">Ștergeți cele selectate</string>
   <string name="delete_no">Nu ștergeți</string>
   <string name="delete_yes">Ștergeți formulare</string>
-  <string name="file_deleted_error">Ne pare rău, %1$s din %2$s formular(e) selectat(e) nu au putut fi șterse!</string>
-  <string name="file_deleted_ok">%s formular(e) șters(e) cu succes!</string>
-  <string name="file_delete_in_progress">Ne pare rău, formularul este deja în proces de ștergere!</string>
+    <string name="file_deleted_ok">%s formular(e) șters(e) cu succes!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

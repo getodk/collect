@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formmanagement.InstancesDataService;
+import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;

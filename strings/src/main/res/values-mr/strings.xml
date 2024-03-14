@@ -317,9 +317,7 @@
   <string name="delete_file">निवडलेले हटवा ?</string>
   <string name="delete_no">हटवू नका</string>
   <string name="delete_yes">फॉर्म हटवा</string>
-  <string name="file_deleted_error">क्षमस्व, %1$s पैकी फॉर्म(स) %2$s नी हटविण्यात अयशस्वी!</string>
-  <string name="file_deleted_ok">%s फॉर्म(स) यशस्वीरित्या हटविले!</string>
-  <string name="file_delete_in_progress">क्षमस्व, एक फॉर्म हटविणे क्रिया आधीच प्रगतीपथावर आहे!</string>
+    <string name="file_deleted_ok">%s फॉर्म(स) यशस्वीरित्या हटविले!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

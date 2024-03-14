@@ -35,7 +35,7 @@ class BlankFormListMenuProvider(
     }
 
     override fun onCreateMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.form_list_menu, menu)
+        inflater.inflate(R.menu.blank_form_list_menu, menu)
 
         menu.findItem(R.id.menu_filter).apply {
             setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
@@ -97,34 +97,15 @@ class BlankFormListMenuProvider(
                 }
                 true
             }
+
             R.id.menu_sort -> {
                 FormListSortingBottomSheetDialog(
                     activity,
-                    listOf(
-                        FormListSortingOption(
-                            R.drawable.ic_sort_by_alpha,
-                            org.odk.collect.strings.R.string.sort_by_name_asc
-                        ),
-                        FormListSortingOption(
-                            R.drawable.ic_sort_by_alpha,
-                            org.odk.collect.strings.R.string.sort_by_name_desc
-                        ),
-                        FormListSortingOption(
-                            R.drawable.ic_access_time,
-                            org.odk.collect.strings.R.string.sort_by_date_desc
-                        ),
-                        FormListSortingOption(
-                            R.drawable.ic_access_time,
-                            org.odk.collect.strings.R.string.sort_by_date_asc
-                        ),
-                        FormListSortingOption(
-                            R.drawable.ic_sort_by_last_saved,
-                            org.odk.collect.strings.R.string.sort_by_last_saved
-                        )
-                    ),
-                    viewModel.sortingOrder
+                    BlankFormListViewModel.SortOrder.entries.map { getForListSortingOption(it) },
+                    viewModel.sortingOrder.ordinal
                 ) { newSortingOrder ->
-                    viewModel.sortingOrder = newSortingOrder
+                    viewModel.sortingOrder =
+                        BlankFormListViewModel.SortOrder.entries[newSortingOrder]
                 }.show()
 
                 true
@@ -132,4 +113,32 @@ class BlankFormListMenuProvider(
             else -> false
         }
     }
+
+    private fun getForListSortingOption(it: BlankFormListViewModel.SortOrder) =
+        when (it) {
+            BlankFormListViewModel.SortOrder.NAME_ASC -> FormListSortingOption(
+                R.drawable.ic_sort_by_alpha,
+                org.odk.collect.strings.R.string.sort_by_name_asc
+            )
+
+            BlankFormListViewModel.SortOrder.NAME_DESC -> FormListSortingOption(
+                R.drawable.ic_sort_by_alpha,
+                org.odk.collect.strings.R.string.sort_by_name_desc
+            )
+
+            BlankFormListViewModel.SortOrder.DATE_DESC -> FormListSortingOption(
+                R.drawable.ic_access_time,
+                org.odk.collect.strings.R.string.sort_by_date_desc
+            )
+
+            BlankFormListViewModel.SortOrder.DATE_ASC -> FormListSortingOption(
+                R.drawable.ic_access_time,
+                org.odk.collect.strings.R.string.sort_by_date_asc
+            )
+
+            BlankFormListViewModel.SortOrder.LAST_SAVED -> FormListSortingOption(
+                R.drawable.ic_sort_by_last_saved,
+                org.odk.collect.strings.R.string.sort_by_last_saved
+            )
+        }
 }

@@ -580,11 +580,8 @@
   <string name="delete_file">Poista valittu</string>
   <string name="delete_no">Älä poista</string>
   <string name="delete_yes">Poista lomakkeita</string>
-  <string name="file_deleted_error">Pahoittelut, poistaminen epäonnistui %1$s / %2$s valitun lomakkeen kohdalla!</string>
-  <string name="form_delete_message">Valittuja lomakkeita poistetaan</string>
-  <string name="deleting_form_dialog_update_message">Poistetaan lomake %1$d / %2$d </string>
+    <string name="form_delete_message">Valittuja lomakkeita poistetaan</string>
   <string name="file_deleted_ok">%s lomakkeen poistaminen onnistui!</string>
-  <string name="file_delete_in_progress">Pahoittelut, lomakkeiden poistaminen jo käynnissä!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import kotlin.Pair;
 import kotlin.Triple;
 
 public class LiveDataUtils {
@@ -52,6 +53,13 @@ public class LiveDataUtils {
 
     public static <T> LiveData<T> liveDataOf(T value) {
         return new MutableLiveData<>(value);
+    }
+
+    public static <T, U> LiveData<Pair<T, U>> zip(LiveData<T> one, LiveData<U> two) {
+        return new ZippedLiveData<>(
+                new LiveData[]{one, two},
+                values -> new Pair<>((T) values[0], (U) values[1])
+        );
     }
 
     public static <T, U, V> LiveData<Triple<T, U, V>> zip3(LiveData<T> one, LiveData<U> two, LiveData<V> three) {

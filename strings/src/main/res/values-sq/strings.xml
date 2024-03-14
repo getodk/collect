@@ -334,12 +334,10 @@
   <string name="delete_no">Mos fshi</string>
   <string name="delete_yes">Fshi format</string>
   <string name="form_delete_message">Duke fshirë formularët e përzgjedhur</string>
-  <string name="deleting_form_dialog_update_message">Duke fshirë formularin:%1$dnga%2$d</string>
   <string name="file_deleted_ok">%s formë(a) u fshinë me sukses!</string>
-  <string name="file_delete_in_progress">Një komandë për të fshirë formularin është duke u ekzekutuar!</string>
-  <!--##############################################
-    # UNPROTECTED SETTINGS
-    ##############################################-->
+    <!--##############################################
+      # UNPROTECTED SETTINGS
+      ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
   <!--Subtext of a settings section-->

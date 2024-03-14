@@ -254,9 +254,7 @@
   <string name="delete_file">Slett utvalgte</string>
   <string name="delete_no">Ikke slett</string>
   <string name="delete_yes">Slett skjemaer</string>
-  <string name="file_deleted_error">Beklager, %1$s av %2$s utvalgte skjema(er) sletting mislyktes!</string>
-  <string name="file_deleted_ok">%s skjema(er) er slettet!</string>
-  <string name="file_delete_in_progress">Beklager, sletting pågår!</string>
+    <string name="file_deleted_ok">%s skjema(er) er slettet!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

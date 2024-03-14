@@ -52,7 +52,7 @@ import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormsDataService;
-import org.odk.collect.android.formmanagement.InstancesDataService;
+import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.geo.MapFragmentFactoryImpl;

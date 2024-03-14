@@ -578,11 +578,8 @@
   <string name="delete_file">Apagar Selecionados</string>
   <string name="delete_no">Não Apagar</string>
   <string name="delete_yes">Apagar Formulários</string>
-  <string name="file_deleted_error">Desculpe, %1$s de %2$s formulário(s) selecionado falhou ao apagar!</string>
-  <string name="form_delete_message">Apagando formulários selecionados</string>
-  <string name="deleting_form_dialog_update_message">Apagando formulário: %1$d de %2$d </string>
+    <string name="form_delete_message">Apagando formulários selecionados</string>
   <string name="file_deleted_ok">%s formulário(s) apagados com sucesso!</string>
-  <string name="file_delete_in_progress">Desculpe, uma ação de apagar está em andamento!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->

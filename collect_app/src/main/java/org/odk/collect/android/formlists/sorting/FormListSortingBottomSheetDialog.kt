@@ -12,9 +12,9 @@ import java.util.function.Consumer
 
 class FormListSortingBottomSheetDialog(
     context: Context,
-    private val options: List<FormListSortingOption>,
-    private val selectedOption: Int,
-    private val onSelectedOptionChanged: Consumer<Int>
+    val options: List<FormListSortingOption>,
+    val selectedOption: Int,
+    val onSelectedOptionChanged: Consumer<Int>
 ) : BottomSheetDialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {

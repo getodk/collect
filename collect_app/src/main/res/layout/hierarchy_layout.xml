@@ -46,7 +46,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonholder"
-        style="@style/Widget.Collect.ButtonBar"
+        style="@style/Widget.AndroidShared.ButtonBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +91,7 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <org.odk.collect.android.views.EmptyListView
+    <org.odk.collect.androidshared.ui.EmptyListView
         android:id="@android:id/empty"
         android:layout_width="0dp"
         android:layout_height="0dp"
