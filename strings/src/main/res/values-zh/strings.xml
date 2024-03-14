@@ -372,12 +372,9 @@
   <string name="carto_map_style_dark_matter">Dark Matter</string>
   <string name="reference_layer">应用图层</string>
   <string name="layer_data_file">图层数据文件</string>
-  <string name="view_change_location">查看或修改位置</string>
-  <string name="change_location">更改地点</string>
   <string name="record_geopoint">记录点</string>
   <string name="location_accuracy">精确度: %1$s m</string>
   <string name="location_provider">位置提供程序: %s</string>
-  <string name="get_location">获取位置</string>
   <string name="provider_disabled_error">位置服务被关闭!</string>
   <string name="gps_result">纬度: %1$s\n经度: %2$s\n高程: %3$sm\n精度: %4$sm</string>
   <string name="google_play_services_not_available">此表单希望跟踪您的位置，但Google Play服务不可用。</string>
@@ -390,12 +387,6 @@
   <string name="background_location_enabled">此表单跟踪您的位置. 您可以在上面的菜单 %1$s 中禁用跟踪。</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="validate">检查错误</string>
-  <string name="get_point">开始GeoPoint</string>
-  <string name="geopoint_view_read_only">查看GeoPoint</string>
-  <string name="geoshape_view_read_only">查看 GeoShape</string>
-  <string name="geotrace_view_read_only">查看 GeoTrace</string>
-  <string name="get_shape">开始 GeoShape</string>
-  <string name="get_trace">开始 GeoTrace</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">已用时间: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -460,8 +451,6 @@
   <string name="geopoint_instruction">长按放置标记或点击添加标记按钮。</string>
   <string name="geopoint_no_draggable_instruction">点击添加标记按钮。</string>
   <string name="discard">丢弃</string>
-  <string name="geoshape_view_change_location">查看或更改GeoShape</string>
-  <string name="geotrace_view_change_location">查看或更改GeoTrace</string>
   <string name="select_item_count">%s: %d (%d 在图上)</string>
   <string name="select_item">选择</string>
   <string name="new_item">新元素</string>

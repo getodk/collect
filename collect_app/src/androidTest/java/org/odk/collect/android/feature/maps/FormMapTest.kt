@@ -67,7 +67,7 @@ class FormMapTest {
 
             .inputText("Foo")
             .swipeToNextQuestion("Location")
-            .clickWidgetButton()
+            .clickOnId(R.id.get_location_button)
             .swipeToEndScreen()
             .clickSaveAndExitBackToMap()
 

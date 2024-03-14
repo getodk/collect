@@ -390,12 +390,9 @@
   <string name="carto_map_style_dark_matter">Matéria escura</string>
   <string name="reference_layer">Camada de referência</string>
   <string name="layer_data_file">Arquivo de dados da camada</string>
-  <string name="view_change_location">Ver ou modificar localização</string>
-  <string name="change_location">Mudar Localização</string>
   <string name="record_geopoint">Registre um ponto</string>
   <string name="location_accuracy">Precisão: %1$s m</string>
   <string name="location_provider">Provedor de localização: %s</string>
-  <string name="get_location">Gravar Localização</string>
   <string name="provider_disabled_error">Desculpe, provedor de localização desabilitado!</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrecisão:%4$s m</string>
   <string name="google_play_services_not_available">Este formulário necessita rastrear sua localização, mas o Google Play Services não está disponível.</string>
@@ -408,12 +405,6 @@
   <string name="background_location_enabled">Este formulário rastreia a sua localização. Você pode desabilitar o rastreamento de localização no menu %1$s acima.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="validate">Verificar erros</string>
-  <string name="get_point">Inicia GeoPoint</string>
-  <string name="geopoint_view_read_only">Visualiza GeoPoint</string>
-  <string name="geoshape_view_read_only">Visualizar GeoShape</string>
-  <string name="geotrace_view_read_only">Visualizar GeoTrace</string>
-  <string name="get_shape">Inicia GeoShape</string>
-  <string name="get_trace">Inicia GeoTrace</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Tempo decorrido: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -484,8 +475,6 @@
   <string name="geopoint_instruction">Pressione por mais tempo para colocar marcador ou selecione o botão Adicionar Marcador.</string>
   <string name="geopoint_no_draggable_instruction">Selecione o botão Adicionar Marcador.</string>
   <string name="discard">Descartar</string>
-  <string name="geoshape_view_change_location">Visualizar ou Modificar GeoShape</string>
-  <string name="geotrace_view_change_location">Visualizar ou Modificar GeoTrace</string>
   <string name="select_item_count">1 %s: 2 %d (2 %d mostrado no mapa)</string>
   <string name="select_item">Selecionar</string>
   <string name="new_item">Novo item</string>

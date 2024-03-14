@@ -297,10 +297,7 @@
   <string name="hybrid">Змішана</string>
   <string name="satellite">Супутник</string>
   <string name="google_play_services_error_occured">Нема доступу до Google Карт. Чи встановлено Google Play Services?</string>
-  <string name="view_change_location">Подивитись або змінити місцезнаходження</string>
-  <string name="change_location">Змінити Місцезнаходження</string>
   <string name="record_geopoint">Записати точку</string>
-  <string name="get_location">Записати місцезнаходження</string>
   <string name="provider_disabled_error">Вибачте! Джерела місцезнаходження не доступні!</string>
   <string name="gps_result">Широта: %1$s\nДовгота: %2$s\nВисота: %3$sm\nТочність: %4$sm</string>
   <string name="google_play_services_not_available">Ця анкета хоче відслідковувати ваше розташування але Сервіси Google Play не доступні.</string>
@@ -312,10 +309,6 @@
   <string name="background_location_disabled">Ця анкета хоче відслідковувати ваше розташування але відслідковування вимкнене. Будь ласка, увімкніть його в %1$s меню.</string>
   <string name="background_location_enabled">Ця анкета відслідковує ваше розташування. Ви можете вимкнути відслідковування в %1$s меню.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">Записати ГеоТочку</string>
-  <string name="geopoint_view_read_only">Переглянути ГеоТочку</string>
-  <string name="get_shape">Почати ГеоФігуру</string>
-  <string name="get_trace">Почати ГеоМаршрут</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -375,8 +368,6 @@
   <string name="geopoint_instruction">Довго натисніть для розміщення позначки або натисніть кнопку Додати позначку.</string>
   <string name="geopoint_no_draggable_instruction">Натисніть кнопку Додати позначку.</string>
   <string name="discard">Скинути</string>
-  <string name="geoshape_view_change_location">Переглянути чи змінити ГеоФігуру</string>
-  <string name="geotrace_view_change_location">Переглянути чи змінити ГеоМаршрут</string>
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->

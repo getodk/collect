@@ -180,8 +180,6 @@
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
   <string name="google_play_services_error_occured">Ikke mulig å åpne Google Maps. Er Google Play Services installert?</string>
-  <string name="view_change_location">Vis eller endre plassering</string>
-  <string name="get_location">Registrer posisjon</string>
   <string name="provider_disabled_error">Beklager, stedstjenesten er deaktivert!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->

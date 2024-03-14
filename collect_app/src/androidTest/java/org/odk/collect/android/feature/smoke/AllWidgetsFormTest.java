@@ -353,14 +353,14 @@ public class AllWidgetsFormTest {
     }
 
     public void testGeotraceWidget() {
-        onView(withText("Start GeoTrace")).perform(click());
+        onView(withText("Get polyline")).perform(click());
         pressBack();
 
         onView(withText("Geotrace widget")).perform(swipeLeft());
     }
 
     public void testGeoshapeWidget() {
-        onView(withText("Start GeoShape")).perform(click());
+        onView(withText("Get polygon")).perform(click());
         pressBack();
 
         onView(withText("Geoshape widget")).perform(swipeLeft());

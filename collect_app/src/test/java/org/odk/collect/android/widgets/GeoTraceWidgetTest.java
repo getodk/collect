@@ -72,25 +72,25 @@ public class GeoTraceWidgetTest {
     @Test
     public void whenPromptIsReadOnlyAndDoesNotHaveAnswer_geoButtonIsNotDisplayed() {
         GeoTraceWidget widget = createWidget(promptWithReadOnly());
-        assertEquals(widget.binding.simpleButton.getVisibility(), View.GONE);
+        assertEquals(widget.binding.getPolylineButton.getVisibility(), View.GONE);
     }
 
     @Test
     public void whenPromptIsReadOnlyAndHasAnswer_viewGeoShapeButtonIsShown() {
         GeoTraceWidget widget = createWidget(promptWithReadOnlyAndAnswer(new StringData(answer)));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.geotrace_view_read_only));
+        assertEquals(widget.binding.getPolylineButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_polyline));
     }
 
     @Test
     public void whenPromptIsNotReadOnlyAndDoesNotHaveAnswer_startGeoShapeButtonIsShown() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_trace));
+        assertEquals(widget.binding.getPolylineButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_polyline));
     }
 
     @Test
     public void whenPromptIsNotReadOnlyAndHasAnswer_viewOrChangeGeoShapeButtonIsShown() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.geotrace_view_change_location));
+        assertEquals(widget.binding.getPolylineButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_polyline));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class GeoTraceWidgetTest {
         widget.clearAnswer();
 
         assertEquals(widget.binding.geoAnswerText.getText(), "");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_trace));
+        assertEquals(widget.binding.getPolylineButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_polyline));
     }
 
     @Test
@@ -117,10 +117,10 @@ public class GeoTraceWidgetTest {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
 
         widget.setOnLongClickListener(listener);
-        widget.binding.simpleButton.performLongClick();
+        widget.binding.getPolylineButton.performLongClick();
         widget.binding.geoAnswerText.performLongClick();
 
-        verify(listener).onLongClick(widget.binding.simpleButton);
+        verify(listener).onLongClick(widget.binding.getPolylineButton);
         verify(listener).onLongClick(widget.binding.geoAnswerText);
     }
 
@@ -149,14 +149,14 @@ public class GeoTraceWidgetTest {
     public void setData_whenDataIsNull_updatesButtonLabel() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         widget.setData("");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_trace));
+        assertEquals(widget.binding.getPolylineButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_polyline));
     }
 
     @Test
     public void setData_whenDataIsNotNull_updatesButtonLabel() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
         widget.setData(answer);
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.geotrace_view_change_location));
+        assertEquals(widget.binding.getPolylineButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_polyline));
     }
 
     @Test
@@ -174,7 +174,7 @@ public class GeoTraceWidgetTest {
         GeoTraceWidget widget = createWidget(prompt);
 
         when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(false);
-        widget.binding.simpleButton.performClick();
+        widget.binding.getPolylineButton.performClick();
 
         verify(geoDataRequester, never()).requestGeoTrace(prompt, "",  waitingForDataRegistry);
         verify(mapConfigurator).showUnavailableMessage(widget.getContext());
@@ -184,7 +184,7 @@ public class GeoTraceWidgetTest {
     public void buttonClick_whenMapConfiguratorIsAvailable_requestsGeoTrace() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoTraceWidget widget = createWidget(prompt);
-        widget.binding.simpleButton.performClick();
+        widget.binding.getPolylineButton.performClick();
 
         verify(geoDataRequester).requestGeoTrace(prompt, "", waitingForDataRegistry);
     }
@@ -194,7 +194,7 @@ public class GeoTraceWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
         GeoTraceWidget widget = createWidget(prompt);
         widget.clearAnswer();
-        widget.binding.simpleButton.performClick();
+        widget.binding.getPolylineButton.performClick();
 
         verify(geoDataRequester).requestGeoTrace(prompt, "", waitingForDataRegistry);
     }
@@ -204,7 +204,7 @@ public class GeoTraceWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoTraceWidget widget = createWidget(prompt);
         widget.setData(answer);
-        widget.binding.simpleButton.performClick();
+        widget.binding.getPolylineButton.performClick();
 
         verify(geoDataRequester).requestGeoTrace(prompt, answer, waitingForDataRegistry);
     }

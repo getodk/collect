@@ -300,10 +300,7 @@
   <string name="hybrid">Hibrid</string>
   <string name="satellite">Satelit</string>
   <string name="google_play_services_error_occured">Ne mogu da pristupim Google Mapama. Je li Google Play Service instaliran?</string>
-  <string name="view_change_location">Vidi ili promijeni lokaciju</string>
-  <string name="change_location">Promijeni lokaciju</string>
   <string name="record_geopoint">Zabilježi lokaciju</string>
-  <string name="get_location">Zabilježi lokaciju</string>
   <string name="provider_disabled_error">Pronalaženje lokacije je isključeno!</string>
   <string name="gps_result">Geografska širina:%1$s\nGeografska dužina: %2$s\nVisina: %3$sm\nPreciznost: %4$sm</string>
   <string name="google_play_services_not_available">Ovaj formular želi da prati vašu poziciju ali Google Play Services nisu dostupne.</string>
@@ -315,10 +312,6 @@
   <string name="background_location_disabled">Ovaj formular želi da prati vašu lokaciju ali je ona isključena. Molim uključite lokaciju u %1$s meniju iznad.</string>
   <string name="background_location_enabled">Ovaj formular bilježi tvoju lokaciju. Možeš onemogućiti praćenje u %1$s meniju iznad.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">Započni GeoPoint</string>
-  <string name="geopoint_view_read_only">Vidi GeoPoint</string>
-  <string name="get_shape">Započni GeoShape</string>
-  <string name="get_trace">Započni GeoTrace</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -375,8 +368,6 @@
   <string name="geopoint_instruction">Dugi pritisak da ostavite znak ili dodir za dodavanje dugmeta za marker.</string>
   <string name="geopoint_no_draggable_instruction">Dodirni da dodaš dugme za marker</string>
   <string name="discard">Odbaci</string>
-  <string name="geoshape_view_change_location">Vidi ili promijeni GeoShape</string>
-  <string name="geotrace_view_change_location">Vidi ili promijeni GeoTrace</string>
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->

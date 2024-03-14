@@ -332,10 +332,7 @@
   <string name="carto_map_style_dark_matter">Ciemna Materia</string>
   <string name="reference_layer">Warstwa referencyjna</string>
   <string name="layer_data_file">Plik danych warstwy</string>
-  <string name="view_change_location">Obejrzyj lub Zmień Lokalizację</string>
-  <string name="change_location">Zmień Lokalizację</string>
   <string name="record_geopoint">Zapisz punkt</string>
-  <string name="get_location">Zapisz Lokalizację</string>
   <string name="provider_disabled_error">Przykro mi, dostawcy usługi Lokalizacji są niedostępni.</string>
   <string name="gps_result">Szerokość: %1$s\nDługość: %2$s\nWzniesienie: %3$sm\nDokładność: %4$sm</string>
   <string name="google_play_services_not_available">Ten formularz chce śledzić twoją lokalizację, ale usługi Google Play nie są dostępne.</string>
@@ -347,10 +344,6 @@
   <string name="background_location_disabled">Ten formularz chce śledzić twoją lokalizację, jednak funkcja śledzenia jest wyłączona. Włącz ją wybierając %1$s w menu powyżej.</string>
   <string name="background_location_enabled">Ten formularz śledzi twoją lokalizację. Możesz wyłączyć funkcję śledzenia poprzez %1$s w menu powyżej.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">Zacznij GeoPoint</string>
-  <string name="geopoint_view_read_only">Pokaż GeoPoint</string>
-  <string name="get_shape">Zacznij GeoShape</string>
-  <string name="get_trace">Zacznij GeoShape</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -411,8 +404,6 @@
   <string name="geopoint_instruction">Długo naciśnij aby umieścić znacznik lub dotknij przycisk Dodaj znacznik.</string>
   <string name="geopoint_no_draggable_instruction">Dotknij przycisk Dodaj znacznik.</string>
   <string name="discard">Usuń</string>
-  <string name="geoshape_view_change_location">Pokaż lub Zmień GeoShape</string>
-  <string name="geotrace_view_change_location">Pokaż lub Zmień GeoTrace</string>
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->

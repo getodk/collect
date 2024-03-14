@@ -65,25 +65,25 @@ public class GeoShapeWidgetTest {
     @Test
     public void whenPromptIsReadOnlyAndDoesNotHaveAnswer_geoButtonIsNotDisplayed() {
         GeoShapeWidget widget = createWidget(promptWithReadOnly());
-        assertEquals(widget.binding.simpleButton.getVisibility(), View.GONE);
+        assertEquals(widget.binding.getPolygonButton.getVisibility(), View.GONE);
     }
 
     @Test
     public void whenPromptIsReadOnlyAndHasAnswer_viewGeoShapeButtonIsShown() {
         GeoShapeWidget widget = createWidget(promptWithReadOnlyAndAnswer(new StringData(answer)));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.geoshape_view_read_only));
+        assertEquals(widget.binding.getPolygonButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_polygon));
     }
 
     @Test
     public void whenPromptIsNotReadOnlyAndDoesNotHaveAnswer_startGeoShapeButtonIsShown() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_shape));
+        assertEquals(widget.binding.getPolygonButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_polygon));
     }
 
     @Test
     public void whenPromptIsNotReadOnlyAndHasAnswer_viewOrChangeGeoShapeButtonIsShown() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.geoshape_view_change_location));
+        assertEquals(widget.binding.getPolygonButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_polygon));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class GeoShapeWidgetTest {
         widget.clearAnswer();
 
         assertEquals(widget.binding.geoAnswerText.getText(), "");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_shape));
+        assertEquals(widget.binding.getPolygonButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_polygon));
     }
 
     @Test
@@ -110,10 +110,10 @@ public class GeoShapeWidgetTest {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
 
         widget.setOnLongClickListener(listener);
-        widget.binding.simpleButton.performLongClick();
+        widget.binding.getPolygonButton.performLongClick();
         widget.binding.geoAnswerText.performLongClick();
 
-        verify(listener).onLongClick(widget.binding.simpleButton);
+        verify(listener).onLongClick(widget.binding.getPolygonButton);
         verify(listener).onLongClick(widget.binding.geoAnswerText);
     }
 
@@ -135,14 +135,14 @@ public class GeoShapeWidgetTest {
     public void setData_whenDataIsNull_updatesButtonLabel() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         widget.setData("");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_shape));
+        assertEquals(widget.binding.getPolygonButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_polygon));
     }
 
     @Test
     public void setData_whenDataIsNotNull_updatesButtonLabel() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(null));
         widget.setData(answer);
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.geoshape_view_change_location));
+        assertEquals(widget.binding.getPolygonButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_polygon));
     }
 
     @Test
@@ -158,7 +158,7 @@ public class GeoShapeWidgetTest {
     public void buttonClick_requestsGeoShape() {
         FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
         GeoShapeWidget widget = createWidget(prompt);
-        widget.binding.simpleButton.performClick();
+        widget.binding.getPolygonButton.performClick();
         verify(geoDataRequester).requestGeoShape(prompt, answer, waitingForDataRegistry);
     }
 
@@ -167,7 +167,7 @@ public class GeoShapeWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
         GeoShapeWidget widget = createWidget(prompt);
         widget.clearAnswer();
-        widget.binding.simpleButton.performClick();
+        widget.binding.getPolygonButton.performClick();
 
         verify(geoDataRequester).requestGeoShape(prompt, "", waitingForDataRegistry);
     }
@@ -177,7 +177,7 @@ public class GeoShapeWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoShapeWidget widget = createWidget(prompt);
         widget.setData(answer);
-        widget.binding.simpleButton.performClick();
+        widget.binding.getPolygonButton.performClick();
 
         verify(geoDataRequester).requestGeoShape(prompt, answer, waitingForDataRegistry);
     }

@@ -332,12 +332,9 @@
   <string name="carto_map_style_dark_matter">Dark Matter</string>
   <string name="reference_layer">రిఫరెన్స్ లేయర్</string>
   <string name="layer_data_file">లేయర్ డేటా ఫైల్ </string>
-  <string name="view_change_location">లొకేషన్ చూడండి లేదా మార్చండి</string>
-  <string name="change_location">లొకేషన్ మార్చండి</string>
   <string name="record_geopoint">ఒక పాయింట్ రికార్డ్ చేయండి</string>
   <string name="location_accuracy">%1$s ఖచ్చితత్వం</string>
   <string name="location_provider">%s ప్రదేశ అనుమతులు</string>
-  <string name="get_location">లొకేషన్ రికార్డు చెయ్యండి </string>
   <string name="provider_disabled_error">క్షమించండి, లొకేషన్ ప్రొవైడర్లు డిసేబుల్ చెయ్యబడ్డాయి!</string>
   <string name="gps_result">అక్షాంశం: %1$s\n రేఖాంశం:%2$s \n ఎత్తు: %3$sm\n ఖచ్చితత్వం: %4$sm</string>
   <string name="google_play_services_not_available">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది, కానీ గూగుల్ ప్లే సేవలు అందుబాటులో లేవు.</string>
@@ -349,10 +346,6 @@
   <string name="background_location_disabled">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది కాని ట్రాకింగ్ నిలిపివేయబడింది. దయచేసి పై మెను %1$sలో ప్రారంభించండి.</string>
   <string name="background_location_enabled">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేస్తుంది. పై మెను%1$sలో మీరు ట్రాకింగ్‌ను నిలిపివేయవచ్చు.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">జియోపాయింట్ ప్రారంభించండి</string>
-  <string name="geopoint_view_read_only">జియోపాయింట్ చూడండి</string>
-  <string name="get_shape">జియోషాప్ ప్రారంభించండి</string>
-  <string name="get_trace">జియోట్రేస్ ప్రారంభించండి</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -407,8 +400,6 @@
   <string name="geopoint_instruction">గుర్తు ఉంచడానికి ఎక్కువసేపు నొక్కండి లేదా మార్కర్ బటన్‌ను నొక్కండి.</string>
   <string name="geopoint_no_draggable_instruction">మార్కర్ బటన్ యాడ్ చెయ్యడానికి ఇక్కడ నొక్కండి.</string>
   <string name="discard">విస్మరించండి</string>
-  <string name="geoshape_view_change_location">జియో షేప్ చూడండి లేదా మార్చండి</string>
-  <string name="geotrace_view_change_location">జియోట్రేస్‌ను చూడండి లేదా మార్చండి</string>
   <!--Name of an action button-->
   <string name="view_data">సేవ్ చెయ్యబడిన ఫారంలు చూడండి</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->

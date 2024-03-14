@@ -355,12 +355,9 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="carto_map_style_dark_matter">Ibibazo bidasobanutse cg byijimye.</string>
   <string name="reference_layer">Indangakitegererezo.</string>
   <string name="layer_data_file">Ububiko bw\'amakuru shingiro.</string>
-  <string name="view_change_location">Kora igenzura cyangwa uhindure ujye ahandi</string>
-  <string name="change_location">Hindura ujye ahandi</string>
   <string name="record_geopoint">Irabika amakuru</string>
   <string name="location_accuracy">Birizewe: %1$s m</string>
   <string name="location_provider">Igitanga aho uri ubu: %s</string>
-  <string name="get_location">Fata amakuru y\'ahantu</string>
   <string name="provider_disabled_error">Ihangane, ibituma amakuru y\'ahantu afatwa birafunze</string>
   <string name="gps_result">Ubujy\'ejuru: %1$s \nUmurambararo: %2$s \nUbutumburuke: %3$s m\n Byizewe: %4$s m</string>
   <string name="google_play_services_not_available">Iyi form irashaka kugenzura aho uherereye, ariko Google Play Services ntabwo iboneka</string>
@@ -372,12 +369,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="background_location_disabled">Iyi form ishaka kwerekana aho uherereye ariko ntiwabifunguye. Yishyireho 1%1$s murutonde ruri hejuru.</string>
   <string name="background_location_enabled">Iyi form iri kwerekana aho uherereye.Ushobobora kubihagarika muri 1%1$s unyuze ku rutonde ruri hejuru aha</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">Reba amakuru y\'ahantu</string>
-  <string name="geopoint_view_read_only">Reba amakuru y\'ahantu</string>
-  <string name="geoshape_view_read_only">Garagaza imiterere yahantu.</string>
-  <string name="geotrace_view_read_only">Garagaza ikimenyetso kiranga ahantu.</string>
-  <string name="get_shape">Tangira cg Shushanya imiterere yahantu.</string>
-  <string name="get_trace">Tangira cg Shakisha ibimenyetso biranga ahantu.</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -436,8 +427,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="geopoint_instruction">Kanda umare umwanya kugirango ushyiremo mark cg ukore kuri buto ya marker</string>
   <string name="geopoint_no_draggable_instruction">Kanda hano wemeze.</string>
   <string name="discard">Kuraho cg Jugunya.</string>
-  <string name="geoshape_view_change_location">Garagaza cg Uhindure imiterere yahantu.</string>
-  <string name="geotrace_view_change_location">Garagaza cg Uhindure ikimenyetso ndangahantu.</string>
   <!--Name of an action button-->
   <string name="view_data">Reba Form Wabitse </string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->

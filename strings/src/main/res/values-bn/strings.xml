@@ -151,7 +151,6 @@
   <string name="terrain">ভূখণ্ড</string>
   <string name="hybrid">হাইব্রিড</string>
   <string name="satellite">উপগ্রহ</string>
-  <string name="get_location">জিপিএস স্থান চিন্হিত করুন</string>
   <string name="provider_disabled_error">দুঃখিত, অবস্থান প্রদানকারী সেবা বন্ধ আছে!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->

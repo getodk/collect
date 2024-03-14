@@ -210,18 +210,12 @@
   <string name="hybrid">Hübriid</string>
   <string name="satellite">Satelliit</string>
   <string name="google_play_services_error_occured">Puudub ligipääs Google Maps-ile. Veenduge, et Google Play teenused on paigaldatud.</string>
-  <string name="view_change_location">Vaata või muuda asukohta</string>
-  <string name="get_location">Salvesta asukoht</string>
   <string name="provider_disabled_error">Kahjuks on asukoha küsimine maha keeratud!</string>
   <string name="gps_result">Laiuskraad: %1$s\nPikkuskraad: %2$s\nKõrgus: %3$sm\nTäpsusaste: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->
   <!--Displayed in the form filling menu when a form has background location disabled-->
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">Loo asukohapunkt</string>
-  <string name="geopoint_view_read_only">Vaata asukohapunkti</string>
-  <string name="get_shape">Loo polügoon</string>
-  <string name="get_trace">Alusta rada</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -248,8 +242,6 @@
   <string name="geopoint_instruction">Markeri paigutamiseks tuleb teha pikk hoidmine või valida marker nupp.</string>
   <string name="geopoint_no_draggable_instruction">Puuduta lisa marke nuppu.</string>
   <string name="discard">Loobu</string>
-  <string name="geoshape_view_change_location">Vaata või muuda polügooni</string>
-  <string name="geotrace_view_change_location">Vaata või muuda rada</string>
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
