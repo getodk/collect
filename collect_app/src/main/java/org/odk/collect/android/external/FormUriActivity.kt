@@ -87,7 +87,9 @@ class FormUriActivity : ComponentActivity() {
                     contentResolver,
                     formsRepositoryProvider,
                     instanceRepositoryProvider,
-                    resources
+                    savepointsRepositoryProvider,
+                    resources,
+                    savepointsFinder
                 ) as T
             }
         }
@@ -98,37 +100,17 @@ class FormUriActivity : ComponentActivity() {
         DaggerUtils.getComponent(this).inject(this)
         setContentView(R.layout.circular_progress_indicator)
 
-        formUriViewModel.error.observe(this) {
-            if (it != null) {
-                displayErrorDialog(it)
-            } else if (savedInstanceState?.getBoolean(FORM_FILLING_ALREADY_STARTED) != true) {
-                scheduler.immediate(
-                    background = {
-                        getSavePoint()
-                    },
-                    foreground = { savePoint ->
-                        if (savePoint == null) {
-                            startForm()
-                        } else {
-                            displaySavePointRecoveryDialog(savePoint)
-                        }
-                    }
-                )
+        if (savedInstanceState?.getBoolean(FORM_FILLING_ALREADY_STARTED) == true) {
+            return
+        }
+
+        formUriViewModel.formInspectionResult.observe(this) {
+            when (it) {
+                is FormInspectionResult.Error -> displayErrorDialog(it.error)
+                is FormInspectionResult.Savepoint -> displaySavePointRecoveryDialog(it.savepoint)
+                is FormInspectionResult.Valid -> startForm()
             }
         }
-    }
-
-    private fun getSavePoint(): Savepoint? {
-        val uri = intent.data!!
-        val uriMimeType = contentResolver.getType(uri)!!
-
-        return savepointsFinder.getSavepoint(
-            uri,
-            uriMimeType,
-            formsRepositoryProvider.get(),
-            instanceRepositoryProvider.get(),
-            savepointsRepositoryProvider.get()
-        )
     }
 
     private fun displaySavePointRecoveryDialog(savepoint: Savepoint) {
@@ -216,20 +198,32 @@ private class FormUriViewModel(
     private val contentResolver: ContentResolver,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
-    private val resources: Resources
+    private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
+    private val resources: Resources,
+    private val savepointsFinder: SavepointFinder,
 ) : ViewModel() {
 
-    private val _error = MutableLiveData<String?>()
-    val error: LiveData<String?> = _error
+    private val _formInspectionResult = MutableLiveData<FormInspectionResult>()
+    val formInspectionResult: LiveData<FormInspectionResult> = _formInspectionResult
 
     init {
         scheduler.immediate(
             background = {
-                assertProjectListNotEmpty() ?: assertCurrentProjectUsed() ?: assertValidUri()
-                    ?: assertFormExists() ?: assertFormNotEncrypted()
+                val error = assertProjectListNotEmpty()
+                    ?: assertCurrentProjectUsed()
+                    ?: assertValidUri()
+                    ?: assertFormExists()
+                    ?: assertFormNotEncrypted()
+                if (error != null) {
+                    FormInspectionResult.Error(error)
+                } else {
+                    getSavePoint()?.let {
+                        FormInspectionResult.Savepoint(it)
+                    } ?: FormInspectionResult.Valid
+                }
             },
             foreground = {
-                _error.value = it
+                _formInspectionResult.value = it
             }
         )
     }
@@ -333,4 +327,22 @@ private class FormUriViewModel(
             null
         }
     }
+
+    private fun getSavePoint(): Savepoint? {
+        val uriMimeType = contentResolver.getType(uri!!)!!
+
+        return savepointsFinder.getSavepoint(
+            uri,
+            uriMimeType,
+            formsRepositoryProvider.get(),
+            instancesRepositoryProvider.get(),
+            savepointsRepositoryProvider.get()
+        )
+    }
+}
+
+private sealed class FormInspectionResult {
+    data class Error(val error: String) : FormInspectionResult()
+    data class Savepoint(val savepoint: org.odk.collect.forms.savepoints.Savepoint) : FormInspectionResult()
+    data object Valid : FormInspectionResult()
 }
