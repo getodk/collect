@@ -98,6 +98,8 @@ Downloads
 |------------- |------------------------------------------------------------- |-----------|
 |Server        |https://smap-master.s3.amazonaws.com/smap_24_03_04_719.tgz    |23.03.04   |
 
+[Server Administration Documentation](https://www.smap.com.au/docs/server-admin.html)
+
 Acknowledgements
 ----------------
 
