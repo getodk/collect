@@ -49,7 +49,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
     private fun writeEntities(entities: MutableList<Entity>) {
         StrictMode.noteSlowCall("Writing to JSON file")
 
-        val json = Gson().toJson(entities)
+        val json = Gson().toJson(entities.map { it.toJson() })
         entitiesFile.writeText(json)
     }
 
@@ -61,9 +61,10 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             entitiesFile.createNewFile()
         }
 
-        val typeToken = TypeToken.getParameterized(MutableList::class.java, Entity::class.java)
-        return Gson().fromJson(entitiesFile.readText(), typeToken.type)
-            ?: mutableListOf()
+        val typeToken = TypeToken.getParameterized(MutableList::class.java, JsonEntity::class.java)
+        return (Gson().fromJson<MutableList<JsonEntity>>(entitiesFile.readText(), typeToken.type) ?: emptyList())
+            .map { it.toEntity() }
+            .toMutableList()
     }
 
     private fun mergeProperties(
@@ -76,5 +77,33 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         }
 
         return existingProperties.map { Pair(it.key, it.value) }
+    }
+
+    private data class JsonEntity(
+        val dataset: String,
+        val id: String,
+        val label: String?,
+        val version: Int = 1,
+        val properties: Map<String, String>
+    )
+
+    private fun JsonEntity.toEntity(): Entity {
+        return Entity(
+            this.dataset,
+            this.id,
+            this.label,
+            this.version,
+            this.properties.entries.map { Pair(it.key, it.value) }
+        )
+    }
+
+    private fun Entity.toJson(): JsonEntity {
+        return JsonEntity(
+            this.dataset,
+            this.id,
+            this.label,
+            this.version,
+            this.properties.toMap()
+        )
     }
 }
