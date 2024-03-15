@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Widget.Collect.Button.QuestionWidget" parent="Widget.Material3.Button">
+    <style name="Widget.Collect.Button.Icon.QuestionWidget" parent="Widget.Material3.Button.Icon">
         <item name="android:paddingTop">@dimen/margin_small</item>
         <item name="android:paddingBottom">@dimen/margin_small</item>
         <item name="android:textAppearance">?textAppearanceBodyLarge</item>
+        <item name="iconGravity">textStart</item>
     </style>
 
     <style name="Widget.Collect.Button" parent="Widget.Material3.Button">

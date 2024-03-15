@@ -6,7 +6,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/launch_external_app_button"
-        style="?widgetButtonQuestionWidgetStyle"
+        style="?widgetButtonIconQuestionWidgetStyle"
         android:text="@string/launch_app"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

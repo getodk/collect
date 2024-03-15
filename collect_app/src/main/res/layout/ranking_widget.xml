@@ -7,7 +7,7 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/rank_items_button"
-        style="?widgetButtonQuestionWidgetStyle"
+        style="?widgetButtonIconQuestionWidgetStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/rank_items"
