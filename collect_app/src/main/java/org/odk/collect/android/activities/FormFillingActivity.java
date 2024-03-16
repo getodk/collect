@@ -156,6 +156,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.ControllableLifecyleOwner;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -545,6 +546,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
         identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
             if (isFormEntryCancelled) {
+                identityPromptViewModel.exit();
                 exit();
             }
         });
