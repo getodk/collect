@@ -121,7 +121,15 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name=".activities.FormFillingActivity"
             android:theme="@style/Theme.Collect.FormEntry"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <data android:scheme="odkcollect" android:host="form" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name="org.odk.collect.draw.DrawActivity"
             android:screenOrientation="landscape" />

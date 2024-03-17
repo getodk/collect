@@ -29,6 +29,8 @@ import com.opencsv.exceptions.CsvValidationException;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.data.SelectOneData;
+import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.model.instance.InstanceInitializationFactory;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
@@ -42,6 +44,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dynamicpreload.ExternalAnswerResolver;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 import org.odk.collect.android.dynamicpreload.ExternalDataUseCases;
+import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
@@ -178,6 +181,15 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
              * explicitly saved instance is edited via edit-saved-form.
              */
             instancePath = loadSavePoint();
+        } else if (uri.getScheme().equals("odkcollect") && uri.getHost().equals("form")) {
+            // Launch a form from a browsable web link in the format: odkcollect://form/<form_id>
+            String formId = uri.getPathSegments().get(0);
+            List<Form> forms = new FormsRepositoryProvider(Collect.getInstance()).get().getAllByFormId(formId);
+            if (forms.size() == 0) {
+                Timber.e(new Error("Form not found for URL: " + uri));
+                return null;
+            }
+            form = forms.get(0);
         }
 
         if (form.getFormFilePath() == null) {
@@ -270,8 +282,35 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
                 fc.setIndexWaitingForData(idx);
             }
         }
+
+        preselectEntity(fc, uri);
+
         data = new FECWrapper(fc, usedSavepoint);
         return data;
+    }
+
+    private void preselectEntity(FormController fc, Uri uri) {
+        FormIndex saved = fc.getFormIndex();
+        try {
+            for (int event = fc.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+                 event != FormEntryController.EVENT_END_OF_FORM;
+                event = fc.stepToNextEvent(false)) {
+                FormIndex index = fc.getFormIndex();
+                TreeReference ref = fc.getFormDef().getChildInstanceRef(index);
+                if (ref != null) {
+                    String value = uri.getQueryParameter(ref.getNameLast());
+                    if (value != null) {
+                        try {
+                            fc.answerQuestion(index, new SelectOneData(new Selection(value)));
+                        } catch (JavaRosaException e) {
+                            Timber.w("Could not preselect answer " + value + " for question " + ref);
+                        }
+                    }
+                }
+            }
+        } finally {
+            fc.jumpToIndex(saved);
+        }
     }
 
     private static void unzipMediaFiles(File formMediaDir) {
