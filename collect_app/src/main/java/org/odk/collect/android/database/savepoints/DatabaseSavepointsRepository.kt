@@ -1,5 +1,6 @@
 package org.odk.collect.android.database.savepoints
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteQueryBuilder
@@ -8,12 +9,11 @@ import org.odk.collect.android.database.DatabaseConnection
 import org.odk.collect.android.database.DatabaseConstants
 import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_DATABASE_NAME
 import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_DATABASE_VERSION
-import org.odk.collect.android.database.savepoints.DatabaseSavepointObjectMapper.getSavepointFromCurrentCursorPosition
-import org.odk.collect.android.database.savepoints.DatabaseSavepointObjectMapper.getValuesFromSavepoint
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.FORM_DB_ID
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.INSTANCE_DB_ID
 import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.forms.savepoints.SavepointsRepository
+import org.odk.collect.shared.PathUtils
 import java.io.File
 
 class DatabaseSavepointsRepository(
@@ -116,5 +116,38 @@ class DatabaseSavepointsRepository(
             }
         }
         return savepoints
+    }
+
+    private fun getSavepointFromCurrentCursorPosition(
+        cursor: Cursor,
+        cachePath: String,
+        instancesPath: String
+    ): Savepoint {
+        val formDbIdColumnIndex = cursor.getColumnIndex(FORM_DB_ID)
+        val instanceDbIdColumnIndex = cursor.getColumnIndex(INSTANCE_DB_ID)
+        val savepointFilePathColumnIndex = cursor.getColumnIndex(DatabaseSavepointsColumns.SAVEPOINT_FILE_PATH)
+        val instanceDirPathColumnIndex = cursor.getColumnIndex(DatabaseSavepointsColumns.INSTANCE_FILE_PATH)
+
+        return Savepoint(
+            cursor.getLong(formDbIdColumnIndex),
+            if (cursor.isNull(instanceDbIdColumnIndex)) null else cursor.getLong(instanceDbIdColumnIndex),
+            PathUtils.getAbsoluteFilePath(
+                cachePath,
+                cursor.getString(savepointFilePathColumnIndex)
+            ),
+            PathUtils.getAbsoluteFilePath(
+                instancesPath,
+                cursor.getString(instanceDirPathColumnIndex)
+            )
+        )
+    }
+
+    private fun getValuesFromSavepoint(savepoint: Savepoint, cachePath: String, instancesPath: String): ContentValues {
+        return ContentValues().apply {
+            put(FORM_DB_ID, savepoint.formDbId)
+            put(INSTANCE_DB_ID, savepoint.instanceDbId)
+            put(DatabaseSavepointsColumns.SAVEPOINT_FILE_PATH, PathUtils.getRelativeFilePath(cachePath, savepoint.savepointFilePath))
+            put(DatabaseSavepointsColumns.INSTANCE_FILE_PATH, PathUtils.getRelativeFilePath(instancesPath, savepoint.instanceFilePath))
+        }
     }
 }
