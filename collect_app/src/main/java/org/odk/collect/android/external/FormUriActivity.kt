@@ -108,7 +108,7 @@ class FormUriActivity : ComponentActivity() {
             when (it) {
                 is FormInspectionResult.Error -> displayErrorDialog(it.error)
                 is FormInspectionResult.Savepoint -> displaySavePointRecoveryDialog(it.savepoint)
-                is FormInspectionResult.Valid -> startForm()
+                is FormInspectionResult.Valid -> startForm(intent.data!!)
             }
         }
     }
@@ -121,9 +121,10 @@ class FormUriActivity : ComponentActivity() {
                 val uri = intent.data!!
                 val uriMimeType = contentResolver.getType(uri)!!
                 if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
-                    intent.data = FormsContract.getUri(projectsDataService.getCurrentProject().uuid, savepoint.formDbId)
+                    startForm(FormsContract.getUri(projectsDataService.getCurrentProject().uuid, savepoint.formDbId))
+                } else {
+                    startForm(intent.data!!)
                 }
-                startForm()
             }
             .setNegativeButton(string.do_not_recover) { _, _ ->
                 scheduler.immediate(
@@ -131,7 +132,7 @@ class FormUriActivity : ComponentActivity() {
                         savepointsRepositoryProvider.get().delete(savepoint.formDbId, savepoint.instanceDbId)
                     },
                     foreground = {
-                        startForm()
+                        startForm(intent.data!!)
                     }
                 )
             }
@@ -140,12 +141,12 @@ class FormUriActivity : ComponentActivity() {
             .show()
     }
 
-    private fun startForm() {
+    private fun startForm(uri: Uri) {
         formFillingAlreadyStarted = true
         openForm.launch(
             Intent(this, FormFillingActivity::class.java).apply {
                 action = intent.action
-                data = intent.data
+                data = uri
                 intent.extras?.let { sourceExtras -> putExtras(sourceExtras) }
                 if (!canFormBeEdited()) {
                     putExtra(
