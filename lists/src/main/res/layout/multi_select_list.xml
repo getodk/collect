@@ -11,7 +11,7 @@
         app:layout_constraintBottom_toTopOf="@id/buttons"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <org.odk.collect.androidshared.ui.EmptyListView
+    <org.odk.collect.lists.EmptyListView
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,7 +19,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/buttons"
-        android:name="org.odk.collect.androidshared.ui.multiselect.MultiSelectControlsFragment"
+        android:name="org.odk.collect.lists.multiselect.MultiSelectControlsFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

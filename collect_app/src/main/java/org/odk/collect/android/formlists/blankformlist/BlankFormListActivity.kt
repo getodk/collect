@@ -16,8 +16,6 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
 import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
-import org.odk.collect.androidshared.ui.EmptyListView
-import org.odk.collect.androidshared.ui.RecyclerViewUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
@@ -57,7 +55,7 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
         val list = findViewById<RecyclerView>(R.id.form_list)
         list.layoutManager = LinearLayoutManager(this)
-        list.addItemDecoration(RecyclerViewUtils.verticalLineDivider(this))
+        list.addItemDecoration(org.odk.collect.lists.RecyclerViewUtils.verticalLineDivider(this))
         list.adapter = adapter
 
         initObservers()
@@ -105,7 +103,7 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
             findViewById<RecyclerView>(R.id.form_list).visibility =
                 if (forms.isEmpty()) View.GONE else View.VISIBLE
 
-            findViewById<EmptyListView>(R.id.empty_list_message).visibility =
+            findViewById<org.odk.collect.lists.EmptyListView>(R.id.empty_list_message).visibility =
                 if (forms.isEmpty()) View.VISIBLE else View.GONE
 
             adapter.setData(forms)

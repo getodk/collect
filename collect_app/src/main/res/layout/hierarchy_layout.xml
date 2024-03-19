@@ -91,7 +91,7 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <org.odk.collect.androidshared.ui.EmptyListView
+    <org.odk.collect.lists.EmptyListView
         android:id="@android:id/empty"
         android:layout_width="0dp"
         android:layout_height="0dp"

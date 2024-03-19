@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.ui.multiselect
+package org.odk.collect.lists.multiselect
 
 import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
@@ -12,11 +12,11 @@ import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.androidshared.R
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
-import org.odk.collect.androidshared.ui.multiselect.support.TextAndCheckBoxView
-import org.odk.collect.androidshared.ui.multiselect.support.TextAndCheckBoxViewHolder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
+import org.odk.collect.lists.R
+import org.odk.collect.lists.multiselect.support.TextAndCheckBoxView
+import org.odk.collect.lists.multiselect.support.TextAndCheckBoxViewHolder
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.ViewActions.clickOnItemWith
 import org.odk.collect.testshared.ViewMatchers.recyclerView

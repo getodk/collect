@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.ui.multiselect
+package org.odk.collect.lists.multiselect
 
 import android.content.Context
 import android.os.Bundle
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
-import org.odk.collect.androidshared.databinding.MultiSelectControlsLayoutBinding
+import org.odk.collect.lists.databinding.MultiSelectControlsLayoutBinding
 
 /**
  * A control UI for performing "select all" and "clear all" on multi select lists using

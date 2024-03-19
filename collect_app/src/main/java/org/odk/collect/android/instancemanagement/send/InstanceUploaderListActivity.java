@@ -20,7 +20,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
-import static org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModelKt.updateSelectAll;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -65,9 +64,9 @@ import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.androidshared.ui.MenuExtKt;
-import org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModel;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
+import org.odk.collect.lists.multiselect.MultiSelectViewModel;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.strings.localization.LocalizedActivity;
@@ -151,7 +150,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         multiSelectViewModel = new ViewModelProvider(this).get(MultiSelectViewModel.class);
         multiSelectViewModel.getSelected().observe(this, ids -> {
             binding.uploadButton.setEnabled(!ids.isEmpty());
-            allSelected = updateSelectAll(binding.toggleButton, listAdapter.getCount(), ids.size());
+            allSelected = org.odk.collect.lists.multiselect.MultiSelectViewModelKt.updateSelectAll(binding.toggleButton, listAdapter.getCount(), ids.size());
 
             listAdapter.setSelected(ids);
         });

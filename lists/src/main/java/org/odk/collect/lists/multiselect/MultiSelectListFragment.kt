@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.ui.multiselect
+package org.odk.collect.lists.multiselect
 
 import android.content.Context
 import android.os.Bundle
@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.odk.collect.androidshared.R.layout
-import org.odk.collect.androidshared.databinding.MultiSelectListBinding
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.lists.R
+import org.odk.collect.lists.databinding.MultiSelectListBinding
 
 class MultiSelectListFragment<T, VH : MultiSelectAdapter.ViewHolder<T>>(
     private val actionText: String,
@@ -46,7 +46,7 @@ class MultiSelectListFragment<T, VH : MultiSelectAdapter.ViewHolder<T>>(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(layout.multi_select_list, container, false)
+        return inflater.inflate(R.layout.multi_select_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

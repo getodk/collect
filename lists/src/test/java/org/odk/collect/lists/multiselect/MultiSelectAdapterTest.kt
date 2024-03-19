@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.ui.multiselect
+package org.odk.collect.lists.multiselect
 
 import android.content.Context
 import android.widget.FrameLayout
@@ -11,7 +11,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.androidshared.ui.multiselect.support.TextAndCheckBoxViewHolder
+import org.odk.collect.lists.multiselect.support.TextAndCheckBoxViewHolder
 
 @RunWith(AndroidJUnit4::class)
 class MultiSelectAdapterTest {

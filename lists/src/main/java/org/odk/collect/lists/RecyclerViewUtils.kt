@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.ui
+package org.odk.collect.lists
 
 import android.content.Context
 import androidx.core.content.ContextCompat
