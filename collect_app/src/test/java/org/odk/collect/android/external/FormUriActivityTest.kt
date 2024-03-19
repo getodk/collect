@@ -46,6 +46,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.async.Scheduler
@@ -54,6 +55,7 @@ import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
+import org.odk.collect.formstest.InMemSavepointsRepository
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
@@ -82,6 +84,11 @@ class FormUriActivityTest {
 
     private val settingsProvider = InMemSettingsProvider().apply {
         getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
+    }
+
+    private val savepointsRepository = InMemSavepointsRepository()
+    private val savepointsRepositoryProvider = mock<SavepointsRepositoryProvider>().apply {
+        whenever(get()).thenReturn(savepointsRepository)
     }
 
     @get:Rule
@@ -136,6 +143,10 @@ class FormUriActivityTest {
 
             override fun providesSavepointFinder(): SavepointFinder {
                 return savepointFinder
+            }
+
+            override fun providesSavepointsRepositoryProvider(context: Context?, storagePathProvider: StoragePathProvider?): SavepointsRepositoryProvider {
+                return savepointsRepositoryProvider
             }
         })
     }
@@ -963,6 +974,71 @@ class FormUriActivityTest {
         onView(withText(org.odk.collect.strings.R.string.do_not_recover)).perform(click())
         fakeScheduler.flush()
         assertStartBlankFormIntent(project.uuid, formV2.dbId)
+    }
+
+    @Test
+    fun `An existing savepoint for a blank form should be removed when a user declines`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
+        val savepointFile = TempFiles.createTempFile()
+        val savepoint = Savepoint(form.dbId, null, savepointFile.absolutePath, TempFiles.createTempFile().absolutePath)
+        savepointsRepository.save(savepoint)
+
+        whenever(savepointFinder.getSavepoint(any(), any(), any(), any(), any())).thenReturn(savepoint)
+
+        launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
+        fakeScheduler.flush()
+
+        assertSavepointRecoveryDialog(savepointFile)
+        onView(withText(org.odk.collect.strings.R.string.do_not_recover)).perform(click())
+        fakeScheduler.flush()
+        assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true))
+    }
+
+    @Test
+    fun `An existing savepoint for a saved form should be removed when a user declines`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .build()
+        )
+
+        val savepointFile = TempFiles.createTempFile()
+        val savepoint = Savepoint(form.dbId, instance.dbId, savepointFile.absolutePath, TempFiles.createTempFile().absolutePath)
+        savepointsRepository.save(savepoint)
+
+        whenever(savepointFinder.getSavepoint(any(), any(), any(), any(), any())).thenReturn(savepoint)
+
+        launcherRule.launch<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        fakeScheduler.flush()
+
+        assertSavepointRecoveryDialog(savepointFile)
+        onView(withText(org.odk.collect.strings.R.string.do_not_recover)).perform(click())
+        fakeScheduler.flush()
+        assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true))
     }
 
     private fun getBlankFormIntent(projectId: String?, dbId: Long) =
