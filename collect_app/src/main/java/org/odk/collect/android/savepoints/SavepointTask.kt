@@ -1,11 +1,11 @@
 package org.odk.collect.android.savepoints
 
 import org.odk.collect.android.javarosawrapper.FormController
-import org.odk.collect.android.tasks.SaveFormToDisk
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.SchedulerAsyncTaskMimic
 import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.forms.savepoints.SavepointsRepository
+import org.odk.collect.shared.files.FileUtils
 import timber.log.Timber
 import java.io.File
 
@@ -32,7 +32,7 @@ class SavepointTask(
             val savepoint = Savepoint(formDbId, instanceDbId, savepointFile.absolutePath, formController.getInstanceFile()!!.absolutePath)
 
             if (priority == lastPriorityUsed) {
-                SaveFormToDisk.writeFile(formController.getFilledInFormXml(), savepointFile.absolutePath)
+                FileUtils.saveToFile(formController.getFilledInFormXml().payloadStream, savepointFile.absolutePath)
                 savepointsRepository.save(savepoint)
             }
 

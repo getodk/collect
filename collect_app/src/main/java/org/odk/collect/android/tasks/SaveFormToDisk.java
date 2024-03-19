@@ -63,8 +63,6 @@ import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import timber.log.Timber;
@@ -493,35 +491,6 @@ public class SaveFormToDisk {
      * Writes payload contents to the disk.
      */
     public static void writeFile(ByteArrayPayload payload, String path) throws IOException {
-        File file = new File(path);
-        if (file.exists() && !file.delete()) {
-            throw new IOException("Cannot overwrite " + path + ". Perhaps the file is locked?");
-        }
-
-        // create data stream
-        InputStream is = payload.getPayloadStream();
-        int len = (int) payload.getLength();
-
-        // read from data stream
-        byte[] data = new byte[len];
-        int read = is.read(data, 0, len);
-        if (read > 0) {
-            // Make sure the directory path to this file exists.
-            file.getParentFile().mkdirs();
-            // write xml file
-            RandomAccessFile randomAccessFile = null;
-            try {
-                randomAccessFile = new RandomAccessFile(file, "rws");
-                randomAccessFile.write(data);
-            } finally {
-                if (randomAccessFile != null) {
-                    try {
-                        randomAccessFile.close();
-                    } catch (IOException e) {
-                        Timber.e(e, "Error closing RandomAccessFile: %s", path);
-                    }
-                }
-            }
-        }
+        org.odk.collect.shared.files.FileUtils.saveToFile(payload.getPayloadStream(), path);
     }
 }
