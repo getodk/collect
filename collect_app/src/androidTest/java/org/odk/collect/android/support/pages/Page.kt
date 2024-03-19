@@ -35,6 +35,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withSubstring
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiSelector
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
@@ -495,11 +496,21 @@ abstract class Page<T : Page<T>> {
     }
 
     fun <D : Page<D>> killAndReopenApp(rule: ActivityScenarioLauncherRule, destination: D): D {
-        CollectHelpers.killApp()
+        killApp()
 
         // reopen
         rule.launch<Activity>(getLaunchIntent())
         return destination.assertOnPage()
+    }
+
+    fun killApp() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.pressRecentApps()
+        device
+            .findObject(UiSelector().descriptionContains("Collect"))
+            .swipeUp(10).also {
+                CollectHelpers.simulateProcessRestart() // the process is not restarted automatically (probably to keep the test running) so we have simulate it
+            }
     }
 
     fun assertNoOptionsMenu(): T {

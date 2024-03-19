@@ -2,9 +2,6 @@ package org.odk.collect.android.support
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiSelector
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyComponent
@@ -21,16 +18,6 @@ object CollectHelpers {
             .build()
         application.component = testComponent
         return testComponent
-    }
-
-    fun killApp() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.pressRecentApps()
-        device
-            .findObject(UiSelector().descriptionContains("Collect"))
-            .swipeUp(10).also {
-                simulateProcessRestart() // the process is not restarted automatically (probably to keep the test running) so we have simulate it
-            }
     }
 
     fun simulateProcessRestart(appDependencyModule: AppDependencyModule? = null) {
