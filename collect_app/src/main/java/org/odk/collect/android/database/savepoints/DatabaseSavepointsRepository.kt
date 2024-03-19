@@ -35,13 +35,13 @@ class DatabaseSavepointsRepository(
 
         val cursor = if (instanceDbId == null) {
             queryAndReturnCursor(
-                selection = "$FORM_DB_ID=? AND $INSTANCE_DB_ID IS NULL",
-                selectionArgs = arrayOf(formDbId.toString())
+                "$FORM_DB_ID=? AND $INSTANCE_DB_ID IS NULL",
+                arrayOf(formDbId.toString())
             )
         } else {
             queryAndReturnCursor(
-                selection = "$FORM_DB_ID=? AND $INSTANCE_DB_ID=?",
-                selectionArgs = arrayOf(formDbId.toString(), instanceDbId.toString())
+                "$FORM_DB_ID=? AND $INSTANCE_DB_ID=?",
+                arrayOf(formDbId.toString(), instanceDbId.toString())
             )
         }
         val savepoints = getSavepointsFromCursor(cursor)
@@ -50,7 +50,7 @@ class DatabaseSavepointsRepository(
     }
 
     override fun getAll(): List<Savepoint> {
-        val cursor = queryAndReturnCursor(null, null)
+        val cursor = queryAndReturnCursor()
         return getSavepointsFromCursor(cursor)
     }
 
@@ -96,23 +96,12 @@ class DatabaseSavepointsRepository(
             .delete(DatabaseConstants.SAVEPOINTS_TABLE_NAME, null, null)
     }
 
-    private fun queryAndReturnCursor(
-        projectionMap: Map<String, String>? = null,
-        projection: Array<String>? = null,
-        selection: String? = null,
-        selectionArgs: Array<String?>? = null,
-        groupBy: String? = null,
-        having: String? = null,
-        sortOrder: String? = null
-    ): Cursor {
+    private fun queryAndReturnCursor(selection: String? = null, selectionArgs: Array<String?>? = null): Cursor {
         val readableDatabase = databaseConnection.readableDatabase
         val qb = SQLiteQueryBuilder().apply {
             tables = DatabaseConstants.SAVEPOINTS_TABLE_NAME
-            if (projectionMap != null) {
-                this.projectionMap = projectionMap
-            }
         }
-        return qb.query(readableDatabase, projection, selection, selectionArgs, groupBy, having, sortOrder)
+        return qb.query(readableDatabase, null, selection, selectionArgs, null, null, null)
     }
 
     private fun getSavepointsFromCursor(cursor: Cursor?): List<Savepoint> {
