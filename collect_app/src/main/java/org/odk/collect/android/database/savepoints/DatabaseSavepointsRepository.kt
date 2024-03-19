@@ -69,14 +69,16 @@ class DatabaseSavepointsRepository(
     override fun delete(formDbId: Long, instanceDbId: Long?) {
         val savepoint = get(formDbId, instanceDbId) ?: return
 
-        val selection: String
-        val selectionArgs: Array<String?>
-        if (savepoint.instanceDbId == null) {
-            selection = "$FORM_DB_ID=? AND $INSTANCE_DB_ID IS NULL"
-            selectionArgs = arrayOf(savepoint.formDbId.toString())
+        val (selection, selectionArgs) = if (savepoint.instanceDbId == null) {
+            Pair(
+                "$FORM_DB_ID=? AND $INSTANCE_DB_ID IS NULL",
+                arrayOf(savepoint.formDbId.toString())
+            )
         } else {
-            selection = "$FORM_DB_ID=? AND $INSTANCE_DB_ID=?"
-            selectionArgs = arrayOf(savepoint.formDbId.toString(), savepoint.instanceDbId.toString())
+            Pair(
+                "$FORM_DB_ID=? AND $INSTANCE_DB_ID=?",
+                arrayOf(savepoint.formDbId.toString(), savepoint.instanceDbId.toString())
+            )
         }
 
         databaseConnection
