@@ -112,7 +112,7 @@ class SavePointTest {
         rule.setUpProjectAndCopyForm("two-question-audit.xml", listOf("external_data_10.zip"))
             .fillNewForm("two-question-audit.xml", "Two Question")
             .answerQuestion("What is your name?", "Alexei")
-            .let { simulateProcessDeath(it) }
+            .killApp()
 
         // Start blank form and check save point is loaded
         rule.fillNewFormWithSavepoint("two-question-audit.xml")
@@ -153,7 +153,7 @@ class SavePointTest {
         rule.editForm("two-question-audit.xml", "Two Question")
             .clickGoToStart()
             .answerQuestion("What is your name?", "Alexei")
-            .let { simulateProcessDeath(it) }
+            .killApp()
 
         // Edit instance and check save point is loaded
         rule.editFormWithSavepoint("two-question-audit.xml")
@@ -195,7 +195,7 @@ class SavePointTest {
         // Create save point for blank form
         rule.fillNewForm("two-question-audit.xml", "Two Question")
             .answerQuestion("What is your name?", "Alexei")
-            .let { simulateProcessDeath(it) }
+            .killApp()
 
         // Check editing instance doesn't load save point
         rule.editForm("two-question-audit.xml", "Two Question")
@@ -219,7 +219,7 @@ class SavePointTest {
         rule.editForm("two-question-audit.xml", "Two Question")
             .clickGoToStart()
             .answerQuestion("What is your name?", "Alexei")
-            .let { simulateProcessDeath(it) }
+            .killApp()
 
         // Check starting blank form does not load save point
         rule.fillNewForm("two-question-audit.xml", "Two Question")
@@ -231,12 +231,5 @@ class SavePointTest {
      */
     private fun simulateBatteryDeath(): FormEntryActivityTestRule {
         return rule.simulateProcessRestart()
-    }
-
-    /**
-     * Simulate a "process death" case where an app in the background is killed
-     */
-    private fun simulateProcessDeath(page: FormEntryPage) {
-        page.killApp()
     }
 }
