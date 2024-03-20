@@ -127,14 +127,7 @@ class FormUriActivity : ComponentActivity() {
                 }
             }
             .setNegativeButton(string.do_not_recover) { _, _ ->
-                scheduler.immediate(
-                    background = {
-                        savepointsRepositoryProvider.get().delete(savepoint.formDbId, savepoint.instanceDbId)
-                    },
-                    foreground = {
-                        startForm(intent.data!!)
-                    }
-                )
+                formUriViewModel.deleteSavepoint(savepoint)
             }
             .setOnCancelListener { finish() }
             .create()
@@ -193,7 +186,7 @@ class FormUriActivity : ComponentActivity() {
 
 private class FormUriViewModel(
     private val uri: Uri?,
-    scheduler: Scheduler,
+    private val scheduler: Scheduler,
     private val projectsRepository: ProjectsRepository,
     private val projectsDataService: ProjectsDataService,
     private val contentResolver: ContentResolver,
@@ -338,6 +331,17 @@ private class FormUriViewModel(
             formsRepositoryProvider.get(),
             instancesRepositoryProvider.get(),
             savepointsRepositoryProvider.get()
+        )
+    }
+
+    fun deleteSavepoint(savepoint: Savepoint) {
+        scheduler.immediate(
+            background = {
+                savepointsRepositoryProvider.get().delete(savepoint.formDbId, savepoint.instanceDbId)
+            },
+            foreground = {
+                _formInspectionResult.value = FormInspectionResult.Valid
+            }
         )
     }
 }
