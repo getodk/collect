@@ -77,7 +77,7 @@ import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.projects.ProjectCreator;
 import org.odk.collect.android.projects.ProjectDeleter;
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory;
-import org.odk.collect.android.savepoints.SavepointFinder;
+import org.odk.collect.android.savepoints.SavepointUseCases;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -644,7 +644,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SavepointFinder providesSavepointFinder() {
-        return SavepointFinder.INSTANCE;
+    public SavepointUseCases providesSavepointFinder() {
+        return SavepointUseCases.INSTANCE;
     }
 }

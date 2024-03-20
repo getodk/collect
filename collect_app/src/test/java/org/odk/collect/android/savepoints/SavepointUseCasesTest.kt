@@ -18,7 +18,7 @@ import org.odk.collect.shared.TempFiles
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
-class SavepointFinderTest {
+class SavepointUseCasesTest {
     private var formV1: Form
     private var formV2: Form
 
@@ -78,7 +78,7 @@ class SavepointFinderTest {
         }
 
         assertThat(
-            SavepointFinder.getSavepoint(
+            SavepointUseCases.getSavepoint(
                 FormsContract.getUri("1", formV1.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -96,7 +96,7 @@ class SavepointFinderTest {
         savepointsRepository.save(savepoint)
 
         assertThat(
-            SavepointFinder.getSavepoint(
+            SavepointUseCases.getSavepoint(
                 FormsContract.getUri("1", formV1.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -118,7 +118,7 @@ class SavepointFinderTest {
         savepointsRepository.save(savepoint2)
 
         assertThat(
-            SavepointFinder.getSavepoint(
+            SavepointUseCases.getSavepoint(
                 FormsContract.getUri("1", formV1.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -136,7 +136,7 @@ class SavepointFinderTest {
         savepointsRepository.save(savepoint)
 
         assertThat(
-            SavepointFinder.getSavepoint(
+            SavepointUseCases.getSavepoint(
                 FormsContract.getUri("1", formV2.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -154,7 +154,7 @@ class SavepointFinderTest {
         savepointsRepository.save(savepoint)
 
         assertThat(
-            SavepointFinder.getSavepoint(
+            SavepointUseCases.getSavepoint(
                 FormsContract.getUri("1", formV2.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -176,7 +176,7 @@ class SavepointFinderTest {
         savepointsRepository.save(savepoint2)
 
         assertThat(
-            SavepointFinder.getSavepoint(
+            SavepointUseCases.getSavepoint(
                 FormsContract.getUri("1", formV2.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -195,7 +195,7 @@ class SavepointFinderTest {
         savepointFile.delete()
 
         assertThat(
-            SavepointFinder.getSavepoint(
+            SavepointUseCases.getSavepoint(
                 FormsContract.getUri("1", formV2.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -213,7 +213,7 @@ class SavepointFinderTest {
         savepointsRepository.save(savepoint)
 
         assertThat(
-            SavepointFinder.getSavepoint(
+            SavepointUseCases.getSavepoint(
                 InstancesContract.getUri("1", instance1.dbId),
                 InstancesContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -231,7 +231,7 @@ class SavepointFinderTest {
         savepointsRepository.save(savepoint)
 
         assertThat(
-            SavepointFinder.getSavepoint(
+            SavepointUseCases.getSavepoint(
                 InstancesContract.getUri("1", instance1.dbId),
                 InstancesContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -250,7 +250,7 @@ class SavepointFinderTest {
         savepointFile.delete()
 
         assertThat(
-            SavepointFinder.getSavepoint(
+            SavepointUseCases.getSavepoint(
                 InstancesContract.getUri("1", instance1.dbId),
                 InstancesContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -270,7 +270,7 @@ class SavepointFinderTest {
         instancesRepository.save(instance1)
 
         assertThat(
-            SavepointFinder.getSavepoint(
+            SavepointUseCases.getSavepoint(
                 InstancesContract.getUri("1", instance1.dbId),
                 InstancesContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -292,7 +292,7 @@ class SavepointFinderTest {
         savepointsRepository.save(savepoint2)
 
         assertThat(
-            SavepointFinder.getSavepoint(
+            SavepointUseCases.getSavepoint(
                 InstancesContract.getUri("1", instance1.dbId),
                 InstancesContract.CONTENT_ITEM_TYPE,
                 formsRepository,

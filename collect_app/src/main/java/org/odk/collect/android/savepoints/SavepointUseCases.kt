@@ -9,7 +9,7 @@ import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.forms.savepoints.SavepointsRepository
 import java.io.File
 
-object SavepointFinder {
+object SavepointUseCases {
     fun getSavepoint(
         uri: Uri,
         uriMimeType: String,

@@ -22,7 +22,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.instancemanagement.canBeEdited
 import org.odk.collect.android.projects.ProjectsDataService
-import org.odk.collect.android.savepoints.SavepointFinder
+import org.odk.collect.android.savepoints.SavepointUseCases
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
@@ -320,7 +320,7 @@ private class FormUriViewModel(
     private fun getSavePoint(): Savepoint? {
         val uriMimeType = contentResolver.getType(uri!!)!!
 
-        return SavepointFinder.getSavepoint(
+        return SavepointUseCases.getSavepoint(
             uri,
             uriMimeType,
             formsRepositoryProvider.get(),
