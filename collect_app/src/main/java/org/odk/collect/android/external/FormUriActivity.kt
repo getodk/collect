@@ -65,9 +65,6 @@ class FormUriActivity : ComponentActivity() {
     @Inject
     lateinit var scheduler: Scheduler
 
-    @Inject
-    lateinit var savepointsFinder: SavepointFinder
-
     private var formFillingAlreadyStarted = false
 
     private val openForm =
@@ -88,8 +85,7 @@ class FormUriActivity : ComponentActivity() {
                     formsRepositoryProvider,
                     instanceRepositoryProvider,
                     savepointsRepositoryProvider,
-                    resources,
-                    savepointsFinder
+                    resources
                 ) as T
             }
         }
@@ -193,8 +189,7 @@ private class FormUriViewModel(
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
-    private val resources: Resources,
-    private val savepointsFinder: SavepointFinder,
+    private val resources: Resources
 ) : ViewModel() {
 
     private val _formInspectionResult = MutableLiveData<FormInspectionResult>()
@@ -325,7 +320,7 @@ private class FormUriViewModel(
     private fun getSavePoint(): Savepoint? {
         val uriMimeType = contentResolver.getType(uri!!)!!
 
-        return savepointsFinder.getSavepoint(
+        return SavepointFinder.getSavepoint(
             uri,
             uriMimeType,
             formsRepositoryProvider.get(),

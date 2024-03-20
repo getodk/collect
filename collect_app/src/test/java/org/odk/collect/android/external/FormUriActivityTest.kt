@@ -32,7 +32,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.activities.FormFillingActivity
@@ -40,7 +39,6 @@ import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.application.initialization.MapsInitializer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.ProjectsDataService
-import org.odk.collect.android.savepoints.SavepointFinder
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
@@ -76,12 +74,8 @@ class FormUriActivityTest {
     private val projectsRepository = InMemProjectsRepository()
     private val projectsDataService = mock<ProjectsDataService>()
     private val formsRepository = InMemFormsRepository()
-    private val instancesRepository = InMemInstancesRepository()
+    private val instancesRepository = InMemInstancesRepository { 0 }
     private val fakeScheduler = FakeScheduler()
-    private val savepointFinder: SavepointFinder = mock<SavepointFinder>().apply {
-        whenever(getSavepoint(any(), any(), any(), any(), any())).thenReturn(null)
-    }
-
     private val settingsProvider = InMemSettingsProvider().apply {
         getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
     }
@@ -139,10 +133,6 @@ class FormUriActivityTest {
 
             override fun providesScheduler(workManager: WorkManager?): Scheduler {
                 return fakeScheduler
-            }
-
-            override fun providesSavepointFinder(): SavepointFinder {
-                return savepointFinder
             }
 
             override fun providesSavepointsRepositoryProvider(context: Context?, storagePathProvider: StoragePathProvider?): SavepointsRepositoryProvider {
@@ -863,8 +853,7 @@ class FormUriActivityTest {
         )
         val savepointFile = TempFiles.createTempFile()
         val savepoint = Savepoint(form.dbId, null, savepointFile.absolutePath, TempFiles.createTempFile().absolutePath)
-
-        whenever(savepointFinder.getSavepoint(any(), any(), any(), any(), any())).thenReturn(savepoint)
+        savepointsRepository.save(savepoint)
 
         launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
         fakeScheduler.flush()
@@ -896,8 +885,7 @@ class FormUriActivityTest {
 
         val savepointFile = TempFiles.createTempFile()
         val savepoint = Savepoint(form.dbId, instance.dbId, savepointFile.absolutePath, TempFiles.createTempFile().absolutePath)
-
-        whenever(savepointFinder.getSavepoint(any(), any(), any(), any(), any())).thenReturn(savepoint)
+        savepointsRepository.save(savepoint)
 
         launcherRule.launch<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
         fakeScheduler.flush()
@@ -929,8 +917,7 @@ class FormUriActivityTest {
 
         val savepointFile = TempFiles.createTempFile()
         val savepoint = Savepoint(formV1.dbId, null, savepointFile.absolutePath, TempFiles.createTempFile().absolutePath)
-
-        whenever(savepointFinder.getSavepoint(any(), any(), any(), any(), any())).thenReturn(savepoint)
+        savepointsRepository.save(savepoint)
 
         launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, formV2.dbId))
         fakeScheduler.flush()
@@ -964,8 +951,7 @@ class FormUriActivityTest {
 
         val savepointFile = TempFiles.createTempFile()
         val savepoint = Savepoint(formV1.dbId, null, savepointFile.absolutePath, TempFiles.createTempFile().absolutePath)
-
-        whenever(savepointFinder.getSavepoint(any(), any(), any(), any(), any())).thenReturn(savepoint)
+        savepointsRepository.save(savepoint)
 
         launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, formV2.dbId))
         fakeScheduler.flush()
@@ -992,8 +978,6 @@ class FormUriActivityTest {
         val savepointFile = TempFiles.createTempFile()
         val savepoint = Savepoint(form.dbId, null, savepointFile.absolutePath, TempFiles.createTempFile().absolutePath)
         savepointsRepository.save(savepoint)
-
-        whenever(savepointFinder.getSavepoint(any(), any(), any(), any(), any())).thenReturn(savepoint)
 
         launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
         fakeScheduler.flush()
@@ -1029,8 +1013,6 @@ class FormUriActivityTest {
         val savepointFile = TempFiles.createTempFile()
         val savepoint = Savepoint(form.dbId, instance.dbId, savepointFile.absolutePath, TempFiles.createTempFile().absolutePath)
         savepointsRepository.save(savepoint)
-
-        whenever(savepointFinder.getSavepoint(any(), any(), any(), any(), any())).thenReturn(savepoint)
 
         launcherRule.launch<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
         fakeScheduler.flush()
