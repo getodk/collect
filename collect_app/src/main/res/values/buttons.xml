@@ -5,6 +5,7 @@
         <item name="android:paddingBottom">@dimen/margin_small</item>
         <item name="android:textAppearance">?textAppearanceBodyLarge</item>
         <item name="iconGravity">textStart</item>
+        <item name="iconSize">20dp</item>
     </style>
 
     <style name="Widget.Collect.Button" parent="Widget.Material3.Button">
