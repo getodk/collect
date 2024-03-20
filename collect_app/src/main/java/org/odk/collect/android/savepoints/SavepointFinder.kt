@@ -37,7 +37,7 @@ object SavepointFinder {
             val savepoint = savepointsRepository.get(form.dbId, instance.dbId)
             if (savepoint != null &&
                 File(savepoint.savepointFilePath).exists() &&
-                File(savepoint.savepointFilePath).lastModified() > File(instance.instanceFilePath).lastModified()
+                File(savepoint.savepointFilePath).lastModified() > instance.lastStatusChangeDate
             ) {
                 savepoint
             } else {

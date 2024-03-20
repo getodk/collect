@@ -267,7 +267,7 @@ class SavepointFinderTest {
         val savepoint = Savepoint(formV2.dbId, instance1.dbId, savepointFile.absolutePath, instance1.instanceFilePath)
         savepointsRepository.save(savepoint)
 
-        File(instance1.instanceFilePath).writeText("blah")
+        instancesRepository.save(instance1)
 
         assertThat(
             SavepointFinder.getSavepoint(
