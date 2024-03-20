@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteQueryBuilder
-import android.os.StrictMode
 import org.odk.collect.android.database.DatabaseConnection
 import org.odk.collect.android.database.DatabaseConstants
 import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_DATABASE_NAME
@@ -27,12 +26,11 @@ class DatabaseSavepointsRepository(
         dbPath,
         SAVEPOINTS_DATABASE_NAME,
         SavepointsDatabaseMigrator(),
-        SAVEPOINTS_DATABASE_VERSION
+        SAVEPOINTS_DATABASE_VERSION,
+        true
     )
 
     override fun get(formDbId: Long, instanceDbId: Long?): Savepoint? {
-        StrictMode.noteSlowCall("Accessing readable DB")
-
         val cursor = if (instanceDbId == null) {
             queryAndReturnCursor(
                 "$FORM_DB_ID=? AND $INSTANCE_DB_ID IS NULL",
