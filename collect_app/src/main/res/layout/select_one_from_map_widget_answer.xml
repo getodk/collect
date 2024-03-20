@@ -9,7 +9,7 @@
         android:id="@+id/button"
         style="?widgetButtonIconQuestionWidgetStyle"
         android:text="@string/select_place"
-        app:icon="@drawable/ic_baseline_where_to_vote_white_24"
+        app:icon="@drawable/ic_baseline_location_on_white_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

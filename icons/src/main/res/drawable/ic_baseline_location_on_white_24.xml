@@ -5,8 +5,8 @@
     android:viewportHeight="24"
     android:autoMirrored="true"
     android:tint="@android:color/white">
-      
+
     <path
         android:fillColor="@android:color/white"
-        android:pathData="M12,2c3.86,0 7,3.14 7,7 0,5.25 -7,13 -7,13S5,14.25 5,9c0,-3.86 3.14,-7 7,-7zM10.47,14L17,7.41 15.6,6l-5.13,5.18L8.4,9.09 7,10.5l3.47,3.5z"/>
+        android:pathData="M12,2C8.13,2 5,5.13 5,9c0,5.25 7,13 7,13s7,-7.75 7,-13c0,-3.87 -3.13,-7 -7,-7zM12,11.5c-1.38,0 -2.5,-1.12 -2.5,-2.5s1.12,-2.5 2.5,-2.5 2.5,1.12 2.5,2.5 -1.12,2.5 -2.5,2.5z"/>
 </vector>
