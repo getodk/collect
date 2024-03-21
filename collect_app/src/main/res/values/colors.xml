@@ -15,8 +15,11 @@
     <color name="colorSurfaceVariant">#dce3e9</color>
     <color name="colorOnSurface">#001f2a</color>
     <color name="colorOnSurfaceVariant">#40484c</color>
+    <color name="colorSurfaceContainerLowest">#ffffff</color>
     <color name="colorSurfaceContainerLow">#f7f7f7</color>
-    <color name="elevationOverlayColor">#fafcff</color>
+    <color name="colorSurfaceContainer">#f7f7f7</color>
+    <color name="colorSurfaceContainerHigh">#f7f7f7</color>
+    <color name="colorSurfaceContainerHighest">#ecf5fa</color>
     <color name="colorSurfaceInverse">#003547</color>
     <color name="colorOnSurfaceInverse">#E1F4FF</color>
 

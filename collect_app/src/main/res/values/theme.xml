@@ -59,9 +59,11 @@
         <item name="colorOutline">@color/color_on_surface_medium_emphasis</item>
         <item name="colorErrorContainer">@color/colorErrorContainer</item>
         <item name="colorOnErrorContainer">@color/colorOnErrorContainer</item>
-        <item name="elevationOverlayColor">@color/elevationOverlayColor</item>
+        <item name="colorSurfaceContainerLowest">@color/colorSurfaceContainerLowest</item>
         <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
-        <item name="colorSurfaceContainerHighest">@color/color_primary_low_emphasis</item>
+        <item name="colorSurfaceContainer">@color/colorSurfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/colorSurfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/colorSurfaceContainerHighest</item>
         <item name="textAppearanceDisplayLarge">@style/TextAppearance.Material3.DisplayLarge</item>
         <item name="textAppearanceDisplayMedium">@style/TextAppearance.Material3.DisplayMedium
         </item>
