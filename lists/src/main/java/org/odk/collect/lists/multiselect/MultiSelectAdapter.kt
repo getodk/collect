@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.ui.multiselect
+package org.odk.collect.lists.multiselect
 
 import android.view.View
 import android.view.ViewGroup

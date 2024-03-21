@@ -11,4 +11,9 @@
     <declare-styleable name="CollectCustomAttributes">
         <attr name="widgetButtonQuestionWidgetStyle" format="reference" />
     </declare-styleable>
+
+    <!--  These attributes are extensions to Material 3  -->
+    <declare-styleable name="Material3Custom">
+        <attr name="textAppearanceLabelExtraLarge" format="reference" />
+    </declare-styleable>
 </resources>

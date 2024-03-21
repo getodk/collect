@@ -16,14 +16,14 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
-import org.odk.collect.androidshared.ui.RecyclerViewUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils.SnackbarPresenterObserver
-import org.odk.collect.androidshared.ui.multiselect.MultiSelectControlsFragment
-import org.odk.collect.androidshared.ui.multiselect.MultiSelectItem
-import org.odk.collect.androidshared.ui.multiselect.MultiSelectListFragment
-import org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModel
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.lists.RecyclerViewUtils
+import org.odk.collect.lists.multiselect.MultiSelectControlsFragment
+import org.odk.collect.lists.multiselect.MultiSelectItem
+import org.odk.collect.lists.multiselect.MultiSelectListFragment
+import org.odk.collect.lists.multiselect.MultiSelectViewModel
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.strings.R.string
 
@@ -36,7 +36,12 @@ class DeleteSavedFormFragment(
     private val multiSelectViewModel: MultiSelectViewModel<Instance> by viewModels {
         MultiSelectViewModel.Factory(
             savedFormListViewModel.formsToDisplay.map {
-                it.map { instance -> MultiSelectItem(instance.dbId, instance) }
+                it.map { instance ->
+                    MultiSelectItem(
+                        instance.dbId,
+                        instance
+                    )
+                }
             }
         )
     }
@@ -46,7 +51,11 @@ class DeleteSavedFormFragment(
 
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(MultiSelectListFragment::class) {
-                MultiSelectListFragment(getString(string.delete_file), multiSelectViewModel, ::SelectableSavedFormListItemViewHolder) {
+                MultiSelectListFragment(
+                    getString(string.delete_file),
+                    multiSelectViewModel,
+                    ::SelectableSavedFormListItemViewHolder
+                ) {
                     it.empty.setIcon(R.drawable.ic_baseline_delete_72)
                     it.empty.setTitle(getString(string.empty_list_of_forms_to_delete_title))
                     it.empty.setSubtitle(getString(string.empty_list_of_saved_forms_to_delete_subtitle))

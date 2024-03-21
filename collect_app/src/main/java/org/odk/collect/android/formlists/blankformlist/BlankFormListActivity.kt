@@ -16,9 +16,9 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
 import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
-import org.odk.collect.androidshared.ui.EmptyListView
-import org.odk.collect.androidshared.ui.RecyclerViewUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils
+import org.odk.collect.lists.EmptyListView
+import org.odk.collect.lists.RecyclerViewUtils
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.strings.localization.LocalizedActivity

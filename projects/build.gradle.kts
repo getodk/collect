@@ -55,7 +55,6 @@ dependencies {
     implementation(Dependencies.androidx_core_ktx)
     implementation(Dependencies.androidx_fragment_ktx)
     implementation(Dependencies.gson)
-    implementation(Dependencies.android_material)
     implementation(Dependencies.dagger)
     kapt(Dependencies.dagger_compiler)
 

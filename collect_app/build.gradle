@@ -262,6 +262,7 @@ dependencies {
     implementation project(':google-maps')
     implementation project(':draw')
     implementation project(':printer')
+    implementation project(':lists')
 
     if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')
@@ -277,7 +278,6 @@ dependencies {
     implementation Dependencies.androidx_preference_ktx
     implementation Dependencies.androidx_fragment_ktx
 
-    implementation Dependencies.android_material
     implementation Dependencies.android_flexbox
 
     implementation Dependencies.play_services_maps

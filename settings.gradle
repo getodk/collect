@@ -36,9 +36,10 @@ include ':metadata'
 include ':google-maps'
 include ':test-forms'
 include ':printer'
+include ':draw'
+include ':lists'
 
 apply from: 'secrets.gradle'
 if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
     include ':mapbox'
 }
-include ':draw'

@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.ui.multiselect
+package org.odk.collect.lists.multiselect
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData

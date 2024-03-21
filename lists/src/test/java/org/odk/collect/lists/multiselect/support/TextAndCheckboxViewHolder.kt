@@ -1,10 +1,10 @@
-package org.odk.collect.androidshared.ui.multiselect.support
+package org.odk.collect.lists.multiselect.support
 
 import android.content.Context
 import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.TextView
-import org.odk.collect.androidshared.ui.multiselect.MultiSelectAdapter
+import org.odk.collect.lists.multiselect.MultiSelectAdapter
 
 class TextAndCheckBoxView(context: Context) : FrameLayout(context) {
 

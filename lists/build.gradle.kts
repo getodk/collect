@@ -40,26 +40,28 @@ android {
         viewBinding = true
     }
 
-    namespace = "org.odk.collect.material"
+    namespace = "org.odk.collect.lists"
 }
 
 dependencies {
     coreLibraryDesugaring(Dependencies.desugar)
 
     implementation(project(":androidshared"))
+    implementation(project(":material"))
     implementation(project(":strings"))
-    implementation(Dependencies.androidx_appcompat)
-    api(Dependencies.android_material)
-    implementation(Dependencies.androidx_fragment_ktx)
+    implementation(project(":icons"))
     implementation(Dependencies.kotlin_stdlib)
-
-    debugImplementation(project(":fragments-test"))
+    implementation(Dependencies.androidx_lifecycle_livedata_ktx)
+    implementation(Dependencies.androidx_lifecycle_viewmodel_ktx)
+    implementation(Dependencies.androidx_recyclerview)
 
     testImplementation(project(":test-shared"))
+    testImplementation(project(":androidtest"))
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.androidx_test_ext_junit)
     testImplementation(Dependencies.androidx_test_espresso_core)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.mockito_kotlin)
     testImplementation(Dependencies.robolectric)
+    testImplementation(Dependencies.androidx_arch_core_testing)
+
+    debugImplementation(project(":fragments-test"))
 }

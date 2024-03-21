@@ -60,7 +60,6 @@ dependencies {
     implementation(Dependencies.kotlin_stdlib)
     implementation(Dependencies.androidx_appcompat)
     implementation(Dependencies.androidx_lifecycle_livedata_ktx)
-    implementation(Dependencies.android_material)
     implementation(Dependencies.timber)
     implementation(Dependencies.play_services_location)
     implementation(Dependencies.androidx_fragment_ktx)
