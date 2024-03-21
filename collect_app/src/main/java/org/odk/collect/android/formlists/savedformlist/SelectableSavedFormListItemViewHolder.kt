@@ -5,9 +5,10 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import org.odk.collect.android.R
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.lists.multiselect.MultiSelectAdapter
 
 class SelectableSavedFormListItemViewHolder(parent: ViewGroup) :
-    org.odk.collect.lists.multiselect.MultiSelectAdapter.ViewHolder<Instance>(
+    MultiSelectAdapter.ViewHolder<Instance>(
         SavedFormListItemView(parent.context)
     ) {
     private var selectView = itemView

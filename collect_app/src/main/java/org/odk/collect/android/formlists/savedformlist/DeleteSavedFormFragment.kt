@@ -19,6 +19,11 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils.SnackbarPresenterObserver
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.lists.RecyclerViewUtils
+import org.odk.collect.lists.multiselect.MultiSelectControlsFragment
+import org.odk.collect.lists.multiselect.MultiSelectItem
+import org.odk.collect.lists.multiselect.MultiSelectListFragment
+import org.odk.collect.lists.multiselect.MultiSelectViewModel
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.strings.R.string
 
@@ -28,11 +33,11 @@ class DeleteSavedFormFragment(
 ) : Fragment() {
 
     private val savedFormListViewModel: SavedFormListViewModel by viewModels { viewModelFactory }
-    private val multiSelectViewModel: org.odk.collect.lists.multiselect.MultiSelectViewModel<Instance> by viewModels {
-        org.odk.collect.lists.multiselect.MultiSelectViewModel.Factory(
+    private val multiSelectViewModel: MultiSelectViewModel<Instance> by viewModels {
+        MultiSelectViewModel.Factory(
             savedFormListViewModel.formsToDisplay.map {
                 it.map { instance ->
-                    org.odk.collect.lists.multiselect.MultiSelectItem(
+                    MultiSelectItem(
                         instance.dbId,
                         instance
                     )
@@ -45,8 +50,8 @@ class DeleteSavedFormFragment(
         super.onAttach(context)
 
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(org.odk.collect.lists.multiselect.MultiSelectListFragment::class) {
-                org.odk.collect.lists.multiselect.MultiSelectListFragment(
+            .forClass(MultiSelectListFragment::class) {
+                MultiSelectListFragment(
                     getString(string.delete_file),
                     multiSelectViewModel,
                     ::SelectableSavedFormListItemViewHolder
@@ -55,16 +60,16 @@ class DeleteSavedFormFragment(
                     it.empty.setTitle(getString(string.empty_list_of_forms_to_delete_title))
                     it.empty.setSubtitle(getString(string.empty_list_of_saved_forms_to_delete_subtitle))
 
-                    it.list.addItemDecoration(org.odk.collect.lists.RecyclerViewUtils.verticalLineDivider(context))
+                    it.list.addItemDecoration(RecyclerViewUtils.verticalLineDivider(context))
                 }
             }
             .build()
 
         childFragmentManager.setFragmentResultListener(
-            org.odk.collect.lists.multiselect.MultiSelectControlsFragment.REQUEST_ACTION,
+            MultiSelectControlsFragment.REQUEST_ACTION,
             this
         ) { _, result ->
-            val selected = result.getLongArray(org.odk.collect.lists.multiselect.MultiSelectControlsFragment.RESULT_SELECTED)!!
+            val selected = result.getLongArray(MultiSelectControlsFragment.RESULT_SELECTED)!!
             onDeleteSelected(selected)
         }
     }

@@ -20,6 +20,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
+import static org.odk.collect.lists.multiselect.MultiSelectViewModelKt.updateSelectAll;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -150,7 +151,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         multiSelectViewModel = new ViewModelProvider(this).get(MultiSelectViewModel.class);
         multiSelectViewModel.getSelected().observe(this, ids -> {
             binding.uploadButton.setEnabled(!ids.isEmpty());
-            allSelected = org.odk.collect.lists.multiselect.MultiSelectViewModelKt.updateSelectAll(binding.toggleButton, listAdapter.getCount(), ids.size());
+            allSelected = updateSelectAll(binding.toggleButton, listAdapter.getCount(), ids.size());
 
             listAdapter.setSelected(ids);
         });
