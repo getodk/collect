@@ -1,29 +1,38 @@
 package org.odk.collect.formstest
 
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.forms.savepoints.SavepointsRepository
+import org.odk.collect.shared.TempFiles
 import java.io.File
 
 abstract class SavepointsRepositoryTest {
-    abstract fun buildSubject(): SavepointsRepository
+    private val cacheDirPath = TempFiles.createTempDir().absolutePath
+    private val instancesDirPath = TempFiles.createTempDir().absolutePath
 
-    abstract fun getSavepointFile(relativeFilePath: String): File
+    abstract fun buildSubject(cacheDirPath: String, instancesDirPath: String): SavepointsRepository
 
-    abstract fun getInstanceFile(relativeFilePath: String): File
+    private fun getSavepointFile(relativeFilePath: String): File {
+        return File(cacheDirPath, relativeFilePath)
+    }
+
+    private fun getInstanceFile(relativeFilePath: String): File {
+        return File(instancesDirPath, relativeFilePath)
+    }
 
     @Test
     fun `get returns null if the database is empty`() {
-        val savepointsRepository = buildSubject()
+        val savepointsRepository = buildSubject(cacheDirPath, instancesDirPath)
 
         assertThat(savepointsRepository.get(1, null), equalTo(null))
     }
 
     @Test
     fun `get returns null if there is no savepoint for give formDbId and instanceDbId`() {
-        val savepointsRepository = buildSubject()
+        val savepointsRepository = buildSubject(cacheDirPath, instancesDirPath)
 
         savepointsRepository.save(Savepoint(1, 1, getSavepointFile("foo").absolutePath, getInstanceFile("foo").absolutePath))
 
@@ -32,7 +41,7 @@ abstract class SavepointsRepositoryTest {
 
     @Test
     fun `get returns savepoint if one with given formDbId and instanceDbId exists`() {
-        val savepointsRepository = buildSubject()
+        val savepointsRepository = buildSubject(cacheDirPath, instancesDirPath)
 
         val savepoint1 = Savepoint(1, 1, getSavepointFile("foo").absolutePath, getInstanceFile("foo").absolutePath)
         val savepoint2 = Savepoint(1, 2, getSavepointFile("bar").absolutePath, getInstanceFile("bar").absolutePath)
@@ -44,39 +53,37 @@ abstract class SavepointsRepositoryTest {
 
     @Test
     fun `getAll returns an empty list if the database is empty`() {
-        val savepointsRepository = buildSubject()
+        val savepointsRepository = buildSubject(cacheDirPath, instancesDirPath)
 
-        assertThat(savepointsRepository.getAll().size, equalTo(0))
+        assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true))
     }
 
     @Test
     fun `getAll returns all savepoints stored in the database`() {
-        val savepointsRepository = buildSubject()
+        val savepointsRepository = buildSubject(cacheDirPath, instancesDirPath)
 
         val savepoint1 = Savepoint(1, null, getSavepointFile("foo").absolutePath, getInstanceFile("foo").absolutePath)
         val savepoint2 = Savepoint(1, 1, getSavepointFile("bar").absolutePath, getInstanceFile("bar").absolutePath)
         savepointsRepository.save(savepoint1)
         savepointsRepository.save(savepoint2)
 
-        assertThat(savepointsRepository.getAll().size, equalTo(2))
-        assertThat(savepointsRepository.getAll().containsAll(listOf(savepoint1, savepoint2)), equalTo(true))
+        assertThat(savepointsRepository.getAll(), contains(savepoint1, savepoint2))
     }
 
     @Test
     fun `save does not save two savepoints with the same formDbId and instanceDbId`() {
-        val savepointsRepository = buildSubject()
+        val savepointsRepository = buildSubject(cacheDirPath, instancesDirPath)
 
         val savepoint1 = Savepoint(1, null, getSavepointFile("foo").absolutePath, getInstanceFile("foo").absolutePath)
         savepointsRepository.save(savepoint1)
         savepointsRepository.save(Savepoint(1, null, getSavepointFile("bar2").absolutePath, getInstanceFile("bar2").absolutePath))
 
-        assertThat(savepointsRepository.getAll().size, equalTo(1))
-        assertThat(savepointsRepository.getAll().containsAll(listOf(savepoint1)), equalTo(true))
+        assertThat(savepointsRepository.getAll(), contains(savepoint1))
     }
 
     @Test
     fun `delete removes savepoint from the database and its savepoint file for given formDbId and instanceDbId if instanceDbId is null`() {
-        val savepointsRepository = buildSubject()
+        val savepointsRepository = buildSubject(cacheDirPath, instancesDirPath)
 
         val savepointFile1 = getSavepointFile("foo")
         savepointFile1.createNewFile()
@@ -91,15 +98,14 @@ abstract class SavepointsRepositoryTest {
 
         savepointsRepository.delete(savepoint1.formDbId, savepoint1.instanceDbId)
 
-        assertThat(savepointsRepository.getAll().size, equalTo(1))
-        assertThat(savepointsRepository.getAll().containsAll(listOf(savepoint2)), equalTo(true))
+        assertThat(savepointsRepository.getAll(), contains(savepoint2))
         assertThat(savepointFile1.exists(), equalTo(false))
         assertThat(savepointFile2.exists(), equalTo(true))
     }
 
     @Test
     fun `delete removes savepoint from the database and its savepoint file for given formDbId and instanceDbId if instanceDbId is not null`() {
-        val savepointsRepository = buildSubject()
+        val savepointsRepository = buildSubject(cacheDirPath, instancesDirPath)
 
         val savepointFile1 = getSavepointFile("foo")
         savepointFile1.createNewFile()
@@ -122,7 +128,7 @@ abstract class SavepointsRepositoryTest {
 
     @Test
     fun `deleteAll removes all savepoints and all savepoint files`() {
-        val savepointsRepository = buildSubject()
+        val savepointsRepository = buildSubject(cacheDirPath, instancesDirPath)
 
         val savepointFile1 = getSavepointFile("foo")
         savepointFile1.createNewFile()
@@ -137,7 +143,7 @@ abstract class SavepointsRepositoryTest {
 
         savepointsRepository.deleteAll()
 
-        assertThat(savepointsRepository.getAll().size, equalTo(0))
+        assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true))
         assertThat(savepointFile1.exists(), equalTo(false))
         assertThat(savepointFile2.exists(), equalTo(false))
     }

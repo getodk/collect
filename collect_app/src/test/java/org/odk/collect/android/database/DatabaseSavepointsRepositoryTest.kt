@@ -7,27 +7,15 @@ import org.odk.collect.android.database.savepoints.DatabaseSavepointsRepository
 import org.odk.collect.forms.savepoints.SavepointsRepository
 import org.odk.collect.formstest.SavepointsRepositoryTest
 import org.odk.collect.shared.TempFiles
-import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class DatabaseSavepointsRepositoryTest : SavepointsRepositoryTest() {
-    private val cacheDirPath = TempFiles.createTempDir().absolutePath
-    private val instancesDirPath = TempFiles.createTempDir().absolutePath
-
-    override fun buildSubject(): SavepointsRepository {
+    override fun buildSubject(cacheDirPath: String, instancesDirPath: String): SavepointsRepository {
         return DatabaseSavepointsRepository(
             ApplicationProvider.getApplicationContext(),
             TempFiles.createTempDir().absolutePath,
             cacheDirPath,
             instancesDirPath
         )
-    }
-
-    override fun getSavepointFile(relativeFilePath: String): File {
-        return File(cacheDirPath, relativeFilePath)
-    }
-
-    override fun getInstanceFile(relativeFilePath: String): File {
-        return File(instancesDirPath, relativeFilePath)
     }
 }
