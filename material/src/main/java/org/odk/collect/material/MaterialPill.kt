@@ -19,7 +19,7 @@ import org.odk.collect.material.databinding.PillBinding
  * included in the spec or in Android's MaterialComponents. The pill will use the
  * `?shapeAppearanceCornerSmall` shape appearance for the current theme.
  */
-class MaterialPill(context: Context, attrs: AttributeSet?) :
+open class MaterialPill(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
 
     var text: String? = null
