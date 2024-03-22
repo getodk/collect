@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.rules.BlankFormTestRule;
-import org.odk.collect.android.support.rules.ResetStateRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
 import java.util.Collections;
@@ -31,7 +30,6 @@ public class LikertTest {
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
-            .around(new ResetStateRule())
             .around(activityTestRule);
 
     @Test

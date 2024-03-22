@@ -105,7 +105,8 @@ class AuditTest {
             .startBlankForm("One Question Audit")
             .fillOut(FormEntryPage.QuestionAndAnswer("what is your age", "31"))
             .killAndReopenApp(rule, MainMenuPage())
-            .startBlankForm("One Question Audit")
+            .startBlankFormWithSavepoint("One Question Audit")
+            .clickRecover(FormEntryPage("One Question Audit"))
             .swipeToEndScreen()
             .clickFinalize()
 

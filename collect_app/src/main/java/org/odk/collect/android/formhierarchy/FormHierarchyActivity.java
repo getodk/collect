@@ -58,12 +58,14 @@ import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvi
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.projects.ProjectsDataService;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
@@ -190,6 +192,9 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     @Inject
     public FormsRepositoryProvider formsRepositoryProvider;
 
+    @Inject
+    public StoragePathProvider storagePathProvider;
+
     protected final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
@@ -223,6 +228,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 autoSendSettingsProvider,
                 formsRepositoryProvider,
                 instancesRepositoryProvider,
+                new SavepointsRepositoryProvider(this, storagePathProvider),
                 new QRCodeCreatorImpl(),
                 new HtmlPrinter()
         );

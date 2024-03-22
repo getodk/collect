@@ -496,19 +496,21 @@ abstract class Page<T : Page<T>> {
     }
 
     fun <D : Page<D>> killAndReopenApp(rule: ActivityScenarioLauncherRule, destination: D): D {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        killApp()
 
-        // kill
+        // reopen
+        rule.launch<Activity>(getLaunchIntent())
+        return destination.assertOnPage()
+    }
+
+    fun killApp() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         device.pressRecentApps()
         device
             .findObject(UiSelector().descriptionContains("Collect"))
             .swipeUp(10).also {
                 CollectHelpers.simulateProcessRestart() // the process is not restarted automatically (probably to keep the test running) so we have simulate it
             }
-
-        // reopen
-        rule.launch<Activity>(getLaunchIntent())
-        return destination.assertOnPage()
     }
 
     fun assertNoOptionsMenu(): T {

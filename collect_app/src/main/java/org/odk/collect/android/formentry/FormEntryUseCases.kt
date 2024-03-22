@@ -102,17 +102,6 @@ object FormEntryUseCases {
         )
     }
 
-    fun getSavePoint(formController: FormController, cacheDir: File): File? {
-        val instanceXml = formController.getInstanceFile()!!
-        val savepointFile = File(cacheDir, "${instanceXml.name}.save")
-
-        return if (savepointFile.exists() && savepointFile.lastModified() > instanceXml.lastModified()) {
-            savepointFile
-        } else {
-            null
-        }
-    }
-
     fun saveDraft(
         form: Form,
         formController: FormController,

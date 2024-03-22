@@ -143,15 +143,16 @@ import org.odk.collect.android.javarosawrapper.SuccessValidationResult;
 import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
-import org.odk.collect.android.tasks.SavePointTask;
+import org.odk.collect.android.savepoints.SavepointListener;
+import org.odk.collect.android.savepoints.SavepointTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.ControllableLifecyleOwner;
@@ -159,6 +160,7 @@ import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.DateTimeWidget;
@@ -224,7 +226,7 @@ import timber.log.Timber;
 @SuppressWarnings("PMD.CouplingBetweenObjects")
 public class FormFillingActivity extends LocalizedActivity implements AnimationListener,
         FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
-        SavePointListener, NumberPickerDialog.NumberPickerListener,
+        SavepointListener, NumberPickerDialog.NumberPickerListener,
         RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
         WidgetValueChangedListener, ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
@@ -360,6 +362,10 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     @Inject
     public InstancesRepositoryProvider instancesRepositoryProvider;
+
+    @Inject
+    public SavepointsRepositoryProvider savepointsRepositoryProvider;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -425,6 +431,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 autoSendSettingsProvider,
                 formsRepositoryProvider,
                 instancesRepositoryProvider,
+                new SavepointsRepositoryProvider(this, storagePathProvider),
                 new QRCodeCreatorImpl(),
                 new HtmlPrinter()
         );
@@ -714,7 +721,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             uriMimeType = getContentResolver().getType(uri);
         }
 
-        formLoaderTask = new FormLoaderTask(uri, uriMimeType, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
+        formLoaderTask = new FormLoaderTask(uri, uriMimeType, startingXPath, waitingXPath, formEntryControllerFactory, scheduler, savepointsRepositoryProvider.get());
         formLoaderTask.setFormLoaderListener(this);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute();
@@ -735,7 +742,21 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
      */
     private void nonblockingCreateSavePointData() {
         try {
-            SavePointTask savePointTask = new SavePointTask(this, getFormController());
+            Long formDbId = formSessionRepository.get(sessionId).getValue().getForm().getDbId();
+            Long instanceDbId = null;
+            Instance instance = formSessionRepository.get(sessionId).getValue().getInstance();
+            if (instance != null) {
+                instanceDbId = instance.getDbId();
+            }
+            SavepointTask savePointTask = new SavepointTask(
+                    this,
+                    getFormController(),
+                    formDbId,
+                    instanceDbId,
+                    storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE),
+                    savepointsRepositoryProvider.get(),
+                    scheduler
+            );
             savePointTask.execute();
 
             if (!allowMovingBackwards) {

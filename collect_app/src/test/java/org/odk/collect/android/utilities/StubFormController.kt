@@ -143,7 +143,7 @@ open class StubFormController : FormController {
 
     override fun isSubmissionEntireForm(): Boolean = false
 
-    override fun getFilledInFormXml(): ByteArrayPayload? = null
+    override fun getFilledInFormXml(): ByteArrayPayload = ByteArrayPayload()
 
     override fun getSubmissionXml(): ByteArrayPayload? = null
 

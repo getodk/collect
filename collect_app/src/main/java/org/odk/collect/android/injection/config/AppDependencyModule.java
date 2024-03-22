@@ -93,6 +93,7 @@ import org.odk.collect.android.utilities.ImageCompressionController;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ProjectResetter;
+import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
@@ -440,7 +441,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstancesDataService providesInstancesDataService(Application application, InstancesRepositoryProvider instancesRepositoryProvider, ProjectsDataService projectsDataService, FormsRepositoryProvider formsRepositoryProvider, EntitiesRepositoryProvider entitiesRepositoryProvider, StoragePathProvider storagePathProvider, InstanceSubmitScheduler instanceSubmitScheduler) {
+    public InstancesDataService providesInstancesDataService(Application application, InstancesRepositoryProvider instancesRepositoryProvider, ProjectsDataService projectsDataService, FormsRepositoryProvider formsRepositoryProvider, EntitiesRepositoryProvider entitiesRepositoryProvider, StoragePathProvider storagePathProvider, InstanceSubmitScheduler instanceSubmitScheduler, SavepointsRepositoryProvider savepointsRepositoryProvider) {
         Function0<Unit> onUpdate = () -> {
             application.getContentResolver().notifyChange(
                     InstancesContract.getUri(projectsDataService.getCurrentProject().getUuid()),
@@ -450,7 +451,7 @@ public class AppDependencyModule {
             return null;
         };
 
-        return new InstancesDataService(getState(application), formsRepositoryProvider, instancesRepositoryProvider, entitiesRepositoryProvider, storagePathProvider, instanceSubmitScheduler, projectsDataService, onUpdate);
+        return new InstancesDataService(getState(application), formsRepositoryProvider, instancesRepositoryProvider, savepointsRepositoryProvider, entitiesRepositoryProvider, storagePathProvider, instanceSubmitScheduler, projectsDataService, onUpdate);
     }
 
     @Provides
@@ -471,6 +472,11 @@ public class AppDependencyModule {
     @Provides
     public InstancesRepositoryProvider providesInstancesRepositoryProvider(Context context, StoragePathProvider storagePathProvider) {
         return new InstancesRepositoryProvider(context, storagePathProvider);
+    }
+
+    @Provides
+    public SavepointsRepositoryProvider providesSavepointsRepositoryProvider(Context context, StoragePathProvider storagePathProvider) {
+        return new SavepointsRepositoryProvider(context, storagePathProvider);
     }
 
     @Provides
@@ -567,8 +573,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ProjectResetter providesProjectResetter(StoragePathProvider storagePathProvider, PropertyManager propertyManager, SettingsProvider settingsProvider, InstancesRepositoryProvider instancesRepositoryProvider, FormsRepositoryProvider formsRepositoryProvider) {
-        return new ProjectResetter(storagePathProvider, propertyManager, settingsProvider, instancesRepositoryProvider, formsRepositoryProvider);
+    public ProjectResetter providesProjectResetter(StoragePathProvider storagePathProvider, PropertyManager propertyManager, SettingsProvider settingsProvider, InstancesRepositoryProvider instancesRepositoryProvider, FormsRepositoryProvider formsRepositoryProvider, SavepointsRepositoryProvider savepointsRepositoryProvider) {
+        return new ProjectResetter(storagePathProvider, propertyManager, settingsProvider, instancesRepositoryProvider, formsRepositoryProvider, savepointsRepositoryProvider);
     }
 
     @Provides

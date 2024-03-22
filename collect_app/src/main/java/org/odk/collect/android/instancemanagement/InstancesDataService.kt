@@ -11,10 +11,10 @@ import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.instances.Instance
 import java.io.File
@@ -23,6 +23,7 @@ class InstancesDataService(
     private val appState: AppState,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
     private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
     private val storagePathProvider: StoragePathProvider,
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
@@ -62,9 +63,9 @@ class InstancesDataService(
     fun finalizeAllDrafts(): FinalizeAllResult {
         val instancesRepository = instancesRepositoryProvider.get()
         val formsRepository = formsRepositoryProvider.get()
+        val savepointsRepository = savepointsRepositoryProvider.get()
         val entitiesRepository = entitiesRepositoryProvider.get()
         val projectRootDir = File(storagePathProvider.getProjectRootDirPath())
-        val cacheDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)
 
         val instances = instancesRepository.getAllByStatus(
             Instance.STATUS_INCOMPLETE,
@@ -92,7 +93,7 @@ class InstancesDataService(
                 if (formController == null) {
                     result.copy(failureCount = result.failureCount + 1)
                 } else {
-                    val savePoint = FormEntryUseCases.getSavePoint(formController, File(cacheDir))
+                    val savePoint = savepointsRepository.get(form.dbId, instance.dbId)
                     val needsEncrypted = form.basE64RSAPublicKey != null
                     val newResult = if (savePoint != null) {
                         Analytics.log(AnalyticsEvents.BULK_FINALIZE_SAVE_POINT)

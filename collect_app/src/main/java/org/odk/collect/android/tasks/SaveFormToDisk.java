@@ -63,8 +63,6 @@ import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import timber.log.Timber;
@@ -147,7 +145,7 @@ public class SaveFormToDisk {
             Instance instance = exportData(shouldFinalize, progressListener, validationResult);
 
             if (formController.getInstanceFile() != null) {
-                removeSavepointFiles(formController.getInstanceFile().getName());
+                removeIndexFile(formController.getInstanceFile().getName());
             }
 
             saveToDiskResult.setSaveResult(saveAndExit ? SAVED_AND_EXIT : SAVED, shouldFinalize);
@@ -313,14 +311,6 @@ public class SaveFormToDisk {
     }
 
     /**
-     * Return the savepoint file for a given instance.
-     */
-    static File getSavepointFile(String instanceName) {
-        File tempDir = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
-        return new File(tempDir, instanceName + ".save");
-    }
-
-    /**
      * Return the formIndex file for a given instance.
      */
     public static File getFormIndexFile(String instanceName) {
@@ -328,10 +318,8 @@ public class SaveFormToDisk {
         return new File(tempDir, instanceName + ".index");
     }
 
-    public static void removeSavepointFiles(String instanceName) {
-        File savepointFile = getSavepointFile(instanceName);
+    public static void removeIndexFile(String instanceName) {
         File formIndexFile = getFormIndexFile(instanceName);
-        FileUtils.deleteAndReport(savepointFile);
         FileUtils.deleteAndReport(formIndexFile);
     }
 
@@ -502,36 +490,7 @@ public class SaveFormToDisk {
     /**
      * Writes payload contents to the disk.
      */
-    static void writeFile(ByteArrayPayload payload, String path) throws IOException {
-        File file = new File(path);
-        if (file.exists() && !file.delete()) {
-            throw new IOException("Cannot overwrite " + path + ". Perhaps the file is locked?");
-        }
-
-        // create data stream
-        InputStream is = payload.getPayloadStream();
-        int len = (int) payload.getLength();
-
-        // read from data stream
-        byte[] data = new byte[len];
-        int read = is.read(data, 0, len);
-        if (read > 0) {
-            // Make sure the directory path to this file exists.
-            file.getParentFile().mkdirs();
-            // write xml file
-            RandomAccessFile randomAccessFile = null;
-            try {
-                randomAccessFile = new RandomAccessFile(file, "rws");
-                randomAccessFile.write(data);
-            } finally {
-                if (randomAccessFile != null) {
-                    try {
-                        randomAccessFile.close();
-                    } catch (IOException e) {
-                        Timber.e(e, "Error closing RandomAccessFile: %s", path);
-                    }
-                }
-            }
-        }
+    public static void writeFile(ByteArrayPayload payload, String path) throws IOException {
+        org.odk.collect.shared.files.FileUtils.saveToFile(payload.getPayloadStream(), path);
     }
 }

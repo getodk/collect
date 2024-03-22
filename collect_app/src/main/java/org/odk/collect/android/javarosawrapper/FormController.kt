@@ -307,7 +307,7 @@ interface FormController {
      * enables a filled-in form to be re-opened and edited.
      */
     @Throws(IOException::class)
-    fun getFilledInFormXml(): ByteArrayPayload?
+    fun getFilledInFormXml(): ByteArrayPayload
 
     /**
      * Extract the portion of the form that should be uploaded to the server.

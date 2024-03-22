@@ -15,12 +15,13 @@ import java.io.File
  *
  * @param migrator used to migrate or create the database automatically before access
  */
-open class DatabaseConnection(
+open class DatabaseConnection @JvmOverloads constructor(
     private val context: Context,
     private val path: String,
     private val name: String,
     private val migrator: DatabaseMigrator,
-    private val databaseVersion: Int
+    private val databaseVersion: Int,
+    private val strict: Boolean = false
 ) {
 
     val writeableDatabase: SQLiteDatabase
@@ -31,6 +32,9 @@ open class DatabaseConnection(
 
     val readableDatabase: SQLiteDatabase
         get() {
+            if (strict) {
+                StrictMode.noteSlowCall("Accessing readable DB")
+            }
             return dbHelper.readableDatabase
         }
 

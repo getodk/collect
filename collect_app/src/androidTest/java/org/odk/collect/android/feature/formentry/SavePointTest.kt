@@ -34,7 +34,8 @@ class SavePointTest {
             .let { simulateBatteryDeath() }
 
         // Start blank form and check save point is loaded
-        rule.fillNewForm("two-question-audit.xml", FormHierarchyPage("Two Question"))
+        rule.fillNewFormWithSavepoint("two-question-audit.xml")
+            .clickRecover(FormHierarchyPage("Two Question"))
             .assertText("Alexei")
             .assertTextDoesNotExist("46")
             .pressBack(FormEntryPage("Two Question"))
@@ -78,7 +79,8 @@ class SavePointTest {
             .let { simulateBatteryDeath() }
 
         // Edit instance and check save point is loaded
-        rule.editForm("two-question-audit.xml", "Two Question")
+        rule.editFormWithSavepoint("two-question-audit.xml")
+            .clickRecover(FormHierarchyPage("Two Question"))
             .assertText("Alexei")
             .assertText("52")
             .assertTextDoesNotExist("46")
@@ -110,10 +112,11 @@ class SavePointTest {
         rule.setUpProjectAndCopyForm("two-question-audit.xml", listOf("external_data_10.zip"))
             .fillNewForm("two-question-audit.xml", "Two Question")
             .answerQuestion("What is your name?", "Alexei")
-            .let { simulateProcessDeath() }
+            .killApp()
 
         // Start blank form and check save point is loaded
-        rule.fillNewForm("two-question-audit.xml", FormHierarchyPage("Two Question"))
+        rule.fillNewFormWithSavepoint("two-question-audit.xml")
+            .clickRecover(FormHierarchyPage("Two Question"))
             .assertText("Alexei")
             .pressBack(FormEntryPage("Two Question"))
             .closeSoftKeyboard()
@@ -150,10 +153,11 @@ class SavePointTest {
         rule.editForm("two-question-audit.xml", "Two Question")
             .clickGoToStart()
             .answerQuestion("What is your name?", "Alexei")
-            .let { simulateProcessDeath() }
+            .killApp()
 
         // Edit instance and check save point is loaded
-        rule.editForm("two-question-audit.xml", "Two Question")
+        rule.editFormWithSavepoint("two-question-audit.xml")
+            .clickRecover(FormHierarchyPage("Two Question"))
             .assertText("Alexei")
             .assertText("52")
             .pressBack(FormEntryPage("Two Question"))
@@ -191,7 +195,7 @@ class SavePointTest {
         // Create save point for blank form
         rule.fillNewForm("two-question-audit.xml", "Two Question")
             .answerQuestion("What is your name?", "Alexei")
-            .let { simulateProcessDeath() }
+            .killApp()
 
         // Check editing instance doesn't load save point
         rule.editForm("two-question-audit.xml", "Two Question")
@@ -215,7 +219,7 @@ class SavePointTest {
         rule.editForm("two-question-audit.xml", "Two Question")
             .clickGoToStart()
             .answerQuestion("What is your name?", "Alexei")
-            .let { simulateProcessDeath() }
+            .killApp()
 
         // Check starting blank form does not load save point
         rule.fillNewForm("two-question-audit.xml", "Two Question")
@@ -227,14 +231,5 @@ class SavePointTest {
      */
     private fun simulateBatteryDeath(): FormEntryActivityTestRule {
         return rule.simulateProcessRestart()
-    }
-
-    /**
-     * Simulate a "process death" case where an app in the background is killed
-     */
-    private fun simulateProcessDeath(): FormEntryActivityTestRule {
-        return rule.navigateAwayFromActivity()
-            .destroyActivity()
-            .simulateProcessRestart()
     }
 }
