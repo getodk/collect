@@ -109,7 +109,30 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         e.getMessage());
             }
         }
-        
+
+        // Delete instances that were successfully sent and that need to be deleted
+        // either because app-level auto-delete is enabled or because the form
+        // specifies it.
+        Set<String> instanceIds = outcome.messagesByInstanceId.keySet();
+
+        boolean isFormAutoDeleteOptionEnabled;
+
+        // The custom configuration from the third party app overrides
+        // the app preferences set for delete after submission
+        if (deleteInstanceAfterSubmission != null) {
+            isFormAutoDeleteOptionEnabled = deleteInstanceAfterSubmission;
+        } else {
+            isFormAutoDeleteOptionEnabled = settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND);
+        }
+
+        Stream<Instance> instancesToDelete = instanceIds.stream()
+                .map(id -> new InstancesRepositoryProvider(Collect.getInstance()).get().get(Long.parseLong(id)))
+                .filter(instance -> instance.getStatus().equals(Instance.STATUS_SUBMITTED))
+                .filter(instance -> InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, isFormAutoDeleteOptionEnabled, instance));
+
+        InstanceDeleter instanceDeleter = new InstanceDeleter(instancesRepository, formsRepository);
+        instanceDeleter.delete(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
+
         return outcome;
     }
 
@@ -130,29 +153,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     stateListener.authRequest(outcome.authRequestingServer, outcome.messagesByInstanceId);
                 } else {
                     stateListener.uploadingComplete(outcome.messagesByInstanceId);
-
-                    // Delete instances that were successfully sent and that need to be deleted
-                    // either because app-level auto-delete is enabled or because the form
-                    // specifies it.
-                    Set<String> instanceIds = outcome.messagesByInstanceId.keySet();
-
-                    boolean isFormAutoDeleteOptionEnabled;
-
-                    // The custom configuration from the third party app overrides
-                    // the app preferences set for delete after submission
-                    if (deleteInstanceAfterSubmission != null) {
-                        isFormAutoDeleteOptionEnabled = deleteInstanceAfterSubmission;
-                    } else {
-                        isFormAutoDeleteOptionEnabled = settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND);
-                    }
-
-                    Stream<Instance> instancesToDelete = instanceIds.stream()
-                            .map(id -> new InstancesRepositoryProvider(Collect.getInstance()).get().get(Long.parseLong(id)))
-                            .filter(instance -> instance.getStatus().equals(Instance.STATUS_SUBMITTED))
-                            .filter(instance -> InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, isFormAutoDeleteOptionEnabled, instance));
-
-                    InstanceDeleter instanceDeleter = new InstanceDeleter(instancesRepository, formsRepository);
-                    instanceDeleter.delete(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
                 }
             }
         }
