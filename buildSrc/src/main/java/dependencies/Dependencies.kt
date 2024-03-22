@@ -21,7 +21,7 @@ object Dependencies {
     const val android_material = "com.google.android.material:material:1.11.0"
     const val android_flexbox = "com.google.android.flexbox:flexbox:3.0.0"
     const val play_services_maps = "com.google.android.gms:play-services-maps:18.2.0"
-    const val play_services_location = "com.google.android.gms:play-services-location:21.1.0"
+    const val play_services_location = "com.google.android.gms:play-services-location:20.0.0" // Check if map screens still work when upgrading and location works as expected https://github.com/getodk/collect/issues/6027, especially after moving to FusedLocationProviderClient.
     const val play_services_oss_licenses = "com.google.android.gms:play-services-oss-licenses:17.0.1"
     const val mapbox_android_sdk = "com.mapbox.maps:android:10.16.4"
     const val osmdroid = "org.osmdroid:osmdroid-android:6.1.18"
