@@ -6,35 +6,38 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/record_video_button"
-        style="?widgetButtonQuestionWidgetStyle"
+        style="?widgetButtonIconQuestionWidgetStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/capture_video"
         android:contentDescription="@string/capture_video"
+        app:icon="@drawable/ic_baseline_videocam_white_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/choose_video_button"
-        style="?widgetButtonQuestionWidgetStyle"
+        style="?widgetButtonIconQuestionWidgetStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/choose_video"
         android:contentDescription="@string/choose_video"
         android:layout_marginTop="@dimen/margin_small"
+        app:icon="@drawable/ic_baseline_video_library_white_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/record_video_button" />
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/play_video_button"
-        style="?widgetButtonQuestionWidgetStyle"
+        style="?widgetButtonIconQuestionWidgetStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/play_video"
         android:contentDescription="@string/play_video"
         android:layout_marginTop="@dimen/margin_small"
+        app:icon="@drawable/ic_baseline_play_circle_white_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/choose_video_button" />

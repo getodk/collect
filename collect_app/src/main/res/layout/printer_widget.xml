@@ -6,10 +6,11 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/printer_button"
-        style="?widgetButtonQuestionWidgetStyle"
+        style="?widgetButtonIconQuestionWidgetStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/print"
+        app:icon="@drawable/ic_baseline_print_white_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -23,7 +23,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 
-import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
+import org.odk.collect.android.databinding.GeoshapeQuestionBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
@@ -32,7 +32,7 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 @SuppressLint("ViewConstructor")
 public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver {
-    GeoWidgetAnswerBinding binding;
+    GeoshapeQuestionBinding binding;
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final GeoDataRequester geoDataRequester;
@@ -48,7 +48,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
+        binding = GeoshapeQuestionBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 

@@ -7,11 +7,12 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/draw_button"
-        style="?widgetButtonQuestionWidgetStyle"
+        style="?widgetButtonIconQuestionWidgetStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/draw_image"
         android:contentDescription="@string/draw_image"
+        app:icon="@drawable/ic_baseline_draw_white_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

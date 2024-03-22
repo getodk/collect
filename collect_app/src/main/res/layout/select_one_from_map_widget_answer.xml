@@ -7,8 +7,9 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/button"
-        style="?widgetButtonQuestionWidgetStyle"
+        style="?widgetButtonIconQuestionWidgetStyle"
         android:text="@string/select_place"
+        app:icon="@drawable/ic_baseline_location_on_white_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

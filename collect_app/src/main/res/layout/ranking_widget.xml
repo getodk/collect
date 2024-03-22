@@ -7,11 +7,12 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/rank_items_button"
-        style="?widgetButtonQuestionWidgetStyle"
+        style="?widgetButtonIconQuestionWidgetStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/rank_items"
         android:contentDescription="@string/rank_items"
+        app:icon="@drawable/ic_baseline_format_list_bulleted_white_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

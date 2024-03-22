@@ -427,7 +427,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         // set button formatting
         MaterialButton launchIntentButton = findViewById(R.id.launchIntentButton);
         launchIntentButton.setText(buttonText);
-        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize() + 2);
+        launchIntentButton.setTextSize(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.BODY_LARGE));
         launchIntentButton.setVisibility(VISIBLE);
         launchIntentButton.setOnClickListener(view -> {
             String intentName = ExternalAppsUtils.extractIntentName(intentString);

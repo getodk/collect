@@ -7,11 +7,12 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/sign_button"
-        style="?widgetButtonQuestionWidgetStyle"
+        style="?widgetButtonIconQuestionWidgetStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/sign_button"
         android:contentDescription="@string/sign_button"
+        app:icon="@drawable/ic_baseline_signature_white_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
