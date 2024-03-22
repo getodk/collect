@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -70,8 +71,8 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
                             .filter(instance -> instance.getStatus().equals(Instance.STATUS_SUBMITTED))
                             .filter(instance -> InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, isFormAutoDeleteOptionEnabled, instance));
 
-                    DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepository, formsRepository);
-                    dit.execute(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
+                    InstanceDeleter instanceDeleter = new InstanceDeleter(instancesRepository, formsRepository);
+                    instanceDeleter.delete(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
                 }
             }
         }

@@ -8,6 +8,12 @@ class InstanceDeleter(
     private val instancesRepository: InstancesRepository,
     private val formsRepository: FormsRepository
 ) {
+    fun delete(ids: Array<Long>) {
+        ids.forEach {
+            delete(it)
+        }
+    }
+
     fun delete(id: Long?) {
         instancesRepository[id]?.let { instance ->
             if (instance.status == Instance.STATUS_SUBMITTED) {
