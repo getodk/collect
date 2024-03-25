@@ -9,6 +9,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -177,6 +178,26 @@ class SavedFormListViewModelTest {
 
         scheduler.flush()
         assertThat(viewModel.isDeleting.getOrAwaitValue(), equalTo(false))
+    }
+
+    @Test
+    fun `deleteForms should return 0 if instances can not be deleted`() {
+        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        whenever(instancesDataService.deleteInstances(any())).thenReturn(false)
+
+        val result = viewModel.deleteForms(longArrayOf(1))
+        scheduler.flush()
+        assertThat(result.value!!.value, equalTo(0))
+    }
+
+    @Test
+    fun `deleteForms should return the number of instances after deleting`() {
+        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        whenever(instancesDataService.deleteInstances(any())).thenReturn(true)
+
+        val result = viewModel.deleteForms(longArrayOf(1))
+        scheduler.flush()
+        assertThat(result.value!!.value, equalTo(1))
     }
 
     private fun saveForms(instances: List<Instance>) {
