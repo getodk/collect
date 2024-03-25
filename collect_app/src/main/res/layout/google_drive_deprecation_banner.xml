@@ -36,7 +36,7 @@
             app:layout_constraintStart_toEndOf="@id/instance_name_info_icon"
             app:layout_constraintTop_toTopOf="@id/instance_name_info_icon" />
 
-        <com.google.android.material.button.MaterialButton
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
             android:id="@+id/learn_more_button"
             style="?borderlessButtonStyle"
             android:layout_width="wrap_content"

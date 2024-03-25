@@ -350,10 +350,6 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
             return true;
         }
 
-        if (!MultiClickGuard.allowClick(getClass().getName())) {
-            return true;
-        }
-
         if (item.getItemId() == R.id.menu_sort) {
             new FormListSortingBottomSheetDialog(
                     this,

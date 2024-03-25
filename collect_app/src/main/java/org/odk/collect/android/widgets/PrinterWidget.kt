@@ -5,13 +5,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.button.MaterialButton
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.interfaces.Printer
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
 
 class PrinterWidget(
     context: Context,
@@ -27,7 +27,7 @@ class PrinterWidget(
     override fun onCreateAnswerView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         val answerView = LayoutInflater.from(context).inflate(R.layout.printer_widget, null)
         answerView
-            .findViewById<MaterialButton>(R.id.printer_button)
+            .findViewById<MultiClickSafeMaterialButton>(R.id.printer_button)
             .setOnClickListener {
                 print()
             }

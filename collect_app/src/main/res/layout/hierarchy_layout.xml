@@ -54,7 +54,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_alignParentBottom="true">
 
-        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
             android:id="@+id/jumpBeginningButton"
             style="?materialButtonOutlinedStyle"
             android:layout_width="0dp"
@@ -65,7 +65,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
             android:id="@+id/jumpEndButton"
             style="?materialButtonOutlinedStyle"
             android:layout_width="0dp"
@@ -77,7 +77,7 @@
             app:layout_constraintStart_toEndOf="@id/jumpBeginningButton"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
             android:id="@+id/exitButton"
             style="?materialButtonOutlinedStyle"
             android:layout_width="0dp"
