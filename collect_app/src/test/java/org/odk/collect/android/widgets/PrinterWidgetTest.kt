@@ -15,7 +15,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.base.QuestionWidgetTest
-import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
 import org.odk.collect.printer.HtmlPrinter
 import org.odk.collect.qrcode.QRCodeCreator
 import org.odk.collect.testshared.FakeScheduler
@@ -33,7 +33,7 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
         whenever(formEntryPrompt.answerText).thenReturn("blah")
 
         val widget = createWidget()
-        widget.findViewById<MultiClickSafeButton>(R.id.printer_button).performClick()
+        widget.findViewById<MultiClickSafeMaterialButton>(R.id.printer_button).performClick()
         scheduler.runBackground()
         scheduler.runForeground()
 
@@ -45,7 +45,7 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
         whenever(formEntryPrompt.answerText).thenReturn(null)
 
         val widget = createWidget()
-        widget.findViewById<MultiClickSafeButton>(R.id.printer_button).performClick()
+        widget.findViewById<MultiClickSafeMaterialButton>(R.id.printer_button).performClick()
 
         verifyNoInteractions(htmlPrinter)
     }

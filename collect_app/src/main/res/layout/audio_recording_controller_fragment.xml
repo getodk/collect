@@ -49,7 +49,7 @@
         android:layout_marginStart="@dimen/margin_standard"
         android:orientation="horizontal">
 
-        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
             android:id="@+id/pause_recording"
             style="?materialIconButtonOutlinedStyle"
             android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
             android:contentDescription="@string/pause_recording"
             app:icon="@drawable/ic_pause_24dp" />
 
-        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
             android:id="@+id/stop_recording"
             style="@style/Widget.Material3.Button.IconButton.Filled"
             android:layout_width="wrap_content"

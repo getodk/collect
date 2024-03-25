@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/launch_app_button"
         style="?widgetButtonIconQuestionWidgetStyle"
         android:text="@string/launch_app"

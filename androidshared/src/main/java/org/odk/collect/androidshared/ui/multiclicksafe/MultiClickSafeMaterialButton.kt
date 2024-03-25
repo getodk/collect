@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import com.google.android.material.button.MaterialButton
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 
-open class MultiClickSafeButton : MaterialButton {
+open class MultiClickSafeMaterialButton : MaterialButton {
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/printer_button"
         style="?widgetButtonIconQuestionWidgetStyle"
         android:layout_width="0dp"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/capture_button"
         style="?widgetButtonIconQuestionWidgetStyle"
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/choose_button"
         style="?widgetButtonIconQuestionWidgetStyle"
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/capture_button" />
 
-    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/annotate_button"
         style="?widgetButtonIconQuestionWidgetStyle"
         android:layout_width="match_parent"

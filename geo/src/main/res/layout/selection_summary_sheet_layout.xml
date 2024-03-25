@@ -51,7 +51,7 @@
             app:layout_constraintTop_toBottomOf="@id/name"
             tools:text="Info" />
 
-        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
             android:id="@+id/action"
             style="?materialButtonIconStyle"
             android:layout_width="wrap_content"

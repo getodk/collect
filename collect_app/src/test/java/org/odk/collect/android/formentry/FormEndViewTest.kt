@@ -15,7 +15,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
-import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
 
 @RunWith(AndroidJUnit4::class)
 class FormEndViewTest {
@@ -45,7 +45,7 @@ class FormEndViewTest {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
         val view = FormEndView(context, "blah", formEndViewModel, listener)
         assertThat(
-            view.findViewById<MultiClickSafeButton>(R.id.save_as_draft).visibility,
+            view.findViewById<MultiClickSafeMaterialButton>(R.id.save_as_draft).visibility,
             equalTo(View.VISIBLE)
         )
     }
@@ -55,7 +55,7 @@ class FormEndViewTest {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(false)
         val view = FormEndView(context, "blah", formEndViewModel, listener)
         assertThat(
-            view.findViewById<MultiClickSafeButton>(R.id.save_as_draft).visibility,
+            view.findViewById<MultiClickSafeMaterialButton>(R.id.save_as_draft).visibility,
             equalTo(View.GONE)
         )
     }
@@ -64,7 +64,7 @@ class FormEndViewTest {
     fun `when 'Save as draft' button is clicked then onSaveClicked is called with false value`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
         val view = FormEndView(context, "blah", formEndViewModel, listener)
-        view.findViewById<MultiClickSafeButton>(R.id.save_as_draft).performClick()
+        view.findViewById<MultiClickSafeMaterialButton>(R.id.save_as_draft).performClick()
         verify(listener).onSaveClicked(false)
     }
 
@@ -73,7 +73,7 @@ class FormEndViewTest {
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
         val view = FormEndView(context, "blah", formEndViewModel, listener)
         assertThat(
-            view.findViewById<MultiClickSafeButton>(R.id.finalize).visibility,
+            view.findViewById<MultiClickSafeMaterialButton>(R.id.finalize).visibility,
             equalTo(View.VISIBLE)
         )
     }
@@ -82,14 +82,14 @@ class FormEndViewTest {
     fun `when finalizing forms is disabled in settings should 'Finalize' button be hidden`() {
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(false)
         val view = FormEndView(context, "blah", formEndViewModel, listener)
-        assertThat(view.findViewById<MultiClickSafeButton>(R.id.finalize).visibility, equalTo(View.GONE))
+        assertThat(view.findViewById<MultiClickSafeMaterialButton>(R.id.finalize).visibility, equalTo(View.GONE))
     }
 
     @Test
     fun `when 'Finalize' button is clicked then onSaveClicked is called with true value`() {
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
         val view = FormEndView(context, "blah", formEndViewModel, listener)
-        view.findViewById<MultiClickSafeButton>(R.id.finalize).performClick()
+        view.findViewById<MultiClickSafeMaterialButton>(R.id.finalize).performClick()
         verify(listener).onSaveClicked(true)
     }
 
@@ -98,7 +98,7 @@ class FormEndViewTest {
         whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(false)
         val view = FormEndView(context, "blah", formEndViewModel, listener)
         assertThat(
-            view.findViewById<MultiClickSafeButton>(R.id.finalize).text,
+            view.findViewById<MultiClickSafeMaterialButton>(R.id.finalize).text,
             equalTo(context.getString(org.odk.collect.strings.R.string.finalize))
         )
     }
@@ -108,7 +108,7 @@ class FormEndViewTest {
         whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
         val view = FormEndView(context, "blah", formEndViewModel, listener)
         assertThat(
-            view.findViewById<MultiClickSafeButton>(R.id.finalize).text,
+            view.findViewById<MultiClickSafeMaterialButton>(R.id.finalize).text,
             equalTo(
                 context.getString(
                     org.odk.collect.strings.R.string.send

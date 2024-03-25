@@ -82,7 +82,7 @@ import org.odk.collect.android.widgets.utilities.StringRequesterImpl;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton;
 import org.odk.collect.audioclips.PlaybackFailedException;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionListener;
@@ -424,7 +424,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         errorString = (v != null) ? v : context.getString(org.odk.collect.strings.R.string.no_app);
 
         // set button formatting
-        MultiClickSafeButton launchIntentButton = findViewById(R.id.launchIntentButton);
+        MultiClickSafeMaterialButton launchIntentButton = findViewById(R.id.launchIntentButton);
         launchIntentButton.setText(buttonText);
         launchIntentButton.setTextSize(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.BODY_LARGE));
         launchIntentButton.setVisibility(VISIBLE);

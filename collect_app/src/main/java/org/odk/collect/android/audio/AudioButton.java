@@ -20,13 +20,13 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import org.odk.collect.android.R;
-import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton;
 
 /**
  * @author ctsims
  * @author carlhartung
  */
-public class AudioButton extends MultiClickSafeButton implements View.OnClickListener {
+public class AudioButton extends MultiClickSafeMaterialButton implements View.OnClickListener {
 
     private Listener listener;
 

@@ -103,7 +103,7 @@ the specific language governing permissions and limitations under the License.
             app:layout_constraintTop_toBottomOf="@+id/form_edits_warning"
             app:layout_constraintWidth_max="@dimen/max_content_width">
 
-            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
                 android:id="@+id/save_as_draft"
                 style="?materialButtonOutlinedIconStyle"
                 android:layout_width="0dp"
@@ -113,7 +113,7 @@ the specific language governing permissions and limitations under the License.
                 app:icon="@drawable/ic_save_menu_24"
                 app:iconGravity="textStart" />
 
-            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
                 android:id="@+id/finalize"
                 style="?materialButtonIconStyle"
                 android:layout_width="0dp"

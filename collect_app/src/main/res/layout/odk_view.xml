@@ -36,7 +36,7 @@ limitations under the License.
             tools:text="Group text"
             tools:visibility="visible" />
 
-        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
             android:id="@+id/launchIntentButton"
             style="?widgetButtonIconQuestionWidgetStyle"
             android:layout_width="match_parent"

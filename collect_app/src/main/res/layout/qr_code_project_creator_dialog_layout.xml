@@ -72,7 +72,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/barcode_view" />
 
-            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
                 android:id="@+id/configure_manually_button"
                 style="?materialButtonOutlinedIconStyle"
                 android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
         android:src="@drawable/shadow_up"
         app:layout_constraintBottom_toTopOf="@+id/cancel_button" />
 
-    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/cancel_button"
         style="?borderlessButtonStyle"
         android:layout_width="wrap_content"

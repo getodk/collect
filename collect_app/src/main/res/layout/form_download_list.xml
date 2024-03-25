@@ -63,7 +63,7 @@ the License.
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
                 android:id="@+id/toggle_button"
                 style="?materialButtonOutlinedStyle"
                 android:layout_width="0dp"
@@ -72,7 +72,7 @@ the License.
                 android:layout_weight="1"
                 android:text="@string/select_all" />
 
-            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
                 android:id="@+id/refresh_button"
                 style="?materialButtonOutlinedStyle"
                 android:layout_width="0dp"
@@ -81,7 +81,7 @@ the License.
                 android:layout_weight="1"
                 android:text="@string/refresh" />
 
-            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
                 android:id="@+id/add_button"
                 style="?materialButtonStyle"
                 android:layout_width="0dp"
