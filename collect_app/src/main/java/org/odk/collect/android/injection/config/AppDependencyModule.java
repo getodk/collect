@@ -441,7 +441,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstancesDataService providesInstancesDataService(Application application, InstancesRepositoryProvider instancesRepositoryProvider, ProjectsDataService projectsDataService, FormsRepositoryProvider formsRepositoryProvider, EntitiesRepositoryProvider entitiesRepositoryProvider, StoragePathProvider storagePathProvider, InstanceSubmitScheduler instanceSubmitScheduler, SavepointsRepositoryProvider savepointsRepositoryProvider) {
+    public InstancesDataService providesInstancesDataService(Application application, InstancesRepositoryProvider instancesRepositoryProvider, ProjectsDataService projectsDataService, FormsRepositoryProvider formsRepositoryProvider, EntitiesRepositoryProvider entitiesRepositoryProvider, StoragePathProvider storagePathProvider, InstanceSubmitScheduler instanceSubmitScheduler, SavepointsRepositoryProvider savepointsRepositoryProvider, ChangeLockProvider changeLockProvider) {
         Function0<Unit> onUpdate = () -> {
             application.getContentResolver().notifyChange(
                     InstancesContract.getUri(projectsDataService.getCurrentProject().getUuid()),
@@ -451,7 +451,7 @@ public class AppDependencyModule {
             return null;
         };
 
-        return new InstancesDataService(getState(application), formsRepositoryProvider, instancesRepositoryProvider, savepointsRepositoryProvider, entitiesRepositoryProvider, storagePathProvider, instanceSubmitScheduler, projectsDataService, onUpdate);
+        return new InstancesDataService(getState(application), formsRepositoryProvider, instancesRepositoryProvider, savepointsRepositoryProvider, entitiesRepositoryProvider, storagePathProvider, instanceSubmitScheduler, projectsDataService, changeLockProvider, onUpdate);
     }
 
     @Provides
