@@ -19,7 +19,7 @@
     <color name="colorSurfaceContainerLow">#f7f7f7</color>
     <color name="colorSurfaceContainer">#f7f7f7</color>
     <color name="colorSurfaceContainerHigh">#f7f7f7</color>
-    <color name="colorSurfaceContainerHighest">#ecf5fa</color>
+    <color name="colorSurfaceContainerHighest">#f2f2f2</color>
     <color name="colorSurfaceInverse">#003547</color>
     <color name="colorOnSurfaceInverse">#E1F4FF</color>
 
