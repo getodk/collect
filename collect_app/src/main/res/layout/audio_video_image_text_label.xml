@@ -71,7 +71,7 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
-        <com.google.android.material.button.MaterialButton
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
             android:id="@+id/videoButton"
             style="?materialIconButtonOutlinedStyle"
             android:layout_width="@dimen/touch_target_size"

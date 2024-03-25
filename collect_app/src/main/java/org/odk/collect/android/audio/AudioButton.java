@@ -19,15 +19,14 @@ import android.content.res.ColorStateList;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.google.android.material.button.MaterialButton;
-
 import org.odk.collect.android.R;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton;
 
 /**
  * @author ctsims
  * @author carlhartung
  */
-public class AudioButton extends MaterialButton implements View.OnClickListener {
+public class AudioButton extends MultiClickSafeButton implements View.OnClickListener {
 
     private Listener listener;
 

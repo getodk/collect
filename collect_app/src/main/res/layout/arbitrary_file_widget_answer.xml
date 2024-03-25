@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.material.button.MaterialButton
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/arbitrary_file_button"
         style="?widgetButtonIconQuestionWidgetStyle"
         android:text="@string/choose_file"
