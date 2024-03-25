@@ -214,7 +214,7 @@ You may have a mismatch between the embedded Android SDK Java and the JDK instal
 Note that this change might cause problems with other Java-based applications (e.g., if you uninstall Android Studio).
 
 #### gradlew Failure: `java.lang.NullPointerException (no error message).`
-If you encounter the `java.lang.NullPointerException (no error message).` when running `gradlew`, please make sure your Java version for this project is Java 8.
+If you encounter the `java.lang.NullPointerException (no error message).` when running `gradlew`, please make sure your Java version for this project is Java 17.
 
 This can be configured under **File > Project Structure** in Android Studio, or by editing `$USER_HOME/.gradle/gradle.properties` to set `org.gradle.java.home=(path to JDK home)` for command-line use.
 
@@ -227,7 +227,7 @@ This is encountered when Robolectric has problems downloading the jars it needs 
 ```
 
 ## Creating signed releases for Google Play Store
-Maintainers keep a folder with a clean checkout of the code and use [jenv.be](https://www.jenv.be) in that folder to ensure compilation with Java 11.
+Maintainers keep a folder with a clean checkout of the code and use [jenv.be](https://www.jenv.be) in that folder to ensure compilation with Java 17.
 
 ### Release prerequisites:
 
