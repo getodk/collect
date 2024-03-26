@@ -61,7 +61,7 @@
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                style="?textInputFilledStyle"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_extra_large">
