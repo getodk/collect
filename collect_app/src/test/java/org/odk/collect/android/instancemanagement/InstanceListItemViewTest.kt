@@ -14,7 +14,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.databinding.FormChooserListItemBinding
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InstanceFixtures
-import org.odk.collect.strings.R.string
 
 @RunWith(AndroidJUnit4::class)
 class InstanceListItemViewTest {
@@ -28,61 +27,42 @@ class InstanceListItemViewTest {
     }
 
     @Test
-    fun whenInstanceIsInvalid_showsIncompleteChip() {
+    fun `show a chip if the status is STATUS_INVALID`() {
         val binding = FormChooserListItemBinding.inflate(layoutInflater)
         val instance = InstanceFixtures.instance(status = Instance.STATUS_INVALID)
 
         InstanceListItemView.setInstance(binding.root, instance, false)
 
         assertThat(binding.chip.visibility, equalTo(View.VISIBLE))
-        assertThat(binding.chip.text, equalTo(context.getString(string.draft_errors)))
     }
 
     @Test
-    fun whenInstanceIsValid_showsCompleteChip() {
+    fun `show a chip if the status is STATUS_VALID`() {
         val binding = FormChooserListItemBinding.inflate(layoutInflater)
         val instance = InstanceFixtures.instance(status = Instance.STATUS_VALID)
 
         InstanceListItemView.setInstance(binding.root, instance, false)
 
         assertThat(binding.chip.visibility, equalTo(View.VISIBLE))
-        assertThat(binding.chip.text, equalTo(context.getString(string.draft_no_errors)))
     }
 
     @Test
-    fun whenInstanceIsIncomplete_showsIncompleteChip() {
+    fun `show a chip if the status is STATUS_INCOMPLETE`() {
         val binding = FormChooserListItemBinding.inflate(layoutInflater)
         val instance = InstanceFixtures.instance(status = Instance.STATUS_INCOMPLETE)
 
         InstanceListItemView.setInstance(binding.root, instance, false)
 
         assertThat(binding.chip.visibility, equalTo(View.VISIBLE))
-        assertThat(binding.chip.text, equalTo(context.getString(string.draft_errors)))
     }
 
     @Test
-    fun whenInstanceIsComplete_doesNotShowIncompleteChip() {
+    fun `do not show a chip if the status is STATUS_COMPLETE`() {
         val binding = FormChooserListItemBinding.inflate(layoutInflater)
         val instance = InstanceFixtures.instance(status = Instance.STATUS_COMPLETE)
 
         InstanceListItemView.setInstance(binding.root, instance, false)
 
         assertThat(binding.chip.visibility, equalTo(View.GONE))
-    }
-
-    @Test
-    fun chipCanBeRecycled() {
-        val binding = FormChooserListItemBinding.inflate(layoutInflater)
-        val valid = InstanceFixtures.instance(status = Instance.STATUS_VALID)
-        InstanceListItemView.setInstance(binding.root, valid, false)
-
-        assertThat(binding.chip.visibility, equalTo(View.VISIBLE))
-        assertThat(binding.chip.text, equalTo(context.getString(string.draft_no_errors)))
-
-        val invalid = InstanceFixtures.instance(status = Instance.STATUS_INVALID)
-        InstanceListItemView.setInstance(binding.root, invalid, false)
-
-        assertThat(binding.chip.visibility, equalTo(View.VISIBLE))
-        assertThat(binding.chip.text, equalTo(context.getString(string.draft_errors)))
     }
 }

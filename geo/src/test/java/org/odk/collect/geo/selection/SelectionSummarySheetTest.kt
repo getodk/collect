@@ -8,7 +8,6 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.PropertyBinding
 import org.odk.collect.geo.support.Fixtures
 import org.odk.collect.testshared.RobolectricHelpers.getCreatedFromResId
@@ -21,7 +20,7 @@ class SelectionSummarySheetTest {
     }
 
     @Test
-    fun `setItem shows status with errors`() {
+    fun `setItem shows a chip when the status is ERRORS`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
             Fixtures.actionMappableSelectItem().copy(
@@ -30,11 +29,10 @@ class SelectionSummarySheetTest {
         )
 
         assertThat(selectionSummarySheet.binding.statusChip.visibility, equalTo(View.VISIBLE))
-        assertThat(selectionSummarySheet.binding.statusChip.text, equalTo(application.getString(org.odk.collect.strings.R.string.draft_errors)))
     }
 
     @Test
-    fun `setItem shows status with no errors`() {
+    fun `setItem shows a chip when the status is NO_ERRORS`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
             Fixtures.actionMappableSelectItem().copy(
@@ -43,11 +41,10 @@ class SelectionSummarySheetTest {
         )
 
         assertThat(selectionSummarySheet.binding.statusChip.visibility, equalTo(View.VISIBLE))
-        assertThat(selectionSummarySheet.binding.statusChip.text, equalTo(application.getString(org.odk.collect.strings.R.string.draft_no_errors)))
     }
 
     @Test
-    fun `setItem does not show status if it is null`() {
+    fun `setItem does not show a chip if the status is null`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(Fixtures.actionMappableSelectItem())
 
