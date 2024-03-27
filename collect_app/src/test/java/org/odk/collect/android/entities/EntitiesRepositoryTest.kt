@@ -40,8 +40,7 @@ abstract class EntitiesRepositoryTest {
         repository.save(updatedWine)
 
         val wines = repository.getEntities("wines")
-        assertThat(wines.size, equalTo(1))
-        assertThat(wines[0], equalTo(updatedWine))
+        assertThat(wines, contains(updatedWine))
     }
 
     @Test
@@ -57,12 +56,10 @@ abstract class EntitiesRepositoryTest {
         repository.save(updatedWine)
 
         val wines = repository.getEntities("wines")
-        assertThat(wines.size, equalTo(1))
-        assertThat(wines[0], equalTo(updatedWine))
+        assertThat(wines, contains(updatedWine))
 
         val whiskys = repository.getEntities("whiskys")
-        assertThat(whiskys.size, equalTo(1))
-        assertThat(whiskys[0], equalTo(whisky))
+        assertThat(whiskys, contains(whisky))
     }
 
     @Test
