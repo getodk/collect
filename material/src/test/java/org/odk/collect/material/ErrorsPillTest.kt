@@ -8,7 +8,6 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
 import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
@@ -16,8 +15,7 @@ class ErrorsPillTest {
     private val context = ApplicationProvider.getApplicationContext<Application>().also {
         it.setTheme(com.google.android.material.R.style.Theme_Material3_Light)
     }
-    private val attrs = Robolectric.buildAttributeSet().build()
-    private val errorsPill: ErrorsPill = ErrorsPill(context, attrs)
+    private val errorsPill: ErrorsPill = ErrorsPill(context, null)
 
     @Test
     fun `setup with State ERRORS should set appropriate properties`() {
