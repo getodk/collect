@@ -1,80 +1,139 @@
 /*
- * Copyright 2016 Nafundi
+ * Copyright (C) 2009 University of Washington
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package org.odk.collect.android.tasks;
 
-import android.net.Uri;
-import android.os.AsyncTask;
-
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.upload.InstanceServerUploader;
+import org.odk.collect.android.upload.FormUploadAuthRequestedException;
+import org.odk.collect.android.upload.FormUploadException;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploaderTask.Outcome> {
+import javax.inject.Inject;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
+import android.net.Uri;
+import android.os.AsyncTask;
+
+/**
+ * Background task for uploading completed forms.
+ *
+ * @author Carl Hartung (carlhartung@gmail.com)
+ */
+public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploaderTask.Outcome> {
+    @Inject
+    OpenRosaHttpInterface httpInterface;
+
+    @Inject
+    WebCredentialsUtils webCredentialsUtils;
+
+    @Inject
+    PropertyManager propertyManager;
+
+    // Custom submission URL, username and password that can be sent via intent extras by external
+    // applications
+    private String completeDestinationUrl;
+    private String customUsername;
+    private String customPassword;
     private InstancesRepository instancesRepository;
     private FormsRepository formsRepository;
-    protected SettingsProvider settingsProvider;
+    private SettingsProvider settingsProvider;
     private InstanceUploaderListener stateListener;
     private Boolean deleteInstanceAfterSubmission;
 
+    public InstanceUploaderTask() {
+        Collect.getInstance().getComponent().inject(this);
+    }
+
     @Override
-    protected void onPostExecute(Outcome outcome) {
-        synchronized (this) {
-            if (outcome != null && stateListener != null) {
-                if (outcome.authRequestingServer != null) {
-                    stateListener.authRequest(outcome.authRequestingServer, outcome.messagesByInstanceId);
-                } else {
-                    stateListener.uploadingComplete(outcome.messagesByInstanceId);
+    public Outcome doInBackground(Long... instanceIdsToUpload) {
+        Outcome outcome = new Outcome();
 
-                    // Delete instances that were successfully sent and that need to be deleted
-                    // either because app-level auto-delete is enabled or because the form
-                    // specifies it.
-                    Set<String> instanceIds = outcome.messagesByInstanceId.keySet();
+        InstanceServerUploader uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils, settingsProvider.getUnprotectedSettings());
+        List<Instance> instancesToUpload = uploader.getInstancesFromIds(instanceIdsToUpload);
 
-                    boolean isFormAutoDeleteOptionEnabled;
+        String deviceId = propertyManager.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
 
-                    // The custom configuration from the third party app overrides
-                    // the app preferences set for delete after submission
-                    if (deleteInstanceAfterSubmission != null) {
-                        isFormAutoDeleteOptionEnabled = deleteInstanceAfterSubmission;
-                    } else {
-                        isFormAutoDeleteOptionEnabled = settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND);
-                    }
+        for (int i = 0; i < instancesToUpload.size(); i++) {
+            if (isCancelled()) {
+                return outcome;
+            }
+            Instance instance = instancesToUpload.get(i);
 
-                    Stream<Instance> instancesToDelete = instanceIds.stream()
-                            .map(id -> new InstancesRepositoryProvider(Collect.getInstance()).get().get(Long.parseLong(id)))
-                            .filter(instance -> instance.getStatus().equals(Instance.STATUS_SUBMITTED))
-                            .filter(instance -> InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, isFormAutoDeleteOptionEnabled, instance));
+            publishProgress(i + 1, instancesToUpload.size());
 
-                    DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepository, formsRepository);
-                    dit.execute(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
-                }
+            try {
+                String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl, null);
+                String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
+                outcome.messagesByInstanceId.put(instance.getDbId().toString(),
+                        customMessage != null ? customMessage : getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.success));
+
+                Analytics.log(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion()));
+            } catch (FormUploadAuthRequestedException e) {
+                outcome.authRequestingServer = e.getAuthRequestingServer();
+                // Don't add the instance that caused an auth request to the map because we want to
+                // retry. Items present in the map are considered already attempted and won't be
+                // retried.
+            } catch (FormUploadException e) {
+                outcome.messagesByInstanceId.put(instance.getDbId().toString(),
+                        e.getMessage());
             }
         }
+
+        // Delete instances that were successfully sent and that need to be deleted
+        // either because app-level auto-delete is enabled or because the form
+        // specifies it.
+        Set<String> instanceIds = outcome.messagesByInstanceId.keySet();
+
+        boolean isFormAutoDeleteOptionEnabled;
+
+        // The custom configuration from the third party app overrides
+        // the app preferences set for delete after submission
+        if (deleteInstanceAfterSubmission != null) {
+            isFormAutoDeleteOptionEnabled = deleteInstanceAfterSubmission;
+        } else {
+            isFormAutoDeleteOptionEnabled = settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND);
+        }
+
+        Stream<Instance> instancesToDelete = instanceIds.stream()
+                .map(id -> new InstancesRepositoryProvider(Collect.getInstance()).get().get(Long.parseLong(id)))
+                .filter(instance -> instance.getStatus().equals(Instance.STATUS_SUBMITTED))
+                .filter(instance -> InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, isFormAutoDeleteOptionEnabled, instance));
+
+        InstanceDeleter instanceDeleter = new InstanceDeleter(instancesRepository, formsRepository);
+        instanceDeleter.delete(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
+
+        return outcome;
     }
 
     @Override
@@ -84,6 +143,27 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
                 stateListener.progressUpdate(values[0], values[1]);
             }
         }
+    }
+
+    @Override
+    protected void onPostExecute(Outcome outcome) {
+        synchronized (this) {
+            if (outcome != null && stateListener != null) {
+                if (outcome.authRequestingServer != null) {
+                    stateListener.authRequest(outcome.authRequestingServer, outcome.messagesByInstanceId);
+                } else {
+                    stateListener.uploadingComplete(outcome.messagesByInstanceId);
+                }
+            }
+        }
+
+        // Clear temp credentials
+        clearTemporaryCredentials();
+    }
+
+    @Override
+    protected void onCancelled() {
+        clearTemporaryCredentials();
     }
 
     public void setUploaderListener(InstanceUploaderListener sl) {
@@ -100,6 +180,42 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
         this.instancesRepository = instancesRepository;
         this.formsRepository = formsRepository;
         this.settingsProvider = settingsProvider;
+    }
+
+    public void setCompleteDestinationUrl(String completeDestinationUrl) {
+        setCompleteDestinationUrl(completeDestinationUrl, true);
+    }
+
+    public void setCompleteDestinationUrl(String completeDestinationUrl, boolean clearPreviousConfig) {
+        this.completeDestinationUrl = completeDestinationUrl;
+        if (clearPreviousConfig) {
+            setTemporaryCredentials();
+        }
+    }
+
+    public void setCustomUsername(String customUsername) {
+        this.customUsername = customUsername;
+        setTemporaryCredentials();
+    }
+
+    public void setCustomPassword(String customPassword) {
+        this.customPassword = customPassword;
+        setTemporaryCredentials();
+    }
+
+    private void setTemporaryCredentials() {
+        if (customUsername != null && customPassword != null) {
+            webCredentialsUtils.saveCredentials(completeDestinationUrl, customUsername, customPassword);
+        } else {
+            // In the case for anonymous logins, clear the previous credentials for that host
+            webCredentialsUtils.clearCredentials(completeDestinationUrl);
+        }
+    }
+
+    private void clearTemporaryCredentials() {
+        if (customUsername != null && customPassword != null) {
+            webCredentialsUtils.clearCredentials(completeDestinationUrl);
+        }
     }
 
     /**

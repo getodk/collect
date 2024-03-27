@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.odk.collect.android.utilities
+package org.odk.collect.android.projects
 
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.utilities.FormsRepositoryProvider
+import org.odk.collect.android.utilities.SavepointsRepositoryProvider
+import org.odk.collect.android.utilities.WebCredentialsUtils
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.settings.SettingsProvider
 import java.io.File
@@ -26,9 +30,9 @@ class ProjectResetter(
     private val storagePathProvider: StoragePathProvider,
     private val propertyManager: PropertyManager,
     private val settingsProvider: SettingsProvider,
-    private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val formsRepositoryProvider: FormsRepositoryProvider,
-    private val savepointsRepositoryProvider: SavepointsRepositoryProvider
+    private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
+    private val instancesDataService: InstancesDataService
 ) {
 
     private var failedResetActions = mutableListOf<Int>()
@@ -62,9 +66,8 @@ class ProjectResetter(
     }
 
     private fun resetInstances() {
-        instancesRepositoryProvider.get().deleteAll()
-
-        if (!deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES))) {
+        if (!instancesDataService.deleteAll() ||
+            !deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES))) {
             failedResetActions.add(ResetAction.RESET_INSTANCES)
         }
     }

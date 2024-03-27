@@ -11,6 +11,7 @@ import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -28,6 +29,7 @@ class InstancesDataService(
     private val storagePathProvider: StoragePathProvider,
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
     private val projectsDataService: ProjectsDataService,
+    private val changeLockProvider: ChangeLockProvider,
     private val onUpdate: () -> Unit
 ) {
     val editableCount: LiveData<Int> = appState.getLive(EDITABLE_COUNT_KEY, 0)
@@ -127,12 +129,33 @@ class InstancesDataService(
         return result.copy(successCount = instances.size - result.failureCount)
     }
 
-    fun deleteInstance(instanceId: Long) {
-        InstanceDeleter(instancesRepositoryProvider.get(), formsRepositoryProvider.get()).delete(
-            instanceId
-        )
+    fun deleteInstances(instanceIds: LongArray): Boolean {
+        return changeLockProvider.getInstanceLock(projectsDataService.getCurrentProject().uuid).withLock { acquiredLock: Boolean ->
+            if (acquiredLock) {
+                instanceIds.forEach { instanceId ->
+                    InstanceDeleter(instancesRepositoryProvider.get(), formsRepositoryProvider.get()).delete(
+                        instanceId
+                    )
+                }
 
-        update()
+                update()
+                true
+            } else {
+                false
+            }
+        }
+    }
+
+    fun deleteAll(): Boolean {
+        return changeLockProvider.getInstanceLock(projectsDataService.getCurrentProject().uuid).withLock { acquiredLock: Boolean ->
+            if (acquiredLock) {
+                instancesRepositoryProvider.get().deleteAll()
+                update()
+                true
+            } else {
+                false
+            }
+        }
     }
 
     companion object {

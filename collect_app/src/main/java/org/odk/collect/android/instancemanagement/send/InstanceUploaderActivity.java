@@ -27,7 +27,7 @@ import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
-import org.odk.collect.android.tasks.InstanceServerUploaderTask;
+import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
@@ -67,7 +67,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
 
     private String alertMsg;
 
-    private InstanceServerUploaderTask instanceServerUploaderTask;
+    private InstanceUploaderTask instanceUploaderTask;
 
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
     private Long[] instancesToSend;
@@ -169,34 +169,34 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
         // Get the task if there was a configuration change but the app did not go out of memory.
         // If the app went out of memory, the task is null but the simple state was saved so
         // the task status is reconstructed from that state.
-        instanceServerUploaderTask = (InstanceServerUploaderTask) getLastCustomNonConfigurationInstance();
+        instanceUploaderTask = (InstanceUploaderTask) getLastCustomNonConfigurationInstance();
 
-        if (instanceServerUploaderTask == null) {
+        if (instanceUploaderTask == null) {
             // set up dialog and upload task
             showDialog(PROGRESS_DIALOG);
-            instanceServerUploaderTask = new InstanceServerUploaderTask();
+            instanceUploaderTask = new InstanceUploaderTask();
 
             if (url != null) {
-                instanceServerUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION);
+                instanceUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION);
 
                 if (deleteInstanceAfterUpload != null) {
-                    instanceServerUploaderTask.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
+                    instanceUploaderTask.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
                 }
 
                 String host = Uri.parse(url).getHost();
                 if (host != null) {
                     // We do not need to clear the cookies since they are cleared before any request is made and the Credentials provider is used
                     if (password != null && username != null) {
-                        instanceServerUploaderTask.setCustomUsername(username);
-                        instanceServerUploaderTask.setCustomPassword(password);
+                        instanceUploaderTask.setCustomUsername(username);
+                        instanceUploaderTask.setCustomPassword(password);
                     }
                 }
             }
 
             // register this activity with the new uploader task
-            instanceServerUploaderTask.setUploaderListener(this);
-            instanceServerUploaderTask.setRepositories(instancesRepository, formsRepository, settingsProvider);
-            instanceServerUploaderTask.execute(instancesToSend);
+            instanceUploaderTask.setUploaderListener(this);
+            instanceUploaderTask.setRepositories(instancesRepository, formsRepository, settingsProvider);
+            instanceUploaderTask.execute(instancesToSend);
         }
     }
 
@@ -205,8 +205,8 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
         if (instancesToSend != null) {
             Timber.i("onResume: Resuming upload of %d instances!", instancesToSend.length);
         }
-        if (instanceServerUploaderTask != null) {
-            instanceServerUploaderTask.setUploaderListener(this);
+        if (instanceUploaderTask != null) {
+            instanceUploaderTask.setUploaderListener(this);
         }
         super.onResume();
     }
@@ -237,13 +237,13 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        return instanceServerUploaderTask;
+        return instanceUploaderTask;
     }
 
     @Override
     protected void onDestroy() {
-        if (instanceServerUploaderTask != null) {
-            instanceServerUploaderTask.setUploaderListener(null);
+        if (instanceUploaderTask != null) {
+            instanceUploaderTask.setUploaderListener(null);
         }
         super.onDestroy();
     }
@@ -284,8 +284,8 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                instanceServerUploaderTask.cancel(true);
-                                instanceServerUploaderTask.setUploaderListener(null);
+                                instanceUploaderTask.cancel(true);
+                                instanceUploaderTask.setUploaderListener(null);
                                 finish();
                             }
                         };
@@ -367,19 +367,19 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
     @Override
     public void updatedCredentials() {
         showDialog(PROGRESS_DIALOG);
-        instanceServerUploaderTask = new InstanceServerUploaderTask();
+        instanceUploaderTask = new InstanceUploaderTask();
 
         // register this activity with the new uploader task
-        instanceServerUploaderTask.setUploaderListener(this);
+        instanceUploaderTask.setUploaderListener(this);
         // In the case of credentials set via intent extras, the credentials are stored in the
         // global WebCredentialsUtils but the task also needs to know what server to set to
         // TODO: is this really needed here? When would the task not have gotten a server set in
         // init already?
         if (url != null) {
-            instanceServerUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, false);
+            instanceUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, false);
         }
-        instanceServerUploaderTask.setRepositories(instancesRepository, formsRepository, settingsProvider);
-        instanceServerUploaderTask.execute(instancesToSend);
+        instanceUploaderTask.setRepositories(instancesRepository, formsRepository, settingsProvider);
+        instanceUploaderTask.execute(instancesToSend);
     }
 
     @Override

@@ -22,6 +22,7 @@ import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
 import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
+import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.AndroidShortcutsActivity;
@@ -69,13 +70,12 @@ import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.DownloadFormListTask;
-import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.MediaLoadingTask;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.android.utilities.ProjectResetter;
+import org.odk.collect.android.projects.ProjectResetter;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
@@ -139,7 +139,7 @@ public interface AppDependencyComponent {
 
     void inject(FormFillingActivity formFillingActivity);
 
-    void inject(InstanceServerUploaderTask uploader);
+    void inject(InstanceUploaderTask uploader);
 
     void inject(ServerPreferencesFragment serverPreferencesFragment);
 

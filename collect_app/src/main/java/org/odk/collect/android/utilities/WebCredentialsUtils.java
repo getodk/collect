@@ -64,7 +64,7 @@ public class WebCredentialsUtils {
         }
     }
 
-    static void clearAllCredentials() {
+    public static void clearAllCredentials() {
         HOST_CREDENTIALS.clear();
     }
 

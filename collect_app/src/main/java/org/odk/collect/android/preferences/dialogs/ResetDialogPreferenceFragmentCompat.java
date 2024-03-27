@@ -1,7 +1,7 @@
 package org.odk.collect.android.preferences.dialogs;
 
 import static org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG;
-import static org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_PREFERENCES;
+import static org.odk.collect.android.projects.ProjectResetter.ResetAction.RESET_PREFERENCES;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,7 +19,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
-import org.odk.collect.android.utilities.ProjectResetter;
+import org.odk.collect.android.projects.ProjectResetter;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import java.util.ArrayList;
