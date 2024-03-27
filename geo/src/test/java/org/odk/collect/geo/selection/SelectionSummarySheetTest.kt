@@ -20,7 +20,7 @@ class SelectionSummarySheetTest {
     }
 
     @Test
-    fun `setItem shows a chip when the status is ERRORS`() {
+    fun `setItem shows an error chip when the status is ERRORS`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
             Fixtures.actionMappableSelectItem().copy(
@@ -29,10 +29,11 @@ class SelectionSummarySheetTest {
         )
 
         assertThat(selectionSummarySheet.binding.statusChip.visibility, equalTo(View.VISIBLE))
+        assertThat(selectionSummarySheet.binding.statusChip.errors, equalTo(true))
     }
 
     @Test
-    fun `setItem shows a chip when the status is NO_ERRORS`() {
+    fun `setItem shows a no-error chip when the status is NO_ERRORS`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
             Fixtures.actionMappableSelectItem().copy(
@@ -41,6 +42,7 @@ class SelectionSummarySheetTest {
         )
 
         assertThat(selectionSummarySheet.binding.statusChip.visibility, equalTo(View.VISIBLE))
+        assertThat(selectionSummarySheet.binding.statusChip.errors, equalTo(false))
     }
 
     @Test

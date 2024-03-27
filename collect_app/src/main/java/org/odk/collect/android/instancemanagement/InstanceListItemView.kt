@@ -30,8 +30,8 @@ object InstanceListItemView {
         val pill = view.findViewById<ErrorsPill>(R.id.chip)
         if (pill != null) {
             when (instance.status) {
-                Instance.STATUS_INVALID, Instance.STATUS_INCOMPLETE -> pill.setup(ErrorsPill.State.ERRORS)
-                Instance.STATUS_VALID -> pill.setup(ErrorsPill.State.NO_ERRORS)
+                Instance.STATUS_INVALID, Instance.STATUS_INCOMPLETE -> pill.errors = true
+                Instance.STATUS_VALID -> pill.errors = false
                 else -> pill.visibility = View.GONE
             }
         }

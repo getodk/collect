@@ -11,7 +11,6 @@ import androidx.core.view.size
 import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.PropertyBinding
 import org.odk.collect.geo.databinding.SelectionSummarySheetLayoutBinding
-import org.odk.collect.material.ErrorsPill
 
 internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
@@ -48,8 +47,8 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
     fun setItem(item: MappableSelectItem) {
         itemId = item.id
         when (item.status) {
-            Status.ERRORS -> binding.statusChip.setup(ErrorsPill.State.ERRORS)
-            Status.NO_ERRORS -> binding.statusChip.setup(ErrorsPill.State.NO_ERRORS)
+            Status.ERRORS -> binding.statusChip.errors = true
+            Status.NO_ERRORS -> binding.statusChip.errors = false
             else -> binding.statusChip.visibility = View.GONE
         }
 

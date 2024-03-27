@@ -21,22 +21,22 @@ class ErrorsPillTest {
 
     @Test
     fun `setup with State ERRORS should set appropriate properties`() {
-        errorsPill.setup(ErrorsPill.State.ERRORS)
+        errorsPill.errors = true
         assertErrorsPill()
     }
 
     @Test
     fun `setup with State NO_ERRORS should set appropriate properties`() {
-        errorsPill.setup(ErrorsPill.State.NO_ERRORS)
+        errorsPill.errors = false
         assertNoErrorsPill()
     }
 
     @Test
     fun `pill can be recycled`() {
-        errorsPill.setup(ErrorsPill.State.ERRORS)
+        errorsPill.errors = true
         assertErrorsPill()
 
-        errorsPill.setup(ErrorsPill.State.NO_ERRORS)
+        errorsPill.errors = false
         assertNoErrorsPill()
     }
 
