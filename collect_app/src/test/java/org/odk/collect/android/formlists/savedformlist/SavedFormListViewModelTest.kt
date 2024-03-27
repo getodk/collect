@@ -186,8 +186,7 @@ class SavedFormListViewModelTest {
         whenever(instancesDataService.deleteInstances(any())).thenReturn(false)
 
         val result = viewModel.deleteForms(longArrayOf(1))
-        scheduler.flush()
-        assertThat(result.value!!.value, equalTo(0))
+        assertThat(result.getOrAwaitValue(scheduler)!!.value, equalTo(0))
     }
 
     @Test
@@ -196,8 +195,7 @@ class SavedFormListViewModelTest {
         whenever(instancesDataService.deleteInstances(any())).thenReturn(true)
 
         val result = viewModel.deleteForms(longArrayOf(1))
-        scheduler.flush()
-        assertThat(result.value!!.value, equalTo(1))
+        assertThat(result.getOrAwaitValue(scheduler)!!.value, equalTo(1))
     }
 
     private fun saveForms(instances: List<Instance>) {
