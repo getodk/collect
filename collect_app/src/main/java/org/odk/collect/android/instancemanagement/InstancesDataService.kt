@@ -136,8 +136,6 @@ class InstancesDataService(
                     InstanceDeleter(instancesRepositoryProvider.get(), formsRepositoryProvider.get()).delete(
                         instanceId
                     )
-
-                    update()
                 }
 
                 update()
