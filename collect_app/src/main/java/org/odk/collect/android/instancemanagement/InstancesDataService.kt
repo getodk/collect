@@ -146,6 +146,18 @@ class InstancesDataService(
         }
     }
 
+    fun deleteAll(): Boolean {
+        return changeLockProvider.getInstanceLock(projectsDataService.getCurrentProject().uuid).withLock { acquiredLock: Boolean ->
+            if (acquiredLock) {
+                instancesRepositoryProvider.get().deleteAll()
+                update()
+                true
+            } else {
+                false
+            }
+        }
+    }
+
     companion object {
         private const val EDITABLE_COUNT_KEY = "instancesEditableCount"
         private const val SENDABLE_COUNT_KEY = "instancesSendableCount"

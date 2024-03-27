@@ -16,11 +16,10 @@
 package org.odk.collect.android.projects
 
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
-import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.android.utilities.WebCredentialsUtils
 import org.odk.collect.metadata.PropertyManager
@@ -31,11 +30,9 @@ class ProjectResetter(
     private val storagePathProvider: StoragePathProvider,
     private val propertyManager: PropertyManager,
     private val settingsProvider: SettingsProvider,
-    private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
-    private val projectId: String,
-    private val changeLockProvider: ChangeLockProvider
+    private val instancesDataService: InstancesDataService
 ) {
 
     private var failedResetActions = mutableListOf<Int>()
@@ -69,18 +66,9 @@ class ProjectResetter(
     }
 
     private fun resetInstances() {
-        changeLockProvider.getInstanceLock(projectId).withLock { acquiredLock: Boolean ->
-            if (acquiredLock) {
-                instancesRepositoryProvider.get().deleteAll()
-
-                if (!deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES))) {
-                    failedResetActions.add(ResetAction.RESET_INSTANCES)
-                }
-                true
-            } else {
-                failedResetActions.add(ResetAction.RESET_INSTANCES)
-                false
-            }
+        if (!instancesDataService.deleteAll() ||
+            !deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES))) {
+            failedResetActions.add(ResetAction.RESET_INSTANCES)
         }
     }
 
