@@ -47,7 +47,7 @@ class SwitchProjectTest {
 
     @Test
     fun switchingProject_switchesSettingsFormsInstancesAndEntities() {
-        testDependencies.server.addForm("One Question Entity", "one-question-entity", "1", "one-question-entity.xml")
+        testDependencies.server.addForm("One Question Entity Registration", "one-question-entity", "1", "one-question-entity-registration.xml")
 
         rule.startAtMainMenu()
             // Copy and fill form
@@ -76,15 +76,15 @@ class SwitchProjectTest {
             .clickOKOnDialog(MainMenuPage())
 
             // Fill form
-            .startBlankForm("One Question Entity")
+            .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Alice"))
             .clickSendFinalizedForm(1)
-            .assertText("One Question Entity")
+            .assertText("One Question Entity Registration")
             .pressBack(MainMenuPage())
 
             .openEntityBrowser()
             .clickOnDataset("people")
-            .assertEntity("full_name: Alice")
+            .assertEntity("Alice", "full_name: Alice")
             .pressBack(EntitiesPage())
             .pressBack(ExperimentalPage())
             .pressBack(ProjectSettingsPage())

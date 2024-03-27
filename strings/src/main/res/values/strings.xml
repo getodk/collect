@@ -1116,8 +1116,17 @@
     # Entities
     ##############################################
 
-    <!-- An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project. -->
-    <string name="entities_title">Entities</string>
+    <!-- An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view local entities managed in the current project. -->
+    <string name="entities_title">Local entities</string>
+
+    <!-- Title for setting that controls whether locally created/updated entities appear in forms -->
+    <string name="include_local_entities_setting">Include local entities in forms</string>
+
+    <!-- Text for button that leads to browser for the user to view and manage local entites -->
+    <string name="entity_browser_button">View local entities</string>
+
+    <!-- Text for button that deletes all entities for the project -->
+    <string name="clear_entities">Clear all</string>
 
     <!--
     ##############################################

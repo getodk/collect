@@ -20,8 +20,8 @@ open class CoroutineScheduler(private val foregroundContext: CoroutineContext, p
         }
     }
 
-    override fun immediate(background: Boolean, runnable: Runnable) {
-        val context = if (background) {
+    override fun immediate(foreground: Boolean, runnable: Runnable) {
+        val context = if (!foreground) {
             backgroundContext
         } else {
             foregroundContext

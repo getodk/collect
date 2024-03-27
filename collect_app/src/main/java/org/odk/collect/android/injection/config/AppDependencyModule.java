@@ -369,8 +369,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public EntitiesRepositoryProvider provideEntitiesRepositoryProvider(Application application, ProjectsDataService projectsDataService) {
-        return new EntitiesRepositoryProvider(application, projectsDataService);
+    public EntitiesRepositoryProvider provideEntitiesRepositoryProvider(ProjectsDataService projectsDataService, StoragePathProvider storagePathProvider) {
+        return new EntitiesRepositoryProvider(projectsDataService, storagePathProvider);
     }
 
     @Provides
@@ -563,8 +563,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, UpgradeInitializer upgradeInitializer, AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, MapsInitializer mapsInitializer) {
-        return new ApplicationInitializer(context, propertyManager, analytics, upgradeInitializer, analyticsInitializer, mapsInitializer, projectsRepository, settingsProvider);
+    public ApplicationInitializer providesApplicationInitializer(Application context, PropertyManager propertyManager, Analytics analytics, UpgradeInitializer upgradeInitializer, AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, MapsInitializer mapsInitializer, EntitiesRepositoryProvider entitiesRepositoryProvider) {
+        return new ApplicationInitializer(context, propertyManager, analytics, upgradeInitializer, analyticsInitializer, mapsInitializer, projectsRepository, settingsProvider, entitiesRepositoryProvider);
     }
 
     @Provides

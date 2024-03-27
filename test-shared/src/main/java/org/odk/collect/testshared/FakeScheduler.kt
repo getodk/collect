@@ -35,8 +35,8 @@ class FakeScheduler : Scheduler {
         )
     }
 
-    override fun immediate(background: Boolean, runnable: Runnable) {
-        if (background) {
+    override fun immediate(foreground: Boolean, runnable: Runnable) {
+        if (!foreground) {
             backgroundTasks.push(runnable)
         } else {
             foregroundTasks.push(runnable)

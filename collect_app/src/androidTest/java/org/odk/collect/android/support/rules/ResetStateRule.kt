@@ -5,18 +5,16 @@ import androidx.test.core.app.ApplicationProvider
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import org.odk.collect.android.database.DatabaseConnection.Companion.closeAll
+import org.odk.collect.android.database.DatabaseConnection
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyComponent
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.views.DecoratedBarcodeView
-import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.shared.files.DirectoryUtils
-import java.io.File
 import java.io.IOException
 
 private class ResetStateStatement(
@@ -29,14 +27,10 @@ private class ResetStateStatement(
         val oldComponent = DaggerUtils.getComponent(application)
 
         clearPrefs(oldComponent)
-        clearDisk(oldComponent)
+        clearDisk()
         setTestState()
         CollectHelpers.simulateProcessRestart(appDependencyModule)
         base.evaluate()
-    }
-
-    private fun clearAppState(application: Application) {
-        application.getState().clear()
     }
 
     private fun setTestState() {
@@ -46,13 +40,19 @@ private class ResetStateStatement(
         BottomSheetBehavior.DRAGGING_ENABLED = false
     }
 
-    private fun clearDisk(component: AppDependencyComponent) {
+    private fun clearDisk() {
         try {
-            DirectoryUtils.deleteDirectory(File(component.storagePathProvider().odkRootDirPath))
+            val internalFilesDir = ApplicationProvider.getApplicationContext<Application>().filesDir
+            DirectoryUtils.deleteDirectory(internalFilesDir)
+
+            val externalFilesDir =
+                ApplicationProvider.getApplicationContext<Application>().getExternalFilesDir(null)!!
+            DirectoryUtils.deleteDirectory(externalFilesDir)
         } catch (e: IOException) {
             throw RuntimeException(e)
         }
-        closeAll()
+
+        DatabaseConnection.closeAll()
     }
 
     private fun clearPrefs(component: AppDependencyComponent) {

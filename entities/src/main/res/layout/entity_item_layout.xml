@@ -4,14 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:attr/selectableItemBackground"
     android:paddingHorizontal="@dimen/margin_standard"
     android:paddingTop="@dimen/margin_standard">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?textAppearanceBodyLarge"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Label" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/properties"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:textAppearance="?textAppearanceBodyMedium"
+        app:layout_constraintTop_toBottomOf="@id/label"
         tools:text="property1: value1, property2: value2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

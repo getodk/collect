@@ -16,7 +16,14 @@ class EntityItemViewTest {
     @Test
     fun sortsOrderOfProperties() {
         val view = EntityItemView(context)
-        view.setEntity(Entity("songs", listOf(Pair("name", "S.D.O.S"), Pair("length", "2:50"))))
+        view.setEntity(
+            Entity(
+                "songs",
+                "1",
+                "S.D.O.S",
+                properties = listOf(Pair("name", "S.D.O.S"), Pair("length", "2:50"))
+            )
+        )
 
         val propertiesView = view.findViewById<TextView>(R.id.properties)
         assertThat(propertiesView.text, equalTo("length: 2:50, name: S.D.O.S"))

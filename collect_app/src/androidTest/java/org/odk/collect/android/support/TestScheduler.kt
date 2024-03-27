@@ -41,9 +41,9 @@ class TestScheduler : Scheduler, CoroutineDispatcher() {
         }
     }
 
-    override fun immediate(background: Boolean, runnable: Runnable) {
+    override fun immediate(foreground: Boolean, runnable: Runnable) {
         increment()
-        wrappedScheduler.immediate(background) {
+        wrappedScheduler.immediate(foreground) {
             runnable.run()
             decrement()
         }
