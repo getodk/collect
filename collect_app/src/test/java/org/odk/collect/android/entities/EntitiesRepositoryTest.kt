@@ -63,7 +63,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() only changes properties in new entity for existing entity`() {
+    fun `save() adds new properties`() {
         val repository = buildSubject()
 
         val wine = Entity(
@@ -84,7 +84,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() updates existing properties in new entity for existing entity`() {
+    fun `save() updates existing properties`() {
         val repository = buildSubject()
 
         val wine = Entity(
