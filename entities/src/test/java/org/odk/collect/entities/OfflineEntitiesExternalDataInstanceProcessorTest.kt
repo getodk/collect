@@ -124,7 +124,7 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
 
     @Test
     fun `uses online label if offline entity does not have one`() {
-        val entity = Entity("people", "1", null)
+        val entity = Entity("people", "1", null, version = 2)
         entitiesRepository.save(entity)
 
         val processor =
