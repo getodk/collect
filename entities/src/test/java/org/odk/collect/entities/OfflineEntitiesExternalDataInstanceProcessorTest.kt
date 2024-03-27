@@ -4,6 +4,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.instance.TreeElement
+import org.junit.Ignore
 import org.junit.Test
 
 class OfflineEntitiesExternalDataInstanceProcessorTest {
@@ -81,7 +82,7 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
     }
 
     @Test
-    fun `retains properties in the offline entity if they don't exist in the online duplicate`() {
+    fun `merges properties from an offline and online duplicate`() {
         val entity = Entity("people", "1", "Shiv Roy", properties = listOf(Pair("age", "35")))
         entitiesRepository.save(entity)
 
