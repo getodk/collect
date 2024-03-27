@@ -44,6 +44,20 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `save() updates existing entity with matching id and version`() {
+        val repository = buildSubject()
+
+        val wine = Entity("wines", "1", "Léoville Barton 2008", version = 1)
+        repository.save(wine)
+
+        val updatedWine = Entity("wines", wine.id, "Léoville Barton 2009", version = 1)
+        repository.save(updatedWine)
+
+        val wines = repository.getEntities("wines")
+        assertThat(wines, contains(updatedWine))
+    }
+
+    @Test
     fun `save() does not update existing entity with matching id but not dataset`() {
         val repository = buildSubject()
 
@@ -70,12 +84,18 @@ abstract class EntitiesRepositoryTest {
             "wines",
             "1",
             "Léoville Barton 2008",
-            properties = listOf("window" to "2019-2038")
+            properties = listOf("window" to "2019-2038"),
+            version = 1
         )
         repository.save(wine)
 
-        val updatedWine =
-            Entity("wines", wine.id, "Léoville Barton 2008", properties = listOf("score" to "92"))
+        val updatedWine = Entity(
+            "wines",
+            wine.id,
+            "Léoville Barton 2008",
+            properties = listOf("score" to "92"),
+            version = 2
+        )
         repository.save(updatedWine)
 
         val wines = repository.getEntities("wines")
@@ -91,17 +111,18 @@ abstract class EntitiesRepositoryTest {
             "wines",
             "1",
             "Léoville Barton 2008",
-            properties = listOf("window" to "2019-2038")
+            properties = listOf("window" to "2019-2038"),
+            version = 1
         )
         repository.save(wine)
 
-        val updatedWine =
-            Entity(
-                "wines",
-                wine.id,
-                "Léoville Barton 2008",
-                properties = listOf("window" to "2019-2042")
-            )
+        val updatedWine = Entity(
+            "wines",
+            wine.id,
+            "Léoville Barton 2008",
+            properties = listOf("window" to "2019-2042"),
+            version = 2
+        )
         repository.save(updatedWine)
 
         val wines = repository.getEntities("wines")
@@ -117,12 +138,18 @@ abstract class EntitiesRepositoryTest {
             "wines",
             "1",
             "Léoville Barton 2008",
-            properties = listOf("window" to "2019-2038")
+            properties = listOf("window" to "2019-2038"),
+            version = 1
         )
         repository.save(wine)
 
-        val updatedWine =
-            Entity("wines", wine.id, null, properties = listOf("window" to "2019-2042"))
+        val updatedWine = Entity(
+            "wines",
+            wine.id,
+            null,
+            properties = listOf("window" to "2019-2042"),
+            version = 2
+        )
         repository.save(updatedWine)
 
         val wines = repository.getEntities("wines")
