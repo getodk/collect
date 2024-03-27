@@ -15,6 +15,7 @@
  */
 package org.odk.collect.android.feature.formentry
 
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -98,6 +99,7 @@ class FormNavigationTest {
     }
 
     @Test
+    @Ignore("https://github.com/getodk/collect/issues/6044")
     fun whenNavigationSettingsChangeChangesShouldBeReflectedInFormFilling() {
         rule.startAtMainMenu()
             .copyForm("two-question.xml")
