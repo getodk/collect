@@ -15,7 +15,6 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -31,8 +30,6 @@ public class AudioButton extends MultiClickSafeMaterialButton implements View.On
     private Listener listener;
 
     private Boolean playing = false;
-    private Integer playingColor;
-    private Integer idleColor;
 
     public AudioButton(Context context) {
         super(context, null);
@@ -46,12 +43,6 @@ public class AudioButton extends MultiClickSafeMaterialButton implements View.On
 
     public Boolean isPlaying() {
         return playing;
-    }
-
-    public void setColors(Integer idleColor, Integer playingColor) {
-        this.idleColor = idleColor;
-        this.playingColor = playingColor;
-        render();
     }
 
     public void setPlaying(Boolean isPlaying) {
@@ -80,16 +71,8 @@ public class AudioButton extends MultiClickSafeMaterialButton implements View.On
     private void render() {
         if (playing) {
             setIconResource(R.drawable.ic_stop_black_24dp);
-
-            if (playingColor != null) {
-                setIconTint(ColorStateList.valueOf(playingColor));
-            }
         } else {
             setIconResource(R.drawable.ic_volume_up_black_24dp);
-
-            if (idleColor != null) {
-                setIconTint(ColorStateList.valueOf(idleColor));
-            }
         }
     }
 

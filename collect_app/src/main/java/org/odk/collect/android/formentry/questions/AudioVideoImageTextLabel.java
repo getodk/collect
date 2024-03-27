@@ -38,7 +38,6 @@ import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenContext;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.audioclips.Clip;
 import org.odk.collect.imageloader.ImageLoader;
 
@@ -133,7 +132,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     public void setPlayTextColor(int textColor) {
         playTextColor = textColor;
-        binding.audioButton.setColors(new ThemeUtils(getContext()).getColorOnSurface(), playTextColor);
     }
 
     public void setMediaUtils(MediaUtils mediaUtils) {
