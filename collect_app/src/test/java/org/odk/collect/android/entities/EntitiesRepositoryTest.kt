@@ -127,7 +127,8 @@ abstract class EntitiesRepositoryTest {
 
         val wines = repository.getEntities("wines")
         assertThat(wines.size, equalTo(1))
-        assertThat(wines[0].label, equalTo("Léoville Barton 2008"))
+        assertThat(wines[0].label, equalTo(wine.label))
+        assertThat(wines[0].properties, equalTo(updatedWine.properties))
     }
 
     @Test
