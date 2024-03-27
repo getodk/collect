@@ -14,14 +14,14 @@ class EntitiesViewModel(
     val datasets: LiveData<List<String>> = _datasets
 
     init {
-        scheduler.immediate(background = true) {
+        scheduler.immediate {
             _datasets.postValue(entitiesRepository.getDatasets().toList())
         }
     }
 
     fun getEntities(dataset: String): LiveData<List<Entity>> {
         val result = MutableLiveData<List<Entity>>(emptyList())
-        scheduler.immediate(background = true) {
+        scheduler.immediate {
             result.postValue(entitiesRepository.getEntities(dataset))
         }
 
@@ -29,7 +29,7 @@ class EntitiesViewModel(
     }
 
     fun clearAll() {
-        scheduler.immediate(background = true) {
+        scheduler.immediate {
             entitiesRepository.clear()
             _datasets.postValue(entitiesRepository.getDatasets().toList())
         }
