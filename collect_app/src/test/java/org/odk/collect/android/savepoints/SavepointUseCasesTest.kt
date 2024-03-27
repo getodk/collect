@@ -68,7 +68,7 @@ class SavepointUseCasesTest {
     private val savepointsRepository = InMemSavepointsRepository()
 
     @Test
-    fun `getSavepoint called with the old form version uri returns null if only the new form version has a savepoint`() {
+    fun `findValidSavepoint called with the old form version uri returns null if only the new form version has a savepoint`() {
         val savepointFile = createSavepointFile()
         val savepoint = Savepoint(formV2.dbId, null, savepointFile.absolutePath, "")
         savepointsRepository.save(savepoint)
@@ -78,7 +78,7 @@ class SavepointUseCasesTest {
         }
 
         assertThat(
-            SavepointUseCases.getSavepoint(
+            SavepointUseCases.findValidSavepoint(
                 FormsContract.getUri("1", formV1.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -90,13 +90,13 @@ class SavepointUseCasesTest {
     }
 
     @Test
-    fun `getSavepoint called with the old form version uri returns savepoint if it has one`() {
+    fun `findValidSavepoint called with the old form version uri returns savepoint if it has one`() {
         val savepointFile = createSavepointFile()
         val savepoint = Savepoint(formV1.dbId, null, savepointFile.absolutePath, "")
         savepointsRepository.save(savepoint)
 
         assertThat(
-            SavepointUseCases.getSavepoint(
+            SavepointUseCases.findValidSavepoint(
                 FormsContract.getUri("1", formV1.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -108,7 +108,7 @@ class SavepointUseCasesTest {
     }
 
     @Test
-    fun `getSavepoint called with the old form version uri returns savepoint that belongs to the old form if both form versions have ones`() {
+    fun `findValidSavepoint called with the old form version uri returns savepoint that belongs to the old form if both form versions have ones`() {
         val savepointFile1 = createSavepointFile()
         val savepoint1 = Savepoint(formV1.dbId, null, savepointFile1.absolutePath, "")
         savepointsRepository.save(savepoint1)
@@ -118,7 +118,7 @@ class SavepointUseCasesTest {
         savepointsRepository.save(savepoint2)
 
         assertThat(
-            SavepointUseCases.getSavepoint(
+            SavepointUseCases.findValidSavepoint(
                 FormsContract.getUri("1", formV1.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -130,13 +130,13 @@ class SavepointUseCasesTest {
     }
 
     @Test
-    fun `getSavepoint called with the new form version uri returns savepoint if it has one`() {
+    fun `findValidSavepoint called with the new form version uri returns savepoint if it has one`() {
         val savepointFile = createSavepointFile()
         val savepoint = Savepoint(formV2.dbId, null, savepointFile.absolutePath, "")
         savepointsRepository.save(savepoint)
 
         assertThat(
-            SavepointUseCases.getSavepoint(
+            SavepointUseCases.findValidSavepoint(
                 FormsContract.getUri("1", formV2.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -148,13 +148,13 @@ class SavepointUseCasesTest {
     }
 
     @Test
-    fun `getSavepoint called with the new form version uri returns savepoint that belongs to the old form if only the old form has one`() {
+    fun `findValidSavepoint called with the new form version uri returns savepoint that belongs to the old form if only the old form has one`() {
         val savepointFile = createSavepointFile()
         val savepoint = Savepoint(formV1.dbId, null, savepointFile.absolutePath, "")
         savepointsRepository.save(savepoint)
 
         assertThat(
-            SavepointUseCases.getSavepoint(
+            SavepointUseCases.findValidSavepoint(
                 FormsContract.getUri("1", formV2.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -166,7 +166,7 @@ class SavepointUseCasesTest {
     }
 
     @Test
-    fun `getSavepoint called with the new form version uri returns savepoint that belongs to the new form if both form versions have ones`() {
+    fun `findValidSavepoint called with the new form version uri returns savepoint that belongs to the new form if both form versions have ones`() {
         val savepointFile1 = createSavepointFile()
         val savepoint1 = Savepoint(formV1.dbId, null, savepointFile1.absolutePath, "")
         savepointsRepository.save(savepoint1)
@@ -176,7 +176,7 @@ class SavepointUseCasesTest {
         savepointsRepository.save(savepoint2)
 
         assertThat(
-            SavepointUseCases.getSavepoint(
+            SavepointUseCases.findValidSavepoint(
                 FormsContract.getUri("1", formV2.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -188,14 +188,14 @@ class SavepointUseCasesTest {
     }
 
     @Test
-    fun `getSavepoint returns null if savepoint exists in the database but the file does not`() {
+    fun `findValidSavepoint returns null if savepoint exists in the database but the file does not`() {
         val savepointFile = createSavepointFile()
         val savepoint = Savepoint(formV2.dbId, null, savepointFile.absolutePath, "")
         savepointsRepository.save(savepoint)
         savepointFile.delete()
 
         assertThat(
-            SavepointUseCases.getSavepoint(
+            SavepointUseCases.findValidSavepoint(
                 FormsContract.getUri("1", formV2.dbId),
                 FormsContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -207,13 +207,47 @@ class SavepointUseCasesTest {
     }
 
     @Test
-    fun `getSavepoint called for a saved form uri returns null if only its blank form has a savepoint`() {
+    fun `findValidSavepoint returns null and deletes the savepoint if it exists in the database but the form has been deleted and download again`() {
+        formsRepository.deleteAll()
+        formsRepository.save(FormUtils.buildForm(
+            "1",
+            "1",
+            TempFiles.createTempDir().absolutePath
+        ).build())
+
+        val savepointFile = createSavepointFile()
+        val savepoint = Savepoint(formV1.dbId, null, savepointFile.absolutePath, "")
+        savepointsRepository.save(savepoint)
+
+        formsRepository.deleteAll()
+        formsRepository.save(FormUtils.buildForm(
+            "1",
+            "1",
+            TempFiles.createTempDir().absolutePath
+        ).build())
+
+        assertThat(
+            SavepointUseCases.findValidSavepoint(
+                FormsContract.getUri("1", 1),
+                FormsContract.CONTENT_ITEM_TYPE,
+                formsRepository,
+                instancesRepository,
+                savepointsRepository
+            ),
+            equalTo(null)
+        )
+
+        assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true))
+    }
+
+    @Test
+    fun `findValidSavepoint called for a saved form uri returns null if only its blank form has a savepoint`() {
         val savepointFile = createSavepointFile()
         val savepoint = Savepoint(formV2.dbId, null, savepointFile.absolutePath, instance1.instanceFilePath)
         savepointsRepository.save(savepoint)
 
         assertThat(
-            SavepointUseCases.getSavepoint(
+            SavepointUseCases.findValidSavepoint(
                 InstancesContract.getUri("1", instance1.dbId),
                 InstancesContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -225,13 +259,13 @@ class SavepointUseCasesTest {
     }
 
     @Test
-    fun `getSavepoint called for a saved form uri returns savepoint if it has one`() {
+    fun `findValidSavepoint called for a saved form uri returns savepoint if it has one`() {
         val savepointFile = createSavepointFile()
         val savepoint = Savepoint(formV2.dbId, instance1.dbId, savepointFile.absolutePath, instance1.instanceFilePath)
         savepointsRepository.save(savepoint)
 
         assertThat(
-            SavepointUseCases.getSavepoint(
+            SavepointUseCases.findValidSavepoint(
                 InstancesContract.getUri("1", instance1.dbId),
                 InstancesContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -243,14 +277,14 @@ class SavepointUseCasesTest {
     }
 
     @Test
-    fun `getSavepoint called for a saved form uri returns null if savepoint exists in the database but the file does not`() {
+    fun `findValidSavepoint called for a saved form uri returns null if savepoint exists in the database but the file does not`() {
         val savepointFile = createSavepointFile()
         val savepoint = Savepoint(formV2.dbId, instance1.dbId, savepointFile.absolutePath, instance1.instanceFilePath)
         savepointsRepository.save(savepoint)
         savepointFile.delete()
 
         assertThat(
-            SavepointUseCases.getSavepoint(
+            SavepointUseCases.findValidSavepoint(
                 InstancesContract.getUri("1", instance1.dbId),
                 InstancesContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -262,7 +296,7 @@ class SavepointUseCasesTest {
     }
 
     @Test
-    fun `getSavepoint called for a saved form uri returns null if it has one but the instance file has been modified later`() {
+    fun `findValidSavepoint called for a saved form uri returns null and deletes the savepoint if it has one but the instance file has been modified later`() {
         val savepointFile = createSavepointFile()
         val savepoint = Savepoint(formV2.dbId, instance1.dbId, savepointFile.absolutePath, instance1.instanceFilePath)
         savepointsRepository.save(savepoint)
@@ -270,7 +304,7 @@ class SavepointUseCasesTest {
         instancesRepository.save(instance1)
 
         assertThat(
-            SavepointUseCases.getSavepoint(
+            SavepointUseCases.findValidSavepoint(
                 InstancesContract.getUri("1", instance1.dbId),
                 InstancesContract.CONTENT_ITEM_TYPE,
                 formsRepository,
@@ -279,10 +313,12 @@ class SavepointUseCasesTest {
             ),
             equalTo(null)
         )
+
+        assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true))
     }
 
     @Test
-    fun `getSavepoint called for a saved form uri returns savepoint that belongs to that saved form if there are more savepoints in the database created for saved forms`() {
+    fun `findValidSavepoint called for a saved form uri returns savepoint that belongs to that saved form if there are more savepoints in the database created for saved forms`() {
         val savepointFile1 = createSavepointFile()
         val savepoint1 = Savepoint(formV2.dbId, instance1.dbId, savepointFile1.absolutePath, instance1.instanceFilePath)
         savepointsRepository.save(savepoint1)
@@ -292,7 +328,7 @@ class SavepointUseCasesTest {
         savepointsRepository.save(savepoint2)
 
         assertThat(
-            SavepointUseCases.getSavepoint(
+            SavepointUseCases.findValidSavepoint(
                 InstancesContract.getUri("1", instance1.dbId),
                 InstancesContract.CONTENT_ITEM_TYPE,
                 formsRepository,

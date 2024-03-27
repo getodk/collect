@@ -73,7 +73,7 @@ class FormUriActivityTest {
     private val context = ApplicationProvider.getApplicationContext<Application>()
     private val projectsRepository = InMemProjectsRepository()
     private val projectsDataService = mock<ProjectsDataService>()
-    private val formsRepository = InMemFormsRepository()
+    private val formsRepository = InMemFormsRepository { 0 }
     private val instancesRepository = InMemInstancesRepository { 0 }
     private val fakeScheduler = FakeScheduler()
     private val settingsProvider = InMemSettingsProvider().apply {

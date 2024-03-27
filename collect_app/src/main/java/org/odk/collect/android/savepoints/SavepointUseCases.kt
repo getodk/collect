@@ -10,7 +10,7 @@ import org.odk.collect.forms.savepoints.SavepointsRepository
 import java.io.File
 
 object SavepointUseCases {
-    fun getSavepoint(
+    fun findValidSavepoint(
         uri: Uri,
         uriMimeType: String,
         formsRepository: FormsRepository,
@@ -26,7 +26,12 @@ object SavepointUseCases {
                 .forEach { form ->
                     val savepoint = savepointsRepository.get(form.dbId, null)
                     if (savepoint != null && File(savepoint.savepointFilePath).exists()) {
-                        return savepoint
+                        if (File(savepoint.savepointFilePath).lastModified() < form.date) {
+                            savepointsRepository.delete(form.dbId, null)
+                            return null
+                        } else {
+                            return savepoint
+                        }
                     }
                 }
             null
@@ -35,11 +40,13 @@ object SavepointUseCases {
             val form = formsRepository.getLatestByFormIdAndVersion(instance.formId, instance.formVersion)!!
 
             val savepoint = savepointsRepository.get(form.dbId, instance.dbId)
-            if (savepoint != null &&
-                File(savepoint.savepointFilePath).exists() &&
-                File(savepoint.savepointFilePath).lastModified() > instance.lastStatusChangeDate
-            ) {
-                savepoint
+            if (savepoint != null && File(savepoint.savepointFilePath).exists()) {
+                if (File(savepoint.savepointFilePath).lastModified() < instance.lastStatusChangeDate) {
+                    savepointsRepository.delete(form.dbId, instance.dbId)
+                    null
+                } else {
+                    savepoint
+                }
             } else {
                 null
             }

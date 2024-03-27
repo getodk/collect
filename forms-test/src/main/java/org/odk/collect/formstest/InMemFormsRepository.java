@@ -144,6 +144,9 @@ public class InMemFormsRepository implements FormsRepository {
             deleteFilesForForm(form);
             forms.remove(form);
         }
+        if (forms.isEmpty()) {
+            idCounter = 1L;
+        }
     }
 
     @Override
@@ -161,6 +164,9 @@ public class InMemFormsRepository implements FormsRepository {
     @Override
     public void deleteByMd5Hash(@NotNull String md5Hash) {
         forms.removeIf(f -> f.getMD5Hash().equals(md5Hash));
+        if (forms.isEmpty()) {
+            idCounter = 1L;
+        }
     }
 
     @Override
@@ -170,6 +176,7 @@ public class InMemFormsRepository implements FormsRepository {
         }
 
         forms.clear();
+        idCounter = 1L;
     }
 
     @Override

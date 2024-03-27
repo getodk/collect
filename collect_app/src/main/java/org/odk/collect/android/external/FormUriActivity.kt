@@ -320,7 +320,7 @@ private class FormUriViewModel(
     private fun getSavePoint(): Savepoint? {
         val uriMimeType = contentResolver.getType(uri!!)!!
 
-        return SavepointUseCases.getSavepoint(
+        return SavepointUseCases.findValidSavepoint(
             uri,
             uriMimeType,
             formsRepositoryProvider.get(),
