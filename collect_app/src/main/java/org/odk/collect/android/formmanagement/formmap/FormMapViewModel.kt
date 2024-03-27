@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.R
-import org.odk.collect.android.instancemanagement.getIcon
 import org.odk.collect.android.instancemanagement.getStatusDescription
 import org.odk.collect.android.instancemanagement.showAsEditable
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
@@ -17,8 +16,11 @@ import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
+import org.odk.collect.geo.selection.IconifiedText
 import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.geo.selection.SelectionMapData
+import org.odk.collect.geo.selection.Status
+import org.odk.collect.maps.MapPoint
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import timber.log.Timber
@@ -112,21 +114,14 @@ class FormMapViewModel(
                 Locale.getDefault()
             )
 
-            val info = dateFormat.format(instance.deletedDate)
-            MappableSelectItem.WithInfo(
+            val info = "$instanceLastStatusChangeDate\n${dateFormat.format(instance.deletedDate)}"
+            MappableSelectItem(
                 instance.dbId,
-                latitude,
-                longitude,
+                listOf(MapPoint(latitude, longitude)),
                 getDrawableIdForStatus(instance.status, false),
                 getDrawableIdForStatus(instance.status, true),
                 instance.displayName,
-                listOf(
-                    MappableSelectItem.IconifiedText(
-                        instance.getIcon(),
-                        instanceLastStatusChangeDate
-                    )
-                ),
-                info
+                info = info
             )
         } else if (!instance.canEditWhenComplete() && listOf(
                 Instance.STATUS_COMPLETE,
@@ -134,21 +129,14 @@ class FormMapViewModel(
                 Instance.STATUS_SUBMITTED
             ).contains(instance.status)
         ) {
-            val info = resources.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form)
-            MappableSelectItem.WithInfo(
+            val info = "$instanceLastStatusChangeDate\n${resources.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form)}"
+            MappableSelectItem(
                 instance.dbId,
-                latitude,
-                longitude,
+                listOf(MapPoint(latitude, longitude)),
                 getDrawableIdForStatus(instance.status, false),
                 getDrawableIdForStatus(instance.status, true),
                 instance.displayName,
-                listOf(
-                    MappableSelectItem.IconifiedText(
-                        instance.getIcon(),
-                        instanceLastStatusChangeDate
-                    )
-                ),
-                info
+                info = info
             )
         } else {
             val action =
@@ -158,36 +146,39 @@ class FormMapViewModel(
                     createViewAction()
                 }
 
-            MappableSelectItem.WithAction(
+            MappableSelectItem(
                 instance.dbId,
-                latitude,
-                longitude,
+                listOf(MapPoint(latitude, longitude)),
                 getDrawableIdForStatus(instance.status, false),
                 getDrawableIdForStatus(instance.status, true),
                 instance.displayName,
-                listOf(
-                    MappableSelectItem.IconifiedText(
-                        instance.getIcon(),
-                        instanceLastStatusChangeDate
-                    )
-                ),
-                action
+                info = instanceLastStatusChangeDate,
+                action = action,
+                status = instanceStatusToMappableSelectionItemStatus(instance)
             )
         }
     }
 
-    private fun createViewAction(): MappableSelectItem.IconifiedText {
-        return MappableSelectItem.IconifiedText(
+    private fun instanceStatusToMappableSelectionItemStatus(instance: Instance): Status? {
+        return when (instance.status) {
+            Instance.STATUS_INVALID, Instance.STATUS_INCOMPLETE -> Status.ERRORS
+            Instance.STATUS_VALID -> Status.NO_ERRORS
+            else -> null
+        }
+    }
+
+    private fun createViewAction(): IconifiedText {
+        return IconifiedText(
             R.drawable.ic_visibility,
             resources.getString(org.odk.collect.strings.R.string.view_data)
         )
     }
 
-    private fun createEditAction(): MappableSelectItem.IconifiedText {
+    private fun createEditAction(): IconifiedText {
         val canEditSaved = settingsProvider.getProtectedSettings()
             .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
 
-        return MappableSelectItem.IconifiedText(
+        return IconifiedText(
             if (canEditSaved) R.drawable.ic_edit else R.drawable.ic_visibility,
             resources.getString(if (canEditSaved) org.odk.collect.strings.R.string.edit_data else org.odk.collect.strings.R.string.view_data)
         )
