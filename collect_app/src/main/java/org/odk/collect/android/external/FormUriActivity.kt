@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.LiveData
@@ -33,6 +32,7 @@ import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
+import org.odk.collect.strings.localization.LocalizedActivity
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -42,7 +42,7 @@ import javax.inject.Inject
  * This class serves as a firewall for starting form filling. It should be used to do that
  * rather than [FormFillingActivity] directly as it ensures that the required data is valid.
  */
-class FormUriActivity : ComponentActivity() {
+class FormUriActivity : LocalizedActivity() {
 
     @Inject
     lateinit var projectsDataService: ProjectsDataService
