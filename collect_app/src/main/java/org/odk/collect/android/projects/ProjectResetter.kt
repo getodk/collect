@@ -13,11 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.odk.collect.android.utilities
+package org.odk.collect.android.projects
 
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.utilities.ChangeLockProvider
+import org.odk.collect.android.utilities.FormsRepositoryProvider
+import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.android.utilities.SavepointsRepositoryProvider
+import org.odk.collect.android.utilities.WebCredentialsUtils
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.settings.SettingsProvider
 import java.io.File

@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities
+package org.odk.collect.android.projects
 
 import android.app.Application
 import android.content.Context
@@ -21,6 +21,10 @@ import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.android.utilities.ChangeLockProvider
+import org.odk.collect.android.utilities.FormsRepositoryProvider
+import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.savepoints.Savepoint
