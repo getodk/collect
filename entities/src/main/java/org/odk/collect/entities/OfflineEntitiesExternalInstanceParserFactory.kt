@@ -28,21 +28,21 @@ internal class OfflineEntitiesExternalDataInstanceProcessor(private val entities
     ExternalInstanceParser.ExternalDataInstanceProcessor {
     override fun processInstance(id: String, root: TreeElement) {
         if (entitiesRepository.getDatasets().contains(id)) {
-            val items = root.getChildrenWithName(ITEM_ELEMENT)
+            val items = root.getChildrenWithName("item")
             val startingMultiplicity = items.size
 
             entitiesRepository.getEntities(id).forEachIndexed { index, entity ->
                 val duplicateIndex =
-                    items.indexOfFirst { it.getFirstChild(ID_ELEMENT)?.value?.value == entity.id }
+                    items.indexOfFirst { it.getFirstChild(EntityItemElement.ID)?.value?.value == entity.id }
 
                 if (duplicateIndex == -1) {
-                    val name = TreeElement(ID_ELEMENT)
+                    val name = TreeElement(EntityItemElement.ID)
                     name.value = StringData(entity.id)
 
-                    val label = TreeElement(LABEL_ELEMENT)
+                    val label = TreeElement(EntityItemElement.LABEL)
                     label.value = StringData(entity.label ?: "")
 
-                    val item = TreeElement(ITEM_ELEMENT, startingMultiplicity + index)
+                    val item = TreeElement("item", startingMultiplicity + index)
                     item.addChild(name)
                     item.addChild(label)
 
@@ -54,10 +54,10 @@ internal class OfflineEntitiesExternalDataInstanceProcessor(private val entities
                 } else {
                     val duplicateElement = root.getChildAt(duplicateIndex)
 
-                    val version = (duplicateElement.getFirstChild(VERSION_ELEMENT)!!.value!!.value as String).toInt()
+                    val version = (duplicateElement.getFirstChild(EntityItemElement.VERSION)!!.value!!.value as String).toInt()
                     if (entity.version >= version) {
                         if (entity.label != null) {
-                            duplicateElement.getFirstChild(LABEL_ELEMENT)!!.value =
+                            duplicateElement.getFirstChild(EntityItemElement.LABEL)!!.value =
                                 StringData(entity.label)
                         }
 
@@ -84,12 +84,5 @@ internal class OfflineEntitiesExternalDataInstanceProcessor(private val entities
                 it.value = StringData(nameAndValue.second)
             }
         )
-    }
-
-    companion object {
-        private const val ID_ELEMENT = "name"
-        private const val LABEL_ELEMENT = "label"
-        private const val ITEM_ELEMENT = "item"
-        private const val VERSION_ELEMENT = "__version"
     }
 }

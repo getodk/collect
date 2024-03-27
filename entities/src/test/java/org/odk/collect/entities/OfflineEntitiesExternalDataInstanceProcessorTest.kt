@@ -4,7 +4,6 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.instance.TreeElement
-import org.junit.Ignore
 import org.junit.Test
 
 class OfflineEntitiesExternalDataInstanceProcessorTest {
@@ -47,12 +46,12 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
             root.addChild(
                 TreeElement("item", 0).also { item ->
                     item.addChild(
-                        TreeElement("name").also { value ->
+                        TreeElement(EntityItemElement.ID).also { value ->
                             value.value = StringData(entity.id)
                         }
                     )
                     item.addChild(
-                        TreeElement("label").also { label ->
+                        TreeElement(EntityItemElement.LABEL).also { label ->
                             label.value = StringData("Siobhan Roy")
                         }
                     )
@@ -62,7 +61,7 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
                         }
                     )
                     item.addChild(
-                        TreeElement("__version").also { label ->
+                        TreeElement(EntityItemElement.VERSION).also { label ->
                             label.value = StringData("1")
                         }
                     )
@@ -74,7 +73,7 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
         assertThat(instance.numChildren, equalTo(1))
 
         val firstItem = instance.getChildAt(0)
-        assertThat(firstItem.getFirstChild("label")?.value?.value, equalTo(entity.label))
+        assertThat(firstItem.getFirstChild(EntityItemElement.LABEL)?.value?.value, equalTo(entity.label))
         assertThat(
             firstItem.getFirstChild("age")?.value?.value,
             equalTo(entity.properties[0].second)
@@ -93,17 +92,17 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
             root.addChild(
                 TreeElement("item", 0).also { item ->
                     item.addChild(
-                        TreeElement("name").also { value ->
+                        TreeElement(EntityItemElement.ID).also { value ->
                             value.value = StringData(entity.id)
                         }
                     )
                     item.addChild(
-                        TreeElement("label").also { label ->
+                        TreeElement(EntityItemElement.LABEL).also { label ->
                             label.value = StringData("Siobhan Roy")
                         }
                     )
                     item.addChild(
-                        TreeElement("__version").also { label ->
+                        TreeElement(EntityItemElement.VERSION).also { label ->
                             label.value = StringData("1")
                         }
                     )
@@ -115,7 +114,7 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
         assertThat(instance.numChildren, equalTo(1))
 
         val firstItem = instance.getChildAt(0)
-        assertThat(firstItem.getFirstChild("label")?.value?.value, equalTo(entity.label))
+        assertThat(firstItem.getFirstChild(EntityItemElement.LABEL)?.value?.value, equalTo(entity.label))
         assertThat(
             firstItem.getFirstChild("age")?.value?.value,
             equalTo(entity.properties[0].second)
@@ -134,17 +133,17 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
             root.addChild(
                 TreeElement("item", 0).also { item ->
                     item.addChild(
-                        TreeElement("name").also { value ->
+                        TreeElement(EntityItemElement.ID).also { value ->
                             value.value = StringData(entity.id)
                         }
                     )
                     item.addChild(
-                        TreeElement("label").also { label ->
+                        TreeElement(EntityItemElement.LABEL).also { label ->
                             label.value = StringData("Siobhan Roy")
                         }
                     )
                     item.addChild(
-                        TreeElement("__version").also { label ->
+                        TreeElement(EntityItemElement.VERSION).also { label ->
                             label.value = StringData("1")
                         }
                     )
@@ -156,7 +155,7 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
         assertThat(instance.numChildren, equalTo(1))
 
         val firstItem = instance.getChildAt(0)
-        assertThat(firstItem.getFirstChild("label")?.value?.value, equalTo("Siobhan Roy"))
+        assertThat(firstItem.getFirstChild(EntityItemElement.LABEL)?.value?.value, equalTo("Siobhan Roy"))
     }
 
     @Test
@@ -172,6 +171,6 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
         assertThat(instance.numChildren, equalTo(1))
 
         val firstItem = instance.getChildAt(0)
-        assertThat(firstItem.getFirstChild("label")?.value?.value, equalTo(""))
+        assertThat(firstItem.getFirstChild(EntityItemElement.LABEL)?.value?.value, equalTo(""))
     }
 }
