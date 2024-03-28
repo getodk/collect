@@ -1,7 +1,6 @@
 package org.odk.collect.android.support.rules
 
 import android.os.Build
-import org.junit.Assume
 import org.junit.Assume.assumeTrue
 import org.junit.rules.TestRule
 import org.junit.runner.Description
