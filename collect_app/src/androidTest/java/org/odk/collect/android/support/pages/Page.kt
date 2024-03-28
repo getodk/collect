@@ -458,7 +458,11 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertTextInDialog(text: Int): T {
-        onView(withText(getTranslatedString(text))).inRoot(isDialog()).check(matches(isDisplayed()))
+        return assertTextInDialog(getTranslatedString(text))
+    }
+
+    fun assertTextInDialog(text: String): T {
+        onView(withText(text)).inRoot(isDialog()).check(matches(isDisplayed()))
         return this as T
     }
 
