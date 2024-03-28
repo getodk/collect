@@ -15,6 +15,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
+import static org.odk.collect.android.support.WaitFor.tryAgainOnFail;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
 import android.os.Build;
@@ -321,7 +322,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     private void flingLeft() {
-        tryAgainOnFail(() -> {
+        tryAgainOnFail(5, () -> {
             FlingRegister.attemptingFling();
             onView(withId(R.id.questionholder)).perform(swipeLeft());
 
@@ -332,11 +333,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
                     throw new RuntimeException("Fling never detected!");
                 }
             });
-        }, 5);
+        });
     }
 
     private void flingRight() {
-        tryAgainOnFail(() -> {
+        tryAgainOnFail(5, () -> {
             FlingRegister.attemptingFling();
             onView(withId(R.id.questionholder)).perform(swipeRight());
 
@@ -347,7 +348,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
                     throw new RuntimeException("Fling never detected!");
                 }
             });
-        }, 5);
+        });
     }
 
     public FormEntryPage openSelectMinimalDialog() {

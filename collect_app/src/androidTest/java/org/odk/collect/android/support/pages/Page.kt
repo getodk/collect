@@ -48,6 +48,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.ActivityHelpers.getLaunchIntent
+import org.odk.collect.android.support.WaitFor.tryAgainOnFail
 import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
@@ -404,21 +405,6 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    @JvmOverloads
-    fun tryAgainOnFail(action: Runnable, maxTimes: Int = 2) {
-        var failure: Exception? = null
-        for (i in 0 until maxTimes) {
-            try {
-                action.run()
-                return
-            } catch (e: Exception) {
-                failure = e
-                wait250ms()
-            }
-        }
-        throw RuntimeException("tryAgainOnFail failed", failure)
-    }
-
     private fun waitForDialogToSettle() {
         wait250ms() // https://github.com/android/android-test/issues/444
     }
@@ -476,10 +462,10 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOptionsIcon(expectedOptionString: String): T {
-        tryAgainOnFail({
+        tryAgainOnFail {
             onView(OVERFLOW_BUTTON_MATCHER).perform(click())
             assertText(expectedOptionString)
-        })
+        }
 
         return this as T
     }

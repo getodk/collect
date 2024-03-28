@@ -11,6 +11,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.odk.collect.android.support.WaitFor.tryAgainOnFail;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
