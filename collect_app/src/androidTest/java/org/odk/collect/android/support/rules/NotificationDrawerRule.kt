@@ -1,5 +1,8 @@
 package org.odk.collect.android.support.rules
 
+import android.os.Build
+import org.junit.Assume
+import org.junit.Assume.assumeTrue
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -12,6 +15,8 @@ class NotificationDrawerRule : TestRule {
         return object : Statement() {
             @Throws(Throwable::class)
             override fun evaluate() {
+                assumeTrue(SUPPORTED_SDKS.contains(Build.VERSION.SDK_INT)) // Skip if we're not using API 30
+
                 try {
                     base.evaluate()
                 } finally {
@@ -23,5 +28,9 @@ class NotificationDrawerRule : TestRule {
 
     fun open(): NotificationDrawer {
         return notificationDrawer.open()
+    }
+
+    companion object {
+        private val SUPPORTED_SDKS = listOf(30)
     }
 }
