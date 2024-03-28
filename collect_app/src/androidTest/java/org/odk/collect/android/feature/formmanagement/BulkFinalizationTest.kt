@@ -15,6 +15,7 @@ import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.strings.R.plurals
 import org.odk.collect.strings.R.string
@@ -22,11 +23,14 @@ import org.odk.collect.strings.R.string
 @RunWith(AndroidJUnit4::class)
 class BulkFinalizationTest {
 
-    val testDependencies = TestDependencies()
-    val rule = CollectTestRule(useDemoProject = false)
+    private val testDependencies = TestDependencies()
+    private val recentAppsRule = RecentAppsRule()
+    private val rule = CollectTestRule(useDemoProject = false)
 
     @get:Rule
-    val chain: RuleChain = TestRuleChain.chain(testDependencies).around(rule)
+    val chain: RuleChain = TestRuleChain.chain(testDependencies)
+        .around(recentAppsRule)
+        .around(rule)
 
     @Test
     fun canBulkFinalizeDraftsInTheListOfDrafts() {
@@ -113,7 +117,7 @@ class BulkFinalizationTest {
 
             .clickDrafts()
             .clickOnForm("One Question")
-            .killAndReopenApp(rule, MainMenuPage())
+            .killAndReopenApp(rule, recentAppsRule, MainMenuPage())
 
             .clickDrafts(false)
             .clickFinalizeAll(1)

@@ -35,7 +35,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withSubstring
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiSelector
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
@@ -49,11 +48,11 @@ import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.ActivityHelpers.getLaunchIntent
-import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
+import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.strings.localization.getLocalizedQuantityString
@@ -495,22 +494,16 @@ abstract class Page<T : Page<T>> {
         return destination!!.assertOnPage()
     }
 
-    fun <D : Page<D>> killAndReopenApp(rule: ActivityScenarioLauncherRule, destination: D): D {
-        killApp()
+    fun <D : Page<D>> killAndReopenApp(
+        launcherRule: ActivityScenarioLauncherRule,
+        recentAppsRule: RecentAppsRule,
+        destination: D
+    ): D {
+        recentAppsRule.killApp()
 
         // reopen
-        rule.launch<Activity>(getLaunchIntent())
+        launcherRule.launch<Activity>(getLaunchIntent())
         return destination.assertOnPage()
-    }
-
-    fun killApp() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.pressRecentApps()
-        device
-            .findObject(UiSelector().descriptionContains("Collect"))
-            .swipeUp(10).also {
-                CollectHelpers.simulateProcessRestart() // the process is not restarted automatically (probably to keep the test running) so we have simulate it
-            }
     }
 
     fun assertNoOptionsMenu(): T {
