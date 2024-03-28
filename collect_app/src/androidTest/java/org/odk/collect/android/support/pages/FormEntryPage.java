@@ -249,11 +249,15 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage longPressOnQuestion(String question, boolean isRequired) {
-        if (isRequired) {
-            onView(withText("* " + question)).perform(longClick());
-        } else {
-            onView(withText(question)).perform(longClick());
-        }
+        tryAgainOnFail(() -> {
+            if (isRequired) {
+                onView(withText("* " + question)).perform(longClick());
+            } else {
+                onView(withText(question)).perform(longClick());
+            }
+
+            assertText(org.odk.collect.strings.R.string.clear_answer);
+        });
 
         return this;
     }

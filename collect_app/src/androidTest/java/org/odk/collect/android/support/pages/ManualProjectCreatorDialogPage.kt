@@ -27,8 +27,12 @@ class ManualProjectCreatorDialogPage : Page<ManualProjectCreatorDialogPage>() {
     }
 
     fun addProject(): MainMenuPage {
-        onView(withText(org.odk.collect.strings.R.string.add)).perform(click())
-        return MainMenuPage().assertOnPage()
+        tryAgainOnFail(action = {
+            clickOnString(org.odk.collect.strings.R.string.add)
+            MainMenuPage().assertOnPage()
+        })
+
+        return MainMenuPage()
     }
 
     fun addProjectAndAssertDuplicateDialogShown(): ManualProjectCreatorDialogPage {
