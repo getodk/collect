@@ -25,6 +25,12 @@ class InMemFormSessionRepository : FormSessionRepository {
         getLiveData(id).value = FormSession(formController, form, instance)
     }
 
+    override fun update(id: String, instance: Instance?) {
+        getLiveData(id).value?.let {
+            getLiveData(id).value = FormSession(it.formController, it.form, instance)
+        }
+    }
+
     override fun clear(id: String) {
         getLiveData(id).value = null
         map.remove(id)

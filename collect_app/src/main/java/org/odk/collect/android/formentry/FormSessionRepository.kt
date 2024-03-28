@@ -19,6 +19,8 @@ interface FormSessionRepository {
     }
 
     fun set(id: String, formController: FormController, form: Form, instance: Instance?)
+
+    fun update(id: String, instance: Instance?)
 }
 
 class AppStateFormSessionRepository(application: Application) : FormSessionRepository {
@@ -35,6 +37,12 @@ class AppStateFormSessionRepository(application: Application) : FormSessionRepos
 
     override fun set(id: String, formController: FormController, form: Form, instance: Instance?) {
         getLiveData(id).value = FormSession(formController, form, instance)
+    }
+
+    override fun update(id: String, instance: Instance?) {
+        getLiveData(id).value?.let {
+            getLiveData(id).value = FormSession(it.formController, it.form, instance)
+        }
     }
 
     /**
