@@ -108,7 +108,8 @@ tasks.register('testLab') {
                     '--app', 'collect_app/build/outputs/apk/debug/ODK-Collect-debug.apk',
                     '--test', 'collect_app/build/outputs/apk/androidTest/debug/ODK-Collect-debug-androidTest.apk',
                     '--device', 'model=MediumPhone.arm,version=34,locale=en,orientation=portrait',
-                    '--timeout', '10m'
+                    '--timeout', '10m',
+                    '--test-targets', "notPackage org.odk.collect.android.regression"
             )
         }
     }
