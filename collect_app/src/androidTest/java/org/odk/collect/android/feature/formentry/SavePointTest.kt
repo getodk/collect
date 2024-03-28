@@ -14,15 +14,19 @@ import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.FormEntryActivityTestRule
+import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
 @RunWith(AndroidJUnit4::class)
 class SavePointTest {
 
     private val rule = FormEntryActivityTestRule()
+    private val recentAppsRule = RecentAppsRule()
 
     @get:Rule
-    val ruleChain: RuleChain = TestRuleChain.chain().around(rule)
+    val ruleChain: RuleChain = TestRuleChain.chain()
+        .around(recentAppsRule)
+        .around(rule)
 
     @Test
     fun savePointIsCreatedWhenMovingForwardInForm() {
@@ -113,7 +117,8 @@ class SavePointTest {
         // Create save point
         rule.setUpProjectAndCopyForm("two-question-audit.xml", listOf("external_data_10.zip"))
             .fillNewForm("two-question-audit.xml", "Two Question")
-            .killApp()
+
+        recentAppsRule.killApp()
 
         // Start blank form and check save point is loaded
         rule.fillNewFormWithSavepoint("two-question-audit.xml")
@@ -155,7 +160,8 @@ class SavePointTest {
         rule.editForm("two-question-audit.xml", "Two Question")
             .clickGoToStart()
             .answerQuestion("What is your name?", "Alexei")
-            .killApp()
+
+        recentAppsRule.killApp()
 
         // Edit instance and check save point is loaded
         rule.editFormWithSavepoint("two-question-audit.xml")
@@ -197,7 +203,8 @@ class SavePointTest {
         // Create save point for blank form
         rule.fillNewForm("two-question-audit.xml", "Two Question")
             .answerQuestion("What is your name?", "Alexei")
-            .killApp()
+
+        recentAppsRule.killApp()
 
         // Check editing instance doesn't load save point
         rule.editForm("two-question-audit.xml", "Two Question")
@@ -221,7 +228,8 @@ class SavePointTest {
         rule.editForm("two-question-audit.xml", "Two Question")
             .clickGoToStart()
             .answerQuestion("What is your name?", "Alexei")
-            .killApp()
+
+        recentAppsRule.killApp()
 
         // Check starting blank form does not load save point
         rule.fillNewForm("two-question-audit.xml", "Two Question")
