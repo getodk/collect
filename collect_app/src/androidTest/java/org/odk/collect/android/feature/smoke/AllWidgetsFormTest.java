@@ -1,10 +1,5 @@
 package org.odk.collect.android.feature.smoke;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
