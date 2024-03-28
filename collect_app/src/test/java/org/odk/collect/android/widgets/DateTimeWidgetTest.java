@@ -112,7 +112,7 @@ public class DateTimeWidgetTest {
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsCorrectDateAndTime() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new DateTimeData(localDateTime.toDate()));
-        DatePickerDetails datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
+        DatePickerDetails datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getAppearanceHint());
         DateTimeWidget widget = createWidget(prompt);
 
         assertEquals(widget.binding.dateWidget.dateAnswerText.getText(),
@@ -127,7 +127,7 @@ public class DateTimeWidgetTest {
         widget.binding.dateWidget.dateButton.performClick();
 
         verify(widgetUtils).showDatePickerDialog(widgetActivity, DateTimeWidgetUtils.getDatePickerDetails(
-                prompt.getQuestion().getAppearanceAttr()), DateTimeUtils.getCurrentDateTime());
+                prompt.getAppearanceHint()), DateTimeUtils.getCurrentDateTime());
     }
 
     @Test
@@ -145,7 +145,7 @@ public class DateTimeWidgetTest {
         DateTimeWidget widget = createWidget(prompt);
         widget.binding.dateWidget.dateButton.performClick();
 
-        verify(widgetUtils).showDatePickerDialog(widgetActivity, DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr()),
+        verify(widgetUtils).showDatePickerDialog(widgetActivity, DateTimeWidgetUtils.getDatePickerDetails(prompt.getAppearanceHint()),
                 DateTimeUtils.getSelectedDate(localDateTime, new LocalDateTime().withTime(0, 0, 0, 0)));
     }
 
@@ -204,7 +204,7 @@ public class DateTimeWidgetTest {
     @Test
     public void setDateData_updatesValueShownInDateAnswerTextView() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
-        DatePickerDetails datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
+        DatePickerDetails datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getAppearanceHint());
         DateTimeWidget widget = createWidget(prompt);
         widget.setData(new LocalDateTime().withDate(2010, 5, 12));
 

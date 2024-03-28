@@ -59,7 +59,7 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = DateTimeWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-        datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
+        datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getAppearanceHint());
 
         if (prompt.isReadOnly()) {
             binding.dateWidget.dateButton.setVisibility(GONE);

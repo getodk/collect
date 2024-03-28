@@ -36,6 +36,7 @@ import org.odk.collect.android.databinding.ExStringQuestionTypeBinding;
 import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.utilities.StringRequester;
@@ -119,6 +120,7 @@ public class ExStringWidget extends QuestionWidget implements WidgetDataReceiver
                 QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6),
                 true,
                 StringWidgetUtils.getNumberOfRows(questionDetails.getPrompt()),
+                Appearances.isMasked(prompt),
                 this::widgetValueChanged
         );
         binding.widgetAnswerText.setAnswer(getFormEntryPrompt().getAnswerText());

@@ -20,9 +20,21 @@ import java.util.Date
 object QuestionAnswerProcessor {
     @JvmStatic
     fun getQuestionAnswer(fep: FormEntryPrompt, context: Context, formController: FormController): String {
-        val appearance: String? = fep.question.appearanceAttr
+        val appearance: String? = fep.appearanceHint
         if (appearance == Appearances.PRINTER) {
             return ""
+        }
+
+        if (!fep.answerText.isNullOrBlank() &&
+            Appearances.isMasked(fep) &&
+            fep.controlType == Constants.CONTROL_INPUT &&
+            (
+                fep.dataType == Constants.DATATYPE_TEXT ||
+                    fep.dataType == Constants.DATATYPE_INTEGER ||
+                    fep.dataType == Constants.DATATYPE_DECIMAL
+                )
+        ) {
+            return "••••••••••"
         }
 
         val data = fep.answerValue

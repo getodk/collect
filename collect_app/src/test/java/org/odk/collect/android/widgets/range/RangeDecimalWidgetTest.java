@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 
 import java.math.BigDecimal;
 
@@ -98,8 +99,12 @@ public class RangeDecimalWidgetTest {
 
     @Test
     public void whenSliderIsContinuous_widgetShowsCorrectSlider() {
-        when(rangeQuestion.getAppearanceAttr()).thenReturn(NO_TICKS_APPEARANCE);
-        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withQuestion(rangeQuestion)
+                .withAnswer(new StringData("2.5"))
+                .withAppearance(NO_TICKS_APPEARANCE)
+                .build();
+        RangeDecimalWidget widget = createWidget(prompt);
 
         assertThat(widget.slider.getValueFrom(), equalTo(1.5F));
         assertThat(widget.slider.getValueTo(), equalTo(5.5F));

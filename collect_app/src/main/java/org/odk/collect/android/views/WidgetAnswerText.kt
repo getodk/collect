@@ -8,6 +8,7 @@ import android.text.InputType
 import android.text.Selection
 import android.text.TextWatcher
 import android.text.method.DigitsKeyListener
+import android.text.method.PasswordTransformationMethod
 import android.text.method.TextKeyListener
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -32,7 +33,9 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
 
     val binding = WidgetAnswerTextBinding.inflate(LayoutInflater.from(context), this, true)
 
-    fun init(fontSize: Float, readOnly: Boolean, numberOfRows: Int?, afterTextChanged: Runnable) {
+    private var isMasked: Boolean = false
+
+    fun init(fontSize: Float, readOnly: Boolean, numberOfRows: Int?, isMasked: Boolean, afterTextChanged: Runnable) {
         binding.editText.id = generateViewId()
         binding.textView.id = generateViewId()
 
@@ -57,6 +60,11 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
                 afterTextChanged.run()
             }
         })
+        if (isMasked) {
+            this.isMasked = isMasked
+            binding.editText.transformationMethod = PasswordTransformationMethod.getInstance()
+            binding.textView.transformationMethod = PasswordTransformationMethod.getInstance()
+        }
     }
 
     fun updateState(readOnly: Boolean) {
@@ -90,6 +98,11 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
         if (answer != null) {
             setAnswer(String.format(Locale.US, "%d", answer))
         }
+
+        if (isMasked) {
+            binding.editText.transformationMethod = PasswordTransformationMethod.getInstance()
+            binding.textView.transformationMethod = PasswordTransformationMethod.getInstance()
+        }
     }
 
     fun setStringNumberType(useThousandSeparator: Boolean, answer: String?) {
@@ -108,6 +121,11 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
 
         if (answer != null) {
             setAnswer(answer)
+        }
+
+        if (isMasked) {
+            binding.editText.transformationMethod = PasswordTransformationMethod.getInstance()
+            binding.textView.transformationMethod = PasswordTransformationMethod.getInstance()
         }
     }
 
@@ -135,6 +153,11 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
             nf.isGroupingUsed = false
             val formattedValue: String = nf.format(answer)
             setAnswer(formattedValue)
+        }
+
+        if (isMasked) {
+            binding.editText.transformationMethod = PasswordTransformationMethod.getInstance()
+            binding.textView.transformationMethod = PasswordTransformationMethod.getInstance()
         }
     }
 

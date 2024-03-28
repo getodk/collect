@@ -82,7 +82,7 @@ public class DateWidgetTest {
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsCorrectDate() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, new DateData(dateAnswer.toDate()));
-        DatePickerDetails datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
+        DatePickerDetails datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getAppearanceHint());
         DateWidget widget = createWidget(prompt);
 
         assertEquals(widget.binding.dateAnswerText.getText(),
@@ -96,7 +96,7 @@ public class DateWidgetTest {
         widget.binding.dateButton.performClick();
 
         verify(widgetUtils).showDatePickerDialog(widgetActivity, DateTimeWidgetUtils.getDatePickerDetails(
-                prompt.getQuestion().getAppearanceAttr()), DateTimeUtils.getCurrentDateTime());
+                prompt.getAppearanceHint()), DateTimeUtils.getCurrentDateTime());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class DateWidgetTest {
         widget.binding.dateButton.performClick();
 
         verify(widgetUtils).showDatePickerDialog(widgetActivity, DateTimeWidgetUtils.getDatePickerDetails(
-                prompt.getQuestion().getAppearanceAttr()), dateAnswer);
+                prompt.getAppearanceHint()), dateAnswer);
     }
 
     @Test
@@ -146,7 +146,7 @@ public class DateWidgetTest {
     @Test
     public void setData_updatesValueDisplayedInAnswerTextView() {
         FormEntryPrompt prompt = promptWithQuestionDefAndAnswer(questionDef, null);
-        DatePickerDetails datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
+        DatePickerDetails datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getAppearanceHint());
         DateWidget widget = createWidget(prompt);
         widget.setData(dateAnswer);
 

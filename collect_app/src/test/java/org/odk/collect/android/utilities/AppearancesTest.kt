@@ -360,4 +360,24 @@ class AppearancesTest {
         whenever(formEntryPrompt.appearanceHint).thenReturn("search")
         assertTrue(Appearances.isAutocomplete(formEntryPrompt))
     }
+
+    @Test
+    fun `isMasked returns false when there is no appearance`() {
+        assertFalse(Appearances.isMasked(formEntryPrompt))
+
+        whenever(formEntryPrompt.appearanceHint).thenReturn("")
+        assertFalse(Appearances.isMasked(formEntryPrompt))
+    }
+
+    @Test
+    fun `isMasked returns false when non of supported appearances is found`() {
+        whenever(formEntryPrompt.appearanceHint).thenReturn("blah")
+        assertFalse(Appearances.isMasked(formEntryPrompt))
+    }
+
+    @Test
+    fun `isMasked returns true when 'masked' appearance is found`() {
+        whenever(formEntryPrompt.appearanceHint).thenReturn("masked")
+        assertTrue(Appearances.isMasked(formEntryPrompt))
+    }
 }
