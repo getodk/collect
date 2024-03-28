@@ -34,12 +34,17 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public <D extends Page<D>> D clickFinalize(D destination) {
-        clickOnString(org.odk.collect.strings.R.string.finalize);
-        return destination.assertOnPage();
+        tryAgainOnFail(() -> {
+            clickOnString(org.odk.collect.strings.R.string.finalize);
+            destination.assertOnPage();
+        });
+
+        return destination;
     }
 
     public MainMenuPage clickFinalize() {
-        return clickFinalize(new MainMenuPage());
+        clickFinalize(new MainMenuPage());
+        return new MainMenuPage();
     }
 
     public MainMenuPage clickSend() {
