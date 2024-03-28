@@ -65,8 +65,12 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public FillBlankFormPage clickFillBlankForm() {
-        onView(withId(R.id.enter_data)).perform(click());
-        return new FillBlankFormPage().assertOnPage();
+        tryAgainOnFail(() -> {
+            onView(withId(R.id.enter_data)).perform(click());
+            new FillBlankFormPage().assertOnPage();
+        });
+
+        return new FillBlankFormPage();
     }
 
     private void goToBlankForm(String formName) {
