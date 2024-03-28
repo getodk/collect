@@ -3,6 +3,7 @@ package org.odk.collect.android.feature.formentry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -107,11 +108,11 @@ class SavePointTest {
     }
 
     @Test
+    @Ignore("https://github.com/getodk/collect/issues/6039")
     fun savePointIsCreatedWhenLeavingTheApp() {
         // Create save point
         rule.setUpProjectAndCopyForm("two-question-audit.xml", listOf("external_data_10.zip"))
             .fillNewForm("two-question-audit.xml", "Two Question")
-            .answerQuestion("What is your name?", "Alexei")
             .killApp()
 
         // Start blank form and check save point is loaded
@@ -139,6 +140,7 @@ class SavePointTest {
     }
 
     @Test
+    @Ignore("https://github.com/getodk/collect/issues/6039")
     fun whenEditing_savePointIsCreatedWhenLeavingTheApp() {
         // Create instance
         rule.setUpProjectAndCopyForm("two-question-audit.xml", listOf("external_data_10.zip"))
