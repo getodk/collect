@@ -24,15 +24,17 @@ class RecentAppsRule : ExternalResource() {
 
     fun killApp() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.pressRecentApps()
 
         if (Build.VERSION.SDK_INT == 30) {
+            device.pressRecentApps()
             device.wait(Until.hasObject(By.descContains("Collect")), 1000)
             device.findObject(UiSelector().descriptionContains("Collect"))
                 .swipeUp(10).also {
                     CollectHelpers.simulateProcessRestart() // the process is not restarted automatically (probably to keep the test running) so we have simulate it
                 }
         } else if (Build.VERSION.SDK_INT == 34) {
+            device.pressHome() // Pressing recent apps does not actually "leave" the app on API 31+ (cause onPause etc). You need to go home or switch apps.
+            device.pressRecentApps()
             device.wait(Until.hasObject(By.descContains("Screenshot")), 1000)
             while (!device.wait(Until.hasObject(By.text("Clear all")), 0)) {
                 device.swipe(device.displayWidth / 2, device.displayHeight / 2, device.displayWidth,  device.displayHeight / 2, 5)
