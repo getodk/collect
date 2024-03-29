@@ -22,7 +22,7 @@ class RecentAppsRule : ExternalResource() {
         }
     }
 
-    fun killApp() {
+    fun leaveAndKillApp() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         if (Build.VERSION.SDK_INT == 30) {
@@ -37,7 +37,7 @@ class RecentAppsRule : ExternalResource() {
             device.pressRecentApps()
             device.wait(Until.hasObject(By.descContains("Screenshot")), 1000)
             while (!device.wait(Until.hasObject(By.text("Clear all")), 0)) {
-                device.swipe(device.displayWidth / 2, device.displayHeight / 2, device.displayWidth,  device.displayHeight / 2, 5)
+                device.swipe(device.displayWidth / 2, device.displayHeight / 2, device.displayWidth, device.displayHeight / 2, 5)
             }
 
             device.findObject(UiSelector().text("Clear all")).click()
@@ -48,7 +48,7 @@ class RecentAppsRule : ExternalResource() {
     }
 
     /**
-     * Makes sure [killApp] doesn't run into problems with tooltips by opening
+     * Makes sure [leaveAndKillApp] doesn't run into problems with tooltips by opening
      * Recent Apps and dismissing before any test runs. Only needs to run once per test process.
      */
     private fun removeRecentAppsTooltips() {

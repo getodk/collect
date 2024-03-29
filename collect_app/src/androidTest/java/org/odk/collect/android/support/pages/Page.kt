@@ -489,7 +489,7 @@ abstract class Page<T : Page<T>> {
         recentAppsRule: RecentAppsRule,
         destination: D
     ): D {
-        recentAppsRule.killApp()
+        recentAppsRule.leaveAndKillApp()
 
         // reopen
         launcherRule.launch<Activity>(getLaunchIntent())
