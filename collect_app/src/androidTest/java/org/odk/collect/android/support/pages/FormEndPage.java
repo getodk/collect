@@ -25,13 +25,16 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public <D extends Page<D>> D clickSaveAsDraft(D destination) {
-        clickOnString(org.odk.collect.strings.R.string.save_as_draft);
-        return destination.assertOnPage();
+        tryAgainOnFail(() -> {
+            clickOnString(org.odk.collect.strings.R.string.save_as_draft);
+            destination.assertOnPage();
+        });
+
+        return destination;
     }
 
     public MainMenuPage clickSaveAsDraft() {
-        clickOnString(org.odk.collect.strings.R.string.save_as_draft);
-        return new MainMenuPage().assertOnPage();
+        return clickSaveAsDraft(new MainMenuPage());
     }
 
     public <D extends Page<D>> D clickFinalize(D destination) {
