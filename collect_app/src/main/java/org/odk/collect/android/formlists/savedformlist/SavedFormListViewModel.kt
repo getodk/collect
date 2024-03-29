@@ -67,10 +67,14 @@ class SavedFormListViewModel(
         val result = MutableLiveData<Consumable<Int>?>(null)
         worker.immediate(
             background = {
-                databaseIds.forEach { instancesDataService.deleteInstance(it) }
+                instancesDataService.deleteInstances(databaseIds)
             },
-            foreground = {
-                result.value = Consumable(databaseIds.count())
+            foreground = { instancesDeleted ->
+                if (instancesDeleted) {
+                    result.value = Consumable(databaseIds.count())
+                } else {
+                    result.value = Consumable(0)
+                }
             }
         )
 
