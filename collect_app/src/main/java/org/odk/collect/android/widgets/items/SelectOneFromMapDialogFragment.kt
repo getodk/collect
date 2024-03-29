@@ -28,6 +28,7 @@ import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
+import org.odk.collect.geo.selection.IconifiedText
 import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.geo.selection.SelectionMapData
 import org.odk.collect.geo.selection.SelectionMapFragment
@@ -149,7 +150,7 @@ internal class SelectChoicesMapData(
                             val properties = selectChoice.additionalChildren.filter {
                                 it.first != GeojsonFeature.GEOMETRY_CHILD_NAME
                             }.map {
-                                MappableSelectItem.IconifiedText(null, "${it.first}: ${it.second}")
+                                IconifiedText(null, "${it.first}: ${it.second}")
                             }
 
                             val markerColor =
@@ -157,20 +158,20 @@ internal class SelectChoicesMapData(
                             val markerSymbol =
                                 selectChoice.additionalChildren.firstOrNull { it.first == "marker-symbol" }?.second
 
-                            list + MappableSelectItem.WithAction(
+                            list + MappableSelectItem(
                                 index.toLong(),
                                 points,
                                 if (markerSymbol == null) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small else org.odk.collect.icons.R.drawable.ic_map_marker_small,
                                 if (markerSymbol == null) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big else org.odk.collect.icons.R.drawable.ic_map_marker_big,
                                 prompt.getSelectChoiceText(selectChoice),
                                 properties,
-                                MappableSelectItem.IconifiedText(
-                                    org.odk.collect.icons.R.drawable.ic_save,
-                                    resources.getString(org.odk.collect.strings.R.string.select_item)
-                                ),
                                 selectChoice.index == selectedIndex,
                                 markerColor,
-                                markerSymbol
+                                markerSymbol,
+                                action = IconifiedText(
+                                    org.odk.collect.icons.R.drawable.ic_save,
+                                    resources.getString(org.odk.collect.strings.R.string.select_item)
+                                )
                             )
                         } else {
                             list

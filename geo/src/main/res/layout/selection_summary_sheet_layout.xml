@@ -10,13 +10,6 @@
         android:paddingBottom="@dimen/margin_standard">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/margin_standard" />
-
-        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,14 +23,30 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="@dimen/margin_standard" />
 
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:id="@+id/drag_handle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <org.odk.collect.material.ErrorsPill
+            android:id="@+id/status_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/drag_handle" />
+
         <TextView
             android:id="@+id/name"
             style="?textAppearanceHeadline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="?colorOnSurface"
+            android:layout_marginTop="@dimen/margin_extra_extra_small"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/guideline_top"
+            app:layout_constraintTop_toBottomOf="@id/status_chip"
             tools:text="Name" />
 
         <TextView
@@ -47,9 +56,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textColor="@color/color_on_surface_medium_emphasis"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toBottomOf="@id/name"
-            tools:text="Info" />
+            tools:text="Info"
+            tools:visibility="visible" />
 
         <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
             android:id="@+id/action"
@@ -57,6 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_extra_small"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toBottomOf="@id/info"
             tools:icon="@drawable/ic_delete"
@@ -85,6 +97,4 @@
             app:showDividers="middle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </androidx.core.widget.NestedScrollView>

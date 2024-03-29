@@ -37,8 +37,8 @@ import org.odk.collect.android.widgets.support.NoOpMapFragment
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
+import org.odk.collect.geo.selection.IconifiedText
 import org.odk.collect.geo.selection.MappableSelectItem
-import org.odk.collect.geo.selection.MappableSelectItem.IconifiedText
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import org.odk.collect.maps.MapFragment
@@ -176,7 +176,7 @@ class SelectOneFromMapDialogFragmentTest {
                 data.getMappableItems().value,
                 equalTo(
                     listOf(
-                        MappableSelectItem.WithAction(
+                        MappableSelectItem(
                             0,
                             listOf(
                                 MapPoint(
@@ -189,13 +189,12 @@ class SelectOneFromMapDialogFragmentTest {
                             org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small,
                             org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big,
                             "A",
-                            emptyList(),
-                            IconifiedText(
+                            action = IconifiedText(
                                 org.odk.collect.icons.R.drawable.ic_save,
                                 application.getString(org.odk.collect.strings.R.string.select_item)
                             )
                         ),
-                        MappableSelectItem.WithAction(
+                        MappableSelectItem(
                             1,
                             listOf(
                                 MapPoint(
@@ -208,8 +207,7 @@ class SelectOneFromMapDialogFragmentTest {
                             org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small,
                             org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big,
                             "B",
-                            emptyList(),
-                            IconifiedText(
+                            action = IconifiedText(
                                 org.odk.collect.icons.R.drawable.ic_save,
                                 application.getString(org.odk.collect.strings.R.string.select_item)
                             )

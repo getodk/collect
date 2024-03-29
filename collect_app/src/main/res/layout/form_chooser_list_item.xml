@@ -8,7 +8,7 @@
 
     <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
 
-    <org.odk.collect.material.MaterialPill
+    <org.odk.collect.material.ErrorsPill
         android:id="@+id/chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
