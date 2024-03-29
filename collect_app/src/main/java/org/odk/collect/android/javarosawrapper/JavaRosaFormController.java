@@ -1110,7 +1110,7 @@ public class JavaRosaFormController implements FormController {
     public Stream<Entity> getEntities() {
         Entities extra = formEntryController.getModel().getExtras().get(Entities.class);
         if (extra != null) {
-            return extra.getEntities().stream().map(entity -> new Entity(entity.dataset, entity.properties));
+            return extra.getEntities().stream().map(entity -> new Entity(entity.dataset, entity.id, entity.label, entity.version, entity.properties));
         } else {
             return Stream.empty();
         }

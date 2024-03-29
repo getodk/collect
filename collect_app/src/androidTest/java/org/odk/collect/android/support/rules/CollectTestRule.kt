@@ -41,6 +41,17 @@ class CollectTestRule @JvmOverloads constructor(
             .addProject()
     }
 
+    fun withMatchExactlyProject(serverUrl: String): MainMenuPage {
+        return startAtFirstLaunch()
+            .clickManuallyEnterProjectDetails()
+            .inputUrl(serverUrl)
+            .addProject()
+            .enableMatchExactly()
+            .clickFillBlankForm()
+            .clickRefresh()
+            .pressBack(MainMenuPage())
+    }
+
     fun withProject(testServer: StubOpenRosaServer, vararg formFiles: String): MainMenuPage {
         val mainMenuPage = startAtFirstLaunch()
             .clickManuallyEnterProjectDetails()

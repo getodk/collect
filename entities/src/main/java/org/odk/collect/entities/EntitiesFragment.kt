@@ -6,20 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.odk.collect.entities.databinding.ListLayoutBinding
-import javax.inject.Inject
 
-class EntitiesFragment : Fragment() {
+class EntitiesFragment(private val viewModelFactory: ViewModelProvider.Factory) : Fragment() {
 
-    @Inject
-    lateinit var entitiesRepository: EntitiesRepository
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        (context.applicationContext as EntitiesDependencyComponentProvider)
-            .entitiesDependencyComponent.inject(this)
-    }
+    private val entitiesViewModel by viewModels<EntitiesViewModel> { viewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,14 +26,36 @@ class EntitiesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val dataset = EntitiesFragmentArgs.fromBundle(requireArguments()).dataset
         val binding = ListLayoutBinding.bind(view)
+        binding.list.layoutManager = LinearLayoutManager(requireContext())
 
-        entitiesRepository.getEntities(dataset).forEach { entity ->
-            val item = EntityItemView(view.context)
-            item.setEntity(entity)
-
-            binding.list.addView(item)
+        val dataset = EntitiesFragmentArgs.fromBundle(requireArguments()).dataset
+        entitiesViewModel.getEntities(dataset).observe(viewLifecycleOwner) {
+            binding.list.adapter = EntitiesAdapter(it)
         }
+    }
+}
+
+private class EntitiesAdapter(private val data: List<Entity>) :
+    RecyclerView.Adapter<EntityViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, position: Int): EntityViewHolder {
+        return EntityViewHolder(parent.context)
+    }
+
+    override fun getItemCount(): Int {
+        return data.size
+    }
+
+    override fun onBindViewHolder(viewHolder: EntityViewHolder, position: Int) {
+        val entity = data[position]
+        viewHolder.setEntity(entity)
+    }
+}
+
+private class EntityViewHolder(context: Context) : ViewHolder(EntityItemView(context)) {
+
+    fun setEntity(entity: Entity) {
+        (itemView as EntityItemView).setEntity(entity)
     }
 }

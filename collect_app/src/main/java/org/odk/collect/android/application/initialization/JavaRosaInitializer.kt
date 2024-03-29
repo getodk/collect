@@ -9,10 +9,18 @@ import org.javarosa.xform.parse.XFormParser
 import org.javarosa.xform.parse.XFormParserFactory
 import org.javarosa.xform.util.XFormUtils
 import org.odk.collect.android.dynamicpreload.DynamicPreloadXFormParserFactory
+import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
+import org.odk.collect.entities.OfflineEntitiesExternalInstanceParserFactory
 import org.odk.collect.metadata.PropertyManager
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 
-class JavaRosaInitializer(private val propertyManager: PropertyManager) {
+class JavaRosaInitializer(
+    private val propertyManager: PropertyManager,
+    private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
+    private val settingsProvider: SettingsProvider
+) {
 
     fun initialize() {
         propertyManager.reload()
@@ -37,5 +45,12 @@ class JavaRosaInitializer(private val propertyManager: PropertyManager) {
             DynamicPreloadXFormParserFactory(entityXFormParserFactory)
 
         XFormUtils.setXFormParserFactory(dynamicPreloadXFormParserFactory)
+
+        val offlineEntitiesExternalInstanceParserFactory = OfflineEntitiesExternalInstanceParserFactory(
+            entitiesRepositoryProvider::get,
+            { settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_LOCAL_ENTITIES) }
+        )
+
+        XFormUtils.setExternalInstanceParserFactory(offlineEntitiesExternalInstanceParserFactory)
     }
 }

@@ -69,8 +69,8 @@ abstract class SchedulerAsyncTaskMimic<Params, Progress, Result>(private val sch
     }
 
     protected fun publishProgress(vararg values: Progress) {
-        scheduler.immediate(
-            runnable = { onProgressUpdate(*values) }
-        )
+        scheduler.immediate(foreground = true) {
+            onProgressUpdate(*values)
+        }
     }
 }

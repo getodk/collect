@@ -12,9 +12,9 @@ import org.junit.Test
 import org.kxml2.io.KXmlParser
 import org.kxml2.kdom.Document
 import org.mockito.kotlin.mock
-import org.odk.collect.android.entities.InMemEntitiesRepository
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.entities.InMemEntitiesRepository
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormFixtures

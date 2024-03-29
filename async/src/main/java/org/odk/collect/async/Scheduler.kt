@@ -25,7 +25,7 @@ interface Scheduler {
     /**
      * Run work in the foreground or background. Cancelled if application closed.
      */
-    fun immediate(background: Boolean = false, runnable: Runnable)
+    fun immediate(foreground: Boolean = false, runnable: Runnable)
 
     /**
      * Schedule a task to run in the background even if the app isn't running. The task

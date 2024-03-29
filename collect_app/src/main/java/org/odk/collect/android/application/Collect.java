@@ -43,6 +43,7 @@ import org.odk.collect.androidshared.data.AppState;
 import org.odk.collect.androidshared.data.StateStore;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.androidshared.system.ExternalFilesUtils;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
@@ -344,6 +345,12 @@ public class Collect extends Application implements
                         public EntitiesRepository providesEntitiesRepository() {
                             String projectId = applicationComponent.currentProjectProvider().getCurrentProject().getUuid();
                             return applicationComponent.entitiesRepositoryProvider().get(projectId);
+                        }
+
+                        @NonNull
+                        @Override
+                        public Scheduler providesScheduler() {
+                            return applicationComponent.scheduler();
                         }
                     })
                     .build();
