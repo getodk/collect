@@ -106,6 +106,11 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
                             label.value = StringData("1")
                         }
                     )
+                    item.addChild(
+                        TreeElement("nickname").also { label ->
+                            label.value = StringData("Shiv")
+                        }
+                    )
                 }
             )
         }
@@ -119,6 +124,7 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
             firstItem.getFirstChild("age")?.value?.value,
             equalTo(entity.properties[0].second)
         )
+        assertThat(firstItem.getFirstChild("nickname")?.value?.value, equalTo("Shiv"))
     }
 
     @Test
