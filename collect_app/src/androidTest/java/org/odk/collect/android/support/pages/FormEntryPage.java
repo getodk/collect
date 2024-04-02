@@ -45,7 +45,10 @@ public class FormEntryPage extends Page<FormEntryPage> {
             return null;
         });
 
-        assertToolbarTitle(formName);
+        WaitFor.waitFor((Callable<Void>) () -> {
+            assertToolbarTitle(formName);
+            return null;
+        });
 
         // Check we are not on the Form Hierarchy page
         assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_beginning);
