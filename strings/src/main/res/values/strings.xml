@@ -500,6 +500,18 @@
     <!-- Text for button that lets the user delete a reference layer -->
     <string name="delete_layer" tools:ignore="UnusedResources">Delete layer</string>
 
+    <!-- Text for title above list of layers -->
+    <string name="layers_list_title" tools:ignore="UnusedResources">Layers</string>
+
+    <!-- Text for title and subtitle above options for how the layer can be access -->
+    <string name="select_layer_access_title" tools:ignore="UnusedResources">Select layer access</string>
+    <string name="select_layer_access_subtitle" tools:ignore="UnusedResources">Do you want the layer available in all projects or your current project only?</string>
+
+    <!-- Text for option where layer should be available to all projects -->
+    <string name="all_projects_option" tools:ignore="UnusedResources">All projects</string>
+
+    <!-- Text for option where layer should be available to the current project only -->
+    <string name="current_project_option" tools:ignore="UnusedResources">Current project only</string>
 
     <string name="view_change_location">View or Change Location</string>
     <string name="change_location">Change Location</string>
