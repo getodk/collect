@@ -271,17 +271,17 @@ public class FieldListUpdateTest {
                 .clickOnQuestion("Level1")
                 .assertTextsDoNotExist("A1", "B1", "C1", "A1A") // No choices should be shown for levels 2 and 3 when no selection is made for level 1
                 .openSelectMinimalDialog(0)
-                .clickOnText("C") // Selecting C for level 1 should only reveal options for C at level 2
+                .selectItem("C") // Selecting C for level 1 should only reveal options for C at level 2
                 .assertTextsDoNotExist("A1", "B1")
                 .openSelectMinimalDialog(1)
-                .clickOnText("C1")
+                .selectItem("C1")
                 .assertTextDoesNotExist("A1A")
                 .clickOnText("C")
                 .clickOnText("A") // Selecting A for level 1 should reveal options for A at level 2
                 .openSelectMinimalDialog(1)
                 .assertText("A1")
                 .assertTextsDoNotExist("A1A", "B1", "C1")
-                .clickOnText("A1") // Selecting A1 for level 2 should reveal options for A1 at level 3
+                .selectItem("A1") // Selecting A1 for level 2 should reveal options for A1 at level 3
                 .openSelectMinimalDialog(2)
                 .assertText("A1A")
                 .assertTextsDoNotExist("B1A", "B1", "C1");
@@ -387,7 +387,7 @@ public class FieldListUpdateTest {
                 .clickOnQuestion("Source15")
                 .openSelectMinimalDialog()
                 .assertTexts("Mango", "Oranges", "Strawberries")
-                .clickOnText("Strawberries")
+                .selectItem("Strawberries")
                 .assertText("Target15")
                 .assertSelectMinimalDialogAnswer("Strawberries");
     }
@@ -417,7 +417,7 @@ public class FieldListUpdateTest {
                 .clickOnContentDescription(org.odk.collect.strings.R.string.stop_recording)
                 .checkIsTranslationDisplayed("Target16")
                 .clickOnString(org.odk.collect.strings.R.string.delete_answer_file)
-                .clickOnButtonInDialog(org.odk.collect.strings.R.string.delete_answer_file, new FormEntryPage("fieldlist-updates"))
+                .clickOnTextInDialog(org.odk.collect.strings.R.string.delete_answer_file, new FormEntryPage("fieldlist-updates"))
                 .assertTextDoesNotExist("Target16");
     }
 

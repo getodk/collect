@@ -12,10 +12,10 @@ class SaveOrIgnoreDrawingDialog<D : Page<D>>(
     }
 
     fun clickSaveChanges(): D {
-        return clickOnButtonInDialog(org.odk.collect.strings.R.string.keep_changes, destination)
+        return clickOnTextInDialog(org.odk.collect.strings.R.string.keep_changes, destination)
     }
 
     fun clickDiscardChanges(): D {
-        return clickOnButtonInDialog(org.odk.collect.strings.R.string.discard_changes, destination)
+        return clickOnTextInDialog(org.odk.collect.strings.R.string.discard_changes, destination)
     }
 }

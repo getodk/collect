@@ -15,10 +15,10 @@ class SavepointRecoveryDialogPage : Page<SavepointRecoveryDialogPage>() {
     }
 
     fun <D : Page<D>> clickRecover(destination: D): D {
-        return this.clickOnButtonInDialog(R.string.recover, destination)
+        return this.clickOnTextInDialog(R.string.recover, destination)
     }
 
     fun <D : Page<D>> clickDoNotRecover(destination: D): D {
-        return this.clickOnButtonInDialog(R.string.do_not_recover, destination)
+        return this.clickOnTextInDialog(R.string.do_not_recover, destination)
     }
 }

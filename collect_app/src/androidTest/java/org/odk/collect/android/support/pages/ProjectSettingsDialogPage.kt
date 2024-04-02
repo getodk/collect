@@ -10,7 +10,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.allOf
-import org.odk.collect.android.R
 import org.odk.collect.android.support.WaitFor
 
 internal class ProjectSettingsDialogPage : Page<ProjectSettingsDialogPage>() {
@@ -21,21 +20,21 @@ internal class ProjectSettingsDialogPage : Page<ProjectSettingsDialogPage>() {
     }
 
     fun clickSettings(): ProjectSettingsPage {
-        return clickOnButtonInDialog(
+        return clickOnTextInDialog(
             org.odk.collect.strings.R.string.settings,
             ProjectSettingsPage()
         )
     }
 
     fun clickAbout(): AboutPage {
-        return clickOnButtonInDialog(
+        return clickOnTextInDialog(
             org.odk.collect.strings.R.string.about_preferences,
             AboutPage()
         )
     }
 
     fun clickAddProject(): QrCodeProjectCreatorDialogPage {
-        return clickOnButtonInDialog(
+        return clickOnTextInDialog(
             org.odk.collect.strings.R.string.add_project,
             QrCodeProjectCreatorDialogPage()
         )

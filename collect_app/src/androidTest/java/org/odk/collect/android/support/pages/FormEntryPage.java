@@ -195,7 +195,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage deleteGroup(String questionText) {
         onView(withText(questionText)).perform(longClick());
         onView(withText(org.odk.collect.strings.R.string.delete_repeat)).perform(click());
-        clickOnButtonInDialog(org.odk.collect.strings.R.string.discard_group, this);
+        clickOnTextInDialog(org.odk.collect.strings.R.string.discard_group, this);
         return this;
     }
 
@@ -268,7 +268,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage removeResponse() {
         onView(withText(org.odk.collect.strings.R.string.clear_answer)).perform(click());
-        return clickOnButtonInDialog(org.odk.collect.strings.R.string.discard_answer, this);
+        return clickOnTextInDialog(org.odk.collect.strings.R.string.discard_answer, this);
     }
 
     public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
@@ -354,14 +354,13 @@ public class FormEntryPage extends Page<FormEntryPage> {
         });
     }
 
-    public FormEntryPage openSelectMinimalDialog() {
-        openSelectMinimalDialog(0);
-        return this;
+    public SelectMinimalDialogPage openSelectMinimalDialog() {
+        return openSelectMinimalDialog(0);
     }
 
-    public FormEntryPage openSelectMinimalDialog(int index) {
+    public SelectMinimalDialogPage openSelectMinimalDialog(int index) {
         onView(withIndex(withClassName(Matchers.endsWith("TextInputEditText")), index)).perform(click());
-        return this;
+        return new SelectMinimalDialogPage(formName).assertOnPage();
     }
 
     public FormEntryPage assertSelectMinimalDialogAnswer(String answer) {
