@@ -225,7 +225,7 @@ class SavePointTest {
         rule.fillNewForm("two-question-audit.xml", "Two Question")
     }
 
-    @Test
+    @Test // https://github.com/getodk/collect/pull/6058
     fun whenBlankFormStartedThenSavedAndKilled_aSavepointShouldBeCreatedForASavedFormNotForTheBlankOne() {
         // Start blank form, save it and create a savepoint
         rule.setUpProjectAndCopyForm("two-question.xml")
