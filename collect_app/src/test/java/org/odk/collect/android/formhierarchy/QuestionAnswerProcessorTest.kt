@@ -4,10 +4,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.QuestionDef
-import org.javarosa.form.api.FormEntryPrompt
 import org.junit.Test
 import org.mockito.Mockito.mock
-import org.mockito.kotlin.whenever
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.utilities.Appearances
 
@@ -35,12 +33,13 @@ class QuestionAnswerProcessorTest {
             Constants.DATATYPE_INTEGER,
             Constants.DATATYPE_DECIMAL
         ).forEach {
-            val prompt = mock<FormEntryPrompt>()
             val question = mock<QuestionDef>()
-            whenever(prompt.dataType).thenReturn(it)
-            whenever(prompt.controlType).thenReturn(Constants.CONTROL_INPUT)
-            whenever(prompt.question).thenReturn(question)
-            whenever(prompt.appearanceHint).thenReturn(Appearances.MASKED)
+            val prompt = MockFormEntryPromptBuilder()
+                .withQuestion(question)
+                .withDataType(it)
+                .withControlType(Constants.CONTROL_INPUT)
+                .withAppearance(Appearances.MASKED)
+                .build()
 
             val answer = QuestionAnswerProcessor.getQuestionAnswer(prompt, mock(), mock())
 
