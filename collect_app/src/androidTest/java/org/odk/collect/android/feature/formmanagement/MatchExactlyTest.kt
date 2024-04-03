@@ -8,7 +8,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.FillBlankFormPage
@@ -93,6 +92,7 @@ class MatchExactlyTest {
             .assertNotification("ODK Collect", "Form update failed", "Demo project")
             .clickAction(
                 "ODK Collect",
+                "Form update failed",
                 "Show details",
                 ErrorPage()
             ).assertText(org.odk.collect.strings.R.string.form_update_error)

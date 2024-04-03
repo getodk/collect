@@ -14,7 +14,7 @@ class NotificationDrawerRule : TestRule {
         return object : Statement() {
             @Throws(Throwable::class)
             override fun evaluate() {
-                assumeTrue(SUPPORTED_SDKS.contains(Build.VERSION.SDK_INT)) // Skip if we're not using API 30
+                assumeTrue(SUPPORTED_SDKS.contains(Build.VERSION.SDK_INT))
 
                 try {
                     base.evaluate()
@@ -30,6 +30,6 @@ class NotificationDrawerRule : TestRule {
     }
 
     companion object {
-        private val SUPPORTED_SDKS = listOf(30)
+        private val SUPPORTED_SDKS = listOf(30, 34)
     }
 }

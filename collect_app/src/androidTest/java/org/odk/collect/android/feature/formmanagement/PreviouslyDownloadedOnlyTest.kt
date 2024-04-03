@@ -127,6 +127,7 @@ class PreviouslyDownloadedOnlyTest {
             )
             .clickAction(
                 "ODK Collect",
+                "Forms download failed",
                 "Show details",
                 ErrorPage()
             )

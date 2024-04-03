@@ -35,10 +35,7 @@ class NotificationDrawer {
         subtext: String? = null,
         body: String? = null
     ): NotificationDrawer {
-        val device = waitForNotification(appName)
-
-        val titleElement = device.findObject(By.text(title))
-        assertThat(titleElement, not(nullValue()))
+        val device = waitForNotification(appName, title)
 
         if (subtext != null) {
             assertExpandedText(device, appName, subtext)
@@ -53,10 +50,11 @@ class NotificationDrawer {
 
     fun <D : Page<D>> clickAction(
         appName: String,
+        title: String,
         actionText: String,
         destination: D
     ): D {
-        val device = waitForNotification(appName)
+        val device = waitForNotification(appName, title)
 
         val actionElement = getExpandedElement(device, appName, actionText) ?: getExpandedElement(device, appName, actionText.uppercase())
         if (actionElement != null) {
@@ -79,9 +77,8 @@ class NotificationDrawer {
         title: String,
         destination: D
     ): D {
-        val device = waitForNotification(appName)
-        val titleElement = assertText(device, title)
-        titleElement.click()
+        val device = waitForNotification(appName, title)
+        device.findObject(By.text(title)).click()
         isOpen = false
 
         return waitFor {
@@ -118,15 +115,6 @@ class NotificationDrawer {
         device.pressBack()
     }
 
-    private fun assertText(device: UiDevice, text: String): UiObject2 {
-        val element = device.findObject(By.text(text))
-        if (element != null) {
-            return element
-        } else {
-            throw AssertionError("Could not find \"$text\"")
-        }
-    }
-
     private fun assertExpandedText(
         device: UiDevice,
         appName: String,
@@ -153,12 +141,13 @@ class NotificationDrawer {
         device.findObject(By.text(appName)).click()
     }
 
-    private fun waitForNotification(appName: String): UiDevice {
+    private fun waitForNotification(appName: String, title: String): UiDevice {
         return waitFor {
             val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-            val result = device.wait(Until.hasObject(By.textStartsWith(appName)), 0L)
+            val result = device.wait(Until.hasObject(By.text(appName)), 0L) &&
+                device.wait(Until.hasObject(By.text(title)), 0L)
             assertThat(
-                "No notification for app: $appName",
+                "No notification for app: $appName with title $title",
                 result,
                 `is`(true)
             )
