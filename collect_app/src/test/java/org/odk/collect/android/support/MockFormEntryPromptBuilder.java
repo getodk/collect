@@ -92,6 +92,11 @@ public class MockFormEntryPromptBuilder {
         return this;
     }
 
+    public MockFormEntryPromptBuilder withDataType(int dataType) {
+        when(prompt.getDataType()).thenReturn(dataType);
+        return this;
+    }
+
     public FormEntryPrompt build() {
         return prompt;
     }

@@ -213,4 +213,40 @@ public class WidgetFactoryTest {
         QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(SelectOneFromMapWidget.class));
     }
+
+    @Test
+    public void exStringWidgetShouldBeCreatedIfThePackageNameIsMixedWithOtherAppearances() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withControlType(Constants.CONTROL_INPUT)
+                .withDataType(Constants.DATATYPE_TEXT)
+                .withAppearance("masked ex:change.uw.android.BREATHCOUNT thousands-sep")
+                .build();
+
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
+        assertThat(widget, instanceOf(ExStringWidget.class));
+    }
+
+    @Test
+    public void exIntegerWidgetShouldBeCreatedIfThePackageNameIsMixedWithOtherAppearances() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withControlType(Constants.CONTROL_INPUT)
+                .withDataType(Constants.DATATYPE_INTEGER)
+                .withAppearance("masked ex:change.uw.android.BREATHCOUNT thousands-sep")
+                .build();
+
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
+        assertThat(widget, instanceOf(ExIntegerWidget.class));
+    }
+
+    @Test
+    public void exDecimalWidgetShouldBeCreatedIfThePackageNameIsMixedWithOtherAppearances() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withControlType(Constants.CONTROL_INPUT)
+                .withDataType(Constants.DATATYPE_DECIMAL)
+                .withAppearance("masked ex:change.uw.android.BREATHCOUNT thousands-sep")
+                .build();
+
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
+        assertThat(widget, instanceOf(ExDecimalWidget.class));
+    }
 }
