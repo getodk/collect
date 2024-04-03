@@ -27,12 +27,11 @@ object QuestionAnswerProcessor {
 
         if (!fep.answerText.isNullOrBlank() &&
             Appearances.isMasked(fep) &&
-            fep.controlType == Constants.CONTROL_INPUT &&
-            (
+            fep.controlType == Constants.CONTROL_INPUT && (
                 fep.dataType == Constants.DATATYPE_TEXT ||
                     fep.dataType == Constants.DATATYPE_INTEGER ||
                     fep.dataType == Constants.DATATYPE_DECIMAL
-                )
+            )
         ) {
             return "••••••••••"
         }
