@@ -456,13 +456,13 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertTextInDialog(text: Int): T {
-        return assertTextInDialog(getTranslatedString(text))
-    }
-
     fun assertTextInDialog(text: String): T {
         onView(withText(text)).inRoot(isDialog()).check(matches(isDisplayed()))
         return this as T
+    }
+
+    fun assertTextInDialog(text: Int): T {
+        return assertTextInDialog(getTranslatedString(text))
     }
 
     fun closeSnackbar(): T {
