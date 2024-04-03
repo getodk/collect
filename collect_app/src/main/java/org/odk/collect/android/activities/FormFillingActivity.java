@@ -1570,6 +1570,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     showShortToast(this, org.odk.collect.strings.R.string.data_saved_ok);
                 }
 
+                formSessionRepository.update(sessionId, formSaveViewModel.getInstance());
                 formSaveViewModel.resumeFormEntry();
                 break;
 

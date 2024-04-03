@@ -225,6 +225,28 @@ class SavePointTest {
         rule.fillNewForm("two-question-audit.xml", "Two Question")
     }
 
+    @Test // https://github.com/getodk/collect/pull/6058
+    fun whenBlankFormStartedThenSavedAndKilled_aSavepointShouldBeCreatedForASavedFormNotForTheBlankOne() {
+        // Start blank form, save it and create a savepoint
+        rule.setUpProjectAndCopyForm("two-question.xml")
+            .fillNewForm("two-question.xml", "Two Question")
+            .answerQuestion("What is your name?", "Alexei")
+            .clickSave()
+            .swipeToNextQuestion("What is your age?")
+            .answerQuestion("What is your age?", "46")
+            .killApp()
+
+        // Start blank form and check save point is not loaded
+        rule.fillNewForm("two-question.xml", "Two Question")
+            .pressBackAndDiscardForm(AppClosedPage())
+
+        // Edit saved form and check save point is loaded
+        rule.editFormWithSavepoint("two-question.xml")
+            .clickRecover(FormHierarchyPage("Two Question"))
+            .assertText("Alexei")
+            .assertText("46")
+    }
+
     /**
      * Simulates a case where the process is killed without lifecycle clean up (like a phone
      * being battery dying).
