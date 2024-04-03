@@ -242,7 +242,8 @@ class SavePointTest {
             .clickSave()
             .swipeToNextQuestion("What is your age?")
             .answerQuestion("What is your age?", "46")
-            .killApp()
+
+        recentAppsRule.leaveAndKillApp()
 
         // Start blank form and check save point is not loaded
         rule.fillNewForm("two-question.xml", "Two Question")
