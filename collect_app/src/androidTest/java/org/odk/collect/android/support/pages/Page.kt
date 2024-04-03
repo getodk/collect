@@ -273,16 +273,25 @@ abstract class Page<T : Page<T>> {
         return destination!!.assertOnPage()
     }
 
-    fun <D : Page<D>?> clickOnTextInDialog(buttonText: Int, destination: D): D {
-        return clickOnTextInDialog(getTranslatedString(buttonText), destination)
-    }
-
-    fun <D : Page<D>?> clickOnTextInDialog(buttonText: String, destination: D): D {
+    fun clickOnTextInDialog(text: String): T {
         waitForDialogToSettle()
-        onView(withText(buttonText))
+        onView(withText(text))
             .inRoot(isDialog())
             .perform(click())
-        return destination!!.assertOnPage()
+        return this as T
+    }
+
+    fun clickOnTextInDialog(text: Int): T {
+        return clickOnTextInDialog(getTranslatedString(text))
+    }
+
+    fun <D : Page<D>> clickOnTextInDialog(text: Int, destination: D): D {
+        return clickOnTextInDialog(getTranslatedString(text), destination)
+    }
+
+    fun <D : Page<D>> clickOnTextInDialog(text: String, destination: D): D {
+        clickOnTextInDialog(text)
+        return destination.assertOnPage()
     }
 
     fun getTranslatedString(id: Int?, vararg formatArgs: Any): String {
