@@ -26,8 +26,9 @@ class InMemFormSessionRepository : FormSessionRepository {
     }
 
     override fun update(id: String, instance: Instance?) {
-        getLiveData(id).value?.let {
-            getLiveData(id).value = FormSession(it.formController, it.form, instance)
+        val liveData = getLiveData(id)
+        liveData.value?.let {
+            liveData.value = it.copy(instance = instance)
         }
     }
 
