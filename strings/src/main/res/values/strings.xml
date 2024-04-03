@@ -479,8 +479,39 @@
     <string name="carto_map_style_positron">Positron</string>
     <string name="carto_map_style_dark_matter">Dark Matter</string>
 
+    <!-- Title for the reference layer section of settings-->
     <string name="reference_layer">Reference layer</string>
-    <string name="layer_data_file">Layer data file</string>
+
+    <!-- Label for the reference layer setting -->
+    <string name="layer_data_file">Layer</string>
+
+    <!-- Title for the screen that allows the user to select a reference layer for maps -->
+    <string name="reference_layer_dialog_title">Select reference layer</string>
+
+    <!-- Description of how to add reference layers to the project -->
+    <string name="reference_layer_dialog_description" tools:ignore="UnusedResources">Select the reference layer to use for all maps in this project. You can add options to the list by selecting an MBTile file from your device.</string>
+
+    <!-- Text of button user can press to get help when setting up Reference Layers -->
+    <string name="get_help_with_reference_layers">Learn more about adding MBTiles.</string>
+
+    <!-- Text for button that lets the user select a reference layer on their device to add -->
+    <string name="add_layer" tools:ignore="UnusedResources">Add layer</string>
+
+    <!-- Text for button that lets the user delete a reference layer -->
+    <string name="delete_layer" tools:ignore="UnusedResources">Delete layer</string>
+
+    <!-- Text for title above list of layers -->
+    <string name="layers_list_title" tools:ignore="UnusedResources">Layers</string>
+
+    <!-- Text for title and subtitle above options for how the layer can be access -->
+    <string name="select_layer_access_title" tools:ignore="UnusedResources">Select layer access</string>
+    <string name="select_layer_access_subtitle" tools:ignore="UnusedResources">Do you want the layer available in all projects or your current project only?</string>
+
+    <!-- Text for option where layer should be available to all projects -->
+    <string name="all_projects_option" tools:ignore="UnusedResources">All projects</string>
+
+    <!-- Text for option where layer should be available to the current project only -->
+    <string name="current_project_option" tools:ignore="UnusedResources">Current project only</string>
 
     <string name="view_change_location">View or Change Location</string>
     <string name="change_location">Change Location</string>
@@ -598,9 +629,6 @@
 
     <!-- Title for notification that lets user know their location is currently being tracked -->
     <string name="location_tracking_notification_title">Tracking location…</string>
-
-    <!-- Text of button user can press to get help when setting up Reference Layers -->
-    <string name="get_help_with_reference_layers">Get help with Reference Layers</string>
 
     <!-- Description for button that zooms to the user's current location on a map -->
     <string name="show_my_location">Show my location</string>

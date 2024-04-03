@@ -16,7 +16,7 @@
         <org.odk.collect.android.preferences.CaptionedListPreference
             android:key="reference_layer"
             android:title="@string/layer_data_file"
-            android:dialogTitle="@string/layer_data_file"
+            android:dialogTitle="@string/reference_layer_dialog_title"
             android:negativeButtonText="@string/cancel"
             android:positiveButtonText="@string/ok"
             app:iconSpaceReserved="false" />
