@@ -6,7 +6,7 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 import androidx.test.uiautomator.Until
-import org.junit.Assume.assumeTrue
+import org.junit.Assert.assertTrue
 import org.junit.rules.ExternalResource
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.DummyActivityLauncher
@@ -14,7 +14,10 @@ import org.odk.collect.android.support.DummyActivityLauncher
 class RecentAppsRule : ExternalResource() {
 
     override fun before() {
-        assumeTrue(SUPPORTED_SDKS.contains(Build.VERSION.SDK_INT))
+        assertTrue(
+            "${this.javaClass.simpleName} does not support this API level!",
+            SUPPORTED_SDKS.contains(Build.VERSION.SDK_INT)
+        )
 
         if (Build.VERSION.SDK_INT == 30) {
             removeRecentAppsTooltips()
@@ -36,7 +39,13 @@ class RecentAppsRule : ExternalResource() {
             device.pressRecentApps()
             device.wait(Until.hasObject(By.descContains("Screenshot")), 1000)
             while (!device.wait(Until.hasObject(By.text("Clear all")), 0)) {
-                device.swipe(device.displayWidth / 2, device.displayHeight / 2, device.displayWidth, device.displayHeight / 2, 5)
+                device.swipe(
+                    device.displayWidth / 2,
+                    device.displayHeight / 2,
+                    device.displayWidth,
+                    device.displayHeight / 2,
+                    5
+                )
             }
 
             device.findObject(UiSelector().text("Clear all")).click()
