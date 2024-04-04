@@ -1,6 +1,5 @@
 package org.odk.collect.android.support.rules
 
-import android.content.Intent
 import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
@@ -10,7 +9,7 @@ import androidx.test.uiautomator.Until
 import org.junit.Assume.assumeTrue
 import org.junit.rules.ExternalResource
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.testshared.DummyActivity
+import org.odk.collect.android.support.DummyActivityLauncher
 
 class RecentAppsRule : ExternalResource() {
 
@@ -52,31 +51,21 @@ class RecentAppsRule : ExternalResource() {
      * Recent Apps and dismissing before any test runs. Only needs to run once per test process.
      */
     private fun removeRecentAppsTooltips() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-
         // Open dummy activity so there is something in Recent Apps
-        InstrumentationRegistry.getInstrumentation().targetContext.apply {
-            val intent = Intent(this.applicationContext, DummyActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-            device.wait(Until.hasObject(By.textStartsWith(DummyActivity.TEXT)), 1000)
+        DummyActivityLauncher.launch { device ->
+            // Open Recent Apps and dismiss tooltips if they're there
+            device.pressRecentApps()
+            val foundToolTip = device.wait(
+                Until.hasObject(By.textStartsWith("Select text and images to copy")),
+                1000
+            )
+            if (foundToolTip) {
+                device.pressBack() // the first time we open the list of recent apps, a tooltip might be displayed and we need to close it
+            }
+
+            // Close recent apps
+            device.pressBack()
         }
-
-        // Open Recent Apps and dismiss tooltips if they're there
-        device.pressRecentApps()
-        val foundToolTip = device.wait(
-            Until.hasObject(By.textStartsWith("Select text and images to copy")),
-            1000
-        )
-        if (foundToolTip) {
-            device.pressBack() // the first time we open the list of recent apps, a tooltip might be displayed and we need to close it
-        }
-
-        // Close recent apps
-        device.pressBack()
-
-        // Close dummy activity
-        device.pressBack()
     }
 
     companion object {
