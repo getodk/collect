@@ -193,8 +193,8 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage deleteGroup(String questionText) {
-        onView(withText(questionText)).perform(longClick());
-        onView(withText(org.odk.collect.strings.R.string.delete_repeat)).perform(click());
+        longClickOnText(questionText);
+        clickOnTextInPopup(org.odk.collect.strings.R.string.delete_repeat);
         clickOnTextInDialog(org.odk.collect.strings.R.string.discard_group, this);
         return this;
     }

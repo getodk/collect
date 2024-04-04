@@ -13,6 +13,7 @@ import androidx.test.espresso.NoActivityResumedException
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.typeText
@@ -20,6 +21,7 @@ import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
@@ -511,6 +513,16 @@ abstract class Page<T : Page<T>> {
 
     fun assertNoOptionsMenu(): T {
         onView(OVERFLOW_BUTTON_MATCHER).check(doesNotExist())
+        return this as T
+    }
+
+    fun longClickOnText(text: String): T {
+        onView(withText(text)).perform(longClick())
+        return this as T
+    }
+
+    fun clickOnTextInPopup(text: Int): T {
+        onView(withText(text)).inRoot(isPlatformPopup()).perform(click())
         return this as T
     }
 
