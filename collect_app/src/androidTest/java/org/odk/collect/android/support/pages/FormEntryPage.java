@@ -25,7 +25,6 @@ import androidx.test.core.app.ApplicationProvider;
 import org.hamcrest.Matchers;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.WaitFor;
-import org.odk.collect.android.utilities.FlingRegister;
 
 import java.util.concurrent.Callable;
 
@@ -325,32 +324,14 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     private void flingLeft() {
-        tryAgainOnFail(5, () -> {
-            FlingRegister.attemptingFling();
+        tryFlakyAction(() -> {
             onView(withId(R.id.questionholder)).perform(swipeLeft());
-
-            WaitFor.waitFor(() -> {
-                if (FlingRegister.isFlingDetected()) {
-                    return true;
-                } else {
-                    throw new RuntimeException("Fling never detected!");
-                }
-            });
         });
     }
 
     private void flingRight() {
-        tryAgainOnFail(5, () -> {
-            FlingRegister.attemptingFling();
+        tryFlakyAction(() -> {
             onView(withId(R.id.questionholder)).perform(swipeRight());
-
-            WaitFor.waitFor(() -> {
-                if (FlingRegister.isFlingDetected()) {
-                    return true;
-                } else {
-                    throw new RuntimeException("Fling never detected!");
-                }
-            });
         });
     }
 

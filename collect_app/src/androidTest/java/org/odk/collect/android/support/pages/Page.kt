@@ -56,6 +56,7 @@ import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
 import org.odk.collect.android.support.rules.RecentAppsRule
+import org.odk.collect.android.utilities.ActionRegister
 import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.strings.localization.getLocalizedQuantityString
@@ -524,6 +525,18 @@ abstract class Page<T : Page<T>> {
     fun clickOnTextInPopup(text: Int): T {
         onView(withText(text)).inRoot(isPlatformPopup()).perform(click())
         return this as T
+    }
+
+    fun tryFlakyAction(action: Runnable) {
+        tryAgainOnFail {
+            ActionRegister.attemptingAction()
+            action.run()
+            waitFor {
+                if (!ActionRegister.isActionDetected) {
+                    throw java.lang.RuntimeException("Action never detected!")
+                }
+            }
+        }
     }
 
     companion object {

@@ -11,7 +11,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.StringContains.containsString;
-import static org.odk.collect.android.support.WaitFor.tryAgainOnFail;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
@@ -66,12 +65,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public FillBlankFormPage clickFillBlankForm() {
-        tryAgainOnFail(() -> {
+        tryFlakyAction(() -> {
             onView(withId(R.id.enter_data)).perform(click());
-            new FillBlankFormPage().assertOnPage();
         });
 
-        return new FillBlankFormPage();
+        return new FillBlankFormPage().assertOnPage();
     }
 
     private void goToBlankForm(String formName) {

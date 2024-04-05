@@ -1,6 +1,5 @@
 package org.odk.collect.android.support.pages
 
-import org.odk.collect.android.R
 import org.odk.collect.android.support.WaitFor.tryAgainOnFail
 
 class FirstLaunchPage : Page<FirstLaunchPage>() {
