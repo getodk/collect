@@ -31,6 +31,7 @@ object DatabaseObjectMapper {
         values.put(DatabaseFormColumns.FORM_MEDIA_PATH, formMediaPath)
         values.put(DatabaseFormColumns.LANGUAGE, form.language)
         values.put(DatabaseFormColumns.AUTO_SEND, form.autoSend)
+        values.put(DatabaseFormColumns.DATE, form.date)
         values.put(DatabaseFormColumns.AUTO_DELETE, form.autoDelete)
         values.put(DatabaseFormColumns.GEOMETRY_XPATH, form.geometryXpath)
         values.put(DatabaseFormColumns.LAST_DETECTED_ATTACHMENTS_UPDATE_DATE, form.lastDetectedAttachmentsUpdateDate)
