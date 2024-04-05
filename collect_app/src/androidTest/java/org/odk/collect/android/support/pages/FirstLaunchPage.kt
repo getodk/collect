@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages
 
-import org.odk.collect.android.support.WaitFor.tryAgainOnFail
-
 class FirstLaunchPage : Page<FirstLaunchPage>() {
 
     override fun assertOnPage(): FirstLaunchPage {
@@ -10,12 +8,9 @@ class FirstLaunchPage : Page<FirstLaunchPage>() {
     }
 
     fun clickTryCollect(): MainMenuPage {
-        tryAgainOnFail {
+        return tryAgainOnFail(MainMenuPage()) {
             scrollToAndClickSubtext(org.odk.collect.strings.R.string.try_demo)
-            MainMenuPage().assertOnPage()
         }
-
-        return MainMenuPage()
     }
 
     fun clickManuallyEnterProjectDetails(): ManualProjectCreatorDialogPage {

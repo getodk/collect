@@ -6,7 +6,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.odk.collect.android.support.WaitFor.tryAgainOnFail;
 
 import org.odk.collect.android.R;
 
@@ -25,12 +24,9 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public <D extends Page<D>> D clickSaveAsDraft(D destination) {
-        tryAgainOnFail(() -> {
+        return tryAgainOnFail(destination, () -> {
             clickOnString(org.odk.collect.strings.R.string.save_as_draft);
-            destination.assertOnPage();
         });
-
-        return destination;
     }
 
     public MainMenuPage clickSaveAsDraft() {
@@ -38,12 +34,9 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public <D extends Page<D>> D clickFinalize(D destination) {
-        tryAgainOnFail(() -> {
+        return tryAgainOnFail(destination, () -> {
             clickOnString(org.odk.collect.strings.R.string.finalize);
-            destination.assertOnPage();
         });
-
-        return destination;
     }
 
     public MainMenuPage clickFinalize() {

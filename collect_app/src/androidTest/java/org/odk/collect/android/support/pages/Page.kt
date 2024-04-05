@@ -539,6 +539,15 @@ abstract class Page<T : Page<T>> {
         }
     }
 
+    fun <D : Page<D>> tryAgainOnFail(destination: D, action: Runnable): D {
+        tryAgainOnFail {
+            action.run()
+            destination.assertOnPage()
+        }
+
+        return destination
+    }
+
     companion object {
         private fun rotateToLandscape(): ViewAction {
             return RotateAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)

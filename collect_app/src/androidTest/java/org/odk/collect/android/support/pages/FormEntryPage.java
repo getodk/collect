@@ -15,7 +15,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
-import static org.odk.collect.android.support.WaitFor.tryAgainOnFail;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
 import android.os.Build;
@@ -252,7 +251,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage longPressOnQuestion(String question, boolean isRequired) {
-        tryAgainOnFail(() -> {
+        return tryAgainOnFail(this, () -> {
             if (isRequired) {
                 onView(withText("* " + question)).perform(longClick());
             } else {
@@ -261,8 +260,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
             assertText(org.odk.collect.strings.R.string.clear_answer);
         });
-
-        return this;
     }
 
     public FormEntryPage removeResponse() {

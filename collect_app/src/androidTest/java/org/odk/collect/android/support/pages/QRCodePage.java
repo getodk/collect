@@ -7,7 +7,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.odk.collect.android.support.WaitFor.tryAgainOnFail;
 
 import android.graphics.Bitmap;
 
@@ -46,11 +45,9 @@ public class QRCodePage extends Page<QRCodePage> {
     }
 
     public QRCodePage clickOnMenu() {
-        tryAgainOnFail(() -> {
+        return tryAgainOnFail(this, () -> {
             Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
             onView(withText(getTranslatedString(org.odk.collect.strings.R.string.import_qrcode_sd))).check(matches(isDisplayed()));
         });
-
-        return this;
     }
 }
