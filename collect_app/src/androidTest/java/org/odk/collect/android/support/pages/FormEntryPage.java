@@ -251,7 +251,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage longPressOnQuestion(String question, boolean isRequired) {
-        return tryAgainOnFail(this, () -> {
+        WaitFor.tryAgainOnFail(() -> {
             if (isRequired) {
                 onView(withText("* " + question)).perform(longClick());
             } else {
@@ -260,6 +260,8 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
             assertText(org.odk.collect.strings.R.string.clear_answer);
         });
+
+        return this;
     }
 
     public FormEntryPage removeResponse() {

@@ -238,6 +238,15 @@ abstract class Page<T : Page<T>> {
         return checkIsToastWithMessageDisplayed(getTranslatedString(id, *formatArgs))
     }
 
+    fun <D : Page<D>> clickOnString(stringID: Int, destination: D): D {
+        tryAgainOnFail {
+            clickOnString(stringID)
+            destination.assertOnPage()
+        }
+
+        return destination
+    }
+
     fun clickOnString(stringID: Int): T {
         clickOnText(getTranslatedString(stringID))
         return this as T

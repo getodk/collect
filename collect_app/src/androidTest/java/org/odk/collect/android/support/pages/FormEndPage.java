@@ -24,9 +24,7 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public <D extends Page<D>> D clickSaveAsDraft(D destination) {
-        return tryAgainOnFail(destination, () -> {
-            clickOnString(org.odk.collect.strings.R.string.save_as_draft);
-        });
+        return clickOnString(org.odk.collect.strings.R.string.save_as_draft, destination);
     }
 
     public MainMenuPage clickSaveAsDraft() {
@@ -34,9 +32,7 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public <D extends Page<D>> D clickFinalize(D destination) {
-        return tryAgainOnFail(destination, () -> {
-            clickOnString(org.odk.collect.strings.R.string.finalize);
-        });
+        return clickOnString(org.odk.collect.strings.R.string.finalize, destination);
     }
 
     public MainMenuPage clickFinalize() {
