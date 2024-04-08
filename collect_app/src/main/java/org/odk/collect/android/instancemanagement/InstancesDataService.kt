@@ -9,12 +9,16 @@ import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory
+import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetcher
+import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.projects.ProjectsDataService
+import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.metadata.PropertyManager
 import java.io.File
 
 class InstancesDataService(
@@ -24,6 +28,8 @@ class InstancesDataService(
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
     private val projectsDataService: ProjectsDataService,
     private val projectDependencyProviderFactory: ProjectDependencyProviderFactory,
+    private val notifier: Notifier,
+    private val propertyManager: PropertyManager,
     private val onUpdate: () -> Unit
 ) {
     val editableCount: LiveData<Int> = appState.getLive(EDITABLE_COUNT_KEY, 0)
@@ -169,6 +175,37 @@ class InstancesDataService(
         return projectDependencyProvider.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
                 instancesRepository.deleteAll()
+                update()
+                true
+            } else {
+                false
+            }
+        }
+    }
+
+    fun autoSendInstances(projectId: String): Boolean {
+        val projectDependencyProvider =
+            projectDependencyProviderFactory.create(projectId)
+
+        val instanceSubmitter = InstanceSubmitter(
+            projectDependencyProvider.formsRepository,
+            projectDependencyProvider.generalSettings,
+            propertyManager
+        )
+        return projectDependencyProvider.changeLockProvider.getInstanceLock(projectDependencyProvider.projectId).withLock { acquiredLock: Boolean ->
+            if (acquiredLock) {
+                val toUpload = InstanceAutoSendFetcher.getInstancesToAutoSend(
+                    projectDependencyProvider.instancesRepository,
+                    projectDependencyProvider.formsRepository
+                )
+
+                try {
+                    val result: Map<Instance, FormUploadException?> = instanceSubmitter.submitInstances(toUpload)
+                    notifier.onSubmission(result, projectDependencyProvider.projectId)
+                } catch (e: SubmitException) {
+                    // do nothing
+                }
+
                 update()
                 true
             } else {

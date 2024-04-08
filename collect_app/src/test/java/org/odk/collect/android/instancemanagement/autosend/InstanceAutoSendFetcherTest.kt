@@ -11,7 +11,7 @@ import org.odk.collect.formstest.InstanceUtils.buildInstance
 import org.odk.collect.shared.TempFiles.createTempDir
 
 class InstanceAutoSendFetcherTest {
-    private val instanceAutoSendFetcher = InstanceAutoSendFetcher()
+
     private val instancesRepository = InMemInstancesRepository()
     private val formsRepository = InMemFormsRepository()
 
@@ -72,7 +72,7 @@ class InstanceAutoSendFetcherTest {
             save(instanceOfFormWithCustomAutoSendSubmitted)
         }
 
-        val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(
+        val instancesToSend = InstanceAutoSendFetcher.getInstancesToAutoSend(
             instancesRepository,
             formsRepository
         )
@@ -105,7 +105,7 @@ class InstanceAutoSendFetcherTest {
             save(instanceOfFormWithEnabledAutoSendCompleteV2)
         }
 
-        val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(
+        val instancesToSend = InstanceAutoSendFetcher.getInstancesToAutoSend(
             instancesRepository,
             formsRepository
         )

@@ -4,7 +4,7 @@ import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
 
-class InstanceAutoSendFetcher {
+object InstanceAutoSendFetcher {
 
     fun getInstancesToAutoSend(
         instancesRepository: InstancesRepository,

@@ -49,6 +49,8 @@ class InstancesDataServiceTest {
             mock(),
             projectDataService,
             projectsDependencyProviderFactory,
+            mock(),
+            mock(),
             mock()
         )
 
