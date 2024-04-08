@@ -43,9 +43,15 @@ class FakeScheduler : Scheduler {
         }
     }
 
-    override fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>) {}
-
     override fun networkDeferred(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        networkType: Scheduler.NetworkType?
+    ) {
+    }
+
+    override fun networkDeferredRepeat(
         tag: String,
         taskSpec: TaskSpec,
         repeatPeriod: Long,

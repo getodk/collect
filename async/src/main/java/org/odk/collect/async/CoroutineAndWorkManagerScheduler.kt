@@ -17,9 +17,15 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
 
     constructor(workManager: WorkManager) : this(Dispatchers.Main, Dispatchers.IO, workManager) // Needed for Java construction
 
-    override fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>) {
+    override fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>, networkType: Scheduler.NetworkType?) {
+        val constraintNetworkType = when (networkType) {
+            Scheduler.NetworkType.WIFI -> NetworkType.UNMETERED
+            Scheduler.NetworkType.CELLULAR -> NetworkType.METERED
+            null -> NetworkType.CONNECTED
+        }
+
         val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiredNetworkType(constraintNetworkType)
             .build()
 
         val workManagerInputData = Data.Builder().putAll(inputData).build()
@@ -34,7 +40,7 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
         workManager.beginUniqueWork(tag, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest).enqueue()
     }
 
-    override fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long, inputData: Map<String, String>) {
+    override fun networkDeferredRepeat(tag: String, spec: TaskSpec, repeatPeriod: Long, inputData: Map<String, String>) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()

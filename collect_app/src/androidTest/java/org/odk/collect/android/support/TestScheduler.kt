@@ -49,11 +49,16 @@ class TestScheduler : Scheduler, CoroutineDispatcher() {
         }
     }
 
-    override fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>) {
+    override fun networkDeferred(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        networkType: Scheduler.NetworkType?
+    ) {
         deferredTasks.add(DeferredTask(tag, spec, null, inputData))
     }
 
-    override fun networkDeferred(
+    override fun networkDeferredRepeat(
         tag: String,
         spec: TaskSpec,
         repeatPeriod: Long,

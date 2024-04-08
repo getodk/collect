@@ -9,7 +9,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.android.R
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.preferences.utilities.FormUpdateMode.MATCH_EXACTLY
 import org.odk.collect.android.preferences.utilities.FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY
@@ -37,7 +36,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
         manager.scheduleUpdates("myProject")
-        verify(scheduler).networkDeferred(
+        verify(scheduler).networkDeferredRepeat(
             eq("serverPollingJob:myProject"),
             any<AutoUpdateTaskSpec>(),
             eq(3600000),
@@ -74,7 +73,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
         manager.scheduleUpdates("myProject")
-        verify(scheduler).networkDeferred(
+        verify(scheduler).networkDeferredRepeat(
             eq("match_exactly:myProject"),
             any<SyncFormsTaskSpec>(),
             eq(3600000),
