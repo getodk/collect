@@ -235,8 +235,6 @@
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="get_point">Start GeoPoint</string>
   <string name="geopoint_view_read_only">Vis GeoPoint</string>
-  <string name="geoshape_view_read_only">Vis GeoShape</string>
-  <string name="get_shape">Start GeoShape</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -290,7 +288,6 @@
   <string name="collection_status_manual">Punkter indtastet: %d(manuel optagelse)</string>
   <string name="collection_status_auto_seconds">Punkter indtastet: %1$d(optager hver %2$dsekund)</string>
   <string name="discard">Kassér</string>
-  <string name="geoshape_view_change_location">Gennemse eller ændr´ GeoShape</string>
   <!--Name of an action button-->
   <string name="view_data">Inpicér gemt formular</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->

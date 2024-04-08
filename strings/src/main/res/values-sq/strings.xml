@@ -246,7 +246,6 @@
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="get_point">Regjistro vendndodhjen gjeografike</string>
   <string name="geopoint_view_read_only">Shih vendndodhjen gjeografike</string>
-  <string name="get_shape">Nis GeoShape</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -272,7 +271,6 @@
   <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <string name="geopoint_instruction">Shtyp për pak sekonda për të vendosur një shenjë ose shtuar buton shenjues</string>
   <string name="discard">Elimino</string>
-  <string name="geoshape_view_change_location">Shih ose ndrysho GeoShape</string>
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->

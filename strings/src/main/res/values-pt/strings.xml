@@ -410,8 +410,6 @@
   <string name="validate">Verificar erros</string>
   <string name="get_point">Inicia GeoPoint</string>
   <string name="geopoint_view_read_only">Visualiza GeoPoint</string>
-  <string name="geoshape_view_read_only">Visualizar GeoShape</string>
-  <string name="get_shape">Inicia GeoShape</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Tempo decorrido: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -482,7 +480,6 @@
   <string name="geopoint_instruction">Pressione por mais tempo para colocar marcador ou selecione o botão Adicionar Marcador.</string>
   <string name="geopoint_no_draggable_instruction">Selecione o botão Adicionar Marcador.</string>
   <string name="discard">Descartar</string>
-  <string name="geoshape_view_change_location">Visualizar ou Modificar GeoShape</string>
   <string name="select_item_count">1 %s: 2 %d (2 %d mostrado no mapa)</string>
   <string name="select_item">Selecionar</string>
   <string name="new_item">Novo item</string>

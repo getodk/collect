@@ -537,8 +537,6 @@
 
     <string name="get_point">Start GeoPoint</string>
     <string name="geopoint_view_read_only">View GeoPoint</string>
-    <string name="geoshape_view_read_only">View GeoShape</string>
-    <string name="get_shape">Start GeoShape</string>
 
     <!-- %1$s is the time taken so far in hh:mm:ss -->
     <string name="time_elapsed">Time elapsed: %1$s</string>
@@ -613,7 +611,6 @@
     <string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
     <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
     <string name="discard">Discard</string>
-    <string name="geoshape_view_change_location">View or Change GeoShape</string>
     <string name="select_item_count">%s: %d (%d shown on map)</string>
     <string name="select_item">Select</string>
     <string name="new_item">New item</string>
@@ -1325,4 +1322,7 @@
     <string name="get_line">Get line</string>
     <string name="view_or_change_line">View or change line</string>
     <string name="view_line">View line</string>
+    <string name="get_polygon">Get polygon</string>
+    <string name="view_or_change_polygon">View or change polygon</string>
+    <string name="view_polygon">View polygon</string>
 </resources>

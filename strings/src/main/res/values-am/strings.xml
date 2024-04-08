@@ -213,7 +213,6 @@
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <string name="discard">አስወግድ</string>
-  <string name="geoshape_view_change_location">GeoShapeን ይመልከቱ ወይም ይቀይሩ</string>
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->

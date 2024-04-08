@@ -415,8 +415,6 @@
   <string name="validate">Tarkista virheiden varalta</string>
   <string name="get_point">Käynnistä GeoPoint</string>
   <string name="geopoint_view_read_only">Tarkastele GeoPoint</string>
-  <string name="geoshape_view_read_only">Katso GeoShape</string>
-  <string name="get_shape">Aloita GeoShape</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Kulunut aika: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -484,7 +482,6 @@
   <string name="geopoint_instruction">Paina pitkään asettaaksesi merkin tai näpäytä merkkinäppäintä.</string>
   <string name="geopoint_no_draggable_instruction">Paina lisää merkki -näppäintä.</string>
   <string name="discard">Hylkää</string>
-  <string name="geoshape_view_change_location">Tarkastele tai Muuta GeoShape</string>
   <string name="select_item_count">%s: %d (%d näytetty kartalla)</string>
   <string name="select_item">Valitse</string>
   <string name="new_item">Uusi kohde</string>

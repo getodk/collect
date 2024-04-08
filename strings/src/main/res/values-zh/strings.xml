@@ -392,8 +392,6 @@
   <string name="validate">检查错误</string>
   <string name="get_point">开始GeoPoint</string>
   <string name="geopoint_view_read_only">查看GeoPoint</string>
-  <string name="geoshape_view_read_only">查看 GeoShape</string>
-  <string name="get_shape">开始 GeoShape</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">已用时间: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -458,7 +456,6 @@
   <string name="geopoint_instruction">长按放置标记或点击添加标记按钮。</string>
   <string name="geopoint_no_draggable_instruction">点击添加标记按钮。</string>
   <string name="discard">丢弃</string>
-  <string name="geoshape_view_change_location">查看或更改GeoShape</string>
   <string name="select_item_count">%s: %d (%d 在图上)</string>
   <string name="select_item">选择</string>
   <string name="new_item">新元素</string>

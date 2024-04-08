@@ -415,8 +415,6 @@
   <string name="validate">Vérifier s\'il y a des erreurs</string>
   <string name="get_point">Démarrer le point</string>
   <string name="geopoint_view_read_only">Voir le point</string>
-  <string name="geoshape_view_read_only">Voir le polygone</string>
-  <string name="get_shape">Démarrer le polygone</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Temps écoulé : %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -487,7 +485,6 @@
   <string name="geopoint_instruction">Appuyez longuement sur la carte pour placer un marqueur ou appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="geopoint_no_draggable_instruction">Appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="discard">Abandoner changements</string>
-  <string name="geoshape_view_change_location">Voir ou modifier le polygone</string>
   <string name="select_item_count">%s: %d (%d affichés sur la carte)</string>
   <string name="select_item">Sélectionner</string>
   <string name="new_item">Nouvel item</string>

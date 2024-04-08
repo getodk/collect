@@ -351,7 +351,6 @@
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="get_point">జియోపాయింట్ ప్రారంభించండి</string>
   <string name="geopoint_view_read_only">జియోపాయింట్ చూడండి</string>
-  <string name="get_shape">జియోషాప్ ప్రారంభించండి</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -406,7 +405,6 @@
   <string name="geopoint_instruction">గుర్తు ఉంచడానికి ఎక్కువసేపు నొక్కండి లేదా మార్కర్ బటన్‌ను నొక్కండి.</string>
   <string name="geopoint_no_draggable_instruction">మార్కర్ బటన్ యాడ్ చెయ్యడానికి ఇక్కడ నొక్కండి.</string>
   <string name="discard">విస్మరించండి</string>
-  <string name="geoshape_view_change_location">జియో షేప్ చూడండి లేదా మార్చండి</string>
   <!--Name of an action button-->
   <string name="view_data">సేవ్ చెయ్యబడిన ఫారంలు చూడండి</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->

@@ -411,8 +411,6 @@
   <string name="validate">غلطیوں کو چیک کریں</string>
   <string name="get_point">جیو پوائنٹ شروع کریں</string>
   <string name="geopoint_view_read_only">جیوپوائنٹ دیکھیں</string>
-  <string name="geoshape_view_read_only"> Geoshape کو دیکھیں</string>
-  <string name="get_shape">جیوشیپ شروع کریں</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">کتنا ٹائم گزرا: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -480,7 +478,6 @@
   <string name="geopoint_instruction">پلیس مارک کرنے کے لیے طویل دبائیں یا ایڈ مارکر بٹن ٹیپ کریں</string>
   <string name="geopoint_no_draggable_instruction"> مارکر بٹن پر کلک کریں.</string>
   <string name="discard">ختم کر دینا</string>
-  <string name="geoshape_view_change_location">جیو شیپ دیکھیں یا تبدیل کریں</string>
   <string name="select_item_count">%s: %d (%d میپ پہ موجود)</string>
   <string name="select_item">منتخب کریں</string>
   <string name="new_item">نیا آئٹم</string>

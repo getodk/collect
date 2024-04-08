@@ -404,8 +404,6 @@
   <string name="validate">تحقق من الأخطاء</string>
   <string name="get_point">البدء بتحديد النقطة</string>
   <string name="geopoint_view_read_only">عرض نقاط الخريطة</string>
-  <string name="geoshape_view_read_only">عرض GeoShape</string>
-  <string name="get_shape">البدء بتحديد مضلع</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -479,7 +477,6 @@
   <string name="geopoint_instruction">انقر مطولاً لإنشاء علامة او انقر على زر إضافة علامة</string>
   <string name="geopoint_no_draggable_instruction">انقر على زر مؤشر الإضافة</string>
   <string name="discard">تجاهل</string>
-  <string name="geoshape_view_change_location">عرض أو تغيير المضلع</string>
   <!--Name of an action button-->
   <string name="view_data">عرض الإستمارات المحفوظة</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->

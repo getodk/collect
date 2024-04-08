@@ -63,15 +63,15 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
 
         if (getFormEntryPrompt().isReadOnly()) {
             if (dataAvailable) {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.geoshape_view_read_only);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_polygon);
             } else {
                 binding.simpleButton.setVisibility(View.GONE);
             }
         } else {
             if (dataAvailable) {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.geoshape_view_change_location);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_or_change_polygon);
             } else {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.get_shape);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.get_polygon);
             }
         }
 
@@ -87,7 +87,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     public void clearAnswer() {
         binding.geoAnswerText.setText(null);
         binding.geoAnswerText.setVisibility(GONE);
-        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_shape);
+        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_polygon);
         widgetValueChanged();
     }
 
@@ -108,7 +108,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     public void setData(Object answer) {
         binding.geoAnswerText.setText(answer.toString());
         binding.geoAnswerText.setVisibility(binding.geoAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
-        binding.simpleButton.setText(answer.toString().isEmpty() ? org.odk.collect.strings.R.string.get_shape : org.odk.collect.strings.R.string.geoshape_view_change_location);
+        binding.simpleButton.setText(answer.toString().isEmpty() ? org.odk.collect.strings.R.string.get_polygon : org.odk.collect.strings.R.string.view_or_change_polygon);
         widgetValueChanged();
     }
 

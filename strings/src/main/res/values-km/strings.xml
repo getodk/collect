@@ -342,7 +342,6 @@
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="get_point">ចាប់ផ្តើម GeoPoint</string>
   <string name="geopoint_view_read_only">មើល GeoPoint</string>
-  <string name="get_shape">ចាប់ផ្តើម GeoShape</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -379,7 +378,6 @@
   <string name="geopoint_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង ឬប៉ះប៊ូតុងបន្ថែមស្លាក</string>
   <string name="geopoint_no_draggable_instruction">ប៉ះដើម្បីបន្ថែមប៊ូតុងសម្គាល់</string>
   <string name="discard">បោះបង់</string>
-  <string name="geoshape_view_change_location">មើល ឬផ្លាស់ប្តូរ GeoShape</string>
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->

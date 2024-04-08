@@ -407,8 +407,6 @@
   <string name="validate">Kontrola chyb</string>
   <string name="get_point">Začít GeoPoint</string>
   <string name="geopoint_view_read_only">Zobrazit GeoPoint</string>
-  <string name="geoshape_view_read_only">Zobrazit GeoShape</string>
-  <string name="get_shape">Začít GeoShape</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Uplynulý čas: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -482,7 +480,6 @@
   <string name="geopoint_instruction">Dlouhým stisknutím označit značku nebo klepnutím na tlačítko přidat značku.</string>
   <string name="geopoint_no_draggable_instruction">Klepnutím na tlačítko přidat značku.</string>
   <string name="discard">Vyřadit</string>
-  <string name="geoshape_view_change_location">Zobrazit nebo změnit GeoShape</string>
   <string name="select_item_count">%s: %d (%d zobrazeno na mapě)</string>
   <string name="select_item">Vybrat</string>
   <string name="new_item">Nová položka</string>
