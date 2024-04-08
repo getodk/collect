@@ -8,7 +8,7 @@
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/simple_button"
         style="?widgetButtonIconQuestionWidgetStyle"
-        android:text="@string/get_location"
+        android:text="@string/get_point"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_baseline_my_location_white_24" />

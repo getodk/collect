@@ -190,8 +190,6 @@
   <string name="streets">መንገዶች</string>
   <string name="terrain">መልከአ ምድር</string>
   <string name="satellite">ሳተላይት</string>
-  <string name="view_change_location">አካባቢን ይመልከቱ ወይም ይቀይሩ</string>
-  <string name="get_location">ቦታን መዝግብ</string>
   <string name="provider_disabled_error">ይቅርታ፣ የአካባቢ አቅራቢዎች አይሰሩም፡፡</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->

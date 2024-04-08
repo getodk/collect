@@ -212,16 +212,11 @@
   <string name="hybrid">हाइव्रिड</string>
   <string name="satellite">उपग्रह</string>
   <string name="google_play_services_error_occured">गुगल  म्याप्स् मा जान सकिएन । के गुगल प्ले सर्भिसेस इन्स्टल गरिएको छ ?</string>
-  <string name="view_change_location">स्थान हेर्नुहोस् वा परिवर्तन गर्नुहोस् </string>
-  <string name="change_location">स्थान परिवर्तन गर्नुहोस्</string>
-  <string name="get_location">स्थान रेकर्ड गर्नुहोस् </string>
   <string name="provider_disabled_error">माफ गर्नुहोस्, स्थान प्रदायकहरु निष्क्रिय गरिएका छन् !</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->
   <!--Displayed in the form filling menu when a form has background location disabled-->
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">जियो पोइन्ट शुरू गर्नुहोस्</string>
-  <string name="geopoint_view_read_only">जियो पोइन्ट हेर्नुहोस्</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->

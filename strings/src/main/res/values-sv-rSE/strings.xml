@@ -310,17 +310,12 @@
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Mörk materia</string>
   <string name="reference_layer">Referenslager</string>
-  <string name="view_change_location">Visa eller ändra position</string>
-  <string name="change_location">Ändra plats</string>
-  <string name="get_location">Spara position</string>
   <string name="provider_disabled_error">Tyvärr, platstjänster är inaktiverade!</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nNoggrannhet: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->
   <!--Displayed in the form filling menu when a form has background location disabled-->
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">Starta GeoPoint</string>
-  <string name="geopoint_view_read_only">Visa GeoPoint</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->

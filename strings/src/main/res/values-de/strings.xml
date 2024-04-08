@@ -393,12 +393,9 @@
   <string name="carto_map_style_dark_matter">Dunkle Materie</string>
   <string name="reference_layer">Referenzebene</string>
   <string name="layer_data_file">Ebenendaten-Datei</string>
-  <string name="view_change_location">Standort anzeigen oder ändern</string>
-  <string name="change_location">Standort ändern</string>
   <string name="record_geopoint">Punkt erfassen</string>
   <string name="location_accuracy">Genauigkeit: %1$s m</string>
   <string name="location_provider">Standortdienst: %s</string>
-  <string name="get_location">Standort erfassen</string>
   <string name="provider_disabled_error">Standortdienste sind nicht aktiviert!</string>
   <string name="gps_result">Breite (Lat.): %1$s\nLänge (Long.): %2$s\nHöhe (Alt.): %3$sm\nGenauigkeit: %4$sm</string>
   <string name="google_play_services_not_available">Dieses Formular möchte Ihren Standort aufzeichnen, aber die Google Play-Dienste sind nicht verfügbar.</string>
@@ -413,8 +410,6 @@
   <string name="background_location_enabled">Dieses Formular zeichnet Ihren Standort auf. Sie können die Standortaufzeichnung oben im %1$s Menü deaktivieren.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="validate">Auf Fehler überprüfen</string>
-  <string name="get_point">Standort erfassen</string>
-  <string name="geopoint_view_read_only">Standort anzeigen</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Vergangene Zeit: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->

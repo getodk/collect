@@ -352,12 +352,9 @@
   <string name="carto_map_style_dark_matter">ダークマター</string>
   <string name="reference_layer">参照レイヤー</string>
   <string name="layer_data_file">レイヤーデータファイル</string>
-  <string name="view_change_location">場所の表示または変更</string>
-  <string name="change_location">場所の変更</string>
   <string name="record_geopoint">位置を記録</string>
   <string name="location_accuracy">精度: %1$s m</string>
   <string name="location_provider">ロケーションプロバイダー: %s</string>
-  <string name="get_location">記録場所</string>
   <string name="provider_disabled_error">申し訳ありません、ロケーション プロバイダーが無効です!</string>
   <string name="gps_result">緯度: %1$s\n経度: %2$s\n高度: %3$sm\n精度: %4$sm</string>
   <string name="google_play_services_not_available">このフォームは位置を追跡しようとしますが、Google Play サービスが利用できません。</string>
@@ -369,8 +366,6 @@
   <string name="background_location_disabled">このフォームは位置を追跡しようとしますが、追跡が無効になっています。 上の %1$s メニューで有効にしてください。</string>
   <string name="background_location_enabled">このフォームは位置を追跡します。 上の %1$s メニューで追跡を無効にすることができます。</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">地理位置を開始</string>
-  <string name="geopoint_view_read_only">地理位置を表示</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->

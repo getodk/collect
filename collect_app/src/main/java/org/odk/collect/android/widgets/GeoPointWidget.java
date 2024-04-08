@@ -67,7 +67,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
             answerText = null;
         } else {
             binding.geoAnswerText.setText(answerToDisplay);
-            binding.simpleButton.setText(org.odk.collect.strings.R.string.change_location);
+            binding.simpleButton.setText(org.odk.collect.strings.R.string.change_point);
         }
         binding.geoAnswerText.setVisibility(binding.geoAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
 
@@ -116,7 +116,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
             answerText = answer.toString();
             binding.geoAnswerText.setText(answerToDisplay);
             binding.geoAnswerText.setVisibility(VISIBLE);
-            binding.simpleButton.setText(org.odk.collect.strings.R.string.change_location);
+            binding.simpleButton.setText(org.odk.collect.strings.R.string.change_point);
         }
         widgetValueChanged();
     }

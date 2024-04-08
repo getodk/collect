@@ -81,7 +81,7 @@ public class GeoPointMapWidgetTest {
     @Test
     public void whenPromptIsReadOnlyAndHasAnswer_viewGeoPointButtonIsShown() {
         GeoPointMapWidget widget = createWidget(promptWithReadOnlyAndAnswer(answer));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.geopoint_view_read_only));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_point));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class GeoPointMapWidgetTest {
     @Test
     public void whenPromptIsNotReadOnlyAndHasAnswer_viewOrChangeLocationButtonIsShown() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_change_location));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_point));
     }
 
     @Test
@@ -154,7 +154,7 @@ public class GeoPointMapWidgetTest {
     public void setData_whenDataIsNotNull_updatesButtonLabel() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
         widget.setData(answer.getDisplayText());
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_change_location));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_point));
     }
 
     @Test

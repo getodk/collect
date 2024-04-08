@@ -151,8 +151,6 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="view_change_location">مقام کو ملاحظہ کریں یا تبدیلکریں۔</string>
-  <string name="get_location">مقام درج کریں</string>
   <string name="provider_disabled_error">معافی، مقام فراہم کرنے والے نااہل کئے گئے ہیں</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->

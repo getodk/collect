@@ -69,9 +69,9 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
             answerText = null;
         } else {
             if (getFormEntryPrompt().isReadOnly()) {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.geopoint_view_read_only);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_point);
             } else {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_change_location);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_or_change_point);
             }
 
             binding.geoAnswerText.setText(answerToDisplay);
@@ -123,7 +123,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
             answerText = answer.toString();
             binding.geoAnswerText.setText(answerToDisplay);
             binding.geoAnswerText.setVisibility(VISIBLE);
-            binding.simpleButton.setText(org.odk.collect.strings.R.string.view_change_location);
+            binding.simpleButton.setText(org.odk.collect.strings.R.string.view_or_change_point);
         }
         widgetValueChanged();
     }

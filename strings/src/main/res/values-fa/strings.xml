@@ -359,12 +359,9 @@
   <string name="carto_map_style_dark_matter">ماده تاریک</string>
   <string name="reference_layer"> مرجع به لایه</string>
   <string name="layer_data_file">لایه data فایل </string>
-  <string name="view_change_location">مشاهده یا تغییر مکان</string>
-  <string name="change_location">تغییر موقعیت</string>
   <string name="record_geopoint">یک نقطه را ثبت کنید</string>
   <string name="location_accuracy">دقت: %1$s متر</string>
   <string name="location_provider">ارائه دهنده مکان: %s</string>
-  <string name="get_location">ثبت لوکیشن</string>
   <string name="provider_disabled_error">با معذرت، نشان دهنده های مکان غیرفعال هستند!</string>
   <string name="gps_result">عرض جغرافیایی: %1$s\n طول: %2$s\lارتفاع: %3$smg دقت: %4$sm</string>
   <string name="google_play_services_not_available">این فورم می خواهد موقعیت مکانی شما را ردیابی کند اما خدمات Google Play در دسترس نیست.</string>
@@ -377,8 +374,6 @@
   <string name="background_location_enabled">این فورم موقعیت مکانی شما را ردیابی می کند. می‌توانید ردیابی را در منوی %1$s بالا غیرفعال کنید.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="validate">بررسی خطا</string>
-  <string name="get_point">آغاز GeoPoint</string>
-  <string name="geopoint_view_read_only">نمایش GeoPoint</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">زمان سپری شده: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->

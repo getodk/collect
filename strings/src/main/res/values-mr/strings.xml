@@ -220,16 +220,12 @@
   <string name="hybrid">संकरित</string>
   <string name="satellite">उपग्रह</string>
   <string name="google_play_services_error_occured">गूगल नकाशे मध्ये प्रवेश करण्यात अक्षम. गूगल प्ले सेवा स्थापित केली आहे का?</string>
-  <string name="view_change_location">दृश्य किंवा स्थान बदला</string>
-  <string name="get_location">स्थान रेकॉर्ड</string>
   <string name="provider_disabled_error">क्षमस्व, स्थान प्रदाता अक्षम केले आहेत!</string>
   <string name="gps_result">अक्षांश: %1$s\nरेखांश: %2$s\nअल्टिट्यूड: %3$sm\nअॅक्चुसीसी: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->
   <!--Displayed in the form filling menu when a form has background location disabled-->
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">जिओ पॉईंट प्रारंभ करा</string>
-  <string name="geopoint_view_read_only">जिओ पॉईंट पहा</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->

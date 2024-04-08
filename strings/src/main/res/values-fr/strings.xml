@@ -393,12 +393,9 @@
   <string name="carto_map_style_dark_matter">Matière Sombre</string>
   <string name="reference_layer">Couche de référence</string>
   <string name="layer_data_file">Dossier de calques</string>
-  <string name="view_change_location">Voir ou changer la position</string>
-  <string name="change_location">Modifier la localisation</string>
   <string name="record_geopoint">Enregistrer un point</string>
   <string name="location_accuracy">Précision: %1$s m</string>
   <string name="location_provider">Fournisseur de la localisation: 1%s</string>
-  <string name="get_location">Enregistrement du lieu</string>
   <string name="provider_disabled_error">Désolé, le fournisseur de localisation est désactivé.</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrécision: %4$sm</string>
   <string name="google_play_services_not_available">Ce formulaire souhaite suivre votre localisation, mais les Services de Google Play ne sont pas disponible</string>
@@ -413,8 +410,6 @@
   <string name="background_location_enabled">Ce formulaire suit votre position. Vous pouvez désactiver le suivi dans le %1$s menu ci-dessus.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="validate">Vérifier s\'il y a des erreurs</string>
-  <string name="get_point">Démarrer le point</string>
-  <string name="geopoint_view_read_only">Voir le point</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Temps écoulé : %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->

@@ -386,12 +386,9 @@
   <string name="carto_map_style_dark_matter">Dark Matter</string>
   <string name="reference_layer">Lapisan referensi</string>
   <string name="layer_data_file">Berkas data lapisan</string>
-  <string name="view_change_location">Lihat atau Ubah Lokasi</string>
-  <string name="change_location">Ubah Lokasi</string>
   <string name="record_geopoint">Rekam titik</string>
   <string name="location_accuracy">Tingkat akurasi adalah %1$s meter</string>
   <string name="location_provider">Lokasi penyedia jasa: %s</string>
-  <string name="get_location">Rekam Lokasi</string>
   <string name="provider_disabled_error">Maaf, penyedia lokasi belum diaktifkan</string>
   <string name="gps_result">Lintang: %1$s\nBujur: %2$s\nKetinggian: %3$s m\nAkurasi: %4$s m</string>
   <string name="google_play_services_not_available">Formulir ini hendak merekam pergerakan lokasi Anda, tetapi Google Play Service tidak tersedia.</string>
@@ -404,8 +401,6 @@
   <string name="background_location_enabled">Formulir ini melacak lokasi Anda. Anda dapat menonaktifkan pelacakan melalui menu %1$s di atas.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="validate">Periksa kesalahan</string>
-  <string name="get_point">Mulai GeoPoint</string>
-  <string name="geopoint_view_read_only">Lihat GeoPoint</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Waktu berlalu: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->

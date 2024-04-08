@@ -226,16 +226,12 @@
   <string name="hybrid">हाइब्रिड </string>
   <string name="satellite">उपग्रह</string>
   <string name="google_play_services_error_occured">गूगल मानचित्र तक पहुंचने में असमर्थ क्या गूगल प्ले सर्विस इनस्टॉल है?</string>
-  <string name="view_change_location">लोकेशन देखें या बदलें</string>
-  <string name="get_location">लोकेशन  रिकार्ड करें </string>
   <string name="provider_disabled_error">क्षमा करें, लोकेशन प्रदाता सक्षम नही हैं!</string>
   <string name="gps_result">अक्षांश: %1$s \n देशांतर: %2$s \n ऊंचाई: %3$sm \n शुद्धता: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->
   <!--Displayed in the form filling menu when a form has background location disabled-->
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point"> जिओपॉइंट शुरू करे </string>
-  <string name="geopoint_view_read_only">जिओपॉइंट  देखे</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->

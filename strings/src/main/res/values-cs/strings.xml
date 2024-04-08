@@ -387,12 +387,9 @@
   <string name="carto_map_style_dark_matter">Temná hmota</string>
   <string name="reference_layer">Referenční vrstva</string>
   <string name="layer_data_file">Soubor datové vrstvy</string>
-  <string name="view_change_location">Prohlédnout nebo změnit polohu</string>
-  <string name="change_location">Změnit lokaci</string>
   <string name="record_geopoint">Zaznamenat bod</string>
   <string name="location_accuracy">Přesnost: %1$s m</string>
   <string name="location_provider">Poskytovatel polohy: %s</string>
-  <string name="get_location">Uložit pozici</string>
   <string name="provider_disabled_error">Nástroje pro získání polohy jsou zakázané!</string>
   <string name="gps_result">Zeměpisná šířka:%1$s \n Zeměpisná délka: %2$s \n Výška: %3$s m \n Přesnost %4$sm</string>
   <string name="google_play_services_not_available">Tento formulář chce sledovat vaši polohu, ale služby Google Play nejsou k dispozici.</string>
@@ -405,8 +402,6 @@
   <string name="background_location_enabled">Tento formulář sleduje vaši polohu. Sledování můžete zakázat v nabídce %1$s výše.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="validate">Kontrola chyb</string>
-  <string name="get_point">Začít GeoPoint</string>
-  <string name="geopoint_view_read_only">Zobrazit GeoPoint</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Uplynulý čas: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->

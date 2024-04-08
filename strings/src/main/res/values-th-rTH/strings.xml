@@ -198,16 +198,11 @@
   <string name="satellite">Satellite</string>
   <string name="google_play_services_error_occured">เปิด Google Maps ไม่ได้ ตรวจสอบว่ามี Google Play Services ติดตั้งหรือไม่
 </string>
-  <string name="view_change_location">แสดงหรือเปลี่ยนตำแหน่ง</string>
-  <string name="change_location">เปลี่ยนตำแหน่งพิกัด</string>
-  <string name="get_location">บันทึกตำแหน่งที่อยู่</string>
   <string name="provider_disabled_error">ขออภัย GPS ถูกปิดการใช้งานไว้</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->
   <!--Displayed in the form filling menu when a form has background location disabled-->
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">เริ่มต้นจุดพิกัด</string>
-  <string name="geopoint_view_read_only">แสดงจุดพิกัด</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->

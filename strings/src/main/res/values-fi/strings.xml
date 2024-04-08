@@ -393,12 +393,9 @@
   <string name="carto_map_style_dark_matter">Pimeä aine</string>
   <string name="reference_layer">Viitekerros</string>
   <string name="layer_data_file">Kerrosdatatiedosto</string>
-  <string name="view_change_location">Tarkastele tai vaihda sijaintia</string>
-  <string name="change_location">Vaihda sijaintia</string>
   <string name="record_geopoint">Tallenna piste</string>
   <string name="location_accuracy">Tarkkuus: %1$s m</string>
   <string name="location_provider">Sijaintilähde: %s</string>
-  <string name="get_location">Tallenna sijainti</string>
   <string name="provider_disabled_error">Pahoittelut, sijaintitiedot eivät ole käytössä!</string>
   <string name="gps_result">Leveysasteet: %1$s\nPituusasteet: %2$s\nKorkeus: %3$sm\nTarkkuus: %4$sm</string>
   <string name="google_play_services_not_available">Tämä lomake haluaa seurata sijaintiasi mutta Google Play Services ei ole käytettävissä.</string>
@@ -413,8 +410,6 @@
   <string name="background_location_enabled">Tämä lomake seuraa sijaintiasi. Voit laittaa seurannan pois päältä valikossa %1$s yllä.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="validate">Tarkista virheiden varalta</string>
-  <string name="get_point">Käynnistä GeoPoint</string>
-  <string name="geopoint_view_read_only">Tarkastele GeoPoint</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Kulunut aika: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->

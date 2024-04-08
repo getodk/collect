@@ -345,18 +345,13 @@
   <string name="carto_map_style_dark_matter">Jambo la Giza</string>
   <string name="reference_layer">Safu ya Kumbukumbu</string>
   <string name="layer_data_file">Safu ya faili la data</string>
-  <string name="view_change_location">Tazama au badilisha eneo</string>
-  <string name="change_location">Badilisha eneo</string>
   <string name="record_geopoint">Rekodi pointi</string>
-  <string name="get_location">Rekodi mahali</string>
   <string name="provider_disabled_error">Samahani, kionesha mahali hakijawezeshwa!</string>
   <string name="gps_result">Latitude: %1$s \nLongitude: %2$s \nUrefumwambao:%3$s m\nUsahihi: %4$s m</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->
   <!--Displayed in the form filling menu when a form has background location disabled-->
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">Anza geopoint</string>
-  <string name="geopoint_view_read_only">Tazama geopoint</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->

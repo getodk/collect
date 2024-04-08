@@ -391,12 +391,9 @@
   <string name="carto_map_style_dark_matter">Dark Matter</string>
   <string name="reference_layer">ریفرنس Layer</string>
   <string name="layer_data_file">Layer کی ڈیٹا فائل</string>
-  <string name="view_change_location">مقام کو دیکھیں یا تبدیل کریں۔</string>
-  <string name="change_location">جگہ تبدیل کریں </string>
   <string name="record_geopoint">پوائنٹ کو ریکارڈ کریں</string>
   <string name="location_accuracy">درستگی: %1$s میٹر</string>
   <string name="location_provider">لوکیشن مہیا کرنے والا: %s</string>
-  <string name="get_location">لوکیشن ریکارڈ کریں</string>
   <string name="provider_disabled_error">معذرت، لوکیشن فراہم کرنے والے نااہل کئے گئے ہیں</string>
   <string name="gps_result">طول عرض:  %1$s \nطول بلد: %2$s \n اونچائی:  %3$s میٹر\n ایکیوریسی: %4$s میٹر</string>
   <string name="google_play_services_not_available">یہ فارم آپ کی لوکیشن کو ریکارڈ کرنا چاہتا ہے، مگر Google Play Services دستیاب نہیں ہیں۔</string>
@@ -409,8 +406,6 @@
   <string name="background_location_enabled">یہ فارم آپ کی لوکیشن ریکارڈ کرتا ہے۔ لوکیشن ریکارڈنگ کو روکنے کے لئے %1$s مینیو دبایئں۔</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="validate">غلطیوں کو چیک کریں</string>
-  <string name="get_point">جیو پوائنٹ شروع کریں</string>
-  <string name="geopoint_view_read_only">جیوپوائنٹ دیکھیں</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">کتنا ٹائم گزرا: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->

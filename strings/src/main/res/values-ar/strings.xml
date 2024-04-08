@@ -382,12 +382,9 @@
   <string name="carto_map_style_dark_matter">المادة المظلمة</string>
   <string name="reference_layer">الطبقة المرجعية</string>
   <string name="layer_data_file">ملف بيانات الطبقة</string>
-  <string name="view_change_location">الاطلاع على الموقع أو تغيير الموقع</string>
-  <string name="change_location">تغيير الموقع</string>
   <string name="record_geopoint">سجل نقطة</string>
   <string name="location_accuracy">الدقة: %1$s متر </string>
   <string name="location_provider">مزود خدمة تحديد الموقع: %s</string>
-  <string name="get_location">تسجيل الموقع</string>
   <string name="provider_disabled_error">عذراً، مزود خدمة الموقع معطّل.</string>
   <string name="gps_result">خط العرض: %1$s\n خط الطول : %2$s\nالارتفاع : %3$s\nالدقة : %4$s متر</string>
   <string name="google_play_services_not_available">تريد هذه الاستمارة تتبع موقعك ولكن خدمات Google Play غير متوفرة.</string>
@@ -402,8 +399,6 @@
   <string name="background_location_enabled">هذه الاستمارة تقوم بتتبع موقعك. يمكنك تعطيل التتبع في القائمة %1$s أعلاه.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="validate">تحقق من الأخطاء</string>
-  <string name="get_point">البدء بتحديد النقطة</string>
-  <string name="geopoint_view_read_only">عرض نقاط الخريطة</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->

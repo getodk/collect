@@ -205,16 +205,12 @@
   <string name="hybrid">Híbrid</string>
   <string name="satellite">Satel·lit</string>
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
-  <string name="view_change_location">Veure o modificar posició</string>
-  <string name="get_location">Enregistrar Localització</string>
   <string name="provider_disabled_error">Atenció, la Locatització està desactivada!</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisió: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->
   <!--Displayed in the form filling menu when a form has background location disabled-->
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">Comença localització gps</string>
-  <string name="geopoint_view_read_only">Veure localització gps</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
