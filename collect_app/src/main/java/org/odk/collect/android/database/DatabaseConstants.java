@@ -10,7 +10,7 @@ public final class DatabaseConstants {
     public static final String INSTANCES_DATABASE_NAME = "instances.db";
     public static final String INSTANCES_TABLE_NAME = "instances";
     // Please always test upgrades manually when you change this value
-    public static final int INSTANCES_DATABASE_VERSION = 6;
+    public static final int INSTANCES_DATABASE_VERSION = 7;
 
     public static final String SAVEPOINTS_DATABASE_NAME = "savepoints.db";
     public static final String SAVEPOINTS_TABLE_NAME = "savepoints";
