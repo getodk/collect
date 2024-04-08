@@ -42,7 +42,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
     private static final String MODEL_VERSION = "modelVersion";
 
     public void onCreate(SQLiteDatabase db) {
-        createFormsTableV12(db);
+        createFormsTableV13(db);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -72,14 +72,17 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 upgradeToVersion12(db);
                 break;
             case 12:
+                upgradeToVersion13(db);
+                break;
+            case 13:
                 // Remember to bump the database version number in {@link org.odk.collect.android.database.DatabaseConstants}
-                // upgradeToVersion13(db);
+                // upgradeToVersion14(db);
         }
     }
 
     public void onDowngrade(SQLiteDatabase db) throws SQLException {
         SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
-        createFormsTableV12(db);
+        createFormsTableV13(db);
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
@@ -265,6 +268,17 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
         SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, LAST_DETECTED_ATTACHMENTS_UPDATE_DATE, "integer");
     }
 
+    private void upgradeToVersion13(SQLiteDatabase db) {
+        String temporaryTable = FORMS_TABLE_NAME + "_tmp";
+        SQLiteUtils.renameTable(db, FORMS_TABLE_NAME, temporaryTable);
+        createFormsTableV13(db);
+        SQLiteUtils.copyRows(db, temporaryTable, new String[]{_ID, DISPLAY_NAME, DESCRIPTION,
+                JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
+                SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
+                GEOMETRY_XPATH, DELETED_DATE, LAST_DETECTED_ATTACHMENTS_UPDATE_DATE}, FORMS_TABLE_NAME);
+        SQLiteUtils.dropTable(db, temporaryTable);
+    }
+
     private void createFormsTableV4(SQLiteDatabase db, String tableName) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + tableName + " ("
                 + _ID + " integer primary key, "
@@ -369,9 +383,9 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + DELETED_DATE + " integer);");
     }
 
-    private void createFormsTableV12(SQLiteDatabase db) {
+    private void createFormsTableV13(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
-                + _ID + " integer primary key, "
+                + _ID + " integer primary key autoincrement, "
                 + DISPLAY_NAME + " text not null, "
                 + DESCRIPTION + " text, "
                 + JR_FORM_ID + " text not null, "
