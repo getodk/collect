@@ -53,13 +53,50 @@ public class FormDatabaseMigratorTest {
 
     @Before
     public void setup() {
-        assertThat("Test expects different Forms DB version", DatabaseConstants.FORMS_DATABASE_VERSION, is(12));
+        assertThat("Test expects different Forms DB version", DatabaseConstants.FORMS_DATABASE_VERSION, is(13));
         database = SQLiteDatabase.create(null);
     }
 
     @After
     public void teardown() {
         database.close();
+    }
+
+    @Test
+    public void onUpgrade_fromVersion12() {
+        int oldVersion = 12;
+        database.setVersion(oldVersion);
+        FormDatabaseMigrator formDatabaseMigrator = new FormDatabaseMigrator();
+
+        formDatabaseMigrator.createFormsTableV12(database);
+        ContentValues contentValues = createVersion12Form();
+        database.insert(FORMS_TABLE_NAME, null, contentValues);
+
+        formDatabaseMigrator.onUpgrade(database, oldVersion);
+
+        try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
+            assertThat(cursor.getColumnCount(), is(18));
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToFirst();
+            assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), is(contentValues.getAsString(DISPLAY_NAME)));
+            assertThat(cursor.getString(cursor.getColumnIndex(DESCRIPTION)), is(contentValues.getAsString(DESCRIPTION)));
+            assertThat(cursor.getString(cursor.getColumnIndex(JR_FORM_ID)), is(contentValues.getAsString(JR_FORM_ID)));
+            assertThat(cursor.getString(cursor.getColumnIndex(JR_VERSION)), is(contentValues.getAsString(JR_VERSION)));
+            assertThat(cursor.getString(cursor.getColumnIndex(MD5_HASH)), is(contentValues.getAsString(MD5_HASH)));
+            assertThat(cursor.getInt(cursor.getColumnIndex(DATE)), is(contentValues.getAsInteger(DATE)));
+            assertThat(cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH)), is(contentValues.getAsString(FORM_MEDIA_PATH)));
+            assertThat(cursor.getString(cursor.getColumnIndex(FORM_FILE_PATH)), is(contentValues.getAsString(FORM_FILE_PATH)));
+            assertThat(cursor.getString(cursor.getColumnIndex(LANGUAGE)), is(contentValues.getAsString(LANGUAGE)));
+            assertThat(cursor.getString(cursor.getColumnIndex(SUBMISSION_URI)), is(contentValues.getAsString(SUBMISSION_URI)));
+            assertThat(cursor.getString(cursor.getColumnIndex(BASE64_RSA_PUBLIC_KEY)), is(contentValues.getAsString(BASE64_RSA_PUBLIC_KEY)));
+            assertThat(cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH)), is(contentValues.getAsString(JRCACHE_FILE_PATH)));
+            assertThat(cursor.getString(cursor.getColumnIndex(AUTO_SEND)), is(contentValues.getAsString(AUTO_SEND)));
+            assertThat(cursor.getString(cursor.getColumnIndex(AUTO_DELETE)), is(contentValues.getAsString(AUTO_DELETE)));
+            assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
+            assertThat(cursor.getInt(cursor.getColumnIndex(DELETED_DATE)), is(contentValues.getAsInteger(DELETED_DATE)));
+            assertThat(cursor.getInt(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(contentValues.getAsInteger(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)));
+        }
     }
 
     @Test
@@ -402,6 +439,28 @@ public class FormDatabaseMigratorTest {
         contentValues.put(AUTO_DELETE, "AutoDelete");
         contentValues.put(GEOMETRY_XPATH, "GeometryXPath");
         contentValues.put(DELETED_DATE, 0);
+        return contentValues;
+    }
+
+    private ContentValues createVersion12Form() {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DISPLAY_NAME, "DisplayName");
+        contentValues.put(DESCRIPTION, "Description");
+        contentValues.put(JR_FORM_ID, "FormId");
+        contentValues.put(JR_VERSION, "FormVersion");
+        contentValues.put(MD5_HASH, "Md5Hash");
+        contentValues.put(DATE, 0);
+        contentValues.put(FORM_MEDIA_PATH, "Form/Media/Path");
+        contentValues.put(FORM_FILE_PATH, "Form/File/Path");
+        contentValues.put(LANGUAGE, "Language");
+        contentValues.put(SUBMISSION_URI, "submission.uri");
+        contentValues.put(BASE64_RSA_PUBLIC_KEY, "Base64RsaPublicKey");
+        contentValues.put(JRCACHE_FILE_PATH, "Jr/Cache/File/Path");
+        contentValues.put(AUTO_SEND, "AutoSend");
+        contentValues.put(AUTO_DELETE, "AutoDelete");
+        contentValues.put(GEOMETRY_XPATH, "GeometryXPath");
+        contentValues.put(DELETED_DATE, 0);
+        contentValues.put(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE, 0);
         return contentValues;
     }
 
