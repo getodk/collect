@@ -24,7 +24,6 @@ class InstanceAutoSender(
         return projectDependencyProvider.changeLockProvider.getInstanceLock(projectDependencyProvider.projectId).withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
                 val toUpload = instanceAutoSendFetcher.getInstancesToAutoSend(
-                    projectDependencyProvider.projectId,
                     projectDependencyProvider.instancesRepository,
                     projectDependencyProvider.formsRepository
                 )

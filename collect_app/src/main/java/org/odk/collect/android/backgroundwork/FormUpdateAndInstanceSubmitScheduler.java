@@ -9,6 +9,7 @@ import android.app.Application;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.settings.Settings;
 
 import java.util.HashMap;
@@ -67,9 +68,17 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
 
     @Override
     public void scheduleSubmit(String projectId) {
+        Scheduler.NetworkType networkType = null;
+        Settings settings = settingsProvider.getUnprotectedSettings(projectId);
+        if (settings.getString(ProjectKeys.KEY_AUTOSEND).equals("wifi_only")) {
+            networkType = Scheduler.NetworkType.WIFI;
+        } else if (settings.getString(ProjectKeys.KEY_AUTOSEND).equals("cellular_only")) {
+            networkType = Scheduler.NetworkType.CELLULAR;
+        }
+
         HashMap<String, String> inputData = new HashMap<>();
         inputData.put(TaskData.DATA_PROJECT_ID, projectId);
-        scheduler.networkDeferred(getAutoSendTag(projectId), new AutoSendTaskSpec(), inputData, null);
+        scheduler.networkDeferred(getAutoSendTag(projectId), new AutoSendTaskSpec(), inputData, networkType);
     }
 
     @Override

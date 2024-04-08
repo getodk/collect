@@ -516,7 +516,7 @@ public class AppDependencyModule {
 
     @Provides
     public InstanceAutoSender providesInstanceAutoSender(AutoSendSettingsProvider autoSendSettingsProvider, Notifier notifier, InstancesDataService instancesDataService, PropertyManager propertyManager) {
-        InstanceAutoSendFetcher instanceAutoSendFetcher = new InstanceAutoSendFetcher(autoSendSettingsProvider);
+        InstanceAutoSendFetcher instanceAutoSendFetcher = new InstanceAutoSendFetcher();
         return new InstanceAutoSender(instanceAutoSendFetcher, notifier, instancesDataService, propertyManager);
     }
 
