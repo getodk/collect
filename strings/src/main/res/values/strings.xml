@@ -538,9 +538,7 @@
     <string name="get_point">Start GeoPoint</string>
     <string name="geopoint_view_read_only">View GeoPoint</string>
     <string name="geoshape_view_read_only">View GeoShape</string>
-    <string name="geotrace_view_read_only">View GeoTrace</string>
     <string name="get_shape">Start GeoShape</string>
-    <string name="get_trace">Start GeoTrace</string>
 
     <!-- %1$s is the time taken so far in hh:mm:ss -->
     <string name="time_elapsed">Time elapsed: %1$s</string>
@@ -616,7 +614,6 @@
     <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
     <string name="discard">Discard</string>
     <string name="geoshape_view_change_location">View or Change GeoShape</string>
-    <string name="geotrace_view_change_location">View or Change GeoTrace</string>
     <string name="select_item_count">%s: %d (%d shown on map)</string>
     <string name="select_item">Select</string>
     <string name="new_item">New item</string>
@@ -1324,4 +1321,8 @@
     <string name="recover">Recover</string>
     <!-- Text for the button that declines the recovery of the work -->
     <string name="do_not_recover">Discard</string>
+
+    <string name="get_line">Get line</string>
+    <string name="view_or_change_line">View or change line</string>
+    <string name="view_line">View line</string>
 </resources>

@@ -392,9 +392,7 @@
   <string name="get_point">Определить местоположение</string>
   <string name="geopoint_view_read_only">Просмотреть геоточку</string>
   <string name="geoshape_view_read_only">Просмотр GeoShape</string>
-  <string name="geotrace_view_read_only">Просмотр GeoTrace</string>
   <string name="get_shape">Начать геофигуру</string>
-  <string name="get_trace">Начать геослед</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Истекшее время: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -451,7 +449,6 @@
   <string name="geopoint_no_draggable_instruction">Нажмите кнопку \"добавить отметку\".</string>
   <string name="discard">Отменить</string>
   <string name="geoshape_view_change_location">Показать или изменить геофигуру</string>
-  <string name="geotrace_view_change_location">Показать или изменить геослед</string>
   <string name="select_item_count">%s: %d (%d показано на карте)</string>
   <string name="select_item">Выбрать</string>
   <string name="new_item">Новый элемент</string>

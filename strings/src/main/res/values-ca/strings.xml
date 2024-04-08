@@ -216,7 +216,6 @@
   <string name="get_point">Comença localització gps</string>
   <string name="geopoint_view_read_only">Veure localització gps</string>
   <string name="get_shape">Comença GeoForma</string>
-  <string name="get_trace">Comença GeoTraça</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -240,7 +239,6 @@
   <string name="geopoint_no_draggable_instruction">Toca el botó afegir fita</string>
   <string name="discard">Descarta</string>
   <string name="geoshape_view_change_location">Visualitza o modifica GeoShape</string>
-  <string name="geotrace_view_change_location">Visualitza o modifica GeoShape</string>
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->

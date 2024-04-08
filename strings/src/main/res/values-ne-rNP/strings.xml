@@ -223,7 +223,6 @@
   <string name="get_point">जियो पोइन्ट शुरू गर्नुहोस्</string>
   <string name="geopoint_view_read_only">जियो पोइन्ट हेर्नुहोस्</string>
   <string name="get_shape">जियो सेप शुरू गर्नुहोस्</string>
-  <string name="get_trace">जियो ट्रेस शुरू गर्नुहोस्</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->

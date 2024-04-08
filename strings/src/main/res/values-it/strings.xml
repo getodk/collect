@@ -411,9 +411,7 @@
   <string name="get_point">Inizia Geo-punto</string>
   <string name="geopoint_view_read_only">Guarda Geo-punto</string>
   <string name="geoshape_view_read_only">Visualizza Geo-contorno</string>
-  <string name="geotrace_view_read_only">Visualizza Geo-tracciatura</string>
   <string name="get_shape">Inizia Geo-contorno</string>
-  <string name="get_trace">Inizia Geo-tracciatura</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Tempo trascorso: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -485,7 +483,6 @@
   <string name="geopoint_no_draggable_instruction">Tocca Aggiungi Posizione.</string>
   <string name="discard">Annulla</string>
   <string name="geoshape_view_change_location">Guarda o Cambia Geo-contorno</string>
-  <string name="geotrace_view_change_location">Guarda o Cambia Geo-tracciatura</string>
   <string name="select_item_count">%s: %d (%d mostrato sulla mappa)</string>
   <string name="select_item">Selezionare</string>
   <string name="new_item">Nuovo oggetto</string>

@@ -372,9 +372,7 @@
   <string name="get_point">地理位置を開始</string>
   <string name="geopoint_view_read_only">地理位置を表示</string>
   <string name="geoshape_view_read_only">GeoShape を表示</string>
-  <string name="geotrace_view_read_only">GeoTrace を表示</string>
   <string name="get_shape">GeoShape を開始</string>
-  <string name="get_trace">GeoTrace を開始</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -431,7 +429,6 @@
   <string name="geopoint_no_draggable_instruction">マーカーを追加ボタンをタップします。</string>
   <string name="discard">破棄</string>
   <string name="geoshape_view_change_location">GeoShape を表示または変更</string>
-  <string name="geotrace_view_change_location">GeoTrace を表示または変更</string>
   <!--Name of an action button-->
   <string name="view_data">保存済のフォームを表示</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->

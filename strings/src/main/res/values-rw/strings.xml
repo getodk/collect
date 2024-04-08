@@ -375,9 +375,7 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="get_point">Reba amakuru y\'ahantu</string>
   <string name="geopoint_view_read_only">Reba amakuru y\'ahantu</string>
   <string name="geoshape_view_read_only">Garagaza imiterere yahantu.</string>
-  <string name="geotrace_view_read_only">Garagaza ikimenyetso kiranga ahantu.</string>
   <string name="get_shape">Tangira cg Shushanya imiterere yahantu.</string>
-  <string name="get_trace">Tangira cg Shakisha ibimenyetso biranga ahantu.</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -437,7 +435,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="geopoint_no_draggable_instruction">Kanda hano wemeze.</string>
   <string name="discard">Kuraho cg Jugunya.</string>
   <string name="geoshape_view_change_location">Garagaza cg Uhindure imiterere yahantu.</string>
-  <string name="geotrace_view_change_location">Garagaza cg Uhindure ikimenyetso ndangahantu.</string>
   <!--Name of an action button-->
   <string name="view_data">Reba Form Wabitse </string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->

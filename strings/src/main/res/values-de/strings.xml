@@ -416,9 +416,7 @@
   <string name="get_point">Standort erfassen</string>
   <string name="geopoint_view_read_only">Standort anzeigen</string>
   <string name="geoshape_view_read_only">GeoShape anzeigen</string>
-  <string name="geotrace_view_read_only">GeoTrace anzeigen</string>
   <string name="get_shape">GeoShape starten</string>
-  <string name="get_trace">GeoTrace starten</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Vergangene Zeit: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -487,7 +485,6 @@
   <string name="geopoint_no_draggable_instruction">Button Markierung hinzufügen antippen.</string>
   <string name="discard">Verwerfen</string>
   <string name="geoshape_view_change_location">GeoShape anzeigen oder ändern</string>
-  <string name="geotrace_view_change_location">GeoTrace anzeigen oder ändern</string>
   <string name="select_item_count">%s: %d (%d auf der Karte angezeigt)</string>
   <string name="select_item">Auswählen</string>
   <string name="new_item">Neues Element</string>

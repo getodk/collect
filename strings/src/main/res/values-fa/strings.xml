@@ -380,9 +380,7 @@
   <string name="get_point">آغاز GeoPoint</string>
   <string name="geopoint_view_read_only">نمایش GeoPoint</string>
   <string name="geoshape_view_read_only">نمایش GeoShape</string>
-  <string name="geotrace_view_read_only">نمایش GeoTrace</string>
   <string name="get_shape">آغاز GeoShape</string>
-  <string name="get_trace">آغاز GeoTrace</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">زمان سپری شده: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -447,7 +445,6 @@
   <string name="geopoint_no_draggable_instruction">روی دکمه افزودن نشانگر انگشیتان را بکشید</string>
   <string name="discard">دور انداختن</string>
   <string name="geoshape_view_change_location">نمایش و یا تغییر GeoShape</string>
-  <string name="geotrace_view_change_location">نمایش و یا تغییر GeoShape</string>
   <string name="select_item_count">%s: %d (%d روی نقشه نشان داده شده است)</string>
   <string name="select_item">برگزیدن</string>
   <string name="new_item">گزینه جدید</string>

@@ -411,9 +411,7 @@
   <string name="get_point">Buscar Ubicación</string>
   <string name="geopoint_view_read_only">Ver Ubicación</string>
   <string name="geoshape_view_read_only">Ver GeoArea</string>
-  <string name="geotrace_view_read_only">Ver GeoLínea</string>
   <string name="get_shape">Iniciar GeoArea</string>
-  <string name="get_trace">Iniciar GeoLínea</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Tiempo transcurrido: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -485,7 +483,6 @@
   <string name="geopoint_no_draggable_instruction">Tap botón de agregar marker</string>
   <string name="discard">Descartar</string>
   <string name="geoshape_view_change_location">Ver o cambiar GeoArea</string>
-  <string name="geotrace_view_change_location">Ver o cambiar GeoLínea</string>
   <string name="select_item_count">%s: %d (%d mostrar en el mapa)</string>
   <string name="select_item">Seleccionar</string>
   <string name="new_item">Nuevo ítem</string>

@@ -358,7 +358,6 @@
   <string name="get_point">Anza geopoint</string>
   <string name="geopoint_view_read_only">Tazama geopoint</string>
   <string name="get_shape">Anza umbo la kijografia</string>
-  <string name="get_trace">Anza geotrace</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -396,7 +395,6 @@
   <string name="geopoint_no_draggable_instruction">Bofya kitufe cha kuongeza alama.</string>
   <string name="discard">Sitisha</string>
   <string name="geoshape_view_change_location">Onesha au badilisha umbo la Kijografia</string>
-  <string name="geotrace_view_change_location">Onesha au badili Mfuatilio wa Kijografia</string>
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->

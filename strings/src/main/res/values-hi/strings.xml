@@ -237,7 +237,6 @@
   <string name="get_point"> जिओपॉइंट शुरू करे </string>
   <string name="geopoint_view_read_only">जिओपॉइंट  देखे</string>
   <string name="get_shape">जिओशेप शुरू करे </string>
-  <string name="get_trace">जीओट्रेस प्रारंभ करें</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -265,7 +264,6 @@
   <string name="geopoint_no_draggable_instruction">मार्कर बटन जोड़ें पर टैप करें</string>
   <string name="discard">छोड़ दें </string>
   <string name="geoshape_view_change_location">जिओ शेप देखें या बदलें </string>
-  <string name="geotrace_view_change_location">जिओ ट्रेस देखें या बदलें </string>
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
