@@ -26,6 +26,7 @@ data class ProjectDependencyProvider(
     val instancesRepository by lazy { instancesRepositoryProvider.get(projectId) }
     val formSource by lazy { formSourceProvider.get(projectId) }
     val formsLock by lazy { changeLockProvider.getFormLock(projectId) }
+    val instancesLock by lazy { changeLockProvider.getInstanceLock(projectId) }
     val formsDir by lazy { storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId) }
     val cacheDir by lazy { storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId) }
 }

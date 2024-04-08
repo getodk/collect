@@ -9,12 +9,9 @@ import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory
+import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.projects.ProjectsDataService
-import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
-import org.odk.collect.android.utilities.FormsRepositoryProvider
-import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.instances.Instance
@@ -22,14 +19,11 @@ import java.io.File
 
 class InstancesDataService(
     private val appState: AppState,
-    private val formsRepositoryProvider: FormsRepositoryProvider,
-    private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
     private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
-    private val storagePathProvider: StoragePathProvider,
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
     private val projectsDataService: ProjectsDataService,
-    private val changeLockProvider: ChangeLockProvider,
+    private val projectDependencyProviderFactory: ProjectDependencyProviderFactory,
     private val onUpdate: () -> Unit
 ) {
     val editableCount: LiveData<Int> = appState.getLive(EDITABLE_COUNT_KEY, 0)
@@ -38,7 +32,9 @@ class InstancesDataService(
     val instances: Flow<List<Instance>> = appState.getFlow("instances", emptyList())
 
     fun update() {
-        val instancesRepository = instancesRepositoryProvider.get()
+        val projectDependencyProvider =
+            projectDependencyProviderFactory.create(projectsDataService.getCurrentProject().uuid)
+        val instancesRepository = projectDependencyProvider.instancesRepository
 
         val sendableInstances = instancesRepository.getCountByStatus(
             Instance.STATUS_COMPLETE,
@@ -63,10 +59,14 @@ class InstancesDataService(
     }
 
     fun finalizeAllDrafts(): FinalizeAllResult {
-        val instancesRepository = instancesRepositoryProvider.get()
-        val formsRepository = formsRepositoryProvider.get()
+        val projectDependencyProvider =
+            projectDependencyProviderFactory.create(projectsDataService.getCurrentProject().uuid)
+        val instancesRepository = projectDependencyProvider.instancesRepository
+        val formsRepository = projectDependencyProvider.formsRepository
+        val storagePathProvider = projectDependencyProvider.storagePathProvider
         val savepointsRepository = savepointsRepositoryProvider.get()
         val entitiesRepository = entitiesRepositoryProvider.get()
+
         val projectRootDir = File(storagePathProvider.getProjectRootDirPath())
 
         val instances = instancesRepository.getAllByStatus(
@@ -91,7 +91,8 @@ class InstancesDataService(
                 val formMediaDir = File(form.formMediaPath)
                 val formEntryController =
                     CollectFormEntryControllerFactory().create(formDef, formMediaDir)
-                val formController = FormEntryUseCases.loadDraft(form, instance, formEntryController)
+                val formController =
+                    FormEntryUseCases.loadDraft(form, instance, formEntryController)
                 if (formController == null) {
                     result.copy(failureCount = result.failureCount + 1)
                 } else {
@@ -99,10 +100,16 @@ class InstancesDataService(
                     val needsEncrypted = form.basE64RSAPublicKey != null
                     val newResult = if (savePoint != null) {
                         Analytics.log(AnalyticsEvents.BULK_FINALIZE_SAVE_POINT)
-                        result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
+                        result.copy(
+                            failureCount = result.failureCount + 1,
+                            unsupportedInstances = true
+                        )
                     } else if (needsEncrypted) {
                         Analytics.log(AnalyticsEvents.BULK_FINALIZE_ENCRYPTED_FORM)
-                        result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
+                        result.copy(
+                            failureCount = result.failureCount + 1,
+                            unsupportedInstances = true
+                        )
                     } else {
                         val finalizedInstance = FormEntryUseCases.finalizeDraft(
                             formController,
@@ -130,10 +137,18 @@ class InstancesDataService(
     }
 
     fun deleteInstances(instanceIds: LongArray): Boolean {
-        return changeLockProvider.getInstanceLock(projectsDataService.getCurrentProject().uuid).withLock { acquiredLock: Boolean ->
+        val projectDependencyProvider =
+            projectDependencyProviderFactory.create(projectsDataService.getCurrentProject().uuid)
+        val instancesRepository = projectDependencyProvider.instancesRepository
+        val formsRepository = projectDependencyProvider.formsRepository
+
+        return projectDependencyProvider.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
                 instanceIds.forEach { instanceId ->
-                    InstanceDeleter(instancesRepositoryProvider.get(), formsRepositoryProvider.get()).delete(
+                    InstanceDeleter(
+                        instancesRepository,
+                        formsRepository
+                    ).delete(
                         instanceId
                     )
                 }
@@ -147,9 +162,13 @@ class InstancesDataService(
     }
 
     fun deleteAll(): Boolean {
-        return changeLockProvider.getInstanceLock(projectsDataService.getCurrentProject().uuid).withLock { acquiredLock: Boolean ->
+        val projectDependencyProvider =
+            projectDependencyProviderFactory.create(projectsDataService.getCurrentProject().uuid)
+        val instancesRepository = projectDependencyProvider.instancesRepository
+
+        return projectDependencyProvider.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
-                instancesRepositoryProvider.get().deleteAll()
+                instancesRepository.deleteAll()
                 update()
                 true
             } else {
@@ -165,4 +184,8 @@ class InstancesDataService(
     }
 }
 
-data class FinalizeAllResult(val successCount: Int, val failureCount: Int, val unsupportedInstances: Boolean)
+data class FinalizeAllResult(
+    val successCount: Int,
+    val failureCount: Int,
+    val unsupportedInstances: Boolean
+)
