@@ -13,7 +13,6 @@ import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetch
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.projects.ProjectsDataService
-import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.androidshared.data.AppState
@@ -192,7 +191,10 @@ class InstancesDataService(
             projectDependencyProvider.generalSettings,
             propertyManager
         )
-        return projectDependencyProvider.changeLockProvider.getInstanceLock(projectDependencyProvider.projectId).withLock { acquiredLock: Boolean ->
+
+        return projectDependencyProvider.changeLockProvider.getInstanceLock(
+            projectDependencyProvider.projectId
+        ).withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
                 val toUpload = InstanceAutoSendFetcher.getInstancesToAutoSend(
                     projectDependencyProvider.instancesRepository,
@@ -200,7 +202,7 @@ class InstancesDataService(
                 )
 
                 try {
-                    val result: Map<Instance, FormUploadException?> = instanceSubmitter.submitInstances(toUpload)
+                    val result = instanceSubmitter.submitInstances(toUpload)
                     notifier.onSubmission(result, projectDependencyProvider.projectId)
                 } catch (e: SubmitException) {
                     // do nothing
