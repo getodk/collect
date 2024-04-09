@@ -3,14 +3,16 @@ package org.odk.collect.android.backgroundwork
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.instancemanagement.InstancesDataService
@@ -60,14 +62,27 @@ class AutoSendTaskSpecTest {
     }
 
     @Test
-    fun `passes projectDependencyProvider with proper project id`() {
-        val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
-        AutoSendTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, true).get()
-        verify(instancesDataService).autoSendInstances(projectId)
+    fun `maxRetries should not be limited`() {
+        assertThat(AutoSendTaskSpec().maxRetries, `is`(nullValue()))
     }
 
     @Test
-    fun `maxRetries should not be limited`() {
-        assertThat(AutoSendTaskSpec().maxRetries, `is`(nullValue()))
+    fun `returns false if sending instances fails`() {
+        whenever(instancesDataService.autoSendInstances(projectId)).doReturn(false)
+
+        val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
+        val spec = AutoSendTaskSpec()
+        val task = spec.getTask(ApplicationProvider.getApplicationContext(), inputData, true)
+        assertThat(task.get(), equalTo(false))
+    }
+
+    @Test
+    fun `returns true if sending instances succeeds`() {
+        whenever(instancesDataService.autoSendInstances(projectId)).doReturn(true)
+
+        val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
+        val spec = AutoSendTaskSpec()
+        val task = spec.getTask(ApplicationProvider.getApplicationContext(), inputData, true)
+        assertThat(task.get(), equalTo(true))
     }
 }
