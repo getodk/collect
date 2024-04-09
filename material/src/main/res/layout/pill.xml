@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="@dimen/margin_extra_small"
+    android:paddingHorizontal="@dimen/margin_small"
     android:paddingVertical="@dimen/margin_extra_extra_small">
 
     <ImageView
@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?colorOnPrimary"
+        app:tint="?colorOnPrimaryContainer"
         tools:src="@drawable/ic_baseline_warning_24" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_extra_small"
         android:textAppearance="?textAppearanceLabelLarge"
-        android:textColor="?colorOnPrimary"
+        android:textColor="?colorOnPrimaryContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/icon"
