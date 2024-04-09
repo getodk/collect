@@ -201,13 +201,8 @@ class InstancesDataService(
                     projectDependencyProvider.formsRepository
                 )
 
-                try {
-                    val result = instanceSubmitter.submitInstances(toUpload)
-                    notifier.onSubmission(result, projectDependencyProvider.projectId)
-                } catch (e: SubmitException) {
-                    // do nothing
-                }
-
+                val results = instanceSubmitter.submitInstances(toUpload)
+                notifier.onSubmission(results, projectDependencyProvider.projectId)
                 update()
                 true
             } else {

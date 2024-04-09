@@ -11,6 +11,7 @@ import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.testshared.BooleanChangeLock
 
 class InstancesDataServiceTest {
@@ -31,7 +32,7 @@ class InstancesDataServiceTest {
     private val changeLockProvider = ChangeLockProvider { BooleanChangeLock() }
 
     private val projectsDependencyProviderFactory = ProjectDependencyProviderFactory(
-        mock(),
+        InMemSettingsProvider(),
         formsRepositoryProvider,
         instancesRepositoryProvider,
         mock(),
@@ -62,6 +63,12 @@ class InstancesDataServiceTest {
     @Test
     fun `instances should be deleted if the instances database is not locked`() {
         val result = instancesDataService.deleteInstances(longArrayOf(1))
+        assertThat(result, equalTo(true))
+    }
+
+    @Test
+    fun `autoSendInstances() returns true when there are no instances to send`() {
+        val result = instancesDataService.autoSendInstances(project.uuid)
         assertThat(result, equalTo(true))
     }
 }
