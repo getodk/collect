@@ -63,13 +63,35 @@ public class FormDatabaseMigratorTest {
     }
 
     @Test
+    public void databaseIdsShouldNotBeReused() {
+        FormDatabaseMigrator formDatabaseMigrator = new FormDatabaseMigrator();
+        formDatabaseMigrator.onCreate(database);
+
+        ContentValues contentValues = getContentValuesForFormV12();
+        database.insert(FORMS_TABLE_NAME, null, contentValues);
+        try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
+            assertThat(cursor.getCount(), is(1));
+            cursor.moveToFirst();
+            assertThat(cursor.getInt(cursor.getColumnIndex(_ID)), is(1));
+        }
+
+        database.delete(FORMS_TABLE_NAME, null, null);
+        database.insert(FORMS_TABLE_NAME, null, contentValues);
+        try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
+            assertThat(cursor.getCount(), is(1));
+            cursor.moveToFirst();
+            assertThat(cursor.getInt(cursor.getColumnIndex(_ID)), is(2));
+        }
+    }
+
+    @Test
     public void onUpgrade_fromVersion12() {
         int oldVersion = 12;
         database.setVersion(oldVersion);
         FormDatabaseMigrator formDatabaseMigrator = new FormDatabaseMigrator();
 
         formDatabaseMigrator.createFormsTableV12(database);
-        ContentValues contentValues = createVersion12Form();
+        ContentValues contentValues = getContentValuesForFormV12();
         database.insert(FORMS_TABLE_NAME, null, contentValues);
 
         formDatabaseMigrator.onUpgrade(database, oldVersion);
@@ -79,6 +101,8 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToFirst();
+
+            assertThat(cursor.getInt(cursor.getColumnIndex(_ID)), is(1));
             assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), is(contentValues.getAsString(DISPLAY_NAME)));
             assertThat(cursor.getString(cursor.getColumnIndex(DESCRIPTION)), is(contentValues.getAsString(DESCRIPTION)));
             assertThat(cursor.getString(cursor.getColumnIndex(JR_FORM_ID)), is(contentValues.getAsString(JR_FORM_ID)));
@@ -442,7 +466,7 @@ public class FormDatabaseMigratorTest {
         return contentValues;
     }
 
-    private ContentValues createVersion12Form() {
+    private ContentValues getContentValuesForFormV12() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DISPLAY_NAME, "DisplayName");
         contentValues.put(DESCRIPTION, "Description");
