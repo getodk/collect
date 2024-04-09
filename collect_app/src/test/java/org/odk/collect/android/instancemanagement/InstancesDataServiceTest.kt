@@ -27,10 +27,8 @@ class InstancesDataServiceTest {
     private val projectDataService = mock<ProjectsDataService>().apply {
         whenever(getCurrentProject()).thenReturn(project)
     }
-    private val changeLock = BooleanChangeLock()
-    private val changeLockProvider = mock<ChangeLockProvider>().apply {
-        whenever(getInstanceLock(project.uuid)).thenReturn(changeLock)
-    }
+
+    private val changeLockProvider = ChangeLockProvider { BooleanChangeLock() }
 
     private val projectsDependencyProviderFactory = ProjectDependencyProviderFactory(
         mock(),
@@ -56,7 +54,7 @@ class InstancesDataServiceTest {
 
     @Test
     fun `instances should not be deleted if the instances database is locked`() {
-        changeLock.lock()
+        (changeLockProvider.getInstanceLock(project.uuid) as BooleanChangeLock).lock()
         val result = instancesDataService.deleteInstances(longArrayOf(1))
         assertThat(result, equalTo(false))
     }

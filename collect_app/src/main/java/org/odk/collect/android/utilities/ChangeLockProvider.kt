@@ -5,15 +5,15 @@ import org.odk.collect.shared.locks.ReentrantLockChangeLock
 import javax.inject.Singleton
 
 @Singleton
-class ChangeLockProvider {
+class ChangeLockProvider(private val changeLockFactory: () -> ChangeLock = { ReentrantLockChangeLock() }) {
 
     private val locks: MutableMap<String, ChangeLock> = mutableMapOf()
 
     fun getFormLock(projectId: String): ChangeLock {
-        return locks.getOrPut("form:$projectId") { ReentrantLockChangeLock() }
+        return locks.getOrPut("form:$projectId") { changeLockFactory() }
     }
 
     fun getInstanceLock(projectId: String): ChangeLock {
-        return locks.getOrPut("instance:$projectId") { ReentrantLockChangeLock() }
+        return locks.getOrPut("instance:$projectId") { changeLockFactory() }
     }
 }
