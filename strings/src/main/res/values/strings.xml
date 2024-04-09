@@ -1313,14 +1313,24 @@
     <!-- Text for the button that declines the recovery of the work -->
     <string name="do_not_recover">Discard</string>
 
+    <!-- Text for the button that initiates getting user location -->
     <string name="get_point">Get point</string>
+    <!-- Text for the button that displays a map for viewing or changing an already existing location -->
     <string name="view_or_change_point">View or change point</string>
+    <!-- Text for the button that displays a map for viewing an already existing location -->
     <string name="view_point">View point</string>
+    <!-- Text for the button that initiates getting user location when one is already present -->
     <string name="change_point">Change point</string>
+    <!-- Text for the button that displays a map for getting a new line -->
     <string name="get_line">Get line</string>
+    <!-- Text for the button that displays a map for viewing or changing an already existing line -->
     <string name="view_or_change_line">View or change line</string>
+    <!-- Text for the button that displays a map for viewing an already existing line -->
     <string name="view_line">View line</string>
+    <!-- Text for the button that displays a map for getting a new polygon -->
     <string name="get_polygon">Get polygon</string>
+    <!-- Text for the button that displays a map for viewing or changing an already existing polygon -->
     <string name="view_or_change_polygon">View or change polygon</string>
+    <!-- Text for the button that displays a map for viewing an already existing polygon -->
     <string name="view_polygon">View polygon</string>
 </resources>
