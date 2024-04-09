@@ -439,7 +439,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstancesDataService providesInstancesDataService(Application application, InstancesRepositoryProvider instancesRepositoryProvider, ProjectsDataService projectsDataService, FormsRepositoryProvider formsRepositoryProvider, EntitiesRepositoryProvider entitiesRepositoryProvider, StoragePathProvider storagePathProvider, InstanceSubmitScheduler instanceSubmitScheduler, SavepointsRepositoryProvider savepointsRepositoryProvider, ChangeLockProvider changeLockProvider, ProjectDependencyProviderFactory projectsDependencyProviderFactory, Notifier notifier, PropertyManager propertyManager) {
+    public InstancesDataService providesInstancesDataService(Application application, InstancesRepositoryProvider instancesRepositoryProvider, ProjectsDataService projectsDataService, FormsRepositoryProvider formsRepositoryProvider, EntitiesRepositoryProvider entitiesRepositoryProvider, StoragePathProvider storagePathProvider, InstanceSubmitScheduler instanceSubmitScheduler, SavepointsRepositoryProvider savepointsRepositoryProvider, ChangeLockProvider changeLockProvider, ProjectDependencyProviderFactory projectsDependencyProviderFactory, Notifier notifier, PropertyManager propertyManager, OpenRosaHttpInterface httpInterface) {
         Function0<Unit> onUpdate = () -> {
             application.getContentResolver().notifyChange(
                     InstancesContract.getUri(projectsDataService.getCurrentProject().getUuid()),
@@ -449,7 +449,7 @@ public class AppDependencyModule {
             return null;
         };
 
-        return new InstancesDataService(getState(application), savepointsRepositoryProvider, entitiesRepositoryProvider, instanceSubmitScheduler, projectsDataService, projectsDependencyProviderFactory, notifier, propertyManager, onUpdate);
+        return new InstancesDataService(getState(application), savepointsRepositoryProvider, entitiesRepositoryProvider, instanceSubmitScheduler, projectsDataService, projectsDependencyProviderFactory, notifier, propertyManager, httpInterface, onUpdate);
     }
 
     @Provides

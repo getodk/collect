@@ -3,6 +3,7 @@ package org.odk.collect.android.instancemanagement
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface
 import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.android.upload.InstanceServerUploader
 import org.odk.collect.android.upload.InstanceUploader
@@ -12,6 +13,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.WebCredentialsUtils
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.metadata.PropertyManager.Companion.PROPMGR_DEVICE_ID
 import org.odk.collect.settings.keys.ProjectKeys
@@ -21,7 +23,9 @@ import timber.log.Timber
 class InstanceSubmitter(
     private val formsRepository: FormsRepository,
     private val generalSettings: Settings,
-    private val propertyManager: PropertyManager
+    private val propertyManager: PropertyManager,
+    private val httpInterface: OpenRosaHttpInterface,
+    private val instancesRepository: InstancesRepository
 ) {
 
     fun submitInstances(toUpload: List<Instance>): Map<Instance, FormUploadException?> {
@@ -51,11 +55,11 @@ class InstanceSubmitter(
     }
 
     private fun setUpODKUploader(): InstanceUploader {
-        val httpInterface = Collect.getInstance().component.openRosaHttpInterface()
         return InstanceServerUploader(
             httpInterface,
             WebCredentialsUtils(generalSettings),
-            generalSettings
+            generalSettings,
+            instancesRepository
         )
     }
 

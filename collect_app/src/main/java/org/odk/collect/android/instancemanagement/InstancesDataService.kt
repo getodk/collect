@@ -11,9 +11,11 @@ import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory
 import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetcher
 import org.odk.collect.android.notifications.Notifier
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
+import org.odk.collect.android.utilities.FormsUploadResultInterpreter
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.instances.Instance
@@ -29,6 +31,7 @@ class InstancesDataService(
     private val projectDependencyProviderFactory: ProjectDependencyProviderFactory,
     private val notifier: Notifier,
     private val propertyManager: PropertyManager,
+    private val httpInterface: OpenRosaHttpInterface,
     private val onUpdate: () -> Unit
 ) {
     val editableCount: LiveData<Int> = appState.getLive(EDITABLE_COUNT_KEY, 0)
@@ -189,7 +192,9 @@ class InstancesDataService(
         val instanceSubmitter = InstanceSubmitter(
             projectDependencyProvider.formsRepository,
             projectDependencyProvider.generalSettings,
-            propertyManager
+            propertyManager,
+            httpInterface,
+            projectDependencyProvider.instancesRepository
         )
 
         return projectDependencyProvider.changeLockProvider.getInstanceLock(
@@ -204,7 +209,8 @@ class InstancesDataService(
                 val results = instanceSubmitter.submitInstances(toUpload)
                 notifier.onSubmission(results, projectDependencyProvider.projectId)
                 update()
-                true
+
+                FormsUploadResultInterpreter.allFormsUploadedSuccessfully(results)
             } else {
                 false
             }

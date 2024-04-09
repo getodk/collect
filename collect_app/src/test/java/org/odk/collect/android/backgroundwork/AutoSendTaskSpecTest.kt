@@ -15,6 +15,7 @@ import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.notifications.Notifier
+import org.odk.collect.android.openrosa.OpenRosaHttpInterface
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
@@ -47,7 +48,8 @@ class AutoSendTaskSpecTest {
                 changeLockProvider: ChangeLockProvider?,
                 projectsDependencyProviderFactory: ProjectDependencyProviderFactory?,
                 notifier: Notifier?,
-                propertyManager: PropertyManager?
+                propertyManager: PropertyManager?,
+                httpInterface: OpenRosaHttpInterface
             ): InstancesDataService {
                 return instancesDataService
             }

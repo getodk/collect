@@ -17,6 +17,7 @@ package org.odk.collect.android.tasks;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
+import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -60,6 +61,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     @Inject
     PropertyManager propertyManager;
 
+    @Inject
+    InstancesDataService instancesDataService;
+
     // Custom submission URL, username and password that can be sent via intent extras by external
     // applications
     private String completeDestinationUrl;
@@ -79,7 +83,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     public Outcome doInBackground(Long... instanceIdsToUpload) {
         Outcome outcome = new Outcome();
 
-        InstanceServerUploader uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils, settingsProvider.getUnprotectedSettings());
+        InstanceServerUploader uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils, settingsProvider.getUnprotectedSettings(), instancesRepository);
         List<Instance> instancesToUpload = uploader.getInstancesFromIds(instanceIdsToUpload);
 
         String deviceId = propertyManager.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
@@ -133,6 +137,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         InstanceDeleter instanceDeleter = new InstanceDeleter(instancesRepository, formsRepository);
         instanceDeleter.delete(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
 
+        instancesDataService.update();
         return outcome;
     }
 
