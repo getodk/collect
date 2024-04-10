@@ -50,8 +50,6 @@ class RecentAppsRule : ExternalResource() {
 
             device.findObject(UiSelector().text("Clear all")).click()
             CollectHelpers.simulateProcessRestart() // the process is not restarted automatically (probably to keep the test running) so we have simulate it
-        } else {
-            throw NotImplementedError()
         }
     }
 
