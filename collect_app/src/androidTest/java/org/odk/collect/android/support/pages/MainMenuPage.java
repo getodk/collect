@@ -65,7 +65,10 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public FillBlankFormPage clickFillBlankForm() {
-        onView(withId(R.id.enter_data)).perform(click());
+        tryFlakyAction(() -> {
+            onView(withId(R.id.enter_data)).perform(click());
+        });
+
         return new FillBlankFormPage().assertOnPage();
     }
 

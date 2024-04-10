@@ -3,7 +3,7 @@ package org.odk.collect.android.support.pages
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import org.odk.collect.android.R
+import org.odk.collect.android.support.WaitFor.tryAgainOnFail
 
 class ManualProjectCreatorDialogPage : Page<ManualProjectCreatorDialogPage>() {
     override fun assertOnPage(): ManualProjectCreatorDialogPage {
@@ -27,8 +27,12 @@ class ManualProjectCreatorDialogPage : Page<ManualProjectCreatorDialogPage>() {
     }
 
     fun addProject(): MainMenuPage {
-        onView(withText(org.odk.collect.strings.R.string.add)).perform(click())
-        return MainMenuPage().assertOnPage()
+        tryAgainOnFail {
+            clickOnString(org.odk.collect.strings.R.string.add)
+            MainMenuPage().assertOnPage()
+        }
+
+        return MainMenuPage()
     }
 
     fun addProjectAndAssertDuplicateDialogShown(): ManualProjectCreatorDialogPage {

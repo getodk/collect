@@ -1,22 +1,15 @@
 package org.odk.collect.android.support.rules
 
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import org.junit.rules.TestRule
-import org.junit.runner.Description
-import org.junit.runners.model.Statement
-import timber.log.Timber
+import org.junit.rules.ExternalResource
+import org.odk.collect.android.support.DummyActivityLauncher
 
-class ResetRotationRule : TestRule {
+class ResetRotationRule : ExternalResource() {
 
-    override fun apply(base: Statement, description: Description): Statement {
-        return object : Statement() {
-            override fun evaluate() {
-                Timber.d("Resetting rotation...")
-                val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-                device.setOrientationNatural()
-                base.evaluate()
-            }
+    override fun before() {
+        // Some devices are always portrait at the home screen so we need to launch something
+        DummyActivityLauncher.launch { device ->
+            device.setOrientationNatural()
+            device.pressBack()
         }
     }
 }

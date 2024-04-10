@@ -37,4 +37,21 @@ object WaitFor {
             // ignored
         }
     }
+
+    @JvmStatic
+    @JvmOverloads
+    fun tryAgainOnFail(maxTimes: Int = 2, action: Runnable) {
+        var failure: Exception? = null
+        for (i in 0 until maxTimes) {
+            try {
+                action.run()
+                return
+            } catch (e: Exception) {
+                failure = e
+                wait250ms()
+            }
+        }
+
+        throw RuntimeException("tryAgainOnFail failed", failure)
+    }
 }

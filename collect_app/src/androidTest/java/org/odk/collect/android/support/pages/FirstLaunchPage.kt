@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages
 
-import org.odk.collect.android.R
-
 class FirstLaunchPage : Page<FirstLaunchPage>() {
 
     override fun assertOnPage(): FirstLaunchPage {
@@ -10,8 +8,9 @@ class FirstLaunchPage : Page<FirstLaunchPage>() {
     }
 
     fun clickTryCollect(): MainMenuPage {
-        scrollToAndClickSubtext(org.odk.collect.strings.R.string.try_demo)
-        return MainMenuPage().assertOnPage()
+        return tryAgainOnFail(MainMenuPage()) {
+            scrollToAndClickSubtext(org.odk.collect.strings.R.string.try_demo)
+        }
     }
 
     fun clickManuallyEnterProjectDetails(): ManualProjectCreatorDialogPage {

@@ -1,13 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import android.graphics.Bitmap;
-
-import androidx.test.espresso.Espresso;
-
-import org.odk.collect.android.support.ActivityHelpers;
-import org.odk.collect.android.support.WaitFor;
-import org.odk.collect.android.support.matchers.DrawableMatcher;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -15,6 +7,14 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import android.graphics.Bitmap;
+
+import androidx.test.espresso.Espresso;
+
+import org.odk.collect.android.support.ActivityHelpers;
+import org.odk.collect.android.support.WaitFor;
+import org.odk.collect.android.support.matchers.DrawableMatcher;
 
 public class QRCodePage extends Page<QRCodePage> {
     @Override
@@ -45,11 +45,9 @@ public class QRCodePage extends Page<QRCodePage> {
     }
 
     public QRCodePage clickOnMenu() {
-        tryAgainOnFail(() -> {
+        return tryAgainOnFail(this, () -> {
             Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
             onView(withText(getTranslatedString(org.odk.collect.strings.R.string.import_qrcode_sd))).check(matches(isDisplayed()));
         });
-
-        return this;
     }
 }

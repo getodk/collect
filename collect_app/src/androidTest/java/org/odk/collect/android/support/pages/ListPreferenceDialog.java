@@ -17,6 +17,6 @@ public class ListPreferenceDialog<T extends Page<T>> extends Page<ListPreference
     }
 
     public T clickOption(int option) {
-        return clickOnButtonInDialog(option, page);
+        return clickOnTextInDialog(option, page);
     }
 }

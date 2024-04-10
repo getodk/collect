@@ -13,6 +13,7 @@ import androidx.test.espresso.NoActivityResumedException
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.typeText
@@ -20,6 +21,7 @@ import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
@@ -35,7 +37,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withSubstring
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiSelector
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
@@ -49,11 +50,13 @@ import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.ActivityHelpers.getLaunchIntent
-import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.android.support.WaitFor.tryAgainOnFail
 import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
+import org.odk.collect.android.support.rules.RecentAppsRule
+import org.odk.collect.android.utilities.ActionRegister
 import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.strings.localization.getLocalizedQuantityString
@@ -235,6 +238,15 @@ abstract class Page<T : Page<T>> {
         return checkIsToastWithMessageDisplayed(getTranslatedString(id, *formatArgs))
     }
 
+    fun <D : Page<D>> clickOnString(stringID: Int, destination: D): D {
+        tryAgainOnFail {
+            clickOnString(stringID)
+            destination.assertOnPage()
+        }
+
+        return destination
+    }
+
     fun clickOnString(stringID: Int): T {
         clickOnText(getTranslatedString(stringID))
         return this as T
@@ -273,12 +285,25 @@ abstract class Page<T : Page<T>> {
         return destination!!.assertOnPage()
     }
 
-    fun <D : Page<D>?> clickOnButtonInDialog(buttonText: Int, destination: D): D {
+    fun clickOnTextInDialog(text: String): T {
         waitForDialogToSettle()
-        onView(withText(getTranslatedString(buttonText)))
+        onView(withText(text))
             .inRoot(isDialog())
             .perform(click())
-        return destination!!.assertOnPage()
+        return this as T
+    }
+
+    fun clickOnTextInDialog(text: Int): T {
+        return clickOnTextInDialog(getTranslatedString(text))
+    }
+
+    fun <D : Page<D>> clickOnTextInDialog(text: Int, destination: D): D {
+        return clickOnTextInDialog(getTranslatedString(text), destination)
+    }
+
+    fun <D : Page<D>> clickOnTextInDialog(text: String, destination: D): D {
+        clickOnTextInDialog(text)
+        return destination.assertOnPage()
     }
 
     fun getTranslatedString(id: Int?, vararg formatArgs: Any): String {
@@ -405,21 +430,6 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    @JvmOverloads
-    fun tryAgainOnFail(action: Runnable, maxTimes: Int = 2) {
-        var failure: Exception? = null
-        for (i in 0 until maxTimes) {
-            try {
-                action.run()
-                return
-            } catch (e: Exception) {
-                failure = e
-                wait250ms()
-            }
-        }
-        throw RuntimeException("tryAgainOnFail failed", failure)
-    }
-
     private fun waitForDialogToSettle() {
         wait250ms() // https://github.com/android/android-test/issues/444
     }
@@ -458,9 +468,13 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertTextInDialog(text: Int): T {
-        onView(withText(getTranslatedString(text))).inRoot(isDialog()).check(matches(isDisplayed()))
+    fun assertTextInDialog(text: String): T {
+        onView(withText(text)).inRoot(isDialog()).check(matches(isDisplayed()))
         return this as T
+    }
+
+    fun assertTextInDialog(text: Int): T {
+        return assertTextInDialog(getTranslatedString(text))
     }
 
     fun closeSnackbar(): T {
@@ -473,10 +487,10 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOptionsIcon(expectedOptionString: String): T {
-        tryAgainOnFail({
+        tryAgainOnFail {
             onView(OVERFLOW_BUTTON_MATCHER).perform(click())
             assertText(expectedOptionString)
-        })
+        }
 
         return this as T
     }
@@ -495,27 +509,52 @@ abstract class Page<T : Page<T>> {
         return destination!!.assertOnPage()
     }
 
-    fun <D : Page<D>> killAndReopenApp(rule: ActivityScenarioLauncherRule, destination: D): D {
-        killApp()
+    fun <D : Page<D>> killAndReopenApp(
+        launcherRule: ActivityScenarioLauncherRule,
+        recentAppsRule: RecentAppsRule,
+        destination: D
+    ): D {
+        recentAppsRule.leaveAndKillApp()
 
         // reopen
-        rule.launch<Activity>(getLaunchIntent())
+        launcherRule.launch<Activity>(getLaunchIntent())
         return destination.assertOnPage()
-    }
-
-    fun killApp() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.pressRecentApps()
-        device
-            .findObject(UiSelector().descriptionContains("Collect"))
-            .swipeUp(10).also {
-                CollectHelpers.simulateProcessRestart() // the process is not restarted automatically (probably to keep the test running) so we have simulate it
-            }
     }
 
     fun assertNoOptionsMenu(): T {
         onView(OVERFLOW_BUTTON_MATCHER).check(doesNotExist())
         return this as T
+    }
+
+    fun longClickOnText(text: String): T {
+        onView(withText(text)).perform(longClick())
+        return this as T
+    }
+
+    fun clickOnTextInPopup(text: Int): T {
+        onView(withText(text)).inRoot(isPlatformPopup()).perform(click())
+        return this as T
+    }
+
+    fun tryFlakyAction(action: Runnable) {
+        tryAgainOnFail {
+            ActionRegister.attemptingAction()
+            action.run()
+            waitFor {
+                if (!ActionRegister.isActionDetected) {
+                    throw java.lang.RuntimeException("Action never detected!")
+                }
+            }
+        }
+    }
+
+    fun <D : Page<D>> tryAgainOnFail(destination: D, action: Runnable): D {
+        tryAgainOnFail {
+            action.run()
+            destination.assertOnPage()
+        }
+
+        return destination
     }
 
     companion object {

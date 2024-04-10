@@ -12,12 +12,12 @@ public class DeleteSelectedDialog extends Page<DeleteSelectedDialog> {
 
     @Override
     public DeleteSelectedDialog assertOnPage() {
-        assertText(getTranslatedString(org.odk.collect.strings.R.string.delete_confirm, numberSelected));
+        assertTextInDialog(getTranslatedString(org.odk.collect.strings.R.string.delete_confirm, numberSelected));
         return this;
     }
 
     public DeleteSavedFormPage clickDeleteForms() {
-        clickOnString(org.odk.collect.strings.R.string.delete_yes);
+        clickOnTextInDialog(org.odk.collect.strings.R.string.delete_yes);
         return destination.assertOnPage();
     }
 }

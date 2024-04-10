@@ -24,22 +24,20 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public <D extends Page<D>> D clickSaveAsDraft(D destination) {
-        clickOnString(org.odk.collect.strings.R.string.save_as_draft);
-        return destination.assertOnPage();
+        return clickOnString(org.odk.collect.strings.R.string.save_as_draft, destination);
     }
 
     public MainMenuPage clickSaveAsDraft() {
-        clickOnString(org.odk.collect.strings.R.string.save_as_draft);
-        return new MainMenuPage().assertOnPage();
+        return clickSaveAsDraft(new MainMenuPage());
     }
 
     public <D extends Page<D>> D clickFinalize(D destination) {
-        clickOnString(org.odk.collect.strings.R.string.finalize);
-        return destination.assertOnPage();
+        return clickOnString(org.odk.collect.strings.R.string.finalize, destination);
     }
 
     public MainMenuPage clickFinalize() {
-        return clickFinalize(new MainMenuPage());
+        clickFinalize(new MainMenuPage());
+        return new MainMenuPage();
     }
 
     public MainMenuPage clickSend() {

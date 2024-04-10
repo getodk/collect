@@ -13,15 +13,18 @@ import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
 @RunWith(AndroidJUnit4::class)
 class AuditTest {
 
     private val rule = CollectTestRule()
+    private val recentAppsRule = RecentAppsRule()
 
     @get:Rule
     val ruleChain: RuleChain = TestRuleChain.chain()
+        .around(recentAppsRule)
         .around(rule)
 
     @Test
@@ -104,7 +107,7 @@ class AuditTest {
             .pressBack(MainMenuPage())
             .startBlankForm("One Question Audit")
             .fillOut(FormEntryPage.QuestionAndAnswer("what is your age", "31"))
-            .killAndReopenApp(rule, MainMenuPage())
+            .killAndReopenApp(rule, recentAppsRule, MainMenuPage())
             .startBlankFormWithSavepoint("One Question Audit")
             .clickRecover(FormEntryPage("One Question Audit"))
             .swipeToEndScreen()

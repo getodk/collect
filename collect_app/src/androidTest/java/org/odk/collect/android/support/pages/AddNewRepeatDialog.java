@@ -23,11 +23,11 @@ public class AddNewRepeatDialog extends Page<AddNewRepeatDialog> {
     }
 
     public <D extends Page<D>> D clickOnAdd(D destination) {
-        return clickOnButtonInDialog(org.odk.collect.strings.R.string.add_repeat, destination);
+        return clickOnTextInDialog(org.odk.collect.strings.R.string.add_repeat, destination);
     }
 
     public <D extends Page<D>> D clickOnDoNotAdd(D destination) {
-        return clickOnButtonInDialog(org.odk.collect.strings.R.string.dont_add_repeat, destination);
+        return clickOnTextInDialog(org.odk.collect.strings.R.string.dont_add_repeat, destination);
     }
 
 }

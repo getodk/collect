@@ -3,6 +3,7 @@ package org.odk.collect.android.support.matchers;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -31,7 +32,7 @@ public final class DrawableMatcher  {
     }
 
     public static Matcher<View> withBitmap(Bitmap match) {
-        return new BoundedMatcher<View, ImageView>(ImageView.class) {
+        return new BoundedMatcher<>(ImageView.class) {
             @Override
             public void describeTo(Description description) {
                 description.appendText("bitmaps did not match");
@@ -50,7 +51,17 @@ public final class DrawableMatcher  {
 
                 Bitmap actual = ((BitmapDrawable) drawable).getBitmap();
 
-                return actual.sameAs(match);
+                StrictMode.ThreadPolicy originalThreadPolicy = StrictMode.getThreadPolicy();
+
+                try {
+                    // Permit slow calls to allow `sameAs` use
+                    StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                            .permitCustomSlowCalls().build());
+
+                    return actual.sameAs(match);
+                } finally {
+                    StrictMode.setThreadPolicy(originalThreadPolicy);
+                }
             }
         };
     }

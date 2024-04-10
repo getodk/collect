@@ -5,7 +5,6 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import org.odk.collect.android.R
 
 class QrCodeProjectCreatorDialogPage : Page<QrCodeProjectCreatorDialogPage>() {
     override fun assertOnPage(): QrCodeProjectCreatorDialogPage {
@@ -14,7 +13,7 @@ class QrCodeProjectCreatorDialogPage : Page<QrCodeProjectCreatorDialogPage>() {
     }
 
     fun switchToManualMode(): ManualProjectCreatorDialogPage {
-        return clickOnButtonInDialog(org.odk.collect.strings.R.string.configure_manually, ManualProjectCreatorDialogPage())
+        return clickOnTextInDialog(org.odk.collect.strings.R.string.configure_manually, ManualProjectCreatorDialogPage())
     }
 
     fun assertDuplicateDialogShown(): QrCodeProjectCreatorDialogPage {
@@ -26,10 +25,10 @@ class QrCodeProjectCreatorDialogPage : Page<QrCodeProjectCreatorDialogPage>() {
     }
 
     fun switchToExistingProject(): MainMenuPage {
-        return clickOnButtonInDialog(org.odk.collect.strings.R.string.switch_to_existing, MainMenuPage())
+        return clickOnTextInDialog(org.odk.collect.strings.R.string.switch_to_existing, MainMenuPage())
     }
 
     fun addDuplicateProject(): MainMenuPage {
-        return clickOnButtonInDialog(org.odk.collect.strings.R.string.add_duplicate_project, MainMenuPage())
+        return clickOnTextInDialog(org.odk.collect.strings.R.string.add_duplicate_project, MainMenuPage())
     }
 }

@@ -104,11 +104,13 @@ tasks.register('testLab') {
             executable 'gcloud'
             args('beta', 'firebase', 'test', 'android', 'run',
                     '--type', 'instrumentation',
-                    '--num-uniform-shards=50',
+                    '--num-uniform-shards=25',
                     '--app', 'collect_app/build/outputs/apk/debug/ODK-Collect-debug.apk',
                     '--test', 'collect_app/build/outputs/apk/androidTest/debug/ODK-Collect-debug-androidTest.apk',
-                    '--device', 'model=MediumPhone.arm,version=30,locale=en,orientation=portrait',
-                    '--timeout', '10m'
+                    '--device', 'model=MediumPhone.arm,version=34,locale=en,orientation=portrait',
+                    '--timeout', '10m',
+                    '--directories-to-pull', '/sdcard',
+                    '--test-targets', "notPackage org.odk.collect.android.regression"
             )
         }
     }

@@ -62,7 +62,7 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
 
     public FormHierarchyPage deleteGroup() {
         onView(withId(R.id.menu_delete_child)).perform(click());
-        return clickOnButtonInDialog(org.odk.collect.strings.R.string.delete_repeat, this);
+        return clickOnTextInDialog(org.odk.collect.strings.R.string.delete_repeat, this);
     }
 
     public FormEndPage clickJumpEndButton() {

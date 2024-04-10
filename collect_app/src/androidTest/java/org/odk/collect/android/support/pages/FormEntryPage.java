@@ -24,7 +24,6 @@ import androidx.test.core.app.ApplicationProvider;
 import org.hamcrest.Matchers;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.WaitFor;
-import org.odk.collect.android.utilities.FlingRegister;
 
 import java.util.concurrent.Callable;
 
@@ -44,7 +43,10 @@ public class FormEntryPage extends Page<FormEntryPage> {
             return null;
         });
 
-        assertToolbarTitle(formName);
+        WaitFor.waitFor((Callable<Void>) () -> {
+            assertToolbarTitle(formName);
+            return null;
+        });
 
         // Check we are not on the Form Hierarchy page
         assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_beginning);
@@ -189,9 +191,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage deleteGroup(String questionText) {
-        onView(withText(questionText)).perform(longClick());
-        onView(withText(org.odk.collect.strings.R.string.delete_repeat)).perform(click());
-        clickOnButtonInDialog(org.odk.collect.strings.R.string.discard_group, this);
+        longClickOnText(questionText);
+        clickOnTextInPopup(org.odk.collect.strings.R.string.delete_repeat);
+        clickOnTextInDialog(org.odk.collect.strings.R.string.discard_group, this);
         return this;
     }
 
@@ -249,18 +251,22 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage longPressOnQuestion(String question, boolean isRequired) {
-        if (isRequired) {
-            onView(withText("* " + question)).perform(longClick());
-        } else {
-            onView(withText(question)).perform(longClick());
-        }
+        WaitFor.tryAgainOnFail(() -> {
+            if (isRequired) {
+                onView(withText("* " + question)).perform(longClick());
+            } else {
+                onView(withText(question)).perform(longClick());
+            }
+
+            assertText(org.odk.collect.strings.R.string.clear_answer);
+        });
 
         return this;
     }
 
     public FormEntryPage removeResponse() {
         onView(withText(org.odk.collect.strings.R.string.clear_answer)).perform(click());
-        return clickOnButtonInDialog(org.odk.collect.strings.R.string.discard_answer, this);
+        return clickOnTextInDialog(org.odk.collect.strings.R.string.discard_answer, this);
     }
 
     public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
@@ -317,43 +323,24 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     private void flingLeft() {
-        tryAgainOnFail(() -> {
-            FlingRegister.attemptingFling();
+        tryFlakyAction(() -> {
             onView(withId(R.id.questionholder)).perform(swipeLeft());
-
-            WaitFor.waitFor(() -> {
-                if (FlingRegister.isFlingDetected()) {
-                    return true;
-                } else {
-                    throw new RuntimeException("Fling never detected!");
-                }
-            });
-        }, 5);
+        });
     }
 
     private void flingRight() {
-        tryAgainOnFail(() -> {
-            FlingRegister.attemptingFling();
+        tryFlakyAction(() -> {
             onView(withId(R.id.questionholder)).perform(swipeRight());
-
-            WaitFor.waitFor(() -> {
-                if (FlingRegister.isFlingDetected()) {
-                    return true;
-                } else {
-                    throw new RuntimeException("Fling never detected!");
-                }
-            });
-        }, 5);
+        });
     }
 
-    public FormEntryPage openSelectMinimalDialog() {
-        openSelectMinimalDialog(0);
-        return this;
+    public SelectMinimalDialogPage openSelectMinimalDialog() {
+        return openSelectMinimalDialog(0);
     }
 
-    public FormEntryPage openSelectMinimalDialog(int index) {
+    public SelectMinimalDialogPage openSelectMinimalDialog(int index) {
         onView(withIndex(withClassName(Matchers.endsWith("TextInputEditText")), index)).perform(click());
-        return this;
+        return new SelectMinimalDialogPage(formName).assertOnPage();
     }
 
     public FormEntryPage assertSelectMinimalDialogAnswer(String answer) {

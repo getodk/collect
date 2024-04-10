@@ -31,6 +31,6 @@ public class OkDialog extends Page<OkDialog> {
     }
 
     public <D extends Page<D>> D clickOK(D destination) {
-        return clickOnButtonInDialog(org.odk.collect.strings.R.string.ok, destination);
+        return clickOnTextInDialog(org.odk.collect.strings.R.string.ok, destination);
     }
 }

@@ -74,6 +74,7 @@ class AutoSendTest {
             .assertNotification("ODK Collect", "Forms upload failed", "1 of 1 uploads failed!")
             .clickAction(
                 "ODK Collect",
+                "Forms upload failed",
                 "Show details",
                 ErrorPage()
             )
@@ -127,6 +128,7 @@ class AutoSendTest {
             .assertNotification("ODK Collect", "Forms upload failed", "1 of 1 uploads failed!")
             .clickAction(
                 "ODK Collect",
+                "Forms upload failed",
                 "Show details",
                 ErrorPage()
             )

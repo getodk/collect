@@ -26,6 +26,7 @@ import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.instancemanagement.send.InstanceUploaderListActivity
 import org.odk.collect.android.projects.ProjectIconView
 import org.odk.collect.android.projects.ProjectSettingsDialog
+import org.odk.collect.android.utilities.ActionRegister
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -144,6 +145,8 @@ class MainMenuFragment(
 
     private fun initButtons(binding: MainMenuBinding) {
         binding.enterData.setOnClickListener {
+            ActionRegister.actionDetected()
+
             formEntryFlowLauncher.launch(
                 Intent(requireActivity(), BlankFormListActivity::class.java)
             )
