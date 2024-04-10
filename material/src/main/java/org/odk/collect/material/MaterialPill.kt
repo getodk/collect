@@ -65,7 +65,7 @@ open class MaterialPill(context: Context, attrs: AttributeSet?) :
 
     private fun getDefaultBackgroundColor(context: Context) = getThemeAttributeValue(
         context,
-        com.google.android.material.R.attr.colorPrimary
+        com.google.android.material.R.attr.colorPrimaryContainer
     )
 
     private fun createMaterialShapeDrawable(@ColorInt color: Int): MaterialShapeDrawable {

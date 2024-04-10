@@ -25,9 +25,9 @@ class ErrorsPill(context: Context, attrs: AttributeSet?) : MaterialPill(context,
             visibility = View.VISIBLE
             setIcon(org.odk.collect.icons.R.drawable.ic_baseline_check_24)
             setText(org.odk.collect.strings.R.string.draft_no_errors)
-            setPillBackgroundColor(MaterialColors.getColor(this, com.google.android.material.R.attr.colorSurfaceContainerHighest))
-            setTextColor(ContextUtils.getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))
-            setIconTint(ContextUtils.getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))
+            setPillBackgroundColor(MaterialColors.getColor(this, com.google.android.material.R.attr.colorPrimaryContainer))
+            setTextColor(ContextUtils.getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnPrimaryContainer))
+            setIconTint(ContextUtils.getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnPrimaryContainer))
         }
     }
 }
