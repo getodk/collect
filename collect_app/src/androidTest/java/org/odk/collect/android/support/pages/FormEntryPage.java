@@ -302,12 +302,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage activateTextQuestion(int index) {
-        onView(withIndex(withClassName(endsWith("EditText")), index)).perform(scrollTo());
-        onView(withIndex(withClassName(endsWith("EditText")), index)).perform(click());
-        return this;
-    }
-
     public FormEntryPage assertQuestion(String text) {
         return assertQuestion(text, false);
     }

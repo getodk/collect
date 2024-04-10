@@ -557,6 +557,17 @@ abstract class Page<T : Page<T>> {
         return destination
     }
 
+    fun selectTextField(label: String, index: Int = 0): T {
+        closeSoftKeyboard()
+
+        onView(withIndex(withClassName(endsWith("EditText")), index)).perform(scrollTo())
+
+        assertText(label)
+        onView(withIndex(withClassName(endsWith("EditText")), index)).perform(click())
+
+        return this as T
+    }
+
     companion object {
         private fun rotateToLandscape(): ViewAction {
             return RotateAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
