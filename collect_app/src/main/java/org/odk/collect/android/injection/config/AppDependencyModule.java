@@ -449,7 +449,7 @@ public class AppDependencyModule {
             return null;
         };
 
-        return new InstancesDataService(getState(application), savepointsRepositoryProvider, entitiesRepositoryProvider, instanceSubmitScheduler, projectsDataService, projectsDependencyProviderFactory, notifier, propertyManager, httpInterface, onUpdate);
+        return new InstancesDataService(getState(application), instanceSubmitScheduler, projectsDataService, projectsDependencyProviderFactory, notifier, propertyManager, httpInterface, onUpdate);
     }
 
     @Provides
@@ -614,8 +614,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ProjectDependencyProviderFactory providesProjectDependencyProviderFactory(SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider, StoragePathProvider storagePathProvider, ChangeLockProvider changeLockProvider, FormSourceProvider formSourceProvider) {
-        return new ProjectDependencyProviderFactory(settingsProvider, formsRepositoryProvider, instancesRepositoryProvider, storagePathProvider, changeLockProvider, formSourceProvider);
+    public ProjectDependencyProviderFactory providesProjectDependencyProviderFactory(SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider, StoragePathProvider storagePathProvider, ChangeLockProvider changeLockProvider, FormSourceProvider formSourceProvider, SavepointsRepositoryProvider savepointsRepositoryProvider, EntitiesRepositoryProvider entitiesRepositoryProvider) {
+        return new ProjectDependencyProviderFactory(settingsProvider, formsRepositoryProvider, instancesRepositoryProvider, storagePathProvider, changeLockProvider, formSourceProvider, savepointsRepositoryProvider, entitiesRepositoryProvider);
     }
 
     @Provides

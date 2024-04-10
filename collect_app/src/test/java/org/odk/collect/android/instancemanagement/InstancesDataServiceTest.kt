@@ -55,6 +55,8 @@ class InstancesDataServiceTest {
         instancesRepositoryProvider,
         mock(),
         changeLockProvider,
+        mock(),
+        mock(),
         mock()
     )
 
@@ -64,8 +66,6 @@ class InstancesDataServiceTest {
 
     private val instancesDataService =
         InstancesDataService(
-            mock(),
-            mock(),
             mock(),
             mock(),
             projectDataService,

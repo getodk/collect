@@ -6,7 +6,6 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
-import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory
 import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetcher
@@ -16,7 +15,6 @@ import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
 import org.odk.collect.android.utilities.FormsUploadResultInterpreter
-import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.metadata.PropertyManager
@@ -24,8 +22,6 @@ import java.io.File
 
 class InstancesDataService(
     private val appState: AppState,
-    private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
-    private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
     private val projectsDataService: ProjectsDataService,
     private val projectDependencyProviderFactory: ProjectDependencyProviderFactory,
@@ -72,8 +68,8 @@ class InstancesDataService(
         val instancesRepository = projectDependencyProvider.instancesRepository
         val formsRepository = projectDependencyProvider.formsRepository
         val storagePathProvider = projectDependencyProvider.storagePathProvider
-        val savepointsRepository = savepointsRepositoryProvider.get()
-        val entitiesRepository = entitiesRepositoryProvider.get()
+        val savepointsRepository = projectDependencyProvider.savepointsRepository
+        val entitiesRepository = projectDependencyProvider.entitiesRepository
 
         val projectRootDir = File(storagePathProvider.getProjectRootDirPath())
 
