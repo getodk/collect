@@ -68,7 +68,6 @@ class InstancesDataServiceTest {
         InstancesDataService(
             mock(),
             mock(),
-            projectDataService,
             projectsDependencyProviderFactory,
             mock(),
             mock(),
@@ -79,13 +78,13 @@ class InstancesDataServiceTest {
     @Test
     fun `instances should not be deleted if the instances database is locked`() {
         (projectDependencyProvider.instancesLock as BooleanChangeLock).lock()
-        val result = instancesDataService.deleteInstances(longArrayOf(1))
+        val result = instancesDataService.deleteInstances(project.uuid, longArrayOf(1))
         assertThat(result, equalTo(false))
     }
 
     @Test
     fun `instances should be deleted if the instances database is not locked`() {
-        val result = instancesDataService.deleteInstances(longArrayOf(1))
+        val result = instancesDataService.deleteInstances(project.uuid, longArrayOf(1))
         assertThat(result, equalTo(true))
     }
 

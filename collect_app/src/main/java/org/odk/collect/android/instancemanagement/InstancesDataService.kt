@@ -12,7 +12,6 @@ import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetch
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
-import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
 import org.odk.collect.android.utilities.FormsUploadResultInterpreter
 import org.odk.collect.androidshared.data.AppState
@@ -23,7 +22,6 @@ import java.io.File
 class InstancesDataService(
     private val appState: AppState,
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
-    private val projectsDataService: ProjectsDataService,
     private val projectDependencyProviderFactory: ProjectDependencyProviderFactory,
     private val notifier: Notifier,
     private val propertyManager: PropertyManager,
@@ -35,9 +33,8 @@ class InstancesDataService(
     val sentCount: LiveData<Int> = appState.getLive(SENT_COUNT_KEY, 0)
     val instances: Flow<List<Instance>> = appState.getFlow("instances", emptyList())
 
-    fun update() {
-        val projectDependencyProvider =
-            projectDependencyProviderFactory.create(projectsDataService.getCurrentProject().uuid)
+    fun update(projectId: String) {
+        val projectDependencyProvider = projectDependencyProviderFactory.create(projectId)
         val instancesRepository = projectDependencyProvider.instancesRepository
 
         val sendableInstances = instancesRepository.getCountByStatus(
@@ -62,9 +59,8 @@ class InstancesDataService(
         onUpdate()
     }
 
-    fun finalizeAllDrafts(): FinalizeAllResult {
-        val projectDependencyProvider =
-            projectDependencyProviderFactory.create(projectsDataService.getCurrentProject().uuid)
+    fun finalizeAllDrafts(projectId: String): FinalizeAllResult {
+        val projectDependencyProvider = projectDependencyProviderFactory.create(projectId)
         val instancesRepository = projectDependencyProvider.instancesRepository
         val formsRepository = projectDependencyProvider.formsRepository
         val storagePathProvider = projectDependencyProvider.storagePathProvider
@@ -134,15 +130,14 @@ class InstancesDataService(
             }
         }
 
-        update()
-        instanceSubmitScheduler.scheduleSubmit(projectsDataService.getCurrentProject().uuid)
+        update(projectId)
+        instanceSubmitScheduler.scheduleSubmit(projectId)
 
         return result.copy(successCount = instances.size - result.failureCount)
     }
 
-    fun deleteInstances(instanceIds: LongArray): Boolean {
-        val projectDependencyProvider =
-            projectDependencyProviderFactory.create(projectsDataService.getCurrentProject().uuid)
+    fun deleteInstances(projectId: String, instanceIds: LongArray): Boolean {
+        val projectDependencyProvider = projectDependencyProviderFactory.create(projectId)
         val instancesRepository = projectDependencyProvider.instancesRepository
         val formsRepository = projectDependencyProvider.formsRepository
 
@@ -157,7 +152,7 @@ class InstancesDataService(
                     )
                 }
 
-                update()
+                update(projectId)
                 true
             } else {
                 false
@@ -165,15 +160,15 @@ class InstancesDataService(
         }
     }
 
-    fun deleteAll(): Boolean {
+    fun deleteAll(projectId: String): Boolean {
         val projectDependencyProvider =
-            projectDependencyProviderFactory.create(projectsDataService.getCurrentProject().uuid)
+            projectDependencyProviderFactory.create(projectId)
         val instancesRepository = projectDependencyProvider.instancesRepository
 
         return projectDependencyProvider.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
                 instancesRepository.deleteAll()
-                update()
+                update(projectId)
                 true
             } else {
                 false
@@ -204,7 +199,7 @@ class InstancesDataService(
 
                 val results = instanceSubmitter.submitInstances(toUpload)
                 notifier.onSubmission(results, projectDependencyProvider.projectId)
-                update()
+                update(projectId)
 
                 FormsUploadResultInterpreter.allFormsUploadedSuccessfully(results)
             } else {

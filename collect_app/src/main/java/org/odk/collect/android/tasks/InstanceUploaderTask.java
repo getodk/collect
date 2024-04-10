@@ -19,6 +19,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.FormsRepository;
@@ -63,6 +64,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
     @Inject
     InstancesDataService instancesDataService;
+
+    @Inject
+    ProjectsDataService projectsDataService;
 
     // Custom submission URL, username and password that can be sent via intent extras by external
     // applications
@@ -137,7 +141,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         InstanceDeleter instanceDeleter = new InstanceDeleter(instancesRepository, formsRepository);
         instanceDeleter.delete(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
 
-        instancesDataService.update();
+        instancesDataService.update(projectsDataService.getCurrentProject().getUuid());
         return outcome;
     }
 

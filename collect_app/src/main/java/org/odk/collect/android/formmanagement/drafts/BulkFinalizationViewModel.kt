@@ -12,9 +12,10 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 
 class BulkFinalizationViewModel(
+    private val projectId: String,
     private val scheduler: Scheduler,
     private val instancesDataService: InstancesDataService,
-    private val settingsProvider: SettingsProvider
+    settingsProvider: SettingsProvider
 ) {
     private val _finalizedForms = MutableLiveData<Consumable<FinalizeAllResult>>()
     val finalizedForms: LiveData<Consumable<FinalizeAllResult>> = _finalizedForms
@@ -31,7 +32,7 @@ class BulkFinalizationViewModel(
 
         scheduler.immediate(
             background = {
-                instancesDataService.finalizeAllDrafts()
+                instancesDataService.finalizeAllDrafts(projectId)
             },
             foreground = {
                 _isFinalizing.value = false

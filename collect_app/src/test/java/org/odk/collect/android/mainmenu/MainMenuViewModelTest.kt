@@ -5,11 +5,12 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.R
 import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.version.VersionInformation
@@ -34,6 +35,10 @@ class MainMenuViewModelTest {
     }
     private val autoSendSettingsProvider = mock<AutoSendSettingsProvider>()
     private val settingsProvider = InMemSettingsProvider()
+
+    private val projectsDataService = mock<ProjectsDataService> {
+        on { getCurrentProject() } doReturn Project.DEMO_PROJECT
+    }
 
     @Test
     fun `version when beta release returns semantic version with prefix and beta version`() {
@@ -313,6 +318,6 @@ class MainMenuViewModelTest {
     }
 
     private fun createViewModelWithVersion(version: String): MainMenuViewModel {
-        return MainMenuViewModel(mock(), VersionInformation { version }, settingsProvider, mock(), mock(), formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider)
+        return MainMenuViewModel(mock(), VersionInformation { version }, settingsProvider, mock(), mock(), formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider, projectsDataService)
     }
 }

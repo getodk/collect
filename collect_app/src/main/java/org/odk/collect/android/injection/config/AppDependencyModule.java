@@ -449,7 +449,7 @@ public class AppDependencyModule {
             return null;
         };
 
-        return new InstancesDataService(getState(application), instanceSubmitScheduler, projectsDataService, projectsDependencyProviderFactory, notifier, propertyManager, httpInterface, onUpdate);
+        return new InstancesDataService(getState(application), instanceSubmitScheduler, projectsDependencyProviderFactory, notifier, propertyManager, httpInterface, onUpdate);
     }
 
     @Provides
@@ -494,7 +494,7 @@ public class AppDependencyModule {
                                                                      AnalyticsInitializer analyticsInitializer, PermissionsChecker permissionChecker,
                                                                      FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider,
                                                                      AutoSendSettingsProvider autoSendSettingsProvider) {
-        return new MainMenuViewModelFactory(versionInformation, application, settingsProvider, instancesDataService, scheduler, projectsDataService, analyticsInitializer, permissionChecker, formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider);
+        return new MainMenuViewModelFactory(versionInformation, application, settingsProvider, instancesDataService, scheduler, projectsDataService, permissionChecker, formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider);
     }
 
     @Provides
@@ -565,8 +565,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ProjectResetter providesProjectResetter(StoragePathProvider storagePathProvider, PropertyManager propertyManager, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, SavepointsRepositoryProvider savepointsRepositoryProvider, InstancesDataService instancesDataService) {
-        return new ProjectResetter(storagePathProvider, propertyManager, settingsProvider, formsRepositoryProvider, savepointsRepositoryProvider, instancesDataService);
+    public ProjectResetter providesProjectResetter(StoragePathProvider storagePathProvider, PropertyManager propertyManager, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, SavepointsRepositoryProvider savepointsRepositoryProvider, InstancesDataService instancesDataService, ProjectsDataService projectsDataService) {
+        return new ProjectResetter(storagePathProvider, propertyManager, settingsProvider, formsRepositoryProvider, savepointsRepositoryProvider, instancesDataService, projectsDataService.getCurrentProject().getUuid());
     }
 
     @Provides

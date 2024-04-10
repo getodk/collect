@@ -12,6 +12,7 @@ import org.odk.collect.android.instancemanagement.canBeEdited
 import org.odk.collect.android.instancemanagement.isDraft
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -29,7 +30,8 @@ class MainMenuViewModel(
     private val scheduler: Scheduler,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
-    private val autoSendSettingsProvider: AutoSendSettingsProvider
+    private val autoSendSettingsProvider: AutoSendSettingsProvider,
+    private val projectsDataService: ProjectsDataService
 ) : ViewModel() {
 
     val version: String
@@ -92,7 +94,7 @@ class MainMenuViewModel(
     fun refreshInstances() {
         scheduler.immediate<Any?>({
             InstanceDiskSynchronizer(settingsProvider).doInBackground()
-            instancesDataService.update()
+            instancesDataService.update(projectsDataService.getCurrentProject().uuid)
             null
         }) { }
     }
