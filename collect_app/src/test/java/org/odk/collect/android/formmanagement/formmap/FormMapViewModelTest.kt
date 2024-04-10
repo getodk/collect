@@ -106,12 +106,12 @@ class FormMapViewModelTest {
         val viewModel = createAndLoadViewModel(form)
         assertThat(viewModel.getMappableItems().value!!.size, equalTo(1))
 
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.MappableSelectPoint(
             instanceWithPoint.dbId,
-            listOf(MapPoint(2.0, 1.0)),
-            R.drawable.ic_room_form_state_incomplete_24dp,
-            R.drawable.ic_room_form_state_incomplete_48dp,
             instanceWithPoint.displayName,
+            point = MapPoint(2.0, 1.0),
+            smallIcon = R.drawable.ic_room_form_state_incomplete_24dp,
+            largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
             action = IconifiedText(
                 R.drawable.ic_edit,
                 application.getString(org.odk.collect.strings.R.string.edit_data)
@@ -145,12 +145,12 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            listOf(MapPoint(2.0, 1.0)),
-            R.drawable.ic_room_form_state_incomplete_24dp,
-            R.drawable.ic_room_form_state_incomplete_48dp,
             instance.displayName,
+            point = MapPoint(2.0, 1.0),
+            smallIcon = R.drawable.ic_room_form_state_incomplete_24dp,
+            largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
             action = IconifiedText(
                 R.drawable.ic_edit,
                 application.getString(org.odk.collect.strings.R.string.edit_data)
@@ -184,12 +184,12 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            listOf(MapPoint(2.0, 1.0)),
-            R.drawable.ic_room_form_state_incomplete_24dp,
-            R.drawable.ic_room_form_state_incomplete_48dp,
             instance.displayName,
+            point = MapPoint(2.0, 1.0),
+            smallIcon = R.drawable.ic_room_form_state_incomplete_24dp,
+            largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
             action = IconifiedText(
                 R.drawable.ic_edit,
                 application.getString(org.odk.collect.strings.R.string.edit_data)
@@ -223,12 +223,12 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            listOf(MapPoint(2.0, 1.0)),
-            R.drawable.ic_room_form_state_complete_24dp,
-            R.drawable.ic_room_form_state_complete_48dp,
             instance.displayName,
+            point = MapPoint(2.0, 1.0),
+            smallIcon = R.drawable.ic_room_form_state_complete_24dp,
+            largeIcon = R.drawable.ic_room_form_state_complete_48dp,
             action = IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(org.odk.collect.strings.R.string.view_data)
@@ -263,12 +263,12 @@ class FormMapViewModelTest {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            listOf(MapPoint(2.0, 1.0)),
-            R.drawable.ic_room_form_state_complete_24dp,
-            R.drawable.ic_room_form_state_complete_48dp,
             instance.displayName,
+            point = MapPoint(2.0, 1.0),
+            smallIcon = R.drawable.ic_room_form_state_complete_24dp,
+            largeIcon = R.drawable.ic_room_form_state_complete_48dp,
             action = IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(org.odk.collect.strings.R.string.view_data)
@@ -301,12 +301,12 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            listOf(MapPoint(2.0, 1.0)),
-            R.drawable.ic_room_form_state_incomplete_24dp,
-            R.drawable.ic_room_form_state_incomplete_48dp,
             instance.displayName,
+            point = MapPoint(2.0, 1.0),
+            smallIcon = R.drawable.ic_room_form_state_incomplete_24dp,
+            largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
             info = formatDate(
                 org.odk.collect.strings.R.string.saved_on_date_at_time,
                 instance.lastStatusChangeDate
@@ -339,12 +339,12 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            listOf(MapPoint(2.0, 1.0)),
-            R.drawable.ic_room_form_state_submitted_24dp,
-            R.drawable.ic_room_form_state_submitted_48dp,
             instance.displayName,
+            point = MapPoint(2.0, 1.0),
+            smallIcon = R.drawable.ic_room_form_state_submitted_24dp,
+            largeIcon = R.drawable.ic_room_form_state_submitted_48dp,
             action = IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(org.odk.collect.strings.R.string.view_data)
@@ -377,12 +377,12 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            listOf(MapPoint(2.0, 1.0)),
-            R.drawable.ic_room_form_state_submission_failed_24dp,
-            R.drawable.ic_room_form_state_submission_failed_48dp,
             instance.displayName,
+            point = MapPoint(2.0, 1.0),
+            smallIcon = R.drawable.ic_room_form_state_submission_failed_24dp,
+            largeIcon = R.drawable.ic_room_form_state_submission_failed_48dp,
             action = IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(org.odk.collect.strings.R.string.view_data)

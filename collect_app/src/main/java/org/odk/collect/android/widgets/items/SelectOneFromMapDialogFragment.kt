@@ -153,26 +153,52 @@ internal class SelectChoicesMapData(
                                 IconifiedText(null, "${it.first}: ${it.second}")
                             }
 
-                            val markerColor =
-                                selectChoice.additionalChildren.firstOrNull { it.first == "marker-color" }?.second
-                            val markerSymbol =
-                                selectChoice.additionalChildren.firstOrNull { it.first == "marker-symbol" }?.second
+                            if (points.size == 1) {
+                                val markerColor =
+                                    selectChoice.additionalChildren.firstOrNull { it.first == "marker-color" }?.second
+                                val markerSymbol =
+                                    selectChoice.additionalChildren.firstOrNull { it.first == "marker-symbol" }?.second
 
-                            list + MappableSelectItem(
-                                index.toLong(),
-                                points,
-                                if (markerSymbol == null) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small else org.odk.collect.icons.R.drawable.ic_map_marker_small,
-                                if (markerSymbol == null) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big else org.odk.collect.icons.R.drawable.ic_map_marker_big,
-                                prompt.getSelectChoiceText(selectChoice),
-                                properties,
-                                selectChoice.index == selectedIndex,
-                                markerColor,
-                                markerSymbol,
-                                action = IconifiedText(
-                                    org.odk.collect.icons.R.drawable.ic_save,
-                                    resources.getString(org.odk.collect.strings.R.string.select_item)
+                                list + MappableSelectItem.MappableSelectPoint(
+                                    index.toLong(),
+                                    prompt.getSelectChoiceText(selectChoice),
+                                    properties,
+                                    selectChoice.index == selectedIndex,
+                                    point = points[0],
+                                    smallIcon = if (markerSymbol == null) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small else org.odk.collect.icons.R.drawable.ic_map_marker_small,
+                                    largeIcon = if (markerSymbol == null) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big else org.odk.collect.icons.R.drawable.ic_map_marker_big,
+                                    color = markerColor,
+                                    symbol = markerSymbol,
+                                    action = IconifiedText(
+                                        org.odk.collect.icons.R.drawable.ic_save,
+                                        resources.getString(org.odk.collect.strings.R.string.select_item)
+                                    )
                                 )
-                            )
+                            } else if (points.first() != points.last()) {
+                                list + MappableSelectItem.MappableSelectLine(
+                                    index.toLong(),
+                                    prompt.getSelectChoiceText(selectChoice),
+                                    properties,
+                                    selectChoice.index == selectedIndex,
+                                    points = points,
+                                    action = IconifiedText(
+                                        org.odk.collect.icons.R.drawable.ic_save,
+                                        resources.getString(org.odk.collect.strings.R.string.select_item)
+                                    )
+                                )
+                            } else {
+                                list + MappableSelectItem.MappableSelectPolygon(
+                                    index.toLong(),
+                                    prompt.getSelectChoiceText(selectChoice),
+                                    properties,
+                                    selectChoice.index == selectedIndex,
+                                    points = points,
+                                    action = IconifiedText(
+                                        org.odk.collect.icons.R.drawable.ic_save,
+                                        resources.getString(org.odk.collect.strings.R.string.select_item)
+                                    )
+                                )
+                            }
                         } else {
                             list
                         }

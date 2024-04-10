@@ -176,37 +176,33 @@ class SelectOneFromMapDialogFragmentTest {
                 data.getMappableItems().value,
                 equalTo(
                     listOf(
-                        MappableSelectItem(
+                        MappableSelectItem.MappableSelectPoint(
                             0,
-                            listOf(
-                                MapPoint(
-                                    firstFeatureGeometry[0].toDouble(),
-                                    firstFeatureGeometry[1].toDouble(),
-                                    firstFeatureGeometry[2].toDouble(),
-                                    firstFeatureGeometry[3].toDouble()
-                                )
-                            ),
-                            org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small,
-                            org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big,
                             "A",
+                            point = MapPoint(
+                                firstFeatureGeometry[0].toDouble(),
+                                firstFeatureGeometry[1].toDouble(),
+                                firstFeatureGeometry[2].toDouble(),
+                                firstFeatureGeometry[3].toDouble()
+                            ),
+                            smallIcon = org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small,
+                            largeIcon = org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big,
                             action = IconifiedText(
                                 org.odk.collect.icons.R.drawable.ic_save,
                                 application.getString(org.odk.collect.strings.R.string.select_item)
                             )
                         ),
-                        MappableSelectItem(
+                        MappableSelectItem.MappableSelectPoint(
                             1,
-                            listOf(
-                                MapPoint(
-                                    secondFeatureGeometry[0].toDouble(),
-                                    secondFeatureGeometry[1].toDouble(),
-                                    secondFeatureGeometry[2].toDouble(),
-                                    secondFeatureGeometry[3].toDouble()
-                                )
-                            ),
-                            org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small,
-                            org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big,
                             "B",
+                            point = MapPoint(
+                                secondFeatureGeometry[0].toDouble(),
+                                secondFeatureGeometry[1].toDouble(),
+                                secondFeatureGeometry[2].toDouble(),
+                                secondFeatureGeometry[3].toDouble()
+                            ),
+                            smallIcon = org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small,
+                            largeIcon = org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big,
                             action = IconifiedText(
                                 org.odk.collect.icons.R.drawable.ic_save,
                                 application.getString(org.odk.collect.strings.R.string.select_item)

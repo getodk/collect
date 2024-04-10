@@ -16,6 +16,7 @@ import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.geo.selection.IconifiedText
+import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.testshared.FakeScheduler
 
@@ -50,7 +51,7 @@ class SelectChoicesMapDataTest {
         val mappableItems = data.getMappableItems().getOrAwaitValue()!!
         assertThat(mappableItems.size, equalTo(1))
 
-        val points = mappableItems[0].points
+        val points = (mappableItems[0] as MappableSelectItem.MappableSelectLine).points
         assertThat(
             points,
             equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0)))
@@ -80,7 +81,7 @@ class SelectChoicesMapDataTest {
         val mappableItems = data.getMappableItems().getOrAwaitValue()!!
         assertThat(mappableItems.size, equalTo(1))
 
-        val points = mappableItems[0].points
+        val points = (mappableItems[0] as MappableSelectItem.MappableSelectPolygon).points
         assertThat(
             points,
             equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0), MapPoint(12.0, -1.0, 3.0, 4.0)))
@@ -233,7 +234,7 @@ class SelectChoicesMapDataTest {
             .build()
 
         val data = loadDataForPrompt(prompt)
-        val item = data.getMappableItems().getOrAwaitValue()!![0]
+        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableSelectItem.MappableSelectPoint
         assertThat(item.symbol, equalTo("A"))
         assertThat(item.color, equalTo("#ffffff"))
     }
@@ -259,7 +260,7 @@ class SelectChoicesMapDataTest {
             .build()
 
         val data = loadDataForPrompt(prompt)
-        val item = data.getMappableItems().getOrAwaitValue()!![0]
+        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableSelectItem.MappableSelectPoint
         assertThat(item.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_small))
         assertThat(item.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_big))
     }
