@@ -1,7 +1,7 @@
 package org.odk.collect.android.support.rules
 
 import android.os.Build
-import org.junit.Assert
+import org.junit.Assert.assertTrue
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -14,7 +14,7 @@ class NotificationDrawerRule : TestRule {
         return object : Statement() {
             @Throws(Throwable::class)
             override fun evaluate() {
-                Assert.assertTrue(
+                assertTrue(
                     "${this.javaClass.simpleName} does not support this API level!",
                     SUPPORTED_SDKS.contains(Build.VERSION.SDK_INT)
                 )
