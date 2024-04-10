@@ -10,6 +10,7 @@ import org.junit.Assert.assertTrue
 import org.junit.rules.ExternalResource
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.DummyActivityLauncher
+import org.odk.collect.shared.TimeInMs
 
 class RecentAppsRule : ExternalResource() {
 
@@ -29,7 +30,7 @@ class RecentAppsRule : ExternalResource() {
 
         if (Build.VERSION.SDK_INT == 30) {
             device.pressRecentApps()
-            device.wait(Until.hasObject(By.descContains("Collect")), 1000)
+            device.wait(Until.hasObject(By.descContains("Collect")), TimeInMs.ONE_SECOND)
             device.findObject(UiSelector().descriptionContains("Collect"))
                 .swipeUp(10).also {
                     CollectHelpers.simulateProcessRestart() // the process is not restarted automatically (probably to keep the test running) so we have simulate it
@@ -37,7 +38,7 @@ class RecentAppsRule : ExternalResource() {
         } else if (Build.VERSION.SDK_INT == 34) {
             device.pressHome() // Pressing recent apps does not actually "leave" the app on API 31+ (cause onPause etc). You need to go home or switch apps.
             device.pressRecentApps()
-            device.wait(Until.hasObject(By.descContains("Screenshot")), 1000)
+            device.wait(Until.hasObject(By.descContains("Screenshot")), TimeInMs.ONE_SECOND)
             while (!device.wait(Until.hasObject(By.text("Clear all")), 0)) {
                 device.swipe(
                     device.displayWidth / 2,
@@ -64,7 +65,7 @@ class RecentAppsRule : ExternalResource() {
             device.pressRecentApps()
             val foundToolTip = device.wait(
                 Until.hasObject(By.textStartsWith("Select text and images to copy")),
-                1000
+                TimeInMs.ONE_SECOND
             )
             if (foundToolTip) {
                 device.pressBack() // the first time we open the list of recent apps, a tooltip might be displayed and we need to close it
