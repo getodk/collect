@@ -22,16 +22,15 @@ and update this document as the code evolves.
 * A lot of code lives in between one "god" Activity (`FormFillingActivity`) and a process singleton (`FormController`)
 * Core form entry flow uses custom side-to-side swipe view (in `FormFillingActivity` made up of `ODKView`)
 * Questions are rendered using a view "framework" of implementations inheriting from `QuestionWidget` (which is documented at in [WIDGETS.MD](WIDGETS.md))
-* Async/reactivity handled with a mixture of callbacks and LiveData
 * App mostly stores data in flat files indexed in SQLite
 * Access to data in SQLite happens through repository objects which deal in data/domain objects (`FormsRepository` and `Form` for example)
 * Settings UIs for the app use Android's Preferences abstraction
-* App uses [Material 2 Theming](https://material.io/develop/android/theming/theming-overview) so [Material components](https://material.io/components?platform=android) (using [Material 3 components](https://m3.material.io/) styles) are preferred over custom or platform ones.
+* App uses [Material 3 Theming](https://m3.material.io/foundations/customization) so [Material components](https://material.io/components?platform=android) (using [Material 3 components](https://m3.material.io/) styles) are preferred over custom or platform ones.
 * Dagger2 is used to inject "black box" objects such as Activity and just uses a very basic setup
 * Http is handled using OkHttp3 and https client abstractions are generally wrapped in Android's AsyncTask
 * Geo activities use three engines (Mapbox, osmdroid, Google Maps) depending on the selected basemap even though Mapbox could do everything osmdroid does
 * Code goes through static analysis using CheckStyle, PMD, ktlint and Android Lint
-* Forms get into the app from three different sources (Open Rosa servers, Google Drive and disk) but the logic for this is disparate and they don't sit behind a common interface
+* Forms get into the app from two different sources (Open Rosa servers and disk) but the logic for this is disparate and they don't sit behind a common interface
 * Instances are linked to the forms they are instances of through formid and version. However, the same formid and version combination could represent multiple forms in storage
 * `SharedPreferences` is wrapped in app's own `Settings` abstraction
 
@@ -45,3 +44,4 @@ and update this document as the code evolves.
 * Replacing async work such as `AsyncTask` with `LiveData` + `Scheduler` abstraction
 * Gradually removing use of `CursorLoader` (all remaining uses are in `CursorLoaderFactory`)
 * Using AndroidX Test in new local tests and migrating other local tests as we touch them (from classic Robolectric)
+* Moving towards a ["data services"](data_services_architecture.pdf) oriented architecture that has emerged over time
