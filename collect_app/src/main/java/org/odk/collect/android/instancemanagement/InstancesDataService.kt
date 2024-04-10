@@ -197,11 +197,15 @@ class InstancesDataService(
                     projectDependencyProvider.formsRepository
                 )
 
-                val results = instanceSubmitter.submitInstances(toUpload)
-                notifier.onSubmission(results, projectDependencyProvider.projectId)
-                update(projectId)
+                if (toUpload.isNotEmpty()) {
+                    val results = instanceSubmitter.submitInstances(toUpload)
+                    notifier.onSubmission(results, projectDependencyProvider.projectId)
+                    update(projectId)
 
-                FormsUploadResultInterpreter.allFormsUploadedSuccessfully(results)
+                    FormsUploadResultInterpreter.allFormsUploadedSuccessfully(results)
+                } else {
+                    true
+                }
             } else {
                 false
             }

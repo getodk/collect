@@ -8,11 +8,12 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
+import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.openrosa.HttpGetResult
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
-import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -38,10 +39,6 @@ class InstancesDataServiceTest {
         whenever(get(project.uuid)).thenReturn(InMemInstancesRepository())
     }
 
-    private val projectDataService = mock<ProjectsDataService>().apply {
-        whenever(getCurrentProject()).thenReturn(project)
-    }
-
     private val changeLockProvider = ChangeLockProvider { BooleanChangeLock() }
 
     val settingsProvider = InMemSettingsProvider().also {
@@ -61,15 +58,15 @@ class InstancesDataServiceTest {
     )
 
     private val projectDependencyProvider = projectsDependencyProviderFactory.create(project.uuid)
-
     private val httpInterface = mock<OpenRosaHttpInterface>()
+    private val notifier = mock<Notifier>()
 
     private val instancesDataService =
         InstancesDataService(
             mock(),
             mock(),
             projectsDependencyProviderFactory,
-            mock(),
+            notifier,
             mock(),
             httpInterface,
             mock()
@@ -92,6 +89,12 @@ class InstancesDataServiceTest {
     fun `autoSendInstances() returns true when there are no instances to send`() {
         val result = instancesDataService.autoSendInstances(project.uuid)
         assertThat(result, equalTo(true))
+    }
+
+    @Test
+    fun `autoSendInstances() does not notify when there are no instances to send`() {
+        instancesDataService.autoSendInstances(project.uuid)
+        verifyNoInteractions(notifier)
     }
 
     @Test
