@@ -47,6 +47,7 @@ sealed class MappableSelectItem {
         override val action: IconifiedText? = null,
         override val status: Status? = null,
         val points: List<MapPoint>,
+        val strokeColor: String? = null,
         val fillColor: String? = null
     ) : MappableSelectItem()
 }

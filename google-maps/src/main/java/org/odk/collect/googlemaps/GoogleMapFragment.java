@@ -319,7 +319,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override
     public int addPolygon(PolygonDescription polygonDescription) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new StaticPolygonFeature(map, polygonDescription.getPoints(), requireContext().getResources().getColor(org.odk.collect.icons.R.color.mapLineColor), polygonDescription.getFillColor()));
+        features.put(featureId, new StaticPolygonFeature(map, polygonDescription));
         return featureId;
     }
 
@@ -943,12 +943,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private static class StaticPolygonFeature implements MapFeature {
         private Polygon polygon;
 
-        StaticPolygonFeature(GoogleMap map, Iterable<MapPoint> points, int strokeLineColor, int fillColor) {
+        StaticPolygonFeature(GoogleMap map, PolygonDescription polygonDescription) {
             polygon = map.addPolygon(new PolygonOptions()
-                    .addAll(StreamSupport.stream(points.spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList()))
-                    .strokeColor(strokeLineColor)
+                    .addAll(StreamSupport.stream(polygonDescription.getPoints().spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList()))
+                    .strokeColor(polygonDescription.getStrokeColor())
                     .strokeWidth(POLYLINE_STROKE_WIDTH)
-                    .fillColor(fillColor)
+                    .fillColor(polygonDescription.getFillColor())
                     .clickable(true)
             );
         }

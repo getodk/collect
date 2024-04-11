@@ -346,7 +346,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public int addPolygon(PolygonDescription polygonDescription) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new StaticPolygonFeature(map, polygonDescription.getPoints(), polygonDescription.getFillColor()));
+        features.put(featureId, new StaticPolygonFeature(map, polygonDescription));
         return featureId;
     }
 
@@ -946,15 +946,14 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         private final MapView map;
         private final Polygon polygon = new Polygon();
 
-        StaticPolygonFeature(MapView map, Iterable<MapPoint> points, int fillColor) {
+        StaticPolygonFeature(MapView map, PolygonDescription polygonDescription) {
             this.map = map;
 
             map.getOverlays().add(polygon);
-            int strokeColor = map.getContext().getResources().getColor(org.odk.collect.icons.R.color.mapLineColor);
-            polygon.getOutlinePaint().setColor(strokeColor);
+            polygon.getOutlinePaint().setColor(polygonDescription.getStrokeColor());
             polygon.setStrokeWidth(POLYLINE_STROKE_WIDTH);
-            polygon.getFillPaint().setColor(fillColor);
-            polygon.setPoints(StreamSupport.stream(points.spliterator(), false).map(point -> new GeoPoint(point.latitude, point.longitude)).collect(Collectors.toList()));
+            polygon.getFillPaint().setColor(polygonDescription.getFillColor());
+            polygon.setPoints(StreamSupport.stream(polygonDescription.getPoints().spliterator(), false).map(point -> new GeoPoint(point.latitude, point.longitude)).collect(Collectors.toList()));
             polygon.setOnClickListener((polygon, mapView, eventPos) -> {
                 int featureId = findFeature(polygon);
                 if (featureClickListener != null && featureId != -1) {

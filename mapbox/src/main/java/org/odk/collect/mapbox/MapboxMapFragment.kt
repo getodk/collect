@@ -365,12 +365,10 @@ class MapboxMapFragment :
     override fun addPolygon(polygonDescription: PolygonDescription): Int {
         val featureId = nextFeatureId++
         features[featureId] = StaticPolygonFeature(
-            requireContext(),
             mapView.annotations.createPolygonAnnotationManager(),
-            polygonDescription.points,
+            polygonDescription,
             featureClickListener,
-            featureId,
-            polygonDescription.getFillColor()
+            featureId
         )
 
         return featureId

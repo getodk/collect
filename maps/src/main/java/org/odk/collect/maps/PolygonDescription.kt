@@ -5,8 +5,14 @@ import org.odk.collect.androidshared.utils.toColorInt
 
 data class PolygonDescription(
     val points: List<MapPoint>,
+    private val strokeColor: String?,
     private val fillColor: String?
 ) {
+    fun getStrokeColor(): Int {
+        val customColor = strokeColor?.toColorInt()
+        return customColor ?: "#ffff0000".toColorInt()!!
+    }
+
     fun getFillColor(): Int {
         val customColor = fillColor?.toColorInt()?.let {
             ColorUtils.setAlphaComponent(
