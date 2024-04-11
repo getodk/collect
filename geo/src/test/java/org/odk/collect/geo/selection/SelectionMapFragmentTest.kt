@@ -197,7 +197,8 @@ class SelectionMapFragmentTest {
                     MapPoint(40.0, 0.0),
                     MapPoint(41.0, 0.0),
                     MapPoint(40.0, 0.0)
-                )
+                ),
+                fillColor = "#ffffff"
             )
         )
 
@@ -207,7 +208,8 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        assertThat(map.getPolygons(), equalTo(itemsLiveData.value?.map { (it as MappableSelectItem.MappableSelectPolygon).points }))
+        assertThat(map.getPolygons()[0].points, equalTo(itemsLiveData.value?.map { (it as MappableSelectItem.MappableSelectPolygon).points }?.first()))
+        assertThat(map.getPolygons()[0].getFillColor(), equalTo(1157627903))
         onView(withText(application.getString(org.odk.collect.strings.R.string.select_item_count, "Things", 0, 1)))
             .check(matches(isDisplayed()))
     }

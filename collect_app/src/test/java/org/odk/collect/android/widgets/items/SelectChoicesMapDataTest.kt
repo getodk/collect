@@ -239,6 +239,35 @@ class SelectChoicesMapDataTest {
         assertThat(item.color, equalTo("#ffffff"))
     }
 
+    /**
+     * Attributes names come from properties defined at
+     * https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0.
+     */
+    @Test
+    fun `polygon fill color is pulled from simple style attributes`() {
+        val choices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"),
+                        treeElement("fill", "#ffffff")
+                    )
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .withSelectChoiceText(mapOf(choices[0] to "A"))
+            .build()
+
+        val data = loadDataForPrompt(prompt)
+        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableSelectItem.MappableSelectPolygon
+        assertThat(item.fillColor, equalTo("#ffffff"))
+    }
+
     @Test
     fun `uses different icon if marker-symbol is defined`() {
         val choices = listOf(

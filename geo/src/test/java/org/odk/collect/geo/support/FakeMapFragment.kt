@@ -28,7 +28,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     private val polyLines = mutableMapOf<Int, List<MapPoint>>()
     private val polyClosed: MutableList<Boolean> = ArrayList()
     private val polyDraggable: MutableList<Boolean> = ArrayList()
-    private val polygons = mutableMapOf<Int, List<MapPoint>>()
+    private val polygons = mutableMapOf<Int, PolygonDescription>()
     private var hasCenter = false
     private val featureIds = mutableListOf<Int>()
 
@@ -125,7 +125,7 @@ class FakeMapFragment : Fragment(), MapFragment {
 
     override fun addPolygon(polygonDescription: PolygonDescription): Int {
         val featureId = generateFeatureId()
-        polygons[featureId] = polygonDescription.points
+        polygons[featureId] = polygonDescription
         featureIds.add(featureId)
         return featureId
     }
@@ -257,7 +257,7 @@ class FakeMapFragment : Fragment(), MapFragment {
         return featureId
     }
 
-    fun getPolygons(): List<List<MapPoint>> {
+    fun getPolygons(): List<PolygonDescription> {
         return polygons.values.toList()
     }
 
