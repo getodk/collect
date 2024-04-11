@@ -198,6 +198,7 @@ class SelectionMapFragmentTest {
                     MapPoint(41.0, 0.0),
                     MapPoint(40.0, 0.0)
                 ),
+                strokeWidth = "10",
                 strokeColor = "#aaccee",
                 fillColor = "#ffffff"
             )
@@ -210,6 +211,7 @@ class SelectionMapFragmentTest {
         map.ready()
 
         assertThat(map.getPolygons()[0].points, equalTo(itemsLiveData.value?.map { (it as MappableSelectItem.MappableSelectPolygon).points }?.first()))
+        assertThat(map.getPolygons()[0].getStrokeWidth(), equalTo(10f))
         assertThat(map.getPolygons()[0].getStrokeColor(), equalTo(-5583634))
         assertThat(map.getPolygons()[0].getFillColor(), equalTo(1157627903))
         onView(withText(application.getString(org.odk.collect.strings.R.string.select_item_count, "Things", 0, 1)))
