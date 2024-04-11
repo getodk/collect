@@ -951,7 +951,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
             map.getOverlays().add(polygon);
             polygon.getOutlinePaint().setColor(polygonDescription.getStrokeColor());
-            polygon.setStrokeWidth(POLYLINE_STROKE_WIDTH);
+            polygon.setStrokeWidth(polygonDescription.getStrokeWidth());
             polygon.getFillPaint().setColor(polygonDescription.getFillColor());
             polygon.setPoints(StreamSupport.stream(polygonDescription.getPoints().spliterator(), false).map(point -> new GeoPoint(point.latitude, point.longitude)).collect(Collectors.toList()));
             polygon.setOnClickListener((polygon, mapView, eventPos) -> {

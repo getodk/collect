@@ -391,7 +391,7 @@ class SelectionMapFragment(
             ids + map.addPolyLine(LineDescription(item.points, item.strokeColor, false, false))
         }
         val polygonIds = polygons.fold(listOf<Int>()) { ids, item ->
-            ids + map.addPolygon(PolygonDescription(item.points, item.strokeColor, item.fillColor))
+            ids + map.addPolygon(PolygonDescription(item.points, item.strokeWidth, item.strokeColor, item.fillColor))
         }
 
         (singlePoints + lines + polygons).zip(pointIds + lineIds + polygonIds).forEach { (item, featureId) ->

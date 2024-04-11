@@ -947,7 +947,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             polygon = map.addPolygon(new PolygonOptions()
                     .addAll(StreamSupport.stream(polygonDescription.getPoints().spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList()))
                     .strokeColor(polygonDescription.getStrokeColor())
-                    .strokeWidth(POLYLINE_STROKE_WIDTH)
+                    .strokeWidth(polygonDescription.getStrokeWidth())
                     .fillColor(polygonDescription.getFillColor())
                     .clickable(true)
             );
