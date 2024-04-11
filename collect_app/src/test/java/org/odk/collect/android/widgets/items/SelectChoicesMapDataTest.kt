@@ -251,6 +251,7 @@ class SelectChoicesMapDataTest {
                 item = treeElement(
                     children = listOf(
                         treeElement("geometry", "12.0 -1.0 3 4; 12.1 -1.0 3 4"),
+                        treeElement("stroke-width", "10"),
                         treeElement("stroke", "#ffffff")
                     )
                 )
@@ -265,6 +266,7 @@ class SelectChoicesMapDataTest {
 
         val data = loadDataForPrompt(prompt)
         val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableSelectItem.MappableSelectLine
+        assertThat(item.strokeWidth, equalTo("10"))
         assertThat(item.strokeColor, equalTo("#ffffff"))
     }
 
