@@ -24,6 +24,7 @@ import org.odk.collect.androidshared.ui.multiclicksafe.setMultiClickSafeOnClickL
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
+import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
@@ -387,7 +388,7 @@ class SelectionMapFragment(
 
         val pointIds = map.addMarkers(markerDescriptions)
         val lineIds = lines.fold(listOf<Int>()) { ids, item ->
-            ids + map.addPolyLine(item.points, false, false)
+            ids + map.addPolyLine(LineDescription(item.points, item.strokeColor, false, false))
         }
         val polygonIds = polygons.fold(listOf<Int>()) { ids, item ->
             ids + map.addPolygon(PolygonDescription(item.points, item.fillColor))

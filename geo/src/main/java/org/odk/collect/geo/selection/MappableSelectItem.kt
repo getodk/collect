@@ -34,7 +34,8 @@ sealed class MappableSelectItem {
         override val info: String? = null,
         override val action: IconifiedText? = null,
         override val status: Status? = null,
-        val points: List<MapPoint>
+        val points: List<MapPoint>,
+        val strokeColor: String? = null
     ) : MappableSelectItem()
 
     data class MappableSelectPolygon(

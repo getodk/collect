@@ -43,6 +43,7 @@ import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.location.LocationClient;
+import org.odk.collect.maps.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
@@ -332,12 +333,12 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
-    public int addPolyLine(@NonNull Iterable<MapPoint> points, boolean closed, boolean draggable) {
+    public int addPolyLine(LineDescription lineDescription) {
         int featureId = nextFeatureId++;
-        if (draggable) {
-            features.put(featureId, new DynamicPolyLineFeature(map, points, closed));
+        if (lineDescription.getDraggable()) {
+            features.put(featureId, new DynamicPolyLineFeature(map, lineDescription));
         } else {
-            features.put(featureId, new StaticPolyLineFeature(map, points, closed));
+            features.put(featureId, new StaticPolyLineFeature(map, lineDescription));
         }
         return featureId;
     }
@@ -800,11 +801,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         final Polyline polyline;
         final boolean closedPolygon;
 
-        StaticPolyLineFeature(MapView map, Iterable<MapPoint> points, boolean closedPolygon) {
+        StaticPolyLineFeature(MapView map, LineDescription lineDescription) {
             this.map = map;
-            this.closedPolygon = closedPolygon;
+            this.closedPolygon = lineDescription.getClosed();
             polyline = new Polyline();
-            polyline.setColor(map.getContext().getResources().getColor(org.odk.collect.icons.R.color.mapLineColor));
+            polyline.setColor(lineDescription.getStrokeColor());
             polyline.setOnClickListener((clickedPolyline, mapView, eventPos) -> {
                 int featureId = findFeature(clickedPolyline);
                 if (featureClickListener != null && featureId != -1) {
@@ -817,7 +818,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             paint.setStrokeWidth(POLYLINE_STROKE_WIDTH);
             map.getOverlays().add(polyline);
 
-            List<GeoPoint> geoPoints = StreamSupport.stream(points.spliterator(), false).map(mapPoint -> new GeoPoint(mapPoint.latitude, mapPoint.longitude, mapPoint.altitude)).collect(Collectors.toList());
+            List<GeoPoint> geoPoints = StreamSupport.stream(lineDescription.getPoints().spliterator(), false).map(mapPoint -> new GeoPoint(mapPoint.latitude, mapPoint.longitude, mapPoint.altitude)).collect(Collectors.toList());
             if (closedPolygon && !geoPoints.isEmpty()) {
                 geoPoints.add(geoPoints.get(0));
             }
@@ -859,11 +860,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         final Polyline polyline;
         final boolean closedPolygon;
 
-        DynamicPolyLineFeature(MapView map, Iterable<MapPoint> points, boolean closedPolygon) {
+        DynamicPolyLineFeature(MapView map, LineDescription lineDescription) {
             this.map = map;
-            this.closedPolygon = closedPolygon;
+            this.closedPolygon = lineDescription.getClosed();
             polyline = new Polyline();
-            polyline.setColor(map.getContext().getResources().getColor(org.odk.collect.icons.R.color.mapLineColor));
+            polyline.setColor(lineDescription.getStrokeColor());
             polyline.setOnClickListener((clickedPolyline, mapView, eventPos) -> {
                 int featureId = findFeature(clickedPolyline);
                 if (featureClickListener != null && featureId != -1) {
@@ -875,7 +876,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             Paint paint = polyline.getPaint();
             paint.setStrokeWidth(POLYLINE_STROKE_WIDTH);
             map.getOverlays().add(polyline);
-            for (MapPoint point : points) {
+            for (MapPoint point : lineDescription.getPoints()) {
                 markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(org.odk.collect.icons.R.drawable.ic_map_point))));
             }
             update();

@@ -184,7 +184,8 @@ internal class SelectChoicesMapData(
                                     action = IconifiedText(
                                         org.odk.collect.icons.R.drawable.ic_save,
                                         resources.getString(org.odk.collect.strings.R.string.select_item)
-                                    )
+                                    ),
+                                    strokeColor = selectChoice.additionalChildren.firstOrNull { it.first == "stroke" }?.second
                                 )
                             } else {
                                 list + MappableSelectItem.MappableSelectPolygon(

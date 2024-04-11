@@ -50,6 +50,7 @@ import kotlinx.coroutines.launch
 import org.odk.collect.androidshared.utils.ScreenUtils
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClient.LocationClientListener
+import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ErrorListener
 import org.odk.collect.maps.MapFragment.FeatureListener
@@ -337,9 +338,9 @@ class MapboxMapFragment :
         }
     }
 
-    override fun addPolyLine(points: MutableIterable<MapPoint>, closed: Boolean, draggable: Boolean): Int {
+    override fun addPolyLine(lineDescription: LineDescription): Int {
         val featureId = nextFeatureId++
-        if (draggable) {
+        if (lineDescription.draggable) {
             features[featureId] = DynamicPolyLineFeature(
                 requireContext(),
                 pointAnnotationManager,
@@ -347,8 +348,7 @@ class MapboxMapFragment :
                 featureId,
                 featureClickListener,
                 featureDragEndListener,
-                closed,
-                points
+                lineDescription
             )
         } else {
             features[featureId] = StaticPolyLineFeature(
@@ -356,8 +356,7 @@ class MapboxMapFragment :
                 polylineAnnotationManager,
                 featureId,
                 featureClickListener,
-                closed,
-                points
+                lineDescription
             )
         }
         return featureId

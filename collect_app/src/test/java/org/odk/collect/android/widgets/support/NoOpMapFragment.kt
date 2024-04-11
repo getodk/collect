@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.support
 
 import androidx.fragment.app.Fragment
+import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
@@ -54,11 +55,7 @@ class NoOpMapFragment : Fragment(), MapFragment {
         TODO("Not yet implemented")
     }
 
-    override fun addPolyLine(
-        points: MutableIterable<MapPoint>,
-        closed: Boolean,
-        draggable: Boolean
-    ): Int {
+    override fun addPolyLine(lineDescription: LineDescription): Int {
         TODO("Not yet implemented")
     }
 

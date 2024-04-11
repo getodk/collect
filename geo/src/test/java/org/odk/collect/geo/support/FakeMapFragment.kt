@@ -1,6 +1,7 @@
 package org.odk.collect.geo.support
 
 import androidx.fragment.app.Fragment
+import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
@@ -108,16 +109,12 @@ class FakeMapFragment : Fragment(), MapFragment {
         return markers[featureId]!!
     }
 
-    override fun addPolyLine(
-        points: Iterable<MapPoint>,
-        closed: Boolean,
-        draggable: Boolean
-    ): Int {
+    override fun addPolyLine(lineDescription: LineDescription): Int {
         val featureId = generateFeatureId()
 
-        polyLines[featureId] = points.toList()
-        polyClosed.add(closed)
-        polyDraggable.add(draggable)
+        polyLines[featureId] = lineDescription.points
+        polyClosed.add(lineDescription.closed)
+        polyDraggable.add(lineDescription.draggable)
 
         featureIds.add(featureId)
         return featureId

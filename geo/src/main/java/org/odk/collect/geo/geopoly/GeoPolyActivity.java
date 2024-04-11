@@ -43,6 +43,7 @@ import org.odk.collect.geo.R;
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.location.Location;
 import org.odk.collect.location.tracker.LocationTracker;
+import org.odk.collect.maps.LineDescription;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
@@ -274,7 +275,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         if (restoredPoints != null) {
             points = restoredPoints;
         }
-        featureId = map.addPolyLine(points, outputMode == OutputMode.GEOSHAPE, true);
+        featureId = map.addPolyLine(new LineDescription(points, null, outputMode == OutputMode.GEOSHAPE, true));
 
         if (inputActive && !intentReadOnly) {
             startInput();
@@ -442,7 +443,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
     private void clear() {
         map.clearFeatures();
-        featureId = map.addPolyLine(new ArrayList<>(), outputMode == OutputMode.GEOSHAPE, true);
+        featureId = map.addPolyLine(new LineDescription(new ArrayList<>(), null, outputMode == OutputMode.GEOSHAPE, true));
         inputActive = false;
         updateUi();
     }
