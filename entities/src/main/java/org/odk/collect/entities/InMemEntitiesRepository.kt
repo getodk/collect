@@ -2,10 +2,11 @@ package org.odk.collect.entities
 
 class InMemEntitiesRepository : EntitiesRepository {
 
+    private val datasets = mutableSetOf<String>()
     private val entities = mutableListOf<Entity>()
 
     override fun getDatasets(): Set<String> {
-        return entities.map { it.dataset }.toSet()
+        return datasets
     }
 
     override fun getEntities(dataset: String): List<Entity> {
@@ -14,9 +15,15 @@ class InMemEntitiesRepository : EntitiesRepository {
 
     override fun clear() {
         entities.clear()
+        datasets.clear()
+    }
+
+    override fun addDataset(dataset: String) {
+        datasets.add(dataset)
     }
 
     override fun save(entity: Entity) {
+        datasets.add(entity.dataset)
         val existing = entities.find { it.id == entity.id && it.dataset == entity.dataset }
 
         if (existing != null) {

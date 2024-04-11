@@ -34,4 +34,11 @@ class EntitiesViewModel(
             _datasets.postValue(entitiesRepository.getDatasets().toList())
         }
     }
+
+    fun addEntityList(name: String) {
+        scheduler.immediate {
+            entitiesRepository.addDataset(name)
+            _datasets.postValue(entitiesRepository.getDatasets().toList())
+        }
+    }
 }

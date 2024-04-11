@@ -5,4 +5,5 @@ interface EntitiesRepository {
     fun getDatasets(): Set<String>
     fun getEntities(dataset: String): List<Entity>
     fun clear()
+    fun addDataset(dataset: String)
 }

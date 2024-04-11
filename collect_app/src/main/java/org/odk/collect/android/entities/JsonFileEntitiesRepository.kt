@@ -12,7 +12,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
     private val entitiesFile = File(directory, "entities.json")
 
     override fun getDatasets(): Set<String> {
-        return readEntities().map { it.dataset }.toSet()
+        return readJson().keys
     }
 
     override fun getEntities(dataset: String): List<Entity> {
@@ -46,14 +46,31 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         entitiesFile.delete()
     }
 
-    private fun writeEntities(entities: MutableList<Entity>) {
-        StrictMode.noteSlowCall("Writing to JSON file")
+    override fun addDataset(dataset: String) {
+        val existing = readJson()
+        if (!existing.containsKey(dataset)) {
+            existing[dataset] = mutableListOf()
+        }
 
-        val json = Gson().toJson(entities.map { it.toJson() })
-        entitiesFile.writeText(json)
+        writeJson(existing)
+    }
+
+    private fun writeEntities(entities: MutableList<Entity>) {
+        val map = mutableMapOf<String, MutableList<JsonEntity>>()
+        entities.forEach {
+            map.getOrPut(it.dataset) { mutableListOf() }.add(it.toJson())
+        }
+
+        writeJson(map)
     }
 
     private fun readEntities(): MutableList<Entity> {
+        return readJson().entries.flatMap { (dataset, entities) ->
+            entities.map { it.toEntity(dataset) }
+        }.toMutableList()
+    }
+
+    private fun readJson(): MutableMap<String, MutableList<JsonEntity>> {
         StrictMode.noteSlowCall("Reading from JSON file")
 
         if (!entitiesFile.exists()) {
@@ -61,10 +78,28 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             entitiesFile.createNewFile()
         }
 
-        val typeToken = TypeToken.getParameterized(MutableList::class.java, JsonEntity::class.java)
-        return (Gson().fromJson<MutableList<JsonEntity>>(entitiesFile.readText(), typeToken.type) ?: emptyList())
-            .map { it.toEntity() }
-            .toMutableList()
+        val typeToken = TypeToken.getParameterized(
+            MutableMap::class.java,
+            String::class.java,
+            TypeToken.getParameterized(MutableList::class.java, JsonEntity::class.java).type
+        )
+
+        val json = entitiesFile.readText()
+        return if (json.isNotBlank()) {
+            val parsedJson =
+                Gson().fromJson<MutableMap<String, MutableList<JsonEntity>>>(json, typeToken.type)
+
+            parsedJson
+        } else {
+            mutableMapOf()
+        }
+    }
+
+    private fun writeJson(map: MutableMap<String, MutableList<JsonEntity>>) {
+        StrictMode.noteSlowCall("Writing to JSON file")
+
+        val json = Gson().toJson(map)
+        entitiesFile.writeText(json)
     }
 
     private fun mergeProperties(
@@ -80,16 +115,15 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
     }
 
     private data class JsonEntity(
-        val dataset: String,
         val id: String,
         val label: String?,
         val version: Int = 1,
         val properties: Map<String, String>
     )
 
-    private fun JsonEntity.toEntity(): Entity {
+    private fun JsonEntity.toEntity(dataset: String): Entity {
         return Entity(
-            this.dataset,
+            dataset,
             this.id,
             this.label,
             this.version,
@@ -99,7 +133,6 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
 
     private fun Entity.toJson(): JsonEntity {
         return JsonEntity(
-            this.dataset,
             this.id,
             this.label,
             this.version,

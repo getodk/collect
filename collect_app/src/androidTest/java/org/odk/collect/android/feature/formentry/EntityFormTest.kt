@@ -6,6 +6,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.ExperimentalPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
@@ -161,9 +162,11 @@ class EntityFormTest {
         rule.withProject(testDependencies.server)
             .openEntityBrowser()
             .clickOptionsIcon(string.add_entity_list)
+            .clickOnTextInPopup(string.add_entity_list)
             .inputText("people")
             .clickOnTextInDialog(string.add)
             .assertText("people")
+            .pressBack(ExperimentalPage())
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
 
