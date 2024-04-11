@@ -49,6 +49,7 @@ dependencies {
     coreLibraryDesugaring(Dependencies.desugar)
 
     implementation(project(":shared"))
+    implementation(project(":androidshared"))
     implementation(Dependencies.kotlin_stdlib)
     implementation(Dependencies.androidx_fragment_ktx)
     implementation(Dependencies.androidx_preference_ktx)

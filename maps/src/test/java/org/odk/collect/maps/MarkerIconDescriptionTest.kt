@@ -10,47 +10,10 @@ import org.odk.collect.maps.markers.MarkerIconDescription
 
 @RunWith(AndroidJUnit4::class)
 class MarkerIconDescriptionTest {
-
     @Test
     fun `return null when color is null`() {
         val markerIconDescription = MarkerIconDescription(0, null)
         assertThat(markerIconDescription.getColor(), `is`(nullValue()))
-    }
-
-    @Test
-    fun `return null when color is empty`() {
-        val markerIconDescription = MarkerIconDescription(0, "")
-        assertThat(markerIconDescription.getColor(), `is`(nullValue()))
-    }
-
-    @Test
-    fun `return null when color is invalid`() {
-        val markerIconDescription = MarkerIconDescription(0, "qwerty")
-        assertThat(markerIconDescription.getColor(), `is`(nullValue()))
-    }
-
-    @Test
-    fun `return color int for valid hex color with # prefix`() {
-        val markerIconDescription = MarkerIconDescription(0, "#aaccee")
-        assertThat(markerIconDescription.getColor(), `is`(-5583634))
-    }
-
-    @Test
-    fun `return color int for valid hex color without # prefix`() {
-        val markerIconDescription = MarkerIconDescription(0, "aaccee")
-        assertThat(markerIconDescription.getColor(), `is`(-5583634))
-    }
-
-    @Test
-    fun `return color int for valid shorthand hex color with # prefix`() {
-        val markerIconDescription = MarkerIconDescription(0, "#ace")
-        assertThat(markerIconDescription.getColor(), `is`(-5583634))
-    }
-
-    @Test
-    fun `return color int for valid shorthand hex color without # prefix`() {
-        val markerIconDescription = MarkerIconDescription(0, "ace")
-        assertThat(markerIconDescription.getColor(), `is`(-5583634))
     }
 
     @Test
