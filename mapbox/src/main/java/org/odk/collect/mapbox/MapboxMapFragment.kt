@@ -352,7 +352,6 @@ class MapboxMapFragment :
             )
         } else {
             features[featureId] = StaticPolyLineFeature(
-                requireContext(),
                 polylineAnnotationManager,
                 featureId,
                 featureClickListener,

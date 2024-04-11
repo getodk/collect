@@ -1,6 +1,5 @@
 package org.odk.collect.mapbox
 
-import android.content.Context
 import com.mapbox.geojson.Point
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
@@ -11,7 +10,6 @@ import org.odk.collect.maps.MapPoint
 
 /** A polyline that can not be manipulated by dragging Symbols at its vertices. */
 internal class StaticPolyLineFeature(
-    context: Context,
     private val polylineAnnotationManager: PolylineAnnotationManager,
     private val featureId: Int,
     private val featureClickListener: MapFragment.FeatureListener?,
