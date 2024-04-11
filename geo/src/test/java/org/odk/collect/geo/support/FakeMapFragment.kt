@@ -26,9 +26,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     private var featureClickListener: FeatureListener? = null
     private val markers = mutableMapOf<Int, MapPoint>()
     private val markerIcons = mutableMapOf<Int, MarkerIconDescription?>()
-    private val polyLines = mutableMapOf<Int, List<MapPoint>>()
-    private val polyClosed: MutableList<Boolean> = ArrayList()
-    private val polyDraggable: MutableList<Boolean> = ArrayList()
+    private val polyLines = mutableMapOf<Int, LineDescription>()
     private val polygons = mutableMapOf<Int, PolygonDescription>()
     private var hasCenter = false
     private val featureIds = mutableListOf<Int>()
@@ -112,10 +110,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     override fun addPolyLine(lineDescription: LineDescription): Int {
         val featureId = generateFeatureId()
 
-        polyLines[featureId] = lineDescription.points
-        polyClosed.add(lineDescription.closed)
-        polyDraggable.add(lineDescription.draggable)
-
+        polyLines[featureId] = lineDescription
         featureIds.add(featureId)
         return featureId
     }
@@ -129,16 +124,16 @@ class FakeMapFragment : Fragment(), MapFragment {
 
     override fun appendPointToPolyLine(featureId: Int, point: MapPoint) {
         val poly = polyLines[featureId]!!
-        polyLines[featureId] = poly + point
+        polyLines[featureId] = poly.copy(points = poly.points + point)
     }
 
     override fun removePolyLineLastPoint(featureId: Int) {
         val poly = polyLines[featureId]!!
-        polyLines[featureId] = poly.dropLast(1)
+        polyLines[featureId] = poly.copy(points = poly.points.dropLast(1))
     }
 
     override fun getPolyLinePoints(featureId: Int): List<MapPoint> {
-        return polyLines[featureId]!!
+        return polyLines[featureId]!!.points
     }
 
     override fun clearFeatures() {
@@ -221,16 +216,16 @@ class FakeMapFragment : Fragment(), MapFragment {
         return zoomBoundingBox
     }
 
-    fun getPolyLines(): List<List<MapPoint>> {
+    fun getPolyLines(): List<LineDescription> {
         return polyLines.values.toList()
     }
 
     fun isPolyClosed(index: Int): Boolean {
-        return polyClosed[index]
+        return polyLines[featureIds[index]]!!.closed
     }
 
     fun isPolyDraggable(index: Int): Boolean {
-        return polyDraggable[index]
+        return polyLines[featureIds[index]]!!.draggable
     }
 
     fun getFeatureId(points: List<MapPoint>): Int {
@@ -240,7 +235,7 @@ class FakeMapFragment : Fragment(), MapFragment {
             }!!.key
         } else {
             polyLines.entries.find {
-                it.value == points
+                it.value.points == points
             }!!.key
         }
     }

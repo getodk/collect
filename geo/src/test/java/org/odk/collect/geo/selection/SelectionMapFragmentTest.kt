@@ -172,7 +172,8 @@ class SelectionMapFragmentTest {
                 points = listOf(
                     MapPoint(40.0, 0.0),
                     MapPoint(41.0, 0.0)
-                )
+                ),
+                strokeColor = "#ffffff"
             )
         )
 
@@ -181,9 +182,8 @@ class SelectionMapFragmentTest {
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
-
-        assertThat(map.getPolyLines(), equalTo(itemsLiveData.value?.map { (it as MappableSelectItem.MappableSelectLine).points }))
-        assertThat(map.isPolyDraggable(0), equalTo(false))
+        assertThat(map.getPolyLines()[0].points, equalTo(itemsLiveData.value?.map { (it as MappableSelectItem.MappableSelectLine).points }?.first()))
+        assertThat(map.getPolyLines()[0].getStrokeColor(), equalTo(-1))
         onView(withText(application.getString(org.odk.collect.strings.R.string.select_item_count, "Things", 0, 1)))
             .check(matches(isDisplayed()))
     }

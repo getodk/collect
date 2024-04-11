@@ -244,6 +244,35 @@ class SelectChoicesMapDataTest {
      * https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0.
      */
     @Test
+    fun `line stroke color is pulled from simple style attributes`() {
+        val choices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "12.0 -1.0 3 4; 12.1 -1.0 3 4"),
+                        treeElement("stroke", "#ffffff")
+                    )
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .withSelectChoiceText(mapOf(choices[0] to "A"))
+            .build()
+
+        val data = loadDataForPrompt(prompt)
+        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableSelectItem.MappableSelectLine
+        assertThat(item.strokeColor, equalTo("#ffffff"))
+    }
+
+    /**
+     * Attributes names come from properties defined at
+     * https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0.
+     */
+    @Test
     fun `polygon fill color is pulled from simple style attributes`() {
         val choices = listOf(
             selectChoice(
