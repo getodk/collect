@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:entities="http://www.opendatakit.org/xforms/entities">
+	<h:head>
+		<h:title>One Question Entity Follow Up</h:title>
+		<model odk:xforms-version="1.0.0" entities:entities-version="2023.1.0">
+			<instance>
+				<data id="one_question_entity_follow_up" version="1">
+					<person/>
+					<meta>
+						<instanceID/>
+					</meta>
+				</data>
+			</instance>
+
+			<instance id="people" src="jr://file-csv/people.csv"/>
+
+			<bind nodeset="/data/person" type="string"/>
+			<bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+		</model>
+	</h:head>
+	<h:body>
+		<select1 ref="/data/person">
+			<label>Select person</label>
+			<itemset nodeset="instance('people')/root/item">
+				<value ref="name"/>
+				<label ref="label"/>
+			</itemset>
+		</select1>
+	</h:body>
+</h:html>

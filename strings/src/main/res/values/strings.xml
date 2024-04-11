@@ -1144,6 +1144,9 @@
     <!-- Text for button that deletes all entities for the project -->
     <string name="clear_entities">Clear all</string>
 
+    <!-- Text for button that adds a new entity list -->
+    <string name="add_entity_list">Add entity list</string>
+
     <!--
     ##############################################
     # Crash handling

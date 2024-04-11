@@ -7,8 +7,11 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage
+import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
+import org.odk.collect.strings.R.string
 
 @RunWith(AndroidJUnit4::class)
 class EntityFormTest {
@@ -139,5 +142,47 @@ class EntityFormTest {
             .startBlankForm("One Question Entity Update")
             .assertText("Romulus Roy")
             .assertTextDoesNotExist("Ro-Ro Roy")
+    }
+
+    @Test
+    fun entityListsAreConsistentBetweenFollowUpForms() {
+        testDependencies.server.apply {
+            addForm(
+                "one-question-entity-update.xml",
+                listOf("people.csv")
+            )
+
+            addForm(
+                "one-question-entity-follow-up.xml",
+                mapOf("people.csv" to "updated-people.csv")
+            )
+        }
+
+        rule.withProject(testDependencies.server)
+            .openEntityBrowser()
+            .clickOptionsIcon(string.add_entity_list)
+            .inputText("people")
+            .clickOnTextInDialog(string.add)
+            .assertText("people")
+            .pressBack(ProjectSettingsPage())
+            .pressBack(MainMenuPage())
+
+            .clickGetBlankForm()
+            .clickClearAll()
+            .clickForm("one-question-entity-update.xml")
+            .clickGetSelected()
+            .clickOK(MainMenuPage())
+            .startBlankForm("One Question Entity Update")
+            .assertText("Roman Roy")
+            .pressBackAndDiscardForm()
+
+            .clickGetBlankForm()
+            .clickClearAll()
+            .clickForm("one-question-entity-follow-up.xml")
+            .clickGetSelected()
+            .clickOK(MainMenuPage())
+            .startBlankForm("One Question Entity Update")
+            .assertText("Ro-Ro Roy")
+            .assertTextDoesNotExist("Roman Roy")
     }
 }
