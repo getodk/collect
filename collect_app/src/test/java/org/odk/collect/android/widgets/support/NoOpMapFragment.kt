@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets.support
 import androidx.fragment.app.Fragment
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 
@@ -61,7 +62,7 @@ class NoOpMapFragment : Fragment(), MapFragment {
         TODO("Not yet implemented")
     }
 
-    override fun addPolygon(points: MutableIterable<MapPoint>): Int {
+    override fun addPolygon(polygonDescription: PolygonDescription): Int {
         TODO("Not yet implemented")
     }
 

@@ -6,6 +6,7 @@ import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 import kotlin.random.Random
@@ -122,9 +123,9 @@ class FakeMapFragment : Fragment(), MapFragment {
         return featureId
     }
 
-    override fun addPolygon(points: MutableIterable<MapPoint>): Int {
+    override fun addPolygon(polygonDescription: PolygonDescription): Int {
         val featureId = generateFeatureId()
-        polygons[featureId] = points.toList()
+        polygons[featureId] = polygonDescription.points
         featureIds.add(featureId)
         return featureId
     }

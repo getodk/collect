@@ -27,6 +27,7 @@ import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.material.BottomSheetBehavior
@@ -389,7 +390,7 @@ class SelectionMapFragment(
             ids + map.addPolyLine(item.points, false, false)
         }
         val polygonIds = polygons.fold(listOf<Int>()) { ids, item ->
-            ids + map.addPolygon(item.points)
+            ids + map.addPolygon(PolygonDescription(item.points, item.fillColor))
         }
 
         (singlePoints + lines + polygons).zip(pointIds + lineIds + polygonIds).forEach { (item, featureId) ->

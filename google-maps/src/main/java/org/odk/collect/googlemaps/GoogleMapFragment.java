@@ -14,7 +14,6 @@
 
 package org.odk.collect.googlemaps;
 
-import static org.odk.collect.maps.MapConsts.POLYGON_FILL_COLOR_OPACITY;
 import static org.odk.collect.maps.MapConsts.POLYLINE_STROKE_WIDTH;
 
 import android.annotation.SuppressLint;
@@ -25,7 +24,6 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.graphics.ColorUtils;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -55,6 +53,7 @@ import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.PolygonDescription;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maps.markers.MarkerDescription;
@@ -317,9 +316,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override
-    public int addPolygon(@NonNull Iterable<MapPoint> points) {
+    public int addPolygon(PolygonDescription polygonDescription) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new StaticPolygonFeature(map, points, requireContext().getResources().getColor(org.odk.collect.icons.R.color.mapLineColor)));
+        features.put(featureId, new StaticPolygonFeature(map, polygonDescription.getPoints(), requireContext().getResources().getColor(org.odk.collect.icons.R.color.mapLineColor), polygonDescription.getFillColor()));
         return featureId;
     }
 
@@ -943,12 +942,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private static class StaticPolygonFeature implements MapFeature {
         private Polygon polygon;
 
-        StaticPolygonFeature(GoogleMap map, Iterable<MapPoint> points, int strokeLineColor) {
+        StaticPolygonFeature(GoogleMap map, Iterable<MapPoint> points, int strokeLineColor, int fillColor) {
             polygon = map.addPolygon(new PolygonOptions()
                     .addAll(StreamSupport.stream(points.spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList()))
                     .strokeColor(strokeLineColor)
                     .strokeWidth(POLYLINE_STROKE_WIDTH)
-                    .fillColor(ColorUtils.setAlphaComponent(strokeLineColor, POLYGON_FILL_COLOR_OPACITY))
+                    .fillColor(fillColor)
                     .clickable(true)
             );
         }

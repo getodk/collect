@@ -57,6 +57,7 @@ import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLayerFile
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
@@ -362,14 +363,15 @@ class MapboxMapFragment :
         return featureId
     }
 
-    override fun addPolygon(points: MutableIterable<MapPoint>): Int {
+    override fun addPolygon(polygonDescription: PolygonDescription): Int {
         val featureId = nextFeatureId++
         features[featureId] = StaticPolygonFeature(
             requireContext(),
             mapView.annotations.createPolygonAnnotationManager(),
-            points,
+            polygonDescription.points,
             featureClickListener,
-            featureId
+            featureId,
+            polygonDescription.getFillColor()
         )
 
         return featureId

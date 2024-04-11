@@ -124,7 +124,7 @@ public interface MapFragment {
      * Adds a polygon to the map with given sequence of vertices. * Returns a positive integer,
      * the featureId for the newly added shape.
      */
-    int addPolygon(@NonNull Iterable<MapPoint> points);
+    int addPolygon(PolygonDescription polygonDescription);
 
     /** Appends a vertex to the polyline or polygon specified by featureId. */
     void appendPointToPolyLine(int featureId, @NonNull MapPoint point);

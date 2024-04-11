@@ -16,7 +16,6 @@ package org.odk.collect.osmdroid;
 
 import static androidx.core.graphics.drawable.DrawableKt.toBitmap;
 
-import static org.odk.collect.maps.MapConsts.POLYGON_FILL_COLOR_OPACITY;
 import static org.odk.collect.maps.MapConsts.POLYLINE_STROKE_WIDTH;
 
 import android.content.BroadcastReceiver;
@@ -38,7 +37,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.LocationListener;
@@ -49,6 +47,7 @@ import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.PolygonDescription;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maps.markers.MarkerDescription;
@@ -344,9 +343,9 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
-    public int addPolygon(@NonNull Iterable<MapPoint> points) {
+    public int addPolygon(PolygonDescription polygonDescription) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new StaticPolygonFeature(map, points));
+        features.put(featureId, new StaticPolygonFeature(map, polygonDescription.getPoints(), polygonDescription.getFillColor()));
         return featureId;
     }
 
@@ -946,14 +945,14 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         private final MapView map;
         private final Polygon polygon = new Polygon();
 
-        StaticPolygonFeature(MapView map, Iterable<MapPoint> points) {
+        StaticPolygonFeature(MapView map, Iterable<MapPoint> points, int fillColor) {
             this.map = map;
 
             map.getOverlays().add(polygon);
             int strokeColor = map.getContext().getResources().getColor(org.odk.collect.icons.R.color.mapLineColor);
             polygon.getOutlinePaint().setColor(strokeColor);
             polygon.setStrokeWidth(POLYLINE_STROKE_WIDTH);
-            polygon.getFillPaint().setColor(ColorUtils.setAlphaComponent(strokeColor, POLYGON_FILL_COLOR_OPACITY));
+            polygon.getFillPaint().setColor(fillColor);
             polygon.setPoints(StreamSupport.stream(points.spliterator(), false).map(point -> new GeoPoint(point.latitude, point.longitude)).collect(Collectors.toList()));
             polygon.setOnClickListener((polygon, mapView, eventPos) -> {
                 int featureId = findFeature(polygon);

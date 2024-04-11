@@ -50,6 +50,7 @@ dependencies {
 
     implementation(project(":shared"))
     implementation(project(":androidshared"))
+    implementation(project(":icons"))
     implementation(Dependencies.kotlin_stdlib)
     implementation(Dependencies.androidx_fragment_ktx)
     implementation(Dependencies.androidx_preference_ktx)
