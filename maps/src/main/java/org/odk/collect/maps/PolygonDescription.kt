@@ -15,31 +15,31 @@ data class PolygonDescription(
                 if (it >= 0) {
                     it
                 } else {
-                    MapConsts.POLYLINE_STROKE_WIDTH
+                    MapConsts.DEFAULT_STROKE_WIDTH
                 }
-            } ?: MapConsts.POLYLINE_STROKE_WIDTH
+            } ?: MapConsts.DEFAULT_STROKE_WIDTH
         } catch (e: Throwable) {
-            MapConsts.POLYLINE_STROKE_WIDTH
+            MapConsts.DEFAULT_STROKE_WIDTH
         }
     }
 
     fun getStrokeColor(): Int {
         val customColor = strokeColor?.toColorInt()
-        return customColor ?: "#ffff0000".toColorInt()!!
+        return customColor ?: MapConsts.DEFAULT_STROKE_COLOR.toColorInt()!!
     }
 
     fun getFillColor(): Int {
         val customColor = fillColor?.toColorInt()?.let {
             ColorUtils.setAlphaComponent(
                 it,
-                MapConsts.POLYGON_FILL_COLOR_OPACITY
+                MapConsts.DEFAULT_FILL_COLOR_OPACITY
             )
         }
 
         return customColor
             ?: ColorUtils.setAlphaComponent(
-                "#ffff0000".toColorInt()!!,
-                MapConsts.POLYGON_FILL_COLOR_OPACITY
+                MapConsts.DEFAULT_STROKE_COLOR.toColorInt()!!,
+                MapConsts.DEFAULT_FILL_COLOR_OPACITY
             )
     }
 }

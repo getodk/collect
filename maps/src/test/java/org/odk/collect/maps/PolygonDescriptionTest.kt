@@ -11,19 +11,19 @@ class PolygonDescriptionTest {
     @Test
     fun `getStrokeWidth returns the default value when the passed one is null`() {
         val polygonDescription = PolygonDescription(emptyList(), null, null, null)
-        assertThat(polygonDescription.getStrokeWidth(), equalTo(MapConsts.POLYLINE_STROKE_WIDTH))
+        assertThat(polygonDescription.getStrokeWidth(), equalTo(MapConsts.DEFAULT_STROKE_WIDTH))
     }
 
     @Test
     fun `getStrokeWidth returns the default value when the passed one is invalid`() {
         val polygonDescription = PolygonDescription(emptyList(), "blah", null, null)
-        assertThat(polygonDescription.getStrokeWidth(), equalTo(MapConsts.POLYLINE_STROKE_WIDTH))
+        assertThat(polygonDescription.getStrokeWidth(), equalTo(MapConsts.DEFAULT_STROKE_WIDTH))
     }
 
     @Test
     fun `getStrokeWidth returns the default value when the passed one is not greater than or equal to zero`() {
         val polygonDescription = PolygonDescription(emptyList(), "-1", null, null)
-        assertThat(polygonDescription.getStrokeWidth(), equalTo(MapConsts.POLYLINE_STROKE_WIDTH))
+        assertThat(polygonDescription.getStrokeWidth(), equalTo(MapConsts.DEFAULT_STROKE_WIDTH))
     }
 
     @Test

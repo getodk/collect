@@ -11,19 +11,19 @@ class LineDescriptionTest {
     @Test
     fun `getStrokeWidth returns the default value when the passed one is null`() {
         val lineDescription = LineDescription(emptyList(), null, null, false, false)
-        assertThat(lineDescription.getStrokeWidth(), equalTo(MapConsts.POLYLINE_STROKE_WIDTH))
+        assertThat(lineDescription.getStrokeWidth(), equalTo(MapConsts.DEFAULT_STROKE_WIDTH))
     }
 
     @Test
     fun `getStrokeWidth returns the default value when the passed one is invalid`() {
         val lineDescription = LineDescription(emptyList(), "blah", null, false, false)
-        assertThat(lineDescription.getStrokeWidth(), equalTo(MapConsts.POLYLINE_STROKE_WIDTH))
+        assertThat(lineDescription.getStrokeWidth(), equalTo(MapConsts.DEFAULT_STROKE_WIDTH))
     }
 
     @Test
     fun `getStrokeWidth returns the default value when the passed one is not greater than or equal to zero`() {
         val lineDescription = LineDescription(emptyList(), "-1", null, false, false)
-        assertThat(lineDescription.getStrokeWidth(), equalTo(MapConsts.POLYLINE_STROKE_WIDTH))
+        assertThat(lineDescription.getStrokeWidth(), equalTo(MapConsts.DEFAULT_STROKE_WIDTH))
     }
 
     @Test

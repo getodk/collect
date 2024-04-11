@@ -15,16 +15,16 @@ data class LineDescription(
                 if (it >= 0) {
                     it
                 } else {
-                    MapConsts.POLYLINE_STROKE_WIDTH
+                    MapConsts.DEFAULT_STROKE_WIDTH
                 }
-            } ?: MapConsts.POLYLINE_STROKE_WIDTH
+            } ?: MapConsts.DEFAULT_STROKE_WIDTH
         } catch (e: Throwable) {
-            MapConsts.POLYLINE_STROKE_WIDTH
+            MapConsts.DEFAULT_STROKE_WIDTH
         }
     }
 
     fun getStrokeColor(): Int {
         val customColor = strokeColor?.toColorInt()
-        return customColor ?: "#ffff0000".toColorInt()!!
+        return customColor ?: MapConsts.DEFAULT_STROKE_COLOR.toColorInt()!!
     }
 }
