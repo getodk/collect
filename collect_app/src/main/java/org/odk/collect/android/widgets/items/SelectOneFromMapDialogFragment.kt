@@ -155,9 +155,9 @@ internal class SelectChoicesMapData(
 
                             if (points.size == 1) {
                                 val markerColor =
-                                    selectChoice.additionalChildren.firstOrNull { it.first == "marker-color" }?.second
+                                    getPropertyValue(selectChoice, "marker-color")
                                 val markerSymbol =
-                                    selectChoice.additionalChildren.firstOrNull { it.first == "marker-symbol" }?.second
+                                    getPropertyValue(selectChoice, "marker-symbol")
 
                                 list + MappableSelectItem.MappableSelectPoint(
                                     index.toLong(),
@@ -185,8 +185,8 @@ internal class SelectChoicesMapData(
                                         org.odk.collect.icons.R.drawable.ic_save,
                                         resources.getString(org.odk.collect.strings.R.string.select_item)
                                     ),
-                                    strokeWidth = selectChoice.additionalChildren.firstOrNull { it.first == "stroke-width" }?.second,
-                                    strokeColor = selectChoice.additionalChildren.firstOrNull { it.first == "stroke" }?.second
+                                    strokeWidth = getPropertyValue(selectChoice, "stroke-width"),
+                                    strokeColor = getPropertyValue(selectChoice, "stroke")
                                 )
                             } else {
                                 list + MappableSelectItem.MappableSelectPolygon(
@@ -199,9 +199,9 @@ internal class SelectChoicesMapData(
                                         org.odk.collect.icons.R.drawable.ic_save,
                                         resources.getString(org.odk.collect.strings.R.string.select_item)
                                     ),
-                                    strokeWidth = selectChoice.additionalChildren.firstOrNull { it.first == "stroke-width" }?.second,
-                                    strokeColor = selectChoice.additionalChildren.firstOrNull { it.first == "stroke" }?.second,
-                                    fillColor = selectChoice.additionalChildren.firstOrNull { it.first == "fill" }?.second
+                                    strokeWidth = getPropertyValue(selectChoice, "stroke-width"),
+                                    strokeColor = getPropertyValue(selectChoice, "stroke"),
+                                    fillColor = getPropertyValue(selectChoice, "fill")
                                 )
                             }
                         } else {
@@ -217,6 +217,10 @@ internal class SelectChoicesMapData(
                 list
             }
         }
+    }
+
+    private fun getPropertyValue(selectChoice: SelectChoice, propertyName: String): String? {
+        return selectChoice.additionalChildren.firstOrNull { it.first == propertyName }?.second
     }
 
     override fun isLoading(): NonNullLiveData<Boolean> {
