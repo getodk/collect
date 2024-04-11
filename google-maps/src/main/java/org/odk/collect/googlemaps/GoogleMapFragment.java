@@ -14,8 +14,6 @@
 
 package org.odk.collect.googlemaps;
 
-import static org.odk.collect.maps.MapConsts.POLYLINE_STROKE_WIDTH;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
@@ -793,7 +791,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 polyline = map.addPolyline(new PolylineOptions()
                         .color(lineDescription.getStrokeColor())
                         .zIndex(1)
-                        .width(POLYLINE_STROKE_WIDTH)
+                        .width(lineDescription.getStrokeWidth())
                         .addAll(latLngs)
                         .clickable(true)
                 );
@@ -889,7 +887,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 polyline = map.addPolyline(new PolylineOptions()
                     .color(lineDescription.getStrokeColor())
                     .zIndex(1)
-                    .width(POLYLINE_STROKE_WIDTH)
+                    .width(lineDescription.getStrokeWidth())
                     .addAll(latLngs)
                     .clickable(true)
                 );

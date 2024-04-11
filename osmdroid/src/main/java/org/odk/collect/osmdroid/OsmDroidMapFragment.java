@@ -16,8 +16,6 @@ package org.odk.collect.osmdroid;
 
 import static androidx.core.graphics.drawable.DrawableKt.toBitmap;
 
-import static org.odk.collect.maps.MapConsts.POLYLINE_STROKE_WIDTH;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -815,7 +813,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 return false;
             });
             Paint paint = polyline.getPaint();
-            paint.setStrokeWidth(POLYLINE_STROKE_WIDTH);
+            paint.setStrokeWidth(lineDescription.getStrokeWidth());
             map.getOverlays().add(polyline);
 
             List<GeoPoint> geoPoints = StreamSupport.stream(lineDescription.getPoints().spliterator(), false).map(mapPoint -> new GeoPoint(mapPoint.latitude, mapPoint.longitude, mapPoint.altitude)).collect(Collectors.toList());
@@ -874,7 +872,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 return false;
             });
             Paint paint = polyline.getPaint();
-            paint.setStrokeWidth(POLYLINE_STROKE_WIDTH);
+            paint.setStrokeWidth(lineDescription.getStrokeWidth());
             map.getOverlays().add(polyline);
             for (MapPoint point : lineDescription.getPoints()) {
                 markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(org.odk.collect.icons.R.drawable.ic_map_point))));
