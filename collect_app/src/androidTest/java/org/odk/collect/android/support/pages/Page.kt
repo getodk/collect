@@ -33,7 +33,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withSubstring
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -253,7 +252,12 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnText(text: String): T {
-        onView(withText(text)).perform(click())
+        try {
+            onView(withText(text)).perform(click())
+        } catch (e: Exception) {
+            onView(withText(text)).perform(scrollTo(), click())
+        }
+
         return this as T
     }
 
@@ -379,21 +383,6 @@ abstract class Page<T : Page<T>> {
 
     fun checkIsSnackbarErrorVisible(): T {
         onView(allOf(withId(com.google.android.material.R.id.snackbar_text))).check(matches(isDisplayed()))
-        return this as T
-    }
-
-    fun scrollToAndClickText(text: Int): T {
-        onView(withText(getTranslatedString(text))).perform(scrollTo(), click())
-        return this as T
-    }
-
-    fun scrollToAndClickSubtext(text: Int): T {
-        onView(withSubstring(getTranslatedString(text))).perform(scrollTo(), click())
-        return this as T
-    }
-
-    fun scrollToAndClickText(text: String?): T {
-        onView(withText(text)).perform(scrollTo(), click())
         return this as T
     }
 

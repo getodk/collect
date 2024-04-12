@@ -575,7 +575,7 @@ public class FillBlankFormTest {
                 .copyForm("3403.xml", asList("staff_list.csv", "staff_rights.csv"))
                 .startBlankForm("3403_ODK Version 1.23.3 Tester")
                 .clickOnText("New Farmer Registration")
-                .scrollToAndClickText("Insemination")
+                .clickOnText("Insemination")
                 .assertText("New Farmer Registration");
     }
 
