@@ -170,7 +170,7 @@ object Appearances {
 
     @JvmStatic
     fun useThousandSeparator(prompt: FormEntryPrompt): Boolean {
-        return getSanitizedAppearanceHint(prompt).contains(THOUSANDS_SEP)
+        return getSanitizedAppearanceHint(prompt).contains(THOUSANDS_SEP) && !isMasked(prompt)
     }
 
     @JvmStatic
