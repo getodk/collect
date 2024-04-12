@@ -49,6 +49,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.ActivityHelpers.getLaunchIntent
+import org.odk.collect.android.support.Interactions
 import org.odk.collect.android.support.WaitFor.tryAgainOnFail
 import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
@@ -238,8 +239,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun <D : Page<D>> clickOnString(stringID: Int, destination: D): D {
-        tryAgainOnFail {
-            clickOnString(stringID)
+        Interactions.clickOn(withText(getTranslatedString(stringID))) {
             destination.assertOnPage()
         }
 
@@ -252,17 +252,12 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnText(text: String): T {
-        try {
-            onView(withText(text)).perform(click())
-        } catch (e: Exception) {
-            onView(withText(text)).perform(scrollTo(), click())
-        }
-
+        Interactions.clickOn(withText(text))
         return this as T
     }
 
     fun clickOnId(id: Int): T {
-        onView(withId(id)).perform(click())
+        Interactions.clickOn(withId(id))
         return this as T
     }
 
@@ -274,26 +269,20 @@ abstract class Page<T : Page<T>> {
     fun clickOKOnDialog(): T {
         closeSoftKeyboard() // Make sure to avoid issues with keyboard being up
         waitForDialogToSettle()
-        onView(withId(android.R.id.button1))
-            .inRoot(isDialog())
-            .perform(click())
+        Interactions.clickOn(withId(android.R.id.button1), root = isDialog())
         return this as T
     }
 
     fun <D : Page<D>?> clickOKOnDialog(destination: D): D {
         closeSoftKeyboard() // Make sure to avoid issues with keyboard being up
         waitForDialogToSettle()
-        onView(withId(android.R.id.button1))
-            .inRoot(isDialog())
-            .perform(click())
+        Interactions.clickOn(withId(android.R.id.button1), root = isDialog())
         return destination!!.assertOnPage()
     }
 
     fun clickOnTextInDialog(text: String): T {
         waitForDialogToSettle()
-        onView(withText(text))
-            .inRoot(isDialog())
-            .perform(click())
+        Interactions.clickOn(withText(text), root = isDialog())
         return this as T
     }
 
@@ -319,7 +308,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnAreaWithIndex(clazz: String?, index: Int): T {
-        onView(withIndex(withClassName(endsWith(clazz)), index)).perform(click())
+        Interactions.clickOn(withIndex(withClassName(endsWith(clazz)), index))
         return this as T
     }
 
@@ -467,7 +456,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun closeSnackbar(): T {
-        onView(withContentDescription(org.odk.collect.strings.R.string.close_snackbar)).perform(click())
+        Interactions.clickOn(withContentDescription(org.odk.collect.strings.R.string.close_snackbar))
         return this as T
     }
 
@@ -476,8 +465,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOptionsIcon(expectedOptionString: String): T {
-        tryAgainOnFail {
-            onView(OVERFLOW_BUTTON_MATCHER).perform(click())
+        Interactions.clickOn(OVERFLOW_BUTTON_MATCHER) {
             assertText(expectedOptionString)
         }
 
@@ -521,7 +509,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnTextInPopup(text: Int): T {
-        onView(withText(text)).inRoot(isPlatformPopup()).perform(click())
+        Interactions.clickOn(withText(text), root = isPlatformPopup())
         return this as T
     }
 

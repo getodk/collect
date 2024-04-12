@@ -1,9 +1,7 @@
 package org.odk.collect.android.support.pages
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.matcher.ViewMatchers.withSubstring
+import org.odk.collect.android.support.Interactions
 import org.odk.collect.strings.R.string
 
 class FirstLaunchPage : Page<FirstLaunchPage>() {
@@ -14,14 +12,11 @@ class FirstLaunchPage : Page<FirstLaunchPage>() {
     }
 
     fun clickTryCollect(): MainMenuPage {
-        return tryAgainOnFail(MainMenuPage()) {
-            try {
-                onView(withSubstring(getTranslatedString(string.try_demo))).perform(click())
-            } catch (e: Exception) {
-                onView(withSubstring(getTranslatedString(string.try_demo)))
-                    .perform(scrollTo(), click())
-            }
+        Interactions.clickOn(withSubstring(getTranslatedString(string.try_demo))) {
+            MainMenuPage().assertOnPage()
         }
+
+        return MainMenuPage()
     }
 
     fun clickManuallyEnterProjectDetails(): ManualProjectCreatorDialogPage {
