@@ -75,15 +75,15 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
 
         if (getFormEntryPrompt().isReadOnly()) {
             if (dataAvailable) {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.geotrace_view_read_only);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_line);
             } else {
                 binding.simpleButton.setVisibility(View.GONE);
             }
         } else {
             if (dataAvailable) {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.geotrace_view_change_location);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_or_change_line);
             } else {
-                binding.simpleButton.setText(org.odk.collect.strings.R.string.get_trace);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.get_line);
             }
         }
 
@@ -105,7 +105,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
     public void clearAnswer() {
         binding.geoAnswerText.setText(null);
         binding.geoAnswerText.setVisibility(GONE);
-        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_trace);
+        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_line);
         widgetValueChanged();
     }
 
@@ -120,7 +120,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
     public void setData(Object answer) {
         binding.geoAnswerText.setText(answer.toString());
         binding.geoAnswerText.setVisibility(binding.geoAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
-        binding.simpleButton.setText(answer.toString().isEmpty() ? org.odk.collect.strings.R.string.get_trace : org.odk.collect.strings.R.string.geotrace_view_change_location);
+        binding.simpleButton.setText(answer.toString().isEmpty() ? org.odk.collect.strings.R.string.get_line : org.odk.collect.strings.R.string.view_or_change_line);
         widgetValueChanged();
     }
 

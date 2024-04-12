@@ -42,7 +42,6 @@
   <string name="forms">Mga Blangkong Form</string>
     <string name="get_barcode">Kunin ang Barcode</string>
   <string name="get_forms">Kumuha ng Blangkong Form</string>
-  <string name="get_location">Itala ang Kinalalagyan</string>
   <string name="provider_disabled_error">Paumanhin, ang mga provider ng Kinalalagyan ay hindi pinagana!</string>
   <string name="invalid_answer_error">Paumanhin, ang tugon na into ay hindi wasto!</string>
   <string name="jump_to_beginning">Punta sa Simula</string>

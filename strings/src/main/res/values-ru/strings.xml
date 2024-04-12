@@ -371,12 +371,9 @@
   <string name="google_play_services_error_occured">Не удалось получить доступ к Google картам. Установлен ли Google Play Services?</string>
   <string name="reference_layer">Базовый слой</string>
   <string name="layer_data_file">Файл данных слоя</string>
-  <string name="view_change_location">Показать или изменить местоположение</string>
-  <string name="change_location">Изменить местоположение</string>
   <string name="record_geopoint">Зафиксировать точку</string>
   <string name="location_accuracy">Точность: %1$s м</string>
   <string name="location_provider">Провайдер геолокации: %s</string>
-  <string name="get_location">Записать местоположение</string>
   <string name="provider_disabled_error">Включите функцию определения местоположения на вашем устройстве!</string>
   <string name="gps_result">Широта: %1$s\nДолгота: %2$s\nВысота: %3$sм\nТочность:%4$sм</string>
   <string name="google_play_services_not_available">Эта форма хочет отслеживать ваше местоположение, но сервисы Google Play недоступны.</string>
@@ -389,12 +386,6 @@
   <string name="background_location_enabled">Эта форма отслеживает ваше местоположение. Вы можете отключить отслеживание в меню %1$s выше.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="validate">Проверить на ошибки</string>
-  <string name="get_point">Определить местоположение</string>
-  <string name="geopoint_view_read_only">Просмотреть геоточку</string>
-  <string name="geoshape_view_read_only">Просмотр GeoShape</string>
-  <string name="geotrace_view_read_only">Просмотр GeoTrace</string>
-  <string name="get_shape">Начать геофигуру</string>
-  <string name="get_trace">Начать геослед</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Истекшее время: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -450,8 +441,6 @@
   <string name="geopoint_instruction">Используйте продолжительное нажатие, чтобы расставлять отметки или нажмите кнопку \"добавить отметку\".</string>
   <string name="geopoint_no_draggable_instruction">Нажмите кнопку \"добавить отметку\".</string>
   <string name="discard">Отменить</string>
-  <string name="geoshape_view_change_location">Показать или изменить геофигуру</string>
-  <string name="geotrace_view_change_location">Показать или изменить геослед</string>
   <string name="select_item_count">%s: %d (%d показано на карте)</string>
   <string name="select_item">Выбрать</string>
   <string name="new_item">Новый элемент</string>

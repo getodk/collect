@@ -8,7 +8,7 @@
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/simple_button"
         style="?widgetButtonIconQuestionWidgetStyle"
-        android:text="@string/get_trace"
+        android:text="@string/get_line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_outline_polyline_white_24" />

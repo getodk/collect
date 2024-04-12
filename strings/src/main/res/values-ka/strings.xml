@@ -210,9 +210,6 @@
     tile caches, and are not shown in the UI.-->
   <string name="basemap_source">წყარო</string>
   <string name="streets">ქუჩები</string>
-  <string name="view_change_location">მდებარეობის ნახვა ან შეცვლა</string>
-  <string name="change_location">ადგილმდებარეობის შეცვლა</string>
-  <string name="get_location">ადგილმდებარეობის ჩანიშვნა</string>
   <string name="provider_disabled_error">უკაცრავად, მდებარეობის მიმღები არ არის გააქტიურებული!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->

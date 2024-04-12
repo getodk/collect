@@ -85,7 +85,7 @@ public class GeoPointWidgetTest {
     @Test
     public void whenPromptHasAnswer_buttonShowsCorrectText() {
         GeoPointWidget widget = createWidget(promptWithAnswer(answer));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.change_location));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.change_point));
     }
 
     @Test
@@ -159,7 +159,7 @@ public class GeoPointWidgetTest {
     public void setData_whenDataIsNotNull_updatesButtonLabel() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         widget.setData(answer.getDisplayText());
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.change_location));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.change_point));
     }
 
     @Test

@@ -201,9 +201,6 @@
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
   <string name="satellite">Satelit</string>
-  <string name="view_change_location">Poglej ali spremeni lokacijo</string>
-  <string name="change_location">Spremeni lokacijo</string>
-  <string name="get_location">Zapiši lokacijo</string>
   <string name="provider_disabled_error">Ponudniki lociranja so onemogočeni!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->

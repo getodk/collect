@@ -390,12 +390,9 @@
   <string name="carto_map_style_dark_matter">Scuro è importante</string>
   <string name="reference_layer">Livello di riferimento</string>
   <string name="layer_data_file">File di dati del livello</string>
-  <string name="view_change_location">Vedi o Cambia Posizione</string>
-  <string name="change_location">Cambiare Localizzazione</string>
   <string name="record_geopoint">Memorizza un punto</string>
   <string name="location_accuracy">Precisione: %1$s m</string>
   <string name="location_provider">Fornitore di posizione: %s</string>
-  <string name="get_location">Registra Posizione</string>
   <string name="provider_disabled_error">Attenzione, i Sistemi di Posizionamento sono disabilitati!</string>
   <string name="gps_result">Latitudine: %1$s\nLongitudine: %2$s\nAltitudine: %3$sm\nPrecisione: %4$sm</string>
   <string name="google_play_services_not_available">Questo formulario vuole monitorare la tua posizione ma Google Play Services non è disponibile.</string>
@@ -408,12 +405,6 @@
   <string name="background_location_enabled">Questo modulo tiene traccia della tua posizione. Puoi disabilitare il monitoraggio nel menu %1$s in alto.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="validate">Controlla gli errori</string>
-  <string name="get_point">Inizia Geo-punto</string>
-  <string name="geopoint_view_read_only">Guarda Geo-punto</string>
-  <string name="geoshape_view_read_only">Visualizza Geo-contorno</string>
-  <string name="geotrace_view_read_only">Visualizza Geo-tracciatura</string>
-  <string name="get_shape">Inizia Geo-contorno</string>
-  <string name="get_trace">Inizia Geo-tracciatura</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Tempo trascorso: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -484,8 +475,6 @@
   <string name="geopoint_instruction">Premi a lungo per posizionare il segno altrimenti tocca su Aggiungi Posizione.</string>
   <string name="geopoint_no_draggable_instruction">Tocca Aggiungi Posizione.</string>
   <string name="discard">Annulla</string>
-  <string name="geoshape_view_change_location">Guarda o Cambia Geo-contorno</string>
-  <string name="geotrace_view_change_location">Guarda o Cambia Geo-tracciatura</string>
   <string name="select_item_count">%s: %d (%d mostrato sulla mappa)</string>
   <string name="select_item">Selezionare</string>
   <string name="new_item">Nuovo oggetto</string>

@@ -275,9 +275,6 @@
   <string name="dark" tools:ignore="UnusedResources">Donker</string>
   <string name="outdoors" tools:ignore="UnusedResources">Buiten</string>
   <string name="topographic">Topografisch</string>
-  <string name="view_change_location">Bekijk of wijzig positie</string>
-  <string name="change_location">Locatie wijzigen</string>
-  <string name="get_location">Positie vastleggen</string>
   <string name="provider_disabled_error">Sorry, GPS is uitgeschakeld!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Ga naar instellingen</string>

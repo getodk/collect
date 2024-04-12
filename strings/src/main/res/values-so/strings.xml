@@ -99,7 +99,6 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="get_location">Diiwaan geli Goobta</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->
   <!--Displayed in the form filling menu when a form has background location disabled-->

@@ -513,12 +513,9 @@
     <!-- Text for option where layer should be available to the current project only -->
     <string name="current_project_option" tools:ignore="UnusedResources">Current project only</string>
 
-    <string name="view_change_location">View or Change Location</string>
-    <string name="change_location">Change Location</string>
     <string name="record_geopoint">Record a point</string>
     <string name="location_accuracy">Accuracy: %1$s m</string>
     <string name="location_provider">Location provider: %s</string>
-    <string name="get_location">Record Location</string>
     <string name="provider_disabled_error">Sorry, Location providers are disabled!</string>
     <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
     <string name="google_play_services_not_available">This form wants to track your location but Google Play Services are not available.</string>
@@ -534,13 +531,6 @@
 
     <!-- Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error. -->
     <string name="validate">Check for errors</string>
-
-    <string name="get_point">Start GeoPoint</string>
-    <string name="geopoint_view_read_only">View GeoPoint</string>
-    <string name="geoshape_view_read_only">View GeoShape</string>
-    <string name="geotrace_view_read_only">View GeoTrace</string>
-    <string name="get_shape">Start GeoShape</string>
-    <string name="get_trace">Start GeoTrace</string>
 
     <!-- %1$s is the time taken so far in hh:mm:ss -->
     <string name="time_elapsed">Time elapsed: %1$s</string>
@@ -615,8 +605,6 @@
     <string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
     <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
     <string name="discard">Discard</string>
-    <string name="geoshape_view_change_location">View or Change GeoShape</string>
-    <string name="geotrace_view_change_location">View or Change GeoTrace</string>
     <string name="select_item_count">%s: %d (%d shown on map)</string>
     <string name="select_item">Select</string>
     <string name="new_item">New item</string>
@@ -1324,4 +1312,25 @@
     <string name="recover">Recover</string>
     <!-- Text for the button that declines the recovery of the work -->
     <string name="do_not_recover">Discard</string>
+
+    <!-- Text for the button that initiates getting user location -->
+    <string name="get_point">Get point</string>
+    <!-- Text for the button that displays a map for viewing or changing an already existing location -->
+    <string name="view_or_change_point">View or change point</string>
+    <!-- Text for the button that displays a map for viewing an already existing location -->
+    <string name="view_point">View point</string>
+    <!-- Text for the button that initiates getting user location when one is already present -->
+    <string name="change_point">Change point</string>
+    <!-- Text for the button that displays a map for getting a new line -->
+    <string name="get_line">Get line</string>
+    <!-- Text for the button that displays a map for viewing or changing an already existing line -->
+    <string name="view_or_change_line">View or change line</string>
+    <!-- Text for the button that displays a map for viewing an already existing line -->
+    <string name="view_line">View line</string>
+    <!-- Text for the button that displays a map for getting a new polygon -->
+    <string name="get_polygon">Get polygon</string>
+    <!-- Text for the button that displays a map for viewing or changing an already existing polygon -->
+    <string name="view_or_change_polygon">View or change polygon</string>
+    <!-- Text for the button that displays a map for viewing an already existing polygon -->
+    <string name="view_polygon">View polygon</string>
 </resources>

@@ -205,18 +205,12 @@
   <string name="hybrid">Híbrid</string>
   <string name="satellite">Satel·lit</string>
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
-  <string name="view_change_location">Veure o modificar posició</string>
-  <string name="get_location">Enregistrar Localització</string>
   <string name="provider_disabled_error">Atenció, la Locatització està desactivada!</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisió: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->
   <!--Displayed in the form filling menu when a form has background location disabled-->
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
-  <string name="get_point">Comença localització gps</string>
-  <string name="geopoint_view_read_only">Veure localització gps</string>
-  <string name="get_shape">Comença GeoForma</string>
-  <string name="get_trace">Comença GeoTraça</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -239,8 +233,6 @@
   <string name="geopoint_instruction">Prem una estona o toca el botó d\'afegir fita.</string>
   <string name="geopoint_no_draggable_instruction">Toca el botó afegir fita</string>
   <string name="discard">Descarta</string>
-  <string name="geoshape_view_change_location">Visualitza o modifica GeoShape</string>
-  <string name="geotrace_view_change_location">Visualitza o modifica GeoShape</string>
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->

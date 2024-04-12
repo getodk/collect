@@ -78,19 +78,19 @@ public class GeoTraceWidgetTest {
     @Test
     public void whenPromptIsReadOnlyAndHasAnswer_viewGeoShapeButtonIsShown() {
         GeoTraceWidget widget = createWidget(promptWithReadOnlyAndAnswer(new StringData(answer)));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.geotrace_view_read_only));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_line));
     }
 
     @Test
     public void whenPromptIsNotReadOnlyAndDoesNotHaveAnswer_startGeoShapeButtonIsShown() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_trace));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_line));
     }
 
     @Test
     public void whenPromptIsNotReadOnlyAndHasAnswer_viewOrChangeGeoShapeButtonIsShown() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.geotrace_view_change_location));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_line));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class GeoTraceWidgetTest {
         widget.clearAnswer();
 
         assertEquals(widget.binding.geoAnswerText.getText(), "");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_trace));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_line));
     }
 
     @Test
@@ -149,14 +149,14 @@ public class GeoTraceWidgetTest {
     public void setData_whenDataIsNull_updatesButtonLabel() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         widget.setData("");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_trace));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_line));
     }
 
     @Test
     public void setData_whenDataIsNotNull_updatesButtonLabel() {
         GeoTraceWidget widget = createWidget(promptWithAnswer(null));
         widget.setData(answer);
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.geotrace_view_change_location));
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_line));
     }
 
     @Test
