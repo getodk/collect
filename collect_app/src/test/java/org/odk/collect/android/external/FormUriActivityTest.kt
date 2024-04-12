@@ -976,7 +976,9 @@ class FormUriActivityTest {
             ).build()
         )
         val savepointFile = TempFiles.createTempFile()
-        val savepoint = Savepoint(form.dbId, null, savepointFile.absolutePath, TempFiles.createTempFile().absolutePath)
+        val instanceDirFile = TempFiles.createTempDir()
+        val instanceFile = TempFiles.createTempFile(instanceDirFile)
+        val savepoint = Savepoint(form.dbId, null, savepointFile.absolutePath, instanceFile.absolutePath)
         savepointsRepository.save(savepoint)
 
         launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
@@ -986,6 +988,8 @@ class FormUriActivityTest {
         onView(withText(org.odk.collect.strings.R.string.do_not_recover)).perform(click())
         fakeScheduler.flush()
         assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true))
+        assertThat(instanceDirFile.exists(), equalTo(false))
+        assertThat(instanceFile.exists(), equalTo(false))
     }
 
     @Test
@@ -1011,7 +1015,9 @@ class FormUriActivityTest {
         )
 
         val savepointFile = TempFiles.createTempFile()
-        val savepoint = Savepoint(form.dbId, instance.dbId, savepointFile.absolutePath, TempFiles.createTempFile().absolutePath)
+        val instanceDirFile = TempFiles.createTempDir()
+        val instanceFile = TempFiles.createTempFile(instanceDirFile)
+        val savepoint = Savepoint(form.dbId, instance.dbId, savepointFile.absolutePath, instanceFile.absolutePath)
         savepointsRepository.save(savepoint)
 
         launcherRule.launch<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
@@ -1021,6 +1027,8 @@ class FormUriActivityTest {
         onView(withText(org.odk.collect.strings.R.string.do_not_recover)).perform(click())
         fakeScheduler.flush()
         assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true))
+        assertThat(instanceDirFile.exists(), equalTo(true))
+        assertThat(instanceFile.exists(), equalTo(true))
     }
 
     private fun getBlankFormIntent(projectId: String?, dbId: Long) =
