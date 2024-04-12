@@ -5,6 +5,7 @@ import org.junit.Test
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.rules.BlankFormTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
+import org.odk.collect.strings.R.string
 
 /**
  * Integration test that runs through a form with all question types.
@@ -70,10 +71,10 @@ class AllWidgetsFormTest {
             .swipeToNextQuestion("Geopoint widget")
             .swipeToNextQuestion("Geopoint widget")
             .swipeToNextQuestion("Geotrace widget")
-            .clickOnText("Start GeoTrace")
+            .clickOnString(string.get_line)
             .pressBack(FormEntryPage("All widgets"))
             .swipeToNextQuestion("Geoshape widget")
-            .clickOnText("Start GeoShape")
+            .clickOnString(string.get_polygon)
             .pressBack(FormEntryPage("All widgets"))
             .swipeToNextQuestion("OSM integration")
 
@@ -90,7 +91,7 @@ class AllWidgetsFormTest {
             .swipeToNextQuestion("Image select one widget")
             .swipeToNextQuestion("Likert widget")
             .swipeToNextQuestion("Select one from map widget")
-            .clickOnText("Select place")
+            .clickOnString(string.select_place)
             .pressBack(FormEntryPage("All widgets"))
             .swipeToNextQuestion("Multi select widget")
             .swipeToNextQuestion("Multi select autocomplete widget")
