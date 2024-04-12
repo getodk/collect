@@ -11,7 +11,7 @@
         android:text="@string/launch_app"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:icon="@drawable/ic_baseline_videocam_white_24" />
+        app:icon="@drawable/ic_baseline_open_in_new_white_24" />
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/play_video_button"
