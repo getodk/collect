@@ -136,7 +136,7 @@ internal class SelectChoicesMapData(
         prompt: FormEntryPrompt
     ): List<MappableSelectItem> {
         return selectChoices.foldIndexed(emptyList()) { index, list, selectChoice ->
-            val geometry = selectChoice.getChild("geometry")
+            val geometry = selectChoice.getChild(GEOMETRY)
 
             if (geometry != null) {
                 try {
@@ -155,9 +155,9 @@ internal class SelectChoicesMapData(
 
                             if (points.size == 1) {
                                 val markerColor =
-                                    getPropertyValue(selectChoice, "marker-color")
+                                    getPropertyValue(selectChoice, MARKER_COLOR)
                                 val markerSymbol =
-                                    getPropertyValue(selectChoice, "marker-symbol")
+                                    getPropertyValue(selectChoice, MARKER_SYMBOL)
 
                                 list + MappableSelectItem.MappableSelectPoint(
                                     index.toLong(),
@@ -185,8 +185,8 @@ internal class SelectChoicesMapData(
                                         org.odk.collect.icons.R.drawable.ic_save,
                                         resources.getString(org.odk.collect.strings.R.string.select_item)
                                     ),
-                                    strokeWidth = getPropertyValue(selectChoice, "stroke-width"),
-                                    strokeColor = getPropertyValue(selectChoice, "stroke")
+                                    strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
+                                    strokeColor = getPropertyValue(selectChoice, STROKE)
                                 )
                             } else {
                                 list + MappableSelectItem.MappableSelectPolygon(
@@ -199,9 +199,9 @@ internal class SelectChoicesMapData(
                                         org.odk.collect.icons.R.drawable.ic_save,
                                         resources.getString(org.odk.collect.strings.R.string.select_item)
                                     ),
-                                    strokeWidth = getPropertyValue(selectChoice, "stroke-width"),
-                                    strokeColor = getPropertyValue(selectChoice, "stroke"),
-                                    fillColor = getPropertyValue(selectChoice, "fill")
+                                    strokeWidth = getPropertyValue(selectChoice, STROKE_WIDTH),
+                                    strokeColor = getPropertyValue(selectChoice, STROKE),
+                                    fillColor = getPropertyValue(selectChoice, FILL)
                                 )
                             }
                         } else {
@@ -241,5 +241,14 @@ internal class SelectChoicesMapData(
 
     override fun getMappableItems(): LiveData<List<MappableSelectItem>?> {
         return items
+    }
+
+    companion object PropertyNames {
+        const val GEOMETRY = "geometry"
+        const val MARKER_COLOR = "marker-color"
+        const val MARKER_SYMBOL = "marker-symbol"
+        const val STROKE = "stroke"
+        const val STROKE_WIDTH = "stroke-width"
+        const val FILL = "fill"
     }
 }

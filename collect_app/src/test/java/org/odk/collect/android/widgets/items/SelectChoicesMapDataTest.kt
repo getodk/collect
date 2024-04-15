@@ -34,7 +34,7 @@ class SelectChoicesMapDataTest {
             selectChoice(
                 value = "a",
                 item = treeElement(
-                    children = listOf(treeElement("geometry", "12.0 -1.0 3 4; 12.1 -1.0 3 4"))
+                    children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4"))
                 )
             )
         )
@@ -64,7 +64,7 @@ class SelectChoicesMapDataTest {
             selectChoice(
                 value = "a",
                 item = treeElement(
-                    children = listOf(treeElement("geometry", "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"))
+                    children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"))
                 )
             )
         )
@@ -93,7 +93,7 @@ class SelectChoicesMapDataTest {
         val choices = listOf(
             selectChoice(
                 value = "a",
-                item = treeElement(children = listOf(treeElement("geometry", "12.0 -1.0 305 0")))
+                item = treeElement(children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0")))
             ),
             selectChoice(
                 value = "b",
@@ -120,7 +120,7 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "12.0 -1.0 305 0"),
+                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
                         treeElement("property", "blah")
                     )
                 )
@@ -165,7 +165,7 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "0 170.00 0 0")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "0 170.00 0 0")
                     )
                 )
             ),
@@ -174,7 +174,7 @@ class SelectChoicesMapDataTest {
                 value = "b",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "blah")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "blah")
                     )
                 )
             ),
@@ -183,7 +183,7 @@ class SelectChoicesMapDataTest {
                 value = "c",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "0 180.1 0 0")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "0 180.1 0 0")
                     )
                 )
             ),
@@ -192,7 +192,7 @@ class SelectChoicesMapDataTest {
                 value = "c",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "0 180 0 0; 0 180.1 0 0")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "0 180 0 0; 0 180.1 0 0")
                     )
                 )
             )
@@ -219,9 +219,9 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "12.0 -1.0 305 0"),
-                        treeElement("marker-symbol", "A"),
-                        treeElement("marker-color", "#ffffff")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, "A"),
+                        treeElement(SelectChoicesMapData.MARKER_COLOR, "#ffffff")
                     )
                 )
             )
@@ -250,9 +250,9 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "12.0 -1.0 3 4; 12.1 -1.0 3 4"),
-                        treeElement("stroke-width", "10"),
-                        treeElement("stroke", "#ffffff")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4"),
+                        treeElement(SelectChoicesMapData.STROKE_WIDTH, "10"),
+                        treeElement(SelectChoicesMapData.STROKE, "#ffffff")
                     )
                 )
             )
@@ -281,10 +281,10 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"),
-                        treeElement("stroke-width", "10"),
-                        treeElement("stroke", "#000000"),
-                        treeElement("fill", "#ffffff")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"),
+                        treeElement(SelectChoicesMapData.STROKE_WIDTH, "10"),
+                        treeElement(SelectChoicesMapData.STROKE, "#000000"),
+                        treeElement(SelectChoicesMapData.FILL, "#ffffff")
                     )
                 )
             )
@@ -310,8 +310,8 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "12.0 -1.0 305 0"),
-                        treeElement("marker-symbol", "A")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, "A")
                     )
                 )
             )
