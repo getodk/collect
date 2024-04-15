@@ -73,10 +73,10 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
         }
 
         item.action?.let {
-            binding.action.text = item.action!!.text
+            binding.action.text = it.text
 
-            if (item.action!!.icon != null) {
-                binding.action.icon = ContextCompat.getDrawable(context, item.action!!.icon!!)
+            if (it.icon != null) {
+                binding.action.icon = ContextCompat.getDrawable(context, it.icon)
             }
 
             binding.action.visibility = View.VISIBLE
