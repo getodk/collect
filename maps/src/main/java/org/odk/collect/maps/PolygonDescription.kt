@@ -4,10 +4,10 @@ import androidx.core.graphics.ColorUtils
 import org.odk.collect.androidshared.utils.toColorInt
 
 data class PolygonDescription(
-    val points: List<MapPoint>,
-    private val strokeWidth: String?,
-    private val strokeColor: String?,
-    private val fillColor: String?
+    val points: List<MapPoint> = emptyList(),
+    private val strokeWidth: String? = null,
+    private val strokeColor: String? = null,
+    private val fillColor: String? = null
 ) {
     fun getStrokeWidth(): Float {
         return try {

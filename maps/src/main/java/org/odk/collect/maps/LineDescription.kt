@@ -3,11 +3,11 @@ package org.odk.collect.maps
 import org.odk.collect.androidshared.utils.toColorInt
 
 data class LineDescription(
-    val points: List<MapPoint>,
-    private val strokeWidth: String?,
-    private val strokeColor: String?,
-    val draggable: Boolean,
-    val closed: Boolean
+    val points: List<MapPoint> = emptyList(),
+    private val strokeWidth: String? = null,
+    private val strokeColor: String? = null,
+    val draggable: Boolean = false,
+    val closed: Boolean = false
 ) {
     fun getStrokeWidth(): Float {
         return try {
