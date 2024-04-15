@@ -21,10 +21,7 @@ fun String.toColorInt() = try {
 }
 
 private fun shorthandToLonghandHexColor(shorthandColor: String): String {
-    var longHandColor = ""
-    shorthandColor.substring(1).map {
-        longHandColor += it.toString() + it.toString()
+    return shorthandColor.substring(1).fold("#") { accum, char ->
+        "$accum$char$char"
     }
-
-    return "#$longHandColor"
 }
