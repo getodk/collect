@@ -322,6 +322,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         MapFeature feature = features.get(featureId);
         if (feature instanceof MarkerFeature) {
             ((MarkerFeature) feature).setIcon(markerIconDescription);
+            map.invalidate();
         }
     }
 
