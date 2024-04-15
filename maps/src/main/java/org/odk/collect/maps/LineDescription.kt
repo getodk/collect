@@ -25,6 +25,6 @@ data class LineDescription(
 
     fun getStrokeColor(): Int {
         val customColor = strokeColor?.toColorInt()
-        return customColor ?: MapConsts.DEFAULT_STROKE_COLOR.toColorInt()!!
+        return customColor ?: MapConsts.DEFAULT_STROKE_COLOR
     }
 }

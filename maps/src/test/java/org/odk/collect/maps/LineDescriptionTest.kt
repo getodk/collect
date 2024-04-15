@@ -41,13 +41,13 @@ class LineDescriptionTest {
     @Test
     fun `getStrokeColor returns the default color when the passed one is null`() {
         val lineDescription = LineDescription(emptyList(), null, null, false, false)
-        assertThat(lineDescription.getStrokeColor(), equalTo(-65536))
+        assertThat(lineDescription.getStrokeColor(), equalTo(MapConsts.DEFAULT_STROKE_COLOR))
     }
 
     @Test
     fun `getStrokeColor returns the default color when the passed one is invalid`() {
         val lineDescription = LineDescription(emptyList(), null, "blah", false, false)
-        assertThat(lineDescription.getStrokeColor(), equalTo(-65536))
+        assertThat(lineDescription.getStrokeColor(), equalTo(MapConsts.DEFAULT_STROKE_COLOR))
     }
 
     @Test

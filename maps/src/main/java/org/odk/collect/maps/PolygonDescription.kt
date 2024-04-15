@@ -25,7 +25,7 @@ data class PolygonDescription(
 
     fun getStrokeColor(): Int {
         val customColor = strokeColor?.toColorInt()
-        return customColor ?: MapConsts.DEFAULT_STROKE_COLOR.toColorInt()!!
+        return customColor ?: MapConsts.DEFAULT_STROKE_COLOR
     }
 
     fun getFillColor(): Int {
@@ -38,7 +38,7 @@ data class PolygonDescription(
 
         return customColor
             ?: ColorUtils.setAlphaComponent(
-                MapConsts.DEFAULT_STROKE_COLOR.toColorInt()!!,
+                MapConsts.DEFAULT_STROKE_COLOR,
                 MapConsts.DEFAULT_FILL_COLOR_OPACITY
             )
     }

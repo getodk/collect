@@ -41,13 +41,13 @@ class PolygonDescriptionTest {
     @Test
     fun `getStrokeColor returns the default color when the passed one is null`() {
         val polygonDescription = PolygonDescription(emptyList(), "0", null, null)
-        assertThat(polygonDescription.getStrokeColor(), equalTo(-65536))
+        assertThat(polygonDescription.getStrokeColor(), equalTo(MapConsts.DEFAULT_STROKE_COLOR))
     }
 
     @Test
     fun `getStrokeColor returns the default color when the passed one is invalid`() {
         val polygonDescription = PolygonDescription(emptyList(), "0", "blah", null)
-        assertThat(polygonDescription.getStrokeColor(), equalTo(-65536))
+        assertThat(polygonDescription.getStrokeColor(), equalTo(MapConsts.DEFAULT_STROKE_COLOR))
     }
 
     @Test
