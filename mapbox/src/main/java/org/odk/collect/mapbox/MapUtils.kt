@@ -6,6 +6,7 @@ import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.markers.MarkerDescription
@@ -64,5 +65,11 @@ object MapUtils {
         // obtained from a GPS reading, so the altitude and standard
         // deviation fields are no longer meaningful; reset them to zero.
         return MapPoint(pointAnnotation.point.latitude(), pointAnnotation.point.longitude(), 0.0, 0.0)
+    }
+
+    // To ensure consistent stroke width across map platforms like Mapbox, Google, and OSM,
+    // the value for Mapbox needs to be divided by 3.
+    fun convertStrokeWidth(lineDescription: LineDescription): Double {
+        return (lineDescription.getStrokeWidth() / 3).toDouble()
     }
 }

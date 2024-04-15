@@ -43,7 +43,7 @@ internal class StaticPolyLineFeature(
                 PolylineAnnotationOptions()
                     .withPoints(points)
                     .withLineColor(lineDescription.getStrokeColor())
-                    .withLineWidth((lineDescription.getStrokeWidth() / 3).toDouble())
+                    .withLineWidth(MapUtils.convertStrokeWidth(lineDescription))
             ).also {
                 polylineAnnotationManager.update(it)
             }
