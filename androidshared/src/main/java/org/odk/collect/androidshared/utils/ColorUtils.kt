@@ -16,7 +16,7 @@ fun String.toColorInt() = try {
     }
 
     Color.parseColor(sanitizedColor)
-} catch (e: Throwable) {
+} catch (e: IllegalArgumentException) {
     null
 }
 

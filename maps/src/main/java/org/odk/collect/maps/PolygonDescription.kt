@@ -18,7 +18,7 @@ data class PolygonDescription(
                     MapConsts.DEFAULT_STROKE_WIDTH
                 }
             } ?: MapConsts.DEFAULT_STROKE_WIDTH
-        } catch (e: Throwable) {
+        } catch (e: NumberFormatException) {
             MapConsts.DEFAULT_STROKE_WIDTH
         }
     }
