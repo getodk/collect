@@ -175,7 +175,12 @@ object FormEntryUseCases {
         }
 
         formController.finalizeForm()
-        formController.getEntities().forEach { entity -> entitiesRepository.save(entity) }
+        formController.getEntities().forEach { entity ->
+            if (entitiesRepository.getDatasets().contains(entity.dataset)) {
+                entitiesRepository.save(entity)
+            }
+        }
+
         return true
     }
 
