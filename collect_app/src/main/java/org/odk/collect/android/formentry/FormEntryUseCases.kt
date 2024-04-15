@@ -165,7 +165,7 @@ object FormEntryUseCases {
     }
 
     @JvmStatic
-    private fun finalizeInstance(
+    fun finalizeInstance(
         formController: FormController,
         entitiesRepository: EntitiesRepository
     ): Boolean {

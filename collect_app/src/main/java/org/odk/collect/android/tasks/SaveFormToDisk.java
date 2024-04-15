@@ -44,6 +44,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.external.InstancesContract;
+import org.odk.collect.android.formentry.FormEntryUseCases;
 import org.odk.collect.android.formentry.saving.FormSaver;
 import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -127,8 +128,7 @@ public class SaveFormToDisk {
         }
 
         if (shouldFinalize) {
-            formController.finalizeForm();
-            formController.getEntities().forEach(entitiesRepository::save);
+            FormEntryUseCases.finalizeInstance(formController, entitiesRepository);
         }
 
         // close all open databases of external data.
