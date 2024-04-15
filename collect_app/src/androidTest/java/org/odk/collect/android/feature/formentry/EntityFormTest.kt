@@ -6,13 +6,10 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.TestDependencies
-import org.odk.collect.android.support.pages.ExperimentalPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
-import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
-import org.odk.collect.strings.R.string
 
 @RunWith(AndroidJUnit4::class)
 class EntityFormTest {
@@ -29,6 +26,7 @@ class EntityFormTest {
         testDependencies.server.addForm("one-question-entity-registration.xml")
 
         rule.withMatchExactlyProject(testDependencies.server.url)
+            .addEntityListInBrowser("people")
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
             .openEntityBrowser()
@@ -43,6 +41,7 @@ class EntityFormTest {
 
         rule.withMatchExactlyProject(testDependencies.server.url)
             .enableLocalEntitiesInForms()
+            .addEntityListInBrowser("people")
 
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
@@ -60,6 +59,7 @@ class EntityFormTest {
 
         rule.withMatchExactlyProject(testDependencies.server.url)
             .enableLocalEntitiesInForms()
+            .addEntityListInBrowser("people")
 
             .startBlankForm("One Question Entity Update") // Open to create cached form def
             .pressBackAndDiscardForm()
@@ -79,6 +79,7 @@ class EntityFormTest {
 
         rule.withMatchExactlyProject(testDependencies.server.url)
             .enableLocalEntitiesInForms()
+            .addEntityListInBrowser("people")
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
@@ -99,6 +100,7 @@ class EntityFormTest {
 
         val mainMenuPage = rule.withMatchExactlyProject(testDependencies.server.url)
             .enableLocalEntitiesInForms()
+            .addEntityListInBrowser("people")
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
@@ -131,6 +133,7 @@ class EntityFormTest {
 
         rule.withMatchExactlyProject(testDependencies.server.url)
             .enableLocalEntitiesInForms()
+            .addEntityListInBrowser("people")
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
@@ -160,15 +163,7 @@ class EntityFormTest {
         }
 
         rule.withProject(testDependencies.server)
-            .openEntityBrowser()
-            .clickOptionsIcon(string.add_entity_list)
-            .clickOnTextInPopup(string.add_entity_list)
-            .inputText("people")
-            .clickOnTextInDialog(string.add)
-            .assertText("people")
-            .pressBack(ExperimentalPage())
-            .pressBack(ProjectSettingsPage())
-            .pressBack(MainMenuPage())
+            .addEntityListInBrowser("people")
 
             .clickGetBlankForm()
             .clickClearAll()

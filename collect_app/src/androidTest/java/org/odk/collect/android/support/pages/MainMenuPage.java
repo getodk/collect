@@ -17,6 +17,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.TestScheduler;
 import org.odk.collect.android.support.WaitFor;
+import org.odk.collect.strings.R.string;
 
 import java.io.IOException;
 import java.util.List;
@@ -285,6 +286,18 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickOnString(org.odk.collect.strings.R.string.entity_browser_button);
 
         return new EntitiesPage().assertOnPage();
+    }
+
+    public MainMenuPage addEntityListInBrowser(String entityList) {
+        return openEntityBrowser()
+                .clickOptionsIcon(string.add_entity_list)
+                .clickOnTextInPopup(string.add_entity_list)
+                .inputText(entityList)
+                .clickOnTextInDialog(string.add)
+                .assertText(entityList)
+                .pressBack(new ExperimentalPage())
+                .pressBack(new ProjectSettingsPage())
+                .pressBack(new MainMenuPage());
     }
 
     @NotNull
