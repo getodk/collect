@@ -1,6 +1,8 @@
 package org.odk.collect.android.formmanagement;
 
 import org.junit.Test;
+import org.odk.collect.android.formmanagement.download.FormDownloadException;
+import org.odk.collect.android.formmanagement.download.FormDownloader;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSourceException;

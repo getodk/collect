@@ -1,4 +1,4 @@
-package org.odk.collect.android.formmanagement;
+package org.odk.collect.android.formmanagement.download;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -23,6 +23,8 @@ import com.google.common.io.Files;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.junit.Test;
+import org.odk.collect.android.formmanagement.FormMetadataParser;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormListItem;
 import org.odk.collect.forms.FormSource;

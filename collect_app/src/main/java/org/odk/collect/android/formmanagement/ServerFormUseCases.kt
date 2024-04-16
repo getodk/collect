@@ -1,8 +1,10 @@
 package org.odk.collect.android.formmanagement
 
+import org.odk.collect.android.formmanagement.download.FormDownloadException
+import org.odk.collect.android.formmanagement.download.FormDownloader
 import org.odk.collect.shared.locks.ChangeLock
 
-class FormUpdateDownloader {
+object ServerFormUseCases {
 
     fun downloadUpdates(
         updatedForms: List<ServerFormDetails>,
@@ -10,7 +12,6 @@ class FormUpdateDownloader {
         formDownloader: FormDownloader
     ): Map<ServerFormDetails, FormDownloadException?> {
         val results = mutableMapOf<ServerFormDetails, FormDownloadException?>()
-
         changeLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
                 for (serverFormDetails in updatedForms) {

@@ -1,7 +1,7 @@
-package org.odk.collect.android.formmanagement
+package org.odk.collect.android.formmanagement.download
 
+import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.utilities.FileUtils
-import org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME
 import org.odk.collect.async.OngoingWorkListener
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSource
@@ -12,24 +12,24 @@ import org.odk.collect.shared.strings.Md5
 import java.io.File
 import java.io.IOException
 
-object ServerFormDownloaderUseCases {
+object FormDownloadUseCases {
+
     @JvmStatic
     fun copySavedFileFromPreviousFormVersionIfExists(formsRepository: FormsRepository, formId: String, mediaDirPath: String) {
         val lastSavedFile: File? = formsRepository
             .getAllByFormId(formId)
             .maxByOrNull { form -> form.date }
             ?.let {
-                File(it.formMediaPath, LAST_SAVED_FILENAME)
+                File(it.formMediaPath, FileUtils.LAST_SAVED_FILENAME)
             }
 
         if (lastSavedFile != null && lastSavedFile.exists()) {
             File(mediaDirPath).mkdir()
-            FileUtils.copyFile(lastSavedFile, File(mediaDirPath, LAST_SAVED_FILENAME))
+            FileUtils.copyFile(lastSavedFile, File(mediaDirPath, FileUtils.LAST_SAVED_FILENAME))
         }
     }
 
     @JvmStatic
-    @JvmOverloads
     @Throws(IOException::class, FormSourceException::class, InterruptedException::class)
     fun downloadMediaFiles(
         formToDownload: ServerFormDetails,

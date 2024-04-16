@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.listeners;
 
-import org.odk.collect.android.formmanagement.FormDownloadException;
+import org.odk.collect.android.formmanagement.download.FormDownloadException;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 
 import java.util.Map;
