@@ -31,10 +31,10 @@ object ServerFormDownloaderUseCases {
     @JvmStatic
     @JvmOverloads
     @Throws(IOException::class, FormSourceException::class, InterruptedException::class)
-    fun download(
-        formsRepository: FormsRepository,
-        formSource: FormSource,
+    fun downloadMediaFiles(
         formToDownload: ServerFormDetails,
+        formSource: FormSource,
+        formsRepository: FormsRepository,
         tempMediaPath: String,
         tempDir: File,
         stateListener: OngoingWorkListener,

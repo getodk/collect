@@ -100,7 +100,7 @@ class ServerFormDownloaderUseCasesTest {
     }
 
     @Test
-    fun `download returns false when there is an existing copy of a media file and an older one`() {
+    fun `downloadMediaFiles returns false when there is an existing copy of a media file and an older one`() {
         var date: Long = 0
         // Save forms
         val formsRepository = InMemFormsRepository {
@@ -130,10 +130,10 @@ class ServerFormDownloaderUseCasesTest {
                 .inputStream()
         }
 
-        val result = ServerFormDownloaderUseCases.download(
-            formsRepository,
-            formSource,
+        val result = ServerFormDownloaderUseCases.downloadMediaFiles(
             serverFormDetails,
+            formSource,
+            formsRepository,
             File(TempFiles.createTempDir(), "temp").absolutePath,
             TempFiles.createTempDir(),
             mock(),
@@ -144,7 +144,7 @@ class ServerFormDownloaderUseCasesTest {
     }
 
     @Test
-    fun `download returns false when there is an existing copy of a media file and an older one and media file list hash doesn't match existing copy`() {
+    fun `downloadMediaFiles returns false when there is an existing copy of a media file and an older one and media file list hash doesn't match existing copy`() {
         // Save forms
         var date: Long = 0
         val formsRepository = InMemFormsRepository {
@@ -173,10 +173,10 @@ class ServerFormDownloaderUseCasesTest {
                 .inputStream()
         }
 
-        val result = ServerFormDownloaderUseCases.download(
-            formsRepository,
-            formSource,
+        val result = ServerFormDownloaderUseCases.downloadMediaFiles(
             serverFormDetails,
+            formSource,
+            formsRepository,
             File(TempFiles.createTempDir(), "temp").absolutePath,
             TempFiles.createTempDir(),
             mock()

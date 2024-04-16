@@ -93,7 +93,7 @@ public class ServerFormDownloader implements FormDownloader {
 
             // download media files if there are any
             if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
-                newAttachmentsDetected = ServerFormDownloaderUseCases.download(formsRepository, formSource, fd, tempMediaPath, tempDir, stateListener);
+                newAttachmentsDetected = ServerFormDownloaderUseCases.downloadMediaFiles(fd, formSource, formsRepository, tempMediaPath, tempDir, stateListener, false);
             }
 
             ServerFormDownloaderUseCases.copySavedFileFromPreviousFormVersionIfExists(formsRepository, fd.getFormId(), tempMediaPath);
