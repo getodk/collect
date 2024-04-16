@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.odk.collect.android.formmanagement.download.FormDownloadException
-import org.odk.collect.android.formmanagement.download.FormDownloader.ProgressReporter
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.notifications.Notifier
@@ -46,35 +45,23 @@ class FormsDataService(
         getServerErrorLiveData(projectId).value = null
     }
 
-    @Throws(FormDownloadException.DownloadingInterrupted::class)
     fun downloadForms(
         projectId: String,
         forms: List<ServerFormDetails>,
         progressReporter: (Int, Int) -> Unit,
         isCancelled: () -> Boolean
     ): Map<ServerFormDetails, FormDownloadException?> {
+        val projectDependencyProvider = projectDependencyProviderFactory.create(projectId)
         val formDownloader =
-            formDownloader(projectDependencyProviderFactory.create(projectId), clock)
+            formDownloader(projectDependencyProvider, clock)
 
-        return forms.foldIndexed(mapOf()) { index, results, form ->
-            try {
-                formDownloader.downloadForm(
-                    form,
-                    object : ProgressReporter {
-                        override fun onDownloadingMediaFile(count: Int) {
-                            progressReporter(index, count)
-                        }
-                    },
-                    { isCancelled() }
-                )
-
-                results + (form to null)
-            } catch (e: FormDownloadException.DownloadingInterrupted) {
-                throw e
-            } catch (e: FormDownloadException) {
-                results + (form to e)
-            }
-        }
+        return ServerFormUseCases.downloadForms(
+            forms,
+            projectDependencyProvider.formsLock,
+            formDownloader,
+            progressReporter,
+            isCancelled
+        )
     }
 
     /**
@@ -98,7 +85,7 @@ class FormsDataService(
                             .collect(Collectors.toList())
                     if (updatedForms.isNotEmpty()) {
                         if (projectDependencies.generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE)) {
-                            val results = ServerFormUseCases.downloadUpdates(
+                            val results = ServerFormUseCases.downloadForms(
                                 updatedForms,
                                 projectDependencies.formsLock,
                                 formDownloader

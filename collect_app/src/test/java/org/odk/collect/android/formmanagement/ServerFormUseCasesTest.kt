@@ -25,7 +25,7 @@ class ServerFormUseCasesTest {
         val serverForm =
             ServerFormDetails("", "", "", "", "", false, true, ManifestFile("", emptyList()))
 
-        ServerFormUseCases.downloadUpdates(
+        ServerFormUseCases.downloadForms(
             listOf(serverForm),
             changeLock,
             formDownloader
@@ -62,7 +62,7 @@ class ServerFormUseCasesTest {
             }
         }).`when`(formDownloader).downloadForm(Mockito.any(), Mockito.any(), Mockito.any())
 
-        val results = ServerFormUseCases.downloadUpdates(
+        val results = ServerFormUseCases.downloadForms(
             serverForms,
             changeLock,
             formDownloader

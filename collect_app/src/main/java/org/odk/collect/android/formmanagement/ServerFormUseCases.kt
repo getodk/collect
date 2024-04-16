@@ -6,22 +6,35 @@ import org.odk.collect.shared.locks.ChangeLock
 
 object ServerFormUseCases {
 
-    fun downloadUpdates(
-        updatedForms: List<ServerFormDetails>,
+    fun downloadForms(
+        forms: List<ServerFormDetails>,
         changeLock: ChangeLock,
-        formDownloader: FormDownloader
+        formDownloader: FormDownloader,
+        progressReporter: ((Int, Int) -> Unit)? = null,
+        isCancelled: (() -> Boolean)? = null,
     ): Map<ServerFormDetails, FormDownloadException?> {
         val results = mutableMapOf<ServerFormDetails, FormDownloadException?>()
         changeLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
-                for (serverFormDetails in updatedForms) {
+                for (index in forms.indices) {
+                    val form = forms[index]
+
                     try {
-                        formDownloader.downloadForm(serverFormDetails, null, null)
-                        results[serverFormDetails] = null
+                        formDownloader.downloadForm(
+                            form,
+                            object : FormDownloader.ProgressReporter {
+                                override fun onDownloadingMediaFile(count: Int) {
+                                    progressReporter?.invoke(index, count)
+                                }
+                            },
+                            { isCancelled?.invoke() ?: false }
+                        )
+
+                        results[form] = null
                     } catch (e: FormDownloadException.DownloadingInterrupted) {
                         break
                     } catch (e: FormDownloadException) {
-                        results[serverFormDetails] = e
+                        results[form] = e
                     }
                 }
             }

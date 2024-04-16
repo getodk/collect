@@ -15,7 +15,6 @@
 package org.odk.collect.android.tasks;
 
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
-import static java.util.Collections.emptyMap;
 
 import android.os.AsyncTask;
 
@@ -52,21 +51,17 @@ public class DownloadFormsTask extends
 
     @Override
     protected Map<ServerFormDetails, FormDownloadException> doInBackground(ArrayList<ServerFormDetails>... values) {
-        try {
-            return formsDataService.downloadForms(projectId, values[0], (index, count) -> {
-                ServerFormDetails serverFormDetails = values[0].get(index);
-                String message = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.form_download_progress,
-                        serverFormDetails.getFormName(),
-                        String.valueOf(count),
-                        String.valueOf(serverFormDetails.getManifest().getMediaFiles().size())
-                );
+        return formsDataService.downloadForms(projectId, values[0], (index, count) -> {
+            ServerFormDetails serverFormDetails = values[0].get(index);
+            String message = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.form_download_progress,
+                    serverFormDetails.getFormName(),
+                    String.valueOf(count),
+                    String.valueOf(serverFormDetails.getManifest().getMediaFiles().size())
+            );
 
-                publishProgress(message, String.valueOf(index), String.valueOf(values[0].size()));
-                return null;
-            }, this::isCancelled);
-        } catch (FormDownloadException.DownloadingInterrupted e) {
-            return emptyMap();
-        }
+            publishProgress(message, String.valueOf(index), String.valueOf(values[0].size()));
+            return null;
+        }, this::isCancelled);
     }
 
     @Override
