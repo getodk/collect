@@ -332,6 +332,9 @@ private class FormUriViewModel(
     fun deleteSavepoint(savepoint: Savepoint) {
         scheduler.immediate(
             background = {
+                if (savepoint.instanceDbId == null) {
+                    File(savepoint.instanceFilePath).parentFile?.deleteRecursively()
+                }
                 savepointsRepositoryProvider.get().delete(savepoint.formDbId, savepoint.instanceDbId)
             },
             foreground = {
