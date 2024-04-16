@@ -136,8 +136,7 @@ class ServerFormDownloaderUseCasesTest {
             formsRepository,
             File(TempFiles.createTempDir(), "temp").absolutePath,
             TempFiles.createTempDir(),
-            mock(),
-            true
+            mock()
         )
 
         assertThat(result, equalTo(false))

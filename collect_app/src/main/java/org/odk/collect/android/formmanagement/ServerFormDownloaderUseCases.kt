@@ -37,8 +37,7 @@ object ServerFormDownloaderUseCases {
         formsRepository: FormsRepository,
         tempMediaPath: String,
         tempDir: File,
-        stateListener: OngoingWorkListener,
-        test: Boolean = false
+        stateListener: OngoingWorkListener
     ): Boolean {
         var atLeastOneNewMediaFileDetected = false
         val tempMediaDir = File(tempMediaPath).also { it.mkdir() }
@@ -59,16 +58,10 @@ object ServerFormDownloaderUseCases {
                         FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
 
                         if (!Md5.getMd5Hash(tempMediaFile).contentEquals(existingFileHash)) {
-                            if (test) {
-                                throw Exception("Content does not equal")
-                            }
                             atLeastOneNewMediaFileDetected = true
                         }
                     }
                 } else {
-                    if (test) {
-                        throw Exception("File does not exist")
-                    }
                     val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
                     FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
                     atLeastOneNewMediaFileDetected = true
