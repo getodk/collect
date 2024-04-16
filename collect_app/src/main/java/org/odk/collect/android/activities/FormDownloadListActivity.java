@@ -39,16 +39,17 @@ import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
-import org.odk.collect.android.formmanagement.download.FormDownloadException;
-import org.odk.collect.android.formmanagement.download.FormDownloader;
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
+import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.formmanagement.download.FormDownloadException;
 import org.odk.collect.android.fragments.dialogs.FormsDownloadResultDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
+import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -128,7 +129,10 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     NetworkStateProvider connectivityProvider;
 
     @Inject
-    FormDownloader formDownloader;
+    FormsDataService formsDataService;
+
+    @Inject
+    ProjectsDataService projectsDataService;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -395,7 +399,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             // show dialog box
             DialogFragmentUtils.showIfNotShowing(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
-            downloadFormsTask = new DownloadFormsTask(formDownloader);
+            downloadFormsTask = new DownloadFormsTask(projectsDataService.getCurrentProject().getUuid(), formsDataService);
             downloadFormsTask.setDownloaderListener(this);
 
             if (viewModel.getUrl() != null) {
