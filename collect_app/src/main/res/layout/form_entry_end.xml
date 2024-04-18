@@ -111,7 +111,8 @@ the specific language governing permissions and limitations under the License.
                 android:layout_weight="1"
                 android:text="@string/save_as_draft"
                 app:icon="@drawable/ic_save_menu_24"
-                app:iconGravity="textStart" />
+                app:iconGravity="textStart"
+                app:screenName="@string/form_end_screen" />
 
             <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
                 android:id="@+id/finalize"
@@ -121,7 +122,8 @@ the specific language governing permissions and limitations under the License.
                 android:layout_weight="1"
                 android:text="@string/finalize"
                 app:icon="@drawable/ic_send_24"
-                app:iconGravity="textStart" />
+                app:iconGravity="textStart"
+                app:screenName="@string/form_end_screen" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
