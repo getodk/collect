@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.TextView
 import org.odk.collect.android.R
-import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 class StartNewFormButton(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
@@ -20,6 +19,6 @@ class StartNewFormButton(context: Context, attrs: AttributeSet?) : FrameLayout(c
         get() = findViewById<TextView>(R.id.name).text.toString()
 
     override fun performClick(): Boolean {
-        return MultiClickGuard.allowClick(ApplicationConstants.ScreenName.MAIN_MENU.name) && super.performClick()
+        return MultiClickGuard.allowClick(context.getString(org.odk.collect.androidshared.R.string.main_menu_screen)) && super.performClick()
     }
 }

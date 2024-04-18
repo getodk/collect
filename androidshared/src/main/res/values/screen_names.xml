@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="main_menu_screen" translatable="false">mainMenuScreen</string>
     <string name="form_end_screen" translatable="false">formEndScreen</string>
 </resources>

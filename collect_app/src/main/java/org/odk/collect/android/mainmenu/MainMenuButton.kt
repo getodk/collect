@@ -10,7 +10,6 @@ import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.badge.ExperimentalBadgeUtils
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.MainMenuButtonBinding
-import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
@@ -51,7 +50,7 @@ class MainMenuButton(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         get() = binding.name.text.toString()
 
     override fun performClick(): Boolean {
-        return MultiClickGuard.allowClick(ApplicationConstants.ScreenName.MAIN_MENU.name) && super.performClick()
+        return MultiClickGuard.allowClick(context.getString(org.odk.collect.androidshared.R.string.main_menu_screen)) && super.performClick()
     }
 
     fun setNumberOfForms(number: Int) {
