@@ -283,6 +283,35 @@ public class GeoPolyActivityTest {
         scenario.onActivity(activity -> assertThat(activity.saveButton.isEnabled(), is(false)));
     }
 
+    @Test
+    public void polyShouldBeDraggableInEditableMode() {
+        ArrayList<MapPoint> polyline = new ArrayList<>();
+        polyline.add(new MapPoint(1.0, 2.0, 3, 4));
+
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
+        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polyline);
+        launcherRule.launch(intent);
+
+        mapFragment.ready();
+
+        assertThat(mapFragment.isPolyDraggable(0), is(true));
+    }
+
+    @Test
+    public void polyShouldNotBeDraggableInReadOnlyMode() {
+        ArrayList<MapPoint> polygon = new ArrayList<>();
+        polygon.add(new MapPoint(1.0, 2.0, 3, 4));
+
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
+        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon);
+        intent.putExtra(Constants.EXTRA_READ_ONLY, true);
+        launcherRule.launch(intent);
+
+        mapFragment.ready();
+
+        assertThat(mapFragment.isPolyDraggable(0), is(false));
+    }
+
     private void startInput(int mode) {
         onView(withId(R.id.play)).perform(click());
         onView(withId(mode)).inRoot(isDialog()).perform(click());
