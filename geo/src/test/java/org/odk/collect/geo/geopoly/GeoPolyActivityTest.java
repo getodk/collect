@@ -22,6 +22,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -245,6 +246,41 @@ public class GeoPolyActivityTest {
         mapFragment.click(new MapPoint(1, 1));
         mapFragment.click(new MapPoint(1, 1));
         assertThat(mapFragment.getPolyLines().get(0).getPoints().size(), equalTo(1));
+    }
+
+    @Test
+    public void buttonsShouldBeEnabledInEditableMode() {
+        ArrayList<MapPoint> polyline = new ArrayList<>();
+        polyline.add(new MapPoint(1.0, 2.0, 3, 4));
+
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
+        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polyline);
+        ActivityScenario<GeoPolyActivity> scenario = launcherRule.launch(intent);
+
+        mapFragment.ready();
+
+        scenario.onActivity(activity -> assertThat(activity.playButton.isEnabled(), is(true)));
+        scenario.onActivity(activity -> assertThat(activity.backspaceButton.isEnabled(), is(true)));
+        scenario.onActivity(activity -> assertThat(activity.clearButton.isEnabled(), is(true)));
+        scenario.onActivity(activity -> assertThat(activity.saveButton.isEnabled(), is(true)));
+    }
+
+    @Test
+    public void buttonsShouldBeDisabledInReadOnlyMode() {
+        ArrayList<MapPoint> polygon = new ArrayList<>();
+        polygon.add(new MapPoint(1.0, 2.0, 3, 4));
+
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
+        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon);
+        intent.putExtra(Constants.EXTRA_READ_ONLY, true);
+        ActivityScenario<GeoPolyActivity> scenario = launcherRule.launch(intent);
+
+        mapFragment.ready();
+
+        scenario.onActivity(activity -> assertThat(activity.playButton.isEnabled(), is(false)));
+        scenario.onActivity(activity -> assertThat(activity.backspaceButton.isEnabled(), is(false)));
+        scenario.onActivity(activity -> assertThat(activity.clearButton.isEnabled(), is(false)));
+        scenario.onActivity(activity -> assertThat(activity.saveButton.isEnabled(), is(false)));
     }
 
     private void startInput(int mode) {
