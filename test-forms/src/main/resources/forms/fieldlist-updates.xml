@@ -186,6 +186,10 @@
             <source16/>
             <target16/>
           </audio>
+          <required>
+            <source17/>
+            <target17/>
+          </required>
           <meta>
             <instanceID/>
           </meta>
@@ -372,6 +376,8 @@
       <bind nodeset="/fieldlist-updates/long_list_of_questions/question20" type="integer"/>
       <bind nodeset="/fieldlist-updates/audio/source16" type="binary"/>
       <bind nodeset="/fieldlist-updates/audio/target16" relevant=" /fieldlist-updates/audio/source16  != ''" type="string"/>
+      <bind nodeset="/fieldlist-updates/required/source17" type="binary"/>
+      <bind nodeset="/fieldlist-updates/required/target17" required=" /fieldlist-updates/required/source17  != ''" type="string"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/fieldlist-updates/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
@@ -727,6 +733,15 @@
       </upload>
       <input ref="/fieldlist-updates/audio/target16">
         <label>Target16</label>
+      </input>
+    </group>
+    <group appearance="field-list" ref="/fieldlist-updates/required">
+      <label>Dynamic required question</label>
+      <input ref="/fieldlist-updates/required/source17">
+        <label>Source17</label>
+      </input>
+      <input ref="/fieldlist-updates/required/target17">
+        <label>Target17</label>
       </input>
     </group>
   </h:body>

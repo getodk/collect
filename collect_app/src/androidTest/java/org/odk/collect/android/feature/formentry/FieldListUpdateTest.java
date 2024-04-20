@@ -421,6 +421,20 @@ public class FieldListUpdateTest {
                 .assertTextDoesNotExist("Target16");
     }
 
+    @Test
+    public void changeInValueUsedToDetermineIfAQuestionIsRequired_ShouldUpdateTheRelatedRequiredQuestion() {
+        new FormEntryPage("fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Dynamic required question")
+                .clickOnQuestion("Source17")
+                .assertQuestion("Target17")
+                .answerQuestion(0, "blah")
+                .assertQuestion("Target17", true)
+                .answerQuestion(0, "")
+                .assertQuestion("Target17");
+    }
+
     // Scroll down until the desired group name is visible. This is needed to make the tests work
     // on devices with screens of different heights.
     private void jumpToGroupWithText(String text) {
