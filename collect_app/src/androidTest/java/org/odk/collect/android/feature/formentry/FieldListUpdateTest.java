@@ -431,8 +431,10 @@ public class FieldListUpdateTest {
                 .assertQuestion("Target17")
                 .answerQuestion(0, "blah")
                 .assertQuestion("Target17", true)
+                .swipeToNextQuestionWithConstraintViolation(org.odk.collect.strings.R.string.required_answer_error)
                 .answerQuestion(0, "")
-                .assertQuestion("Target17");
+                .assertQuestion("Target17")
+                .assertTextDoesNotExist(org.odk.collect.strings.R.string.required_answer_error);
     }
 
     // Scroll down until the desired group name is visible. This is needed to make the tests work
