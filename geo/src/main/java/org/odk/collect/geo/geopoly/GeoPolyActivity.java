@@ -91,11 +91,12 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     private List<MapPoint> originalPoly;
 
     private ImageButton zoomButton;
-    private ImageButton playButton;
-    private ImageButton clearButton;
+    ImageButton playButton;
+    ImageButton clearButton;
     private Button recordButton;
     private ImageButton pauseButton;
-    private ImageButton backspaceButton;
+    ImageButton backspaceButton;
+    ImageButton saveButton;
 
     private TextView locationStatus;
     private TextView collectionStatus;
@@ -225,7 +226,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         backspaceButton = findViewById(R.id.backspace);
         backspaceButton.setOnClickListener(v -> removeLastPoint());
 
-        ImageButton saveButton = findViewById(R.id.save);
+        saveButton = findViewById(R.id.save);
         saveButton.setOnClickListener(v -> {
             if (!map.getPolyLinePoints(featureId).isEmpty()) {
                 if (outputMode == OutputMode.GEOTRACE) {
@@ -470,6 +471,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
             playButton.setEnabled(false);
             backspaceButton.setEnabled(false);
             clearButton.setEnabled(false);
+            saveButton.setEnabled(false);
         }
         // Settings dialog
 
