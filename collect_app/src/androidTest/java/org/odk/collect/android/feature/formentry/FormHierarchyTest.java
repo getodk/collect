@@ -197,6 +197,7 @@ public class FormHierarchyTest {
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickGoUpIcon()
+                .assertText("Outer")
                 .assertNotRemovableGroup();
     }
 }
