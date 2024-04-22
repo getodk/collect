@@ -88,6 +88,11 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
         return this;
     }
 
+    public FormHierarchyPage assertPath(String text) {
+        onView(withId(R.id.pathtext)).check(matches(withText(text)));
+        return this;
+    }
+
     public FormEntryPage clickOnQuestion(String questionLabel) {
         return clickOnQuestion(questionLabel, false);
     }

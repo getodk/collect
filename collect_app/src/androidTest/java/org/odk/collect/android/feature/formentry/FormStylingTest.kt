@@ -223,7 +223,7 @@ class FormStylingTest {
             .startBlankForm(FORM_NAME)
             .clickGoToArrow()
             .clickOnGroup("selectOneQuestions")
-            .assertText("selectOneQuestions")
+            .assertPath("selectOneQuestions")
             .clickOnQuestion("Select one widget")
             .assertText("selectOneQuestions")
     }
