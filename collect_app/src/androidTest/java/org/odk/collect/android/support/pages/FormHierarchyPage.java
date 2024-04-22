@@ -40,6 +40,11 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
         return this;
     }
 
+    public FormHierarchyPage assertNotRemovableGroup() {
+        onView(withId(R.id.menu_delete_child)).check(doesNotExist());
+        return this;
+    }
+
     public FormHierarchyPage clickGoUpIcon() {
         onView(withId(R.id.menu_go_up)).perform(click());
         return this;

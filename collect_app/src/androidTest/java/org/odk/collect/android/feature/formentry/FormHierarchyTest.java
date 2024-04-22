@@ -187,4 +187,16 @@ public class FormHierarchyTest {
                 .clickGoUpIcon()
                 .assertTexts("Repeat", "Repeatable Group");
     }
+
+    @Test
+    //https://github.com/getodk/collect/issues/6015
+    public void regularGroupThatWrapsARepeatableGroupShouldBeTreatedAsARegularOne() {
+        rule.startAtMainMenu()
+                .copyForm("repeat_group_wrapped_with_a_regular_group.xml")
+                .startBlankForm("Repeat group wrapped with a regular group")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .assertNotRemovableGroup();
+    }
 }
