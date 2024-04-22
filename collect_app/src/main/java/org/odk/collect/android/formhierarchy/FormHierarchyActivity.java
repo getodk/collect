@@ -333,7 +333,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
 
         boolean isAtBeginning = screenIndex.isBeginningOfFormIndex() && !shouldShowRepeatGroupPicker();
         boolean shouldShowPicker = shouldShowRepeatGroupPicker();
-        boolean isInRepeat = formController.indexContainsRepeatableGroup();
+        boolean isInRepeat = formController.indexContainsRepeatableGroup(screenIndex);
         boolean isGroupSizeLocked = shouldShowPicker
                 ? isGroupSizeLocked(repeatGroupPickerIndex) : isGroupSizeLocked(screenIndex);
 
@@ -622,7 +622,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 groupPathTextView.setVisibility(View.VISIBLE);
                 groupPathTextView.setText(getCurrentPath());
 
-                if (formController.indexContainsRepeatableGroup() || shouldShowRepeatGroupPicker()) {
+                if (formController.indexContainsRepeatableGroup(screenIndex) || shouldShowRepeatGroupPicker()) {
                     groupIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_repeat));
                 } else {
                     groupIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_folder_open));

@@ -275,6 +275,8 @@ interface FormController {
      */
     fun indexContainsRepeatableGroup(): Boolean
 
+    fun indexContainsRepeatableGroup(formIndex: FormIndex?): Boolean
+
     /**
      * The count of the closest group that repeats or -1.
      */

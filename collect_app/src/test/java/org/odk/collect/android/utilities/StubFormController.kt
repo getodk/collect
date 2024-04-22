@@ -135,6 +135,8 @@ open class StubFormController : FormController {
 
     override fun indexContainsRepeatableGroup(): Boolean = false
 
+    override fun indexContainsRepeatableGroup(formIndex: FormIndex?): Boolean = false
+
     override fun getLastRepeatedGroupRepeatCount(): Int = -1
 
     override fun getLastRepeatedGroupName(): String? = null
