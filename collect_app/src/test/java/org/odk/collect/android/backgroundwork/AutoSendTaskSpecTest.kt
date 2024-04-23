@@ -4,8 +4,6 @@ import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -51,7 +49,7 @@ class AutoSendTaskSpecTest {
 
     @Test
     fun `maxRetries should not be limited`() {
-        assertThat(AutoSendTaskSpec().maxRetries, `is`(nullValue()))
+        assertThat(AutoSendTaskSpec().maxRetries, equalTo(null))
     }
 
     @Test
