@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.core.content.withStyledAttributes
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.badge.ExperimentalBadgeUtils
@@ -19,25 +20,16 @@ class MainMenuButton(context: Context, attrs: AttributeSet?) : FrameLayout(conte
 
     private val binding = MainMenuButtonBinding.inflate(LayoutInflater.from(context), this, true)
     private val badge: BadgeDrawable
-    private val highlightable: Boolean
+    private var highlightable: Boolean = false
 
     init {
-        context.theme.obtainStyledAttributes(
-            attrs,
-            R.styleable.MainMenuButton,
-            0,
-            0
-        ).apply {
-            try {
-                val buttonIcon = this.getResourceId(R.styleable.MainMenuButton_icon, 0)
-                val buttonName = this.getString(R.styleable.MainMenuButton_name)
-                highlightable = this.getBoolean(R.styleable.MainMenuButton_highlightable, false)
+        context.withStyledAttributes(attrs, R.styleable.MainMenuButton) {
+            val buttonIcon = this.getResourceId(R.styleable.MainMenuButton_icon, 0)
+            val buttonName = this.getString(R.styleable.MainMenuButton_name)
+            highlightable = this.getBoolean(R.styleable.MainMenuButton_highlightable, false)
 
-                binding.icon.setImageResource(buttonIcon)
-                binding.name.text = buttonName
-            } finally {
-                recycle()
-            }
+            binding.icon.setImageResource(buttonIcon)
+            binding.name.text = buttonName
         }
 
         badge = BadgeDrawable.create(context).apply {
