@@ -25,6 +25,8 @@ import org.javarosa.xform.parse.XFormParser;
 import org.junit.Test;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.entities.EntitiesRepository;
+import org.odk.collect.entities.InMemEntitiesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormListItem;
 import org.odk.collect.forms.FormSource;
@@ -52,6 +54,8 @@ public class ServerFormDownloaderTest {
     private final File cacheDir = Files.createTempDir();
     private final File formsDir = Files.createTempDir();
     private final Supplier<Long> clock = () -> 123L;
+
+    private final EntitiesRepository entitiesRepository = new InMemEntitiesRepository();
 
     @Test
     public void downloadsAndSavesForm() throws Exception {

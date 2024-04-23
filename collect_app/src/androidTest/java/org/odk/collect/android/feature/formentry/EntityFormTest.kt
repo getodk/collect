@@ -109,58 +109,6 @@ class EntityFormTest {
     }
 
     @Test
-    fun fillingEntityFollowUpForm_whenOnlineDuplicateHasHigherVersion_showsOnlineVersion() {
-        testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
-
-        val mainMenuPage = rule.withMatchExactlyProject(testDependencies.server.url)
-            .setupEntities("people")
-
-            .startBlankForm("One Question Entity Update")
-            .assertQuestion("Select person")
-            .clickOnText("Roman Roy")
-            .swipeToNextQuestion("Name")
-            .answerQuestion("Name", "Romulus Roy")
-            .swipeToEndScreen()
-            .clickFinalize()
-
-        testDependencies.server.updateMediaFile(
-            "one-question-entity-update.xml",
-            "people.csv",
-            "updated-people.csv"
-        )
-
-        mainMenuPage.clickFillBlankForm()
-            .clickRefresh()
-            .clickOnForm("One Question Entity Update")
-            .assertText("Ro-Ro Roy")
-            .assertTextDoesNotExist("Romulus Roy")
-            .assertTextDoesNotExist("Roman Roy")
-    }
-
-    @Test
-    fun fillingEntityFollowUpForm_whenOfflineDuplicateHasHigherVersion_showsOfflineVersion() {
-        testDependencies.server.addForm(
-            "one-question-entity-update.xml",
-            mapOf("people.csv" to "updated-people.csv")
-        )
-
-        rule.withMatchExactlyProject(testDependencies.server.url)
-            .setupEntities("people")
-
-            .startBlankForm("One Question Entity Update")
-            .assertQuestion("Select person")
-            .clickOnText("Ro-Ro Roy")
-            .swipeToNextQuestion("Name")
-            .answerQuestion("Name", "Romulus Roy")
-            .swipeToEndScreen()
-            .clickFinalize()
-
-            .startBlankForm("One Question Entity Update")
-            .assertText("Romulus Roy")
-            .assertTextDoesNotExist("Ro-Ro Roy")
-    }
-
-    @Test
     fun entityListsAreConsistentBetweenFollowUpForms() {
         testDependencies.server.apply {
             addForm(
