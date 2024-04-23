@@ -1,16 +1,23 @@
 package org.odk.collect.settings.enums
 
-enum class AutoSend(private val value: String) {
-    OFF("off"),
-    WIFI_ONLY("wifi_only"),
-    CELLULAR_ONLY("cellular_only"),
-    WIFI_AND_CELLULAR("wifi_and_cellular");
+import android.content.Context
+import androidx.annotation.StringRes
+import org.odk.collect.settings.R
+
+enum class AutoSend(@StringRes private val value: Int) {
+
+    OFF(R.string.auto_send_off),
+    WIFI_ONLY(R.string.auto_send_wifi_only),
+    CELLULAR_ONLY(R.string.auto_send_cellular_only),
+    WIFI_AND_CELLULAR(R.string.auto_send_wifi_and_cellular);
 
     companion object {
 
         @JvmStatic
-        fun parse(value: String): AutoSend {
-            return entries.find { it.value == value } ?: throw IllegalArgumentException()
+        fun parse(context: Context, value: String): AutoSend {
+            return entries.find {
+                context.getString(it.value) == value
+            } ?: throw IllegalArgumentException()
         }
     }
 }

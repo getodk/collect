@@ -71,7 +71,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     public void scheduleSubmit(String projectId) {
         Scheduler.NetworkType networkType = null;
         Settings settings = settingsProvider.getUnprotectedSettings(projectId);
-        AutoSend autoSendSetting = AutoSend.parse(settings.getString(ProjectKeys.KEY_AUTOSEND));
+        AutoSend autoSendSetting = AutoSend.parse(application, settings.getString(ProjectKeys.KEY_AUTOSEND));
         if (autoSendSetting == AutoSend.WIFI_ONLY) {
             networkType = Scheduler.NetworkType.WIFI;
         } else if (autoSendSetting == AutoSend.CELLULAR_ONLY) {
