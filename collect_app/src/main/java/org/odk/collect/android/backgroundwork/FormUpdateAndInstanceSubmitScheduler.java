@@ -9,6 +9,7 @@ import android.app.Application;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.enums.AutoSend;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.settings.Settings;
 
@@ -70,9 +71,10 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     public void scheduleSubmit(String projectId) {
         Scheduler.NetworkType networkType = null;
         Settings settings = settingsProvider.getUnprotectedSettings(projectId);
-        if (settings.getString(ProjectKeys.KEY_AUTOSEND).equals("wifi_only")) {
+        AutoSend autoSendSetting = AutoSend.parse(settings.getString(ProjectKeys.KEY_AUTOSEND));
+        if (autoSendSetting == AutoSend.WIFI_ONLY) {
             networkType = Scheduler.NetworkType.WIFI;
-        } else if (settings.getString(ProjectKeys.KEY_AUTOSEND).equals("cellular_only")) {
+        } else if (autoSendSetting == AutoSend.CELLULAR_ONLY) {
             networkType = Scheduler.NetworkType.CELLULAR;
         }
 
