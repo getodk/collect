@@ -42,7 +42,7 @@ class MainMenuButton(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         get() = binding.name.text.toString()
 
     override fun performClick(): Boolean {
-        return MultiClickGuard.allowClick(context.getString(org.odk.collect.androidshared.R.string.main_menu_screen)) && super.performClick()
+        return MultiClickGuard.allowClick(context.getString(R.string.main_menu_screen)) && super.performClick()
     }
 
     fun setNumberOfForms(number: Int) {
