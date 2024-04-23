@@ -13,19 +13,13 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.projects.ProjectsDataService
-import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.android.utilities.ChangeLockProvider
-import org.odk.collect.android.utilities.FormsRepositoryProvider
-import org.odk.collect.android.utilities.InstancesRepositoryProvider
-import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.testshared.RobolectricHelpers
 
@@ -40,14 +34,8 @@ class AutoSendTaskSpecTest {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesInstancesDataService(
                 application: Application?,
-                instancesRepositoryProvider: InstancesRepositoryProvider?,
                 projectsDataService: ProjectsDataService?,
-                formsRepositoryProvider: FormsRepositoryProvider?,
-                entitiesRepositoryProvider: EntitiesRepositoryProvider?,
-                storagePathProvider: StoragePathProvider?,
                 instanceSubmitScheduler: InstanceSubmitScheduler?,
-                savepointsRepositoryProvider: SavepointsRepositoryProvider?,
-                changeLockProvider: ChangeLockProvider?,
                 projectsDependencyProviderFactory: ProjectDependencyProviderFactory?,
                 notifier: Notifier?,
                 propertyManager: PropertyManager?,
