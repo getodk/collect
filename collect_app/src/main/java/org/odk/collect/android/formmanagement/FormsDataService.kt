@@ -227,7 +227,8 @@ private fun formDownloader(
         File(projectDependencyProvider.cacheDir),
         projectDependencyProvider.formsDir,
         FormMetadataParser(),
-        clock
+        clock,
+        projectDependencyProvider.entitiesRepository
     )
 }
 

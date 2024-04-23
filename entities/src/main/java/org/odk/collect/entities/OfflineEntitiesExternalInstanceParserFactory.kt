@@ -28,21 +28,20 @@ internal class OfflineEntitiesExternalDataInstanceProcessor(private val entities
     ExternalInstanceParser.ExternalDataInstanceProcessor {
     override fun processInstance(id: String, root: TreeElement) {
         if (entitiesRepository.getDatasets().contains(id)) {
-            val items = root.getChildrenWithName("item")
-            val startingMultiplicity = items.size
+            0.until(root.numChildren).forEach { root.removeChildAt(it) }
 
             entitiesRepository.getEntities(id).forEachIndexed { index, entity ->
-                val duplicateIndex =
-                    items.indexOfFirst { it.getFirstChild(EntityItemElement.ID)?.value?.value == entity.id }
-
-                if (duplicateIndex == -1) {
+//                val duplicateIndex =
+//                    items.indexOfFirst { it.getFirstChild(EntityItemElement.ID)?.value?.value == entity.id }
+//
+//                if (duplicateIndex == -1) {
                     val name = TreeElement(EntityItemElement.ID)
                     name.value = StringData(entity.id)
 
                     val label = TreeElement(EntityItemElement.LABEL)
                     label.value = StringData(entity.label ?: "")
 
-                    val item = TreeElement("item", startingMultiplicity + index)
+                    val item = TreeElement("item", index)
                     item.addChild(name)
                     item.addChild(label)
 
@@ -51,26 +50,26 @@ internal class OfflineEntitiesExternalDataInstanceProcessor(private val entities
                     }
 
                     root.addChild(item)
-                } else {
-                    val duplicateElement = root.getChildAt(duplicateIndex)
-
-                    val version = (duplicateElement.getFirstChild(EntityItemElement.VERSION)!!.value!!.value as String).toInt()
-                    if (entity.version >= version) {
-                        if (entity.label != null) {
-                            duplicateElement.getFirstChild(EntityItemElement.LABEL)!!.value =
-                                StringData(entity.label)
-                        }
-
-                        entity.properties.forEach { property ->
-                            val propertyElement = duplicateElement.getFirstChild(property.first)
-                            if (propertyElement != null) {
-                                propertyElement.value = StringData(property.second)
-                            } else {
-                                addChild(duplicateElement, property)
-                            }
-                        }
-                    }
-                }
+//                } else {
+//                    val duplicateElement = root.getChildAt(duplicateIndex)
+//
+//                    val version = (duplicateElement.getFirstChild(EntityItemElement.VERSION)!!.value!!.value as String).toInt()
+//                    if (entity.version >= version) {
+//                        if (entity.label != null) {
+//                            duplicateElement.getFirstChild(EntityItemElement.LABEL)!!.value =
+//                                StringData(entity.label)
+//                        }
+//
+//                        entity.properties.forEach { property ->
+//                            val propertyElement = duplicateElement.getFirstChild(property.first)
+//                            if (propertyElement != null) {
+//                                propertyElement.value = StringData(property.second)
+//                            } else {
+//                                addChild(duplicateElement, property)
+//                            }
+//                        }
+//                    }
+//                }
             }
         }
     }

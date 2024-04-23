@@ -57,8 +57,7 @@ class EntityFormTest {
         testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-            .addEntityListInBrowser("people")
+            .setupEntities("people")
 
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
@@ -75,8 +74,7 @@ class EntityFormTest {
         testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-            .addEntityListInBrowser("people")
+            .setupEntities("people")
 
             .startBlankForm("One Question Entity Update") // Open to create cached form def
             .pressBackAndDiscardForm()
@@ -95,8 +93,7 @@ class EntityFormTest {
         testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-            .addEntityListInBrowser("people")
+            .setupEntities("people")
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
@@ -116,8 +113,7 @@ class EntityFormTest {
         testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
 
         val mainMenuPage = rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-            .addEntityListInBrowser("people")
+            .setupEntities("people")
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
@@ -149,8 +145,7 @@ class EntityFormTest {
         )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-            .addEntityListInBrowser("people")
+            .setupEntities("people")
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
@@ -180,6 +175,7 @@ class EntityFormTest {
         }
 
         rule.withProject(testDependencies.server)
+            .enableLocalEntitiesInForms()
             .addEntityListInBrowser("people")
 
             .clickGetBlankForm()

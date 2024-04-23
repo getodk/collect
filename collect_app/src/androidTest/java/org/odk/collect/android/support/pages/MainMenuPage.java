@@ -300,6 +300,18 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new MainMenuPage());
     }
 
+    public MainMenuPage refreshForms() {
+        return clickFillBlankForm()
+                .clickRefresh()
+                .pressBack(new MainMenuPage());
+    }
+
+    public MainMenuPage setupEntities(String entityList) {
+        return enableLocalEntitiesInForms()
+                .addEntityListInBrowser(entityList)
+                .refreshForms();
+    }
+
     @NotNull
     public MainMenuPage enableLocalEntitiesInForms() {
         return openProjectSettingsDialog()
