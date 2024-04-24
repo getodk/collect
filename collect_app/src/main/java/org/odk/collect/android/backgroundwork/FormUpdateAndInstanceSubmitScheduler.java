@@ -1,16 +1,16 @@
 package org.odk.collect.android.backgroundwork;
 
 import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeriodInMilliseconds;
-import static org.odk.collect.android.preferences.utilities.SettingsUtils.getFormUpdateMode;
+import static org.odk.collect.settings.enums.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 
 import android.app.Application;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.preferences.utilities.SettingsUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.enums.AutoSend;
+import org.odk.collect.settings.enums.SettingsUtils;
 import org.odk.collect.shared.settings.Settings;
 
 import java.util.HashMap;
@@ -33,7 +33,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
         String period = generalSettings.getString(KEY_PERIODIC_FORM_UPDATES_CHECK);
         long periodInMilliseconds = getPeriodInMilliseconds(period, application);
 
-        switch (getFormUpdateMode(application, generalSettings)) {
+        switch (getFormUpdateMode(generalSettings, application)) {
             case MANUAL:
                 scheduler.cancelDeferred(getMatchExactlyTag(projectId));
                 scheduler.cancelDeferred(getAutoUpdateTag(projectId));

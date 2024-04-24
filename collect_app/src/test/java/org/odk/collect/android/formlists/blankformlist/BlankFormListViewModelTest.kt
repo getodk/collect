@@ -17,13 +17,13 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.formmanagement.FormsDataService
-import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemInstancesRepository
+import org.odk.collect.settings.enums.FormUpdateMode
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.InMemSettings
 import org.odk.collect.testshared.BooleanChangeLock

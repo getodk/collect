@@ -24,13 +24,13 @@ import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
-import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.enums.AutoSend
+import org.odk.collect.settings.enums.FormUpdateMode
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.settings.Settings

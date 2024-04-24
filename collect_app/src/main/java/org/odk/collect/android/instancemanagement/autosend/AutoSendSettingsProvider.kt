@@ -2,10 +2,10 @@ package org.odk.collect.android.instancemanagement.autosend
 
 import android.app.Application
 import android.net.ConnectivityManager
-import org.odk.collect.android.preferences.utilities.SettingsUtils.getAutoSend
 import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.enums.AutoSend
+import org.odk.collect.settings.enums.SettingsUtils.getAutoSend
 
 class AutoSendSettingsProvider(
     private val application: Application,

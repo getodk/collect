@@ -3,9 +3,9 @@ package org.odk.collect.android.preferences.screens
 import android.os.Bundle
 import androidx.preference.Preference
 import org.odk.collect.android.R
-import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.PreferencesUtils
-import org.odk.collect.android.preferences.utilities.SettingsUtils
+import org.odk.collect.settings.enums.FormUpdateMode
+import org.odk.collect.settings.enums.SettingsUtils.getFormUpdateMode
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 
 class MainMenuAccessPreferencesFragment : BaseAdminPreferencesFragment() {
@@ -17,7 +17,7 @@ class MainMenuAccessPreferencesFragment : BaseAdminPreferencesFragment() {
         findPreference<Preference>(ProtectedProjectKeys.KEY_EDIT_SAVED)!!.isEnabled =
             settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM)
 
-        val formUpdateMode = SettingsUtils.getFormUpdateMode(requireContext(), settingsProvider.getUnprotectedSettings())
+        val formUpdateMode = settingsProvider.getUnprotectedSettings().getFormUpdateMode(requireContext())
         if (formUpdateMode == FormUpdateMode.MATCH_EXACTLY) {
             PreferencesUtils.displayDisabled(findPreference(ProtectedProjectKeys.KEY_GET_BLANK), false)
         }

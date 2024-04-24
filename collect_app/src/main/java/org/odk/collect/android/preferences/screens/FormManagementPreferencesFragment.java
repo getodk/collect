@@ -15,7 +15,7 @@
 package org.odk.collect.android.preferences.screens;
 
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
-import static org.odk.collect.android.preferences.utilities.SettingsUtils.getFormUpdateMode;
+import static org.odk.collect.settings.enums.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_AUTOSEND;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_CONSTRAINT_BEHAVIOR;
@@ -39,8 +39,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
-import org.odk.collect.android.preferences.utilities.SettingsUtils;
 import org.odk.collect.settings.enums.AutoSend;
+import org.odk.collect.settings.enums.SettingsUtils;
 import org.odk.collect.shared.settings.Settings;
 
 import javax.inject.Inject;
@@ -94,7 +94,7 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
         @Nullable Preference updateFrequency = findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
         @Nullable CheckBoxPreference automaticDownload = findPreference(KEY_AUTOMATIC_UPDATE);
 
-        switch (getFormUpdateMode(requireContext(), generalSettings)) {
+        switch (getFormUpdateMode(generalSettings, requireContext())) {
             case MANUAL:
                 if (automaticDownload != null) {
                     displayDisabled(automaticDownload, false);
