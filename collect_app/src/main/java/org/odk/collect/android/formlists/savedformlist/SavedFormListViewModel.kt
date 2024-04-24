@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.androidshared.data.Consumable
@@ -39,6 +40,7 @@ class SavedFormListViewModel(
         }
 
     val formsToDisplay: LiveData<List<Instance>> = instancesDataService.instances
+        .map { instances -> instances.filter { instance -> instance.deletedDate == null } }
         .combine(_sortOrder) { instances, order ->
             when (order) {
                 SortOrder.NAME_DESC -> {
