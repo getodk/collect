@@ -5,7 +5,7 @@ import androidx.preference.Preference
 import org.odk.collect.android.R
 import org.odk.collect.android.preferences.utilities.PreferencesUtils
 import org.odk.collect.settings.enums.FormUpdateMode
-import org.odk.collect.settings.enums.SettingsUtils.getFormUpdateMode
+import org.odk.collect.settings.enums.StringIdEnumUtils.getFormUpdateMode
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 
 class MainMenuAccessPreferencesFragment : BaseAdminPreferencesFragment() {

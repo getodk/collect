@@ -15,7 +15,7 @@
 package org.odk.collect.android.preferences.screens;
 
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
-import static org.odk.collect.settings.enums.SettingsUtils.getFormUpdateMode;
+import static org.odk.collect.settings.enums.StringIdEnumUtils.getFormUpdateMode;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_AUTOSEND;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_CONSTRAINT_BEHAVIOR;
@@ -40,7 +40,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.settings.enums.AutoSend;
-import org.odk.collect.settings.enums.SettingsUtils;
+import org.odk.collect.settings.enums.StringIdEnumUtils;
 import org.odk.collect.shared.settings.Settings;
 
 import javax.inject.Inject;
@@ -82,7 +82,7 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
             updateDisabledPrefs();
         }
 
-        if (key.equals(KEY_AUTOSEND) && !SettingsUtils.getAutoSend(settingsProvider.getUnprotectedSettings(), requireContext()).equals(AutoSend.OFF)) {
+        if (key.equals(KEY_AUTOSEND) && !StringIdEnumUtils.getAutoSend(settingsProvider.getUnprotectedSettings(), requireContext()).equals(AutoSend.OFF)) {
             instanceSubmitScheduler.scheduleSubmit(projectsDataService.getCurrentProject().getUuid());
         }
     }

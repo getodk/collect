@@ -1,7 +1,7 @@
 package org.odk.collect.android.backgroundwork;
 
 import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeriodInMilliseconds;
-import static org.odk.collect.settings.enums.SettingsUtils.getFormUpdateMode;
+import static org.odk.collect.settings.enums.StringIdEnumUtils.getFormUpdateMode;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 
 import android.app.Application;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.enums.AutoSend;
-import org.odk.collect.settings.enums.SettingsUtils;
+import org.odk.collect.settings.enums.StringIdEnumUtils;
 import org.odk.collect.shared.settings.Settings;
 
 import java.util.HashMap;
@@ -71,7 +71,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     public void scheduleSubmit(String projectId) {
         Scheduler.NetworkType networkType = null;
         Settings settings = settingsProvider.getUnprotectedSettings(projectId);
-        AutoSend autoSendSetting = SettingsUtils.getAutoSend(settings, application);
+        AutoSend autoSendSetting = StringIdEnumUtils.getAutoSend(settings, application);
         if (autoSendSetting == AutoSend.WIFI_ONLY) {
             networkType = Scheduler.NetworkType.WIFI;
         } else if (autoSendSetting == AutoSend.CELLULAR_ONLY) {

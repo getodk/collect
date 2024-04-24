@@ -19,7 +19,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.enums.FormUpdateMode
-import org.odk.collect.settings.enums.SettingsUtils.getFormUpdateMode
+import org.odk.collect.settings.enums.StringIdEnumUtils.getFormUpdateMode
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 
 class MainMenuViewModel(

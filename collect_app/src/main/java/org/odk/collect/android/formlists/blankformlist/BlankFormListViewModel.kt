@@ -18,7 +18,7 @@ import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormSourceException.AuthRequired
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.settings.enums.FormUpdateMode
-import org.odk.collect.settings.enums.SettingsUtils.getFormUpdateMode
+import org.odk.collect.settings.enums.StringIdEnumUtils.getFormUpdateMode
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 

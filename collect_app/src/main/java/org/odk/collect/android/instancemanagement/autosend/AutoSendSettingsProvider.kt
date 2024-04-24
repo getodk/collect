@@ -5,7 +5,7 @@ import android.net.ConnectivityManager
 import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.enums.AutoSend
-import org.odk.collect.settings.enums.SettingsUtils.getAutoSend
+import org.odk.collect.settings.enums.StringIdEnumUtils.getAutoSend
 
 class AutoSendSettingsProvider(
     private val application: Application,

@@ -4,7 +4,7 @@ import android.content.Context
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 
-object SettingsUtils {
+object StringIdEnumUtils {
 
     @JvmStatic
     fun Settings.getFormUpdateMode(context: Context): FormUpdateMode {
