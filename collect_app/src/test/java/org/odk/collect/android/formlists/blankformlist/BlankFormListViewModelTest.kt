@@ -78,6 +78,11 @@ class BlankFormListViewModelTest {
 
     @Test
     fun `isMatchExactlyEnabled returns correct value based on settings`() {
+        generalSettings.save(
+            ProjectKeys.KEY_FORM_UPDATE_MODE,
+            FormUpdateMode.MANUAL.getValue(context)
+        )
+
         createViewModel()
 
         assertThat(viewModel.isMatchExactlyEnabled(), `is`(false))
