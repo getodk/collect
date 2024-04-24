@@ -13,15 +13,19 @@ object LocalEntityUseCases {
         val root = CsvExternalInstance.parse(dataset, entityList.absolutePath)
         val items = root.getChildrenWithName("item")
         items.forEach { item ->
-            val id = item.getFirstChild("name")!!.value!!.value as String
-            val version = (item.getFirstChild("__version")!!.value!!.value as String).toInt()
+            val id = item.getFirstChild("name")?.value?.value as? String
+            val label = item.getFirstChild("label")?.value?.value as? String
+            val version = (item.getFirstChild("__version")?.value?.value as? String)?.toInt()
+            if (id == null || label == null || version == null) {
+                return
+            }
 
             val existing = entitiesRepository.get(dataset, id)
             if (existing == null || existing.version < version) {
                 val entity = Entity(
                     dataset,
                     id,
-                    item.getFirstChild("label")!!.value!!.value as String,
+                    label,
                     version
                 )
 
