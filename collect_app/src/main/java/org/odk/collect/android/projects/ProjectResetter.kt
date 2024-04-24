@@ -32,7 +32,8 @@ class ProjectResetter(
     private val settingsProvider: SettingsProvider,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
-    private val instancesDataService: InstancesDataService
+    private val instancesDataService: InstancesDataService,
+    private val projectId: String
 ) {
 
     private var failedResetActions = mutableListOf<Int>()
@@ -66,7 +67,7 @@ class ProjectResetter(
     }
 
     private fun resetInstances() {
-        if (!instancesDataService.deleteAll() ||
+        if (!instancesDataService.deleteAll(projectId) ||
             !deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES))) {
             failedResetActions.add(ResetAction.RESET_INSTANCES)
         }

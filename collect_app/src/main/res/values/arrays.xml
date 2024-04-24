@@ -73,10 +73,10 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/wifi_cellular_autosend</item>
     </string-array>
     <string-array name="autosend_selector_entries_values" translatable="false">
-        <item>off</item>
-        <item>wifi_only</item>
-        <item>cellular_only</item>
-        <item>wifi_and_cellular</item>
+        <item>@string/auto_send_off</item>
+        <item>@string/auto_send_wifi_only</item>
+        <item>@string/auto_send_cellular_only</item>
+        <item>@string/auto_send_wifi_and_cellular</item>
     </string-array>
     <string-array name="guidance_hint_selector_entries">
         <item>@string/guidance_no</item>

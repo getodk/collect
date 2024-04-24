@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.upload;
 
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
@@ -27,6 +29,7 @@ import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.settings.Settings;
 
@@ -44,8 +47,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 import timber.log.Timber;
 
-import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
-
 public class InstanceServerUploader extends InstanceUploader {
     private static final String URL_PATH_SEP = "/";
 
@@ -56,7 +57,8 @@ public class InstanceServerUploader extends InstanceUploader {
 
     public InstanceServerUploader(OpenRosaHttpInterface httpInterface,
                                   WebCredentialsUtils webCredentialsUtils,
-                                  Settings generalSettings) {
+                                  Settings generalSettings, InstancesRepository instancesRepository) {
+        super(instancesRepository);
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
         this.generalSettings = generalSettings;

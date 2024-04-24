@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auto_send_off" translatable="false">off</string>
+    <string name="auto_send_wifi_only" translatable="false">wifi_only</string>
+    <string name="auto_send_cellular_only" translatable="false">cellular_only</string>
+    <string name="auto_send_wifi_and_cellular" translatable="false">wifi_and_cellular</string>
+
+    <string name="form_update_mode_manual" translatable="false">manual</string>
+    <string name="form_update_mode_previously_downloaded" translatable="false">previously_downloaded</string>
+    <string name="form_update_mode_match_exactly" translatable="false">match_exactly</string>
+</resources>

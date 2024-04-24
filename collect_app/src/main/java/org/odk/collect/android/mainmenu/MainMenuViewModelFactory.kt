@@ -3,7 +3,6 @@ package org.odk.collect.android.mainmenu
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.ProjectsDataService
@@ -21,7 +20,6 @@ open class MainMenuViewModelFactory(
     private val instancesDataService: InstancesDataService,
     private val scheduler: Scheduler,
     private val projectsDataService: ProjectsDataService,
-    private val analyticsInitializer: AnalyticsInitializer,
     private val permissionChecker: PermissionsChecker,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
@@ -37,7 +35,8 @@ open class MainMenuViewModelFactory(
                 scheduler,
                 formsRepositoryProvider,
                 instancesRepositoryProvider,
-                autoSendSettingsProvider
+                autoSendSettingsProvider,
+                projectsDataService
             )
 
             CurrentProjectViewModel::class.java -> CurrentProjectViewModel(

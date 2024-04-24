@@ -24,12 +24,13 @@ import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
-import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.enums.AutoSend
+import org.odk.collect.settings.enums.FormUpdateMode
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.settings.Settings
@@ -452,7 +453,7 @@ class FormManagementPreferencesFragmentTest {
     fun `When Auto send preference is enabled, finalized forms should be scheduled for submission`() {
         val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
-            fragment.findPreference<ListPreference>(ProjectKeys.KEY_AUTOSEND)!!.value = "wifi"
+            fragment.findPreference<ListPreference>(ProjectKeys.KEY_AUTOSEND)!!.value = AutoSend.WIFI_ONLY.getValue(context)
         }
         verify(instanceSubmitScheduler).scheduleSubmit(projectID)
     }
@@ -461,7 +462,7 @@ class FormManagementPreferencesFragmentTest {
     fun `When Auto send preference is disabled, no submissions should be scheduled`() {
         val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
-            fragment.findPreference<ListPreference>(ProjectKeys.KEY_AUTOSEND)!!.value = "off"
+            fragment.findPreference<ListPreference>(ProjectKeys.KEY_AUTOSEND)!!.value = AutoSend.OFF.getValue(context)
         }
         verify(instanceSubmitScheduler, never()).scheduleSubmit(projectID)
     }

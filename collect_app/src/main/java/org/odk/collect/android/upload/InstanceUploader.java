@@ -17,27 +17,18 @@ package org.odk.collect.android.upload;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.instancemanagement.InstancesDataService;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 public abstract class InstanceUploader {
 
-    @Inject
-    InstancesRepositoryProvider instancesRepositoryProvider;
+    private final InstancesRepository instancesRepository;
 
-    @Inject
-    InstancesDataService instancesDataService;
-
-    public InstanceUploader() {
-        DaggerUtils.getComponent(Collect.getInstance()).inject(this);
+    public InstanceUploader(InstancesRepository instancesRepository) {
+        this.instancesRepository = instancesRepository;
     }
 
     public static final String FAIL = "Error: ";
@@ -61,31 +52,25 @@ public abstract class InstanceUploader {
         List<Instance> instances = new ArrayList<>();
 
         for (Long id : instanceDatabaseIds) {
-            instances.add(instancesRepositoryProvider.get().get(id));
+            instances.add(instancesRepository.get(id));
         }
 
         return instances;
     }
 
     public void markSubmissionFailed(Instance instance) {
-        instancesRepositoryProvider
-                .get()
+        instancesRepository
                 .save(new Instance.Builder(instance)
                         .status(Instance.STATUS_SUBMISSION_FAILED)
                         .build()
                 );
-
-        instancesDataService.update();
     }
 
     public void markSubmissionComplete(Instance instance) {
-        instancesRepositoryProvider
-                .get()
+        instancesRepository
                 .save(new Instance.Builder(instance)
                         .status(Instance.STATUS_SUBMITTED)
                         .build()
                 );
-
-        instancesDataService.update();
     }
 }

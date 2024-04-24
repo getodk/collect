@@ -36,7 +36,7 @@ interface Scheduler {
      * @param spec defines the task to be run
      * @param inputData a map of input data that can be accessed by the task
      */
-    fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>)
+    fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>, networkConstraint: NetworkType? = null)
 
     /**
      * Schedule a task to run in the background repeatedly even if the app isn't running. The task
@@ -48,7 +48,7 @@ interface Scheduler {
      * @param repeatPeriod the period between each run of the task
      * @param inputData a map of input data that can be accessed by the task
      */
-    fun networkDeferred(
+    fun networkDeferredRepeat(
         tag: String,
         spec: TaskSpec,
         repeatPeriod: Long,
@@ -77,6 +77,11 @@ interface Scheduler {
     fun cancelAllDeferred()
 
     fun <T> flowOnBackground(flow: Flow<T>): Flow<T>
+
+    enum class NetworkType {
+        WIFI,
+        CELLULAR
+    }
 }
 
 fun <T> Flow<T>.flowOnBackground(scheduler: Scheduler): Flow<T> {

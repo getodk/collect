@@ -157,6 +157,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
         init();
 
         BulkFinalizationViewModel bulkFinalizationViewModel = new BulkFinalizationViewModel(
+                projectsDataService.getCurrentProject().getUuid(),
                 scheduler,
                 instancesDataService,
                 settingsProvider

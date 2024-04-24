@@ -102,7 +102,6 @@ class MainMenuActivityTest {
                     instancesDataService,
                     scheduler,
                     projectsDataService,
-                    analyticsInitializer,
                     permissionChecker,
                     formsRepositoryProvider,
                     instancesRepositoryProvider,

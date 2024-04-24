@@ -18,7 +18,8 @@ import org.odk.collect.shared.settings.Settings
 class SavedFormListViewModel(
     scheduler: Scheduler,
     private val settings: Settings,
-    private val instancesDataService: InstancesDataService
+    private val instancesDataService: InstancesDataService,
+    val projectId: String
 ) : ViewModel() {
 
     private val _sortOrder =
@@ -67,7 +68,7 @@ class SavedFormListViewModel(
         val result = MutableLiveData<Consumable<Int>?>(null)
         worker.immediate(
             background = {
-                instancesDataService.deleteInstances(databaseIds)
+                instancesDataService.deleteInstances(projectId, databaseIds)
             },
             foreground = { instancesDeleted ->
                 if (instancesDeleted) {

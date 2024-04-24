@@ -40,7 +40,8 @@ class SavedFormListViewModelTest {
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
         saveForms(listOf(myForm, yourForm))
 
-        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        val viewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
 
         viewModel.filterText = "Your"
         assertThat(
@@ -61,7 +62,8 @@ class SavedFormListViewModelTest {
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
         saveForms(listOf(myForm, yourForm))
 
-        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        val viewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
 
         viewModel.filterText = "blah"
         assertThat(
@@ -82,7 +84,8 @@ class SavedFormListViewModelTest {
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
         saveForms(listOf(myForm, yourForm))
 
-        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        val viewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
 
         viewModel.filterText = "my"
         assertThat(
@@ -97,7 +100,8 @@ class SavedFormListViewModelTest {
         val b = InstanceFixtures.instance(displayName = "B")
         saveForms(listOf(b, a))
 
-        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        val viewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
 
         viewModel.sortOrder = SortOrder.NAME_ASC
         assertThat(
@@ -112,7 +116,8 @@ class SavedFormListViewModelTest {
         val b = InstanceFixtures.instance(displayName = "B")
         saveForms(listOf(a, b))
 
-        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        val viewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
 
         viewModel.sortOrder = SortOrder.NAME_DESC
         assertThat(
@@ -127,7 +132,8 @@ class SavedFormListViewModelTest {
         val b = InstanceFixtures.instance(displayName = "B", lastStatusChangeDate = 1)
         saveForms(listOf(a, b))
 
-        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        val viewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
 
         viewModel.sortOrder = SortOrder.DATE_DESC
         assertThat(
@@ -142,7 +148,8 @@ class SavedFormListViewModelTest {
         val b = InstanceFixtures.instance(displayName = "B", lastStatusChangeDate = 1)
         saveForms(listOf(b, a))
 
-        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        val viewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
 
         viewModel.sortOrder = SortOrder.DATE_ASC
         assertThat(
@@ -157,10 +164,12 @@ class SavedFormListViewModelTest {
         val b = InstanceFixtures.instance(displayName = "B", lastStatusChangeDate = 1)
         saveForms(listOf(b, a))
 
-        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        val viewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
         viewModel.sortOrder = SortOrder.DATE_ASC
 
-        val newViewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        val newViewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
         assertThat(newViewModel.sortOrder, equalTo(SortOrder.DATE_ASC))
         assertThat(
             newViewModel.formsToDisplay.getOrAwaitValue(scheduler),
@@ -170,7 +179,8 @@ class SavedFormListViewModelTest {
 
     @Test
     fun `isDeleting is true while deleting forms`() {
-        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
+        val viewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
         assertThat(viewModel.isDeleting.getOrAwaitValue(), equalTo(false))
 
         viewModel.deleteForms(longArrayOf(1))
@@ -182,8 +192,9 @@ class SavedFormListViewModelTest {
 
     @Test
     fun `deleteForms should return 0 if instances can not be deleted`() {
-        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
-        whenever(instancesDataService.deleteInstances(any())).thenReturn(false)
+        val viewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
+        whenever(instancesDataService.deleteInstances(any(), any())).thenReturn(false)
 
         val result = viewModel.deleteForms(longArrayOf(1))
         assertThat(result.getOrAwaitValue(scheduler)!!.value, equalTo(0))
@@ -191,8 +202,9 @@ class SavedFormListViewModelTest {
 
     @Test
     fun `deleteForms should return the number of instances after deleting`() {
-        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService)
-        whenever(instancesDataService.deleteInstances(any())).thenReturn(true)
+        val viewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
+        whenever(instancesDataService.deleteInstances(any(), any())).thenReturn(true)
 
         val result = viewModel.deleteForms(longArrayOf(1))
         assertThat(result.getOrAwaitValue(scheduler)!!.value, equalTo(1))

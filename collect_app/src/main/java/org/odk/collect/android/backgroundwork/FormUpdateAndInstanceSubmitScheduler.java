@@ -1,7 +1,7 @@
 package org.odk.collect.android.backgroundwork;
 
 import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeriodInMilliseconds;
-import static org.odk.collect.android.preferences.utilities.SettingsUtils.getFormUpdateMode;
+import static org.odk.collect.settings.enums.StringIdEnumUtils.getFormUpdateMode;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 
 import android.app.Application;
@@ -9,6 +9,8 @@ import android.app.Application;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.enums.AutoSend;
+import org.odk.collect.settings.enums.StringIdEnumUtils;
 import org.odk.collect.shared.settings.Settings;
 
 import java.util.HashMap;
@@ -31,7 +33,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
         String period = generalSettings.getString(KEY_PERIODIC_FORM_UPDATES_CHECK);
         long periodInMilliseconds = getPeriodInMilliseconds(period, application);
 
-        switch (getFormUpdateMode(application, generalSettings)) {
+        switch (getFormUpdateMode(generalSettings, application)) {
             case MANUAL:
                 scheduler.cancelDeferred(getMatchExactlyTag(projectId));
                 scheduler.cancelDeferred(getAutoUpdateTag(projectId));
@@ -50,13 +52,13 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     private void scheduleAutoUpdate(long periodInMilliseconds, String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
         inputData.put(TaskData.DATA_PROJECT_ID, projectId);
-        scheduler.networkDeferred(getAutoUpdateTag(projectId), new AutoUpdateTaskSpec(), periodInMilliseconds, inputData);
+        scheduler.networkDeferredRepeat(getAutoUpdateTag(projectId), new AutoUpdateTaskSpec(), periodInMilliseconds, inputData);
     }
 
     private void scheduleMatchExactly(long periodInMilliseconds, String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
         inputData.put(TaskData.DATA_PROJECT_ID, projectId);
-        scheduler.networkDeferred(getMatchExactlyTag(projectId), new SyncFormsTaskSpec(), periodInMilliseconds, inputData);
+        scheduler.networkDeferredRepeat(getMatchExactlyTag(projectId), new SyncFormsTaskSpec(), periodInMilliseconds, inputData);
     }
 
     @Override
@@ -67,9 +69,18 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
 
     @Override
     public void scheduleSubmit(String projectId) {
+        Scheduler.NetworkType networkType = null;
+        Settings settings = settingsProvider.getUnprotectedSettings(projectId);
+        AutoSend autoSendSetting = StringIdEnumUtils.getAutoSend(settings, application);
+        if (autoSendSetting == AutoSend.WIFI_ONLY) {
+            networkType = Scheduler.NetworkType.WIFI;
+        } else if (autoSendSetting == AutoSend.CELLULAR_ONLY) {
+            networkType = Scheduler.NetworkType.CELLULAR;
+        }
+
         HashMap<String, String> inputData = new HashMap<>();
         inputData.put(TaskData.DATA_PROJECT_ID, projectId);
-        scheduler.networkDeferred(getAutoSendTag(projectId), new AutoSendTaskSpec(), inputData);
+        scheduler.networkDeferred(getAutoSendTag(projectId), new AutoSendTaskSpec(), inputData, networkType);
     }
 
     @Override

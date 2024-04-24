@@ -3,20 +3,15 @@ package org.odk.collect.android.instancemanagement.autosend
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 import org.junit.Test
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormUtils.buildForm
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceUtils.buildInstance
-import org.odk.collect.projects.Project
 import org.odk.collect.shared.TempFiles.createTempDir
 
 class InstanceAutoSendFetcherTest {
-    private val autoSendSettingsProvider: AutoSendSettingsProvider = mock()
-    private val instanceAutoSendFetcher = InstanceAutoSendFetcher(autoSendSettingsProvider)
-    private val projectId = Project.DEMO_PROJECT_NAME
+
     private val instancesRepository = InMemInstancesRepository()
     private val formsRepository = InMemFormsRepository()
 
@@ -49,9 +44,7 @@ class InstanceAutoSendFetcherTest {
     private val instanceOfFormWithCustomAutoSendSubmitted = buildInstance("4", "1", "instance 4", Instance.STATUS_SUBMITTED, null, createTempDir().absolutePath).build()
 
     @Test
-    fun `when auto-send enabled in settings return all finalized instances of forms that do not have auto send disabled on a form level`() {
-        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId)).thenReturn(true)
-
+    fun `return all finalized instances of forms that do not have auto send disabled on a form level`() {
         formsRepository.save(formWithEnabledAutoSend)
         formsRepository.save(formWithoutSpecifiedAutoSend)
         formsRepository.save(formWithDisabledAutoSend)
@@ -79,7 +72,10 @@ class InstanceAutoSendFetcherTest {
             save(instanceOfFormWithCustomAutoSendSubmitted)
         }
 
-        val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(projectId, instancesRepository, formsRepository)
+        val instancesToSend = InstanceAutoSendFetcher.getInstancesToAutoSend(
+            instancesRepository,
+            formsRepository
+        )
         assertThat(
             instancesToSend.map { it.instanceFilePath },
             contains(
@@ -89,47 +85,6 @@ class InstanceAutoSendFetcherTest {
                 instanceOfFormWithoutSpecifiedAutoSendSubmissionFailed.instanceFilePath,
                 instanceOfFormWithCustomAutoSendComplete.instanceFilePath,
                 instanceOfFormWithCustomAutoSendSubmissionFailed.instanceFilePath
-            )
-        )
-    }
-
-    @Test
-    fun `when auto-send disabled in settings return only those instances with auto-send enabled on a form level`() {
-        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId)).thenReturn(false)
-
-        formsRepository.save(formWithEnabledAutoSend)
-        formsRepository.save(formWithoutSpecifiedAutoSend)
-        formsRepository.save(formWithDisabledAutoSend)
-        formsRepository.save(formWithCustomAutoSend)
-
-        instancesRepository.apply {
-            save(instanceOfFormWithEnabledAutoSendIncomplete)
-            save(instanceOfFormWithEnabledAutoSendComplete)
-            save(instanceOfFormWithEnabledAutoSendSubmissionFailed)
-            save(instanceOfFormWithEnabledAutoSendSubmitted)
-
-            save(instanceOfFormWithoutSpecifiedAutoSendIncomplete)
-            save(instanceOfFormWithoutSpecifiedAutoSendComplete)
-            save(instanceOfFormWithoutSpecifiedAutoSendSubmissionFailed)
-            save(instanceOfFormWithoutSpecifiedAutoSendSubmitted)
-
-            save(instanceOfFormWithDisabledAutoSendIncomplete)
-            save(instanceOfFormWithDisabledAutoSendComplete)
-            save(instanceOfFormWithDisabledAutoSendSubmissionFailed)
-            save(instanceOfFormWithDisabledAutoSendSubmitted)
-
-            save(instanceOfFormWithCustomAutoSendIncomplete)
-            save(instanceOfFormWithCustomAutoSendComplete)
-            save(instanceOfFormWithCustomAutoSendSubmissionFailed)
-            save(instanceOfFormWithCustomAutoSendSubmitted)
-        }
-
-        val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(projectId, instancesRepository, formsRepository)
-        assertThat(
-            instancesToSend.map { it.instanceFilePath },
-            contains(
-                instanceOfFormWithEnabledAutoSendComplete.instanceFilePath,
-                instanceOfFormWithEnabledAutoSendSubmissionFailed.instanceFilePath
             )
         )
     }
@@ -150,7 +105,10 @@ class InstanceAutoSendFetcherTest {
             save(instanceOfFormWithEnabledAutoSendCompleteV2)
         }
 
-        val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(projectId, instancesRepository, formsRepository)
+        val instancesToSend = InstanceAutoSendFetcher.getInstancesToAutoSend(
+            instancesRepository,
+            formsRepository
+        )
         assertThat(
             instancesToSend.map { it.instanceFilePath },
             contains(

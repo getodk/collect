@@ -10,8 +10,7 @@ import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvi
 import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
 import org.odk.collect.android.instancemanagement.canBeEdited
 import org.odk.collect.android.instancemanagement.isDraft
-import org.odk.collect.android.preferences.utilities.FormUpdateMode
-import org.odk.collect.android.preferences.utilities.SettingsUtils
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -19,6 +18,8 @@ import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.enums.FormUpdateMode
+import org.odk.collect.settings.enums.StringIdEnumUtils.getFormUpdateMode
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 
 class MainMenuViewModel(
@@ -29,7 +30,8 @@ class MainMenuViewModel(
     private val scheduler: Scheduler,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
-    private val autoSendSettingsProvider: AutoSendSettingsProvider
+    private val autoSendSettingsProvider: AutoSendSettingsProvider,
+    private val projectsDataService: ProjectsDataService
 ) : ViewModel() {
 
     val version: String
@@ -78,7 +80,7 @@ class MainMenuViewModel(
     }
 
     private fun isMatchExactlyEnabled(): Boolean {
-        return SettingsUtils.getFormUpdateMode(application, settingsProvider.getUnprotectedSettings()) == FormUpdateMode.MATCH_EXACTLY
+        return settingsProvider.getUnprotectedSettings().getFormUpdateMode(application) == FormUpdateMode.MATCH_EXACTLY
     }
 
     private fun appendToCommitDescription(commitDescription: String, part: String): String {
@@ -92,7 +94,7 @@ class MainMenuViewModel(
     fun refreshInstances() {
         scheduler.immediate<Any?>({
             InstanceDiskSynchronizer(settingsProvider).doInBackground()
-            instancesDataService.update()
+            instancesDataService.update(projectsDataService.getCurrentProject().uuid)
             null
         }) { }
     }

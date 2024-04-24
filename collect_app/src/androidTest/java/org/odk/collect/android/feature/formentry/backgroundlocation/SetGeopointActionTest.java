@@ -1,12 +1,5 @@
 package org.odk.collect.android.feature.formentry.backgroundlocation;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
-import androidx.test.core.app.ApplicationProvider;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -25,8 +18,8 @@ public class SetGeopointActionTest {
 
     @Test
     public void locationCollectionSnackbar_ShouldBeDisplayedAtFormLaunch() {
-        onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(withText(String.format(ApplicationProvider.getApplicationContext().getString(org.odk.collect.strings.R.string.background_location_enabled), "⋮"))));
+        rule.startInFormEntry()
+                .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.background_location_enabled, "⋮");
     }
 
     /**

@@ -17,8 +17,7 @@ import android.content.Context
 import androidx.work.BackoffPolicy
 import androidx.work.WorkerParameters
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSender
-import org.odk.collect.android.projects.ProjectDependencyProviderFactory
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.WorkerAdapter
 import java.util.function.Supplier
@@ -26,21 +25,18 @@ import javax.inject.Inject
 
 class AutoSendTaskSpec : TaskSpec {
     @Inject
-    lateinit var instanceAutoSender: InstanceAutoSender
-
-    @Inject
-    lateinit var projectDependencyProviderFactory: ProjectDependencyProviderFactory
+    lateinit var instancesDataService: InstancesDataService
 
     override val maxRetries: Int? = null
-    override val backoffPolicy: BackoffPolicy? = null
-    override val backoffDelay: Long? = null
+    override val backoffPolicy = BackoffPolicy.EXPONENTIAL
+    override val backoffDelay: Long = 60_000
 
     override fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
-                instanceAutoSender.autoSendInstances(projectDependencyProviderFactory.create(projectId))
+                instancesDataService.autoSendInstances(projectId)
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }

@@ -76,7 +76,9 @@ class FormsDataServiceTest {
             mock(),
             storagePathProvider,
             changeLockProvider,
-            formSourceProvider
+            formSourceProvider,
+            mock(),
+            mock()
         )
 
         val projectDependencyProviderFactory = mock<ProjectDependencyProviderFactory>()

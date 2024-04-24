@@ -53,11 +53,11 @@ open class CoroutineScheduler(private val foregroundContext: CoroutineContext, p
         throw UnsupportedOperationException()
     }
 
-    override fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>) {
+    override fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>, networkConstraint: Scheduler.NetworkType?) {
         throw UnsupportedOperationException()
     }
 
-    override fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long, inputData: Map<String, String>) {
+    override fun networkDeferredRepeat(tag: String, spec: TaskSpec, repeatPeriod: Long, inputData: Map<String, String>) {
         throw UnsupportedOperationException()
     }
 

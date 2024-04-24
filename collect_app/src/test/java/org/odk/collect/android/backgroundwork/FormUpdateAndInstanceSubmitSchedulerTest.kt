@@ -9,11 +9,11 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.android.R
 import org.odk.collect.android.TestSettingsProvider
-import org.odk.collect.android.preferences.utilities.FormUpdateMode.MATCH_EXACTLY
-import org.odk.collect.android.preferences.utilities.FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY
 import org.odk.collect.async.Scheduler
+import org.odk.collect.settings.enums.FormUpdateMode.MATCH_EXACTLY
+import org.odk.collect.settings.enums.FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProjectKeys.KEY_FORM_UPDATE_MODE
 import org.odk.collect.settings.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK
 
@@ -37,7 +37,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
         manager.scheduleUpdates("myProject")
-        verify(scheduler).networkDeferred(
+        verify(scheduler).networkDeferredRepeat(
             eq("serverPollingJob:myProject"),
             any<AutoUpdateTaskSpec>(),
             eq(3600000),
@@ -74,7 +74,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
         manager.scheduleUpdates("myProject")
-        verify(scheduler).networkDeferred(
+        verify(scheduler).networkDeferredRepeat(
             eq("match_exactly:myProject"),
             any<SyncFormsTaskSpec>(),
             eq(3600000),
@@ -84,13 +84,46 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
 
     @Test
     fun `scheduleSubmit passes current project ID`() {
+        settingsProvider.getUnprotectedSettings("myProject")
+            .save(ProjectKeys.KEY_AUTOSEND, "wifi_and_cellular")
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
         manager.scheduleSubmit("myProject")
         verify(scheduler).networkDeferred(
             eq("AutoSendWorker:myProject"),
             any<AutoSendTaskSpec>(),
-            eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject"))
+            eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject")),
+            eq(null)
+        )
+    }
+
+    @Test
+    fun `scheduleSubmit uses wifi network type when set in settings`() {
+        settingsProvider.getUnprotectedSettings("myProject")
+            .save(ProjectKeys.KEY_AUTOSEND, "wifi_only")
+        val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
+
+        manager.scheduleSubmit("myProject")
+        verify(scheduler).networkDeferred(
+            eq("AutoSendWorker:myProject"),
+            any<AutoSendTaskSpec>(),
+            eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject")),
+            eq(Scheduler.NetworkType.WIFI)
+        )
+    }
+
+    @Test
+    fun `scheduleSubmit uses cellular network type when set in settings`() {
+        settingsProvider.getUnprotectedSettings("myProject")
+            .save(ProjectKeys.KEY_AUTOSEND, "cellular_only")
+        val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
+
+        manager.scheduleSubmit("myProject")
+        verify(scheduler).networkDeferred(
+            eq("AutoSendWorker:myProject"),
+            any<AutoSendTaskSpec>(),
+            eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject")),
+            eq(Scheduler.NetworkType.CELLULAR)
         )
     }
 

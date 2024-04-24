@@ -11,9 +11,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.TestSettingsProvider
-import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
+import org.odk.collect.settings.enums.FormUpdateMode
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.settings.Settings

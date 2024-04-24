@@ -11,14 +11,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import org.odk.collect.android.formmanagement.FormsDataService
-import org.odk.collect.android.preferences.utilities.FormUpdateMode
-import org.odk.collect.android.preferences.utilities.SettingsUtils
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.flowOnBackground
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormSourceException.AuthRequired
 import org.odk.collect.forms.instances.InstancesRepository
+import org.odk.collect.settings.enums.FormUpdateMode
+import org.odk.collect.settings.enums.StringIdEnumUtils.getFormUpdateMode
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 
@@ -85,10 +85,7 @@ class BlankFormListViewModel(
     }
 
     fun isMatchExactlyEnabled(): Boolean {
-        return SettingsUtils.getFormUpdateMode(
-            application,
-            generalSettings
-        ) == FormUpdateMode.MATCH_EXACTLY
+        return generalSettings.getFormUpdateMode(application) == FormUpdateMode.MATCH_EXACTLY
     }
 
     fun isOutOfSyncWithServer(): LiveData<Boolean> {
