@@ -16,7 +16,7 @@ object LocalEntityUseCases {
             val id = item.getFirstChild("name")!!.value!!.value as String
             val version = (item.getFirstChild("__version")!!.value!!.value as String).toInt()
 
-            val existing = entitiesRepository.getEntities(dataset).find { it.id == id }
+            val existing = entitiesRepository.get(dataset, id)
             if (existing == null || existing.version < version) {
                 val entity = Entity(
                     dataset,
