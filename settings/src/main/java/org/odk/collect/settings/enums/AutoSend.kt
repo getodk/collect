@@ -11,10 +11,14 @@ enum class AutoSend(@StringRes private val value: Int) {
     CELLULAR_ONLY(R.string.auto_send_cellular_only),
     WIFI_AND_CELLULAR(R.string.auto_send_wifi_and_cellular);
 
+    fun getValue(context: Context): String {
+        return context.getString(value)
+    }
+
     companion object {
 
         @JvmStatic
-        fun parse(context: Context, value: String): AutoSend {
+        fun parse(context: Context, value: String?): AutoSend {
             return entries.find {
                 context.getString(it.value) == value
             } ?: throw IllegalArgumentException()

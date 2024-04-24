@@ -513,8 +513,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AutoSendSettingsProvider providesAutoSendSettingsProvider(NetworkStateProvider networkStateProvider, SettingsProvider settingsProvider) {
-        return new AutoSendSettingsProvider(networkStateProvider, settingsProvider);
+    public AutoSendSettingsProvider providesAutoSendSettingsProvider(Application application, SettingsProvider settingsProvider, NetworkStateProvider networkStateProvider) {
+        return new AutoSendSettingsProvider(application, networkStateProvider, settingsProvider);
     }
 
     @Provides

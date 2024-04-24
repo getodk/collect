@@ -39,6 +39,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
+import org.odk.collect.android.preferences.utilities.SettingsUtils;
+import org.odk.collect.settings.enums.AutoSend;
 import org.odk.collect.shared.settings.Settings;
 
 import javax.inject.Inject;
@@ -80,7 +82,7 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
             updateDisabledPrefs();
         }
 
-        if (key.equals(KEY_AUTOSEND) && !settingsProvider.getUnprotectedSettings().getString(KEY_AUTOSEND).equals("off")) {
+        if (key.equals(KEY_AUTOSEND) && !SettingsUtils.getAutoSend(settingsProvider.getUnprotectedSettings(), requireContext()).equals(AutoSend.OFF)) {
             instanceSubmitScheduler.scheduleSubmit(projectsDataService.getCurrentProject().getUuid());
         }
     }
