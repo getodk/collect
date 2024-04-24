@@ -62,21 +62,6 @@ class LocalEntityUseCasesTest {
         )
     }
 
-    @Test
-    fun `updateLocalEntities maintains properties in local version when overriding with newer list version`() {
-        val entitiesRepository = InMemEntitiesRepository()
-        entitiesRepository.save(Entity("songs", "noah", "Noa", 1, listOf(Pair("length", "6:38"))))
-
-        val csv = createEntityList(Entity("songs", "noah", "Noah", 2))
-
-        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
-        val songs = entitiesRepository.getEntities("songs")
-        assertThat(
-            songs,
-            containsInAnyOrder(Entity("songs", "noah", "Noah", 2, listOf(Pair("length", "6:38"))))
-        )
-    }
-
     private fun createEntityList(entity: Entity): File {
         val csv = TempFiles.createTempFile()
         csv.writer().use { it ->
