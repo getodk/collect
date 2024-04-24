@@ -47,7 +47,7 @@ class FakeScheduler : Scheduler {
         tag: String,
         spec: TaskSpec,
         inputData: Map<String, String>,
-        networkType: Scheduler.NetworkType?
+        networkConstraint: Scheduler.NetworkType?
     ) {
     }
 

@@ -53,7 +53,7 @@ class TestScheduler : Scheduler, CoroutineDispatcher() {
         tag: String,
         spec: TaskSpec,
         inputData: Map<String, String>,
-        networkType: Scheduler.NetworkType?
+        networkConstraint: Scheduler.NetworkType?
     ) {
         deferredTasks.add(DeferredTask(tag, spec, null, inputData))
     }

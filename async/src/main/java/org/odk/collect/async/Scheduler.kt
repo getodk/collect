@@ -36,7 +36,7 @@ interface Scheduler {
      * @param spec defines the task to be run
      * @param inputData a map of input data that can be accessed by the task
      */
-    fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>, networkType: NetworkType? = null)
+    fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>, networkConstraint: NetworkType? = null)
 
     /**
      * Schedule a task to run in the background repeatedly even if the app isn't running. The task
