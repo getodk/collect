@@ -60,7 +60,7 @@ the License.
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggle_button"
                 style="?materialButtonOutlinedStyle"
                 android:layout_width="0dp"
@@ -69,7 +69,7 @@ the License.
                 android:layout_weight="1"
                 android:text="@string/select_all" />
 
-            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/upload_button"
                 style="?materialButtonStyle"
                 android:layout_width="0dp"
