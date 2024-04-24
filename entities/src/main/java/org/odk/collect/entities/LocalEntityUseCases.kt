@@ -10,7 +10,12 @@ object LocalEntityUseCases {
         entityList: File,
         entitiesRepository: EntitiesRepository
     ) {
-        val root = CsvExternalInstance.parse(dataset, entityList.absolutePath)
+        val root = try {
+            CsvExternalInstance.parse(dataset, entityList.absolutePath)
+        } catch (e: Exception) {
+            return
+        }
+
         val items = root.getChildrenWithName("item")
         items.forEach { item ->
             val id = item.getFirstChild("name")?.value?.value as? String

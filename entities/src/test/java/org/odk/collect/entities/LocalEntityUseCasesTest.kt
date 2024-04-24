@@ -105,6 +105,14 @@ class LocalEntityUseCasesTest {
         )
     }
 
+    @Test
+    fun `updateLocalEntities does nothing if passed a non-CSV file`() {
+        val file = TempFiles.createTempFile(".xml")
+
+        LocalEntityUseCases.updateLocalEntities("songs", file, entitiesRepository)
+        assertThat(entitiesRepository.getDatasets().size, equalTo(0))
+    }
+
     private fun createEntityList(entity: Entity): File {
         val header = listOf(
             EntityItemElement.ID,
