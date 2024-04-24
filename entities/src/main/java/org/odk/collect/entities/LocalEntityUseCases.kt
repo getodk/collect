@@ -27,15 +27,6 @@ object LocalEntityUseCases {
 
             val existing = entitiesRepository.get(dataset, id)
             if (existing == null || existing.version < version) {
-                val entity = Entity(
-                    dataset,
-                    id,
-                    label,
-                    version
-                )
-
-                entitiesRepository.save(entity)
-            } else {
                 val properties = 0.until(item.numChildren)
                     .fold(emptyList<Pair<String, String>>()) { properties, index ->
                         val child = item.getChildAt(index)
@@ -52,7 +43,7 @@ object LocalEntityUseCases {
                         }
                     }
 
-                val entity = existing.copy(properties = properties)
+                val entity = Entity(dataset, id, label, version, properties)
                 entitiesRepository.save(entity)
             }
         }

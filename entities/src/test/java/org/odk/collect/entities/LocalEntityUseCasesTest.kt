@@ -44,16 +44,30 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntities adds properties not in local version from older list version`() {
-        entitiesRepository.save(Entity("songs", "noah", "Noah", 2))
+    fun `updateLocalEntities ignores properties not in local version from older list version`() {
+        entitiesRepository.save(Entity("songs", "noah", "Noah", 3))
         val csv =
-            createEntityList(Entity("songs", "noah", "Noa", 1, listOf(Pair("length", "6:38"))))
+            createEntityList(Entity("songs", "noah", "Noah", 2, listOf(Pair("length", "6:38"))))
 
         LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
-            containsInAnyOrder(Entity("songs", "noah", "Noah", 2, listOf(Pair("length", "6:38"))))
+            containsInAnyOrder(Entity("songs", "noah", "Noah", 3))
+        )
+    }
+
+    @Test
+    fun `updateLocalEntities overrides properties in local version from newer list version`() {
+        entitiesRepository.save(Entity("songs", "noah", "Noah", 1, listOf(Pair("length", "6:38"))))
+        val csv =
+            createEntityList(Entity("songs", "noah", "Noah", 2, listOf(Pair("length", "4:58"))))
+
+        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        val songs = entitiesRepository.getEntities("songs")
+        assertThat(
+            songs,
+            containsInAnyOrder(Entity("songs", "noah", "Noah", 2, listOf(Pair("length", "4:58"))))
         )
     }
 
@@ -95,13 +109,13 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntities adds list entity when its label is blank`() {
-        val csv = createEntityList(Entity("songs", "cathedrals", ""))
+        val csv = createEntityList(Entity("songs", "cathedrals", label = ""))
 
         LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
-            containsInAnyOrder(Entity("songs", "cathedrals", ""))
+            containsInAnyOrder(Entity("songs", "cathedrals", label = ""))
         )
     }
 
