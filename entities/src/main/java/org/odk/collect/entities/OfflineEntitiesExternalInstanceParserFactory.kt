@@ -2,6 +2,7 @@ package org.odk.collect.entities
 
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.instance.TreeElement
+import org.javarosa.core.reference.ReferenceManager
 import org.javarosa.xform.parse.ExternalInstanceParser
 import org.javarosa.xform.parse.ExternalInstanceParserFactory
 
@@ -10,27 +11,26 @@ class OfflineEntitiesExternalInstanceParserFactory(
     private val enabled: () -> Boolean
 ) : ExternalInstanceParserFactory {
     override fun getExternalInstanceParser(): ExternalInstanceParser {
-        val parser = ExternalInstanceParser()
-
-        if (enabled()) {
-            parser.addProcessor(
-                OfflineEntitiesExternalDataInstanceProcessor(
-                    entitiesRepositoryProvider()
-                )
-            )
+        return if (enabled()) {
+            OfflineEntitiesExternalInstanceParser(entitiesRepositoryProvider())
+        } else {
+            ExternalInstanceParser()
         }
-
-        return parser
     }
 }
 
-internal class OfflineEntitiesExternalDataInstanceProcessor(private val entitiesRepository: EntitiesRepository) :
-    ExternalInstanceParser.ExternalDataInstanceProcessor {
-    override fun processInstance(id: String, root: TreeElement) {
-        if (entitiesRepository.getDatasets().contains(id)) {
-            0.until(root.numChildren).forEach { root.removeChildAt(it) }
+internal class OfflineEntitiesExternalInstanceParser(private val entitiesRepository: EntitiesRepository) :
+    ExternalInstanceParser() {
 
-            entitiesRepository.getEntities(id).forEachIndexed { index, entity ->
+    override fun parse(
+        referenceManager: ReferenceManager,
+        instanceId: String,
+        instanceSrc: String
+    ): TreeElement {
+        if (entitiesRepository.getDatasets().contains(instanceId)) {
+            val root = TreeElement("root", 0)
+
+            entitiesRepository.getEntities(instanceId).forEachIndexed { index, entity ->
                 val name = TreeElement(EntityItemElement.ID)
                 name.value = StringData(entity.id)
 
@@ -47,6 +47,10 @@ internal class OfflineEntitiesExternalDataInstanceProcessor(private val entities
 
                 root.addChild(item)
             }
+
+            return root
+        } else {
+            return super.parse(referenceManager, instanceId, instanceSrc)
         }
     }
 

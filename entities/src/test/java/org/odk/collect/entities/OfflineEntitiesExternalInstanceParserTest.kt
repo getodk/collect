@@ -2,10 +2,10 @@ package org.odk.collect.entities
 
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.javarosa.core.model.instance.TreeElement
 import org.junit.Test
+import org.mockito.kotlin.mock
 
-class OfflineEntitiesExternalDataInstanceProcessorTest {
+class OfflineEntitiesExternalInstanceParserTest {
 
     private val entitiesRepository = InMemEntitiesRepository()
 
@@ -20,11 +20,8 @@ class OfflineEntitiesExternalDataInstanceProcessorTest {
             )
         entitiesRepository.save(entity)
 
-        val processor =
-            OfflineEntitiesExternalDataInstanceProcessor(entitiesRepository)
-
-        val instance = TreeElement("root")
-        processor.processInstance("people", instance)
+        val parser = OfflineEntitiesExternalInstanceParser(entitiesRepository)
+        val instance = parser.parse(mock(), "people", "people.csv")
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
