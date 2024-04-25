@@ -37,9 +37,13 @@ internal class OfflineEntitiesExternalInstanceParser(private val entitiesReposit
                 val label = TreeElement(EntityItemElement.LABEL)
                 label.value = StringData(entity.label)
 
+                val version = TreeElement(EntityItemElement.VERSION)
+                version.value = StringData(entity.version.toString())
+
                 val item = TreeElement("item", index)
                 item.addChild(name)
                 item.addChild(label)
+                item.addChild(version)
 
                 entity.properties.forEach { property ->
                     addChild(item, property)

@@ -25,8 +25,28 @@ class OfflineEntitiesExternalInstanceParserTest {
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
-        assertThat(item.numChildren, equalTo(4))
+        assertThat(item.numChildren, equalTo(5))
         assertThat(item.getFirstChild("age")?.value?.value, equalTo("35"))
         assertThat(item.getFirstChild("born")?.value?.value, equalTo("England"))
+    }
+
+    @Test
+    fun `includes version in offline entity elements`() {
+        val entity =
+            Entity(
+                "people",
+                "1",
+                "Shiv Roy",
+                version = 1
+            )
+        entitiesRepository.save(entity)
+
+        val parser = OfflineEntitiesExternalInstanceParser(entitiesRepository)
+        val instance = parser.parse(mock(), "people", "people.csv")
+        assertThat(instance.numChildren, equalTo(1))
+
+        val item = instance.getChildAt(0)!!
+        assertThat(item.numChildren, equalTo(3))
+        assertThat(item.getFirstChild("__version")?.value?.value, equalTo("1"))
     }
 }
