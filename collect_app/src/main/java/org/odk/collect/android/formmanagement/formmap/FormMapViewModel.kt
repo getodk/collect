@@ -115,12 +115,12 @@ class FormMapViewModel(
             )
 
             val info = "$instanceLastStatusChangeDate\n${dateFormat.format(instance.deletedDate)}"
-            MappableSelectItem(
+            MappableSelectItem.MappableSelectPoint(
                 instance.dbId,
-                listOf(MapPoint(latitude, longitude)),
-                getDrawableIdForStatus(instance.status, false),
-                getDrawableIdForStatus(instance.status, true),
                 instance.displayName,
+                point = MapPoint(latitude, longitude),
+                smallIcon = getDrawableIdForStatus(instance.status, false),
+                largeIcon = getDrawableIdForStatus(instance.status, true),
                 info = info
             )
         } else if (!instance.canEditWhenComplete() && listOf(
@@ -130,12 +130,12 @@ class FormMapViewModel(
             ).contains(instance.status)
         ) {
             val info = "$instanceLastStatusChangeDate\n${resources.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form)}"
-            MappableSelectItem(
+            MappableSelectItem.MappableSelectPoint(
                 instance.dbId,
-                listOf(MapPoint(latitude, longitude)),
-                getDrawableIdForStatus(instance.status, false),
-                getDrawableIdForStatus(instance.status, true),
                 instance.displayName,
+                point = MapPoint(latitude, longitude),
+                smallIcon = getDrawableIdForStatus(instance.status, false),
+                largeIcon = getDrawableIdForStatus(instance.status, true),
                 info = info
             )
         } else {
@@ -146,12 +146,12 @@ class FormMapViewModel(
                     createViewAction()
                 }
 
-            MappableSelectItem(
+            MappableSelectItem.MappableSelectPoint(
                 instance.dbId,
-                listOf(MapPoint(latitude, longitude)),
-                getDrawableIdForStatus(instance.status, false),
-                getDrawableIdForStatus(instance.status, true),
                 instance.displayName,
+                point = MapPoint(latitude, longitude),
+                smallIcon = getDrawableIdForStatus(instance.status, false),
+                largeIcon = getDrawableIdForStatus(instance.status, true),
                 info = instanceLastStatusChangeDate,
                 action = action,
                 status = instanceStatusToMappableSelectionItemStatus(instance)

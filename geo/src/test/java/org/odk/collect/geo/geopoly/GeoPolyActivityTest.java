@@ -51,6 +51,7 @@ import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.geo.support.FakeMapFragment;
 import org.odk.collect.geo.support.RobolectricApplication;
 import org.odk.collect.location.tracker.LocationTracker;
+import org.odk.collect.maps.LineDescription;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
 import org.robolectric.shadows.ShadowApplication;
@@ -138,9 +139,9 @@ public class GeoPolyActivityTest {
 
         mapFragment.ready();
 
-        List<List<MapPoint>> polys = mapFragment.getPolyLines();
+        List<LineDescription> polys = mapFragment.getPolyLines();
         assertThat(polys.size(), equalTo(1));
-        assertThat(polys.get(0), equalTo(polygon));
+        assertThat(polys.get(0).getPoints(), equalTo(polygon));
     }
 
     @Test
@@ -157,13 +158,13 @@ public class GeoPolyActivityTest {
 
         mapFragment.ready();
 
-        List<List<MapPoint>> polys = mapFragment.getPolyLines();
+        List<LineDescription> polys = mapFragment.getPolyLines();
         assertThat(polys.size(), equalTo(1));
 
         ArrayList<MapPoint> expectedPolygon = new ArrayList<>();
         expectedPolygon.add(new MapPoint(1.0, 2.0, 3, 4));
         expectedPolygon.add(new MapPoint(2.0, 3.0, 3, 4));
-        assertThat(polys.get(0), equalTo(expectedPolygon));
+        assertThat(polys.get(0).getPoints(), equalTo(expectedPolygon));
         assertThat(mapFragment.isPolyClosed(0), equalTo(true));
     }
 
@@ -178,9 +179,9 @@ public class GeoPolyActivityTest {
 
         mapFragment.ready();
 
-        List<List<MapPoint>> polys = mapFragment.getPolyLines();
+        List<LineDescription> polys = mapFragment.getPolyLines();
         assertThat(polys.size(), equalTo(1));
-        assertThat(polys.get(0).isEmpty(), equalTo(true));
+        assertThat(polys.get(0).getPoints().isEmpty(), equalTo(true));
     }
 
     @Test
@@ -231,7 +232,7 @@ public class GeoPolyActivityTest {
         mapFragment.setLocation(new MapPoint(1, 1));
         onView(withId(R.id.record_button)).perform(click());
         onView(withId(R.id.record_button)).perform(click());
-        assertThat(mapFragment.getPolyLines().get(0).size(), equalTo(1));
+        assertThat(mapFragment.getPolyLines().get(0).getPoints().size(), equalTo(1));
     }
 
     @Test
@@ -243,7 +244,7 @@ public class GeoPolyActivityTest {
 
         mapFragment.click(new MapPoint(1, 1));
         mapFragment.click(new MapPoint(1, 1));
-        assertThat(mapFragment.getPolyLines().get(0).size(), equalTo(1));
+        assertThat(mapFragment.getPolyLines().get(0).getPoints().size(), equalTo(1));
     }
 
     private void startInput(int mode) {

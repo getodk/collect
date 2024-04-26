@@ -1,34 +1,25 @@
 package org.odk.collect.mapbox
 
-import android.content.Context
-import androidx.core.graphics.ColorUtils
 import com.mapbox.geojson.Point
 import com.mapbox.maps.plugin.annotation.generated.OnPolygonAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
-import org.odk.collect.maps.MapConsts.POLYGON_FILL_COLOR_OPACITY
 import org.odk.collect.maps.MapFragment
-import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.PolygonDescription
 
 class StaticPolygonFeature(
-    context: Context,
     private val polygonAnnotationManager: PolygonAnnotationManager,
-    points: Iterable<MapPoint>,
+    polygonDescription: PolygonDescription,
     featureClickListener: MapFragment.FeatureListener?,
     featureId: Int
 ) : MapFeature {
 
     private val polygonAnnotation: PolygonAnnotation = polygonAnnotationManager.create(
         PolygonAnnotationOptions()
-            .withPoints(listOf(points.map { Point.fromLngLat(it.longitude, it.latitude) }))
-            .withFillOutlineColor(context.resources.getColor(org.odk.collect.icons.R.color.mapLineColor))
-            .withFillColor(
-                ColorUtils.setAlphaComponent(
-                    context.resources.getColor(org.odk.collect.icons.R.color.mapLineColor),
-                    POLYGON_FILL_COLOR_OPACITY
-                )
-            )
+            .withPoints(listOf(polygonDescription.points.map { Point.fromLngLat(it.longitude, it.latitude) }))
+            .withFillOutlineColor(polygonDescription.getStrokeColor())
+            .withFillColor(polygonDescription.getFillColor())
     )
 
     private val polygonClickListener =

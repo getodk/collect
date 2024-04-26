@@ -14,9 +14,6 @@
 
 package org.odk.collect.googlemaps;
 
-import static org.odk.collect.maps.MapConsts.POLYGON_FILL_COLOR_OPACITY;
-import static org.odk.collect.maps.MapConsts.POLYLINE_STROKE_WIDTH;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
@@ -25,7 +22,6 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.graphics.ColorUtils;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -51,10 +47,12 @@ import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.location.LocationClient;
+import org.odk.collect.maps.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.PolygonDescription;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maps.markers.MarkerDescription;
@@ -306,20 +304,20 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return feature instanceof MarkerFeature ? ((MarkerFeature) feature).getPoint() : null;
     }
 
-    @Override public int addPolyLine(@NonNull Iterable<MapPoint> points, boolean closed, boolean draggable) {
+    @Override public int addPolyLine(LineDescription lineDescription) {
         int featureId = nextFeatureId++;
-        if (draggable) {
-            features.put(featureId, new DynamicPolyLineFeature(getActivity(), points, closed, map));
+        if (lineDescription.getDraggable()) {
+            features.put(featureId, new DynamicPolyLineFeature(getActivity(), lineDescription, map));
         } else {
-            features.put(featureId, new StaticPolyLineFeature(getActivity(), points, closed, map));
+            features.put(featureId, new StaticPolyLineFeature(lineDescription, map));
         }
         return featureId;
     }
 
     @Override
-    public int addPolygon(@NonNull Iterable<MapPoint> points) {
+    public int addPolygon(PolygonDescription polygonDescription) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new StaticPolygonFeature(map, points, requireContext().getResources().getColor(org.odk.collect.icons.R.color.mapLineColor)));
+        features.put(featureId, new StaticPolygonFeature(map, polygonDescription));
         return featureId;
     }
 
@@ -778,22 +776,22 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
         private Polyline polyline;
 
-        StaticPolyLineFeature(Context context, Iterable<MapPoint> points, boolean closedPolygon, GoogleMap map) {
+        StaticPolyLineFeature(LineDescription lineDescription, GoogleMap map) {
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
 
-            List<LatLng> latLngs = StreamSupport.stream(points.spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList());
-            if (closedPolygon && !latLngs.isEmpty()) {
+            List<LatLng> latLngs = StreamSupport.stream(lineDescription.getPoints().spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList());
+            if (lineDescription.getClosed() && !latLngs.isEmpty()) {
                 latLngs.add(latLngs.get(0));
             }
             if (latLngs.isEmpty()) {
                 clearPolyline();
             } else if (polyline == null) {
                 polyline = map.addPolyline(new PolylineOptions()
-                        .color(context.getResources().getColor(org.odk.collect.icons.R.color.mapLineColor))
+                        .color(lineDescription.getStrokeColor())
                         .zIndex(1)
-                        .width(POLYLINE_STROKE_WIDTH)
+                        .width(lineDescription.getStrokeWidth())
                         .addAll(latLngs)
                         .clickable(true)
                 );
@@ -840,19 +838,19 @@ public class GoogleMapFragment extends SupportMapFragment implements
         private final Context context;
         private final GoogleMap map;
         private final List<Marker> markers = new ArrayList<>();
-        private final boolean closedPolygon;
+        private final LineDescription lineDescription;
         private Polyline polyline;
 
-        DynamicPolyLineFeature(Context context, Iterable<MapPoint> points, boolean closedPolygon, GoogleMap map) {
+        DynamicPolyLineFeature(Context context, LineDescription lineDescription, GoogleMap map) {
             this.context = context;
+            this.lineDescription = lineDescription;
             this.map = map;
-            this.closedPolygon = closedPolygon;
 
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
 
-            for (MapPoint point : points) {
+            for (MapPoint point : lineDescription.getPoints()) {
                 markers.add(createMarker(context, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(org.odk.collect.icons.R.drawable.ic_map_point)), map));
             }
 
@@ -880,16 +878,16 @@ public class GoogleMapFragment extends SupportMapFragment implements
             for (Marker marker : markers) {
                 latLngs.add(marker.getPosition());
             }
-            if (closedPolygon && !latLngs.isEmpty()) {
+            if (lineDescription.getClosed() && !latLngs.isEmpty()) {
                 latLngs.add(latLngs.get(0));
             }
             if (markers.isEmpty()) {
                 clearPolyline();
             } else if (polyline == null) {
                 polyline = map.addPolyline(new PolylineOptions()
-                    .color(context.getResources().getColor(org.odk.collect.icons.R.color.mapLineColor))
+                    .color(lineDescription.getStrokeColor())
                     .zIndex(1)
-                    .width(POLYLINE_STROKE_WIDTH)
+                    .width(lineDescription.getStrokeWidth())
                     .addAll(latLngs)
                     .clickable(true)
                 );
@@ -943,12 +941,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private static class StaticPolygonFeature implements MapFeature {
         private Polygon polygon;
 
-        StaticPolygonFeature(GoogleMap map, Iterable<MapPoint> points, int strokeLineColor) {
+        StaticPolygonFeature(GoogleMap map, PolygonDescription polygonDescription) {
             polygon = map.addPolygon(new PolygonOptions()
-                    .addAll(StreamSupport.stream(points.spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList()))
-                    .strokeColor(strokeLineColor)
-                    .strokeWidth(POLYLINE_STROKE_WIDTH)
-                    .fillColor(ColorUtils.setAlphaComponent(strokeLineColor, POLYGON_FILL_COLOR_OPACITY))
+                    .addAll(StreamSupport.stream(polygonDescription.getPoints().spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList()))
+                    .strokeColor(polygonDescription.getStrokeColor())
+                    .strokeWidth(polygonDescription.getStrokeWidth())
+                    .fillColor(polygonDescription.getFillColor())
                     .clickable(true)
             );
         }

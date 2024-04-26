@@ -16,6 +16,7 @@ import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.geo.selection.IconifiedText
+import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.testshared.FakeScheduler
 
@@ -33,7 +34,7 @@ class SelectChoicesMapDataTest {
             selectChoice(
                 value = "a",
                 item = treeElement(
-                    children = listOf(treeElement("geometry", "12.0 -1.0 3 4; 12.1 -1.0 3 4"))
+                    children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4"))
                 )
             )
         )
@@ -50,7 +51,7 @@ class SelectChoicesMapDataTest {
         val mappableItems = data.getMappableItems().getOrAwaitValue()!!
         assertThat(mappableItems.size, equalTo(1))
 
-        val points = mappableItems[0].points
+        val points = (mappableItems[0] as MappableSelectItem.MappableSelectLine).points
         assertThat(
             points,
             equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0)))
@@ -63,7 +64,7 @@ class SelectChoicesMapDataTest {
             selectChoice(
                 value = "a",
                 item = treeElement(
-                    children = listOf(treeElement("geometry", "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"))
+                    children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"))
                 )
             )
         )
@@ -80,7 +81,7 @@ class SelectChoicesMapDataTest {
         val mappableItems = data.getMappableItems().getOrAwaitValue()!!
         assertThat(mappableItems.size, equalTo(1))
 
-        val points = mappableItems[0].points
+        val points = (mappableItems[0] as MappableSelectItem.MappableSelectPolygon).points
         assertThat(
             points,
             equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0), MapPoint(12.0, -1.0, 3.0, 4.0)))
@@ -92,7 +93,7 @@ class SelectChoicesMapDataTest {
         val choices = listOf(
             selectChoice(
                 value = "a",
-                item = treeElement(children = listOf(treeElement("geometry", "12.0 -1.0 305 0")))
+                item = treeElement(children = listOf(treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0")))
             ),
             selectChoice(
                 value = "b",
@@ -119,7 +120,7 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "12.0 -1.0 305 0"),
+                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
                         treeElement("property", "blah")
                     )
                 )
@@ -164,7 +165,7 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "0 170.00 0 0")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "0 170.00 0 0")
                     )
                 )
             ),
@@ -173,7 +174,7 @@ class SelectChoicesMapDataTest {
                 value = "b",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "blah")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "blah")
                     )
                 )
             ),
@@ -182,7 +183,7 @@ class SelectChoicesMapDataTest {
                 value = "c",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "0 180.1 0 0")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "0 180.1 0 0")
                     )
                 )
             ),
@@ -191,7 +192,7 @@ class SelectChoicesMapDataTest {
                 value = "c",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "0 180 0 0; 0 180.1 0 0")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "0 180 0 0; 0 180.1 0 0")
                     )
                 )
             )
@@ -218,9 +219,9 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "12.0 -1.0 305 0"),
-                        treeElement("marker-symbol", "A"),
-                        treeElement("marker-color", "#ffffff")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, "A"),
+                        treeElement(SelectChoicesMapData.MARKER_COLOR, "#ffffff")
                     )
                 )
             )
@@ -233,9 +234,73 @@ class SelectChoicesMapDataTest {
             .build()
 
         val data = loadDataForPrompt(prompt)
-        val item = data.getMappableItems().getOrAwaitValue()!![0]
+        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableSelectItem.MappableSelectPoint
         assertThat(item.symbol, equalTo("A"))
         assertThat(item.color, equalTo("#ffffff"))
+    }
+
+    /**
+     * Attributes names come from properties defined at
+     * https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0.
+     */
+    @Test
+    fun `line stroke color is pulled from simple style attributes`() {
+        val choices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(
+                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4"),
+                        treeElement(SelectChoicesMapData.STROKE_WIDTH, "10"),
+                        treeElement(SelectChoicesMapData.STROKE, "#ffffff")
+                    )
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .withSelectChoiceText(mapOf(choices[0] to "A"))
+            .build()
+
+        val data = loadDataForPrompt(prompt)
+        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableSelectItem.MappableSelectLine
+        assertThat(item.strokeWidth, equalTo("10"))
+        assertThat(item.strokeColor, equalTo("#ffffff"))
+    }
+
+    /**
+     * Attributes names come from properties defined at
+     * https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0.
+     */
+    @Test
+    fun `polygon stroke width, stroke color and fill color are pulled from simple style attributes`() {
+        val choices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(
+                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"),
+                        treeElement(SelectChoicesMapData.STROKE_WIDTH, "10"),
+                        treeElement(SelectChoicesMapData.STROKE, "#000000"),
+                        treeElement(SelectChoicesMapData.FILL, "#ffffff")
+                    )
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .withSelectChoiceText(mapOf(choices[0] to "A"))
+            .build()
+
+        val data = loadDataForPrompt(prompt)
+        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableSelectItem.MappableSelectPolygon
+        assertThat(item.strokeWidth, equalTo("10"))
+        assertThat(item.strokeColor, equalTo("#000000"))
+        assertThat(item.fillColor, equalTo("#ffffff"))
     }
 
     @Test
@@ -245,8 +310,8 @@ class SelectChoicesMapDataTest {
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "12.0 -1.0 305 0"),
-                        treeElement("marker-symbol", "A")
+                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, "A")
                     )
                 )
             )
@@ -259,7 +324,7 @@ class SelectChoicesMapDataTest {
             .build()
 
         val data = loadDataForPrompt(prompt)
-        val item = data.getMappableItems().getOrAwaitValue()!![0]
+        val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableSelectItem.MappableSelectPoint
         assertThat(item.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_small))
         assertThat(item.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_big))
     }

@@ -1,7 +1,7 @@
 package org.odk.collect.maps
 
 object MapConsts {
-    const val POLYLINE_STROKE_WIDTH = 8
-    const val MAPBOX_POLYLINE_STROKE_WIDTH = 4
-    const val POLYGON_FILL_COLOR_OPACITY = 68
+    const val DEFAULT_STROKE_COLOR = -65536 // color-int representation of #ffff0000
+    const val DEFAULT_STROKE_WIDTH = 8f
+    const val DEFAULT_FILL_COLOR_OPACITY = 68
 }

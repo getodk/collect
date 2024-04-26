@@ -1,11 +1,13 @@
 package org.odk.collect.geo.support
 
 import androidx.fragment.app.Fragment
+import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 import kotlin.random.Random
@@ -24,10 +26,8 @@ class FakeMapFragment : Fragment(), MapFragment {
     private var featureClickListener: FeatureListener? = null
     private val markers = mutableMapOf<Int, MapPoint>()
     private val markerIcons = mutableMapOf<Int, MarkerIconDescription?>()
-    private val polyLines = mutableMapOf<Int, List<MapPoint>>()
-    private val polyClosed: MutableList<Boolean> = ArrayList()
-    private val polyDraggable: MutableList<Boolean> = ArrayList()
-    private val polygons = mutableMapOf<Int, List<MapPoint>>()
+    private val polyLines = mutableMapOf<Int, LineDescription>()
+    private val polygons = mutableMapOf<Int, PolygonDescription>()
     private var hasCenter = false
     private val featureIds = mutableListOf<Int>()
 
@@ -107,40 +107,33 @@ class FakeMapFragment : Fragment(), MapFragment {
         return markers[featureId]!!
     }
 
-    override fun addPolyLine(
-        points: Iterable<MapPoint>,
-        closed: Boolean,
-        draggable: Boolean
-    ): Int {
+    override fun addPolyLine(lineDescription: LineDescription): Int {
         val featureId = generateFeatureId()
 
-        polyLines[featureId] = points.toList()
-        polyClosed.add(closed)
-        polyDraggable.add(draggable)
-
+        polyLines[featureId] = lineDescription
         featureIds.add(featureId)
         return featureId
     }
 
-    override fun addPolygon(points: MutableIterable<MapPoint>): Int {
+    override fun addPolygon(polygonDescription: PolygonDescription): Int {
         val featureId = generateFeatureId()
-        polygons[featureId] = points.toList()
+        polygons[featureId] = polygonDescription
         featureIds.add(featureId)
         return featureId
     }
 
     override fun appendPointToPolyLine(featureId: Int, point: MapPoint) {
         val poly = polyLines[featureId]!!
-        polyLines[featureId] = poly + point
+        polyLines[featureId] = poly.copy(points = poly.points + point)
     }
 
     override fun removePolyLineLastPoint(featureId: Int) {
         val poly = polyLines[featureId]!!
-        polyLines[featureId] = poly.dropLast(1)
+        polyLines[featureId] = poly.copy(points = poly.points.dropLast(1))
     }
 
     override fun getPolyLinePoints(featureId: Int): List<MapPoint> {
-        return polyLines[featureId]!!
+        return polyLines[featureId]!!.points
     }
 
     override fun clearFeatures() {
@@ -223,16 +216,16 @@ class FakeMapFragment : Fragment(), MapFragment {
         return zoomBoundingBox
     }
 
-    fun getPolyLines(): List<List<MapPoint>> {
+    fun getPolyLines(): List<LineDescription> {
         return polyLines.values.toList()
     }
 
     fun isPolyClosed(index: Int): Boolean {
-        return polyClosed[index]
+        return polyLines[featureIds[index]]!!.closed
     }
 
     fun isPolyDraggable(index: Int): Boolean {
-        return polyDraggable[index]
+        return polyLines[featureIds[index]]!!.draggable
     }
 
     fun getFeatureId(points: List<MapPoint>): Int {
@@ -242,7 +235,7 @@ class FakeMapFragment : Fragment(), MapFragment {
             }!!.key
         } else {
             polyLines.entries.find {
-                it.value == points
+                it.value.points == points
             }!!.key
         }
     }
@@ -256,7 +249,7 @@ class FakeMapFragment : Fragment(), MapFragment {
         return featureId
     }
 
-    fun getPolygons(): List<List<MapPoint>> {
+    fun getPolygons(): List<PolygonDescription> {
         return polygons.values.toList()
     }
 
