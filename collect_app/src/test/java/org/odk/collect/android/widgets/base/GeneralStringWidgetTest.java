@@ -120,4 +120,10 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
         assertThat(getSpyWidget().widgetAnswerText.getBinding().editText.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
         assertThat(getSpyWidget().widgetAnswerText.getBinding().textView.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
     }
+
+    @Test
+    public abstract void verifyInputType();
+
+    @Test
+    public abstract void verifyInputTypeWithMaskedAppearance();
 }

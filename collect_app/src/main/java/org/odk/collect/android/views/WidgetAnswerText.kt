@@ -33,8 +33,6 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
 
     val binding = WidgetAnswerTextBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private var isMasked: Boolean = false
-
     fun init(fontSize: Float, readOnly: Boolean, numberOfRows: Int?, isMasked: Boolean, afterTextChanged: Runnable) {
         binding.editText.id = generateViewId()
         binding.textView.id = generateViewId()
@@ -61,9 +59,11 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
             }
         })
         if (isMasked) {
-            this.isMasked = isMasked
+            binding.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             binding.editText.transformationMethod = PasswordTransformationMethod.getInstance()
             binding.textView.transformationMethod = PasswordTransformationMethod.getInstance()
+        } else {
+            binding.editText.inputType = InputType.TYPE_CLASS_TEXT
         }
     }
 
@@ -83,7 +83,6 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
             binding.editText.addTextChangedListener(ThousandsSeparatorTextWatcher(binding.editText))
         }
 
-        binding.editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
         binding.editText.keyListener = DigitsKeyListener(true, false) // only allows numbers and no periods
 
         // ints can only hold 2,147,483,648. we allow 999,999,999
@@ -98,11 +97,6 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
         if (answer != null) {
             setAnswer(String.format(Locale.US, "%d", answer))
         }
-
-        if (isMasked) {
-            binding.editText.transformationMethod = PasswordTransformationMethod.getInstance()
-            binding.textView.transformationMethod = PasswordTransformationMethod.getInstance()
-        }
     }
 
     fun setStringNumberType(useThousandSeparator: Boolean, answer: String?) {
@@ -110,7 +104,6 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
             binding.editText.addTextChangedListener(ThousandsSeparatorTextWatcher(binding.editText))
         }
 
-        binding.editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
         binding.editText.keyListener = object : DigitsKeyListener() {
             override fun getAcceptedChars(): CharArray {
                 return charArrayOf(
@@ -122,11 +115,6 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
         if (answer != null) {
             setAnswer(answer)
         }
-
-        if (isMasked) {
-            binding.editText.transformationMethod = PasswordTransformationMethod.getInstance()
-            binding.textView.transformationMethod = PasswordTransformationMethod.getInstance()
-        }
     }
 
     fun setDecimalType(useThousandSeparator: Boolean, answer: Double?) {
@@ -134,7 +122,6 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
             binding.editText.addTextChangedListener(ThousandsSeparatorTextWatcher(binding.editText))
         }
 
-        binding.editText.inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
         binding.editText.keyListener = DigitsKeyListener(true, true) // only numbers are allowed
 
         // only 15 characters allowed
@@ -153,11 +140,6 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
             nf.isGroupingUsed = false
             val formattedValue: String = nf.format(answer)
             setAnswer(formattedValue)
-        }
-
-        if (isMasked) {
-            binding.editText.transformationMethod = PasswordTransformationMethod.getInstance()
-            binding.textView.transformationMethod = PasswordTransformationMethod.getInstance()
         }
     }
 

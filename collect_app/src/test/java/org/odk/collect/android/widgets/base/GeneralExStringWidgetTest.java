@@ -81,4 +81,10 @@ public abstract class GeneralExStringWidgetTest<W extends ExStringWidget, A exte
         assertThat(getSpyWidget().binding.widgetAnswerText.getBinding().editText.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
         assertThat(getSpyWidget().binding.widgetAnswerText.getBinding().textView.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
     }
+
+    @Test
+    public abstract void verifyInputType();
+
+    @Test
+    public abstract void verifyInputTypeWithMaskedAppearance();
 }

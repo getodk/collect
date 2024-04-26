@@ -233,6 +233,12 @@ class AppearancesTest {
     }
 
     @Test
+    fun `useThousandSeparator returns false when 'thousands-sep' appearance is found but mixed with 'masked'`() {
+        whenever(formEntryPrompt.appearanceHint).thenReturn("thousands-sep masked")
+        assertFalse(Appearances.useThousandSeparator(formEntryPrompt))
+    }
+
+    @Test
     fun `useThousandSeparator returns true when 'thousands-sep' appearance is found`() {
         whenever(formEntryPrompt.appearanceHint).thenReturn("THOUSANDS-SEP")
         assertTrue(Appearances.useThousandSeparator(formEntryPrompt))
