@@ -11,7 +11,7 @@ object LocalEntityUseCases {
         entitiesRepository: EntitiesRepository
     ) {
         val root = try {
-            CsvExternalInstance.parse(dataset, entityList.absolutePath)
+            CsvExternalInstance().parse(dataset, entityList.absolutePath)
         } catch (e: Exception) {
             return
         }
