@@ -194,7 +194,8 @@ class InstancesDataService(
             if (acquiredLock) {
                 val toUpload = InstanceAutoSendFetcher.getInstancesToAutoSend(
                     projectDependencyProvider.instancesRepository,
-                    projectDependencyProvider.formsRepository
+                    projectDependencyProvider.formsRepository,
+                    projectDependencyProvider.settingsProvider
                 )
 
                 if (toUpload.isNotEmpty()) {

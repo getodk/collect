@@ -8,6 +8,7 @@ import org.odk.collect.formstest.FormUtils.buildForm
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceUtils.buildInstance
+import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.shared.TempFiles.createTempDir
 
 class InstanceAutoSendFetcherTest {
@@ -74,7 +75,8 @@ class InstanceAutoSendFetcherTest {
 
         val instancesToSend = InstanceAutoSendFetcher.getInstancesToAutoSend(
             instancesRepository,
-            formsRepository
+            formsRepository,
+            InMemSettingsProvider()
         )
         assertThat(
             instancesToSend.map { it.instanceFilePath },
@@ -107,7 +109,8 @@ class InstanceAutoSendFetcherTest {
 
         val instancesToSend = InstanceAutoSendFetcher.getInstancesToAutoSend(
             instancesRepository,
-            formsRepository
+            formsRepository,
+            InMemSettingsProvider()
         )
         assertThat(
             instancesToSend.map { it.instanceFilePath },

@@ -7,6 +7,7 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.ErrorPage
+import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ViewSentFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -132,5 +133,18 @@ class AutoSendTest {
                 "Show details",
                 ErrorPage()
             )
+    }
+
+    @Test
+    fun whenAutoSendDisabled_fillingAndFinalizingForm_doesNotSendFormAutomatically() {
+        val mainMenuPage = rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .copyForm("one-question.xml")
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("what is your age", "31"))
+
+        testDependencies.scheduler.runDeferredTasks()
+
+        mainMenuPage.assertNumberOfFinalizedForms(1)
     }
 }
