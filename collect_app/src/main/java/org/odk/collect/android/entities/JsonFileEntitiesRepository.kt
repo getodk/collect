@@ -55,10 +55,6 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         writeJson(existing)
     }
 
-    override fun get(dataset: String, id: String): Entity? {
-        return readEntities().find { it.dataset == dataset && it.id == id }
-    }
-
     private fun writeEntities(entities: MutableList<Entity>) {
         val map = mutableMapOf<String, MutableList<JsonEntity>>()
         entities.forEach {

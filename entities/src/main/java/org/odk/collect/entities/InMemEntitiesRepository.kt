@@ -22,10 +22,6 @@ class InMemEntitiesRepository : EntitiesRepository {
         datasets.add(dataset)
     }
 
-    override fun get(dataset: String, id: String): Entity? {
-        return entities.find { it.dataset == dataset && it.id == id }
-    }
-
     override fun save(entity: Entity) {
         datasets.add(entity.dataset)
         val existing = entities.find { it.id == entity.id && it.dataset == entity.dataset }

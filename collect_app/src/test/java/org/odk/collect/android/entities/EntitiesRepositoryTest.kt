@@ -194,28 +194,4 @@ abstract class EntitiesRepositoryTest {
         assertThat(repository.getDatasets(), containsInAnyOrder("wine"))
         assertThat(repository.getEntities("wine").size, equalTo(0))
     }
-
-    @Test
-    fun `get() returns entity when it exists`() {
-        val repository = buildSubject()
-
-        val entity = Entity("songs", "1", "Hall of Mirrors")
-        repository.save(entity)
-        assertThat(repository.get("songs", "1"), equalTo(entity))
-    }
-
-    @Test
-    fun `get() returns entity when none match`() {
-        val repository = buildSubject()
-
-        val entity = Entity("songs", "2", "Hall of Mirrors")
-        repository.save(entity)
-        assertThat(repository.get("songs", "1"), equalTo(null))
-    }
-
-    @Test
-    fun `get() returns null when empty`() {
-        val repository = buildSubject()
-        assertThat(repository.get("songs", "1"), equalTo(null))
-    }
 }

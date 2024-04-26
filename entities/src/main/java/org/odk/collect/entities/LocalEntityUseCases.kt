@@ -16,8 +16,9 @@ object LocalEntityUseCases {
             return
         }
 
-        val items = root.getChildrenWithName("item")
-        items.forEach { item ->
+        val localEntities = entitiesRepository.getEntities(dataset).associateBy { it.id }
+        val listItems = root.getChildrenWithName("item")
+        listItems.forEach { item ->
             val id = item.getFirstChild("name")?.value?.value as? String
             val label = item.getFirstChild("label")?.value?.value as? String
             val version = (item.getFirstChild("__version")?.value?.value as? String)?.toInt()
@@ -25,7 +26,7 @@ object LocalEntityUseCases {
                 return
             }
 
-            val existing = entitiesRepository.get(dataset, id)
+            val existing = localEntities[id]
             if (existing == null || existing.version < version) {
                 val properties = 0.until(item.numChildren)
                     .fold(emptyList<Pair<String, String>>()) { properties, index ->
