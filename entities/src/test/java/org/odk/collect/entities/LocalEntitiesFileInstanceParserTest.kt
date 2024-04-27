@@ -3,9 +3,8 @@ package org.odk.collect.entities
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
-import org.mockito.kotlin.mock
 
-class OfflineEntitiesExternalInstanceParserTest {
+class LocalEntitiesFileInstanceParserTest {
 
     private val entitiesRepository = InMemEntitiesRepository()
 
@@ -20,8 +19,8 @@ class OfflineEntitiesExternalInstanceParserTest {
             )
         entitiesRepository.save(entity)
 
-        val parser = OfflineEntitiesExternalInstanceParser(entitiesRepository)
-        val instance = parser.parse(mock(), "people", "people.csv")
+        val parser = LocalEntitiesFileInstanceParser { entitiesRepository }
+        val instance = parser.parse("people", "people.csv")
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
@@ -41,8 +40,8 @@ class OfflineEntitiesExternalInstanceParserTest {
             )
         entitiesRepository.save(entity)
 
-        val parser = OfflineEntitiesExternalInstanceParser(entitiesRepository)
-        val instance = parser.parse(mock(), "people", "people.csv")
+        val parser = LocalEntitiesFileInstanceParser { entitiesRepository }
+        val instance = parser.parse("people", "people.csv")
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
