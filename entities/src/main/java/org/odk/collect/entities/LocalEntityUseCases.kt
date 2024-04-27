@@ -19,7 +19,7 @@ object LocalEntityUseCases {
         val localEntities = entitiesRepository.getEntities(dataset).associateBy { it.id }
         val listItems = root.getChildrenWithName("item")
 
-        val newAndUpdated = listItems.fold(emptyList<Entity>()) { entities, item ->
+        val newAndUpdated = listItems.fold(arrayOf<Entity>()) { entities, item ->
             val id = item.getFirstChild("name")?.value?.value as? String
             val label = item.getFirstChild("label")?.value?.value as? String
             val version = (item.getFirstChild("__version")?.value?.value as? String)?.toInt()
@@ -52,7 +52,7 @@ object LocalEntityUseCases {
         }
 
         if (newAndUpdated.isNotEmpty()) {
-            entitiesRepository.save(*newAndUpdated.toTypedArray())
+            entitiesRepository.save(*newAndUpdated)
         }
     }
 }
