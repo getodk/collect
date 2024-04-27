@@ -13,6 +13,8 @@ import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceUtils.buildInstance
 import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.enums.AutoSend
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.TempFiles.createTempDir
 
 @RunWith(AndroidJUnit4::class)
@@ -80,11 +82,16 @@ class InstanceAutoSendFetcherTest {
             save(instanceOfFormWithCustomAutoSendSubmitted)
         }
 
+        val settingsProvider = InMemSettingsProvider().also {
+            it.getUnprotectedSettings()
+                .save(ProjectKeys.KEY_AUTOSEND, AutoSend.WIFI_ONLY.getValue(application))
+        }
+
         val instancesToSend = InstanceAutoSendFetcher.getInstancesToAutoSend(
             application,
             instancesRepository,
             formsRepository,
-            InMemSettingsProvider()
+            settingsProvider
         )
 
         assertThat(
@@ -116,11 +123,16 @@ class InstanceAutoSendFetcherTest {
             save(instanceOfFormWithEnabledAutoSendCompleteV2)
         }
 
+        val settingsProvider = InMemSettingsProvider().also {
+            it.getUnprotectedSettings()
+                .save(ProjectKeys.KEY_AUTOSEND, AutoSend.WIFI_ONLY.getValue(application))
+        }
+
         val instancesToSend = InstanceAutoSendFetcher.getInstancesToAutoSend(
             application,
             instancesRepository,
             formsRepository,
-            InMemSettingsProvider()
+            settingsProvider
         )
         assertThat(
             instancesToSend.map { it.instanceFilePath },
