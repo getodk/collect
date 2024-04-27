@@ -32,7 +32,7 @@ interface Scheduler {
      * will only be run when the network is available.
      *
      * @param tag used to identify this task in future. If there is a previously scheduled task
-     * with the same tag then that task then this will replace that
+     * with the same tag then that task will be cancelled and this will replace it
      * @param spec defines the task to be run
      * @param inputData a map of input data that can be accessed by the task
      * @param networkConstraint the specific kind of network required
