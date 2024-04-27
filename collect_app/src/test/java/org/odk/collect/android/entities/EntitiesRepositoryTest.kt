@@ -187,6 +187,17 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `save() can save multiple entities`() {
+        val repository = buildSubject()
+
+        val wine = Entity("wines", "1", "Léoville Barton 2008")
+        val whisky = Entity("whiskys", "2", "Lagavulin 16")
+        repository.save(wine, whisky)
+
+        assertThat(repository.getDatasets(), containsInAnyOrder("wines", "whiskys"))
+    }
+
+    @Test
     fun `addDataset() adds a dataset with no entities`() {
         val repository = buildSubject()
 

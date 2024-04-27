@@ -19,26 +19,29 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         return readEntities().filter { it.dataset == dataset }
     }
 
-    override fun save(entity: Entity) {
-        val entities = readEntities()
-        val existing = entities.find { it.id == entity.id && it.dataset == entity.dataset }
+    override fun save(vararg entities: Entity) {
+        val storedEntities = readEntities()
 
-        if (existing != null) {
-            entities.remove(existing)
-            entities.add(
-                Entity(
-                    entity.dataset,
-                    entity.id,
-                    entity.label ?: existing.label,
-                    version = entity.version,
-                    properties = mergeProperties(existing, entity)
+        entities.forEach { entity ->
+            val existing = storedEntities.find { it.id == entity.id && it.dataset == entity.dataset }
+
+            if (existing != null) {
+                storedEntities.remove(existing)
+                storedEntities.add(
+                    Entity(
+                        entity.dataset,
+                        entity.id,
+                        entity.label ?: existing.label,
+                        version = entity.version,
+                        properties = mergeProperties(existing, entity)
+                    )
                 )
-            )
-        } else {
-            entities.add(entity)
+            } else {
+                storedEntities.add(entity)
+            }
         }
 
-        writeEntities(entities)
+        writeEntities(storedEntities)
     }
 
     override fun clear() {

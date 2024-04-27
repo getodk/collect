@@ -22,23 +22,25 @@ class InMemEntitiesRepository : EntitiesRepository {
         datasets.add(dataset)
     }
 
-    override fun save(entity: Entity) {
-        datasets.add(entity.dataset)
-        val existing = entities.find { it.id == entity.id && it.dataset == entity.dataset }
+    override fun save(vararg entities: Entity) {
+        entities.forEach { entity ->
+            datasets.add(entity.dataset)
+            val existing = this.entities.find { it.id == entity.id && it.dataset == entity.dataset }
 
-        if (existing != null) {
-            entities.remove(existing)
-            entities.add(
-                Entity(
-                    entity.dataset,
-                    entity.id,
-                    entity.label ?: existing.label,
-                    version = entity.version,
-                    properties = mergeProperties(existing, entity)
+            if (existing != null) {
+                this.entities.remove(existing)
+                this.entities.add(
+                    Entity(
+                        entity.dataset,
+                        entity.id,
+                        entity.label ?: existing.label,
+                        version = entity.version,
+                        properties = mergeProperties(existing, entity)
+                    )
                 )
-            )
-        } else {
-            entities.add(entity)
+            } else {
+                this.entities.add(entity)
+            }
         }
     }
 
