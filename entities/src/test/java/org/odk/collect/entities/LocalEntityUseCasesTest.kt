@@ -127,20 +127,49 @@ class LocalEntityUseCasesTest {
         assertThat(entitiesRepository.getDatasets().size, equalTo(0))
     }
 
-    private fun createEntityList(entity: Entity): File {
+    @Test
+    fun `updateLocalEntities accesses entities repo only twice when saving multiple entities`() {
+        val csv = createEntityList(
+            Entity("songs", "noah", "Noah"),
+            Entity("songs", "seven-trumpets", "Seven Trumpets")
+        )
+
+        val entitiesRepository = MeasurableEntitiesRepository(entitiesRepository)
+        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        assertThat(entitiesRepository.accesses, equalTo(2))
+    }
+
+    @Test
+    fun `updateLocalEntities accesses entities repo only once when not saving new entities`() {
+        val entities = arrayOf(
+            Entity("songs", "noah", "Noah"),
+            Entity("songs", "seven-trumpets", "Seven Trumpets")
+        )
+
+        entitiesRepository.save(*entities)
+        val csv = createEntityList(*entities)
+
+        val entitiesRepository = MeasurableEntitiesRepository(entitiesRepository)
+        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        assertThat(entitiesRepository.accesses, equalTo(1))
+    }
+
+    private fun createEntityList(vararg entities: Entity): File {
         val header = listOf(
             EntityItemElement.ID,
             EntityItemElement.LABEL,
             EntityItemElement.VERSION
-        ) + entity.properties.map { it.first }
+        ) + entities[0].properties.map { it.first }
 
-        val row: List<String?> = listOf(
-            entity.id,
-            entity.label,
-            entity.version.toString()
-        ) + entity.properties.map { it.second }
+        val rows = entities.map { entity ->
+            listOf(
+                entity.id,
+                entity.label,
+                entity.version.toString()
+            ) + entity.properties.map { it.second }
+        }.toTypedArray()
 
-        return createCsv(header, row)
+        return createCsv(header, *rows)
     }
 
     private fun createCsv(header: List<String>, vararg rows: List<String?>): File {
@@ -155,5 +184,37 @@ class LocalEntityUseCasesTest {
         }
 
         return csv
+    }
+}
+
+private class MeasurableEntitiesRepository(private val wrapped: EntitiesRepository) :
+    EntitiesRepository {
+
+    var accesses: Int = 0
+        private set
+
+    override fun save(vararg entities: Entity) {
+        accesses += 1
+        wrapped.save(*entities)
+    }
+
+    override fun getDatasets(): Set<String> {
+        accesses += 1
+        return wrapped.getDatasets()
+    }
+
+    override fun getEntities(dataset: String): List<Entity> {
+        accesses += 1
+        return wrapped.getEntities(dataset)
+    }
+
+    override fun clear() {
+        accesses += 1
+        wrapped.clear()
+    }
+
+    override fun addDataset(dataset: String) {
+        accesses += 1
+        wrapped.addDataset(dataset)
     }
 }
