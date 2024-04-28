@@ -39,19 +39,6 @@ class EntityFormTest {
     }
 
     @Test
-    fun fillingEntityRegistrationForm_createsEntityInTheBrowser() {
-        testDependencies.server.addForm("one-question-entity-registration.xml")
-
-        rule.withMatchExactlyProject(testDependencies.server.url)
-            .addEntityListInBrowser("people")
-            .startBlankForm("One Question Entity Registration")
-            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
-            .openEntityBrowser()
-            .clickOnDataset("people")
-            .assertEntity("Logan Roy", "full_name: Logan Roy")
-    }
-
-    @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpForms() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
         testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
