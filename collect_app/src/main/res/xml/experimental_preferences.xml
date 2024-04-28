@@ -17,6 +17,7 @@
         <SwitchPreferenceCompat
             android:key="experimental_local_entities"
             android:title="@string/include_local_entities_setting"
+            android:summary="@string/local_entity_features_summary"
             app:iconSpaceReserved="false" />
 
         <Preference
