@@ -35,6 +35,20 @@ class SavedFormListViewModelTest {
     }
 
     @Test
+    fun `formsToDisplay should not include deleted forms`() {
+        val myForm = InstanceFixtures.instance(displayName = "My form", deletedDate = 1)
+        val yourForm = InstanceFixtures.instance(displayName = "Your form")
+        saveForms(listOf(myForm, yourForm))
+
+        val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
+
+        assertThat(
+            viewModel.formsToDisplay.getOrAwaitValue(scheduler),
+            contains(yourForm)
+        )
+    }
+
+    @Test
     fun `setting filterText filters forms on display name`() {
         val myForm = InstanceFixtures.instance(displayName = "My form")
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
