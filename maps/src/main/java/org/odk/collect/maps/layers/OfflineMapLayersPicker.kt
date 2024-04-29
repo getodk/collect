@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.odk.collect.maps.databinding.OfflineMapLayersPickerBinding
 import org.odk.collect.shared.TempFiles
@@ -49,6 +50,13 @@ class OfflineMapLayersPicker : BottomSheetDialogFragment() {
             dismiss()
         }
         return offlineMapLayersPickerBinding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        BottomSheetBehavior.from(requireView().parent as View).apply {
+            maxWidth = ViewGroup.LayoutParams.MATCH_PARENT
+        }
     }
 
     companion object {
