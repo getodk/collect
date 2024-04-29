@@ -22,13 +22,13 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.setMultiClickSafeOnClickListener
 import org.odk.collect.geo.GeoDependencyComponentProvider
-import org.odk.collect.geo.ReferenceLayerSettingsNavigator
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
+import org.odk.collect.maps.layers.OfflineMapLayersPicker
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.material.BottomSheetBehavior
@@ -50,9 +50,6 @@ class SelectionMapFragment(
 
     @Inject
     lateinit var mapFragmentFactory: MapFragmentFactory
-
-    @Inject
-    lateinit var referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator
 
     @Inject
     lateinit var permissionsChecker: PermissionsChecker
@@ -180,7 +177,9 @@ class SelectionMapFragment(
         }
 
         binding.layerMenu.setMultiClickSafeOnClickListener {
-            referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(requireActivity())
+            OfflineMapLayersPicker().also {
+                it.show(parentFragmentManager, OfflineMapLayersPicker.TAG)
+            }
         }
 
         if (showNewItemButton) {
