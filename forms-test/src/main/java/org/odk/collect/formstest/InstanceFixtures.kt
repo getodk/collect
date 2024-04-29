@@ -11,7 +11,8 @@ object InstanceFixtures {
         lastStatusChangeDate: Long = 0,
         displayName: String? = null,
         dbId: Long? = null,
-        form: Form? = null
+        form: Form? = null,
+        deletedDate: Long? = null
     ): Instance {
         val instancesDir = TempFiles.createTempDir()
         return InstanceUtils.buildInstance("formId", "version", instancesDir.absolutePath)
@@ -24,6 +25,7 @@ object InstanceFixtures {
                     it.formVersion(form.version)
                 }
             }
+            .deletedDate(deletedDate)
             .build()
     }
 }
