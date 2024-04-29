@@ -32,9 +32,10 @@ interface Scheduler {
      * will only be run when the network is available.
      *
      * @param tag used to identify this task in future. If there is a previously scheduled task
-     * with the same tag then that task then nothing new will be scheduled (this becomes  no-op)
+     * with the same tag then that task will be cancelled and this will replace it
      * @param spec defines the task to be run
      * @param inputData a map of input data that can be accessed by the task
+     * @param networkConstraint the specific kind of network required
      */
     fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>, networkConstraint: NetworkType? = null)
 

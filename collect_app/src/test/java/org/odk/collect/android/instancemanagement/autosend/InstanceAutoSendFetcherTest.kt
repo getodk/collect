@@ -1,15 +1,23 @@
 package org.odk.collect.android.instancemanagement.autosend
 
+import android.app.Application
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormUtils.buildForm
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceUtils.buildInstance
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.enums.AutoSend
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.TempFiles.createTempDir
 
+@RunWith(AndroidJUnit4::class)
 class InstanceAutoSendFetcherTest {
 
     private val instancesRepository = InMemInstancesRepository()
@@ -43,6 +51,8 @@ class InstanceAutoSendFetcherTest {
     private val instanceOfFormWithCustomAutoSendSubmissionFailed = buildInstance("4", "1", "instance 3", Instance.STATUS_SUBMISSION_FAILED, null, createTempDir().absolutePath).build()
     private val instanceOfFormWithCustomAutoSendSubmitted = buildInstance("4", "1", "instance 4", Instance.STATUS_SUBMITTED, null, createTempDir().absolutePath).build()
 
+    private val application = ApplicationProvider.getApplicationContext<Application>()
+
     @Test
     fun `return all finalized instances of forms that do not have auto send disabled on a form level`() {
         formsRepository.save(formWithEnabledAutoSend)
@@ -72,10 +82,18 @@ class InstanceAutoSendFetcherTest {
             save(instanceOfFormWithCustomAutoSendSubmitted)
         }
 
+        val settingsProvider = InMemSettingsProvider().also {
+            it.getUnprotectedSettings()
+                .save(ProjectKeys.KEY_AUTOSEND, AutoSend.WIFI_ONLY.getValue(application))
+        }
+
         val instancesToSend = InstanceAutoSendFetcher.getInstancesToAutoSend(
+            application,
             instancesRepository,
-            formsRepository
+            formsRepository,
+            settingsProvider
         )
+
         assertThat(
             instancesToSend.map { it.instanceFilePath },
             contains(
@@ -105,9 +123,16 @@ class InstanceAutoSendFetcherTest {
             save(instanceOfFormWithEnabledAutoSendCompleteV2)
         }
 
+        val settingsProvider = InMemSettingsProvider().also {
+            it.getUnprotectedSettings()
+                .save(ProjectKeys.KEY_AUTOSEND, AutoSend.WIFI_ONLY.getValue(application))
+        }
+
         val instancesToSend = InstanceAutoSendFetcher.getInstancesToAutoSend(
+            application,
             instancesRepository,
-            formsRepository
+            formsRepository,
+            settingsProvider
         )
         assertThat(
             instancesToSend.map { it.instanceFilePath },
