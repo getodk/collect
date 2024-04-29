@@ -3,7 +3,9 @@ package org.odk.collect.android.formmanagement
 import androidx.test.espresso.matcher.ViewMatchers
 import org.hamcrest.Matchers
 import org.junit.Test
-import org.mockito.Mockito
+import org.mockito.Mockito.any
+import org.mockito.Mockito.doAnswer
+import org.mockito.Mockito.never
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -31,10 +33,10 @@ class ServerFormUseCasesTest {
             formDownloader
         )
 
-        verify(formDownloader, Mockito.never()).downloadForm(
-            Mockito.any(),
-            Mockito.any(),
-            Mockito.any()
+        verify(formDownloader, never()).downloadForm(
+            any(),
+            any(),
+            any()
         )
     }
 
@@ -49,7 +51,7 @@ class ServerFormUseCasesTest {
         )
 
         // Cancel form download after downloading one form
-        Mockito.doAnswer(object : Answer<Unit> {
+        doAnswer(object : Answer<Unit> {
             private var calledBefore = false
 
             @Throws(Throwable::class)
@@ -60,7 +62,7 @@ class ServerFormUseCasesTest {
                     throw FormDownloadException.DownloadingInterrupted()
                 }
             }
-        }).`when`(formDownloader).downloadForm(Mockito.any(), Mockito.any(), Mockito.any())
+        }).`when`(formDownloader).downloadForm(any(), any(), any())
 
         val results = ServerFormUseCases.downloadForms(
             serverForms,
