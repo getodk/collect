@@ -13,7 +13,7 @@ import androidx.preference.ListPreferenceDialogFragmentCompat;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.CaptionedListPreference;
-import org.odk.collect.android.utilities.ExternalWebPageHelper;
+import org.odk.collect.webpage.ExternalWebPageHelper;
 
 public class ReferenceLayerPreferenceDialog extends ListPreferenceDialogFragmentCompat implements DialogInterface.OnClickListener {
 

@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.webpage;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -10,8 +10,6 @@ import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.browser.customtabs.CustomTabsSession;
-
-import org.odk.collect.android.activities.WebViewActivity;
 
 /**
  * Created by sanjeev on 17/3/17.

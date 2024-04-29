@@ -34,7 +34,6 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.items.LabelWidget;
 import org.odk.collect.android.widgets.items.LikertWidget;
@@ -66,6 +65,7 @@ import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.webpage.ExternalWebPageHelper;
 
 /**
  * Convenience class that handles creation of widgets.

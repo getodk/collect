@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.webpage;
 
 import android.app.Activity;
 import android.net.Uri;

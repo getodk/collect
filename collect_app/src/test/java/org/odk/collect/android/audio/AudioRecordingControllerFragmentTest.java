@@ -28,13 +28,13 @@ import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
+import org.odk.collect.webpage.ExternalWebPageHelper;
 import org.robolectric.annotation.Config;
 
 import java.io.File;

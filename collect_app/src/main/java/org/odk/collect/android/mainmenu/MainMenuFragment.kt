@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.activities.DeleteFormsActivity
 import org.odk.collect.android.activities.FormDownloadListActivity
 import org.odk.collect.android.activities.InstanceChooserList
-import org.odk.collect.android.activities.WebViewActivity
 import org.odk.collect.android.application.MapboxClassInstanceCreator
 import org.odk.collect.android.databinding.MainMenuBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
@@ -34,6 +33,7 @@ import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
+import org.odk.collect.webpage.WebViewActivity
 
 class MainMenuFragment(
     private val viewModelFactory: ViewModelProvider.Factory,

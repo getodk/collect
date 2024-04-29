@@ -15,10 +15,10 @@ import androidx.core.text.underline
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import org.odk.collect.android.R
-import org.odk.collect.android.activities.WebViewActivity
 import org.odk.collect.android.databinding.FormEntryEndBinding
 import org.odk.collect.androidshared.system.ContextUtils
 import org.odk.collect.strings.localization.getLocalizedString
+import org.odk.collect.webpage.WebViewActivity
 
 class FormEndView(
     context: Context,

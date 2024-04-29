@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.WidgetTestActivity;
-import org.odk.collect.android.utilities.ExternalWebPageHelper;
+import org.odk.collect.webpage.ExternalWebPageHelper;
 import org.robolectric.shadows.ShadowToast;
 
 import static org.hamcrest.MatcherAssert.assertThat;

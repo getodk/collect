@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.webpage;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -26,8 +26,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 public class WebViewActivity extends LocalizedActivity {
@@ -51,14 +49,14 @@ public class WebViewActivity extends LocalizedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(org.odk.collect.icons.R.drawable.ic_close);
 
         String url = getIntent().getStringExtra(ExternalWebPageHelper.OPEN_URL);
-        webView = (WebView) findViewById(R.id.webView);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        webView = findViewById(R.id.webView);
+        progressBar = findViewById(R.id.progressBar);
 
         webView.setWebViewClient(new WebViewClient() {
             @Override

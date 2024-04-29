@@ -83,7 +83,6 @@ import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
-import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.ImageCompressionController;
@@ -134,6 +133,7 @@ import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.UserAgentProvider;
+import org.odk.collect.webpage.ExternalWebPageHelper;
 
 import java.io.File;
 
