@@ -222,14 +222,8 @@ class GeoPolyActivityTest {
         mapFragment.ready()
         scenario.onActivity { activity: GeoPolyActivity ->
             assertThat(activity.playButton.isEnabled, equalTo(true))
-        }
-        scenario.onActivity { activity: GeoPolyActivity ->
             assertThat(activity.backspaceButton.isEnabled, equalTo(true))
-        }
-        scenario.onActivity { activity: GeoPolyActivity ->
             assertThat(activity.clearButton.isEnabled, equalTo(true))
-        }
-        scenario.onActivity { activity: GeoPolyActivity ->
             assertThat(activity.saveButton.isEnabled, equalTo(true))
         }
     }
@@ -246,14 +240,8 @@ class GeoPolyActivityTest {
         mapFragment.ready()
         scenario.onActivity { activity: GeoPolyActivity ->
             assertThat(activity.playButton.isEnabled, equalTo(false))
-        }
-        scenario.onActivity { activity: GeoPolyActivity ->
             assertThat(activity.backspaceButton.isEnabled, equalTo(false))
-        }
-        scenario.onActivity { activity: GeoPolyActivity ->
             assertThat(activity.clearButton.isEnabled, equalTo(false))
-        }
-        scenario.onActivity { activity: GeoPolyActivity ->
             assertThat(activity.saveButton.isEnabled, equalTo(false))
         }
     }
