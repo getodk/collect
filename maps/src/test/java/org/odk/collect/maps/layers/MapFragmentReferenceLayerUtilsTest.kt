@@ -5,6 +5,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.shared.TempFiles.createTempDir
 import org.robolectric.RobolectricTestRunner
@@ -21,7 +22,7 @@ class MapFragmentReferenceLayerUtilsTest {
         assertNull(
             MapFragmentReferenceLayerUtils.getReferenceLayerFile(
                 config,
-                DirectoryReferenceLayerRepository(layersPath)
+                DirectoryReferenceLayerRepository(listOf(layersPath), mock())
             )
         )
     }
@@ -34,7 +35,7 @@ class MapFragmentReferenceLayerUtilsTest {
         assertNull(
             MapFragmentReferenceLayerUtils.getReferenceLayerFile(
                 config,
-                DirectoryReferenceLayerRepository(layersPath)
+                DirectoryReferenceLayerRepository(listOf(layersPath), mock())
             )
         )
     }
@@ -50,7 +51,7 @@ class MapFragmentReferenceLayerUtilsTest {
         assertNotNull(
             MapFragmentReferenceLayerUtils.getReferenceLayerFile(
                 config,
-                DirectoryReferenceLayerRepository(layersPath)
+                DirectoryReferenceLayerRepository(listOf(layersPath), mock())
             )
         )
     }

@@ -52,6 +52,7 @@ import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.geo.MapFragmentFactoryImpl;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider;
@@ -137,6 +138,7 @@ import org.odk.collect.utilities.UserAgentProvider;
 import org.odk.collect.webpage.ExternalWebPageHelper;
 
 import java.io.File;
+import java.util.Arrays;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -570,10 +572,12 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ReferenceLayerRepository providesReferenceLayerRepository(StoragePathProvider storagePathProvider) {
+    public ReferenceLayerRepository providesReferenceLayerRepository(StoragePathProvider storagePathProvider, SettingsProvider settingsProvider) {
         return new DirectoryReferenceLayerRepository(
-                storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS),
-                storagePathProvider.getOdkDirPath(StorageSubdirectory.SHARED_LAYERS)
+                Arrays.asList(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS), storagePathProvider.getOdkDirPath(StorageSubdirectory.SHARED_LAYERS)),
+                () -> MapConfiguratorProvider.getConfigurator(
+                        settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_BASEMAP_SOURCE)
+                )
         );
     }
 

@@ -19,7 +19,7 @@ class OfflineMapLayersPickerViewModel(
     init {
         scheduler.immediate(
             background = {
-                val layers = referenceLayerRepository.getAll()
+                val layers = referenceLayerRepository.getAllSupported()
                 val selectedLayerId = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER)
 
                 _data.postValue(Pair(layers, selectedLayerId))

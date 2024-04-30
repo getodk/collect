@@ -19,7 +19,7 @@ class ReferenceLayerPreferenceUtilsTest {
     fun populateReferenceLayerPref_whenPrefValueNotInReferenceLayers_clearsPref() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val tempDirPath = TempFiles.createTempDir().absolutePath
-        val referenceLayerRepository = DirectoryReferenceLayerRepository(tempDirPath)
+        val referenceLayerRepository = DirectoryReferenceLayerRepository(listOf(tempDirPath), mock())
 
         // Use mock to avoid explosions constructing pref in Robolectric
         val pref = mock<CaptionedListPreference> {
