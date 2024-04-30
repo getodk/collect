@@ -16,7 +16,8 @@ import org.odk.collect.utilities.UserAgentProvider;
 public class TestDependencies extends AppDependencyModule {
 
     public final StubOpenRosaServer server = new StubOpenRosaServer();
-    public final TestScheduler scheduler = new TestScheduler();
+    public final FakeNetworkStateProvider networkStateProvider = new FakeNetworkStateProvider();
+    public final TestScheduler scheduler = new TestScheduler(networkStateProvider);
     public final StoragePathProvider storagePathProvider = new StoragePathProvider();
     public final StubBarcodeViewDecoder stubBarcodeViewDecoder = new StubBarcodeViewDecoder();
 

@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.flow.Flow
+import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler
 import org.odk.collect.async.Scheduler
@@ -15,7 +16,7 @@ import java.util.function.Consumer
 import java.util.function.Supplier
 import kotlin.coroutines.CoroutineContext
 
-class TestScheduler : Scheduler, CoroutineDispatcher() {
+class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Scheduler, CoroutineDispatcher() {
 
     private val wrappedScheduler: Scheduler
     private val lock = Any()
@@ -55,7 +56,7 @@ class TestScheduler : Scheduler, CoroutineDispatcher() {
         inputData: Map<String, String>,
         networkConstraint: Scheduler.NetworkType?
     ) {
-        deferredTasks.add(DeferredTask(tag, spec, null, inputData))
+        deferredTasks.add(DeferredTask(tag, spec, null, inputData, networkConstraint))
     }
 
     override fun networkDeferredRepeat(
@@ -65,7 +66,7 @@ class TestScheduler : Scheduler, CoroutineDispatcher() {
         inputData: Map<String, String>
     ) {
         cancelDeferred(tag)
-        deferredTasks.add(DeferredTask(tag, spec, repeatPeriod, inputData))
+        deferredTasks.add(DeferredTask(tag, spec, repeatPeriod, inputData, null))
     }
 
     override fun cancelDeferred(tag: String) {
@@ -77,13 +78,18 @@ class TestScheduler : Scheduler, CoroutineDispatcher() {
     }
 
     fun runDeferredTasks() {
-        val applicationContext = ApplicationProvider.getApplicationContext<Context>()
-        for (deferredTask in deferredTasks) {
-            deferredTask.spec.getTask(applicationContext, deferredTask.inputData, true).get()
+        if (networkStateProvider.isDeviceOnline) {
+            val applicationContext = ApplicationProvider.getApplicationContext<Context>()
+            deferredTasks.removeIf { deferredTask ->
+                if (deferredTask.networkConstraint == null || deferredTask.networkConstraint == networkStateProvider.currentNetwork) {
+                    deferredTask.spec.getTask(applicationContext, deferredTask.inputData, true)
+                        .get()
+                    deferredTask.repeatPeriod == null
+                } else {
+                    false
+                }
+            }
         }
-
-        // Remove non repeating tasks
-        deferredTasks.removeIf { deferredTask: DeferredTask -> deferredTask.repeatPeriod == null }
     }
 
     fun setFinishedCallback(callback: Runnable?) {
@@ -130,6 +136,7 @@ class TestScheduler : Scheduler, CoroutineDispatcher() {
         val tag: String,
         val spec: TaskSpec,
         val repeatPeriod: Long?,
-        val inputData: Map<String, String>
+        val inputData: Map<String, String>,
+        val networkConstraint: Scheduler.NetworkType?
     )
 }

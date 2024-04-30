@@ -13,6 +13,8 @@ import org.odk.collect.android.support.pages.ViewSentFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.NotificationDrawerRule
 import org.odk.collect.android.support.rules.TestRuleChain
+import org.odk.collect.async.Scheduler
+import org.odk.collect.strings.R
 
 @RunWith(AndroidJUnit4::class)
 class AutoSendTest {
@@ -29,7 +31,10 @@ class AutoSendTest {
     fun whenAutoSendEnabled_fillingAndFinalizingForm_sendsFormAndNotifiesUser() {
         val mainMenuPage = rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
-            .enableAutoSend(testDependencies.scheduler)
+            .enableAutoSend(
+                testDependencies.scheduler,
+                R.string.wifi_cellular_autosend
+            )
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .inputText("31")
@@ -58,7 +63,10 @@ class AutoSendTest {
 
         val mainMenuPage = rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
-            .enableAutoSend(testDependencies.scheduler)
+            .enableAutoSend(
+                testDependencies.scheduler,
+                R.string.wifi_cellular_autosend
+            )
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .inputText("31")
@@ -82,15 +90,20 @@ class AutoSendTest {
     }
 
     @Test
-    fun whenFormHasAutoSend_fillingAndFinalizingForm_sendsFormAndNotifiesUser() {
+    fun whenFormHasAutoSend_fillingAndFinalizingForm_sendsFormAndNotifiesUser_regardlessOfSetting() {
         val mainMenuPage = rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
+            .enableAutoSend(
+                testDependencies.scheduler,
+                R.string.wifi_autosend
+            )
             .copyForm("one-question-autosend.xml")
             .startBlankForm("One Question Autosend")
             .inputText("31")
             .swipeToEndScreen()
             .clickSend()
 
+        testDependencies.networkStateProvider.goOnline(Scheduler.NetworkType.CELLULAR)
         testDependencies.scheduler.runDeferredTasks()
 
         mainMenuPage
@@ -108,17 +121,22 @@ class AutoSendTest {
     }
 
     @Test
-    fun whenFormHasAutoSend_fillingAndFinalizingForm_notifiesUserWhenSendingFails() {
+    fun whenFormHasAutoSend_fillingAndFinalizingForm_notifiesUserWhenSendingFails_regardlessOfSetting() {
         testDependencies.server.alwaysReturnError()
 
         val mainMenuPage = rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
+            .enableAutoSend(
+                testDependencies.scheduler,
+                R.string.wifi_autosend
+            )
             .copyForm("one-question-autosend.xml")
             .startBlankForm("One Question Autosend")
             .inputText("31")
             .swipeToEndScreen()
             .clickSend()
 
+        testDependencies.networkStateProvider.goOnline(Scheduler.NetworkType.CELLULAR)
         testDependencies.scheduler.runDeferredTasks()
 
         mainMenuPage.clickViewSentForm(1)
