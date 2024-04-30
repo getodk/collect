@@ -1,8 +1,8 @@
 package org.odk.collect.androidshared.network
 
-import android.net.NetworkInfo
+import org.odk.collect.async.Scheduler
 
 interface NetworkStateProvider {
     val isDeviceOnline: Boolean
-    val networkInfo: NetworkInfo?
+    val currentNetwork: Scheduler.NetworkType?
 }
