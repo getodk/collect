@@ -121,6 +121,28 @@ class AutoSendTest {
     }
 
     @Test
+    fun whenFormHasAutoSend_canAutoSendMultipleForms() {
+        val mainMenuPage = rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .copyForm("one-question-autosend.xml")
+
+            .startBlankForm("One Question Autosend")
+            .inputText("31")
+            .swipeToEndScreen()
+            .clickSend()
+
+            .startBlankForm("One Question Autosend")
+            .inputText("32")
+            .swipeToEndScreen()
+            .clickSend()
+
+        testDependencies.scheduler.runDeferredTasks()
+
+        mainMenuPage
+            .clickViewSentForm(2)
+    }
+
+    @Test
     fun whenFormHasAutoSend_fillingAndFinalizingForm_notifiesUserWhenSendingFails_regardlessOfSetting() {
         testDependencies.server.alwaysReturnError()
 

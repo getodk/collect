@@ -56,6 +56,7 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         inputData: Map<String, String>,
         networkConstraint: Scheduler.NetworkType?
     ) {
+        cancelDeferred(tag)
         deferredTasks.add(DeferredTask(tag, spec, null, inputData, networkConstraint))
     }
 
