@@ -92,19 +92,19 @@ class InstancesDataServiceTest {
     }
 
     @Test
-    fun `autoSendInstances() returns true when there are no instances to send`() {
-        val result = instancesDataService.autoSendInstances(project.uuid)
+    fun `sendInstances() returns true when there are no instances to send`() {
+        val result = instancesDataService.sendInstances(project.uuid)
         assertThat(result, equalTo(true))
     }
 
     @Test
-    fun `autoSendInstances() does not notify when there are no instances to send`() {
-        instancesDataService.autoSendInstances(project.uuid)
+    fun `sendInstances() does not notify when there are no instances to send`() {
+        instancesDataService.sendInstances(project.uuid)
         verifyNoInteractions(notifier)
     }
 
     @Test
-    fun `autoSendInstances() returns false when an instance fails to send`() {
+    fun `sendInstances() returns false when an instance fails to send`() {
         val formsRepository = projectDependencyProvider.formsRepository
         val form = formsRepository.save(FormFixtures.form())
 
@@ -114,7 +114,7 @@ class InstancesDataServiceTest {
         whenever(httpInterface.executeGetRequest(any(), any(), any()))
             .doReturn(HttpGetResult(null, emptyMap(), "", 500))
 
-        val result = instancesDataService.autoSendInstances(project.uuid)
+        val result = instancesDataService.sendInstances(project.uuid)
         assertThat(result, equalTo(false))
     }
 }

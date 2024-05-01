@@ -10,7 +10,7 @@ import org.odk.collect.async.WorkerAdapter
 import java.util.function.Supplier
 import javax.inject.Inject
 
-class AutoSendFormTaskSpec : TaskSpec {
+class SendFormTaskSpec : TaskSpec {
 
     @Inject
     lateinit var instancesDataService: InstancesDataService
@@ -39,5 +39,5 @@ class AutoSendFormTaskSpec : TaskSpec {
     }
 
     class Adapter(context: Context, workerParams: WorkerParameters) :
-        WorkerAdapter(AutoSendFormTaskSpec(), context, workerParams)
+        WorkerAdapter(SendFormTaskSpec(), context, workerParams)
 }

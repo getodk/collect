@@ -176,28 +176,7 @@ class InstancesDataService(
         }
     }
 
-    fun sendInstances(projectId: String, instanceIds: List<Long>) {
-        val projectDependencyProvider =
-            projectDependencyProviderFactory.create(projectId)
-
-        val instanceSubmitter = InstanceSubmitter(
-            projectDependencyProvider.formsRepository,
-            projectDependencyProvider.generalSettings,
-            propertyManager,
-            httpInterface,
-            projectDependencyProvider.instancesRepository
-        )
-
-        val instances = instanceIds.map {
-            projectDependencyProvider.instancesRepository.get(it)!!
-        }
-
-        val results = instanceSubmitter.submitInstances(instances)
-        notifier.onSubmission(results, projectDependencyProvider.projectId)
-        update(projectId)
-    }
-
-    fun autoSendInstances(projectId: String): Boolean {
+    fun sendInstances(projectId: String, instanceIds: List<Long>? = null): Boolean {
         val projectDependencyProvider =
             projectDependencyProviderFactory.create(projectId)
 
@@ -213,10 +192,16 @@ class InstancesDataService(
             projectDependencyProvider.projectId
         ).withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
-                val toUpload = InstanceAutoSendFetcher.getInstancesToAutoSend(
-                    projectDependencyProvider.instancesRepository,
-                    projectDependencyProvider.formsRepository
-                )
+                val toUpload = if (instanceIds != null) {
+                    instanceIds.map {
+                        projectDependencyProvider.instancesRepository.get(it)!!
+                    }
+                } else {
+                    InstanceAutoSendFetcher.getInstancesToAutoSend(
+                        projectDependencyProvider.instancesRepository,
+                        projectDependencyProvider.formsRepository
+                    )
+                }
 
                 if (toUpload.isNotEmpty()) {
                     val results = instanceSubmitter.submitInstances(toUpload)

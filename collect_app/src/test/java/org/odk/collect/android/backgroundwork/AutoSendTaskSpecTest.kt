@@ -54,7 +54,7 @@ class AutoSendTaskSpecTest {
 
     @Test
     fun `returns false if sending instances fails`() {
-        whenever(instancesDataService.autoSendInstances(projectId)).doReturn(false)
+        whenever(instancesDataService.sendInstances(projectId)).doReturn(false)
 
         val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
         val spec = AutoSendTaskSpec()
@@ -64,7 +64,7 @@ class AutoSendTaskSpecTest {
 
     @Test
     fun `returns true if sending instances succeeds`() {
-        whenever(instancesDataService.autoSendInstances(projectId)).doReturn(true)
+        whenever(instancesDataService.sendInstances(projectId)).doReturn(true)
 
         val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
         val spec = AutoSendTaskSpec()

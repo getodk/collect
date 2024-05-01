@@ -16,7 +16,7 @@ import org.odk.collect.android.application.initialization.ApplicationInitializer
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.audio.AudioRecordingControllerFragment;
 import org.odk.collect.android.audio.AudioRecordingErrorDialogFragment;
-import org.odk.collect.android.backgroundwork.AutoSendFormTaskSpec;
+import org.odk.collect.android.backgroundwork.SendFormTaskSpec;
 import org.odk.collect.android.backgroundwork.AutoSendTaskSpec;
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec;
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
@@ -262,7 +262,7 @@ public interface AppDependencyComponent {
 
     void inject(DownloadFormListTask downloadFormListTask);
 
-    void inject(AutoSendFormTaskSpec autoSendFormTaskSpec);
+    void inject(SendFormTaskSpec sendFormTaskSpec);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

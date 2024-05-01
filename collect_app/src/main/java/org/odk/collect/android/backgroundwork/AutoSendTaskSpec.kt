@@ -36,7 +36,7 @@ class AutoSendTaskSpec : TaskSpec {
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
-                instancesDataService.autoSendInstances(projectId)
+                instancesDataService.sendInstances(projectId)
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }
