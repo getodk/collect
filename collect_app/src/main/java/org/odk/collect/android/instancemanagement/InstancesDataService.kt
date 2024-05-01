@@ -231,10 +231,10 @@ class InstancesDataService(
             if (form.autoSend != null && form.autoSend == "true") {
                 instanceSubmitScheduler.scheduleSubmit(projectId, instance.dbId)
             } else {
-                instanceSubmitScheduler.scheduleSubmit(projectId)
+                instanceSubmitScheduler.scheduleSubmitIfNeeded(projectId)
             }
         } else {
-            instanceSubmitScheduler.scheduleSubmit(projectId)
+            instanceSubmitScheduler.scheduleSubmitIfNeeded(projectId)
         }
     }
 

@@ -68,7 +68,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     }
 
     @Override
-    public void scheduleSubmit(String projectId) {
+    public void scheduleSubmitIfNeeded(String projectId) {
         Scheduler.NetworkType networkConstraint;
         Settings settings = settingsProvider.getUnprotectedSettings(projectId);
         AutoSend autoSendSetting = StringIdEnumUtils.getAutoSend(settings, application);
