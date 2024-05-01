@@ -15,6 +15,7 @@ import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
 import org.odk.collect.android.utilities.FormsUploadResultInterpreter
 import org.odk.collect.androidshared.data.AppState
+import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.metadata.PropertyManager
 import java.io.File
@@ -120,7 +121,7 @@ class InstancesDataService(
                         if (finalizedInstance == null) {
                             result.copy(failureCount = result.failureCount + 1)
                         } else {
-                            instanceFinalized(projectId, finalizedInstance.dbId)
+                            instanceFinalized(projectId, form, instance)
                             result
                         }
                     }
@@ -218,21 +219,9 @@ class InstancesDataService(
         }
     }
 
-    fun instanceFinalized(projectId: String, instanceId: Long? = null) {
-        if (instanceId != null) {
-            val projectDependencyProvider = projectDependencyProviderFactory.create(projectId)
-            val formsRepository = projectDependencyProvider.formsRepository
-            val instancesRepository = projectDependencyProvider.instancesRepository
-
-            val instance = instancesRepository.get(instanceId)!!
-            val form =
-                formsRepository.getLatestByFormIdAndVersion(instance.formId, instance.formVersion)!!
-
-            if (form.autoSend != null && form.autoSend == "true") {
-                instanceSubmitScheduler.scheduleSubmit(projectId, instance.dbId)
-            } else {
-                instanceSubmitScheduler.scheduleSubmitIfNeeded(projectId)
-            }
+    fun instanceFinalized(projectId: String, form: Form, instance: Instance) {
+        if (form.autoSend != null && form.autoSend == "true") {
+            instanceSubmitScheduler.scheduleSubmit(projectId, instance.dbId)
         } else {
             instanceSubmitScheduler.scheduleSubmitIfNeeded(projectId)
         }
