@@ -84,7 +84,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
 
         HashMap<String, String> inputData = new HashMap<>();
         inputData.put(TaskData.DATA_PROJECT_ID, projectId);
-        scheduler.networkDeferred(getAutoSendTag(projectId), new AutoSendTaskSpec(), inputData, networkConstraint);
+        scheduler.networkDeferred(getAutoSendTag(projectId), new SendFormsTaskSpec(), inputData, networkConstraint);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
         HashMap<String, String> inputData = new HashMap<>();
         inputData.put(TaskData.DATA_PROJECT_ID, projectId);
         inputData.put(TaskData.DATA_INSTANCE_ID, instanceId.toString());
-        scheduler.networkDeferred(getAutoSendFormTag(projectId, instanceId), new SendFormTaskSpec(), inputData, null);
+        scheduler.networkDeferred(getAutoSendFormTag(projectId, instanceId), new SendFormsTaskSpec(), inputData, null);
     }
 
     @Override

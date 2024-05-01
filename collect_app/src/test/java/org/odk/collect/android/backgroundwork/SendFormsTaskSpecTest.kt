@@ -22,7 +22,7 @@ import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
-class AutoSendTaskSpecTest {
+class SendFormsTaskSpecTest {
 
     private val instancesDataService = mock<InstancesDataService>()
     private lateinit var projectId: String
@@ -49,7 +49,7 @@ class AutoSendTaskSpecTest {
 
     @Test
     fun `maxRetries should not be limited`() {
-        assertThat(AutoSendTaskSpec().maxRetries, equalTo(null))
+        assertThat(SendFormsTaskSpec().maxRetries, equalTo(null))
     }
 
     @Test
@@ -57,7 +57,7 @@ class AutoSendTaskSpecTest {
         whenever(instancesDataService.sendInstances(projectId)).doReturn(false)
 
         val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
-        val spec = AutoSendTaskSpec()
+        val spec = SendFormsTaskSpec()
         val task = spec.getTask(ApplicationProvider.getApplicationContext(), inputData, true)
         assertThat(task.get(), equalTo(false))
     }
@@ -67,7 +67,7 @@ class AutoSendTaskSpecTest {
         whenever(instancesDataService.sendInstances(projectId)).doReturn(true)
 
         val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
-        val spec = AutoSendTaskSpec()
+        val spec = SendFormsTaskSpec()
         val task = spec.getTask(ApplicationProvider.getApplicationContext(), inputData, true)
         assertThat(task.get(), equalTo(true))
     }

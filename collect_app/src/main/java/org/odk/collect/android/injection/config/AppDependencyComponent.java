@@ -16,8 +16,7 @@ import org.odk.collect.android.application.initialization.ApplicationInitializer
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.audio.AudioRecordingControllerFragment;
 import org.odk.collect.android.audio.AudioRecordingErrorDialogFragment;
-import org.odk.collect.android.backgroundwork.SendFormTaskSpec;
-import org.odk.collect.android.backgroundwork.AutoSendTaskSpec;
+import org.odk.collect.android.backgroundwork.SendFormsTaskSpec;
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec;
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
 import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
@@ -170,7 +169,7 @@ public interface AppDependencyComponent {
 
     void inject(ShowQRCodeFragment showQRCodeFragment);
 
-    void inject(AutoSendTaskSpec autoSendTaskSpec);
+    void inject(SendFormsTaskSpec sendFormsTaskSpec);
 
     void inject(AdminPasswordDialogFragment adminPasswordDialogFragment);
 
@@ -261,8 +260,6 @@ public interface AppDependencyComponent {
     void inject(AppListActivity appListActivity);
 
     void inject(DownloadFormListTask downloadFormListTask);
-
-    void inject(SendFormTaskSpec sendFormTaskSpec);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

@@ -23,7 +23,7 @@ import org.odk.collect.async.WorkerAdapter
 import java.util.function.Supplier
 import javax.inject.Inject
 
-class AutoSendTaskSpec : TaskSpec {
+class SendFormsTaskSpec : TaskSpec {
     @Inject
     lateinit var instancesDataService: InstancesDataService
 
@@ -35,8 +35,13 @@ class AutoSendTaskSpec : TaskSpec {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
+            val instanceId = inputData[TaskData.DATA_INSTANCE_ID]?.toLong()
             if (projectId != null) {
-                instancesDataService.sendInstances(projectId)
+                if (instanceId != null) {
+                    instancesDataService.sendInstances(projectId, listOf(instanceId))
+                } else {
+                    instancesDataService.sendInstances(projectId)
+                }
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }
@@ -48,5 +53,5 @@ class AutoSendTaskSpec : TaskSpec {
     }
 
     class Adapter(context: Context, workerParams: WorkerParameters) :
-        WorkerAdapter(AutoSendTaskSpec(), context, workerParams)
+        WorkerAdapter(SendFormsTaskSpec(), context, workerParams)
 }

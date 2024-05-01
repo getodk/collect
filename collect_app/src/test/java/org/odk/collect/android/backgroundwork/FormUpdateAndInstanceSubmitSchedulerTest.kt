@@ -92,7 +92,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
         manager.scheduleSubmit("myProject")
         verify(scheduler).networkDeferred(
             eq("AutoSendWorker:myProject"),
-            any<AutoSendTaskSpec>(),
+            any<SendFormsTaskSpec>(),
             eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject")),
             eq(null)
         )
@@ -107,7 +107,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
         manager.scheduleSubmit("myProject")
         verify(scheduler).networkDeferred(
             eq("AutoSendWorker:myProject"),
-            any<AutoSendTaskSpec>(),
+            any<SendFormsTaskSpec>(),
             eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject")),
             eq(Scheduler.NetworkType.WIFI)
         )
@@ -122,7 +122,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
         manager.scheduleSubmit("myProject")
         verify(scheduler).networkDeferred(
             eq("AutoSendWorker:myProject"),
-            any<AutoSendTaskSpec>(),
+            any<SendFormsTaskSpec>(),
             eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject")),
             eq(Scheduler.NetworkType.CELLULAR)
         )
