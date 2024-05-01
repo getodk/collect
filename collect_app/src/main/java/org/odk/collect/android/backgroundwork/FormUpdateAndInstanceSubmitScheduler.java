@@ -69,18 +69,22 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
 
     @Override
     public void scheduleSubmit(String projectId) {
-        Scheduler.NetworkType networkType = null;
+        Scheduler.NetworkType networkConstraint;
         Settings settings = settingsProvider.getUnprotectedSettings(projectId);
         AutoSend autoSendSetting = StringIdEnumUtils.getAutoSend(settings, application);
         if (autoSendSetting == AutoSend.WIFI_ONLY) {
-            networkType = Scheduler.NetworkType.WIFI;
+            networkConstraint = Scheduler.NetworkType.WIFI;
         } else if (autoSendSetting == AutoSend.CELLULAR_ONLY) {
-            networkType = Scheduler.NetworkType.CELLULAR;
+            networkConstraint = Scheduler.NetworkType.CELLULAR;
+        } else if (autoSendSetting == AutoSend.WIFI_AND_CELLULAR) {
+            networkConstraint = null;
+        } else {
+            return;
         }
 
         HashMap<String, String> inputData = new HashMap<>();
         inputData.put(TaskData.DATA_PROJECT_ID, projectId);
-        scheduler.networkDeferred(getAutoSendTag(projectId), new AutoSendTaskSpec(), inputData, networkType);
+        scheduler.networkDeferred(getAutoSendTag(projectId), new AutoSendTaskSpec(), inputData, networkConstraint);
     }
 
     @Override

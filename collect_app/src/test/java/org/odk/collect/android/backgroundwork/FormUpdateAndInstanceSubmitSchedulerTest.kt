@@ -9,6 +9,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.async.Scheduler
 import org.odk.collect.settings.enums.FormUpdateMode.MATCH_EXACTLY
@@ -125,6 +126,16 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject")),
             eq(Scheduler.NetworkType.CELLULAR)
         )
+    }
+
+    @Test
+    fun `scheduleSubmit does nothing if auto send is disabled`() {
+        settingsProvider.getUnprotectedSettings("myProject")
+            .save(ProjectKeys.KEY_AUTOSEND, "off")
+        val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
+
+        manager.scheduleSubmit("myProject")
+        verifyNoInteractions(scheduler)
     }
 
     @Test

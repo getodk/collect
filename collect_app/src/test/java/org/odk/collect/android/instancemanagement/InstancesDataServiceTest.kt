@@ -19,6 +19,7 @@ import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.instances.Instance.STATUS_COMPLETE
 import org.odk.collect.formstest.FormFixtures
 import org.odk.collect.formstest.InMemFormsRepository
@@ -26,7 +27,6 @@ import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.InMemSettingsProvider
-import org.odk.collect.settings.enums.AutoSend
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.testshared.BooleanChangeLock
 
@@ -50,8 +50,6 @@ class InstancesDataServiceTest {
     val settingsProvider = InMemSettingsProvider().also {
         it.getUnprotectedSettings(project.uuid)
             .save(ProjectKeys.KEY_SERVER_URL, "http://example.com")
-        it.getUnprotectedSettings()
-            .save(ProjectKeys.KEY_AUTOSEND, AutoSend.WIFI_ONLY.getValue(application))
     }
 
     private val projectsDependencyProviderFactory = ProjectDependencyProviderFactory(
@@ -71,7 +69,7 @@ class InstancesDataServiceTest {
 
     private val instancesDataService =
         InstancesDataService(
-            application,
+            AppState(),
             mock(),
             projectsDependencyProviderFactory,
             notifier,

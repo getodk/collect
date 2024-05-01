@@ -1,6 +1,5 @@
 package org.odk.collect.android.instancemanagement
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 import org.odk.collect.analytics.Analytics
@@ -15,13 +14,13 @@ import org.odk.collect.android.openrosa.OpenRosaHttpInterface
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
 import org.odk.collect.android.utilities.FormsUploadResultInterpreter
-import org.odk.collect.androidshared.data.getState
+import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.metadata.PropertyManager
 import java.io.File
 
 class InstancesDataService(
-    private val application: Application,
+    private val appState: AppState,
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
     private val projectDependencyProviderFactory: ProjectDependencyProviderFactory,
     private val notifier: Notifier,
@@ -29,7 +28,6 @@ class InstancesDataService(
     private val httpInterface: OpenRosaHttpInterface,
     private val onUpdate: () -> Unit
 ) {
-    private val appState = application.getState()
     val editableCount: LiveData<Int> = appState.getLive(EDITABLE_COUNT_KEY, 0)
     val sendableCount: LiveData<Int> = appState.getLive(SENDABLE_COUNT_KEY, 0)
     val sentCount: LiveData<Int> = appState.getLive(SENT_COUNT_KEY, 0)
@@ -216,10 +214,8 @@ class InstancesDataService(
         ).withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
                 val toUpload = InstanceAutoSendFetcher.getInstancesToAutoSend(
-                    application,
                     projectDependencyProvider.instancesRepository,
-                    projectDependencyProvider.formsRepository,
-                    projectDependencyProvider.settingsProvider
+                    projectDependencyProvider.formsRepository
                 )
 
                 if (toUpload.isNotEmpty()) {
