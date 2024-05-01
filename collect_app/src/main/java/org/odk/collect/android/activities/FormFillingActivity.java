@@ -433,7 +433,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 instancesRepositoryProvider,
                 new SavepointsRepositoryProvider(this, storagePathProvider),
                 new QRCodeCreatorImpl(),
-                new HtmlPrinter()
+                new HtmlPrinter(),
+                instanceSubmitScheduler
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
@@ -1561,10 +1562,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 DialogFragmentUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
 
                 if (result.getRequest().viewExiting()) {
-                    if (result.getRequest().shouldFinalize()) {
-                        instanceSubmitScheduler.scheduleSubmit(projectsDataService.getCurrentProject().getUuid());
-                    }
-
                     finishAndReturnInstance();
                 } else {
                     showShortToast(this, org.odk.collect.strings.R.string.data_saved_ok);

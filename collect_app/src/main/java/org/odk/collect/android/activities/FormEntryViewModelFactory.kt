@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActions
 import org.javarosa.core.model.instance.TreeReference
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.BackgroundAudioViewModel
 import org.odk.collect.android.formentry.BackgroundAudioViewModel.RecordAudioActionRegistry
@@ -55,7 +56,8 @@ class FormEntryViewModelFactory(
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
     private val qrCodeCreator: QRCodeCreator,
-    private val htmlPrinter: HtmlPrinter
+    private val htmlPrinter: HtmlPrinter,
+    private val instanceSubmitScheduler: InstanceSubmitScheduler
 ) : AbstractSavedStateViewModelFactory(owner, null) {
 
     override fun <T : ViewModel> create(
@@ -86,7 +88,8 @@ class FormEntryViewModelFactory(
                     formSessionRepository.get(sessionId),
                     entitiesRepositoryProvider.get(projectId),
                     instancesRepositoryProvider.get(projectId),
-                    savepointsRepositoryProvider.get(projectId)
+                    savepointsRepositoryProvider.get(projectId),
+                    instanceSubmitScheduler
                 )
             }
 

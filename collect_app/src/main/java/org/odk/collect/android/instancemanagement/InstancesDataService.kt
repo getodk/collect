@@ -178,6 +178,27 @@ class InstancesDataService(
         }
     }
 
+    fun sendInstances(projectId: String, instanceIds: List<Long>) {
+        val projectDependencyProvider =
+            projectDependencyProviderFactory.create(projectId)
+
+        val instanceSubmitter = InstanceSubmitter(
+            projectDependencyProvider.formsRepository,
+            projectDependencyProvider.generalSettings,
+            propertyManager,
+            httpInterface,
+            projectDependencyProvider.instancesRepository
+        )
+
+        val instances = instanceIds.map {
+            projectDependencyProvider.instancesRepository.get(it)!!
+        }
+
+        val results = instanceSubmitter.submitInstances(instances)
+        notifier.onSubmission(results, projectDependencyProvider.projectId)
+        update(projectId)
+    }
+
     fun autoSendInstances(projectId: String): Boolean {
         val projectDependencyProvider =
             projectDependencyProviderFactory.create(projectId)

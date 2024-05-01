@@ -154,6 +154,26 @@ class AutoSendTest {
     }
 
     @Test
+    fun whenFormHasAutoSendDisabled_fillingAndFinalizingForm_doesNotSendForm_regardlessOfSetting() {
+        testDependencies.server.alwaysReturnError()
+
+        val mainMenuPage = rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .enableAutoSend(
+                testDependencies.scheduler,
+                R.string.wifi_cellular_autosend
+            )
+            .copyForm("one-question-autosend-disabled.xml")
+            .startBlankForm("One Question Autosend Disabled")
+            .inputText("31")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+        testDependencies.scheduler.runDeferredTasks()
+        mainMenuPage.assertNumberOfFinalizedForms(1)
+    }
+
+    @Test
     fun whenAutoSendDisabled_fillingAndFinalizingForm_doesNotSendFormAutomatically() {
         val mainMenuPage = rule.startAtMainMenu()
             .setServer(testDependencies.server.url)

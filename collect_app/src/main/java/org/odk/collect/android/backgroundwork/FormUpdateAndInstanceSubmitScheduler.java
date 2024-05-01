@@ -84,6 +84,14 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     }
 
     @Override
+    public void scheduleSubmit(String projectId, Long instanceId) {
+        HashMap<String, String> inputData = new HashMap<>();
+        inputData.put(TaskData.DATA_PROJECT_ID, projectId);
+        inputData.put(TaskData.DATA_INSTANCE_ID, instanceId.toString());
+        scheduler.networkDeferred(getAutoSendFormTag(projectId), new AutoSendFormTaskSpec(), inputData, null);
+    }
+
+    @Override
     public void cancelSubmit(String projectId) {
         scheduler.cancelDeferred(getAutoSendTag(projectId));
     }
@@ -91,6 +99,10 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     @NotNull
     public String getAutoSendTag(String projectId) {
         return "AutoSendWorker:" + projectId;
+    }
+
+    public String getAutoSendFormTag(String projectId) {
+        return "auto_send_form:" + projectId;
     }
 
     @NotNull

@@ -47,6 +47,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryViewModelFactory;
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -195,6 +196,9 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     @Inject
     public StoragePathProvider storagePathProvider;
 
+    @Inject
+    public InstanceSubmitScheduler instanceSubmitScheduler;
+
     protected final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
@@ -230,7 +234,8 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 instancesRepositoryProvider,
                 new SavepointsRepositoryProvider(this, storagePathProvider),
                 new QRCodeCreatorImpl(),
-                new HtmlPrinter()
+                new HtmlPrinter(),
+                instanceSubmitScheduler
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()

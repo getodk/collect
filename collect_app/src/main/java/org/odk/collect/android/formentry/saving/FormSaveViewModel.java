@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModel;
 import org.apache.commons.io.IOUtils;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 import org.odk.collect.android.formentry.FormSession;
@@ -90,12 +91,13 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     private Form form;
     private Instance instance;
     private final Cancellable formSessionObserver;
+    private InstanceSubmitScheduler instanceSubmitScheduler;
 
     public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver,
                              MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder,
                              ProjectsDataService projectsDataService, LiveData<FormSession> formSession,
                              EntitiesRepository entitiesRepository, InstancesRepository instancesRepository,
-                             SavepointsRepository savepointsRepository
+                             SavepointsRepository savepointsRepository, InstanceSubmitScheduler instanceSubmitScheduler
     ) {
         this.stateHandle = stateHandle;
         this.clock = clock;
@@ -107,6 +109,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         this.entitiesRepository = entitiesRepository;
         this.instancesRepository = instancesRepository;
         this.savepointsRepository = savepointsRepository;
+        this.instanceSubmitScheduler = instanceSubmitScheduler;
 
         if (stateHandle.get(ORIGINAL_FILES) != null) {
             originalFiles = stateHandle.get(ORIGINAL_FILES);
@@ -268,6 +271,12 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                     if (saveRequest.shouldFinalize) {
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, clock.get());
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, clock.get());
+
+                        if (form.getAutoSend() != null && form.getAutoSend().equals("true")) {
+                            instanceSubmitScheduler.scheduleSubmit(projectsDataService.getCurrentProject().getUuid(), instance.getDbId());
+                        } else {
+                            instanceSubmitScheduler.scheduleSubmit(projectsDataService.getCurrentProject().getUuid());
+                        }
                     } else {
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, clock.get());
                     }
