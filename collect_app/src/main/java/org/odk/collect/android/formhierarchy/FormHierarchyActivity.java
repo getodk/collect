@@ -47,7 +47,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryViewModelFactory;
-import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -55,6 +54,7 @@ import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
@@ -197,7 +197,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     public StoragePathProvider storagePathProvider;
 
     @Inject
-    public InstanceSubmitScheduler instanceSubmitScheduler;
+    public InstancesDataService instancesDataService;
 
     protected final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
@@ -235,7 +235,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 new SavepointsRepositoryProvider(this, storagePathProvider),
                 new QRCodeCreatorImpl(),
                 new HtmlPrinter(),
-                instanceSubmitScheduler
+                instancesDataService
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()

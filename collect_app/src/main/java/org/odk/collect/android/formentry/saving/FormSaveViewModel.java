@@ -17,12 +17,12 @@ import androidx.lifecycle.ViewModel;
 import org.apache.commons.io.IOUtils;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 import org.odk.collect.android.formentry.FormSession;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
+import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.tasks.SaveFormToDisk;
@@ -91,13 +91,13 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     private Form form;
     private Instance instance;
     private final Cancellable formSessionObserver;
-    private InstanceSubmitScheduler instanceSubmitScheduler;
+    private InstancesDataService instancesDataService;
 
     public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver,
                              MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder,
                              ProjectsDataService projectsDataService, LiveData<FormSession> formSession,
                              EntitiesRepository entitiesRepository, InstancesRepository instancesRepository,
-                             SavepointsRepository savepointsRepository, InstanceSubmitScheduler instanceSubmitScheduler
+                             SavepointsRepository savepointsRepository, InstancesDataService instancesDataService
     ) {
         this.stateHandle = stateHandle;
         this.clock = clock;
@@ -109,7 +109,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         this.entitiesRepository = entitiesRepository;
         this.instancesRepository = instancesRepository;
         this.savepointsRepository = savepointsRepository;
-        this.instanceSubmitScheduler = instanceSubmitScheduler;
+        this.instancesDataService = instancesDataService;
 
         if (stateHandle.get(ORIGINAL_FILES) != null) {
             originalFiles = stateHandle.get(ORIGINAL_FILES);
@@ -272,11 +272,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, clock.get());
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, clock.get());
 
-                        if (form.getAutoSend() != null && form.getAutoSend().equals("true")) {
-                            instanceSubmitScheduler.scheduleSubmit(projectsDataService.getCurrentProject().getUuid(), instance.getDbId());
-                        } else {
-                            instanceSubmitScheduler.scheduleSubmit(projectsDataService.getCurrentProject().getUuid());
-                        }
+                        instancesDataService.instanceFinalized(projectsDataService.getCurrentProject().getUuid(), instance.getDbId());
                     } else {
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, clock.get());
                     }

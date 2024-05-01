@@ -120,6 +120,7 @@ class InstancesDataService(
                         if (finalizedInstance == null) {
                             result.copy(failureCount = result.failureCount + 1)
                         } else {
+                            instanceFinalized(projectId, finalizedInstance.dbId)
                             result
                         }
                     }
@@ -131,7 +132,6 @@ class InstancesDataService(
         }
 
         update(projectId)
-        instanceSubmitScheduler.scheduleSubmit(projectId)
 
         return result.copy(successCount = instances.size - result.failureCount)
     }
@@ -215,6 +215,26 @@ class InstancesDataService(
             } else {
                 false
             }
+        }
+    }
+
+    fun instanceFinalized(projectId: String, instanceId: Long? = null) {
+        if (instanceId != null) {
+            val projectDependencyProvider = projectDependencyProviderFactory.create(projectId)
+            val formsRepository = projectDependencyProvider.formsRepository
+            val instancesRepository = projectDependencyProvider.instancesRepository
+
+            val instance = instancesRepository.get(instanceId)!!
+            val form =
+                formsRepository.getLatestByFormIdAndVersion(instance.formId, instance.formVersion)!!
+
+            if (form.autoSend != null && form.autoSend == "true") {
+                instanceSubmitScheduler.scheduleSubmit(projectId, instance.dbId)
+            } else {
+                instanceSubmitScheduler.scheduleSubmit(projectId)
+            }
+        } else {
+            instanceSubmitScheduler.scheduleSubmit(projectId)
         }
     }
 

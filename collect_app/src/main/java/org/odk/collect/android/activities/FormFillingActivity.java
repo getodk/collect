@@ -88,7 +88,6 @@ import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.AudioRecordingControllerFragment;
 import org.odk.collect.android.audio.M4AAppender;
-import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -135,6 +134,7 @@ import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
+import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider;
 import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -309,7 +309,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     PropertyManager propertyManager;
 
     @Inject
-    InstanceSubmitScheduler instanceSubmitScheduler;
+    InstancesDataService instancesDataService;
 
     @Inject
     Scheduler scheduler;
@@ -434,7 +434,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 new SavepointsRepositoryProvider(this, storagePathProvider),
                 new QRCodeCreatorImpl(),
                 new HtmlPrinter(),
-                instanceSubmitScheduler
+                instancesDataService
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()

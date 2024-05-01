@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActions
 import org.javarosa.core.model.instance.TreeReference
-import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.BackgroundAudioViewModel
 import org.odk.collect.android.formentry.BackgroundAudioViewModel.RecordAudioActionRegistry
@@ -20,6 +19,7 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationMa
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel
 import org.odk.collect.android.formentry.saving.DiskFormSaver
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ApplicationConstants
@@ -57,7 +57,7 @@ class FormEntryViewModelFactory(
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
     private val qrCodeCreator: QRCodeCreator,
     private val htmlPrinter: HtmlPrinter,
-    private val instanceSubmitScheduler: InstanceSubmitScheduler
+    private val instancesDataService: InstancesDataService
 ) : AbstractSavedStateViewModelFactory(owner, null) {
 
     override fun <T : ViewModel> create(
@@ -89,7 +89,7 @@ class FormEntryViewModelFactory(
                     entitiesRepositoryProvider.get(projectId),
                     instancesRepositoryProvider.get(projectId),
                     savepointsRepositoryProvider.get(projectId),
-                    instanceSubmitScheduler
+                    instancesDataService
                 )
             }
 
