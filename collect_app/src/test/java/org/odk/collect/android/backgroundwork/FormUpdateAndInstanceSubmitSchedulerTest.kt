@@ -89,7 +89,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             .save(ProjectKeys.KEY_AUTOSEND, "wifi_and_cellular")
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
-        manager.scheduleSubmitIfNeeded("myProject")
+        manager.scheduleAutoSend("myProject")
         verify(scheduler).networkDeferred(
             eq("AutoSendWorker:myProject"),
             any<SendFormsTaskSpec>(),
@@ -104,7 +104,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             .save(ProjectKeys.KEY_AUTOSEND, "wifi_only")
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
-        manager.scheduleSubmitIfNeeded("myProject")
+        manager.scheduleAutoSend("myProject")
         verify(scheduler).networkDeferred(
             eq("AutoSendWorker:myProject"),
             any<SendFormsTaskSpec>(),
@@ -119,7 +119,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             .save(ProjectKeys.KEY_AUTOSEND, "cellular_only")
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
-        manager.scheduleSubmitIfNeeded("myProject")
+        manager.scheduleAutoSend("myProject")
         verify(scheduler).networkDeferred(
             eq("AutoSendWorker:myProject"),
             any<SendFormsTaskSpec>(),
@@ -134,7 +134,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             .save(ProjectKeys.KEY_AUTOSEND, "off")
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
-        manager.scheduleSubmitIfNeeded("myProject")
+        manager.scheduleAutoSend("myProject")
         verifyNoInteractions(scheduler)
     }
 

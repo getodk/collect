@@ -121,7 +121,7 @@ class InstancesDataService(
                         if (finalizedInstance == null) {
                             result.copy(failureCount = result.failureCount + 1)
                         } else {
-                            instanceFinalized(projectId, form, instance)
+                            instanceFinalized(projectId, form)
                             result
                         }
                     }
@@ -177,7 +177,7 @@ class InstancesDataService(
         }
     }
 
-    fun sendInstances(projectId: String, instanceIds: List<Long>? = null): Boolean {
+    fun sendInstances(projectId: String, formAutoSendOnly: Boolean = false): Boolean {
         val projectDependencyProvider =
             projectDependencyProviderFactory.create(projectId)
 
@@ -193,9 +193,11 @@ class InstancesDataService(
             projectDependencyProvider.projectId
         ).withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
-                val toUpload = if (instanceIds != null) {
-                    instanceIds.map {
-                        projectDependencyProvider.instancesRepository.get(it)!!
+                val toUpload = if (formAutoSendOnly) {
+                    projectDependencyProvider.instancesRepository.all.filter {
+                        projectDependencyProvider.formsRepository.getLatestByFormIdAndVersion(it.formId, it.formVersion)?.let { form ->
+                            form.autoSend != null && form.autoSend == "true"
+                        } ?: false
                     }
                 } else {
                     InstanceAutoSendFetcher.getInstancesToAutoSend(
@@ -219,11 +221,11 @@ class InstancesDataService(
         }
     }
 
-    fun instanceFinalized(projectId: String, form: Form, instance: Instance) {
+    fun instanceFinalized(projectId: String, form: Form) {
         if (form.autoSend != null && form.autoSend == "true") {
-            instanceSubmitScheduler.scheduleSubmit(projectId, instance.dbId)
+            instanceSubmitScheduler.scheduleFormAutoSend(projectId)
         } else {
-            instanceSubmitScheduler.scheduleSubmitIfNeeded(projectId)
+            instanceSubmitScheduler.scheduleAutoSend(projectId)
         }
     }
 

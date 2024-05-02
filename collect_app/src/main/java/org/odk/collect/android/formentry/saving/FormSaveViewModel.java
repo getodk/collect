@@ -272,7 +272,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, clock.get());
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, clock.get());
 
-                        instancesDataService.instanceFinalized(projectsDataService.getCurrentProject().getUuid(), form, instance);
+                        instancesDataService.instanceFinalized(projectsDataService.getCurrentProject().getUuid(), form);
                     } else {
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, clock.get());
                     }

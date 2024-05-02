@@ -68,7 +68,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     }
 
     @Override
-    public void scheduleSubmitIfNeeded(String projectId) {
+    public void scheduleAutoSend(String projectId) {
         Scheduler.NetworkType networkConstraint;
         Settings settings = settingsProvider.getUnprotectedSettings(projectId);
         AutoSend autoSendSetting = StringIdEnumUtils.getAutoSend(settings, application);
@@ -88,11 +88,11 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     }
 
     @Override
-    public void scheduleSubmit(String projectId, Long instanceId) {
+    public void scheduleFormAutoSend(String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
         inputData.put(TaskData.DATA_PROJECT_ID, projectId);
-        inputData.put(TaskData.DATA_INSTANCE_ID, instanceId.toString());
-        scheduler.networkDeferred(getAutoSendFormTag(projectId, instanceId), new SendFormsTaskSpec(), inputData, null);
+        inputData.put(TaskData.DATA_FORM_AUTO_SEND, "");
+        scheduler.networkDeferred(getAutoSendFormTag(projectId), new SendFormsTaskSpec(), inputData, null);
     }
 
     @Override
@@ -105,8 +105,8 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
         return "AutoSendWorker:" + projectId;
     }
 
-    public String getAutoSendFormTag(String projectId, Long instanceId) {
-        return "auto_send_form:" + projectId + ":" + instanceId;
+    public String getAutoSendFormTag(String projectId) {
+        return "auto_send_form:" + projectId;
     }
 
     @NotNull

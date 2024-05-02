@@ -455,7 +455,7 @@ class FormManagementPreferencesFragmentTest {
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             fragment.findPreference<ListPreference>(ProjectKeys.KEY_AUTOSEND)!!.value = AutoSend.WIFI_ONLY.getValue(context)
         }
-        verify(instanceSubmitScheduler).scheduleSubmitIfNeeded(projectID)
+        verify(instanceSubmitScheduler).scheduleAutoSend(projectID)
     }
 
     @Test
@@ -464,6 +464,6 @@ class FormManagementPreferencesFragmentTest {
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             fragment.findPreference<ListPreference>(ProjectKeys.KEY_AUTOSEND)!!.value = AutoSend.OFF.getValue(context)
         }
-        verify(instanceSubmitScheduler, never()).scheduleSubmitIfNeeded(projectID)
+        verify(instanceSubmitScheduler, never()).scheduleAutoSend(projectID)
     }
 }

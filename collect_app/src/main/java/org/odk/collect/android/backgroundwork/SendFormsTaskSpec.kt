@@ -35,10 +35,10 @@ class SendFormsTaskSpec : TaskSpec {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
-            val instanceId = inputData[TaskData.DATA_INSTANCE_ID]?.toLong()
+            val formAutoSend = inputData[TaskData.DATA_FORM_AUTO_SEND] != null
             if (projectId != null) {
-                if (instanceId != null) {
-                    instancesDataService.sendInstances(projectId, listOf(instanceId))
+                if (formAutoSend) {
+                    instancesDataService.sendInstances(projectId, formAutoSendOnly = true)
                 } else {
                     instancesDataService.sendInstances(projectId)
                 }
