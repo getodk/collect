@@ -88,4 +88,48 @@ class InstanceAutoSendFetcherTest {
             )
         )
     }
+
+    @Test
+    fun `return all finalized forms with autosend when formAutoSend is true`() {
+        formsRepository.save(formWithEnabledAutoSend)
+        formsRepository.save(formWithoutSpecifiedAutoSend)
+        formsRepository.save(formWithDisabledAutoSend)
+        formsRepository.save(formWithCustomAutoSend)
+
+        instancesRepository.apply {
+            save(instanceOfFormWithEnabledAutoSendIncomplete)
+            save(instanceOfFormWithEnabledAutoSendComplete)
+            save(instanceOfFormWithEnabledAutoSendSubmissionFailed)
+            save(instanceOfFormWithEnabledAutoSendSubmitted)
+
+            save(instanceOfFormWithoutSpecifiedAutoSendIncomplete)
+            save(instanceOfFormWithoutSpecifiedAutoSendComplete)
+            save(instanceOfFormWithoutSpecifiedAutoSendSubmissionFailed)
+            save(instanceOfFormWithoutSpecifiedAutoSendSubmitted)
+
+            save(instanceOfFormWithDisabledAutoSendIncomplete)
+            save(instanceOfFormWithDisabledAutoSendComplete)
+            save(instanceOfFormWithDisabledAutoSendSubmissionFailed)
+            save(instanceOfFormWithDisabledAutoSendSubmitted)
+
+            save(instanceOfFormWithCustomAutoSendIncomplete)
+            save(instanceOfFormWithCustomAutoSendComplete)
+            save(instanceOfFormWithCustomAutoSendSubmissionFailed)
+            save(instanceOfFormWithCustomAutoSendSubmitted)
+        }
+
+        val instancesToSend = InstanceAutoSendFetcher.getInstancesToAutoSend(
+            instancesRepository,
+            formsRepository,
+            formAutoSend = true
+        )
+
+        assertThat(
+            instancesToSend.map { it.instanceFilePath },
+            contains(
+                instanceOfFormWithEnabledAutoSendComplete.instanceFilePath,
+                instanceOfFormWithEnabledAutoSendSubmissionFailed.instanceFilePath,
+            )
+        )
+    }
 }

@@ -177,7 +177,7 @@ class InstancesDataService(
         }
     }
 
-    fun sendInstances(projectId: String, formAutoSendOnly: Boolean = false): Boolean {
+    fun sendInstances(projectId: String, formAutoSend: Boolean = false): Boolean {
         val projectDependencyProvider =
             projectDependencyProviderFactory.create(projectId)
 
@@ -193,18 +193,11 @@ class InstancesDataService(
             projectDependencyProvider.projectId
         ).withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
-                val toUpload = if (formAutoSendOnly) {
-                    projectDependencyProvider.instancesRepository.all.filter {
-                        projectDependencyProvider.formsRepository.getLatestByFormIdAndVersion(it.formId, it.formVersion)?.let { form ->
-                            form.autoSend != null && form.autoSend == "true"
-                        } ?: false
-                    }
-                } else {
-                    InstanceAutoSendFetcher.getInstancesToAutoSend(
-                        projectDependencyProvider.instancesRepository,
-                        projectDependencyProvider.formsRepository
-                    )
-                }
+                val toUpload = InstanceAutoSendFetcher.getInstancesToAutoSend(
+                    projectDependencyProvider.instancesRepository,
+                    projectDependencyProvider.formsRepository,
+                    formAutoSend
+                )
 
                 if (toUpload.isNotEmpty()) {
                     val results = instanceSubmitter.submitInstances(toUpload)

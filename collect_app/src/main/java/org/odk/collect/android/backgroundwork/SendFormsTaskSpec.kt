@@ -38,7 +38,7 @@ class SendFormsTaskSpec : TaskSpec {
             val formAutoSend = inputData[TaskData.DATA_FORM_AUTO_SEND] != null
             if (projectId != null) {
                 if (formAutoSend) {
-                    instancesDataService.sendInstances(projectId, formAutoSendOnly = true)
+                    instancesDataService.sendInstances(projectId, formAutoSend = true)
                 } else {
                     instancesDataService.sendInstances(projectId)
                 }
