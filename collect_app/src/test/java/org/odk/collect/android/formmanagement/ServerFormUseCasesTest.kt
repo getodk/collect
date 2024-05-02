@@ -1,7 +1,7 @@
 package org.odk.collect.android.formmanagement
 
-import androidx.test.espresso.matcher.ViewMatchers
-import org.hamcrest.Matchers
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.mockito.Mockito.any
 import org.mockito.Mockito.doAnswer
@@ -70,7 +70,7 @@ class ServerFormUseCasesTest {
             formDownloader
         )
 
-        ViewMatchers.assertThat(results.size, Matchers.`is`(1))
-        ViewMatchers.assertThat(results[serverForms[0]], Matchers.equalTo(null))
+        assertThat(results.size, equalTo(1))
+        assertThat(results[serverForms[0]], equalTo(null))
     }
 }
