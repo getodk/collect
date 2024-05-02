@@ -96,7 +96,7 @@ class EntityFormTest {
     }
 
     @Test
-    fun entityListsAreConsistentBetweenFollowUpForms() {
+    fun entityListSecondaryInstancesAreConsistentBetweenFollowUpForms() {
         testDependencies.server.apply {
             addForm(
                 "one-question-entity-update.xml",
