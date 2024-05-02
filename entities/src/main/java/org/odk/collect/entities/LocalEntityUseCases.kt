@@ -20,9 +20,10 @@ object LocalEntityUseCases {
         val listItems = root.getChildrenWithName("item")
 
         val newAndUpdated = listItems.fold(arrayOf<Entity>()) { entities, item ->
-            val id = item.getFirstChild("name")?.value?.value as? String
-            val label = item.getFirstChild("label")?.value?.value as? String
-            val version = (item.getFirstChild("__version")?.value?.value as? String)?.toInt()
+            val id = item.getFirstChild(EntityItemElement.ID)?.value?.value as? String
+            val label = item.getFirstChild(EntityItemElement.LABEL)?.value?.value as? String
+            val version =
+                (item.getFirstChild(EntityItemElement.VERSION)?.value?.value as? String)?.toInt()
             if (id == null || label == null || version == null) {
                 return
             }
