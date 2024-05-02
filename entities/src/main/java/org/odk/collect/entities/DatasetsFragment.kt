@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -19,8 +18,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
-import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.odk.collect.entities.databinding.AddEntitiesDialogLayoutBinding
 import org.odk.collect.entities.databinding.DatasetItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding
 
@@ -30,15 +29,6 @@ class DatasetsFragment(
 ) : Fragment() {
 
     private val entitiesViewModel by viewModels<EntitiesViewModel> { viewModelFactory }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(AddEntityListDialogFragment::class) {
-                AddEntityListDialogFragment(entitiesViewModel)
-            }.build()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +47,7 @@ class DatasetsFragment(
         }
 
         menuHost().addMenuProvider(
-            DatasetsMenuProvider(entitiesViewModel, childFragmentManager),
+            DatasetsMenuProvider(entitiesViewModel, requireContext()),
             viewLifecycleOwner
         )
     }
@@ -65,7 +55,7 @@ class DatasetsFragment(
 
 private class DatasetsMenuProvider(
     private val entitiesViewModel: EntitiesViewModel,
-    private val childFragmentManager: FragmentManager
+    private val context: Context
 ) : MenuProvider {
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.datasets, menu)
@@ -79,7 +69,13 @@ private class DatasetsMenuProvider(
             }
 
             R.id.add_entity_list -> {
-                childFragmentManager.showIfNotShowing(AddEntityListDialogFragment::class)
+                val binding = AddEntitiesDialogLayoutBinding.inflate(LayoutInflater.from(context))
+                MaterialAlertDialogBuilder(context)
+                    .setView(binding.root)
+                    .setPositiveButton(org.odk.collect.strings.R.string.add) { _, _ ->
+                        entitiesViewModel.addEntityList(binding.entityListName.text.toString())
+                    }
+                    .show()
                 true
             }
 
