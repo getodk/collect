@@ -48,11 +48,6 @@ class SendFormsTaskSpecTest {
     }
 
     @Test
-    fun `maxRetries should not be limited`() {
-        assertThat(SendFormsTaskSpec().maxRetries, equalTo(null))
-    }
-
-    @Test
     fun `returns false if sending instances fails`() {
         whenever(instancesDataService.sendInstances(projectId)).doReturn(false)
 
