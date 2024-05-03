@@ -25,7 +25,7 @@ class SendFormsTaskSpec : TaskSpec {
     @Inject
     lateinit var instancesDataService: InstancesDataService
 
-    override val maxRetries: Int? = null
+    override val maxRetries: Int = 13 // Stop trying when backoff is > 5 days
     override val backoffPolicy = BackoffPolicy.EXPONENTIAL
     override val backoffDelay: Long = 60_000
 

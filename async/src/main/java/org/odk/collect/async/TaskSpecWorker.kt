@@ -3,14 +3,22 @@ package org.odk.collect.async
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import org.odk.collect.async.network.ConnectivityProvider
 
 class TaskSpecWorker(
     context: Context,
     workerParams: WorkerParameters
 ) : Worker(context, workerParams) {
 
+    private val connectivityProvider: ConnectivityProvider = ConnectivityProvider(context)
+
     override fun doWork(): Result {
-        val specClass = inputData.getString(TASK_SPEC_CLASS)!!
+        val cellularOnly = inputData.getBoolean(DATA_CELLULAR_ONLY, false)
+        if (cellularOnly && connectivityProvider.currentNetwork != Scheduler.NetworkType.CELLULAR) {
+            return Result.retry()
+        }
+
+        val specClass = inputData.getString(DATA_TASK_SPEC_CLASS)!!
         val spec = Class.forName(specClass).getConstructor().newInstance() as TaskSpec
 
         val stringInputData = inputData.keyValueMap.mapValues { it.value.toString() }
@@ -31,6 +39,7 @@ class TaskSpecWorker(
         spec.maxRetries?.let { runAttemptCount >= it } ?: true
 
     companion object {
-        const val TASK_SPEC_CLASS = "taskSpecClass"
+        const val DATA_TASK_SPEC_CLASS = "taskSpecClass"
+        const val DATA_CELLULAR_ONLY = "cellularOnly"
     }
 }

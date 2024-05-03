@@ -63,7 +63,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.ProjectsDataService;
-import org.odk.collect.androidshared.network.NetworkStateProvider;
+import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.androidshared.ui.MenuExtKt;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;

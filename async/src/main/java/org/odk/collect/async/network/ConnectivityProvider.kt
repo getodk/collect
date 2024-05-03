@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.network
+package org.odk.collect.async.network
 
 import android.content.Context
 import android.net.ConnectivityManager

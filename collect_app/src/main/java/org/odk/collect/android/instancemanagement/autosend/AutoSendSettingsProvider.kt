@@ -1,7 +1,7 @@
 package org.odk.collect.android.instancemanagement.autosend
 
 import android.app.Application
-import org.odk.collect.androidshared.network.NetworkStateProvider
+import org.odk.collect.async.network.NetworkStateProvider
 import org.odk.collect.async.Scheduler
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.enums.AutoSend

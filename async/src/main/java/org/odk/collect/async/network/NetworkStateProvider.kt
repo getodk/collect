@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.network
+package org.odk.collect.async.network
 
 import org.odk.collect.async.Scheduler
 

@@ -13,11 +13,24 @@ import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
 
-class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, backgroundContext: CoroutineContext, private val workManager: WorkManager) : CoroutineScheduler(foregroundContext, backgroundContext) {
+class CoroutineAndWorkManagerScheduler(
+    foregroundContext: CoroutineContext,
+    backgroundContext: CoroutineContext,
+    private val workManager: WorkManager
+) : CoroutineScheduler(foregroundContext, backgroundContext) {
 
-    constructor(workManager: WorkManager) : this(Dispatchers.Main, Dispatchers.IO, workManager) // Needed for Java construction
+    constructor(workManager: WorkManager) : this(
+        Dispatchers.Main,
+        Dispatchers.IO,
+        workManager
+    ) // Needed for Java construction
 
-    override fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>, networkConstraint: Scheduler.NetworkType?) {
+    override fun networkDeferred(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        networkConstraint: Scheduler.NetworkType?
+    ) {
         val constraintNetworkType = when (networkConstraint) {
             Scheduler.NetworkType.WIFI -> NetworkType.UNMETERED
             Scheduler.NetworkType.CELLULAR -> NetworkType.METERED
@@ -29,7 +42,11 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
             .build()
 
         val workManagerInputData = Data.Builder()
-            .putString(TaskSpecWorker.TASK_SPEC_CLASS, spec.javaClass.name)
+            .putString(TaskSpecWorker.DATA_TASK_SPEC_CLASS, spec.javaClass.name)
+            .putBoolean(
+                TaskSpecWorker.DATA_CELLULAR_ONLY,
+                networkConstraint == Scheduler.NetworkType.CELLULAR
+            )
             .putAll(inputData)
             .build()
 
@@ -42,17 +59,26 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
         workManager.beginUniqueWork(tag, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
     }
 
-    override fun networkDeferredRepeat(tag: String, spec: TaskSpec, repeatPeriod: Long, inputData: Map<String, String>) {
+    override fun networkDeferredRepeat(
+        tag: String,
+        spec: TaskSpec,
+        repeatPeriod: Long,
+        inputData: Map<String, String>
+    ) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
         val workManagerInputData = Data.Builder()
-            .putString(TaskSpecWorker.TASK_SPEC_CLASS, spec.javaClass.name)
+            .putString(TaskSpecWorker.DATA_TASK_SPEC_CLASS, spec.javaClass.name)
             .putAll(inputData)
             .build()
 
-        val builder = PeriodicWorkRequest.Builder(TaskSpecWorker::class.java, repeatPeriod, TimeUnit.MILLISECONDS)
+        val builder = PeriodicWorkRequest.Builder(
+            TaskSpecWorker::class.java,
+            repeatPeriod,
+            TimeUnit.MILLISECONDS
+        )
             .addTag(tag)
             .setInputData(workManagerInputData)
             .setConstraints(constraints)
@@ -63,7 +89,11 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
             }
         }
 
-        workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, builder.build())
+        workManager.enqueueUniquePeriodicWork(
+            tag,
+            ExistingPeriodicWorkPolicy.REPLACE,
+            builder.build()
+        )
     }
 
     override fun cancelDeferred(tag: String) {
