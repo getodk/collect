@@ -28,10 +28,12 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
             .setRequiredNetworkType(constraintNetworkType)
             .build()
 
-        val workManagerInputData = Data.Builder().putAll(inputData).build()
+        val workManagerInputData = Data.Builder()
+            .putString(TaskSpecWorker.TASK_SPEC_CLASS, spec.javaClass.name)
+            .putAll(inputData)
+            .build()
 
-        val worker = spec.getWorkManagerAdapter()
-        val workRequest = OneTimeWorkRequest.Builder(worker)
+        val workRequest = OneTimeWorkRequest.Builder(TaskSpecWorker::class.java)
             .addTag(tag)
             .setConstraints(constraints)
             .setInputData(workManagerInputData)
@@ -45,10 +47,12 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val workManagerInputData = Data.Builder().putAll(inputData).build()
+        val workManagerInputData = Data.Builder()
+            .putString(TaskSpecWorker.TASK_SPEC_CLASS, spec.javaClass.name)
+            .putAll(inputData)
+            .build()
 
-        val worker = spec.getWorkManagerAdapter()
-        val builder = PeriodicWorkRequest.Builder(worker, repeatPeriod, TimeUnit.MILLISECONDS)
+        val builder = PeriodicWorkRequest.Builder(TaskSpecWorker::class.java, repeatPeriod, TimeUnit.MILLISECONDS)
             .addTag(tag)
             .setInputData(workManagerInputData)
             .setConstraints(constraints)
