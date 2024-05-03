@@ -21,7 +21,7 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
         val constraintNetworkType = when (networkConstraint) {
             Scheduler.NetworkType.WIFI -> NetworkType.UNMETERED
             Scheduler.NetworkType.CELLULAR -> NetworkType.METERED
-            null -> NetworkType.CONNECTED
+            else -> NetworkType.CONNECTED
         }
 
         val constraints = Constraints.Builder()
