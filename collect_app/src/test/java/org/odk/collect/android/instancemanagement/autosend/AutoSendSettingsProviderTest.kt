@@ -9,8 +9,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.odk.collect.async.network.NetworkStateProvider
 import org.odk.collect.async.Scheduler
+import org.odk.collect.async.network.NetworkStateProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.enums.AutoSend
