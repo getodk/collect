@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -22,6 +23,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.instanceOf
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.notNullValue
 import org.hamcrest.Matchers.nullValue
@@ -31,7 +33,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -39,17 +40,19 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.geo.R
-import org.odk.collect.geo.ReferenceLayerSettingsNavigator
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.Fixtures
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.layers.OfflineMapLayersPicker
+import org.odk.collect.maps.layers.OfflineMapLayersPickerViewModel
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
+import org.odk.collect.webpage.ExternalWebPageHelper
 
 @RunWith(AndroidJUnit4::class)
 class SelectionMapFragmentTest {
@@ -57,7 +60,6 @@ class SelectionMapFragmentTest {
     private val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
 
     private lateinit var map: FakeMapFragment
-    private val referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator = mock()
     private val data = mock<SelectionMapData> {
         on { isLoading() } doReturn MutableNonNullLiveData(false)
         on { getMapTitle() } doReturn MutableLiveData("")
@@ -100,8 +102,20 @@ class SelectionMapFragmentTest {
                     }
                 }
 
-                override fun providesReferenceLayerSettingsNavigator() =
-                    referenceLayerSettingsNavigator
+                override fun providesOfflineMapLayersPickerViewModelFactory(): OfflineMapLayersPickerViewModel.Factory {
+                    val viewModel = mock<OfflineMapLayersPickerViewModel>().also {
+                        whenever(it.data).thenReturn(MutableLiveData(Pair(emptyList(), null)))
+                    }
+                    return object : OfflineMapLayersPickerViewModel.Factory(mock(), mock(), mock()) {
+                        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                            return viewModel as T
+                        }
+                    }
+                }
+
+                override fun providesExternalWebPageHelper(): ExternalWebPageHelper {
+                    return mock()
+                }
             }).build()
 
         BottomSheetBehavior.DRAGGING_ENABLED = false
@@ -409,9 +423,11 @@ class SelectionMapFragmentTest {
         map.ready()
 
         onView(withId(R.id.layer_menu)).perform(click())
-
         scenario.onFragment {
-            verify(referenceLayerSettingsNavigator).navigateToReferenceLayerSettings(it.requireActivity())
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersPicker::class.java.name),
+                instanceOf(OfflineMapLayersPicker::class.java)
+            )
         }
     }
 

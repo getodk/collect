@@ -37,7 +37,7 @@ class OfflineMapLayersPickerViewModel(
         _data.postValue(_data.value?.copy(second = selectedLayerId))
     }
 
-    class Factory(
+    open class Factory(
         private val referenceLayerRepository: ReferenceLayerRepository,
         private val scheduler: Scheduler,
         private val settingsProvider: SettingsProvider
