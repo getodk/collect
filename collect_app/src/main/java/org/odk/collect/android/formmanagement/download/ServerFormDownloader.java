@@ -6,6 +6,7 @@ import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.formmanagement.ServerFormUseCases;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.androidshared.utils.Validator;
@@ -98,10 +99,10 @@ public class ServerFormDownloader implements FormDownloader {
 
             // download media files if there are any
             if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
-                newAttachmentsDetected = FormDownloadUseCases.downloadMediaFiles(fd, formSource, formsRepository, tempMediaPath, tempDir, entitiesRepository, stateListener);
+                newAttachmentsDetected = ServerFormUseCases.downloadMediaFiles(fd, formSource, formsRepository, tempMediaPath, tempDir, entitiesRepository, stateListener);
             }
 
-            FormDownloadUseCases.copySavedFileFromPreviousFormVersionIfExists(formsRepository, fd.getFormId(), tempMediaPath);
+            ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(formsRepository, fd.getFormId(), tempMediaPath);
         } catch (FormDownloadException.DownloadingInterrupted | InterruptedException e) {
             Timber.i(e);
             cleanUp(fileResult, tempMediaPath);
