@@ -26,6 +26,11 @@ public class GetBlankFormPage extends Page<GetBlankFormPage> {
         return this;
     }
 
+    public GetBlankFormPage clickSelectAll() {
+        clickOnString(string.select_all);
+        return this;
+    }
+
     public GetBlankFormPage clickForm(String formName) {
         clickOnText(formName);
         return this;

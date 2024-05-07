@@ -6,6 +6,9 @@ import static java.util.Arrays.asList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.javarosa.core.model.FormDef;
+import org.javarosa.xform.parse.XFormParser;
+import org.javarosa.xform.util.XFormUtils;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.openrosa.CaseInsensitiveEmptyHeaders;
 import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
@@ -137,15 +140,27 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     }
 
     public void addForm(String formXML, List<String> mediaFiles) {
-        forms.add(new XFormItem(formXML, formXML, formXML, "1", mediaFiles));
+        HashMap<String, String> mediaFilesMap = new HashMap<>();
+        for (String mediaFile : mediaFiles) {
+            mediaFilesMap.put(mediaFile, mediaFile);
+        }
+
+        addForm(formXML, mediaFilesMap);
     }
 
     public void addForm(String formXML, Map<String, String> mediaFiles) {
-        forms.add(new XFormItem(formXML, formXML, formXML, "1", mediaFiles));
+        try (InputStream formDefStream = getResourceAsStream("forms/" + formXML)) {
+            FormDef formDef = XFormUtils.getFormFromInputStream(formDefStream);
+            String formId = formDef.getMainInstance().getRoot().getAttributeValue(null, "id");
+            String version = formDef.getMainInstance().getRoot().getAttributeValue(null, "version");
+            forms.add(new XFormItem(formDef.getTitle(), formXML, formId, version, mediaFiles));
+        } catch (IOException | XFormParser.ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void addForm(String formXML) {
-        forms.add(new XFormItem(formXML, formXML, formXML, "1"));
+        addForm(formXML, new HashMap<>());
     }
 
     public void updateMediaFile(String formXML, String name, String newFile) {

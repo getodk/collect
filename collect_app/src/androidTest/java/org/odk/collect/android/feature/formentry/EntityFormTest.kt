@@ -1,6 +1,7 @@
 package org.odk.collect.android.feature.formentry
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -20,6 +21,11 @@ class EntityFormTest {
     @get:Rule
     val ruleChain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(rule)
+
+    @Before
+    fun setup() {
+        testDependencies.server.returnRandomMediaFileHash() // Entity list media files don't have hashes related to the file MD5
+    }
 
     @Test
     fun fillingEntityRegistrationForm_beforeCreatingEntityList_doesNotCreateEntityForFollowUpForms() {
@@ -115,7 +121,7 @@ class EntityFormTest {
 
             .clickGetBlankForm()
             .clickClearAll()
-            .clickForm("one-question-entity-update.xml")
+            .clickForm("One Question Entity Update")
             .clickGetSelected()
             .clickOK(MainMenuPage())
             .startBlankForm("One Question Entity Update")
@@ -123,9 +129,7 @@ class EntityFormTest {
             .pressBackAndDiscardForm()
 
             .clickGetBlankForm()
-            .clickClearAll()
-            .clickForm("one-question-entity-follow-up.xml")
-            .clickGetSelected()
+            .clickGetSelected() // Collect automatically only selects the un-downloaded forms
             .clickOK(MainMenuPage())
             .startBlankForm("One Question Entity Update")
             .assertText("Ro-Ro Roy")

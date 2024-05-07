@@ -1,5 +1,6 @@
 package org.odk.collect.android.feature.entitymanagement
 
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -16,6 +17,11 @@ class ViewEntitiesTest {
     @get:Rule
     val ruleChain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(rule)
+
+    @Before
+    fun setup() {
+        testDependencies.server.returnRandomMediaFileHash() // Entity list media files don't have hashes related to the file MD5
+    }
 
     @Test
     fun canViewLocallyCreatedEntitiesInBrowser() {
