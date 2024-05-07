@@ -1,9 +1,9 @@
 package org.odk.collect.android.feature.entitymanagement
 
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
+import org.odk.collect.android.support.StubOpenRosaServer
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -17,11 +17,6 @@ class ViewEntitiesTest {
     @get:Rule
     val ruleChain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(rule)
-
-    @Before
-    fun setup() {
-        testDependencies.server.returnRandomMediaFileHash() // Entity list media files don't have hashes related to the file MD5
-    }
 
     @Test
     fun canViewLocallyCreatedEntitiesInBrowser() {
@@ -38,7 +33,10 @@ class ViewEntitiesTest {
 
     @Test
     fun canViewListEntitiesInBrowser() {
-        testDependencies.server.addForm("one-question-entity-follow-up.xml", listOf("people.csv"))
+        testDependencies.server.addForm(
+            "one-question-entity-follow-up.xml",
+            listOf(StubOpenRosaServer.EntityListItem("people.csv"))
+        )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
             .addEntityListInBrowser("people")

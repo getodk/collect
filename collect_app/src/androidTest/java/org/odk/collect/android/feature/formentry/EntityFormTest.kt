@@ -1,11 +1,11 @@
 package org.odk.collect.android.feature.formentry
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -22,15 +22,13 @@ class EntityFormTest {
     val ruleChain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(rule)
 
-    @Before
-    fun setup() {
-        testDependencies.server.returnRandomMediaFileHash() // Entity list media files don't have hashes related to the file MD5
-    }
-
     @Test
     fun fillingEntityRegistrationForm_beforeCreatingEntityList_doesNotCreateEntityForFollowUpForms() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
-        testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
             .enableLocalEntitiesInForms()
@@ -47,7 +45,10 @@ class EntityFormTest {
     @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpForms() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
-        testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
             .setupEntities("people")
@@ -64,7 +65,10 @@ class EntityFormTest {
     @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpFormsWithCachedFormDefs() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
-        testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
             .setupEntities("people")
@@ -83,7 +87,10 @@ class EntityFormTest {
 
     @Test
     fun fillingEntityUpdateForm_updatesEntityForFollowUpForms() {
-        testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
             .setupEntities("people")
@@ -106,12 +113,12 @@ class EntityFormTest {
         testDependencies.server.apply {
             addForm(
                 "one-question-entity-update.xml",
-                listOf("people.csv")
+                listOf(EntityListItem("people.csv"))
             )
 
             addForm(
                 "one-question-entity-follow-up.xml",
-                mapOf("people.csv" to "updated-people.csv")
+                listOf(EntityListItem("people.csv", "updated-people.csv"))
             )
         }
 
