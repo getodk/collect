@@ -46,6 +46,6 @@ class LocalEntitiesFileInstanceParserTest {
 
         val item = instance.getChildAt(0)!!
         assertThat(item.numChildren, equalTo(3))
-        assertThat(item.getFirstChild("__version")?.value?.value, equalTo("1"))
+        assertThat(item.getFirstChild(EntityItemElement.VERSION)?.value?.value, equalTo("1"))
     }
 }
