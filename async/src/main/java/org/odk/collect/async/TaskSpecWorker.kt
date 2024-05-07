@@ -3,6 +3,7 @@ package org.odk.collect.async
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.async.network.ConnectivityProvider
 
 class TaskSpecWorker(
@@ -15,6 +16,7 @@ class TaskSpecWorker(
     override fun doWork(): Result {
         val cellularOnly = inputData.getBoolean(DATA_CELLULAR_ONLY, false)
         if (cellularOnly && connectivityProvider.currentNetwork != Scheduler.NetworkType.CELLULAR) {
+            Analytics.setUserProperty("EncounteredMeteredNonCellularInTasks", "true")
             return Result.retry()
         }
 
