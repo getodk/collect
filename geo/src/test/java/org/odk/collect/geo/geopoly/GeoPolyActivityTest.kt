@@ -3,7 +3,6 @@ package org.odk.collect.geo.geopoly
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
@@ -30,13 +29,14 @@ import org.odk.collect.geo.Constants
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.geo.R
-import org.odk.collect.geo.ReferenceLayerSettingsNavigator
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.layers.OfflineMapLayersPickerViewModel
+import org.odk.collect.webpage.ExternalWebPageHelper
 import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
@@ -64,15 +64,16 @@ class GeoPolyActivityTest {
                     }
                 }
 
-                override fun providesReferenceLayerSettingsNavigator(): ReferenceLayerSettingsNavigator {
-                    return object : ReferenceLayerSettingsNavigator {
-                        override fun navigateToReferenceLayerSettings(activity: FragmentActivity) {
-                        }
-                    }
-                }
-
                 override fun providesLocationTracker(application: Application): LocationTracker {
                     return locationTracker
+                }
+
+                override fun providesOfflineMapLayersPickerViewModelFactory(): OfflineMapLayersPickerViewModel.Factory {
+                    return mock()
+                }
+
+                override fun providesExternalWebPageHelper(): ExternalWebPageHelper {
+                    return mock()
                 }
             })
             .build()
