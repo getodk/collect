@@ -9,6 +9,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.content.withStyledAttributes
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
@@ -35,6 +36,11 @@ open class MaterialPill(context: Context, attrs: AttributeSet?) :
 
     init {
         background = createMaterialShapeDrawable(getDefaultBackgroundColor(context))
+
+        context.withStyledAttributes(attrs, R.styleable.MaterialPill) {
+            text = getString(R.styleable.MaterialPill_text)
+            setIcon(getResourceId(R.styleable.MaterialPill_icon, 0))
+        }
     }
 
     fun setText(@StringRes id: Int) {

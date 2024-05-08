@@ -12,4 +12,9 @@
     <declare-styleable name="Material3Custom">
         <attr name="textAppearanceLabelExtraLarge" format="reference" />
     </declare-styleable>
+
+    <declare-styleable name="MaterialPill">
+        <attr name="icon" />
+        <attr name="text" format="string" />
+    </declare-styleable>
 </resources>
