@@ -28,6 +28,15 @@ class OfflineMapLayersPickerViewModel(
         )
     }
 
+    fun saveSelectedLayer() {
+        val selectedLayerId = data.value?.second
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, selectedLayerId)
+    }
+
+    fun changeSelectedLayerId(selectedLayerId: String?) {
+        _data.postValue(_data.value?.copy(second = selectedLayerId))
+    }
+
     class Factory(
         private val referenceLayerRepository: ReferenceLayerRepository,
         private val scheduler: Scheduler,
