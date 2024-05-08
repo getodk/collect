@@ -68,4 +68,6 @@ dependencies {
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.robolectric)
+    testImplementation(Dependencies.hamcrest)
+    testImplementation(Dependencies.mockito_kotlin)
 }

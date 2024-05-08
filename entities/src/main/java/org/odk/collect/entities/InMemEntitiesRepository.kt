@@ -2,10 +2,11 @@ package org.odk.collect.entities
 
 class InMemEntitiesRepository : EntitiesRepository {
 
+    private val datasets = mutableSetOf<String>()
     private val entities = mutableListOf<Entity>()
 
     override fun getDatasets(): Set<String> {
-        return entities.map { it.dataset }.toSet()
+        return datasets
     }
 
     override fun getEntities(dataset: String): List<Entity> {
@@ -14,24 +15,32 @@ class InMemEntitiesRepository : EntitiesRepository {
 
     override fun clear() {
         entities.clear()
+        datasets.clear()
     }
 
-    override fun save(entity: Entity) {
-        val existing = entities.find { it.id == entity.id && it.dataset == entity.dataset }
+    override fun addDataset(dataset: String) {
+        datasets.add(dataset)
+    }
 
-        if (existing != null) {
-            entities.remove(existing)
-            entities.add(
-                Entity(
-                    entity.dataset,
-                    entity.id,
-                    entity.label ?: existing.label,
-                    version = entity.version,
-                    properties = mergeProperties(existing, entity)
+    override fun save(vararg entities: Entity) {
+        entities.forEach { entity ->
+            datasets.add(entity.dataset)
+            val existing = this.entities.find { it.id == entity.id && it.dataset == entity.dataset }
+
+            if (existing != null) {
+                this.entities.remove(existing)
+                this.entities.add(
+                    Entity(
+                        entity.dataset,
+                        entity.id,
+                        entity.label ?: existing.label,
+                        version = entity.version,
+                        properties = mergeProperties(existing, entity)
+                    )
                 )
-            )
-        } else {
-            entities.add(entity)
+            } else {
+                this.entities.add(entity)
+            }
         }
     }
 

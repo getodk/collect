@@ -1,5 +1,6 @@
-package org.odk.collect.android.formmanagement
+package org.odk.collect.android.formmanagement.download
 
+import org.odk.collect.android.formmanagement.ServerFormDetails
 import java.util.function.Supplier
 
 interface FormDownloader {

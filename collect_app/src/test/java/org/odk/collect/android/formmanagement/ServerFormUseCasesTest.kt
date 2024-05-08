@@ -1,12 +1,20 @@
 package org.odk.collect.android.formmanagement
 
-import org.apache.commons.io.FileUtils
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
+import org.mockito.Mockito.any
+import org.mockito.Mockito.doAnswer
+import org.mockito.Mockito.never
+import org.mockito.invocation.InvocationOnMock
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME
+import org.mockito.kotlin.verify
+import org.mockito.stubbing.Answer
+import org.odk.collect.android.formmanagement.download.FormDownloadException
+import org.odk.collect.android.formmanagement.download.FormDownloader
+import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.entities.InMemEntitiesRepository
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.ManifestFile
@@ -16,15 +24,74 @@ import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.strings.Md5
+import org.odk.collect.testshared.BooleanChangeLock
 import java.io.File
 
-class ServerFormDownloaderUseCasesTest {
+class ServerFormUseCasesTest {
+
+    @Test
+    fun `downloadUpdates does not download when change lock locked`() {
+        val changeLock = BooleanChangeLock()
+        val formDownloader = mock<FormDownloader>()
+
+        changeLock.lock()
+
+        val serverForm =
+            ServerFormDetails("", "", "", "", "", false, true, ManifestFile("", emptyList()))
+
+        ServerFormUseCases.downloadForms(
+            listOf(serverForm),
+            changeLock,
+            formDownloader
+        )
+
+        verify(formDownloader, never()).downloadForm(
+            any(),
+            any(),
+            any()
+        )
+    }
+
+    @Test
+    fun `downloadUpdates returns completed downloads when cancelled`() {
+        val changeLock = BooleanChangeLock()
+        val formDownloader = mock<FormDownloader>()
+
+        val serverForms = listOf(
+            ServerFormDetails("", "", "", "", "", false, true, ManifestFile("", emptyList())),
+            ServerFormDetails("", "", "", "", "", false, true, ManifestFile("", emptyList()))
+        )
+
+        // Cancel form download after downloading one form
+        doAnswer(object : Answer<Unit> {
+            private var calledBefore = false
+
+            @Throws(Throwable::class)
+            override fun answer(invocation: InvocationOnMock) {
+                calledBefore = if (!calledBefore) {
+                    true
+                } else {
+                    throw FormDownloadException.DownloadingInterrupted()
+                }
+            }
+        }).`when`(formDownloader).downloadForm(any(), any(), any())
+
+        val results = ServerFormUseCases.downloadForms(
+            serverForms,
+            changeLock,
+            formDownloader
+        )
+
+        assertThat(results.size, equalTo(1))
+        assertThat(results[serverForms[0]], equalTo(null))
+    }
+
     @Test
     fun `copySavedFileFromPreviousFormVersionIfExists does not copy any file if there is no matching last-saved file`() {
         val destinationMediaDirPath = TempFiles.createTempDir().absolutePath
-        ServerFormDownloaderUseCases.copySavedFileFromPreviousFormVersionIfExists(InMemFormsRepository(), "1", destinationMediaDirPath)
+        ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(InMemFormsRepository(), "1", destinationMediaDirPath)
 
-        val resultFile = File(destinationMediaDirPath, LAST_SAVED_FILENAME)
+        val resultFile = File(destinationMediaDirPath, FileUtils.LAST_SAVED_FILENAME)
         assertThat(resultFile.exists(), equalTo(false))
     }
 
@@ -32,19 +99,19 @@ class ServerFormDownloaderUseCasesTest {
     fun `copySavedFileFromPreviousFormVersionIfExists copies the newest matching last-saved file for given formId`() {
         val tempDir1 = TempFiles.createTempDir()
         val file1 = TempFiles.createTempFile(tempDir1, "last-saved", ".xml")
-        FileUtils.writeByteArrayToFile(file1, "file1".toByteArray())
+        org.apache.commons.io.FileUtils.writeByteArrayToFile(file1, "file1".toByteArray())
 
         val tempDir2 = TempFiles.createTempDir()
         val file2 = TempFiles.createTempFile(tempDir2, "last-saved", ".xml")
-        FileUtils.writeByteArrayToFile(file2, "file2".toByteArray())
+        org.apache.commons.io.FileUtils.writeByteArrayToFile(file2, "file2".toByteArray())
 
         val tempDir3 = TempFiles.createTempDir()
         val file3 = TempFiles.createTempFile(tempDir3, "last-saved", ".xml")
-        FileUtils.writeByteArrayToFile(file3, "file3".toByteArray())
+        org.apache.commons.io.FileUtils.writeByteArrayToFile(file3, "file3".toByteArray())
 
         val tempDir4 = TempFiles.createTempDir()
         val file4 = TempFiles.createTempFile(tempDir4, "last-saved", ".xml")
-        FileUtils.writeByteArrayToFile(file4, "file4".toByteArray())
+        org.apache.commons.io.FileUtils.writeByteArrayToFile(file4, "file4".toByteArray())
 
         val formsRepository = InMemFormsRepository().also {
             it.save(
@@ -93,14 +160,14 @@ class ServerFormDownloaderUseCasesTest {
         }
 
         val destinationMediaDirPath = TempFiles.createTempDir().absolutePath
-        ServerFormDownloaderUseCases.copySavedFileFromPreviousFormVersionIfExists(formsRepository, "1", destinationMediaDirPath)
+        ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(formsRepository, "1", destinationMediaDirPath)
 
-        val resultFile = File(destinationMediaDirPath, LAST_SAVED_FILENAME)
+        val resultFile = File(destinationMediaDirPath, FileUtils.LAST_SAVED_FILENAME)
         assertThat(resultFile.readText(), equalTo("file2"))
     }
 
     @Test
-    fun `download returns false when there is an existing copy of a media file and an older one`() {
+    fun `downloadMediaFiles returns false when there is an existing copy of a media file and an older one`() {
         var date: Long = 0
         // Save forms
         val formsRepository = InMemFormsRepository {
@@ -130,21 +197,21 @@ class ServerFormDownloaderUseCasesTest {
                 .inputStream()
         }
 
-        val result = ServerFormDownloaderUseCases.download(
-            formsRepository,
-            formSource,
+        val result = ServerFormUseCases.downloadMediaFiles(
             serverFormDetails,
+            formSource,
+            formsRepository,
             File(TempFiles.createTempDir(), "temp").absolutePath,
             TempFiles.createTempDir(),
-            mock(),
-            true
+            InMemEntitiesRepository(),
+            mock()
         )
 
         assertThat(result, equalTo(false))
     }
 
     @Test
-    fun `download returns false when there is an existing copy of a media file and an older one and media file list hash doesn't match existing copy`() {
+    fun `downloadMediaFiles returns false when there is an existing copy of a media file and an older one and media file list hash doesn't match existing copy`() {
         // Save forms
         var date: Long = 0
         val formsRepository = InMemFormsRepository {
@@ -173,12 +240,13 @@ class ServerFormDownloaderUseCasesTest {
                 .inputStream()
         }
 
-        val result = ServerFormDownloaderUseCases.download(
-            formsRepository,
-            formSource,
+        val result = ServerFormUseCases.downloadMediaFiles(
             serverFormDetails,
+            formSource,
+            formsRepository,
             File(TempFiles.createTempDir(), "temp").absolutePath,
             TempFiles.createTempDir(),
+            InMemEntitiesRepository(),
             mock()
         )
 

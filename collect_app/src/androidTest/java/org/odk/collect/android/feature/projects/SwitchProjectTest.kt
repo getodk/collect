@@ -76,6 +76,7 @@ class SwitchProjectTest {
             .clickOKOnDialog(MainMenuPage())
 
             // Fill form
+            .addEntityListInBrowser("people")
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Alice"))
             .clickSendFinalizedForm(1)

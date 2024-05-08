@@ -2,6 +2,7 @@ package org.odk.collect.android.entities
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
+import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.odk.collect.entities.EntitiesRepository
@@ -10,6 +11,18 @@ import org.odk.collect.entities.Entity
 abstract class EntitiesRepositoryTest {
 
     abstract fun buildSubject(): EntitiesRepository
+
+    @Test
+    fun `getDatasets() returns datasets for saved entities`() {
+        val repository = buildSubject()
+
+        val wine = Entity("wines", "1", "Léoville Barton 2008")
+        val whisky = Entity("whiskys", "2", "Lagavulin 16")
+        repository.save(wine)
+        repository.save(whisky)
+
+        assertThat(repository.getDatasets(), containsInAnyOrder("wines", "whiskys"))
+    }
 
     @Test
     fun `getEntities() returns entities for dataset`() {
@@ -171,5 +184,25 @@ abstract class EntitiesRepositoryTest {
         assertThat(repository.getDatasets().size, equalTo(0))
         assertThat(repository.getEntities("wines").size, equalTo(0))
         assertThat(repository.getEntities("whiskys").size, equalTo(0))
+    }
+
+    @Test
+    fun `save() can save multiple entities`() {
+        val repository = buildSubject()
+
+        val wine = Entity("wines", "1", "Léoville Barton 2008")
+        val whisky = Entity("whiskys", "2", "Lagavulin 16")
+        repository.save(wine, whisky)
+
+        assertThat(repository.getDatasets(), containsInAnyOrder("wines", "whiskys"))
+    }
+
+    @Test
+    fun `addDataset() adds a dataset with no entities`() {
+        val repository = buildSubject()
+
+        repository.addDataset("wine")
+        assertThat(repository.getDatasets(), containsInAnyOrder("wine"))
+        assertThat(repository.getEntities("wine").size, equalTo(0))
     }
 }

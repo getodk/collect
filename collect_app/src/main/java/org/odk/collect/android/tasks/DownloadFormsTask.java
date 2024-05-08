@@ -15,19 +15,16 @@
 package org.odk.collect.android.tasks;
 
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
-import static java.util.Collections.emptyMap;
 
 import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formmanagement.FormDownloadException;
-import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.formmanagement.download.FormDownloadException;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -43,45 +40,28 @@ import java.util.Map;
 public class DownloadFormsTask extends
         AsyncTask<ArrayList<ServerFormDetails>, String, Map<ServerFormDetails, FormDownloadException>> {
 
-    private final FormDownloader formDownloader;
+    private final String projectId;
+    private final FormsDataService formsDataService;
     private DownloadFormsTaskListener stateListener;
 
-    public DownloadFormsTask(FormDownloader formDownloader) {
-        this.formDownloader = formDownloader;
+    public DownloadFormsTask(String projectId, FormsDataService formsDataService) {
+        this.projectId = projectId;
+        this.formsDataService = formsDataService;
     }
 
     @Override
     protected Map<ServerFormDetails, FormDownloadException> doInBackground(ArrayList<ServerFormDetails>... values) {
-        HashMap<ServerFormDetails, FormDownloadException> results = new HashMap<>();
+        return formsDataService.downloadForms(projectId, values[0], (index, count) -> {
+            ServerFormDetails serverFormDetails = values[0].get(index);
+            String message = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.form_download_progress,
+                    serverFormDetails.getFormName(),
+                    String.valueOf(count),
+                    String.valueOf(serverFormDetails.getManifest().getMediaFiles().size())
+            );
 
-        int index = 1;
-        for (ServerFormDetails serverFormDetails : values[0]) {
-            try {
-                String currentFormNumber = String.valueOf(index);
-                String totalForms = String.valueOf(values[0].size());
-                publishProgress(serverFormDetails.getFormName(), currentFormNumber, totalForms);
-
-                formDownloader.downloadForm(serverFormDetails, count -> {
-                    String message = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.form_download_progress,
-                            serverFormDetails.getFormName(),
-                            String.valueOf(count),
-                            String.valueOf(serverFormDetails.getManifest().getMediaFiles().size())
-                    );
-
-                    publishProgress(message, currentFormNumber, totalForms);
-                }, this::isCancelled);
-
-                results.put(serverFormDetails, null);
-            } catch (FormDownloadException.DownloadingInterrupted e) {
-                return emptyMap();
-            } catch (FormDownloadException e) {
-                results.put(serverFormDetails, e);
-            }
-
-            index++;
-        }
-
-        return results;
+            publishProgress(message, String.valueOf(index), String.valueOf(values[0].size()));
+            return null;
+        }, this::isCancelled);
     }
 
     @Override

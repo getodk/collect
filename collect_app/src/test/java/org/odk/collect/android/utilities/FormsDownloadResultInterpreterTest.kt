@@ -7,10 +7,9 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
-import org.odk.collect.android.formmanagement.FormDownloadException
-import org.odk.collect.android.formmanagement.FormDownloadExceptionMapper
 import org.odk.collect.android.formmanagement.ServerFormDetails
+import org.odk.collect.android.formmanagement.download.FormDownloadException
+import org.odk.collect.android.formmanagement.download.FormDownloadExceptionMapper
 
 @RunWith(AndroidJUnit4::class)
 class FormsDownloadResultInterpreterTest {

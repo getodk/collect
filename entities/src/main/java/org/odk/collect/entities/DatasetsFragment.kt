@@ -1,5 +1,6 @@
 package org.odk.collect.entities
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -17,10 +18,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.odk.collect.entities.databinding.AddEntitiesDialogLayoutBinding
 import org.odk.collect.entities.databinding.DatasetItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding
 
-class DatasetsFragment(private val viewModelFactory: ViewModelProvider.Factory, private val menuHost: () -> MenuHost) : Fragment() {
+class DatasetsFragment(
+    private val viewModelFactory: ViewModelProvider.Factory,
+    private val menuHost: () -> MenuHost
+) : Fragment() {
 
     private val entitiesViewModel by viewModels<EntitiesViewModel> { viewModelFactory }
 
@@ -40,18 +46,41 @@ class DatasetsFragment(private val viewModelFactory: ViewModelProvider.Factory, 
             binding.list.adapter = DatasetsAdapter(it, findNavController())
         }
 
-        menuHost().addMenuProvider(DatasetsMenuProvider(entitiesViewModel), viewLifecycleOwner)
+        menuHost().addMenuProvider(
+            DatasetsMenuProvider(entitiesViewModel, requireContext()),
+            viewLifecycleOwner
+        )
     }
 }
 
-private class DatasetsMenuProvider(private val entitiesViewModel: EntitiesViewModel) : MenuProvider {
+private class DatasetsMenuProvider(
+    private val entitiesViewModel: EntitiesViewModel,
+    private val context: Context
+) : MenuProvider {
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.datasets, menu)
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        entitiesViewModel.clearAll()
-        return true
+        return when (menuItem.itemId) {
+            R.id.clear_entities -> {
+                entitiesViewModel.clearAll()
+                true
+            }
+
+            R.id.add_entity_list -> {
+                val binding = AddEntitiesDialogLayoutBinding.inflate(LayoutInflater.from(context))
+                MaterialAlertDialogBuilder(context)
+                    .setView(binding.root)
+                    .setPositiveButton(org.odk.collect.strings.R.string.add) { _, _ ->
+                        entitiesViewModel.addEntityList(binding.entityListName.text.toString())
+                    }
+                    .show()
+                true
+            }
+
+            else -> false
+        }
     }
 }
 

@@ -1,10 +1,9 @@
 package org.odk.collect.android.utilities
 
 import android.content.Context
-import org.odk.collect.android.R
-import org.odk.collect.android.formmanagement.FormDownloadException
-import org.odk.collect.android.formmanagement.FormDownloadExceptionMapper
 import org.odk.collect.android.formmanagement.ServerFormDetails
+import org.odk.collect.android.formmanagement.download.FormDownloadException
+import org.odk.collect.android.formmanagement.download.FormDownloadExceptionMapper
 import org.odk.collect.errors.ErrorItem
 import org.odk.collect.strings.localization.getLocalizedString
 

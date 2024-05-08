@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.odk.collect.android.formmanagement.download.FormDownloadException
+import org.odk.collect.android.formmanagement.download.ServerFormDownloader
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
@@ -43,6 +45,25 @@ class FormsDataService(
         getServerErrorLiveData(projectId).value = null
     }
 
+    fun downloadForms(
+        projectId: String,
+        forms: List<ServerFormDetails>,
+        progressReporter: (Int, Int) -> Unit,
+        isCancelled: () -> Boolean
+    ): Map<ServerFormDetails, FormDownloadException?> {
+        val projectDependencyProvider = projectDependencyProviderFactory.create(projectId)
+        val formDownloader =
+            formDownloader(projectDependencyProvider, clock)
+
+        return ServerFormUseCases.downloadForms(
+            forms,
+            projectDependencyProvider.formsLock,
+            formDownloader,
+            progressReporter,
+            isCancelled
+        )
+    }
+
     /**
      * Downloads updates for the project's already downloaded forms. If Automatic download is
      * disabled the user will just be notified that there are updates available.
@@ -64,8 +85,7 @@ class FormsDataService(
                             .collect(Collectors.toList())
                     if (updatedForms.isNotEmpty()) {
                         if (projectDependencies.generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE)) {
-                            val formUpdateDownloader = FormUpdateDownloader()
-                            val results = formUpdateDownloader.downloadUpdates(
+                            val results = ServerFormUseCases.downloadForms(
                                 updatedForms,
                                 projectDependencies.formsLock,
                                 formDownloader
@@ -207,7 +227,8 @@ private fun formDownloader(
         File(projectDependencyProvider.cacheDir),
         projectDependencyProvider.formsDir,
         FormMetadataParser(),
-        clock
+        clock,
+        projectDependencyProvider.entitiesRepository
     )
 }
 

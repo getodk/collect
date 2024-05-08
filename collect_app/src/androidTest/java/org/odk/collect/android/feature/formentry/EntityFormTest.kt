@@ -5,8 +5,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage
+import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
@@ -21,24 +23,35 @@ class EntityFormTest {
         .around(rule)
 
     @Test
-    fun fillingEntityRegistrationForm_createsEntityInTheBrowser() {
+    fun fillingEntityRegistrationForm_beforeCreatingEntityList_doesNotCreateEntityForFollowUpForms() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
+            .enableLocalEntitiesInForms()
+
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
-            .openEntityBrowser()
-            .clickOnDataset("people")
-            .assertEntity("Logan Roy", "full_name: Logan Roy")
+
+            .startBlankForm("One Question Entity Update")
+            .assertQuestion("Select person")
+            .assertText("Roman Roy")
+            .assertTextDoesNotExist("Logan Roy")
     }
 
     @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpForms() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
-        testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
+            .setupEntities("people")
 
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
@@ -52,10 +65,13 @@ class EntityFormTest {
     @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpFormsWithCachedFormDefs() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
-        testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
+            .setupEntities("people")
 
             .startBlankForm("One Question Entity Update") // Open to create cached form def
             .pressBackAndDiscardForm()
@@ -71,66 +87,17 @@ class EntityFormTest {
 
     @Test
     fun fillingEntityUpdateForm_updatesEntityForFollowUpForms() {
-        testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
-
-        rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-
-            .startBlankForm("One Question Entity Update")
-            .assertQuestion("Select person")
-            .clickOnText("Roman Roy")
-            .swipeToNextQuestion("Name")
-            .answerQuestion("Name", "Romulus Roy")
-            .swipeToEndScreen()
-            .clickFinalize()
-
-            .startBlankForm("One Question Entity Update")
-            .assertText("Romulus Roy")
-            .assertTextDoesNotExist("Roman Roy")
-    }
-
-    @Test
-    fun fillingEntityFollowUpForm_whenOnlineDuplicateHasHigherVersion_showsOnlineVersion() {
-        testDependencies.server.addForm("one-question-entity-update.xml", listOf("people.csv"))
-
-        val mainMenuPage = rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-
-            .startBlankForm("One Question Entity Update")
-            .assertQuestion("Select person")
-            .clickOnText("Roman Roy")
-            .swipeToNextQuestion("Name")
-            .answerQuestion("Name", "Romulus Roy")
-            .swipeToEndScreen()
-            .clickFinalize()
-
-        testDependencies.server.updateMediaFile(
-            "one-question-entity-update.xml",
-            "people.csv",
-            "updated-people.csv"
-        )
-
-        mainMenuPage.clickFillBlankForm()
-            .clickRefresh()
-            .clickOnForm("One Question Entity Update")
-            .assertText("Ro-Ro Roy")
-            .assertTextDoesNotExist("Romulus Roy")
-            .assertTextDoesNotExist("Roman Roy")
-    }
-
-    @Test
-    fun fillingEntityFollowUpForm_whenOfflineDuplicateHasHigherVersion_showsOfflineVersion() {
         testDependencies.server.addForm(
             "one-question-entity-update.xml",
-            mapOf("people.csv" to "updated-people.csv")
+            listOf(EntityListItem("people.csv"))
         )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
+            .setupEntities("people")
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .clickOnText("Ro-Ro Roy")
+            .clickOnText("Roman Roy")
             .swipeToNextQuestion("Name")
             .answerQuestion("Name", "Romulus Roy")
             .swipeToEndScreen()
@@ -138,6 +105,41 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertText("Romulus Roy")
-            .assertTextDoesNotExist("Ro-Ro Roy")
+            .assertTextDoesNotExist("Roman Roy")
+    }
+
+    @Test
+    fun entityListSecondaryInstancesAreConsistentBetweenFollowUpForms() {
+        testDependencies.server.apply {
+            addForm(
+                "one-question-entity-update.xml",
+                listOf(EntityListItem("people.csv"))
+            )
+
+            addForm(
+                "one-question-entity-follow-up.xml",
+                listOf(EntityListItem("people.csv", "updated-people.csv"))
+            )
+        }
+
+        rule.withProject(testDependencies.server)
+            .enableLocalEntitiesInForms()
+            .addEntityListInBrowser("people")
+
+            .clickGetBlankForm()
+            .clickClearAll()
+            .clickForm("One Question Entity Update")
+            .clickGetSelected()
+            .clickOK(MainMenuPage())
+            .startBlankForm("One Question Entity Update")
+            .assertText("Roman Roy")
+            .pressBackAndDiscardForm()
+
+            .clickGetBlankForm()
+            .clickGetSelected() // Collect automatically only selects the un-downloaded forms
+            .clickOK(MainMenuPage())
+            .startBlankForm("One Question Entity Update")
+            .assertText("Ro-Ro Roy")
+            .assertTextDoesNotExist("Roman Roy")
     }
 }

@@ -107,7 +107,7 @@ object FormEntryUseCases {
         formController: FormController,
         instancesRepository: InstancesRepository
     ): Instance {
-        saveFormToDisk(formController)
+        saveInstanceToDisk(formController)
         return instancesRepository.save(
             Instance.Builder()
                 .formId(form.formId)
@@ -127,10 +127,12 @@ object FormEntryUseCases {
         val instance =
             getInstanceFromFormController(formController, instancesRepository)!!
 
-        val valid = finalizeInstance(formController, entitiesRepository)
+        val validationResult = formController.validateAnswers(false)
+        val valid = validationResult !is FailedValidationResult
 
         return if (valid) {
-            saveFormToDisk(formController)
+            finalizeFormController(formController, entitiesRepository)
+            saveInstanceToDisk(formController)
             val instanceName = formController.getSubmissionMetadata()?.instanceName
 
             instancesRepository.save(
@@ -151,6 +153,19 @@ object FormEntryUseCases {
         }
     }
 
+    @JvmStatic
+    fun finalizeFormController(
+        formController: FormController,
+        entitiesRepository: EntitiesRepository
+    ) {
+        formController.finalizeForm()
+        formController.getEntities().forEach { entity ->
+            if (entitiesRepository.getDatasets().contains(entity.dataset)) {
+                entitiesRepository.save(entity)
+            }
+        }
+    }
+
     private fun getInstanceFromFormController(
         formController: FormController,
         instancesRepository: InstancesRepository
@@ -159,24 +174,9 @@ object FormEntryUseCases {
         return instancesRepository.getOneByPath(instancePath)
     }
 
-    private fun saveFormToDisk(formController: FormController) {
+    private fun saveInstanceToDisk(formController: FormController) {
         val payload = formController.getSubmissionXml()
         FileUtils.write(formController.getInstanceFile(), payload!!.payloadBytes)
-    }
-
-    @JvmStatic
-    private fun finalizeInstance(
-        formController: FormController,
-        entitiesRepository: EntitiesRepository
-    ): Boolean {
-        val validationResult = formController.validateAnswers(false)
-        if (validationResult is FailedValidationResult) {
-            return false
-        }
-
-        formController.finalizeForm()
-        formController.getEntities().forEach { entity -> entitiesRepository.save(entity) }
-        return true
     }
 
     private fun createFormDefFromCacheOrXml(xForm: File, formDefCache: FormDefCache): FormDef? {

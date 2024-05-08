@@ -1,8 +1,8 @@
 package org.odk.collect.android.formmanagement.matchexactly;
 
 import org.odk.collect.android.formmanagement.LocalFormUseCases;
-import org.odk.collect.android.formmanagement.FormDownloadException;
-import org.odk.collect.android.formmanagement.FormDownloader;
+import org.odk.collect.android.formmanagement.download.FormDownloadException;
+import org.odk.collect.android.formmanagement.download.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.forms.Form;

@@ -1,13 +1,17 @@
-package org.odk.collect.android.formmanagement;
+package org.odk.collect.android.formmanagement.download;
 
 import static org.odk.collect.android.utilities.FileUtils.interuptablyWriteFile;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.formmanagement.FormMetadataParser;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.formmanagement.ServerFormUseCases;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.androidshared.utils.Validator;
 import org.odk.collect.async.OngoingWorkListener;
+import org.odk.collect.entities.EntitiesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
@@ -36,14 +40,16 @@ public class ServerFormDownloader implements FormDownloader {
     private final String formsDirPath;
     private final FormMetadataParser formMetadataParser;
     private final Supplier<Long> clock;
+    private final EntitiesRepository entitiesRepository;
 
-    public ServerFormDownloader(FormSource formSource, FormsRepository formsRepository, File cacheDir, String formsDirPath, FormMetadataParser formMetadataParser, Supplier<Long> clock) {
+    public ServerFormDownloader(FormSource formSource, FormsRepository formsRepository, File cacheDir, String formsDirPath, FormMetadataParser formMetadataParser, Supplier<Long> clock, EntitiesRepository entitiesRepository) {
         this.formSource = formSource;
         this.cacheDir = cacheDir;
         this.formsDirPath = formsDirPath;
         this.formsRepository = formsRepository;
         this.formMetadataParser = formMetadataParser;
         this.clock = clock;
+        this.entitiesRepository = entitiesRepository;
     }
 
     @Override
@@ -93,10 +99,10 @@ public class ServerFormDownloader implements FormDownloader {
 
             // download media files if there are any
             if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
-                newAttachmentsDetected = ServerFormDownloaderUseCases.download(formsRepository, formSource, fd, tempMediaPath, tempDir, stateListener);
+                newAttachmentsDetected = ServerFormUseCases.downloadMediaFiles(fd, formSource, formsRepository, tempMediaPath, tempDir, entitiesRepository, stateListener);
             }
 
-            ServerFormDownloaderUseCases.copySavedFileFromPreviousFormVersionIfExists(formsRepository, fd.getFormId(), tempMediaPath);
+            ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(formsRepository, fd.getFormId(), tempMediaPath);
         } catch (FormDownloadException.DownloadingInterrupted | InterruptedException e) {
             Timber.i(e);
             cleanUp(fileResult, tempMediaPath);

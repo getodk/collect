@@ -1,4 +1,4 @@
-package org.odk.collect.android.formmanagement
+package org.odk.collect.android.formmanagement.download
 
 import org.odk.collect.forms.FormSourceException
 
