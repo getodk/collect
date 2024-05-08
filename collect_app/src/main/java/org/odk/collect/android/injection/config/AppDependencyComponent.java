@@ -91,6 +91,7 @@ import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.ODKAppSettingsImporter;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.webpage.ExternalWebPageHelper;
 
 import javax.inject.Singleton;
 
@@ -310,4 +311,6 @@ public interface AppDependencyComponent {
     FormsDataService formsDataService();
 
     ProjectDependencyProviderFactory projectDependencyProviderFactory();
+
+    ExternalWebPageHelper externalWebPageHelper();
 }

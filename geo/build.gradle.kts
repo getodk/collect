@@ -57,6 +57,7 @@ dependencies {
     implementation(project(":permissions"))
     implementation(project(":maps"))
     implementation(project(":material"))
+    implementation(project(":web-page"))
     implementation(Dependencies.kotlin_stdlib)
     implementation(Dependencies.androidx_appcompat)
     implementation(Dependencies.androidx_lifecycle_livedata_ktx)

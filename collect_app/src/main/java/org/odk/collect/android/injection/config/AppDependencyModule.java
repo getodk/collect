@@ -111,6 +111,7 @@ import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.layers.DirectoryReferenceLayerRepository;
+import org.odk.collect.maps.layers.OfflineMapLayersPickerViewModel;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.metadata.InstallIDProvider;
 import org.odk.collect.metadata.PropertyManager;
@@ -626,5 +627,10 @@ public class AppDependencyModule {
     @Provides
     public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory(SettingsProvider settingsProvider) {
         return new CollectFormEntryControllerFactory();
+    }
+
+    @Provides
+    public OfflineMapLayersPickerViewModel.Factory providesOfflineMapLayersPickerViewModelFactory(ReferenceLayerRepository referenceLayerRepository, Scheduler scheduler, SettingsProvider settingsProvider) {
+        return new OfflineMapLayersPickerViewModel.Factory(referenceLayerRepository, scheduler, settingsProvider);
     }
 }

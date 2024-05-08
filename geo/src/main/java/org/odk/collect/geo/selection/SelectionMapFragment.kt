@@ -18,6 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCa
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import org.odk.collect.androidshared.livedata.NonNullLiveData
+import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.setMultiClickSafeOnClickListener
@@ -29,11 +30,13 @@ import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.layers.OfflineMapLayersPicker
+import org.odk.collect.maps.layers.OfflineMapLayersPickerViewModel
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.webpage.ExternalWebPageHelper
 import javax.inject.Inject
 
 /**
@@ -53,6 +56,12 @@ class SelectionMapFragment(
 
     @Inject
     lateinit var permissionsChecker: PermissionsChecker
+
+    @Inject
+    lateinit var viewModelFactory: OfflineMapLayersPickerViewModel.Factory
+
+    @Inject
+    lateinit var externalWebPageHelper: ExternalWebPageHelper
 
     private val selectedItemViewModel by viewModels<SelectedItemViewModel>()
 
@@ -78,6 +87,9 @@ class SelectionMapFragment(
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(MapFragment::class.java) {
                 mapFragmentFactory.createMapFragment() as Fragment
+            }
+            .forClass(OfflineMapLayersPicker::class) {
+                OfflineMapLayersPicker(viewModelFactory, externalWebPageHelper)
             }
             .build()
 
@@ -177,9 +189,10 @@ class SelectionMapFragment(
         }
 
         binding.layerMenu.setMultiClickSafeOnClickListener {
-            OfflineMapLayersPicker().also {
-                it.show(parentFragmentManager, OfflineMapLayersPicker.TAG)
-            }
+            DialogFragmentUtils.showIfNotShowing(
+                OfflineMapLayersPicker::class.java,
+                childFragmentManager
+            )
         }
 
         if (showNewItemButton) {

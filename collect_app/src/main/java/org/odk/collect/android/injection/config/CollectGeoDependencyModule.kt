@@ -14,13 +14,17 @@ import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragmentFactory
+import org.odk.collect.maps.layers.OfflineMapLayersPickerViewModel
 import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.webpage.ExternalWebPageHelper
 
 class CollectGeoDependencyModule(
     private val mapFragmentFactory: MapFragmentFactory,
     private val locationClient: LocationClient,
     private val scheduler: Scheduler,
-    private val permissionChecker: PermissionsChecker
+    private val permissionChecker: PermissionsChecker,
+    private val offlineMapLayersPickerViewModelFactory: OfflineMapLayersPickerViewModel.Factory,
+    private val externalWebPageHelper: ExternalWebPageHelper
 ) : GeoDependencyModule() {
 
     override fun providesReferenceLayerSettingsNavigator(): ReferenceLayerSettingsNavigator {
@@ -55,5 +59,13 @@ class CollectGeoDependencyModule(
 
     override fun providesPermissionChecker(context: Context): PermissionsChecker {
         return permissionChecker
+    }
+
+    override fun providesOfflineMapLayersPickerViewModelFactory(): OfflineMapLayersPickerViewModel.Factory {
+        return offlineMapLayersPickerViewModelFactory
+    }
+
+    override fun providesExternalWebPageHelper(): ExternalWebPageHelper {
+        return externalWebPageHelper
     }
 }
