@@ -1,5 +1,6 @@
 package org.odk.collect.maps.layers
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.odk.collect.androidshared.ui.GroupClickListener.addOnClickListener
 import org.odk.collect.maps.databinding.OfflineMapLayersPickerBinding
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.webpage.ExternalWebPageHelper
@@ -28,6 +30,13 @@ class OfflineMapLayersPicker(
         savedInstanceState: Bundle?
     ): View {
         offlineMapLayersPickerBinding = OfflineMapLayersPickerBinding.inflate(inflater)
+
+        offlineMapLayersPickerBinding.mbtilesInfoGroup.addOnClickListener {
+            externalWebPageHelper.openWebPageInCustomTab(
+                requireActivity(),
+                Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices")
+            )
+        }
 
         val layers = listOf(
             ReferenceLayer("1", TempFiles.createTempFile()),

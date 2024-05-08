@@ -56,6 +56,13 @@
         app:layout_constraintStart_toEndOf="@id/mbtiles_info_icon"
         app:layout_constraintTop_toTopOf="@id/mbtiles_info_icon" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/mbtiles_info_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="mbtiles_info_icon,mbtiles_info_icon_text" />
+
     <View
         android:id="@+id/top_divider"
         android:layout_width="match_parent"
