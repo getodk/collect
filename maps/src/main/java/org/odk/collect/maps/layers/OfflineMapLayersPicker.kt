@@ -60,8 +60,12 @@ class OfflineMapLayersPicker(
 
     override fun onStart() {
         super.onStart()
-        BottomSheetBehavior.from(requireView().parent as View).apply {
-            maxWidth = ViewGroup.LayoutParams.MATCH_PARENT
+        try {
+            BottomSheetBehavior.from(requireView().parent as View).apply {
+                maxWidth = ViewGroup.LayoutParams.MATCH_PARENT
+            }
+        } catch (e: Exception) {
+            // ignore
         }
     }
 
