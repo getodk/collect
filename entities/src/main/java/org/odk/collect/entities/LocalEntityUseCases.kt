@@ -19,7 +19,7 @@ object LocalEntityUseCases {
         val localEntities = entitiesRepository.getEntities(dataset).associateBy { it.id }
         val listItems = root.getChildrenWithName("item")
 
-        val newAndUpdated = listItems.fold(arrayOf<Entity>()) { entities, item ->
+        val onlineEntities = listItems.fold(arrayOf<Entity>()) { entities, item ->
             val id = item.getFirstChild(EntityItemElement.ID)?.value?.value as? String
             val label = item.getFirstChild(EntityItemElement.LABEL)?.value?.value as? String
             val version =
@@ -54,17 +54,17 @@ object LocalEntityUseCases {
             }
         }
 
-        if (newAndUpdated.isNotEmpty()) {
+        if (onlineEntities.isNotEmpty()) {
             localEntities.values.forEach { localEntity ->
                 if (!localEntity.offline) {
-                    val noLongerExists = newAndUpdated.toList().none { localEntity.id == it.id }
+                    val noLongerExists = onlineEntities.toList().none { localEntity.id == it.id }
                     if (noLongerExists) {
                         entitiesRepository.delete(localEntity.id)
                     }
                 }
             }
 
-            entitiesRepository.save(*newAndUpdated)
+            entitiesRepository.save(*onlineEntities)
         }
     }
 }

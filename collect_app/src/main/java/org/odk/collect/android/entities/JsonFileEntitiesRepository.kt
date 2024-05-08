@@ -26,6 +26,12 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             val existing = storedEntities.find { it.id == entity.id && it.dataset == entity.dataset }
 
             if (existing != null) {
+                val offline = if (existing.offline) {
+                    entity.offline
+                } else {
+                    false
+                }
+
                 storedEntities.remove(existing)
                 storedEntities.add(
                     Entity(
@@ -34,7 +40,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
                         entity.label ?: existing.label,
                         version = entity.version,
                         properties = mergeProperties(existing, entity),
-                        offline = entity.offline
+                        offline = offline
                     )
                 )
             } else {
