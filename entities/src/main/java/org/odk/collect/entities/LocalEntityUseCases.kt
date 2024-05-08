@@ -7,11 +7,11 @@ object LocalEntityUseCases {
 
     fun updateLocalEntities(
         dataset: String,
-        entityList: File,
+        onlineList: File,
         entitiesRepository: EntitiesRepository
     ) {
         val root = try {
-            CsvExternalInstance().parse(dataset, entityList.absolutePath)
+            CsvExternalInstance().parse(dataset, onlineList.absolutePath)
         } catch (e: Exception) {
             return
         }
