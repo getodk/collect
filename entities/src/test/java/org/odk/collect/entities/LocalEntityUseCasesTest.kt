@@ -140,6 +140,22 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
+    fun `updateLocalEntities does not remove offline entities that are not in online entities`() {
+        entitiesRepository.save(Entity("songs", "noah", "Noah"))
+        val csv = createEntityList(Entity("songs", "cathedrals", "Cathedrals"))
+
+        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        val songs = entitiesRepository.getEntities("songs")
+        assertThat(
+            songs,
+            containsInAnyOrder(
+                Entity("songs", "cathedrals", "Cathedrals"),
+                Entity("songs", "noah", "Noah")
+            )
+        )
+    }
+
+    @Test
     fun `updateLocalEntities accesses entities repo only once when not saving new entities`() {
         val entities = arrayOf(
             Entity("songs", "noah", "Noah"),
