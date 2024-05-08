@@ -24,7 +24,7 @@ class OfflineMapLayersAdapter(
                 holder.binding.radioButton.setChecked(true)
             }
         } else {
-            holder.binding.radioButton.text = layers[position - 1].file.absolutePath
+            holder.binding.radioButton.text = layers[position - 1].name
             if (selectedLayerId == layers[position - 1].id) {
                 holder.binding.radioButton.setChecked(true)
             }
