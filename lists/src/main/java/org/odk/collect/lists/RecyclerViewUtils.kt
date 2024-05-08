@@ -1,8 +1,10 @@
 package org.odk.collect.lists
 
 import android.content.Context
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.androidshared.R
 
 object RecyclerViewUtils {
@@ -13,5 +15,12 @@ object RecyclerViewUtils {
         itemDecoration.setDrawable(drawable)
 
         return itemDecoration
+    }
+
+    fun RecyclerView.ViewHolder.setItemViewLayoutParams() {
+        itemView.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
     }
 }

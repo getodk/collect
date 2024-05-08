@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.odk.collect.entities.databinding.ListLayoutBinding
+import org.odk.collect.lists.RecyclerViewUtils.setItemViewLayoutParams
 
 class EntitiesFragment(private val viewModelFactory: ViewModelProvider.Factory) : Fragment() {
 
@@ -54,6 +55,10 @@ private class EntitiesAdapter(private val data: List<Entity>) :
 }
 
 private class EntityViewHolder(context: Context) : ViewHolder(EntityItemView(context)) {
+
+    init {
+        setItemViewLayoutParams()
+    }
 
     fun setEntity(entity: Entity) {
         (itemView as EntityItemView).setEntity(entity)

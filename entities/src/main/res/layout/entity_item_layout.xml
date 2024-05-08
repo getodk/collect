@@ -3,17 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:paddingHorizontal="@dimen/margin_standard"
     android:paddingTop="@dimen/margin_standard">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/label"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAppearance="?textAppearanceBodyLarge"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/offline_pill"
         tools:text="Label" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -24,5 +26,13 @@
         android:textAppearance="?textAppearanceBodyMedium"
         app:layout_constraintTop_toBottomOf="@id/label"
         tools:text="property1: value1, property2: value2" />
+
+    <org.odk.collect.material.MaterialPill
+        android:id="@+id/offline_pill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/label"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
