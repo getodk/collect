@@ -33,7 +33,8 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
                         entity.id,
                         entity.label ?: existing.label,
                         version = entity.version,
-                        properties = mergeProperties(existing, entity)
+                        properties = mergeProperties(existing, entity),
+                        offline = entity.offline
                     )
                 )
             } else {
@@ -56,6 +57,12 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         }
 
         writeJson(existing)
+    }
+
+    override fun delete(id: String) {
+        val existing = readEntities()
+        existing.removeIf { it.id == id }
+        writeEntities(existing)
     }
 
     private fun writeEntities(entities: MutableList<Entity>) {
@@ -120,8 +127,9 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
     private data class JsonEntity(
         val id: String,
         val label: String?,
-        val version: Int = 1,
-        val properties: Map<String, String>
+        val version: Int,
+        val properties: Map<String, String>,
+        val offline: Boolean
     )
 
     private fun JsonEntity.toEntity(dataset: String): Entity {
@@ -130,7 +138,8 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             this.id,
             this.label,
             this.version,
-            this.properties.entries.map { Pair(it.key, it.value) }
+            this.properties.entries.map { Pair(it.key, it.value) },
+            this.offline
         )
     }
 
@@ -139,7 +148,8 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             this.id,
             this.label,
             this.version,
-            this.properties.toMap()
+            this.properties.toMap(),
+            this.offline
         )
     }
 }

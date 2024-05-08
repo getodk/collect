@@ -46,13 +46,24 @@ object LocalEntityUseCases {
                         }
                     }
 
-                entities + Entity(dataset, id, label, version, properties)
+                entities + Entity(dataset, id, label, version, properties, offline = false)
+            } else if (existing.offline) {
+                entities + existing.copy(offline = false)
             } else {
                 entities
             }
         }
 
         if (newAndUpdated.isNotEmpty()) {
+            localEntities.values.forEach { localEntity ->
+                if (!localEntity.offline) {
+                    val noLongerExists = newAndUpdated.toList().none { localEntity.id == it.id }
+                    if (noLongerExists) {
+                        entitiesRepository.delete(localEntity.id)
+                    }
+                }
+            }
+
             entitiesRepository.save(*newAndUpdated)
         }
     }

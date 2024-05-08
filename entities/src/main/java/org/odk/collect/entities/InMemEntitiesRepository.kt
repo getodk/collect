@@ -22,6 +22,10 @@ class InMemEntitiesRepository : EntitiesRepository {
         datasets.add(dataset)
     }
 
+    override fun delete(id: String) {
+        entities.removeIf { it.id == id }
+    }
+
     override fun save(vararg entities: Entity) {
         entities.forEach { entity ->
             datasets.add(entity.dataset)
@@ -35,7 +39,8 @@ class InMemEntitiesRepository : EntitiesRepository {
                         entity.id,
                         entity.label ?: existing.label,
                         version = entity.version,
-                        properties = mergeProperties(existing, entity)
+                        properties = mergeProperties(existing, entity),
+                        offline = entity.offline
                     )
                 )
             } else {

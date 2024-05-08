@@ -20,7 +20,7 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2)))
+        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, offline = false)))
     }
 
     @Test
@@ -30,7 +30,7 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2)))
+        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, offline = false)))
     }
 
     @Test
@@ -40,7 +40,7 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2)))
+        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, offline = false)))
     }
 
     @Test
@@ -53,7 +53,7 @@ class LocalEntityUseCasesTest {
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
-            containsInAnyOrder(Entity("songs", "noah", "Noah", 3))
+            containsInAnyOrder(Entity("songs", "noah", "Noah", 3, offline = false))
         )
     }
 
@@ -67,7 +67,16 @@ class LocalEntityUseCasesTest {
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
-            containsInAnyOrder(Entity("songs", "noah", "Noah", 2, listOf(Pair("length", "4:58"))))
+            containsInAnyOrder(
+                Entity(
+                    "songs",
+                    "noah",
+                    "Noah",
+                    2,
+                    listOf(Pair("length", "4:58")),
+                    offline = false
+                )
+            )
         )
     }
 
@@ -115,7 +124,7 @@ class LocalEntityUseCasesTest {
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
-            containsInAnyOrder(Entity("songs", "cathedrals", label = ""))
+            containsInAnyOrder(Entity("songs", "cathedrals", label = "", offline = false))
         )
     }
 
@@ -149,17 +158,46 @@ class LocalEntityUseCasesTest {
         assertThat(
             songs,
             containsInAnyOrder(
-                Entity("songs", "cathedrals", "Cathedrals"),
+                Entity("songs", "cathedrals", "Cathedrals", offline = false),
                 Entity("songs", "noah", "Noah")
             )
         )
     }
 
     @Test
+    fun `updateLocalEntities removes offline entity that was in online list, but isn't any longer`() {
+        entitiesRepository.save(Entity("songs", "cathedrals", "Cathedrals"))
+
+        val firstCsv = createEntityList(Entity("songs", "cathedrals", "Cathedrals"))
+        LocalEntityUseCases.updateLocalEntities("songs", firstCsv, entitiesRepository)
+
+        val secondCsv = createEntityList(Entity("songs", "noah", "Noah"))
+        LocalEntityUseCases.updateLocalEntities("songs", secondCsv, entitiesRepository)
+
+        val songs = entitiesRepository.getEntities("songs")
+        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", offline = false)))
+    }
+
+    @Test
+    fun `updateLocalEntities removes offline entity that was updated in online list, but isn't any longer`() {
+        entitiesRepository.save(Entity("songs", "cathedrals", "Cathedrals", version = 1))
+
+        val firstCsv =
+            createEntityList(Entity("songs", "cathedrals", "Cathedrals (A Song)", version = 2))
+        LocalEntityUseCases.updateLocalEntities("songs", firstCsv, entitiesRepository)
+
+        val secondCsv = createEntityList(Entity("songs", "noah", "Noah"))
+        LocalEntityUseCases.updateLocalEntities("songs", secondCsv, entitiesRepository)
+
+        val songs = entitiesRepository.getEntities("songs")
+        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", offline = false)))
+    }
+
+    @Test
     fun `updateLocalEntities accesses entities repo only once when not saving new entities`() {
         val entities = arrayOf(
-            Entity("songs", "noah", "Noah"),
-            Entity("songs", "seven-trumpets", "Seven Trumpets")
+            Entity("songs", "noah", "Noah", offline = false),
+            Entity("songs", "seven-trumpets", "Seven Trumpets", offline = false)
         )
 
         entitiesRepository.save(*entities)
@@ -232,5 +270,10 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
     override fun addDataset(dataset: String) {
         accesses += 1
         wrapped.addDataset(dataset)
+    }
+
+    override fun delete(id: String) {
+        accesses += 1
+        wrapped.delete(id)
     }
 }

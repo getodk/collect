@@ -90,6 +90,20 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `save() updates offline on existing entity`() {
+        val repository = buildSubject()
+
+        val wine = Entity("wines", "1", "Léoville Barton 2008", offline = true)
+        repository.save(wine)
+
+        val updatedWine = wine.copy(offline = false)
+        repository.save(updatedWine)
+
+        val wines = repository.getEntities("wines")
+        assertThat(wines, contains(updatedWine))
+    }
+
+    @Test
     fun `save() adds new properties`() {
         val repository = buildSubject()
 
@@ -204,5 +218,18 @@ abstract class EntitiesRepositoryTest {
         repository.addDataset("wine")
         assertThat(repository.getDatasets(), containsInAnyOrder("wine"))
         assertThat(repository.getEntities("wine").size, equalTo(0))
+    }
+
+    @Test
+    fun `delete() removes an entity`() {
+        val repository = buildSubject()
+
+        val leoville = Entity("wines", "1", "Léoville Barton 2008")
+        val canet = Entity("wines", "2", "Pontet-Canet 2014")
+        repository.save(leoville, canet)
+
+        repository.delete("1")
+
+        assertThat(repository.getEntities("wines"), containsInAnyOrder(canet))
     }
 }
