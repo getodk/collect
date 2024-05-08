@@ -32,19 +32,22 @@ import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.R;
-import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.layers.OfflineMapLayersPicker;
+import org.odk.collect.maps.layers.OfflineMapLayersPickerViewModel;
 import org.odk.collect.maps.markers.MarkerDescription;
 import org.odk.collect.maps.markers.MarkerIconDescription;
 import org.odk.collect.strings.localization.LocalizedActivity;
+import org.odk.collect.webpage.ExternalWebPageHelper;
 
 import java.text.DecimalFormat;
 
@@ -84,7 +87,10 @@ public class GeoPointMapActivity extends LocalizedActivity {
     MapFragmentFactory mapFragmentFactory;
 
     @Inject
-    ReferenceLayerSettingsNavigator referenceLayerSettingsNavigator;
+    OfflineMapLayersPickerViewModel.Factory viewModelFactory;
+
+    @Inject
+    ExternalWebPageHelper externalWebPageHelper;
 
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
@@ -127,6 +133,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(MapFragment.class, () -> (Fragment) mapFragmentFactory.createMapFragment())
+                .forClass(OfflineMapLayersPicker.class, () -> new OfflineMapLayersPicker(viewModelFactory, externalWebPageHelper))
                 .build()
         );
 
@@ -229,7 +236,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         // Menu Layer Toggle
         findViewById(R.id.layer_menu).setOnClickListener(v -> {
-            referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(this);
+            DialogFragmentUtils.showIfNotShowing(OfflineMapLayersPicker.class, getSupportFragmentManager());
         });
 
         clearButton = findViewById(R.id.clear);

@@ -40,7 +40,6 @@ import org.odk.collect.geo.Constants;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.R;
-import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.location.Location;
 import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.maps.LineDescription;
@@ -48,7 +47,10 @@ import org.odk.collect.maps.MapConsts;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.layers.OfflineMapLayersPicker;
+import org.odk.collect.maps.layers.OfflineMapLayersPickerViewModel;
 import org.odk.collect.strings.localization.LocalizedActivity;
+import org.odk.collect.webpage.ExternalWebPageHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +86,10 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     LocationTracker locationTracker;
 
     @Inject
-    ReferenceLayerSettingsNavigator referenceLayerSettingsNavigator;
+    OfflineMapLayersPickerViewModel.Factory viewModelFactory;
+
+    @Inject
+    ExternalWebPageHelper externalWebPageHelper;
 
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
@@ -141,6 +146,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
         getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(MapFragment.class, () -> (Fragment) mapFragmentFactory.createMapFragment())
+                .forClass(OfflineMapLayersPicker.class, () -> new OfflineMapLayersPicker(viewModelFactory, externalWebPageHelper))
                 .build()
         );
 
@@ -252,7 +258,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         recordButton.setOnClickListener(v -> recordPoint(map.getGpsLocation()));
 
         findViewById(R.id.layers).setOnClickListener(v -> {
-            referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(this);
+            DialogFragmentUtils.showIfNotShowing(OfflineMapLayersPicker.class, getSupportFragmentManager());
         });
 
         zoomButton = findViewById(R.id.zoom);
@@ -288,7 +294,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         map.setLongPressListener(this::onClick);
         map.setGpsLocationEnabled(true);
         map.setGpsLocationListener(this::onGpsLocation);
-        
+
         if (!map.hasCenter()) {
             if (!points.isEmpty()) {
                 map.zoomToBoundingBox(points, 0.6, false);
