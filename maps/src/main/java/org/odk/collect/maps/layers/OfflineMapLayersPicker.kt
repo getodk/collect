@@ -31,6 +31,9 @@ class OfflineMapLayersPicker(
         offlineMapLayersPickerBinding = OfflineMapLayersPickerBinding.inflate(inflater)
 
         viewModel.data.observe(this) { data ->
+            offlineMapLayersPickerBinding.progressIndicator.visibility = View.GONE
+            offlineMapLayersPickerBinding.layers.visibility = View.VISIBLE
+
             val offlineMapLayersAdapter = OfflineMapLayersAdapter(data.first, data.second)
             offlineMapLayersPickerBinding.layers.setAdapter(offlineMapLayersAdapter)
         }
