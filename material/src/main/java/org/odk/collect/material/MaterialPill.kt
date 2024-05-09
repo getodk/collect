@@ -39,7 +39,11 @@ open class MaterialPill(context: Context, attrs: AttributeSet?) :
 
         context.withStyledAttributes(attrs, R.styleable.MaterialPill) {
             text = getString(R.styleable.MaterialPill_text)
-            setIcon(getResourceId(R.styleable.MaterialPill_icon, 0))
+
+            val iconId = getResourceId(R.styleable.MaterialPill_icon, -1)
+            if (iconId != -1) {
+                setIcon(iconId)
+            }
         }
     }
 
