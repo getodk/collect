@@ -12,7 +12,7 @@
         android:id="@+id/label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="?textAppearanceBodyLarge"
+        android:textAppearance="?textAppearanceTitleMedium"
         app:layout_constraintEnd_toStartOf="@id/offline_pill"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
