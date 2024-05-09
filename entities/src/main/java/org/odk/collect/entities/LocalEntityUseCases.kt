@@ -16,10 +16,12 @@ object LocalEntityUseCases {
             return
         }
 
-        val localEntities = entitiesRepository.getEntities(dataset).associateBy { it.id }
-        val listItems = root.getChildrenWithName("item")
+        val localEntities = entitiesRepository.getEntities(dataset)
+        val serverEntities = root.getChildrenWithName("item")
 
-        val newLocal = listItems.fold(arrayOf<Entity>()) { entities, item ->
+        val accumulator =
+            Pair(arrayOf<Entity>(), localEntities.associateBy { it.id }.toMutableMap())
+        val (newAndUpdated, missingFromServer) = serverEntities.fold(accumulator) { (new, missing), item ->
             val id = item.getFirstChild(EntityItemElement.ID)?.value?.value as? String
             val label = item.getFirstChild(EntityItemElement.LABEL)?.value?.value as? String
             val version =
@@ -28,7 +30,7 @@ object LocalEntityUseCases {
                 return
             }
 
-            val existing = localEntities[id]
+            val existing = missing.remove(id)
             if (existing == null || existing.version < version) {
                 val properties = 0.until(item.numChildren)
                     .fold(emptyList<Pair<String, String>>()) { properties, index ->
@@ -46,23 +48,21 @@ object LocalEntityUseCases {
                         }
                     }
 
-                entities + Entity(dataset, id, label, version, properties, offline = false)
+                val entity = Entity(dataset, id, label, version, properties, offline = false)
+                Pair(new + entity, missing)
             } else if (existing.offline) {
-                entities + existing.copy(offline = false)
+                Pair(new + existing.copy(offline = false), missing)
             } else {
-                entities + existing
+                Pair(new, missing)
             }
         }
 
-        localEntities.values.forEach { localEntity ->
-            if (!localEntity.offline) {
-                val noLongerExists = newLocal.toList().none { localEntity.id == it.id }
-                if (noLongerExists) {
-                    entitiesRepository.delete(localEntity.id)
-                }
+        missingFromServer.values.forEach {
+            if (!it.offline) {
+                entitiesRepository.delete(it.id)
             }
         }
 
-        entitiesRepository.save(*newLocal)
+        entitiesRepository.save(*newAndUpdated)
     }
 }
