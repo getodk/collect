@@ -186,44 +186,39 @@ class LocalEntityUseCasesTest {
             createEntityList(Entity("songs", "cathedrals", "Cathedrals (A Song)", version = 2))
         LocalEntityUseCases.updateLocalEntities("songs", firstCsv, entitiesRepository)
 
-        val secondCsv = createEntityList(Entity("songs", "noah", "Noah"))
+        val secondCsv = createEntityList()
         LocalEntityUseCases.updateLocalEntities("songs", secondCsv, entitiesRepository)
 
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", offline = false)))
-    }
-
-    @Test
-    fun `updateLocalEntities accesses entities repo only once when not saving new entities`() {
-        val entities = arrayOf(
-            Entity("songs", "noah", "Noah", offline = false),
-            Entity("songs", "seven-trumpets", "Seven Trumpets", offline = false)
-        )
-
-        entitiesRepository.save(*entities)
-        val csv = createEntityList(*entities)
-
-        val entitiesRepository = MeasurableEntitiesRepository(entitiesRepository)
-        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
-        assertThat(entitiesRepository.accesses, equalTo(1))
+        assertThat(songs.isEmpty(), equalTo(true))
     }
 
     private fun createEntityList(vararg entities: Entity): File {
-        val header = listOf(
-            EntityItemElement.ID,
-            EntityItemElement.LABEL,
-            EntityItemElement.VERSION
-        ) + entities[0].properties.map { it.first }
+        if (entities.isNotEmpty()) {
+            val header = listOf(
+                EntityItemElement.ID,
+                EntityItemElement.LABEL,
+                EntityItemElement.VERSION
+            ) + entities[0].properties.map { it.first }
 
-        val rows = entities.map { entity ->
-            listOf(
-                entity.id,
-                entity.label,
-                entity.version.toString()
-            ) + entity.properties.map { it.second }
-        }.toTypedArray()
+            val rows = entities.map { entity ->
+                listOf(
+                    entity.id,
+                    entity.label,
+                    entity.version.toString()
+                ) + entity.properties.map { it.second }
+            }.toTypedArray()
 
-        return createCsv(header, *rows)
+            return createCsv(header, *rows)
+        } else {
+            val header = listOf(
+                EntityItemElement.ID,
+                EntityItemElement.LABEL,
+                EntityItemElement.VERSION
+            )
+
+            return createCsv(header)
+        }
     }
 
     private fun createCsv(header: List<String>, vararg rows: List<String?>): File {
