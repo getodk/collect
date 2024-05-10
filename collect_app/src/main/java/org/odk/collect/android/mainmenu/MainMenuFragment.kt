@@ -27,6 +27,7 @@ import org.odk.collect.android.projects.ProjectIconView
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ActionRegister
 import org.odk.collect.android.utilities.ApplicationConstants
+import org.odk.collect.androidshared.data.consume
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
@@ -86,12 +87,8 @@ class MainMenuFragment(
             )
         }
 
-        mainMenuViewModel.savedForm.observe(viewLifecycleOwner) {
-            val value = it.value
-
-            if (value != null && !it.isConsumed()) {
-                it.consume()
-
+        mainMenuViewModel.savedForm.consume(viewLifecycleOwner) { value ->
+            if (value != null) {
                 SnackbarUtils.showLongSnackbar(
                     requireView(),
                     getString(value.second),
