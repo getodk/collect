@@ -2,7 +2,6 @@ package org.odk.collect.android.mainmenu
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -45,8 +44,9 @@ class MainMenuFragment(
     private lateinit var permissionsViewModel: RequestPermissionsViewModel
 
     private val formEntryFlowLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            displayFormSavedSnackbar(it.data?.data)
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val uri = result.data?.data
+            mainMenuViewModel.setSavedForm(uri)
         }
 
     override fun onAttach(context: Context) {
@@ -84,6 +84,30 @@ class MainMenuFragment(
                 PermissionsDialogFragment::class.java,
                 this.parentFragmentManager
             )
+        }
+
+        mainMenuViewModel.savedForm.observe(viewLifecycleOwner) {
+            val value = it.value
+
+            if (value != null && !it.isConsumed()) {
+                it.consume()
+
+                SnackbarUtils.showLongSnackbar(
+                    requireView(),
+                    getString(value.second),
+                    action = value.third?.let { action ->
+                        SnackbarUtils.Action(getString(action)) {
+                            formEntryFlowLauncher.launch(
+                                FormFillingIntentFactory.editInstanceIntent(
+                                    requireContext(),
+                                    value.first
+                                )
+                            )
+                        }
+                    },
+                    displayDismissButton = true
+                )
+            }
         }
     }
 
@@ -241,32 +265,6 @@ class MainMenuFragment(
             }
         } else {
             binding.googleDriveDeprecationBanner.root.visibility = View.GONE
-        }
-    }
-
-    private fun displayFormSavedSnackbar(uri: Uri?) {
-        if (uri == null) {
-            return
-        }
-
-        val formSavedSnackbarDetails = mainMenuViewModel.getFormSavedSnackbarDetails(uri)
-
-        formSavedSnackbarDetails?.let {
-            SnackbarUtils.showLongSnackbar(
-                requireView(),
-                getString(it.first),
-                action = it.second?.let { action ->
-                    SnackbarUtils.Action(getString(action)) {
-                        formEntryFlowLauncher.launch(
-                            FormFillingIntentFactory.editInstanceIntent(
-                                requireContext(),
-                                uri
-                            )
-                        )
-                    }
-                },
-                displayDismissButton = true
-            )
         }
     }
 }

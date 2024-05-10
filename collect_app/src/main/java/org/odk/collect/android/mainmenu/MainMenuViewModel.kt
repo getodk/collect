@@ -3,7 +3,9 @@ package org.odk.collect.android.mainmenu
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
@@ -15,6 +17,7 @@ import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.settings.SettingsProvider
@@ -42,7 +45,10 @@ class MainMenuViewModel(
             var commitDescription = ""
             if (versionInformation.commitCount != null) {
                 commitDescription =
-                    appendToCommitDescription(commitDescription, versionInformation.commitCount.toString())
+                    appendToCommitDescription(
+                        commitDescription,
+                        versionInformation.commitCount.toString()
+                    )
             }
             if (versionInformation.commitSHA != null) {
                 commitDescription =
@@ -58,29 +64,38 @@ class MainMenuViewModel(
             }
         }
 
+    private val _savedForm = MutableLiveData<Triple<Uri, Int, Int?>?>()
+    val savedForm: LiveData<Consumable<Triple<Uri, Int, Int?>?>> = _savedForm.map { Consumable(it) }
+
     fun shouldEditSavedFormButtonBeVisible(): Boolean {
-        return settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
+        return settingsProvider.getProtectedSettings()
+            .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
     }
 
     fun shouldSendFinalizedFormButtonBeVisible(): Boolean {
-        return settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SEND_FINALIZED)
+        return settingsProvider.getProtectedSettings()
+            .getBoolean(ProtectedProjectKeys.KEY_SEND_FINALIZED)
     }
 
     fun shouldViewSentFormButtonBeVisible(): Boolean {
-        return settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT)
+        return settingsProvider.getProtectedSettings()
+            .getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT)
     }
 
     fun shouldGetBlankFormButtonBeVisible(): Boolean {
-        val buttonEnabled = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_GET_BLANK)
+        val buttonEnabled =
+            settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_GET_BLANK)
         return !isMatchExactlyEnabled() && buttonEnabled
     }
 
     fun shouldDeleteSavedFormButtonBeVisible(): Boolean {
-        return settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_DELETE_SAVED)
+        return settingsProvider.getProtectedSettings()
+            .getBoolean(ProtectedProjectKeys.KEY_DELETE_SAVED)
     }
 
     private fun isMatchExactlyEnabled(): Boolean {
-        return settingsProvider.getUnprotectedSettings().getFormUpdateMode(application) == FormUpdateMode.MATCH_EXACTLY
+        return settingsProvider.getUnprotectedSettings()
+            .getFormUpdateMode(application) == FormUpdateMode.MATCH_EXACTLY
     }
 
     private fun appendToCommitDescription(commitDescription: String, part: String): String {
@@ -114,7 +129,8 @@ class MainMenuViewModel(
             val message = if (instance.isDraft()) {
                 org.odk.collect.strings.R.string.form_saved_as_draft
             } else if (instance.status == Instance.STATUS_COMPLETE || instance.status == Instance.STATUS_SUBMISSION_FAILED) {
-                val form = formsRepositoryProvider.get().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
+                val form = formsRepositoryProvider.get()
+                    .getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
                 if (form.shouldFormBeSentAutomatically(autoSendSettingsProvider.isAutoSendEnabledInSettings())) {
                     org.odk.collect.strings.R.string.form_sending
                 } else {
@@ -137,6 +153,19 @@ class MainMenuViewModel(
             return Pair(message, action)
         } else {
             null
+        }
+    }
+
+    fun setSavedForm(uri: Uri?) {
+        if (uri == null) {
+            return
+        }
+
+        scheduler.immediate {
+            val details = getFormSavedSnackbarDetails(uri)
+            if (details != null) {
+                _savedForm.postValue(Triple(uri, details.first, details.second))
+            }
         }
     }
 }
