@@ -30,8 +30,8 @@ class EntitiesFragment(private val viewModelFactory: ViewModelProvider.Factory) 
         val binding = ListLayoutBinding.bind(view)
         binding.list.layoutManager = LinearLayoutManager(requireContext())
 
-        val dataset = EntitiesFragmentArgs.fromBundle(requireArguments()).dataset
-        entitiesViewModel.getEntities(dataset).observe(viewLifecycleOwner) {
+        val list = EntitiesFragmentArgs.fromBundle(requireArguments()).list
+        entitiesViewModel.getEntities(list).observe(viewLifecycleOwner) {
             binding.list.adapter = EntitiesAdapter(it)
         }
     }

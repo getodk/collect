@@ -23,8 +23,8 @@ class JsonFileEntitiesRepositoryTest : EntitiesRepositoryTest() {
 
         val entity = Entity("stuff", "1", "A thing")
         one.save(entity)
-        assertThat(two.getDatasets(), contains("stuff"))
+        assertThat(two.getLists(), contains("stuff"))
         assertThat(two.getEntities("stuff"), contains(entity))
-        assertThat(three.getDatasets().size, equalTo(0))
+        assertThat(three.getLists().size, equalTo(0))
     }
 }

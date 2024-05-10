@@ -1,7 +1,7 @@
 package org.odk.collect.entities
 
 data class Entity @JvmOverloads constructor(
-    val dataset: String,
+    val list: String,
     val id: String,
     val label: String?,
     val version: Int = 1,

@@ -55,7 +55,7 @@ internal class LocalEntitiesFileInstanceParser(private val entitiesRepositoryPro
 
     override fun isSupported(instanceId: String, instanceSrc: String): Boolean {
         val entitiesRepository = entitiesRepositoryProvider()
-        return entitiesRepository.getDatasets().contains(instanceId)
+        return entitiesRepository.getLists().contains(instanceId)
     }
 
     private fun addChild(

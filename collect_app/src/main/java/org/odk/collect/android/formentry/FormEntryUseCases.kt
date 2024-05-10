@@ -160,7 +160,7 @@ object FormEntryUseCases {
     ) {
         formController.finalizeForm()
         formController.getEntities().forEach { entity ->
-            if (entitiesRepository.getDatasets().contains(entity.dataset)) {
+            if (entitiesRepository.getLists().contains(entity.list)) {
                 entitiesRepository.save(entity)
             }
         }

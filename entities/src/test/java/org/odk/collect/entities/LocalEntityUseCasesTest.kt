@@ -89,7 +89,7 @@ class LocalEntityUseCasesTest {
             )
 
         LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
-        assertThat(entitiesRepository.getDatasets().size, equalTo(0))
+        assertThat(entitiesRepository.getLists().size, equalTo(0))
     }
 
     @Test
@@ -101,7 +101,7 @@ class LocalEntityUseCasesTest {
             )
 
         LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
-        assertThat(entitiesRepository.getDatasets().size, equalTo(0))
+        assertThat(entitiesRepository.getLists().size, equalTo(0))
     }
 
     @Test
@@ -113,7 +113,7 @@ class LocalEntityUseCasesTest {
             )
 
         LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
-        assertThat(entitiesRepository.getDatasets().size, equalTo(0))
+        assertThat(entitiesRepository.getLists().size, equalTo(0))
     }
 
     @Test
@@ -133,7 +133,7 @@ class LocalEntityUseCasesTest {
         val file = TempFiles.createTempFile(".xml")
 
         LocalEntityUseCases.updateLocalEntities("songs", file, entitiesRepository)
-        assertThat(entitiesRepository.getDatasets().size, equalTo(0))
+        assertThat(entitiesRepository.getLists().size, equalTo(0))
     }
 
     @Test
@@ -247,14 +247,14 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         wrapped.save(*entities)
     }
 
-    override fun getDatasets(): Set<String> {
+    override fun getLists(): Set<String> {
         accesses += 1
-        return wrapped.getDatasets()
+        return wrapped.getLists()
     }
 
-    override fun getEntities(dataset: String): List<Entity> {
+    override fun getEntities(list: String): List<Entity> {
         accesses += 1
-        return wrapped.getEntities(dataset)
+        return wrapped.getEntities(list)
     }
 
     override fun clear() {
@@ -262,9 +262,9 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         wrapped.clear()
     }
 
-    override fun addDataset(dataset: String) {
+    override fun addList(list: String) {
         accesses += 1
-        wrapped.addDataset(dataset)
+        wrapped.addList(list)
     }
 
     override fun delete(id: String) {

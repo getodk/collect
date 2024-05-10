@@ -2,23 +2,23 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
-    app:startDestination="@id/datasets">
+    app:startDestination="@id/lists">
 
     <fragment
-        android:id="@+id/datasets"
-        android:name="org.odk.collect.entities.DatasetsFragment"
+        android:id="@+id/lists"
+        android:name="org.odk.collect.entities.EntityListsFragment"
         android:label="@string/entities_title">
         <action
-            android:id="@+id/datasets_to_entities"
+            android:id="@+id/lists_to_entities"
             app:destination="@id/entities" />
     </fragment>
 
     <fragment
         android:id="@+id/entities"
         android:name="org.odk.collect.entities.EntitiesFragment"
-        android:label="{dataset}">
+        android:label="{list}">
         <argument
-            android:name="dataset"
+            android:name="list"
             app:argType="string" />
     </fragment>
 </navigation>

@@ -10,19 +10,19 @@ class EntitiesViewModel(
     private val entitiesRepository: EntitiesRepository
 ) : ViewModel() {
 
-    private val _datasets = MutableLiveData<List<String>>(emptyList())
-    val datasets: LiveData<List<String>> = _datasets
+    private val _lists = MutableLiveData<List<String>>(emptyList())
+    val lists: LiveData<List<String>> = _lists
 
     init {
         scheduler.immediate {
-            _datasets.postValue(entitiesRepository.getDatasets().toList())
+            _lists.postValue(entitiesRepository.getLists().toList())
         }
     }
 
-    fun getEntities(dataset: String): LiveData<List<Entity>> {
+    fun getEntities(list: String): LiveData<List<Entity>> {
         val result = MutableLiveData<List<Entity>>(emptyList())
         scheduler.immediate {
-            result.postValue(entitiesRepository.getEntities(dataset))
+            result.postValue(entitiesRepository.getEntities(list))
         }
 
         return result
@@ -31,14 +31,14 @@ class EntitiesViewModel(
     fun clearAll() {
         scheduler.immediate {
             entitiesRepository.clear()
-            _datasets.postValue(entitiesRepository.getDatasets().toList())
+            _lists.postValue(entitiesRepository.getLists().toList())
         }
     }
 
     fun addEntityList(name: String) {
         scheduler.immediate {
-            entitiesRepository.addDataset(name)
-            _datasets.postValue(entitiesRepository.getDatasets().toList())
+            entitiesRepository.addList(name)
+            _lists.postValue(entitiesRepository.getLists().toList())
         }
     }
 }

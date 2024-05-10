@@ -20,10 +20,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.entities.databinding.AddEntitiesDialogLayoutBinding
-import org.odk.collect.entities.databinding.DatasetItemLayoutBinding
+import org.odk.collect.entities.databinding.EntityListItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding
 
-class DatasetsFragment(
+class EntityListsFragment(
     private val viewModelFactory: ViewModelProvider.Factory,
     private val menuHost: () -> MenuHost
 ) : Fragment() {
@@ -42,23 +42,23 @@ class DatasetsFragment(
         val binding = ListLayoutBinding.bind(view)
         binding.list.layoutManager = LinearLayoutManager(requireContext())
 
-        entitiesViewModel.datasets.observe(viewLifecycleOwner) {
-            binding.list.adapter = DatasetsAdapter(it, findNavController())
+        entitiesViewModel.lists.observe(viewLifecycleOwner) {
+            binding.list.adapter = ListsAdapter(it, findNavController())
         }
 
         menuHost().addMenuProvider(
-            DatasetsMenuProvider(entitiesViewModel, requireContext()),
+            ListsMenuProvider(entitiesViewModel, requireContext()),
             viewLifecycleOwner
         )
     }
 }
 
-private class DatasetsMenuProvider(
+private class ListsMenuProvider(
     private val entitiesViewModel: EntitiesViewModel,
     private val context: Context
 ) : MenuProvider {
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.datasets, menu)
+        menuInflater.inflate(R.menu.entity_lists, menu)
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -84,40 +84,40 @@ private class DatasetsMenuProvider(
     }
 }
 
-private class DatasetsAdapter(
+private class ListsAdapter(
     private val data: List<String>,
     private val navController: NavController
-) : RecyclerView.Adapter<DatasetViewHolder>() {
+) : RecyclerView.Adapter<ListViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, position: Int): DatasetViewHolder {
-        return DatasetViewHolder(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, position: Int): ListViewHolder {
+        return ListViewHolder(parent)
     }
 
     override fun getItemCount(): Int {
         return data.size
     }
 
-    override fun onBindViewHolder(viewHolder: DatasetViewHolder, position: Int) {
-        val dataset = data[position]
-        viewHolder.setDataset(dataset)
+    override fun onBindViewHolder(viewHolder: ListViewHolder, position: Int) {
+        val list = data[position]
+        viewHolder.setList(list)
         viewHolder.itemView.setOnClickListener {
             navController.navigate(
-                R.id.datasets_to_entities,
-                EntitiesFragmentArgs(dataset).toBundle()
+                R.id.lists_to_entities,
+                EntitiesFragmentArgs(list).toBundle()
             )
         }
     }
 }
 
-private class DatasetViewHolder(parent: ViewGroup) : ViewHolder(
-    DatasetItemLayoutBinding.inflate(
+private class ListViewHolder(parent: ViewGroup) : ViewHolder(
+    EntityListItemLayoutBinding.inflate(
         LayoutInflater.from(parent.context),
         parent,
         false
     ).root
 ) {
 
-    fun setDataset(dataset: String) {
-        DatasetItemLayoutBinding.bind(itemView).name.text = dataset
+    fun setList(list: String) {
+        EntityListItemLayoutBinding.bind(itemView).name.text = list
     }
 }

@@ -11,19 +11,19 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
 
     private val entitiesFile = File(directory, "entities.json")
 
-    override fun getDatasets(): Set<String> {
+    override fun getLists(): Set<String> {
         return readJson().keys
     }
 
-    override fun getEntities(dataset: String): List<Entity> {
-        return readEntities().filter { it.dataset == dataset }
+    override fun getEntities(list: String): List<Entity> {
+        return readEntities().filter { it.list == list }
     }
 
     override fun save(vararg entities: Entity) {
         val storedEntities = readEntities()
 
         entities.forEach { entity ->
-            val existing = storedEntities.find { it.id == entity.id && it.dataset == entity.dataset }
+            val existing = storedEntities.find { it.id == entity.id && it.list == entity.list }
 
             if (existing != null) {
                 val offline = if (existing.offline) {
@@ -35,7 +35,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
                 storedEntities.remove(existing)
                 storedEntities.add(
                     Entity(
-                        entity.dataset,
+                        entity.list,
                         entity.id,
                         entity.label ?: existing.label,
                         version = entity.version,
@@ -56,10 +56,10 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         entitiesFile.delete()
     }
 
-    override fun addDataset(dataset: String) {
+    override fun addList(list: String) {
         val existing = readJson()
-        if (!existing.containsKey(dataset)) {
-            existing[dataset] = mutableListOf()
+        if (!existing.containsKey(list)) {
+            existing[list] = mutableListOf()
         }
 
         writeJson(existing)
@@ -74,7 +74,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
     private fun writeEntities(entities: MutableList<Entity>) {
         val map = mutableMapOf<String, MutableList<JsonEntity>>()
         entities.forEach {
-            map.getOrPut(it.dataset) { mutableListOf() }.add(it.toJson())
+            map.getOrPut(it.list) { mutableListOf() }.add(it.toJson())
         }
 
         writeJson(map)

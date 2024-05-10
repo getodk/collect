@@ -7,23 +7,23 @@ import java.io.File
 object LocalEntityUseCases {
 
     fun updateLocalEntities(
-        dataset: String,
+        list: String,
         onlineList: File,
         entitiesRepository: EntitiesRepository
     ) {
         val root = try {
-            CsvExternalInstance().parse(dataset, onlineList.absolutePath)
+            CsvExternalInstance().parse(list, onlineList.absolutePath)
         } catch (e: Exception) {
             return
         }
 
-        val localEntities = entitiesRepository.getEntities(dataset)
+        val localEntities = entitiesRepository.getEntities(list)
         val serverEntities = root.getChildrenWithName("item")
 
         val accumulator =
             Pair(arrayOf<Entity>(), localEntities.associateBy { it.id }.toMutableMap())
         val (newAndUpdated, missingFromServer) = serverEntities.fold(accumulator) { (new, missing), item ->
-            val entity = parseEntityFromItem(item, dataset) ?: return
+            val entity = parseEntityFromItem(item, list) ?: return
             val existing = missing.remove(entity.id)
 
             if (existing == null || existing.version < entity.version) {
@@ -46,7 +46,7 @@ object LocalEntityUseCases {
 
     private fun parseEntityFromItem(
         item: TreeElement,
-        dataset: String
+        list: String
     ): Entity? {
         val id = item.getFirstChild(EntityItemElement.ID)?.value?.value as? String
         val label = item.getFirstChild(EntityItemElement.LABEL)?.value?.value as? String
@@ -72,7 +72,7 @@ object LocalEntityUseCases {
                 }
             }
 
-        val entity = Entity(dataset, id, label, version, properties, offline = false)
+        val entity = Entity(list, id, label, version, properties, offline = false)
         return entity
     }
 }
