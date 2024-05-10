@@ -64,8 +64,8 @@ class MainMenuViewModel(
             }
         }
 
-    private val _savedForm = MutableLiveData<Triple<Uri, Int, Int?>?>()
-    val savedForm: LiveData<Consumable<Triple<Uri, Int, Int?>?>> = _savedForm.map { Consumable(it) }
+    private val _savedForm = MutableLiveData<SavedForm>()
+    val savedForm: LiveData<Consumable<SavedForm>> = _savedForm.map { Consumable(it) }
 
     fun shouldEditSavedFormButtonBeVisible(): Boolean {
         return settingsProvider.getProtectedSettings()
@@ -123,7 +123,20 @@ class MainMenuViewModel(
     val sentInstancesCount: LiveData<Int>
         get() = instancesDataService.sentCount
 
-    fun getFormSavedSnackbarDetails(uri: Uri): Pair<Int, Int?>? {
+    fun setSavedForm(uri: Uri?) {
+        if (uri == null) {
+            return
+        }
+
+        scheduler.immediate {
+            val details = getFormSavedSnackbarDetails(uri)
+            if (details != null) {
+                _savedForm.postValue(SavedForm(uri, details.first, details.second))
+            }
+        }
+    }
+
+    private fun getFormSavedSnackbarDetails(uri: Uri): Pair<Int, Int?>? {
         val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
         return if (instance != null) {
             val message = if (instance.isDraft()) {
@@ -156,16 +169,5 @@ class MainMenuViewModel(
         }
     }
 
-    fun setSavedForm(uri: Uri?) {
-        if (uri == null) {
-            return
-        }
-
-        scheduler.immediate {
-            val details = getFormSavedSnackbarDetails(uri)
-            if (details != null) {
-                _savedForm.postValue(Triple(uri, details.first, details.second))
-            }
-        }
-    }
+    data class SavedForm(val uri: Uri, val message: Int, val action: Int?)
 }

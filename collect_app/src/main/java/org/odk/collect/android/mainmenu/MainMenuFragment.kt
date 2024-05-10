@@ -88,23 +88,21 @@ class MainMenuFragment(
         }
 
         mainMenuViewModel.savedForm.consume(viewLifecycleOwner) { value ->
-            if (value != null) {
-                SnackbarUtils.showLongSnackbar(
-                    requireView(),
-                    getString(value.second),
-                    action = value.third?.let { action ->
-                        SnackbarUtils.Action(getString(action)) {
-                            formEntryFlowLauncher.launch(
-                                FormFillingIntentFactory.editInstanceIntent(
-                                    requireContext(),
-                                    value.first
-                                )
+            SnackbarUtils.showLongSnackbar(
+                requireView(),
+                getString(value.message),
+                action = value.action?.let { action ->
+                    SnackbarUtils.Action(getString(action)) {
+                        formEntryFlowLauncher.launch(
+                            FormFillingIntentFactory.editInstanceIntent(
+                                requireContext(),
+                                value.uri
                             )
-                        }
-                    },
-                    displayDismissButton = true
-                )
-            }
+                        )
+                    }
+                },
+                displayDismissButton = true
+            )
         }
     }
 
