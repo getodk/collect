@@ -19,7 +19,7 @@ class LocalEntityUseCasesTest {
         entitiesRepository.save(Entity("songs", "noah", "Noa", 1))
         val csv = createEntityList(Entity("songs", "noah", "Noah", 2))
 
-        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, state = ONLINE)))
     }
@@ -29,7 +29,7 @@ class LocalEntityUseCasesTest {
         entitiesRepository.save(Entity("songs", "noah", "Noah", 2))
         val csv = createEntityList(Entity("songs", "noah", "Noa", 1))
 
-        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, state = ONLINE)))
     }
@@ -39,7 +39,7 @@ class LocalEntityUseCasesTest {
         entitiesRepository.save(Entity("songs", "noah", "Noah", 2))
         val csv = createEntityList(Entity("songs", "noah", "Noa", 2))
 
-        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, state = ONLINE)))
     }
@@ -50,7 +50,7 @@ class LocalEntityUseCasesTest {
         val csv =
             createEntityList(Entity("songs", "noah", "Noah", 2, listOf(Pair("length", "6:38"))))
 
-        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
@@ -64,7 +64,7 @@ class LocalEntityUseCasesTest {
         val csv =
             createEntityList(Entity("songs", "noah", "Noah", 2, listOf(Pair("length", "4:58"))))
 
-        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
@@ -89,7 +89,7 @@ class LocalEntityUseCasesTest {
                 listOf("grisaille", "Grisaille")
             )
 
-        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         assertThat(entitiesRepository.getLists().size, equalTo(0))
     }
 
@@ -101,7 +101,7 @@ class LocalEntityUseCasesTest {
                 listOf("Grisaille", "2")
             )
 
-        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         assertThat(entitiesRepository.getLists().size, equalTo(0))
     }
 
@@ -113,7 +113,7 @@ class LocalEntityUseCasesTest {
                 listOf("grisaille", "2")
             )
 
-        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         assertThat(entitiesRepository.getLists().size, equalTo(0))
     }
 
@@ -121,7 +121,7 @@ class LocalEntityUseCasesTest {
     fun `updateLocalEntities adds online entity when its label is blank`() {
         val csv = createEntityList(Entity("songs", "cathedrals", label = ""))
 
-        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
@@ -133,7 +133,7 @@ class LocalEntityUseCasesTest {
     fun `updateLocalEntities does nothing if passed a non-CSV file`() {
         val file = TempFiles.createTempFile(".xml")
 
-        LocalEntityUseCases.updateLocalEntities("songs", file, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", file, entitiesRepository)
         assertThat(entitiesRepository.getLists().size, equalTo(0))
     }
 
@@ -145,7 +145,7 @@ class LocalEntityUseCasesTest {
         )
 
         val entitiesRepository = MeasurableEntitiesRepository(entitiesRepository)
-        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         assertThat(entitiesRepository.accesses, equalTo(2))
     }
 
@@ -154,7 +154,7 @@ class LocalEntityUseCasesTest {
         entitiesRepository.save(Entity("songs", "noah", "Noah"))
         val csv = createEntityList(Entity("songs", "cathedrals", "Cathedrals"))
 
-        LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
@@ -170,10 +170,10 @@ class LocalEntityUseCasesTest {
         entitiesRepository.save(Entity("songs", "cathedrals", "Cathedrals"))
 
         val firstCsv = createEntityList(Entity("songs", "cathedrals", "Cathedrals"))
-        LocalEntityUseCases.updateLocalEntities("songs", firstCsv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", firstCsv, entitiesRepository)
 
         val secondCsv = createEntityList(Entity("songs", "noah", "Noah"))
-        LocalEntityUseCases.updateLocalEntities("songs", secondCsv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", secondCsv, entitiesRepository)
 
         val songs = entitiesRepository.getEntities("songs")
         assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", state = ONLINE)))
@@ -185,10 +185,10 @@ class LocalEntityUseCasesTest {
 
         val firstCsv =
             createEntityList(Entity("songs", "cathedrals", "Cathedrals (A Song)", version = 2))
-        LocalEntityUseCases.updateLocalEntities("songs", firstCsv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", firstCsv, entitiesRepository)
 
         val secondCsv = createEntityList()
-        LocalEntityUseCases.updateLocalEntities("songs", secondCsv, entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", secondCsv, entitiesRepository)
 
         val songs = entitiesRepository.getEntities("songs")
         assertThat(songs.isEmpty(), equalTo(true))

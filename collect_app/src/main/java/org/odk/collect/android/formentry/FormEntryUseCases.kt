@@ -16,6 +16,7 @@ import org.odk.collect.android.javarosawrapper.JavaRosaFormController
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormUtils
 import org.odk.collect.entities.EntitiesRepository
+import org.odk.collect.entities.LocalEntityUseCases
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
@@ -31,7 +32,8 @@ object FormEntryUseCases {
         formDefCache: FormDefCache
     ): Pair<FormDef, Form>? {
         val form =
-            formsRepository.getAllByFormIdAndVersion(instance.formId, instance.formVersion).firstOrNull()
+            formsRepository.getAllByFormIdAndVersion(instance.formId, instance.formVersion)
+                .firstOrNull()
         return if (form == null) {
             null
         } else {
@@ -159,11 +161,10 @@ object FormEntryUseCases {
         entitiesRepository: EntitiesRepository
     ) {
         formController.finalizeForm()
-        formController.getEntities().forEach { entity ->
-            if (entitiesRepository.getLists().contains(entity.list)) {
-                entitiesRepository.save(entity)
-            }
-        }
+        LocalEntityUseCases.updateLocalEntitiesFromForm(
+            formController.getEntities(),
+            entitiesRepository
+        )
     }
 
     private fun getInstanceFromFormController(

@@ -2,17 +2,29 @@ package org.odk.collect.entities
 
 import org.javarosa.core.model.instance.CsvExternalInstance
 import org.javarosa.core.model.instance.TreeElement
+import org.javarosa.entities.internal.Entities
 import java.io.File
 
 object LocalEntityUseCases {
 
-    fun updateLocalEntities(
+    @JvmStatic
+    fun updateLocalEntitiesFromForm(entities: Entities?, entitiesRepository: EntitiesRepository) {
+        entities?.entities?.forEach {
+            val id = it.id
+            if (id != null && entitiesRepository.getLists().contains(it.dataset)) {
+                val entity = Entity(it.dataset, id, it.label, it.version, it.properties)
+                entitiesRepository.save(entity)
+            }
+        }
+    }
+
+    fun updateLocalEntitiesFromServer(
         list: String,
-        onlineList: File,
+        serverList: File,
         entitiesRepository: EntitiesRepository
     ) {
         val root = try {
-            CsvExternalInstance().parse(list, onlineList.absolutePath)
+            CsvExternalInstance().parse(list, serverList.absolutePath)
         } catch (e: Exception) {
             return
         }
