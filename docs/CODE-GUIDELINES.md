@@ -28,6 +28,29 @@ assertThat(ClassToTest.methodToTest("input"), equalTo("expected"));
 assertThat(ClassToTest.methodReturnsNull(), equalTo(null));
 ```
 
+### Backtick test naming
+
+Tests written in Kotlin should use [backtick enclosed method names](https://kotlinlang.org/docs/coding-conventions.html#names-for-test-methods) and use `#` JavaDoc syntax to refer to an object member's in unit tests:
+
+```kotlin
+@Test
+fun `#getHello returns hello string`() {
+    assertThat(subject.getHello(), equalTo("hello"))
+}
+```
+
+Test naming structure is hard to put strict rules around, but in general conditions ("given") should go after the action ("when") and assertion ("then") in this style of method naming:
+
+```kotlin
+@Test
+fun `#getHello returns goodbye string when subject is angry`() {
+    subject.setAngry(true)
+    assertThat(subject.getHello(), equalTo("goodbye"))
+}
+```
+
+Also, to keep test names short, it's best to avoid words like "should" or "will" (`#getHello should return hello string`) and instead use definitive statements with [third person singular verb conjugations](https://www.grammarly.com/blog/verb-forms/) ("returns", "sets", "fetches" etc).
+
 ## XML style guidelines
 
 Follow these naming conventions in Android XML files:

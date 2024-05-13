@@ -13,7 +13,7 @@ abstract class EntitiesRepositoryTest {
     abstract fun buildSubject(): EntitiesRepository
 
     @Test
-    fun `getLists() returns lists for saved entities`() {
+    fun `#getLists returns lists for saved entities`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008")
@@ -25,7 +25,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `getEntities() returns entities for list`() {
+    fun `#getEntities returns entities for list`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008")
@@ -43,7 +43,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() updates existing entity with matching id`() {
+    fun `#save updates existing entity with matching id`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008", version = 1)
@@ -57,7 +57,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() updates existing entity with matching id and version`() {
+    fun `#save updates existing entity with matching id and version`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008", version = 1)
@@ -71,7 +71,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() does not update existing entity with matching id but not list`() {
+    fun `#save does not update existing entity with matching id but not list`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008")
@@ -90,7 +90,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() updates offline on existing entity when it is false`() {
+    fun `#save updates offline on existing entity when it is false`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008", offline = true)
@@ -104,7 +104,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() does not update offline on existing entity when it is true`() {
+    fun `#save does not update offline on existing entity when it is true`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008", offline = false)
@@ -118,7 +118,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() adds new properties`() {
+    fun `#save adds new properties`() {
         val repository = buildSubject()
 
         val wine = Entity(
@@ -145,7 +145,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() updates existing properties`() {
+    fun `#save updates existing properties`() {
         val repository = buildSubject()
 
         val wine = Entity(
@@ -172,7 +172,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() does not update existing label if new one is null`() {
+    fun `#save does not update existing label if new one is null`() {
         val repository = buildSubject()
 
         val wine = Entity(
@@ -200,7 +200,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `clear() deletes all entities`() {
+    fun `#clear deletes all entities`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008")
@@ -215,7 +215,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() can save multiple entities`() {
+    fun `#save can save multiple entities`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008")
@@ -226,7 +226,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `addList() adds a list with no entities`() {
+    fun `#addList adds a list with no entities`() {
         val repository = buildSubject()
 
         repository.addList("wine")
@@ -235,7 +235,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `delete() removes an entity`() {
+    fun `#delete removes an entity`() {
         val repository = buildSubject()
 
         val leoville = Entity("wines", "1", "Léoville Barton 2008")
