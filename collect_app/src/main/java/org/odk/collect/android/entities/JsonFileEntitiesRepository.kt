@@ -90,25 +90,35 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         StrictMode.noteSlowCall("Reading from JSON file")
 
         if (!entitiesFile.exists()) {
-            entitiesFile.parentFile.mkdirs()
-            entitiesFile.createNewFile()
+            createFile()
         }
 
-        val typeToken = TypeToken.getParameterized(
-            MutableMap::class.java,
-            String::class.java,
-            TypeToken.getParameterized(MutableList::class.java, JsonEntity::class.java).type
-        )
+        try {
+            val typeToken = TypeToken.getParameterized(
+                MutableMap::class.java,
+                String::class.java,
+                TypeToken.getParameterized(MutableList::class.java, JsonEntity::class.java).type
+            )
 
-        val json = entitiesFile.readText()
-        return if (json.isNotBlank()) {
-            val parsedJson =
-                Gson().fromJson<MutableMap<String, MutableList<JsonEntity>>>(json, typeToken.type)
+            val json = entitiesFile.readText()
+            return if (json.isNotBlank()) {
+                val parsedJson =
+                    Gson().fromJson<MutableMap<String, MutableList<JsonEntity>>>(json, typeToken.type)
 
-            parsedJson
-        } else {
-            mutableMapOf()
+                parsedJson
+            } else {
+                mutableMapOf()
+            }
+        } catch (e: Exception) {
+            entitiesFile.delete()
+            createFile()
+            return mutableMapOf()
         }
+    }
+
+    private fun createFile() {
+        entitiesFile.parentFile.mkdirs()
+        entitiesFile.createNewFile()
     }
 
     private fun writeJson(map: MutableMap<String, MutableList<JsonEntity>>) {

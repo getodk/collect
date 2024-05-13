@@ -10,8 +10,11 @@ import org.odk.collect.shared.TempFiles
 import java.io.File
 
 class JsonFileEntitiesRepositoryTest : EntitiesRepositoryTest() {
+
+    private val directory = TempFiles.createTempDir()
+
     override fun buildSubject(): EntitiesRepository {
-        return JsonFileEntitiesRepository(TempFiles.createTempDir())
+        return JsonFileEntitiesRepository(directory)
     }
 
     @Test
@@ -26,5 +29,19 @@ class JsonFileEntitiesRepositoryTest : EntitiesRepositoryTest() {
         assertThat(two.getLists(), contains("stuff"))
         assertThat(two.getEntities("stuff"), contains(entity))
         assertThat(three.getLists().size, equalTo(0))
+    }
+
+    @Test
+    fun `deletes existing backing file if it can't be parsed by current code`() {
+        val repository = buildSubject()
+        repository.getEntities("blah")
+
+        val filesInDir = directory.listFiles()
+        assertThat(filesInDir!!.size, equalTo(1))
+
+        val backingFile = filesInDir[0]
+        backingFile.writeText("blah")
+
+        assertThat(repository.getEntities("blah").size, equalTo(0))
     }
 }
