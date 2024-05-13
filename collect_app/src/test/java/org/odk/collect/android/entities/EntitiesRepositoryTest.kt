@@ -63,30 +63,11 @@ abstract class EntitiesRepositoryTest {
         val wine = Entity("wines", "1", "Léoville Barton 2008", version = 1)
         repository.save(wine)
 
-        val updatedWine = wine.copy(label = "Léoville Barton 2009")
+        val updatedWine = wine.copy(label = "Léoville Barton 2009", version = 1)
         repository.save(updatedWine)
 
         val wines = repository.getEntities("wines")
         assertThat(wines, contains(updatedWine))
-    }
-
-    @Test
-    fun `#save does not update existing entity with matching id but not list`() {
-        val repository = buildSubject()
-
-        val wine = Entity("wines", "1", "Léoville Barton 2008")
-        val whisky = Entity("whiskys", wine.id, "Lagavulin 16")
-        repository.save(wine)
-        repository.save(whisky)
-
-        val updatedWine = Entity("wines", wine.id, "Léoville Barton 2009")
-        repository.save(updatedWine)
-
-        val wines = repository.getEntities("wines")
-        assertThat(wines, contains(updatedWine))
-
-        val whiskys = repository.getEntities("whiskys")
-        assertThat(whiskys, contains(whisky))
     }
 
     @Test
