@@ -1,10 +1,7 @@
 package org.odk.collect.android.application.initialization
 
-import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.utilities.FormsRepositoryProvider
-import org.odk.collect.android.utilities.InstancesRepositoryProvider
-import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.forms.savepoints.Savepoint
@@ -16,10 +13,7 @@ import java.io.File
 
 class SavepointsImporter(
     private val projectsRepository: ProjectsRepository,
-    private val instancesRepositoryProvider: InstancesRepositoryProvider,
-    private val formsRepositoryProvider: FormsRepositoryProvider,
-    private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
-    private val storagePathProvider: StoragePathProvider
+    private val projectDependencyProviderFactory: ProjectDependencyProviderFactory
 ) : Upgrade {
     override fun key(): String {
         return MetaKeys.OLD_SAVEPOINTS_IMPORTED
@@ -27,15 +21,16 @@ class SavepointsImporter(
 
     override fun run() {
         projectsRepository.getAll().forEach { project ->
-            val instancesRepository = instancesRepositoryProvider.get(project.uuid)
-            val formsRepository = formsRepositoryProvider.get(project.uuid)
-            val savepointsRepository = savepointsRepositoryProvider.get(project.uuid)
-            val cacheDir = File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, project.uuid))
-            val instancesDir = File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid))
+            val projectDependencyProvider = projectDependencyProviderFactory.create(project.uuid)
 
-            importSavepointsThatBelongToSavedForms(instancesRepository, formsRepository, savepointsRepository, cacheDir)
+            val cacheDir =
+                File(projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, project.uuid))
+            val instancesDir =
+                File(projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid))
 
-            importSavepointsThatBelongToBlankForms(formsRepository, savepointsRepository, cacheDir, instancesDir)
+            importSavepointsThatBelongToSavedForms(projectDependencyProvider.instancesRepository, projectDependencyProvider.formsRepository, projectDependencyProvider.savepointsRepository, cacheDir)
+
+            importSavepointsThatBelongToBlankForms(projectDependencyProvider.formsRepository, projectDependencyProvider.savepointsRepository, cacheDir, instancesDir)
         }
     }
 

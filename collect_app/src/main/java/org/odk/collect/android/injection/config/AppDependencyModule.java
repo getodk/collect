@@ -536,8 +536,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SavepointsImporter providesSavepointsMigrator(ProjectsRepository projectsRepository, InstancesRepositoryProvider instancesRepositoryProvider, FormsRepositoryProvider formsRepositoryProvider, SavepointsRepositoryProvider savepointsRepositoryProvider, StoragePathProvider storagePathProvider) {
-        return new SavepointsImporter(projectsRepository, instancesRepositoryProvider, formsRepositoryProvider, savepointsRepositoryProvider, storagePathProvider);
+    public SavepointsImporter providesSavepointsMigrator(ProjectsRepository projectsRepository, ProjectDependencyProviderFactory projectDependencyProviderFactory) {
+        return new SavepointsImporter(projectsRepository, projectDependencyProviderFactory);
     }
 
     @Provides
