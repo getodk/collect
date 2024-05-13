@@ -536,12 +536,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SavepointsImporter providesSavepointsMigrator(ProjectsRepository projectsRepository, ProjectDependencyProviderFactory projectDependencyProviderFactory) {
-        return new SavepointsImporter(projectsRepository, projectDependencyProviderFactory);
-    }
-
-    @Provides
-    public UpgradeInitializer providesUpgradeInitializer(Context context, SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, ExistingSettingsMigrator existingSettingsMigrator, FormUpdatesUpgrade formUpdatesUpgrade, GoogleDriveProjectsDeleter googleDriveProjectsDeleter, SavepointsImporter savepointsImporter) {
+    public UpgradeInitializer providesUpgradeInitializer(Context context, SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, ExistingSettingsMigrator existingSettingsMigrator, FormUpdatesUpgrade formUpdatesUpgrade, GoogleDriveProjectsDeleter googleDriveProjectsDeleter, ProjectsRepository projectsRepository, ProjectDependencyProviderFactory projectDependencyProviderFactory) {
         return new UpgradeInitializer(
                 context,
                 settingsProvider,
@@ -549,7 +544,7 @@ public class AppDependencyModule {
                 existingSettingsMigrator,
                 formUpdatesUpgrade,
                 googleDriveProjectsDeleter,
-                savepointsImporter
+                new SavepointsImporter(projectsRepository, projectDependencyProviderFactory)
         );
     }
 
