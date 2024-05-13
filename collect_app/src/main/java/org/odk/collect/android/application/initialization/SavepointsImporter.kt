@@ -39,10 +39,9 @@ class SavepointsImporter(
             if (instance.deletedDate == null) {
                 val savepointFile = File(cacheDir, File(instance.instanceFilePath).name.plus(".save"))
                 if (savepointFile.exists() && savepointFile.lastModified() > instance.lastStatusChangeDate) {
-                    formsRepository.getAllByFormIdAndVersion(instance.formId, instance.formVersion).firstOrNull()?.let { form ->
-                        if (!form.isDeleted) {
-                            savepointsRepository.save(Savepoint(form.dbId, instance.dbId, savepointFile.absolutePath, instance.instanceFilePath))
-                        }
+                    val form = formsRepository.getAllByFormIdAndVersion(instance.formId, instance.formVersion).firstOrNull()
+                    if (form != null && !form.isDeleted) {
+                        savepointsRepository.save(Savepoint(form.dbId, instance.dbId, savepointFile.absolutePath, instance.instanceFilePath))
                     }
                 }
             }
