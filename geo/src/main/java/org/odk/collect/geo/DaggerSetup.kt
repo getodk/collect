@@ -52,7 +52,6 @@ interface GeoDependencyComponent {
     val scheduler: Scheduler
     val locationTracker: LocationTracker
     val satelliteInfoClient: SatelliteInfoClient
-    val referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator
 }
 
 @Module
@@ -65,11 +64,6 @@ open class GeoDependencyModule {
 
     @Provides
     open fun providesMapFragmentFactory(): MapFragmentFactory {
-        throw UnsupportedOperationException("This should be overridden by dependent application")
-    }
-
-    @Provides
-    open fun providesReferenceLayerSettingsNavigator(): ReferenceLayerSettingsNavigator {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 

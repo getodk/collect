@@ -3,11 +3,8 @@ package org.odk.collect.android.injection.config
 import android.app.Application
 import android.content.Context
 import android.location.LocationManager
-import androidx.fragment.app.FragmentActivity
-import org.odk.collect.android.preferences.screens.MapsPreferencesFragment
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoDependencyModule
-import org.odk.collect.geo.ReferenceLayerSettingsNavigator
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.satellites.GpsStatusSatelliteInfoClient
 import org.odk.collect.location.satellites.SatelliteInfoClient
@@ -26,14 +23,6 @@ class CollectGeoDependencyModule(
     private val offlineMapLayersPickerViewModelFactory: OfflineMapLayersPickerViewModel.Factory,
     private val externalWebPageHelper: ExternalWebPageHelper
 ) : GeoDependencyModule() {
-
-    override fun providesReferenceLayerSettingsNavigator(): ReferenceLayerSettingsNavigator {
-        return object : ReferenceLayerSettingsNavigator {
-            override fun navigateToReferenceLayerSettings(activity: FragmentActivity) {
-                MapsPreferencesFragment.showReferenceLayerDialog(activity)
-            }
-        }
-    }
 
     override fun providesMapFragmentFactory(): MapFragmentFactory {
         return mapFragmentFactory

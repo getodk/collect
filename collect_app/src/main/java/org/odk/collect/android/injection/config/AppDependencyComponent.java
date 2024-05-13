@@ -43,7 +43,6 @@ import org.odk.collect.android.instancemanagement.send.InstanceUploaderActivity;
 import org.odk.collect.android.instancemanagement.send.InstanceUploaderListActivity;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.preferences.CaptionedListPreference;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat;
@@ -233,8 +232,6 @@ public interface AppDependencyComponent {
     void inject(BaseProjectPreferencesFragment baseProjectPreferencesFragment);
 
     void inject(BaseAdminPreferencesFragment baseAdminPreferencesFragment);
-
-    void inject(CaptionedListPreference captionedListPreference);
 
     void inject(AndroidShortcutsActivity androidShortcutsActivity);
 
