@@ -43,6 +43,6 @@ object InstanceUtils {
         val instanceDir = File(instancesDir + File.separator + System.currentTimeMillis() + Math.random())
         instanceDir.mkdir()
 
-        return createTempFile(instanceDir, "intance_${System.currentTimeMillis()}", ".xml")
+        return createTempFile(instanceDir, "intance", ".xml")
     }
 }
