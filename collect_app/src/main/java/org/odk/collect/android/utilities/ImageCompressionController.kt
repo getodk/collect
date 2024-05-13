@@ -27,12 +27,13 @@ class ImageCompressionController(private val imageCompressor: ImageCompressor) {
         for (bindAttribute in questionWidget.formEntryPrompt.bindAttributes) {
             if ("max-pixels" == bindAttribute.name && ApplicationConstants.Namespaces.XML_OPENROSA_NAMESPACE == bindAttribute.namespace) {
                 try {
-                    return bindAttribute.attributeValue.toInt()
+                    return bindAttribute.attributeValue?.toInt()
                 } catch (e: NumberFormatException) {
                     Timber.i(e)
                 }
             }
         }
+
         return null
     }
 
