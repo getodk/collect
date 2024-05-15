@@ -33,6 +33,10 @@ class SavepointsImporterTest {
 
     private val project = projectsRepository.save(Project.DEMO_PROJECT)
     private val projectDependencyProvider = projectDependencyProviderFactory.create(project.uuid)
+    private val savepointsRepository = projectDependencyProvider.savepointsRepository
+    private val storagePathProvider = projectDependencyProvider.storagePathProvider
+    private val formsRepository = projectDependencyProvider.formsRepository
+    private val instancesRepository = projectDependencyProvider.instancesRepository
 
     @Test
     fun ifABlankFormHasNoSavepoint_nothingShouldBeImported() {
@@ -43,7 +47,7 @@ class SavepointsImporterTest {
         savepointsImporter.run()
 
         // verify import
-        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        val savepoints = savepointsRepository.getAll()
         assertThat(savepoints.isEmpty(), equalTo(true))
     }
 
@@ -59,7 +63,7 @@ class SavepointsImporterTest {
         savepointsImporter.run()
 
         // verify import
-        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        val savepoints = savepointsRepository.getAll()
         assertThat(savepoints.isEmpty(), equalTo(true))
     }
 
@@ -75,12 +79,12 @@ class SavepointsImporterTest {
         savepointsImporter.run()
 
         // verify import
-        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        val savepoints = savepointsRepository.getAll()
         assertThat(savepoints.isEmpty(), equalTo(true))
     }
 
     @Test
-    fun ifInCacheThereIsAFileThatLooksLikeASavepointForBlankFormButDoesNotContainTheCorrectSuffixThatIdentifiesSavepoints_nothingShouldBeImported() {
+    fun ifAFileForABlankFormExistsWithMatchingName_butIncorrectSuffix_nothingShouldBeImported() {
         val formName = "sampleForm"
 
         // create blank forms
@@ -93,7 +97,7 @@ class SavepointsImporterTest {
         savepointsImporter.run()
 
         // verify import
-        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        val savepoints = savepointsRepository.getAll()
         assertThat(savepoints.isEmpty(), equalTo(true))
     }
 
@@ -114,11 +118,11 @@ class SavepointsImporterTest {
         savepointsImporter.run()
 
         // verify import
-        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        val savepoints = savepointsRepository.getAll()
         val expectedSavepoint1 =
-            Savepoint(blankForm1.dbId, null, savepointFile1.absolutePath, "${projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid)}/$form1Name/$form1Name.xml")
+            Savepoint(blankForm1.dbId, null, savepointFile1.absolutePath, "${storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid)}/$form1Name/$form1Name.xml")
         val expectedSavepoint2 =
-            Savepoint(blankForm2.dbId, null, savepointFile2.absolutePath, "${projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid)}/$form2Name/$form2Name.xml")
+            Savepoint(blankForm2.dbId, null, savepointFile2.absolutePath, "${storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid)}/$form2Name/$form2Name.xml")
         assertThat(savepoints, contains(expectedSavepoint1, expectedSavepoint2))
     }
 
@@ -139,11 +143,11 @@ class SavepointsImporterTest {
         savepointsImporter.run()
 
         // verify import
-        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        val savepoints = savepointsRepository.getAll()
         val expectedSavepoint1 =
-            Savepoint(blankForm1.dbId, null, savepointFile1.absolutePath, "${projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid)}/$form1Name/$form1Name.xml")
+            Savepoint(blankForm1.dbId, null, savepointFile1.absolutePath, "${storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid)}/$form1Name/$form1Name.xml")
         val expectedSavepoint2 =
-            Savepoint(blankForm2.dbId, null, savepointFile2.absolutePath, "${projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid)}/$form2Name/$form2Name.xml")
+            Savepoint(blankForm2.dbId, null, savepointFile2.absolutePath, "${storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid)}/$form2Name/$form2Name.xml")
         assertThat(savepoints, contains(expectedSavepoint1, expectedSavepoint2))
     }
 
@@ -159,7 +163,7 @@ class SavepointsImporterTest {
         savepointsImporter.run()
 
         // verify import
-        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        val savepoints = savepointsRepository.getAll()
         assertThat(savepoints.isEmpty(), equalTo(true))
     }
 
@@ -178,7 +182,7 @@ class SavepointsImporterTest {
         savepointsImporter.run()
 
         // verify import
-        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        val savepoints = savepointsRepository.getAll()
         assertThat(savepoints.isEmpty(), equalTo(true))
     }
 
@@ -197,7 +201,7 @@ class SavepointsImporterTest {
         savepointsImporter.run()
 
         // verify import
-        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        val savepoints = savepointsRepository.getAll()
         assertThat(savepoints.isEmpty(), equalTo(true))
     }
 
@@ -213,7 +217,7 @@ class SavepointsImporterTest {
         savepointsImporter.run()
 
         // verify import
-        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        val savepoints = savepointsRepository.getAll()
         assertThat(savepoints.isEmpty(), equalTo(true))
     }
 
@@ -232,12 +236,12 @@ class SavepointsImporterTest {
         savepointsImporter.run()
 
         // verify import
-        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        val savepoints = savepointsRepository.getAll()
         assertThat(savepoints.isEmpty(), equalTo(true))
     }
 
     @Test
-    fun ifInCacheThereIsAFileThatLooksLikeASavepointForSavedFormButDoesNotContainTheCorrectSuffixThatIdentifiesSavepoints_nothingShouldBeImported() {
+    fun ifAFileForASavedFormExistsWithMatchingName_butIncorrectSuffix_nothingShouldBeImported() {
         val formName = "sampleForm"
 
         // create blank forms
@@ -253,7 +257,7 @@ class SavepointsImporterTest {
         savepointsImporter.run()
 
         // verify import
-        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        val savepoints = savepointsRepository.getAll()
         assertThat(savepoints.isEmpty(), equalTo(true))
     }
 
@@ -278,26 +282,26 @@ class SavepointsImporterTest {
         savepointsImporter.run()
 
         // verify import
-        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        val savepoints = savepointsRepository.getAll()
         val expectedSavepoint1 = Savepoint(1, 1, savepointFile1.absolutePath, savedForm1.instanceFilePath)
         val expectedSavepoint2 = Savepoint(2, 2, savepointFile2.absolutePath, savedForm2.instanceFilePath)
         assertThat(savepoints, contains(expectedSavepoint1, expectedSavepoint2))
     }
 
     private fun createBlankForm(project: Project.Saved, formName: String, formId: String, formVersion: String = "1", date: Long = 0, deleted: Boolean = false): Form {
-        val formFile = File(projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, project.uuid), "$formName.xml").also {
+        val formFile = File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, project.uuid), "$formName.xml").also {
             it.writeText(RandomString.randomString(10))
         }
-        val blankForm = projectDependencyProvider.formsRepository.save(FormFixtures.form(formId, formVersion, formFile.absolutePath))
-        return projectDependencyProvider.formsRepository.save(Form.Builder(blankForm).date(date).deleted(deleted).build())
+        val blankForm = formsRepository.save(FormFixtures.form(formId, formVersion, formFile.absolutePath))
+        return formsRepository.save(Form.Builder(blankForm).date(date).deleted(deleted).build())
     }
 
     private fun createSavedForm(formName: String, form: Form, lastStatusChangeDate: Long = System.currentTimeMillis() - TimeInMs.ONE_HOUR, deletedDate: Long? = null): Instance {
-        return projectDependencyProvider.instancesRepository.save(InstanceFixtures.instance(displayName = formName, form = form, lastStatusChangeDate = lastStatusChangeDate, deletedDate = deletedDate))
+        return instancesRepository.save(InstanceFixtures.instance(displayName = formName, form = form, lastStatusChangeDate = lastStatusChangeDate, deletedDate = deletedDate))
     }
 
     private fun createFileInCache(project: Project.Saved, fileName: String): File {
-        val cacheDir = File(projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, project.uuid))
+        val cacheDir = File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, project.uuid))
         return File(cacheDir, fileName).also {
             it.writeText(RandomString.randomString(10))
         }
