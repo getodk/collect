@@ -5,6 +5,8 @@ import org.apache.commons.csv.CSVPrinter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
+import org.javarosa.entities.EntityAction
+import org.javarosa.entities.internal.Entities
 import org.junit.Test
 import org.odk.collect.entities.Entity.State.ONLINE
 import org.odk.collect.shared.TempFiles
@@ -13,6 +15,17 @@ import java.io.File
 class LocalEntityUseCasesTest {
 
     private val entitiesRepository = InMemEntitiesRepository()
+
+    @Test
+    fun `updateLocalEntitiesFromForm does not save updated entity that doesn't already exist`() {
+        val entity =
+            org.javarosa.entities.Entity(EntityAction.UPDATE, "things", "1", "1", 1, emptyList())
+        val formEntities = Entities(listOf(entity))
+        entitiesRepository.addList("things")
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        assertThat(entitiesRepository.getEntities("things").size, equalTo(0))
+    }
 
     @Test
     fun `updateLocalEntitiesFromServer overrides offline version if the online version is newer`() {
