@@ -53,7 +53,7 @@ class SavepointsImporterTest {
         createBlankForm(project, "sampleForm", "1", date = System.currentTimeMillis() + TimeInMs.ONE_HOUR)
 
         // create savepoints
-        createSavepointFile(project, "sampleForm_${System.currentTimeMillis()}.xml")
+        createSavepointFile(project, "sampleForm_2024-04-10_01-35-41.xml.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -69,7 +69,7 @@ class SavepointsImporterTest {
         createBlankForm(project, "sampleForm", "1", deleted = true)
 
         // create savepoints
-        createSavepointFile(project, "sampleForm_${System.currentTimeMillis()}.xml")
+        createSavepointFile(project, "sampleForm_2024-04-10_01-35-41.xml.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -89,8 +89,8 @@ class SavepointsImporterTest {
         val blankForm2 = createBlankForm(project, form2Name, "2")
 
         // create savepoints
-        val savepointFile1 = createSavepointFile(project, "${form1Name}_${System.currentTimeMillis()}.xml")
-        val savepointFile2 = createSavepointFile(project, "${form2Name}_${System.currentTimeMillis()}.xml")
+        val savepointFile1 = createSavepointFile(project, "${form1Name}_2024-04-10_01-35-41.xml.save")
+        val savepointFile2 = createSavepointFile(project, "${form2Name}_2024-04-10_01-35-42.xml.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -114,8 +114,8 @@ class SavepointsImporterTest {
         val blankForm2 = createBlankForm(project, form2Name, "1", "2", date = 2)
 
         // create savepoints
-        val savepointFile1 = createSavepointFile(project, "${form1Name}_${System.currentTimeMillis()}.xml")
-        val savepointFile2 = createSavepointFile(project, "${form2Name}_${System.currentTimeMillis()}.xml")
+        val savepointFile1 = createSavepointFile(project, "${form1Name}_2024-04-10_01-35-41.xml.save")
+        val savepointFile2 = createSavepointFile(project, "${form2Name}_2024-04-10_01-35-42.xml.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -126,7 +126,7 @@ class SavepointsImporterTest {
             Savepoint(blankForm1.dbId, null, savepointFile1.absolutePath, "${projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid)}/$form1Name/$form1Name.xml")
         val expectedSavepoint2 =
             Savepoint(blankForm2.dbId, null, savepointFile2.absolutePath, "${projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid)}/$form2Name/$form2Name.xml")
-        assertThat(savepoints, contains(expectedSavepoint2, expectedSavepoint1))
+        assertThat(savepoints, contains(expectedSavepoint1, expectedSavepoint2))
     }
 
     @Test
@@ -154,7 +154,7 @@ class SavepointsImporterTest {
         val savedForm = createSavedForm("sampleForm", form, lastStatusChangeDate = System.currentTimeMillis() + TimeInMs.ONE_HOUR)
 
         // create savepoints
-        createSavepointFile(project, File(savedForm.instanceFilePath).name)
+        createSavepointFile(project, "${File(savedForm.instanceFilePath).name}.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -173,7 +173,7 @@ class SavepointsImporterTest {
         val savedForm = createSavedForm("sampleForm", form)
 
         // create savepoints
-        createSavepointFile(project, File(savedForm.instanceFilePath).name)
+        createSavepointFile(project, "${File(savedForm.instanceFilePath).name}.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -189,7 +189,7 @@ class SavepointsImporterTest {
         val savedForm = createSavedForm("sampleForm", FormFixtures.form("1"))
 
         // create savepoints
-        createSavepointFile(project, File(savedForm.instanceFilePath).name)
+        createSavepointFile(project, "${File(savedForm.instanceFilePath).name}.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -208,7 +208,7 @@ class SavepointsImporterTest {
         val savedForm = createSavedForm("sampleForm", form, deletedDate = System.currentTimeMillis())
 
         // create savepoints
-        createSavepointFile(project, File(savedForm.instanceFilePath).name)
+        createSavepointFile(project, "${File(savedForm.instanceFilePath).name}.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -232,8 +232,8 @@ class SavepointsImporterTest {
         val savedForm2 = createSavedForm(form2Name, form2)
 
         // create savepoints
-        val savepointFile1 = createSavepointFile(project, File(savedForm1.instanceFilePath).name)
-        val savepointFile2 = createSavepointFile(project, File(savedForm2.instanceFilePath).name)
+        val savepointFile1 = createSavepointFile(project, "${File(savedForm1.instanceFilePath).name}.save")
+        val savepointFile2 = createSavepointFile(project, "${File(savedForm2.instanceFilePath).name}.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -257,9 +257,9 @@ class SavepointsImporterTest {
         return projectDependencyProvider.instancesRepository.save(InstanceFixtures.instance(displayName = formName, form = form, lastStatusChangeDate = lastStatusChangeDate, deletedDate = deletedDate))
     }
 
-    private fun createSavepointFile(project: Project.Saved, instanceName: String): File {
+    private fun createSavepointFile(project: Project.Saved, fileName: String): File {
         val cacheDir = File(projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, project.uuid))
-        return File(cacheDir, "$instanceName.save").also {
+        return File(cacheDir, fileName).also {
             it.writeText(RandomString.randomString(10))
         }
     }

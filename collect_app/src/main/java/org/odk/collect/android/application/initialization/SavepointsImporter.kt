@@ -49,18 +49,16 @@ class SavepointsImporter(
     }
 
     private fun importSavepointsThatBelongToBlankForms(formsRepository: FormsRepository, savepointsRepository: SavepointsRepository, cacheDir: File, instancesDir: File) {
-        formsRepository.all.sortedByDescending { form -> form.date }.forEach { form ->
+        formsRepository.all.forEach { form ->
             if (!form.isDeleted) {
                 val formFileName = File(form.formFilePath).name.substringBeforeLast(".xml")
 
                 cacheDir.listFiles { file ->
-                    file.name.startsWith("${formFileName}_") && file.name.endsWith(".xml.save")
+                    val match = """${formFileName}_(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})(.xml.save)""".toRegex().matchEntire(file.name)
+                    match != null
                 }?.forEach { savepointFile ->
                     if (savepointFile.lastModified() > form.date) {
-                        val alreadyUsed = savepointsRepository.getAll().any { savepoint -> savepoint.savepointFilePath == savepointFile.absolutePath }
-                        if (!alreadyUsed) {
-                            savepointsRepository.save(Savepoint(form.dbId, null, savepointFile.absolutePath, File(instancesDir, "$formFileName/$formFileName.xml").absolutePath))
-                        }
+                        savepointsRepository.save(Savepoint(form.dbId, null, savepointFile.absolutePath, File(instancesDir, "$formFileName/$formFileName.xml").absolutePath))
                     }
                 }
             }
