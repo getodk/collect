@@ -53,7 +53,7 @@ class SavepointsImporterTest {
         createBlankForm(project, "sampleForm", "1", date = System.currentTimeMillis() + TimeInMs.ONE_HOUR)
 
         // create savepoints
-        createSavepointFile(project, "sampleForm_2024-04-10_01-35-41.xml.save")
+        createFileInCache(project, "sampleForm_2024-04-10_01-35-41.xml.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -69,7 +69,25 @@ class SavepointsImporterTest {
         createBlankForm(project, "sampleForm", "1", deleted = true)
 
         // create savepoints
-        createSavepointFile(project, "sampleForm_2024-04-10_01-35-41.xml.save")
+        createFileInCache(project, "sampleForm_2024-04-10_01-35-41.xml.save")
+
+        // trigger importing
+        savepointsImporter.run()
+
+        // verify import
+        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        assertThat(savepoints.isEmpty(), equalTo(true))
+    }
+
+    @Test
+    fun ifInCacheThereIsAFileThatLooksLikeASavepointForBlankFormButDoesNotContainTheCorrectSuffixThatIdentifiesSavepoints_nothingShouldBeImported() {
+        val formName = "sampleForm"
+
+        // create blank forms
+        createBlankForm(project, formName, "1", "1")
+
+        // create savepoints
+        createFileInCache(project, "${formName}_2024-04-10_01-35-41.xml")
 
         // trigger importing
         savepointsImporter.run()
@@ -89,8 +107,8 @@ class SavepointsImporterTest {
         val blankForm2 = createBlankForm(project, form2Name, "2")
 
         // create savepoints
-        val savepointFile1 = createSavepointFile(project, "${form1Name}_2024-04-10_01-35-41.xml.save")
-        val savepointFile2 = createSavepointFile(project, "${form2Name}_2024-04-10_01-35-42.xml.save")
+        val savepointFile1 = createFileInCache(project, "${form1Name}_2024-04-10_01-35-41.xml.save")
+        val savepointFile2 = createFileInCache(project, "${form2Name}_2024-04-10_01-35-42.xml.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -114,8 +132,8 @@ class SavepointsImporterTest {
         val blankForm2 = createBlankForm(project, form2Name, "1", "2", date = 2)
 
         // create savepoints
-        val savepointFile1 = createSavepointFile(project, "${form1Name}_2024-04-10_01-35-41.xml.save")
-        val savepointFile2 = createSavepointFile(project, "${form2Name}_2024-04-10_01-35-42.xml.save")
+        val savepointFile1 = createFileInCache(project, "${form1Name}_2024-04-10_01-35-41.xml.save")
+        val savepointFile2 = createFileInCache(project, "${form2Name}_2024-04-10_01-35-42.xml.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -154,7 +172,7 @@ class SavepointsImporterTest {
         val savedForm = createSavedForm("sampleForm", form, lastStatusChangeDate = System.currentTimeMillis() + TimeInMs.ONE_HOUR)
 
         // create savepoints
-        createSavepointFile(project, "${File(savedForm.instanceFilePath).name}.save")
+        createFileInCache(project, "${File(savedForm.instanceFilePath).name}.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -173,7 +191,7 @@ class SavepointsImporterTest {
         val savedForm = createSavedForm("sampleForm", form)
 
         // create savepoints
-        createSavepointFile(project, "${File(savedForm.instanceFilePath).name}.save")
+        createFileInCache(project, "${File(savedForm.instanceFilePath).name}.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -189,7 +207,7 @@ class SavepointsImporterTest {
         val savedForm = createSavedForm("sampleForm", FormFixtures.form("1"))
 
         // create savepoints
-        createSavepointFile(project, "${File(savedForm.instanceFilePath).name}.save")
+        createFileInCache(project, "${File(savedForm.instanceFilePath).name}.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -208,7 +226,28 @@ class SavepointsImporterTest {
         val savedForm = createSavedForm("sampleForm", form, deletedDate = System.currentTimeMillis())
 
         // create savepoints
-        createSavepointFile(project, "${File(savedForm.instanceFilePath).name}.save")
+        createFileInCache(project, "${File(savedForm.instanceFilePath).name}.save")
+
+        // trigger importing
+        savepointsImporter.run()
+
+        // verify import
+        val savepoints = projectDependencyProvider.savepointsRepository.getAll()
+        assertThat(savepoints.isEmpty(), equalTo(true))
+    }
+
+    @Test
+    fun ifInCacheThereIsAFileThatLooksLikeASavepointForSavedFormButDoesNotContainTheCorrectSuffixThatIdentifiesSavepoints_nothingShouldBeImported() {
+        val formName = "sampleForm"
+
+        // create blank forms
+        val form = createBlankForm(project, formName, "1")
+
+        // create saved forms
+        val savedForm = createSavedForm(formName, form)
+
+        // create savepoints
+        createFileInCache(project, File(savedForm.instanceFilePath).name)
 
         // trigger importing
         savepointsImporter.run()
@@ -232,8 +271,8 @@ class SavepointsImporterTest {
         val savedForm2 = createSavedForm(form2Name, form2)
 
         // create savepoints
-        val savepointFile1 = createSavepointFile(project, "${File(savedForm1.instanceFilePath).name}.save")
-        val savepointFile2 = createSavepointFile(project, "${File(savedForm2.instanceFilePath).name}.save")
+        val savepointFile1 = createFileInCache(project, "${File(savedForm1.instanceFilePath).name}.save")
+        val savepointFile2 = createFileInCache(project, "${File(savedForm2.instanceFilePath).name}.save")
 
         // trigger importing
         savepointsImporter.run()
@@ -257,7 +296,7 @@ class SavepointsImporterTest {
         return projectDependencyProvider.instancesRepository.save(InstanceFixtures.instance(displayName = formName, form = form, lastStatusChangeDate = lastStatusChangeDate, deletedDate = deletedDate))
     }
 
-    private fun createSavepointFile(project: Project.Saved, fileName: String): File {
+    private fun createFileInCache(project: Project.Saved, fileName: String): File {
         val cacheDir = File(projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, project.uuid))
         return File(cacheDir, fileName).also {
             it.writeText(RandomString.randomString(10))
