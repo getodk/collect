@@ -29,6 +29,7 @@ import org.odk.collect.android.database.DatabaseConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.savepoints.SavepointsRepository;
 import org.odk.collect.shared.files.DirectoryUtils;
 import org.odk.collect.shared.strings.Md5;
 
@@ -50,8 +51,9 @@ public class DatabaseFormsRepository implements FormsRepository {
     private final String formsPath;
     private final String cachePath;
     private final Supplier<Long> clock;
+    private final SavepointsRepository savepointsRepository;
 
-    public DatabaseFormsRepository(Context context, String dbPath, String formsPath, String cachePath, Supplier<Long> clock) {
+    public DatabaseFormsRepository(Context context, String dbPath, String formsPath, String cachePath, Supplier<Long> clock, SavepointsRepository savepointsRepository) {
         this.formsPath = formsPath;
         this.cachePath = cachePath;
         this.clock = clock;
@@ -62,6 +64,7 @@ public class DatabaseFormsRepository implements FormsRepository {
                 new FormDatabaseMigrator(),
                 DatabaseConstants.FORMS_DATABASE_VERSION
         );
+        this.savepointsRepository = savepointsRepository;
     }
 
     @Nullable
@@ -182,6 +185,7 @@ public class DatabaseFormsRepository implements FormsRepository {
         ContentValues values = new ContentValues();
         values.put(DELETED_DATE, System.currentTimeMillis());
         updateForm(id, values);
+        savepointsRepository.delete(id, null);
     }
 
     @Override
@@ -303,5 +307,7 @@ public class DatabaseFormsRepository implements FormsRepository {
                 mediaDir.delete();
             }
         }
+
+        savepointsRepository.delete(form.getDbId(), null);
     }
 }
