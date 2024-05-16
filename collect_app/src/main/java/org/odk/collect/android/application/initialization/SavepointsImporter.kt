@@ -58,7 +58,8 @@ class SavepointsImporter(
                     match != null
                 }?.forEach { savepointFile ->
                     if (savepointFile.lastModified() > form.date) {
-                        savepointsRepository.save(Savepoint(form.dbId, null, savepointFile.absolutePath, File(instancesDir, "$formFileName/$formFileName.xml").absolutePath))
+                        val instanceFileName = savepointFile.name.substringBefore(".xml.save")
+                        savepointsRepository.save(Savepoint(form.dbId, null, savepointFile.absolutePath, File(instancesDir, "$instanceFileName/$instanceFileName.xml").absolutePath))
                     }
                 }
             }
