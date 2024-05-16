@@ -1,8 +1,10 @@
 package org.odk.collect.android.mainmenu
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
@@ -14,6 +16,7 @@ import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
@@ -22,6 +25,8 @@ import org.odk.collect.projects.Project
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
+import org.odk.collect.testshared.FakeScheduler
+import java.util.concurrent.TimeoutException
 
 @RunWith(AndroidJUnit4::class)
 class MainMenuViewModelTest {
@@ -39,6 +44,11 @@ class MainMenuViewModelTest {
     private val projectsDataService = mock<ProjectsDataService> {
         on { getCurrentProject() } doReturn Project.DEMO_PROJECT
     }
+
+    private val scheduler = FakeScheduler()
+
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Test
     fun `version when beta release returns semantic version with prefix and beta version`() {
@@ -101,7 +111,7 @@ class MainMenuViewModelTest {
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is saved as draft, editing drafts is enabled and encryption is disabled`() {
+    fun `setSavedForm should set proper message and action when the corresponding instance is saved as draft, editing drafts is enabled and encryption is disabled`() {
         val viewModel = createViewModelWithVersion("")
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
 
@@ -116,13 +126,16 @@ class MainMenuViewModelTest {
         )
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarType = viewModel.getFormSavedSnackbarDetails(uri)!!
-        assertThat(formSavedSnackbarType.first, equalTo(org.odk.collect.strings.R.string.form_saved_as_draft))
-        assertThat(formSavedSnackbarType.second, equalTo(org.odk.collect.strings.R.string.edit_form))
+        viewModel.setSavedForm(uri)
+        scheduler.flush()
+
+        val formSavedSnackbarType = viewModel.savedForm.getOrAwaitValue().value!!
+        assertThat(formSavedSnackbarType.message, equalTo(org.odk.collect.strings.R.string.form_saved_as_draft))
+        assertThat(formSavedSnackbarType.action, equalTo(org.odk.collect.strings.R.string.edit_form))
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is saved as draft, editing drafts is enabled and encryption is enabled`() {
+    fun `setSavedForm should set proper message and action when the corresponding instance is saved as draft, editing drafts is enabled and encryption is enabled`() {
         val viewModel = createViewModelWithVersion("")
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
 
@@ -138,13 +151,17 @@ class MainMenuViewModelTest {
         )
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarType = viewModel.getFormSavedSnackbarDetails(uri)!!
-        assertThat(formSavedSnackbarType.first, equalTo(org.odk.collect.strings.R.string.form_saved_as_draft))
-        assertThat(formSavedSnackbarType.second, equalTo(org.odk.collect.strings.R.string.edit_form))
+
+        viewModel.setSavedForm(uri)
+        scheduler.flush()
+
+        val formSavedSnackbarType = viewModel.savedForm.getOrAwaitValue().value!!
+        assertThat(formSavedSnackbarType.message, equalTo(org.odk.collect.strings.R.string.form_saved_as_draft))
+        assertThat(formSavedSnackbarType.action, equalTo(org.odk.collect.strings.R.string.edit_form))
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is saved as draft, editing drafts is disabled and encryption is disabled`() {
+    fun `setSavedForm should set proper message and action when the corresponding instance is saved as draft, editing drafts is disabled and encryption is disabled`() {
         val viewModel = createViewModelWithVersion("")
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
 
@@ -159,13 +176,17 @@ class MainMenuViewModelTest {
         )
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarType = viewModel.getFormSavedSnackbarDetails(uri)!!
-        assertThat(formSavedSnackbarType.first, equalTo(org.odk.collect.strings.R.string.form_saved_as_draft))
-        assertThat(formSavedSnackbarType.second, equalTo(org.odk.collect.strings.R.string.view_form))
+
+        viewModel.setSavedForm(uri)
+        scheduler.flush()
+
+        val formSavedSnackbarType = viewModel.savedForm.getOrAwaitValue().value!!
+        assertThat(formSavedSnackbarType.message, equalTo(org.odk.collect.strings.R.string.form_saved_as_draft))
+        assertThat(formSavedSnackbarType.action, equalTo(org.odk.collect.strings.R.string.view_form))
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is saved as draft, editing drafts is disabled and encryption is enabled`() {
+    fun `setSavedForm should set proper message and action when the corresponding instance is saved as draft, editing drafts is disabled and encryption is enabled`() {
         val viewModel = createViewModelWithVersion("")
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
 
@@ -181,13 +202,17 @@ class MainMenuViewModelTest {
         )
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarType = viewModel.getFormSavedSnackbarDetails(uri)!!
-        assertThat(formSavedSnackbarType.first, equalTo(org.odk.collect.strings.R.string.form_saved_as_draft))
-        assertThat(formSavedSnackbarType.second, equalTo(org.odk.collect.strings.R.string.view_form))
+
+        viewModel.setSavedForm(uri)
+        scheduler.flush()
+
+        val formSavedSnackbarType = viewModel.savedForm.getOrAwaitValue().value!!
+        assertThat(formSavedSnackbarType.message, equalTo(org.odk.collect.strings.R.string.form_saved_as_draft))
+        assertThat(formSavedSnackbarType.action, equalTo(org.odk.collect.strings.R.string.view_form))
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is finalized, auto send is disabled and encryption is disabled`() {
+    fun `setSavedForm should set proper message and action when the corresponding instance is finalized, auto send is disabled and encryption is disabled`() {
         val viewModel = createViewModelWithVersion("")
 
         formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
@@ -202,13 +227,17 @@ class MainMenuViewModelTest {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(false)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)!!
-        assertThat(formSavedSnackbarDetails.first, equalTo(org.odk.collect.strings.R.string.form_saved))
-        assertThat(formSavedSnackbarDetails.second, equalTo(org.odk.collect.strings.R.string.view_form))
+
+        viewModel.setSavedForm(uri)
+        scheduler.flush()
+
+        val formSavedSnackbarType = viewModel.savedForm.getOrAwaitValue().value!!
+        assertThat(formSavedSnackbarType.message, equalTo(org.odk.collect.strings.R.string.form_saved))
+        assertThat(formSavedSnackbarType.action, equalTo(org.odk.collect.strings.R.string.view_form))
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is finalized, auto send is disabled and encryption is enabled`() {
+    fun `setSavedForm should set proper message and action when the corresponding instance is finalized, auto send is disabled and encryption is enabled`() {
         val viewModel = createViewModelWithVersion("")
 
         formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
@@ -224,13 +253,17 @@ class MainMenuViewModelTest {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(false)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)!!
-        assertThat(formSavedSnackbarDetails.first, equalTo(org.odk.collect.strings.R.string.form_saved))
-        assertThat(formSavedSnackbarDetails.second, equalTo(null))
+
+        viewModel.setSavedForm(uri)
+        scheduler.flush()
+
+        val formSavedSnackbarType = viewModel.savedForm.getOrAwaitValue().value!!
+        assertThat(formSavedSnackbarType.message, equalTo(org.odk.collect.strings.R.string.form_saved))
+        assertThat(formSavedSnackbarType.action, equalTo(null))
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is finalized, auto send is enabled and encryption is disabled`() {
+    fun `setSavedForm should set proper message and action when the corresponding instance is finalized, auto send is enabled and encryption is disabled`() {
         val viewModel = createViewModelWithVersion("")
 
         formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
@@ -246,13 +279,17 @@ class MainMenuViewModelTest {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)!!
-        assertThat(formSavedSnackbarDetails.first, equalTo(org.odk.collect.strings.R.string.form_sending))
-        assertThat(formSavedSnackbarDetails.second, equalTo(org.odk.collect.strings.R.string.view_form))
+
+        viewModel.setSavedForm(uri)
+        scheduler.flush()
+
+        val formSavedSnackbarType = viewModel.savedForm.getOrAwaitValue().value!!
+        assertThat(formSavedSnackbarType.message, equalTo(org.odk.collect.strings.R.string.form_sending))
+        assertThat(formSavedSnackbarType.action, equalTo(org.odk.collect.strings.R.string.view_form))
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is finalized, auto send is enabled and encryption is enabled`() {
+    fun `setSavedForm should set proper message and action when the corresponding instance is finalized, auto send is enabled and encryption is enabled`() {
         val viewModel = createViewModelWithVersion("")
 
         formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
@@ -269,13 +306,17 @@ class MainMenuViewModelTest {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)!!
-        assertThat(formSavedSnackbarDetails.first, equalTo(org.odk.collect.strings.R.string.form_sending))
-        assertThat(formSavedSnackbarDetails.second, equalTo(null))
+
+        viewModel.setSavedForm(uri)
+        scheduler.flush()
+
+        val formSavedSnackbarType = viewModel.savedForm.getOrAwaitValue().value!!
+        assertThat(formSavedSnackbarType.message, equalTo(org.odk.collect.strings.R.string.form_sending))
+        assertThat(formSavedSnackbarType.action, equalTo(null))
     }
 
-    @Test
-    fun `getFormSavedSnackbarDetails should return null when the corresponding instance is already sent`() {
+    @Test(expected = TimeoutException::class)
+    fun `setSavedForm should not set when the corresponding instance is already sent`() {
         val viewModel = createViewModelWithVersion("")
 
         formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
@@ -291,12 +332,14 @@ class MainMenuViewModelTest {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)
-        assertThat(formSavedSnackbarDetails, equalTo(null))
+        viewModel.setSavedForm(uri)
+        scheduler.flush()
+
+        viewModel.savedForm.getOrAwaitValue()
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance failed to sent`() {
+    fun `setSavedForm should set proper message and action when the corresponding instance failed to sent`() {
         val viewModel = createViewModelWithVersion("")
 
         formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
@@ -312,12 +355,16 @@ class MainMenuViewModelTest {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)!!
-        assertThat(formSavedSnackbarDetails.first, equalTo(org.odk.collect.strings.R.string.form_sending))
-        assertThat(formSavedSnackbarDetails.second, equalTo(org.odk.collect.strings.R.string.view_form))
+
+        viewModel.setSavedForm(uri)
+        scheduler.flush()
+
+        val formSavedSnackbarType = viewModel.savedForm.getOrAwaitValue().value!!
+        assertThat(formSavedSnackbarType.message, equalTo(org.odk.collect.strings.R.string.form_sending))
+        assertThat(formSavedSnackbarType.action, equalTo(org.odk.collect.strings.R.string.view_form))
     }
 
     private fun createViewModelWithVersion(version: String): MainMenuViewModel {
-        return MainMenuViewModel(mock(), VersionInformation { version }, settingsProvider, mock(), mock(), formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider, projectsDataService)
+        return MainMenuViewModel(mock(), VersionInformation { version }, settingsProvider, mock(), scheduler, formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider, projectsDataService)
     }
 }

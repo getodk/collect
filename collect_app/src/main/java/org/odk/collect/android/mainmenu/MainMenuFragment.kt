@@ -2,7 +2,6 @@ package org.odk.collect.android.mainmenu
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -28,6 +27,7 @@ import org.odk.collect.android.projects.ProjectIconView
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ActionRegister
 import org.odk.collect.android.utilities.ApplicationConstants
+import org.odk.collect.androidshared.data.consume
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
@@ -45,8 +45,9 @@ class MainMenuFragment(
     private lateinit var permissionsViewModel: RequestPermissionsViewModel
 
     private val formEntryFlowLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            displayFormSavedSnackbar(it.data?.data)
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val uri = result.data?.data
+            mainMenuViewModel.setSavedForm(uri)
         }
 
     override fun onAttach(context: Context) {
@@ -83,6 +84,24 @@ class MainMenuFragment(
             DialogFragmentUtils.showIfNotShowing(
                 PermissionsDialogFragment::class.java,
                 this.parentFragmentManager
+            )
+        }
+
+        mainMenuViewModel.savedForm.consume(viewLifecycleOwner) { value ->
+            SnackbarUtils.showLongSnackbar(
+                requireView(),
+                getString(value.message),
+                action = value.action?.let { action ->
+                    SnackbarUtils.Action(getString(action)) {
+                        formEntryFlowLauncher.launch(
+                            FormFillingIntentFactory.editInstanceIntent(
+                                requireContext(),
+                                value.uri
+                            )
+                        )
+                    }
+                },
+                displayDismissButton = true
             )
         }
     }
@@ -241,32 +260,6 @@ class MainMenuFragment(
             }
         } else {
             binding.googleDriveDeprecationBanner.root.visibility = View.GONE
-        }
-    }
-
-    private fun displayFormSavedSnackbar(uri: Uri?) {
-        if (uri == null) {
-            return
-        }
-
-        val formSavedSnackbarDetails = mainMenuViewModel.getFormSavedSnackbarDetails(uri)
-
-        formSavedSnackbarDetails?.let {
-            SnackbarUtils.showLongSnackbar(
-                requireView(),
-                getString(it.first),
-                action = it.second?.let { action ->
-                    SnackbarUtils.Action(getString(action)) {
-                        formEntryFlowLauncher.launch(
-                            FormFillingIntentFactory.editInstanceIntent(
-                                requireContext(),
-                                uri
-                            )
-                        )
-                    }
-                },
-                displayDismissButton = true
-            )
         }
     }
 }

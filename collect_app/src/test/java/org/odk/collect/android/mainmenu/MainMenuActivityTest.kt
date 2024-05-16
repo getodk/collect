@@ -61,6 +61,7 @@ class MainMenuActivityTest {
         on { sendableInstancesCount } doReturn MutableLiveData(0)
         on { sentInstancesCount } doReturn MutableLiveData(0)
         on { editableInstancesCount } doReturn MutableLiveData(0)
+        on { savedForm } doReturn MutableLiveData()
     }
 
     private val currentProjectViewModel = mock<CurrentProjectViewModel> {
