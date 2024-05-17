@@ -6,6 +6,7 @@ import org.odk.collect.android.application.initialization.ExistingProjectMigrato
 import org.odk.collect.android.application.initialization.ExistingSettingsMigrator
 import org.odk.collect.android.application.initialization.FormUpdatesUpgrade
 import org.odk.collect.android.application.initialization.GoogleDriveProjectsDeleter
+import org.odk.collect.android.application.initialization.SavepointsImporter
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.upgrade.AppUpgrader
@@ -16,7 +17,8 @@ class UpgradeInitializer(
     private val existingProjectMigrator: ExistingProjectMigrator,
     private val existingSettingsMigrator: ExistingSettingsMigrator,
     private val formUpdatesUpgrade: FormUpdatesUpgrade,
-    private val googleDriveProjectsDeleter: GoogleDriveProjectsDeleter
+    private val googleDriveProjectsDeleter: GoogleDriveProjectsDeleter,
+    private val savepointsImporter: SavepointsImporter
 ) {
 
     fun initialize() {
@@ -29,7 +31,8 @@ class UpgradeInitializer(
                 existingProjectMigrator,
                 existingSettingsMigrator,
                 formUpdatesUpgrade,
-                googleDriveProjectsDeleter
+                googleDriveProjectsDeleter,
+                savepointsImporter
             )
         ).upgradeIfNeeded()
     }
