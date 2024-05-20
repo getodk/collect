@@ -63,7 +63,7 @@ abstract class EntitiesRepositoryTest {
         val wine = Entity("wines", "1", "Léoville Barton 2008", version = 1)
         repository.save(wine)
 
-        val updatedWine = wine.copy(label = "Léoville Barton 2009", version = 1)
+        val updatedWine = wine.copy(label = "Léoville Barton 2009")
         repository.save(updatedWine)
 
         val wines = repository.getEntities("wines")
