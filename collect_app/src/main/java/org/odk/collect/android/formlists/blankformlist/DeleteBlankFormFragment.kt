@@ -16,7 +16,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.lists.RecyclerViewUtils
-import org.odk.collect.lists.RecyclerViewUtils.setItemViewLayoutParams
+import org.odk.collect.lists.RecyclerViewUtils.matchParentWidth
 import org.odk.collect.lists.multiselect.MultiSelectAdapter
 import org.odk.collect.lists.multiselect.MultiSelectControlsFragment
 import org.odk.collect.lists.multiselect.MultiSelectItem
@@ -111,7 +111,7 @@ private class SelectableBlankFormListItemViewHolder(parent: ViewGroup) :
     ) {
 
     init {
-        setItemViewLayoutParams()
+        matchParentWidth()
     }
 
     override fun setItem(item: BlankFormListItem) {

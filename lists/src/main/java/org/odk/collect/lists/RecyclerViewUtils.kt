@@ -17,7 +17,7 @@ object RecyclerViewUtils {
         return itemDecoration
     }
 
-    fun RecyclerView.ViewHolder.setItemViewLayoutParams() {
+    fun RecyclerView.ViewHolder.matchParentWidth() {
         itemView.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT

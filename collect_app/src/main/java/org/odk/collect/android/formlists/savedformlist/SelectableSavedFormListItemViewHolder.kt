@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import org.odk.collect.android.R
 import org.odk.collect.forms.instances.Instance
-import org.odk.collect.lists.RecyclerViewUtils.setItemViewLayoutParams
+import org.odk.collect.lists.RecyclerViewUtils.matchParentWidth
 import org.odk.collect.lists.multiselect.MultiSelectAdapter
 
 class SelectableSavedFormListItemViewHolder(parent: ViewGroup) :
@@ -15,7 +15,7 @@ class SelectableSavedFormListItemViewHolder(parent: ViewGroup) :
     private var selectView = itemView
 
     init {
-        setItemViewLayoutParams()
+        matchParentWidth()
     }
 
     override fun setItem(item: Instance) {

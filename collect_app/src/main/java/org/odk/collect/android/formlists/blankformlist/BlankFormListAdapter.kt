@@ -7,7 +7,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
-import org.odk.collect.lists.RecyclerViewUtils.setItemViewLayoutParams
+import org.odk.collect.lists.RecyclerViewUtils.matchParentWidth
 
 class BlankFormListAdapter(
     val listener: OnFormItemClickListener
@@ -64,7 +64,7 @@ class BlankFormListAdapter(
         }
 
         init {
-            setItemViewLayoutParams()
+            matchParentWidth()
         }
     }
 }
