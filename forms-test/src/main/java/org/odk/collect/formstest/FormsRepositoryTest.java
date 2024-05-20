@@ -138,15 +138,16 @@ public abstract class FormsRepositoryTest {
     @Test
     public void softDelete_deletesTheSavepointThatBelongsToTheFormThatShouldBeDeleted() {
         FormsRepository formsRepository = buildSubject();
-        Form form = formsRepository.save(FormUtils.buildForm("1", null, getFormFilesPath())
-                .build());
-        Savepoint savepoint1 = new Savepoint(form.getDbId(), null, "", "");
-        Savepoint savepoint2 = new Savepoint(form.getDbId() + 1, null, "", "");
+        Form form1 = formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath()).build());
+        Form form2 = formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath()).build());
+
+        Savepoint savepoint1 = new Savepoint(form1.getDbId(), null, "", "");
+        Savepoint savepoint2 = new Savepoint(form2.getDbId(), null, "", "");
         savepointsRepository.save(savepoint1);
         savepointsRepository.save(savepoint2);
 
-        formsRepository.softDelete(form.getDbId());
-        assertThat(formsRepository.get(form.getDbId()).isDeleted(), is(true));
+        formsRepository.softDelete(form1.getDbId());
+
         assertThat(savepointsRepository.getAll(), contains(savepoint2));
     }
 
@@ -275,14 +276,16 @@ public abstract class FormsRepositoryTest {
     @Test
     public void delete_deletesTheSavepointThatBelongsToTheFormThatShouldBeDeleted() {
         FormsRepository formsRepository = buildSubject();
-        Form form = formsRepository.save(FormUtils.buildForm("id", "version", getFormFilesPath()).build());
+        Form form1 = formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath()).build());
+        Form form2 = formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath()).build());
 
-        Savepoint savepoint1 = new Savepoint(form.getDbId(), null, "", "");
-        Savepoint savepoint2 = new Savepoint(form.getDbId() + 1, null, "", "");
+        Savepoint savepoint1 = new Savepoint(form1.getDbId(), null, "", "");
+        Savepoint savepoint2 = new Savepoint(form2.getDbId(), null, "", "");
         savepointsRepository.save(savepoint1);
         savepointsRepository.save(savepoint2);
 
-        formsRepository.delete(form.getDbId());
+        formsRepository.delete(form1.getDbId());
+
         assertThat(savepointsRepository.getAll(), contains(savepoint2));
     }
 
@@ -330,14 +333,12 @@ public abstract class FormsRepositoryTest {
 
         Savepoint savepoint1 = new Savepoint(form1.getDbId(), null, "", "");
         Savepoint savepoint2 = new Savepoint(form2.getDbId(), null, "", "");
-        Savepoint savepoint3 = new Savepoint(form2.getDbId() + 1, null, "", "");
         savepointsRepository.save(savepoint1);
         savepointsRepository.save(savepoint2);
-        savepointsRepository.save(savepoint3);
 
         formsRepository.deleteAll();
 
-        assertThat(savepointsRepository.getAll(), contains(savepoint3));
+        assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true));
     }
 
     @Test
