@@ -81,8 +81,8 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
     }
 
     private fun readEntities(): MutableList<Entity> {
-        return readJson().entries.flatMap { (dataset, entities) ->
-            entities.map { it.toEntity(dataset) }
+        return readJson().entries.flatMap { (list, entities) ->
+            entities.map { it.toEntity(list) }
         }.toMutableList()
     }
 
@@ -148,9 +148,9 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         val offline: Boolean
     )
 
-    private fun JsonEntity.toEntity(dataset: String): Entity {
+    private fun JsonEntity.toEntity(list: String): Entity {
         return Entity(
-            dataset,
+            list,
             this.id,
             this.label,
             this.version,

@@ -7,8 +7,8 @@ class EntitiesPage : Page<EntitiesPage>() {
         return this
     }
 
-    fun clickOnList(datasetName: String): DatasetPage {
-        clickOnText(datasetName)
-        return DatasetPage(datasetName)
+    fun clickOnList(list: String): EntityListPage {
+        clickOnText(list)
+        return EntityListPage(list)
     }
 }
