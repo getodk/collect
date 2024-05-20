@@ -6,6 +6,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
+import org.odk.collect.entities.Entity.State.ONLINE
 import org.odk.collect.shared.TempFiles
 import java.io.File
 
@@ -20,7 +21,7 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, offline = false)))
+        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, state = ONLINE)))
     }
 
     @Test
@@ -30,7 +31,7 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, offline = false)))
+        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, state = ONLINE)))
     }
 
     @Test
@@ -40,7 +41,7 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntities("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, offline = false)))
+        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, state = ONLINE)))
     }
 
     @Test
@@ -53,7 +54,7 @@ class LocalEntityUseCasesTest {
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
-            containsInAnyOrder(Entity("songs", "noah", "Noah", 3, offline = false))
+            containsInAnyOrder(Entity("songs", "noah", "Noah", 3, state = ONLINE))
         )
     }
 
@@ -74,7 +75,7 @@ class LocalEntityUseCasesTest {
                     "Noah",
                     2,
                     listOf(Pair("length", "4:58")),
-                    offline = false
+                    state = ONLINE
                 )
             )
         )
@@ -124,7 +125,7 @@ class LocalEntityUseCasesTest {
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
-            containsInAnyOrder(Entity("songs", "cathedrals", label = "", offline = false))
+            containsInAnyOrder(Entity("songs", "cathedrals", label = "", state = ONLINE))
         )
     }
 
@@ -158,7 +159,7 @@ class LocalEntityUseCasesTest {
         assertThat(
             songs,
             containsInAnyOrder(
-                Entity("songs", "cathedrals", "Cathedrals", offline = false),
+                Entity("songs", "cathedrals", "Cathedrals", state = ONLINE),
                 Entity("songs", "noah", "Noah")
             )
         )
@@ -175,7 +176,7 @@ class LocalEntityUseCasesTest {
         LocalEntityUseCases.updateLocalEntities("songs", secondCsv, entitiesRepository)
 
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", offline = false)))
+        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", state = ONLINE)))
     }
 
     @Test

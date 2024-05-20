@@ -28,15 +28,15 @@ object LocalEntityUseCases {
 
             if (existing == null || existing.version < entity.version) {
                 Pair(new + entity, missing)
-            } else if (existing.offline) {
-                Pair(new + existing.copy(offline = false), missing)
+            } else if (existing.state == Entity.State.OFFLINE) {
+                Pair(new + existing.copy(state = Entity.State.ONLINE), missing)
             } else {
                 Pair(new, missing)
             }
         }
 
         missingFromServer.values.forEach {
-            if (!it.offline) {
+            if (it.state == Entity.State.ONLINE) {
                 entitiesRepository.delete(it.id)
             }
         }
@@ -72,7 +72,7 @@ object LocalEntityUseCases {
                 }
             }
 
-        val entity = Entity(list, id, label, version, properties, offline = false)
+        val entity = Entity(list, id, label, version, properties, state = Entity.State.ONLINE)
         return entity
     }
 }

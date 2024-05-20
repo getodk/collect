@@ -32,10 +32,9 @@ class InMemEntitiesRepository : EntitiesRepository {
             val existing = this.entities.find { it.id == entity.id }
 
             if (existing != null) {
-                val offline = if (existing.offline) {
-                    entity.offline
-                } else {
-                    false
+                val state = when (existing.state) {
+                    Entity.State.OFFLINE -> entity.state
+                    Entity.State.ONLINE -> Entity.State.ONLINE
                 }
 
                 this.entities.remove(existing)
@@ -46,7 +45,7 @@ class InMemEntitiesRepository : EntitiesRepository {
                         entity.label ?: existing.label,
                         version = entity.version,
                         properties = mergeProperties(existing, entity),
-                        offline = offline
+                        state = state
                     )
                 )
             } else {

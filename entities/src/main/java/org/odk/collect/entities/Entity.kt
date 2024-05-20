@@ -6,5 +6,10 @@ data class Entity @JvmOverloads constructor(
     val label: String?,
     val version: Int = 1,
     val properties: List<Pair<String, String>> = emptyList(),
-    val offline: Boolean = true
-)
+    val state: State = State.OFFLINE
+) {
+    enum class State {
+        OFFLINE,
+        ONLINE
+    }
+}

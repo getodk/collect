@@ -26,10 +26,9 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             val existing = storedEntities.find { it.id == entity.id }
 
             if (existing != null) {
-                val offline = if (existing.offline) {
-                    entity.offline
-                } else {
-                    false
+                val state = when (existing.state) {
+                    Entity.State.OFFLINE -> entity.state
+                    Entity.State.ONLINE -> Entity.State.ONLINE
                 }
 
                 storedEntities.remove(existing)
@@ -40,7 +39,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
                         entity.label ?: existing.label,
                         version = entity.version,
                         properties = mergeProperties(existing, entity),
-                        offline = offline
+                        state = state
                     )
                 )
             } else {
@@ -145,13 +144,19 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
     )
 
     private fun JsonEntity.toEntity(list: String): Entity {
+        val state = if (this.offline) {
+            Entity.State.OFFLINE
+        } else {
+            Entity.State.ONLINE
+        }
+
         return Entity(
             list,
             this.id,
             this.label,
             this.version,
             this.properties.entries.map { Pair(it.key, it.value) },
-            this.offline
+            state
         )
     }
 
@@ -161,7 +166,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             this.label,
             this.version,
             this.properties.toMap(),
-            this.offline
+            this.state == Entity.State.OFFLINE
         )
     }
 }

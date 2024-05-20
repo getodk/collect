@@ -36,10 +36,10 @@ class EntityItemViewTest {
         val view = EntityItemView(context)
         val entity = Entity("songs", "1", "S.D.O.S")
 
-        view.setEntity(entity.copy(offline = true))
+        view.setEntity(entity.copy(state = Entity.State.OFFLINE))
         assertThat(view.binding.offlinePill.isVisible, equalTo(true))
 
-        view.setEntity(entity.copy(offline = false))
+        view.setEntity(entity.copy(state = Entity.State.ONLINE))
         assertThat(view.binding.offlinePill.isVisible, equalTo(false))
     }
 }

@@ -87,13 +87,13 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#save updates offline on existing entity when it is false`() {
+    fun `#save updates state on existing entity when it is offline`() {
         val repository = buildSubject()
 
-        val wine = Entity("wines", "1", "Léoville Barton 2008", offline = true)
+        val wine = Entity("wines", "1", "Léoville Barton 2008", state = Entity.State.OFFLINE)
         repository.save(wine)
 
-        val updatedWine = wine.copy(offline = false)
+        val updatedWine = wine.copy(state = Entity.State.ONLINE)
         repository.save(updatedWine)
 
         val wines = repository.getEntities("wines")
@@ -101,13 +101,13 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#save does not update offline on existing entity when it is true`() {
+    fun `#save does not update state on existing entity when it is online`() {
         val repository = buildSubject()
 
-        val wine = Entity("wines", "1", "Léoville Barton 2008", offline = false)
+        val wine = Entity("wines", "1", "Léoville Barton 2008", state = Entity.State.ONLINE)
         repository.save(wine)
 
-        val updatedWine = wine.copy(offline = true)
+        val updatedWine = wine.copy(state = Entity.State.OFFLINE)
         repository.save(updatedWine)
 
         val wines = repository.getEntities("wines")

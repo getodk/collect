@@ -15,6 +15,6 @@ class EntityItemView(context: Context) : FrameLayout(context) {
         binding.properties.text = entity.properties
             .sortedBy { it.first }
             .joinToString(separator = ", ") { "${it.first}: ${it.second}" }
-        binding.offlinePill.isVisible = entity.offline
+        binding.offlinePill.isVisible = entity.state == Entity.State.OFFLINE
     }
 }
