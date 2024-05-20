@@ -90,7 +90,8 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         StrictMode.noteSlowCall("Reading from JSON file")
 
         if (!entitiesFile.exists()) {
-            createFile()
+            entitiesFile.parentFile.mkdirs()
+            entitiesFile.createNewFile()
         }
 
         try {
@@ -111,14 +112,9 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             }
         } catch (e: Exception) {
             entitiesFile.delete()
-            createFile()
+            entitiesFile.createNewFile()
             return mutableMapOf()
         }
-    }
-
-    private fun createFile() {
-        entitiesFile.parentFile.mkdirs()
-        entitiesFile.createNewFile()
     }
 
     private fun writeJson(map: MutableMap<String, MutableList<JsonEntity>>) {
