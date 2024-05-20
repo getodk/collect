@@ -32,16 +32,19 @@ class JsonFileEntitiesRepositoryTest : EntitiesRepositoryTest() {
     }
 
     @Test
-    fun `deletes existing backing file if it can't be parsed by current code`() {
+    fun `clears data if backing file can't be parsed by current code`() {
         val repository = buildSubject()
-        repository.getEntities("blah")
+        repository.addList("stuff")
+        repository.save(Entity("stuff", "123", null))
 
         val filesInDir = directory.listFiles()
         assertThat(filesInDir!!.size, equalTo(1))
-
         val backingFile = filesInDir[0]
         backingFile.writeText("blah")
 
         assertThat(repository.getEntities("blah").size, equalTo(0))
+
+        repository.save(Entity("stuff", "123", null))
+        assertThat(repository.getEntities("stuff").size, equalTo(1))
     }
 }
