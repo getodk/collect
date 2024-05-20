@@ -99,6 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@drawable/list_item_divider"
+        android:layout_marginBottom="@dimen/margin_extra_extra_small"
         app:layout_constraintBottom_toTopOf="@id/save" />
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
@@ -107,8 +108,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_marginBottom="@dimen/margin_extra_extra_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/mbtiles_info_icon_text" />
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/cancel"

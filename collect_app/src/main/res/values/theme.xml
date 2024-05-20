@@ -100,6 +100,7 @@
         <item name="materialButtonOutlinedStyle">@style/Widget.Collect.Button.OutlinedButton</item>
         <item name="borderlessButtonStyle">@style/Widget.Collect.Button.TextButton</item>
         <item name="materialAlertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
+        <item name="bottomSheetDialogTheme">@style/Theme.Collect.BottomSheet</item>
 
         <!-- Custom style for buttons used in question widgets -->
         <item name="widgetButtonIconQuestionWidgetStyle">@style/Widget.Collect.Button.Icon.QuestionWidget</item>
@@ -148,5 +149,9 @@
 
     <style name="Widget.Collect.SearchView.NoIcon" parent="Widget.AppCompat.SearchView">
         <item name="searchHintIcon">@null</item>
+    </style>
+
+    <style name="Theme.Collect.BottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="materialButtonStyle">@style/Widget.Collect.Button</item>
     </style>
 </resources>
