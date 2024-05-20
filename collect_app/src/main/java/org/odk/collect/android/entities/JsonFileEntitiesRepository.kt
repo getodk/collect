@@ -23,7 +23,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         val storedEntities = readEntities()
 
         entities.forEach { entity ->
-            val existing = storedEntities.find { it.id == entity.id && it.list == entity.list }
+            val existing = storedEntities.find { it.id == entity.id }
 
             if (existing != null) {
                 val offline = if (existing.offline) {
