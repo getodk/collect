@@ -16,22 +16,22 @@
   <string name="version_number">Versio: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="added_on_date_at_time">\'Lisätty\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
+  <string name="added_on_date_at_time">\'Lisätty\' EEE dd.MMM.yyyy \'kello\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="updated_on_date_at_time">\'Päivitetty\' EEE dd.MM.yyyy \'kello\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">\'Tallennettu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
+  <string name="saved_on_date_at_time">\'Tallennettu\' EEE dd.MM.yyyy \'kello\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">\'Viimeistelty\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
+  <string name="finalized_on_date_at_time">\'Viimeistelty\' EEE dd.MM.yyyy \'kello\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'Lähetetty\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
+  <string name="sent_on_date_at_time">\'Lähetetty\' EEE dd.MM.yyyy \'kello\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'Lähettäminen epäonnistunut\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
+  <string name="sending_failed_on_date_at_time">\'Lähettäminen epäonnistunut\' EEE dd.MM.yyyy \'kello\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="deleted_on_date_at_time">\'Poistettu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
+  <string name="deleted_on_date_at_time">\'Poistettu\' EEE dd.MM.yyyy \'kello\' HH:mm</string>
   <string name="submission_deleted">Lähetys poistettu</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="modified_on_date_at_time">\'Muokattu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
+  <string name="modified_on_date_at_time">\'Muokattu\' EEE dd.MM.yyyy \'kello\' HH:mm</string>
   <string name="encrypted_form">Salattu lomake</string>
   <string name="deleted_form">Poistettu lomake</string>
   <string name="sort_the_list">Lajittele lista</string>
@@ -134,10 +134,10 @@
   <string name="keep_editing">Jatka muokkausta</string>
   <string name="quit_form_title">Tallennetaanko lomake?</string>
   <string name="save_explanation">Voit tallentaa tämän lomakkeen ja löytää sen milloin tahansa luonnostesi joukosta.</string>
-  <string name="save_explanation_with_last_saved">\'Tämä lomake tallennettiin viimeksi\' EEE, MMM dd, yyyy \'kello\' HH:mm\'. Tallenna luonnos säilyttääksesi muutokset.\'</string>
+  <string name="save_explanation_with_last_saved">\'Tämä lomake tallennettiin viimeksi\' EEE dd.MM.yyyy \'kello\' HH:mm\'. Tallenna luonnos säilyttääksesi muutokset.\'</string>
   <string name="quit_form_continue_title">Jatketaanko muokkausta?</string>
   <string name="discard_form_warning">Jos hylkäät lomakkeen, tulet menettämään kaikki tähän mennessä tekemäsi muutokset.</string>
-  <string name="discard_changes_warning">\'Tämä lomake tallennettiin viimeksi\' EEE, MMM dd, yyyy \'kello\' HH:mm\'. Jos hylkäät muutokset, tulet menettämään kaikki tähän mennessä tekemäsi muutokset.\'</string>
+  <string name="discard_changes_warning">\'Tämä lomake tallennettiin viimeksi\' EEE dd.MM.yyyy \'kello\' HH:mm\'. Jos hylkäät muutokset, tulet menettämään kaikki tähän mennessä tekemäsi muutokset.\'</string>
   <string name="saving_form">Tallentamassa lomaketta</string>
   <string name="survey_saving_validating_message">Tarkistetaan vastauksia…</string>
   <string name="survey_saving_collecting_message">Kerätää dataa…</string>
@@ -391,8 +391,29 @@
   <string name="google_play_services_error_occured">Google Maps -palveluun ei saada yhteyttä. Onko Google Play Services asennettu?</string>
   <string name="carto_map_style_positron">Positroni</string>
   <string name="carto_map_style_dark_matter">Pimeä aine</string>
+  <!--Title for the reference layer section of settings-->
   <string name="reference_layer">Viitekerros</string>
-  <string name="layer_data_file">Kerrosdatatiedosto</string>
+  <!--Label for the reference layer setting-->
+  <string name="layer_data_file">Kerros</string>
+  <!--Title for the screen that allows the user to select a reference layer for maps-->
+  <string name="reference_layer_dialog_title">Valitse viitekerros</string>
+  <!--Description of how to add reference layers to the project-->
+  <string name="reference_layer_dialog_description" tools:ignore="UnusedResources">Valitse viitekerros jota käytetään kaikissa tämän projektin kartoissa. Voit lisätä vaihtoehtoja listaan valitsemalla MBTile-tiedoston laitteeltasi.</string>
+  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <string name="get_help_with_reference_layers">Opi lisää MBTile-tiedostojen lisäämisestä.</string>
+  <!--Text for button that lets the user select a reference layer on their device to add-->
+  <string name="add_layer" tools:ignore="UnusedResources">Lisää kerros</string>
+  <!--Text for button that lets the user delete a reference layer-->
+  <string name="delete_layer" tools:ignore="UnusedResources">Poista kerros</string>
+  <!--Text for title above list of layers-->
+  <string name="layers_list_title" tools:ignore="UnusedResources">Kerrokset</string>
+  <!--Text for title and subtitle above options for how the layer can be access-->
+  <string name="select_layer_access_title" tools:ignore="UnusedResources">Valitse kerroksen käyttöoikeudet</string>
+  <string name="select_layer_access_subtitle" tools:ignore="UnusedResources">Haluatko kerroksen olevan käytettävissä kaikissa projekteissa vai ainoastaan tässä projektissa?</string>
+  <!--Text for option where layer should be available to all projects-->
+  <string name="all_projects_option" tools:ignore="UnusedResources">Kaikissa projekteissa</string>
+  <!--Text for option where layer should be available to the current project only-->
+  <string name="current_project_option" tools:ignore="UnusedResources">Vain tässä projektissa</string>
   <string name="record_geopoint">Tallenna piste</string>
   <string name="location_accuracy">Tarkkuus: %1$s m</string>
   <string name="location_provider">Sijaintilähde: %s</string>
@@ -487,8 +508,6 @@
   <string name="location_tracking_notification_channel_name">Sijainnin seuranta</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
   <string name="location_tracking_notification_title">Sijaintia seurataan…</string>
-  <!--Text of button user can press to get help when setting up Reference Layers-->
-  <string name="get_help_with_reference_layers">Viitekerrosten ohje</string>
   <!--Description for button that zooms to the user's current location on a map-->
   <string name="show_my_location">Näytä sijaintini</string>
   <!--Description for button that zooms a map so that it shows all items-->
@@ -569,7 +588,7 @@
   <string name="delete_file">Poista valittu</string>
   <string name="delete_no">Älä poista</string>
   <string name="delete_yes">Poista lomakkeita</string>
-    <string name="form_delete_message">Valittuja lomakkeita poistetaan</string>
+  <string name="form_delete_message">Valittuja lomakkeita poistetaan</string>
   <string name="file_deleted_ok">%s lomakkeen poistaminen onnistui!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
@@ -903,6 +922,16 @@
   <string name="open_settings">Avaa asetukset</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <string name="entities_title">Entiteettejä</string>
+  <!--Title for setting that controls whether local entity features are enabled or not-->
+  <string name="include_local_entities_setting">Aktivoi paikalliset entiteetit</string>
+  <string name="local_entity_features_summary">Seurantalomakkeilla tulee olemaan johdonmukaiset entiteettilistat ja tulevat sisällyttämään paikallisesti luodut tai päivitetyt entiteetit.</string>
+  <!--Text for button that leads to browser for the user to view and manage entity lists-->
+  <string name="entity_browser_button">Tarkastele entiteettilistoja</string>
+  <!--Text for button that deletes all entities for the project-->
+  <string name="clear_entities">Poista kaikki</string>
+  <!--Text for button that adds a new entity list-->
+  <string name="add_entity_list">Lisää entiteettilista</string>
+  <!--Label for entity that has been created offline and is not on the server yet-->
   <!--##############################################
     # Crash handling
     ##############################################-->
@@ -1021,4 +1050,35 @@
   <string name="empty_list_of_blank_forms_to_delete_subtitle">Kun olet ladannut tyhjiä lomakkeita ne tulevat ilmestymään tänne</string>
   <!--Subtext displayed when the list of filled forms to delete is empty-->
   <string name="empty_list_of_saved_forms_to_delete_subtitle">Kun olet tallentanut lomakkeita ne tulevat ilmestymään tänne</string>
+  <!--##############################################
+    # Savepoint recovery dialog
+    ##############################################-->
+  <!--Title displayed in a dialog before starting a form if there is a work to recover-->
+  <string name="savepoint_recovery_dialog_title">Haluatko palauttaa työsi?</string>
+  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <string name="savepoint_recovery_dialog_message">\'Collect sulkeutui odottamattomasti\' EEE dd.MM.yyyy \'kello\' HH:mm\' ja tallensi työsi.\n\nHaluatko palauttaa työsi?\'</string>
+  <!--Text for the button that accepts the recovery of the work-->
+  <string name="recover">Palauta</string>
+  <!--Text for the button that declines the recovery of the work-->
+  <string name="do_not_recover">Hylkää</string>
+  <!--Text for the button that initiates getting user location-->
+  <string name="get_point">Hae piste</string>
+  <!--Text for the button that displays a map for viewing or changing an already existing location-->
+  <string name="view_or_change_point">Tarkastele tai muuta pistettä</string>
+  <!--Text for the button that displays a map for viewing an already existing location-->
+  <string name="view_point">Tarkastele pistettä</string>
+  <!--Text for the button that initiates getting user location when one is already present-->
+  <string name="change_point">Muuta pistettä</string>
+  <!--Text for the button that displays a map for getting a new line-->
+  <string name="get_line">Hae viiva</string>
+  <!--Text for the button that displays a map for viewing or changing an already existing line-->
+  <string name="view_or_change_line">Tarkastele tai muuta viivaa</string>
+  <!--Text for the button that displays a map for viewing an already existing line-->
+  <string name="view_line">Tarkastele viivaa</string>
+  <!--Text for the button that displays a map for getting a new polygon-->
+  <string name="get_polygon">Hae monikulmio</string>
+  <!--Text for the button that displays a map for viewing or changing an already existing polygon-->
+  <string name="view_or_change_polygon">Tarkastele tai muuta monikulmiota</string>
+  <!--Text for the button that displays a map for viewing an already existing polygon-->
+  <string name="view_polygon">Tarkastele monikulmiota</string>
 </resources>

@@ -210,6 +210,17 @@
   <string name="hybrid">Hübriid</string>
   <string name="satellite">Satelliit</string>
   <string name="google_play_services_error_occured">Puudub ligipääs Google Maps-ile. Veenduge, et Google Play teenused on paigaldatud.</string>
+  <!--Title for the reference layer section of settings-->
+  <!--Label for the reference layer setting-->
+  <!--Title for the screen that allows the user to select a reference layer for maps-->
+  <!--Description of how to add reference layers to the project-->
+  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <!--Text for button that lets the user select a reference layer on their device to add-->
+  <!--Text for button that lets the user delete a reference layer-->
+  <!--Text for title above list of layers-->
+  <!--Text for title and subtitle above options for how the layer can be access-->
+  <!--Text for option where layer should be available to all projects-->
+  <!--Text for option where layer should be available to the current project only-->
   <string name="provider_disabled_error">Kahjuks on asukoha küsimine maha keeratud!</string>
   <string name="gps_result">Laiuskraad: %1$s\nPikkuskraad: %2$s\nKõrgus: %3$sm\nTäpsusaste: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -245,7 +256,6 @@
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
-  <!--Text of button user can press to get help when setting up Reference Layers-->
   <!--Description for button that zooms to the user's current location on a map-->
   <!--Description for button that zooms a map so that it shows all items-->
   <!--Description for button that pauses automatic location recording-->
@@ -298,7 +308,7 @@
   <string name="delete_file">Kustuta valitu</string>
   <string name="delete_no">Ei kustuta</string>
   <string name="delete_yes">Kustuta vormid</string>
-    <string name="file_deleted_ok">%s vorm(id) edukalt kustutatud!</string>
+  <string name="file_deleted_ok">%s vorm(id) edukalt kustutatud!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->
@@ -457,6 +467,11 @@
     # Permissions
     ##############################################-->
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--Title for setting that controls whether local entity features are enabled or not-->
+  <!--Text for button that leads to browser for the user to view and manage entity lists-->
+  <!--Text for button that deletes all entities for the project-->
+  <!--Text for button that adds a new entity list-->
+  <!--Label for entity that has been created offline and is not on the server yet-->
   <!--##############################################
     # Crash handling
     ##############################################-->
@@ -501,4 +516,22 @@
   <!--Message displayed when the list of forms to delete is empty-->
   <!--Subtext displayed when the list of blank forms to delete is empty-->
   <!--Subtext displayed when the list of filled forms to delete is empty-->
+  <!--##############################################
+    # Savepoint recovery dialog
+    ##############################################-->
+  <!--Title displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Text for the button that accepts the recovery of the work-->
+  <!--Text for the button that declines the recovery of the work-->
+  <string name="do_not_recover">Loobu</string>
+  <!--Text for the button that initiates getting user location-->
+  <!--Text for the button that displays a map for viewing or changing an already existing location-->
+  <!--Text for the button that displays a map for viewing an already existing location-->
+  <!--Text for the button that initiates getting user location when one is already present-->
+  <!--Text for the button that displays a map for getting a new line-->
+  <!--Text for the button that displays a map for viewing or changing an already existing line-->
+  <!--Text for the button that displays a map for viewing an already existing line-->
+  <!--Text for the button that displays a map for getting a new polygon-->
+  <!--Text for the button that displays a map for viewing or changing an already existing polygon-->
+  <!--Text for the button that displays a map for viewing an already existing polygon-->
 </resources>

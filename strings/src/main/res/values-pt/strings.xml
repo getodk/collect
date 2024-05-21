@@ -175,6 +175,7 @@
   <string name="no_app">Aplicativo faltando. Por favor, inserir manualmente a informação</string>
   <string name="null_intent_value">A aplicação externa não enviou as informações esperadas.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
+  <string name="print">Imprimir</string>
   <string name="launch_printer">Impressão Inicializada</string>
   <string name="no_printer">A impressora solicitada não está instalada. Por favor, instale a impressora</string>
   <string name="open_url">Abrir URL</string>
@@ -225,7 +226,9 @@
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Continuar</string>
   <!--Displayed in the form filling menu when a form has background audio recording enabled-->
+  <string name="record_audio_on">Gravação de áudio: ligado</string>
   <!--Displayed in the form filling menu when a form has background audio recording disabled-->
+  <string name="record_audio_off">Gravação de áudio: desligado</string>
   <string name="background_audio_permission_explanation">Esse formulário grava áudio em segundo plano. Você precisa dar permissão de acesso ao microfone para o ODK Collect. Se não permitir isso, você não poderá abrir esse formulário.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <string name="stop_recording_confirmation">Esse formulário solicita gravação de áudio em segundo plano. Desabilitar isso irá interromper a gravação e descartar o áudio já gravado. Você tem certeza que deseja continuar?</string>
@@ -388,8 +391,28 @@
   <string name="google_play_services_error_occured">Não foi capaz de acessar o Google Maps. O serviço do Google Play está instalado?</string>
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Matéria escura</string>
+  <!--Title for the reference layer section of settings-->
   <string name="reference_layer">Camada de referência</string>
-  <string name="layer_data_file">Arquivo de dados da camada</string>
+  <!--Label for the reference layer setting-->
+  <string name="layer_data_file">Camada</string>
+  <!--Title for the screen that allows the user to select a reference layer for maps-->
+  <string name="reference_layer_dialog_title">Selecionar camada de referência</string>
+  <!--Description of how to add reference layers to the project-->
+  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <string name="get_help_with_reference_layers">Saber mais sobre adicionar MBTiles.</string>
+  <!--Text for button that lets the user select a reference layer on their device to add-->
+  <string name="add_layer" tools:ignore="UnusedResources">Adicionar camada</string>
+  <!--Text for button that lets the user delete a reference layer-->
+  <string name="delete_layer" tools:ignore="UnusedResources">Apagar camada</string>
+  <!--Text for title above list of layers-->
+  <string name="layers_list_title" tools:ignore="UnusedResources">Camadas</string>
+  <!--Text for title and subtitle above options for how the layer can be access-->
+  <string name="select_layer_access_title" tools:ignore="UnusedResources">Selecionar acesso à camada</string>
+  <string name="select_layer_access_subtitle" tools:ignore="UnusedResources">Você deseja que a camada esteja disponível em todos os projetos ou somente no projeto atual?</string>
+  <!--Text for option where layer should be available to all projects-->
+  <string name="all_projects_option" tools:ignore="UnusedResources">Todos os projetos</string>
+  <!--Text for option where layer should be available to the current project only-->
+  <string name="current_project_option" tools:ignore="UnusedResources">Apenas o projeto atual</string>
   <string name="record_geopoint">Registre um ponto</string>
   <string name="location_accuracy">Precisão: %1$s m</string>
   <string name="location_provider">Provedor de localização: %s</string>
@@ -400,7 +423,9 @@
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Ir para as configurações</string>
   <!--Displayed in the form filling menu when a form has background location enabled-->
+  <string name="track_location_on">Rastrear localização: ligado</string>
   <!--Displayed in the form filling menu when a form has background location disabled-->
+  <string name="track_location_off">Rastrear localização: desligado</string>
   <string name="background_location_disabled">Este formulário necessita rastrear sua localização, mas a localização está desabilitada no seu celular. Por favor, habilite no menu %1$s acima.</string>
   <string name="background_location_enabled">Este formulário rastreia a sua localização. Você pode desabilitar o rastreamento de localização no menu %1$s acima.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
@@ -485,8 +510,6 @@
   <string name="location_tracking_notification_channel_name">Registro de localização</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
   <string name="location_tracking_notification_title">Obtendo localização…</string>
-  <!--Text of button user can press to get help when setting up Reference Layers-->
-  <string name="get_help_with_reference_layers">Obter ajuda com Camadas de Referência</string>
   <!--Description for button that zooms to the user's current location on a map-->
   <string name="show_my_location">Mostrar minha localização</string>
   <!--Description for button that zooms a map so that it shows all items-->
@@ -567,7 +590,7 @@
   <string name="delete_file">Apagar Selecionados</string>
   <string name="delete_no">Não Apagar</string>
   <string name="delete_yes">Apagar Formulários</string>
-    <string name="form_delete_message">Apagando formulários selecionados</string>
+  <string name="form_delete_message">Apagando formulários selecionados</string>
   <string name="file_deleted_ok">%s formulário(s) apagados com sucesso!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
@@ -901,6 +924,15 @@
   <string name="open_settings">Abrir configurações</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <string name="entities_title">Entidades</string>
+  <!--Title for setting that controls whether local entity features are enabled or not-->
+  <string name="include_local_entities_setting">Habilitar entidades locais</string>
+  <!--Text for button that leads to browser for the user to view and manage entity lists-->
+  <string name="entity_browser_button">Ver listas de entidades</string>
+  <!--Text for button that deletes all entities for the project-->
+  <string name="clear_entities">Limpar tudo</string>
+  <!--Text for button that adds a new entity list-->
+  <string name="add_entity_list">Adicionar lista de entidades</string>
+  <!--Label for entity that has been created offline and is not on the server yet-->
   <!--##############################################
     # Crash handling
     ##############################################-->
@@ -1002,7 +1034,9 @@
   <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">Não há nada para exibir</string>
   <!--Message displayed when the list of blank forms is empty-->
+  <string name="empty_list_of_blank_forms_title">Não há formulários em branco</string>
   <!--Subtext displayed when the list of blank forms is empty-->
+  <string name="empty_list_of_blank_forms_subtitle">Baixe o formulário para começar</string>
   <!--Message displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_title">Não há nada em rascunhos</string>
   <!--Subtext displayed when the list of drafts is empty-->
@@ -1016,7 +1050,42 @@
   <!--Subtext of message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_subtitle">Quando você enviar formulários finalizados eles aparecerão aqui</string>
   <!--Message displayed when the list of forms to download is empty-->
+  <string name="empty_list_of_forms_to_download_title">Não há formulários para baixar</string>
+  <string name="empty_list_of_forms_to_download_subtitle">Baixe o formulário para começar</string>
   <!--Message displayed when the list of forms to delete is empty-->
+  <string name="empty_list_of_forms_to_delete_title">Não há formulários para apagar</string>
   <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <string name="empty_list_of_blank_forms_to_delete_subtitle">Quando você tiver baixado formulários em branco, eles aparecerão aqui</string>
   <!--Subtext displayed when the list of filled forms to delete is empty-->
+  <string name="empty_list_of_saved_forms_to_delete_subtitle">Quando você tiver formulários salvos, eles aparecerão aqui</string>
+  <!--##############################################
+    # Savepoint recovery dialog
+    ##############################################-->
+  <!--Title displayed in a dialog before starting a form if there is a work to recover-->
+  <string name="savepoint_recovery_dialog_title">Recuperar o seu trabalho?</string>
+  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Text for the button that accepts the recovery of the work-->
+  <string name="recover">Recuperar</string>
+  <!--Text for the button that declines the recovery of the work-->
+  <string name="do_not_recover">Descartar</string>
+  <!--Text for the button that initiates getting user location-->
+  <string name="get_point">Obter ponto</string>
+  <!--Text for the button that displays a map for viewing or changing an already existing location-->
+  <string name="view_or_change_point">Ver ou modificar o ponto</string>
+  <!--Text for the button that displays a map for viewing an already existing location-->
+  <string name="view_point">Visualizar ponto</string>
+  <!--Text for the button that initiates getting user location when one is already present-->
+  <string name="change_point">Alterar ponto</string>
+  <!--Text for the button that displays a map for getting a new line-->
+  <string name="get_line">Obter linha</string>
+  <!--Text for the button that displays a map for viewing or changing an already existing line-->
+  <string name="view_or_change_line">Ver ou modificar linha</string>
+  <!--Text for the button that displays a map for viewing an already existing line-->
+  <string name="view_line">Visualizar linha</string>
+  <!--Text for the button that displays a map for getting a new polygon-->
+  <string name="get_polygon">Obter polígono</string>
+  <!--Text for the button that displays a map for viewing or changing an already existing polygon-->
+  <string name="view_or_change_polygon">Ver ou modificar polígono</string>
+  <!--Text for the button that displays a map for viewing an already existing polygon-->
+  <string name="view_polygon">Visualizar polígono</string>
 </resources>

@@ -117,7 +117,6 @@
   <string name="save_enter_data_description">Esta al final de \"%s\".</string>
   <string name="form_edits_warning_title">Los formularios finalizados no pueden ser editados.</string>
   <string name="form_edits_warning_title_auto_send_enabled">Los formularios enviados no pueden ser editados.</string>
-  <string name="form_edits_warning_message">Si necesita hacer cambios, \"Guardar como borrador\" hasta que esté listo para enviar.</string>
   <string name="form_edits_warning_learn_more">Aprende más</string>
   <string name="save_as_draft">Guardar como borrador</string>
   <string name="finalize">Finalizar</string>
@@ -388,8 +387,18 @@
   <string name="google_play_services_error_occured">No se puede acceder a Google Maps. ¿Están los servicios de Google Play instalados?</string>
   <string name="carto_map_style_positron">Positrón</string>
   <string name="carto_map_style_dark_matter">Materia oscura</string>
+  <!--Title for the reference layer section of settings-->
   <string name="reference_layer">Capa de referencia</string>
-  <string name="layer_data_file">Archivo de datos de capa</string>
+  <!--Label for the reference layer setting-->
+  <!--Title for the screen that allows the user to select a reference layer for maps-->
+  <!--Description of how to add reference layers to the project-->
+  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <!--Text for button that lets the user select a reference layer on their device to add-->
+  <!--Text for button that lets the user delete a reference layer-->
+  <!--Text for title above list of layers-->
+  <!--Text for title and subtitle above options for how the layer can be access-->
+  <!--Text for option where layer should be available to all projects-->
+  <!--Text for option where layer should be available to the current project only-->
   <string name="record_geopoint">Registrando un punto</string>
   <string name="location_accuracy">Precisión: %1$s m</string>
   <string name="location_provider">Proveedor de Ubicación: %s</string>
@@ -485,8 +494,6 @@
   <string name="location_tracking_notification_channel_name">Seguimiento de ubicación</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
   <string name="location_tracking_notification_title">Monitoreando ubicación…</string>
-  <!--Text of button user can press to get help when setting up Reference Layers-->
-  <string name="get_help_with_reference_layers">Obtenga ayuda con las capas de referencia</string>
   <!--Description for button that zooms to the user's current location on a map-->
   <string name="show_my_location">Mostrar mi ubicación</string>
   <!--Description for button that zooms a map so that it shows all items-->
@@ -567,7 +574,7 @@
   <string name="delete_file">Borrar los Seleccionados</string>
   <string name="delete_no">No Borrar</string>
   <string name="delete_yes">Borrar los Formularios</string>
-    <string name="form_delete_message">Eliminando formularios seleccionados</string>
+  <string name="form_delete_message">Eliminando formularios seleccionados</string>
   <string name="file_deleted_ok">¡%s formulario(s) se borraron correctamente!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
@@ -902,6 +909,11 @@
   <string name="open_settings">Abrir Configuración</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <string name="entities_title">Entidades</string>
+  <!--Title for setting that controls whether local entity features are enabled or not-->
+  <!--Text for button that leads to browser for the user to view and manage entity lists-->
+  <!--Text for button that deletes all entities for the project-->
+  <!--Text for button that adds a new entity list-->
+  <!--Label for entity that has been created offline and is not on the server yet-->
   <!--##############################################
     # Crash handling
     ##############################################-->
@@ -978,4 +990,22 @@
   <!--Message displayed when the list of forms to delete is empty-->
   <!--Subtext displayed when the list of blank forms to delete is empty-->
   <!--Subtext displayed when the list of filled forms to delete is empty-->
+  <!--##############################################
+    # Savepoint recovery dialog
+    ##############################################-->
+  <!--Title displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Text for the button that accepts the recovery of the work-->
+  <!--Text for the button that declines the recovery of the work-->
+  <string name="do_not_recover">Descartar</string>
+  <!--Text for the button that initiates getting user location-->
+  <!--Text for the button that displays a map for viewing or changing an already existing location-->
+  <!--Text for the button that displays a map for viewing an already existing location-->
+  <!--Text for the button that initiates getting user location when one is already present-->
+  <!--Text for the button that displays a map for getting a new line-->
+  <!--Text for the button that displays a map for viewing or changing an already existing line-->
+  <!--Text for the button that displays a map for viewing an already existing line-->
+  <!--Text for the button that displays a map for getting a new polygon-->
+  <!--Text for the button that displays a map for viewing or changing an already existing polygon-->
+  <!--Text for the button that displays a map for viewing an already existing polygon-->
 </resources>
