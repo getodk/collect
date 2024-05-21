@@ -110,8 +110,6 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
                 mutableMapOf()
             }
         } catch (e: Exception) {
-            entitiesFile.delete()
-            entitiesFile.createNewFile()
             return mutableMapOf()
         }
     }
