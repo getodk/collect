@@ -1149,6 +1149,9 @@
     <!-- Text for button that adds a new entity list -->
     <string name="add_entity_list">Add entity list</string>
 
+    <!-- Label for entity that has been created offline and is not on the server yet -->
+    <string name="offline">Offline</string>
+
     <!--
     ##############################################
     # Crash handling

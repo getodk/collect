@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages
 
-import org.odk.collect.android.R
-
 class EntitiesPage : Page<EntitiesPage>() {
 
     override fun assertOnPage(): EntitiesPage {
@@ -9,8 +7,8 @@ class EntitiesPage : Page<EntitiesPage>() {
         return this
     }
 
-    fun clickOnDataset(datasetName: String): DatasetPage {
-        clickOnText(datasetName)
-        return DatasetPage(datasetName)
+    fun clickOnList(list: String): EntityListPage {
+        clickOnText(list)
+        return EntityListPage(list)
     }
 }

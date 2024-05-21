@@ -1,59 +1,78 @@
 package org.odk.collect.entities
 
 import org.javarosa.core.model.instance.CsvExternalInstance
+import org.javarosa.core.model.instance.TreeElement
 import java.io.File
 
 object LocalEntityUseCases {
 
     fun updateLocalEntities(
-        dataset: String,
-        entityList: File,
+        list: String,
+        onlineList: File,
         entitiesRepository: EntitiesRepository
     ) {
         val root = try {
-            CsvExternalInstance().parse(dataset, entityList.absolutePath)
+            CsvExternalInstance().parse(list, onlineList.absolutePath)
         } catch (e: Exception) {
             return
         }
 
-        val localEntities = entitiesRepository.getEntities(dataset).associateBy { it.id }
-        val listItems = root.getChildrenWithName("item")
+        val localEntities = entitiesRepository.getEntities(list)
+        val serverEntities = root.getChildrenWithName("item")
 
-        val newAndUpdated = listItems.fold(arrayOf<Entity>()) { entities, item ->
-            val id = item.getFirstChild(EntityItemElement.ID)?.value?.value as? String
-            val label = item.getFirstChild(EntityItemElement.LABEL)?.value?.value as? String
-            val version =
-                (item.getFirstChild(EntityItemElement.VERSION)?.value?.value as? String)?.toInt()
-            if (id == null || label == null || version == null) {
-                return
-            }
+        val accumulator =
+            Pair(arrayOf<Entity>(), localEntities.associateBy { it.id }.toMutableMap())
+        val (newAndUpdated, missingFromServer) = serverEntities.fold(accumulator) { (new, missing), item ->
+            val entity = parseEntityFromItem(item, list) ?: return
+            val existing = missing.remove(entity.id)
 
-            val existing = localEntities[id]
-            if (existing == null || existing.version < version) {
-                val properties = 0.until(item.numChildren)
-                    .fold(emptyList<Pair<String, String>>()) { properties, index ->
-                        val child = item.getChildAt(index)
-
-                        if (!listOf(
-                                EntityItemElement.ID,
-                                EntityItemElement.LABEL,
-                                EntityItemElement.VERSION
-                            ).contains(child.name)
-                        ) {
-                            properties + Pair(child.name, child.value!!.value as String)
-                        } else {
-                            properties
-                        }
-                    }
-
-                entities + Entity(dataset, id, label, version, properties)
+            if (existing == null || existing.version < entity.version) {
+                Pair(new + entity, missing)
+            } else if (existing.state == Entity.State.OFFLINE) {
+                Pair(new + existing.copy(state = Entity.State.ONLINE), missing)
             } else {
-                entities
+                Pair(new, missing)
             }
         }
 
-        if (newAndUpdated.isNotEmpty()) {
-            entitiesRepository.save(*newAndUpdated)
+        missingFromServer.values.forEach {
+            if (it.state == Entity.State.ONLINE) {
+                entitiesRepository.delete(it.id)
+            }
         }
+
+        entitiesRepository.save(*newAndUpdated)
+    }
+
+    private fun parseEntityFromItem(
+        item: TreeElement,
+        list: String
+    ): Entity? {
+        val id = item.getFirstChild(EntityItemElement.ID)?.value?.value as? String
+        val label = item.getFirstChild(EntityItemElement.LABEL)?.value?.value as? String
+        val version =
+            (item.getFirstChild(EntityItemElement.VERSION)?.value?.value as? String)?.toInt()
+        if (id == null || label == null || version == null) {
+            return null
+        }
+
+        val properties = 0.until(item.numChildren)
+            .fold(emptyList<Pair<String, String>>()) { properties, index ->
+                val child = item.getChildAt(index)
+
+                if (!listOf(
+                        EntityItemElement.ID,
+                        EntityItemElement.LABEL,
+                        EntityItemElement.VERSION
+                    ).contains(child.name)
+                ) {
+                    properties + Pair(child.name, child.value!!.value as String)
+                } else {
+                    properties
+                }
+            }
+
+        val entity = Entity(list, id, label, version, properties, state = Entity.State.ONLINE)
+        return entity
     }
 }

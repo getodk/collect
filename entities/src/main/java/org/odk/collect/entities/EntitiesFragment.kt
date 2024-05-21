@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.odk.collect.entities.databinding.ListLayoutBinding
+import org.odk.collect.lists.RecyclerViewUtils.matchParentWidth
 
 class EntitiesFragment(private val viewModelFactory: ViewModelProvider.Factory) : Fragment() {
 
@@ -29,8 +30,8 @@ class EntitiesFragment(private val viewModelFactory: ViewModelProvider.Factory) 
         val binding = ListLayoutBinding.bind(view)
         binding.list.layoutManager = LinearLayoutManager(requireContext())
 
-        val dataset = EntitiesFragmentArgs.fromBundle(requireArguments()).dataset
-        entitiesViewModel.getEntities(dataset).observe(viewLifecycleOwner) {
+        val list = EntitiesFragmentArgs.fromBundle(requireArguments()).list
+        entitiesViewModel.getEntities(list).observe(viewLifecycleOwner) {
             binding.list.adapter = EntitiesAdapter(it)
         }
     }
@@ -54,6 +55,10 @@ private class EntitiesAdapter(private val data: List<Entity>) :
 }
 
 private class EntityViewHolder(context: Context) : ViewHolder(EntityItemView(context)) {
+
+    init {
+        matchParentWidth()
+    }
 
     fun setEntity(entity: Entity) {
         (itemView as EntityItemView).setEntity(entity)

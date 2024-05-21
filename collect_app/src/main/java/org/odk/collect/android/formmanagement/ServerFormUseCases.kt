@@ -111,7 +111,7 @@ object ServerFormUseCases {
             }
 
             val dataset = mediaFile.filename.substringBefore(".csv")
-            if (entitiesRepository.getDatasets().contains(dataset)) {
+            if (entitiesRepository.getLists().contains(dataset)) {
                 LocalEntityUseCases.updateLocalEntities(dataset, tempMediaFile, entitiesRepository)
             }
         }

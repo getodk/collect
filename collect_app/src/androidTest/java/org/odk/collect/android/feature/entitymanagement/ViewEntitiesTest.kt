@@ -27,7 +27,7 @@ class ViewEntitiesTest {
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
             .openEntityBrowser()
-            .clickOnDataset("people")
+            .clickOnList("people")
             .assertEntity("Logan Roy", "full_name: Logan Roy")
     }
 
@@ -42,7 +42,7 @@ class ViewEntitiesTest {
             .addEntityListInBrowser("people")
             .refreshForms()
             .openEntityBrowser()
-            .clickOnDataset("people")
+            .clickOnList("people")
             .assertEntity("Roman Roy", "full_name: Roman Roy")
     }
 }

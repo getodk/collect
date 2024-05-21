@@ -13,7 +13,7 @@ abstract class EntitiesRepositoryTest {
     abstract fun buildSubject(): EntitiesRepository
 
     @Test
-    fun `getDatasets() returns datasets for saved entities`() {
+    fun `#getLists returns lists for saved entities`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008")
@@ -21,11 +21,11 @@ abstract class EntitiesRepositoryTest {
         repository.save(wine)
         repository.save(whisky)
 
-        assertThat(repository.getDatasets(), containsInAnyOrder("wines", "whiskys"))
+        assertThat(repository.getLists(), containsInAnyOrder("wines", "whiskys"))
     }
 
     @Test
-    fun `getEntities() returns entities for dataset`() {
+    fun `#getEntities returns entities for list`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008")
@@ -43,7 +43,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() updates existing entity with matching id`() {
+    fun `#save updates existing entity with matching id`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008", version = 1)
@@ -57,7 +57,23 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() updates existing entity with matching id and version`() {
+    fun `#save updates existing entity with matching id in different list`() {
+        val repository = buildSubject()
+
+        val wine = Entity("wines", "1", "Léoville Barton 2008", version = 1)
+        repository.save(wine)
+
+        val updatedWine = Entity("whisky", wine.id, "Edradour 10", version = 2)
+        repository.save(updatedWine)
+
+        val wines = repository.getEntities("wines")
+        assertThat(wines.size, equalTo(0))
+        val whiskys = repository.getEntities("whisky")
+        assertThat(whiskys, contains(updatedWine))
+    }
+
+    @Test
+    fun `#save updates existing entity with matching id and version`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008", version = 1)
@@ -71,26 +87,35 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() does not update existing entity with matching id but not dataset`() {
+    fun `#save updates state on existing entity when it is offline`() {
         val repository = buildSubject()
 
-        val wine = Entity("wines", "1", "Léoville Barton 2008")
-        val whisky = Entity("whiskys", wine.id, "Lagavulin 16")
+        val wine = Entity("wines", "1", "Léoville Barton 2008", state = Entity.State.OFFLINE)
         repository.save(wine)
-        repository.save(whisky)
 
-        val updatedWine = Entity("wines", wine.id, "Léoville Barton 2009")
+        val updatedWine = wine.copy(state = Entity.State.ONLINE)
         repository.save(updatedWine)
 
         val wines = repository.getEntities("wines")
         assertThat(wines, contains(updatedWine))
-
-        val whiskys = repository.getEntities("whiskys")
-        assertThat(whiskys, contains(whisky))
     }
 
     @Test
-    fun `save() adds new properties`() {
+    fun `#save does not update state on existing entity when it is online`() {
+        val repository = buildSubject()
+
+        val wine = Entity("wines", "1", "Léoville Barton 2008", state = Entity.State.ONLINE)
+        repository.save(wine)
+
+        val updatedWine = wine.copy(state = Entity.State.OFFLINE)
+        repository.save(updatedWine)
+
+        val wines = repository.getEntities("wines")
+        assertThat(wines, contains(wine))
+    }
+
+    @Test
+    fun `#save adds new properties`() {
         val repository = buildSubject()
 
         val wine = Entity(
@@ -117,7 +142,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() updates existing properties`() {
+    fun `#save updates existing properties`() {
         val repository = buildSubject()
 
         val wine = Entity(
@@ -144,7 +169,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `save() does not update existing label if new one is null`() {
+    fun `#save does not update existing label if new one is null`() {
         val repository = buildSubject()
 
         val wine = Entity(
@@ -172,7 +197,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `clear() deletes all entities`() {
+    fun `#clear deletes all entities`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008")
@@ -181,28 +206,41 @@ abstract class EntitiesRepositoryTest {
         repository.save(whisky)
 
         repository.clear()
-        assertThat(repository.getDatasets().size, equalTo(0))
+        assertThat(repository.getLists().size, equalTo(0))
         assertThat(repository.getEntities("wines").size, equalTo(0))
         assertThat(repository.getEntities("whiskys").size, equalTo(0))
     }
 
     @Test
-    fun `save() can save multiple entities`() {
+    fun `#save can save multiple entities`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008")
         val whisky = Entity("whiskys", "2", "Lagavulin 16")
         repository.save(wine, whisky)
 
-        assertThat(repository.getDatasets(), containsInAnyOrder("wines", "whiskys"))
+        assertThat(repository.getLists(), containsInAnyOrder("wines", "whiskys"))
     }
 
     @Test
-    fun `addDataset() adds a dataset with no entities`() {
+    fun `#addList adds a list with no entities`() {
         val repository = buildSubject()
 
-        repository.addDataset("wine")
-        assertThat(repository.getDatasets(), containsInAnyOrder("wine"))
+        repository.addList("wine")
+        assertThat(repository.getLists(), containsInAnyOrder("wine"))
         assertThat(repository.getEntities("wine").size, equalTo(0))
+    }
+
+    @Test
+    fun `#delete removes an entity`() {
+        val repository = buildSubject()
+
+        val leoville = Entity("wines", "1", "Léoville Barton 2008")
+        val canet = Entity("wines", "2", "Pontet-Canet 2014")
+        repository.save(leoville, canet)
+
+        repository.delete("1")
+
+        assertThat(repository.getEntities("wines"), containsInAnyOrder(canet))
     }
 }

@@ -9,7 +9,7 @@ class LocalEntitiesFileInstanceParserTest {
     private val entitiesRepository = InMemEntitiesRepository()
 
     @Test
-    fun `includes properties in offline entity elements`() {
+    fun `includes properties in local entity elements`() {
         val entity =
             Entity(
                 "people",
@@ -30,7 +30,7 @@ class LocalEntitiesFileInstanceParserTest {
     }
 
     @Test
-    fun `includes version in offline entity elements`() {
+    fun `includes version in local entity elements`() {
         val entity =
             Entity(
                 "people",

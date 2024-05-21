@@ -27,7 +27,7 @@ class EntityBrowserActivity : LocalizedActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(DatasetsFragment::class) { DatasetsFragment(viewModelFactory, ::getToolbar) }
+            .forClass(EntityListsFragment::class) { EntityListsFragment(viewModelFactory, ::getToolbar) }
             .forClass(EntitiesFragment::class) { EntitiesFragment(viewModelFactory) }
             .build()
 

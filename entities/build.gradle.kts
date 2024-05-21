@@ -53,6 +53,7 @@ dependencies {
     implementation(project(":androidshared"))
     implementation(project(":material"))
     implementation(project(":async"))
+    implementation(project(":lists"))
 
     implementation(Dependencies.kotlin_stdlib)
     implementation(Dependencies.javarosa) {
