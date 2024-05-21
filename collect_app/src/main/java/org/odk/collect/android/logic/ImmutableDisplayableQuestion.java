@@ -64,6 +64,11 @@ public class ImmutableDisplayableQuestion {
     private final boolean isReadOnly;
 
     /**
+     * Whether the question is required.
+     */
+    private final boolean isRequired;
+
+    /**
      * The choices displayed to a user if this question is of a type that has choices.
      */
     private List<SelectChoice> selectChoices;
@@ -78,6 +83,7 @@ public class ImmutableDisplayableQuestion {
         guidanceText = question.getSpecialFormQuestionText(question.getQuestion().getHelpTextID(), "guidance");
         answerText = question.getAnswerText();
         isReadOnly = question.isReadOnly();
+        isRequired = question.isRequired();
 
         List<SelectChoice> choices = question.getSelectChoices();
         if (choices != null) {
@@ -106,7 +112,8 @@ public class ImmutableDisplayableQuestion {
                 && (getGuidanceHintText(question) == null ? guidanceText == null : getGuidanceHintText(question).equals(guidanceText))
                 && (question.getAnswerText() == null ? answerText == null : question.getAnswerText().equals(answerText))
                 && (question.isReadOnly() == isReadOnly)
-                && selectChoiceListsEqual(question.getSelectChoices(), selectChoices);
+                && selectChoiceListsEqual(question.getSelectChoices(), selectChoices)
+                && question.isRequired() == isRequired;
     }
 
     private static boolean selectChoiceListsEqual(List<SelectChoice> selectChoiceList1, List<SelectChoice> selectChoiceList2) {

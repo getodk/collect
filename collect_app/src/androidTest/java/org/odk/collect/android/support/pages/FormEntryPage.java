@@ -143,6 +143,13 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new ErrorDialog().assertOnPage();
     }
 
+    public FormEntryPage swipeToNextQuestionWithConstraintViolation(int constraintText) {
+        flingLeft();
+        assertText(constraintText);
+
+        return this;
+    }
+
     public FormEntryPage swipeToNextQuestionWithConstraintViolation(String constraintText) {
         flingLeft();
         assertText(constraintText);
