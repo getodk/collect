@@ -4,6 +4,8 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.savepoints.Savepoint;
+import org.odk.collect.forms.savepoints.SavepointsRepository;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
@@ -24,6 +26,7 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.formstest.FormUtils.createXFormBody;
 
 public abstract class FormsRepositoryTest {
+    protected final SavepointsRepository savepointsRepository = new InMemSavepointsRepository();
 
     public abstract FormsRepository buildSubject();
 
@@ -130,6 +133,22 @@ public abstract class FormsRepositoryTest {
 
         formsRepository.softDelete(1L);
         assertThat(formsRepository.get(1L).isDeleted(), is(true));
+    }
+
+    @Test
+    public void softDelete_deletesTheSavepointThatBelongsToTheFormThatShouldBeDeleted() {
+        FormsRepository formsRepository = buildSubject();
+        Form form1 = formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath()).build());
+        Form form2 = formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath()).build());
+
+        Savepoint savepoint1 = new Savepoint(form1.getDbId(), null, "", "");
+        Savepoint savepoint2 = new Savepoint(form2.getDbId(), null, "", "");
+        savepointsRepository.save(savepoint1);
+        savepointsRepository.save(savepoint2);
+
+        formsRepository.softDelete(form1.getDbId());
+
+        assertThat(savepointsRepository.getAll(), contains(savepoint2));
     }
 
     @Test
@@ -255,6 +274,22 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
+    public void delete_deletesTheSavepointThatBelongsToTheFormThatShouldBeDeleted() {
+        FormsRepository formsRepository = buildSubject();
+        Form form1 = formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath()).build());
+        Form form2 = formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath()).build());
+
+        Savepoint savepoint1 = new Savepoint(form1.getDbId(), null, "", "");
+        Savepoint savepoint2 = new Savepoint(form2.getDbId(), null, "", "");
+        savepointsRepository.save(savepoint1);
+        savepointsRepository.save(savepoint2);
+
+        formsRepository.delete(form1.getDbId());
+
+        assertThat(savepointsRepository.getAll(), contains(savepoint2));
+    }
+
+    @Test
     public void delete_whenMediaPathIsFile_deletesFiles() throws Exception {
         FormsRepository formsRepository = buildSubject();
         Form form = formsRepository.save(FormUtils.buildForm("id", "version", getFormFilesPath()).build());
@@ -291,6 +326,22 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
+    public void deleteAll_deletesAllSavepointsThatBelongToFormsThatShouldBeDeleted() {
+        FormsRepository formsRepository = buildSubject();
+        Form form1 = formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath()).build());
+        Form form2 = formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath()).build());
+
+        Savepoint savepoint1 = new Savepoint(form1.getDbId(), null, "", "");
+        Savepoint savepoint2 = new Savepoint(form2.getDbId(), null, "", "");
+        savepointsRepository.save(savepoint1);
+        savepointsRepository.save(savepoint2);
+
+        formsRepository.deleteAll();
+
+        assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true));
+    }
+
+    @Test
     public void deleteByMd5Hash_deletesFormsWithMatchingHash() {
         FormsRepository formsRepository = buildSubject();
         formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath(), createXFormBody("id1", "version", "Form1")).build());
@@ -301,6 +352,23 @@ public abstract class FormsRepositoryTest {
 
         assertThat(formsRepository.getAll().size(), is(1));
         assertThat(formsRepository.getAll().get(0).getFormId(), is("id2"));
+    }
+
+    @Test
+    public void deleteByMd5Hash_deletesTheSavepointThatBelongsToTheFormThatShouldBeDeleted() {
+        FormsRepository formsRepository = buildSubject();
+        Form form1 = formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath(), createXFormBody("id1", "version", "Form1")).build());
+        Form form2 = formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath(), createXFormBody("id2", "version", "Form2")).build());
+
+        Savepoint savepoint1 = new Savepoint(form1.getDbId(), null, "", "");
+        Savepoint savepoint2 = new Savepoint(form2.getDbId(), null, "", "");
+        savepointsRepository.save(savepoint1);
+        savepointsRepository.save(savepoint2);
+
+        List<Form> id1Forms = formsRepository.getAllByFormIdAndVersion("id1", "version");
+        formsRepository.deleteByMd5Hash(id1Forms.get(0).getMD5Hash());
+
+        assertThat(savepointsRepository.getAll(), contains(savepoint2));
     }
 
     @Test(expected = Exception.class)

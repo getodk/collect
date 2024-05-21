@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.savepoints.SavepointsRepository;
 import org.odk.collect.shared.files.DirectoryUtils;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.TempFiles;
@@ -24,13 +25,23 @@ public class InMemFormsRepository implements FormsRepository {
     private long idCounter = 1L;
 
     private final Supplier<Long> clock;
+    private final SavepointsRepository savepointsRepository;
 
     public InMemFormsRepository() {
-        this.clock = System::currentTimeMillis;
+        this(System::currentTimeMillis, new InMemSavepointsRepository());
     }
 
     public InMemFormsRepository(Supplier<Long> clock) {
+        this(clock, new InMemSavepointsRepository());
+    }
+
+    public InMemFormsRepository(SavepointsRepository savepointsRepository) {
+        this(System::currentTimeMillis, savepointsRepository);
+    }
+
+    public InMemFormsRepository(Supplier<Long> clock, SavepointsRepository savepointsRepository) {
         this.clock = clock;
+        this.savepointsRepository = savepointsRepository;
     }
 
     @Nullable
@@ -155,12 +166,17 @@ public class InMemFormsRepository implements FormsRepository {
             forms.add(new Form.Builder(form)
                     .deleted(true)
                     .build());
+            savepointsRepository.delete(id, null);
         }
     }
 
     @Override
     public void deleteByMd5Hash(@NotNull String md5Hash) {
-        forms.removeIf(f -> f.getMD5Hash().equals(md5Hash));
+        Form form = forms.stream().filter(f -> f.getMD5Hash().equals(md5Hash)).findFirst().orElse(null);
+        if (form != null) {
+            forms.remove(form);
+            savepointsRepository.delete(form.getDbId(), null);
+        }
     }
 
     @Override
@@ -205,5 +221,7 @@ public class InMemFormsRepository implements FormsRepository {
                 mediaDir.delete();
             }
         }
+
+        savepointsRepository.delete(form.getDbId(), null);
     }
 }

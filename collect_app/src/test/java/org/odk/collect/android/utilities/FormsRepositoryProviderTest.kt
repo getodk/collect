@@ -34,7 +34,7 @@ class FormsRepositoryProviderTest {
             on { getOdkDirPath(CACHE, projectId) } doReturn cacheDir.absolutePath
         }
 
-        val formsRepositoryProvider = FormsRepositoryProvider(context, storagePathProvider)
+        val formsRepositoryProvider = FormsRepositoryProvider(context, storagePathProvider, mock())
         val repository = formsRepositoryProvider.get(projectId)
 
         val form = repository.save(buildForm("id", "version", formsDir.absolutePath).build())

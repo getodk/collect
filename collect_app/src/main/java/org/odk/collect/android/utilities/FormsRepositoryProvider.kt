@@ -8,7 +8,8 @@ import org.odk.collect.forms.FormsRepository
 
 class FormsRepositoryProvider @JvmOverloads constructor(
     private val context: Context,
-    private val storagePathProvider: StoragePathProvider = StoragePathProvider()
+    private val storagePathProvider: StoragePathProvider = StoragePathProvider(),
+    private val savepointsRepositoryProvider: SavepointsRepositoryProvider = SavepointsRepositoryProvider(context, storagePathProvider)
 ) {
 
     private val clock = { System.currentTimeMillis() }
@@ -18,6 +19,8 @@ class FormsRepositoryProvider @JvmOverloads constructor(
         val dbPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA, projectId)
         val formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId)
         val cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId)
-        return DatabaseFormsRepository(context, dbPath, formsPath, cachePath, clock)
+        val savepointsRepository = savepointsRepositoryProvider.get(projectId)
+
+        return DatabaseFormsRepository(context, dbPath, formsPath, cachePath, clock, savepointsRepository)
     }
 }

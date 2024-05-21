@@ -21,12 +21,12 @@ public class DatabaseFormsRepositoryTest extends FormsRepositoryTest {
 
     @Override
     public FormsRepository buildSubject() {
-        return new DatabaseFormsRepository(ApplicationProvider.getApplicationContext(), dbDir.getAbsolutePath(), formsDir.getAbsolutePath(), cacheDir.getAbsolutePath(), System::currentTimeMillis);
+        return new DatabaseFormsRepository(ApplicationProvider.getApplicationContext(), dbDir.getAbsolutePath(), formsDir.getAbsolutePath(), cacheDir.getAbsolutePath(), System::currentTimeMillis, savepointsRepository);
     }
 
     @Override
     public FormsRepository buildSubject(Supplier<Long> clock) {
-        return new DatabaseFormsRepository(ApplicationProvider.getApplicationContext(), dbDir.getAbsolutePath(), formsDir.getAbsolutePath(), cacheDir.getAbsolutePath(), clock);
+        return new DatabaseFormsRepository(ApplicationProvider.getApplicationContext(), dbDir.getAbsolutePath(), formsDir.getAbsolutePath(), cacheDir.getAbsolutePath(), clock, savepointsRepository);
     }
 
     @Override

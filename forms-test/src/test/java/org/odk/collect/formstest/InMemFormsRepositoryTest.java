@@ -17,12 +17,12 @@ public class InMemFormsRepositoryTest extends FormsRepositoryTest {
 
     @Override
     public FormsRepository buildSubject() {
-        return new InMemFormsRepository();
+        return new InMemFormsRepository(savepointsRepository);
     }
 
     @Override
     public FormsRepository buildSubject(Supplier<Long> clock) {
-        return new InMemFormsRepository(clock);
+        return new InMemFormsRepository(clock, savepointsRepository);
     }
 
     @Override
