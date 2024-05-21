@@ -369,8 +369,18 @@
   <string name="outdoors" tools:ignore="UnusedResources">Снаружи</string>
   <string name="topographic">Топографический</string>
   <string name="google_play_services_error_occured">Не удалось получить доступ к Google картам. Установлен ли Google Play Services?</string>
+  <!--Title for the reference layer section of settings-->
   <string name="reference_layer">Базовый слой</string>
-  <string name="layer_data_file">Файл данных слоя</string>
+  <!--Label for the reference layer setting-->
+  <!--Title for the screen that allows the user to select a reference layer for maps-->
+  <!--Description of how to add reference layers to the project-->
+  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <!--Text for button that lets the user select a reference layer on their device to add-->
+  <!--Text for button that lets the user delete a reference layer-->
+  <!--Text for title above list of layers-->
+  <!--Text for title and subtitle above options for how the layer can be access-->
+  <!--Text for option where layer should be available to all projects-->
+  <!--Text for option where layer should be available to the current project only-->
   <string name="record_geopoint">Зафиксировать точку</string>
   <string name="location_accuracy">Точность: %1$s м</string>
   <string name="location_provider">Провайдер геолокации: %s</string>
@@ -451,8 +461,6 @@
   <string name="location_tracking_notification_channel_name">Отслеживание местоположения</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
   <string name="location_tracking_notification_title">Отслеживание местоположения…</string>
-  <!--Text of button user can press to get help when setting up Reference Layers-->
-  <string name="get_help_with_reference_layers">Получить помощь по слоям</string>
   <!--Description for button that zooms to the user's current location on a map-->
   <string name="show_my_location">Показать мое местоположение</string>
   <!--Description for button that zooms a map so that it shows all items-->
@@ -533,7 +541,7 @@
   <string name="delete_file">Удалить выбранные</string>
   <string name="delete_no">Не удалять</string>
   <string name="delete_yes">Удалить бланки</string>
-    <string name="form_delete_message">Удаляю выбранные опросники</string>
+  <string name="form_delete_message">Удаляю выбранные опросники</string>
   <string name="file_deleted_ok">Бланк опросника успешно удалён: %s шт.</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
@@ -852,6 +860,11 @@
     ##############################################-->
   <string name="open_settings">Открыть настройки</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--Title for setting that controls whether local entity features are enabled or not-->
+  <!--Text for button that leads to browser for the user to view and manage entity lists-->
+  <!--Text for button that deletes all entities for the project-->
+  <!--Text for button that adds a new entity list-->
+  <!--Label for entity that has been created offline and is not on the server yet-->
   <!--##############################################
     # Crash handling
     ##############################################-->
@@ -908,4 +921,22 @@
   <!--Message displayed when the list of forms to delete is empty-->
   <!--Subtext displayed when the list of blank forms to delete is empty-->
   <!--Subtext displayed when the list of filled forms to delete is empty-->
+  <!--##############################################
+    # Savepoint recovery dialog
+    ##############################################-->
+  <!--Title displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Text for the button that accepts the recovery of the work-->
+  <!--Text for the button that declines the recovery of the work-->
+  <string name="do_not_recover">Отменить</string>
+  <!--Text for the button that initiates getting user location-->
+  <!--Text for the button that displays a map for viewing or changing an already existing location-->
+  <!--Text for the button that displays a map for viewing an already existing location-->
+  <!--Text for the button that initiates getting user location when one is already present-->
+  <!--Text for the button that displays a map for getting a new line-->
+  <!--Text for the button that displays a map for viewing or changing an already existing line-->
+  <!--Text for the button that displays a map for viewing an already existing line-->
+  <!--Text for the button that displays a map for getting a new polygon-->
+  <!--Text for the button that displays a map for viewing or changing an already existing polygon-->
+  <!--Text for the button that displays a map for viewing an already existing polygon-->
 </resources>

@@ -391,8 +391,29 @@
   <string name="google_play_services_error_occured">Impossible d’accéder à Google Maps. Google Play Services est-il installé ?</string>
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Matière Sombre</string>
+  <!--Title for the reference layer section of settings-->
   <string name="reference_layer">Couche de référence</string>
-  <string name="layer_data_file">Dossier de calques</string>
+  <!--Label for the reference layer setting-->
+  <string name="layer_data_file">Couche</string>
+  <!--Title for the screen that allows the user to select a reference layer for maps-->
+  <string name="reference_layer_dialog_title">Sélectionnez la couche de référence</string>
+  <!--Description of how to add reference layers to the project-->
+  <string name="reference_layer_dialog_description" tools:ignore="UnusedResources">Sélectionnez la couche de référence à utiliser pour toutes les cartes de ce projet.  Vous pouvez ajouter des options à la liste en sélectionnant un fichier MBTile sur votre appareil.</string>
+  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <string name="get_help_with_reference_layers">En apprendre plus à propos de l\'ajout de MBTiles.</string>
+  <!--Text for button that lets the user select a reference layer on their device to add-->
+  <string name="add_layer" tools:ignore="UnusedResources">Ajouter une couche</string>
+  <!--Text for button that lets the user delete a reference layer-->
+  <string name="delete_layer" tools:ignore="UnusedResources">Supprimer une couche</string>
+  <!--Text for title above list of layers-->
+  <string name="layers_list_title" tools:ignore="UnusedResources">Couches</string>
+  <!--Text for title and subtitle above options for how the layer can be access-->
+  <string name="select_layer_access_title" tools:ignore="UnusedResources">Sélectionner l\'accès à la couche</string>
+  <string name="select_layer_access_subtitle" tools:ignore="UnusedResources">Voulez vous que la couche soit disponible dans tous les projets ou seulement dans le projet courant ?</string>
+  <!--Text for option where layer should be available to all projects-->
+  <string name="all_projects_option" tools:ignore="UnusedResources">Tous les projets</string>
+  <!--Text for option where layer should be available to the current project only-->
+  <string name="current_project_option" tools:ignore="UnusedResources">Projet courant seulement</string>
   <string name="record_geopoint">Enregistrer un point</string>
   <string name="location_accuracy">Précision: %1$s m</string>
   <string name="location_provider">Fournisseur de la localisation: 1%s</string>
@@ -490,8 +511,6 @@
   <string name="location_tracking_notification_channel_name">Suivi de la localisation</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
   <string name="location_tracking_notification_title">Enregistrement de la localisation…</string>
-  <!--Text of button user can press to get help when setting up Reference Layers-->
-  <string name="get_help_with_reference_layers">Obtenir de l\'aide au sujet des couches de référence</string>
   <!--Description for button that zooms to the user's current location on a map-->
   <string name="show_my_location">Montrer ma position</string>
   <!--Description for button that zooms a map so that it shows all items-->
@@ -572,7 +591,7 @@
   <string name="delete_file">Supprimer la sélection</string>
   <string name="delete_no">Ne pas supprimer</string>
   <string name="delete_yes">Supprimer ces formulaires</string>
-    <string name="form_delete_message">Supprimer les formulaires sélectionnés</string>
+  <string name="form_delete_message">Supprimer les formulaires sélectionnés</string>
   <string name="file_deleted_ok">%s formulaire(s) supprimé(s) avec succès.</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
@@ -906,6 +925,17 @@
   <string name="open_settings">Ouvrir les paramètres</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <string name="entities_title">Entités</string>
+  <!--Title for setting that controls whether local entity features are enabled or not-->
+  <string name="include_local_entities_setting">Activer les entités locales</string>
+  <string name="local_entity_features_summary">Les formulaires de suivi auront accès aux listes d\'entités partagées incluant les entités créées ou mises à jour localement.</string>
+  <!--Text for button that leads to browser for the user to view and manage entity lists-->
+  <string name="entity_browser_button">Voir liste d\'entités</string>
+  <!--Text for button that deletes all entities for the project-->
+  <string name="clear_entities">Tout supprimer</string>
+  <!--Text for button that adds a new entity list-->
+  <string name="add_entity_list">Ajouter liste d\'entités</string>
+  <!--Label for entity that has been created offline and is not on the server yet-->
+  <string name="offline">Hors ligne</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
@@ -962,8 +992,8 @@
     <item quantity="other">Dernier formulaire envoyé : %d jours auparavant</item>
   </plurals>
   <plurals name="forms_ready_to_send">
-    <item quantity="one">%dformulaire prêt à être envoyé</item>
-    <item quantity="many">%dformulaires prêts à être envoyés</item>
+    <item quantity="one">%d formulaire prêt à être envoyé</item>
+    <item quantity="many">%d formulaires prêts à être envoyés</item>
     <item quantity="other">%d formulaires prêts à être envoyés</item>
   </plurals>
   <string name="edit_finalized_form_warning" tools:ignore="UnusedResources">Dans les versions futures, les formulaires finalisés ne seront plus modifiables. Enregistrez les formulaires comme ébauches pour les modifier plus tard.\n\nVous pouvez vérifier la présence d\'erreurs dans une ébauche de formulaire en tapant les trois points (⋮) puis Vérifier les erreurs</string>
@@ -1032,4 +1062,35 @@
   <string name="empty_list_of_blank_forms_to_delete_subtitle">Quand vous aurez téléchargé des formulaires vierges, ils apparaîtront ici</string>
   <!--Subtext displayed when the list of filled forms to delete is empty-->
   <string name="empty_list_of_saved_forms_to_delete_subtitle">Quand vous aurez enregistré des formulaires, ils apparaîtront ici</string>
+  <!--##############################################
+    # Savepoint recovery dialog
+    ##############################################-->
+  <!--Title displayed in a dialog before starting a form if there is a work to recover-->
+  <string name="savepoint_recovery_dialog_title">Récupérer votre travail ?</string>
+  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <string name="savepoint_recovery_dialog_message">\'Collect s\'est arrété de manière inattendue le \'EEE dd MMM yyyy à HH:mm\' et a sauvegardé votre travail.\n\nVoulez vous le récupérer ou l\'ignorer ?\'</string>
+  <!--Text for the button that accepts the recovery of the work-->
+  <string name="recover">Récupérer ?</string>
+  <!--Text for the button that declines the recovery of the work-->
+  <string name="do_not_recover">Abandoner changements</string>
+  <!--Text for the button that initiates getting user location-->
+  <string name="get_point">Créer le point</string>
+  <!--Text for the button that displays a map for viewing or changing an already existing location-->
+  <string name="view_or_change_point">Voir ou modifier le point</string>
+  <!--Text for the button that displays a map for viewing an already existing location-->
+  <string name="view_point">Voir le point</string>
+  <!--Text for the button that initiates getting user location when one is already present-->
+  <string name="change_point">Modifier le point</string>
+  <!--Text for the button that displays a map for getting a new line-->
+  <string name="get_line">Créer la ligne</string>
+  <!--Text for the button that displays a map for viewing or changing an already existing line-->
+  <string name="view_or_change_line">Voir ou modifier la ligne</string>
+  <!--Text for the button that displays a map for viewing an already existing line-->
+  <string name="view_line">Voir la ligne</string>
+  <!--Text for the button that displays a map for getting a new polygon-->
+  <string name="get_polygon">Créer le polygone</string>
+  <!--Text for the button that displays a map for viewing or changing an already existing polygon-->
+  <string name="view_or_change_polygon">Voir ou modifier le polygone</string>
+  <!--Text for the button that displays a map for viewing an already existing polygon-->
+  <string name="view_polygon">Voir le polygone</string>
 </resources>
