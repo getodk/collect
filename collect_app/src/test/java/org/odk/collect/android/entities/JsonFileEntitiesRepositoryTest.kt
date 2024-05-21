@@ -42,7 +42,7 @@ class JsonFileEntitiesRepositoryTest : EntitiesRepositoryTest() {
         val backingFile = filesInDir[0]
         backingFile.writeText("blah")
 
-        assertThat(repository.getEntities("blah").size, equalTo(0))
+        assertThat(repository.getEntities("stuff").size, equalTo(0))
 
         repository.save(Entity("stuff", "123", null))
         assertThat(repository.getEntities("stuff").size, equalTo(1))
