@@ -1,9 +1,9 @@
 package org.odk.collect.android.support.pages
 
-class EntityListPage(private val datasetName: String) : Page<EntityListPage>() {
+class EntityListPage(private val list: String) : Page<EntityListPage>() {
 
     override fun assertOnPage(): EntityListPage {
-        assertToolbarTitle(datasetName)
+        assertToolbarTitle(list)
         return this
     }
 
