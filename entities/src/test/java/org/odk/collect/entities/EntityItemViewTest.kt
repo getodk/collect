@@ -28,7 +28,7 @@ class EntityItemViewTest {
         )
 
         val propertiesView = view.binding.properties
-        assertThat(propertiesView.text, equalTo("length: 2:50, name: S.D.O.S"))
+        assertThat(propertiesView.text, equalTo("length: 2:50\nname: S.D.O.S"))
     }
 
     @Test

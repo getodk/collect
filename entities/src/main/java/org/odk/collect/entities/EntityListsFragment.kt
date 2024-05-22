@@ -19,9 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.odk.collect.androidshared.ui.enableIconsVisibility
 import org.odk.collect.entities.databinding.AddEntitiesDialogLayoutBinding
 import org.odk.collect.entities.databinding.EntityListItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding
+import org.odk.collect.lists.RecyclerViewUtils
 
 class EntityListsFragment(
     private val viewModelFactory: ViewModelProvider.Factory,
@@ -41,6 +43,7 @@ class EntityListsFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = ListLayoutBinding.bind(view)
         binding.list.layoutManager = LinearLayoutManager(requireContext())
+        binding.list.addItemDecoration(RecyclerViewUtils.verticalLineDivider(requireContext()))
 
         entitiesViewModel.lists.observe(viewLifecycleOwner) {
             binding.list.adapter = ListsAdapter(it, findNavController())
@@ -72,6 +75,7 @@ private class ListsMenuProvider(
                 val binding = AddEntitiesDialogLayoutBinding.inflate(LayoutInflater.from(context))
                 MaterialAlertDialogBuilder(context)
                     .setView(binding.root)
+                    .setTitle("Add entity list")
                     .setPositiveButton(org.odk.collect.strings.R.string.add) { _, _ ->
                         entitiesViewModel.addEntityList(binding.entityListName.text.toString())
                     }
