@@ -1068,7 +1068,6 @@
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">Récupérer votre travail ?</string>
   <!--Message displayed in a dialog before starting a form if there is a work to recover-->
-  <string name="savepoint_recovery_dialog_message">\'Collect s\'est arrété de manière inattendue le \'EEE dd MMM yyyy à HH:mm\' et a sauvegardé votre travail.\n\nVoulez vous le récupérer ou l\'ignorer ?\'</string>
   <!--Text for the button that accepts the recovery of the work-->
   <string name="recover">Récupérer ?</string>
   <!--Text for the button that declines the recovery of the work-->
