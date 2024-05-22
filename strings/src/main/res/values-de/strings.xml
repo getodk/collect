@@ -1041,7 +1041,6 @@
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">Ihre Arbeit Wiederherstellen?</string>
   <!--Message displayed in a dialog before starting a form if there is a work to recover-->
-  <string name="savepoint_recovery_dialog_message">Collect wurde am \'EEE, MMM dd, yyyy \'um\' HH:mm\' unerwartet beendet und hat ihre Arbeit gespeichert.\n\nWollen Sie die gespeicherte Arbeit wiederherstellen oder verwerfen?</string>
   <!--Text for the button that accepts the recovery of the work-->
   <string name="recover">Wiederherstellen</string>
   <!--Text for the button that declines the recovery of the work-->
