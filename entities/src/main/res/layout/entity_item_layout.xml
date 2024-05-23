@@ -21,6 +21,7 @@
         app:icon="@drawable/ic_baseline_wifi_off_24"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
         app:layout_constraintTop_toTopOf="parent"
+        app:pillBackgroundColor="?colorSurfaceContainerHighest"
         app:text="@string/offline" />
 
     <com.google.android.material.textview.MaterialTextView

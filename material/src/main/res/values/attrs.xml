@@ -16,5 +16,6 @@
     <declare-styleable name="MaterialPill">
         <attr name="icon" />
         <attr name="text" format="string" />
+        <attr name="pillBackgroundColor" format="reference"/>
     </declare-styleable>
 </resources>

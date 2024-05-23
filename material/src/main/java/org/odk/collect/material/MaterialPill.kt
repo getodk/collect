@@ -2,6 +2,7 @@ package org.odk.collect.material
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -29,14 +30,9 @@ open class MaterialPill(context: Context, attrs: AttributeSet?) :
             binding.text.text = text
         }
 
-    private val shapeAppearanceModel =
-        ShapeAppearanceModel.builder(context, getShapeAppearance(context), -1).build()
-
     val binding = PillBinding.inflate(LayoutInflater.from(context), this, true)
 
     init {
-        background = createMaterialShapeDrawable(getDefaultBackgroundColor(context))
-
         context.withStyledAttributes(attrs, R.styleable.MaterialPill) {
             text = getString(R.styleable.MaterialPill_text)
 
@@ -44,6 +40,12 @@ open class MaterialPill(context: Context, attrs: AttributeSet?) :
             if (iconId != -1) {
                 setIcon(iconId)
             }
+
+            val backgroundColor = getColor(
+                R.styleable.MaterialPill_pillBackgroundColor,
+                getDefaultBackgroundColor(context)
+            )
+            setPillBackgroundColor(backgroundColor)
         }
     }
 
@@ -61,26 +63,37 @@ open class MaterialPill(context: Context, attrs: AttributeSet?) :
     }
 
     fun setPillBackgroundColor(@ColorInt color: Int) {
-        background = createMaterialShapeDrawable(color)
+        if (isInEditMode) {
+            /**
+             * For some reason `ShapeAppearanceModel` can't be built in Android Studio's design
+             * preview (even when using a Material 3 theme). It could be that some of the
+             * attibutes used here are not available in the basic themes, but are set in the real
+             * ones we use. For now, just setting a "unshaped" background is an easier option than
+             * deep diving.
+             */
+            background = ColorDrawable(color)
+            return
+        }
+
+        val shapeAppearance = getThemeAttributeValue(
+            context,
+            com.google.android.material.R.attr.shapeAppearanceCornerSmall
+        )
+
+        val shapeAppearanceModel =
+            ShapeAppearanceModel.builder(context, shapeAppearance, -1).build()
+
+        background = MaterialShapeDrawable(shapeAppearanceModel).also {
+            it.fillColor = ColorStateList.valueOf(color)
+        }
     }
 
     fun setTextColor(@ColorInt color: Int) {
         binding.text.setTextColor(color)
     }
 
-    private fun getShapeAppearance(context: Context) = getThemeAttributeValue(
-        context,
-        com.google.android.material.R.attr.shapeAppearanceCornerSmall
-    )
-
     private fun getDefaultBackgroundColor(context: Context) = getThemeAttributeValue(
         context,
         com.google.android.material.R.attr.colorPrimaryContainer
     )
-
-    private fun createMaterialShapeDrawable(@ColorInt color: Int): MaterialShapeDrawable {
-        return MaterialShapeDrawable(shapeAppearanceModel).also {
-            it.fillColor = ColorStateList.valueOf(color)
-        }
-    }
 }
