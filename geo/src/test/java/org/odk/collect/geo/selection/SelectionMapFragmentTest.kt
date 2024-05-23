@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -36,6 +35,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
@@ -47,10 +47,11 @@ import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.layers.OfflineMapLayersPicker
-import org.odk.collect.maps.layers.OfflineMapLayersPickerViewModel
+import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.odk.collect.webpage.ExternalWebPageHelper
 
@@ -102,15 +103,16 @@ class SelectionMapFragmentTest {
                     }
                 }
 
-                override fun providesOfflineMapLayersPickerViewModelFactory(): OfflineMapLayersPickerViewModel.Factory {
-                    val viewModel = mock<OfflineMapLayersPickerViewModel>().also {
-                        whenever(it.data).thenReturn(MutableLiveData(Pair(emptyList(), null)))
-                    }
-                    return object : OfflineMapLayersPickerViewModel.Factory(mock(), mock(), mock()) {
-                        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                            return viewModel as T
-                        }
-                    }
+                override fun providesReferenceLayerRepository(): ReferenceLayerRepository {
+                    return mock()
+                }
+
+                override fun providesScheduler(): Scheduler {
+                    return mock()
+                }
+
+                override fun providesSettingsProvider(): SettingsProvider {
+                    return mock()
                 }
 
                 override fun providesExternalWebPageHelper(): ExternalWebPageHelper {

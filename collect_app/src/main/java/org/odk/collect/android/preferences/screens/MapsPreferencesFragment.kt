@@ -25,9 +25,9 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.PrefUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
+import org.odk.collect.async.Scheduler
 import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.maps.layers.OfflineMapLayersPicker
-import org.odk.collect.maps.layers.OfflineMapLayersPickerViewModel
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.keys.ProjectKeys.CATEGORY_BASEMAP
 import org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE
@@ -43,7 +43,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
     lateinit var referenceLayerRepository: ReferenceLayerRepository
 
     @Inject
-    lateinit var viewModelFactory: OfflineMapLayersPickerViewModel.Factory
+    lateinit var scheduler: Scheduler
 
     @Inject
     lateinit var externalWebPageHelper: ExternalWebPageHelper
@@ -56,7 +56,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
     override fun onCreate(savedInstanceState: Bundle?) {
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(OfflineMapLayersPicker::class) {
-                OfflineMapLayersPicker(viewModelFactory, externalWebPageHelper)
+                OfflineMapLayersPicker(referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
             }
             .build()
 

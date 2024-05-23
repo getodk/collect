@@ -6,19 +6,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.odk.collect.androidshared.ui.GroupClickListener.addOnClickListener
+import org.odk.collect.async.Scheduler
 import org.odk.collect.maps.databinding.OfflineMapLayersPickerBinding
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.webpage.ExternalWebPageHelper
 
 class OfflineMapLayersPicker(
-    private val viewModelFactory: ViewModelProvider.Factory,
+    private val referenceLayerRepository: ReferenceLayerRepository,
+    private val scheduler: Scheduler,
+    private val settingsProvider: SettingsProvider,
     private val externalWebPageHelper: ExternalWebPageHelper
 ) : BottomSheetDialogFragment() {
     private val viewModel: OfflineMapLayersPickerViewModel by viewModels {
-        viewModelFactory
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return OfflineMapLayersPickerViewModel(referenceLayerRepository, scheduler, settingsProvider) as T
+            }
+        }
     }
 
     private lateinit var offlineMapLayersPickerBinding: OfflineMapLayersPickerBinding

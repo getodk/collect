@@ -114,8 +114,8 @@ class SelectOneFromMapDialogFragmentTest {
             }
 
             override fun providesReferenceLayerRepository(
-                storagePathProvider: StoragePathProvider?,
-                settingsProvider: SettingsProvider?
+                storagePathProvider: StoragePathProvider,
+                settingsProvider: SettingsProvider
             ): ReferenceLayerRepository {
                 return mock()
             }

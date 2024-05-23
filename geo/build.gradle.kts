@@ -55,6 +55,7 @@ dependencies {
     implementation(project(":async"))
     implementation(project(":analytics"))
     implementation(project(":permissions"))
+    implementation(project(":settings"))
     implementation(project(":maps"))
     implementation(project(":material"))
     implementation(project(":web-page"))

@@ -79,7 +79,7 @@ class SelectOneFromMapWidgetTest {
             }
 
             override fun providesReferenceLayerRepository(
-                storagePathProvider: StoragePathProvider?,
+                storagePathProvider: StoragePathProvider,
                 settingsProvider: SettingsProvider
             ): ReferenceLayerRepository {
                 return mock()

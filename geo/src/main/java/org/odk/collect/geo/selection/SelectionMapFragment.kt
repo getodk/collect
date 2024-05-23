@@ -22,6 +22,7 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.setMultiClickSafeOnClickListener
+import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.maps.LineDescription
@@ -30,12 +31,13 @@ import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.layers.OfflineMapLayersPicker
-import org.odk.collect.maps.layers.OfflineMapLayersPickerViewModel
+import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.webpage.ExternalWebPageHelper
 import javax.inject.Inject
 
@@ -58,7 +60,13 @@ class SelectionMapFragment(
     lateinit var permissionsChecker: PermissionsChecker
 
     @Inject
-    lateinit var viewModelFactory: OfflineMapLayersPickerViewModel.Factory
+    lateinit var referenceLayerRepository: ReferenceLayerRepository
+
+    @Inject
+    lateinit var scheduler: Scheduler
+
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
 
     @Inject
     lateinit var externalWebPageHelper: ExternalWebPageHelper
@@ -89,7 +97,7 @@ class SelectionMapFragment(
                 mapFragmentFactory.createMapFragment() as Fragment
             }
             .forClass(OfflineMapLayersPicker::class) {
-                OfflineMapLayersPicker(viewModelFactory, externalWebPageHelper)
+                OfflineMapLayersPicker(referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
             }
             .build()
 

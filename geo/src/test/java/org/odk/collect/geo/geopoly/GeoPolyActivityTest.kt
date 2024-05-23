@@ -25,6 +25,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.androidtest.ActivityScenarioExtensions.isFinishing
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
+import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.Constants
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
@@ -35,7 +36,8 @@ import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.layers.OfflineMapLayersPickerViewModel
+import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.webpage.ExternalWebPageHelper
 import org.robolectric.Shadows
 
@@ -68,7 +70,15 @@ class GeoPolyActivityTest {
                     return locationTracker
                 }
 
-                override fun providesOfflineMapLayersPickerViewModelFactory(): OfflineMapLayersPickerViewModel.Factory {
+                override fun providesReferenceLayerRepository(): ReferenceLayerRepository {
+                    return mock()
+                }
+
+                override fun providesScheduler(): Scheduler {
+                    return mock()
+                }
+
+                override fun providesSettingsProvider(): SettingsProvider {
                     return mock()
                 }
 

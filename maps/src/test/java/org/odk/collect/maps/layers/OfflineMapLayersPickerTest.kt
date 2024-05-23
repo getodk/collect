@@ -43,14 +43,13 @@ class OfflineMapLayersPickerTest {
     }
     private val scheduler = FakeScheduler()
     private val settingsProvider = InMemSettingsProvider()
-    private val viewModelFactory = OfflineMapLayersPickerViewModel.Factory(referenceLayerRepository, scheduler, settingsProvider)
     private val externalWebPageHelper = mock<ExternalWebPageHelper>()
 
     @get:Rule
     val fragmentScenarioLauncherRule = FragmentScenarioLauncherRule(
         FragmentFactoryBuilder()
             .forClass(OfflineMapLayersPicker::class) {
-                OfflineMapLayersPicker(viewModelFactory, externalWebPageHelper)
+                OfflineMapLayersPicker(referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
             }.build()
     )
 

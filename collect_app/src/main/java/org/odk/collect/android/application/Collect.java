@@ -305,7 +305,8 @@ public class Collect extends Application implements
                             applicationComponent.locationClient(),
                             applicationComponent.scheduler(),
                             applicationComponent.permissionsChecker(),
-                            applicationComponent.offlineMapLayersPickerViewModelFactory(),
+                            applicationComponent.referenceLayerRepository(),
+                            applicationComponent.settingsProvider(),
                             applicationComponent.externalWebPageHelper()
                     ))
                     .build();

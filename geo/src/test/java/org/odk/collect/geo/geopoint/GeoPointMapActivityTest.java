@@ -22,6 +22,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyModule;
@@ -30,7 +31,8 @@ import org.odk.collect.geo.support.FakeMapFragment;
 import org.odk.collect.geo.support.RobolectricApplication;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
-import org.odk.collect.maps.layers.OfflineMapLayersPickerViewModel;
+import org.odk.collect.maps.layers.ReferenceLayerRepository;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.webpage.ExternalWebPageHelper;
 import org.robolectric.shadows.ShadowApplication;
 
@@ -62,7 +64,19 @@ public class GeoPointMapActivityTest {
 
                     @NonNull
                     @Override
-                    public OfflineMapLayersPickerViewModel.Factory providesOfflineMapLayersPickerViewModelFactory() {
+                    public ReferenceLayerRepository providesReferenceLayerRepository() {
+                        return mock();
+                    }
+
+                    @NonNull
+                    @Override
+                    public Scheduler providesScheduler() {
+                        return mock();
+                    }
+
+                    @NonNull
+                    @Override
+                    public SettingsProvider providesSettingsProvider() {
                         return mock();
                     }
 

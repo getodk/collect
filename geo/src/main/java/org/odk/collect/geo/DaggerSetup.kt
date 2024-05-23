@@ -19,8 +19,9 @@ import org.odk.collect.location.LocationClient
 import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragmentFactory
-import org.odk.collect.maps.layers.OfflineMapLayersPickerViewModel
+import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.webpage.ExternalWebPageHelper
 import javax.inject.Singleton
 
@@ -110,7 +111,12 @@ open class GeoDependencyModule {
     }
 
     @Provides
-    open fun providesOfflineMapLayersPickerViewModelFactory(): OfflineMapLayersPickerViewModel.Factory {
+    open fun providesReferenceLayerRepository(): ReferenceLayerRepository {
+        throw UnsupportedOperationException("This should be overridden by dependent application")
+    }
+
+    @Provides
+    open fun providesSettingsProvider(): SettingsProvider {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 
