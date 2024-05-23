@@ -55,4 +55,9 @@ public class FormManagementPage extends Page<FormManagementPage> {
         onView(withText(getTranslatedString(org.odk.collect.strings.R.string.constraint_behavior_title))).check(matches(not(isEnabled())));
         return this;
     }
+
+    public FormManagementPage checkIfConstraintProcessingIsEnabled() {
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.constraint_behavior_title))).check(matches(isEnabled()));
+        return this;
+    }
 }
