@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.odk.collect.androidshared.ui.enableIconsVisibility
 import org.odk.collect.entities.databinding.AddEntitiesDialogLayoutBinding
 import org.odk.collect.entities.databinding.EntityListItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding
@@ -75,7 +74,7 @@ private class ListsMenuProvider(
                 val binding = AddEntitiesDialogLayoutBinding.inflate(LayoutInflater.from(context))
                 MaterialAlertDialogBuilder(context)
                     .setView(binding.root)
-                    .setTitle("Add entity list")
+                    .setTitle(org.odk.collect.strings.R.string.add_entity_list)
                     .setPositiveButton(org.odk.collect.strings.R.string.add) { _, _ ->
                         entitiesViewModel.addEntityList(binding.entityListName.text.toString())
                     }
