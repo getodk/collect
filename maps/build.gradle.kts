@@ -52,6 +52,7 @@ dependencies {
     implementation(project(":shared"))
     implementation(project(":androidshared"))
     implementation(project(":icons"))
+    implementation(project(":material"))
     implementation(project(":settings"))
     implementation(project(":strings"))
     implementation(project(":web-page"))

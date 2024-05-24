@@ -9,22 +9,14 @@ import org.odk.collect.settings.keys.ProjectKeys
 
 class OfflineMapLayersPickerViewModel(
     private val referenceLayerRepository: ReferenceLayerRepository,
-    scheduler: Scheduler,
+    private val scheduler: Scheduler,
     private val settingsProvider: SettingsProvider
 ) : ViewModel() {
     private val _data = MutableLiveData<Pair<List<ReferenceLayer>, String?>>()
     val data: LiveData<Pair<List<ReferenceLayer>, String?>> = _data
 
     init {
-        scheduler.immediate(
-            background = {
-                val layers = referenceLayerRepository.getAll()
-                val selectedLayerId = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER)
-
-                _data.postValue(Pair(layers, selectedLayerId))
-            },
-            foreground = { }
-        )
+        refreshLayers()
     }
 
     fun saveSelectedLayer() {
@@ -34,5 +26,17 @@ class OfflineMapLayersPickerViewModel(
 
     fun changeSelectedLayerId(selectedLayerId: String?) {
         _data.postValue(_data.value?.copy(second = selectedLayerId))
+    }
+
+    fun refreshLayers() {
+        scheduler.immediate(
+            background = {
+                val layers = referenceLayerRepository.getAll()
+                val selectedLayerId = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER)
+
+                _data.postValue(Pair(layers, selectedLayerId))
+            },
+            foreground = { }
+        )
     }
 }
