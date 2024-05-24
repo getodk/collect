@@ -94,7 +94,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_divider"
+        app:layout_constraintBottom_toTopOf="@id/add_layer"
         app:layout_constraintHeight_default="wrap"
         app:layout_constraintTop_toBottomOf="@id/top_divider"
         tools:visibility="visible" />
@@ -105,10 +105,22 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/margin_small"
         android:indeterminate="true"
-        app:layout_constraintBottom_toTopOf="@id/bottom_divider"
+        app:layout_constraintBottom_toTopOf="@id/add_layer"
         app:layout_constraintEnd_toEndOf="@id/message"
         app:layout_constraintStart_toStartOf="@id/message"
         app:layout_constraintTop_toBottomOf="@id/top_divider" />
+
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
+        android:id="@+id/add_layer"
+        style="?materialButtonOutlinedIconStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_layer"
+        android:layout_marginBottom="@dimen/margin_extra_small"
+        app:icon="@drawable/ic_add_white_24"
+        app:iconTint="?colorAccent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_divider"
+        app:layout_constraintStart_toEndOf="@id/guideline_start" />
 
     <View
         android:id="@+id/bottom_divider"

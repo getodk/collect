@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -32,6 +33,9 @@ class OfflineMapLayersPicker(
 
     private lateinit var offlineMapLayersPickerBinding: OfflineMapLayersPickerBinding
 
+    private val getLayers = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,6 +59,10 @@ class OfflineMapLayersPicker(
                 requireActivity(),
                 Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices")
             )
+        }
+
+        offlineMapLayersPickerBinding.addLayer.setOnClickListener {
+            getLayers.launch("*/*")
         }
 
         offlineMapLayersPickerBinding.cancel.setOnClickListener {
