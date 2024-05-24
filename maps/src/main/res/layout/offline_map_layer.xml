@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="@dimen/margin_small"
     android:paddingVertical="@dimen/margin_extra_small">
 
     <com.google.android.material.radiobutton.MaterialRadioButton
@@ -13,6 +12,7 @@
         android:layout_height="wrap_content"
         android:minWidth="0dp"
         android:minHeight="0dp"
+        android:translationX="-5dp"
         android:paddingStart="@dimen/margin_standard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -5,6 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/margin_standard" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/margin_standard" />
+
     <com.google.android.material.bottomsheet.BottomSheetDragHandleView
         android:id="@+id/drag_handle"
         android:layout_width="0dp"
@@ -15,12 +29,12 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_standard"
         android:text="@string/reference_layer_dialog_title"
         android:textAppearance="?textAppearanceTitleLarge"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
         app:layout_constraintTop_toBottomOf="@id/drag_handle" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -30,8 +44,8 @@
         android:layout_marginTop="@dimen/margin_small"
         android:text="@string/reference_layer_dialog_description"
         android:textAppearance="?textAppearanceBodyMedium"
-        app:layout_constraintEnd_toEndOf="@+id/title"
-        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
         app:layout_constraintTop_toBottomOf="@id/title" />
 
     <ImageView
@@ -40,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
         android:src="@drawable/ic_outline_info_24"
-        app:layout_constraintStart_toStartOf="@id/message"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/message"
         app:tint="?colorPrimary" />
 
@@ -53,7 +67,7 @@
         android:textAppearance="?textAppearanceLabelLarge"
         android:textColor="?colorAccent"
         app:layout_constraintBottom_toBottomOf="@id/mbtiles_info_icon"
-        app:layout_constraintEnd_toEndOf="@id/message"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
         app:layout_constraintStart_toEndOf="@id/mbtiles_info_icon"
         app:layout_constraintTop_toTopOf="@id/mbtiles_info_icon" />
 
@@ -74,10 +88,12 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/layers"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
         app:layout_constraintBottom_toTopOf="@id/bottom_divider"
         app:layout_constraintHeight_default="wrap"
         app:layout_constraintTop_toBottomOf="@id/top_divider"
@@ -110,7 +126,7 @@
         android:text="@string/save"
         android:layout_marginBottom="@dimen/margin_extra_extra_small"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/mbtiles_info_icon_text" />
+        app:layout_constraintEnd_toStartOf="@id/guideline_end" />
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/cancel"
