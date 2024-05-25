@@ -904,7 +904,11 @@ public class JavaRosaFormController implements FormController {
     }
 
     public boolean indexContainsRepeatableGroup() {
-        FormEntryCaption[] groups = getCaptionHierarchy();
+        return indexContainsRepeatableGroup(getFormIndex());
+    }
+
+    public boolean indexContainsRepeatableGroup(FormIndex formIndex) {
+        FormEntryCaption[] groups = getCaptionHierarchy(formIndex);
         if (groups.length == 0) {
             return false;
         }

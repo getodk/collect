@@ -333,7 +333,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
 
         boolean isAtBeginning = screenIndex.isBeginningOfFormIndex() && !shouldShowRepeatGroupPicker();
         boolean shouldShowPicker = shouldShowRepeatGroupPicker();
-        boolean isInRepeat = formController.indexContainsRepeatableGroup();
+        boolean isInRepeat = formController.indexContainsRepeatableGroup(screenIndex);
         boolean isGroupSizeLocked = shouldShowPicker
                 ? isGroupSizeLocked(repeatGroupPickerIndex) : isGroupSizeLocked(screenIndex);
 
@@ -494,15 +494,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
      */
     private CharSequence getCurrentPath() {
         FormController formController = formEntryViewModel.getFormController();
-        FormIndex index = formController.getFormIndex();
-
-        // Step out to the enclosing group if the current index is something
-        // we don't want to display in the path (e.g. a question name or the
-        // very first group in a form which is auto-entered).
-        if (formController.getEvent(index) == FormEntryController.EVENT_QUESTION
-                || getPreviousLevel(index) == null) {
-            index = getPreviousLevel(index);
-        }
+        FormIndex index = screenIndex;
 
         List<FormEntryCaption> groups = new ArrayList<>();
 
@@ -622,7 +614,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 groupPathTextView.setVisibility(View.VISIBLE);
                 groupPathTextView.setText(getCurrentPath());
 
-                if (formController.indexContainsRepeatableGroup() || shouldShowRepeatGroupPicker()) {
+                if (formController.indexContainsRepeatableGroup(screenIndex) || shouldShowRepeatGroupPicker()) {
                     groupIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_repeat));
                 } else {
                     groupIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_folder_open));

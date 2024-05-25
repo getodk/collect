@@ -40,6 +40,11 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
         return this;
     }
 
+    public FormHierarchyPage assertNotRemovableGroup() {
+        onView(withId(R.id.menu_delete_child)).check(doesNotExist());
+        return this;
+    }
+
     public FormHierarchyPage clickGoUpIcon() {
         onView(withId(R.id.menu_go_up)).perform(click());
         return this;
@@ -80,6 +85,11 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
                     .atPositionOnView(position, R.id.secondary_text))
                     .check(matches(withText(secondaryText)));
         }
+        return this;
+    }
+
+    public FormHierarchyPage assertPath(String text) {
+        onView(withId(R.id.pathtext)).check(matches(withText(text)));
         return this;
     }
 
