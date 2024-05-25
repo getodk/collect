@@ -167,11 +167,11 @@ class DirectoryReferenceLayerRepositoryTest {
     private class StubMapConfigurator : MapConfigurator {
         private val files = mutableMapOf<File, Pair<Boolean, String>>()
 
-        override fun supportsLayer(file: File?): Boolean {
+        override fun supportsLayer(file: File): Boolean {
             return files[file]!!.first
         }
 
-        override fun getDisplayName(file: File?): String {
+        override fun getDisplayName(file: File): String {
             return files[file]!!.second
         }
 
@@ -179,21 +179,20 @@ class DirectoryReferenceLayerRepositoryTest {
             files[file] = Pair(isSupported, displayName)
         }
 
-        override fun isAvailable(context: Context?): Boolean {
+        override fun isAvailable(context: Context): Boolean {
             TODO("Not yet implemented")
         }
 
-        override fun showUnavailableMessage(context: Context?) {
+        override fun showUnavailableMessage(context: Context) {
             TODO("Not yet implemented")
         }
 
-        override fun createPrefs(context: Context?, settings: Settings?): MutableList<Preference> {
+        override fun createPrefs(context: Context, settings: Settings): MutableList<Preference> {
             TODO("Not yet implemented")
         }
 
-        override fun getPrefKeys(): MutableCollection<String> {
-            TODO("Not yet implemented")
-        }
+        override val prefKeys: Collection<String>
+            get() = TODO("Not yet implemented")
 
         override fun buildConfig(prefs: Settings): Bundle {
             TODO("Not yet implemented")

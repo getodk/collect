@@ -110,8 +110,8 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
         onBasemapSourceChanged(MapConfiguratorProvider.getConfigurator())
         basemapSourcePref.setOnPreferenceChangeListener { _: Preference?, value: Any ->
             val cftor = MapConfiguratorProvider.getConfigurator(value.toString())
-            if (!cftor.isAvailable(context)) {
-                cftor.showUnavailableMessage(context)
+            if (!cftor.isAvailable(requireContext())) {
+                cftor.showUnavailableMessage(requireContext())
                 false
             } else {
                 onBasemapSourceChanged(cftor)
@@ -142,7 +142,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
         val baseCategory = findPreference<PreferenceCategory>(CATEGORY_BASEMAP)
         baseCategory!!.removeAll()
         baseCategory.addPreference(basemapSourcePref)
-        for (pref in cftor.createPrefs(context, settingsProvider.getUnprotectedSettings())) {
+        for (pref in cftor.createPrefs(requireContext(), settingsProvider.getUnprotectedSettings())) {
             pref.isIconSpaceReserved = false
             baseCategory.addPreference(pref)
         }

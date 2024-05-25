@@ -1,15 +1,10 @@
-package org.odk.collect.maps;
+package org.odk.collect.maps
 
-import android.content.Context;
-import android.os.Bundle;
-
-import androidx.preference.Preference;
-
-import org.odk.collect.shared.settings.Settings;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.List;
+import android.content.Context
+import android.os.Bundle
+import androidx.preference.Preference
+import org.odk.collect.shared.settings.Settings
+import java.io.File
 
 /**
  * For each MapFragment implementation class, there is one instance of this
@@ -22,33 +17,33 @@ import java.util.List;
  * For example, the GoogleMapConfigurator can define a "Google map style"
  * preference with choices such as Terrain or Satellite.
  */
-public interface MapConfigurator {
-    /** Returns true if this MapFragment implementation is available on this device. */
-    boolean isAvailable(Context context);
+interface MapConfigurator {
+    /** Returns true if this MapFragment implementation is available on this device.  */
+    fun isAvailable(context: Context): Boolean
 
     /**
      * Displays a warning to the user that this MapFragment implementation is
      * unavailable.  This will be invoked when isSupported() is false or
      * createMapFragment(context) returns null.
      */
-    void showUnavailableMessage(Context context);
+    fun showUnavailableMessage(context: Context)
 
-    /** Constructs any preference widgets that are specific to this map implementation. */
-    List<Preference> createPrefs(Context context, Settings settings);
+    /** Constructs any preference widgets that are specific to this map implementation.  */
+    fun createPrefs(context: Context, settings: Settings): List<Preference>
 
-    /** Gets the set of keys for preferences that should be watched for changes. */
-    Collection<String> getPrefKeys();
+    /** Gets the set of keys for preferences that should be watched for changes.  */
+    val prefKeys: Collection<String>
 
-    /** Packs map-related preferences into a Bundle for MapFragment.applyConfig(). */
-    Bundle buildConfig(Settings prefs);
+    /** Packs map-related preferences into a Bundle for MapFragment.applyConfig().  */
+    fun buildConfig(prefs: Settings): Bundle
 
     /**
      * Returns true if map fragments obtained from this MapConfigurator are
      * expected to be able to render the given file as an overlay.  This
      * check determines which files appear as available Reference Layers.
      */
-    boolean supportsLayer(File file);
+    fun supportsLayer(file: File): Boolean
 
-    /** Returns a String name for a given overlay file, or null if unsupported. */
-    String getDisplayName(File file);
+    /** Returns a String name for a given overlay file, or null if unsupported.  */
+    fun getDisplayName(file: File): String
 }
