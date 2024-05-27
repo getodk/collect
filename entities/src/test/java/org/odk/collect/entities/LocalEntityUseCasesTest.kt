@@ -28,6 +28,17 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
+    fun `updateLocalEntitiesFromForm does not save entity that doesn't have an ID`() {
+        val entity =
+            org.javarosa.entities.Entity(EntityAction.CREATE, "things", null, "1", 1, emptyList())
+        val formEntities = Entities(listOf(entity))
+        entitiesRepository.addList("things")
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        assertThat(entitiesRepository.getEntities("things").size, equalTo(0))
+    }
+
+    @Test
     fun `updateLocalEntitiesFromServer overrides offline version if the online version is newer`() {
         entitiesRepository.save(Entity("songs", "noah", "Noa", 1))
         val csv = createEntityList(Entity("songs", "noah", "Noah", 2))

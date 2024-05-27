@@ -109,25 +109,6 @@ class EntityFormTest {
     }
 
     @Test
-    fun fillingEntityUpdateForm_withoutSelectingEntity_doesNothing() {
-        testDependencies.server.addForm(
-            "one-question-entity-update.xml",
-            listOf(EntityListItem("people.csv"))
-        )
-
-        rule.withMatchExactlyProject(testDependencies.server.url)
-            .setupEntities("people")
-
-            .startBlankForm("One Question Entity Update")
-            .swipeToNextQuestion("Name")
-            .swipeToEndScreen()
-            .clickFinalize()
-
-            .startBlankForm("One Question Entity Update")
-            .assertText("Roman Roy")
-    }
-
-    @Test
     fun entityListSecondaryInstancesAreConsistentBetweenFollowUpForms() {
         testDependencies.server.apply {
             addForm(
