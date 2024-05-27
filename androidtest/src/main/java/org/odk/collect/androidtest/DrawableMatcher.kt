@@ -1,11 +1,16 @@
 package org.odk.collect.androidtest
 
+import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.VectorDrawable
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.toBitmap
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.BoundedMatcher
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -19,7 +24,8 @@ object DrawableMatcher {
             }
 
             public override fun matchesSafely(imageView: ImageView): Boolean {
-                return expectedResourceId == imageView.tag as Int
+                val context = ApplicationProvider.getApplicationContext<Application>()
+                return imageView.drawable.toBitmap().rowBytes == (AppCompatResources.getDrawable(context, expectedResourceId) as VectorDrawable).toBitmap().rowBytes
             }
         }
     }
