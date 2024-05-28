@@ -97,8 +97,8 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
-        instancesRepository = instancesRepositoryProvider.get();
-        formsRepository = formsRepositoryProvider.get();
+        instancesRepository = instancesRepositoryProvider.create();
+        formsRepository = formsRepositoryProvider.create();
 
         init(savedInstanceState);
     }

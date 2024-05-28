@@ -86,7 +86,7 @@ open class FormEntryActivityTestRule :
         val application = ApplicationProvider.getApplicationContext<Application>()
         val formPath = DaggerUtils.getComponent(application).storagePathProvider()
             .getOdkDirPath(StorageSubdirectory.FORMS) + "/" + formFilename
-        val form = DaggerUtils.getComponent(application).formsRepositoryProvider().get()
+        val form = DaggerUtils.getComponent(application).formsRepositoryProvider().create()
             .getOneByPath(formPath)
         val projectId = DaggerUtils.getComponent(application).currentProjectProvider()
             .getCurrentProject().uuid
@@ -101,9 +101,9 @@ open class FormEntryActivityTestRule :
         val application = ApplicationProvider.getApplicationContext<Application>()
         val formPath = DaggerUtils.getComponent(application).storagePathProvider()
             .getOdkDirPath(StorageSubdirectory.FORMS) + "/" + formFilename
-        val form = DaggerUtils.getComponent(application).formsRepositoryProvider().get()
+        val form = DaggerUtils.getComponent(application).formsRepositoryProvider().create()
             .getOneByPath(formPath)
-        val instance = DaggerUtils.getComponent(application).instancesRepositoryProvider().get()
+        val instance = DaggerUtils.getComponent(application).instancesRepositoryProvider().create()
             .getAllByFormId(form!!.formId).first()
         val projectId = DaggerUtils.getComponent(application).currentProjectProvider()
             .getCurrentProject().uuid

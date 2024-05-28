@@ -273,7 +273,7 @@ class FormFillingActivityTest {
             File(formsDir, "two-question.xml")
         )
 
-        val formsRepository = component.formsRepositoryProvider().get()
+        val formsRepository = component.formsRepositoryProvider().create()
         val form = formsRepository.save(form(formFilePath = formFile.absolutePath))
         return form
     }

@@ -73,7 +73,7 @@ class FormEntryViewModelFactory(
                 scheduler,
                 formSessionRepository,
                 sessionId,
-                formsRepositoryProvider.get(projectId)
+                formsRepositoryProvider.create(projectId)
             )
 
             FormSaveViewModel::class.java -> {
@@ -87,7 +87,7 @@ class FormEntryViewModelFactory(
                     projectsDataService,
                     formSessionRepository.get(sessionId),
                     entitiesRepositoryProvider.create(projectId),
-                    instancesRepositoryProvider.get(projectId),
+                    instancesRepositoryProvider.create(projectId),
                     savepointsRepositoryProvider.create(projectId),
                     instancesDataService
                 )

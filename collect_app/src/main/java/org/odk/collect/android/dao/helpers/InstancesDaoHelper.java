@@ -51,7 +51,7 @@ public final class InstancesDaoHelper {
         if (formController != null && formController.getInstanceFile() != null) {
             // Then see if we've already marked this form as complete before
             String path = formController.getInstanceFile().getAbsolutePath();
-            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().getOneByPath(path);
+            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).create().getOneByPath(path);
             if (instance != null && instance.getStatus().equals(Instance.STATUS_COMPLETE)) {
                 complete = true;
             }
@@ -66,7 +66,7 @@ public final class InstancesDaoHelper {
     // that returns an {@link Instance} object from a path.
     public static boolean isInstanceAvailable(String path) {
         if (path != null) {
-            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().getOneByPath(path);
+            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).create().getOneByPath(path);
             return instance != null;
         } else {
             return false;

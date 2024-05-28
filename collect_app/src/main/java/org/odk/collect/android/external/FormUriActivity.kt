@@ -161,7 +161,7 @@ class FormUriActivity : LocalizedActivity() {
         val uriMimeType = contentResolver.getType(uri)
 
         val formEditingEnabled = if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
-            val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
+            val instance = instanceRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))
             instance!!.canBeEdited(settingsProvider)
         } else {
             true
@@ -261,7 +261,7 @@ private class FormUriViewModel(
 
         return if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
             val formExists =
-                formsRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))?.let {
+                formsRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))?.let {
                     File(it.formFilePath).exists()
                 } ?: false
 
@@ -271,18 +271,18 @@ private class FormUriViewModel(
                 resources.getString(string.bad_uri)
             }
         } else {
-            val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
+            val instance = instancesRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))
             if (instance == null) {
                 resources.getString(string.bad_uri)
             } else if (!File(instance.instanceFilePath).exists()) {
                 Analytics.log(AnalyticsEvents.OPEN_DELETED_INSTANCE)
                 InstanceDeleter(
-                    instancesRepositoryProvider.get(),
-                    formsRepositoryProvider.get()
+                    instancesRepositoryProvider.create(),
+                    formsRepositoryProvider.create()
                 ).delete(instance.dbId)
                 resources.getString(string.instance_deleted_message)
             } else {
-                val candidateForms = formsRepositoryProvider.get()
+                val candidateForms = formsRepositoryProvider.create()
                     .getAllByFormIdAndVersion(instance.formId, instance.formVersion)
 
                 if (candidateForms.isEmpty()) {
@@ -306,7 +306,7 @@ private class FormUriViewModel(
         val uriMimeType = contentResolver.getType(uri!!)
 
         return if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
-            val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
+            val instance = instancesRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))
             if (instance!!.canEditWhenComplete()) {
                 null
             } else {
@@ -323,8 +323,8 @@ private class FormUriViewModel(
         return SavepointUseCases.getSavepoint(
             uri,
             uriMimeType,
-            formsRepositoryProvider.get(),
-            instancesRepositoryProvider.get(),
+            formsRepositoryProvider.create(),
+            instancesRepositoryProvider.create(),
             savepointsRepositoryProvider.create()
         )
     }

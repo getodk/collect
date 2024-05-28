@@ -107,7 +107,7 @@ class FormsDataServiceTest {
 
         formsDataService.downloadUpdates(project.uuid)
         assertThat(
-            formsRepositoryProvider.get(project.uuid).getAllByFormIdAndVersion("formId", "2").size,
+            formsRepositoryProvider.create(project.uuid).getAllByFormIdAndVersion("formId", "2").size,
             equalTo(1)
         )
     }
@@ -258,7 +258,7 @@ class FormsDataServiceTest {
 
     private fun addFormLocally(project: Project.Saved, formId: String, formVersion: String) {
         val formsDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, project.uuid)
-        val formsRepository = formsRepositoryProvider.get(project.uuid)
+        val formsRepository = formsRepositoryProvider.create(project.uuid)
         formsRepository.save(
             FormUtils.buildForm(formId, formVersion, formsDir).build()
         )

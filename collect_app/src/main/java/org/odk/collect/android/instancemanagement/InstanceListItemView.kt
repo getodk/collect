@@ -41,7 +41,7 @@ object InstanceListItemView {
             var isFormEncrypted = false
             val formId = instance.formId
             val formVersion = instance.formVersion
-            val form = FormsRepositoryProvider(context.applicationContext).get()
+            val form = FormsRepositoryProvider(context.applicationContext).create()
                 .getLatestByFormIdAndVersion(formId, formVersion)
 
             if (form != null) {

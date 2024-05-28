@@ -26,8 +26,8 @@ class ProjectDependencyModuleFactory @Inject constructor(
         return ProjectDependencyModule(
             projectId,
             ProjectDependencyFactory.from { settingsProvider.getUnprotectedSettings(projectId) },
-            ProjectDependencyFactory.from { formsRepositoryProvider.get(projectId) },
-            ProjectDependencyFactory.from { instancesRepositoryProvider.get(projectId) },
+            formsRepositoryProvider,
+            instancesRepositoryProvider,
             storagePathProvider,
             changeLockProvider,
             ProjectDependencyFactory.from { formSourceProvider.get(projectId) },

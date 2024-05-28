@@ -60,8 +60,8 @@ class FormMapActivity : LocalizedActivity() {
                 return FormMapViewModel(
                     resources,
                     formId,
-                    formsRepositoryProvider.get(),
-                    instancesRepositoryProvider.get(),
+                    formsRepositoryProvider.create(),
+                    instancesRepositoryProvider.create(),
                     settingsProvider,
                     scheduler
                 ) as T
