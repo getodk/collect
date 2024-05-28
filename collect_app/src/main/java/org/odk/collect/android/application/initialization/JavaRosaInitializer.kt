@@ -8,17 +8,20 @@ import org.javarosa.xform.parse.XFormParser
 import org.javarosa.xform.parse.XFormParserFactory
 import org.javarosa.xform.util.XFormUtils
 import org.odk.collect.android.dynamicpreload.DynamicPreloadXFormParserFactory
-import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesExternalInstanceParserFactory
 import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory
+import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.metadata.PropertyManager
+import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 
 class JavaRosaInitializer(
     private val propertyManager: PropertyManager,
-    private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
+    private val projectsDataService: ProjectsDataService,
+    private val entitiesRepositoryProvider: ProjectDependencyFactory<EntitiesRepository>,
     private val settingsProvider: SettingsProvider
 ) {
 
@@ -50,7 +53,7 @@ class JavaRosaInitializer(
         XFormUtils.setXFormParserFactory(dynamicPreloadXFormParserFactory)
 
         val localEntitiesExternalInstanceParserFactory = LocalEntitiesExternalInstanceParserFactory(
-            entitiesRepositoryProvider::create,
+            { entitiesRepositoryProvider.create(projectsDataService.getCurrentProject().uuid) },
             { settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_LOCAL_ENTITIES) }
         )
 
