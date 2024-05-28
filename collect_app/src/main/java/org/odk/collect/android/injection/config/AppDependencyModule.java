@@ -118,6 +118,8 @@ import org.odk.collect.metadata.SettingsInstallIDProvider;
 import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.projects.Project;
+import org.odk.collect.projects.ProjectDependencyFactory;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
 import org.odk.collect.qrcode.QRCodeCreatorImpl;
@@ -332,9 +334,10 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider) {
-        FormsRepository formsRepository = formsRepositoryProvider.create();
-        return new ServerFormsDetailsFetcher(formsRepository, formSourceProvider.get());
+    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider, ProjectsDataService projectsDataService) {
+        Project.Saved currentProject = projectsDataService.getCurrentProject();
+        FormsRepository formsRepository = formsRepositoryProvider.create(currentProject.getUuid());
+        return new ServerFormsDetailsFetcher(formsRepository, formSourceProvider.create(currentProject.getUuid()));
     }
 
     @Provides
@@ -497,7 +500,7 @@ public class AppDependencyModule {
 
     @Provides
     public FormSourceProvider providesFormSourceProvider(SettingsProvider settingsProvider, OpenRosaHttpInterface openRosaHttpInterface) {
-        return new FormSourceProvider(settingsProvider, openRosaHttpInterface);
+        return new FormSourceProvider(ProjectDependencyFactory.from(settingsProvider::getUnprotectedSettings), openRosaHttpInterface);
     }
 
     @Provides
