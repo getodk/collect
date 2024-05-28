@@ -1,22 +1,33 @@
 package org.odk.collect.android.utilities
 
 import android.content.Context
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsRepository
-import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.storage.StoragePaths
 import org.odk.collect.forms.savepoints.SavepointsRepository
+import org.odk.collect.projects.ProjectDependencyFactory
 
 class SavepointsRepositoryProvider(
     private val context: Context,
-    private val storagePathProvider: StoragePathProvider
-) {
+    private val storagePathFactory: ProjectDependencyFactory<StoragePaths>
+) : ProjectDependencyFactory<SavepointsRepository> {
 
-    @JvmOverloads
-    fun get(projectId: String? = null): SavepointsRepository {
-        val dbPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA, projectId)
-        val cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId)
-        val instancesPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, projectId)
+    override fun create(projectId: String): SavepointsRepository {
+        val storagePaths = storagePathFactory.create(projectId)
+        return DatabaseSavepointsRepository(
+            context,
+            storagePaths.metaDir,
+            storagePaths.cacheDir,
+            storagePaths.instancesDir
+        )
+    }
 
-        return DatabaseSavepointsRepository(context, dbPath, cachePath, instancesPath)
+    @Deprecated("Creating dependency without specified project is dangerous")
+    fun create(): SavepointsRepository {
+        val currentProject =
+            DaggerUtils.getComponent(Collect.getInstance()).currentProjectProvider()
+                .getCurrentProject()
+        return create(currentProject.uuid)
     }
 }

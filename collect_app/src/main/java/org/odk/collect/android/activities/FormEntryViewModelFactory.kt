@@ -88,7 +88,7 @@ class FormEntryViewModelFactory(
                     formSessionRepository.get(sessionId),
                     entitiesRepositoryProvider.get(projectId),
                     instancesRepositoryProvider.get(projectId),
-                    savepointsRepositoryProvider.get(projectId),
+                    savepointsRepositoryProvider.create(projectId),
                     instancesDataService
                 )
             }
