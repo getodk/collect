@@ -2,7 +2,7 @@ package org.odk.collect.android.projects
 
 import org.odk.collect.android.storage.StoragePaths
 import org.odk.collect.android.utilities.ChangeLocks
-import org.odk.collect.entities.EntitiesRepository
+import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.InstancesRepository

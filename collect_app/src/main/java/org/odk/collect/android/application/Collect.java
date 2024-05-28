@@ -335,7 +335,7 @@ public class Collect extends Application implements
                         @Override
                         public EntitiesRepository providesEntitiesRepository() {
                             String projectId = applicationComponent.currentProjectProvider().getCurrentProject().getUuid();
-                            return applicationComponent.entitiesRepositoryProvider().get(projectId);
+                            return applicationComponent.entitiesRepositoryProvider().create(projectId);
                         }
 
                         @NonNull

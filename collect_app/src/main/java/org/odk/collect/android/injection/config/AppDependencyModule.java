@@ -361,7 +361,7 @@ public class AppDependencyModule {
     @Provides
     @Singleton
     public EntitiesRepositoryProvider provideEntitiesRepositoryProvider(ProjectsDataService projectsDataService, StoragePathProvider storagePathProvider) {
-        return new EntitiesRepositoryProvider(projectsDataService, storagePathProvider);
+        return new EntitiesRepositoryProvider(storagePathProvider);
     }
 
     @Provides
