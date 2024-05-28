@@ -56,7 +56,7 @@ object StorageUtils {
 
         if (copyToDatabase) {
             val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
-            val formsRepository = component.formsRepositoryProvider().get()
+            val formsRepository = component.formsRepositoryProvider().create()
             val formsDir = component.storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
             LocalFormUseCases.synchronizeWithDisk(formsRepository, formsDir)
         }

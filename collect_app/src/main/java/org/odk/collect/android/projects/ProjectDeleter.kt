@@ -31,7 +31,7 @@ class ProjectDeleter(
     }
 
     private fun unsentInstancesDetected(projectId: String): Boolean {
-        return instancesRepositoryProvider.get(projectId).getAllByStatus(
+        return instancesRepositoryProvider.create(projectId).getAllByStatus(
             Instance.STATUS_INCOMPLETE,
             Instance.STATUS_INVALID,
             Instance.STATUS_VALID,

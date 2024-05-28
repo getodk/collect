@@ -35,7 +35,7 @@ class FormsRepositoryProviderTest {
         }
 
         val formsRepositoryProvider = FormsRepositoryProvider(context, storagePathProvider, mock())
-        val repository = formsRepositoryProvider.get(projectId)
+        val repository = formsRepositoryProvider.create(projectId)
 
         val form = repository.save(buildForm("id", "version", formsDir.absolutePath).build())
         assertThat(form.formFilePath, startsWith(formsDir.absolutePath))

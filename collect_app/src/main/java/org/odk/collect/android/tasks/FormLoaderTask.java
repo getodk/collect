@@ -160,15 +160,15 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         errorMsg = null;
 
         if (uriMimeType != null && uriMimeType.equals(InstancesContract.CONTENT_ITEM_TYPE)) {
-            instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
+            instance = new InstancesRepositoryProvider(Collect.getInstance()).create().get(ContentUriHelper.getIdFromUri(uri));
             instancePath = instance.getInstanceFilePath();
 
-            List<Form> candidateForms = new FormsRepositoryProvider(Collect.getInstance()).get().getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
+            List<Form> candidateForms = new FormsRepositoryProvider(Collect.getInstance()).create().getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
 
             form = candidateForms.get(0);
             savepoint = savepointsRepository.get(form.getDbId(), instance.getDbId());
         } else if (uriMimeType != null && uriMimeType.equals(FormsContract.CONTENT_ITEM_TYPE)) {
-            form = new FormsRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
+            form = new FormsRepositoryProvider(Collect.getInstance()).create().get(ContentUriHelper.getIdFromUri(uri));
             if (form == null) {
                 Timber.e(new Error("form is null"));
                 errorMsg = "This form no longer exists, please email support@getodk.org with a description of what you were doing when this happened.";

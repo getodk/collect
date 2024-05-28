@@ -74,7 +74,7 @@ class ProjectResetter(
     }
 
     private fun resetForms() {
-        formsRepositoryProvider.get().deleteAll()
+        formsRepositoryProvider.create().deleteAll()
 
         File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA) + File.separator + ItemsetDbAdapter.DATABASE_NAME).delete()
 

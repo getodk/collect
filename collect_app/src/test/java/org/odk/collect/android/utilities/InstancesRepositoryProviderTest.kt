@@ -41,7 +41,7 @@ class InstancesRepositoryProviderTest {
         }
 
         val instancesRepositoryProvider = InstancesRepositoryProvider(context, storagePathProvider)
-        val repository = instancesRepositoryProvider.get(projectId)
+        val repository = instancesRepositoryProvider.create(projectId)
 
         val instance = repository.save(
             InstanceUtils.buildInstance(
