@@ -15,7 +15,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface
-import org.odk.collect.android.projects.ProjectDependencyProviderFactory
+import org.odk.collect.android.projects.ProjectDependencyModuleFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.metadata.PropertyManager
@@ -34,7 +34,7 @@ class SendFormsTaskSpecTest {
                 application: Application?,
                 projectsDataService: ProjectsDataService?,
                 instanceSubmitScheduler: InstanceSubmitScheduler?,
-                projectsDependencyProviderFactory: ProjectDependencyProviderFactory?,
+                projectsDependencyProviderFactory: ProjectDependencyModuleFactory?,
                 notifier: Notifier?,
                 propertyManager: PropertyManager?,
                 httpInterface: OpenRosaHttpInterface

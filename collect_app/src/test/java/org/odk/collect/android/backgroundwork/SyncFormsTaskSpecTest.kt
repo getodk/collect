@@ -14,7 +14,7 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.notifications.Notifier
-import org.odk.collect.android.projects.ProjectDependencyProviderFactory
+import org.odk.collect.android.projects.ProjectDependencyModuleFactory
 import org.odk.collect.android.support.CollectHelpers
 
 @RunWith(AndroidJUnit4::class)
@@ -27,7 +27,7 @@ class SyncFormsTaskSpecTest {
             override fun providesFormsUpdater(
                 application: Application,
                 notifier: Notifier,
-                projectDependencyProviderFactory: ProjectDependencyProviderFactory
+                projectDependencyModuleFactory: ProjectDependencyModuleFactory
             ): FormsDataService {
                 return formsDataService
             }

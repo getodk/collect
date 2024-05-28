@@ -34,7 +34,7 @@ class SavepointsImporterTest {
     private val project = projectsRepository.save(Project.DEMO_PROJECT)
     private val projectDependencyProvider = projectDependencyProviderFactory.create(project.uuid)
     private val savepointsRepository = projectDependencyProvider.savepointsRepository
-    private val storagePathProvider = projectDependencyProvider.storagePathProvider
+    private val storagePathProvider = component.storagePathProvider()
     private val formsRepository = projectDependencyProvider.formsRepository
     private val instancesRepository = projectDependencyProvider.instancesRepository
 
