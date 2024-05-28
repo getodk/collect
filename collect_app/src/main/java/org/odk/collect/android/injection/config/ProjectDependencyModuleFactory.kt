@@ -2,13 +2,13 @@ package org.odk.collect.android.injection.config
 
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formmanagement.FormSourceProvider
-import org.odk.collect.android.projects.ProjectDependencyFactory
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
+import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.SettingsProvider
 
 class ProjectDependencyModuleFactory(
