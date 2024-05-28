@@ -1,7 +1,7 @@
 package org.odk.collect.android.application.initialization
 
-import org.odk.collect.android.projects.ProjectDependencyProviderFactory
-import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.projects.ProjectDependencyFactory
+import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.forms.savepoints.Savepoint
@@ -13,7 +13,7 @@ import java.io.File
 
 class SavepointsImporter(
     private val projectsRepository: ProjectsRepository,
-    private val projectDependencyProviderFactory: ProjectDependencyProviderFactory
+    private val projectDependencyModuleFactory: ProjectDependencyFactory<ProjectDependencyModule>
 ) : Upgrade {
     override fun key(): String {
         return MetaKeys.OLD_SAVEPOINTS_IMPORTED
@@ -21,16 +21,14 @@ class SavepointsImporter(
 
     override fun run() {
         projectsRepository.getAll().forEach { project ->
-            val projectDependencyProvider = projectDependencyProviderFactory.create(project.uuid)
+            val projectDependencyModule = projectDependencyModuleFactory.create(project.uuid)
 
-            val cacheDir =
-                File(projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, project.uuid))
-            val instancesDir =
-                File(projectDependencyProvider.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid))
+            val cacheDir = File(projectDependencyModule.cacheDir)
+            val instancesDir = File(projectDependencyModule.instancesDir)
 
-            importSavepointsThatBelongToSavedForms(projectDependencyProvider.instancesRepository, projectDependencyProvider.formsRepository, projectDependencyProvider.savepointsRepository, cacheDir)
+            importSavepointsThatBelongToSavedForms(projectDependencyModule.instancesRepository, projectDependencyModule.formsRepository, projectDependencyModule.savepointsRepository, cacheDir)
 
-            importSavepointsThatBelongToBlankForms(projectDependencyProvider.formsRepository, projectDependencyProvider.savepointsRepository, cacheDir, instancesDir)
+            importSavepointsThatBelongToBlankForms(projectDependencyModule.formsRepository, projectDependencyModule.savepointsRepository, cacheDir, instancesDir)
         }
     }
 

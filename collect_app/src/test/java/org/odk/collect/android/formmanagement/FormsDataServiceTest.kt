@@ -20,8 +20,7 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.notifications.Notifier
-import org.odk.collect.android.projects.ProjectDependencyModule
-import org.odk.collect.android.projects.ProjectDependencyProviderFactory
+import org.odk.collect.android.projects.ProjectDependencyModuleFactory
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.androidshared.data.AppState
@@ -53,6 +52,7 @@ class FormsDataServiceTest {
 
     private val changeLockProvider = mock<ChangeLockProvider> {
         on { getFormLock(any()) } doReturn BooleanChangeLock()
+        on { getInstanceLock(any()) } doReturn BooleanChangeLock()
     }
 
     private val formSource = mock<FormSource> {
@@ -69,8 +69,7 @@ class FormsDataServiceTest {
 
         val formSourceProvider = mock<FormSourceProvider> { on { get(any()) } doReturn formSource }
 
-        val projectDependencyModule = ProjectDependencyModule(
-            project.uuid,
+        val projectDependencyModule = ProjectDependencyModuleFactory(
             settingsProvider,
             formsRepositoryProvider,
             mock(),
@@ -79,15 +78,15 @@ class FormsDataServiceTest {
             formSourceProvider,
             mock(),
             mock()
-        )
+        ).create(project.uuid)
 
-        val projectDependencyProviderFactory = mock<ProjectDependencyProviderFactory>()
-        whenever(projectDependencyProviderFactory.create(project.uuid)).thenReturn(projectDependencyModule)
+        val projectDependencyModuleFactory = mock<ProjectDependencyModuleFactory>()
+        whenever(projectDependencyModuleFactory.create(project.uuid)).thenReturn(projectDependencyModule)
 
         formsDataService = FormsDataService(
             appState = AppState(),
             notifier = notifier,
-            projectDependencyProviderFactory = projectDependencyProviderFactory
+            projectDependencyModuleFactory = projectDependencyModuleFactory
         ) { 0 }
     }
 
