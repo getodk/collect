@@ -82,7 +82,7 @@ class FormUriActivityTest {
 
     private val savepointsRepository = InMemSavepointsRepository()
     private val savepointsRepositoryProvider = mock<SavepointsRepositoryProvider>().apply {
-        whenever(get()).thenReturn(savepointsRepository)
+        whenever(create()).thenReturn(savepointsRepository)
     }
 
     @get:Rule

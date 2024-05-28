@@ -19,7 +19,11 @@ class FormsRepositoryProvider @JvmOverloads constructor(
         val dbPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA, projectId)
         val formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId)
         val cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId)
-        val savepointsRepository = savepointsRepositoryProvider.get(projectId)
+        val savepointsRepository = if (projectId != null) {
+            savepointsRepositoryProvider.create(projectId)
+        } else {
+            savepointsRepositoryProvider.create()
+        }
 
         return DatabaseFormsRepository(context, dbPath, formsPath, cachePath, clock, savepointsRepository)
     }

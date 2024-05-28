@@ -261,7 +261,7 @@ class ProjectResetterTest {
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_CACHE))
 
-        assertEquals(0, savepointsRepositoryProvider.get(currentProjectId).getAll().size)
+        assertEquals(0, savepointsRepositoryProvider.create(currentProjectId).getAll().size)
         assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, currentProjectId))
     }
 
@@ -272,7 +272,7 @@ class ProjectResetterTest {
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_CACHE))
 
-        assertEquals(1, savepointsRepositoryProvider.get(anotherProjectId).getAll().size)
+        assertEquals(1, savepointsRepositoryProvider.create(anotherProjectId).getAll().size)
         assertTestCacheFiles(anotherProjectId)
     }
 
@@ -325,10 +325,10 @@ class ProjectResetterTest {
     }
 
     private fun setupTestSavepointsDatabase(uuid: String) {
-        SavepointsRepositoryProvider(ApplicationProvider.getApplicationContext(), storagePathProvider).get(uuid).save(
+        SavepointsRepositoryProvider(ApplicationProvider.getApplicationContext(), storagePathProvider).create(uuid).save(
             Savepoint(1, 1, "blah", "blah")
         )
-        assertEquals(1, savepointsRepositoryProvider.get(uuid).getAll().size)
+        assertEquals(1, savepointsRepositoryProvider.create(uuid).getAll().size)
     }
 
     private fun createTestItemsetsDatabaseFile(uuid: String) {

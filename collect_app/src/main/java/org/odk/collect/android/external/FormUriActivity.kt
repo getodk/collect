@@ -325,7 +325,7 @@ private class FormUriViewModel(
             uriMimeType,
             formsRepositoryProvider.get(),
             instancesRepositoryProvider.get(),
-            savepointsRepositoryProvider.get()
+            savepointsRepositoryProvider.create()
         )
     }
 
@@ -335,7 +335,7 @@ private class FormUriViewModel(
                 if (savepoint.instanceDbId == null) {
                     File(savepoint.instanceFilePath).parentFile?.deleteRecursively()
                 }
-                savepointsRepositoryProvider.get().delete(savepoint.formDbId, savepoint.instanceDbId)
+                savepointsRepositoryProvider.create().delete(savepoint.formDbId, savepoint.instanceDbId)
             },
             foreground = {
                 _formInspectionResult.value = FormInspectionResult.Valid

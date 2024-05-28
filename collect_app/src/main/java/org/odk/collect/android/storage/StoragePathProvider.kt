@@ -87,7 +87,8 @@ class StoragePathProvider(
         return StoragePaths(getProjectRootDirPath(projectId),
             getOdkDirPath(StorageSubdirectory.FORMS, projectId),
             getOdkDirPath(StorageSubdirectory.INSTANCES, projectId),
-            getOdkDirPath(StorageSubdirectory.CACHE, projectId)
+            getOdkDirPath(StorageSubdirectory.CACHE, projectId),
+            getOdkDirPath(StorageSubdirectory.METADATA, projectId)
         )
     }
 }
