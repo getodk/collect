@@ -13,8 +13,8 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.injection.config.ProjectDependencyModuleFactory
 import org.odk.collect.android.notifications.Notifier
-import org.odk.collect.android.projects.ProjectDependencyModuleFactory
 import org.odk.collect.android.support.CollectHelpers
 
 @RunWith(AndroidJUnit4::class)

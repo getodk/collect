@@ -27,8 +27,8 @@ import org.odk.collect.android.formlists.savedformlist.DeleteSavedFormFragment
 import org.odk.collect.android.formlists.savedformlist.SavedFormListViewModel
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.injection.config.ProjectDependencyModuleFactory
 import org.odk.collect.android.instancemanagement.InstancesDataService
-import org.odk.collect.android.projects.ProjectDependencyModuleFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ListFragmentStateAdapter

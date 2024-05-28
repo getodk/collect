@@ -15,9 +15,9 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.openrosa.HttpGetResult
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface
-import org.odk.collect.android.projects.ChangeLocks
 import org.odk.collect.android.projects.ProjectDependencyFactory
 import org.odk.collect.android.projects.ProjectDependencyModule
+import org.odk.collect.android.utilities.ChangeLocks
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.instances.Instance.STATUS_COMPLETE
 import org.odk.collect.formstest.FormFixtures
