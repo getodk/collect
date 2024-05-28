@@ -86,7 +86,7 @@ class FormEntryViewModelFactory(
                     audioRecorder,
                     projectsDataService,
                     formSessionRepository.get(sessionId),
-                    entitiesRepositoryProvider.get(projectId),
+                    entitiesRepositoryProvider.create(projectId),
                     instancesRepositoryProvider.get(projectId),
                     savepointsRepositoryProvider.create(projectId),
                     instancesDataService
