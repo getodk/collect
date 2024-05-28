@@ -30,7 +30,7 @@ class ProjectDependencyModuleFactory @Inject constructor(
             instancesRepositoryProvider,
             storagePathProvider,
             changeLockProvider,
-            ProjectDependencyFactory.from { formSourceProvider.get(projectId) },
+            formSourceProvider,
             savepointsRepositoryProvider,
             entitiesRepositoryProvider
         )

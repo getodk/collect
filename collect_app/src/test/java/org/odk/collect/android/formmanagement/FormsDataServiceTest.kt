@@ -67,7 +67,7 @@ class FormsDataServiceTest {
     fun setup() {
         project = setupProject()
 
-        val formSourceProvider = mock<FormSourceProvider> { on { get(any()) } doReturn formSource }
+        val formSourceProvider = mock<FormSourceProvider> { on { create(any()) } doReturn formSource }
 
         val projectDependencyModule = ProjectDependencyModuleFactory(
             settingsProvider,
