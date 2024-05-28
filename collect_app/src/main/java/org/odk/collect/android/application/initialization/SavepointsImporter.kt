@@ -1,11 +1,11 @@
 package org.odk.collect.android.application.initialization
 
-import org.odk.collect.android.projects.ProjectDependencyFactory
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.forms.savepoints.SavepointsRepository
+import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.upgrade.Upgrade

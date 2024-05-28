@@ -2,9 +2,9 @@ package org.odk.collect.android.storage
 
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.ProjectDependencyFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.PathUtils
 import timber.log.Timber

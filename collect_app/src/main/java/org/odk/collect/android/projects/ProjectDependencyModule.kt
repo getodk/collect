@@ -7,6 +7,7 @@ import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.forms.savepoints.SavepointsRepository
+import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.shared.settings.Settings
 
 /**
@@ -36,18 +37,4 @@ data class ProjectDependencyModule(
     val savepointsRepository by lazy { savepointsRepositoryFactory.create(projectId) }
     val rootDir by lazy { storagePathsFactory.create(projectId).rootDir }
     val instancesDir by lazy { storagePathsFactory.create(projectId).instancesDir }
-}
-
-interface ProjectDependencyFactory<T> {
-    fun create(projectId: String): T
-
-    companion object {
-        fun <T> from(factory: (String) -> T): ProjectDependencyFactory<T> {
-            return object : ProjectDependencyFactory<T> {
-                override fun create(projectId: String): T {
-                    return factory(projectId)
-                }
-            }
-        }
-    }
 }

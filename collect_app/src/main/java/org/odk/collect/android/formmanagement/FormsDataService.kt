@@ -8,11 +8,11 @@ import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.notifications.Notifier
-import org.odk.collect.android.projects.ProjectDependencyFactory
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
+import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
 import java.io.File
 import java.util.function.Supplier
