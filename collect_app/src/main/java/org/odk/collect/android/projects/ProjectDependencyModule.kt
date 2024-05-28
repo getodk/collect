@@ -14,7 +14,7 @@ import org.odk.collect.settings.SettingsProvider
  * Provides all the basic/building block dependencies needed when performing logic inside a
  * project.
  */
-data class ProjectDependencyProvider(
+data class ProjectDependencyModule(
     val projectId: String,
     val settingsProvider: SettingsProvider,
     val formsRepositoryProvider: FormsRepositoryProvider,
@@ -47,7 +47,7 @@ class ProjectDependencyProviderFactory(
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
     private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
 ) {
-    fun create(projectId: String) = ProjectDependencyProvider(
+    fun create(projectId: String) = ProjectDependencyModule(
         projectId,
         settingsProvider,
         formsRepositoryProvider,

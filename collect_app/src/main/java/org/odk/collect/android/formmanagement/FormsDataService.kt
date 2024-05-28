@@ -8,7 +8,7 @@ import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.notifications.Notifier
-import org.odk.collect.android.projects.ProjectDependencyProvider
+import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.Form
@@ -218,25 +218,25 @@ class FormsDataService(
 }
 
 private fun formDownloader(
-    projectDependencyProvider: ProjectDependencyProvider,
+    projectDependencyModule: ProjectDependencyModule,
     clock: Supplier<Long>
 ): ServerFormDownloader {
     return ServerFormDownloader(
-        projectDependencyProvider.formSource,
-        projectDependencyProvider.formsRepository,
-        File(projectDependencyProvider.cacheDir),
-        projectDependencyProvider.formsDir,
+        projectDependencyModule.formSource,
+        projectDependencyModule.formsRepository,
+        File(projectDependencyModule.cacheDir),
+        projectDependencyModule.formsDir,
         FormMetadataParser(),
         clock,
-        projectDependencyProvider.entitiesRepository
+        projectDependencyModule.entitiesRepository
     )
 }
 
 private fun serverFormsDetailsFetcher(
-    projectDependencyProvider: ProjectDependencyProvider
+    projectDependencyModule: ProjectDependencyModule
 ): ServerFormsDetailsFetcher {
     return ServerFormsDetailsFetcher(
-        projectDependencyProvider.formsRepository,
-        projectDependencyProvider.formSource
+        projectDependencyModule.formsRepository,
+        projectDependencyModule.formSource
     )
 }
