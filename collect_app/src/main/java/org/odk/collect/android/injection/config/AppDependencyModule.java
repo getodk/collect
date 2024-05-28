@@ -72,7 +72,6 @@ import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.preferences.source.SharedPreferencesSettingsProvider;
 import org.odk.collect.android.projects.ProjectCreator;
 import org.odk.collect.android.projects.ProjectDeleter;
-import org.odk.collect.android.projects.ProjectDependencyModuleFactory;
 import org.odk.collect.android.projects.ProjectResetter;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.storage.StoragePathProvider;

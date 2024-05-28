@@ -2,6 +2,7 @@ package org.odk.collect.android.storage
 
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.projects.ProjectDependencyFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.projects.ProjectsRepository
@@ -13,9 +14,10 @@ class StoragePathProvider(
     private val projectsDataService: ProjectsDataService = DaggerUtils.getComponent(Collect.getInstance()).currentProjectProvider(),
     private val projectsRepository: ProjectsRepository = DaggerUtils.getComponent(Collect.getInstance()).projectsRepository(),
     val odkRootDirPath: String = Collect.getInstance().getExternalFilesDir(null)!!.absolutePath
-) {
+) : ProjectDependencyFactory<StoragePaths> {
 
     @JvmOverloads
+    @Deprecated(message = "Use create() instead")
     fun getProjectRootDirPath(projectId: String? = null): String {
         val uuid = projectId ?: projectsDataService.getCurrentProject().uuid
         val path = getOdkDirPath(StorageSubdirectory.PROJECTS) + File.separator + uuid
@@ -41,6 +43,7 @@ class StoragePathProvider(
     }
 
     @JvmOverloads
+    @Deprecated(message = "Use create() instead")
     fun getOdkDirPath(subdirectory: StorageSubdirectory, projectId: String? = null): String {
         val path = when (subdirectory) {
             StorageSubdirectory.PROJECTS,
@@ -78,5 +81,13 @@ class StoragePathProvider(
     )
     fun getTmpVideoFilePath(): String {
         return getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.mp4"
+    }
+
+    override fun create(projectId: String): StoragePaths {
+        return StoragePaths(getProjectRootDirPath(projectId),
+            getOdkDirPath(StorageSubdirectory.FORMS, projectId),
+            getOdkDirPath(StorageSubdirectory.INSTANCES, projectId),
+            getOdkDirPath(StorageSubdirectory.CACHE, projectId)
+        )
     }
 }
