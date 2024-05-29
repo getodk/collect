@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingVertical="@dimen/margin_extra_small">
+    android:layout_height="wrap_content">
 
     <com.google.android.material.radiobutton.MaterialRadioButton
         android:id="@+id/radio_button"
@@ -14,6 +13,7 @@
         android:minHeight="0dp"
         android:translationX="-5dp"
         android:paddingStart="@dimen/margin_standard"
+        android:paddingVertical="@dimen/margin_extra_small"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
