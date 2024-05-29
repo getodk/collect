@@ -151,7 +151,7 @@ class FormUpdateTest {
             .assertText("32")
     }
 
-    @Test
+    @Test // https://github.com/getodk/collect/issues/6097
     fun itIsPossibleToDownloadAnUpdate_afterDownloadingAndOpeningAFormWithBrokenExternalDataset() {
         testDependencies.server.addForm(
             "external_select_csv.xml",
