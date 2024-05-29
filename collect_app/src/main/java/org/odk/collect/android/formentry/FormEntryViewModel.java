@@ -15,6 +15,7 @@ import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
@@ -356,6 +357,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     public void exit() {
         formSessionRepository.clear(sessionId);
+        ReferenceManager.instance().reset();
     }
 
     public void validate() {

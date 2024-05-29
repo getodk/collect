@@ -74,7 +74,6 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.model.instance.TreeElement;
-import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -2110,7 +2109,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     }
 
     private void exit() {
-        ReferenceManager.instance().reset();
         backgroundLocationViewModel.activityHidden();
         formEntryViewModel.exit();
         finish();
