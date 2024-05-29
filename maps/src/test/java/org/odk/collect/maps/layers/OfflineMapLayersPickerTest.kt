@@ -88,11 +88,22 @@ class OfflineMapLayersPickerTest {
     fun `clicking the 'save' button dismisses the layers picker`() {
         val scenario = launchFragment()
 
+        scheduler.flush()
+
         scenario.onFragment {
             assertThat(it.isVisible, equalTo(true))
             EspressoHelpers.clickOnText(string.save)
             assertThat(it.isVisible, equalTo(false))
         }
+    }
+
+    @Test
+    fun `the 'save' button should be disabled during loading layers`() {
+        launchFragment()
+
+        onView(withText(string.save)).check(matches(not(isEnabled())))
+        scheduler.flush()
+        onView(withText(string.save)).check(matches(isEnabled()))
     }
 
     @Test
