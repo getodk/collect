@@ -38,6 +38,10 @@ object EspressoHelpers {
         onView(withText(string)).perform(click())
     }
 
+    fun clickOnText(string: String) {
+        onView(withText(string)).perform(click())
+    }
+
     fun clickOnTextInDialog(string: Int) {
         onView(withText(string)).inRoot(isDialog()).perform(click())
     }

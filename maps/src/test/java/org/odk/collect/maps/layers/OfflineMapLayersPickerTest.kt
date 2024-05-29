@@ -8,6 +8,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -28,16 +29,14 @@ import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R.string
+import org.odk.collect.testshared.EspressoHelpers
 import org.odk.collect.testshared.FakeScheduler
+import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.webpage.ExternalWebPageHelper
 
 @RunWith(AndroidJUnit4::class)
 class OfflineMapLayersPickerTest {
-    private val layers = listOf(
-        ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
-        ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
-    )
     private val referenceLayerRepository = mock<ReferenceLayerRepository>().also {
         whenever(it.getAllSupported()).thenReturn(emptyList())
     }
@@ -57,91 +56,103 @@ class OfflineMapLayersPickerTest {
     fun `clicking the 'cancel' button dismisses the layers picker`() {
         val scenario = launchFragment()
 
-        scheduler.flush()
-
         scenario.onFragment {
             assertThat(it.isVisible, equalTo(true))
-            onView(withText(string.cancel)).perform(click())
+            EspressoHelpers.clickOnText(string.cancel)
             assertThat(it.isVisible, equalTo(false))
         }
     }
 
     @Test
-    fun `selecting a new layer and clicking the 'cancel' button does not save the layer`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(layers)
+    fun `clicking the 'cancel' button does not save the layer`() {
+        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
+        ))
 
         launchFragment()
 
         scheduler.flush()
 
-        onView(withText("layer2")).perform(click())
-        onView(withText(string.cancel)).perform(click())
+        EspressoHelpers.clickOnText(string.cancel)
         assertThat(settingsProvider.getUnprotectedSettings().contains(ProjectKeys.KEY_REFERENCE_LAYER), equalTo(false))
+    }
+
+    @Test
+    fun `the 'cancel' button should be enabled during loading layers`() {
+        launchFragment()
+
+        onView(withText(string.cancel)).check(matches(isEnabled()))
     }
 
     @Test
     fun `clicking the 'save' button dismisses the layers picker`() {
         val scenario = launchFragment()
 
-        scheduler.flush()
-
         scenario.onFragment {
             assertThat(it.isVisible, equalTo(true))
-            onView(withText(string.save)).perform(click())
+            EspressoHelpers.clickOnText(string.save)
             assertThat(it.isVisible, equalTo(false))
         }
     }
 
     @Test
-    fun `clicking the 'save' button saves null when none of the layers is selected`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(layers)
+    fun `clicking the 'save' button saves null when 'None' option is checked`() {
+        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
+        ))
 
         launchFragment()
 
         scheduler.flush()
 
-        onView(withText(string.save)).perform(click())
+        EspressoHelpers.clickOnText(string.save)
         assertThat(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER), equalTo(null))
     }
 
     @Test
-    fun `clicking the 'save' button saves the current layer`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(layers)
+    fun `clicking the 'save' button saves the layer id if any is checked`() {
+        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
+        ))
+
+        launchFragment()
+
+        scheduler.flush()
+
+        EspressoHelpers.clickOnText("layer1")
+        EspressoHelpers.clickOnText(string.save)
+        assertThat(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER), equalTo("1"))
+    }
+
+    @Test
+    fun `when no layer id is saved in settings the 'None' option should be checked`() {
+        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
+        ))
+
+        launchFragment()
+
+        scheduler.flush()
+
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(isChecked()))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(not(isChecked())))
+    }
+
+    @Test
+    fun `when layer id is saved in settings the layer it belongs to should be checked`() {
+        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
+            ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
+        ))
         settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, "2")
 
         launchFragment()
 
         scheduler.flush()
 
-        onView(withText(string.save)).perform(click())
-        assertThat(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER), equalTo("2"))
-    }
-
-    @Test
-    fun `selecting a new layer and clicking the 'save' button saves the new layer`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(layers)
-
-        launchFragment()
-
-        scheduler.flush()
-
-        onView(withText("layer2")).perform(click())
-        onView(withText(string.save)).perform(click())
-        assertThat(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER), equalTo("2"))
-    }
-
-    @Test
-    fun `selecting 'none' and clicking the 'save' button saves null`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(layers)
-        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, "2")
-
-        launchFragment()
-
-        scheduler.flush()
-
-        onView(withText(string.none)).perform(click())
-        onView(withText(string.save)).perform(click())
-        assertThat(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER), equalTo(null))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(not(isChecked())))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(not(isChecked())))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(matches(isChecked()))
     }
 
     @Test
@@ -155,6 +166,13 @@ class OfflineMapLayersPickerTest {
 
         onView(withId(R.id.progress_indicator)).check(matches(not(isDisplayed())))
         onView(withId(R.id.layers)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun `the 'learn more' button should be enabled during loading layers`() {
+        launchFragment()
+
+        onView(withText(string.get_help_with_reference_layers)).check(matches(isEnabled()))
     }
 
     @Test
@@ -174,35 +192,60 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        onView(withText(string.none)).check(matches(isDisplayed()))
+        onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(1)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(withText(string.none)))
     }
 
     @Test
-    fun `if there are multiple layers all of them are displayed along with the 'none' option`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(layers)
+    fun `if there are multiple layers all of them are displayed along with the 'None'`() {
+        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
+            ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
+        ))
 
         launchFragment()
 
         scheduler.flush()
 
-        onView(withText(string.none)).check(matches(isDisplayed()))
-        onView(withText("layer1")).check(matches(isDisplayed()))
-        onView(withText("layer2")).check(matches(isDisplayed()))
+        onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(withText(string.none)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(withText("layer1")))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(matches(withText("layer2")))
+    }
+
+    @Test
+    fun `checking layers sets selection correctly`() {
+        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
+        ))
+
+        launchFragment()
+
+        scheduler.flush()
+
+        EspressoHelpers.clickOnText("layer1")
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(not(isChecked())))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(isChecked()))
+
+        EspressoHelpers.clickOnText(string.none)
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(isChecked()))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(not(isChecked())))
     }
 
     @Test
     fun `recreating maintains selection`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(layers)
+        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
+        ))
 
         val scenario = launchFragment()
 
         scheduler.flush()
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(isChecked()))
-        onView(withText("layer2")).perform(click())
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(matches(isChecked()))
+        EspressoHelpers.clickOnText("layer1")
         scenario.recreate()
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(matches(isChecked()))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(not(isChecked())))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(isChecked()))
     }
 
     private fun launchFragment(): FragmentScenario<OfflineMapLayersPicker> {
