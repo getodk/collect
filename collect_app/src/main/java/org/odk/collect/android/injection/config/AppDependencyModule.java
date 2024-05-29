@@ -119,7 +119,6 @@ import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.Project;
-import org.odk.collect.projects.ProjectDependencyFactory;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
 import org.odk.collect.qrcode.QRCodeCreatorImpl;
@@ -500,7 +499,7 @@ public class AppDependencyModule {
 
     @Provides
     public FormSourceProvider providesFormSourceProvider(SettingsProvider settingsProvider, OpenRosaHttpInterface openRosaHttpInterface) {
-        return new FormSourceProvider(ProjectDependencyFactory.from(settingsProvider::getUnprotectedSettings), openRosaHttpInterface);
+        return new FormSourceProvider(settingsProvider::getUnprotectedSettings, openRosaHttpInterface);
     }
 
     @Provides

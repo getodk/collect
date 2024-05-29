@@ -5,7 +5,6 @@ import org.hamcrest.Matchers.`is`
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.odk.collect.android.openrosa.OpenRosaFormSource
-import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.InMemSettings
 
@@ -14,8 +13,7 @@ class FormSourceProviderTest {
     @Test
     fun `returned source uses project's server when passed`() {
         val settings = InMemSettings()
-
-        val formSourceProvider = FormSourceProvider(ProjectDependencyFactory.from { settings }, mock())
+        val formSourceProvider = FormSourceProvider({ settings }, mock())
 
         settings.save(ProjectKeys.KEY_SERVER_URL, "http://example.com")
         settings.save(ProjectKeys.KEY_USERNAME, "user")

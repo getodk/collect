@@ -43,14 +43,14 @@ class InstancesDataServiceTest {
     private val formsRepository = InMemFormsRepository()
     private val instancesRepository = InMemInstancesRepository()
 
-    private val projectsDependencyModuleFactory = ProjectDependencyFactory.from {
+    private val projectsDependencyModuleFactory = ProjectDependencyFactory {
         ProjectDependencyModule(
             it,
-            ProjectDependencyFactory.from { settings },
-            ProjectDependencyFactory.from { formsRepository },
-            ProjectDependencyFactory.from { instancesRepository },
+            { settings },
+            { formsRepository },
+            { instancesRepository },
             mock(),
-            ProjectDependencyFactory.from { changeLocks },
+            { changeLocks },
             mock(),
             mock(),
             mock()
