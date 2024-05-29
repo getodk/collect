@@ -182,4 +182,19 @@ class DirectoryReferenceLayerRepositoryTest {
         file.delete()
         assertThat(repository.get(fileLayer.id), equalTo(null))
     }
+
+    @Test
+    fun get_returnsLayerWithCorrectName() {
+        val dir = TempFiles.createTempDir()
+        val file = TempFiles.createTempFile(dir)
+
+        val mapConfigurator = mock<MapConfigurator>().also {
+            whenever(it.getDisplayName(file)).thenReturn("blah")
+        }
+
+        val repository = DirectoryReferenceLayerRepository(listOf(dir.absolutePath)) { mapConfigurator }
+        val fileLayer = repository.getAll().first { it.file == file }
+
+        assertThat(repository.get(fileLayer.id)!!.name, equalTo("blah"))
+    }
 }

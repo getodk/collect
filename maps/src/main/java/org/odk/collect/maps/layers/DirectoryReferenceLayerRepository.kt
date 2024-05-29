@@ -40,7 +40,6 @@ class DirectoryReferenceLayerRepository(
         PathUtils.getRelativeFilePath(directoryPath, file.absolutePath)
 
     private fun getName(file: File): String {
-        val name = MbtilesFile.readName(file)
-        return name ?: file.getName()
+        return getMapConfigurator().getDisplayName(file)
     }
 }
