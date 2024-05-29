@@ -11,13 +11,10 @@ class DirectoryReferenceLayerRepository(
 ) : ReferenceLayerRepository {
 
     override fun getAll(): List<ReferenceLayer> {
-        return getAllFilesWithDirectory().map {
-            ReferenceLayer(getIdForFile(it.second, it.first), it.first, getName(it.first))
-        }.distinctBy { it.id }
-    }
-
-    override fun getAllSupported(): List<ReferenceLayer> {
-        return getAll().filter { getMapConfigurator().supportsLayer(it.file) }
+        return getAllFilesWithDirectory()
+            .map { ReferenceLayer(getIdForFile(it.second, it.first), it.first, getName(it.first)) }
+            .distinctBy { it.id }
+            .filter { getMapConfigurator().supportsLayer(it.file) }
     }
 
     override fun get(id: String): ReferenceLayer? {

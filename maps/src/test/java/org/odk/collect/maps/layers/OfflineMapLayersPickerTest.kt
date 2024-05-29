@@ -38,7 +38,7 @@ import org.odk.collect.webpage.ExternalWebPageHelper
 @RunWith(AndroidJUnit4::class)
 class OfflineMapLayersPickerTest {
     private val referenceLayerRepository = mock<ReferenceLayerRepository>().also {
-        whenever(it.getAllSupported()).thenReturn(emptyList())
+        whenever(it.getAll()).thenReturn(emptyList())
     }
     private val scheduler = FakeScheduler()
     private val settingsProvider = InMemSettingsProvider()
@@ -65,7 +65,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'cancel' button does not save the layer`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
         ))
 
@@ -108,7 +108,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'save' button saves null when 'None' option is checked`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
         ))
 
@@ -122,7 +122,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'save' button saves the layer id if any is checked`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
         ))
 
@@ -137,7 +137,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `when no layer id is saved in settings the 'None' option should be checked`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
         ))
 
@@ -151,7 +151,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `when layer id is saved in settings the layer it belongs to should be checked`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
             ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
         ))
@@ -209,7 +209,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `if there are multiple layers all of them are displayed along with the 'None'`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
             ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
         ))
@@ -226,7 +226,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `checking layers sets selection correctly`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
         ))
 
@@ -245,7 +245,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `recreating maintains selection`() {
-        whenever(referenceLayerRepository.getAllSupported()).thenReturn(listOf(
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
         ))
 

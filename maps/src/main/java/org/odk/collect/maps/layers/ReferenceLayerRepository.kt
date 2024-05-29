@@ -5,7 +5,6 @@ import java.io.File
 interface ReferenceLayerRepository {
 
     fun getAll(): List<ReferenceLayer>
-    fun getAllSupported(): List<ReferenceLayer>
     fun get(id: String): ReferenceLayer?
 }
 
