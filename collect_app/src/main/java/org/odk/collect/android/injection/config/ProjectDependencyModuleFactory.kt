@@ -25,7 +25,7 @@ class ProjectDependencyModuleFactory @Inject constructor(
     override fun create(projectId: String): ProjectDependencyModule {
         return ProjectDependencyModule(
             projectId,
-            ProjectDependencyFactory.from { settingsProvider.getUnprotectedSettings(projectId) },
+            settingsProvider::getUnprotectedSettings,
             formsRepositoryProvider,
             instancesRepositoryProvider,
             storagePathProvider,
