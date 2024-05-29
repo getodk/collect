@@ -14,7 +14,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.Defaults
@@ -50,8 +49,7 @@ class ProjectResetterTest {
     private lateinit var anotherProjectId: String
 
     private val propertyManager = mock<PropertyManager>()
-    private val changeLockProvider = mock<ChangeLockProvider>()
-    private val changeLock = BooleanChangeLock()
+    private val changeLockProvider = ChangeLockProvider { BooleanChangeLock() }
 
     @Before
     fun setup() {
@@ -78,8 +76,6 @@ class ProjectResetterTest {
         formsRepositoryProvider = component.formsRepositoryProvider()
         instancesRepositoryProvider = component.instancesRepositoryProvider()
         savepointsRepositoryProvider = component.savepointsRepositoryProvider()
-
-        whenever(changeLockProvider.getInstanceLock(currentProjectId)).thenReturn(changeLock)
     }
 
     @Test
@@ -206,7 +202,7 @@ class ProjectResetterTest {
         saveTestInstanceFiles(currentProjectId)
         setupTestInstancesDatabase(currentProjectId)
 
-        changeLock.lock()
+        (changeLockProvider.create(currentProjectId).instancesLock as BooleanChangeLock).lock()
         val failedResetActions = projectResetter.reset(listOf(ProjectResetter.ResetAction.RESET_INSTANCES))
         assertEquals(1, failedResetActions.size)
 
