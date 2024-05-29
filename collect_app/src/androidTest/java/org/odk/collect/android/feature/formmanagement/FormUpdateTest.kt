@@ -5,6 +5,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.support.StubOpenRosaServer
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -148,5 +149,33 @@ class FormUpdateTest {
             .clickOKOnDialog(MainMenuPage())
             .startBlankForm("One Question Last Saved")
             .assertText("32")
+    }
+
+    @Test // https://github.com/getodk/collect/issues/6097
+    fun itIsPossibleToDownloadAnUpdate_afterDownloadingAndOpeningAFormWithBrokenExternalDataset() {
+        testDependencies.server.addForm(
+            "external_select_csv.xml",
+            listOf(StubOpenRosaServer.MediaFileItem("external_data.csv", "external_data_broken.csv"))
+        )
+
+        val mainMenuPage = rule.withProject(testDependencies.server.url)
+            .clickGetBlankForm()
+            .clickGetSelected()
+            .clickOKOnDialog(MainMenuPage())
+            .startBlankFormWithError("external select")
+            .assertText(org.odk.collect.strings.R.string.error_occured)
+            .clickOKOnDialog(MainMenuPage())
+
+        testDependencies.server.addForm(
+            "external_select_csv.xml",
+            listOf(StubOpenRosaServer.MediaFileItem("external_data.csv"))
+        )
+
+        mainMenuPage.clickGetBlankForm()
+            .clickGetSelected()
+            .clickOKOnDialog(MainMenuPage())
+            .startBlankForm("external select")
+            .assertTextDoesNotExist("Error Occurred")
+            .assertTexts("One", "Two", "Three")
     }
 }
