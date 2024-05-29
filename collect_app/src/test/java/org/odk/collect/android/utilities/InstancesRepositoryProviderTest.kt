@@ -7,10 +7,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.startsWith
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.storage.StoragePaths
 import org.odk.collect.formstest.InstanceUtils
 import org.odk.collect.shared.TempFiles
 
@@ -23,26 +20,17 @@ class InstancesRepositoryProviderTest {
     @Test
     fun `returned repository uses project directory when passed`() {
         val context = ApplicationProvider.getApplicationContext<Application>()
-
-        val projectId = "projectId"
-        val storagePathProvider = mock<StoragePathProvider> {
-            on {
-                getOdkDirPath(
-                    StorageSubdirectory.METADATA,
-                    projectId
-                )
-            } doReturn dbDir.absolutePath
-            on {
-                getOdkDirPath(
-                    StorageSubdirectory.INSTANCES,
-                    projectId
-                )
-            } doReturn instancesDir.absolutePath
+        val instancesRepositoryProvider = InstancesRepositoryProvider(context) {
+            StoragePaths(
+                "",
+                "",
+                instancesDir.absolutePath,
+                "",
+                dbDir.absolutePath
+            )
         }
 
-        val instancesRepositoryProvider = InstancesRepositoryProvider(context, storagePathProvider)
-        val repository = instancesRepositoryProvider.create(projectId)
-
+        val repository = instancesRepositoryProvider.create("projectId")
         val instance = repository.save(
             InstanceUtils.buildInstance(
                 "formId",
