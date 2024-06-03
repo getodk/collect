@@ -39,6 +39,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
+import org.odk.collect.android.database.DatabaseConnection;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.FormUriActivity;
@@ -70,7 +71,10 @@ import javax.inject.Inject;
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
+ * @deprecated Uses {@link CursorLoaderFactory} and interacts with {@link DatabaseConnection} on the
+ * UI thread.
  */
+@Deprecated
 public class InstanceChooserList extends AppListActivity implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
