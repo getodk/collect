@@ -1,13 +1,16 @@
 package org.odk.collect.maps.layers
 
+import android.content.Context
+import android.os.Bundle
+import androidx.preference.Preference
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
 import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.shared.TempFiles
+import org.odk.collect.shared.settings.Settings
+import java.io.File
 
 class DirectoryReferenceLayerRepositoryTest {
     @Test
@@ -16,13 +19,10 @@ class DirectoryReferenceLayerRepositoryTest {
         val file1 = TempFiles.createTempFile(dir)
         val file2 = TempFiles.createTempFile(dir)
         val file3 = TempFiles.createTempFile(dir)
-        val mapConfigurator = mock<MapConfigurator>().also {
-            whenever(it.supportsLayer(file1)).thenReturn(true)
-            whenever(it.getDisplayName(file1)).thenReturn("file1")
-            whenever(it.supportsLayer(file2)).thenReturn(false)
-            whenever(it.getDisplayName(file2)).thenReturn("file2")
-            whenever(it.supportsLayer(file3)).thenReturn(true)
-            whenever(it.getDisplayName(file3)).thenReturn("file3")
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, false, file2.name)
+            it.addFile(file3, true, file3.name)
         }
 
         val repository = DirectoryReferenceLayerRepository(listOf(dir.absolutePath)) { mapConfigurator }
@@ -36,13 +36,10 @@ class DirectoryReferenceLayerRepositoryTest {
         val file1 = TempFiles.createTempFile(dir2)
         val file2 = TempFiles.createTempFile(dir2)
         val file3 = TempFiles.createTempFile(dir2)
-        val mapConfigurator = mock<MapConfigurator>().also {
-            whenever(it.supportsLayer(file1)).thenReturn(true)
-            whenever(it.getDisplayName(file1)).thenReturn("file1")
-            whenever(it.supportsLayer(file2)).thenReturn(false)
-            whenever(it.getDisplayName(file2)).thenReturn("file2")
-            whenever(it.supportsLayer(file3)).thenReturn(true)
-            whenever(it.getDisplayName(file3)).thenReturn("file3")
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, false, file2.name)
+            it.addFile(file3, true, file3.name)
         }
 
         val repository = DirectoryReferenceLayerRepository(listOf(dir1.absolutePath)) { mapConfigurator }
@@ -57,13 +54,10 @@ class DirectoryReferenceLayerRepositoryTest {
         val file1 = TempFiles.createTempFile(dir1)
         val file2 = TempFiles.createTempFile(dir2)
         val file3 = TempFiles.createTempFile(dir3)
-        val mapConfigurator = mock<MapConfigurator>().also {
-            whenever(it.supportsLayer(file1)).thenReturn(true)
-            whenever(it.getDisplayName(file1)).thenReturn("file1")
-            whenever(it.supportsLayer(file2)).thenReturn(false)
-            whenever(it.getDisplayName(file2)).thenReturn("file2")
-            whenever(it.supportsLayer(file3)).thenReturn(true)
-            whenever(it.getDisplayName(file3)).thenReturn("file3")
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, false, file2.name)
+            it.addFile(file3, true, file3.name)
         }
 
         val repository =
@@ -84,13 +78,10 @@ class DirectoryReferenceLayerRepositoryTest {
         val file1 = TempFiles.createTempFile(dir1, "blah", ".temp")
         val file2 = TempFiles.createTempFile(dir2, "blah", ".temp")
         val file3 = TempFiles.createTempFile(dir3, "blah", ".temp")
-        val mapConfigurator = mock<MapConfigurator>().also {
-            whenever(it.supportsLayer(file1)).thenReturn(true)
-            whenever(it.getDisplayName(file1)).thenReturn("file1")
-            whenever(it.supportsLayer(file2)).thenReturn(false)
-            whenever(it.getDisplayName(file2)).thenReturn("file2")
-            whenever(it.supportsLayer(file3)).thenReturn(true)
-            whenever(it.getDisplayName(file3)).thenReturn("file3")
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, false, file2.name)
+            it.addFile(file3, true, file3.name)
         }
 
         val repository =
@@ -103,11 +94,9 @@ class DirectoryReferenceLayerRepositoryTest {
         val dir = TempFiles.createTempDir()
         val file1 = TempFiles.createTempFile(dir)
         val file2 = TempFiles.createTempFile(dir)
-        val mapConfigurator = mock<MapConfigurator>().also {
-            whenever(it.getDisplayName(file1)).thenReturn("file1")
-            whenever(it.supportsLayer(file1)).thenReturn(true)
-            whenever(it.getDisplayName(file2)).thenReturn("file2")
-            whenever(it.supportsLayer(file2)).thenReturn(true)
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, true, file2.name)
         }
 
         val repository = DirectoryReferenceLayerRepository(listOf(dir.absolutePath)) { mapConfigurator }
@@ -121,11 +110,9 @@ class DirectoryReferenceLayerRepositoryTest {
         val dir2 = TempFiles.createTempDir()
         val file1 = TempFiles.createTempFile(dir1)
         val file2 = TempFiles.createTempFile(dir2)
-        val mapConfigurator = mock<MapConfigurator>().also {
-            whenever(it.getDisplayName(file1)).thenReturn("file1")
-            whenever(it.supportsLayer(file1)).thenReturn(true)
-            whenever(it.getDisplayName(file2)).thenReturn("file2")
-            whenever(it.supportsLayer(file2)).thenReturn(true)
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, true, file2.name)
         }
 
         val repository = DirectoryReferenceLayerRepository(listOf(dir1.absolutePath, dir2.absolutePath)) { mapConfigurator }
@@ -139,11 +126,9 @@ class DirectoryReferenceLayerRepositoryTest {
         val dir2 = TempFiles.createTempDir()
         val file1 = TempFiles.createTempFile(dir1, "blah", ".temp")
         val file2 = TempFiles.createTempFile(dir2, "blah", ".temp")
-        val mapConfigurator = mock<MapConfigurator>().also {
-            whenever(it.getDisplayName(file1)).thenReturn("file1")
-            whenever(it.supportsLayer(file1)).thenReturn(true)
-            whenever(it.getDisplayName(file2)).thenReturn("file2")
-            whenever(it.supportsLayer(file2)).thenReturn(true)
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, true, file2.name)
         }
 
         val repository = DirectoryReferenceLayerRepository(listOf(dir1.absolutePath, dir2.absolutePath)) { mapConfigurator }
@@ -155,9 +140,8 @@ class DirectoryReferenceLayerRepositoryTest {
     fun get_whenFileDoesNotExist_returnsNull() {
         val dir = TempFiles.createTempDir()
         val file = TempFiles.createTempFile(dir)
-        val mapConfigurator = mock<MapConfigurator>().also {
-            whenever(it.supportsLayer(file)).thenReturn(true)
-            whenever(it.getDisplayName(file)).thenReturn("file")
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file, true, file.name)
         }
 
         val repository = DirectoryReferenceLayerRepository(listOf(dir.absolutePath)) { mapConfigurator }
@@ -172,14 +156,49 @@ class DirectoryReferenceLayerRepositoryTest {
         val dir = TempFiles.createTempDir()
         val file = TempFiles.createTempFile(dir)
 
-        val mapConfigurator = mock<MapConfigurator>().also {
-            whenever(it.supportsLayer(file)).thenReturn(true)
-            whenever(it.getDisplayName(file)).thenReturn("file")
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file, true, file.name)
         }
 
         val repository = DirectoryReferenceLayerRepository(listOf(dir.absolutePath)) { mapConfigurator }
         val fileLayer = repository.getAll().first { it.file == file }
 
-        assertThat(repository.get(fileLayer.id)!!.name, equalTo("file"))
+        assertThat(repository.get(fileLayer.id)!!.name, equalTo(file.name))
+    }
+
+    private class StubMapConfigurator : MapConfigurator {
+        private val files = mutableMapOf<File, Pair<Boolean, String>>()
+
+        override fun supportsLayer(file: File?): Boolean {
+            return files[file]!!.first
+        }
+
+        override fun getDisplayName(file: File?): String {
+            return files[file]!!.second
+        }
+
+        fun addFile(file: File, isSupported: Boolean, displayName: String) {
+            files[file] = Pair(isSupported, displayName)
+        }
+
+        override fun isAvailable(context: Context?): Boolean {
+            TODO("Not yet implemented")
+        }
+
+        override fun showUnavailableMessage(context: Context?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun createPrefs(context: Context?, settings: Settings?): MutableList<Preference> {
+            TODO("Not yet implemented")
+        }
+
+        override fun getPrefKeys(): MutableCollection<String> {
+            TODO("Not yet implemented")
+        }
+
+        override fun buildConfig(prefs: Settings): Bundle {
+            TODO("Not yet implemented")
+        }
     }
 }
