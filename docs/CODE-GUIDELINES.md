@@ -178,12 +178,12 @@ Collect is a multi module Gradle project. Modules should have a focused feature 
 There's no easy way to define exactly when a new module should be pulled out of an existing one or when new code calls for a new module - it's best to discuss that with the team before making any decisions. Once a structure has been agreed on, to add a new module:
 
 1. Click `File > New > New module...` in Android Studio
-1. Decide whether the new module should be an "Android Library" or "Java or Kotlin Library" - ideally as much code as possible could avoid relying on Android but a lot of features will require at least one Android Library module
-1. Review the generated `build.gradle` and remove any unnecessary dependencies or setup
-1. Add quality checks to the module's `build.gradle`:
+2. Decide whether the new module should be an "Android Library" or "Java or Kotlin Library" - ideally as much code as possible could avoid relying on Android but a lot of features will require at least one Android Library module
+3. Review the generated `build.gradle` and remove any unnecessary dependencies or setup
+4. Add quality checks to the module's `build.gradle`:
 
   ```
   apply from: '../config/quality.gradle'
   ```
 
-1. If the module will have tests, make sure they get run on CI by adding a line to `test_modules.txt` with `<module-name>:test` for a Java Library or `<module-name>:testDebug` for an Android library
+5. If the module will have tests, make sure they get run on CI by adding a line to `test_modules.txt` with `<module-name>`
