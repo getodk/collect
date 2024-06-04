@@ -304,7 +304,10 @@ public class Collect extends Application implements
                             applicationComponent.mapFragmentFactory(),
                             applicationComponent.locationClient(),
                             applicationComponent.scheduler(),
-                            applicationComponent.permissionsChecker()
+                            applicationComponent.permissionsChecker(),
+                            applicationComponent.referenceLayerRepository(),
+                            applicationComponent.settingsProvider(),
+                            applicationComponent.externalWebPageHelper()
                     ))
                     .build();
         }

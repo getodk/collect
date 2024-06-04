@@ -1,43 +1,68 @@
 package org.odk.collect.maps.layers
 
+import android.content.Context
+import android.os.Bundle
+import androidx.preference.Preference
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
+import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.shared.TempFiles
+import org.odk.collect.shared.settings.Settings
+import java.io.File
 
 class DirectoryReferenceLayerRepositoryTest {
-
     @Test
-    fun getAll_returnsAllLayersInTheDirectory() {
+    fun getAll_returnsAllSupportedLayersInTheDirectory() {
         val dir = TempFiles.createTempDir()
         val file1 = TempFiles.createTempFile(dir)
         val file2 = TempFiles.createTempFile(dir)
+        val file3 = TempFiles.createTempFile(dir)
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, false, file2.name)
+            it.addFile(file3, true, file3.name)
+        }
 
-        val repository = DirectoryReferenceLayerRepository(dir.absolutePath)
-        assertThat(repository.getAll().map { it.file }, containsInAnyOrder(file1, file2))
+        val repository = DirectoryReferenceLayerRepository(listOf(dir.absolutePath)) { mapConfigurator }
+        assertThat(repository.getAll().map { it.file }, containsInAnyOrder(file1, file3))
     }
 
     @Test
-    fun getAll_returnsAllLayersInSubDirectories() {
+    fun getAll_returnsAllSupportedLayersInSubDirectories() {
         val dir1 = TempFiles.createTempDir()
         val dir2 = TempFiles.createTempDir(dir1)
         val file1 = TempFiles.createTempFile(dir2)
         val file2 = TempFiles.createTempFile(dir2)
+        val file3 = TempFiles.createTempFile(dir2)
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, false, file2.name)
+            it.addFile(file3, true, file3.name)
+        }
 
-        val repository = DirectoryReferenceLayerRepository(dir1.absolutePath)
-        assertThat(repository.getAll().map { it.file }, containsInAnyOrder(file1, file2))
+        val repository = DirectoryReferenceLayerRepository(listOf(dir1.absolutePath)) { mapConfigurator }
+        assertThat(repository.getAll().map { it.file }, containsInAnyOrder(file1, file3))
     }
 
     @Test
-    fun getAll_withMultipleDirectories_returnsAllLayersInAllDirectories() {
+    fun getAll_withMultipleDirectories_returnsAllSupportedLayersInAllDirectories() {
         val dir1 = TempFiles.createTempDir()
         val dir2 = TempFiles.createTempDir()
+        val dir3 = TempFiles.createTempDir()
         val file1 = TempFiles.createTempFile(dir1)
         val file2 = TempFiles.createTempFile(dir2)
+        val file3 = TempFiles.createTempFile(dir3)
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, false, file2.name)
+            it.addFile(file3, true, file3.name)
+        }
 
-        val repository = DirectoryReferenceLayerRepository(dir1.absolutePath, dir2.absolutePath)
-        assertThat(repository.getAll().map { it.file }, containsInAnyOrder(file1, file2))
+        val repository =
+            DirectoryReferenceLayerRepository(listOf(dir1.absolutePath, dir2.absolutePath, dir3.absolutePath)) { mapConfigurator }
+        assertThat(repository.getAll().map { it.file }, containsInAnyOrder(file1, file3))
     }
 
     /**
@@ -46,23 +71,35 @@ class DirectoryReferenceLayerRepositoryTest {
      * layer directories) will be returned.
      */
     @Test
-    fun getAll_withMultipleDirectoriesWithFilesWithTheSameRelativePath_onlyReturnsTheFileFromTheFirstDirectory() {
+    fun getAll_withMultipleDirectoriesWithFilesWithTheSameRelativePath_onlyReturnsTheSupportedFileFromTheFirstDirectory() {
         val dir1 = TempFiles.createTempDir()
         val dir2 = TempFiles.createTempDir()
+        val dir3 = TempFiles.createTempDir()
         val file1 = TempFiles.createTempFile(dir1, "blah", ".temp")
-        TempFiles.createTempFile(dir2, "blah", ".temp")
+        val file2 = TempFiles.createTempFile(dir2, "blah", ".temp")
+        val file3 = TempFiles.createTempFile(dir3, "blah", ".temp")
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, false, file2.name)
+            it.addFile(file3, true, file3.name)
+        }
 
-        val repository = DirectoryReferenceLayerRepository(dir1.absolutePath, dir2.absolutePath)
+        val repository =
+            DirectoryReferenceLayerRepository(listOf(dir1.absolutePath, dir2.absolutePath, dir3.absolutePath)) { mapConfigurator }
         assertThat(repository.getAll().map { it.file }, containsInAnyOrder(file1))
     }
 
     @Test
     fun get_returnsLayer() {
         val dir = TempFiles.createTempDir()
-        TempFiles.createTempFile(dir)
+        val file1 = TempFiles.createTempFile(dir)
         val file2 = TempFiles.createTempFile(dir)
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, true, file2.name)
+        }
 
-        val repository = DirectoryReferenceLayerRepository(dir.absolutePath)
+        val repository = DirectoryReferenceLayerRepository(listOf(dir.absolutePath)) { mapConfigurator }
         val file2Layer = repository.getAll().first { it.file == file2 }
         assertThat(repository.get(file2Layer.id)!!.file, equalTo(file2))
     }
@@ -71,10 +108,14 @@ class DirectoryReferenceLayerRepositoryTest {
     fun get_withMultipleDirectories_returnsLayer() {
         val dir1 = TempFiles.createTempDir()
         val dir2 = TempFiles.createTempDir()
-        TempFiles.createTempFile(dir1)
+        val file1 = TempFiles.createTempFile(dir1)
         val file2 = TempFiles.createTempFile(dir2)
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, true, file2.name)
+        }
 
-        val repository = DirectoryReferenceLayerRepository(dir1.absolutePath, dir2.absolutePath)
+        val repository = DirectoryReferenceLayerRepository(listOf(dir1.absolutePath, dir2.absolutePath)) { mapConfigurator }
         val file2Layer = repository.getAll().first { it.file == file2 }
         assertThat(repository.get(file2Layer.id)!!.file, equalTo(file2))
     }
@@ -84,9 +125,13 @@ class DirectoryReferenceLayerRepositoryTest {
         val dir1 = TempFiles.createTempDir()
         val dir2 = TempFiles.createTempDir()
         val file1 = TempFiles.createTempFile(dir1, "blah", ".temp")
-        TempFiles.createTempFile(dir2, "blah", ".temp")
+        val file2 = TempFiles.createTempFile(dir2, "blah", ".temp")
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file1, true, file1.name)
+            it.addFile(file2, true, file2.name)
+        }
 
-        val repository = DirectoryReferenceLayerRepository(dir1.absolutePath, dir2.absolutePath)
+        val repository = DirectoryReferenceLayerRepository(listOf(dir1.absolutePath, dir2.absolutePath)) { mapConfigurator }
         val layerId = repository.getAll().first().id
         assertThat(repository.get(layerId)!!.file, equalTo(file1))
     }
@@ -95,11 +140,65 @@ class DirectoryReferenceLayerRepositoryTest {
     fun get_whenFileDoesNotExist_returnsNull() {
         val dir = TempFiles.createTempDir()
         val file = TempFiles.createTempFile(dir)
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file, true, file.name)
+        }
 
-        val repository = DirectoryReferenceLayerRepository(dir.absolutePath)
+        val repository = DirectoryReferenceLayerRepository(listOf(dir.absolutePath)) { mapConfigurator }
         val fileLayer = repository.getAll().first { it.file == file }
 
         file.delete()
         assertThat(repository.get(fileLayer.id), equalTo(null))
+    }
+
+    @Test
+    fun get_returnsLayerWithCorrectName() {
+        val dir = TempFiles.createTempDir()
+        val file = TempFiles.createTempFile(dir)
+
+        val mapConfigurator = StubMapConfigurator().also {
+            it.addFile(file, true, file.name)
+        }
+
+        val repository = DirectoryReferenceLayerRepository(listOf(dir.absolutePath)) { mapConfigurator }
+        val fileLayer = repository.getAll().first { it.file == file }
+
+        assertThat(repository.get(fileLayer.id)!!.name, equalTo(file.name))
+    }
+
+    private class StubMapConfigurator : MapConfigurator {
+        private val files = mutableMapOf<File, Pair<Boolean, String>>()
+
+        override fun supportsLayer(file: File?): Boolean {
+            return files[file]!!.first
+        }
+
+        override fun getDisplayName(file: File?): String {
+            return files[file]!!.second
+        }
+
+        fun addFile(file: File, isSupported: Boolean, displayName: String) {
+            files[file] = Pair(isSupported, displayName)
+        }
+
+        override fun isAvailable(context: Context?): Boolean {
+            TODO("Not yet implemented")
+        }
+
+        override fun showUnavailableMessage(context: Context?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun createPrefs(context: Context?, settings: Settings?): MutableList<Preference> {
+            TODO("Not yet implemented")
+        }
+
+        override fun getPrefKeys(): MutableCollection<String> {
+            TODO("Not yet implemented")
+        }
+
+        override fun buildConfig(prefs: Settings): Bundle {
+            TODO("Not yet implemented")
+        }
     }
 }

@@ -35,12 +35,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.Constants;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.R;
-import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.location.Location;
 import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.maps.LineDescription;
@@ -48,7 +48,11 @@ import org.odk.collect.maps.MapConsts;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.layers.OfflineMapLayersPicker;
+import org.odk.collect.maps.layers.ReferenceLayerRepository;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
+import org.odk.collect.webpage.ExternalWebPageHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +76,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
     public enum OutputMode { GEOTRACE, GEOSHAPE }
 
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService executorServiceScheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
 
     private OutputMode outputMode;
@@ -84,7 +88,16 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     LocationTracker locationTracker;
 
     @Inject
-    ReferenceLayerSettingsNavigator referenceLayerSettingsNavigator;
+    ReferenceLayerRepository referenceLayerRepository;
+
+    @Inject
+    Scheduler scheduler;
+
+    @Inject
+    SettingsProvider settingsProvider;
+
+    @Inject
+    ExternalWebPageHelper externalWebPageHelper;
 
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
@@ -141,6 +154,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
         getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(MapFragment.class, () -> (Fragment) mapFragmentFactory.createMapFragment())
+                .forClass(OfflineMapLayersPicker.class, () -> new OfflineMapLayersPicker(referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper))
                 .build()
         );
 
@@ -252,7 +266,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         recordButton.setOnClickListener(v -> recordPoint(map.getGpsLocation()));
 
         findViewById(R.id.layers).setOnClickListener(v -> {
-            referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(this);
+            DialogFragmentUtils.showIfNotShowing(OfflineMapLayersPicker.class, getSupportFragmentManager());
         });
 
         zoomButton = findViewById(R.id.zoom);
@@ -288,7 +302,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         map.setLongPressListener(this::onClick);
         map.setGpsLocationEnabled(true);
         map.setGpsLocationListener(this::onGpsLocation);
-        
+
         if (!map.hasCenter()) {
             if (!points.isEmpty()) {
                 map.zoomToBoundingBox(points, 0.6, false);
@@ -336,7 +350,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
             locationTracker.start(retainMockAccuracy);
 
             recordPoint(map.getGpsLocation());
-            schedulerHandler = scheduler.scheduleAtFixedRate(() -> runOnUiThread(() -> {
+            schedulerHandler = executorServiceScheduler.scheduleAtFixedRate(() -> runOnUiThread(() -> {
                 Location currentLocation = locationTracker.getCurrentLocation();
 
                 if (currentLocation != null) {

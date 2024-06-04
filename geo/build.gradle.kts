@@ -55,8 +55,10 @@ dependencies {
     implementation(project(":async"))
     implementation(project(":analytics"))
     implementation(project(":permissions"))
+    implementation(project(":settings"))
     implementation(project(":maps"))
     implementation(project(":material"))
+    implementation(project(":web-page"))
     implementation(Dependencies.kotlin_stdlib)
     implementation(Dependencies.androidx_appcompat)
     implementation(Dependencies.androidx_lifecycle_livedata_ktx)
@@ -69,6 +71,7 @@ dependencies {
     debugImplementation(project(":fragments-test"))
 
     testImplementation(project(":androidtest"))
+    testImplementation(project(":settings"))
     testImplementation(project(":test-shared"))
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.hamcrest)

@@ -43,7 +43,6 @@ import org.odk.collect.android.instancemanagement.send.InstanceUploaderActivity;
 import org.odk.collect.android.instancemanagement.send.InstanceUploaderListActivity;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.preferences.CaptionedListPreference;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat;
@@ -91,6 +90,7 @@ import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.ODKAppSettingsImporter;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.webpage.ExternalWebPageHelper;
 
 import javax.inject.Singleton;
 
@@ -233,8 +233,6 @@ public interface AppDependencyComponent {
 
     void inject(BaseAdminPreferencesFragment baseAdminPreferencesFragment);
 
-    void inject(CaptionedListPreference captionedListPreference);
-
     void inject(AndroidShortcutsActivity androidShortcutsActivity);
 
     void inject(ProjectSettingsDialog projectSettingsDialog);
@@ -310,4 +308,6 @@ public interface AppDependencyComponent {
     FormsDataService formsDataService();
 
     ProjectDependencyProviderFactory projectDependencyProviderFactory();
+
+    ExternalWebPageHelper externalWebPageHelper();
 }

@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -21,15 +22,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyModule;
 import org.odk.collect.geo.R;
-import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.geo.support.FakeMapFragment;
 import org.odk.collect.geo.support.RobolectricApplication;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.layers.ReferenceLayerRepository;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.webpage.ExternalWebPageHelper;
 import org.robolectric.shadows.ShadowApplication;
 
 import java.util.List;
@@ -60,8 +64,26 @@ public class GeoPointMapActivityTest {
 
                     @NonNull
                     @Override
-                    public ReferenceLayerSettingsNavigator providesReferenceLayerSettingsNavigator() {
-                        return activity -> { };
+                    public ReferenceLayerRepository providesReferenceLayerRepository() {
+                        return mock();
+                    }
+
+                    @NonNull
+                    @Override
+                    public Scheduler providesScheduler() {
+                        return mock();
+                    }
+
+                    @NonNull
+                    @Override
+                    public SettingsProvider providesSettingsProvider() {
+                        return mock();
+                    }
+
+                    @NonNull
+                    @Override
+                    public ExternalWebPageHelper providesExternalWebPageHelper() {
+                        return mock();
                     }
                 })
                 .build();

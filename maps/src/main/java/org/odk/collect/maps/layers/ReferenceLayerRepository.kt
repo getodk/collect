@@ -8,4 +8,4 @@ interface ReferenceLayerRepository {
     fun get(id: String): ReferenceLayer?
 }
 
-data class ReferenceLayer(val id: String, val file: File)
+data class ReferenceLayer(val id: String, val file: File, val name: String)

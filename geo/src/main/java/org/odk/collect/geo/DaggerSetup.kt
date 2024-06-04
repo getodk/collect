@@ -19,7 +19,10 @@ import org.odk.collect.location.LocationClient
 import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragmentFactory
+import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.webpage.ExternalWebPageHelper
 import javax.inject.Singleton
 
 interface GeoDependencyComponentProvider {
@@ -50,7 +53,6 @@ interface GeoDependencyComponent {
     val scheduler: Scheduler
     val locationTracker: LocationTracker
     val satelliteInfoClient: SatelliteInfoClient
-    val referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator
 }
 
 @Module
@@ -63,11 +65,6 @@ open class GeoDependencyModule {
 
     @Provides
     open fun providesMapFragmentFactory(): MapFragmentFactory {
-        throw UnsupportedOperationException("This should be overridden by dependent application")
-    }
-
-    @Provides
-    open fun providesReferenceLayerSettingsNavigator(): ReferenceLayerSettingsNavigator {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 
@@ -111,5 +108,20 @@ open class GeoDependencyModule {
                 ) as T
             }
         }
+    }
+
+    @Provides
+    open fun providesReferenceLayerRepository(): ReferenceLayerRepository {
+        throw UnsupportedOperationException("This should be overridden by dependent application")
+    }
+
+    @Provides
+    open fun providesSettingsProvider(): SettingsProvider {
+        throw UnsupportedOperationException("This should be overridden by dependent application")
+    }
+
+    @Provides
+    open fun providesExternalWebPageHelper(): ExternalWebPageHelper {
+        throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 }
