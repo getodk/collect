@@ -230,7 +230,7 @@ jobs:
           command: ./gradlew assembleSelfSignedRelease
 
       - run:
-          name: Check APK size isn't larger than 10.9MB
+          name: Check APK size isn't larger than 11.5MB
           command: ./check-size.sh
 
       - run:
