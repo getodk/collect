@@ -77,14 +77,20 @@ class OfflineMapLayersPicker(
         offlineMapLayersPickerBinding = OfflineMapLayersPickerBinding.inflate(inflater)
 
         viewModel.data.observe(this) { data ->
-            offlineMapLayersPickerBinding.progressIndicator.visibility = View.GONE
-            offlineMapLayersPickerBinding.layers.visibility = View.VISIBLE
-            offlineMapLayersPickerBinding.save.isEnabled = true
+            if (data == null) {
+                offlineMapLayersPickerBinding.progressIndicator.visibility = View.VISIBLE
+                offlineMapLayersPickerBinding.layers.visibility = View.GONE
+                offlineMapLayersPickerBinding.save.isEnabled = false
+            } else {
+                offlineMapLayersPickerBinding.progressIndicator.visibility = View.GONE
+                offlineMapLayersPickerBinding.layers.visibility = View.VISIBLE
+                offlineMapLayersPickerBinding.save.isEnabled = true
 
-            val offlineMapLayersAdapter = OfflineMapLayersAdapter(data.first, data.second) {
-                viewModel.changeSelectedLayerId(it)
+                val offlineMapLayersAdapter = OfflineMapLayersAdapter(data.first, data.second) {
+                    viewModel.changeSelectedLayerId(it)
+                }
+                offlineMapLayersPickerBinding.layers.setAdapter(offlineMapLayersAdapter)
             }
-            offlineMapLayersPickerBinding.layers.setAdapter(offlineMapLayersAdapter)
         }
 
         offlineMapLayersPickerBinding.mbtilesInfoGroup.addOnClickListener {

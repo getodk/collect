@@ -12,8 +12,8 @@ class OfflineMapLayersPickerViewModel(
     private val scheduler: Scheduler,
     private val settingsProvider: SettingsProvider
 ) : ViewModel() {
-    private val _data = MutableLiveData<Pair<List<ReferenceLayer>, String?>>()
-    val data: LiveData<Pair<List<ReferenceLayer>, String?>> = _data
+    private val _data = MutableLiveData<Pair<List<ReferenceLayer>, String?>?>(null)
+    val data: LiveData<Pair<List<ReferenceLayer>, String?>?> = _data
 
     init {
         refreshLayers()
@@ -29,6 +29,8 @@ class OfflineMapLayersPickerViewModel(
     }
 
     fun refreshLayers() {
+        _data.value = null
+
         scheduler.immediate(
             background = {
                 val layers = referenceLayerRepository.getAll()
