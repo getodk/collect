@@ -32,10 +32,12 @@ class OfflineMapLayersImportDialogViewModel(
                 uris?.forEach { uriString ->
                     val uri = Uri.parse(uriString)
                     uri.getFileName(contentResolver)?.let { fileName ->
-                        val layerFile = File(tempLayersDir, fileName).also { file ->
-                            uri.toFile(contentResolver, file)
+                        if (fileName.endsWith(".mbtiles")) {
+                            val layerFile = File(tempLayersDir, fileName).also { file ->
+                                uri.toFile(contentResolver, file)
+                            }
+                            layers.add(ReferenceLayer(layerFile.absolutePath, layerFile, MbtilesFile.readName(layerFile) ?: layerFile.name))
                         }
-                        layers.add(ReferenceLayer(layerFile.absolutePath, layerFile, MbtilesFile.readName(layerFile) ?: layerFile.name))
                     }
                 }
                 _data.postValue(layers)
