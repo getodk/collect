@@ -12,7 +12,7 @@ import org.odk.collect.shared.TempFiles
 import java.io.File
 import java.util.ArrayList
 
-class OfflineMapLayersImportDialogViewModel(
+class OfflineMapLayersImporterViewModel(
     private val scheduler: Scheduler,
     private val contentResolver: ContentResolver
 ) : ViewModel() {

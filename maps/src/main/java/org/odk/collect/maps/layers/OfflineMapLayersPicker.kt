@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -44,8 +43,8 @@ class OfflineMapLayersPicker(
             }
 
             DialogFragmentUtils.showIfNotShowing(
-                OfflineMapLayersImportDialog::class.java,
-                Bundle().apply { putStringArrayList(OfflineMapLayersImportDialog.URIS, ArrayList<String>(uriStrings)) },
+                OfflineMapLayersImporter::class.java,
+                Bundle().apply { putStringArrayList(OfflineMapLayersImporter.URIS, ArrayList<String>(uriStrings)) },
                 childFragmentManager
             )
         }
@@ -53,8 +52,8 @@ class OfflineMapLayersPicker(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(OfflineMapLayersImportDialog::class) {
-                OfflineMapLayersImportDialog(
+            .forClass(OfflineMapLayersImporter::class) {
+                OfflineMapLayersImporter(
                     scheduler,
                     referenceLayerRepository.getSharedLayersDirPath(),
                     referenceLayerRepository.getProjectLayersDirPath()
@@ -64,7 +63,7 @@ class OfflineMapLayersPicker(
 
         super.onCreate(savedInstanceState)
 
-        childFragmentManager.setFragmentResultListener(OfflineMapLayersImportDialog.RESULT_KEY, this) { _, _ ->
+        childFragmentManager.setFragmentResultListener(OfflineMapLayersImporter.RESULT_KEY, this) { _, _ ->
             viewModel.refreshLayers()
         }
     }
@@ -86,10 +85,10 @@ class OfflineMapLayersPicker(
                 offlineMapLayersPickerBinding.layers.visibility = View.VISIBLE
                 offlineMapLayersPickerBinding.save.isEnabled = true
 
-                val offlineMapLayersAdapter = OfflineMapLayersAdapter(data.first, data.second) {
+                val adapter = OfflineMapLayersPickerAdapter(data.first, data.second) {
                     viewModel.changeSelectedLayerId(it)
                 }
-                offlineMapLayersPickerBinding.layers.setAdapter(offlineMapLayersAdapter)
+                offlineMapLayersPickerBinding.layers.setAdapter(adapter)
             }
         }
 

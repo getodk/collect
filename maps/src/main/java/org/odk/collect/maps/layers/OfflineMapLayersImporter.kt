@@ -11,40 +11,40 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.async.Scheduler
-import org.odk.collect.maps.databinding.OfflineMapLayersImportDialogBinding
+import org.odk.collect.maps.databinding.OfflineMapLayersImporterBinding
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.material.MaterialProgressDialogFragment
 
-class OfflineMapLayersImportDialog(
+class OfflineMapLayersImporter(
     private val scheduler: Scheduler,
     private val sharedLayersDirPath: String,
     private val projectLayersDirPath: String
 ) : MaterialFullScreenDialogFragment() {
 
-    private val viewModel: OfflineMapLayersImportDialogViewModel by viewModels {
+    private val viewModel: OfflineMapLayersImporterViewModel by viewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return OfflineMapLayersImportDialogViewModel(scheduler, requireContext().contentResolver) as T
+                return OfflineMapLayersImporterViewModel(scheduler, requireContext().contentResolver) as T
             }
         }
     }
 
-    private lateinit var binding: OfflineMapLayersImportDialogBinding
+    private lateinit var binding: OfflineMapLayersImporterBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = OfflineMapLayersImportDialogBinding.inflate(inflater)
+        binding = OfflineMapLayersImporterBinding.inflate(inflater)
 
         viewModel.data.observe(this) { data ->
             binding.progressIndicator.visibility = View.GONE
-            binding.layersList.visibility = View.VISIBLE
+            binding.layers.visibility = View.VISIBLE
             binding.addLayerButton.isEnabled = true
 
-            val adapter = OfflineMapLayersImportAdapter(data)
-            binding.layersList.setAdapter(adapter)
+            val adapter = OfflineMapLayersImporterAdapter(data)
+            binding.layers.setAdapter(adapter)
         }
         viewModel.init(requireArguments().getStringArrayList(URIS))
 

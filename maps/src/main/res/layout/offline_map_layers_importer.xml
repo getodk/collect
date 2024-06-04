@@ -51,7 +51,7 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/layers_list"
+                android:id="@+id/layers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="layers_list,progress_indicator" />
+                app:constraint_referenced_ids="layers,progress_indicator" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/select_layer_access_title"

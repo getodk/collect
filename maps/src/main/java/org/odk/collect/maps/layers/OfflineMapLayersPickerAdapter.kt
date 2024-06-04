@@ -3,17 +3,17 @@ package org.odk.collect.maps.layers
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.odk.collect.maps.databinding.OfflineMapLayerBinding
+import org.odk.collect.maps.databinding.OfflineMapLayersPickerItemBinding
 import org.odk.collect.strings.localization.getLocalizedString
 
-class OfflineMapLayersAdapter(
+class OfflineMapLayersPickerAdapter(
     private val layers: List<ReferenceLayer>,
     private var selectedLayerId: String?,
     private val onSelectedLayerChanged: (String?) -> Unit
-) : RecyclerView.Adapter<OfflineMapLayersAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<OfflineMapLayersPickerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = OfflineMapLayerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = OfflineMapLayersPickerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -41,5 +41,5 @@ class OfflineMapLayersAdapter(
 
     override fun getItemCount() = layers.size + 1
 
-    class ViewHolder(val binding: OfflineMapLayerBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(val binding: OfflineMapLayersPickerItemBinding) : RecyclerView.ViewHolder(binding.root)
 }

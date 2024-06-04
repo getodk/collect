@@ -3,14 +3,14 @@ package org.odk.collect.maps.layers
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.odk.collect.maps.databinding.OfflineMapLayersImportItemBinding
+import org.odk.collect.maps.databinding.OfflineMapLayersImporterItemBinding
 
-class OfflineMapLayersImportAdapter(
+class OfflineMapLayersImporterAdapter(
     private val layers: List<ReferenceLayer>,
-) : RecyclerView.Adapter<OfflineMapLayersImportAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<OfflineMapLayersImporterAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = OfflineMapLayersImportItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = OfflineMapLayersImporterItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -20,5 +20,5 @@ class OfflineMapLayersImportAdapter(
 
     override fun getItemCount() = layers.size
 
-    class ViewHolder(val binding: OfflineMapLayersImportItemBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(val binding: OfflineMapLayersImporterItemBinding) : RecyclerView.ViewHolder(binding.root)
 }

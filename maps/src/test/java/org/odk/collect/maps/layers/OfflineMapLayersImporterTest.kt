@@ -30,7 +30,7 @@ import org.odk.collect.testshared.RobolectricHelpers
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
-class OfflineMapLayersImportDialogTest {
+class OfflineMapLayersImporterTest {
     private val scheduler = FakeScheduler()
     private val sharedLayersDirPath = TempFiles.createTempDir().absolutePath
     private val projectLayersDirPath = TempFiles.createTempDir().absolutePath
@@ -38,8 +38,8 @@ class OfflineMapLayersImportDialogTest {
     @get:Rule
     val fragmentScenarioLauncherRule = FragmentScenarioLauncherRule(
         FragmentFactoryBuilder()
-            .forClass(OfflineMapLayersImportDialog::class) {
-                OfflineMapLayersImportDialog(scheduler, sharedLayersDirPath, projectLayersDirPath)
+            .forClass(OfflineMapLayersImporter::class) {
+                OfflineMapLayersImporter(scheduler, sharedLayersDirPath, projectLayersDirPath)
             }.build()
     )
 
@@ -57,7 +57,7 @@ class OfflineMapLayersImportDialogTest {
         launchFragment(arrayListOf()).onFragment {
             var resultReceived = false
             it.parentFragmentManager.setFragmentResultListener(
-                OfflineMapLayersImportDialog.RESULT_KEY,
+                OfflineMapLayersImporter.RESULT_KEY,
                 it
             ) { _, _ ->
                 resultReceived = true
@@ -86,7 +86,7 @@ class OfflineMapLayersImportDialogTest {
             scheduler.flush()
             var resultReceived = false
             it.parentFragmentManager.setFragmentResultListener(
-                OfflineMapLayersImportDialog.RESULT_KEY,
+                OfflineMapLayersImporter.RESULT_KEY,
                 it
             ) { _, _ ->
                 resultReceived = true
@@ -107,12 +107,12 @@ class OfflineMapLayersImportDialogTest {
         launchFragment(arrayListOf(file1.toUri().toString(), file2.toUri().toString()))
 
         onView(withId(org.odk.collect.maps.R.id.progress_indicator)).check(matches(isDisplayed()))
-        onView(withId(org.odk.collect.maps.R.id.layers_list)).check(matches(not(isDisplayed())))
+        onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(not(isDisplayed())))
 
         scheduler.flush()
 
         onView(withId(org.odk.collect.maps.R.id.progress_indicator)).check(matches(not(isDisplayed())))
-        onView(withId(org.odk.collect.maps.R.id.layers_list)).check(matches(isDisplayed()))
+        onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -175,7 +175,7 @@ class OfflineMapLayersImportDialogTest {
 
         scheduler.flush()
 
-        onView(withId(org.odk.collect.maps.R.id.layers_list)).check(matches(RecyclerViewMatcher.withListSize(2)))
+        onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
         onView(withText("layer1.mbtiles")).check(matches(isDisplayed()))
         onView(withText("layer2.mbtiles")).check(matches(isDisplayed()))
     }
@@ -190,7 +190,7 @@ class OfflineMapLayersImportDialogTest {
 
         scenario.recreate()
 
-        onView(withId(org.odk.collect.maps.R.id.layers_list)).check(matches(RecyclerViewMatcher.withListSize(2)))
+        onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
         onView(withText("layer1.mbtiles")).check(matches(isDisplayed()))
         onView(withText("layer2.mbtiles")).check(matches(isDisplayed()))
     }
@@ -203,7 +203,7 @@ class OfflineMapLayersImportDialogTest {
         launchFragment(arrayListOf(file1.toUri().toString(), file2.toUri().toString()))
         scheduler.flush()
 
-        onView(withId(org.odk.collect.maps.R.id.layers_list)).check(matches(RecyclerViewMatcher.withListSize(1)))
+        onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(1)))
         onView(withText("layer1.mbtiles")).check(matches(isDisplayed()))
         onView(withText("layer2.txt")).check(doesNotExist())
     }
@@ -264,10 +264,10 @@ class OfflineMapLayersImportDialogTest {
         assertThat(copiedFile2.readText(), equalTo("blah2"))
     }
 
-    private fun launchFragment(uris: ArrayList<String>): FragmentScenario<OfflineMapLayersImportDialog> {
+    private fun launchFragment(uris: ArrayList<String>): FragmentScenario<OfflineMapLayersImporter> {
         return fragmentScenarioLauncherRule.launchInContainer(
-            OfflineMapLayersImportDialog::class.java,
-            Bundle().apply { putStringArrayList(OfflineMapLayersImportDialog.URIS, uris) }
+            OfflineMapLayersImporter::class.java,
+            Bundle().apply { putStringArrayList(OfflineMapLayersImporter.URIS, uris) }
         )
     }
 }
