@@ -32,7 +32,7 @@ class OfflineMapLayersImportDialogViewModel(
                 uris?.forEach { uriString ->
                     val uri = Uri.parse(uriString)
                     uri.getFileName(contentResolver)?.let { fileName ->
-                        if (fileName.endsWith(".mbtiles")) {
+                        if (fileName.endsWith(MbtilesFile.FILE_EXTENSION)) {
                             val layerFile = File(tempLayersDir, fileName).also { file ->
                                 uri.toFile(contentResolver, file)
                             }

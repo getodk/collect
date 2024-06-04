@@ -28,6 +28,8 @@ import static android.database.sqlite.SQLiteDatabase.OPEN_READONLY;
  * See https://github.com/mapbox/mbtiles-spec for the detailed specification.
  */
 public class MbtilesFile implements Closeable, TileSource {
+    public static final String FILE_EXTENSION = ".mbtiles";
+
     public enum LayerType { RASTER, VECTOR }
 
     private final File file;
@@ -166,7 +168,7 @@ public class MbtilesFile implements Closeable, TileSource {
         if (!file.exists() || !file.isFile()) {
             throw new NotFileException(file);
         }
-        if (!file.getName().toLowerCase(Locale.US).endsWith(".mbtiles")) {
+        if (!file.getName().toLowerCase(Locale.US).endsWith(FILE_EXTENSION)) {
             throw new UnsupportedFilenameException(file);
         }
         try (SQLiteDatabase db = openSqliteReadOnly(file)) {
