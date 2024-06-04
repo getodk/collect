@@ -26,7 +26,7 @@ object TempFiles {
     @JvmStatic
     fun createTempFile(name: String, extension: String): File {
         val tmpDir = getTempDir()
-        return File(tmpDir, name + getRandomName(tmpDir) + extension).also {
+        return File(tmpDir, name + extension).also {
             it.createNewFile()
             it.deleteOnExit()
         }
