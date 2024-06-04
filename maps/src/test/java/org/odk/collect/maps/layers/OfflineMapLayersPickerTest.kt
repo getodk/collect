@@ -1,10 +1,14 @@
 package org.odk.collect.maps.layers
 
+import android.content.Intent
 import android.net.Uri
+import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -257,6 +261,71 @@ class OfflineMapLayersPickerTest {
         scenario.recreate()
         onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(not(isChecked())))
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(isChecked()))
+    }
+
+    @Test
+    fun `clicking the 'add layer' button opens file picker that allows selecting multiple files`() {
+        Intents.init()
+        launchFragment()
+
+        onView(withText(string.add_layer)).perform(click())
+
+        Intents.getIntents()[0].apply {
+            assertThat(this, IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT))
+            assertThat(categories.containsAll(listOf(Intent.CATEGORY_OPENABLE)), equalTo(true))
+            assertThat(this, IntentMatchers.hasType("*/*"))
+            assertThat(this, IntentMatchers.hasExtra(Intent.EXTRA_ALLOW_MULTIPLE, true))
+        }
+
+        Intents.release()
+    }
+
+    @Test
+    fun `progress indicator is displayed during loading layers after receiving new ones`() {
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
+        ))
+        val scenario = launchFragment()
+
+        scheduler.flush()
+
+        scenario.onFragment {
+            it.childFragmentManager.setFragmentResult(OfflineMapLayersImportDialog.RESULT_KEY, bundleOf())
+        }
+
+        onView(withId(R.id.progress_indicator)).check(matches(isDisplayed()))
+        onView(withId(R.id.layers)).check(matches(not(isDisplayed())))
+
+        scheduler.flush()
+        onView(withId(R.id.progress_indicator)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.layers)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun `when new layers added the list should be updated`() {
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
+        ))
+
+        val scenario = launchFragment()
+
+        scheduler.flush()
+
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
+            ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
+        ))
+
+        scenario.onFragment {
+            it.childFragmentManager.setFragmentResult(OfflineMapLayersImportDialog.RESULT_KEY, bundleOf())
+        }
+
+        scheduler.flush()
+
+        onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(withText(string.none)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(withText("layer1")))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(matches(withText("layer2")))
     }
 
     private fun launchFragment(): FragmentScenario<OfflineMapLayersPicker> {
