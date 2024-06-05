@@ -38,14 +38,6 @@ class OfflineMapLayersImporter(
     ): View {
         binding = OfflineMapLayersImporterBinding.inflate(inflater)
 
-        viewModel.data.observe(this) { data ->
-            binding.progressIndicator.visibility = View.GONE
-            binding.layers.visibility = View.VISIBLE
-            binding.addLayerButton.isEnabled = true
-
-            val adapter = OfflineMapLayersImporterAdapter(data)
-            binding.layers.setAdapter(adapter)
-        }
         viewModel.init(requireArguments().getStringArrayList(URIS))
 
         binding.cancelButton.setOnClickListener {
@@ -59,25 +51,39 @@ class OfflineMapLayersImporter(
                 projectLayersDirPath
             }
 
-            val isLoading = viewModel.addLayers(layersDir)
-            MaterialProgressDialogFragment.showOn(
-                this,
-                isLoading,
-                childFragmentManager
-            ) {
-                MaterialProgressDialogFragment().also { dialog ->
-                    dialog.message = getString(org.odk.collect.strings.R.string.loading)
-                }
-            }
-
-            isLoading.observe(this) {
-                if (!it) {
-                    setFragmentResult(RESULT_KEY, bundleOf())
-                    dismiss()
-                }
-            }
+            viewModel.addLayers(layersDir)
         }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        MaterialProgressDialogFragment.showOn(
+            this,
+            viewModel.isLoading,
+            childFragmentManager
+        ) {
+            MaterialProgressDialogFragment().also { dialog ->
+                dialog.message = getString(org.odk.collect.strings.R.string.loading)
+            }
+        }
+
+        viewModel.isLoading.observe(this) { isLoading ->
+            binding.addLayerButton.isEnabled = !isLoading
+        }
+
+        viewModel.data.observe(this) { data ->
+            val adapter = OfflineMapLayersImporterAdapter(data)
+            binding.layers.setAdapter(adapter)
+        }
+
+        viewModel.isAddingNewLayersFinished.observe(this) { isAddingNewLayersFinished ->
+            if (isAddingNewLayersFinished) {
+                setFragmentResult(RESULT_KEY, bundleOf())
+                dismiss()
+            }
+        }
     }
 
     override fun onCloseClicked() {

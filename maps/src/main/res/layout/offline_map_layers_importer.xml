@@ -54,31 +54,12 @@
                 android:id="@+id/layers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_marginTop="@dimen/margin_small"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layers_title"
                 tools:visibility="visible" />
-
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/progress_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/margin_small"
-                android:indeterminate="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layers_title" />
-
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrier"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:barrierDirection="bottom"
-                app:constraint_referenced_ids="layers,progress_indicator" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/select_layer_access_title"
@@ -87,7 +68,7 @@
                 android:text="@string/select_layer_access_title"
                 android:textAppearance="?textAppearanceTitleLarge"
                 android:layout_marginTop="@dimen/margin_standard"
-                app:layout_constraintTop_toBottomOf="@id/barrier"
+                app:layout_constraintTop_toBottomOf="@id/layers"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 

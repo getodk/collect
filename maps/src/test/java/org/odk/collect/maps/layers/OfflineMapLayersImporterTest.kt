@@ -15,6 +15,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
@@ -22,6 +23,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
+import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R
 import org.odk.collect.testshared.FakeScheduler
@@ -46,6 +48,7 @@ class OfflineMapLayersImporterTest {
     @Test
     fun `clicking the 'cancel' button dismisses the dialog`() {
         launchFragment(arrayListOf()).onFragment {
+            scheduler.flush()
             assertThat(it.isVisible, equalTo(true))
             onView(withText(R.string.cancel)).perform(click())
             assertThat(it.isVisible, equalTo(false))
@@ -69,11 +72,15 @@ class OfflineMapLayersImporterTest {
     }
 
     @Test
-    fun `clicking the 'add layer' button dismisses the dialog`() {
+    fun `clicking the 'add layer' button displays progress indicator before adding layers and dismisses the dialog after`() {
         launchFragment(arrayListOf()).onFragment {
             scheduler.flush()
             assertThat(it.isVisible, equalTo(true))
             onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(click())
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(MaterialProgressDialogFragment::class.java.name),
+                instanceOf(MaterialProgressDialogFragment::class.java)
+            )
             scheduler.flush()
             RobolectricHelpers.runLooper()
             assertThat(it.isVisible, equalTo(false))
@@ -104,15 +111,23 @@ class OfflineMapLayersImporterTest {
         val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
-        launchFragment(arrayListOf(file1.toUri().toString(), file2.toUri().toString()))
+        val scenario = launchFragment(arrayListOf(file1.toUri().toString(), file2.toUri().toString()))
 
-        onView(withId(org.odk.collect.maps.R.id.progress_indicator)).check(matches(isDisplayed()))
-        onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(not(isDisplayed())))
+        scenario.onFragment {
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(MaterialProgressDialogFragment::class.java.name),
+                instanceOf(MaterialProgressDialogFragment::class.java)
+            )
+        }
 
         scheduler.flush()
 
-        onView(withId(org.odk.collect.maps.R.id.progress_indicator)).check(matches(not(isDisplayed())))
-        onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(isDisplayed()))
+        scenario.onFragment {
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(MaterialProgressDialogFragment::class.java.name),
+                equalTo(null)
+            )
+        }
     }
 
     @Test
@@ -144,6 +159,8 @@ class OfflineMapLayersImporterTest {
     @Test
     fun `checking location sets selection correctly`() {
         launchFragment(arrayListOf())
+        scheduler.flush()
+
         onView(withId(org.odk.collect.maps.R.id.current_project_option)).perform(click())
 
         onView(withId(org.odk.collect.maps.R.id.all_projects_option)).check(matches(not(isChecked())))
@@ -158,6 +175,8 @@ class OfflineMapLayersImporterTest {
     @Test
     fun `recreating maintains the selected layers location`() {
         val scenario = launchFragment(arrayListOf())
+        scheduler.flush()
+
         onView(withId(org.odk.collect.maps.R.id.current_project_option)).perform(click())
 
         scenario.recreate()

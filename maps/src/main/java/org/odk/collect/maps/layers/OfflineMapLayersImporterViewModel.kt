@@ -16,6 +16,11 @@ class OfflineMapLayersImporterViewModel(
     private val scheduler: Scheduler,
     private val contentResolver: ContentResolver
 ) : ViewModel() {
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _isAddingNewLayersFinished = MutableLiveData<Boolean>()
+    val isAddingNewLayersFinished: LiveData<Boolean> = _isAddingNewLayersFinished
 
     private val _data = MutableLiveData<List<ReferenceLayer>>()
     val data: LiveData<List<ReferenceLayer>> = _data
@@ -23,6 +28,7 @@ class OfflineMapLayersImporterViewModel(
     private lateinit var tempLayersDir: File
 
     fun init(uris: ArrayList<String>?) {
+        _isLoading.value = true
         scheduler.immediate(
             background = {
                 tempLayersDir = TempFiles.createTempDir().also {
@@ -40,14 +46,15 @@ class OfflineMapLayersImporterViewModel(
                         }
                     }
                 }
+                _isLoading.postValue(false)
                 _data.postValue(layers)
             },
             foreground = { }
         )
     }
 
-    fun addLayers(layersDir: String): LiveData<Boolean> {
-        val isLoading = MutableLiveData(true)
+    fun addLayers(layersDir: String) {
+        _isLoading.value = true
         scheduler.immediate(
             background = {
                 val destDir = File(layersDir)
@@ -56,10 +63,10 @@ class OfflineMapLayersImporterViewModel(
                 }
                 tempLayersDir.delete()
 
-                isLoading.postValue(false)
+                _isLoading.postValue(false)
+                _isAddingNewLayersFinished.postValue(true)
             },
             foreground = { }
         )
-        return isLoading
     }
 }
