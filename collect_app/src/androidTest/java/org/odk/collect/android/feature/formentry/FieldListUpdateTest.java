@@ -400,7 +400,7 @@ public class FieldListUpdateTest {
                 .clickOnQuestion("Question1")
                 .answerQuestion(0, "X")
                 .activateTextQuestion(19)
-                .checkIsTranslationDisplayed("Question20");
+                .assertText("Question20");
     }
 
     @Test
@@ -413,7 +413,7 @@ public class FieldListUpdateTest {
                 .assertTextDoesNotExist("Target16")
                 .clickOnString(org.odk.collect.strings.R.string.capture_audio)
                 .clickOnContentDescription(org.odk.collect.strings.R.string.stop_recording)
-                .checkIsTranslationDisplayed("Target16")
+                .assertText("Target16")
                 .clickOnString(org.odk.collect.strings.R.string.delete_answer_file)
                 .clickOnTextInDialog(org.odk.collect.strings.R.string.delete_answer_file, new FormEntryPage("fieldlist-updates"))
                 .assertTextDoesNotExist("Target16");
