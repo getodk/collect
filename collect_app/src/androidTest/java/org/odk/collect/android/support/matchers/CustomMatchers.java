@@ -33,7 +33,10 @@ public final class CustomMatchers {
     /**
      * Matches the view at the given index. Useful when several views have the same properties.
      * https://stackoverflow.com/a/39756832
+     *
+     * @deprecated this matcher is stateful and will cause problems if used more than once
      */
+    @Deprecated
     public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
         return new TypeSafeMatcher<View>() {
             int currentIndex;
