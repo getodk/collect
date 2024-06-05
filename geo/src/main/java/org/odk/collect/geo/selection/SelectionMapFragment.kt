@@ -97,7 +97,7 @@ class SelectionMapFragment(
                 mapFragmentFactory.createMapFragment() as Fragment
             }
             .forClass(OfflineMapLayersPicker::class) {
-                OfflineMapLayersPicker(referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
+                OfflineMapLayersPicker(requireActivity().activityResultRegistry, referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
             }
             .build()
 

@@ -56,7 +56,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
     override fun onCreate(savedInstanceState: Bundle?) {
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(OfflineMapLayersPicker::class) {
-                OfflineMapLayersPicker(referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
+                OfflineMapLayersPicker(requireActivity().activityResultRegistry, referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
             }
             .build()
 

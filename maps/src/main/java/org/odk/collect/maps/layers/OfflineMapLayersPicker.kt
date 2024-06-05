@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
@@ -20,6 +21,7 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.webpage.ExternalWebPageHelper
 
 class OfflineMapLayersPicker(
+    registry: ActivityResultRegistry,
     private val referenceLayerRepository: ReferenceLayerRepository,
     private val scheduler: Scheduler,
     private val settingsProvider: SettingsProvider,
@@ -35,7 +37,7 @@ class OfflineMapLayersPicker(
 
     private lateinit var offlineMapLayersPickerBinding: OfflineMapLayersPickerBinding
 
-    private val getLayers = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
+    private val getLayers = registerForActivityResult(ActivityResultContracts.GetMultipleContents(), registry) { uris ->
         if (uris.isNotEmpty()) {
             val uriStrings: MutableList<String> = ArrayList()
             for (uri in uris) {

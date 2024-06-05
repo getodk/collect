@@ -1,14 +1,15 @@
 package org.odk.collect.maps.layers
 
-import android.content.Intent
 import android.net.Uri
+import androidx.activity.result.ActivityResultRegistry
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -17,6 +18,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
@@ -43,16 +45,32 @@ import org.odk.collect.webpage.ExternalWebPageHelper
 class OfflineMapLayersPickerTest {
     private val referenceLayerRepository = mock<ReferenceLayerRepository>().also {
         whenever(it.getAll()).thenReturn(emptyList())
+        whenever(it.getSharedLayersDirPath()).thenReturn("")
+        whenever(it.getProjectLayersDirPath()).thenReturn("")
     }
     private val scheduler = FakeScheduler()
     private val settingsProvider = InMemSettingsProvider()
     private val externalWebPageHelper = mock<ExternalWebPageHelper>()
 
+    private val uris = mutableListOf<Uri>()
+    private val testRegistry = object : ActivityResultRegistry() {
+        override fun <I, O> onLaunch(
+            requestCode: Int,
+            contract: ActivityResultContract<I, O>,
+            input: I,
+            options: ActivityOptionsCompat?
+        ) {
+            assertThat(contract, instanceOf(ActivityResultContracts.GetMultipleContents()::class.java))
+            assertThat(input, equalTo("*/*"))
+            dispatchResult(requestCode, uris)
+        }
+    }
+
     @get:Rule
     val fragmentScenarioLauncherRule = FragmentScenarioLauncherRule(
         FragmentFactoryBuilder()
             .forClass(OfflineMapLayersPicker::class) {
-                OfflineMapLayersPicker(referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
+                OfflineMapLayersPicker(testRegistry, referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
             }.build()
     )
 
@@ -264,20 +282,32 @@ class OfflineMapLayersPickerTest {
     }
 
     @Test
-    fun `clicking the 'add layer' button opens file picker that allows selecting multiple files`() {
-        Intents.init()
-        launchFragment()
+    fun `clicking the 'add layer' and selecting layers displays the confirmation dialog`() {
+        val scenario = launchFragment()
+
+        uris.add(Uri.parse("blah"))
+        onView(withText(string.add_layer)).perform(click())
+
+        scenario.onFragment {
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
+                instanceOf(OfflineMapLayersImporter::class.java)
+            )
+        }
+    }
+
+    @Test
+    fun `clicking the 'add layer' and selecting nothing does not display the confirmation dialog`() {
+        val scenario = launchFragment()
 
         onView(withText(string.add_layer)).perform(click())
 
-        Intents.getIntents()[0].apply {
-            assertThat(this, IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT))
-            assertThat(categories.containsAll(listOf(Intent.CATEGORY_OPENABLE)), equalTo(true))
-            assertThat(this, IntentMatchers.hasType("*/*"))
-            assertThat(this, IntentMatchers.hasExtra(Intent.EXTRA_ALLOW_MULTIPLE, true))
+        scenario.onFragment {
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
+                equalTo(null)
+            )
         }
-
-        Intents.release()
     }
 
     @Test
