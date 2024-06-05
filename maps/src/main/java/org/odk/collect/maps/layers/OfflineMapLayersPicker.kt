@@ -77,23 +77,6 @@ class OfflineMapLayersPicker(
     ): View {
         offlineMapLayersPickerBinding = OfflineMapLayersPickerBinding.inflate(inflater)
 
-        viewModel.data.observe(this) { data ->
-            if (data == null) {
-                offlineMapLayersPickerBinding.progressIndicator.visibility = View.VISIBLE
-                offlineMapLayersPickerBinding.layers.visibility = View.GONE
-                offlineMapLayersPickerBinding.save.isEnabled = false
-            } else {
-                offlineMapLayersPickerBinding.progressIndicator.visibility = View.GONE
-                offlineMapLayersPickerBinding.layers.visibility = View.VISIBLE
-                offlineMapLayersPickerBinding.save.isEnabled = true
-
-                val adapter = OfflineMapLayersPickerAdapter(data.first, data.second) {
-                    viewModel.changeSelectedLayerId(it)
-                }
-                offlineMapLayersPickerBinding.layers.setAdapter(adapter)
-            }
-        }
-
         offlineMapLayersPickerBinding.mbtilesInfoGroup.addOnClickListener {
             externalWebPageHelper.openWebPageInCustomTab(
                 requireActivity(),
@@ -115,6 +98,27 @@ class OfflineMapLayersPicker(
         }
 
         return offlineMapLayersPickerBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.data.observe(this) { data ->
+            if (data == null) {
+                offlineMapLayersPickerBinding.progressIndicator.visibility = View.VISIBLE
+                offlineMapLayersPickerBinding.layers.visibility = View.GONE
+                offlineMapLayersPickerBinding.save.isEnabled = false
+            } else {
+                offlineMapLayersPickerBinding.progressIndicator.visibility = View.GONE
+                offlineMapLayersPickerBinding.layers.visibility = View.VISIBLE
+                offlineMapLayersPickerBinding.save.isEnabled = true
+
+                val adapter = OfflineMapLayersPickerAdapter(data.first, data.second) {
+                    viewModel.changeSelectedLayerId(it)
+                }
+                offlineMapLayersPickerBinding.layers.setAdapter(adapter)
+            }
+        }
     }
 
     override fun onStart() {
