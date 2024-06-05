@@ -5,11 +5,12 @@ import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.os.bundleOf
+import androidx.core.net.toUri
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -45,8 +46,8 @@ import org.odk.collect.webpage.ExternalWebPageHelper
 class OfflineMapLayersPickerTest {
     private val referenceLayerRepository = mock<ReferenceLayerRepository>().also {
         whenever(it.getAll()).thenReturn(emptyList())
-        whenever(it.getSharedLayersDirPath()).thenReturn("")
-        whenever(it.getProjectLayersDirPath()).thenReturn("")
+        whenever(it.getSharedLayersDirPath()).thenReturn(TempFiles.createTempDir().absolutePath)
+        whenever(it.getProjectLayersDirPath()).thenReturn(TempFiles.createTempDir().absolutePath)
     }
     private val scheduler = FakeScheduler()
     private val settingsProvider = InMemSettingsProvider()
@@ -76,7 +77,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'cancel' button dismisses the layers picker`() {
-        val scenario = launchFragment()
+        val scenario = launchOfflineMapLayersPicker()
 
         scenario.onFragment {
             assertThat(it.isVisible, equalTo(true))
@@ -91,7 +92,7 @@ class OfflineMapLayersPickerTest {
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
         ))
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -101,14 +102,14 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `the 'cancel' button should be enabled during loading layers`() {
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         onView(withText(string.cancel)).check(matches(isEnabled()))
     }
 
     @Test
     fun `clicking the 'save' button dismisses the layers picker`() {
-        val scenario = launchFragment()
+        val scenario = launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -121,7 +122,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `the 'save' button should be disabled during loading layers`() {
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         onView(withText(string.save)).check(matches(not(isEnabled())))
         scheduler.flush()
@@ -134,7 +135,7 @@ class OfflineMapLayersPickerTest {
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
         ))
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -148,7 +149,7 @@ class OfflineMapLayersPickerTest {
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
         ))
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -163,7 +164,7 @@ class OfflineMapLayersPickerTest {
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
         ))
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -179,7 +180,7 @@ class OfflineMapLayersPickerTest {
         ))
         settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, "2")
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -190,7 +191,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `progress indicator is displayed during loading layers`() {
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         onView(withId(R.id.progress_indicator)).check(matches(isDisplayed()))
         onView(withId(R.id.layers)).check(matches(not(isDisplayed())))
@@ -203,14 +204,14 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `the 'learn more' button should be enabled during loading layers`() {
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         onView(withText(string.get_help_with_reference_layers)).check(matches(isEnabled()))
     }
 
     @Test
     fun `clicking the 'learn more' button opens the forum thread`() {
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -221,7 +222,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `if there are no layers the 'none' option is displayed`() {
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -236,7 +237,7 @@ class OfflineMapLayersPickerTest {
             ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
         ))
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -252,7 +253,7 @@ class OfflineMapLayersPickerTest {
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
         ))
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -271,7 +272,7 @@ class OfflineMapLayersPickerTest {
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
         ))
 
-        val scenario = launchFragment()
+        val scenario = launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -283,7 +284,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'add layer' and selecting layers displays the confirmation dialog`() {
-        val scenario = launchFragment()
+        val scenario = launchOfflineMapLayersPicker()
 
         uris.add(Uri.parse("blah"))
         onView(withText(string.add_layer)).perform(click())
@@ -298,7 +299,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'add layer' and selecting nothing does not display the confirmation dialog`() {
-        val scenario = launchFragment()
+        val scenario = launchOfflineMapLayersPicker()
 
         onView(withText(string.add_layer)).perform(click())
 
@@ -312,53 +313,57 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `progress indicator is displayed during loading layers after receiving new ones`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
-        val scenario = launchFragment()
+        val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
+        val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
+
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
-        scenario.onFragment {
-            it.childFragmentManager.setFragmentResult(OfflineMapLayersImporter.RESULT_KEY, bundleOf())
-        }
+        uris.add(file1.toUri())
+        uris.add(file2.toUri())
+
+        onView(withText(string.add_layer)).perform(click())
+        scheduler.flush()
+        onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(click())
 
         onView(withId(R.id.progress_indicator)).check(matches(isDisplayed()))
         onView(withId(R.id.layers)).check(matches(not(isDisplayed())))
 
         scheduler.flush()
+
         onView(withId(R.id.progress_indicator)).check(matches(not(isDisplayed())))
         onView(withId(R.id.layers)).check(matches(isDisplayed()))
     }
 
     @Test
     fun `when new layers added the list should be updated`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
+        val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
-        val scenario = launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
+        uris.add(file1.toUri())
+        uris.add(file2.toUri())
+
+        onView(withText(string.add_layer)).perform(click())
+        scheduler.flush()
+        onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(click())
         whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
-            ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
+            ReferenceLayer("1", TempFiles.createTempFile(), file1.name),
+            ReferenceLayer("1", TempFiles.createTempFile(), file2.name)
         ))
-
-        scenario.onFragment {
-            it.childFragmentManager.setFragmentResult(OfflineMapLayersImporter.RESULT_KEY, bundleOf())
-        }
-
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
         onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(withText(string.none)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(withText("layer1")))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(matches(withText("layer2")))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(withText(file1.name)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(matches(withText(file2.name)))
     }
 
-    private fun launchFragment(): FragmentScenario<OfflineMapLayersPicker> {
+    private fun launchOfflineMapLayersPicker(): FragmentScenario<OfflineMapLayersPicker> {
         return fragmentScenarioLauncherRule.launchInContainer(OfflineMapLayersPicker::class.java)
     }
 }

@@ -8,26 +8,48 @@ import androidx.lifecycle.ViewModel
 import org.odk.collect.androidshared.system.getFileName
 import org.odk.collect.androidshared.system.toFile
 import org.odk.collect.async.Scheduler
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.TempFiles
 import java.io.File
-import java.util.ArrayList
 
-class OfflineMapLayersImporterViewModel(
+class OfflineMapLayersViewModel(
+    private val referenceLayerRepository: ReferenceLayerRepository,
     private val scheduler: Scheduler,
+    private val settingsProvider: SettingsProvider,
     private val contentResolver: ContentResolver
 ) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _isAddingNewLayersFinished = MutableLiveData<Boolean>()
-    val isAddingNewLayersFinished: LiveData<Boolean> = _isAddingNewLayersFinished
+    private val _existingLayers = MutableLiveData<Pair<List<ReferenceLayer>, String?>>()
+    val existingLayers: LiveData<Pair<List<ReferenceLayer>, String?>> = _existingLayers
 
-    private val _data = MutableLiveData<List<ReferenceLayer>>()
-    val data: LiveData<List<ReferenceLayer>> = _data
+    private val _layersToImport = MutableLiveData<List<ReferenceLayer>>()
+    val layersToImport: LiveData<List<ReferenceLayer>> = _layersToImport
 
     private lateinit var tempLayersDir: File
 
-    fun init(uris: ArrayList<String>?) {
+    init {
+        loadExistingLayers()
+    }
+
+    private fun loadExistingLayers() {
+        _isLoading.value = true
+        scheduler.immediate(
+            background = {
+                val layers = referenceLayerRepository.getAll()
+                val selectedLayerId =
+                    settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER)
+
+                _isLoading.postValue(false)
+                _existingLayers.postValue(Pair(layers, selectedLayerId))
+            },
+            foreground = { }
+        )
+    }
+
+    fun loadLayersToImport(uris: List<Uri>) {
         _isLoading.value = true
         scheduler.immediate(
             background = {
@@ -35,8 +57,7 @@ class OfflineMapLayersImporterViewModel(
                     it.deleteOnExit()
                 }
                 val layers = mutableListOf<ReferenceLayer>()
-                uris?.forEach { uriString ->
-                    val uri = Uri.parse(uriString)
+                uris.forEach { uri ->
                     uri.getFileName(contentResolver)?.let { fileName ->
                         if (fileName.endsWith(MbtilesFile.FILE_EXTENSION)) {
                             val layerFile = File(tempLayersDir, fileName).also { file ->
@@ -47,13 +68,13 @@ class OfflineMapLayersImporterViewModel(
                     }
                 }
                 _isLoading.postValue(false)
-                _data.postValue(layers)
+                _layersToImport.postValue(layers)
             },
             foreground = { }
         )
     }
 
-    fun addLayers(layersDir: String) {
+    fun importNewLayers(layersDir: String) {
         _isLoading.value = true
         scheduler.immediate(
             background = {
@@ -62,11 +83,20 @@ class OfflineMapLayersImporterViewModel(
                     it.copyTo(File(destDir, it.name), true)
                 }
                 tempLayersDir.delete()
-
                 _isLoading.postValue(false)
-                _isAddingNewLayersFinished.postValue(true)
             },
-            foreground = { }
+            foreground = {
+                loadExistingLayers()
+            }
         )
+    }
+
+    fun saveSelectedLayer() {
+        val selectedLayerId = existingLayers.value?.second
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, selectedLayerId)
+    }
+
+    fun changeSelectedLayerId(selectedLayerId: String?) {
+        _existingLayers.postValue(_existingLayers.value?.copy(second = selectedLayerId))
     }
 }

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -27,26 +27,21 @@ class OfflineMapLayersPicker(
     private val settingsProvider: SettingsProvider,
     private val externalWebPageHelper: ExternalWebPageHelper
 ) : BottomSheetDialogFragment() {
-    private val viewModel: OfflineMapLayersPickerViewModel by viewModels {
+    private val viewModel: OfflineMapLayersViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return OfflineMapLayersPickerViewModel(referenceLayerRepository, scheduler, settingsProvider) as T
+                return OfflineMapLayersViewModel(referenceLayerRepository, scheduler, settingsProvider, requireContext().contentResolver) as T
             }
         }
     }
 
-    private lateinit var offlineMapLayersPickerBinding: OfflineMapLayersPickerBinding
+    private lateinit var binding: OfflineMapLayersPickerBinding
 
     private val getLayers = registerForActivityResult(ActivityResultContracts.GetMultipleContents(), registry) { uris ->
         if (uris.isNotEmpty()) {
-            val uriStrings: MutableList<String> = ArrayList()
-            for (uri in uris) {
-                uriStrings.add(uri.toString())
-            }
-
+            viewModel.loadLayersToImport(uris)
             DialogFragmentUtils.showIfNotShowing(
                 OfflineMapLayersImporter::class.java,
-                Bundle().apply { putStringArrayList(OfflineMapLayersImporter.URIS, ArrayList<String>(uriStrings)) },
                 childFragmentManager
             )
         }
@@ -56,7 +51,9 @@ class OfflineMapLayersPicker(
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(OfflineMapLayersImporter::class) {
                 OfflineMapLayersImporter(
+                    referenceLayerRepository,
                     scheduler,
+                    settingsProvider,
                     referenceLayerRepository.getSharedLayersDirPath(),
                     referenceLayerRepository.getProjectLayersDirPath()
                 )
@@ -64,10 +61,6 @@ class OfflineMapLayersPicker(
             .build()
 
         super.onCreate(savedInstanceState)
-
-        childFragmentManager.setFragmentResultListener(OfflineMapLayersImporter.RESULT_KEY, this) { _, _ ->
-            viewModel.refreshLayers()
-        }
     }
 
     override fun onCreateView(
@@ -75,49 +68,51 @@ class OfflineMapLayersPicker(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        offlineMapLayersPickerBinding = OfflineMapLayersPickerBinding.inflate(inflater)
+        binding = OfflineMapLayersPickerBinding.inflate(inflater)
 
-        offlineMapLayersPickerBinding.mbtilesInfoGroup.addOnClickListener {
+        binding.mbtilesInfoGroup.addOnClickListener {
             externalWebPageHelper.openWebPageInCustomTab(
                 requireActivity(),
                 Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices")
             )
         }
 
-        offlineMapLayersPickerBinding.addLayer.setOnClickListener {
+        binding.addLayer.setOnClickListener {
             getLayers.launch("*/*")
         }
 
-        offlineMapLayersPickerBinding.cancel.setOnClickListener {
+        binding.cancel.setOnClickListener {
             dismiss()
         }
 
-        offlineMapLayersPickerBinding.save.setOnClickListener {
+        binding.save.setOnClickListener {
             viewModel.saveSelectedLayer()
             dismiss()
         }
 
-        return offlineMapLayersPickerBinding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.data.observe(this) { data ->
-            if (data == null) {
-                offlineMapLayersPickerBinding.progressIndicator.visibility = View.VISIBLE
-                offlineMapLayersPickerBinding.layers.visibility = View.GONE
-                offlineMapLayersPickerBinding.save.isEnabled = false
+        viewModel.isLoading.observe(this) { isLoading ->
+            if (isLoading) {
+                binding.progressIndicator.visibility = View.VISIBLE
+                binding.layers.visibility = View.GONE
+                binding.save.isEnabled = false
             } else {
-                offlineMapLayersPickerBinding.progressIndicator.visibility = View.GONE
-                offlineMapLayersPickerBinding.layers.visibility = View.VISIBLE
-                offlineMapLayersPickerBinding.save.isEnabled = true
-
-                val adapter = OfflineMapLayersPickerAdapter(data.first, data.second) {
-                    viewModel.changeSelectedLayerId(it)
-                }
-                offlineMapLayersPickerBinding.layers.setAdapter(adapter)
+                binding.progressIndicator.visibility = View.GONE
+                binding.layers.visibility = View.VISIBLE
+                binding.save.isEnabled = true
             }
+        }
+
+        viewModel.existingLayers.observe(this) { layers ->
+            val adapter = OfflineMapLayersPickerAdapter(layers.first, layers.second) {
+                viewModel.changeSelectedLayerId(it)
+            }
+            binding.layers.setAdapter(adapter)
         }
     }
 

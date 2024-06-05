@@ -1,6 +1,5 @@
 package org.odk.collect.maps.layers
 
-import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.espresso.Espresso.onView
@@ -15,15 +14,16 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
-import org.odk.collect.material.MaterialProgressDialogFragment
+import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R
 import org.odk.collect.testshared.FakeScheduler
@@ -36,18 +36,24 @@ class OfflineMapLayersImporterTest {
     private val scheduler = FakeScheduler()
     private val sharedLayersDirPath = TempFiles.createTempDir().absolutePath
     private val projectLayersDirPath = TempFiles.createTempDir().absolutePath
+    private val referenceLayerRepository = mock<ReferenceLayerRepository>().also {
+        whenever(it.getAll()).thenReturn(emptyList())
+        whenever(it.getSharedLayersDirPath()).thenReturn(sharedLayersDirPath)
+        whenever(it.getProjectLayersDirPath()).thenReturn(projectLayersDirPath)
+    }
+    private val settingsProvider = InMemSettingsProvider()
 
     @get:Rule
     val fragmentScenarioLauncherRule = FragmentScenarioLauncherRule(
         FragmentFactoryBuilder()
             .forClass(OfflineMapLayersImporter::class) {
-                OfflineMapLayersImporter(scheduler, sharedLayersDirPath, projectLayersDirPath)
+                OfflineMapLayersImporter(referenceLayerRepository, scheduler, settingsProvider, sharedLayersDirPath, projectLayersDirPath)
             }.build()
     )
 
     @Test
     fun `clicking the 'cancel' button dismisses the dialog`() {
-        launchFragment(arrayListOf()).onFragment {
+        launchFragment().onFragment {
             scheduler.flush()
             assertThat(it.isVisible, equalTo(true))
             onView(withText(R.string.cancel)).perform(click())
@@ -56,53 +62,15 @@ class OfflineMapLayersImporterTest {
     }
 
     @Test
-    fun `clicking the 'cancel' button does not set fragment result`() {
-        launchFragment(arrayListOf()).onFragment {
-            var resultReceived = false
-            it.parentFragmentManager.setFragmentResultListener(
-                OfflineMapLayersImporter.RESULT_KEY,
-                it
-            ) { _, _ ->
-                resultReceived = true
-            }
-
-            onView(withId(org.odk.collect.maps.R.id.cancel_button)).perform(click())
-            assertThat(resultReceived, equalTo(false))
-        }
-    }
-
-    @Test
-    fun `clicking the 'add layer' button displays progress indicator before adding layers and dismisses the dialog after`() {
-        launchFragment(arrayListOf()).onFragment {
+    fun `clicking the 'add layer' button dismisses the dialog`() {
+        launchFragment().onFragment {
             scheduler.flush()
             assertThat(it.isVisible, equalTo(true))
+            it.viewModel.loadLayersToImport(emptyList())
             onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(click())
-            assertThat(
-                it.childFragmentManager.findFragmentByTag(MaterialProgressDialogFragment::class.java.name),
-                instanceOf(MaterialProgressDialogFragment::class.java)
-            )
             scheduler.flush()
             RobolectricHelpers.runLooper()
             assertThat(it.isVisible, equalTo(false))
-        }
-    }
-
-    @Test
-    fun `clicking the 'add layer' button sets fragment result`() {
-        launchFragment(arrayListOf()).onFragment {
-            scheduler.flush()
-            var resultReceived = false
-            it.parentFragmentManager.setFragmentResultListener(
-                OfflineMapLayersImporter.RESULT_KEY,
-                it
-            ) { _, _ ->
-                resultReceived = true
-            }
-
-            onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(click())
-            scheduler.flush()
-            RobolectricHelpers.runLooper()
-            assertThat(resultReceived, equalTo(true))
         }
     }
 
@@ -111,28 +79,22 @@ class OfflineMapLayersImporterTest {
         val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
-        val scenario = launchFragment(arrayListOf(file1.toUri().toString(), file2.toUri().toString()))
-
-        scenario.onFragment {
-            assertThat(
-                it.childFragmentManager.findFragmentByTag(MaterialProgressDialogFragment::class.java.name),
-                instanceOf(MaterialProgressDialogFragment::class.java)
-            )
+        launchFragment().onFragment {
+            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
         }
+
+        onView(withId(org.odk.collect.maps.R.id.progress_indicator)).check(matches(isDisplayed()))
+        onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(not(isDisplayed())))
 
         scheduler.flush()
 
-        scenario.onFragment {
-            assertThat(
-                it.childFragmentManager.findFragmentByTag(MaterialProgressDialogFragment::class.java.name),
-                equalTo(null)
-            )
-        }
+        onView(withId(org.odk.collect.maps.R.id.progress_indicator)).check(matches(not(isDisplayed())))
+        onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(isDisplayed()))
     }
 
     @Test
     fun `the 'cancel' button is enabled during loading layers`() {
-        launchFragment(arrayListOf())
+        launchFragment()
 
         onView(withId(org.odk.collect.maps.R.id.cancel_button)).check(matches(isEnabled()))
         scheduler.flush()
@@ -141,7 +103,7 @@ class OfflineMapLayersImporterTest {
 
     @Test
     fun `the 'add layer' button is disabled during loading layers`() {
-        launchFragment(arrayListOf())
+        launchFragment()
 
         onView(withId(org.odk.collect.maps.R.id.add_layer_button)).check(matches(not(isEnabled())))
         scheduler.flush()
@@ -150,7 +112,7 @@ class OfflineMapLayersImporterTest {
 
     @Test
     fun `'All projects' location should be selected by default`() {
-        launchFragment(arrayListOf())
+        launchFragment()
 
         onView(withId(org.odk.collect.maps.R.id.all_projects_option)).check(matches(isChecked()))
         onView(withId(org.odk.collect.maps.R.id.current_project_option)).check(matches(not(isChecked())))
@@ -158,7 +120,7 @@ class OfflineMapLayersImporterTest {
 
     @Test
     fun `checking location sets selection correctly`() {
-        launchFragment(arrayListOf())
+        launchFragment()
         scheduler.flush()
 
         onView(withId(org.odk.collect.maps.R.id.current_project_option)).perform(click())
@@ -174,7 +136,7 @@ class OfflineMapLayersImporterTest {
 
     @Test
     fun `recreating maintains the selected layers location`() {
-        val scenario = launchFragment(arrayListOf())
+        val scenario = launchFragment()
         scheduler.flush()
 
         onView(withId(org.odk.collect.maps.R.id.current_project_option)).perform(click())
@@ -190,7 +152,9 @@ class OfflineMapLayersImporterTest {
         val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
-        launchFragment(arrayListOf(file1.toUri().toString(), file2.toUri().toString()))
+        launchFragment().onFragment {
+            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
+        }
 
         scheduler.flush()
 
@@ -204,7 +168,10 @@ class OfflineMapLayersImporterTest {
         val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
-        val scenario = launchFragment(arrayListOf(file1.toUri().toString(), file2.toUri().toString()))
+        val scenario = launchFragment().onFragment {
+            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
+        }
+
         scheduler.flush()
 
         scenario.recreate()
@@ -219,7 +186,10 @@ class OfflineMapLayersImporterTest {
         val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
         val file2 = TempFiles.createTempFile("layer2", ".txt")
 
-        launchFragment(arrayListOf(file1.toUri().toString(), file2.toUri().toString()))
+        launchFragment().onFragment {
+            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
+        }
+
         scheduler.flush()
 
         onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(1)))
@@ -236,7 +206,10 @@ class OfflineMapLayersImporterTest {
             it.writeText("blah2")
         }
 
-        launchFragment(arrayListOf(file1.toUri().toString(), file2.toUri().toString()))
+        launchFragment().onFragment {
+            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
+        }
+
         scheduler.flush()
 
         onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(click())
@@ -263,7 +236,10 @@ class OfflineMapLayersImporterTest {
             it.writeText("blah2")
         }
 
-        launchFragment(arrayListOf(file1.toUri().toString(), file2.toUri().toString()))
+        launchFragment().onFragment {
+            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
+        }
+
         scheduler.flush()
 
         onView(withId(org.odk.collect.maps.R.id.current_project_option)).perform(scrollTo(), click())
@@ -283,10 +259,7 @@ class OfflineMapLayersImporterTest {
         assertThat(copiedFile2.readText(), equalTo("blah2"))
     }
 
-    private fun launchFragment(uris: ArrayList<String>): FragmentScenario<OfflineMapLayersImporter> {
-        return fragmentScenarioLauncherRule.launchInContainer(
-            OfflineMapLayersImporter::class.java,
-            Bundle().apply { putStringArrayList(OfflineMapLayersImporter.URIS, uris) }
-        )
+    private fun launchFragment(): FragmentScenario<OfflineMapLayersImporter> {
+        return fragmentScenarioLauncherRule.launchInContainer(OfflineMapLayersImporter::class.java)
     }
 }
