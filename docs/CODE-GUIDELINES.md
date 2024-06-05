@@ -186,4 +186,10 @@ There's no easy way to define exactly when a new module should be pulled out of 
   apply from: '../config/quality.gradle'
   ```
 
-5. If the module will have tests, make sure they get run on CI by adding a line to `test_modules.txt` with `<module-name>`
+5. If the module will have tests, make sure they get run on CI by adding a line to `test_modules.txt` with `<module-name>` and if it's a non-Android module, registering the `testDebug` task in its `build.gradle` file:
+
+  ```
+  tasks.register("testDebug") {
+    dependsOn("test")
+  }
+  ```
