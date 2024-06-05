@@ -16,9 +16,7 @@ import org.odk.collect.settings.SettingsProvider
 class OfflineMapLayersImporter(
     private val referenceLayerRepository: ReferenceLayerRepository,
     private val scheduler: Scheduler,
-    private val settingsProvider: SettingsProvider,
-    private val sharedLayersDirPath: String,
-    private val projectLayersDirPath: String
+    private val settingsProvider: SettingsProvider
 ) : MaterialFullScreenDialogFragment() {
     val viewModel: OfflineMapLayersViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
@@ -43,9 +41,9 @@ class OfflineMapLayersImporter(
 
         binding.addLayerButton.setOnClickListener {
             val layersDir = if (binding.allProjectsOption.isChecked) {
-                sharedLayersDirPath
+                referenceLayerRepository.getSharedLayersDirPath()
             } else {
-                projectLayersDirPath
+                referenceLayerRepository.getProjectLayersDirPath()
             }
 
             viewModel.importNewLayers(layersDir)

@@ -28,7 +28,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.maps.R
@@ -44,11 +43,7 @@ import org.odk.collect.webpage.ExternalWebPageHelper
 
 @RunWith(AndroidJUnit4::class)
 class OfflineMapLayersPickerTest {
-    private val referenceLayerRepository = mock<ReferenceLayerRepository>().also {
-        whenever(it.getAll()).thenReturn(emptyList())
-        whenever(it.getSharedLayersDirPath()).thenReturn(TempFiles.createTempDir().absolutePath)
-        whenever(it.getProjectLayersDirPath()).thenReturn(TempFiles.createTempDir().absolutePath)
-    }
+    private val referenceLayerRepository = TestReferenceLayerRepository()
     private val scheduler = FakeScheduler()
     private val settingsProvider = InMemSettingsProvider()
     private val externalWebPageHelper = mock<ExternalWebPageHelper>()
@@ -88,9 +83,9 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'cancel' button does not save the layer`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+        referenceLayerRepository.addLayers(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        )
 
         launchOfflineMapLayersPicker()
 
@@ -131,9 +126,9 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'save' button saves null when 'None' option is checked`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+        referenceLayerRepository.addLayers(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        )
 
         launchOfflineMapLayersPicker()
 
@@ -145,9 +140,9 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'save' button saves the layer id if any is checked`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+        referenceLayerRepository.addLayers(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        )
 
         launchOfflineMapLayersPicker()
 
@@ -160,9 +155,9 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `when no layer id is saved in settings the 'None' option should be checked`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+        referenceLayerRepository.addLayers(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        )
 
         launchOfflineMapLayersPicker()
 
@@ -174,10 +169,11 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `when layer id is saved in settings the layer it belongs to should be checked`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+        referenceLayerRepository.addLayers(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
             ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
-        ))
+        )
+
         settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, "2")
 
         launchOfflineMapLayersPicker()
@@ -215,7 +211,7 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        onView(withText(string.get_help_with_reference_layers)).perform(click())
+        EspressoHelpers.clickOnText(string.get_help_with_reference_layers)
 
         verify(externalWebPageHelper).openWebPageInCustomTab(any(), eq(Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices")))
     }
@@ -232,10 +228,10 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `if there are multiple layers all of them are displayed along with the 'None'`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+        referenceLayerRepository.addLayers(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
             ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
-        ))
+        )
 
         launchOfflineMapLayersPicker()
 
@@ -249,9 +245,9 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `checking layers sets selection correctly`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+        referenceLayerRepository.addLayers(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        )
 
         launchOfflineMapLayersPicker()
 
@@ -268,9 +264,9 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `recreating maintains selection`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+        referenceLayerRepository.addLayers(
             ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        )
 
         val scenario = launchOfflineMapLayersPicker()
 
@@ -287,7 +283,7 @@ class OfflineMapLayersPickerTest {
         val scenario = launchOfflineMapLayersPicker()
 
         uris.add(Uri.parse("blah"))
-        onView(withText(string.add_layer)).perform(click())
+        EspressoHelpers.clickOnText(string.add_layer)
 
         scenario.onFragment {
             assertThat(
@@ -301,7 +297,7 @@ class OfflineMapLayersPickerTest {
     fun `clicking the 'add layer' and selecting nothing does not display the confirmation dialog`() {
         val scenario = launchOfflineMapLayersPicker()
 
-        onView(withText(string.add_layer)).perform(click())
+        EspressoHelpers.clickOnText(string.add_layer)
 
         scenario.onFragment {
             assertThat(
@@ -323,7 +319,7 @@ class OfflineMapLayersPickerTest {
         uris.add(file1.toUri())
         uris.add(file2.toUri())
 
-        onView(withText(string.add_layer)).perform(click())
+        EspressoHelpers.clickOnText(string.add_layer)
         scheduler.flush()
         onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(click())
 
@@ -348,13 +344,13 @@ class OfflineMapLayersPickerTest {
         uris.add(file1.toUri())
         uris.add(file2.toUri())
 
-        onView(withText(string.add_layer)).perform(click())
+        EspressoHelpers.clickOnText(string.add_layer)
         scheduler.flush()
         onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(click())
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), file1.name),
-            ReferenceLayer("1", TempFiles.createTempFile(), file2.name)
-        ))
+        referenceLayerRepository.addLayers(
+            ReferenceLayer("1", file1, file1.name),
+            ReferenceLayer("2", file2, file2.name)
+        )
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))

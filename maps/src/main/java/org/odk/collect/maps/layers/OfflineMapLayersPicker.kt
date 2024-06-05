@@ -50,13 +50,7 @@ class OfflineMapLayersPicker(
     override fun onCreate(savedInstanceState: Bundle?) {
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(OfflineMapLayersImporter::class) {
-                OfflineMapLayersImporter(
-                    referenceLayerRepository,
-                    scheduler,
-                    settingsProvider,
-                    referenceLayerRepository.getSharedLayersDirPath(),
-                    referenceLayerRepository.getProjectLayersDirPath()
-                )
+                OfflineMapLayersImporter(referenceLayerRepository, scheduler, settingsProvider)
             }
             .build()
 
