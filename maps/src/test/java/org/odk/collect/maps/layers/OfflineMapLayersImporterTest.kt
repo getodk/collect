@@ -176,8 +176,8 @@ class OfflineMapLayersImporterTest {
         scheduler.flush()
 
         onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
-        onView(withText("layer1.mbtiles")).check(matches(isDisplayed()))
-        onView(withText("layer2.mbtiles")).check(matches(isDisplayed()))
+        onView(withText(file1.name)).check(matches(isDisplayed()))
+        onView(withText(file2.name)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -191,8 +191,8 @@ class OfflineMapLayersImporterTest {
         scenario.recreate()
 
         onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
-        onView(withText("layer1.mbtiles")).check(matches(isDisplayed()))
-        onView(withText("layer2.mbtiles")).check(matches(isDisplayed()))
+        onView(withText(file1.name)).check(matches(isDisplayed()))
+        onView(withText(file2.name)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -204,8 +204,8 @@ class OfflineMapLayersImporterTest {
         scheduler.flush()
 
         onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(1)))
-        onView(withText("layer1.mbtiles")).check(matches(isDisplayed()))
-        onView(withText("layer2.txt")).check(doesNotExist())
+        onView(withText(file1.name)).check(matches(isDisplayed()))
+        onView(withText(file2.name)).check(doesNotExist())
     }
 
     @Test
@@ -226,11 +226,11 @@ class OfflineMapLayersImporterTest {
         assertThat(File(sharedLayersDirPath).listFiles().size, equalTo(2))
         assertThat(File(projectLayersDirPath).listFiles().size, equalTo(0))
 
-        val copiedFile1 = File(sharedLayersDirPath, "layer1.mbtiles")
+        val copiedFile1 = File(sharedLayersDirPath, file1.name)
         assertThat(copiedFile1.exists(), equalTo(true))
         assertThat(copiedFile1.readText(), equalTo("blah1"))
 
-        val copiedFile2 = File(sharedLayersDirPath, "layer2.mbtiles")
+        val copiedFile2 = File(sharedLayersDirPath, file2.name)
         assertThat(copiedFile2.exists(), equalTo(true))
         assertThat(copiedFile2.readText(), equalTo("blah2"))
     }
@@ -255,11 +255,11 @@ class OfflineMapLayersImporterTest {
         assertThat(File(sharedLayersDirPath).listFiles().size, equalTo(0))
         assertThat(File(projectLayersDirPath).listFiles().size, equalTo(2))
 
-        val copiedFile1 = File(projectLayersDirPath, "layer1.mbtiles")
+        val copiedFile1 = File(projectLayersDirPath, file1.name)
         assertThat(copiedFile1.exists(), equalTo(true))
         assertThat(copiedFile1.readText(), equalTo("blah1"))
 
-        val copiedFile2 = File(projectLayersDirPath, "layer2.mbtiles")
+        val copiedFile2 = File(projectLayersDirPath, file2.name)
         assertThat(copiedFile2.exists(), equalTo(true))
         assertThat(copiedFile2.readText(), equalTo("blah2"))
     }
