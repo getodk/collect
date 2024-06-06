@@ -115,7 +115,6 @@
         android:text="@string/add_layer"
         android:layout_marginBottom="@dimen/margin_extra_small"
         app:icon="@drawable/ic_add_white_24"
-        app:iconTint="?colorAccent"
         app:layout_constraintBottom_toTopOf="@id/bottom_divider"
         app:layout_constraintStart_toEndOf="@id/guideline_start" />
 
