@@ -28,12 +28,12 @@ class DirectoryReferenceLayerRepository(
         }
     }
 
-    override fun getSharedLayersDirPath(): String {
-        return sharedLayersDirPath
-    }
-
-    override fun getProjectLayersDirPath(): String {
-        return projectLayersDirPath
+    override fun addLayer(file: File, shared: Boolean) {
+        if (shared) {
+            file.copyTo(File(sharedLayersDirPath, file.name), true)
+        } else {
+            file.copyTo(File(projectLayersDirPath, file.name), true)
+        }
     }
 
     private fun getAllFilesWithDirectory() = listOf(sharedLayersDirPath, projectLayersDirPath).flatMap { dir ->

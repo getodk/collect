@@ -74,13 +74,12 @@ class OfflineMapLayersViewModel(
         )
     }
 
-    fun importNewLayers(layersDir: String) {
+    fun importNewLayers(shared: Boolean) {
         _isLoading.value = true
         scheduler.immediate(
             background = {
-                val destDir = File(layersDir)
                 tempLayersDir.listFiles()?.forEach {
-                    it.copyTo(File(destDir, it.name), true)
+                    referenceLayerRepository.addLayer(it, shared)
                 }
                 tempLayersDir.delete()
                 _isLoading.postValue(false)

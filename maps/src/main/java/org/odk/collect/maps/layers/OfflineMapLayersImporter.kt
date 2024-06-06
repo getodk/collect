@@ -40,13 +40,7 @@ class OfflineMapLayersImporter(
         }
 
         binding.addLayerButton.setOnClickListener {
-            val layersDir = if (binding.allProjectsOption.isChecked) {
-                referenceLayerRepository.getSharedLayersDirPath()
-            } else {
-                referenceLayerRepository.getProjectLayersDirPath()
-            }
-
-            viewModel.importNewLayers(layersDir)
+            viewModel.importNewLayers(binding.allProjectsOption.isChecked)
             dismiss()
         }
         return binding.root

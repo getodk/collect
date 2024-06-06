@@ -1,11 +1,8 @@
 package org.odk.collect.maps.layers
 
-import org.odk.collect.shared.TempFiles
+import java.io.File
 
 class TestReferenceLayerRepository : ReferenceLayerRepository {
-    private val sharedLayersDirPath: String = TempFiles.createTempDir().absolutePath
-    private val projectLayersDirPath: String = TempFiles.createTempDir().absolutePath
-
     private val layers = mutableListOf<ReferenceLayer>()
 
     override fun getAll(): List<ReferenceLayer> {
@@ -16,12 +13,8 @@ class TestReferenceLayerRepository : ReferenceLayerRepository {
         return layers.find { it.id == id }
     }
 
-    override fun getSharedLayersDirPath(): String {
-        return sharedLayersDirPath
-    }
-
-    override fun getProjectLayersDirPath(): String {
-        return projectLayersDirPath
+    override fun addLayer(file: File, shared: Boolean) {
+        TODO("Not yet implemented")
     }
 
     fun addLayers(vararg newLayers: ReferenceLayer) {

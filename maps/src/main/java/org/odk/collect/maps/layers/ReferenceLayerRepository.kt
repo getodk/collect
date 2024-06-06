@@ -6,9 +6,7 @@ interface ReferenceLayerRepository {
 
     fun getAll(): List<ReferenceLayer>
     fun get(id: String): ReferenceLayer?
-
-    fun getSharedLayersDirPath(): String
-    fun getProjectLayersDirPath(): String
+    fun addLayer(file: File, shared: Boolean)
 }
 
 data class ReferenceLayer(val id: String, val file: File, val name: String)

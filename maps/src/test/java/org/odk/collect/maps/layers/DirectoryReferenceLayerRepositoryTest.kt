@@ -164,6 +164,48 @@ class DirectoryReferenceLayerRepositoryTest {
         assertThat(repository.get(fileLayer.id)!!.name, equalTo(file.name))
     }
 
+    @Test
+    fun addLayer_movesFileToTheSharedLayersDir_whenSharedIsTrue() {
+        val sharedLayersDir = TempFiles.createTempDir()
+        val projectLayersDir = TempFiles.createTempDir()
+        val file = TempFiles.createTempFile().also {
+            it.writeText("blah")
+        }
+
+        val repository = DirectoryReferenceLayerRepository(
+            sharedLayersDir.absolutePath,
+            projectLayersDir.absolutePath
+        ) { StubMapConfigurator() }
+
+        repository.addLayer(file, true)
+
+        assertThat(sharedLayersDir.listFiles().size, equalTo(1))
+        assertThat(sharedLayersDir.listFiles()[0].name, equalTo(file.name))
+        assertThat(sharedLayersDir.listFiles()[0].readText(), equalTo("blah"))
+        assertThat(projectLayersDir.listFiles().size, equalTo(0))
+    }
+
+    @Test
+    fun addLayer_movesFileToTheProjectLayersDir_whenSharedIsFalse() {
+        val sharedLayersDir = TempFiles.createTempDir()
+        val projectLayersDir = TempFiles.createTempDir()
+        val file = TempFiles.createTempFile().also {
+            it.writeText("blah")
+        }
+
+        val repository = DirectoryReferenceLayerRepository(
+            sharedLayersDir.absolutePath,
+            projectLayersDir.absolutePath
+        ) { StubMapConfigurator() }
+
+        repository.addLayer(file, false)
+
+        assertThat(sharedLayersDir.listFiles().size, equalTo(0))
+        assertThat(projectLayersDir.listFiles().size, equalTo(1))
+        assertThat(projectLayersDir.listFiles()[0].name, equalTo(file.name))
+        assertThat(projectLayersDir.listFiles()[0].readText(), equalTo("blah"))
+    }
+
     private class StubMapConfigurator : MapConfigurator {
         private val files = mutableMapOf<File, Pair<Boolean, String>>()
 

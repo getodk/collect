@@ -19,6 +19,10 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.InMemSettingsProvider
@@ -33,7 +37,7 @@ import java.io.File
 @RunWith(AndroidJUnit4::class)
 class OfflineMapLayersImporterTest {
     private val scheduler = FakeScheduler()
-    private val referenceLayerRepository = TestReferenceLayerRepository()
+    private val referenceLayerRepository = mock<ReferenceLayerRepository>()
     private val settingsProvider = InMemSettingsProvider()
 
     @get:Rule
@@ -192,12 +196,8 @@ class OfflineMapLayersImporterTest {
 
     @Test
     fun `clicking the 'add layer' button moves the files to the shared layers dir if it is selected`() {
-        val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION).also {
-            it.writeText("blah1")
-        }
-        val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION).also {
-            it.writeText("blah2")
-        }
+        val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
+        val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
         launchFragment().onFragment {
             it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
@@ -208,26 +208,20 @@ class OfflineMapLayersImporterTest {
         onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(click())
         scheduler.flush()
 
-        assertThat(File(referenceLayerRepository.getSharedLayersDirPath()).listFiles().size, equalTo(2))
-        assertThat(File(referenceLayerRepository.getProjectLayersDirPath()).listFiles().size, equalTo(0))
+        val fileCaptor = argumentCaptor<File>()
+        val booleanCaptor = argumentCaptor<Boolean>()
 
-        val copiedFile1 = File(referenceLayerRepository.getSharedLayersDirPath(), file1.name)
-        assertThat(copiedFile1.exists(), equalTo(true))
-        assertThat(copiedFile1.readText(), equalTo("blah1"))
-
-        val copiedFile2 = File(referenceLayerRepository.getSharedLayersDirPath(), file2.name)
-        assertThat(copiedFile2.exists(), equalTo(true))
-        assertThat(copiedFile2.readText(), equalTo("blah2"))
+        verify(referenceLayerRepository, times(2)).addLayer(fileCaptor.capture(), booleanCaptor.capture())
+        assertThat(fileCaptor.allValues.any { file -> file.name == file1.name }, equalTo(true))
+        assertThat(fileCaptor.allValues.any { file -> file.name == file2.name }, equalTo(true))
+        assertThat(booleanCaptor.firstValue, equalTo(true))
+        assertThat(booleanCaptor.secondValue, equalTo(true))
     }
 
     @Test
     fun `clicking the 'add layer' button moves the files to the project layers dir if it is selected`() {
-        val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION).also {
-            it.writeText("blah1")
-        }
-        val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION).also {
-            it.writeText("blah2")
-        }
+        val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
+        val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
         launchFragment().onFragment {
             it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
@@ -240,16 +234,14 @@ class OfflineMapLayersImporterTest {
         onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(click())
         scheduler.flush()
 
-        assertThat(File(referenceLayerRepository.getSharedLayersDirPath()).listFiles().size, equalTo(0))
-        assertThat(File(referenceLayerRepository.getProjectLayersDirPath()).listFiles().size, equalTo(2))
+        val fileCaptor = argumentCaptor<File>()
+        val booleanCaptor = argumentCaptor<Boolean>()
 
-        val copiedFile1 = File(referenceLayerRepository.getProjectLayersDirPath(), file1.name)
-        assertThat(copiedFile1.exists(), equalTo(true))
-        assertThat(copiedFile1.readText(), equalTo("blah1"))
-
-        val copiedFile2 = File(referenceLayerRepository.getProjectLayersDirPath(), file2.name)
-        assertThat(copiedFile2.exists(), equalTo(true))
-        assertThat(copiedFile2.readText(), equalTo("blah2"))
+        verify(referenceLayerRepository, times(2)).addLayer(fileCaptor.capture(), booleanCaptor.capture())
+        assertThat(fileCaptor.allValues.any { file -> file.name == file1.name }, equalTo(true))
+        assertThat(fileCaptor.allValues.any { file -> file.name == file2.name }, equalTo(true))
+        assertThat(booleanCaptor.firstValue, equalTo(false))
+        assertThat(booleanCaptor.secondValue, equalTo(false))
     }
 
     private fun launchFragment(): FragmentScenario<OfflineMapLayersImporter> {
