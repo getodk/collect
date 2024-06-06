@@ -16,9 +16,12 @@
 package org.odk.collect.android.support.matchers
 
 import android.view.View
+import android.widget.TextView
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
+import org.odk.collect.android.R
+import org.odk.collect.android.widgets.QuestionWidget
 
 /**
  * Grab bag of Hamcrest matchers.
@@ -43,6 +46,25 @@ object CustomMatchers {
 
             override fun matchesSafely(view: View): Boolean {
                 return matcher.matches(view) && currentIndex++ == index
+            }
+        }
+    }
+
+    @JvmStatic
+    fun isQuestionView(questionText: String): Matcher<View> {
+        return object : TypeSafeMatcher<View>() {
+            override fun describeTo(description: Description) {
+                description.appendText("is question view with text: ")
+                description.appendValue(questionText)
+            }
+
+            override fun matchesSafely(item: View): Boolean {
+                return if (item is QuestionWidget) {
+                    val questionTextView = item.findViewById<TextView>(R.id.text_label)
+                    questionTextView.text.toString() == questionText
+                } else {
+                    false
+                }
             }
         }
     }

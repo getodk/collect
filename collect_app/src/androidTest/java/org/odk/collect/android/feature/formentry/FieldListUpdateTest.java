@@ -399,7 +399,7 @@ public class FieldListUpdateTest {
                 .clickOnGroup("Long list of questions")
                 .clickOnQuestion("Question1")
                 .answerQuestion(0, "X")
-                .activateTextQuestion(19)
+                .activateTextQuestion("Question20")
                 .assertText("Question20");
     }
 

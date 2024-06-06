@@ -8,13 +8,16 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
+import static org.odk.collect.android.support.matchers.CustomMatchers.isQuestionView;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
 import android.os.Build;
@@ -315,6 +318,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage activateTextQuestion(int index) {
         onView(withIndex(withClassName(endsWith("EditText")), index)).perform(scrollTo());
         onView(withIndex(withClassName(endsWith("EditText")), index)).perform(click());
+        return this;
+    }
+
+    public FormEntryPage activateTextQuestion(String questionText) {
+        onView(allOf(withClassName(endsWith("EditText")), isDescendantOfA(isQuestionView(questionText)))).perform(scrollTo(), click());
         return this;
     }
 
