@@ -30,7 +30,7 @@ class OfflineMapLayersPicker(
     private val viewModel: OfflineMapLayersViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return OfflineMapLayersViewModel(referenceLayerRepository, scheduler, settingsProvider, requireContext().contentResolver) as T
+                return OfflineMapLayersViewModel(referenceLayerRepository, scheduler, settingsProvider) as T
             }
         }
     }
@@ -39,7 +39,7 @@ class OfflineMapLayersPicker(
 
     private val getLayers = registerForActivityResult(ActivityResultContracts.GetMultipleContents(), registry) { uris ->
         if (uris.isNotEmpty()) {
-            viewModel.loadLayersToImport(uris)
+            viewModel.loadLayersToImport(uris, requireContext())
             DialogFragmentUtils.showIfNotShowing(
                 OfflineMapLayersImporter::class.java,
                 childFragmentManager

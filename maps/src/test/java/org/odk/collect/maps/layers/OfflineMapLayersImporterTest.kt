@@ -63,7 +63,7 @@ class OfflineMapLayersImporterTest {
         launchFragment().onFragment {
             scheduler.flush()
             assertThat(it.isVisible, equalTo(true))
-            it.viewModel.loadLayersToImport(emptyList())
+            it.viewModel.loadLayersToImport(emptyList(), it.requireContext())
             onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(click())
             scheduler.flush()
             RobolectricHelpers.runLooper()
@@ -77,7 +77,7 @@ class OfflineMapLayersImporterTest {
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
         launchFragment().onFragment {
-            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
+            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
         }
 
         onView(withId(org.odk.collect.maps.R.id.progress_indicator)).check(matches(isDisplayed()))
@@ -150,7 +150,7 @@ class OfflineMapLayersImporterTest {
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
         launchFragment().onFragment {
-            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
+            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
         }
 
         scheduler.flush()
@@ -166,7 +166,7 @@ class OfflineMapLayersImporterTest {
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
         val scenario = launchFragment().onFragment {
-            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
+            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
         }
 
         scheduler.flush()
@@ -184,7 +184,7 @@ class OfflineMapLayersImporterTest {
         val file2 = TempFiles.createTempFile("layer2", ".txt")
 
         launchFragment().onFragment {
-            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
+            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
         }
 
         scheduler.flush()
@@ -200,7 +200,7 @@ class OfflineMapLayersImporterTest {
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
         launchFragment().onFragment {
-            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
+            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
         }
 
         scheduler.flush()
@@ -224,7 +224,7 @@ class OfflineMapLayersImporterTest {
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
         launchFragment().onFragment {
-            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()))
+            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
         }
 
         scheduler.flush()
