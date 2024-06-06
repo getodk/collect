@@ -8,7 +8,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-fun Uri.toFile(contentResolver: ContentResolver, dest: File) {
+fun Uri.copyToFile(contentResolver: ContentResolver, dest: File) {
     try {
         contentResolver.openInputStream(this)?.use { inputStream ->
             FileOutputStream(dest).use { outputStream ->

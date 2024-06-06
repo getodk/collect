@@ -5,8 +5,8 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import org.odk.collect.androidshared.system.copyToFile
 import org.odk.collect.androidshared.system.getFileName
-import org.odk.collect.androidshared.system.toFile
 import org.odk.collect.async.Scheduler
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
@@ -61,7 +61,7 @@ class OfflineMapLayersViewModel(
                     uri.getFileName(contentResolver)?.let { fileName ->
                         if (fileName.endsWith(MbtilesFile.FILE_EXTENSION)) {
                             val layerFile = File(tempLayersDir, fileName).also { file ->
-                                uri.toFile(contentResolver, file)
+                                uri.copyToFile(contentResolver, file)
                             }
                             layers.add(ReferenceLayer(layerFile.absolutePath, layerFile, MbtilesFile.readName(layerFile) ?: layerFile.name))
                         }
