@@ -3,10 +3,8 @@ package org.odk.collect.androidshared.system
 import android.content.ContentResolver
 import android.net.Uri
 import android.provider.OpenableColumns
-import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 
 fun Uri.copyToFile(contentResolver: ContentResolver, dest: File) {
     try {
@@ -15,8 +13,8 @@ fun Uri.copyToFile(contentResolver: ContentResolver, dest: File) {
                 inputStream.copyTo(outputStream)
             }
         }
-    } catch (e: IOException) {
-        Timber.e(e)
+    } catch (e: Exception) {
+        // ignore
     }
 }
 
