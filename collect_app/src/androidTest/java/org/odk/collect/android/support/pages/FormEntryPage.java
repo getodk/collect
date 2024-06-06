@@ -21,11 +21,14 @@ import static org.odk.collect.android.support.matchers.CustomMatchers.isQuestion
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
 import android.os.Build;
+import android.view.View;
 
 import androidx.test.core.app.ApplicationProvider;
 
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.Interactions;
 import org.odk.collect.android.support.WaitFor;
 
 import java.util.concurrent.Callable;
@@ -54,7 +57,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
         // Check we are not on the Form Hierarchy page
         assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_beginning);
         assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_end);
-        
+
         return this;
     }
 
@@ -315,14 +318,10 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage activateTextQuestion(int index) {
-        onView(withIndex(withClassName(endsWith("EditText")), index)).perform(scrollTo());
-        onView(withIndex(withClassName(endsWith("EditText")), index)).perform(click());
-        return this;
-    }
-
-    public FormEntryPage activateTextQuestion(String questionText) {
-        onView(allOf(withClassName(endsWith("EditText")), isDescendantOfA(isQuestionView(questionText)))).perform(scrollTo(), click());
+    public FormEntryPage clickOnQuestionField(String questionText) {
+        Matcher<View> classMatcher = withClassName(endsWith("EditText"));
+        Matcher<View> questionViewMatcher = isQuestionView(questionText);
+        Interactions.clickOn(allOf(classMatcher, isDescendantOfA(questionViewMatcher)));
         return this;
     }
 

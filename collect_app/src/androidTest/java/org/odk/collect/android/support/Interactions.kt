@@ -16,6 +16,8 @@ object Interactions {
      * initially clicking on the view fails, this will then attempt to scroll to the view and
      * retry the click.
      */
+    @JvmStatic
+    @JvmOverloads
     fun clickOn(view: Matcher<View>, root: Matcher<Root>? = null) {
         val onView = if (root != null) {
             onView(view).inRoot(root)
