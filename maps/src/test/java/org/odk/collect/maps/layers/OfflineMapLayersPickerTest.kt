@@ -232,7 +232,7 @@ class OfflineMapLayersPickerTest {
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(1)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(withText(string.none)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
     }
 
     @Test
@@ -249,9 +249,9 @@ class OfflineMapLayersPickerTest {
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(withText(string.none)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(withText("layer1")))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(matches(withText("layer2")))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText("layer1")))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.title)).check(matches(withText("layer2")))
     }
 
     @Test
@@ -367,9 +367,9 @@ class OfflineMapLayersPickerTest {
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(withText(string.none)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(withText(file1.name)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(matches(withText(file2.name)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText(file1.name)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.title)).check(matches(withText(file2.name)))
     }
 
     @Test
