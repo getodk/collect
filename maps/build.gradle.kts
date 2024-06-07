@@ -64,11 +64,13 @@ dependencies {
 
     debugImplementation(project(":fragments-test"))
 
+    testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.androidx_test_ext_junit)
     testImplementation(Dependencies.hamcrest)
     testImplementation(Dependencies.robolectric)
     testImplementation(Dependencies.mockito_kotlin)
+    testImplementation(Dependencies.androidx_test_espresso_contrib)
     testImplementation(Dependencies.androidx_test_espresso_core)
 }

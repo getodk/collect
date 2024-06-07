@@ -7,14 +7,19 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.testing.FragmentScenario
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
+import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -30,6 +35,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidtest.DrawableMatcher.withImageDrawable
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.maps.R
 import org.odk.collect.settings.InMemSettingsProvider
@@ -73,7 +79,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'cancel' button dismisses the layers picker`() {
-        val scenario = launchOfflineMapLayersPicker()
+        val scenario = launchFragment()
 
         scenario.onFragment {
             assertThat(it.isVisible, equalTo(true))
@@ -88,7 +94,7 @@ class OfflineMapLayersPickerTest {
             listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
         )
 
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         scheduler.flush()
 
@@ -98,14 +104,14 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `the 'cancel' button should be enabled during loading layers`() {
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         onView(withText(string.cancel)).check(matches(isEnabled()))
     }
 
     @Test
     fun `clicking the 'save' button dismisses the layers picker`() {
-        val scenario = launchOfflineMapLayersPicker()
+        val scenario = launchFragment()
 
         scheduler.flush()
 
@@ -118,7 +124,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `the 'save' button should be disabled during loading layers`() {
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         onView(withText(string.save)).check(matches(not(isEnabled())))
         scheduler.flush()
@@ -131,7 +137,7 @@ class OfflineMapLayersPickerTest {
             listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
         )
 
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         scheduler.flush()
 
@@ -145,7 +151,7 @@ class OfflineMapLayersPickerTest {
             listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
         )
 
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         scheduler.flush()
 
@@ -160,7 +166,7 @@ class OfflineMapLayersPickerTest {
             listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
         )
 
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         scheduler.flush()
 
@@ -179,7 +185,7 @@ class OfflineMapLayersPickerTest {
 
         settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, "2")
 
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         scheduler.flush()
 
@@ -190,7 +196,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `progress indicator is displayed during loading layers`() {
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         onView(withId(R.id.progress_indicator)).check(matches(isDisplayed()))
         onView(withId(R.id.layers)).check(matches(not(isDisplayed())))
@@ -203,14 +209,14 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `the 'learn more' button should be enabled during loading layers`() {
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         onView(withText(string.get_help_with_reference_layers)).check(matches(isEnabled()))
     }
 
     @Test
     fun `clicking the 'learn more' button opens the forum thread`() {
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         scheduler.flush()
 
@@ -221,7 +227,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `if there are no layers the 'none' option is displayed`() {
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         scheduler.flush()
 
@@ -238,7 +244,7 @@ class OfflineMapLayersPickerTest {
             )
         )
 
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         scheduler.flush()
 
@@ -254,7 +260,7 @@ class OfflineMapLayersPickerTest {
             listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
         )
 
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         scheduler.flush()
 
@@ -273,7 +279,7 @@ class OfflineMapLayersPickerTest {
             listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
         )
 
-        val scenario = launchOfflineMapLayersPicker()
+        val scenario = launchFragment()
 
         scheduler.flush()
 
@@ -285,7 +291,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'add layer' and selecting layers displays the confirmation dialog`() {
-        val scenario = launchOfflineMapLayersPicker()
+        val scenario = launchFragment()
 
         uris.add(Uri.parse("blah"))
         EspressoHelpers.clickOnText(string.add_layer)
@@ -300,7 +306,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'add layer' and selecting nothing does not display the confirmation dialog`() {
-        val scenario = launchOfflineMapLayersPicker()
+        val scenario = launchFragment()
 
         EspressoHelpers.clickOnText(string.add_layer)
 
@@ -317,7 +323,7 @@ class OfflineMapLayersPickerTest {
         val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         scheduler.flush()
 
@@ -342,7 +348,7 @@ class OfflineMapLayersPickerTest {
         val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
-        launchOfflineMapLayersPicker()
+        launchFragment()
 
         scheduler.flush()
 
@@ -366,7 +372,146 @@ class OfflineMapLayersPickerTest {
         onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(matches(withText(file2.name)))
     }
 
-    private fun launchOfflineMapLayersPicker(): FragmentScenario<OfflineMapLayersPicker> {
+    @Test
+    fun `layers are collapsed by default`() {
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(
+                ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
+                ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
+            )
+        )
+
+        launchFragment()
+
+        scheduler.flush()
+
+        assertLayerCollapsed(1)
+        assertLayerCollapsed(2)
+    }
+
+    @Test
+    fun `recreating maintains expanded layers`() {
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
+            ReferenceLayer("2", TempFiles.createTempFile(), "layer2"),
+            ReferenceLayer("3", TempFiles.createTempFile(), "layer3")
+        ))
+
+        val scenario = launchFragment()
+
+        scheduler.flush()
+
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(3))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(3, R.id.arrow)).perform(click())
+
+        scenario.recreate()
+
+        assertLayerExpanded(1)
+        assertLayerCollapsed(2)
+        assertLayerExpanded(3)
+    }
+
+    @Test
+    fun `correct path is displayed after expanding layers`() {
+        val file1 = TempFiles.createTempFile()
+        val file2 = TempFiles.createTempFile()
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+            ReferenceLayer("1", file1, "layer1"),
+            ReferenceLayer("2", file2, "layer2")
+        ))
+
+        launchFragment()
+
+        scheduler.flush()
+
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(2))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.arrow)).perform(click())
+
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.path)).check(matches(withText(file1.absolutePath)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.path)).check(matches(withText(file2.absolutePath)))
+    }
+
+    @Test
+    fun `clicking delete shows the confirmation dialog`() {
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
+        ))
+
+        launchFragment()
+
+        scheduler.flush()
+
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(scrollTo(), click())
+
+        onView(withText(string.cancel)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withText(string.delete_layer)).inRoot(isDialog()).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun `clicking delete and canceling does not remove the layer`() {
+        val layerFile1 = TempFiles.createTempFile()
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+            ReferenceLayer("1", layerFile1, "layer1")
+        ))
+
+        launchFragment()
+
+        scheduler.flush()
+
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(scrollTo(), click())
+
+        onView(withText(string.cancel)).inRoot(isDialog()).perform(click())
+
+        onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
+        onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(0))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText("layer1")))
+        assertThat(layerFile1.exists(), equalTo(true))
+    }
+
+    @Test
+    fun `clicking delete and confirming removes the layer`() {
+        val layerFile1 = TempFiles.createTempFile()
+        val layerFile2 = TempFiles.createTempFile()
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+            ReferenceLayer("1", layerFile1, "layer1"),
+            ReferenceLayer("2", layerFile2, "layer2")
+        ))
+
+        launchFragment()
+
+        scheduler.flush()
+
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(scrollTo(), click())
+
+        onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
+        scheduler.flush()
+
+        onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText("layer2")))
+        assertThat(layerFile1.exists(), equalTo(false))
+        assertThat(layerFile2.exists(), equalTo(true))
+    }
+
+    private fun assertLayerCollapsed(position: Int) {
+        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.arrow)).check(matches(withImageDrawable(org.odk.collect.icons.R.drawable.ic_baseline_expand_24)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.path)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.delete_layer)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+    }
+
+    private fun assertLayerExpanded(position: Int) {
+        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.arrow)).check(matches(withImageDrawable(org.odk.collect.icons.R.drawable.ic_baseline_collapse_24)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.path)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.delete_layer)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
+    private fun launchFragment(): FragmentScenario<OfflineMapLayersPicker> {
         return fragmentScenarioLauncherRule.launchInContainer(OfflineMapLayersPicker::class.java)
     }
 }
