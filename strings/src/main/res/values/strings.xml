@@ -513,6 +513,9 @@
     <!-- Text for option where layer should be available to the current project only -->
     <string name="current_project_option" tools:ignore="UnusedResources">Current project only</string>
 
+    <!-- Text for message displayed in a dialog to confirm that the layer should be deleted -->
+    <string name="delete_layer_confirmation_message">Are you sure you want to delete %1$s offline layers?</string>
+
     <string name="record_geopoint">Record a point</string>
     <string name="location_accuracy">Accuracy: %1$s m</string>
     <string name="location_provider">Location provider: %s</string>

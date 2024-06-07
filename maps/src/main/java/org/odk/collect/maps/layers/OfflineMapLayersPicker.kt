@@ -12,12 +12,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
-import org.odk.collect.androidshared.ui.GroupClickListener.addOnClickListener
+import org.odk.collect.androidshared.ui.addOnClickListener
 import org.odk.collect.async.Scheduler
 import org.odk.collect.maps.databinding.OfflineMapLayersPickerBinding
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.webpage.ExternalWebPageHelper
 
 class OfflineMapLayersPicker(
@@ -26,7 +28,8 @@ class OfflineMapLayersPicker(
     private val scheduler: Scheduler,
     private val settingsProvider: SettingsProvider,
     private val externalWebPageHelper: ExternalWebPageHelper
-) : BottomSheetDialogFragment() {
+) : BottomSheetDialogFragment(),
+    OfflineMapLayersPickerAdapter.OfflineMapLayersPickerAdapterInterface {
     private val viewModel: OfflineMapLayersViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -80,7 +83,7 @@ class OfflineMapLayersPicker(
         }
 
         binding.save.setOnClickListener {
-            viewModel.saveSelectedLayer()
+            viewModel.saveCheckedLayer()
             dismiss()
         }
 
@@ -102,11 +105,10 @@ class OfflineMapLayersPicker(
             }
         }
 
+        val adapter = OfflineMapLayersPickerAdapter(this)
+        binding.layers.setAdapter(adapter)
         viewModel.existingLayers.observe(this) { layers ->
-            val adapter = OfflineMapLayersPickerAdapter(layers.first, layers.second) {
-                viewModel.changeSelectedLayerId(it)
-            }
-            binding.layers.setAdapter(adapter)
+            adapter.setData(layers)
         }
     }
 
@@ -119,5 +121,28 @@ class OfflineMapLayersPicker(
         } catch (e: Exception) {
             // ignore
         }
+    }
+
+    override fun onLayerChecked(layerId: String?) {
+        viewModel.onLayerChecked(layerId)
+    }
+
+    override fun onLayerToggled(layerId: String?) {
+        viewModel.onLayerToggled(layerId)
+    }
+
+    override fun onDeleteLayer(layerItem: CheckableReferenceLayer) {
+        MaterialAlertDialogBuilder(requireActivity())
+            .setMessage(requireActivity().getLocalizedString(org.odk.collect.strings.R.string.delete_layer_confirmation_message, layerItem.name))
+            .setPositiveButton(org.odk.collect.strings.R.string.delete_layer) { _, _ ->
+                layerItem.file?.delete()
+                if (layerItem.id == viewModel.getCheckedLayer()) {
+                    viewModel.onLayerChecked(null)
+                }
+                viewModel.onLayerDeleted(layerItem.id)
+            }
+            .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
+            .create()
+            .show()
     }
 }

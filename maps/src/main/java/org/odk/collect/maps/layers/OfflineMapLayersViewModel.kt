@@ -22,8 +22,8 @@ class OfflineMapLayersViewModel(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _existingLayers = MutableLiveData<Pair<List<ReferenceLayer>, String?>>()
-    val existingLayers: LiveData<Pair<List<ReferenceLayer>, String?>> = _existingLayers
+    private val _existingLayers = MutableLiveData<List<CheckableReferenceLayer>>()
+    val existingLayers: LiveData<List<CheckableReferenceLayer>> = _existingLayers
 
     private val _layersToImport = MutableLiveData<List<ReferenceLayer>>()
     val layersToImport: LiveData<List<ReferenceLayer>> = _layersToImport
@@ -39,11 +39,13 @@ class OfflineMapLayersViewModel(
         scheduler.immediate(
             background = {
                 val layers = referenceLayerRepository.getAll()
-                val selectedLayerId =
+                val checkedLayerId =
                     settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER)
 
+                val newData = mutableListOf(CheckableReferenceLayer(null, null, "", checkedLayerId == null, false))
+                newData.addAll(layers.map { CheckableReferenceLayer(it.id, it.file, it.name, it.id == checkedLayerId, false) })
                 _isLoading.postValue(false)
-                _existingLayers.postValue(Pair(layers, selectedLayerId))
+                _existingLayers.postValue(newData)
             },
             foreground = { }
         )
@@ -90,12 +92,40 @@ class OfflineMapLayersViewModel(
         )
     }
 
-    fun saveSelectedLayer() {
-        val selectedLayerId = existingLayers.value?.second
-        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, selectedLayerId)
+    fun saveCheckedLayer() {
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, getCheckedLayer())
     }
 
-    fun changeSelectedLayerId(selectedLayerId: String?) {
-        _existingLayers.postValue(_existingLayers.value?.copy(second = selectedLayerId))
+    fun onLayerChecked(layerId: String?) {
+        _existingLayers.value = _existingLayers.value?.map {
+            it.copy(isChecked = it.id == layerId)
+        }
+    }
+
+    fun onLayerToggled(layerId: String?) {
+        _existingLayers.value = _existingLayers.value?.map {
+            val isExpanded = if (it.id == layerId) {
+                !it.isExpanded
+            } else {
+                it.isExpanded
+            }
+            it.copy(isExpanded = isExpanded)
+        }
+    }
+
+    fun onLayerDeleted(deletedLayerId: String?) {
+        _existingLayers.value = _existingLayers.value?.filter { it.id != deletedLayerId }
+    }
+
+    fun getCheckedLayer(): String? {
+        return _existingLayers.value?.find { it.isChecked }?.id
     }
 }
+
+data class CheckableReferenceLayer(
+    val id: String?,
+    val file: File?,
+    val name: String,
+    val isChecked: Boolean,
+    val isExpanded: Boolean
+)

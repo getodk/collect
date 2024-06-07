@@ -23,18 +23,17 @@
         app:layout_constraintStart_toEndOf="@id/radio_button"
         app:layout_constraintEnd_toStartOf="@id/arrow"
         app:layout_constraintTop_toTopOf="@id/radio_button"
+        app:layout_constraintBottom_toBottomOf="@id/radio_button"
         tools:text="Layer1" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/path"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:textAppearance="?textAppearanceBodyMedium"
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintEnd_toEndOf="@id/title"
         app:layout_constraintTop_toBottomOf="@id/title"
-        tools:visibility="visible"
         tools:text="org.odk.collect.android/projects/FSDDSDS5/layers/layer2.mbtiles" />
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
@@ -44,13 +43,11 @@
         android:layout_height="wrap_content"
         android:text="@string/delete_layer"
         android:layout_marginBottom="@dimen/margin_extra_small"
-        android:visibility="gone"
         android:layout_marginTop="@dimen/margin_extra_small"
         app:icon="@drawable/ic_add_white_24"
         app:iconTint="?colorAccent"
         app:layout_constraintStart_toStartOf="@id/title"
-        app:layout_constraintTop_toBottomOf="@id/path"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@id/path" />
 
     <ImageView
         android:id="@+id/arrow"
