@@ -141,7 +141,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(MapFragment.class, () -> (Fragment) mapFragmentFactory.createMapFragment())
-                .forClass(OfflineMapLayersPicker.class, () -> new OfflineMapLayersPicker(referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper))
+                .forClass(OfflineMapLayersPicker.class, () -> new OfflineMapLayersPicker(getActivityResultRegistry(), referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper))
                 .build()
         );
 

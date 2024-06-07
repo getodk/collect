@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/add_project_toolbar"
+        style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            style="@style/Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls.CloseIcon"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@null"
+            app:title="@string/add_layer"/>
+
+        <include layout="@layout/app_bar_shadow"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/shadow_up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_project_toolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/layers_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/layers_list_title"
+                android:textAppearance="?textAppearanceTitleLarge"
+                android:layout_marginTop="@dimen/margin_standard"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/layers"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layers_title" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progress_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_small"
+                android:indeterminate="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layers_title" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="layers,progress_indicator" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/select_layer_access_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/select_layer_access_title"
+                android:textAppearance="?textAppearanceTitleLarge"
+                android:layout_marginTop="@dimen/margin_standard"
+                app:layout_constraintTop_toBottomOf="@id/barrier"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/select_layer_access_subtitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/select_layer_access_subtitle"
+                android:textAppearance="?textAppearanceBodyMedium"
+                android:layout_marginTop="@dimen/margin_standard"
+                app:layout_constraintTop_toBottomOf="@id/select_layer_access_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_extra_extra_small"
+                android:checkedButton="@id/all_projects_option"
+                app:layout_constraintTop_toBottomOf="@id/select_layer_access_subtitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <RadioButton
+                    android:id="@+id/all_projects_option"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/margin_standard"
+                    android:translationX="-5dp"
+                    android:textAppearance="?textAppearanceBodyMedium"
+                    android:text="@string/all_projects_option"/>
+
+                <RadioButton
+                    android:id="@+id/current_project_option"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/margin_standard"
+                    android:translationX="-5dp"
+                    android:textAppearance="?textAppearanceBodyMedium"
+                    android:text="@string/current_project_option"/>
+            </RadioGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/shadow_up"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/shadow_up"
+        android:layout_marginBottom="@dimen/margin_small"
+        app:layout_constraintBottom_toTopOf="@id/cancel_button" />
+
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
+        android:id="@+id/cancel_button"
+        style="?borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:layout_marginEnd="@dimen/margin_small"
+        app:layout_constraintBottom_toBottomOf="@id/add_layer_button"
+        app:layout_constraintEnd_toStartOf="@id/add_layer_button"
+        app:layout_constraintTop_toTopOf="@id/add_layer_button" />
+
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
+        android:id="@+id/add_layer_button"
+        style="?materialButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_extra_small"
+        android:text="@string/add_layer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,16 @@
 package org.odk.collect.maps.layers
 
 import android.net.Uri
+import androidx.activity.result.ActivityResultRegistry
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -13,6 +19,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
@@ -37,24 +44,36 @@ import org.odk.collect.webpage.ExternalWebPageHelper
 
 @RunWith(AndroidJUnit4::class)
 class OfflineMapLayersPickerTest {
-    private val referenceLayerRepository = mock<ReferenceLayerRepository>().also {
-        whenever(it.getAll()).thenReturn(emptyList())
-    }
+    private val referenceLayerRepository = mock<ReferenceLayerRepository>()
     private val scheduler = FakeScheduler()
     private val settingsProvider = InMemSettingsProvider()
     private val externalWebPageHelper = mock<ExternalWebPageHelper>()
+
+    private val uris = mutableListOf<Uri>()
+    private val testRegistry = object : ActivityResultRegistry() {
+        override fun <I, O> onLaunch(
+            requestCode: Int,
+            contract: ActivityResultContract<I, O>,
+            input: I,
+            options: ActivityOptionsCompat?
+        ) {
+            assertThat(contract, instanceOf(ActivityResultContracts.GetMultipleContents()::class.java))
+            assertThat(input, equalTo("*/*"))
+            dispatchResult(requestCode, uris)
+        }
+    }
 
     @get:Rule
     val fragmentScenarioLauncherRule = FragmentScenarioLauncherRule(
         FragmentFactoryBuilder()
             .forClass(OfflineMapLayersPicker::class) {
-                OfflineMapLayersPicker(referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
+                OfflineMapLayersPicker(testRegistry, referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
             }.build()
     )
 
     @Test
     fun `clicking the 'cancel' button dismisses the layers picker`() {
-        val scenario = launchFragment()
+        val scenario = launchOfflineMapLayersPicker()
 
         scenario.onFragment {
             assertThat(it.isVisible, equalTo(true))
@@ -65,11 +84,11 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'cancel' button does not save the layer`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
+        )
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -79,14 +98,14 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `the 'cancel' button should be enabled during loading layers`() {
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         onView(withText(string.cancel)).check(matches(isEnabled()))
     }
 
     @Test
     fun `clicking the 'save' button dismisses the layers picker`() {
-        val scenario = launchFragment()
+        val scenario = launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -99,7 +118,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `the 'save' button should be disabled during loading layers`() {
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         onView(withText(string.save)).check(matches(not(isEnabled())))
         scheduler.flush()
@@ -108,11 +127,11 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'save' button saves null when 'None' option is checked`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
+        )
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -122,11 +141,11 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `clicking the 'save' button saves the layer id if any is checked`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
+        )
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -137,11 +156,11 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `when no layer id is saved in settings the 'None' option should be checked`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
+        )
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -151,13 +170,16 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `when layer id is saved in settings the layer it belongs to should be checked`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
-            ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(
+                ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
+                ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
+            )
+        )
+
         settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, "2")
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -168,7 +190,7 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `progress indicator is displayed during loading layers`() {
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         onView(withId(R.id.progress_indicator)).check(matches(isDisplayed()))
         onView(withId(R.id.layers)).check(matches(not(isDisplayed())))
@@ -181,25 +203,25 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `the 'learn more' button should be enabled during loading layers`() {
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         onView(withText(string.get_help_with_reference_layers)).check(matches(isEnabled()))
     }
 
     @Test
     fun `clicking the 'learn more' button opens the forum thread`() {
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
-        onView(withText(string.get_help_with_reference_layers)).perform(click())
+        EspressoHelpers.clickOnText(string.get_help_with_reference_layers)
 
         verify(externalWebPageHelper).openWebPageInCustomTab(any(), eq(Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices")))
     }
 
     @Test
     fun `if there are no layers the 'none' option is displayed`() {
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -209,12 +231,14 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `if there are multiple layers all of them are displayed along with the 'None'`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
-            ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(
+                ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
+                ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
+            )
+        )
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -226,11 +250,11 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `checking layers sets selection correctly`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
+        )
 
-        launchFragment()
+        launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -245,11 +269,11 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `recreating maintains selection`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
+        )
 
-        val scenario = launchFragment()
+        val scenario = launchOfflineMapLayersPicker()
 
         scheduler.flush()
 
@@ -259,7 +283,90 @@ class OfflineMapLayersPickerTest {
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(isChecked()))
     }
 
-    private fun launchFragment(): FragmentScenario<OfflineMapLayersPicker> {
+    @Test
+    fun `clicking the 'add layer' and selecting layers displays the confirmation dialog`() {
+        val scenario = launchOfflineMapLayersPicker()
+
+        uris.add(Uri.parse("blah"))
+        EspressoHelpers.clickOnText(string.add_layer)
+
+        scenario.onFragment {
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
+                instanceOf(OfflineMapLayersImporter::class.java)
+            )
+        }
+    }
+
+    @Test
+    fun `clicking the 'add layer' and selecting nothing does not display the confirmation dialog`() {
+        val scenario = launchOfflineMapLayersPicker()
+
+        EspressoHelpers.clickOnText(string.add_layer)
+
+        scenario.onFragment {
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
+                equalTo(null)
+            )
+        }
+    }
+
+    @Test
+    fun `progress indicator is displayed during loading layers after receiving new ones`() {
+        val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
+        val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
+
+        launchOfflineMapLayersPicker()
+
+        scheduler.flush()
+
+        uris.add(file1.toUri())
+        uris.add(file2.toUri())
+
+        EspressoHelpers.clickOnText(string.add_layer)
+        scheduler.flush()
+        onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(click())
+
+        onView(withId(R.id.progress_indicator)).check(matches(isDisplayed()))
+        onView(withId(R.id.layers)).check(matches(not(isDisplayed())))
+
+        scheduler.flush()
+
+        onView(withId(R.id.progress_indicator)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.layers)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun `when new layers added the list should be updated`() {
+        val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
+        val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
+
+        launchOfflineMapLayersPicker()
+
+        scheduler.flush()
+
+        uris.add(file1.toUri())
+        uris.add(file2.toUri())
+
+        EspressoHelpers.clickOnText(string.add_layer)
+        scheduler.flush()
+        onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(click())
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(
+                ReferenceLayer("1", TempFiles.createTempFile(), file1.name),
+                ReferenceLayer("2", TempFiles.createTempFile(), file2.name)
+            )
+        )
+        scheduler.flush()
+
+        onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(withText(string.none)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(withText(file1.name)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(matches(withText(file2.name)))
+    }
+
+    private fun launchOfflineMapLayersPicker(): FragmentScenario<OfflineMapLayersPicker> {
         return fragmentScenarioLauncherRule.launchInContainer(OfflineMapLayersPicker::class.java)
     }
 }

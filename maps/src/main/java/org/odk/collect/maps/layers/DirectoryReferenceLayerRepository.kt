@@ -6,7 +6,8 @@ import org.odk.collect.shared.files.DirectoryUtils.listFilesRecursively
 import java.io.File
 
 class DirectoryReferenceLayerRepository(
-    private val directoryPaths: List<String>,
+    private val sharedLayersDirPath: String,
+    private val projectLayersDirPath: String,
     private val getMapConfigurator: () -> MapConfigurator
 ) : ReferenceLayerRepository {
 
@@ -27,7 +28,15 @@ class DirectoryReferenceLayerRepository(
         }
     }
 
-    private fun getAllFilesWithDirectory() = directoryPaths.flatMap { dir ->
+    override fun addLayer(file: File, shared: Boolean) {
+        if (shared) {
+            file.copyTo(File(sharedLayersDirPath, file.name), true)
+        } else {
+            file.copyTo(File(projectLayersDirPath, file.name), true)
+        }
+    }
+
+    private fun getAllFilesWithDirectory() = listOf(sharedLayersDirPath, projectLayersDirPath).flatMap { dir ->
         listFilesRecursively(File(dir)).map { file ->
             Pair(file, dir)
         }

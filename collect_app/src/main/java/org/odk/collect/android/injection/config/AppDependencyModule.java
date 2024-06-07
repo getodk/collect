@@ -137,7 +137,6 @@ import org.odk.collect.utilities.UserAgentProvider;
 import org.odk.collect.webpage.ExternalWebPageHelper;
 
 import java.io.File;
-import java.util.Arrays;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -573,7 +572,8 @@ public class AppDependencyModule {
     @Provides
     public ReferenceLayerRepository providesReferenceLayerRepository(StoragePathProvider storagePathProvider, SettingsProvider settingsProvider) {
         return new DirectoryReferenceLayerRepository(
-                Arrays.asList(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS), storagePathProvider.getOdkDirPath(StorageSubdirectory.SHARED_LAYERS)),
+                storagePathProvider.getOdkDirPath(StorageSubdirectory.SHARED_LAYERS),
+                storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS),
                 () -> MapConfiguratorProvider.getConfigurator(
                         settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_BASEMAP_SOURCE)
                 )
