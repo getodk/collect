@@ -7,14 +7,59 @@
 
     <com.google.android.material.radiobutton.MaterialRadioButton
         android:id="@+id/radio_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:button="@drawable/radio_button_inset"
         android:paddingEnd="@dimen/margin_standard"
         android:paddingVertical="@dimen/margin_extra_small"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Layer 1" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?textAppearanceTitleMedium"
+        app:layout_constraintStart_toEndOf="@id/radio_button"
+        app:layout_constraintEnd_toStartOf="@id/arrow"
+        app:layout_constraintTop_toTopOf="@id/radio_button"
+        tools:text="Layer1" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/path"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:textAppearance="?textAppearanceBodyMedium"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintEnd_toEndOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:visibility="visible"
+        tools:text="org.odk.collect.android/projects/FSDDSDS5/layers/layer2.mbtiles" />
+
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
+        android:id="@+id/delete_layer"
+        style="?materialButtonOutlinedIconStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_layer"
+        android:layout_marginBottom="@dimen/margin_extra_small"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        app:icon="@drawable/ic_add_white_24"
+        app:iconTint="?colorAccent"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/path"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_baseline_expand_24"
+        android:paddingHorizontal="@dimen/margin_standard"
+        app:layout_constraintTop_toTopOf="@id/radio_button"
+        app:layout_constraintBottom_toBottomOf="@id/radio_button"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
