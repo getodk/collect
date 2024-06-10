@@ -114,7 +114,7 @@ class TaskSpecWorkerTest {
     }
 }
 
-class TestTaskSpec : TaskSpec {
+private class TestTaskSpec : TaskSpec {
 
     companion object {
 
