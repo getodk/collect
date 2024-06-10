@@ -17,11 +17,9 @@ package org.odk.collect.android.backgroundwork
 
 import android.content.Context
 import androidx.work.BackoffPolicy
-import androidx.work.WorkerParameters
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.async.TaskSpec
-import org.odk.collect.async.WorkerAdapter
 import java.util.function.Supplier
 import javax.inject.Inject
 
@@ -45,11 +43,4 @@ class AutoUpdateTaskSpec : TaskSpec {
             }
         }
     }
-
-    override fun getWorkManagerAdapter(): Class<out WorkerAdapter> {
-        return Adapter::class.java
-    }
-
-    class Adapter(context: Context, workerParams: WorkerParameters) :
-        WorkerAdapter(AutoUpdateTaskSpec(), context, workerParams)
 }

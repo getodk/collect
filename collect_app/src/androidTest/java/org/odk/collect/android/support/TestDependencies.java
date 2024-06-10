@@ -1,6 +1,7 @@
 package org.odk.collect.android.support;
 
 import android.app.Application;
+import android.content.Context;
 import android.webkit.MimeTypeMap;
 
 import androidx.work.WorkManager;
@@ -11,12 +12,14 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.utilities.UserAgentProvider;
 
 public class TestDependencies extends AppDependencyModule {
 
     public final StubOpenRosaServer server = new StubOpenRosaServer();
-    public final TestScheduler scheduler = new TestScheduler();
+    public final FakeNetworkStateProvider networkStateProvider = new FakeNetworkStateProvider();
+    public final TestScheduler scheduler = new TestScheduler(networkStateProvider);
     public final StoragePathProvider storagePathProvider = new StoragePathProvider();
     public final StubBarcodeViewDecoder stubBarcodeViewDecoder = new StubBarcodeViewDecoder();
 
@@ -33,5 +36,10 @@ public class TestDependencies extends AppDependencyModule {
     @Override
     public BarcodeViewDecoder providesBarcodeViewDecoder() {
         return stubBarcodeViewDecoder;
+    }
+
+    @Override
+    public NetworkStateProvider providesNetworkStateProvider(Context context) {
+        return networkStateProvider;
     }
 }

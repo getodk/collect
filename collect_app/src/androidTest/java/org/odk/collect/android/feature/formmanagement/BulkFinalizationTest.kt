@@ -171,7 +171,10 @@ class BulkFinalizationTest {
     @Test
     fun whenAutoSendIsEnabled_draftsAreSentAfterFinalizing() {
         val mainMenuPage = rule.withProject(testDependencies.server.url)
-            .enableAutoSend(testDependencies.scheduler)
+            .enableAutoSend(
+                testDependencies.scheduler,
+                string.wifi_cellular_autosend
+            )
 
             .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")
@@ -186,6 +189,26 @@ class BulkFinalizationTest {
 
         mainMenuPage.clickViewSentForm(1)
             .assertText("One Question")
+
+        assertThat(testDependencies.server.submissions.size, equalTo(1))
+    }
+
+    @Test
+    fun whenDraftFormHasAutoSendEnabled_draftsAreSentAfterFinalizing() {
+        val mainMenuPage = rule.withProject(testDependencies.server.url)
+            .copyForm("one-question-autosend.xml", testDependencies.server.hostName)
+            .startBlankForm("One Question Autosend")
+            .fillOutAndSave(QuestionAndAnswer("what is your age", "97"))
+
+            .clickDrafts(1)
+            .clickFinalizeAll(1)
+            .clickFinalize()
+            .pressBack(MainMenuPage())
+
+        testDependencies.scheduler.runDeferredTasks()
+
+        mainMenuPage.clickViewSentForm(1)
+            .assertText("One Question Autosend")
 
         assertThat(testDependencies.server.submissions.size, equalTo(1))
     }

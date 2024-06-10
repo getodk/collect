@@ -29,10 +29,10 @@ import org.odk.collect.android.application.initialization.AnalyticsInitializer;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.application.initialization.ExistingSettingsMigrator;
-import org.odk.collect.android.application.initialization.FormUpdatesUpgrade;
 import org.odk.collect.android.application.initialization.GoogleDriveProjectsDeleter;
 import org.odk.collect.android.application.initialization.MapsInitializer;
 import org.odk.collect.android.application.initialization.SavepointsImporter;
+import org.odk.collect.android.application.initialization.ScheduledWorkUpgrade;
 import org.odk.collect.android.application.initialization.upgrade.UpgradeInitializer;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
@@ -95,8 +95,8 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.androidshared.bitmap.ImageCompressor;
-import org.odk.collect.androidshared.network.ConnectivityProvider;
-import org.odk.collect.androidshared.network.NetworkStateProvider;
+import org.odk.collect.async.network.ConnectivityProvider;
+import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.androidshared.utils.ScreenUtils;
@@ -443,7 +443,7 @@ public class AppDependencyModule {
             return null;
         };
 
-        return new InstancesDataService(application, instanceSubmitScheduler, projectsDependencyProviderFactory, notifier, propertyManager, httpInterface, onUpdate);
+        return new InstancesDataService(getState(application), instanceSubmitScheduler, projectsDependencyProviderFactory, notifier, propertyManager, httpInterface, onUpdate);
     }
 
     @Provides
@@ -522,8 +522,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormUpdatesUpgrade providesFormUpdatesUpgrader(Scheduler scheduler, ProjectsRepository projectsRepository, FormUpdateScheduler formUpdateScheduler) {
-        return new FormUpdatesUpgrade(scheduler, projectsRepository, formUpdateScheduler);
+    public ScheduledWorkUpgrade providesFormUpdatesUpgrader(Scheduler scheduler, ProjectsRepository projectsRepository, FormUpdateScheduler formUpdateScheduler, InstanceSubmitScheduler instanceSubmitScheduler) {
+        return new ScheduledWorkUpgrade(scheduler, projectsRepository, formUpdateScheduler, instanceSubmitScheduler);
     }
 
     @Provides
@@ -537,13 +537,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public UpgradeInitializer providesUpgradeInitializer(Context context, SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, ExistingSettingsMigrator existingSettingsMigrator, FormUpdatesUpgrade formUpdatesUpgrade, GoogleDriveProjectsDeleter googleDriveProjectsDeleter, ProjectsRepository projectsRepository, ProjectDependencyProviderFactory projectDependencyProviderFactory) {
+    public UpgradeInitializer providesUpgradeInitializer(Context context, SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, ExistingSettingsMigrator existingSettingsMigrator, ScheduledWorkUpgrade scheduledWorkUpgrade, GoogleDriveProjectsDeleter googleDriveProjectsDeleter, ProjectsRepository projectsRepository, ProjectDependencyProviderFactory projectDependencyProviderFactory) {
         return new UpgradeInitializer(
                 context,
                 settingsProvider,
                 existingProjectMigrator,
                 existingSettingsMigrator,
-                formUpdatesUpgrade,
+                scheduledWorkUpgrade,
                 googleDriveProjectsDeleter,
                 new SavepointsImporter(projectsRepository, projectDependencyProviderFactory)
         );

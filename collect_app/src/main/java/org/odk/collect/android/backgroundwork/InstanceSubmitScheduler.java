@@ -2,7 +2,9 @@ package org.odk.collect.android.backgroundwork;
 
 public interface InstanceSubmitScheduler {
 
-    void scheduleSubmit(String projectId);
+    void scheduleAutoSend(String projectId);
+
+    void scheduleFormAutoSend(String projectId);
 
     void cancelSubmit(String projectId);
 }

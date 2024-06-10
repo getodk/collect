@@ -42,6 +42,9 @@ dependencies {
     implementation(Dependencies.androidx_core_ktx)
     implementation(Dependencies.kotlinx_coroutines_android)
     implementation(Dependencies.androidx_work_runtime)
+    implementation(project(":analytics")) {
+        exclude("com.google.firebase")
+    }
 
     testImplementation(Dependencies.hamcrest)
     testImplementation(Dependencies.robolectric)

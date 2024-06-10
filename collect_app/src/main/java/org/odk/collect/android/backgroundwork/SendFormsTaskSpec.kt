@@ -15,19 +15,17 @@ package org.odk.collect.android.backgroundwork
 
 import android.content.Context
 import androidx.work.BackoffPolicy
-import androidx.work.WorkerParameters
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.async.TaskSpec
-import org.odk.collect.async.WorkerAdapter
 import java.util.function.Supplier
 import javax.inject.Inject
 
-class AutoSendTaskSpec : TaskSpec {
+class SendFormsTaskSpec : TaskSpec {
     @Inject
     lateinit var instancesDataService: InstancesDataService
 
-    override val maxRetries: Int? = null
+    override val maxRetries: Int = 13 // Stop trying when backoff is > 5 days
     override val backoffPolicy = BackoffPolicy.EXPONENTIAL
     override val backoffDelay: Long = 60_000
 
@@ -35,18 +33,16 @@ class AutoSendTaskSpec : TaskSpec {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
+            val formAutoSend = inputData[TaskData.DATA_FORM_AUTO_SEND] != null
             if (projectId != null) {
-                instancesDataService.autoSendInstances(projectId)
+                if (formAutoSend) {
+                    instancesDataService.sendInstances(projectId, formAutoSend = true)
+                } else {
+                    instancesDataService.sendInstances(projectId)
+                }
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }
         }
     }
-
-    override fun getWorkManagerAdapter(): Class<out WorkerAdapter> {
-        return Adapter::class.java
-    }
-
-    class Adapter(context: Context, workerParams: WorkerParameters) :
-        WorkerAdapter(AutoSendTaskSpec(), context, workerParams)
 }

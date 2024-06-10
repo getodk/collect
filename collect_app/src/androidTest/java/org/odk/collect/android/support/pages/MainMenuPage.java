@@ -191,12 +191,12 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new MainMenuPage());
     }
 
-    public MainMenuPage enableAutoSend(TestScheduler scheduler) {
+    public MainMenuPage enableAutoSend(TestScheduler scheduler, int setting) {
         MainMenuPage mainMenuPage = openProjectSettingsDialog()
                 .clickSettings()
                 .clickFormManagement()
                 .clickOnString(org.odk.collect.strings.R.string.autosend)
-                .clickOnString(org.odk.collect.strings.R.string.wifi_cellular_autosend)
+                .clickOnString(setting)
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
 

@@ -16,7 +16,7 @@ import org.odk.collect.android.application.initialization.ApplicationInitializer
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.audio.AudioRecordingControllerFragment;
 import org.odk.collect.android.audio.AudioRecordingErrorDialogFragment;
-import org.odk.collect.android.backgroundwork.AutoSendTaskSpec;
+import org.odk.collect.android.backgroundwork.SendFormsTaskSpec;
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec;
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
 import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
@@ -78,7 +78,7 @@ import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
-import org.odk.collect.androidshared.network.NetworkStateProvider;
+import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.draw.DrawActivity;
 import org.odk.collect.googlemaps.GoogleMapFragment;
@@ -169,7 +169,7 @@ public interface AppDependencyComponent {
 
     void inject(ShowQRCodeFragment showQRCodeFragment);
 
-    void inject(AutoSendTaskSpec autoSendTaskSpec);
+    void inject(SendFormsTaskSpec sendFormsTaskSpec);
 
     void inject(AdminPasswordDialogFragment adminPasswordDialogFragment);
 

@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":settings"))
     implementation(project(":shared"))
     implementation(project(":strings"))
+    implementation(project(":async"))
     implementation(Dependencies.play_services_location)
     implementation(Dependencies.androidx_preference_ktx)
     implementation(Dependencies.mapbox_android_sdk)

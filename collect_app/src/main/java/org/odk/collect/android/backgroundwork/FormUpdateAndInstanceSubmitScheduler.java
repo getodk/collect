@@ -68,19 +68,31 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     }
 
     @Override
-    public void scheduleSubmit(String projectId) {
-        Scheduler.NetworkType networkType = null;
+    public void scheduleAutoSend(String projectId) {
+        Scheduler.NetworkType networkConstraint;
         Settings settings = settingsProvider.getUnprotectedSettings(projectId);
         AutoSend autoSendSetting = StringIdEnumUtils.getAutoSend(settings, application);
         if (autoSendSetting == AutoSend.WIFI_ONLY) {
-            networkType = Scheduler.NetworkType.WIFI;
+            networkConstraint = Scheduler.NetworkType.WIFI;
         } else if (autoSendSetting == AutoSend.CELLULAR_ONLY) {
-            networkType = Scheduler.NetworkType.CELLULAR;
+            networkConstraint = Scheduler.NetworkType.CELLULAR;
+        } else if (autoSendSetting == AutoSend.WIFI_AND_CELLULAR) {
+            networkConstraint = null;
+        } else {
+            return;
         }
 
         HashMap<String, String> inputData = new HashMap<>();
         inputData.put(TaskData.DATA_PROJECT_ID, projectId);
-        scheduler.networkDeferred(getAutoSendTag(projectId), new AutoSendTaskSpec(), inputData, networkType);
+        scheduler.networkDeferred(getAutoSendTag(projectId), new SendFormsTaskSpec(), inputData, networkConstraint);
+    }
+
+    @Override
+    public void scheduleFormAutoSend(String projectId) {
+        HashMap<String, String> inputData = new HashMap<>();
+        inputData.put(TaskData.DATA_PROJECT_ID, projectId);
+        inputData.put(TaskData.DATA_FORM_AUTO_SEND, "");
+        scheduler.networkDeferred(getAutoSendFormTag(projectId), new SendFormsTaskSpec(), inputData, null);
     }
 
     @Override
@@ -91,6 +103,10 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     @NotNull
     public String getAutoSendTag(String projectId) {
         return "AutoSendWorker:" + projectId;
+    }
+
+    public String getAutoSendFormTag(String projectId) {
+        return "auto_send_form:" + projectId;
     }
 
     @NotNull

@@ -9,9 +9,9 @@ import androidx.core.view.MenuProvider
 import org.odk.collect.android.R
 import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog
 import org.odk.collect.android.formlists.sorting.FormListSortingOption
-import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
+import org.odk.collect.async.network.NetworkStateProvider
 
 class BlankFormListMenuProvider(
     private val activity: ComponentActivity,

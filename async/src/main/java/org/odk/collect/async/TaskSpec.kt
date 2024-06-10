@@ -18,10 +18,4 @@ interface TaskSpec {
      * once instead of doing that after every single execution.
      */
     fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean>
-
-    /**
-     * Returns class that can be used to schedule this task using Android's
-     * WorkManager framework
-     */
-    fun getWorkManagerAdapter(): Class<out WorkerAdapter>
 }

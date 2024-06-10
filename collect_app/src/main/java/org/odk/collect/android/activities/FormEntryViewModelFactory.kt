@@ -19,6 +19,7 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationMa
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel
 import org.odk.collect.android.formentry.saving.DiskFormSaver
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ApplicationConstants
@@ -55,7 +56,8 @@ class FormEntryViewModelFactory(
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
     private val qrCodeCreator: QRCodeCreator,
-    private val htmlPrinter: HtmlPrinter
+    private val htmlPrinter: HtmlPrinter,
+    private val instancesDataService: InstancesDataService
 ) : AbstractSavedStateViewModelFactory(owner, null) {
 
     override fun <T : ViewModel> create(
@@ -86,7 +88,8 @@ class FormEntryViewModelFactory(
                     formSessionRepository.get(sessionId),
                     entitiesRepositoryProvider.get(projectId),
                     instancesRepositoryProvider.get(projectId),
-                    savepointsRepositoryProvider.get(projectId)
+                    savepointsRepositoryProvider.get(projectId),
+                    instancesDataService
                 )
             }
 

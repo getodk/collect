@@ -1,10 +1,11 @@
 package org.odk.collect.android.feature.settings;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.work.WorkManager;
 
 import org.junit.After;
 import org.junit.Rule;
@@ -15,34 +16,31 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.support.StubBarcodeViewDecoder;
+import org.odk.collect.android.support.TestDependencies;
+import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
+import org.odk.collect.android.support.pages.QRCodePage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.ResetStateRule;
 import org.odk.collect.android.support.rules.RunnableRule;
-import org.odk.collect.android.support.StubBarcodeViewDecoder;
-import org.odk.collect.android.support.TestScheduler;
-import org.odk.collect.android.support.pages.ProjectSettingsPage;
-import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.pages.QRCodePage;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.views.BarcodeViewDecoder;
-import org.odk.collect.async.Scheduler;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Collection;
 
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
-
 @RunWith(AndroidJUnit4.class)
 public class ConfigureWithQRCodeTest {
 
+    private final TestDependencies testDependencies = new TestDependencies();
     private final CollectTestRule rule = new CollectTestRule();
     private final StubQRCodeGenerator stubQRCodeGenerator = new StubQRCodeGenerator();
     private final StubBarcodeViewDecoder stubBarcodeViewDecoder = new StubBarcodeViewDecoder();
-    private final TestScheduler testScheduler = new TestScheduler();
 
     @Rule
-    public RuleChain copyFormChain = TestRuleChain.chain()
+    public RuleChain copyFormChain = TestRuleChain.chain(testDependencies)
             .around(new ResetStateRule(new AppDependencyModule() {
 
                 @Override
@@ -53,11 +51,6 @@ public class ConfigureWithQRCodeTest {
                 @Override
                 public QRCodeGenerator providesQRCodeGenerator() {
                     return stubQRCodeGenerator;
-                }
-
-                @Override
-                public Scheduler providesScheduler(WorkManager workManager) {
-                    return testScheduler;
                 }
             }))
             .around(new RunnableRule(stubQRCodeGenerator::setup))

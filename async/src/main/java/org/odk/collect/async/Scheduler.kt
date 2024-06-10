@@ -81,7 +81,8 @@ interface Scheduler {
 
     enum class NetworkType {
         WIFI,
-        CELLULAR
+        CELLULAR,
+        OTHER
     }
 }
 

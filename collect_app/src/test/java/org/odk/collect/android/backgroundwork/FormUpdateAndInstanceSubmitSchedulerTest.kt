@@ -9,6 +9,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.async.Scheduler
 import org.odk.collect.settings.enums.FormUpdateMode.MATCH_EXACTLY
@@ -83,48 +84,58 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
     }
 
     @Test
-    fun `scheduleSubmit passes current project ID`() {
+    fun `scheduleAutoSend passes current project ID`() {
         settingsProvider.getUnprotectedSettings("myProject")
             .save(ProjectKeys.KEY_AUTOSEND, "wifi_and_cellular")
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
-        manager.scheduleSubmit("myProject")
+        manager.scheduleAutoSend("myProject")
         verify(scheduler).networkDeferred(
             eq("AutoSendWorker:myProject"),
-            any<AutoSendTaskSpec>(),
+            any<SendFormsTaskSpec>(),
             eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject")),
             eq(null)
         )
     }
 
     @Test
-    fun `scheduleSubmit uses wifi network type when set in settings`() {
+    fun `scheduleAutoSend uses wifi network type when set in settings`() {
         settingsProvider.getUnprotectedSettings("myProject")
             .save(ProjectKeys.KEY_AUTOSEND, "wifi_only")
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
-        manager.scheduleSubmit("myProject")
+        manager.scheduleAutoSend("myProject")
         verify(scheduler).networkDeferred(
             eq("AutoSendWorker:myProject"),
-            any<AutoSendTaskSpec>(),
+            any<SendFormsTaskSpec>(),
             eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject")),
             eq(Scheduler.NetworkType.WIFI)
         )
     }
 
     @Test
-    fun `scheduleSubmit uses cellular network type when set in settings`() {
+    fun `scheduleAutoSend uses cellular network type when set in settings`() {
         settingsProvider.getUnprotectedSettings("myProject")
             .save(ProjectKeys.KEY_AUTOSEND, "cellular_only")
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
-        manager.scheduleSubmit("myProject")
+        manager.scheduleAutoSend("myProject")
         verify(scheduler).networkDeferred(
             eq("AutoSendWorker:myProject"),
-            any<AutoSendTaskSpec>(),
+            any<SendFormsTaskSpec>(),
             eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject")),
             eq(Scheduler.NetworkType.CELLULAR)
         )
+    }
+
+    @Test
+    fun `scheduleAutoSend does nothing if auto send is disabled`() {
+        settingsProvider.getUnprotectedSettings("myProject")
+            .save(ProjectKeys.KEY_AUTOSEND, "off")
+        val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
+
+        manager.scheduleAutoSend("myProject")
+        verifyNoInteractions(scheduler)
     }
 
     @Test

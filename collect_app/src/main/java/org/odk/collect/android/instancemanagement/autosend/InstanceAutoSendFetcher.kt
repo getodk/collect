@@ -1,33 +1,31 @@
 package org.odk.collect.android.instancemanagement.autosend
 
-import android.app.Application
+import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
-import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.settings.enums.AutoSend
-import org.odk.collect.settings.enums.StringIdEnumUtils.getAutoSend
 
 object InstanceAutoSendFetcher {
 
     fun getInstancesToAutoSend(
-        application: Application,
         instancesRepository: InstancesRepository,
         formsRepository: FormsRepository,
-        settingsProvider: SettingsProvider
+        formAutoSend: Boolean = false
     ): List<Instance> {
         val allFinalizedForms = instancesRepository.getAllByStatus(
             Instance.STATUS_COMPLETE,
             Instance.STATUS_SUBMISSION_FAILED
         )
 
-        val autoSendSetting =
-            settingsProvider.getUnprotectedSettings().getAutoSend(application)
+        val filter: (Form) -> Boolean = if (formAutoSend) {
+            { form -> form.autoSend != null && form.autoSend == "true" }
+        } else {
+            { form -> form.autoSend == null }
+        }
 
         return allFinalizedForms.filter {
-            formsRepository.getLatestByFormIdAndVersion(it.formId, it.formVersion)?.let { form ->
-                form.shouldFormBeSentAutomatically(autoSendSetting != AutoSend.OFF)
-            } ?: false
+            formsRepository.getLatestByFormIdAndVersion(it.formId, it.formVersion)
+                ?.let { form -> filter(form) } ?: false
         }
     }
 }
