@@ -11,7 +11,6 @@ class ConnectivityProvider(private val context: Context) : NetworkStateProvider 
                 when (connectivityManager.activeNetworkInfo?.type) {
                     ConnectivityManager.TYPE_WIFI -> Scheduler.NetworkType.WIFI
                     ConnectivityManager.TYPE_MOBILE -> Scheduler.NetworkType.CELLULAR
-                    null -> null
                     else -> Scheduler.NetworkType.OTHER
                 }
             } else {
