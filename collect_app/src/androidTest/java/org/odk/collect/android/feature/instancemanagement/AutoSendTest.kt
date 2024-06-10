@@ -177,8 +177,6 @@ class AutoSendTest {
 
     @Test
     fun whenFormHasAutoSendDisabled_fillingAndFinalizingForm_doesNotSendForm_regardlessOfSetting() {
-        testDependencies.server.alwaysReturnError()
-
         val mainMenuPage = rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
             .enableAutoSend(
