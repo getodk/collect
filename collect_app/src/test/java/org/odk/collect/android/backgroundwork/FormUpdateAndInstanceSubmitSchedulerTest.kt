@@ -84,7 +84,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
     }
 
     @Test
-    fun `scheduleSubmit passes current project ID`() {
+    fun `scheduleAutoSend passes current project ID`() {
         settingsProvider.getUnprotectedSettings("myProject")
             .save(ProjectKeys.KEY_AUTOSEND, "wifi_and_cellular")
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
@@ -99,7 +99,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
     }
 
     @Test
-    fun `scheduleSubmit uses wifi network type when set in settings`() {
+    fun `scheduleAutoSend uses wifi network type when set in settings`() {
         settingsProvider.getUnprotectedSettings("myProject")
             .save(ProjectKeys.KEY_AUTOSEND, "wifi_only")
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
@@ -114,7 +114,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
     }
 
     @Test
-    fun `scheduleSubmit uses cellular network type when set in settings`() {
+    fun `scheduleAutoSend uses cellular network type when set in settings`() {
         settingsProvider.getUnprotectedSettings("myProject")
             .save(ProjectKeys.KEY_AUTOSEND, "cellular_only")
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
@@ -129,7 +129,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
     }
 
     @Test
-    fun `scheduleSubmit does nothing if auto send is disabled`() {
+    fun `scheduleAutoSend does nothing if auto send is disabled`() {
         settingsProvider.getUnprotectedSettings("myProject")
             .save(ProjectKeys.KEY_AUTOSEND, "off")
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
