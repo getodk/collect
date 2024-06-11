@@ -34,7 +34,7 @@ class InstancesDataService(
     val sentCount: LiveData<Int> = appState.getLive(SENT_COUNT_KEY, 0)
 
     fun getInstances(projectId: String): Flow<List<Instance>> {
-        return appState.getFlow("instances", emptyList())
+        return appState.getFlow("instances:$projectId", emptyList())
     }
 
     fun update(projectId: String) {
@@ -58,7 +58,7 @@ class InstancesDataService(
         appState.setLive(EDITABLE_COUNT_KEY, editableInstances)
         appState.setLive(SENDABLE_COUNT_KEY, sendableInstances)
         appState.setLive(SENT_COUNT_KEY, sentInstances)
-        appState.setFlow("instances", instancesRepository.all)
+        appState.setFlow("instances:$projectId", instancesRepository.all)
 
         onUpdate()
     }
