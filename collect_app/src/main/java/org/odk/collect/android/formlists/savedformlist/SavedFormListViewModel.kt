@@ -39,7 +39,7 @@ class SavedFormListViewModel(
             _filterText.value = value
         }
 
-    val formsToDisplay: LiveData<List<Instance>> = instancesDataService.instances
+    val formsToDisplay: LiveData<List<Instance>> = instancesDataService.getInstances(projectId)
         .map { instances -> instances.filter { instance -> instance.deletedDate == null } }
         .combine(_sortOrder) { instances, order ->
             when (order) {

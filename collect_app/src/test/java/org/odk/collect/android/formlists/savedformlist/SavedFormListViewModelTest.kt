@@ -31,14 +31,14 @@ class SavedFormListViewModelTest {
     private val settings = InMemSettings()
 
     private val instancesDataService: InstancesDataService = mock {
-        on { instances } doReturn MutableStateFlow(emptyList())
+        on { getInstances(any()) } doReturn MutableStateFlow(emptyList())
     }
 
     @Test
     fun `formsToDisplay should not include deleted forms`() {
         val myForm = InstanceFixtures.instance(displayName = "My form", deletedDate = 1)
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
-        saveForms(listOf(myForm, yourForm))
+        saveForms("projectId", listOf(myForm, yourForm))
 
         val viewModel = SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
 
@@ -52,7 +52,7 @@ class SavedFormListViewModelTest {
     fun `setting filterText filters forms on display name`() {
         val myForm = InstanceFixtures.instance(displayName = "My form")
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
-        saveForms(listOf(myForm, yourForm))
+        saveForms("projectId", listOf(myForm, yourForm),)
 
         val viewModel =
             SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
@@ -74,7 +74,7 @@ class SavedFormListViewModelTest {
     fun `clearing filterText does not filter forms`() {
         val myForm = InstanceFixtures.instance(displayName = "My form")
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
-        saveForms(listOf(myForm, yourForm))
+        saveForms("projectId", listOf(myForm, yourForm),)
 
         val viewModel =
             SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
@@ -96,7 +96,7 @@ class SavedFormListViewModelTest {
     fun `filtering forms is not case sensitive`() {
         val myForm = InstanceFixtures.instance(displayName = "My form")
         val yourForm = InstanceFixtures.instance(displayName = "Your form")
-        saveForms(listOf(myForm, yourForm))
+        saveForms("projectId", listOf(myForm, yourForm),)
 
         val viewModel =
             SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
@@ -112,7 +112,7 @@ class SavedFormListViewModelTest {
     fun `can sort forms by ascending name`() {
         val a = InstanceFixtures.instance(displayName = "A")
         val b = InstanceFixtures.instance(displayName = "B")
-        saveForms(listOf(b, a))
+        saveForms("projectId", listOf(b, a),)
 
         val viewModel =
             SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
@@ -128,7 +128,7 @@ class SavedFormListViewModelTest {
     fun `can sort forms by descending name`() {
         val a = InstanceFixtures.instance(displayName = "A")
         val b = InstanceFixtures.instance(displayName = "B")
-        saveForms(listOf(a, b))
+        saveForms("projectId", listOf(a, b),)
 
         val viewModel =
             SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
@@ -144,7 +144,7 @@ class SavedFormListViewModelTest {
     fun `can sort forms by descending date`() {
         val a = InstanceFixtures.instance(displayName = "A", lastStatusChangeDate = 0)
         val b = InstanceFixtures.instance(displayName = "B", lastStatusChangeDate = 1)
-        saveForms(listOf(a, b))
+        saveForms("projectId", listOf(a, b),)
 
         val viewModel =
             SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
@@ -160,7 +160,7 @@ class SavedFormListViewModelTest {
     fun `can sort forms by ascending date`() {
         val a = InstanceFixtures.instance(displayName = "A", lastStatusChangeDate = 0)
         val b = InstanceFixtures.instance(displayName = "B", lastStatusChangeDate = 1)
-        saveForms(listOf(b, a))
+        saveForms("projectId", listOf(b, a),)
 
         val viewModel =
             SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
@@ -176,7 +176,7 @@ class SavedFormListViewModelTest {
     fun `sort order is retained between view models`() {
         val a = InstanceFixtures.instance(displayName = "A", lastStatusChangeDate = 0)
         val b = InstanceFixtures.instance(displayName = "B", lastStatusChangeDate = 1)
-        saveForms(listOf(b, a))
+        saveForms("projectId", listOf(b, a),)
 
         val viewModel =
             SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
@@ -224,7 +224,7 @@ class SavedFormListViewModelTest {
         assertThat(result.getOrAwaitValue(scheduler)!!.value, equalTo(1))
     }
 
-    private fun saveForms(instances: List<Instance>) {
-        whenever(instancesDataService.instances).doReturn(MutableStateFlow(instances))
+    private fun saveForms(projectId: String, instances: List<Instance>) {
+        whenever(instancesDataService.getInstances(projectId)).doReturn(MutableStateFlow(instances))
     }
 }

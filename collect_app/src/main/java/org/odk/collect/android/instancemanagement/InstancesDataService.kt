@@ -32,7 +32,10 @@ class InstancesDataService(
     val editableCount: LiveData<Int> = appState.getLive(EDITABLE_COUNT_KEY, 0)
     val sendableCount: LiveData<Int> = appState.getLive(SENDABLE_COUNT_KEY, 0)
     val sentCount: LiveData<Int> = appState.getLive(SENT_COUNT_KEY, 0)
-    val instances: Flow<List<Instance>> = appState.getFlow("instances", emptyList())
+
+    fun getInstances(projectId: String): Flow<List<Instance>> {
+        return appState.getFlow("instances", emptyList())
+    }
 
     fun update(projectId: String) {
         val projectDependencyProvider = projectDependencyProviderFactory.create(projectId)
