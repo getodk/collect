@@ -8,17 +8,20 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.odk.collect.androidshared.livedata.LiveDataUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.addOnClickListener
 import org.odk.collect.async.Scheduler
 import org.odk.collect.maps.databinding.OfflineMapLayersPickerBinding
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.webpage.ExternalWebPageHelper
 
@@ -30,7 +33,17 @@ class OfflineMapLayersPicker(
     private val externalWebPageHelper: ExternalWebPageHelper
 ) : BottomSheetDialogFragment(),
     OfflineMapLayersPickerAdapter.OfflineMapLayersPickerAdapterInterface {
-    private val viewModel: OfflineMapLayersViewModel by activityViewModels {
+    private val stateViewModel: OfflineMapLayersStateViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return OfflineMapLayersStateViewModel(
+                    settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER)
+                ) as T
+            }
+        }
+    }
+
+    private val sharedViewModel: OfflineMapLayersViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return OfflineMapLayersViewModel(referenceLayerRepository, scheduler, settingsProvider) as T
@@ -42,7 +55,7 @@ class OfflineMapLayersPicker(
 
     private val getLayers = registerForActivityResult(ActivityResultContracts.GetMultipleContents(), registry) { uris ->
         if (uris.isNotEmpty()) {
-            viewModel.loadLayersToImport(uris, requireContext())
+            sharedViewModel.loadLayersToImport(uris, requireContext())
             DialogFragmentUtils.showIfNotShowing(
                 OfflineMapLayersImporter::class.java,
                 childFragmentManager
@@ -83,7 +96,7 @@ class OfflineMapLayersPicker(
         }
 
         binding.save.setOnClickListener {
-            viewModel.saveCheckedLayer()
+            sharedViewModel.saveCheckedLayer(stateViewModel.getCheckedLayer())
             dismiss()
         }
 
@@ -93,7 +106,7 @@ class OfflineMapLayersPicker(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.isLoading.observe(this) { isLoading ->
+        sharedViewModel.isLoading.observe(this) { isLoading ->
             if (isLoading) {
                 binding.progressIndicator.visibility = View.VISIBLE
                 binding.layers.visibility = View.GONE
@@ -107,8 +120,12 @@ class OfflineMapLayersPicker(
 
         val adapter = OfflineMapLayersPickerAdapter(this)
         binding.layers.setAdapter(adapter)
-        viewModel.existingLayers.observe(this) { layers ->
-            adapter.setData(layers)
+        LiveDataUtils.zip3(
+            sharedViewModel.existingLayers,
+            stateViewModel.checkedLayerId,
+            stateViewModel.expandedLayerIds
+        ).observe(this) { (layers, checkedLayerId, expandedLayerIds) ->
+            updateAdapter(layers, checkedLayerId, expandedLayerIds, adapter)
         }
     }
 
@@ -124,11 +141,11 @@ class OfflineMapLayersPicker(
     }
 
     override fun onLayerChecked(layerId: String?) {
-        viewModel.onLayerChecked(layerId)
+        stateViewModel.onLayerChecked(layerId)
     }
 
     override fun onLayerToggled(layerId: String?) {
-        viewModel.onLayerToggled(layerId)
+        stateViewModel.onLayerToggled(layerId)
     }
 
     override fun onDeleteLayer(layerItem: CheckableReferenceLayer) {
@@ -136,13 +153,46 @@ class OfflineMapLayersPicker(
             .setMessage(requireActivity().getLocalizedString(org.odk.collect.strings.R.string.delete_layer_confirmation_message, layerItem.name))
             .setPositiveButton(org.odk.collect.strings.R.string.delete_layer) { _, _ ->
                 layerItem.file?.delete()
-                if (layerItem.id == viewModel.getCheckedLayer()) {
-                    viewModel.onLayerChecked(null)
+                if (layerItem.id == stateViewModel.getCheckedLayer()) {
+                    stateViewModel.onLayerChecked(null)
                 }
-                viewModel.onLayerDeleted(layerItem.id)
+                stateViewModel.onLayerDeleted(layerItem.id)
+                sharedViewModel.onLayerDeleted(layerItem.id)
             }
             .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
             .create()
             .show()
+    }
+
+    private fun updateAdapter(
+        layers: List<ReferenceLayer>?,
+        checkedLayerId: String?,
+        expandedLayerIds: List<String?>,
+        adapter: OfflineMapLayersPickerAdapter
+    ) {
+        if (layers == null) {
+            return
+        }
+
+        val newData = mutableListOf(
+            CheckableReferenceLayer(
+                null,
+                null,
+                requireContext().getLocalizedString(org.odk.collect.strings.R.string.none),
+                checkedLayerId == null,
+                false
+            )
+        )
+
+        newData.addAll(layers.map {
+            CheckableReferenceLayer(
+                it.id,
+                it.file,
+                it.name,
+                checkedLayerId == it.id,
+                expandedLayerIds.contains(it.id)
+            )
+        })
+        adapter.setData(newData)
     }
 }

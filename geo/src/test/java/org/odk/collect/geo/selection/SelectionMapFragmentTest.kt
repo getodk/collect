@@ -51,6 +51,7 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.odk.collect.webpage.ExternalWebPageHelper
@@ -112,7 +113,7 @@ class SelectionMapFragmentTest {
                 }
 
                 override fun providesSettingsProvider(): SettingsProvider {
-                    return mock()
+                    return InMemSettingsProvider()
                 }
 
                 override fun providesExternalWebPageHelper(): ExternalWebPageHelper {
