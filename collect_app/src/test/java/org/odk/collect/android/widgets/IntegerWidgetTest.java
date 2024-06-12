@@ -2,16 +2,20 @@ package org.odk.collect.android.widgets;
 
 import androidx.annotation.NonNull;
 
+import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.data.IntegerData;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.junit.Test;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.base.GeneralStringWidgetTest;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.utilities.Appearances.MASKED;
 import static org.odk.collect.android.utilities.Appearances.THOUSANDS_SEP;
 
 import android.text.InputType;
@@ -26,6 +30,7 @@ public class IntegerWidgetTest extends GeneralStringWidgetTest<IntegerWidget, In
     @NonNull
     @Override
     public IntegerWidget createWidget() {
+        when(formEntryPrompt.getDataType()).thenReturn(Constants.DATATYPE_INTEGER);
         return new IntegerWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride));
     }
 
@@ -63,12 +68,11 @@ public class IntegerWidgetTest extends GeneralStringWidgetTest<IntegerWidget, In
         assertThat(widget.widgetAnswerText.getBinding().editText.getTransformationMethod().getClass(), equalTo(SingleLineTransformationMethod.class));
     }
 
-    @Override
     @Test
-    public void verifyInputTypeWithMaskedAppearance() {
-        when(formEntryPrompt.getAppearanceHint()).thenReturn(MASKED);
-        IntegerWidget widget = getWidget();
-        assertThat(widget.widgetAnswerText.getBinding().editText.getInputType(), equalTo(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED));
-        assertThat(widget.widgetAnswerText.getBinding().editText.getTransformationMethod().getClass(), equalTo(PasswordTransformationMethod.class));
+    public void answersShouldNotBeMaskedIfMaskedAppearanceIsUsed() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn(Appearances.MASKED);
+
+        assertThat(getSpyWidget().widgetAnswerText.getBinding().editText.getTransformationMethod(), is(not(instanceOf(PasswordTransformationMethod.class))));
+        assertThat(getSpyWidget().widgetAnswerText.getBinding().textView.getTransformationMethod(), is(not(instanceOf(PasswordTransformationMethod.class))));
     }
 }

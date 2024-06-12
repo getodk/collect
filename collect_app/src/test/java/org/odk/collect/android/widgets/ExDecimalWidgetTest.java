@@ -2,11 +2,13 @@ package org.odk.collect.android.widgets;
 
 import androidx.annotation.NonNull;
 
+import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.data.DecimalData;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.javarosa.core.model.data.IAnswerData;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.base.GeneralExStringWidgetTest;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.StringRequester;
@@ -16,11 +18,12 @@ import java.util.Locale;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.utilities.Appearances.MASKED;
 import static org.odk.collect.android.utilities.Appearances.THOUSANDS_SEP;
 
 import android.text.InputType;
@@ -42,6 +45,7 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
     @NonNull
     @Override
     public ExDecimalWidget createWidget() {
+        when(formEntryPrompt.getDataType()).thenReturn(Constants.DATATYPE_DECIMAL);
         return new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), stringRequester);
     }
 
@@ -103,13 +107,11 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
         assertThat(widget.binding.widgetAnswerText.getBinding().textView.getTransformationMethod(), equalTo(null));
     }
 
-    @Override
     @Test
-    public void verifyInputTypeWithMaskedAppearance() {
-        when(formEntryPrompt.getAppearanceHint()).thenReturn(MASKED);
-        ExDecimalWidget widget = getWidget();
-        assertThat(widget.binding.widgetAnswerText.getBinding().editText.getInputType(), equalTo(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL));
-        assertThat(widget.binding.widgetAnswerText.getBinding().editText.getTransformationMethod().getClass(), equalTo(PasswordTransformationMethod.class));
-        assertThat(widget.binding.widgetAnswerText.getBinding().textView.getTransformationMethod().getClass(), equalTo(PasswordTransformationMethod.class));
+    public void answersShouldNotBeMaskedIfMaskedAppearanceIsUsed() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn(Appearances.MASKED);
+
+        assertThat(getSpyWidget().binding.widgetAnswerText.getBinding().editText.getTransformationMethod(), is(not(instanceOf(PasswordTransformationMethod.class))));
+        assertThat(getSpyWidget().binding.widgetAnswerText.getBinding().textView.getTransformationMethod(), is(not(instanceOf(PasswordTransformationMethod.class))));
     }
 }

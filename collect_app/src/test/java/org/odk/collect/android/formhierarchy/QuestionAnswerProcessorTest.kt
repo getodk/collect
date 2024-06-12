@@ -27,73 +27,57 @@ class QuestionAnswerProcessorTest {
     }
 
     @Test
-    fun noAnswerShouldBeDisplayedIfItDoesNotExistAndMaskedAppearanceIsUsedForTextAndNumberDataTypes() {
-        listOf(
-            Constants.DATATYPE_TEXT,
-            Constants.DATATYPE_INTEGER,
-            Constants.DATATYPE_DECIMAL
-        ).forEach {
-            val question = mock<QuestionDef>()
-            val prompt = MockFormEntryPromptBuilder()
-                .withQuestion(question)
-                .withDataType(it)
-                .withControlType(Constants.CONTROL_INPUT)
-                .withAppearance(Appearances.MASKED)
-                .build()
+    fun noAnswerShouldBeDisplayedIfItDoesNotExistAndMaskedAppearanceIsUsedForTextDataTypes() {
+        val question = mock<QuestionDef>()
+        val prompt = MockFormEntryPromptBuilder()
+            .withQuestion(question)
+            .withDataType(Constants.DATATYPE_TEXT)
+            .withControlType(Constants.CONTROL_INPUT)
+            .withAppearance(Appearances.MASKED)
+            .build()
 
-            val answer = QuestionAnswerProcessor.getQuestionAnswer(prompt, mock(), mock())
+        val answer = QuestionAnswerProcessor.getQuestionAnswer(prompt, mock(), mock())
 
-            assertThat(answer, equalTo(""))
-        }
+        assertThat(answer, equalTo(""))
     }
 
     @Test
-    fun noAnswerShouldBeDisplayedIfItIsEmptyAndMaskedAppearanceIsUsedForTextAndNumberDataTypes() {
-        listOf(
-            Constants.DATATYPE_TEXT,
-            Constants.DATATYPE_INTEGER,
-            Constants.DATATYPE_DECIMAL
-        ).forEach {
-            val question = mock<QuestionDef>()
-            val prompt = MockFormEntryPromptBuilder()
-                .withQuestion(question)
-                .withAnswerDisplayText("")
-                .withAppearance(Appearances.MASKED)
-                .withControlType(Constants.CONTROL_INPUT)
-                .withDataType(it)
-                .build()
+    fun noAnswerShouldBeDisplayedIfItIsEmptyAndMaskedAppearanceIsUsedForTextDataTypes() {
+        val question = mock<QuestionDef>()
+        val prompt = MockFormEntryPromptBuilder()
+            .withQuestion(question)
+            .withAnswerDisplayText("")
+            .withAppearance(Appearances.MASKED)
+            .withControlType(Constants.CONTROL_INPUT)
+            .withDataType(Constants.DATATYPE_TEXT)
+            .build()
 
-            val answer = QuestionAnswerProcessor.getQuestionAnswer(prompt, mock(), mock())
+        val answer = QuestionAnswerProcessor.getQuestionAnswer(prompt, mock(), mock())
 
-            assertThat(answer, equalTo(""))
-        }
+        assertThat(answer, equalTo(""))
     }
 
     @Test
-    fun maskedAnswerShouldBeDisplayedIfItExistAndMaskedAppearanceIsUsedForTextAndNumberDataTypes() {
-        listOf(
-            Constants.DATATYPE_TEXT,
-            Constants.DATATYPE_INTEGER,
-            Constants.DATATYPE_DECIMAL
-        ).forEach {
-            val question = mock<QuestionDef>()
-            val prompt = MockFormEntryPromptBuilder()
-                .withQuestion(question)
-                .withAnswerDisplayText("blah")
-                .withAppearance(Appearances.MASKED)
-                .withControlType(Constants.CONTROL_INPUT)
-                .withDataType(it)
-                .build()
+    fun maskedAnswerShouldBeDisplayedIfItExistAndMaskedAppearanceIsUsedForTextDataTypes() {
+        val question = mock<QuestionDef>()
+        val prompt = MockFormEntryPromptBuilder()
+            .withQuestion(question)
+            .withAnswerDisplayText("blah")
+            .withAppearance(Appearances.MASKED)
+            .withControlType(Constants.CONTROL_INPUT)
+            .withDataType(Constants.DATATYPE_TEXT)
+            .build()
 
-            val answer = QuestionAnswerProcessor.getQuestionAnswer(prompt, mock(), mock())
+        val answer = QuestionAnswerProcessor.getQuestionAnswer(prompt, mock(), mock())
 
-            assertThat(answer, equalTo("••••••••••"))
-        }
+        assertThat(answer, equalTo("••••••••••"))
     }
 
     @Test
-    fun originalAnswerShouldBeDisplayedIfItExistAndMaskedAppearanceIsUsedForDataTypesOtherThanTextAndNumber() {
+    fun originalAnswerShouldBeDisplayedIfItExistAndMaskedAppearanceIsUsedForDataTypesOtherThanText() {
         listOf(
+            Constants.DATATYPE_INTEGER,
+            Constants.DATATYPE_DECIMAL,
             Constants.DATATYPE_DATE_TIME,
             Constants.DATATYPE_DATE,
             Constants.DATATYPE_TIME,
@@ -120,7 +104,7 @@ class QuestionAnswerProcessorTest {
     }
 
     @Test
-    fun originalAnswerShouldBeDisplayedIfItExistAndMaskedAppearanceIsUsedButControlTypeIsOtherThanInput() {
+    fun originalAnswerShouldBeDisplayedIfItExistAndMaskedAppearanceIsUsedForDataTypesAndControlTypeOtherThanInput() {
         listOf(
             Constants.CONTROL_RANGE,
             Constants.CONTROL_RANK,
