@@ -17,19 +17,19 @@ class OfflineMapLayersStateViewModel(settingsProvider: SettingsProvider) : ViewM
     val checkedLayerId: LiveData<String?> = _checkedLayerId
 
     fun onLayerChecked(layerId: String?) {
-        _checkedLayerId.postValue(layerId)
+        _checkedLayerId.value = layerId
     }
 
     fun onLayerToggled(layerId: String?) {
         if (_expandedLayerIds.value.contains(layerId)) {
-            _expandedLayerIds.postValue(_expandedLayerIds.value.filter { it != layerId })
+            _expandedLayerIds.value = _expandedLayerIds.value.filter { it != layerId }
         } else {
-            _expandedLayerIds.postValue(_expandedLayerIds.value.plus(layerId))
+            _expandedLayerIds.value = _expandedLayerIds.value.plus(layerId)
         }
     }
 
     fun onLayerDeleted(layerId: String?) {
-        _expandedLayerIds.postValue(_expandedLayerIds.value.filter { it != layerId })
+        _expandedLayerIds.value = _expandedLayerIds.value.filter { it != layerId }
     }
 
     fun getCheckedLayer(): String? {
