@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.adapters;
 
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,23 +78,25 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
 
         final TextView textView;
         final ThemeUtils themeUtils;
+        private final ColorDrawable background;
 
         ItemViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.rank_item_text);
             textView.setTextSize(QuestionFontSizeUtils.getQuestionFontSize());
             themeUtils = new ThemeUtils(itemView.getContext());
+            background = (ColorDrawable) itemView.getBackground();
         }
 
         public void onItemSelected() {
             GradientDrawable border = new GradientDrawable();
             border.setStroke(10, themeUtils.getAccentColor());
-            border.setColor(textView.getContext().getResources().getColor(R.color.colorSurfaceContainerLow));
+            border.setColor(background.getColor());
             itemView.setBackground(border);
         }
 
         public void onItemClear() {
-            itemView.setBackgroundColor(textView.getContext().getResources().getColor(R.color.colorSurfaceContainerLow));
+            itemView.setBackground(background);
         }
     }
 }
