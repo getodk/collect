@@ -147,9 +147,14 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
             baseCategory.addPreference(pref)
         }
 
-        // Clear the reference layer if it isn't supported by the new basemap.
+        // Clear the reference layer if it does not exist or it isn't supported by the new basemap.
         val layerId = settingsProvider.getUnprotectedSettings().getString(REFERENCE_LAYER_KEY)
-        if (layerId != null && !cftor.supportsLayer(referenceLayerRepository.get(layerId)!!.file)) {
+        if (layerId != null) {
+            val layer = referenceLayerRepository.get(layerId)
+            if (layer == null || !cftor.supportsLayer(layer.file)) {
+                settingsProvider.getUnprotectedSettings().save(REFERENCE_LAYER_KEY, null)
+            }
+
             settingsProvider.getUnprotectedSettings().save(REFERENCE_LAYER_KEY, null)
         }
     }
