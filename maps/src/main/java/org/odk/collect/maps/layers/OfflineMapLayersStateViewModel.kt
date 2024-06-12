@@ -5,12 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 
-class OfflineMapLayersStateViewModel(checkedLayerId: String?) : ViewModel() {
+class OfflineMapLayersStateViewModel(settingsProvider: SettingsProvider) : ViewModel() {
     private val _expandedLayerIds = MutableNonNullLiveData<List<String?>>(emptyList())
     val expandedLayerIds: NonNullLiveData<List<String?>> = _expandedLayerIds
 
-    private val _checkedLayerId = MutableLiveData<String?>(checkedLayerId)
+    private val _checkedLayerId =
+        MutableLiveData<String?>(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER))
     val checkedLayerId: LiveData<String?> = _checkedLayerId
 
     fun onLayerChecked(layerId: String?) {

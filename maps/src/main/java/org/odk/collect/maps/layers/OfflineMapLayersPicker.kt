@@ -21,7 +21,6 @@ import org.odk.collect.androidshared.ui.addOnClickListener
 import org.odk.collect.async.Scheduler
 import org.odk.collect.maps.databinding.OfflineMapLayersPickerBinding
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.webpage.ExternalWebPageHelper
 
@@ -36,9 +35,7 @@ class OfflineMapLayersPicker(
     private val stateViewModel: OfflineMapLayersStateViewModel by viewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return OfflineMapLayersStateViewModel(
-                    settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER)
-                ) as T
+                return OfflineMapLayersStateViewModel(settingsProvider) as T
             }
         }
     }
