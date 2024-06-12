@@ -21,6 +21,7 @@ import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.strings.UUIDGenerator
 
 @RunWith(AndroidJUnit4::class)
@@ -68,10 +69,10 @@ class MapsPreferencesFragmentTest {
     @Test
     fun `if saved layer does not exist it is set to 'none'`() {
         val settings = settingsProvider.getUnprotectedSettings()
-        settings.save(MapsPreferencesFragment.REFERENCE_LAYER_KEY, "blah")
+        settings.save(ProjectKeys.KEY_REFERENCE_LAYER, "blah")
 
         launcherRule.launch(MapsPreferencesFragment::class.java)
 
-        assertThat(settings.getString(MapsPreferencesFragment.REFERENCE_LAYER_KEY), equalTo(null))
+        assertThat(settings.getString(ProjectKeys.KEY_REFERENCE_LAYER), equalTo(null))
     }
 }
