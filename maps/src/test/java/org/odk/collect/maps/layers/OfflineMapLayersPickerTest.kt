@@ -499,6 +499,30 @@ class OfflineMapLayersPickerTest {
         assertThat(layerFile2.exists(), equalTo(true))
     }
 
+    @Test
+    fun `progress indicator is displayed during deleting layers`() {
+        val layerFile1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+            ReferenceLayer("1", layerFile1, "layer1"),
+        ))
+
+        launchFragment()
+
+        scheduler.flush()
+
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(scrollTo(), click())
+        onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
+
+        onView(withId(R.id.progress_indicator)).check(matches(isDisplayed()))
+        onView(withId(R.id.layers)).check(matches(not(isDisplayed())))
+
+        scheduler.flush()
+
+        onView(withId(R.id.progress_indicator)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.layers)).check(matches(isDisplayed()))
+    }
+
     private fun assertLayerCollapsed(position: Int) {
         onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.arrow)).check(matches(withImageDrawable(org.odk.collect.icons.R.drawable.ic_baseline_expand_24)))
         onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.path)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))

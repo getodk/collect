@@ -149,12 +149,11 @@ class OfflineMapLayersPicker(
         MaterialAlertDialogBuilder(requireActivity())
             .setMessage(requireActivity().getLocalizedString(org.odk.collect.strings.R.string.delete_layer_confirmation_message, layerItem.name))
             .setPositiveButton(org.odk.collect.strings.R.string.delete_layer) { _, _ ->
-                layerItem.file?.delete()
                 if (layerItem.id == stateViewModel.getCheckedLayer()) {
                     stateViewModel.onLayerChecked(null)
                 }
                 stateViewModel.onLayerDeleted(layerItem.id)
-                sharedViewModel.onLayerDeleted(layerItem.id)
+                sharedViewModel.onLayerDeleted(layerItem.id, layerItem.file)
             }
             .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
             .create()
