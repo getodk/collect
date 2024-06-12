@@ -32,6 +32,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -470,7 +471,7 @@ class OfflineMapLayersPickerTest {
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(0))
         onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText("layer1")))
-        assertThat(layerFile1.exists(), equalTo(true))
+        verify(referenceLayerRepository, never()).delete("1")
     }
 
     @Test
@@ -495,8 +496,8 @@ class OfflineMapLayersPickerTest {
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
         onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText("layer2")))
-        assertThat(layerFile1.exists(), equalTo(false))
-        assertThat(layerFile2.exists(), equalTo(true))
+        verify(referenceLayerRepository).delete("1")
+        verify(referenceLayerRepository, never()).delete("2")
     }
 
     @Test

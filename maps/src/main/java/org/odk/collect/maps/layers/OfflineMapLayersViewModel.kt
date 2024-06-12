@@ -91,10 +91,10 @@ class OfflineMapLayersViewModel(
         settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, layerId)
     }
 
-    fun onLayerDeleted(layerId: String?, layerFile: File?) {
+    fun onLayerDeleted(layerId: String) {
         _isLoading.value = true
         scheduler.immediate {
-            layerFile?.delete()
+            referenceLayerRepository.delete(layerId)
             _existingLayers.postValue(_existingLayers.value?.filter { it.id != layerId })
             _isLoading.postValue(false)
         }
