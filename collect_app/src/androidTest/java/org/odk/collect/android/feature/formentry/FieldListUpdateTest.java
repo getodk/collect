@@ -57,7 +57,6 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.hamcrest.Matcher;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -393,7 +392,6 @@ public class FieldListUpdateTest {
     }
 
     @Test
-    @Ignore("https://github.com/getodk/collect/issues/5996")
     public void listOfQuestionsShouldNotBeScrolledToTheLastEditedQuestionAfterClickingOnAQuestion() {
         new FormEntryPage("fieldlist-updates")
                 .clickGoToArrow()
@@ -401,8 +399,8 @@ public class FieldListUpdateTest {
                 .clickOnGroup("Long list of questions")
                 .clickOnQuestion("Question1")
                 .answerQuestion(0, "X")
-                .activateTextQuestion(19)
-                .checkIsTranslationDisplayed("Question20");
+                .clickOnQuestionField("Question20")
+                .assertText("Question20");
     }
 
     @Test
@@ -415,7 +413,7 @@ public class FieldListUpdateTest {
                 .assertTextDoesNotExist("Target16")
                 .clickOnString(org.odk.collect.strings.R.string.capture_audio)
                 .clickOnContentDescription(org.odk.collect.strings.R.string.stop_recording)
-                .checkIsTranslationDisplayed("Target16")
+                .assertText("Target16")
                 .clickOnString(org.odk.collect.strings.R.string.delete_answer_file)
                 .clickOnTextInDialog(org.odk.collect.strings.R.string.delete_answer_file, new FormEntryPage("fieldlist-updates"))
                 .assertTextDoesNotExist("Target16");

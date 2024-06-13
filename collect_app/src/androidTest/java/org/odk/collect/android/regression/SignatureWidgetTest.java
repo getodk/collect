@@ -35,7 +35,7 @@ public class SignatureWidgetTest {
                 .clickOnId(R.id.sign_button)
                 .waitForRotationToEnd()
                 .pressBack(new SaveOrIgnoreDrawingDialog<>("Gather Signature", new FormEntryPage("All widgets")))
-                .checkIsTranslationDisplayed("Exit Gather Signature", "Salir Adjuntar firma")
+                .assertText("Exit Gather Signature")
                 .assertText(org.odk.collect.strings.R.string.keep_changes)
                 .clickDiscardChanges()
                 .waitForRotationToEnd()

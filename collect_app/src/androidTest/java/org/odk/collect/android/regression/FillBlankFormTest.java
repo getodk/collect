@@ -97,7 +97,7 @@ public class FillBlankFormTest {
         rule.startAtMainMenu()
                 .copyForm("1560_DateData.xml")
                 .startBlankForm("1560_DateData")
-                .checkIsTranslationDisplayed("Jan 01, 1900", "01 ene. 1900")
+                .assertText("Jan 01, 1900")
                 .swipeToEndScreen("01/01/00")
                 .clickFinalize()
 

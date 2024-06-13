@@ -8,21 +8,27 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
+import static org.odk.collect.android.support.matchers.CustomMatchers.isQuestionView;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
 import android.os.Build;
+import android.view.View;
 
 import androidx.test.core.app.ApplicationProvider;
 
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.Interactions;
 import org.odk.collect.android.support.WaitFor;
 
 import java.util.concurrent.Callable;
@@ -51,7 +57,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
         // Check we are not on the Form Hierarchy page
         assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_beginning);
         assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_end);
-        
+
         return this;
     }
 
@@ -312,9 +318,10 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage activateTextQuestion(int index) {
-        onView(withIndex(withClassName(endsWith("EditText")), index)).perform(scrollTo());
-        onView(withIndex(withClassName(endsWith("EditText")), index)).perform(click());
+    public FormEntryPage clickOnQuestionField(String questionText) {
+        Matcher<View> classMatcher = withClassName(endsWith("EditText"));
+        Matcher<View> questionViewMatcher = isQuestionView(questionText);
+        Interactions.clickOn(allOf(classMatcher, isDescendantOfA(questionViewMatcher)));
         return this;
     }
 

@@ -10,7 +10,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoActivityResumedException
-import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
@@ -166,17 +165,6 @@ abstract class Page<T : Page<T>> {
                 index
             )
         ).check(doesNotExist())
-        return this as T
-    }
-
-    fun checkIsTranslationDisplayed(vararg text: String?): T {
-        for (s in text) {
-            try {
-                onView(withText(s)).check(matches(isDisplayed()))
-            } catch (e: NoMatchingViewException) {
-                Timber.i(e)
-            }
-        }
         return this as T
     }
 
