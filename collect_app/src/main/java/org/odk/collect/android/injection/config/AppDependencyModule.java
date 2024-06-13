@@ -574,9 +574,7 @@ public class AppDependencyModule {
         return new DirectoryReferenceLayerRepository(
                 storagePathProvider.getOdkDirPath(StorageSubdirectory.SHARED_LAYERS),
                 storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS),
-                () -> MapConfiguratorProvider.getConfigurator(
-                        settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_BASEMAP_SOURCE)
-                )
+                MapConfiguratorProvider.getConfigurator(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_BASEMAP_SOURCE))
         );
     }
 

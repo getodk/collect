@@ -19,8 +19,9 @@ class DirectoryReferenceLayerRepositoryTest {
     private val mapConfigurator = StubMapConfigurator()
     private val repository = DirectoryReferenceLayerRepository(
         sharedLayersDir.absolutePath,
-        projectLayersDir.absolutePath
-    ) { mapConfigurator }
+        projectLayersDir.absolutePath,
+        mapConfigurator
+    )
 
     @Test
     fun getAll_returnsAllSupportedLayersInTheDirectory() {

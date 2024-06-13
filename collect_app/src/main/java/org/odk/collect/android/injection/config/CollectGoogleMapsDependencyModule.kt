@@ -6,19 +6,17 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
 
 class CollectGoogleMapsDependencyModule(
-    private val referenceLayerRepository: ReferenceLayerRepository,
-    private val locationClient: LocationClient,
-    private val settingsProvider: SettingsProvider
+    private val appDependencyComponent: AppDependencyComponent
 ) : GoogleMapsDependencyModule() {
     override fun providesReferenceLayerRepository(): ReferenceLayerRepository {
-        return referenceLayerRepository
+        return appDependencyComponent.referenceLayerRepository()
     }
 
     override fun providesLocationClient(): LocationClient {
-        return locationClient
+        return appDependencyComponent.locationClient()
     }
 
     override fun providesSettingsProvider(): SettingsProvider {
-        return settingsProvider
+        return appDependencyComponent.settingsProvider()
     }
 }

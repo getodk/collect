@@ -8,14 +8,14 @@ import java.io.File
 class DirectoryReferenceLayerRepository(
     private val sharedLayersDirPath: String,
     private val projectLayersDirPath: String,
-    private val getMapConfigurator: () -> MapConfigurator
+    private val mapConfigurator: MapConfigurator
 ) : ReferenceLayerRepository {
 
     override fun getAll(): List<ReferenceLayer> {
         return getAllFilesWithDirectory()
             .map { ReferenceLayer(getIdForFile(it.second, it.first), it.first, getName(it.first)) }
             .distinctBy { it.id }
-            .filter { getMapConfigurator().supportsLayer(it.file) }
+            .filter { mapConfigurator.supportsLayer(it.file) }
     }
 
     override fun get(id: String): ReferenceLayer? {
@@ -50,6 +50,6 @@ class DirectoryReferenceLayerRepository(
         PathUtils.getRelativeFilePath(directoryPath, file.absolutePath)
 
     private fun getName(file: File): String {
-        return getMapConfigurator().getDisplayName(file)
+        return mapConfigurator.getDisplayName(file)
     }
 }

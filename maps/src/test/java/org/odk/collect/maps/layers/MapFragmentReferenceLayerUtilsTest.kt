@@ -57,7 +57,7 @@ class MapFragmentReferenceLayerUtilsTest {
         assertNotNull(
             MapFragmentReferenceLayerUtils.getReferenceLayerFile(
                 config,
-                DirectoryReferenceLayerRepository(layersPath, "") { mapConfigurator }
+                DirectoryReferenceLayerRepository(layersPath, "", mapConfigurator)
             )
         )
     }

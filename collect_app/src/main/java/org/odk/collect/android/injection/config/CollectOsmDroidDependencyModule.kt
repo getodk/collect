@@ -9,25 +9,23 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 
 class CollectOsmDroidDependencyModule(
-    private val referenceLayerRepository: ReferenceLayerRepository,
-    private val locationClient: LocationClient,
-    private val settingsProvider: SettingsProvider
+    private val appDependencyComponent: AppDependencyComponent
 ) : OsmDroidDependencyModule() {
     override fun providesReferenceLayerRepository(): ReferenceLayerRepository {
-        return referenceLayerRepository
+        return appDependencyComponent.referenceLayerRepository()
     }
 
     override fun providesLocationClient(): LocationClient {
-        return locationClient
+        return appDependencyComponent.locationClient()
     }
 
     override fun providesMapConfigurator(): MapConfigurator {
         return MapConfiguratorProvider.getConfigurator(
-            settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_BASEMAP_SOURCE)
+            appDependencyComponent.settingsProvider().getUnprotectedSettings().getString(ProjectKeys.KEY_BASEMAP_SOURCE)
         )
     }
 
     override fun providesSettingsProvider(): SettingsProvider {
-        return settingsProvider
+        return appDependencyComponent.settingsProvider()
     }
 }

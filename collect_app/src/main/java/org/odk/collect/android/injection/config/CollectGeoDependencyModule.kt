@@ -17,17 +17,11 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.webpage.ExternalWebPageHelper
 
 class CollectGeoDependencyModule(
-    private val mapFragmentFactory: MapFragmentFactory,
-    private val locationClient: LocationClient,
-    private val scheduler: Scheduler,
-    private val permissionChecker: PermissionsChecker,
-    private val referenceLayerRepository: ReferenceLayerRepository,
-    private val settingsProvider: SettingsProvider,
-    private val externalWebPageHelper: ExternalWebPageHelper
+    private val appDependencyComponent: AppDependencyComponent
 ) : GeoDependencyModule() {
 
     override fun providesMapFragmentFactory(): MapFragmentFactory {
-        return mapFragmentFactory
+        return appDependencyComponent.mapFragmentFactory()
     }
 
     override fun providesLocationTracker(application: Application): LocationTracker {
@@ -35,11 +29,11 @@ class CollectGeoDependencyModule(
     }
 
     override fun providesLocationClient(): LocationClient {
-        return locationClient
+        return appDependencyComponent.locationClient()
     }
 
     override fun providesScheduler(): Scheduler {
-        return scheduler
+        return appDependencyComponent.scheduler()
     }
 
     override fun providesSatelliteInfoClient(context: Context): SatelliteInfoClient {
@@ -49,18 +43,18 @@ class CollectGeoDependencyModule(
     }
 
     override fun providesPermissionChecker(context: Context): PermissionsChecker {
-        return permissionChecker
+        return appDependencyComponent.permissionsChecker()
     }
 
     override fun providesReferenceLayerRepository(): ReferenceLayerRepository {
-        return referenceLayerRepository
+        return appDependencyComponent.referenceLayerRepository()
     }
 
     override fun providesSettingsProvider(): SettingsProvider {
-        return settingsProvider
+        return appDependencyComponent.settingsProvider()
     }
 
     override fun providesExternalWebPageHelper(): ExternalWebPageHelper {
-        return externalWebPageHelper
+        return appDependencyComponent.externalWebPageHelper()
     }
 }
