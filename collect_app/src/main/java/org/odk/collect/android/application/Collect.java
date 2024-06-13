@@ -201,7 +201,7 @@ public class Collect extends Application implements
                 .build();
 
         selfieCameraDependencyComponent = DaggerSelfieCameraDependencyComponent.builder()
-                .selfieCameraDependencyModule(new CollectSelfieCameraDependencyModule(applicationComponent::permissionsChecker))
+                .selfieCameraDependencyModule(new CollectSelfieCameraDependencyModule(applicationComponent))
                 .build();
 
         drawDependencyComponent = DaggerDrawDependencyComponent.builder()
