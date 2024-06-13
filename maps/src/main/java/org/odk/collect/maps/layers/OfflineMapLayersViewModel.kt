@@ -22,8 +22,8 @@ class OfflineMapLayersViewModel(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _existingLayers = MutableLiveData<Pair<List<ReferenceLayer>, String?>>()
-    val existingLayers: LiveData<Pair<List<ReferenceLayer>, String?>> = _existingLayers
+    private val _existingLayers = MutableLiveData<List<ReferenceLayer>>()
+    val existingLayers: LiveData<List<ReferenceLayer>> = _existingLayers
 
     private val _layersToImport = MutableLiveData<List<ReferenceLayer>>()
     val layersToImport: LiveData<List<ReferenceLayer>> = _layersToImport
@@ -39,11 +39,8 @@ class OfflineMapLayersViewModel(
         scheduler.immediate(
             background = {
                 val layers = referenceLayerRepository.getAll()
-                val selectedLayerId =
-                    settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER)
-
                 _isLoading.postValue(false)
-                _existingLayers.postValue(Pair(layers, selectedLayerId))
+                _existingLayers.postValue(layers)
             },
             foreground = { }
         )
@@ -90,12 +87,16 @@ class OfflineMapLayersViewModel(
         )
     }
 
-    fun saveSelectedLayer() {
-        val selectedLayerId = existingLayers.value?.second
-        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, selectedLayerId)
+    fun saveCheckedLayer(layerId: String?) {
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, layerId)
     }
 
-    fun changeSelectedLayerId(selectedLayerId: String?) {
-        _existingLayers.postValue(_existingLayers.value?.copy(second = selectedLayerId))
+    fun deleteLayer(layerId: String) {
+        _isLoading.value = true
+        scheduler.immediate {
+            referenceLayerRepository.delete(layerId)
+            _existingLayers.postValue(_existingLayers.value?.filter { it.id != layerId })
+            _isLoading.postValue(false)
+        }
     }
 }

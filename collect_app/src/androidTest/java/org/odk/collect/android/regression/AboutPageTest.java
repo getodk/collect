@@ -14,7 +14,7 @@ import org.odk.collect.android.support.pages.AboutPage;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.odk.collect.android.support.matchers.DrawableMatcher.withImageDrawable;
+import static org.odk.collect.androidtest.DrawableMatcher.withImageDrawable;
 import static org.odk.collect.testshared.RecyclerViewMatcher.withRecyclerView;
 
 //Issue NODK-234

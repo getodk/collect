@@ -36,6 +36,10 @@ class DirectoryReferenceLayerRepository(
         }
     }
 
+    override fun delete(id: String) {
+        get(id)?.file?.delete()
+    }
+
     private fun getAllFilesWithDirectory() = listOf(sharedLayersDirPath, projectLayersDirPath).flatMap { dir ->
         listFilesRecursively(File(dir)).map { file ->
             Pair(file, dir)

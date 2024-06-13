@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.preference.Preference
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
@@ -174,6 +175,23 @@ class DirectoryReferenceLayerRepositoryTest {
         assertThat(projectLayersDir.listFiles().size, equalTo(1))
         assertThat(projectLayersDir.listFiles()[0].name, equalTo(file.name))
         assertThat(projectLayersDir.listFiles()[0].readText(), equalTo("blah"))
+    }
+
+    @Test
+    fun delete_deletesLayerWithId() {
+        val file1 = TempFiles.createTempFile(sharedLayersDir)
+        val file2 = TempFiles.createTempFile(sharedLayersDir)
+
+        mapConfigurator.apply {
+            addFile(file1, true, file2.name)
+            addFile(file2, true, file2.name)
+        }
+
+        val fileLayer1 = repository.getAll().first { it.file == file1 }
+        val fileLayer2 = repository.getAll().first { it.file == file2 }
+        repository.delete(fileLayer1.id)
+
+        assertThat(repository.getAll(), contains(fileLayer2))
     }
 
     private class StubMapConfigurator : MapConfigurator {
