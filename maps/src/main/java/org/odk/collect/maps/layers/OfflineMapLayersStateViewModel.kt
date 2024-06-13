@@ -28,10 +28,6 @@ class OfflineMapLayersStateViewModel(settingsProvider: SettingsProvider) : ViewM
         }
     }
 
-    fun onLayerDeleted(layerId: String?) {
-        _expandedLayerIds.value = _expandedLayerIds.value.filter { it != layerId }
-    }
-
     fun getCheckedLayer(): String? {
         return checkedLayerId.value
     }

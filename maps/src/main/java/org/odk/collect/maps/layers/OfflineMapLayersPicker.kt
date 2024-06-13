@@ -152,7 +152,6 @@ class OfflineMapLayersPicker(
                 if (layerItem.id == stateViewModel.getCheckedLayer()) {
                     stateViewModel.onLayerChecked(null)
                 }
-                stateViewModel.onLayerDeleted(layerItem.id)
                 sharedViewModel.onLayerDeleted(layerItem.id!!)
             }
             .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
