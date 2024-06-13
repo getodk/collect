@@ -38,27 +38,24 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
-import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.dao.CursorLoaderFactory;
+import org.odk.collect.android.database.DatabaseConnection;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.FormUriActivity;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
-import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.formmanagement.drafts.BulkFinalizationViewModel;
 import org.odk.collect.android.formmanagement.drafts.DraftsMenuProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.FinalizeAllSnackbarPresenter;
+import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.forms.Form;
-import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.lists.EmptyListView;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.settings.SettingsProvider;
@@ -74,7 +71,10 @@ import javax.inject.Inject;
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
+ * @deprecated Uses {@link CursorLoaderFactory} and interacts with {@link DatabaseConnection} on the
+ * UI thread.
  */
+@Deprecated
 public class InstanceChooserList extends AppListActivity implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
@@ -213,7 +213,6 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                     intent.setData(instanceUri);
                     String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                     if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                        logFormEdit(c);
                         intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                         formLauncher.launch(intent);
                     } else {
@@ -226,21 +225,6 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                 TextView disabledCause = view.findViewById(R.id.form_subtitle2);
                 Toast.makeText(this, disabledCause.getText(), Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    private void logFormEdit(Cursor cursor) {
-        String status = cursor.getString(cursor.getColumnIndex(DatabaseInstanceColumns.STATUS));
-        String formId = cursor.getString(cursor.getColumnIndex(DatabaseInstanceColumns.JR_FORM_ID));
-        String version = cursor.getString(cursor.getColumnIndex(DatabaseInstanceColumns.JR_VERSION));
-
-        Form form = formsRepositoryProvider.get().getLatestByFormIdAndVersion(formId, version);
-        String formTitle = form != null ? form.getDisplayName() : "";
-
-        if (status.equals(Instance.STATUS_INCOMPLETE) || status.equals(Instance.STATUS_INVALID) || status.equals(Instance.STATUS_VALID)) {
-            AnalyticsUtils.logFormEvent(AnalyticsEvents.EDIT_NON_FINALIZED_FORM, formId, formTitle);
-        } else if (status.equals(Instance.STATUS_COMPLETE)) {
-            AnalyticsUtils.logFormEvent(AnalyticsEvents.EDIT_FINALIZED_FORM, formId, formTitle);
         }
     }
 

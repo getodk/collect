@@ -125,16 +125,6 @@ object AnalyticsEvents {
     const val INSTANCE_PROVIDER_DELETE = "InstanceProviderDelete"
 
     /**
-     * Tracks how often non finalized forms are edited
-     */
-    const val EDIT_NON_FINALIZED_FORM = "EditNonFinalizedForm"
-
-    /**
-     * Tracks how often finalized forms are edited
-     */
-    const val EDIT_FINALIZED_FORM = "EditFinalizedForm"
-
-    /**
      * Tracks how often form-level auto-delete setting is used
      */
     const val FORM_LEVEL_AUTO_DELETE = "FormLevelAutoDelete"
