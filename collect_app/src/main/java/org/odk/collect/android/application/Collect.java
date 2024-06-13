@@ -365,11 +365,7 @@ public class Collect extends Application implements
     public GoogleMapsDependencyComponent getGoogleMapsDependencyComponent() {
         if (googleMapsDependencyComponent == null) {
             googleMapsDependencyComponent = DaggerGoogleMapsDependencyComponent.builder()
-                    .googleMapsDependencyModule(new CollectGoogleMapsDependencyModule(
-                            applicationComponent.referenceLayerRepository(),
-                            applicationComponent.locationClient(),
-                            applicationComponent.settingsProvider()
-                    ))
+                    .googleMapsDependencyModule(new CollectGoogleMapsDependencyModule(applicationComponent))
                     .build();
         }
 
