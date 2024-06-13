@@ -8,7 +8,9 @@ import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 
-class OfflineMapLayersStateViewModel(settingsProvider: SettingsProvider) : ViewModel() {
+class OfflineMapLayersStateViewModel(
+    private val settingsProvider: SettingsProvider
+) : ViewModel() {
     private val _expandedLayerIds = MutableNonNullLiveData<List<String?>>(emptyList())
     val expandedLayerIds: NonNullLiveData<List<String?>> = _expandedLayerIds
 
@@ -25,6 +27,13 @@ class OfflineMapLayersStateViewModel(settingsProvider: SettingsProvider) : ViewM
             _expandedLayerIds.value = _expandedLayerIds.value.filter { it != layerId }
         } else {
             _expandedLayerIds.value = _expandedLayerIds.value.plus(layerId)
+        }
+    }
+
+    fun onLayersChanged(layerIds: List<String?>) {
+        if (!layerIds.contains(_checkedLayerId.value)) {
+            _checkedLayerId.value = null
+            settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, null)
         }
     }
 
