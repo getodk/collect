@@ -178,7 +178,7 @@ class DirectoryReferenceLayerRepositoryTest {
     }
 
     @Test
-    fun delete_returnsLayerWithCorrectName() {
+    fun delete_deletesLayerWithId() {
         val file1 = TempFiles.createTempFile(sharedLayersDir)
         val file2 = TempFiles.createTempFile(sharedLayersDir)
 
