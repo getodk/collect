@@ -197,7 +197,7 @@ public class Collect extends Application implements
                 .build();
 
         projectsDependencyComponent = DaggerProjectsDependencyComponent.builder()
-                .projectsDependencyModule(new CollectProjectsDependencyModule(applicationComponent.projectsRepository()))
+                .projectsDependencyModule(new CollectProjectsDependencyModule(applicationComponent))
                 .build();
 
         selfieCameraDependencyComponent = DaggerSelfieCameraDependencyComponent.builder()
