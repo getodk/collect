@@ -495,7 +495,7 @@
     <string name="get_help_with_reference_layers">Learn more about adding MBTiles.</string>
 
     <!-- Text for button that lets the user select a reference layer on their device to add -->
-    <string name="add_layer">Add layer</string>
+    <string name="add_layer">Add layers</string>
 
     <!-- Text for button that lets the user delete a reference layer -->
     <string name="delete_layer">Delete layer</string>
@@ -504,8 +504,8 @@
     <string name="layers_list_title">Layers</string>
 
     <!-- Text for title and subtitle above options for how the layer can be access -->
-    <string name="select_layer_access_title">Select layer access</string>
-    <string name="select_layer_access_subtitle">Do you want the layer available in all projects or your current project only?</string>
+    <string name="select_layer_access_title">Select layers access</string>
+    <string name="select_layer_access_subtitle">Do you want the layers available in all projects or your current project only?</string>
 
     <!-- Text for option where layer should be available to all projects -->
     <string name="all_projects_option">All projects</string>
@@ -514,7 +514,7 @@
     <string name="current_project_option">Current project only</string>
 
     <!-- Text for message displayed in a dialog to confirm that the layer should be deleted -->
-    <string name="delete_layer_confirmation_message">Are you sure you want to delete %1$s offline layers?</string>
+    <string name="delete_layer_confirmation_message">Are you sure you want to delete %1$s offline layer?</string>
 
     <string name="record_geopoint">Record a point</string>
     <string name="location_accuracy">Accuracy: %1$s m</string>
