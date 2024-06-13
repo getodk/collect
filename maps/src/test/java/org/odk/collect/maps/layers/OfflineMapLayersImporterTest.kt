@@ -4,8 +4,6 @@ import androidx.core.net.toUri
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.scrollTo
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -31,6 +29,7 @@ import org.odk.collect.strings.R
 import org.odk.collect.testshared.EspressoHelpers
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.RecyclerViewMatcher
+import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.RobolectricHelpers
 import java.io.File
 
@@ -156,8 +155,8 @@ class OfflineMapLayersImporterTest {
         scheduler.flush()
 
         onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
-        onView(withText(file2.name)).check(matches(isDisplayed()))
-        onView(withText(file1.name)).check(matches(isDisplayed()))
+        onView(withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(0, org.odk.collect.maps.R.id.layer_name)).check(matches(withText(file2.name)))
+        onView(withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(1, org.odk.collect.maps.R.id.layer_name)).check(matches(withText(file1.name)))
     }
 
     @Test
@@ -174,8 +173,8 @@ class OfflineMapLayersImporterTest {
         scenario.recreate()
 
         onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
-        onView(withText(file1.name)).check(matches(isDisplayed()))
-        onView(withText(file2.name)).check(matches(isDisplayed()))
+        onView(withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(0, org.odk.collect.maps.R.id.layer_name)).check(matches(withText(file1.name)))
+        onView(withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(1, org.odk.collect.maps.R.id.layer_name)).check(matches(withText(file2.name)))
     }
 
     @Test
@@ -190,8 +189,7 @@ class OfflineMapLayersImporterTest {
         scheduler.flush()
 
         onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(1)))
-        onView(withText(file1.name)).check(matches(isDisplayed()))
-        onView(withText(file2.name)).check(doesNotExist())
+        onView(withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(0, org.odk.collect.maps.R.id.layer_name)).check(matches(withText(file1.name)))
     }
 
     @Test
@@ -229,7 +227,7 @@ class OfflineMapLayersImporterTest {
 
         scheduler.flush()
 
-        onView(withId(org.odk.collect.maps.R.id.current_project_option)).perform(scrollTo(), click())
+        onView(withId(org.odk.collect.maps.R.id.current_project_option)).perform(click())
 
         onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(click())
         scheduler.flush()
