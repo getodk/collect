@@ -29,6 +29,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.maps.layers.OfflineMapLayersPicker
 import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProjectKeys.CATEGORY_BASEMAP
 import org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE
 import org.odk.collect.strings.localization.getLocalizedString
@@ -65,8 +66,8 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
 
     override fun onSettingChanged(key: String) {
         super.onSettingChanged(key)
-        if (key == REFERENCE_LAYER_KEY) {
-            findPreference<Preference>(REFERENCE_LAYER_KEY)!!.summary = getLayerName()
+        if (key == ProjectKeys.KEY_REFERENCE_LAYER) {
+            findPreference<Preference>(ProjectKeys.KEY_REFERENCE_LAYER)!!.summary = getLayerName()
         }
     }
 
@@ -80,7 +81,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
     override fun onPreferenceClick(preference: Preference): Boolean {
         if (allowClick(javaClass.name)) {
             when (preference.key) {
-                REFERENCE_LAYER_KEY -> {
+                ProjectKeys.KEY_REFERENCE_LAYER -> {
                     DialogFragmentUtils.showIfNotShowing(
                         OfflineMapLayersPicker::class.java,
                         childFragmentManager
@@ -121,14 +122,14 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
     }
 
     private fun initLayersPref() {
-        findPreference<Preference>(REFERENCE_LAYER_KEY)?.apply {
+        findPreference<Preference>(ProjectKeys.KEY_REFERENCE_LAYER)?.apply {
             onPreferenceClickListener = this@MapsPreferencesFragment
             summary = getLayerName()
         }
     }
 
     private fun getLayerName(): String {
-        val layerId = settingsProvider.getUnprotectedSettings().getString(REFERENCE_LAYER_KEY)
+        val layerId = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER)
         return if (layerId == null) {
             requireContext().getLocalizedString(org.odk.collect.strings.R.string.none)
         } else {
@@ -147,14 +148,15 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
             baseCategory.addPreference(pref)
         }
 
-        // Clear the reference layer if it isn't supported by the new basemap.
-        val layerId = settingsProvider.getUnprotectedSettings().getString(REFERENCE_LAYER_KEY)
-        if (layerId != null && !cftor.supportsLayer(referenceLayerRepository.get(layerId)!!.file)) {
-            settingsProvider.getUnprotectedSettings().save(REFERENCE_LAYER_KEY, null)
-        }
-    }
+        // Clear the reference layer if it does not exist or it isn't supported by the new basemap.
+        val layerId = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER)
+        if (layerId != null) {
+            val layer = referenceLayerRepository.get(layerId)
+            if (layer == null || !cftor.supportsLayer(layer.file)) {
+                settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, null)
+            }
 
-    companion object {
-        const val REFERENCE_LAYER_KEY = "reference_layer"
+            settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, null)
+        }
     }
 }
