@@ -145,9 +145,9 @@ class OfflineMapLayersImporterTest {
     }
 
     @Test
-    fun `the list of selected layers should be displayed`() {
-        val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
-        val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
+    fun `the list of selected layers should be displayed in A-Z order`() {
+        val file1 = TempFiles.createTempFile("layerB", MbtilesFile.FILE_EXTENSION)
+        val file2 = TempFiles.createTempFile("layerA", MbtilesFile.FILE_EXTENSION)
 
         launchFragment().onFragment {
             it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
@@ -156,8 +156,8 @@ class OfflineMapLayersImporterTest {
         scheduler.flush()
 
         onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
-        onView(withText(file1.name)).check(matches(isDisplayed()))
         onView(withText(file2.name)).check(matches(isDisplayed()))
+        onView(withText(file1.name)).check(matches(isDisplayed()))
     }
 
     @Test

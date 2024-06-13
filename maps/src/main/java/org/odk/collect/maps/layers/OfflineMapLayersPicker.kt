@@ -180,15 +180,17 @@ class OfflineMapLayersPicker(
             )
         )
 
-        newData.addAll(layers.map {
-            CheckableReferenceLayer(
-                it.id,
-                it.file,
-                it.name,
-                checkedLayerId == it.id,
-                expandedLayerIds.contains(it.id)
-            )
-        })
+        newData.addAll(
+            layers.map {
+                CheckableReferenceLayer(
+                    it.id,
+                    it.file,
+                    it.name,
+                    checkedLayerId == it.id,
+                    expandedLayerIds.contains(it.id)
+                )
+            }.sortedBy { it.name }
+        )
         adapter.setData(newData)
     }
 }

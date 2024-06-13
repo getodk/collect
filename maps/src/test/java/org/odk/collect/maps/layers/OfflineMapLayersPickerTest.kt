@@ -254,11 +254,11 @@ class OfflineMapLayersPickerTest {
     }
 
     @Test
-    fun `if there are multiple layers all of them are displayed along with the 'None'`() {
+    fun `if there are multiple layers all of them are displayed along with the 'None' and sorted in A-Z order`() {
         whenever(referenceLayerRepository.getAll()).thenReturn(
             listOf(
-                ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
-                ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
+                ReferenceLayer("1", TempFiles.createTempFile(), "layerB"),
+                ReferenceLayer("2", TempFiles.createTempFile(), "layerA")
             )
         )
 
@@ -268,8 +268,8 @@ class OfflineMapLayersPickerTest {
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
         onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText("layer1")))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.title)).check(matches(withText("layer2")))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText("layerA")))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.title)).check(matches(withText("layerB")))
     }
 
     @Test

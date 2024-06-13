@@ -65,7 +65,7 @@ class OfflineMapLayersViewModel(
                     }
                 }
                 _isLoading.postValue(false)
-                _layersToImport.postValue(layers)
+                _layersToImport.postValue(layers.sortedBy { it.name })
             },
             foreground = { }
         )
