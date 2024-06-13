@@ -300,15 +300,7 @@ public class Collect extends Application implements
         if (geoDependencyComponent == null) {
             geoDependencyComponent = DaggerGeoDependencyComponent.builder()
                     .application(this)
-                    .geoDependencyModule(new CollectGeoDependencyModule(
-                            applicationComponent.mapFragmentFactory(),
-                            applicationComponent.locationClient(),
-                            applicationComponent.scheduler(),
-                            applicationComponent.permissionsChecker(),
-                            applicationComponent.referenceLayerRepository(),
-                            applicationComponent.settingsProvider(),
-                            applicationComponent.externalWebPageHelper()
-                    ))
+                    .geoDependencyModule(new CollectGeoDependencyModule(applicationComponent))
                     .build();
         }
 
