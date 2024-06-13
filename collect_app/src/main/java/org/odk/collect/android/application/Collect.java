@@ -312,11 +312,7 @@ public class Collect extends Application implements
     public OsmDroidDependencyComponent getOsmDroidDependencyComponent() {
         if (osmDroidDependencyComponent == null) {
             osmDroidDependencyComponent = DaggerOsmDroidDependencyComponent.builder()
-                    .osmDroidDependencyModule(new CollectOsmDroidDependencyModule(
-                            applicationComponent.referenceLayerRepository(),
-                            applicationComponent.locationClient(),
-                            applicationComponent.settingsProvider()
-                    ))
+                    .osmDroidDependencyModule(new CollectOsmDroidDependencyModule(applicationComponent))
                     .build();
         }
 
