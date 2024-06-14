@@ -137,19 +137,17 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+        ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);
         getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(MapFragment.class, () -> (Fragment) mapFragmentFactory.createMapFragment())
                 .forClass(OfflineMapLayersPicker.class, () -> new OfflineMapLayersPicker(getActivityResultRegistry(), referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper))
                 .build()
         );
+        super.onCreate(savedInstanceState);
 
         requireLocationPermissions(this);
 
         previousState = savedInstanceState;
-
-        ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         try {
