@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.map
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -21,8 +22,11 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.addOnClickListener
 import org.odk.collect.async.Scheduler
 import org.odk.collect.lists.selects.MultiSelectViewModel
+import org.odk.collect.lists.selects.SelectItem
+import org.odk.collect.lists.selects.SingleSelectViewModel
 import org.odk.collect.maps.databinding.OfflineMapLayersPickerBinding
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.webpage.ExternalWebPageHelper
 
@@ -34,25 +38,39 @@ class OfflineMapLayersPicker(
     private val externalWebPageHelper: ExternalWebPageHelper
 ) : BottomSheetDialogFragment(),
     OfflineMapLayersPickerAdapter.OfflineMapLayersPickerAdapterInterface {
-    private val stateViewModel: OfflineMapLayersStateViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return OfflineMapLayersStateViewModel(settingsProvider) as T
-            }
-        }
-    }
 
     private val sharedViewModel: OfflineMapLayersViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return OfflineMapLayersViewModel(referenceLayerRepository, scheduler, settingsProvider) as T
+                return OfflineMapLayersViewModel(
+                    referenceLayerRepository,
+                    scheduler,
+                    settingsProvider
+                ) as T
             }
         }
     }
 
-    private val multiSelectViewModel: MultiSelectViewModel<*> by viewModels {
+    private val expandedStateViewModel: MultiSelectViewModel<*> by viewModels {
         viewModelFactory {
             addInitializer(MultiSelectViewModel::class) { MultiSelectViewModel<Any>() }
+        }
+    }
+
+    private val checkedStateViewModel: SingleSelectViewModel by viewModels {
+        viewModelFactory {
+            addInitializer(SingleSelectViewModel::class) {
+                SingleSelectViewModel(sharedViewModel.existingLayers.map {
+                    it.map { layer ->
+                        SelectItem(
+                            layer.id,
+                            layer,
+                            settingsProvider.getUnprotectedSettings()
+                                .getString(ProjectKeys.KEY_REFERENCE_LAYER) == layer.id
+                        )
+                    }
+                })
+            }
         }
     }
 
@@ -99,7 +117,7 @@ class OfflineMapLayersPicker(
         }
 
         binding.save.setOnClickListener {
-            sharedViewModel.saveCheckedLayer(stateViewModel.getCheckedLayer())
+            sharedViewModel.saveCheckedLayer(checkedStateViewModel.getSelected().value)
             dismiss()
         }
 
@@ -125,14 +143,10 @@ class OfflineMapLayersPicker(
         binding.layers.setAdapter(adapter)
         LiveDataUtils.zip3(
             sharedViewModel.existingLayers,
-            stateViewModel.checkedLayerId,
-            multiSelectViewModel.getSelected()
+            checkedStateViewModel.getSelected(),
+            expandedStateViewModel.getSelected()
         ).observe(this) { (layers, checkedLayerId, expandedLayerIds) ->
             updateAdapter(layers, checkedLayerId, expandedLayerIds.toList(), adapter)
-        }
-
-        sharedViewModel.existingLayers.observe(this) { layers ->
-            stateViewModel.onLayersChanged(layers.map { it.id }.plus(null))
         }
     }
 
@@ -148,16 +162,25 @@ class OfflineMapLayersPicker(
     }
 
     override fun onLayerChecked(layerId: String?) {
-        stateViewModel.onLayerChecked(layerId)
+        if (layerId != null) {
+            checkedStateViewModel.select(layerId)
+        } else {
+            checkedStateViewModel.clear()
+        }
     }
 
     override fun onLayerToggled(layerId: String) {
-        multiSelectViewModel.toggle(layerId)
+        expandedStateViewModel.toggle(layerId)
     }
 
     override fun onDeleteLayer(layerItem: CheckableReferenceLayer) {
         MaterialAlertDialogBuilder(requireActivity())
-            .setMessage(requireActivity().getLocalizedString(org.odk.collect.strings.R.string.delete_layer_confirmation_message, layerItem.name))
+            .setMessage(
+                requireActivity().getLocalizedString(
+                    org.odk.collect.strings.R.string.delete_layer_confirmation_message,
+                    layerItem.name
+                )
+            )
             .setPositiveButton(org.odk.collect.strings.R.string.delete_layer) { _, _ ->
                 sharedViewModel.deleteLayer(layerItem.id!!)
             }
