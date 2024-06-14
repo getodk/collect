@@ -150,7 +150,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     };
 
     @Override public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);
 
         getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(MapFragment.class, () -> (Fragment) mapFragmentFactory.createMapFragment())
@@ -158,11 +158,11 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
                 .build()
         );
 
+        super.onCreate(savedInstanceState);
+
         requireLocationPermissions(this);
 
         previousState = savedInstanceState;
-
-        ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);
 
         if (savedInstanceState != null) {
             restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY);
