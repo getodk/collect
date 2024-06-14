@@ -541,6 +541,31 @@ class OfflineMapLayersPickerTest {
     }
 
     @Test
+    fun `deleting one of the layers keeps the list sorted in A-Z order`() {
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+            ReferenceLayer("1", TempFiles.createTempFile(), "layerC"),
+            ReferenceLayer("2", TempFiles.createTempFile(), "layerB"),
+            ReferenceLayer("3", TempFiles.createTempFile(), "layerA")
+        ))
+
+        launchFragment()
+
+        scheduler.flush()
+
+        onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(2))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.arrow)).perform(click())
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.delete_layer)).perform(scrollTo(), click())
+
+        onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
+        scheduler.flush()
+
+        onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText("layerA")))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.title)).check(matches(withText("layerC")))
+    }
+
+    @Test
     fun `progress indicator is displayed during deleting layers`() {
         val layerFile1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
         whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
