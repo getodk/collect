@@ -560,8 +560,15 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         formEntryViewModel = viewModelProvider.get(FormEntryViewModel.class);
         printerWidgetViewModel = viewModelProvider.get(PrinterWidgetViewModel.class);
 
-        formEntryViewModel.getCurrentIndex().observe(this, index -> {
-            formIndexAnimationHandler.handle(index);
+        formEntryViewModel.getCurrentIndex().observe(this, indexAndValidationResult -> {
+            if (indexAndValidationResult != null) {
+                FormIndex formIndex = indexAndValidationResult.component1();
+                ValidationResult validationResult = indexAndValidationResult.component2();
+                formIndexAnimationHandler.handle(formIndex);
+                if (validationResult != null) {
+                    handleValidationResult(validationResult);
+                }
+            }
         });
 
         formEntryViewModel.isLoading().observe(this, isLoading -> {
@@ -582,16 +589,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 return;
             }
             ValidationResult validationResult = consumable.getValue();
-            if (validationResult instanceof FailedValidationResult failedValidationResult) {
-                String errorMessage = failedValidationResult.getCustomErrorMessage();
-                if (errorMessage == null) {
-                    errorMessage = getString(failedValidationResult.getDefaultErrorMessage());
-                }
-                getCurrentViewIfODKView().setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
-                swipeHandler.setBeenSwiped(false);
-            } else if (validationResult instanceof SuccessValidationResult) {
-                SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(org.odk.collect.strings.R.string.success_form_validation), findViewById(R.id.buttonholder));
-            }
+            handleValidationResult(validationResult);
             consumable.consume();
         });
 
@@ -643,6 +641,19 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         audioClipViewModel.isLoading().observe(this, (isLoading) -> {
             findViewById(R.id.loading_screen).setVisibility(isLoading ? View.VISIBLE : View.GONE);
         });
+    }
+
+    private void handleValidationResult(ValidationResult validationResult) {
+        if (validationResult instanceof FailedValidationResult failedValidationResult) {
+            String errorMessage = failedValidationResult.getCustomErrorMessage();
+            if (errorMessage == null) {
+                errorMessage = getString(failedValidationResult.getDefaultErrorMessage());
+            }
+            getCurrentViewIfODKView().setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
+            swipeHandler.setBeenSwiped(false);
+        } else if (validationResult instanceof SuccessValidationResult) {
+            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(org.odk.collect.strings.R.string.success_form_validation), findViewById(R.id.buttonholder));
+        }
     }
 
     private void formControllerAvailable(@NonNull FormController formController, @NonNull Form form, @Nullable Instance instance) {
