@@ -6,7 +6,6 @@ interface ReferenceLayerRepository {
 
     fun getAll(): List<ReferenceLayer>
     fun get(id: String): ReferenceLayer?
-    fun getSupported(id: String): ReferenceLayer?
     fun addLayer(file: File, shared: Boolean)
     fun delete(id: String)
 }

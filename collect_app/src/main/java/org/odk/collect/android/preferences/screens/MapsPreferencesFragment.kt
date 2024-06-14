@@ -151,7 +151,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
         // Clear the reference layer if it does not exist or it isn't supported by the new basemap.
         val layerId = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER)
         if (layerId != null) {
-            val layer = referenceLayerRepository.getSupported(layerId)
+            val layer = referenceLayerRepository.get(layerId)
             if (layer == null) {
                 settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, null)
             }

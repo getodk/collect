@@ -21,19 +21,11 @@ class DirectoryReferenceLayerRepository(
     override fun get(id: String): ReferenceLayer? {
         val file = getAllFilesWithDirectory().firstOrNull { getIdForFile(it.second, it.first) == id }
 
-        return if (file != null) {
+        return if (file != null && mapConfigurator.supportsLayer(file.first)) {
             ReferenceLayer(getIdForFile(file.second, file.first), file.first, getName(file.first))
         } else {
             null
         }
-    }
-
-    override fun getSupported(id: String): ReferenceLayer? {
-        val layer = get(id)
-        if (layer != null && mapConfigurator.supportsLayer(layer.file)) {
-            return layer
-        }
-        return null
     }
 
     override fun addLayer(file: File, shared: Boolean) {

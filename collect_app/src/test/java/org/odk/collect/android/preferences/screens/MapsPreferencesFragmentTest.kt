@@ -94,7 +94,6 @@ class MapsPreferencesFragmentTest {
         val settings = settingsProvider.getUnprotectedSettings()
         settings.save(ProjectKeys.KEY_REFERENCE_LAYER, "blah")
         val layer = ReferenceLayer("blah", TempFiles.createTempFile(), "blah")
-        whenever(referenceLayerRepository.getSupported("blah")).thenReturn(layer)
         whenever(referenceLayerRepository.get("blah")).thenReturn(layer)
 
         val scenario = launcherRule.launch(MapsPreferencesFragment::class.java)
