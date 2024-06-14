@@ -45,12 +45,15 @@ class MapFragmentReferenceLayerUtilsTest {
     @Test
     fun whenOfflineLayerFileExist_should_getReferenceLayerFileReturnThatFile() {
         val layersPath = createTempDir().absolutePath
-        File(layersPath, "blah").writeBytes(byteArrayOf())
+        val file = File(layersPath, "blah").also {
+            it.writeBytes(byteArrayOf())
+        }
 
         val config = Bundle()
         config.putString(MapFragment.KEY_REFERENCE_LAYER, "blah")
 
         val mapConfigurator = mock<MapConfigurator>().also {
+            whenever(it.supportsLayer(file)).thenReturn(true)
             whenever(it.getDisplayName(File(layersPath, "blah"))).thenReturn("blah")
         }
 

@@ -46,7 +46,7 @@ class DirectoryReferenceLayerRepository(
         }
     }
 
-    private fun getIdForFile(directoryPath: String, file: File) =
+    fun getIdForFile(directoryPath: String, file: File) =
         PathUtils.getRelativeFilePath(directoryPath, file.absolutePath)
 
     private fun getName(file: File): String {
