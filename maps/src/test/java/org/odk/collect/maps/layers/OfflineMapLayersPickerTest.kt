@@ -196,6 +196,23 @@ class OfflineMapLayersPickerTest {
     }
 
     @Test
+    fun `when layer id is saved in settings but the layer it belongs to does not exist the 'None' option should be checked`() {
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
+        )
+
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, "2")
+
+        launchFragment()
+
+        scheduler.flush()
+
+        onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(isChecked()))
+    }
+
+    @Test
     fun `progress indicator is displayed during loading layers`() {
         launchFragment()
 
@@ -498,6 +515,29 @@ class OfflineMapLayersPickerTest {
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText("layer2")))
         verify(referenceLayerRepository).delete("1")
         verify(referenceLayerRepository, never()).delete("2")
+    }
+
+    @Test
+    fun `deleting the selected layer changes selection to 'none' and saves it`() {
+        val layerFile1 = TempFiles.createTempFile()
+        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
+            ReferenceLayer("1", layerFile1, "layer1")
+        ))
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, "1")
+
+        launchFragment()
+
+        scheduler.flush()
+
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(scrollTo(), click())
+
+        onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
+        scheduler.flush()
+
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(isChecked()))
+        assertThat(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER), equalTo(null))
     }
 
     @Test

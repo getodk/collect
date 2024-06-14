@@ -124,6 +124,10 @@ class OfflineMapLayersPicker(
         ).observe(this) { (layers, checkedLayerId, expandedLayerIds) ->
             updateAdapter(layers, checkedLayerId, expandedLayerIds, adapter)
         }
+
+        sharedViewModel.existingLayers.observe(this) { layers ->
+            stateViewModel.onLayersChanged(layers.map { it.id }.plus(null))
+        }
     }
 
     override fun onStart() {
@@ -149,9 +153,6 @@ class OfflineMapLayersPicker(
         MaterialAlertDialogBuilder(requireActivity())
             .setMessage(requireActivity().getLocalizedString(org.odk.collect.strings.R.string.delete_layer_confirmation_message, layerItem.name))
             .setPositiveButton(org.odk.collect.strings.R.string.delete_layer) { _, _ ->
-                if (layerItem.id == stateViewModel.getCheckedLayer()) {
-                    stateViewModel.onLayerChecked(null)
-                }
                 sharedViewModel.deleteLayer(layerItem.id!!)
             }
             .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
