@@ -38,7 +38,7 @@ class OfflineMapLayersViewModel(
         _isLoading.value = true
         scheduler.immediate(
             background = {
-                val layers = referenceLayerRepository.getAll()
+                val layers = referenceLayerRepository.getAll().sortedBy { it.name }
                 _isLoading.postValue(false)
                 _existingLayers.postValue(layers)
             },

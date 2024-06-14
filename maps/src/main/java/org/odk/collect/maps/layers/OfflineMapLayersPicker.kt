@@ -189,7 +189,7 @@ class OfflineMapLayersPicker(
                     checkedLayerId == it.id,
                     expandedLayerIds.contains(it.id)
                 )
-            }.sortedBy { it.name }
+            }
         )
         adapter.setData(newData)
     }
