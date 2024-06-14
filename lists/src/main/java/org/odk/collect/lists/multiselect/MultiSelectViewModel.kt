@@ -20,7 +20,7 @@ class MultiSelectViewModel<T>(
     private val data: LiveData<List<MultiSelectItem<T>>> = MutableLiveData(emptyList())
 ) : ViewModel() {
 
-    private val selected = MutableNonNullLiveData(emptySet<Long>())
+    private val selected = MutableNonNullLiveData(emptySet<String>())
     private val isAllSelected = LiveDataUtils.zip(data, selected).map { (data, selected) ->
         data.isNotEmpty() && data.size == selected.size
     }
@@ -29,15 +29,15 @@ class MultiSelectViewModel<T>(
         return data
     }
 
-    fun select(item: Long) {
+    fun select(item: String) {
         updateSelected(selected.value + item)
     }
 
-    fun getSelected(): NonNullLiveData<Set<Long>> {
+    fun getSelected(): NonNullLiveData<Set<String>> {
         return selected
     }
 
-    fun unselect(item: Long) {
+    fun unselect(item: String) {
         updateSelected(selected.value - item)
     }
 
@@ -53,7 +53,7 @@ class MultiSelectViewModel<T>(
         return isAllSelected
     }
 
-    fun toggle(item: Long) {
+    fun toggle(item: String) {
         if (selected.value.contains(item)) {
             unselect(item)
         } else {
@@ -61,7 +61,7 @@ class MultiSelectViewModel<T>(
         }
     }
 
-    private fun updateSelected(new: Set<Long>) {
+    private fun updateSelected(new: Set<String>) {
         selected.value = new
     }
 

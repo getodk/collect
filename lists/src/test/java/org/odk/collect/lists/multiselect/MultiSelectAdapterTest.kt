@@ -20,9 +20,9 @@ class MultiSelectAdapterTest {
 
     @Test
     fun `selected items are checked`() {
-        val data = MutableLiveData(listOf(MultiSelectItem<Long>(1, 1), MultiSelectItem<Long>(2, 2)))
+        val data = MutableLiveData(listOf(MultiSelectItem<Long>("1", 1), MultiSelectItem<Long>("2", 2)))
         val multiSelectViewModel = MultiSelectViewModel(data)
-        multiSelectViewModel.select(1)
+        multiSelectViewModel.select("1")
 
         val adapter = MultiSelectAdapter(multiSelectViewModel) {
             TextAndCheckBoxViewHolder<Long>(it.context)
@@ -39,7 +39,7 @@ class MultiSelectAdapterTest {
 
     @Test
     fun `checking an item selects it`() {
-        val data = MutableLiveData(listOf(MultiSelectItem<Long>(1, 1), MultiSelectItem<Long>(2, 2)))
+        val data = MutableLiveData(listOf(MultiSelectItem<Long>("1", 1), MultiSelectItem<Long>("2", 2)))
         val multiSelectViewModel = MultiSelectViewModel(data)
 
         val adapter = MultiSelectAdapter(multiSelectViewModel) {
@@ -51,12 +51,12 @@ class MultiSelectAdapterTest {
 
         val holders = createAndBindList(adapter)
         holders[0].view.checkBox.performClick()
-        assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1)))
+        assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf("1")))
     }
 
     @Test
     fun `clicking an item selects it`() {
-        val data = MutableLiveData(listOf(MultiSelectItem<Long>(1, 1), MultiSelectItem<Long>(2, 2)))
+        val data = MutableLiveData(listOf(MultiSelectItem<Long>("1", 1), MultiSelectItem<Long>("2", 2)))
         val multiSelectViewModel = MultiSelectViewModel(data)
 
         val adapter = MultiSelectAdapter(multiSelectViewModel) {
@@ -68,14 +68,14 @@ class MultiSelectAdapterTest {
 
         val holders = createAndBindList(adapter)
         holders[0].view.performClick()
-        assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1)))
+        assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf("1")))
     }
 
     @Test
     fun `unchecking an item selects it`() {
-        val data = MutableLiveData(listOf(MultiSelectItem<Long>(1, 1), MultiSelectItem<Long>(2, 2)))
+        val data = MutableLiveData(listOf(MultiSelectItem<Long>("1", 1), MultiSelectItem<Long>("2", 2)))
         val multiSelectViewModel = MultiSelectViewModel(data)
-        multiSelectViewModel.select(1)
+        multiSelectViewModel.select("1")
 
         val adapter = MultiSelectAdapter(multiSelectViewModel) {
             TextAndCheckBoxViewHolder<Long>(it.context)

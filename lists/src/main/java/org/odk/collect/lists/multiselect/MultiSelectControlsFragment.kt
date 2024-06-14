@@ -49,13 +49,13 @@ class MultiSelectControlsFragment(
                 multiSelectViewModel.unselectAll()
             }
 
-            override fun onAction(selected: Set<Long>) {
+            override fun onAction(selected: Set<String>) {
                 parentFragmentManager.setFragmentResult(
                     REQUEST_ACTION,
                     Bundle().apply {
-                        putLongArray(
+                        putStringArray(
                             RESULT_SELECTED,
-                            selected.toLongArray()
+                            selected.toTypedArray()
                         )
                     }
                 )
@@ -72,7 +72,7 @@ class MultiSelectControlsFragment(
 private class MultiSelectControlsView(context: Context) :
     FrameLayout(context) {
 
-    var selected = emptySet<Long>()
+    var selected = emptySet<String>()
         set(value) {
             field = value
             render()
@@ -121,6 +121,6 @@ private class MultiSelectControlsView(context: Context) :
     interface Listener {
         fun onSelectAll()
         fun onClearAll()
-        fun onAction(selected: Set<Long>)
+        fun onAction(selected: Set<String>)
     }
 }

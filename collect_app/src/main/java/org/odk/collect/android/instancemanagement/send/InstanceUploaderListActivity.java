@@ -63,10 +63,10 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.ProjectsDataService;
-import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.androidshared.ui.MenuExtKt;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
+import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.lists.multiselect.MultiSelectViewModel;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
@@ -75,6 +75,7 @@ import org.odk.collect.strings.localization.LocalizedActivity;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -152,8 +153,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         multiSelectViewModel.getSelected().observe(this, ids -> {
             binding.uploadButton.setEnabled(!ids.isEmpty());
             allSelected = updateSelectAll(binding.toggleButton, listAdapter.getCount(), ids.size());
-
-            listAdapter.setSelected(ids);
+            listAdapter.setSelected(ids.stream().map(Long::valueOf).collect(Collectors.toSet()));
         });
         readyToSendViewModel = new ViewModelProvider(this, factory).get(ReadyToSendViewModel.class);
         readyToSendViewModel.getData().observe(this, data -> binding.readyToSendBanner.setData(data));
@@ -179,7 +179,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
             return;
         }
 
-        Set<Long> selectedItems = multiSelectViewModel.getSelected().getValue();
+        Set<Long> selectedItems = multiSelectViewModel.getSelected().getValue().stream().map(Long::valueOf).collect(Collectors.toSet());
         if (!selectedItems.isEmpty()) {
             binding.uploadButton.setEnabled(false);
 
@@ -216,7 +216,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         binding.toggleButton.setOnClickListener(v -> {
             if (!allSelected) {
                 for (int i = 0; i < listView.getCount(); i++) {
-                    multiSelectViewModel.select(listView.getItemIdAtPosition(i));
+                    multiSelectViewModel.select(String.valueOf(listView.getItemIdAtPosition(i)));
                 }
             } else {
                 multiSelectViewModel.unselectAll();
@@ -421,7 +421,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
     private void setupAdapter() {
         listAdapter = new InstanceUploaderAdapter(this, null, dbId -> {
-            multiSelectViewModel.toggle(dbId);
+            multiSelectViewModel.toggle(dbId.toString());
         });
 
         listView.setAdapter(listAdapter);

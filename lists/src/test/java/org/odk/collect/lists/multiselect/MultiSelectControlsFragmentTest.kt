@@ -22,7 +22,7 @@ import org.odk.collect.strings.R.string
 @RunWith(AndroidJUnit4::class)
 class MultiSelectControlsFragmentTest {
 
-    private val data = MutableLiveData(listOf(MultiSelectItem(1, null), MultiSelectItem(2, null)))
+    private val data = MutableLiveData(listOf(MultiSelectItem("1", null), MultiSelectItem("2", null)))
     private val multiSelectViewModel = MultiSelectViewModel(data)
 
     @get:Rule
@@ -38,7 +38,7 @@ class MultiSelectControlsFragmentTest {
         fragmentScenarioLauncherRule.launchInContainer(MultiSelectControlsFragment::class.java)
 
         onView(withText(string.select_all)).perform(click())
-        assertThat(multiSelectViewModel.getSelected().getOrAwaitValue(), equalTo(setOf<Long>(1, 2)))
+        assertThat(multiSelectViewModel.getSelected().getOrAwaitValue(), equalTo(setOf("1", "2")))
     }
 
     @Test
@@ -57,7 +57,7 @@ class MultiSelectControlsFragmentTest {
         fragmentScenarioLauncherRule.launchInContainer(MultiSelectControlsFragment::class.java)
         onView(withText("Action")).check(matches(not(isEnabled())))
 
-        multiSelectViewModel.select(1)
+        multiSelectViewModel.select("1")
         onView(withText("Action")).check(matches(isEnabled()))
     }
 }

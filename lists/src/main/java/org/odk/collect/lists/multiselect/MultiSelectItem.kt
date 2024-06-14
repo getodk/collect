@@ -1,3 +1,3 @@
 package org.odk.collect.lists.multiselect
 
-data class MultiSelectItem<T>(val id: Long, val item: T)
+data class MultiSelectItem<T>(val id: String, val item: T)

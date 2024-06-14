@@ -44,7 +44,7 @@ class MultiSelectListFragmentTest {
         fragmentScenarioLauncherRule.launchInContainer(MultiSelectListFragment::class.java)
         onView(withId(R.id.empty)).check(matches(isDisplayed()))
 
-        data.value = listOf(MultiSelectItem(1, "Blah"))
+        data.value = listOf(MultiSelectItem("1", "Blah"))
         onView(withId(R.id.empty)).check(matches(not(isDisplayed())))
     }
 
@@ -53,7 +53,7 @@ class MultiSelectListFragmentTest {
         fragmentScenarioLauncherRule.launchInContainer(MultiSelectListFragment::class.java)
         onView(withId(R.id.buttons)).check(matches(not(isDisplayed())))
 
-        data.value = listOf(MultiSelectItem(1, "Blah"))
+        data.value = listOf(MultiSelectItem("1", "Blah"))
         onView(withId(R.id.buttons)).check(matches(isDisplayed()))
     }
 
@@ -61,7 +61,7 @@ class MultiSelectListFragmentTest {
     fun `recreating maintains selection`() {
         val scenario =
             fragmentScenarioLauncherRule.launchInContainer(MultiSelectListFragment::class.java)
-        data.value = listOf(MultiSelectItem(1, "Blah 1"), MultiSelectItem(2, "Blah 2"))
+        data.value = listOf(MultiSelectItem("1", "Blah 1"), MultiSelectItem("1", "Blah 2"))
 
         onView(recyclerView()).perform(clickOnItemWith(withText("Blah 2")))
 

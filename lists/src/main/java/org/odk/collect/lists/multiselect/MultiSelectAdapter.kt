@@ -13,7 +13,7 @@ class MultiSelectAdapter<T, VH : MultiSelectAdapter.ViewHolder<T>>(
     private val viewHolderFactory: (ViewGroup) -> VH
 ) : RecyclerView.Adapter<VH>() {
 
-    var selected: Set<Long> = emptySet()
+    var selected: Set<String> = emptySet()
         set(value) {
             field = value
             notifyDataSetChanged()
