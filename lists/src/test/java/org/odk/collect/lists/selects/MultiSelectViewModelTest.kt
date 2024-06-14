@@ -1,4 +1,4 @@
-package org.odk.collect.lists.multiselect
+package org.odk.collect.lists.selects
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
@@ -56,7 +56,7 @@ class MultiSelectViewModelTest {
 
     @Test
     fun `selectAll selects all data`() {
-        val data = MutableLiveData(listOf(MultiSelectItem<Long>("1", 1), MultiSelectItem<Long>("2", 2)))
+        val data = MutableLiveData(listOf(SelectItem<Long>("1", 1), SelectItem<Long>("2", 2)))
         val viewModel = MultiSelectViewModel(data)
 
         viewModel.selectAll()
@@ -65,7 +65,7 @@ class MultiSelectViewModelTest {
 
     @Test
     fun `isAllSelected is true when all data selected`() {
-        val data = MutableLiveData(listOf(MultiSelectItem<Long>("1", 1), MultiSelectItem<Long>("2", 2)))
+        val data = MutableLiveData(listOf(SelectItem<Long>("1", 1), SelectItem<Long>("2", 2)))
         val viewModel = MultiSelectViewModel(data)
         assertThat(viewModel.isAllSelected().getOrAwaitValue(), equalTo(false))
 
@@ -78,7 +78,7 @@ class MultiSelectViewModelTest {
 
     @Test
     fun `isAllSelected returns false when no data`() {
-        val data = MutableLiveData(listOf<MultiSelectItem<Any>>())
+        val data = MutableLiveData(listOf<SelectItem<Any>>())
         val viewModel = MultiSelectViewModel(data)
         assertThat(viewModel.isAllSelected().getOrAwaitValue(), equalTo(false))
     }

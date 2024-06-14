@@ -1,4 +1,4 @@
-package org.odk.collect.lists.multiselect
+package org.odk.collect.lists.selects
 
 import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
@@ -15,8 +15,8 @@ import org.junit.runner.RunWith
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.lists.R
-import org.odk.collect.lists.multiselect.support.TextAndCheckBoxView
-import org.odk.collect.lists.multiselect.support.TextAndCheckBoxViewHolder
+import org.odk.collect.lists.selects.support.TextAndCheckBoxView
+import org.odk.collect.lists.selects.support.TextAndCheckBoxViewHolder
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.ViewActions.clickOnItemWith
 import org.odk.collect.testshared.ViewMatchers.recyclerView
@@ -24,7 +24,7 @@ import org.odk.collect.testshared.ViewMatchers.recyclerView
 @RunWith(AndroidJUnit4::class)
 class MultiSelectListFragmentTest {
 
-    private val data = MutableLiveData<List<MultiSelectItem<String>>>(emptyList())
+    private val data = MutableLiveData<List<SelectItem<String>>>(emptyList())
     private val multiSelectViewModel = MultiSelectViewModel(data)
 
     @get:Rule
@@ -44,7 +44,7 @@ class MultiSelectListFragmentTest {
         fragmentScenarioLauncherRule.launchInContainer(MultiSelectListFragment::class.java)
         onView(withId(R.id.empty)).check(matches(isDisplayed()))
 
-        data.value = listOf(MultiSelectItem("1", "Blah"))
+        data.value = listOf(SelectItem("1", "Blah"))
         onView(withId(R.id.empty)).check(matches(not(isDisplayed())))
     }
 
@@ -53,7 +53,7 @@ class MultiSelectListFragmentTest {
         fragmentScenarioLauncherRule.launchInContainer(MultiSelectListFragment::class.java)
         onView(withId(R.id.buttons)).check(matches(not(isDisplayed())))
 
-        data.value = listOf(MultiSelectItem("1", "Blah"))
+        data.value = listOf(SelectItem("1", "Blah"))
         onView(withId(R.id.buttons)).check(matches(isDisplayed()))
     }
 
@@ -61,7 +61,7 @@ class MultiSelectListFragmentTest {
     fun `recreating maintains selection`() {
         val scenario =
             fragmentScenarioLauncherRule.launchInContainer(MultiSelectListFragment::class.java)
-        data.value = listOf(MultiSelectItem("1", "Blah 1"), MultiSelectItem("1", "Blah 2"))
+        data.value = listOf(SelectItem("1", "Blah 1"), SelectItem("1", "Blah 2"))
 
         onView(recyclerView()).perform(clickOnItemWith(withText("Blah 2")))
 

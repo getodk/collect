@@ -1,4 +1,4 @@
-package org.odk.collect.lists.multiselect
+package org.odk.collect.lists.selects
 
 import android.widget.Button
 import androidx.lifecycle.LiveData
@@ -17,7 +17,7 @@ import org.odk.collect.androidshared.livedata.NonNullLiveData
  * all and determine whether all items are selected or not.
  */
 class MultiSelectViewModel<T>(
-    private val data: LiveData<List<MultiSelectItem<T>>> = MutableLiveData(emptyList())
+    private val data: LiveData<List<SelectItem<T>>> = MutableLiveData(emptyList())
 ) : ViewModel() {
 
     private val selected = MutableNonNullLiveData(emptySet<String>())
@@ -25,7 +25,7 @@ class MultiSelectViewModel<T>(
         data.isNotEmpty() && data.size == selected.size
     }
 
-    fun getData(): LiveData<List<MultiSelectItem<T>>> {
+    fun getData(): LiveData<List<SelectItem<T>>> {
         return data
     }
 
@@ -65,7 +65,7 @@ class MultiSelectViewModel<T>(
         selected.value = new
     }
 
-    class Factory<T>(private val data: LiveData<List<MultiSelectItem<T>>>) : ViewModelProvider.Factory {
+    class Factory<T>(private val data: LiveData<List<SelectItem<T>>>) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <VM : ViewModel> create(modelClass: Class<VM>, extras: CreationExtras): VM {
             return MultiSelectViewModel(data) as VM

@@ -1,4 +1,4 @@
-package org.odk.collect.lists.multiselect
+package org.odk.collect.lists.selects
 
 import android.content.Context
 import android.widget.FrameLayout
@@ -11,7 +11,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.lists.multiselect.support.TextAndCheckBoxViewHolder
+import org.odk.collect.lists.selects.support.TextAndCheckBoxViewHolder
 
 @RunWith(AndroidJUnit4::class)
 class MultiSelectAdapterTest {
@@ -20,7 +20,7 @@ class MultiSelectAdapterTest {
 
     @Test
     fun `selected items are checked`() {
-        val data = MutableLiveData(listOf(MultiSelectItem<Long>("1", 1), MultiSelectItem<Long>("2", 2)))
+        val data = MutableLiveData(listOf(SelectItem<Long>("1", 1), SelectItem<Long>("2", 2)))
         val multiSelectViewModel = MultiSelectViewModel(data)
         multiSelectViewModel.select("1")
 
@@ -39,7 +39,7 @@ class MultiSelectAdapterTest {
 
     @Test
     fun `checking an item selects it`() {
-        val data = MutableLiveData(listOf(MultiSelectItem<Long>("1", 1), MultiSelectItem<Long>("2", 2)))
+        val data = MutableLiveData(listOf(SelectItem<Long>("1", 1), SelectItem<Long>("2", 2)))
         val multiSelectViewModel = MultiSelectViewModel(data)
 
         val adapter = MultiSelectAdapter(multiSelectViewModel) {
@@ -56,7 +56,7 @@ class MultiSelectAdapterTest {
 
     @Test
     fun `clicking an item selects it`() {
-        val data = MutableLiveData(listOf(MultiSelectItem<Long>("1", 1), MultiSelectItem<Long>("2", 2)))
+        val data = MutableLiveData(listOf(SelectItem<Long>("1", 1), SelectItem<Long>("2", 2)))
         val multiSelectViewModel = MultiSelectViewModel(data)
 
         val adapter = MultiSelectAdapter(multiSelectViewModel) {
@@ -73,7 +73,7 @@ class MultiSelectAdapterTest {
 
     @Test
     fun `unchecking an item selects it`() {
-        val data = MutableLiveData(listOf(MultiSelectItem<Long>("1", 1), MultiSelectItem<Long>("2", 2)))
+        val data = MutableLiveData(listOf(SelectItem<Long>("1", 1), SelectItem<Long>("2", 2)))
         val multiSelectViewModel = MultiSelectViewModel(data)
         multiSelectViewModel.select("1")
 

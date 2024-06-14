@@ -20,10 +20,10 @@ import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils.SnackbarPresenterObserver
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.lists.RecyclerViewUtils
-import org.odk.collect.lists.multiselect.MultiSelectControlsFragment
-import org.odk.collect.lists.multiselect.MultiSelectItem
-import org.odk.collect.lists.multiselect.MultiSelectListFragment
-import org.odk.collect.lists.multiselect.MultiSelectViewModel
+import org.odk.collect.lists.selects.MultiSelectControlsFragment
+import org.odk.collect.lists.selects.MultiSelectListFragment
+import org.odk.collect.lists.selects.MultiSelectViewModel
+import org.odk.collect.lists.selects.SelectItem
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.strings.R.string
 
@@ -37,7 +37,7 @@ class DeleteSavedFormFragment(
         MultiSelectViewModel.Factory(
             savedFormListViewModel.formsToDisplay.map {
                 it.map { instance ->
-                    MultiSelectItem(
+                    SelectItem(
                         instance.dbId.toString(),
                         instance
                     )

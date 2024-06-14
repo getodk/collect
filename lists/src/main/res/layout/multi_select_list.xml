@@ -19,7 +19,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/buttons"
-        android:name="org.odk.collect.lists.multiselect.MultiSelectControlsFragment"
+        android:name="org.odk.collect.lists.selects.MultiSelectControlsFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -1,4 +1,4 @@
-package org.odk.collect.lists.multiselect
+package org.odk.collect.lists.selects
 
 import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
@@ -22,7 +22,7 @@ import org.odk.collect.strings.R.string
 @RunWith(AndroidJUnit4::class)
 class MultiSelectControlsFragmentTest {
 
-    private val data = MutableLiveData(listOf(MultiSelectItem("1", null), MultiSelectItem("2", null)))
+    private val data = MutableLiveData(listOf(SelectItem("1", null), SelectItem("2", null)))
     private val multiSelectViewModel = MultiSelectViewModel(data)
 
     @get:Rule

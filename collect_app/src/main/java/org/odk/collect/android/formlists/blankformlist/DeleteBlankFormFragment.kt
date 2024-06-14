@@ -17,11 +17,11 @@ import org.odk.collect.android.R
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.lists.RecyclerViewUtils
 import org.odk.collect.lists.RecyclerViewUtils.matchParentWidth
-import org.odk.collect.lists.multiselect.MultiSelectAdapter
-import org.odk.collect.lists.multiselect.MultiSelectControlsFragment
-import org.odk.collect.lists.multiselect.MultiSelectItem
-import org.odk.collect.lists.multiselect.MultiSelectListFragment
-import org.odk.collect.lists.multiselect.MultiSelectViewModel
+import org.odk.collect.lists.selects.MultiSelectAdapter
+import org.odk.collect.lists.selects.MultiSelectControlsFragment
+import org.odk.collect.lists.selects.MultiSelectListFragment
+import org.odk.collect.lists.selects.MultiSelectViewModel
+import org.odk.collect.lists.selects.SelectItem
 import org.odk.collect.strings.R.string
 
 class DeleteBlankFormFragment(
@@ -34,7 +34,7 @@ class DeleteBlankFormFragment(
         MultiSelectViewModel.Factory(
             blankFormListViewModel.formsToDisplay.map {
                 it.map { blankForm ->
-                    MultiSelectItem(
+                    SelectItem(
                         blankForm.databaseId.toString(),
                         blankForm
                     )
