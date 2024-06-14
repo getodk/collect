@@ -51,8 +51,6 @@ public abstract class MaterialFullScreenDialogFragment extends DialogFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
         if (getToolbar() != null) {
             getToolbar().setNavigationOnClickListener(v -> {
                 onCloseClicked();

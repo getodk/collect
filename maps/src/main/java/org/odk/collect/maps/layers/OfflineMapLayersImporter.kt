@@ -47,9 +47,7 @@ class OfflineMapLayersImporter(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.isLoading.observe(this) { isLoading ->
+        viewModel.trackableWorker.isWorking.observe(this) { isLoading ->
             if (isLoading) {
                 binding.addLayerButton.isEnabled = false
                 binding.layers.visibility = View.GONE
