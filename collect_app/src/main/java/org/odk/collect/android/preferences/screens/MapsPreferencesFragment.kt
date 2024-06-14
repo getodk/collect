@@ -155,8 +155,6 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
             if (layer == null) {
                 settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, null)
             }
-
-            settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, null)
         }
     }
 }
