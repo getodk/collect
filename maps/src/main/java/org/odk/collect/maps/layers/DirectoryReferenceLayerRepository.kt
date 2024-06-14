@@ -28,6 +28,14 @@ class DirectoryReferenceLayerRepository(
         }
     }
 
+    override fun getSupported(id: String): ReferenceLayer? {
+        val layer = get(id)
+        if (layer != null && mapConfigurator.supportsLayer(layer.file)) {
+            return layer
+        }
+        return null
+    }
+
     override fun addLayer(file: File, shared: Boolean) {
         if (shared) {
             file.copyTo(File(sharedLayersDirPath, file.name), true)
