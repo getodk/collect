@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -19,6 +20,7 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.addOnClickListener
 import org.odk.collect.async.Scheduler
+import org.odk.collect.lists.selects.MultiSelectViewModel
 import org.odk.collect.maps.databinding.OfflineMapLayersPickerBinding
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.getLocalizedString
@@ -45,6 +47,12 @@ class OfflineMapLayersPicker(
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return OfflineMapLayersViewModel(referenceLayerRepository, scheduler, settingsProvider) as T
             }
+        }
+    }
+
+    private val multiSelectViewModel: MultiSelectViewModel<*> by viewModels {
+        viewModelFactory {
+            addInitializer(MultiSelectViewModel::class) { MultiSelectViewModel<Any>() }
         }
     }
 
@@ -118,9 +126,9 @@ class OfflineMapLayersPicker(
         LiveDataUtils.zip3(
             sharedViewModel.existingLayers,
             stateViewModel.checkedLayerId,
-            stateViewModel.expandedLayerIds
+            multiSelectViewModel.getSelected()
         ).observe(this) { (layers, checkedLayerId, expandedLayerIds) ->
-            updateAdapter(layers, checkedLayerId, expandedLayerIds, adapter)
+            updateAdapter(layers, checkedLayerId, expandedLayerIds.toList(), adapter)
         }
 
         sharedViewModel.existingLayers.observe(this) { layers ->
@@ -143,8 +151,8 @@ class OfflineMapLayersPicker(
         stateViewModel.onLayerChecked(layerId)
     }
 
-    override fun onLayerToggled(layerId: String?) {
-        stateViewModel.onLayerToggled(layerId)
+    override fun onLayerToggled(layerId: String) {
+        multiSelectViewModel.toggle(layerId)
     }
 
     override fun onDeleteLayer(layerItem: CheckableReferenceLayer) {

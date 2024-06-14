@@ -17,7 +17,7 @@ class OfflineMapLayersPickerAdapter(
 ) : RecyclerView.Adapter<OfflineMapLayersPickerAdapter.ViewHolder>() {
     interface OfflineMapLayersPickerAdapterInterface {
         fun onLayerChecked(layerId: String?)
-        fun onLayerToggled(layerId: String?)
+        fun onLayerToggled(layerId: String)
         fun onDeleteLayer(layerItem: CheckableReferenceLayer)
     }
 
@@ -60,7 +60,9 @@ class OfflineMapLayersPickerAdapter(
         }
 
         holder.binding.arrow.setOnClickListener {
-            listener.onLayerToggled(layer.id)
+            if (layer.id != null) {
+                listener.onLayerToggled(layer.id)
+            }
         }
 
         holder.binding.deleteLayer.setOnClickListener {
