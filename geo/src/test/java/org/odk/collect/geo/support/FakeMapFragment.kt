@@ -103,8 +103,8 @@ class FakeMapFragment : Fragment(), MapFragment {
         markerIcons[featureId] = markerIconDescription
     }
 
-    override fun getMarkerPoint(featureId: Int): MapPoint {
-        return markers[featureId]!!
+    override fun getMarkerPoint(featureId: Int): MapPoint? {
+        return markers[featureId]
     }
 
     override fun addPolyLine(lineDescription: LineDescription): Int {

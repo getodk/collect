@@ -37,6 +37,7 @@ import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.webpage.ExternalWebPageHelper
 import org.robolectric.Shadows
@@ -79,7 +80,7 @@ class GeoPolyActivityTest {
                 }
 
                 override fun providesSettingsProvider(): SettingsProvider {
-                    return mock()
+                    return InMemSettingsProvider()
                 }
 
                 override fun providesExternalWebPageHelper(): ExternalWebPageHelper {
@@ -280,6 +281,16 @@ class GeoPolyActivityTest {
         launcherRule.launch<Activity>(intent)
         mapFragment.ready()
         assertThat(mapFragment.isPolyDraggable(0), equalTo(false))
+    }
+
+    @Test
+    fun recreatingTheActivityWithTheLayersDialogDisplayedDoesNotCrashTheApp() {
+        val scenario = launcherRule.launch(GeoPolyActivity::class.java)
+        mapFragment.ready()
+
+        onView(withId(R.id.layers)).perform(click())
+
+        scenario.recreate()
     }
 
     private fun startInput(mode: Int) {
