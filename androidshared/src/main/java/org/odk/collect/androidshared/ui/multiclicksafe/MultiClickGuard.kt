@@ -15,21 +15,21 @@ object MultiClickGuard {
     }
 
     /**
-     * Debounce multiple clicks within the same screen
+     * Debounce multiple clicks within the same scope
      *
-     * @param screenName The name of the screen. If not provided, the Java class name of the element
+     * @param scope If not provided, the Java class name of the element
      * is used. However, this approach is imperfect, as elements on the same screen might belong to
      * different classes. Consequently, clicks on these elements are treated as interactions occurring
      * on two distinct screens, not protecting from rapid clicking.
      */
     @JvmStatic
     @JvmOverloads
-    fun allowClick(screenName: String = javaClass.name, clickDebounceMs: Long = 1000): Boolean {
+    fun allowClick(scope: String = javaClass.name, clickDebounceMs: Long = 1000): Boolean {
         if (test) {
             return true
         }
         val elapsedRealtime = SystemClock.elapsedRealtime()
-        val isSameClass = screenName == lastClickName
+        val isSameClass = scope == lastClickName
         val isBeyondThreshold = elapsedRealtime - lastClickTime > clickDebounceMs
         val isBeyondTestThreshold =
             lastClickTime == 0L || lastClickTime == elapsedRealtime // just for tests
@@ -38,7 +38,7 @@ object MultiClickGuard {
 
         if (allowClick) {
             lastClickTime = elapsedRealtime
-            lastClickName = screenName
+            lastClickName = scope
         }
         return allowClick
     }
