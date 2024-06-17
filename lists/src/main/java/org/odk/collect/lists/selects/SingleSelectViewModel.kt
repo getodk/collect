@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import org.odk.collect.androidshared.livedata.LiveDataUtils
 
-class SingleSelectViewModel(private val data: LiveData<List<SelectItem<*>>>) : ViewModel() {
+class SingleSelectViewModel(data: LiveData<List<SelectItem<*>>>) : ViewModel() {
 
     private val _selected = MutableLiveData<String?>(null)
     private val selected = LiveDataUtils.zip(_selected, data).map { (selected, data) ->
