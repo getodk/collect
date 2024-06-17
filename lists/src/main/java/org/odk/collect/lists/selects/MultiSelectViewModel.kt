@@ -65,7 +65,8 @@ class MultiSelectViewModel<T>(
         selected.value = new
     }
 
-    class Factory<T>(private val data: LiveData<List<SelectItem<T>>>) : ViewModelProvider.Factory {
+    class Factory<T>(private val data: LiveData<List<SelectItem<T>>> = MutableLiveData(emptyList())) :
+        ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <VM : ViewModel> create(modelClass: Class<VM>, extras: CreationExtras): VM {
             return MultiSelectViewModel(data) as VM

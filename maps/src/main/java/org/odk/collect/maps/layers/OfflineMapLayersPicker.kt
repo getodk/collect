@@ -50,11 +50,8 @@ class OfflineMapLayersPicker(
             }
         }
     }
-
     private val expandedStateViewModel: MultiSelectViewModel<*> by viewModels {
-        viewModelFactory {
-            addInitializer(MultiSelectViewModel::class) { MultiSelectViewModel<Any>() }
-        }
+        MultiSelectViewModel.Factory<Any>()
     }
 
     private val checkedStateViewModel: SingleSelectViewModel by viewModels {
