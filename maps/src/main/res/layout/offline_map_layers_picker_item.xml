@@ -10,7 +10,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:button="@drawable/radio_button_inset"
-        android:paddingEnd="@dimen/margin_standard"
         android:paddingVertical="@dimen/margin_extra_small"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
