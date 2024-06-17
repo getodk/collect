@@ -16,6 +16,7 @@
 package org.odk.collect.android.utilities
 
 import android.content.res.Configuration
+import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.dynamicpreload.ExternalDataUtil
 import org.odk.collect.androidshared.utils.ScreenUtils
@@ -195,6 +196,6 @@ object Appearances {
     @JvmStatic
     fun isMasked(prompt: FormEntryPrompt): Boolean {
         val appearance = getSanitizedAppearanceHint(prompt)
-        return appearance.contains(MASKED)
+        return appearance.contains(MASKED) && prompt.dataType == Constants.DATATYPE_TEXT
     }
 }

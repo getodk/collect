@@ -19,6 +19,7 @@ import android.content.res.Configuration
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
+import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
 import org.junit.Test
 import org.mockito.kotlin.mock
@@ -233,7 +234,8 @@ class AppearancesTest {
     }
 
     @Test
-    fun `useThousandSeparator returns false when 'thousands-sep' appearance is found but mixed with 'masked'`() {
+    fun `useThousandSeparator returns false when 'thousands-sep' appearance is found but mixed with 'masked' for text questions`() {
+        whenever(formEntryPrompt.dataType).thenReturn(Constants.DATATYPE_TEXT)
         whenever(formEntryPrompt.appearanceHint).thenReturn("thousands-sep masked")
         assertFalse(Appearances.useThousandSeparator(formEntryPrompt))
     }
@@ -369,6 +371,7 @@ class AppearancesTest {
 
     @Test
     fun `isMasked returns false when there is no appearance`() {
+        whenever(formEntryPrompt.dataType).thenReturn(Constants.DATATYPE_TEXT)
         assertFalse(Appearances.isMasked(formEntryPrompt))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("")
@@ -377,13 +380,25 @@ class AppearancesTest {
 
     @Test
     fun `isMasked returns false when non of supported appearances is found`() {
+        whenever(formEntryPrompt.dataType).thenReturn(Constants.DATATYPE_TEXT)
         whenever(formEntryPrompt.appearanceHint).thenReturn("blah")
         assertFalse(Appearances.isMasked(formEntryPrompt))
     }
 
     @Test
-    fun `isMasked returns true when 'masked' appearance is found`() {
+    fun `isMasked returns true when 'masked' appearance is found for text questions`() {
+        whenever(formEntryPrompt.dataType).thenReturn(Constants.DATATYPE_TEXT)
         whenever(formEntryPrompt.appearanceHint).thenReturn("masked")
         assertTrue(Appearances.isMasked(formEntryPrompt))
+    }
+
+    @Test
+    fun `isMasked returns false when 'masked' appearance is found for numeric questions`() {
+        whenever(formEntryPrompt.dataType).thenReturn(Constants.DATATYPE_INTEGER)
+        whenever(formEntryPrompt.appearanceHint).thenReturn("masked")
+        assertFalse(Appearances.isMasked(formEntryPrompt))
+
+        whenever(formEntryPrompt.dataType).thenReturn(Constants.DATATYPE_DECIMAL)
+        assertFalse(Appearances.isMasked(formEntryPrompt))
     }
 }
