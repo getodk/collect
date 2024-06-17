@@ -152,11 +152,9 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
         val layerId = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER)
         if (layerId != null) {
             val layer = referenceLayerRepository.get(layerId)
-            if (layer == null || !cftor.supportsLayer(layer.file)) {
+            if (layer == null) {
                 settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, null)
             }
-
-            settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, null)
         }
     }
 }

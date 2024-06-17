@@ -86,7 +86,7 @@ class DirectoryReferenceLayerRepositoryTest {
     }
 
     @Test
-    fun get_returnsLayer() {
+    fun get_returnsProperLayer() {
         val file1 = TempFiles.createTempFile(sharedLayersDir)
         val file2 = TempFiles.createTempFile(sharedLayersDir)
         mapConfigurator.apply {
@@ -96,6 +96,17 @@ class DirectoryReferenceLayerRepositoryTest {
 
         val file2Layer = repository.getAll().first { it.file == file2 }
         assertThat(repository.get(file2Layer.id)!!.file, equalTo(file2))
+    }
+
+    @Test
+    fun get_returnsNullIfLayerIsNotSupported() {
+        val file = TempFiles.createTempFile(sharedLayersDir)
+        mapConfigurator.apply {
+            addFile(file, false, file.name)
+        }
+
+        val fileId = repository.getIdForFile(sharedLayersDir.absolutePath, file)
+        assertThat(repository.get(fileId), equalTo(null))
     }
 
     @Test

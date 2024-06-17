@@ -21,7 +21,7 @@ class DirectoryReferenceLayerRepository(
     override fun get(id: String): ReferenceLayer? {
         val file = getAllFilesWithDirectory().firstOrNull { getIdForFile(it.second, it.first) == id }
 
-        return if (file != null) {
+        return if (file != null && mapConfigurator.supportsLayer(file.first)) {
             ReferenceLayer(getIdForFile(file.second, file.first), file.first, getName(file.first))
         } else {
             null
@@ -46,7 +46,7 @@ class DirectoryReferenceLayerRepository(
         }
     }
 
-    private fun getIdForFile(directoryPath: String, file: File) =
+    fun getIdForFile(directoryPath: String, file: File) =
         PathUtils.getRelativeFilePath(directoryPath, file.absolutePath)
 
     private fun getName(file: File): String {
