@@ -67,7 +67,7 @@ class DeleteBlankFormFragment(
             this
         ) { _, result ->
             val selected = result.getStringArray(MultiSelectControlsFragment.RESULT_SELECTED)!!
-            onDeleteSelected(selected)
+            onDeleteSelected(selected.map { it.toLong() }.toLongArray())
         }
     }
 
@@ -85,7 +85,7 @@ class DeleteBlankFormFragment(
         menuHost.addMenuProvider(blankFormListMenuProvider, viewLifecycleOwner, State.RESUMED)
     }
 
-    private fun onDeleteSelected(selected: Array<String>) {
+    private fun onDeleteSelected(selected: LongArray) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(string.delete_file)
             .setMessage(
@@ -95,7 +95,7 @@ class DeleteBlankFormFragment(
                 )
             )
             .setPositiveButton(getString(string.delete_yes)) { _, _ ->
-                blankFormListViewModel.deleteForms(*(selected.map { it.toLong() }.toLongArray()))
+                blankFormListViewModel.deleteForms(*selected)
                 multiSelectViewModel.unselectAll()
             }
             .setNegativeButton(getString(string.delete_no), null)

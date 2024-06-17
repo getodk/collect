@@ -70,7 +70,7 @@ class DeleteSavedFormFragment(
             this
         ) { _, result ->
             val selected = result.getStringArray(MultiSelectControlsFragment.RESULT_SELECTED)!!
-            onDeleteSelected(selected)
+            onDeleteSelected(selected.map { it.toLong() }.toLongArray())
         }
     }
 
@@ -104,7 +104,7 @@ class DeleteSavedFormFragment(
         }
     }
 
-    private fun onDeleteSelected(selected: Array<String>) {
+    private fun onDeleteSelected(selected: LongArray) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(string.delete_file)
             .setMessage(
@@ -117,7 +117,7 @@ class DeleteSavedFormFragment(
                 logDelete(selected.size)
 
                 multiSelectViewModel.unselectAll()
-                savedFormListViewModel.deleteForms(selected.map { it.toLong() }.toLongArray()).observe(
+                savedFormListViewModel.deleteForms(selected).observe(
                     viewLifecycleOwner,
                     object : SnackbarPresenterObserver<Int>(requireView()) {
                         override fun getSnackbarDetails(value: Int): SnackbarUtils.SnackbarDetails {
