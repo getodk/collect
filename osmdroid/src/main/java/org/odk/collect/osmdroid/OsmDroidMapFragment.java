@@ -361,8 +361,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     public @NonNull
     List<MapPoint> getPolyLinePoints(int featureId) {
         MapFeature feature = features.get(featureId);
-        if (feature instanceof DynamicPolyLineFeature) {
-            return ((DynamicPolyLineFeature) feature).getPoints();
+        if (feature instanceof LineFeature) {
+            return ((LineFeature) feature).getPoints();
         }
         return new ArrayList<>();
     }
@@ -792,13 +792,19 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
     }
 
+    private interface LineFeature extends MapFeature {
+
+        List<MapPoint> getPoints();
+    }
+
     /**
      * A polyline or polygon that can be manipulated by dragging markers at its vertices.
      */
-    private class StaticPolyLineFeature implements MapFeature {
+    private class StaticPolyLineFeature implements LineFeature {
         final MapView map;
         final Polyline polyline;
         final boolean closedPolygon;
+        private final List<MapPoint> points;
 
         StaticPolyLineFeature(MapView map, LineDescription lineDescription) {
             this.map = map;
@@ -817,7 +823,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             paint.setStrokeWidth(lineDescription.getStrokeWidth());
             map.getOverlays().add(polyline);
 
-            List<GeoPoint> geoPoints = StreamSupport.stream(lineDescription.getPoints().spliterator(), false).map(mapPoint -> new GeoPoint(mapPoint.latitude, mapPoint.longitude, mapPoint.altitude)).collect(Collectors.toList());
+            points = lineDescription.getPoints();
+            List<GeoPoint> geoPoints = StreamSupport.stream(points.spliterator(), false).map(mapPoint -> new GeoPoint(mapPoint.latitude, mapPoint.longitude, mapPoint.altitude)).collect(Collectors.toList());
             if (closedPolygon && !geoPoints.isEmpty()) {
                 geoPoints.add(geoPoints.get(0));
             }
@@ -848,12 +855,17 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         public void dispose() {
             map.getOverlays().remove(polyline);
         }
+
+        @Override
+        public List<MapPoint> getPoints() {
+            return points;
+        }
     }
 
     /**
      * A polyline or polygon that can be manipulated by dragging markers at its vertices.
      */
-    private class DynamicPolyLineFeature implements MapFeature {
+    private class DynamicPolyLineFeature implements LineFeature {
         final MapView map;
         final List<Marker> markers = new ArrayList<>();
         final Polyline polyline;
@@ -918,6 +930,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             map.getOverlays().remove(polyline);
         }
 
+        @Override
         public List<MapPoint> getPoints() {
             List<MapPoint> points = new ArrayList<>();
             for (Marker marker : markers) {

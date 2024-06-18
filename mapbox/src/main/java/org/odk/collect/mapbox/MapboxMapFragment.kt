@@ -389,8 +389,8 @@ class MapboxMapFragment :
 
     override fun getPolyLinePoints(featureId: Int): List<MapPoint> {
         val feature = features[featureId]
-        return if (feature is DynamicPolyLineFeature) {
-            feature.mapPoints
+        return if (feature is LineFeature) {
+            feature.points
         } else {
             emptyList()
         }
