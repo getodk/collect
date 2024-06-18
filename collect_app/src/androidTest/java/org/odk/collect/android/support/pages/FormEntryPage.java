@@ -23,6 +23,7 @@ import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 import android.os.Build;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ApplicationProvider;
 
 import org.hamcrest.Matcher;
@@ -308,10 +309,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
             questionText = question;
         }
 
-        Matcher<View> classMatcher = withClassName(endsWith("EditText"));
-        Matcher<View> questionViewMatcher = isQuestionView(questionText);
-        onView(allOf(classMatcher, isDescendantOfA(questionViewMatcher))).perform(replaceText(answer));
-        closeSoftKeyboard();
+        Interactions.replaceText(getQuestionFieldMatcher(questionText), answer);
         return this;
     }
 
@@ -326,9 +324,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage clickOnQuestionField(String questionText) {
-        Matcher<View> classMatcher = withClassName(endsWith("EditText"));
-        Matcher<View> questionViewMatcher = isQuestionView(questionText);
-        Interactions.clickOn(allOf(classMatcher, isDescendantOfA(questionViewMatcher)));
+        Interactions.clickOn(getQuestionFieldMatcher(questionText));
         return this;
     }
 
@@ -418,6 +414,13 @@ public class FormEntryPage extends Page<FormEntryPage> {
         onView(withId(com.google.android.material.R.id.snackbar_text))
                 .check(matches(withText(String.format(ApplicationProvider.getApplicationContext().getString(org.odk.collect.strings.R.string.background_location_enabled), "⋮"))));
         return this;
+    }
+
+    private static @NonNull Matcher<View> getQuestionFieldMatcher(String question) {
+        return allOf(
+                withClassName(endsWith("EditText")),
+                isDescendantOfA(isQuestionView(question))
+        );
     }
 
     public static class QuestionAndAnswer {
