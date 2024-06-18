@@ -392,15 +392,15 @@
   <string name="carto_map_style_positron">Positroni</string>
   <string name="carto_map_style_dark_matter">Pimeä aine</string>
   <!--Title for the reference layer section of settings-->
-  <string name="reference_layer">Viitekerros</string>
+  <string name="offline_layer">Viitekerros</string>
   <!--Label for the reference layer setting-->
   <string name="layer_data_file">Kerros</string>
   <!--Title for the screen that allows the user to select a reference layer for maps-->
-  <string name="reference_layer_dialog_title">Valitse viitekerros</string>
+  <string name="offline_layer_dialog_title">Valitse viitekerros</string>
   <!--Description of how to add reference layers to the project-->
-  <string name="reference_layer_dialog_description" tools:ignore="UnusedResources">Valitse viitekerros jota käytetään kaikissa tämän projektin kartoissa. Voit lisätä vaihtoehtoja listaan valitsemalla MBTile-tiedoston laitteeltasi.</string>
+  <string name="offline_layer_dialog_description" tools:ignore="UnusedResources">Valitse viitekerros jota käytetään kaikissa tämän projektin kartoissa. Voit lisätä vaihtoehtoja listaan valitsemalla MBTile-tiedoston laitteeltasi.</string>
   <!--Text of button user can press to get help when setting up Reference Layers-->
-  <string name="get_help_with_reference_layers">Opi lisää MBTile-tiedostojen lisäämisestä.</string>
+  <string name="get_help_with_offline_layers">Opi lisää MBTile-tiedostojen lisäämisestä.</string>
   <!--Text for button that lets the user select a reference layer on their device to add-->
   <string name="add_layer" tools:ignore="UnusedResources">Lisää kerros</string>
   <!--Text for button that lets the user delete a reference layer-->

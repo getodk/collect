@@ -370,7 +370,7 @@
   <string name="topographic">Топографический</string>
   <string name="google_play_services_error_occured">Не удалось получить доступ к Google картам. Установлен ли Google Play Services?</string>
   <!--Title for the reference layer section of settings-->
-  <string name="reference_layer">Базовый слой</string>
+  <string name="offline_layer">Базовый слой</string>
   <!--Label for the reference layer setting-->
   <!--Title for the screen that allows the user to select a reference layer for maps-->
   <!--Description of how to add reference layers to the project-->

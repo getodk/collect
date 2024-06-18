@@ -392,14 +392,14 @@
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Matéria escura</string>
   <!--Title for the reference layer section of settings-->
-  <string name="reference_layer">Camada de referência</string>
+  <string name="offline_layer">Camada de referência</string>
   <!--Label for the reference layer setting-->
   <string name="layer_data_file">Camada</string>
   <!--Title for the screen that allows the user to select a reference layer for maps-->
-  <string name="reference_layer_dialog_title">Selecionar camada de referência</string>
+  <string name="offline_layer_dialog_title">Selecionar camada de referência</string>
   <!--Description of how to add reference layers to the project-->
   <!--Text of button user can press to get help when setting up Reference Layers-->
-  <string name="get_help_with_reference_layers">Saber mais sobre adicionar MBTiles.</string>
+  <string name="get_help_with_offline_layers">Saber mais sobre adicionar MBTiles.</string>
   <!--Text for button that lets the user select a reference layer on their device to add-->
   <string name="add_layer" tools:ignore="UnusedResources">Adicionar camada</string>
   <!--Text for button that lets the user delete a reference layer-->

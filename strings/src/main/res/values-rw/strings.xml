@@ -354,7 +354,7 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="carto_map_style_positron">Utunyangingo.</string>
   <string name="carto_map_style_dark_matter">Ibibazo bidasobanutse cg byijimye.</string>
   <!--Title for the reference layer section of settings-->
-  <string name="reference_layer">Indangakitegererezo.</string>
+  <string name="offline_layer">Indangakitegererezo.</string>
   <!--Label for the reference layer setting-->
   <!--Title for the screen that allows the user to select a reference layer for maps-->
   <!--Description of how to add reference layers to the project-->
