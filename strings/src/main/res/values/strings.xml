@@ -479,25 +479,25 @@
     <string name="carto_map_style_positron">Positron</string>
     <string name="carto_map_style_dark_matter">Dark Matter</string>
 
-    <!-- Title for the reference layer section of settings-->
-    <string name="reference_layer">Reference layer</string>
+    <!-- Title for the offline layer section of settings-->
+    <string name="offline_layer">Offline layers</string>
 
-    <!-- Label for the reference layer setting -->
+    <!-- Label for the offline layer setting -->
     <string name="layer_data_file">Layer</string>
 
-    <!-- Title for the screen that allows the user to select a reference layer for maps -->
-    <string name="reference_layer_dialog_title">Select reference layer</string>
+    <!-- Title for the screen that allows the user to select a offline layer for maps -->
+    <string name="offline_layer_dialog_title">Select offline layer</string>
 
-    <!-- Description of how to add reference layers to the project -->
-    <string name="reference_layer_dialog_description">Select the reference layer to use for all maps in this project. You can add options to the list by selecting an MBTile file from your device.</string>
+    <!-- Description of how to add offline layers to the project -->
+    <string name="offline_layer_dialog_description">Select the offline layer to use for all maps in this project. You can add options to the list by selecting an MBTile file from your device.</string>
 
-    <!-- Text of button user can press to get help when setting up Reference Layers -->
-    <string name="get_help_with_reference_layers">Learn more about adding MBTiles.</string>
+    <!-- Text of button user can press to get help when setting up Offline Layers -->
+    <string name="get_help_with_offline_layers">Learn more about adding MBTiles.</string>
 
-    <!-- Text for button that lets the user select a reference layer on their device to add -->
+    <!-- Text for button that lets the user select a offline layer on their device to add -->
     <string name="add_layer">Add layers</string>
 
-    <!-- Text for button that lets the user delete a reference layer -->
+    <!-- Text for button that lets the user delete a offline layer -->
     <string name="delete_layer">Delete layer</string>
 
     <!-- Text for title above list of layers -->

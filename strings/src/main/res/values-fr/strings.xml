@@ -392,15 +392,15 @@
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Matière Sombre</string>
   <!--Title for the reference layer section of settings-->
-  <string name="reference_layer">Couche de référence</string>
+  <string name="offline_layer">Couche de référence</string>
   <!--Label for the reference layer setting-->
   <string name="layer_data_file">Couche</string>
   <!--Title for the screen that allows the user to select a reference layer for maps-->
-  <string name="reference_layer_dialog_title">Sélectionnez la couche de référence</string>
+  <string name="offline_layer_dialog_title">Sélectionnez la couche de référence</string>
   <!--Description of how to add reference layers to the project-->
-  <string name="reference_layer_dialog_description" tools:ignore="UnusedResources">Sélectionnez la couche de référence à utiliser pour toutes les cartes de ce projet.  Vous pouvez ajouter des options à la liste en sélectionnant un fichier MBTile sur votre appareil.</string>
+  <string name="offline_layer_dialog_description" tools:ignore="UnusedResources">Sélectionnez la couche de référence à utiliser pour toutes les cartes de ce projet.  Vous pouvez ajouter des options à la liste en sélectionnant un fichier MBTile sur votre appareil.</string>
   <!--Text of button user can press to get help when setting up Reference Layers-->
-  <string name="get_help_with_reference_layers">En apprendre plus à propos de l\'ajout de MBTiles.</string>
+  <string name="get_help_with_offline_layers">En apprendre plus à propos de l\'ajout de MBTiles.</string>
   <!--Text for button that lets the user select a reference layer on their device to add-->
   <string name="add_layer" tools:ignore="UnusedResources">Ajouter une couche</string>
   <!--Text for button that lets the user delete a reference layer-->

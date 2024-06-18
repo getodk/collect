@@ -388,7 +388,7 @@
   <string name="carto_map_style_positron">Positrón</string>
   <string name="carto_map_style_dark_matter">Materia oscura</string>
   <!--Title for the reference layer section of settings-->
-  <string name="reference_layer">Capa de referencia</string>
+  <string name="offline_layer">Capa de referencia</string>
   <!--Label for the reference layer setting-->
   <!--Title for the screen that allows the user to select a reference layer for maps-->
   <!--Description of how to add reference layers to the project-->

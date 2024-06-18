@@ -229,7 +229,7 @@ class OfflineMapLayersPickerTest {
     fun `the 'learn more' button should be enabled during loading layers`() {
         launchFragment()
 
-        onView(withText(string.get_help_with_reference_layers)).check(matches(isEnabled()))
+        onView(withText(string.get_help_with_offline_layers)).check(matches(isEnabled()))
     }
 
     @Test
@@ -238,7 +238,7 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        EspressoHelpers.clickOnText(string.get_help_with_reference_layers)
+        EspressoHelpers.clickOnText(string.get_help_with_offline_layers)
 
         verify(externalWebPageHelper).openWebPageInCustomTab(any(), eq(Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices")))
     }
