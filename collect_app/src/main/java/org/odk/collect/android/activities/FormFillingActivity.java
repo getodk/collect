@@ -563,7 +563,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         formEntryViewModel.getCurrentIndex().observe(this, indexAndValidationResult -> {
             if (indexAndValidationResult != null) {
                 FormIndex formIndex = indexAndValidationResult.component1();
-                ValidationResult validationResult = indexAndValidationResult.component2();
+                FailedValidationResult validationResult = indexAndValidationResult.component2();
                 formIndexAnimationHandler.handle(formIndex);
                 if (validationResult != null) {
                     handleValidationResult(validationResult);
