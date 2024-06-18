@@ -330,9 +330,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public @NonNull List<MapPoint> getPolyLinePoints(int featureId) {
         MapFeature feature = features.get(featureId);
-        if (feature instanceof DynamicPolyLineFeature) {
-            return ((DynamicPolyLineFeature) feature).getPoints();
+        if (feature instanceof LineFeature) {
+            return ((LineFeature) feature).getPoints();
         }
+
         return new ArrayList<>();
     }
 
@@ -771,9 +772,15 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    /** A polyline or polygon that can not be manipulated by dragging markers at its vertices. */
-    private static class StaticPolyLineFeature implements MapFeature {
+    private interface LineFeature extends MapFeature {
 
+        List<MapPoint> getPoints();
+    }
+
+    /** A polyline or polygon that can not be manipulated by dragging markers at its vertices. */
+    private static class StaticPolyLineFeature implements LineFeature {
+
+        private List<MapPoint> points;
         private Polyline polyline;
 
         StaticPolyLineFeature(LineDescription lineDescription, GoogleMap map) {
@@ -781,7 +788,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 return;
             }
 
-            List<LatLng> latLngs = StreamSupport.stream(lineDescription.getPoints().spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList());
+            points = lineDescription.getPoints();
+            List<LatLng> latLngs = StreamSupport.stream(points.spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList());
             if (lineDescription.getClosed() && !latLngs.isEmpty()) {
                 latLngs.add(latLngs.get(0));
             }
@@ -830,10 +838,15 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 polyline = null;
             }
         }
+
+        @Override
+        public List<MapPoint> getPoints() {
+            return points;
+        }
     }
 
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
-    private static class DynamicPolyLineFeature implements MapFeature {
+    private static class DynamicPolyLineFeature implements LineFeature {
 
         private final Context context;
         private final GoogleMap map;

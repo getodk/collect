@@ -14,16 +14,16 @@ internal class StaticPolyLineFeature(
     private val featureId: Int,
     private val featureClickListener: MapFragment.FeatureListener?,
     private val lineDescription: LineDescription
-) : MapFeature {
-    private val mapPoints = mutableListOf<MapPoint>()
+) : LineFeature {
+    override val points = mutableListOf<MapPoint>()
     private var polylineAnnotation: PolylineAnnotation? = null
 
     init {
         lineDescription.points.forEach {
-            mapPoints.add(it)
+            points.add(it)
         }
 
-        val points = mapPoints
+        val points = points
             .map {
                 Point.fromLngLat(it.longitude, it.latitude, it.altitude)
             }
@@ -65,6 +65,6 @@ internal class StaticPolyLineFeature(
         polylineAnnotation?.let {
             polylineAnnotationManager.delete(it)
         }
-        mapPoints.clear()
+        points.clear()
     }
 }
