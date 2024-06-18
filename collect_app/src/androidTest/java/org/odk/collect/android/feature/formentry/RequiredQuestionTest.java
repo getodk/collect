@@ -104,7 +104,7 @@ public class RequiredQuestionTest {
         rule.startAtMainMenu()
                 .copyForm("requiredQuestionInFieldList.xml")
                 .startBlankForm("requiredQuestionInFieldList")
-                .answerQuestion(0, "Foo")
+                .answerQuestion("Foo", true, "blah")
                 .swipeToNextQuestionWithConstraintViolation("Custom required message2")
                 .clickOptionsIcon()
                 .clickOnString(org.odk.collect.strings.R.string.validate)

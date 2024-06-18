@@ -301,17 +301,24 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage answerQuestion(String question, boolean isRequired, String answer) {
+        String questionText;
         if (isRequired) {
-            assertQuestionText("* " + question);
+            questionText = "* " + question;
         } else {
-            assertQuestionText(question);
+            questionText = question;
         }
 
-        inputText(answer);
+        Matcher<View> classMatcher = withClassName(endsWith("EditText"));
+        Matcher<View> questionViewMatcher = isQuestionView(questionText);
+        onView(allOf(classMatcher, isDescendantOfA(questionViewMatcher))).perform(replaceText(answer));
         closeSoftKeyboard();
         return this;
     }
 
+    /**
+     * @deprecated Use {@link #answerQuestion(String, String)} instead
+     */
+    @Deprecated
     public FormEntryPage answerQuestion(int index, String answer) {
         onView(withIndex(withClassName(endsWith("EditText")), index)).perform(scrollTo());
         onView(withIndex(withClassName(endsWith("EditText")), index)).perform(replaceText(answer));
