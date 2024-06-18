@@ -67,7 +67,7 @@ class AuditTest {
         rule.startAtMainMenu()
             .copyForm("two-question-audit-track-changes.xml")
             .startBlankForm("One Question Audit Track Changes")
-            .fillOut(FormEntryPage.QuestionAndAnswer("What is your age", "31"))
+            .fillOut(FormEntryPage.QuestionAndAnswer("What is your age?", "31"))
             .clickOptionsIcon()
             .clickGeneralSettings()
 
@@ -81,7 +81,7 @@ class AuditTest {
         rule.startAtMainMenu()
             .copyForm("two-question-audit-track-changes.xml")
             .startBlankForm("One Question Audit Track Changes")
-            .fillOut(FormEntryPage.QuestionAndAnswer("What is your age", "31"))
+            .fillOut(FormEntryPage.QuestionAndAnswer("What is your age?", "31"))
             .swipeToNextQuestion("What is your name?")
             .fillOut(FormEntryPage.QuestionAndAnswer("What is your name?", "Adam"))
             .swipeToEndScreen()
