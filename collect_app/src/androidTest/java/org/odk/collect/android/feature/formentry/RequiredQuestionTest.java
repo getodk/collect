@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.equalTo;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.apache.commons.csv.CSVRecord;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -101,7 +100,6 @@ public class RequiredQuestionTest {
     }
 
     @Test
-    @Ignore("https://github.com/getodk/collect/issues/5939")
     public void ifRequiredQuestionIsInFieldListAndNotFirst_shouldBeValidatedProperly() {
         rule.startAtMainMenu()
                 .copyForm("requiredQuestionInFieldList.xml")
