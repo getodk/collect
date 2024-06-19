@@ -17,7 +17,7 @@ fun Form.shouldFormBeSentAutomatically(isAutoSendEnabledInSettings: Boolean): Bo
 }
 
 fun Form.getAutoSendMode(): FormAutoSendMode {
-    return if (autoSend == "false") {
+    return if (autoSend?.trim()?.lowercase() == "false") {
         FormAutoSendMode.OPT_OUT
     } else if (autoSend?.trim()?.lowercase() == "true") {
         FormAutoSendMode.FORCED
