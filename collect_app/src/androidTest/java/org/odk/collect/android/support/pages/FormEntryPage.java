@@ -23,6 +23,7 @@ import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 import android.os.Build;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ApplicationProvider;
 
 import org.hamcrest.Matcher;
@@ -301,17 +302,21 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage answerQuestion(String question, boolean isRequired, String answer) {
+        String questionText;
         if (isRequired) {
-            assertQuestionText("* " + question);
+            questionText = "* " + question;
         } else {
-            assertQuestionText(question);
+            questionText = question;
         }
 
-        inputText(answer);
-        closeSoftKeyboard();
+        Interactions.replaceText(getQuestionFieldMatcher(questionText), answer);
         return this;
     }
 
+    /**
+     * @deprecated Use {@link #answerQuestion(String, String)} instead
+     */
+    @Deprecated
     public FormEntryPage answerQuestion(int index, String answer) {
         onView(withIndex(withClassName(endsWith("EditText")), index)).perform(scrollTo());
         onView(withIndex(withClassName(endsWith("EditText")), index)).perform(replaceText(answer));
@@ -319,9 +324,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage clickOnQuestionField(String questionText) {
-        Matcher<View> classMatcher = withClassName(endsWith("EditText"));
-        Matcher<View> questionViewMatcher = isQuestionView(questionText);
-        Interactions.clickOn(allOf(classMatcher, isDescendantOfA(questionViewMatcher)));
+        Interactions.clickOn(getQuestionFieldMatcher(questionText));
         return this;
     }
 
@@ -411,6 +414,13 @@ public class FormEntryPage extends Page<FormEntryPage> {
         onView(withId(com.google.android.material.R.id.snackbar_text))
                 .check(matches(withText(String.format(ApplicationProvider.getApplicationContext().getString(org.odk.collect.strings.R.string.background_location_enabled), "⋮"))));
         return this;
+    }
+
+    private static @NonNull Matcher<View> getQuestionFieldMatcher(String question) {
+        return allOf(
+                withClassName(endsWith("EditText")),
+                isDescendantOfA(isQuestionView(question))
+        );
     }
 
     public static class QuestionAndAnswer {

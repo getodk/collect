@@ -1,8 +1,10 @@
 package org.odk.collect.android.support
 
 import android.view.View
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Root
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import org.hamcrest.Matcher
@@ -45,5 +47,14 @@ object Interactions {
             clickOn(view, root)
             assertion()
         }
+    }
+
+    /**
+     * Replaces text in the view matched by [view] and then closes the keyboard.
+     */
+    @JvmStatic
+    fun replaceText(view: Matcher<View>, text: String) {
+        onView(view).perform(ViewActions.replaceText(text))
+        closeSoftKeyboard()
     }
 }
