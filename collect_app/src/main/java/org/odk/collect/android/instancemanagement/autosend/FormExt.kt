@@ -10,9 +10,9 @@ fun Form.shouldFormBeSentAutomatically(isAutoSendEnabledInSettings: Boolean): Bo
     }
 
     return if (isAutoSendEnabledInSettings) {
-        autoSend == null || getAutoSendMode() != FormAutoSendMode.OPT_OUT
+        getAutoSendMode() != FormAutoSendMode.OPT_OUT
     } else {
-        autoSend != null && getAutoSendMode() == FormAutoSendMode.FORCED
+        getAutoSendMode() == FormAutoSendMode.FORCED
     }
 }
 

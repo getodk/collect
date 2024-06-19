@@ -10,17 +10,17 @@ object InstanceAutoSendFetcher {
     fun getInstancesToAutoSend(
         instancesRepository: InstancesRepository,
         formsRepository: FormsRepository,
-        formAutoSend: Boolean = false
+        forcedOnly: Boolean = false
     ): List<Instance> {
         val allFinalizedForms = instancesRepository.getAllByStatus(
             Instance.STATUS_COMPLETE,
             Instance.STATUS_SUBMISSION_FAILED
         )
 
-        val filter: (Form) -> Boolean = if (formAutoSend) {
-            { form -> form.autoSend != null && form.autoSend == "true" }
+        val filter: (Form) -> Boolean = if (forcedOnly) {
+            { form -> form.getAutoSendMode() == FormAutoSendMode.FORCED }
         } else {
-            { form -> form.autoSend == null }
+            { form -> form.getAutoSendMode() == FormAutoSendMode.NEUTRAL }
         }
 
         return allFinalizedForms.filter {
