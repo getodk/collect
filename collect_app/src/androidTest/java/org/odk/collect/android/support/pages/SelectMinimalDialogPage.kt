@@ -2,7 +2,7 @@ package org.odk.collect.android.support.pages
 
 class SelectMinimalDialogPage(private val formName: String) : Page<SelectMinimalDialogPage>() {
     override fun assertOnPage(): SelectMinimalDialogPage {
-        assertTextDoesNotExist(formName)
+        assertTextDoesNotExistInDialog(formName)
         return this
     }
 

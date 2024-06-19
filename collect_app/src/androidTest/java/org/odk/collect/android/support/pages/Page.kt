@@ -189,6 +189,13 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
+    fun assertTextDoesNotExistInDialog(text: String?): T {
+        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+            .inRoot(isDialog())
+            .check(doesNotExist())
+        return this as T
+    }
+
     fun checkIsSnackbarWithQuantityDisplayed(message: Int, quantity: Int): T {
         return checkIsSnackbarWithMessageDisplayed(
             ApplicationProvider.getApplicationContext<Application>()
