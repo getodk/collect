@@ -1,14 +1,14 @@
 package org.odk.collect.testshared
 
 import android.content.Intent
+import android.view.View
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Root
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.assertThat
@@ -17,22 +17,21 @@ import org.hamcrest.Matchers.equalTo
 
 object Assertions {
 
-    fun assertText(text: String) {
-        onView(allOf(withText(text), withEffectiveVisibility(VISIBLE)))
-            .check(matches(not(doesNotExist())))
+    fun assertText(view: Matcher<View>, root: Matcher<Root>? = null) {
+        val onView = if (root != null) {
+            onView(allOf(view, withEffectiveVisibility(VISIBLE))).inRoot(root)
+        } else {
+            onView(allOf(view, withEffectiveVisibility(VISIBLE)))
+        }
+
+        onView.check(matches(not(doesNotExist())))
     }
 
-    fun assertTextInDialog(text: String) {
-        onView(allOf(withText(text), withEffectiveVisibility(VISIBLE)))
-            .inRoot(isDialog())
-            .check(matches(not(doesNotExist())))
-    }
-
-    fun assertIntents(vararg matchers: Matcher<Intent>) {
+    fun assertIntents(vararg intentMatchers: Matcher<Intent>) {
         val intents = Intents.getIntents()
-        assertThat(matchers.size, equalTo(intents.size))
+        assertThat(intentMatchers.size, equalTo(intents.size))
 
-        matchers.forEachIndexed { index, matcher ->
+        intentMatchers.forEachIndexed { index, matcher ->
             assertThat(intents[index], matcher)
         }
     }

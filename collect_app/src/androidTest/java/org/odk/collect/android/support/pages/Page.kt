@@ -131,7 +131,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertText(text: String): T {
-        Assertions.assertText(text)
+        Assertions.assertText(withText(text))
         return this as T
     }
 
