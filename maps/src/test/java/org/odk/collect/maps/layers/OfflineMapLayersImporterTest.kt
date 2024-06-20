@@ -3,8 +3,6 @@ package org.odk.collect.maps.layers
 import androidx.core.net.toUri
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -64,7 +62,7 @@ class OfflineMapLayersImporterTest {
             scheduler.flush()
             assertThat(it.isVisible, equalTo(true))
             it.viewModel.loadLayersToImport(emptyList(), it.requireContext())
-            onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(click())
+            Interactions.clickOn(withId(org.odk.collect.maps.R.id.add_layer_button))
             scheduler.flush()
             RobolectricHelpers.runLooper()
             assertThat(it.isVisible, equalTo(false))
@@ -120,12 +118,12 @@ class OfflineMapLayersImporterTest {
         launchFragment()
         scheduler.flush()
 
-        onView(withId(org.odk.collect.maps.R.id.current_project_option)).perform(click())
+        Interactions.clickOn(withId(org.odk.collect.maps.R.id.current_project_option))
 
         onView(withId(org.odk.collect.maps.R.id.all_projects_option)).check(matches(not(isChecked())))
         onView(withId(org.odk.collect.maps.R.id.current_project_option)).check(matches(isChecked()))
 
-        onView(withId(org.odk.collect.maps.R.id.all_projects_option)).perform(click())
+        Interactions.clickOn(withId(org.odk.collect.maps.R.id.all_projects_option))
 
         onView(withId(org.odk.collect.maps.R.id.all_projects_option)).check(matches(isChecked()))
         onView(withId(org.odk.collect.maps.R.id.current_project_option)).check(matches(not(isChecked())))
@@ -136,7 +134,7 @@ class OfflineMapLayersImporterTest {
         val scenario = launchFragment()
         scheduler.flush()
 
-        onView(withId(org.odk.collect.maps.R.id.current_project_option)).perform(click())
+        Interactions.clickOn(withId(org.odk.collect.maps.R.id.current_project_option))
 
         scenario.recreate()
 
@@ -204,7 +202,7 @@ class OfflineMapLayersImporterTest {
 
         scheduler.flush()
 
-        onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(scrollTo(), click())
+        Interactions.clickOn(withId(org.odk.collect.maps.R.id.add_layer_button))
         scheduler.flush()
 
         val fileCaptor = argumentCaptor<File>()
@@ -228,9 +226,8 @@ class OfflineMapLayersImporterTest {
 
         scheduler.flush()
 
-        onView(withId(org.odk.collect.maps.R.id.current_project_option)).perform(click())
-
-        onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(scrollTo(), click())
+        Interactions.clickOn(withId(org.odk.collect.maps.R.id.current_project_option))
+        Interactions.clickOn(withId(org.odk.collect.maps.R.id.add_layer_button))
         scheduler.flush()
 
         val fileCaptor = argumentCaptor<File>()
