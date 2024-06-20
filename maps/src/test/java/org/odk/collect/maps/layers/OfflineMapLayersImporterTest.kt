@@ -4,6 +4,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -203,7 +204,7 @@ class OfflineMapLayersImporterTest {
 
         scheduler.flush()
 
-        onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(click())
+        onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(scrollTo(), click())
         scheduler.flush()
 
         val fileCaptor = argumentCaptor<File>()
@@ -229,7 +230,7 @@ class OfflineMapLayersImporterTest {
 
         onView(withId(org.odk.collect.maps.R.id.current_project_option)).perform(click())
 
-        onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(click())
+        onView(withId(org.odk.collect.maps.R.id.add_layer_button)).perform(scrollTo(), click())
         scheduler.flush()
 
         val fileCaptor = argumentCaptor<File>()

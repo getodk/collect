@@ -350,7 +350,7 @@ class OfflineMapLayersPickerTest {
 
         EspressoHelpers.clickOnText(string.add_layer)
         scheduler.flush()
-        onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(click())
+        onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(scrollTo(), click())
 
         onView(withId(R.id.progress_indicator)).check(matches(isDisplayed()))
         onView(withId(R.id.layers)).check(matches(not(isDisplayed())))
@@ -375,7 +375,7 @@ class OfflineMapLayersPickerTest {
 
         EspressoHelpers.clickOnText(string.add_layer)
         scheduler.flush()
-        onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(click())
+        onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(scrollTo(), click())
         whenever(referenceLayerRepository.getAll()).thenReturn(
             listOf(
                 ReferenceLayer("1", TempFiles.createTempFile(), file1.name),
