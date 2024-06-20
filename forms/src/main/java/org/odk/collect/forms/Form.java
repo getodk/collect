@@ -262,6 +262,7 @@ public final class Form {
         return language;
     }
 
+    @Nullable
     public String getAutoSend() {
         return autoSend;
     }

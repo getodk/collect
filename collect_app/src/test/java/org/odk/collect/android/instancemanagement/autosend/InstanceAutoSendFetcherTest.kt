@@ -85,6 +85,8 @@ class InstanceAutoSendFetcherTest {
             contains(
                 instanceOfFormWithoutSpecifiedAutoSendComplete.instanceFilePath,
                 instanceOfFormWithoutSpecifiedAutoSendSubmissionFailed.instanceFilePath,
+                instanceOfFormWithCustomAutoSendComplete.instanceFilePath,
+                instanceOfFormWithCustomAutoSendSubmissionFailed.instanceFilePath
             )
         )
     }
@@ -121,7 +123,7 @@ class InstanceAutoSendFetcherTest {
         val instancesToSend = InstanceAutoSendFetcher.getInstancesToAutoSend(
             instancesRepository,
             formsRepository,
-            formAutoSend = true
+            forcedOnly = true
         )
 
         assertThat(

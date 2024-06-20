@@ -7,72 +7,74 @@ import org.odk.collect.formstest.FormFixtures
 
 class FormExtTest {
     @Test
-    fun `should return true when auto send is not set on a form level and enabled in settings`() {
+    fun `#shouldFormBeSentAutomatically returns true when auto send is not set on a form level and enabled in settings`() {
         val form = FormFixtures.form()
         val result = form.shouldFormBeSentAutomatically(true)
         assertThat(result, equalTo(true))
     }
 
     @Test
-    fun `should return true when auto send is enabled on a form level and enabled in settings`() {
+    fun `#shouldFormBeSentAutomatically returns true when auto send is enabled on a form level and enabled in settings`() {
         val form = FormFixtures.form(autoSend = "true")
         val result = form.shouldFormBeSentAutomatically(true)
         assertThat(result, equalTo(true))
     }
 
     @Test
-    fun `should return true when auto send is enabled on a form level but not sanitized and enabled in settings`() {
-        val form = FormFixtures.form(autoSend = " True ")
-        val result = form.shouldFormBeSentAutomatically(true)
-        assertThat(result, equalTo(true))
-    }
-
-    @Test
-    fun `should return true when auto send is set on a form level but with a wrong value and enabled in settings`() {
-        val form = FormFixtures.form(autoSend = "something")
-        val result = form.shouldFormBeSentAutomatically(true)
-        assertThat(result, equalTo(true))
-    }
-
-    @Test
-    fun `should return true when auto send is enabled on a form level and disabled in settings`() {
+    fun `#shouldFormBeSentAutomatically returns true when auto send is enabled on a form level and disabled in settings`() {
         val form = FormFixtures.form(autoSend = "true")
         val result = form.shouldFormBeSentAutomatically(false)
         assertThat(result, equalTo(true))
     }
 
     @Test
-    fun `should return true when auto send is enabled on a form level but not sanitized and disabled in settings`() {
-        val form = FormFixtures.form(autoSend = " True ")
-        val result = form.shouldFormBeSentAutomatically(false)
-        assertThat(result, equalTo(true))
-    }
-
-    @Test
-    fun `should return false when auto send is not set on a form level and disabled in settings`() {
+    fun `#shouldFormBeSentAutomatically returns false when auto send is not set on a form level and disabled in settings`() {
         val form = FormFixtures.form()
         val result = form.shouldFormBeSentAutomatically(false)
         assertThat(result, equalTo(false))
     }
 
     @Test
-    fun `should return false when auto send is disabled on a form level and disabled in settings`() {
+    fun `#shouldFormBeSentAutomatically returns false when auto send is disabled on a form level and disabled in settings`() {
         val form = FormFixtures.form(autoSend = "false")
         val result = form.shouldFormBeSentAutomatically(false)
         assertThat(result, equalTo(false))
     }
 
     @Test
-    fun `should return false when auto send is disabled on a form level and enabled in settings`() {
+    fun `#shouldFormBeSentAutomatically returns false when auto send is disabled on a form level and enabled in settings`() {
         val form = FormFixtures.form(autoSend = "false")
         val result = form.shouldFormBeSentAutomatically(true)
         assertThat(result, equalTo(false))
     }
 
     @Test
-    fun `should return false when auto send is set on a form level but with a wrong value and disabled in settings`() {
-        val form = FormFixtures.form(autoSend = "something")
-        val result = form.shouldFormBeSentAutomatically(false)
-        assertThat(result, equalTo(false))
+    fun `#getAutoSendMode returns NEUTRAL when autoSend is unsupported`() {
+        val form = FormFixtures.form(autoSend = "blah")
+        assertThat(form.getAutoSendMode(), equalTo(FormAutoSendMode.NEUTRAL))
+    }
+
+    @Test
+    fun `#getAutoSendMode returns FORCED when autoSend is true but incorrectly cased`() {
+        val form = FormFixtures.form(autoSend = "TRUE")
+        assertThat(form.getAutoSendMode(), equalTo(FormAutoSendMode.FORCED))
+    }
+
+    @Test
+    fun `#getAutoSendMode returns FORCED when autoSend is true but with whitespace`() {
+        val form = FormFixtures.form(autoSend = " true ")
+        assertThat(form.getAutoSendMode(), equalTo(FormAutoSendMode.FORCED))
+    }
+
+    @Test
+    fun `#getAutoSendMode returns OPT_OUT when autoSend is false but incorrectly cased`() {
+        val form = FormFixtures.form(autoSend = "FALSE")
+        assertThat(form.getAutoSendMode(), equalTo(FormAutoSendMode.OPT_OUT))
+    }
+
+    @Test
+    fun `#getAutoSendMode returns OPT_OUT when autoSend is false but with whitespace`() {
+        val form = FormFixtures.form(autoSend = " false ")
+        assertThat(form.getAutoSendMode(), equalTo(FormAutoSendMode.OPT_OUT))
     }
 }

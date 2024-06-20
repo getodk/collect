@@ -10,8 +10,24 @@ fun Form.shouldFormBeSentAutomatically(isAutoSendEnabledInSettings: Boolean): Bo
     }
 
     return if (isAutoSendEnabledInSettings) {
-        autoSend == null || autoSend.trim().lowercase() != "false"
+        getAutoSendMode() != FormAutoSendMode.OPT_OUT
     } else {
-        autoSend != null && autoSend.trim().lowercase() == "true"
+        getAutoSendMode() == FormAutoSendMode.FORCED
     }
+}
+
+fun Form.getAutoSendMode(): FormAutoSendMode {
+    return if (autoSend?.trim()?.lowercase() == "false") {
+        FormAutoSendMode.OPT_OUT
+    } else if (autoSend?.trim()?.lowercase() == "true") {
+        FormAutoSendMode.FORCED
+    } else {
+        FormAutoSendMode.NEUTRAL
+    }
+}
+
+enum class FormAutoSendMode {
+    OPT_OUT,
+    FORCED,
+    NEUTRAL
 }

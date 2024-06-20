@@ -8,7 +8,9 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory
+import org.odk.collect.android.instancemanagement.autosend.FormAutoSendMode
 import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetcher
+import org.odk.collect.android.instancemanagement.autosend.getAutoSendMode
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
@@ -218,7 +220,7 @@ class InstancesDataService(
     }
 
     fun instanceFinalized(projectId: String, form: Form) {
-        if (form.autoSend != null && form.autoSend == "true") {
+        if (form.getAutoSendMode() == FormAutoSendMode.FORCED) {
             instanceSubmitScheduler.scheduleFormAutoSend(projectId)
         } else {
             instanceSubmitScheduler.scheduleAutoSend(projectId)
