@@ -401,4 +401,11 @@ class AppearancesTest {
         whenever(formEntryPrompt.dataType).thenReturn(Constants.DATATYPE_DECIMAL)
         assertFalse(Appearances.isMasked(formEntryPrompt))
     }
+
+    @Test
+    fun `isMasked returns false when 'masked' appearance is found for text questions with 'numbers' appearance`() {
+        whenever(formEntryPrompt.dataType).thenReturn(Constants.DATATYPE_TEXT)
+        whenever(formEntryPrompt.appearanceHint).thenReturn("masked numbers")
+        assertFalse(Appearances.isMasked(formEntryPrompt))
+    }
 }
