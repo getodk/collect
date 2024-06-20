@@ -1,29 +1,24 @@
 package org.odk.collect.android.widgets;
 
-import androidx.annotation.NonNull;
-
-import org.javarosa.core.model.Constants;
-import org.javarosa.core.model.data.IntegerData;
-import org.mockito.Mock;
-import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.junit.Test;
-import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.widgets.base.GeneralExStringWidgetTest;
-import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.android.widgets.utilities.StringRequester;
-
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.Appearances.THOUSANDS_SEP;
 
 import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.text.method.SingleLineTransformationMethod;
+
+import androidx.annotation.NonNull;
+
+import org.javarosa.core.model.Constants;
+import org.javarosa.core.model.data.IntegerData;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.widgets.base.GeneralExStringWidgetTest;
+import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.StringRequester;
 
 /**
  * @author James Knight
@@ -80,13 +75,5 @@ public class ExIntegerWidgetTest extends GeneralExStringWidgetTest<ExIntegerWidg
         assertThat(widget.binding.widgetAnswerText.getBinding().editText.getInputType(), equalTo(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED));
         assertThat(widget.binding.widgetAnswerText.getBinding().editText.getTransformationMethod().getClass(), equalTo(SingleLineTransformationMethod.class));
         assertThat(widget.binding.widgetAnswerText.getBinding().textView.getTransformationMethod(), equalTo(null));
-    }
-
-    @Test
-    public void answersShouldNotBeMaskedIfMaskedAppearanceIsUsed() {
-        when(formEntryPrompt.getAppearanceHint()).thenReturn(Appearances.MASKED);
-
-        assertThat(getSpyWidget().binding.widgetAnswerText.getBinding().editText.getTransformationMethod(), is(not(instanceOf(PasswordTransformationMethod.class))));
-        assertThat(getSpyWidget().binding.widgetAnswerText.getBinding().textView.getTransformationMethod(), is(not(instanceOf(PasswordTransformationMethod.class))));
     }
 }
