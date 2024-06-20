@@ -27,8 +27,8 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R
-import org.odk.collect.testshared.EspressoHelpers
 import org.odk.collect.testshared.FakeScheduler
+import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.RobolectricHelpers
@@ -53,7 +53,7 @@ class OfflineMapLayersImporterTest {
         launchFragment().onFragment {
             scheduler.flush()
             assertThat(it.isVisible, equalTo(true))
-            EspressoHelpers.clickOnText(R.string.cancel)
+            Interactions.clickOn(withText(R.string.cancel))
             assertThat(it.isVisible, equalTo(false))
         }
     }

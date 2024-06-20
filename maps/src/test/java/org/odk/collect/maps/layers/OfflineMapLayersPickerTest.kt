@@ -43,8 +43,8 @@ import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R.string
-import org.odk.collect.testshared.EspressoHelpers
 import org.odk.collect.testshared.FakeScheduler
+import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.webpage.ExternalWebPageHelper
@@ -64,7 +64,10 @@ class OfflineMapLayersPickerTest {
             input: I,
             options: ActivityOptionsCompat?
         ) {
-            assertThat(contract, instanceOf(ActivityResultContracts.GetMultipleContents()::class.java))
+            assertThat(
+                contract,
+                instanceOf(ActivityResultContracts.GetMultipleContents()::class.java)
+            )
             assertThat(input, equalTo("*/*"))
             dispatchResult(requestCode, uris)
         }
@@ -74,7 +77,13 @@ class OfflineMapLayersPickerTest {
     val fragmentScenarioLauncherRule = FragmentScenarioLauncherRule(
         FragmentFactoryBuilder()
             .forClass(OfflineMapLayersPicker::class) {
-                OfflineMapLayersPicker(testRegistry, referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
+                OfflineMapLayersPicker(
+                    testRegistry,
+                    referenceLayerRepository,
+                    scheduler,
+                    settingsProvider,
+                    externalWebPageHelper
+                )
             }.build()
     )
 
@@ -84,7 +93,7 @@ class OfflineMapLayersPickerTest {
 
         scenario.onFragment {
             assertThat(it.isVisible, equalTo(true))
-            EspressoHelpers.clickOnText(string.cancel)
+            Interactions.clickOn(withText(string.cancel))
             assertThat(it.isVisible, equalTo(false))
         }
     }
@@ -99,8 +108,11 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        EspressoHelpers.clickOnText(string.cancel)
-        assertThat(settingsProvider.getUnprotectedSettings().contains(ProjectKeys.KEY_REFERENCE_LAYER), equalTo(false))
+        Interactions.clickOn(withText(string.cancel))
+        assertThat(
+            settingsProvider.getUnprotectedSettings().contains(ProjectKeys.KEY_REFERENCE_LAYER),
+            equalTo(false)
+        )
     }
 
     @Test
@@ -118,7 +130,7 @@ class OfflineMapLayersPickerTest {
 
         scenario.onFragment {
             assertThat(it.isVisible, equalTo(true))
-            EspressoHelpers.clickOnText(string.save)
+            Interactions.clickOn(withText(string.save))
             assertThat(it.isVisible, equalTo(false))
         }
     }
@@ -142,8 +154,11 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        EspressoHelpers.clickOnText(string.save)
-        assertThat(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER), equalTo(null))
+        Interactions.clickOn(withText(string.save))
+        assertThat(
+            settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER),
+            equalTo(null)
+        )
     }
 
     @Test
@@ -156,9 +171,12 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        EspressoHelpers.clickOnText("layer1")
-        EspressoHelpers.clickOnText(string.save)
-        assertThat(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER), equalTo("1"))
+        Interactions.clickOn(withText("layer1"))
+        Interactions.clickOn(withText(string.save))
+        assertThat(
+            settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER),
+            equalTo("1")
+        )
     }
 
     @Test
@@ -171,8 +189,16 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(isChecked()))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(not(isChecked())))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
+            matches(
+                isChecked()
+            )
+        )
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
+            matches(
+                not(isChecked())
+            )
+        )
     }
 
     @Test
@@ -190,9 +216,21 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(not(isChecked())))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(not(isChecked())))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(matches(isChecked()))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
+            matches(
+                not(isChecked())
+            )
+        )
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
+            matches(
+                not(isChecked())
+            )
+        )
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(
+            matches(
+                isChecked()
+            )
+        )
     }
 
     @Test
@@ -208,8 +246,17 @@ class OfflineMapLayersPickerTest {
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(isChecked()))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                0,
+                R.id.title
+            )
+        ).check(matches(withText(string.none)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
+            matches(
+                isChecked()
+            )
+        )
     }
 
     @Test
@@ -238,9 +285,12 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        EspressoHelpers.clickOnText(string.get_help_with_offline_layers)
+        Interactions.clickOn(withText(string.get_help_with_offline_layers))
 
-        verify(externalWebPageHelper).openWebPageInCustomTab(any(), eq(Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices")))
+        verify(externalWebPageHelper).openWebPageInCustomTab(
+            any(),
+            eq(Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices"))
+        )
     }
 
     @Test
@@ -250,7 +300,12 @@ class OfflineMapLayersPickerTest {
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(1)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                0,
+                R.id.title
+            )
+        ).check(matches(withText(string.none)))
     }
 
     @Test
@@ -267,9 +322,24 @@ class OfflineMapLayersPickerTest {
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText("layerA")))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.title)).check(matches(withText("layerB")))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                0,
+                R.id.title
+            )
+        ).check(matches(withText(string.none)))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                1,
+                R.id.title
+            )
+        ).check(matches(withText("layerA")))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                2,
+                R.id.title
+            )
+        ).check(matches(withText("layerB")))
     }
 
     @Test
@@ -282,13 +352,29 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        EspressoHelpers.clickOnText("layer1")
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(not(isChecked())))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(isChecked()))
+        Interactions.clickOn(withText("layer1"))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
+            matches(
+                not(isChecked())
+            )
+        )
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
+            matches(
+                isChecked()
+            )
+        )
 
-        EspressoHelpers.clickOnText(string.none)
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(isChecked()))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(not(isChecked())))
+        Interactions.clickOn(withText(string.none))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
+            matches(
+                isChecked()
+            )
+        )
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
+            matches(
+                not(isChecked())
+            )
+        )
     }
 
     @Test
@@ -301,10 +387,18 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        EspressoHelpers.clickOnText("layer1")
+        Interactions.clickOn(withText("layer1"))
         scenario.recreate()
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(not(isChecked())))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(matches(isChecked()))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
+            matches(
+                not(isChecked())
+            )
+        )
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
+            matches(
+                isChecked()
+            )
+        )
     }
 
     @Test
@@ -312,7 +406,7 @@ class OfflineMapLayersPickerTest {
         val scenario = launchFragment()
 
         uris.add(Uri.parse("blah"))
-        EspressoHelpers.clickOnText(string.add_layer)
+        Interactions.clickOn(withText(string.add_layer))
 
         scenario.onFragment {
             assertThat(
@@ -326,7 +420,7 @@ class OfflineMapLayersPickerTest {
     fun `clicking the 'add layer' and selecting nothing does not display the confirmation dialog`() {
         val scenario = launchFragment()
 
-        EspressoHelpers.clickOnText(string.add_layer)
+        Interactions.clickOn(withText(string.add_layer))
 
         scenario.onFragment {
             assertThat(
@@ -348,7 +442,7 @@ class OfflineMapLayersPickerTest {
         uris.add(file1.toUri())
         uris.add(file2.toUri())
 
-        EspressoHelpers.clickOnText(string.add_layer)
+        Interactions.clickOn(withText(string.add_layer))
         scheduler.flush()
         onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(scrollTo(), click())
 
@@ -373,7 +467,7 @@ class OfflineMapLayersPickerTest {
         uris.add(file1.toUri())
         uris.add(file2.toUri())
 
-        EspressoHelpers.clickOnText(string.add_layer)
+        Interactions.clickOn(withText(string.add_layer))
         scheduler.flush()
         onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(scrollTo(), click())
         whenever(referenceLayerRepository.getAll()).thenReturn(
@@ -385,9 +479,24 @@ class OfflineMapLayersPickerTest {
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText(file1.name)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.title)).check(matches(withText(file2.name)))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                0,
+                R.id.title
+            )
+        ).check(matches(withText(string.none)))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                1,
+                R.id.title
+            )
+        ).check(matches(withText(file1.name)))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                2,
+                R.id.title
+            )
+        ).check(matches(withText(file2.name)))
     }
 
     @Test
@@ -409,11 +518,13 @@ class OfflineMapLayersPickerTest {
 
     @Test
     fun `recreating maintains expanded layers`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
-            ReferenceLayer("2", TempFiles.createTempFile(), "layer2"),
-            ReferenceLayer("3", TempFiles.createTempFile(), "layer3")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(
+                ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
+                ReferenceLayer("2", TempFiles.createTempFile(), "layer2"),
+                ReferenceLayer("3", TempFiles.createTempFile(), "layer3")
+            )
+        )
 
         val scenario = launchFragment()
 
@@ -434,10 +545,12 @@ class OfflineMapLayersPickerTest {
     fun `correct path is displayed after expanding layers`() {
         val file1 = TempFiles.createTempFile()
         val file2 = TempFiles.createTempFile()
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", file1, "layer1"),
-            ReferenceLayer("2", file2, "layer2")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(
+                ReferenceLayer("1", file1, "layer1"),
+                ReferenceLayer("2", file2, "layer2")
+            )
+        )
 
         launchFragment()
 
@@ -447,22 +560,39 @@ class OfflineMapLayersPickerTest {
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(2))
         onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.arrow)).perform(click())
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.path)).check(matches(withText(file1.absolutePath)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.path)).check(matches(withText(file2.absolutePath)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.path)).check(
+            matches(
+                withText(
+                    file1.absolutePath
+                )
+            )
+        )
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.path)).check(
+            matches(
+                withText(
+                    file2.absolutePath
+                )
+            )
+        )
     }
 
     @Test
     fun `clicking delete shows the confirmation dialog`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(
+                ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
+            )
+        )
 
         launchFragment()
 
         scheduler.flush()
 
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(scrollTo(), click())
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
+            scrollTo(),
+            click()
+        )
 
         onView(withText(string.cancel)).inRoot(isDialog()).check(matches(isDisplayed()))
         onView(withText(string.delete_layer)).inRoot(isDialog()).check(matches(isDisplayed()))
@@ -471,23 +601,38 @@ class OfflineMapLayersPickerTest {
     @Test
     fun `clicking delete and canceling does not remove the layer`() {
         val layerFile1 = TempFiles.createTempFile()
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", layerFile1, "layer1")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(
+                ReferenceLayer("1", layerFile1, "layer1")
+            )
+        )
 
         launchFragment()
 
         scheduler.flush()
 
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(scrollTo(), click())
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
+            scrollTo(),
+            click()
+        )
 
         onView(withText(string.cancel)).inRoot(isDialog()).perform(click())
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(0))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText("layer1")))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                0,
+                R.id.title
+            )
+        ).check(matches(withText(string.none)))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                1,
+                R.id.title
+            )
+        ).check(matches(withText("layer1")))
         verify(referenceLayerRepository, never()).delete("1")
     }
 
@@ -495,24 +640,39 @@ class OfflineMapLayersPickerTest {
     fun `clicking delete and confirming removes the layer`() {
         val layerFile1 = TempFiles.createTempFile()
         val layerFile2 = TempFiles.createTempFile()
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", layerFile1, "layer1"),
-            ReferenceLayer("2", layerFile2, "layer2")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(
+                ReferenceLayer("1", layerFile1, "layer1"),
+                ReferenceLayer("2", layerFile2, "layer2")
+            )
+        )
 
         launchFragment()
 
         scheduler.flush()
 
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(scrollTo(), click())
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
+            scrollTo(),
+            click()
+        )
 
         onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText("layer2")))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                0,
+                R.id.title
+            )
+        ).check(matches(withText(string.none)))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                1,
+                R.id.title
+            )
+        ).check(matches(withText("layer2")))
         verify(referenceLayerRepository).delete("1")
         verify(referenceLayerRepository, never()).delete("2")
     }
@@ -520,9 +680,11 @@ class OfflineMapLayersPickerTest {
     @Test
     fun `deleting the selected layer changes selection to 'none' and saves it`() {
         val layerFile1 = TempFiles.createTempFile()
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", layerFile1, "layer1")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(
+                ReferenceLayer("1", layerFile1, "layer1")
+            )
+        )
         settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, "1")
 
         launchFragment()
@@ -530,23 +692,40 @@ class OfflineMapLayersPickerTest {
         scheduler.flush()
 
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(scrollTo(), click())
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
+            scrollTo(),
+            click()
+        )
 
         onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
         scheduler.flush()
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(matches(isChecked()))
-        assertThat(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER), equalTo(null))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                0,
+                R.id.title
+            )
+        ).check(matches(withText(string.none)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
+            matches(
+                isChecked()
+            )
+        )
+        assertThat(
+            settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER),
+            equalTo(null)
+        )
     }
 
     @Test
     fun `deleting one of the layers keeps the list sorted in A-Z order`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", TempFiles.createTempFile(), "layerC"),
-            ReferenceLayer("2", TempFiles.createTempFile(), "layerB"),
-            ReferenceLayer("3", TempFiles.createTempFile(), "layerA")
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(
+                ReferenceLayer("1", TempFiles.createTempFile(), "layerC"),
+                ReferenceLayer("2", TempFiles.createTempFile(), "layerB"),
+                ReferenceLayer("3", TempFiles.createTempFile(), "layerA")
+            )
+        )
 
         launchFragment()
 
@@ -554,30 +733,53 @@ class OfflineMapLayersPickerTest {
 
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(2))
         onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.arrow)).perform(click())
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.delete_layer)).perform(scrollTo(), click())
+        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.delete_layer)).perform(
+            scrollTo(),
+            click()
+        )
 
         onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.title)).check(matches(withText(string.none)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.title)).check(matches(withText("layerA")))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.title)).check(matches(withText("layerC")))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                0,
+                R.id.title
+            )
+        ).check(matches(withText(string.none)))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                1,
+                R.id.title
+            )
+        ).check(matches(withText("layerA")))
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                2,
+                R.id.title
+            )
+        ).check(matches(withText("layerC")))
     }
 
     @Test
     fun `progress indicator is displayed during deleting layers`() {
         val layerFile1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
-        whenever(referenceLayerRepository.getAll()).thenReturn(listOf(
-            ReferenceLayer("1", layerFile1, "layer1"),
-        ))
+        whenever(referenceLayerRepository.getAll()).thenReturn(
+            listOf(
+                ReferenceLayer("1", layerFile1, "layer1"),
+            )
+        )
 
         launchFragment()
 
         scheduler.flush()
 
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(scrollTo(), click())
+        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
+            scrollTo(),
+            click()
+        )
         onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
 
         onView(withId(R.id.progress_indicator)).check(matches(isDisplayed()))
@@ -590,15 +792,35 @@ class OfflineMapLayersPickerTest {
     }
 
     private fun assertLayerCollapsed(position: Int) {
-        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.arrow)).check(matches(withImageDrawable(org.odk.collect.icons.R.drawable.ic_baseline_expand_24)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.path)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.delete_layer)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.arrow)).check(
+            matches(
+                withImageDrawable(org.odk.collect.icons.R.drawable.ic_baseline_expand_24)
+            )
+        )
+        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.path)).check(
+            matches(
+                withEffectiveVisibility(ViewMatchers.Visibility.GONE)
+            )
+        )
+        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.delete_layer)).check(
+            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE))
+        )
     }
 
     private fun assertLayerExpanded(position: Int) {
-        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.arrow)).check(matches(withImageDrawable(org.odk.collect.icons.R.drawable.ic_baseline_collapse_24)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.path)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.delete_layer)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.arrow)).check(
+            matches(
+                withImageDrawable(org.odk.collect.icons.R.drawable.ic_baseline_collapse_24)
+            )
+        )
+        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.path)).check(
+            matches(
+                withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
+            )
+        )
+        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.delete_layer)).check(
+            matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))
+        )
     }
 
     private fun launchFragment(): FragmentScenario<OfflineMapLayersPicker> {

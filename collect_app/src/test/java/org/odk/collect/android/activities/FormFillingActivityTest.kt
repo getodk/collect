@@ -7,6 +7,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.DialogFragment
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
+import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.WorkManager
 import org.hamcrest.MatcherAssert.assertThat
@@ -36,12 +39,10 @@ import org.odk.collect.formstest.FormFixtures.form
 import org.odk.collect.strings.R
 import org.odk.collect.testshared.ActivityControllerRule
 import org.odk.collect.testshared.AssertIntentsHelper
-import org.odk.collect.testshared.EspressoHelpers.assertText
-import org.odk.collect.testshared.EspressoHelpers.assertTextInDialog
-import org.odk.collect.testshared.EspressoHelpers.clickOnContentDescription
-import org.odk.collect.testshared.EspressoHelpers.clickOnText
-import org.odk.collect.testshared.EspressoHelpers.clickOnTextInDialog
+import org.odk.collect.testshared.Assertions.assertText
+import org.odk.collect.testshared.Assertions.assertTextInDialog
 import org.odk.collect.testshared.FakeScheduler
+import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RobolectricHelpers.recreateWithProcessRestore
 import org.robolectric.Shadows.shadowOf
 import java.io.File
@@ -95,7 +96,7 @@ class FormFillingActivityTest {
         assertText("Two Question")
         assertText("What is your name?")
 
-        clickOnText(R.string.form_forward)
+        Interactions.clickOn(withText(R.string.form_forward))
         scheduler.flush()
         assertText("What is your age?")
 
@@ -133,11 +134,11 @@ class FormFillingActivityTest {
         assertText("Two Question")
         assertText("What is your name?")
 
-        clickOnText(R.string.form_forward)
+        Interactions.clickOn(withText(R.string.form_forward))
         scheduler.flush()
         assertText("What is your age?")
 
-        clickOnContentDescription(R.string.view_hierarchy)
+        Interactions.clickOn(withContentDescription(R.string.view_hierarchy))
         assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
 
         // Recreate and assert we start FormHierarchyActivity
@@ -174,7 +175,7 @@ class FormFillingActivityTest {
         assertText("Two Question")
         assertText("What is your name?")
 
-        clickOnText(R.string.form_forward)
+        Interactions.clickOn(withText(R.string.form_forward))
         scheduler.flush()
         assertText("What is your age?")
 
@@ -219,12 +220,12 @@ class FormFillingActivityTest {
         assertText("Two Question")
         assertText("What is your name?")
 
-        clickOnText(R.string.form_forward)
+        Interactions.clickOn(withText(R.string.form_forward))
         scheduler.flush()
         assertText("What is your age?")
 
         // Open external app
-        clickOnContentDescription(R.string.launch_app)
+        Interactions.clickOn(withContentDescription(R.string.launch_app))
         assertIntentsHelper.assertNewIntent(hasAction("com.example.EXAMPLE"))
 
         // Recreate with result
@@ -259,7 +260,7 @@ class FormFillingActivityTest {
         scheduler.flush()
         assertTextInDialog("This form no longer exists, please email support@getodk.org with a description of what you were doing when this happened.")
 
-        clickOnTextInDialog(R.string.ok)
+        Interactions.clickOn(withText(R.string.ok), root = isDialog())
         assertThat(scenario.isFinishing, equalTo(true))
     }
 
