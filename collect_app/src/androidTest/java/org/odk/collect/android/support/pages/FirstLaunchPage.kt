@@ -1,8 +1,8 @@
 package org.odk.collect.android.support.pages
 
 import androidx.test.espresso.matcher.ViewMatchers.withSubstring
-import org.odk.collect.android.support.Interactions
 import org.odk.collect.strings.R.string
+import org.odk.collect.testshared.Interactions
 
 class FirstLaunchPage : Page<FirstLaunchPage>() {
 

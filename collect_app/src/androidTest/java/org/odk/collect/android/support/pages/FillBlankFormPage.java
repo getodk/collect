@@ -19,7 +19,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.WaitFor;
+import org.odk.collect.testshared.WaitFor;
 
 public class FillBlankFormPage extends Page<FillBlankFormPage> {
 

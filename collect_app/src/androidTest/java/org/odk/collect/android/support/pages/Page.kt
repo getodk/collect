@@ -48,10 +48,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.ActivityHelpers.getLaunchIntent
-import org.odk.collect.android.support.Interactions
-import org.odk.collect.android.support.WaitFor.tryAgainOnFail
-import org.odk.collect.android.support.WaitFor.wait250ms
-import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
 import org.odk.collect.android.support.rules.RecentAppsRule
@@ -61,7 +57,11 @@ import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.strings.localization.getLocalizedQuantityString
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.EspressoHelpers
+import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RecyclerViewMatcher
+import org.odk.collect.testshared.WaitFor.tryAgainOnFail
+import org.odk.collect.testshared.WaitFor.wait250ms
+import org.odk.collect.testshared.WaitFor.waitFor
 import timber.log.Timber
 import java.io.File
 

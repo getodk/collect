@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.WaitFor;
+import org.odk.collect.testshared.WaitFor;
 
 import java.util.concurrent.Callable;
 

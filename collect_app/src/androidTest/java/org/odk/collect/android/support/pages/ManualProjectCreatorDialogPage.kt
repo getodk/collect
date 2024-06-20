@@ -3,7 +3,7 @@ package org.odk.collect.android.support.pages
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import org.odk.collect.android.support.WaitFor.tryAgainOnFail
+import org.odk.collect.testshared.WaitFor.tryAgainOnFail
 
 class ManualProjectCreatorDialogPage : Page<ManualProjectCreatorDialogPage>() {
     override fun assertOnPage(): ManualProjectCreatorDialogPage {

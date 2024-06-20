@@ -13,7 +13,7 @@ import android.graphics.Bitmap;
 import androidx.test.espresso.Espresso;
 
 import org.odk.collect.android.support.ActivityHelpers;
-import org.odk.collect.android.support.WaitFor;
+import org.odk.collect.testshared.WaitFor;
 import org.odk.collect.androidtest.DrawableMatcher;
 
 public class QRCodePage extends Page<QRCodePage> {

@@ -9,7 +9,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import org.odk.collect.android.support.WaitFor;
+import org.odk.collect.testshared.WaitFor;
 
 import java.util.concurrent.Callable;
 
