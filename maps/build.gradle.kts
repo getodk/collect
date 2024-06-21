@@ -56,6 +56,7 @@ dependencies {
     implementation(project(":settings"))
     implementation(project(":strings"))
     implementation(project(":web-page"))
+    implementation(project(":analytics"))
     implementation(Dependencies.android_material)
     implementation(Dependencies.kotlin_stdlib)
     implementation(Dependencies.androidx_fragment_ktx)

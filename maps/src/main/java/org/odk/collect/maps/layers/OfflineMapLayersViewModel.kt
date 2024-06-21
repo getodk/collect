@@ -5,10 +5,12 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.androidshared.system.copyToFile
 import org.odk.collect.androidshared.system.getFileExtension
 import org.odk.collect.androidshared.system.getFileName
 import org.odk.collect.async.Scheduler
+import org.odk.collect.maps.AnalyticsEvents
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.TempFiles
@@ -75,7 +77,10 @@ class OfflineMapLayersViewModel(
         _isLoading.value = true
         scheduler.immediate(
             background = {
-                tempLayersDir.listFiles()?.forEach {
+                val layers = tempLayersDir.listFiles()
+                logImport(layers)
+
+                layers?.forEach {
                     referenceLayerRepository.addLayer(it, shared)
                 }
                 tempLayersDir.delete()
@@ -98,5 +103,16 @@ class OfflineMapLayersViewModel(
             _existingLayers.postValue(_existingLayers.value?.filter { it.id != layerId })
             _isLoading.postValue(false)
         }
+    }
+
+    private fun logImport(layers: Array<File>?) {
+        val count = layers?.size ?: return
+        val event = when {
+            count == 1 -> AnalyticsEvents.IMPORT_LAYER_SINGLE
+            count <= 5 -> AnalyticsEvents.IMPORT_LAYER_FEW
+            else -> AnalyticsEvents.IMPORT_LAYER_MANY
+        }
+
+        Analytics.log(event)
     }
 }

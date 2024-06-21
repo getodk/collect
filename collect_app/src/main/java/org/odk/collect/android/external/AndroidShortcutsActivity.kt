@@ -21,8 +21,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
-import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.formlists.blankformlist.BlankFormListItem
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.injection.DaggerUtils
@@ -59,10 +57,6 @@ class AndroidShortcutsActivity : AppCompatActivity() {
                     .map { it.formName }
                     .toTypedArray()
             ) { _: DialogInterface?, item: Int ->
-                AnalyticsUtils.logServerEvent(
-                    AnalyticsEvents.CREATE_SHORTCUT,
-                    settingsProvider.getUnprotectedSettings()
-                )
                 val intent = getShortcutIntent(blankFormListItems, item)
                 setResult(RESULT_OK, intent)
                 finish()

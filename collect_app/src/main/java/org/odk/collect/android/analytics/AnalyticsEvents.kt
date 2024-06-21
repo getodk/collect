@@ -8,19 +8,6 @@ object AnalyticsEvents {
     const val SET_SERVER = "SetServer"
 
     /**
-     * Track video requests with high resolution setting turned off. The action should be a hash of
-     * the form definition.
-     */
-    const val REQUEST_VIDEO_NOT_HIGH_RES = "RequestVideoNotHighRes"
-
-    /**
-     * Track video requests with high resolution setting turned on. This is tracked to contextualize
-     * the counts with the high resolution setting turned off since we expect that video is not very
-     * common overall. The action should be a hash of the form definition.
-     */
-    const val REQUEST_HIGH_RES_VIDEO = "RequestHighResVideo"
-
-    /**
      * Track submission encryption. The action should be a hash of the form definition.
      */
     const val ENCRYPT_SUBMISSION = "EncryptSubmission"
@@ -30,28 +17,6 @@ object AnalyticsEvents {
      * hash of the form definition.
      */
     const val SUBMISSION = "Submission"
-
-    /**
-     * Tracks if any forms are being used as part of a workflow where instances are imported
-     * from disk
-     */
-    const val IMPORT_INSTANCE = "ImportInstance"
-
-    /**
-     * Tracks if any forms are being used as part of a workflow where instances are imported
-     * from disk and then encrypted
-     */
-    const val IMPORT_AND_ENCRYPT_INSTANCE = "ImportAndEncryptInstance"
-
-    /**
-     * Tracks responses from OpenMapKit to the OSMWidget
-     */
-    const val OPEN_MAP_KIT_RESPONSE = "OpenMapKitResponse"
-
-    /**
-     * Tracks how often users create shortcuts to forms
-     */
-    const val CREATE_SHORTCUT = "CreateShortcut"
 
     /**
      * Tracks how often instances that have been deleted on disk are opened for editing/viewing
@@ -125,35 +90,15 @@ object AnalyticsEvents {
     const val INSTANCE_PROVIDER_DELETE = "InstanceProviderDelete"
 
     /**
-     * Tracks how often form-level auto-delete setting is used
-     */
-    const val FORM_LEVEL_AUTO_DELETE = "FormLevelAutoDelete"
-
-    /**
-     * Tracks how often form-level auto-send setting is used
-     */
-    const val FORM_LEVEL_AUTO_SEND = "FormLevelAutoSend"
-
-    /**
-     * Tracks how often a form is finalized using a `ref` attribute on the `submission` element
-     */
-    const val PARTIAL_FORM_FINALIZED = "PartialFormFinalized"
-
-    /**
      * Tracks how often drafts that can't be bulk finalized are attempted to be
      */
     const val BULK_FINALIZE_ENCRYPTED_FORM = "BulkFinalizeEncryptedForm"
     const val BULK_FINALIZE_SAVE_POINT = "BulkFinalizeSavePoint"
 
     /**
-     * Tracks how often printing with the old ExPrinterWidget is triggered
-     */
-    const val ZEBRA_PRINTER_STARTED = "ZebraPrinterStarted"
-
-    /**
      * Tracks how often saved forms are manually deleted and in what number
      */
-    const val DELETE_SAVED_FORM_FEW = "DeleteSavedFormFew"
-    const val DELETE_SAVED_FORM_TENS = "DeleteSavedFormTens"
-    const val DELETE_SAVED_FORM_HUNDREDS = "DeleteSavedFormHundreds"
+    const val DELETE_SAVED_FORM_FEW = "DeleteSavedFormFew" // < 10
+    const val DELETE_SAVED_FORM_TENS = "DeleteSavedFormTens" // >= 10
+    const val DELETE_SAVED_FORM_HUNDREDS = "DeleteSavedFormHundreds" // >= 100
 }

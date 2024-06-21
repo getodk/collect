@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.REQUEST_HIGH_RES_VIDEO;
-import static org.odk.collect.android.analytics.AnalyticsEvents.REQUEST_VIDEO_NOT_HIGH_RES;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 import android.annotation.SuppressLint;
@@ -32,7 +30,6 @@ import androidx.annotation.NonNull;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.databinding.VideoWidgetBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.Appearances;
@@ -163,10 +160,8 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
         boolean highResolution = settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_HIGH_RESOLUTION);
         if (highResolution) {
             i.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-            Analytics.log(REQUEST_HIGH_RES_VIDEO, "form");
-        } else {
-            Analytics.log(REQUEST_VIDEO_NOT_HIGH_RES, "form");
         }
+
         try {
             waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
             ((Activity) getContext()).startActivityForResult(i, requestCode);
