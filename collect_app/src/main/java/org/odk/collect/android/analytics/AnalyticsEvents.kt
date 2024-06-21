@@ -19,18 +19,6 @@ object AnalyticsEvents {
     const val SUBMISSION = "Submission"
 
     /**
-     * Tracks if any forms are being used as part of a workflow where instances are imported
-     * from disk
-     */
-    const val IMPORT_INSTANCE = "ImportInstance"
-
-    /**
-     * Tracks if any forms are being used as part of a workflow where instances are imported
-     * from disk and then encrypted
-     */
-    const val IMPORT_AND_ENCRYPT_INSTANCE = "ImportAndEncryptInstance"
-
-    /**
      * Tracks how often instances that have been deleted on disk are opened for editing/viewing
      */
     const val OPEN_DELETED_INSTANCE = "OpenDeletedInstance"

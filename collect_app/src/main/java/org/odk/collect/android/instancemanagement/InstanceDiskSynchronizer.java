@@ -14,11 +14,11 @@
 
 package org.odk.collect.android.instancemanagement;
 
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
 import android.net.Uri;
 
 import org.apache.commons.io.FileUtils;
-import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.external.InstancesContract;
@@ -49,8 +49,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import timber.log.Timber;
-
-import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 public class InstanceDiskSynchronizer {
 
@@ -187,20 +185,9 @@ public class InstanceDiskSynchronizer {
     private void encryptInstanceIfNeeded(Form form, Instance instance) throws EncryptionException, IOException {
         if (instance != null) {
             if (shouldInstanceBeEncrypted(form)) {
-                logImportAndEncrypt(form);
                 encryptInstance(instance);
-            } else {
-                logImport(form);
             }
         }
-    }
-
-    private void logImport(Form form) {
-        AnalyticsUtils.logFormEvent(AnalyticsEvents.IMPORT_INSTANCE, form.getFormId(), form.getDisplayName());
-    }
-
-    private void logImportAndEncrypt(Form form) {
-        AnalyticsUtils.logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, form.getFormId(), form.getDisplayName());
     }
 
     private void encryptInstance(Instance instance) throws EncryptionException, IOException {
