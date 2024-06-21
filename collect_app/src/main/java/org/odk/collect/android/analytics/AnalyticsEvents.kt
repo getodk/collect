@@ -31,11 +31,6 @@ object AnalyticsEvents {
     const val IMPORT_AND_ENCRYPT_INSTANCE = "ImportAndEncryptInstance"
 
     /**
-     * Tracks how often users create shortcuts to forms
-     */
-    const val CREATE_SHORTCUT = "CreateShortcut"
-
-    /**
      * Tracks how often instances that have been deleted on disk are opened for editing/viewing
      */
     const val OPEN_DELETED_INSTANCE = "OpenDeletedInstance"
