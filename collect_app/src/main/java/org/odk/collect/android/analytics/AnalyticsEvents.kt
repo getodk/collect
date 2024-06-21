@@ -98,7 +98,7 @@ object AnalyticsEvents {
     /**
      * Tracks how often saved forms are manually deleted and in what number
      */
-    const val DELETE_SAVED_FORM_FEW = "DeleteSavedFormFew"
-    const val DELETE_SAVED_FORM_TENS = "DeleteSavedFormTens"
-    const val DELETE_SAVED_FORM_HUNDREDS = "DeleteSavedFormHundreds"
+    const val DELETE_SAVED_FORM_FEW = "DeleteSavedFormFew" // < 10
+    const val DELETE_SAVED_FORM_TENS = "DeleteSavedFormTens" // >= 10
+    const val DELETE_SAVED_FORM_HUNDREDS = "DeleteSavedFormHundreds" // >= 100
 }
