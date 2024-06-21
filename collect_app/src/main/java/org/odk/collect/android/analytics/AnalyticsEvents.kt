@@ -95,11 +95,6 @@ object AnalyticsEvents {
     const val FORM_LEVEL_AUTO_DELETE = "FormLevelAutoDelete"
 
     /**
-     * Tracks how often form-level auto-send setting is used
-     */
-    const val FORM_LEVEL_AUTO_SEND = "FormLevelAutoSend"
-
-    /**
      * Tracks how often drafts that can't be bulk finalized are attempted to be
      */
     const val BULK_FINALIZE_ENCRYPTED_FORM = "BulkFinalizeEncryptedForm"
