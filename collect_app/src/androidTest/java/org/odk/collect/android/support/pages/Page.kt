@@ -48,10 +48,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.ActivityHelpers.getLaunchIntent
-import org.odk.collect.android.support.Interactions
-import org.odk.collect.android.support.WaitFor.tryAgainOnFail
-import org.odk.collect.android.support.WaitFor.wait250ms
-import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
 import org.odk.collect.android.support.rules.RecentAppsRule
@@ -60,8 +56,12 @@ import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.strings.localization.getLocalizedQuantityString
 import org.odk.collect.strings.localization.getLocalizedString
-import org.odk.collect.testshared.EspressoHelpers
+import org.odk.collect.testshared.Assertions
+import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RecyclerViewMatcher
+import org.odk.collect.testshared.WaitFor.tryAgainOnFail
+import org.odk.collect.testshared.WaitFor.wait250ms
+import org.odk.collect.testshared.WaitFor.waitFor
 import timber.log.Timber
 import java.io.File
 
@@ -131,7 +131,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertText(text: String): T {
-        EspressoHelpers.assertText(text)
+        Assertions.assertText(withText(text))
         return this as T
     }
 
@@ -185,7 +185,12 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertTextDoesNotExist(text: String?): T {
-        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist())
+        onView(
+            allOf(
+                withText(text),
+                withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
+            )
+        ).check(doesNotExist())
         return this as T
     }
 
@@ -295,11 +300,13 @@ abstract class Page<T : Page<T>> {
     }
 
     fun getTranslatedString(id: Int?, vararg formatArgs: Any): String {
-        return ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(id!!, *formatArgs)
+        return ApplicationProvider.getApplicationContext<Collect>()
+            .getLocalizedString(id!!, *formatArgs)
     }
 
     fun getTranslatedQuantityString(id: Int?, quantity: Int, vararg formatArgs: Any): String {
-        return ApplicationProvider.getApplicationContext<Collect>().getLocalizedQuantityString(id!!, quantity, *formatArgs)
+        return ApplicationProvider.getApplicationContext<Collect>()
+            .getLocalizedQuantityString(id!!, quantity, *formatArgs)
     }
 
     fun clickOnAreaWithIndex(clazz: String?, index: Int): T {
@@ -366,25 +373,56 @@ abstract class Page<T : Page<T>> {
     }
 
     fun checkIsSnackbarErrorVisible(): T {
-        onView(allOf(withId(com.google.android.material.R.id.snackbar_text))).check(matches(isDisplayed()))
+        onView(allOf(withId(com.google.android.material.R.id.snackbar_text))).check(
+            matches(
+                isDisplayed()
+            )
+        )
         return this as T
     }
 
     fun scrollToRecyclerViewItemAndClickText(text: String?): T {
-        onView(withId(androidx.preference.R.id.recycler_view)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(text)), scrollTo()))
-        onView(withId(androidx.preference.R.id.recycler_view)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(text)), click()))
+        onView(withId(androidx.preference.R.id.recycler_view)).perform(
+            RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                hasDescendant(withText(text)),
+                scrollTo()
+            )
+        )
+        onView(withId(androidx.preference.R.id.recycler_view)).perform(
+            RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                hasDescendant(withText(text)),
+                click()
+            )
+        )
         return this as T
     }
 
     fun scrollToRecyclerViewItemAndClickText(string: Int): T {
-        onView(ViewMatchers.isAssignableFrom(RecyclerView::class.java)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(getTranslatedString(string))), scrollTo()))
-        onView(ViewMatchers.isAssignableFrom(RecyclerView::class.java)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(getTranslatedString(string))), click()))
+        onView(ViewMatchers.isAssignableFrom(RecyclerView::class.java)).perform(
+            RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                hasDescendant(withText(getTranslatedString(string))),
+                scrollTo()
+            )
+        )
+        onView(ViewMatchers.isAssignableFrom(RecyclerView::class.java)).perform(
+            RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                hasDescendant(withText(getTranslatedString(string))),
+                click()
+            )
+        )
         return this as T
     }
 
     fun clickOnElementInHierarchy(index: Int): T {
-        onView(withId(R.id.list)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(index))
-        onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(index, R.id.primary_text)).perform(click())
+        onView(withId(R.id.list)).perform(
+            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                index
+            )
+        )
+        onView(
+            RecyclerViewMatcher.withRecyclerView(R.id.list)
+                .atPositionOnView(index, R.id.primary_text)
+        ).perform(click())
         return this as T
     }
 
@@ -394,7 +432,10 @@ abstract class Page<T : Page<T>> {
     }
 
     fun checkIfElementInHierarchyMatchesToText(text: String?, index: Int): T {
-        onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(index, R.id.primary_text)).check(matches(withText(text)))
+        onView(
+            RecyclerViewMatcher.withRecyclerView(R.id.list)
+                .atPositionOnView(index, R.id.primary_text)
+        ).check(matches(withText(text)))
         return this as T
     }
 
@@ -412,7 +453,12 @@ abstract class Page<T : Page<T>> {
     }
 
     protected fun assertToolbarTitle(title: String?) {
-        onView(allOf(withText(title), isDescendantOfA(withId(org.odk.collect.androidshared.R.id.toolbar)))).check(matches(isDisplayed()))
+        onView(
+            allOf(
+                withText(title),
+                isDescendantOfA(withId(org.odk.collect.androidshared.R.id.toolbar))
+            )
+        ).check(matches(isDisplayed()))
     }
 
     protected fun assertToolbarTitle(title: Int) {
@@ -430,11 +476,14 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnContentDescription(string: Int): T {
-        EspressoHelpers.clickOnContentDescription(string)
+        Interactions.clickOn(withContentDescription(string))
         return this as T
     }
 
-    fun assertFileWithProjectNameUpdated(sanitizedOldProjectName: String, sanitizedNewProjectName: String): T {
+    fun assertFileWithProjectNameUpdated(
+        sanitizedOldProjectName: String,
+        sanitizedNewProjectName: String
+    ): T {
         val storagePathProvider = StoragePathProvider()
         Assert.assertFalse(File(storagePathProvider.getProjectRootDirPath() + File.separator + sanitizedOldProjectName).exists())
         Assert.assertTrue(File(storagePathProvider.getProjectRootDirPath() + File.separator + sanitizedNewProjectName).exists())

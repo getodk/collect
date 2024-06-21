@@ -1,4 +1,4 @@
-package org.odk.collect.android.support
+package org.odk.collect.testshared
 
 import junit.framework.AssertionFailedError
 import java.util.concurrent.Callable

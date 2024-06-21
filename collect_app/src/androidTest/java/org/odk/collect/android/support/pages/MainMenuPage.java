@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.TestScheduler;
-import org.odk.collect.android.support.WaitFor;
+import org.odk.collect.testshared.WaitFor;
 import org.odk.collect.strings.R.string;
 
 import java.io.IOException;

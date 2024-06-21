@@ -3,7 +3,7 @@ package org.odk.collect.testshared
 import android.content.Intent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import org.hamcrest.Matcher
-import org.odk.collect.testshared.EspressoHelpers.assertIntents
+import org.odk.collect.testshared.Assertions.assertIntents
 import kotlin.reflect.KClass
 
 class AssertIntentsHelper {

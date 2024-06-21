@@ -48,8 +48,6 @@ class OfflineMapLayersPicker(
         }
     }
 
-    private lateinit var binding: OfflineMapLayersPickerBinding
-
     private val getLayers = registerForActivityResult(ActivityResultContracts.GetMultipleContents(), registry) { uris ->
         if (uris.isNotEmpty()) {
             sharedViewModel.loadLayersToImport(uris, requireContext())
@@ -75,7 +73,7 @@ class OfflineMapLayersPicker(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = OfflineMapLayersPickerBinding.inflate(inflater)
+        val binding = OfflineMapLayersPickerBinding.inflate(inflater)
 
         binding.mbtilesInfoGroup.addOnClickListener {
             externalWebPageHelper.openWebPageInCustomTab(
@@ -101,7 +99,7 @@ class OfflineMapLayersPicker(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val binding = OfflineMapLayersPickerBinding.bind(view)
 
         sharedViewModel.isLoading.observe(this) { isLoading ->
             if (isLoading) {

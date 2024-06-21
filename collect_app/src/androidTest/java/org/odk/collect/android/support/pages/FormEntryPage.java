@@ -29,8 +29,8 @@ import androidx.test.core.app.ApplicationProvider;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.Interactions;
-import org.odk.collect.android.support.WaitFor;
+import org.odk.collect.testshared.Interactions;
+import org.odk.collect.testshared.WaitFor;
 
 import java.util.concurrent.Callable;
 

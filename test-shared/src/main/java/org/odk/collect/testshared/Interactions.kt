@@ -1,4 +1,4 @@
-package org.odk.collect.android.support
+package org.odk.collect.testshared
 
 import android.view.View
 import androidx.test.espresso.Espresso.closeSoftKeyboard
@@ -8,7 +8,7 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import org.hamcrest.Matcher
-import org.odk.collect.android.support.WaitFor.tryAgainOnFail
+import org.odk.collect.testshared.WaitFor.tryAgainOnFail
 
 object Interactions {
 

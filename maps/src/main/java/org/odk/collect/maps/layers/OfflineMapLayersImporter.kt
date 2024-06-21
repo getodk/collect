@@ -21,19 +21,21 @@ class OfflineMapLayersImporter(
     val viewModel: OfflineMapLayersViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return OfflineMapLayersViewModel(referenceLayerRepository, scheduler, settingsProvider) as T
+                return OfflineMapLayersViewModel(
+                    referenceLayerRepository,
+                    scheduler,
+                    settingsProvider
+                ) as T
             }
         }
     }
-
-    private lateinit var binding: OfflineMapLayersImporterBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = OfflineMapLayersImporterBinding.inflate(inflater)
+        val binding = OfflineMapLayersImporterBinding.inflate(inflater)
 
         binding.cancelButton.setOnClickListener {
             dismiss()
@@ -48,6 +50,7 @@ class OfflineMapLayersImporter(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val binding = OfflineMapLayersImporterBinding.bind(view)
 
         viewModel.isLoading.observe(this) { isLoading ->
             if (isLoading) {
@@ -74,6 +77,6 @@ class OfflineMapLayersImporter(
     }
 
     override fun getToolbar(): Toolbar {
-        return binding.toolbar
+        return OfflineMapLayersImporterBinding.bind(requireView()).toolbar
     }
 }
