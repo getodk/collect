@@ -96,11 +96,6 @@ object AnalyticsEvents {
     const val BULK_FINALIZE_SAVE_POINT = "BulkFinalizeSavePoint"
 
     /**
-     * Tracks how often printing with the old ExPrinterWidget is triggered
-     */
-    const val ZEBRA_PRINTER_STARTED = "ZebraPrinterStarted"
-
-    /**
      * Tracks how often saved forms are manually deleted and in what number
      */
     const val DELETE_SAVED_FORM_FEW = "DeleteSavedFormFew"
