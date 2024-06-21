@@ -8,19 +8,6 @@ object AnalyticsEvents {
     const val SET_SERVER = "SetServer"
 
     /**
-     * Track video requests with high resolution setting turned off. The action should be a hash of
-     * the form definition.
-     */
-    const val REQUEST_VIDEO_NOT_HIGH_RES = "RequestVideoNotHighRes"
-
-    /**
-     * Track video requests with high resolution setting turned on. This is tracked to contextualize
-     * the counts with the high resolution setting turned off since we expect that video is not very
-     * common overall. The action should be a hash of the form definition.
-     */
-    const val REQUEST_HIGH_RES_VIDEO = "RequestHighResVideo"
-
-    /**
      * Track submission encryption. The action should be a hash of the form definition.
      */
     const val ENCRYPT_SUBMISSION = "EncryptSubmission"
