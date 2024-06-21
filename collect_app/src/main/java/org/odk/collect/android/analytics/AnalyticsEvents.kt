@@ -31,11 +31,6 @@ object AnalyticsEvents {
     const val IMPORT_AND_ENCRYPT_INSTANCE = "ImportAndEncryptInstance"
 
     /**
-     * Tracks responses from OpenMapKit to the OSMWidget
-     */
-    const val OPEN_MAP_KIT_RESPONSE = "OpenMapKitResponse"
-
-    /**
      * Tracks how often users create shortcuts to forms
      */
     const val CREATE_SHORTCUT = "CreateShortcut"
