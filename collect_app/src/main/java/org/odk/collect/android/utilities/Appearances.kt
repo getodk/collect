@@ -20,7 +20,6 @@ import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.dynamicpreload.ExternalDataUtil
 import org.odk.collect.androidshared.utils.ScreenUtils
-import java.lang.Exception
 
 object Appearances {
     // Date appearances
@@ -196,6 +195,8 @@ object Appearances {
     @JvmStatic
     fun isMasked(prompt: FormEntryPrompt): Boolean {
         val appearance = getSanitizedAppearanceHint(prompt)
-        return appearance.contains(MASKED) && prompt.dataType == Constants.DATATYPE_TEXT
+        return appearance.contains(MASKED) &&
+            !appearance.contains(NUMBERS) &&
+            prompt.dataType == Constants.DATATYPE_TEXT
     }
 }
