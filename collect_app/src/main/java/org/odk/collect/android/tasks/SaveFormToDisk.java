@@ -39,7 +39,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.exception.EncryptionException;
@@ -357,10 +356,6 @@ public class SaveFormToDisk {
             // now see if the packaging of the data for the server would make it
             // non-reopenable (e.g., encryption or other fraction of the form).
             boolean canEditAfterCompleted = formController.isSubmissionEntireForm();
-            if (!canEditAfterCompleted) {
-                Analytics.log(AnalyticsEvents.PARTIAL_FORM_FINALIZED, "form");
-            }
-
             boolean isEncrypted = false;
 
             // build a submission.xml to hold the data being submitted
