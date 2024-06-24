@@ -85,6 +85,23 @@ class DirectoryReferenceLayerRepositoryTest {
     }
 
     @Test
+    fun getAllAlwaysUsesMapConfiguratorThatRepresentsTheCurrentConfiguration() {
+        val file = TempFiles.createTempFile(sharedLayersDir)
+
+        mapConfigurator.apply {
+            addFile(file, false, file.name)
+        }
+
+        assertThat(repository.getAll().isEmpty(), equalTo(true))
+
+        mapConfigurator = StubMapConfigurator().apply {
+            addFile(file, true, file.name)
+        }
+
+        assertThat(repository.getAll().isEmpty(), equalTo(false))
+    }
+
+    @Test
     fun get_returnsProperLayer() {
         val file1 = TempFiles.createTempFile(sharedLayersDir)
         val file2 = TempFiles.createTempFile(sharedLayersDir)
@@ -161,6 +178,24 @@ class DirectoryReferenceLayerRepositoryTest {
     }
 
     @Test
+    fun getAlwaysUsesMapConfiguratorThatRepresentsTheCurrentConfiguration() {
+        val file = TempFiles.createTempFile(sharedLayersDir)
+
+        mapConfigurator.apply {
+            addFile(file, false, file.name)
+        }
+
+        val fileId = repository.getIdForFile(sharedLayersDir.absolutePath, file)
+        assertThat(repository.get(fileId), equalTo(null))
+
+        mapConfigurator = StubMapConfigurator().apply {
+            addFile(file, true, file.name)
+        }
+
+        assertThat(repository.get(fileId)!!.file, equalTo(file))
+    }
+
+    @Test
     fun addLayer_movesFileToTheSharedLayersDir_whenSharedIsTrue() {
         val file = TempFiles.createTempFile().also {
             it.writeText("blah")
@@ -203,23 +238,6 @@ class DirectoryReferenceLayerRepositoryTest {
         repository.delete(fileLayer1.id)
 
         assertThat(repository.getAll(), contains(fileLayer2))
-    }
-
-    @Test // https://github.com/getodk/collect/issues/6211
-    fun mapConfiguratorThatRepresentsTheCurrentConfigurationShouldBeUsedEveryTimeTheRepositoryIsCalled() {
-        val file = TempFiles.createTempFile(sharedLayersDir)
-
-        mapConfigurator.apply {
-            addFile(file, false, file.name)
-        }
-
-        assertThat(repository.getAll().isEmpty(), equalTo(true))
-
-        mapConfigurator = StubMapConfigurator().apply {
-            addFile(file, true, file.name)
-        }
-
-        assertThat(repository.getAll().isEmpty(), equalTo(false))
     }
 
     private class StubMapConfigurator : MapConfigurator {
