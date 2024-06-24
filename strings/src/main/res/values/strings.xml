@@ -513,8 +513,8 @@
     <!-- Text for option where layer should be available to the current project only -->
     <string name="current_project_option">Current project only</string>
 
-    <!-- Text for message displayed in a dialog to confirm that the layer should be deleted -->
-    <string name="delete_layer_confirmation_message">Are you sure you want to delete %1$s offline layer?</string>
+    <!-- Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list -->
+    <string name="delete_layer_confirmation_message">Are you sure you want to delete the %1$s offline layer?</string>
 
     <string name="record_geopoint">Record a point</string>
     <string name="location_accuracy">Accuracy: %1$s m</string>
