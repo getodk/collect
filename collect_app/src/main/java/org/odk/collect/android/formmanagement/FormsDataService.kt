@@ -1,15 +1,15 @@
 package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.androidshared.data.AppState
+import org.odk.collect.androidshared.data.DataService
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.projects.ProjectDependencyFactory
@@ -19,30 +19,35 @@ import java.util.function.Supplier
 import java.util.stream.Collectors
 
 class FormsDataService(
-    private val appState: AppState,
+    appState: AppState,
     private val notifier: Notifier,
     private val projectDependencyModuleFactory: ProjectDependencyFactory<ProjectDependencyModule>,
     private val clock: Supplier<Long>
-) {
+) : DataService(appState) {
+
+    private val forms = getData("forms", emptyList<Form>())
+    private val syncing = getData("syncStatusSyncing", false)
+    private val serverError = getData<FormSourceException?>("syncStatusError", null)
+    private val diskError = getData<String?>("diskError", null)
 
     fun getForms(projectId: String): Flow<List<Form>> {
-        return getFormsFlow(projectId)
+        return forms.get(projectId)
     }
 
     fun isSyncing(projectId: String): LiveData<Boolean> {
-        return getSyncingLiveData(projectId)
+        return syncing.get(projectId).asLiveData()
     }
 
     fun getServerError(projectId: String): LiveData<FormSourceException?> {
-        return getServerErrorLiveData(projectId)
+        return serverError.get(projectId).asLiveData()
     }
 
     fun getDiskError(projectId: String): LiveData<String?> {
-        return getDiskErrorLiveData(projectId)
+        return diskError.get(projectId).asLiveData()
     }
 
     fun clear(projectId: String) {
-        getServerErrorLiveData(projectId).value = null
+        serverError.set(projectId, null)
     }
 
     fun downloadForms(
@@ -180,40 +185,21 @@ class FormsDataService(
             projectDependencies.formsDir
         )
 
-        getDiskErrorLiveData(projectId).postValue(error)
+        diskError.set(projectId, error)
     }
 
     private fun startSync(projectId: String) {
-        getSyncingLiveData(projectId).postValue(true)
+        syncing.set(projectId, true)
     }
 
     private fun finishSync(projectId: String, exception: FormSourceException? = null) {
-        getServerErrorLiveData(projectId).postValue(exception)
-        getSyncingLiveData(projectId).postValue(false)
+        serverError.set(projectId, exception)
+        syncing.set(projectId, false)
     }
 
     private fun syncWithDb(projectId: String) {
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
-        getFormsFlow(projectId).value = projectDependencies.formsRepository.all
-    }
-
-    private fun getFormsFlow(projectId: String): MutableStateFlow<List<Form>> {
-        return appState.get("forms:$projectId", MutableStateFlow(emptyList()))
-    }
-
-    private fun getSyncingLiveData(projectId: String) =
-        appState.get("$KEY_PREFIX_SYNCING:$projectId", MutableLiveData(false))
-
-    private fun getServerErrorLiveData(projectId: String) =
-        appState.get("$KEY_PREFIX_ERROR:$projectId", MutableLiveData<FormSourceException>(null))
-
-    private fun getDiskErrorLiveData(projectId: String): MutableLiveData<String?> =
-        appState.get("$KEY_PREFIX_DISK_ERROR:$projectId", MutableLiveData<String?>(null))
-
-    companion object {
-        const val KEY_PREFIX_SYNCING = "syncStatusSyncing"
-        const val KEY_PREFIX_ERROR = "syncStatusError"
-        const val KEY_PREFIX_DISK_ERROR = "diskError"
+        forms.set(projectId, projectDependencies.formsRepository.all)
     }
 }
 
