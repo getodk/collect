@@ -1,6 +1,7 @@
 package org.odk.collect.android.instancemanagement
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
@@ -17,6 +18,7 @@ import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
 import org.odk.collect.android.utilities.FormsUploadResultInterpreter
 import org.odk.collect.androidshared.data.AppState
+import org.odk.collect.androidshared.data.DataService
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.metadata.PropertyManager
@@ -24,20 +26,28 @@ import org.odk.collect.projects.ProjectDependencyFactory
 import java.io.File
 
 class InstancesDataService(
-    private val appState: AppState,
+    appState: AppState,
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
     private val projectDependencyModuleFactory: ProjectDependencyFactory<ProjectDependencyModule>,
     private val notifier: Notifier,
     private val propertyManager: PropertyManager,
     private val httpInterface: OpenRosaHttpInterface,
     private val onUpdate: () -> Unit
-) {
-    val editableCount: LiveData<Int> = appState.getLive(EDITABLE_COUNT_KEY, 0)
-    val sendableCount: LiveData<Int> = appState.getLive(SENDABLE_COUNT_KEY, 0)
-    val sentCount: LiveData<Int> = appState.getLive(SENT_COUNT_KEY, 0)
+) : DataService(appState) {
+
+    private val _editableCount = getData("instancesEditableCount", 0)
+    val editableCount: LiveData<Int> = _editableCount.get().asLiveData()
+
+    private val _sendableCount = getData("instancesSendableCount", 0)
+    val sendableCount: LiveData<Int> = _sendableCount.get().asLiveData()
+
+    private val _sentCount = getData("instancesSentCount", 0)
+    val sentCount: LiveData<Int> = _sentCount.get().asLiveData()
+
+    private val instances = getData<List<Instance>>("instances", emptyList())
 
     fun getInstances(projectId: String): Flow<List<Instance>> {
-        return appState.getFlow("instances:$projectId", emptyList())
+        return instances.get(projectId)
     }
 
     fun update(projectId: String) {
@@ -58,10 +68,10 @@ class InstancesDataService(
             Instance.STATUS_VALID
         )
 
-        appState.setLive(EDITABLE_COUNT_KEY, editableInstances)
-        appState.setLive(SENDABLE_COUNT_KEY, sendableInstances)
-        appState.setLive(SENT_COUNT_KEY, sentInstances)
-        appState.setFlow("instances:$projectId", instancesRepository.all)
+        _editableCount.set(editableInstances)
+        _sendableCount.set(sendableInstances)
+        _sentCount.set(sentInstances)
+        instances.set(projectId, instancesRepository.all)
 
         onUpdate()
     }
@@ -223,12 +233,6 @@ class InstancesDataService(
         } else {
             instanceSubmitScheduler.scheduleAutoSend(projectId)
         }
-    }
-
-    companion object {
-        private const val EDITABLE_COUNT_KEY = "instancesEditableCount"
-        private const val SENDABLE_COUNT_KEY = "instancesSendableCount"
-        private const val SENT_COUNT_KEY = "instancesSentCount"
     }
 }
 
