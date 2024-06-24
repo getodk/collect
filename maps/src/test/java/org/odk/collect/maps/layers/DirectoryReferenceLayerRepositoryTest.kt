@@ -16,7 +16,7 @@ import java.io.File
 class DirectoryReferenceLayerRepositoryTest {
     private val sharedLayersDir = TempFiles.createTempDir()
     private val projectLayersDir = TempFiles.createTempDir()
-    private val mapConfigurator = StubMapConfigurator()
+    private var mapConfigurator = StubMapConfigurator()
     private val repository = DirectoryReferenceLayerRepository(
         sharedLayersDir.absolutePath,
         projectLayersDir.absolutePath,
@@ -204,6 +204,23 @@ class DirectoryReferenceLayerRepositoryTest {
         repository.delete(fileLayer1.id)
 
         assertThat(repository.getAll(), contains(fileLayer2))
+    }
+
+    @Test // https://github.com/getodk/collect/issues/6211
+    fun mapConfiguratorThatRepresentsTheCurrentConfigurationShouldBeUsedEveryTimeTheRepositoryIsCalled() {
+        val file = TempFiles.createTempFile(sharedLayersDir)
+
+        mapConfigurator.apply {
+            addFile(file, false, file.name)
+        }
+
+        assertThat(repository.getAll().isEmpty(), equalTo(true))
+
+        mapConfigurator = StubMapConfigurator().apply {
+            addFile(file, true, file.name)
+        }
+
+        assertThat(repository.getAll().isEmpty(), equalTo(false))
     }
 
     private class StubMapConfigurator : MapConfigurator {
