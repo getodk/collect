@@ -16,12 +16,11 @@ import java.io.File
 class DirectoryReferenceLayerRepositoryTest {
     private val sharedLayersDir = TempFiles.createTempDir()
     private val projectLayersDir = TempFiles.createTempDir()
-    private val mapConfigurator = StubMapConfigurator()
+    private var mapConfigurator = StubMapConfigurator()
     private val repository = DirectoryReferenceLayerRepository(
         sharedLayersDir.absolutePath,
-        projectLayersDir.absolutePath,
-        mapConfigurator
-    )
+        projectLayersDir.absolutePath
+    ) { mapConfigurator }
 
     @Test
     fun getAll_returnsAllSupportedLayersInTheDirectory() {
@@ -83,6 +82,23 @@ class DirectoryReferenceLayerRepositoryTest {
         }
 
         assertThat(repository.getAll().map { it.file }, containsInAnyOrder(file1))
+    }
+
+    @Test
+    fun getAllAlwaysUsesMapConfiguratorThatRepresentsTheCurrentConfiguration() {
+        val file = TempFiles.createTempFile(sharedLayersDir)
+
+        mapConfigurator.apply {
+            addFile(file, false, file.name)
+        }
+
+        assertThat(repository.getAll().isEmpty(), equalTo(true))
+
+        mapConfigurator = StubMapConfigurator().apply {
+            addFile(file, true, file.name)
+        }
+
+        assertThat(repository.getAll().isEmpty(), equalTo(false))
     }
 
     @Test
@@ -159,6 +175,24 @@ class DirectoryReferenceLayerRepositoryTest {
         val fileLayer = repository.getAll().first { it.file == file }
 
         assertThat(repository.get(fileLayer.id)!!.name, equalTo(file.name))
+    }
+
+    @Test
+    fun getAlwaysUsesMapConfiguratorThatRepresentsTheCurrentConfiguration() {
+        val file = TempFiles.createTempFile(sharedLayersDir)
+
+        mapConfigurator.apply {
+            addFile(file, false, file.name)
+        }
+
+        val fileId = repository.getIdForFile(sharedLayersDir.absolutePath, file)
+        assertThat(repository.get(fileId), equalTo(null))
+
+        mapConfigurator = StubMapConfigurator().apply {
+            addFile(file, true, file.name)
+        }
+
+        assertThat(repository.get(fileId)!!.file, equalTo(file))
     }
 
     @Test
