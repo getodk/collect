@@ -35,7 +35,14 @@ Please note that the `master` branch reflects ongoing development and is not pro
 
 ## Release cycle
 
-Releases are planned to happen every 2-3 months (resulting in ~4 releases a year). Soon before (or just after) the end of one release cycle, the core team will plan a new set of work for the next release based on the [ODK Roadmap](https://getodk.org/roadmap), bugs and crashes identified in previous releases and other required or preemptive maintenance. This work will be broken down into Github Issues (for things that aren't already) by [@seadowg](https://github.com/seadowg) and is then added into Collect's prioritised [backlog](https://github.com/orgs/getodk/projects/9/views/8) for the core team (and any external contributors) to work on day to day. Sometimes issues will be assigned to core team members before they are actually started (moved to "in progress") to make it clear who's going to be working on what.
+Releases are planned to happen every 2-3 months (resulting in ~4 releases a year). Soon before (or just after) the end of one release cycle, the core team will plan a new set of work for the next release. This involves:
+
+1. Moving issues not finished in the last release and new items from the [ODK Roadmap](https://getodk.org/roadmap) to the [planning board](https://github.com/orgs/getodk/projects/9/views/25)
+2. Giving the core team a few days to review and reflect on the planning board
+3. The core team will then meet to trim work that will not be included in the next release and pitch alternative things to work on
+4. The milestone for the new release is added to [the backlog](https://github.com/orgs/getodk/projects/9) and is prioritized
+
+Sometimes issues will be assigned to core team members before they are actually started (moved to "in progress") to make it clear who's going to be working on what.
 
 Once the majority of high risk or visible work is done for a release, a new beta will then be released to the Play Store by [@lognaturel](https://github.com/lognaturel) and that will be used for regression testing by [@getodk/testers](https://github.com/orgs/getodk/teams/testers). If any problems are found, the release is blocked until we can merge fixes. Regression testing should continue on the original beta build (rather than a new one with fixes) unless problems block the rest of testing. Once the process is complete, [@lognaturel](https://github.com/lognaturel) pushes the releases to the Play Store following [these instructions](#creating-signed-releases-for-google-play-store).
 
