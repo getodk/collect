@@ -129,8 +129,7 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="@dimen/margin_standard"
                         android:text="@string/all_projects_option"
-                        android:textAppearance="?textAppearanceBodyMedium"
-                        android:translationX="-5dp" />
+                        android:textAppearance="?textAppearanceBodyMedium" />
 
                     <RadioButton
                         android:id="@+id/current_project_option"
@@ -138,8 +137,7 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="@dimen/margin_standard"
                         android:text="@string/current_project_option"
-                        android:textAppearance="?textAppearanceBodyMedium"
-                        android:translationX="-5dp" />
+                        android:textAppearance="?textAppearanceBodyMedium" />
                 </RadioGroup>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
