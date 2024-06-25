@@ -19,7 +19,7 @@ The purpose of this document is to give anyone who reads it a quick overview  of
 * UI is "iconic" (old) but with a lot of inconsistencies and quirks and is best adapted to small screens (although often used on tablets)
 * A lot of code lives in between one "god" Activity (`FormFillingActivity`) and a process singleton (`FormController`)
 * Core form entry flow uses custom side-to-side swipe view (in `FormFillingActivity` made up of `ODKView`)
-* Questions are rendered using a view "framework" of implementations inheriting from `QuestionWidget` (which is documented at in [WIDGETS.MD](WIDGETS.md)) which are also used to store UI state during form entry
+* Questions are rendered using a view "framework" of implementations inheriting from `QuestionWidget` (which is documented in [WIDGETS.MD](WIDGETS.md)) which are also used to store UI state during form entry
 * App mostly stores data in flat files indexed in SQLite
 * Access to data in SQLite happens through repository objects which deal in data/domain objects (`FormsRepository` and `Form` for example)
 * Settings UIs for the app use Android's Preferences abstraction
@@ -31,7 +31,7 @@ The purpose of this document is to give anyone who reads it a quick overview  of
 * Forms get into the app from two different sources (Open Rosa servers and disk) but the logic for this is disparate and they don't sit behind a common interface
 * Instances are linked to the forms they are instances of through formid and version. However, the same formid and version combination could represent multiple forms in storage
 * `SharedPreferences` is wrapped in app's own `Settings` abstraction
-* The form hierarchy is rendered using `FormHierarchyActivity` which hasn't been seriously touched (at a code or design) level for a few years
+* The form hierarchy is rendered using `FormHierarchyActivity`, which hasn't been seriously touched (at a code or design) level for a few years
 
 ## Where we're going
 
@@ -43,5 +43,5 @@ The purpose of this document is to give anyone who reads it a quick overview  of
 * Replacing async work such as `AsyncTask` with `Flow`/`LiveData` + `Scheduler` abstraction
 * Gradually removing use of `CursorLoader` (all remaining uses are in `CursorLoaderFactory`)
 * Using AndroidX Test in new local tests and migrating other local tests as we touch them (from classic Robolectric)
-* Moving towards a ["data services"](data_services_architecture.pdf) oriented architecture that has emerged over time that uses AndroidX Architecture Components for the core of the UI (Fragment, View, ViewModel etc)
+* Moving towards a ["data services"](data_services_architecture.pdf) oriented architecture that has emerged over time that uses AndroidX Architecture Components for the core of the UI (Fragment, View, ViewModel etc.)
 * Improving the `MapFragment` abstraction so more logic can be shared between the map engines
