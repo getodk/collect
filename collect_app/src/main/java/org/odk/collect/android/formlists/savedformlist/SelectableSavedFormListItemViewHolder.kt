@@ -6,7 +6,7 @@ import android.widget.CheckBox
 import org.odk.collect.android.R
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.lists.RecyclerViewUtils.matchParentWidth
-import org.odk.collect.lists.multiselect.MultiSelectAdapter
+import org.odk.collect.lists.selects.MultiSelectAdapter
 
 class SelectableSavedFormListItemViewHolder(parent: ViewGroup) :
     MultiSelectAdapter.ViewHolder<Instance>(

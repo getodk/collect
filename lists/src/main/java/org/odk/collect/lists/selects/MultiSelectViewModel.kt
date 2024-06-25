@@ -1,4 +1,4 @@
-package org.odk.collect.lists.multiselect
+package org.odk.collect.lists.selects
 
 import android.widget.Button
 import androidx.lifecycle.LiveData
@@ -17,27 +17,27 @@ import org.odk.collect.androidshared.livedata.NonNullLiveData
  * all and determine whether all items are selected or not.
  */
 class MultiSelectViewModel<T>(
-    private val data: LiveData<List<MultiSelectItem<T>>> = MutableLiveData(emptyList())
+    private val data: LiveData<List<SelectItem<T>>> = MutableLiveData(emptyList())
 ) : ViewModel() {
 
-    private val selected = MutableNonNullLiveData(emptySet<Long>())
+    private val selected = MutableNonNullLiveData(emptySet<String>())
     private val isAllSelected = LiveDataUtils.zip(data, selected).map { (data, selected) ->
         data.isNotEmpty() && data.size == selected.size
     }
 
-    fun getData(): LiveData<List<MultiSelectItem<T>>> {
+    fun getData(): LiveData<List<SelectItem<T>>> {
         return data
     }
 
-    fun select(item: Long) {
+    fun select(item: String) {
         updateSelected(selected.value + item)
     }
 
-    fun getSelected(): NonNullLiveData<Set<Long>> {
+    fun getSelected(): NonNullLiveData<Set<String>> {
         return selected
     }
 
-    fun unselect(item: Long) {
+    fun unselect(item: String) {
         updateSelected(selected.value - item)
     }
 
@@ -53,7 +53,7 @@ class MultiSelectViewModel<T>(
         return isAllSelected
     }
 
-    fun toggle(item: Long) {
+    fun toggle(item: String) {
         if (selected.value.contains(item)) {
             unselect(item)
         } else {
@@ -61,11 +61,12 @@ class MultiSelectViewModel<T>(
         }
     }
 
-    private fun updateSelected(new: Set<Long>) {
+    private fun updateSelected(new: Set<String>) {
         selected.value = new
     }
 
-    class Factory<T>(private val data: LiveData<List<MultiSelectItem<T>>>) : ViewModelProvider.Factory {
+    class Factory<T>(private val data: LiveData<List<SelectItem<T>>> = MutableLiveData(emptyList())) :
+        ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <VM : ViewModel> create(modelClass: Class<VM>, extras: CreationExtras): VM {
             return MultiSelectViewModel(data) as VM

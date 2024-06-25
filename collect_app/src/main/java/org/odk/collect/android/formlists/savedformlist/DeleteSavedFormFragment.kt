@@ -20,10 +20,10 @@ import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils.SnackbarPresenterObserver
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.lists.RecyclerViewUtils
-import org.odk.collect.lists.multiselect.MultiSelectControlsFragment
-import org.odk.collect.lists.multiselect.MultiSelectItem
-import org.odk.collect.lists.multiselect.MultiSelectListFragment
-import org.odk.collect.lists.multiselect.MultiSelectViewModel
+import org.odk.collect.lists.selects.MultiSelectControlsFragment
+import org.odk.collect.lists.selects.MultiSelectListFragment
+import org.odk.collect.lists.selects.MultiSelectViewModel
+import org.odk.collect.lists.selects.SelectItem
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.strings.R.string
 
@@ -37,8 +37,8 @@ class DeleteSavedFormFragment(
         MultiSelectViewModel.Factory(
             savedFormListViewModel.formsToDisplay.map {
                 it.map { instance ->
-                    MultiSelectItem(
-                        instance.dbId,
+                    SelectItem(
+                        instance.dbId.toString(),
                         instance
                     )
                 }
@@ -69,8 +69,8 @@ class DeleteSavedFormFragment(
             MultiSelectControlsFragment.REQUEST_ACTION,
             this
         ) { _, result ->
-            val selected = result.getLongArray(MultiSelectControlsFragment.RESULT_SELECTED)!!
-            onDeleteSelected(selected)
+            val selected = result.getStringArray(MultiSelectControlsFragment.RESULT_SELECTED)!!
+            onDeleteSelected(selected.map { it.toLong() }.toLongArray())
         }
     }
 

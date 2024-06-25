@@ -1,4 +1,4 @@
-package org.odk.collect.lists.multiselect
+package org.odk.collect.lists.selects
 
 import android.view.View
 import android.view.ViewGroup
@@ -13,13 +13,13 @@ class MultiSelectAdapter<T, VH : MultiSelectAdapter.ViewHolder<T>>(
     private val viewHolderFactory: (ViewGroup) -> VH
 ) : RecyclerView.Adapter<VH>() {
 
-    var selected: Set<Long> = emptySet()
+    var selected: Set<String> = emptySet()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
-    var data = emptyList<MultiSelectItem<T>>()
+    var data = emptyList<SelectItem<T>>()
         set(value) {
             field = value.toList()
             notifyDataSetChanged()
