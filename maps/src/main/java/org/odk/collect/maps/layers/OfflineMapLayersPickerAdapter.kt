@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
+import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -43,7 +43,7 @@ class OfflineMapLayersPickerAdapter(
         holder.binding.radioButton.setChecked(layer.isChecked)
         holder.binding.title.text = layer.name
         holder.binding.path.text = layer.file?.absolutePath
-        holder.binding.arrow.isVisible = layer.id != null
+        holder.binding.arrow.isInvisible = layer.id == null
 
         if (layer.isExpanded) {
             holder.binding.arrow.setImageDrawable(ContextCompat.getDrawable(holder.binding.root.context, org.odk.collect.icons.R.drawable.ic_baseline_collapse_24))
