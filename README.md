@@ -39,7 +39,7 @@ Releases are planned to happen every 2-3 months (resulting in ~4 releases a year
 
 1. Moving issues not finished in the last release and new items from the [ODK Roadmap](https://getodk.org/roadmap) to the [planning board](https://github.com/orgs/getodk/projects/9/views/25)
 2. Giving the core team a few days to review and reflect on the planning board
-3. The core team will then meet to trim work not that will not be included in the next release and pitch alternative things to work on
+3. The core team will then meet to trim work that will not be included in the next release and pitch alternative things to work on
 4. The milestone for the new release is added to [the backlog](https://github.com/orgs/getodk/projects/9) and is prioritized
 
 Sometimes issues will be assigned to core team members before they are actually started (moved to "in progress") to make it clear who's going to be working on what.
