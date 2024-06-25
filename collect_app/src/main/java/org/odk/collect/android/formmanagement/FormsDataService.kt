@@ -9,7 +9,7 @@ import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchroniz
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.androidshared.data.AppState
-import org.odk.collect.androidshared.data.DataService
+import org.odk.collect.androidshared.data.getData
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.projects.ProjectDependencyFactory
@@ -23,12 +23,12 @@ class FormsDataService(
     private val notifier: Notifier,
     private val projectDependencyModuleFactory: ProjectDependencyFactory<ProjectDependencyModule>,
     private val clock: Supplier<Long>
-) : DataService(appState) {
+) {
 
-    private val forms = getData("forms", emptyList<Form>())
-    private val syncing = getData("syncStatusSyncing", false)
-    private val serverError = getData<FormSourceException?>("syncStatusError", null)
-    private val diskError = getData<String?>("diskError", null)
+    private val forms = appState.getData("forms", emptyList<Form>())
+    private val syncing = appState.getData("syncStatusSyncing", false)
+    private val serverError = appState.getData<FormSourceException?>("syncStatusError", null)
+    private val diskError = appState.getData<String?>("diskError", null)
 
     fun getForms(projectId: String): Flow<List<Form>> {
         return forms.get(projectId)
