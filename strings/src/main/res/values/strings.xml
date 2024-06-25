@@ -500,6 +500,18 @@
     <!-- Text for button that lets the user delete a offline layer -->
     <string name="delete_layer">Delete layer</string>
 
+    <!-- Text for title displayed in a dialog to inform that some/all the selected files are not MBTiles and they can't be imported -->
+    <plurals name="non_mbtiles_files_selected_title">
+        <item quantity="one">%d layer can\'t be added</item>
+        <item quantity="other">%d layers can\'t be added</item>
+    </plurals>
+
+    <!-- Text for message displayed in a dialog to inform that all the selected files are not MBTiles and they can't be imported -->
+    <string name="all_non_mbtiles_files_selected_message">The files you selected are not MBTiles. You can only add MBTiles files.</string>
+
+    <!-- Text for message displayed in a dialog to inform that some of the selected files are not MBTiles and they can't be imported -->
+    <string name="some_non_mbtiles_files_selected_message">Some of the files you selected are not MBTiles. You can only add MBTiles files.</string>
+
     <!-- Text for title above list of layers -->
     <string name="layers_list_title">Layers</string>
 
