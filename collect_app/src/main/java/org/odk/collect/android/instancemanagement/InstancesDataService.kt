@@ -18,7 +18,7 @@ import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
 import org.odk.collect.android.utilities.FormsUploadResultInterpreter
 import org.odk.collect.androidshared.data.AppState
-import org.odk.collect.androidshared.data.DataService
+import org.odk.collect.androidshared.data.getData
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.metadata.PropertyManager
@@ -33,18 +33,18 @@ class InstancesDataService(
     private val propertyManager: PropertyManager,
     private val httpInterface: OpenRosaHttpInterface,
     private val onUpdate: () -> Unit
-) : DataService(appState) {
+) {
 
-    private val _editableCount = getData("instancesEditableCount", 0)
+    private val _editableCount = appState.getData("instancesEditableCount", 0)
     val editableCount: LiveData<Int> = _editableCount.get().asLiveData()
 
-    private val _sendableCount = getData("instancesSendableCount", 0)
+    private val _sendableCount = appState.getData("instancesSendableCount", 0)
     val sendableCount: LiveData<Int> = _sendableCount.get().asLiveData()
 
-    private val _sentCount = getData("instancesSentCount", 0)
+    private val _sentCount = appState.getData("instancesSentCount", 0)
     val sentCount: LiveData<Int> = _sentCount.get().asLiveData()
 
-    private val instances = getData<List<Instance>>("instances", emptyList())
+    private val instances = appState.getData<List<Instance>>("instances", emptyList())
 
     fun getInstances(projectId: String): Flow<List<Instance>> {
         return instances.get(projectId)
