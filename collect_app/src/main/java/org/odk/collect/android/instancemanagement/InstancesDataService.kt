@@ -15,6 +15,7 @@ import org.odk.collect.android.instancemanagement.autosend.getAutoSendMode
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface
 import org.odk.collect.android.projects.ProjectDependencyModule
+import org.odk.collect.android.state.DataKeys
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
 import org.odk.collect.android.utilities.FormsUploadResultInterpreter
 import org.odk.collect.androidshared.data.AppState
@@ -35,16 +36,16 @@ class InstancesDataService(
     private val onUpdate: () -> Unit
 ) {
 
-    private val _editableCount = appState.getData("instancesEditableCount", 0)
+    private val _editableCount = appState.getData(DataKeys.INSTANCES_EDITABLE_COUNT, 0)
     val editableCount: LiveData<Int> = _editableCount.get().asLiveData()
 
-    private val _sendableCount = appState.getData("instancesSendableCount", 0)
+    private val _sendableCount = appState.getData(DataKeys.INSTANCES_SENDABLE_COUNT, 0)
     val sendableCount: LiveData<Int> = _sendableCount.get().asLiveData()
 
-    private val _sentCount = appState.getData("instancesSentCount", 0)
+    private val _sentCount = appState.getData(DataKeys.INSTANCES_SENT_COUNT, 0)
     val sentCount: LiveData<Int> = _sentCount.get().asLiveData()
 
-    private val instances = appState.getData<List<Instance>>("instances", emptyList())
+    private val instances = appState.getData<List<Instance>>(DataKeys.INSTANCES, emptyList())
 
     fun getInstances(projectId: String): Flow<List<Instance>> {
         return instances.get(projectId)
