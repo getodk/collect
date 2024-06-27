@@ -1,4 +1,6 @@
-package org.odk.collect.entities.javarosa
+package org.odk.collect.entities.javarosa.finalization
+
+import org.odk.collect.entities.javarosa.spec.EntityAction
 
 class Entity(
     val action: EntityAction,

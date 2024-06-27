@@ -1,4 +1,4 @@
-package org.odk.collect.entities.javarosa;
+package org.odk.collect.entities.javarosa.spec;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.FormInstance;
@@ -7,13 +7,13 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static org.odk.collect.entities.javarosa.EntityConstants.ATTRIBUTE_BASE_VERSION;
-import static org.odk.collect.entities.javarosa.EntityConstants.ATTRIBUTE_CREATE;
-import static org.odk.collect.entities.javarosa.EntityConstants.ATTRIBUTE_DATASET;
-import static org.odk.collect.entities.javarosa.EntityConstants.ATTRIBUTE_ID;
-import static org.odk.collect.entities.javarosa.EntityConstants.ATTRIBUTE_UPDATE;
-import static org.odk.collect.entities.javarosa.EntityConstants.ELEMENT_ENTITY;
-import static org.odk.collect.entities.javarosa.EntityConstants.ELEMENT_LABEL;
+import static org.odk.collect.entities.javarosa.spec.EntityConstants.ATTRIBUTE_BASE_VERSION;
+import static org.odk.collect.entities.javarosa.spec.EntityConstants.ATTRIBUTE_CREATE;
+import static org.odk.collect.entities.javarosa.spec.EntityConstants.ATTRIBUTE_DATASET;
+import static org.odk.collect.entities.javarosa.spec.EntityConstants.ATTRIBUTE_ID;
+import static org.odk.collect.entities.javarosa.spec.EntityConstants.ATTRIBUTE_UPDATE;
+import static org.odk.collect.entities.javarosa.spec.EntityConstants.ELEMENT_ENTITY;
+import static org.odk.collect.entities.javarosa.spec.EntityConstants.ELEMENT_LABEL;
 
 public class EntityFormParser {
 

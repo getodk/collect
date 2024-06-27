@@ -1,4 +1,4 @@
-package org.odk.collect.entities.javarosa;
+package org.odk.collect.entities.javarosa.parse;
 
 import org.javarosa.xform.parse.IXFormParserFactory;
 import org.javarosa.xform.parse.XFormParser;

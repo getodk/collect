@@ -1,4 +1,4 @@
-package org.odk.collect.entities.javarosa;
+package org.odk.collect.entities.javarosa.parse;
 
 import kotlin.Pair;
 import org.javarosa.core.util.externalizable.DeserializationException;

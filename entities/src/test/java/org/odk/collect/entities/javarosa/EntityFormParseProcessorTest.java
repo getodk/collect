@@ -22,6 +22,9 @@ import org.javarosa.test.XFormsElement;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.parse.XFormParser.MissingModelAttributeException;
 import org.junit.Test;
+import org.odk.collect.entities.javarosa.parse.EntityFormExtra;
+import org.odk.collect.entities.javarosa.parse.EntityFormParseProcessor;
+import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;

@@ -1,4 +1,4 @@
-package org.odk.collect.entities.javarosa
+package org.odk.collect.entities.javarosa.spec
 
 internal object EntityConstants {
     const val ELEMENT_ENTITY = "entity"
