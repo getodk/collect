@@ -281,6 +281,53 @@ class OfflineMapLayersImporterTest {
         }
     }
 
+    @Test
+    fun `the warning dialog shows correct number of unsupported layers`() {
+        val context = ApplicationProvider.getApplicationContext<Application>()
+
+        launchFragment().onFragment {
+            // Three unsupported layers
+            it.viewModel.loadLayersToImport(
+                listOf(
+                    TempFiles.createTempFile("layerA", ".txt").toUri(),
+                    TempFiles.createTempFile("layerB", ".txt").toUri(),
+                    TempFiles.createTempFile("layerC", ".txt").toUri()
+                ),
+                context
+            )
+            scheduler.flush()
+            onView(withText(context.getLocalizedQuantityString(R.plurals.non_mbtiles_files_selected_title, 3, 3))).inRoot(isDialog()).check(matches(isDisplayed()))
+        }
+
+        launchFragment().onFragment {
+            // Two unsupported layers
+            it.viewModel.loadLayersToImport(
+                listOf(
+                    TempFiles.createTempFile("layerA", ".txt").toUri(),
+                    TempFiles.createTempFile("layerB", ".txt").toUri(),
+                    TempFiles.createTempFile("layerC", MbtilesFile.FILE_EXTENSION).toUri()
+                ),
+                context
+            )
+            scheduler.flush()
+            onView(withText(context.getLocalizedQuantityString(R.plurals.non_mbtiles_files_selected_title, 2, 2))).inRoot(isDialog()).check(matches(isDisplayed()))
+        }
+
+        launchFragment().onFragment {
+            // One unsupported layer
+            it.viewModel.loadLayersToImport(
+                listOf(
+                    TempFiles.createTempFile("layerA", ".txt").toUri(),
+                    TempFiles.createTempFile("layerB", MbtilesFile.FILE_EXTENSION).toUri(),
+                    TempFiles.createTempFile("layerC", MbtilesFile.FILE_EXTENSION).toUri()
+                ),
+                context
+            )
+            scheduler.flush()
+            onView(withText(context.getLocalizedQuantityString(R.plurals.non_mbtiles_files_selected_title, 1, 1))).inRoot(isDialog()).check(matches(isDisplayed()))
+        }
+    }
+
     private fun launchFragment(): FragmentScenario<OfflineMapLayersImporter> {
         return fragmentScenarioLauncherRule.launchInContainer(OfflineMapLayersImporter::class.java)
     }
