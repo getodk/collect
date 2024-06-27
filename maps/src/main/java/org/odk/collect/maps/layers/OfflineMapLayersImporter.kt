@@ -8,10 +8,14 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.maps.databinding.OfflineMapLayersImporterBinding
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.strings.R
+import org.odk.collect.strings.localization.getLocalizedQuantityString
+import org.odk.collect.strings.localization.getLocalizedString
 
 class OfflineMapLayersImporter(
     private val referenceLayerRepository: ReferenceLayerRepository,
@@ -65,8 +69,19 @@ class OfflineMapLayersImporter(
         }
 
         viewModel.layersToImport.observe(this) { layersToImport ->
-            val adapter = OfflineMapLayersImporterAdapter(layersToImport)
+            val adapter = OfflineMapLayersImporterAdapter(layersToImport.value.layers)
             binding.layers.setAdapter(adapter)
+
+            if (!layersToImport.isConsumed()) {
+                layersToImport.consume()
+
+                if (layersToImport.value.numberOfSelectedLayers == layersToImport.value.numberOfUnsupportedLayers) {
+                    dismiss()
+                    showNoSupportedLayersWarning(layersToImport.value.numberOfUnsupportedLayers)
+                } else if (layersToImport.value.numberOfUnsupportedLayers > 0) {
+                    showSomeUnsupportedLayersWarning(layersToImport.value.numberOfSelectedLayers - layersToImport.value.numberOfUnsupportedLayers)
+                }
+            }
         }
     }
 
@@ -78,5 +93,35 @@ class OfflineMapLayersImporter(
 
     override fun getToolbar(): Toolbar {
         return OfflineMapLayersImporterBinding.bind(requireView()).toolbar
+    }
+
+    private fun showNoSupportedLayersWarning(numberOfLayers: Int) {
+        MaterialAlertDialogBuilder(requireActivity())
+            .setTitle(
+                requireActivity().getLocalizedQuantityString(
+                    R.plurals.non_mbtiles_files_selected_title,
+                    numberOfLayers,
+                    numberOfLayers
+                )
+            )
+            .setMessage(requireActivity().getLocalizedString(R.string.all_non_mbtiles_files_selected_message))
+            .setPositiveButton(R.string.ok, null)
+            .create()
+            .show()
+    }
+
+    private fun showSomeUnsupportedLayersWarning(numberOfLayers: Int) {
+        MaterialAlertDialogBuilder(requireActivity())
+            .setTitle(
+                requireActivity().getLocalizedQuantityString(
+                    R.plurals.non_mbtiles_files_selected_title,
+                    numberOfLayers,
+                    numberOfLayers
+                )
+            )
+            .setMessage(requireActivity().getLocalizedString(R.string.some_non_mbtiles_files_selected_message))
+            .setPositiveButton(R.string.ok, null)
+            .create()
+            .show()
     }
 }

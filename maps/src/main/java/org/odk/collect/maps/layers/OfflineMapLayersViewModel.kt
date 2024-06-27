@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.odk.collect.analytics.Analytics
+import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.system.copyToFile
 import org.odk.collect.androidshared.system.getFileExtension
 import org.odk.collect.androidshared.system.getFileName
@@ -27,8 +28,8 @@ class OfflineMapLayersViewModel(
     private val _existingLayers = MutableLiveData<List<ReferenceLayer>>()
     val existingLayers: LiveData<List<ReferenceLayer>> = _existingLayers
 
-    private val _layersToImport = MutableLiveData<List<ReferenceLayer>>()
-    val layersToImport: LiveData<List<ReferenceLayer>> = _layersToImport
+    private val _layersToImport = MutableLiveData<Consumable<LayersToImport>>()
+    val layersToImport: LiveData<Consumable<LayersToImport>> = _layersToImport
 
     private lateinit var tempLayersDir: File
 
@@ -67,7 +68,15 @@ class OfflineMapLayersViewModel(
                     }
                 }
                 _isLoading.postValue(false)
-                _layersToImport.postValue(layers.sortedBy { it.name })
+                _layersToImport.postValue(
+                    Consumable(
+                        LayersToImport(
+                            uris.size,
+                            uris.size - layers.size,
+                            layers.sortedBy { it.name }
+                        )
+                    )
+                )
             },
             foreground = { }
         )
@@ -119,4 +128,10 @@ class OfflineMapLayersViewModel(
 
         Analytics.log(event)
     }
+
+    data class LayersToImport(
+        val numberOfSelectedLayers: Int,
+        val numberOfUnsupportedLayers: Int,
+        val layers: List<ReferenceLayer>
+    )
 }

@@ -1,9 +1,12 @@
 package org.odk.collect.maps.layers
 
+import android.app.Application
 import androidx.core.net.toUri
 import androidx.fragment.app.testing.FragmentScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
@@ -25,6 +28,7 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R
+import org.odk.collect.strings.localization.getLocalizedQuantityString
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RecyclerViewMatcher
@@ -238,6 +242,43 @@ class OfflineMapLayersImporterTest {
         assertThat(fileCaptor.allValues.any { file -> file.name == file2.name }, equalTo(true))
         assertThat(booleanCaptor.firstValue, equalTo(false))
         assertThat(booleanCaptor.secondValue, equalTo(false))
+    }
+
+    @Test
+    fun `the warning dialog is displayed if some selected files are not supported and the importer dialog is kept displayed`() {
+        val file1 = TempFiles.createTempFile("layerA", ".txt")
+        val file2 = TempFiles.createTempFile("layerB", MbtilesFile.FILE_EXTENSION)
+
+        launchFragment().onFragment {
+            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
+
+            scheduler.flush()
+
+            val context = ApplicationProvider.getApplicationContext<Application>()
+            onView(withText(context.getLocalizedQuantityString(R.plurals.non_mbtiles_files_selected_title, 1, 1))).inRoot(isDialog()).check(matches(isDisplayed()))
+            onView(withText(R.string.some_non_mbtiles_files_selected_message)).inRoot(isDialog()).check(matches(isDisplayed()))
+            onView(withText(R.string.ok)).inRoot(isDialog()).check(matches(isDisplayed()))
+
+            assertThat(it.isVisible, equalTo(true))
+        }
+    }
+
+    @Test
+    fun `the warning dialog is displayed if all selected files are not supported and the importer dialog is dismissed`() {
+        val file = TempFiles.createTempFile("layerA", ".txt")
+
+        launchFragment().onFragment {
+            it.viewModel.loadLayersToImport(listOf(file.toUri()), it.requireContext())
+
+            scheduler.flush()
+
+            val context = ApplicationProvider.getApplicationContext<Application>()
+            onView(withText(context.getLocalizedQuantityString(R.plurals.non_mbtiles_files_selected_title, 1, 1))).inRoot(isDialog()).check(matches(isDisplayed()))
+            onView(withText(R.string.all_non_mbtiles_files_selected_message)).inRoot(isDialog()).check(matches(isDisplayed()))
+            onView(withText(R.string.ok)).inRoot(isDialog()).check(matches(isDisplayed()))
+
+            assertThat(it.isVisible, equalTo(false))
+        }
     }
 
     private fun launchFragment(): FragmentScenario<OfflineMapLayersImporter> {
