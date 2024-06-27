@@ -1,4 +1,4 @@
-package org.odk.collect.entities.javarosa.internal;
+package org.odk.collect.entities.javarosa;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -18,7 +18,6 @@ import static org.junit.Assert.fail;
 import static java.util.Arrays.asList;
 
 import org.javarosa.core.model.FormDef;
-import org.odk.collect.entities.javarosa.UnrecognizedEntityVersionException;
 import org.javarosa.test.XFormsElement;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.parse.XFormParser.MissingModelAttributeException;

@@ -1,4 +1,4 @@
-package org.odk.collect.entities
+package org.odk.collect.entities.storage
 
 data class Entity @JvmOverloads constructor(
     val list: String,

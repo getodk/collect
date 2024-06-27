@@ -11,9 +11,6 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryFinalizationProcessor;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.model.xform.XPathReference;
-import org.odk.collect.entities.javarosa.internal.EntitiesExtra;
-import org.odk.collect.entities.javarosa.internal.EntityFormExtra;
-import org.odk.collect.entities.javarosa.internal.EntityFormParser;
 
 import java.util.List;
 import java.util.stream.Collectors;

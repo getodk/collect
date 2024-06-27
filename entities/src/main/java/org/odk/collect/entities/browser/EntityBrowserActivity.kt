@@ -1,4 +1,4 @@
-package org.odk.collect.entities
+package org.odk.collect.entities.browser
 
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
@@ -8,6 +8,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
+import org.odk.collect.entities.EntitiesDependencyComponentProvider
+import org.odk.collect.entities.R
+import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 

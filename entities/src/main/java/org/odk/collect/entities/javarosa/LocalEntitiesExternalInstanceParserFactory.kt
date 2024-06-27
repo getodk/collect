@@ -1,10 +1,12 @@
-package org.odk.collect.entities
+package org.odk.collect.entities.javarosa
 
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.instance.TreeElement
 import org.javarosa.xform.parse.ExternalInstanceParser
 import org.javarosa.xform.parse.ExternalInstanceParser.FileInstanceParser
 import org.javarosa.xform.parse.ExternalInstanceParserFactory
+import org.odk.collect.entities.browser.EntityItemElement
+import org.odk.collect.entities.storage.EntitiesRepository
 
 class LocalEntitiesExternalInstanceParserFactory(
     private val entitiesRepositoryProvider: () -> EntitiesRepository,

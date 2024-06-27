@@ -6,9 +6,13 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
-import org.odk.collect.entities.Entity.State.ONLINE
+import org.odk.collect.entities.browser.EntityItemElement
+import org.odk.collect.entities.javarosa.EntitiesExtra
 import org.odk.collect.entities.javarosa.EntityAction
-import org.odk.collect.entities.javarosa.internal.EntitiesExtra
+import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.entities.storage.Entity
+import org.odk.collect.entities.storage.Entity.State.ONLINE
+import org.odk.collect.entities.storage.InMemEntitiesRepository
 import org.odk.collect.shared.TempFiles
 import java.io.File
 
