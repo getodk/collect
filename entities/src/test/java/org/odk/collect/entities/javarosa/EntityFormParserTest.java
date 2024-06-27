@@ -2,15 +2,14 @@ package org.odk.collect.entities.javarosa;
 
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.core.model.instance.TreeElement;
-import org.odk.collect.entities.javarosa.internal.EntityFormParser;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.odk.collect.entities.javarosa.internal.EntityConstants.ATTRIBUTE_CREATE;
-import static org.odk.collect.entities.javarosa.internal.EntityConstants.ATTRIBUTE_UPDATE;
-import static org.odk.collect.entities.javarosa.internal.EntityConstants.ELEMENT_ENTITY;
-import static org.odk.collect.entities.javarosa.internal.EntityConstants.ELEMENT_LABEL;
+import static org.odk.collect.entities.javarosa.EntityConstants.ATTRIBUTE_CREATE;
+import static org.odk.collect.entities.javarosa.EntityConstants.ATTRIBUTE_UPDATE;
+import static org.odk.collect.entities.javarosa.EntityConstants.ELEMENT_ENTITY;
+import static org.odk.collect.entities.javarosa.EntityConstants.ELEMENT_LABEL;
 
 public class EntityFormParserTest {
 

@@ -14,7 +14,7 @@ import org.kxml2.kdom.Document
 import org.mockito.kotlin.mock
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.utilities.FileUtils
-import org.odk.collect.entities.InMemEntitiesRepository
+import org.odk.collect.entities.storage.InMemEntitiesRepository
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormFixtures

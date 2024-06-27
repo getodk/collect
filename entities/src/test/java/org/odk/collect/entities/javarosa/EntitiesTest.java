@@ -26,7 +26,6 @@ import org.javarosa.xform.util.XFormUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.odk.collect.entities.javarosa.internal.EntitiesExtra;
 
 import java.io.IOException;
 import java.util.List;

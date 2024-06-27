@@ -1,6 +1,4 @@
-package org.odk.collect.entities.javarosa.internal;
-
-import org.odk.collect.entities.javarosa.Entity;
+package org.odk.collect.entities.javarosa;
 
 import java.util.List;
 

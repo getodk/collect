@@ -3,8 +3,8 @@ package org.odk.collect.android.entities
 import android.os.StrictMode
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import org.odk.collect.entities.EntitiesRepository
-import org.odk.collect.entities.Entity
+import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.entities.storage.Entity
 import java.io.File
 
 class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {

@@ -34,7 +34,7 @@ import org.odk.collect.androidshared.livedata.LiveDataUtils;
 import org.odk.collect.async.Cancellable;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
-import org.odk.collect.entities.EntitiesRepository;
+import org.odk.collect.entities.storage.EntitiesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;

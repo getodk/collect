@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/lists"
-        android:name="org.odk.collect.entities.EntityListsFragment"
+        android:name="org.odk.collect.entities.browser.EntityListsFragment"
         android:label="@string/entities_title">
         <action
             android:id="@+id/lists_to_entities"
@@ -15,7 +15,7 @@
 
     <fragment
         android:id="@+id/entities"
-        android:name="org.odk.collect.entities.EntitiesFragment"
+        android:name="org.odk.collect.entities.browser.EntitiesFragment"
         android:label="{list}">
         <argument
             android:name="list"

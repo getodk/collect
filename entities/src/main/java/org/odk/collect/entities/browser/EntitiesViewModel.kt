@@ -1,9 +1,11 @@
-package org.odk.collect.entities
+package org.odk.collect.entities.browser
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.odk.collect.async.Scheduler
+import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.entities.storage.Entity
 
 class EntitiesViewModel(
     private val scheduler: Scheduler,

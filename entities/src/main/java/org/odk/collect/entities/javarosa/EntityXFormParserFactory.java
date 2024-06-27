@@ -1,6 +1,5 @@
 package org.odk.collect.entities.javarosa;
 
-import org.odk.collect.entities.javarosa.internal.EntityFormParseProcessor;
 import org.javarosa.xform.parse.IXFormParserFactory;
 import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;

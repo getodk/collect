@@ -56,7 +56,7 @@ import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformatio
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.entities.EntitiesRepository;
+import org.odk.collect.entities.storage.EntitiesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;

@@ -1,4 +1,4 @@
-package org.odk.collect.entities
+package org.odk.collect.entities.browser
 
 internal object EntityItemElement {
     const val ID = "name"

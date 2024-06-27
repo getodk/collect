@@ -9,7 +9,7 @@ import org.javarosa.form.api.FormEntryCaption
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.exception.JavaRosaException
 import org.odk.collect.android.formentry.audit.AuditEventLogger
-import org.odk.collect.entities.javarosa.internal.EntitiesExtra
+import org.odk.collect.entities.javarosa.EntitiesExtra
 import java.io.File
 import java.io.IOException
 

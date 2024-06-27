@@ -53,7 +53,7 @@ import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.entities.javarosa.internal.EntitiesExtra;
+import org.odk.collect.entities.javarosa.EntitiesExtra;
 
 import java.io.File;
 import java.io.IOException;

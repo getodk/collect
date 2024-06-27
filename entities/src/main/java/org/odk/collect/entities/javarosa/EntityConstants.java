@@ -1,4 +1,4 @@
-package org.odk.collect.entities.javarosa.internal;
+package org.odk.collect.entities.javarosa;
 
 public class EntityConstants {
 
