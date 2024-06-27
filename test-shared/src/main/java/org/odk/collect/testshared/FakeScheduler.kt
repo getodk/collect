@@ -77,6 +77,12 @@ class FakeScheduler : Scheduler {
         return flow.flowOn(backgroundDispatcher)
     }
 
+    fun runFirstForeground() {
+        if (foregroundTasks.isNotEmpty()) {
+            foregroundTasks.removeFirst().run()
+        }
+    }
+
     fun runForeground() {
         while (foregroundTasks.isNotEmpty()) {
             foregroundTasks.remove().run()
@@ -100,6 +106,12 @@ class FakeScheduler : Scheduler {
                     it.lastRun = currentTime
                 }
             }
+        }
+    }
+
+    fun runFirstBackground() {
+        if (backgroundTasks.isNotEmpty()) {
+            backgroundTasks.removeFirst().run()
         }
     }
 
