@@ -1,4 +1,4 @@
-package org.odk.collect.entities.javarosa;
+package org.odk.collect.entities.javarosa.finalization;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -11,6 +11,9 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryFinalizationProcessor;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.model.xform.XPathReference;
+import org.odk.collect.entities.javarosa.spec.EntityAction;
+import org.odk.collect.entities.javarosa.spec.EntityFormParser;
+import org.odk.collect.entities.javarosa.parse.EntityFormExtra;
 
 import java.util.List;
 import java.util.stream.Collectors;

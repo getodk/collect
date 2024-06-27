@@ -1,10 +1,12 @@
-package org.odk.collect.entities.javarosa;
+package org.odk.collect.entities.javarosa.parse;
 
 import kotlin.Pair;
 import org.javarosa.core.model.DataBinding;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.model.xform.XPathReference;
 import org.javarosa.xform.parse.XFormParser;
+import org.odk.collect.entities.javarosa.spec.EntityFormParser;
+import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException;
 
 import java.util.ArrayList;
 import java.util.HashSet;

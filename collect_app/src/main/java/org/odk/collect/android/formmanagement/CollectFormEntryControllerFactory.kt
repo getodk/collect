@@ -7,7 +7,7 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.dynamicpreload.ExternalDataManagerImpl
 import org.odk.collect.android.dynamicpreload.handler.ExternalDataHandlerPull
 import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory
-import org.odk.collect.entities.javarosa.EntityFormFinalizationProcessor
+import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor
 import java.io.File
 
 class CollectFormEntryControllerFactory :

@@ -19,6 +19,9 @@ import org.javarosa.xform.util.XFormUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.odk.collect.entities.javarosa.finalization.EntitiesExtra;
+import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor;
+import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory;
 
 public class EntityFormFinalizationProcessorTest {
 

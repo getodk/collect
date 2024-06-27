@@ -4,6 +4,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.odk.collect.entities.browser.EntityItemElement
+import org.odk.collect.entities.javarosa.intance.LocalEntitiesFileInstanceParser
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.InMemEntitiesRepository
 
