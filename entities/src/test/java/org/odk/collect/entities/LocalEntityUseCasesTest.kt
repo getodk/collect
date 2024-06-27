@@ -5,10 +5,10 @@ import org.apache.commons.csv.CSVPrinter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
-import org.javarosa.entities.EntityAction
-import org.javarosa.entities.internal.Entities
 import org.junit.Test
 import org.odk.collect.entities.Entity.State.ONLINE
+import org.odk.collect.entities.javarosa.EntityAction
+import org.odk.collect.entities.javarosa.internal.EntitiesExtra
 import org.odk.collect.shared.TempFiles
 import java.io.File
 
@@ -19,8 +19,11 @@ class LocalEntityUseCasesTest {
     @Test
     fun `updateLocalEntitiesFromForm does not save updated entity that doesn't already exist`() {
         val entity =
-            org.javarosa.entities.Entity(EntityAction.UPDATE, "things", "1", "1", 1, emptyList())
-        val formEntities = Entities(listOf(entity))
+            org.odk.collect.entities.javarosa.Entity(EntityAction.UPDATE, "things", "1", "1", 1, emptyList())
+        val formEntities =
+            EntitiesExtra(
+                listOf(entity)
+            )
         entitiesRepository.addList("things")
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -30,8 +33,11 @@ class LocalEntityUseCasesTest {
     @Test
     fun `updateLocalEntitiesFromForm does not save entity that doesn't have an ID`() {
         val entity =
-            org.javarosa.entities.Entity(EntityAction.CREATE, "things", null, "1", 1, emptyList())
-        val formEntities = Entities(listOf(entity))
+            org.odk.collect.entities.javarosa.Entity(EntityAction.CREATE, "things", null, "1", 1, emptyList())
+        val formEntities =
+            EntitiesExtra(
+                listOf(entity)
+            )
         entitiesRepository.addList("things")
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)

@@ -1,17 +1,5 @@
 package org.odk.collect.entities.javarosa;
 
-import org.javarosa.entities.EntityFormFinalizationProcessor;
-import org.javarosa.entities.EntityXFormParserFactory;
-import org.javarosa.test.Scenario;
-import org.javarosa.test.XFormsElement;
-import org.javarosa.entities.internal.Entities;
-import org.javarosa.form.api.FormEntryModel;
-import org.javarosa.xform.parse.XFormParserFactory;
-import org.javarosa.xform.util.XFormUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.javarosa.test.BindBuilderXFormsElement.bind;
@@ -22,6 +10,16 @@ import static org.javarosa.test.XFormsElement.mainInstance;
 import static org.javarosa.test.XFormsElement.model;
 import static org.javarosa.test.XFormsElement.t;
 import static org.javarosa.test.XFormsElement.title;
+
+import org.javarosa.form.api.FormEntryModel;
+import org.javarosa.test.Scenario;
+import org.javarosa.test.XFormsElement;
+import org.javarosa.xform.parse.XFormParserFactory;
+import org.javarosa.xform.util.XFormUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.odk.collect.entities.javarosa.internal.EntitiesExtra;
 
 public class EntityFormFinalizationProcessorTest {
 
@@ -59,6 +57,6 @@ public class EntityFormFinalizationProcessorTest {
         EntityFormFinalizationProcessor processor = new EntityFormFinalizationProcessor();
         FormEntryModel model = scenario.getFormEntryController().getModel();
         processor.processForm(model);
-        assertThat(model.getExtras().get(Entities.class), equalTo(null));
+        assertThat(model.getExtras().get(EntitiesExtra.class), equalTo(null));
     }
 }

@@ -18,9 +18,7 @@ import static org.junit.Assert.fail;
 import static java.util.Arrays.asList;
 
 import org.javarosa.core.model.FormDef;
-import org.javarosa.entities.UnrecognizedEntityVersionException;
-import org.javarosa.entities.internal.EntityFormExtra;
-import org.javarosa.entities.internal.EntityFormParseProcessor;
+import org.odk.collect.entities.javarosa.UnrecognizedEntityVersionException;
 import org.javarosa.test.XFormsElement;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.parse.XFormParser.MissingModelAttributeException;
