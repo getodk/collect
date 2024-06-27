@@ -56,7 +56,7 @@ class OfflineMapLayersImporter(
         super.onViewCreated(view, savedInstanceState)
         val binding = OfflineMapLayersImporterBinding.bind(view)
 
-        viewModel.isLoading.observe(this) { isLoading ->
+        viewModel.trackableWorker.isWorking.observe(this) { isLoading ->
             if (isLoading) {
                 binding.addLayerButton.isEnabled = false
                 binding.layers.visibility = View.GONE
