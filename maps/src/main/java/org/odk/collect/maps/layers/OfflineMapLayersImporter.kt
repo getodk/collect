@@ -79,7 +79,7 @@ class OfflineMapLayersImporter(
                     dismiss()
                     showNoSupportedLayersWarning(layersToImport.value.numberOfUnsupportedLayers)
                 } else if (layersToImport.value.numberOfUnsupportedLayers > 0) {
-                    showSomeUnsupportedLayersWarning(layersToImport.value.numberOfSelectedLayers - layersToImport.value.numberOfUnsupportedLayers)
+                    showSomeUnsupportedLayersWarning(layersToImport.value.numberOfUnsupportedLayers)
                 }
             }
         }
