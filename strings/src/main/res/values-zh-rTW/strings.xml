@@ -137,7 +137,7 @@
   <string name="save_explanation_with_last_saved">\'此表格最後儲存於\' EEE, MMM dd, yyyy\' \'HH:mm\'。另存為草稿以保留變更。\'</string>
   <string name="quit_form_continue_title">繼續編輯？</string>
   <string name="discard_form_warning">如果您放棄儲存表單，您將失去所有已做的修改。</string>
-  <string name="discard_changes_warning">\'此表格最後儲存於 \'EEE, MMM dd, yyyy\' \'HH:mm\'，如果您放棄變更，將失去此後所做的更改。</string>
+  <string name="discard_changes_warning">\'此表格最後儲存於 \'EEE, MMM dd, yyyy HH:mm\'，如果您放棄變更，將失去此後所做的更改。\'</string>
   <string name="saving_form">正在儲存表格</string>
   <string name="survey_saving_validating_message">正在驗證答案…</string>
   <string name="survey_saving_collecting_message">正在收集資料…</string>
@@ -1058,8 +1058,7 @@
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">恢復您的作業？</string>
   <!--Message displayed in a dialog before starting a form if there is a work to recover-->
-  <string name="savepoint_recovery_dialog_message">\'Collect closed unexpectedly on \'EEE, MMM dd, yyyy \'at\' HH:mm\' and saved your work.\n\nWould you like to recover or discard it?\'
-\'Collect 於 \'EEE, MMM dd, yyyy \' \' HH:mm\' 意外關閉並儲存了您的工作。\n\n您想恢復還是放棄它？</string>
+  <string name="savepoint_recovery_dialog_message">\'Collect 於 \'EEE, MMM dd, yyyy HH:mm\' 意外關閉並儲存了您的工作。\n\n您想恢復還是放棄它？\'</string>
   <!--Text for the button that accepts the recovery of the work-->
   <string name="recover">恢復</string>
   <!--Text for the button that declines the recovery of the work-->
