@@ -20,7 +20,7 @@ class InvalidFormTest {
         rule.startAtMainMenu()
             .copyForm("invalid-form.xml")
             .clickFillBlankForm()
-            .checkIsSnackbarErrorVisible()
+            .checkIsSnackbarErrorVisible("org.javarosa.xform.parse.XFormParseException: Cycle detected in form's relevant and calculation logic!")
             .assertTextDoesNotExist("invalid-form")
     }
 }
