@@ -6,15 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import org.odk.collect.androidshared.livedata.LiveDataUtils
 
-class SingleSelectViewModel(data: LiveData<List<SelectItem<*>>>) : ViewModel() {
+class SingleSelectViewModel(
+    selected: String?,
+    data: LiveData<List<SelectItem<*>>>
+) : ViewModel() {
 
-    private val _selected = MutableLiveData<String?>(null)
+    private val _selected = MutableLiveData<String?>(selected)
     private val selected = LiveDataUtils.zip(_selected, data).map { (selected, data) ->
-        if (selected != null && data.any { it.id == selected }) {
-            selected
-        } else {
-            data.find { it.selected }?.id
-        }
+        selected.takeIf { id -> data.any { it.id == id } }
     }
 
     fun getSelected(): LiveData<String?> {
