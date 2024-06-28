@@ -57,16 +57,14 @@ class OfflineMapLayersPicker(
     private val checkedStateViewModel: SingleSelectViewModel by viewModels {
         viewModelFactory {
             addInitializer(SingleSelectViewModel::class) {
-                SingleSelectViewModel(sharedViewModel.existingLayers.map {
-                    it.map { layer ->
-                        SelectItem(
-                            layer.id,
-                            layer,
-                            settingsProvider.getUnprotectedSettings()
-                                .getString(ProjectKeys.KEY_REFERENCE_LAYER) == layer.id
-                        )
+                SingleSelectViewModel(
+                    settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER),
+                    sharedViewModel.existingLayers.map {
+                        it.map { layer ->
+                            SelectItem(layer.id, layer)
+                        }
                     }
-                })
+                )
             }
         }
     }
