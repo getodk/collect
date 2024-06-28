@@ -391,18 +391,34 @@
   <string name="google_play_services_error_occured">Zugriff auf Google Maps nicht möglich. Sind die Google Play Services installiert?</string>
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Dunkle Materie</string>
-  <!--Title for the reference layer section of settings-->
-  <string name="offline_layer">Referenzebene</string>
-  <!--Label for the reference layer setting-->
-  <!--Title for the screen that allows the user to select a reference layer for maps-->
-  <!--Description of how to add reference layers to the project-->
-  <!--Text of button user can press to get help when setting up Reference Layers-->
-  <!--Text for button that lets the user select a reference layer on their device to add-->
-  <!--Text for button that lets the user delete a reference layer-->
+  <!--Title for the offline layer section of settings-->
+  <string name="offline_layer">Offline-Ebenen</string>
+  <!--Label for the offline layer setting-->
+  <string name="layer_data_file">Ebene</string>
+  <!--Title for the screen that allows the user to select a offline layer for maps-->
+  <string name="offline_layer_dialog_title">Offline-Ebene auswählen</string>
+  <!--Description of how to add offline layers to the project-->
+  <string name="offline_layer_dialog_description">Wählen Sie die Offline-Ebene aus, die für alle Karten in diesem Projekt verwendet werden soll. Sie können der Liste Optionen hinzufügen, indem Sie eine MBTiles-Datei von Ihrem Gerät auswählen, und vorhandene Ebenen aus der Liste löschen.\"</string>
+  <!--Text of button user can press to get help when setting up Offline Layers-->
+  <string name="get_help_with_offline_layers">Mehr über das Hinzufügen von MBTiles erfahren?</string>
+  <!--Text for button that lets the user select a offline layer on their device to add-->
+  <string name="add_layer">Ebenen hinzufügen</string>
+  <!--Text for button that lets the user delete a offline layer-->
+  <string name="delete_layer">Ebene löschen</string>
+  <!--Text for title displayed in a dialog to inform that some/all the selected files are not MBTiles and they can't be imported-->
+  <!--Text for message displayed in a dialog to inform that all the selected files are not MBTiles and they can't be imported-->
+  <!--Text for message displayed in a dialog to inform that some of the selected files are not MBTiles and they can't be imported-->
   <!--Text for title above list of layers-->
+  <string name="layers_list_title">Ebenen</string>
   <!--Text for title and subtitle above options for how the layer can be access-->
+  <string name="select_layer_access_title">Ebenenzugriff auswählen</string>
+  <string name="select_layer_access_subtitle">Sollen die Ebenen in allen Projekten oder nur im aktuellen verfügbar sein?</string>
   <!--Text for option where layer should be available to all projects-->
+  <string name="all_projects_option">Alle Projekte</string>
   <!--Text for option where layer should be available to the current project only-->
+  <string name="current_project_option">Nur aktuelles Projekt</string>
+  <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
+  <string name="delete_layer_confirmation_message">Möchten sie wirklich die %1$s Offline-Ebene löschen?</string>
   <string name="record_geopoint">Punkt erfassen</string>
   <string name="location_accuracy">Genauigkeit: %1$s m</string>
   <string name="location_provider">Standortdienst: %s</string>
@@ -912,11 +928,16 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <string name="entities_title">Objekte</string>
   <!--Title for setting that controls whether local entity features are enabled or not-->
+  <string name="include_local_entities_setting">Lokale Entitäten aktivieren</string>
+  <string name="local_entity_features_summary">Follow-Up-Formulare werden konsistente Objektlisten haben und lokal erzeugte oder aktualisierte Objekte beinhalten.</string>
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
+  <string name="entity_browser_button">Objektliste anzeigen</string>
   <!--Text for button that deletes all entities for the project-->
   <string name="clear_entities">Alle löschen</string>
   <!--Text for button that adds a new entity list-->
+  <string name="add_entity_list">Objektliste hinzufügen</string>
   <!--Label for entity that has been created offline and is not on the server yet-->
+  <string name="offline">Offline</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
@@ -1041,18 +1062,29 @@
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">Ihre Arbeit Wiederherstellen?</string>
   <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <string name="savepoint_recovery_dialog_message">\'Collect wurde am \'EEE, MMM dd, yyyy \'um\' HH:mm\' unerwartet beendet und hat ihre Arbeit gespeichert.\n\nWollen Sie die gespeicherte Arbeit wiederherstellen oder verwerfen?\'</string>
   <!--Text for the button that accepts the recovery of the work-->
   <string name="recover">Wiederherstellen</string>
   <!--Text for the button that declines the recovery of the work-->
   <string name="do_not_recover">Verwerfen</string>
   <!--Text for the button that initiates getting user location-->
+  <string name="get_point">Punkt erhalten</string>
   <!--Text for the button that displays a map for viewing or changing an already existing location-->
+  <string name="view_or_change_point">Punkt anzeigen oder ändern</string>
   <!--Text for the button that displays a map for viewing an already existing location-->
+  <string name="view_point">Punkt anzeigen</string>
   <!--Text for the button that initiates getting user location when one is already present-->
+  <string name="change_point">Punkt ändern</string>
   <!--Text for the button that displays a map for getting a new line-->
+  <string name="get_line">Linie erhalten</string>
   <!--Text for the button that displays a map for viewing or changing an already existing line-->
+  <string name="view_or_change_line">Linie anzeigen oder ändern</string>
   <!--Text for the button that displays a map for viewing an already existing line-->
+  <string name="view_line">Linie anzeigen</string>
   <!--Text for the button that displays a map for getting a new polygon-->
+  <string name="get_polygon">Polygon erhalten</string>
   <!--Text for the button that displays a map for viewing or changing an already existing polygon-->
+  <string name="view_or_change_polygon">Polygon anzeigen oder ändern</string>
   <!--Text for the button that displays a map for viewing an already existing polygon-->
+  <string name="view_polygon">Polygon anzeigen</string>
 </resources>
