@@ -69,6 +69,7 @@
   <string name="survey_loading_reading_csv_message">正在读取CSV文件…</string>
   <string name="parse_error">无法读取表格.</string>
   <string name="loading_form_failed">加载表单时出错。请重试。</string>
+  <string name="parent_form_not_present">无法编辑此草稿，因为相应的空白表格不存在或已被删除。\n\n表格ID: %1$s</string>
   <string name="cannot_edit_completed_form">一旦此表格被标记为“最终版”，它便不能再次编辑，因为它可能已被加密。</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">已从自动保存点恢复未保存修改!</string>
@@ -114,7 +115,12 @@
   <string name="too_complex_form">此表单对于此设备太复杂。尝试简化表达或在论坛上寻求帮助。</string>
   <string name="survey_internal_error">内部错误：提示步骤失败。</string>
   <string name="save_enter_data_description">您已在 %s 的末尾.</string>
+  <string name="form_edits_warning_title">最终的表格不可编辑。</string>
+  <string name="form_edits_warning_title_auto_send_enabled">发送的表格不可编辑。</string>
+  <string name="form_edits_warning_message">如果您需要对表格进行编辑，请“另存为草稿”，直到您准备好发送为止。</string>
+  <string name="form_edits_warning_learn_more">了解更多</string>
   <string name="save_as_draft">保存为草稿</string>
+  <string name="finalize">最终确定</string>
   <string name="send">发送</string>
   <string name="data_saved_error">表格保存失败!</string>
   <string name="data_saved_ok">表格已成功保存!</string>
@@ -122,7 +128,16 @@
   <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">退出 %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">放弃表格</string>
+  <string name="discard_changes">放弃变更</string>
   <string name="keep_changes">保存修改</string>
+  <string name="keep_editing">继续编辑</string>
+  <string name="quit_form_title">储存表格？</string>
+  <string name="save_explanation">您可以保存此表单并随时从草稿中存取它。</string>
+  <string name="save_explanation_with_last_saved">\'此表格最后储存于\' EEE, MMM dd, yyyy\'at\'HH:mm\'。另存为草稿以保留变更。\'</string>
+  <string name="quit_form_continue_title">继续编辑？</string>
+  <string name="discard_form_warning">如果您丢弃表单，您将失去所有已做的更改。</string>
+  <string name="discard_changes_warning">\'此表格最后保存于 \'EEE, MMM dd, yyyy\'at\'HH:mm\'。如果您放弃更改，您将失去此后所做的所有更改。</string>
   <string name="saving_form">正在保存表格</string>
   <string name="survey_saving_validating_message">正在验证答案…</string>
   <string name="survey_saving_collecting_message">正在收集数据…</string>
@@ -160,6 +175,7 @@
   <string name="no_app">请求的应用不可用. 请手动填入相应值.</string>
   <string name="null_intent_value">外部应用程序未提供预期信息。</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
+  <string name="print">列印</string>
   <string name="launch_printer">初始化打印</string>
   <string name="no_printer">请求的打印机未被安装. 请安装打印机.</string>
   <string name="open_url">打开Url</string>
@@ -182,7 +198,10 @@
   <string name="selected_invalid_image">所选文件不是有效图像</string>
   <string name="take_picture_instruction">点击屏幕拍照</string>
   <string name="error_front_camera_unavailable">前置摄像头在此设备上不可用</string>
+  <string name="camera_error">拍照时出错</string>
+  <string name="camera_failed_to_initialize">无法启动相机！</string>
   <string name="annotate_image">注释该图片</string>
+  <string name="gif_not_supported">Gif 档案格式不支援</string>
   <string name="invalid_file_type">应用程序返回了无效的文件类型</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">保存并关闭</string>
@@ -207,7 +226,9 @@
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">恢复</string>
   <!--Displayed in the form filling menu when a form has background audio recording enabled-->
+  <string name="record_audio_on">录音：开</string>
   <!--Displayed in the form filling menu when a form has background audio recording disabled-->
+  <string name="record_audio_off">录音：关闭</string>
   <string name="background_audio_permission_explanation">此窗体在后台录制音频。您必须授予使用麦克风的权限。否则，您将无法打开此表单。</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <string name="stop_recording_confirmation">此表单请求后台音频录制。禁用它将停止录制并丢弃现有音频。是否确实要继续？</string>
@@ -370,18 +391,39 @@
   <string name="google_play_services_error_occured">无法访问谷歌地图。是否安装了Google Play服务？</string>
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Dark Matter</string>
-  <!--Title for the reference layer section of settings-->
-  <string name="offline_layer">应用图层</string>
-  <!--Label for the reference layer setting-->
-  <!--Title for the screen that allows the user to select a reference layer for maps-->
-  <!--Description of how to add reference layers to the project-->
-  <!--Text of button user can press to get help when setting up Reference Layers-->
-  <!--Text for button that lets the user select a reference layer on their device to add-->
-  <!--Text for button that lets the user delete a reference layer-->
+  <!--Title for the offline layer section of settings-->
+  <string name="offline_layer">离线图层</string>
+  <!--Label for the offline layer setting-->
+  <string name="layer_data_file">图层</string>
+  <!--Title for the screen that allows the user to select a offline layer for maps-->
+  <string name="offline_layer_dialog_title">选择离线图层</string>
+  <!--Description of how to add offline layers to the project-->
+  <string name="offline_layer_dialog_description">选择要用于该项目中所有地图的离线图层。您可以通过从设备中选择 MBTiles 文件来将选项添加到列表中，也可以从列表中删除现有图层。</string>
+  <!--Text of button user can press to get help when setting up Offline Layers-->
+  <string name="get_help_with_offline_layers">了解有关添加 MBTiles 的更多信息。</string>
+  <!--Text for button that lets the user select a offline layer on their device to add-->
+  <string name="add_layer">新增图层</string>
+  <!--Text for button that lets the user delete a offline layer-->
+  <string name="delete_layer">删除图层</string>
+  <!--Text for title displayed in a dialog to inform that some/all the selected files are not MBTiles and they can't be imported-->
+  <plurals name="non_mbtiles_files_selected_title">
+    <item quantity="other">%d 图层无法新增</item>
+  </plurals>
+  <!--Text for message displayed in a dialog to inform that all the selected files are not MBTiles and they can't be imported-->
+  <string name="all_non_mbtiles_files_selected_message">您选择的文件不是 MBTiles。您只能添加 MBTiles 文件。</string>
+  <!--Text for message displayed in a dialog to inform that some of the selected files are not MBTiles and they can't be imported-->
+  <string name="some_non_mbtiles_files_selected_message">某些您选择的文件不是 MBTiles 格式。您只能添加 MBTiles 文件。</string>
   <!--Text for title above list of layers-->
+  <string name="layers_list_title">图层</string>
   <!--Text for title and subtitle above options for how the layer can be access-->
+  <string name="select_layer_access_title">选择访问图层</string>
+  <string name="select_layer_access_subtitle">您希望图层在所有项目中使用，还是仅在当前项目中使用？</string>
   <!--Text for option where layer should be available to all projects-->
+  <string name="all_projects_option">所有项目</string>
   <!--Text for option where layer should be available to the current project only-->
+  <string name="current_project_option">目前项目</string>
+  <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
+  <string name="delete_layer_confirmation_message">您确定要删除 %1$s 离线图层吗？</string>
   <string name="record_geopoint">记录点</string>
   <string name="location_accuracy">精确度: %1$s m</string>
   <string name="location_provider">位置提供程序: %s</string>
@@ -392,7 +434,9 @@
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">转到设置</string>
   <!--Displayed in the form filling menu when a form has background location enabled-->
+  <string name="track_location_on">追踪位置：开</string>
   <!--Displayed in the form filling menu when a form has background location disabled-->
+  <string name="track_location_off">追踪位置：关</string>
   <string name="background_location_disabled">此表单希望跟踪您的位置，但已禁用跟踪. 请在菜单 %1$s 上启用他</string>
   <string name="background_location_enabled">此表单跟踪您的位置. 您可以在上面的菜单 %1$s 中禁用跟踪。</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
@@ -721,6 +765,7 @@
   <string name="found_in_main">不选中以从主菜单中隐藏</string>
   <string name="found_in_settings">取消选中以隐藏不受保护的设置</string>
   <string name="form_entry">取消选中以隐藏表单条目</string>
+  <string name="form_end">取消选中以隐藏 Form End</string>
   <string name="reset_project_settings_title">重置</string>
   <string name="reset_project_settings_subtext">从设置、表单和数据中进行选择</string>
   <string name="delete_project">删除</string>
@@ -750,11 +795,14 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">向后移动</string>
   <string name="moving_backwards_disabled_title">向后移动已禁用</string>
+  <string name="moving_backwards_disabled_message">配置设备以防止用户绕过此设置？\n\n更改如下：\n\u2022 禁用“编辑草稿”\n\u2022 禁用“另存为草稿”\n\u2022 禁用“转到提示”\n\u2022 将约束处理设置为向前滑动时验证</string>
   <string name="yes">是</string>
   <string name="no">否</string>
   <string name="moving_backwards_enabled_title">已启用向后移动</string>
+  <string name="moving_backwards_enabled_message">您可能希望检查以下设置:\n\n\u2022 编辑草稿\n\u2022 另存为草稿\n\u2022 前往提示\n\u2022 约束处理</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">保存为草稿</string>
+  <string name="save_mid_summary">退出表单时，顶部栏中的保存图标和“另存为草稿”按钮</string>
   <!--##############################################
      # ABOUT
      ##############################################-->
@@ -793,6 +841,7 @@
   <string name="invalid_qrcode">二维码不包含有效设置</string>
   <string name="qr_code_not_found">在所选图像中找不到二维码</string>
   <string name="corrupt_imported_preferences_error">当前设置已损坏。从项目管理设置中，重置设置或导入工作设置。</string>
+  <string name="settings_with_gd_protocol">无法再创建 Google Drive/Sheets 项目</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -881,10 +930,16 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <string name="entities_title">实体</string>
   <!--Title for setting that controls whether local entity features are enabled or not-->
+  <string name="include_local_entities_setting">启用本地实体</string>
+  <string name="local_entity_features_summary">后续表格将具有一致的实体列表，并将包括本地创建或更新的实体。</string>
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
+  <string name="entity_browser_button">查看实体列表</string>
   <!--Text for button that deletes all entities for the project-->
+  <string name="clear_entities">全部清除</string>
   <!--Text for button that adds a new entity list-->
+  <string name="add_entity_list">新增实体列表</string>
   <!--Label for entity that has been created offline and is not on the server yet-->
+  <string name="offline">离线</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
@@ -893,6 +948,10 @@
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
+  <string name="google_drive_removed_message">该项目之前已连接到 Google Drive 帐户。Google Drive 支持已被删除。您可以配置服务器或将提交内容传至电脑。
+
+</string>
+  <string name="learn_more_button_text">了解更多</string>
   <!--##############################################
     # Developer tools
     ##############################################-->
@@ -902,59 +961,127 @@
   <string name="crash_app">崩溃应用程序</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">强制执行导致应用程序崩溃的未捕获异常</string>
+  <string name="permission_dialog_title">关于权限</string>
+  <string name="permission_dialog_text">您将被要求允许 ODK Collect 访问以下功能，如果您想使用它们，请选择“允许”。</string>
   <string name="notifications">提醒事项</string>
+  <string name="required_for_notifications"> 在下载、更新和发送表单时需要显示更新。</string>
   <!--##############################################
     # Form saved Snackbar
     ##############################################-->
+  <string name="form_saved_as_draft">您的表单已保存为草稿。</string>
   <string name="form_saved">你的表格已被保存。</string>
   <string name="form_sending">发送表格中…</string>
   <string name="edit_form">编辑</string>
+  <string name="view_form">检视</string>
+  <string name="close_snackbar">关闭通知</string>
   <!--##############################################
     # Forms ready to send banner
     ##############################################-->
+  <plurals name="last_form_sent_seconds_ago">
+    <item quantity="other">最后发送的表格：%d 秒前</item>
+  </plurals>
+  <plurals name="last_form_sent_minutes_ago">
+    <item quantity="other">最后发送的表格：%d 分钟前</item>
+  </plurals>
+  <plurals name="last_form_sent_hours_ago">
+    <item quantity="other">最后发送的表格：%d 小时前</item>
+  </plurals>
+  <plurals name="last_form_sent_days_ago">
+    <item quantity="other">最后发送的表格：%d 天前</item>
+  </plurals>
+  <plurals name="forms_ready_to_send">
+    <item quantity="other">%d 表格已准备传送</item>
+  </plurals>
+  <string name="edit_finalized_form_warning" tools:ignore="UnusedResources">在后续版本中，最终确定的表格将不再可编辑。将表单保存为草稿以便稍后编辑。\n\n您可以通过点击三个点 (⋮) 然后检查错误来检查草稿表单中的错误。</string>
   <!--Message showed on main menu to inform users that the ability to edit finalized forms is going away-->
+  <string name="edit_finalized_form_deprecation_message" tools:ignore="UnusedResources">在后续版本中，最终确定的表格将不再可编辑。</string>
   <!--Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend-->
+  <string name="finalize_all_drafts">完成所有草稿</string>
   <!--Dialog title that asks if the user wants to finalize all drafts-->
+  <plurals name="bulk_finalize_confirmation">
+    <item quantity="other">您要完成 %d 草稿?</item>
+  </plurals>
   <!--Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel-->
+  <string name="bulk_finalize_explanation">一旦您完成所有草稿，它们将处于“准备发送”状态，并且您将无法进行编辑。任何有错误的草稿都不会被最终确定。\n\n您将无法撤消此操作。</string>
   <!--Message shown after bulk finalization when finalizing all drafts has succeeded-->
+  <plurals name="bulk_finalize_success">
+    <item quantity="other">成功！%d 份草稿已完成。</item>
+  </plurals>
   <!--Message shown after bulk finalization when no drafts finalized successfully-->
+  <plurals name="bulk_finalize_failure">
+    <item quantity="other">%d 个草稿有错误，必须在最终确定之前解决。</item>
+  </plurals>
   <!--Message shown after bulk finalization when some drafts finalize successfully and others fail-->
+  <string name="bulk_finalize_partial_success">%d 份草稿已完成。%d 个草稿有错误，必须在最终确定之前解决。</string>
   <!--Message shown when some drafts finalize successfully but others need to be finalized manually-->
+  <string name="bulk_finalize_unsupported">%d 份草稿已完成。剩下的草稿需要手动完成。</string>
   <!--Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature.-->
   <string name="draft_errors">错误</string>
   <!--Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature.-->
+  <string name="draft_no_errors">无错误</string>
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
+  <string name="uncheck_to_hide_from_drafts">取消选中即可在草稿中隐藏</string>
   <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <string name="new_feature">新功能</string>
   <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <string name="drafts_pills_education_message">草稿列表现在已显示验证错误。每次将表单保存为草稿时，其验证状态都会更新。\n\n标有“错误”的草稿要么缺少必填问题，要么包含不允许的值。</string>
   <!--Message displayed when the list of questions is empty-->
+  <string name="empty_list_of_questions">没有可显示的内容</string>
   <!--Message displayed when the list of blank forms is empty-->
+  <string name="empty_list_of_blank_forms_title">無空白表格</string>
   <!--Subtext displayed when the list of blank forms is empty-->
+  <string name="empty_list_of_blank_forms_subtitle">下载表格以开始使用</string>
   <!--Message displayed when the list of drafts is empty-->
+  <string name="empty_list_of_drafts_title">無草稿</string>
   <!--Subtext displayed when the list of drafts is empty-->
+  <string name="empty_list_of_drafts_subtitle">当您保存为草稿时，表格将显示在此处</string>
   <!--Message displayed when the list of ready to send forms is empty-->
+  <string name="empty_list_of_finalized_forms_title">尚无准备发送的表單</string>
   <!--Subtext displayed when the list of ready to send forms is empty-->
+  <string name="empty_list_of_finalized_forms_subtitle">当你完成草稿时，它们将显示在这里</string>
   <!--Message displayed when the list of sent forms is empty-->
+  <string name="empty_list_of_sent_forms_title">沒有任何已發送的表單</string>
   <!--Subtext of message displayed when the list of sent forms is empty-->
+  <string name="empty_list_of_sent_forms_subtitle">当您发送最终表單後，它们将在这里显示</string>
   <!--Message displayed when the list of forms to download is empty-->
+  <string name="empty_list_of_forms_to_download_title">无下载表單</string>
+  <string name="empty_list_of_forms_to_download_subtitle">下载表格以开始使用</string>
   <!--Message displayed when the list of forms to delete is empty-->
+  <string name="empty_list_of_forms_to_delete_title">没有要删除的表單</string>
   <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <string name="empty_list_of_blank_forms_to_delete_subtitle">下载空白表单后，它们将显示在这里</string>
   <!--Subtext displayed when the list of filled forms to delete is empty-->
+  <string name="empty_list_of_saved_forms_to_delete_subtitle">当您保存表单后，它们将显示在此处</string>
   <!--##############################################
     # Savepoint recovery dialog
     ##############################################-->
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
+  <string name="savepoint_recovery_dialog_title">恢复您的作业？</string>
   <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <string name="savepoint_recovery_dialog_message">\'Collect closed unexpectedly on \'EEE, MMM dd, yyyy \'at\' HH:mm\' and saved your work.\n\nWould you like to recover or discard it?\'
+\'Collect 于 \'EEE, MMM dd, yyyy \' \' HH:mm\' 意外关闭并保存了您的工作。\n\n您想恢复还是放弃它？</string>
   <!--Text for the button that accepts the recovery of the work-->
+  <string name="recover">恢复</string>
   <!--Text for the button that declines the recovery of the work-->
-  <string name="do_not_recover">丢弃</string>
+  <string name="do_not_recover">放弃</string>
   <!--Text for the button that initiates getting user location-->
+  <string name="get_point">取得定位点</string>
   <!--Text for the button that displays a map for viewing or changing an already existing location-->
+  <string name="view_or_change_point">检视或查看定位点</string>
   <!--Text for the button that displays a map for viewing an already existing location-->
+  <string name="view_point">查看定位点</string>
   <!--Text for the button that initiates getting user location when one is already present-->
+  <string name="change_point">变更定位点</string>
   <!--Text for the button that displays a map for getting a new line-->
+  <string name="get_line">取得线段</string>
   <!--Text for the button that displays a map for viewing or changing an already existing line-->
+  <string name="view_or_change_line">查看或变更线段</string>
   <!--Text for the button that displays a map for viewing an already existing line-->
+  <string name="view_line">检视线段</string>
   <!--Text for the button that displays a map for getting a new polygon-->
+  <string name="get_polygon">获取多边形</string>
   <!--Text for the button that displays a map for viewing or changing an already existing polygon-->
+  <string name="view_or_change_polygon">检视或变更多边形</string>
   <!--Text for the button that displays a map for viewing an already existing polygon-->
+  <string name="view_polygon">检视多边形</string>
 </resources>

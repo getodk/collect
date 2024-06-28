@@ -391,28 +391,27 @@
   <string name="google_play_services_error_occured">Não foi capaz de acessar o Google Maps. O serviço do Google Play está instalado?</string>
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Matéria escura</string>
-  <!--Title for the reference layer section of settings-->
-  <string name="offline_layer">Camada de referência</string>
-  <!--Label for the reference layer setting-->
+  <!--Title for the offline layer section of settings-->
+  <!--Label for the offline layer setting-->
   <string name="layer_data_file">Camada</string>
-  <!--Title for the screen that allows the user to select a reference layer for maps-->
-  <string name="offline_layer_dialog_title">Selecionar camada de referência</string>
-  <!--Description of how to add reference layers to the project-->
-  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <!--Title for the screen that allows the user to select a offline layer for maps-->
+  <!--Description of how to add offline layers to the project-->
+  <!--Text of button user can press to get help when setting up Offline Layers-->
   <string name="get_help_with_offline_layers">Saber mais sobre adicionar MBTiles.</string>
-  <!--Text for button that lets the user select a reference layer on their device to add-->
-  <string name="add_layer" tools:ignore="UnusedResources">Adicionar camada</string>
-  <!--Text for button that lets the user delete a reference layer-->
-  <string name="delete_layer" tools:ignore="UnusedResources">Apagar camada</string>
+  <!--Text for button that lets the user select a offline layer on their device to add-->
+  <!--Text for button that lets the user delete a offline layer-->
+  <string name="delete_layer">Apagar camada</string>
+  <!--Text for title displayed in a dialog to inform that some/all the selected files are not MBTiles and they can't be imported-->
+  <!--Text for message displayed in a dialog to inform that all the selected files are not MBTiles and they can't be imported-->
+  <!--Text for message displayed in a dialog to inform that some of the selected files are not MBTiles and they can't be imported-->
   <!--Text for title above list of layers-->
-  <string name="layers_list_title" tools:ignore="UnusedResources">Camadas</string>
+  <string name="layers_list_title">Camadas</string>
   <!--Text for title and subtitle above options for how the layer can be access-->
-  <string name="select_layer_access_title" tools:ignore="UnusedResources">Selecionar acesso à camada</string>
-  <string name="select_layer_access_subtitle" tools:ignore="UnusedResources">Você deseja que a camada esteja disponível em todos os projetos ou somente no projeto atual?</string>
   <!--Text for option where layer should be available to all projects-->
-  <string name="all_projects_option" tools:ignore="UnusedResources">Todos os projetos</string>
+  <string name="all_projects_option">Todos os projetos</string>
   <!--Text for option where layer should be available to the current project only-->
-  <string name="current_project_option" tools:ignore="UnusedResources">Apenas o projeto atual</string>
+  <string name="current_project_option">Apenas o projeto atual</string>
+  <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="record_geopoint">Registre um ponto</string>
   <string name="location_accuracy">Precisão: %1$s m</string>
   <string name="location_provider">Provedor de localização: %s</string>

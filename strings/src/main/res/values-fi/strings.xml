@@ -391,29 +391,40 @@
   <string name="google_play_services_error_occured">Google Maps -palveluun ei saada yhteyttä. Onko Google Play Services asennettu?</string>
   <string name="carto_map_style_positron">Positroni</string>
   <string name="carto_map_style_dark_matter">Pimeä aine</string>
-  <!--Title for the reference layer section of settings-->
-  <string name="offline_layer">Viitekerros</string>
-  <!--Label for the reference layer setting-->
+  <!--Title for the offline layer section of settings-->
+  <string name="offline_layer">Offlinetasot</string>
+  <!--Label for the offline layer setting-->
   <string name="layer_data_file">Kerros</string>
-  <!--Title for the screen that allows the user to select a reference layer for maps-->
-  <string name="offline_layer_dialog_title">Valitse viitekerros</string>
-  <!--Description of how to add reference layers to the project-->
-  <string name="offline_layer_dialog_description" tools:ignore="UnusedResources">Valitse viitekerros jota käytetään kaikissa tämän projektin kartoissa. Voit lisätä vaihtoehtoja listaan valitsemalla MBTile-tiedoston laitteeltasi.</string>
-  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <!--Title for the screen that allows the user to select a offline layer for maps-->
+  <string name="offline_layer_dialog_title">Valitse offlinetaso</string>
+  <!--Description of how to add offline layers to the project-->
+  <string name="offline_layer_dialog_description">Valitse offline-taso kaikkiin karttoihin tässä projektissa. Voit lisätä vaihtoehtoja listaan valitsemalla MBTile-tiedoston laitteellasi tai poistaa aikaisemmin lisättyjä tasoja listalta.</string>
+  <!--Text of button user can press to get help when setting up Offline Layers-->
   <string name="get_help_with_offline_layers">Opi lisää MBTile-tiedostojen lisäämisestä.</string>
-  <!--Text for button that lets the user select a reference layer on their device to add-->
-  <string name="add_layer" tools:ignore="UnusedResources">Lisää kerros</string>
-  <!--Text for button that lets the user delete a reference layer-->
-  <string name="delete_layer" tools:ignore="UnusedResources">Poista kerros</string>
+  <!--Text for button that lets the user select a offline layer on their device to add-->
+  <string name="add_layer">Lisää tasoja</string>
+  <!--Text for button that lets the user delete a offline layer-->
+  <string name="delete_layer">Poista taso</string>
+  <!--Text for title displayed in a dialog to inform that some/all the selected files are not MBTiles and they can't be imported-->
+  <plurals name="non_mbtiles_files_selected_title">
+    <item quantity="one">%d tasoa ei voi lisätä</item>
+    <item quantity="other">%d tasoa ei voi lisätä</item>
+  </plurals>
+  <!--Text for message displayed in a dialog to inform that all the selected files are not MBTiles and they can't be imported-->
+  <string name="all_non_mbtiles_files_selected_message">Valitsemasi tiedostot eivät ole MBTiles-tiedostoja. Voit ainoastaan lisätä MBTiles-tiedostoja.</string>
+  <!--Text for message displayed in a dialog to inform that some of the selected files are not MBTiles and they can't be imported-->
+  <string name="some_non_mbtiles_files_selected_message">Jotkut valitsemistasi tiedostoista eivät ole MBTiles-tiedostoja. Voit ainoastaan lisätä MBTiles-tiedostoja.</string>
   <!--Text for title above list of layers-->
-  <string name="layers_list_title" tools:ignore="UnusedResources">Kerrokset</string>
+  <string name="layers_list_title">Tasot</string>
   <!--Text for title and subtitle above options for how the layer can be access-->
-  <string name="select_layer_access_title" tools:ignore="UnusedResources">Valitse kerroksen käyttöoikeudet</string>
-  <string name="select_layer_access_subtitle" tools:ignore="UnusedResources">Haluatko kerroksen olevan käytettävissä kaikissa projekteissa vai ainoastaan tässä projektissa?</string>
+  <string name="select_layer_access_title">Valitse tasojen saatavuus</string>
+  <string name="select_layer_access_subtitle">Haluatko tasojen olevan käytettävissä kaikissa projekteissa vai ainoastaan nykyisessä?</string>
   <!--Text for option where layer should be available to all projects-->
-  <string name="all_projects_option" tools:ignore="UnusedResources">Kaikissa projekteissa</string>
+  <string name="all_projects_option">Kaikissa projekteissa</string>
   <!--Text for option where layer should be available to the current project only-->
-  <string name="current_project_option" tools:ignore="UnusedResources">Vain tässä projektissa</string>
+  <string name="current_project_option">Vain tässä projektissa</string>
+  <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
+  <string name="delete_layer_confirmation_message">Haluatko varmasti poistaa offline-tason %1$s?</string>
   <string name="record_geopoint">Tallenna piste</string>
   <string name="location_accuracy">Tarkkuus: %1$s m</string>
   <string name="location_provider">Sijaintilähde: %s</string>
@@ -932,6 +943,7 @@
   <!--Text for button that adds a new entity list-->
   <string name="add_entity_list">Lisää entiteettilista</string>
   <!--Label for entity that has been created offline and is not on the server yet-->
+  <string name="offline">Offline</string>
   <!--##############################################
     # Crash handling
     ##############################################-->

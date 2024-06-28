@@ -101,17 +101,21 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <!--Title for the reference layer section of settings-->
-  <!--Label for the reference layer setting-->
-  <!--Title for the screen that allows the user to select a reference layer for maps-->
-  <!--Description of how to add reference layers to the project-->
-  <!--Text of button user can press to get help when setting up Reference Layers-->
-  <!--Text for button that lets the user select a reference layer on their device to add-->
-  <!--Text for button that lets the user delete a reference layer-->
+  <!--Title for the offline layer section of settings-->
+  <!--Label for the offline layer setting-->
+  <!--Title for the screen that allows the user to select a offline layer for maps-->
+  <!--Description of how to add offline layers to the project-->
+  <!--Text of button user can press to get help when setting up Offline Layers-->
+  <!--Text for button that lets the user select a offline layer on their device to add-->
+  <!--Text for button that lets the user delete a offline layer-->
+  <!--Text for title displayed in a dialog to inform that some/all the selected files are not MBTiles and they can't be imported-->
+  <!--Text for message displayed in a dialog to inform that all the selected files are not MBTiles and they can't be imported-->
+  <!--Text for message displayed in a dialog to inform that some of the selected files are not MBTiles and they can't be imported-->
   <!--Text for title above list of layers-->
   <!--Text for title and subtitle above options for how the layer can be access-->
   <!--Text for option where layer should be available to all projects-->
   <!--Text for option where layer should be available to the current project only-->
+  <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->
   <!--Displayed in the form filling menu when a form has background location disabled-->
