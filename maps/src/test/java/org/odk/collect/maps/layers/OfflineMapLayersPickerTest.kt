@@ -823,6 +823,30 @@ class OfflineMapLayersPickerTest {
         )
     }
 
+    @Test
+    fun `the confirmation dialog is dismissed o activity recreation`() {
+        val scenario = launchFragment()
+
+        uris.add(Uri.parse("blah"))
+        Interactions.clickOn(withText(string.add_layer))
+
+        scenario.onFragment {
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
+                instanceOf(OfflineMapLayersImporter::class.java)
+            )
+        }
+
+        scenario.recreate()
+
+        scenario.onFragment {
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
+                equalTo(null)
+            )
+        }
+    }
+
     private fun launchFragment(): FragmentScenario<OfflineMapLayersPicker> {
         return fragmentScenarioLauncherRule.launchInContainer(OfflineMapLayersPicker::class.java)
     }
