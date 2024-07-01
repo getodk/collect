@@ -372,12 +372,8 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun checkIsSnackbarErrorVisible(): T {
-        onView(allOf(withId(com.google.android.material.R.id.snackbar_text))).check(
-            matches(
-                isDisplayed()
-            )
-        )
+    fun checkIsSnackbarErrorVisible(text: String): T {
+        onView(withId(com.google.android.material.R.id.snackbar_text)).check(matches(withText(containsString(text))))
         return this as T
     }
 
