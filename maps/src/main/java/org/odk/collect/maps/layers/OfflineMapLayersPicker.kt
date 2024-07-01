@@ -116,6 +116,13 @@ class OfflineMapLayersPicker(
             dismiss()
         }
 
+        if (sharedViewModel.layersToImport.value?.value == null) {
+            DialogFragmentUtils.dismissDialog(
+                OfflineMapLayersImporter::class.java,
+                childFragmentManager
+            )
+        }
+
         return binding.root
     }
 
