@@ -5,8 +5,8 @@ import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
-import org.odk.collect.entities.EntitiesRepository
-import org.odk.collect.entities.Entity
+import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.entities.storage.Entity
 
 abstract class EntitiesRepositoryTest {
 

@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name=".EntityBrowserActivity"
+            android:name=".browser.EntityBrowserActivity"
             android:theme="@style/Theme.Material3.DayNight"/>
     </application>
 

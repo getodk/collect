@@ -1,10 +1,11 @@
-package org.odk.collect.entities
+package org.odk.collect.entities.browser
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import org.odk.collect.entities.databinding.EntityItemLayoutBinding
+import org.odk.collect.entities.storage.Entity
 
 class EntityItemView(context: Context) : FrameLayout(context) {
 

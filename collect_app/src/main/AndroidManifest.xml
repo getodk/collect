@@ -160,7 +160,7 @@ the specific language governing permissions and limitations under the License.
             tools:replace="android:theme" />
 
         <activity
-            android:name="org.odk.collect.entities.EntityBrowserActivity"
+            android:name="org.odk.collect.entities.browser.EntityBrowserActivity"
             android:theme="@style/Theme.Collect"
             tools:replace="android:theme" />
 

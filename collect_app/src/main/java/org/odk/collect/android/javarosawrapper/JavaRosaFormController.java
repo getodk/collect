@@ -37,7 +37,6 @@ import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
-import org.javarosa.entities.internal.Entities;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
@@ -54,6 +53,7 @@ import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.entities.javarosa.finalization.EntitiesExtra;
 
 import java.io.File;
 import java.io.IOException;
@@ -1109,7 +1109,7 @@ public class JavaRosaFormController implements FormController {
         return getFormDef().getMainInstance().resolveReference(treeReference).getValue();
     }
 
-    public Entities getEntities() {
-        return formEntryController.getModel().getExtras().get(Entities.class);
+    public EntitiesExtra getEntities() {
+        return formEntryController.getModel().getExtras().get(EntitiesExtra.class);
     }
 }

@@ -1,4 +1,4 @@
-package org.odk.collect.entities
+package org.odk.collect.entities.browser
 
 import android.content.Context
 import android.os.Bundle
@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.odk.collect.entities.R
 import org.odk.collect.entities.databinding.AddEntitiesDialogLayoutBinding
 import org.odk.collect.entities.databinding.EntityListItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding

@@ -1,28 +1,13 @@
-package org.odk.collect.entities
+package org.odk.collect.entities.javarosa.intance
 
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.instance.TreeElement
 import org.javarosa.xform.parse.ExternalInstanceParser
-import org.javarosa.xform.parse.ExternalInstanceParser.FileInstanceParser
-import org.javarosa.xform.parse.ExternalInstanceParserFactory
-
-class LocalEntitiesExternalInstanceParserFactory(
-    private val entitiesRepositoryProvider: () -> EntitiesRepository,
-    private val enabled: () -> Boolean
-) : ExternalInstanceParserFactory {
-    override fun getExternalInstanceParser(): ExternalInstanceParser {
-        val parser = ExternalInstanceParser()
-
-        if (enabled()) {
-            parser.addFileInstanceParser(LocalEntitiesFileInstanceParser(entitiesRepositoryProvider))
-        }
-
-        return parser
-    }
-}
+import org.odk.collect.entities.browser.EntityItemElement
+import org.odk.collect.entities.storage.EntitiesRepository
 
 internal class LocalEntitiesFileInstanceParser(private val entitiesRepositoryProvider: () -> EntitiesRepository) :
-    FileInstanceParser {
+    ExternalInstanceParser.FileInstanceParser {
 
     override fun parse(instanceId: String, path: String): TreeElement {
         val root = TreeElement("root", 0)

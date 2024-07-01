@@ -1,10 +1,11 @@
-package org.odk.collect.entities
+package org.odk.collect.entities.browser
 
 import androidx.core.view.isVisible
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.entities.storage.Entity
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 

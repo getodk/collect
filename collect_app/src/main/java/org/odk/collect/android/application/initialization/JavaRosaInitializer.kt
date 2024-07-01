@@ -3,7 +3,6 @@ package org.odk.collect.android.application.initialization
 import org.javarosa.core.model.CoreModelModule
 import org.javarosa.core.services.PrototypeManager
 import org.javarosa.core.util.JavaRosaCoreModule
-import org.javarosa.entities.EntityXFormParserFactory
 import org.javarosa.model.xform.XFormsModule
 import org.javarosa.xform.parse.XFormParser
 import org.javarosa.xform.parse.XFormParserFactory
@@ -11,7 +10,8 @@ import org.javarosa.xform.util.XFormUtils
 import org.odk.collect.android.dynamicpreload.DynamicPreloadXFormParserFactory
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
-import org.odk.collect.entities.LocalEntitiesExternalInstanceParserFactory
+import org.odk.collect.entities.javarosa.intance.LocalEntitiesExternalInstanceParserFactory
+import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
@@ -40,7 +40,10 @@ class JavaRosaInitializer(
         )
 
         // Configure default parser factory
-        val entityXFormParserFactory = EntityXFormParserFactory(XFormParserFactory())
+        val entityXFormParserFactory =
+            EntityXFormParserFactory(
+                XFormParserFactory()
+            )
         val dynamicPreloadXFormParserFactory =
             DynamicPreloadXFormParserFactory(entityXFormParserFactory)
 

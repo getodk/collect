@@ -4,6 +4,8 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import org.odk.collect.async.Scheduler
+import org.odk.collect.entities.browser.EntityBrowserActivity
+import org.odk.collect.entities.storage.EntitiesRepository
 import javax.inject.Singleton
 
 interface EntitiesDependencyComponentProvider {
