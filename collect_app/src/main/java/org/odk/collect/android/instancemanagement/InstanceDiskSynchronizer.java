@@ -66,7 +66,7 @@ public class InstanceDiskSynchronizer {
 
     public InstanceDiskSynchronizer(SettingsProvider settingsProvider) {
         this.settingsProvider = settingsProvider;
-        instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).get();
+        instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).create();
         AppDependencyComponent component = DaggerUtils.getComponent(Collect.getInstance());
         projectsDataService = component.currentProjectProvider();
     }
@@ -116,7 +116,7 @@ public class InstanceDiskSynchronizer {
                         try {
                             // TODO: optimize this by caching the previously found form definition
                             // TODO: optimize this by caching unavailable form definition to skip
-                            List<Form> forms = new FormsRepositoryProvider(Collect.getInstance()).get().getAllByFormId(instanceFormId);
+                            List<Form> forms = new FormsRepositoryProvider(Collect.getInstance()).create().getAllByFormId(instanceFormId);
 
                             if (!forms.isEmpty()) {
                                 Form form = forms.get(0);

@@ -67,8 +67,8 @@ class InstanceSubmitter(
         // communicated to the user. Maybe successful delete should also be communicated?
         if (InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, generalSettings.getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND), instance)) {
             InstanceDeleter(
-                InstancesRepositoryProvider(Collect.getInstance()).get(),
-                FormsRepositoryProvider(Collect.getInstance()).get()
+                InstancesRepositoryProvider(Collect.getInstance()).create(),
+                FormsRepositoryProvider(Collect.getInstance()).create()
             ).delete(instance.dbId)
         }
     }

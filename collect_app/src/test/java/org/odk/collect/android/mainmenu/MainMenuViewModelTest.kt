@@ -32,11 +32,11 @@ import java.util.concurrent.TimeoutException
 class MainMenuViewModelTest {
     private val formsRepository = InMemFormsRepository()
     private val formsRepositoryProvider = mock<FormsRepositoryProvider>().apply {
-        whenever(get()).thenReturn(formsRepository)
+        whenever(create()).thenReturn(formsRepository)
     }
     private val instancesRepository = InMemInstancesRepository()
     private val instancesRepositoryProvider = mock<InstancesRepositoryProvider>().apply {
-        whenever(get()).thenReturn(instancesRepository)
+        whenever(create()).thenReturn(instancesRepository)
     }
     private val autoSendSettingsProvider = mock<AutoSendSettingsProvider>()
     private val settingsProvider = InMemSettingsProvider()

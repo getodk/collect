@@ -731,7 +731,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             uriMimeType = getContentResolver().getType(uri);
         }
 
-        formLoaderTask = new FormLoaderTask(uri, uriMimeType, startingXPath, waitingXPath, formEntryControllerFactory, scheduler, savepointsRepositoryProvider.get());
+        formLoaderTask = new FormLoaderTask(uri, uriMimeType, startingXPath, waitingXPath, formEntryControllerFactory, scheduler, savepointsRepositoryProvider.create());
         formLoaderTask.setFormLoaderListener(this);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute();
@@ -764,7 +764,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     formDbId,
                     instanceDbId,
                     storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE),
-                    savepointsRepositoryProvider.get(),
+                    savepointsRepositoryProvider.create(),
                     scheduler
             );
             savePointTask.execute();
@@ -1201,7 +1201,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
             if (saveName == null && uriMimeType != null
                     && uriMimeType.equals(InstancesContract.CONTENT_ITEM_TYPE)) {
-                Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(instanceUri));
+                Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).create().get(ContentUriHelper.getIdFromUri(instanceUri));
                 if (instance != null) {
                     saveName = instance.getDisplayName();
                 }
