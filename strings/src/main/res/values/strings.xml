@@ -1148,7 +1148,7 @@
     ##############################################
 
     <!-- An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project. -->
-    <string name="entities_title">Entities</string>
+    <string name="entities_title">Entity lists</string>
 
     <!-- Title for setting that controls whether local entity features are enabled or not -->
     <string name="include_local_entities_setting">Enable local entities</string>
