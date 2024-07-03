@@ -16,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.TestScheduler;
-import org.odk.collect.testshared.WaitFor;
 import org.odk.collect.strings.R.string;
+import org.odk.collect.testshared.WaitFor;
 
 import java.io.IOException;
 import java.util.List;
@@ -304,12 +304,6 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return clickFillBlankForm()
                 .clickRefresh()
                 .pressBack(new MainMenuPage());
-    }
-
-    public MainMenuPage setupEntities(String entityList) {
-        return enableLocalEntitiesInForms()
-                .addEntityListInBrowser(entityList)
-                .refreshForms();
     }
 
     @NotNull
