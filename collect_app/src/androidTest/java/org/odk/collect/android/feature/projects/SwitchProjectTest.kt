@@ -76,7 +76,7 @@ class SwitchProjectTest {
             .clickOKOnDialog(MainMenuPage())
 
             // Fill form
-            .addEntityListInBrowser("people")
+            .addEntityListInBrowser("people") // No server entity list to enable creation
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Alice"))
             .clickSendFinalizedForm(1)

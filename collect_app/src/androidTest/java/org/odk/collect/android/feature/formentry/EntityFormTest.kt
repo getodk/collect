@@ -125,7 +125,6 @@ class EntityFormTest {
 
         rule.withProject(testDependencies.server)
             .enableLocalEntitiesInForms()
-            .addEntityListInBrowser("people")
 
             .clickGetBlankForm()
             .clickClearAll()

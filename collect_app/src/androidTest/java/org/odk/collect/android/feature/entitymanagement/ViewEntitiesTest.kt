@@ -23,7 +23,7 @@ class ViewEntitiesTest {
         testDependencies.server.addForm("one-question-entity-registration.xml")
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .addEntityListInBrowser("people")
+            .addEntityListInBrowser("people") // No server entity list to enable creation
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
             .openEntityBrowser()
@@ -39,7 +39,6 @@ class ViewEntitiesTest {
         )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .addEntityListInBrowser("people")
             .refreshForms()
             .openEntityBrowser()
             .clickOnList("people")
