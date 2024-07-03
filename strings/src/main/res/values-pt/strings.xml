@@ -930,8 +930,7 @@
   <!--Text for button that deletes all entities for the project-->
   <string name="clear_entities">Limpar tudo</string>
   <!--Text for button that adds a new entity list-->
-  <string name="add_entity_list">Adicionar lista de entidades</string>
-  <!--Label for entity that has been created offline and is not on the server yet-->
+    <!--Label for entity that has been created offline and is not on the server yet-->
   <!--##############################################
     # Crash handling
     ##############################################-->

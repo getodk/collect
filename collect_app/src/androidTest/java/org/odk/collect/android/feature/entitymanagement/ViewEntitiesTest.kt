@@ -21,9 +21,12 @@ class ViewEntitiesTest {
     @Test
     fun canViewLocallyCreatedEntitiesInBrowser() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
+        testDependencies.server.addForm(
+            "one-question-entity-follow-up.xml",
+            listOf(StubOpenRosaServer.EntityListItem("people.csv"))
+        )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .addEntityListInBrowser("people") // No server entity list to enable creation
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
             .openEntityBrowser()

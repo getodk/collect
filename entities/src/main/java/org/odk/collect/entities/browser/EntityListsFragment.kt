@@ -1,6 +1,5 @@
 package org.odk.collect.entities.browser
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -18,9 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.entities.R
-import org.odk.collect.entities.databinding.AddEntitiesDialogLayoutBinding
 import org.odk.collect.entities.databinding.EntityListItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding
 import org.odk.collect.lists.RecyclerViewUtils
@@ -50,15 +47,14 @@ class EntityListsFragment(
         }
 
         menuHost().addMenuProvider(
-            ListsMenuProvider(entitiesViewModel, requireContext()),
+            ListsMenuProvider(entitiesViewModel),
             viewLifecycleOwner
         )
     }
 }
 
 private class ListsMenuProvider(
-    private val entitiesViewModel: EntitiesViewModel,
-    private val context: Context
+    private val entitiesViewModel: EntitiesViewModel
 ) : MenuProvider {
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.entity_lists, menu)
@@ -68,18 +64,6 @@ private class ListsMenuProvider(
         return when (menuItem.itemId) {
             R.id.clear_entities -> {
                 entitiesViewModel.clearAll()
-                true
-            }
-
-            R.id.add_entity_list -> {
-                val binding = AddEntitiesDialogLayoutBinding.inflate(LayoutInflater.from(context))
-                MaterialAlertDialogBuilder(context)
-                    .setView(binding.root)
-                    .setTitle(org.odk.collect.strings.R.string.add_entity_list)
-                    .setPositiveButton(org.odk.collect.strings.R.string.add) { _, _ ->
-                        entitiesViewModel.addEntityList(binding.entityListName.text.toString())
-                    }
-                    .show()
                 true
             }
 
