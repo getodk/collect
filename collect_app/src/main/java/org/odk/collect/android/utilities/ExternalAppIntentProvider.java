@@ -21,7 +21,7 @@ public class ExternalAppIntentProvider {
 
         String exSpec = appearance.substring(appearance.indexOf(Appearances.EX));
         if (exSpec.contains(")")) {
-            exSpec = exSpec.substring(0, exSpec.indexOf(')') + 1);
+            exSpec = exSpec.substring(0, exSpec.lastIndexOf(')') + 1);
         } else if (exSpec.contains(" ")) {
             exSpec = exSpec.substring(0, exSpec.indexOf(' '));
         }
