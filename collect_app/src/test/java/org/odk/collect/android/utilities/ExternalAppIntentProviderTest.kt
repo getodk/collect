@@ -74,4 +74,12 @@ class ExternalAppIntentProviderTest {
         assertThat(resultIntent.extras!!.getString("param1"), `is`("value1"))
         assertThat(resultIntent.extras!!.getString("param2"), `is`("value2"))
     }
+
+    @Test
+    fun parametersCanContainParentheses() {
+        whenever(formEntryPrompt.appearanceHint)
+            .thenReturn("ex:com.example.collectanswersprovider(param='blah()')")
+        val resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(null, formEntryPrompt)
+        assertThat(resultIntent.extras!!.getString("param"), `is`("blah()"))
+    }
 }
