@@ -9,13 +9,14 @@
 -dontwarn android.content.res.**
 -dontwarn org.kxml2.io.**
 
--keep class org.javarosa.**
 -keep class org.odk.collect.android.logic.actions.**
 -keep class android.support.v7.widget.** { *; }
 -keep class org.mp4parser.boxes.** { *; }
+-keep class * extends androidx.fragment.app.Fragment{}
+
+-keep class * implements org.javarosa.core.util.externalizable.Externalizable{}
 -keep class org.javarosa.core.model.instance.geojson.GeojsonFeature { *; }
 -keep class org.javarosa.core.model.instance.geojson.GeojsonGeometry { *; }
--keep class * extends androidx.fragment.app.Fragment{}
 
 -dontobfuscate
 
