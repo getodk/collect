@@ -22,8 +22,8 @@ import org.odk.collect.android.utilities.MyanmarDateUtils;
 
 import java.util.List;
 
+import mmcalendar.MyanmarCalendarKernel;
 import mmcalendar.MyanmarDate;
-import mmcalendar.MyanmarDateKernel;
 
 public class MyanmarDatePickerDialog extends CustomDatePickerDialog {
     private static final int MIN_SUPPORTED_YEAR = 1261; //1900 in Gregorian calendar
@@ -39,13 +39,13 @@ public class MyanmarDatePickerDialog extends CustomDatePickerDialog {
     @Override
     protected void updateDays() {
         MyanmarDate myanmarDate = getCurrentMyanmarDate();
-        setUpDayPicker(MyanmarDateUtils.getFirstMonthDay(myanmarDate), myanmarDate.getMonthDay(), MyanmarDateUtils.getMonthLength(myanmarDate));
+        setUpDayPicker(MyanmarDateUtils.getFirstMonthDay(myanmarDate), myanmarDate.getDayOfMonth(), MyanmarDateUtils.getMonthLength(myanmarDate));
     }
 
     @Override
     protected void yearUpdated() {
         MyanmarDate myanmarDate = getCurrentMyanmarDate();
-        setUpMonthPicker(MyanmarDateUtils.getMonthId(myanmarDate) + 1, MyanmarDateUtils.getMyanmarMonthsArray(myanmarDate.getYearInt()));
+        setUpMonthPicker(MyanmarDateUtils.getMonthId(myanmarDate) + 1, MyanmarDateUtils.getMyanmarMonthsArray(myanmarDate.getYearValue()));
         super.yearUpdated();
     }
 
@@ -57,13 +57,13 @@ public class MyanmarDatePickerDialog extends CustomDatePickerDialog {
     private void setUpDatePicker() {
         MyanmarDate myanmarDate = MyanmarDateUtils.gregorianDateToMyanmarDate(DateTimeUtils.getDateWithSkippedDaylightSavingGapIfExists(getDate()));
 
-        setUpDayPicker(MyanmarDateUtils.getFirstMonthDay(myanmarDate), myanmarDate.getMonthDay(), MyanmarDateUtils.getMonthLength(myanmarDate));
-        setUpMonthPicker(MyanmarDateUtils.getMonthId(myanmarDate) + 1, MyanmarDateUtils.getMyanmarMonthsArray(myanmarDate.getYearInt()));
-        setUpYearPicker(myanmarDate.getYearInt(), MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);
+        setUpDayPicker(MyanmarDateUtils.getFirstMonthDay(myanmarDate), myanmarDate.getDayOfMonth(), MyanmarDateUtils.getMonthLength(myanmarDate));
+        setUpMonthPicker(MyanmarDateUtils.getMonthId(myanmarDate) + 1, MyanmarDateUtils.getMyanmarMonthsArray(myanmarDate.getYearValue()));
+        setUpYearPicker(myanmarDate.getYearValue(), MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);
     }
 
     private MyanmarDate getCurrentMyanmarDate() {
-        List<Integer> monthIndexes = MyanmarDateKernel.getMyanmarMonth(getYear(), 1).getIndex();
+        List<Integer> monthIndexes = MyanmarCalendarKernel.calculateRelatedMyanmarMonths(getYear(), 1).getMonthList();
         int monthIndex = getMonthId() < monthIndexes.size() ? monthIndexes.get(getMonthId()) : monthIndexes.get(monthIndexes.size() - 1);
         int monthLength = MyanmarDateUtils.getMonthLength(getYear(), monthIndex);
         int dayOfMonth = getDay() > monthLength ? monthLength : getDay();

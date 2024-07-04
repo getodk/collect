@@ -29,7 +29,7 @@ object Dependencies {
     const val squareup_okhttp_tls = "com.squareup.okhttp3:okhttp-tls:${Versions.okhttp3}"
     const val burgstaller_okhttp_digest = "io.github.rburgst:okhttp-digest:3.1.0"
     const val persian_joda_time = "com.github.mohamadian:persianjodatime:1.2"
-    const val myanmar_calendar = "com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3" // Check if https://github.com/chanmratekoko/mmcalendar/issues/4 no longer takes place before upgrading
+    const val myanmar_calendar = "com.github.chanmratekoko:myanmar-calendar:1.0.9.RELEASE"
     const val bikram_sambat = "bikramsambat:bikram-sambat:1.1.0"
     const val danlew_android_joda = "net.danlew:android.joda:2.12.7"
     const val rarepebble_colorpicker = "com.github.martin-stone:hsv-alpha-color-picker-android:3.1.0"
