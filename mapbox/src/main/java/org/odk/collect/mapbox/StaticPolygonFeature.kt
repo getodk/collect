@@ -34,7 +34,7 @@ class StaticPolygonFeature(
 }
 
 private class PolygonClickListener(
-    private val polygonId: Long,
+    private val polygonId: String,
     private val featureClickListener: MapFragment.FeatureListener?,
     private val featureId: Int
 ) : OnPolygonAnnotationClickListener {

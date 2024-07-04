@@ -1,28 +1,26 @@
 package org.odk.collect.mapbox
 
-import com.mapbox.android.core.location.LocationEngineCallback
-import com.mapbox.android.core.location.LocationEngineResult
+import com.mapbox.common.location.Location
+import com.mapbox.common.location.LocationObserver
+import com.mapbox.common.location.toAndroidLocation
 import org.odk.collect.location.LocationUtils.sanitizeAccuracy
-import java.lang.Exception
 import java.lang.ref.WeakReference
 
 // https://docs.mapbox.com/android/core/guides/#requesting-location-updates
 // Replace mock location accuracy with 0 as in LocationClient implementations since Mapbox uses its own location engine.
-class MapboxLocationCallback(map: MapboxMapFragment) : LocationEngineCallback<LocationEngineResult> {
+class MapboxLocationCallback(map: MapboxMapFragment) : LocationObserver {
     private val mapRef: WeakReference<MapboxMapFragment> = WeakReference(map)
     private var retainMockAccuracy = false
 
-    override fun onSuccess(result: LocationEngineResult) {
+    override fun onLocationUpdateReceived(locations: MutableList<Location>) {
         val map = mapRef.get()
-        val location = result.lastLocation
-        if (map != null && location != null) {
-            sanitizeAccuracy(location, retainMockAccuracy)?.let {
+        val location = locations.last()
+        if (map != null) {
+            sanitizeAccuracy(location.toAndroidLocation(), retainMockAccuracy)?.let {
                 map.onLocationChanged(it)
             }
         }
     }
-
-    override fun onFailure(exception: Exception) = Unit
 
     fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {
         this.retainMockAccuracy = retainMockAccuracy

@@ -23,7 +23,7 @@ object Dependencies {
     const val play_services_maps = "com.google.android.gms:play-services-maps:19.0.0"
     const val play_services_location = "com.google.android.gms:play-services-location:21.3.0"
     const val play_services_oss_licenses = "com.google.android.gms:play-services-oss-licenses:17.1.0"
-    const val mapbox_android_sdk = "com.mapbox.maps:android:10.16.4"
+    const val mapbox_android_sdk = "com.mapbox.maps:android:11.4.1"
     const val osmdroid = "org.osmdroid:osmdroid-android:6.1.18"
     const val squareup_okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp3}"
     const val squareup_okhttp_tls = "com.squareup.okhttp3:okhttp-tls:${Versions.okhttp3}"
