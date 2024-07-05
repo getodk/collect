@@ -11,7 +11,7 @@ class ProjectDisplayPage : Page<ProjectDisplayPage>() {
         return this
     }
 
-    fun setProjectName(projectName: String?): ProjectDisplayPage {
+    fun setProjectName(projectName: String): ProjectDisplayPage {
         clickOnString(org.odk.collect.strings.R.string.project_name)
         inputText(projectName)
         clickOKOnDialog()
@@ -25,7 +25,7 @@ class ProjectDisplayPage : Page<ProjectDisplayPage>() {
         return this
     }
 
-    fun setProjectColor(projectColor: String?): ProjectDisplayPage {
+    fun setProjectColor(projectColor: String): ProjectDisplayPage {
         clickOnString(org.odk.collect.strings.R.string.project_color)
         onView(withContentDescription(org.odk.collect.strings.R.string.hex_color)).perform(replaceText(projectColor))
         clickOKOnDialog()
