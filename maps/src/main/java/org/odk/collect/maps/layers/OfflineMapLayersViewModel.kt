@@ -33,11 +33,7 @@ class OfflineMapLayersViewModel(
 
     private lateinit var tempLayersDir: File
 
-    init {
-        loadExistingLayers()
-    }
-
-    private fun loadExistingLayers() {
+    fun loadExistingLayers() {
         trackableWorker.immediate(
             background = {
                 val layers = referenceLayerRepository.getAll().sortedBy { it.name }
