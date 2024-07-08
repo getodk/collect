@@ -137,7 +137,7 @@
   <string name="save_explanation_with_last_saved">\'此表格最後儲存於\' EEE, MMM dd, yyyy\' \'HH:mm\'。另存為草稿以保留變更。\'</string>
   <string name="quit_form_continue_title">繼續編輯？</string>
   <string name="discard_form_warning">如果您放棄儲存表單，您將失去所有已做的修改。</string>
-  <string name="discard_changes_warning">\'此表格最後儲存於 \'EEE, MMM dd, yyyy HH:mm\'，如果您放棄變更，將失去此後所做的更改。\'</string>
+  <string name="discard_changes_warning">\'此表格最後儲存於\' EEE, MMM dd, yyyy HH:mm \'，如果您放棄變更，將失去此後所做的更改。\'</string>
   <string name="saving_form">正在儲存表格</string>
   <string name="survey_saving_validating_message">正在驗證答案…</string>
   <string name="survey_saving_collecting_message">正在收集資料…</string>
@@ -159,7 +159,7 @@
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <string name="mic_in_use">麥克風已在使用中。</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
-  <string name="answer_file_copy_failed_message">無法將媒體附加到表單，但可以在 %1$s 獲取</string>
+  <string name="answer_file_copy_failed_message">無法將媒體附加到表單，但可以在 %1$s 取得</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">錄製已禁用。在 %s 中啟用</string>
   <!--Error displayed when opened filled form has been deleted on disk-->
@@ -398,7 +398,7 @@
   <!--Title for the screen that allows the user to select a offline layer for maps-->
   <string name="offline_layer_dialog_title">選擇離線圖層</string>
   <!--Description of how to add offline layers to the project-->
-  <string name="offline_layer_dialog_description">選擇要用於該項目中所有地圖的離線圖層。您可以通過從設備中選擇 MBTiles 文件來將選項添加到列表中，也可以從列表中刪除現有圖層。</string>
+  <string name="offline_layer_dialog_description">選擇要用於該項目中所有地圖的離線圖層。您可從設備中選取 MBTiles 文件，添加選項到列表中，也可以從列表刪除現有圖層。</string>
   <!--Text of button user can press to get help when setting up Offline Layers-->
   <string name="get_help_with_offline_layers">瞭解有關添加 MBTiles 的更多訊息。</string>
   <!--Text for button that lets the user select a offline layer on their device to add-->
@@ -447,11 +447,11 @@
   <string name="point_will_be_saved">點將儲存在 %1$s</string>
   <!--%1$s is the number of satellites being used to get location-->
   <string name="satellites">衛星：%1$s</string>
-  <string name="waiting_for_location">正在嘗試獲取位置，請稍候。</string>
+  <string name="waiting_for_location">正在嘗試取得位置，請稍候..</string>
   <string name="poor_accuracy">精度差，請稍候。</string>
   <string name="unacceptable_accuracy">精度不可接受，請稍候。</string>
   <string name="improving_accuracy">提高準確性，請稍候。</string>
-  <string name="accuracy_status_title">正在獲取位置</string>
+  <string name="accuracy_status_title">正在取得位置</string>
   <!--The accuracy of a location fix in meters-->
   <string name="accuracy_m">%1$sm</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
@@ -550,7 +550,7 @@
   <string name="refresh">更新</string>
   <string name="download">下載選取項目</string>
   <string name="downloading_data">連接到伺服器</string>
-  <string name="fetching_file">獲取 %1$s.\n\n表單 %2$s / %3$s 表單。</string>
+  <string name="fetching_file">正在下載 %1$s.\n\n表單 %2$s / %3$s 表單..</string>
   <string name="form_download_progress">%1$s. 載入媒體文件: %3$s 中的 %2$s</string>
   <string name="version">版本：</string>
   <string name="form_updates_available">表單更新可用</string>

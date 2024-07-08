@@ -134,10 +134,10 @@
   <string name="keep_editing">继续编辑</string>
   <string name="quit_form_title">储存表格？</string>
   <string name="save_explanation">您可以保存此表单并随时从草稿中存取它。</string>
-  <string name="save_explanation_with_last_saved">\'此表格最后储存于\' EEE, MMM dd, yyyy \'at\' HH:mm\'。另存为草稿以保留变更。\'</string>
+  <string name="save_explanation_with_last_saved">\'此表格最后储存于\' EEE, MMM dd, yyyy\'at\'HH:mm\'。另存为草稿以保留变更。\'</string>
   <string name="quit_form_continue_title">继续编辑？</string>
   <string name="discard_form_warning">如果您丢弃表单，您将失去所有已做的更改。</string>
-  <string name="discard_changes_warning">\'此表格最後儲存於\' EEE, MMM dd, yyyy HH:mm\'，如果您放棄變更，將失去此後所做的更改。\'</string>
+  <string name="discard_changes_warning">\'此表格最后保存于 \'EEE, MMM dd, yyyy HH:mm\'。如果您放弃更改，您将失去此后所做的所有更改。\'</string>
   <string name="saving_form">正在保存表格</string>
   <string name="survey_saving_validating_message">正在验证答案…</string>
   <string name="survey_saving_collecting_message">正在收集数据…</string>

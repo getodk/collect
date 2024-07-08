@@ -117,6 +117,7 @@
   <string name="save_enter_data_description">Esta al final de \"%s\".</string>
   <string name="form_edits_warning_title">Los formularios finalizados no pueden ser editados.</string>
   <string name="form_edits_warning_title_auto_send_enabled">Los formularios enviados no pueden ser editados.</string>
+  <string name="form_edits_warning_message">Si necesita hacer cambios, \"Guardar como borrador\" hasta que esté listo para enviar.</string>
   <string name="form_edits_warning_learn_more">Aprende más</string>
   <string name="save_as_draft">Guardar como borrador</string>
   <string name="finalize">Finalizar</string>
@@ -174,6 +175,7 @@
   <string name="no_app">Esta aplicación no está. Por favor ingrese el dato manualmente.</string>
   <string name="null_intent_value">La aplicación externa no suministra la información esperada</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
+  <string name="print">Imprimir</string>
   <string name="launch_printer">Iniciar Impresión</string>
   <string name="no_printer">La impresora solicitado no está instalada. Por favor, instale la impresora.</string>
   <string name="open_url">Abrir URL</string>
@@ -925,6 +927,7 @@
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
+  <string name="google_drive_removed_message">Este proyecto estaba previamente conectado a una cuenta de Google Drive. Se ha eliminado la compatibilidad con Google Drive. Puede configurar un servidor o conectar a una computadora.</string>
   <string name="learn_more_button_text">Aprende más</string>
   <!--##############################################
     # Developer tools
