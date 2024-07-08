@@ -68,6 +68,13 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
         super.onSettingChanged(key)
         if (key == ProjectKeys.KEY_REFERENCE_LAYER) {
             findPreference<Preference>(ProjectKeys.KEY_REFERENCE_LAYER)!!.summary = getLayerName()
+        } else if (key == KEY_BASEMAP_SOURCE) {
+            val cftor = MapConfiguratorProvider.getConfigurator(settingsProvider.getUnprotectedSettings().getString(key))
+            if (!cftor.isAvailable(requireContext())) {
+                cftor.showUnavailableMessage(requireContext())
+            } else {
+                onBasemapSourceChanged(cftor)
+            }
         }
     }
 
@@ -109,16 +116,6 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
 
         basemapSourcePref.setIconSpaceReserved(false)
         onBasemapSourceChanged(MapConfiguratorProvider.getConfigurator())
-        basemapSourcePref.setOnPreferenceChangeListener { _: Preference?, value: Any ->
-            val cftor = MapConfiguratorProvider.getConfigurator(value.toString())
-            if (!cftor.isAvailable(requireContext())) {
-                cftor.showUnavailableMessage(requireContext())
-                false
-            } else {
-                onBasemapSourceChanged(cftor)
-                true
-            }
-        }
     }
 
     private fun initLayersPref() {

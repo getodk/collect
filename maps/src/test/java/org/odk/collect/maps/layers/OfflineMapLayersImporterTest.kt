@@ -102,7 +102,11 @@ class OfflineMapLayersImporterTest {
 
     @Test
     fun `the 'add layer' button is disabled during loading layers`() {
-        launchFragment()
+        val file = TempFiles.createTempFile("layer", MbtilesFile.FILE_EXTENSION)
+
+        launchFragment().onFragment {
+            it.viewModel.loadLayersToImport(listOf(file.toUri()), it.requireContext())
+        }
 
         onView(withId(org.odk.collect.maps.R.id.add_layer_button)).check(matches(not(isEnabled())))
         scheduler.flush()

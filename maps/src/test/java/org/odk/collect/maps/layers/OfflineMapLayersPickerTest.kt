@@ -389,6 +389,7 @@ class OfflineMapLayersPickerTest {
 
         Interactions.clickOn(withText("layer1"))
         scenario.recreate()
+        scheduler.flush()
         onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
             matches(
                 not(isChecked())
@@ -535,6 +536,7 @@ class OfflineMapLayersPickerTest {
         onView(withRecyclerView(R.id.layers).atPositionOnView(3, R.id.arrow)).perform(click())
 
         scenario.recreate()
+        scheduler.flush()
 
         assertLayerExpanded(1)
         assertLayerCollapsed(2)
