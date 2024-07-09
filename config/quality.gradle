@@ -1,5 +1,5 @@
 def configDir = "${project.rootDir}/config"
-def reportsDir = "${project.buildDir}/reports"
+def reportsDir = "${project.layout.buildDirectory}/reports"
 
 //------------------------Checkstyle------------------------//
 
