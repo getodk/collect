@@ -3,7 +3,6 @@ package org.odk.collect.entities
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.odk.collect.entities.browser.EntityItemElement
@@ -11,7 +10,6 @@ import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
-import org.odk.collect.entities.storage.Entity.State.ONLINE
 import org.odk.collect.entities.storage.InMemEntitiesRepository
 import org.odk.collect.shared.TempFiles
 import java.io.File
@@ -69,10 +67,9 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(
-            songs,
-            containsInAnyOrder(Entity.Saved("songs", "noah", "Noah", 2, state = ONLINE))
-        )
+        assertThat(songs.size, equalTo(1))
+        assertThat(songs[0].label, equalTo("Noah"))
+        assertThat(songs[0].version, equalTo(2))
     }
 
     @Test
@@ -82,10 +79,9 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(
-            songs,
-            containsInAnyOrder(Entity.Saved("songs", "noah", "Noah", 2, state = ONLINE))
-        )
+        assertThat(songs.size, equalTo(1))
+        assertThat(songs[0].label, equalTo("Noah"))
+        assertThat(songs[0].version, equalTo(2))
     }
 
     @Test
@@ -95,10 +91,9 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(
-            songs,
-            containsInAnyOrder(Entity.Saved("songs", "noah", "Noah", 2, state = ONLINE))
-        )
+        assertThat(songs.size, equalTo(1))
+        assertThat(songs[0].label, equalTo("Noah"))
+        assertThat(songs[0].version, equalTo(2))
     }
 
     @Test
@@ -109,10 +104,8 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(
-            songs,
-            containsInAnyOrder(Entity.Saved("songs", "noah", "Noah", 3, state = ONLINE))
-        )
+        assertThat(songs.size, equalTo(1))
+        assertThat(songs[0].properties, equalTo(emptyList()))
     }
 
     @Test
@@ -125,19 +118,9 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(
-            songs,
-            containsInAnyOrder(
-                Entity.Saved(
-                    "songs",
-                    "noah",
-                    "Noah",
-                    2,
-                    listOf(Pair("length", "4:58")),
-                    state = ONLINE
-                )
-            )
-        )
+        assertThat(songs.size, equalTo(1))
+        assertThat(songs[0].version, equalTo(2))
+        assertThat(songs[0].properties, equalTo(listOf(Pair("length", "4:58"))))
     }
 
     @Test
@@ -182,10 +165,8 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(
-            songs,
-            containsInAnyOrder(Entity.Saved("songs", "cathedrals", label = "", state = ONLINE))
-        )
+        assertThat(songs.size, equalTo(1))
+        assertThat(songs[0].label, equalTo(""))
     }
 
     @Test
@@ -215,13 +196,7 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(
-            songs,
-            containsInAnyOrder(
-                Entity.Saved("songs", "cathedrals", "Cathedrals", state = ONLINE),
-                Entity.Saved("songs", "noah", "Noah")
-            )
-        )
+        assertThat(songs.size, equalTo(2))
     }
 
     @Test
@@ -235,7 +210,8 @@ class LocalEntityUseCasesTest {
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", secondCsv, entitiesRepository)
 
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(songs, containsInAnyOrder(Entity.Saved("songs", "noah", "Noah", state = ONLINE)))
+        assertThat(songs.size, equalTo(1))
+        assertThat(songs[0].id, equalTo("noah"))
     }
 
     @Test

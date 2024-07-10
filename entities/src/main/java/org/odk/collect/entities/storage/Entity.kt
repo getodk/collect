@@ -23,7 +23,8 @@ sealed interface Entity {
         override val label: String?,
         override val version: Int = 1,
         override val properties: List<Pair<String, String>> = emptyList(),
-        override val state: State = State.OFFLINE
+        override val state: State = State.OFFLINE,
+        val index: Int
     ) : Entity
 
     enum class State {

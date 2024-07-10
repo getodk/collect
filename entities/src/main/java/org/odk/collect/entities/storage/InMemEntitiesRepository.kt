@@ -3,14 +3,24 @@ package org.odk.collect.entities.storage
 class InMemEntitiesRepository : EntitiesRepository {
 
     private val lists = mutableSetOf<String>()
-    private val entities = mutableListOf<Entity.Saved>()
+    private val entities = mutableListOf<Entity.New>()
 
     override fun getLists(): Set<String> {
         return lists
     }
 
     override fun getEntities(list: String): List<Entity.Saved> {
-        return entities.filter { it.list == list }
+        return entities.filter { it.list == list }.mapIndexed { index, entity ->
+            Entity.Saved(
+                entity.list,
+                entity.id,
+                entity.label,
+                entity.version,
+                entity.properties,
+                entity.state,
+                index
+            )
+        }
     }
 
     override fun clear() {
@@ -39,7 +49,7 @@ class InMemEntitiesRepository : EntitiesRepository {
 
                 this.entities.remove(existing)
                 this.entities.add(
-                    Entity.Saved(
+                    Entity.New(
                         entity.list,
                         entity.id,
                         entity.label ?: existing.label,
@@ -50,7 +60,7 @@ class InMemEntitiesRepository : EntitiesRepository {
                 )
             } else {
                 this.entities.add(
-                    Entity.Saved(
+                    Entity.New(
                         entity.list,
                         entity.id,
                         entity.label,

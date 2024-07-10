@@ -236,6 +236,47 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#save assigns an index to each entity in insert order when saving multiple entities`() {
+        val first = Entity.New("wines", "1", "Léoville Barton 2008")
+        val second = Entity.New("wines", "2", "Pontet Canet 2014")
+
+        val repository = buildSubject()
+        repository.save(first, second)
+
+        val entities = repository.getEntities("wines")
+        assertThat(entities[0].index, equalTo(0))
+        assertThat(entities[1].index, equalTo(1))
+    }
+
+    @Test
+    fun `#save assigns an index to each entity in insert order when saving single entities`() {
+        val first = Entity.New("wines", "1", "Léoville Barton 2008")
+        val second = Entity.New("wines", "2", "Pontet Canet 2014")
+
+        val repository = buildSubject()
+        repository.save(first)
+        repository.save(second)
+
+        val entities = repository.getEntities("wines")
+        assertThat(entities[0].index, equalTo(0))
+        assertThat(entities[1].index, equalTo(1))
+    }
+
+    @Test
+    fun `#save does not change index when updating an existing entity`() {
+        val repository = buildSubject()
+
+        val wine = Entity.New("wines", "1", "Léoville Barton 2008", version = 1)
+        repository.save(wine)
+        assertThat(repository.getEntities("wines")[0].index, equalTo(0))
+
+        val updatedWine = wine.copy(label = "Léoville Barton 2009")
+        repository.save(updatedWine)
+
+        assertThat(repository.getEntities("wines")[0].index, equalTo(0))
+    }
+
+    @Test
     fun `#addList adds a list with no entities`() {
         val repository = buildSubject()
 
@@ -255,5 +296,27 @@ abstract class EntitiesRepositoryTest {
         repository.delete("1")
 
         assertThat(repository.getEntities("wines"), containsInAnyOrder(sameEntityAs(canet)))
+    }
+
+    @Test
+    fun `#delete updates index values so that they are always in sequence and start at 0`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("wines", "1", "Léoville Barton 2008")
+        val canet = Entity.New("wines", "2", "Pontet-Canet 2014")
+        val gloria = Entity.New("wines", "3", "Chateau Gloria 2016")
+        repository.save(leoville, canet, gloria)
+
+        repository.delete("1")
+
+        var wines = repository.getEntities("wines")
+        assertThat(wines[0].index, equalTo(0))
+        assertThat(wines[1].index, equalTo(1))
+
+        repository.save(leoville)
+        wines = repository.getEntities("wines")
+        assertThat(wines[0].index, equalTo(0))
+        assertThat(wines[1].index, equalTo(1))
+        assertThat(wines[2].index, equalTo(2))
     }
 }
