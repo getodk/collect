@@ -2,15 +2,18 @@ package org.odk.collect.entities
 
 import org.javarosa.core.model.instance.CsvExternalInstance
 import org.javarosa.core.model.instance.TreeElement
-import org.javarosa.entities.EntityAction
-import org.javarosa.entities.internal.Entities
+import org.odk.collect.entities.browser.EntityItemElement
+import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
+import org.odk.collect.entities.javarosa.spec.EntityAction
+import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.entities.storage.Entity
 import java.io.File
 
 object LocalEntityUseCases {
 
     @JvmStatic
     fun updateLocalEntitiesFromForm(
-        formEntities: Entities?,
+        formEntities: EntitiesExtra?,
         entitiesRepository: EntitiesRepository
     ) {
         formEntities?.entities?.forEach { formEntity ->

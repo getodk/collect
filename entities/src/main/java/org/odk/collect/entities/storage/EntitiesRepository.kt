@@ -1,4 +1,4 @@
-package org.odk.collect.entities
+package org.odk.collect.entities.storage
 
 interface EntitiesRepository {
     fun save(vararg entities: Entity)

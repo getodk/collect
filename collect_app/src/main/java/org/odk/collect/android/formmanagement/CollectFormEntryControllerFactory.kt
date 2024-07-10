@@ -1,13 +1,13 @@
 package org.odk.collect.android.formmanagement
 
 import org.javarosa.core.model.FormDef
-import org.javarosa.entities.EntityFormFinalizationProcessor
 import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.dynamicpreload.ExternalDataManagerImpl
 import org.odk.collect.android.dynamicpreload.handler.ExternalDataHandlerPull
 import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory
+import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor
 import java.io.File
 
 class CollectFormEntryControllerFactory :

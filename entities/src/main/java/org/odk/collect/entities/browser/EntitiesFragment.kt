@@ -1,4 +1,4 @@
-package org.odk.collect.entities
+package org.odk.collect.entities.browser
 
 import android.content.Context
 import android.os.Bundle
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.odk.collect.entities.databinding.ListLayoutBinding
+import org.odk.collect.entities.storage.Entity
 import org.odk.collect.lists.RecyclerViewUtils
 import org.odk.collect.lists.RecyclerViewUtils.matchParentWidth
 
