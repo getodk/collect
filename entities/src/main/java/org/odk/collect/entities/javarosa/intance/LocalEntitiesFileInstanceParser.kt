@@ -10,26 +10,37 @@ internal class LocalEntitiesFileInstanceParser(private val entitiesRepositoryPro
     ExternalInstanceParser.FileInstanceParser {
 
     override fun parse(instanceId: String, path: String): TreeElement {
+        return parse(instanceId, path, false)
+    }
+
+    override fun parse(instanceId: String, path: String, partial: Boolean): TreeElement {
         val root = TreeElement("root", 0)
 
         val entitiesRepository = entitiesRepositoryProvider()
         entitiesRepository.getEntities(instanceId).forEachIndexed { index, entity ->
             val name = TreeElement(EntityItemElement.ID)
-            name.value = StringData(entity.id)
-
             val label = TreeElement(EntityItemElement.LABEL)
-            label.value = StringData(entity.label)
-
             val version = TreeElement(EntityItemElement.VERSION)
-            version.value = StringData(entity.version.toString())
 
-            val item = TreeElement("item", index)
+            if (!partial) {
+                name.value = StringData(entity.id)
+                label.value = StringData(entity.label)
+                version.value = StringData(entity.version.toString())
+            }
+
+            val item = TreeElement("item", index, partial)
             item.addChild(name)
             item.addChild(label)
             item.addChild(version)
 
             entity.properties.forEach { property ->
-                addChild(item, property)
+                val propertyElement = TreeElement(property.first)
+
+                if (!partial) {
+                    propertyElement.value = StringData(property.second)
+                }
+
+                item.addChild(propertyElement)
             }
 
             root.addChild(item)
@@ -41,16 +52,5 @@ internal class LocalEntitiesFileInstanceParser(private val entitiesRepositoryPro
     override fun isSupported(instanceId: String, instanceSrc: String): Boolean {
         val entitiesRepository = entitiesRepositoryProvider()
         return entitiesRepository.getLists().contains(instanceId)
-    }
-
-    private fun addChild(
-        element: TreeElement,
-        nameAndValue: Pair<String, String>
-    ) {
-        element.addChild(
-            TreeElement(nameAndValue.first).also {
-                it.value = StringData(nameAndValue.second)
-            }
-        )
     }
 }
