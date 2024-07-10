@@ -96,4 +96,29 @@ class OpenRosaResponseParserImplTest {
         assertThat(mediaFiles.size, equalTo(1))
         assertThat(mediaFiles[0].isEntityList, equalTo(true))
     }
+
+    @Test
+    fun `parseManifest() when media file does not have type returns isEntityList as false`() {
+        val response = StringBuilder()
+            .appendLine("<?xml version='1.0' encoding='UTF-8' ?>")
+            .appendLine("<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">")
+            .appendLine("<mediaFile>")
+            .appendLine("<filename>badgers.csv</filename>")
+            .appendLine("<hash>blah</hash>")
+            .appendLine("<downloadUrl>http://funk.appspot.com/binaryData?blobKey=%3A477e3</downloadUrl>")
+            .appendLine("</mediaFile>")
+            .appendLine("</manifest>")
+            .toString()
+
+        val doc = StringReader(response).use { reader ->
+            val parser = KXmlParser()
+            parser.setInput(reader)
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
+            Document().also { it.parse(parser) }
+        }
+
+        val mediaFiles = OpenRosaResponseParserImpl().parseManifest(doc)!!
+        assertThat(mediaFiles.size, equalTo(1))
+        assertThat(mediaFiles[0].isEntityList, equalTo(false))
+    }
 }
