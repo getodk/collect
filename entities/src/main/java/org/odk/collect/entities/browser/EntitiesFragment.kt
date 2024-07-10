@@ -40,7 +40,7 @@ class EntitiesFragment(private val viewModelFactory: ViewModelProvider.Factory) 
     }
 }
 
-private class EntitiesAdapter(private val data: List<Entity>) :
+private class EntitiesAdapter(private val data: List<Entity.Saved>) :
     RecyclerView.Adapter<EntityViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): EntityViewHolder {
@@ -63,7 +63,7 @@ private class EntityViewHolder(context: Context) : ViewHolder(EntityItemView(con
         matchParentWidth()
     }
 
-    fun setEntity(entity: Entity) {
+    fun setEntity(entity: Entity.Saved) {
         (itemView as EntityItemView).setEntity(entity)
     }
 }

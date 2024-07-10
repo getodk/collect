@@ -15,7 +15,7 @@ class LocalEntitiesFileInstanceParserTest {
     @Test
     fun `includes properties in local entity elements`() {
         val entity =
-            Entity(
+            Entity.New(
                 "people",
                 "1",
                 "Shiv Roy",
@@ -36,7 +36,7 @@ class LocalEntitiesFileInstanceParserTest {
     @Test
     fun `includes version in local entity elements`() {
         val entity =
-            Entity(
+            Entity.New(
                 "people",
                 "1",
                 "Shiv Roy",
@@ -56,7 +56,7 @@ class LocalEntitiesFileInstanceParserTest {
     @Test
     fun `partial parse returns elements without values`() {
         val entity =
-            Entity(
+            Entity.New(
                 "people",
                 "1",
                 "Shiv Roy",

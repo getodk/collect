@@ -64,60 +64,71 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromServer overrides offline version if the online version is newer`() {
-        entitiesRepository.save(Entity("songs", "noah", "Noa", 1))
-        val csv = createEntityList(Entity("songs", "noah", "Noah", 2))
-
-        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
-        val songs = entitiesRepository.getEntities("songs")
-        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, state = ONLINE)))
-    }
-
-    @Test
-    fun `updateLocalEntitiesFromServer does not override offline version if the online version is older`() {
-        entitiesRepository.save(Entity("songs", "noah", "Noah", 2))
-        val csv = createEntityList(Entity("songs", "noah", "Noa", 1))
-
-        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
-        val songs = entitiesRepository.getEntities("songs")
-        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, state = ONLINE)))
-    }
-
-    @Test
-    fun `updateLocalEntitiesFromServer does not override offline version if the online version is the same`() {
-        entitiesRepository.save(Entity("songs", "noah", "Noah", 2))
-        val csv = createEntityList(Entity("songs", "noah", "Noa", 2))
-
-        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
-        val songs = entitiesRepository.getEntities("songs")
-        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", 2, state = ONLINE)))
-    }
-
-    @Test
-    fun `updateLocalEntitiesFromServer ignores properties not in offline version from older online version`() {
-        entitiesRepository.save(Entity("songs", "noah", "Noah", 3))
-        val csv =
-            createEntityList(Entity("songs", "noah", "Noah", 2, listOf(Pair("length", "6:38"))))
+        entitiesRepository.save(Entity.New("songs", "noah", "Noa", 1))
+        val csv = createEntityList(Entity.New("songs", "noah", "Noah", 2))
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
-            containsInAnyOrder(Entity("songs", "noah", "Noah", 3, state = ONLINE))
+            containsInAnyOrder(Entity.Saved("songs", "noah", "Noah", 2, state = ONLINE))
+        )
+    }
+
+    @Test
+    fun `updateLocalEntitiesFromServer does not override offline version if the online version is older`() {
+        entitiesRepository.save(Entity.New("songs", "noah", "Noah", 2))
+        val csv = createEntityList(Entity.New("songs", "noah", "Noa", 1))
+
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
+        val songs = entitiesRepository.getEntities("songs")
+        assertThat(
+            songs,
+            containsInAnyOrder(Entity.Saved("songs", "noah", "Noah", 2, state = ONLINE))
+        )
+    }
+
+    @Test
+    fun `updateLocalEntitiesFromServer does not override offline version if the online version is the same`() {
+        entitiesRepository.save(Entity.New("songs", "noah", "Noah", 2))
+        val csv = createEntityList(Entity.New("songs", "noah", "Noa", 2))
+
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
+        val songs = entitiesRepository.getEntities("songs")
+        assertThat(
+            songs,
+            containsInAnyOrder(Entity.Saved("songs", "noah", "Noah", 2, state = ONLINE))
+        )
+    }
+
+    @Test
+    fun `updateLocalEntitiesFromServer ignores properties not in offline version from older online version`() {
+        entitiesRepository.save(Entity.New("songs", "noah", "Noah", 3))
+        val csv =
+            createEntityList(Entity.New("songs", "noah", "Noah", 2, listOf(Pair("length", "6:38"))))
+
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
+        val songs = entitiesRepository.getEntities("songs")
+        assertThat(
+            songs,
+            containsInAnyOrder(Entity.Saved("songs", "noah", "Noah", 3, state = ONLINE))
         )
     }
 
     @Test
     fun `updateLocalEntitiesFromServer overrides properties in offline version from newer list version`() {
-        entitiesRepository.save(Entity("songs", "noah", "Noah", 1, listOf(Pair("length", "6:38"))))
+        entitiesRepository.save(
+            Entity.New("songs", "noah", "Noah", 1, listOf(Pair("length", "6:38")))
+        )
         val csv =
-            createEntityList(Entity("songs", "noah", "Noah", 2, listOf(Pair("length", "4:58"))))
+            createEntityList(Entity.New("songs", "noah", "Noah", 2, listOf(Pair("length", "4:58"))))
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
             containsInAnyOrder(
-                Entity(
+                Entity.Saved(
                     "songs",
                     "noah",
                     "Noah",
@@ -167,13 +178,13 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromServer adds online entity when its label is blank`() {
-        val csv = createEntityList(Entity("songs", "cathedrals", label = ""))
+        val csv = createEntityList(Entity.New("songs", "cathedrals", label = ""))
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
-            containsInAnyOrder(Entity("songs", "cathedrals", label = "", state = ONLINE))
+            containsInAnyOrder(Entity.Saved("songs", "cathedrals", label = "", state = ONLINE))
         )
     }
 
@@ -188,8 +199,8 @@ class LocalEntityUseCasesTest {
     @Test
     fun `updateLocalEntitiesFromServer accesses entities repo only twice when saving multiple entities`() {
         val csv = createEntityList(
-            Entity("songs", "noah", "Noah"),
-            Entity("songs", "seven-trumpets", "Seven Trumpets")
+            Entity.New("songs", "noah", "Noah"),
+            Entity.New("songs", "seven-trumpets", "Seven Trumpets")
         )
 
         val entitiesRepository = MeasurableEntitiesRepository(entitiesRepository)
@@ -199,40 +210,40 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromServer does not remove offline entities that are not in online entities`() {
-        entitiesRepository.save(Entity("songs", "noah", "Noah"))
-        val csv = createEntityList(Entity("songs", "cathedrals", "Cathedrals"))
+        entitiesRepository.save(Entity.New("songs", "noah", "Noah"))
+        val csv = createEntityList(Entity.New("songs", "cathedrals", "Cathedrals"))
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(
             songs,
             containsInAnyOrder(
-                Entity("songs", "cathedrals", "Cathedrals", state = ONLINE),
-                Entity("songs", "noah", "Noah")
+                Entity.Saved("songs", "cathedrals", "Cathedrals", state = ONLINE),
+                Entity.Saved("songs", "noah", "Noah")
             )
         )
     }
 
     @Test
     fun `updateLocalEntitiesFromServer removes offline entity that was in online list, but isn't any longer`() {
-        entitiesRepository.save(Entity("songs", "cathedrals", "Cathedrals"))
+        entitiesRepository.save(Entity.New("songs", "cathedrals", "Cathedrals"))
 
-        val firstCsv = createEntityList(Entity("songs", "cathedrals", "Cathedrals"))
+        val firstCsv = createEntityList(Entity.New("songs", "cathedrals", "Cathedrals"))
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", firstCsv, entitiesRepository)
 
-        val secondCsv = createEntityList(Entity("songs", "noah", "Noah"))
+        val secondCsv = createEntityList(Entity.New("songs", "noah", "Noah"))
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", secondCsv, entitiesRepository)
 
         val songs = entitiesRepository.getEntities("songs")
-        assertThat(songs, containsInAnyOrder(Entity("songs", "noah", "Noah", state = ONLINE)))
+        assertThat(songs, containsInAnyOrder(Entity.Saved("songs", "noah", "Noah", state = ONLINE)))
     }
 
     @Test
     fun `updateLocalEntitiesFromServer removes offline entity that was updated in online list, but isn't any longer`() {
-        entitiesRepository.save(Entity("songs", "cathedrals", "Cathedrals", version = 1))
+        entitiesRepository.save(Entity.New("songs", "cathedrals", "Cathedrals", version = 1))
 
         val firstCsv =
-            createEntityList(Entity("songs", "cathedrals", "Cathedrals (A Song)", version = 2))
+            createEntityList(Entity.New("songs", "cathedrals", "Cathedrals (A Song)", version = 2))
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", firstCsv, entitiesRepository)
 
         val secondCsv = createEntityList()
@@ -301,7 +312,7 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         return wrapped.getLists()
     }
 
-    override fun getEntities(list: String): List<Entity> {
+    override fun getEntities(list: String): List<Entity.Saved> {
         accesses += 1
         return wrapped.getEntities(list)
     }

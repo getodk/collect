@@ -15,7 +15,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         return readJson().keys
     }
 
-    override fun getEntities(list: String): List<Entity> {
+    override fun getEntities(list: String): List<Entity.Saved> {
         return readEntities().filter { it.list == list }
     }
 
@@ -35,7 +35,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
 
                 entityList.remove(existing)
                 entityList.add(
-                    Entity(
+                    Entity.New(
                         entity.list,
                         entity.id,
                         entity.label ?: existing.label,
@@ -72,7 +72,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         writeEntities(existing)
     }
 
-    private fun writeEntities(entities: MutableList<Entity>) {
+    private fun writeEntities(entities: MutableList<Entity.Saved>) {
         val map = mutableMapOf<String, MutableList<JsonEntity>>()
         entities.forEach {
             map.getOrPut(it.list) { mutableListOf() }.add(it.toJson())
@@ -81,7 +81,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         writeJson(map)
     }
 
-    private fun readEntities(): MutableList<Entity> {
+    private fun readEntities(): MutableList<Entity.Saved> {
         return readJson().entries.flatMap { (list, entities) ->
             entities.map { it.toEntity(list) }
         }.toMutableList()
@@ -146,14 +146,14 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         val offline: Boolean
     )
 
-    private fun JsonEntity.toEntity(list: String): Entity {
+    private fun JsonEntity.toEntity(list: String): Entity.Saved {
         val state = if (this.offline) {
             Entity.State.OFFLINE
         } else {
             Entity.State.ONLINE
         }
 
-        return Entity(
+        return Entity.Saved(
             list,
             this.id,
             this.label,
