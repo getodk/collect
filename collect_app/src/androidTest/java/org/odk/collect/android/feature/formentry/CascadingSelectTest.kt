@@ -15,7 +15,7 @@ class CascadingSelectTest {
     @get:Rule
     var copyFormChain: RuleChain = chain().around(rule)
 
-    @Test
+    @Test // This was for a bug but the original issue is missing
     fun cascadingSelect_withACSVFileWithColumnNamesStartingWithNumbers_shouldWorkCorrectly() {
         rule.startAtMainMenu()
             .copyForm("numberInCSV.xml", listOf("itemSets.csv"))
