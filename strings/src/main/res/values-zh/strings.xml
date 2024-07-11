@@ -937,8 +937,7 @@
   <!--Text for button that deletes all entities for the project-->
   <string name="clear_entities">全部清除</string>
   <!--Text for button that adds a new entity list-->
-  <string name="add_entity_list">新增实体列表</string>
-  <!--Label for entity that has been created offline and is not on the server yet-->
+    <!--Label for entity that has been created offline and is not on the server yet-->
   <string name="offline">离线</string>
   <!--##############################################
     # Crash handling

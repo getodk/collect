@@ -6,6 +6,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
+import org.odk.collect.android.support.StubOpenRosaServer.MediaFileItem
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -27,7 +28,7 @@ class EntityFormTest {
         testDependencies.server.addForm("one-question-entity-registration.xml")
         testDependencies.server.addForm(
             "one-question-entity-update.xml",
-            listOf(EntityListItem("people.csv"))
+            listOf(MediaFileItem("people.csv"))
         )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
@@ -51,7 +52,7 @@ class EntityFormTest {
         )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .setupEntities("people")
+            .enableLocalEntitiesInForms()
 
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
@@ -71,7 +72,7 @@ class EntityFormTest {
         )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .setupEntities("people")
+            .enableLocalEntitiesInForms()
 
             .startBlankForm("One Question Entity Update") // Open to create cached form def
             .pressBackAndDiscardForm()
@@ -93,7 +94,7 @@ class EntityFormTest {
         )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .setupEntities("people")
+            .enableLocalEntitiesInForms()
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
@@ -124,7 +125,6 @@ class EntityFormTest {
 
         rule.withProject(testDependencies.server)
             .enableLocalEntitiesInForms()
-            .addEntityListInBrowser("people")
 
             .clickGetBlankForm()
             .clickClearAll()

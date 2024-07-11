@@ -36,11 +36,4 @@ class EntitiesViewModel(
             _lists.postValue(entitiesRepository.getLists().toList())
         }
     }
-
-    fun addEntityList(name: String) {
-        scheduler.immediate {
-            entitiesRepository.addList(name)
-            _lists.postValue(entitiesRepository.getLists().toList())
-        }
-    }
 }

@@ -275,8 +275,15 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
                     mediaFileHash = Md5.getMd5Hash(getResourceAsStream("media/" + mediaFile.getFile()));
                 }
 
+                if (mediaFile instanceof EntityListItem) {
+                    stringBuilder
+                            .append("<mediaFile type=\"entityList\">");
+                } else {
+                    stringBuilder
+                            .append("<mediaFile>");
+                }
+
                 stringBuilder
-                        .append("<mediaFile>")
                         .append("<filename>" + mediaFile.getName() + "</filename>\n");
 
                 if (noHashPrefixInMediaFiles) {

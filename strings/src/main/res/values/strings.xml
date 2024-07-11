@@ -1148,7 +1148,7 @@
     ##############################################
 
     <!-- An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project. -->
-    <string name="entities_title">Entities</string>
+    <string name="entities_title">Entity lists</string>
 
     <!-- Title for setting that controls whether local entity features are enabled or not -->
     <string name="include_local_entities_setting">Enable local entities</string>
@@ -1160,9 +1160,6 @@
 
     <!-- Text for button that deletes all entities for the project -->
     <string name="clear_entities">Clear all</string>
-
-    <!-- Text for button that adds a new entity list -->
-    <string name="add_entity_list">Add entity list</string>
 
     <!-- Label for entity that has been created offline and is not on the server yet -->
     <string name="offline">Offline</string>
