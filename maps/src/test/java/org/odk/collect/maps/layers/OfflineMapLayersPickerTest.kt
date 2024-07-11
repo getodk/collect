@@ -793,6 +793,30 @@ class OfflineMapLayersPickerTest {
         onView(withId(R.id.layers)).check(matches(isDisplayed()))
     }
 
+    @Test
+    fun `the confirmation dialog is dismissed o activity recreation`() {
+        val scenario = launchFragment()
+
+        uris.add(Uri.parse("blah"))
+        Interactions.clickOn(withText(string.add_layer))
+
+        scenario.onFragment {
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
+                instanceOf(OfflineMapLayersImporter::class.java)
+            )
+        }
+
+        scenario.recreate()
+
+        scenario.onFragment {
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
+                equalTo(null)
+            )
+        }
+    }
+
     private fun assertLayerCollapsed(position: Int) {
         onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.arrow)).check(
             matches(
@@ -823,30 +847,6 @@ class OfflineMapLayersPickerTest {
         onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.delete_layer)).check(
             matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))
         )
-    }
-
-    @Test
-    fun `the confirmation dialog is dismissed o activity recreation`() {
-        val scenario = launchFragment()
-
-        uris.add(Uri.parse("blah"))
-        Interactions.clickOn(withText(string.add_layer))
-
-        scenario.onFragment {
-            assertThat(
-                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
-                instanceOf(OfflineMapLayersImporter::class.java)
-            )
-        }
-
-        scenario.recreate()
-
-        scenario.onFragment {
-            assertThat(
-                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
-                equalTo(null)
-            )
-        }
     }
 
     private fun launchFragment(): FragmentScenario<OfflineMapLayersPicker> {
