@@ -345,14 +345,6 @@ workflows:
   commit:
     jobs:
       - compile
-      - create_dependency_backup:
-          requires:
-            - compile
-          filters:
-            tags:
-              only: /^v((20)[0-9]{2})\.\d+\.\d+$/ # matches semvers like v1.2.3
-            branches:
-              ignore: /.*/
       - check_quality:
           requires:
             - compile
@@ -393,3 +385,16 @@ workflows:
       - test_instrumented:
           requires:
             - compile
+
+  release:
+    jobs:
+      - compile:
+          filters:
+            tags:
+              only: /^v((20)[0-9]{2})\.\d+\.\d+$/ # matches semvers like v1.2.3
+            branches:
+              ignore: /.*/
+      - create_dependency_backup:
+          requires:
+            - compile
+
