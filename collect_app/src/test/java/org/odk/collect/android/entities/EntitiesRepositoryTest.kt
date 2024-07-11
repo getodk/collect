@@ -320,4 +320,43 @@ abstract class EntitiesRepositoryTest {
         assertThat(wines[1].index, equalTo(1))
         assertThat(wines[2].index, equalTo(2))
     }
+
+    @Test
+    fun `#getAllById returns entities with matching id`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("wines", "1", "Léoville Barton 2008")
+        val canet = Entity.New("wines", "2", "Pontet-Canet 2014")
+        repository.save(leoville, canet)
+
+        val wines = repository.getEntities("wines")
+
+        val queriedLeoville = repository.getById("wines", "1")
+        assertThat(queriedLeoville, equalTo(wines.first { it.id == "1" }))
+
+        val queriedCanet = repository.getById("wines", "2")
+        assertThat(queriedCanet, equalTo(wines.first { it.id == "2" }))
+    }
+
+    @Test
+    fun `#getAllById returns null when there are no matches`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("wines", "1", "Léoville Barton 2008")
+        val canet = Entity.New("wines", "2", "Pontet-Canet 2014")
+        repository.save(leoville, canet)
+
+        assertThat(repository.getById("wines", "3"), equalTo(null))
+    }
+
+    @Test
+    fun `#getAllById returns null when there is a match in a different list`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("wines", "1", "Léoville Barton 2008")
+        val ardbeg = Entity.New("whisky", "2", "Ardbeg 10")
+        repository.save(leoville, ardbeg)
+
+        assertThat(repository.getById("whisky", "1"), equalTo(null))
+    }
 }

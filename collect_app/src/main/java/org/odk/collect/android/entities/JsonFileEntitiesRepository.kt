@@ -82,6 +82,10 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         writeEntities(existing)
     }
 
+    override fun getById(list: String, id: String): Entity.Saved? {
+        return getEntities(list).firstOrNull { it.id == id }
+    }
+
     private fun writeEntities(entities: List<Entity.New>) {
         val map = mutableMapOf<String, MutableList<JsonEntity>>()
         entities.forEach {
