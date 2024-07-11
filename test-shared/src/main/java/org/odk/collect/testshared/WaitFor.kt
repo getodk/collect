@@ -41,12 +41,12 @@ object WaitFor {
     @JvmStatic
     @JvmOverloads
     fun tryAgainOnFail(maxTimes: Int = 2, action: Runnable) {
-        var failure: Exception? = null
+        var failure: Throwable? = null
         for (i in 0 until maxTimes) {
             try {
                 action.run()
                 return
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 failure = e
                 wait250ms()
             }

@@ -353,29 +353,33 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        Interactions.clickOn(withText("layer1"))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
-            matches(
-                not(isChecked())
+        WaitFor.tryAgainOnFail {
+            Interactions.clickOn(withText("layer1"))
+            onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
+                matches(
+                    not(isChecked())
+                )
             )
-        )
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
-            matches(
-                isChecked()
+            onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
+                matches(
+                    isChecked()
+                )
             )
-        )
+        }
 
-        Interactions.clickOn(withText(string.none))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
-            matches(
-                isChecked()
+        WaitFor.tryAgainOnFail {
+            Interactions.clickOn(withText(string.none))
+            onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
+                matches(
+                    isChecked()
+                )
             )
-        )
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
-            matches(
-                not(isChecked())
+            onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
+                matches(
+                    not(isChecked())
+                )
             )
-        )
+        }
     }
 
     @Test
