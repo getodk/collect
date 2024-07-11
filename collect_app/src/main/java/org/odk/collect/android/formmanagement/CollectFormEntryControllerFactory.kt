@@ -25,6 +25,7 @@ class CollectFormEntryControllerFactory :
         val projectId = projectsDataService.getCurrentProject().uuid
 
         return FormEntryController(FormEntryModel(formDef)).also {
+            it.addFunctionHandler(ExternalDataHandlerPull(externalDataManager))
             it.addFilterStrategy(LocalEntitiesFilterStrategy(Collect.getInstance().component.entitiesRepositoryProvider().create(projectId)))
             it.addPostProcessor(EntityFormFinalizationProcessor())
         }
