@@ -71,7 +71,9 @@ public class RequiredQuestionTest {
                 .clickOptionsIcon()
                 .clickOnString(org.odk.collect.strings.R.string.validate)
                 .assertConstraintDisplayed("Custom required message")
-                .assertQuestion("Foo", true);
+                // Make sure both questions are still displayed on the same screen
+                .assertQuestion("Foo", true)
+                .assertQuestion("Bar", true);
     }
 
     @Test
