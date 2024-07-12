@@ -21,6 +21,10 @@ class LocalEntitiesFilterStrategy(private val entitiesRepository: EntitiesReposi
         evaluationContext: EvaluationContext,
         next: Supplier<MutableList<TreeReference>>
     ): List<TreeReference> {
+        if (!entitiesRepository.getLists().contains(sourceInstance.instanceId)) {
+            return next.get()
+        }
+
         val candidate = CompareToNodeExpression.parse(predicate)
 
         return when (val original = candidate?.original) {
