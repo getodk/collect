@@ -26,13 +26,13 @@ class SavepointsImporterTest {
     private val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Context>() as Application)
 
     private val projectsRepository = component.projectsRepository()
-    private val projectDependencyProviderFactory = component.projectDependencyModuleFactory()
+    private val projectDependencyModuleFactory = component.projectDependencyModuleFactory()
 
     private val savepointsImporter =
-        SavepointsImporter(projectsRepository, projectDependencyProviderFactory)
+        SavepointsImporter(projectsRepository, projectDependencyModuleFactory)
 
     private val project = projectsRepository.save(Project.DEMO_PROJECT)
-    private val projectDependencyModule = projectDependencyProviderFactory.create(project.uuid)
+    private val projectDependencyModule = projectDependencyModuleFactory.create(project.uuid)
     private val savepointsRepository = projectDependencyModule.savepointsRepository
     private val storagePathProvider = component.storagePathProvider()
     private val formsRepository = projectDependencyModule.formsRepository
