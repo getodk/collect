@@ -134,7 +134,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         }
 
         Stream<Instance> instancesToDelete = instanceIds.stream()
-                .map(id -> new InstancesRepositoryProvider(Collect.getInstance()).get().get(Long.parseLong(id)))
+                .map(id -> new InstancesRepositoryProvider(Collect.getInstance()).create().get(Long.parseLong(id)))
                 .filter(instance -> instance.getStatus().equals(Instance.STATUS_SUBMITTED))
                 .filter(instance -> InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, isFormAutoDeleteOptionEnabled, instance));
 

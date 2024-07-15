@@ -82,7 +82,7 @@ class FormUriActivityTest {
 
     private val savepointsRepository = InMemSavepointsRepository()
     private val savepointsRepositoryProvider = mock<SavepointsRepositoryProvider>().apply {
-        whenever(get()).thenReturn(savepointsRepository)
+        whenever(create()).thenReturn(savepointsRepository)
     }
 
     @get:Rule
@@ -114,7 +114,7 @@ class FormUriActivityTest {
 
             override fun providesFormsRepositoryProvider(application: Application): FormsRepositoryProvider {
                 return mock<FormsRepositoryProvider>().apply {
-                    whenever(get()).thenReturn(formsRepository)
+                    whenever(create()).thenReturn(formsRepository)
                 }
             }
 
@@ -123,7 +123,7 @@ class FormUriActivityTest {
                 storagePathProvider: StoragePathProvider
             ): InstancesRepositoryProvider {
                 return mock<InstancesRepositoryProvider>().apply {
-                    whenever(get()).thenReturn(instancesRepository)
+                    whenever(create()).thenReturn(instancesRepository)
                 }
             }
 

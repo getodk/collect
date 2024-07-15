@@ -62,7 +62,6 @@ import org.odk.collect.android.preferences.screens.ProjectPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
 import org.odk.collect.android.projects.ManualProjectCreatorDialog;
-import org.odk.collect.android.projects.ProjectDependencyProviderFactory;
 import org.odk.collect.android.projects.ProjectResetter;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.projects.ProjectsDataService;
@@ -307,7 +306,7 @@ public interface AppDependencyComponent {
 
     FormsDataService formsDataService();
 
-    ProjectDependencyProviderFactory projectDependencyProviderFactory();
+    ProjectDependencyModuleFactory projectDependencyModuleFactory();
 
     ExternalWebPageHelper externalWebPageHelper();
 }

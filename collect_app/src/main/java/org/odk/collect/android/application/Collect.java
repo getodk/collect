@@ -252,7 +252,7 @@ public class Collect extends Application implements
      * @return md5 hash of the form title, a space, the form ID
      */
     public static String getFormIdentifierHash(String formId, String formVersion) {
-        Form form = new FormsRepositoryProvider(Collect.getInstance()).get().getLatestByFormIdAndVersion(formId, formVersion);
+        Form form = new FormsRepositoryProvider(Collect.getInstance()).create().getLatestByFormIdAndVersion(formId, formVersion);
 
         String formTitle = form != null ? form.getDisplayName() : "";
 
@@ -335,7 +335,7 @@ public class Collect extends Application implements
                         @Override
                         public EntitiesRepository providesEntitiesRepository() {
                             String projectId = applicationComponent.currentProjectProvider().getCurrentProject().getUuid();
-                            return applicationComponent.entitiesRepositoryProvider().get(projectId);
+                            return applicationComponent.entitiesRepositoryProvider().create(projectId);
                         }
 
                         @NonNull

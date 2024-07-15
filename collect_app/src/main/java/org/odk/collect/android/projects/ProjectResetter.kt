@@ -74,7 +74,7 @@ class ProjectResetter(
     }
 
     private fun resetForms() {
-        formsRepositoryProvider.get().deleteAll()
+        formsRepositoryProvider.create().deleteAll()
 
         File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA) + File.separator + ItemsetDbAdapter.DATABASE_NAME).delete()
 
@@ -90,7 +90,7 @@ class ProjectResetter(
     }
 
     private fun resetCache() {
-        savepointsRepositoryProvider.get().deleteAll()
+        savepointsRepositoryProvider.create().deleteAll()
         if (!deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE))) {
             failedResetActions.add(ResetAction.RESET_CACHE)
         }

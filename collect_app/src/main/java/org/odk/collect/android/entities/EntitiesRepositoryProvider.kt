@@ -1,17 +1,15 @@
 package org.odk.collect.android.entities
 
-import org.odk.collect.android.projects.ProjectsDataService
-import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.storage.StoragePaths
 import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.projects.ProjectDependencyFactory
 import java.io.File
 
-class EntitiesRepositoryProvider(
-    private val projectsDataService: ProjectsDataService,
-    private val storagePathProvider: StoragePathProvider
-) {
+class EntitiesRepositoryProvider(private val storagePathFactory: ProjectDependencyFactory<StoragePaths>) :
+    ProjectDependencyFactory<EntitiesRepository> {
 
-    fun get(projectId: String = projectsDataService.getCurrentProject().uuid): EntitiesRepository {
-        val projectDir = File(storagePathProvider.getProjectRootDirPath(projectId))
+    override fun create(projectId: String): EntitiesRepository {
+        val projectDir = File(storagePathFactory.create(projectId).rootDir)
         return JsonFileEntitiesRepository(projectDir)
     }
 }

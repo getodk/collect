@@ -1,48 +1,54 @@
 package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.notifications.Notifier
-import org.odk.collect.android.projects.ProjectDependencyProvider
-import org.odk.collect.android.projects.ProjectDependencyProviderFactory
+import org.odk.collect.android.projects.ProjectDependencyModule
+import org.odk.collect.android.state.DataKeys
 import org.odk.collect.androidshared.data.AppState
+import org.odk.collect.androidshared.data.getData
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
+import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
 import java.io.File
 import java.util.function.Supplier
 import java.util.stream.Collectors
 
 class FormsDataService(
-    private val appState: AppState,
+    appState: AppState,
     private val notifier: Notifier,
-    private val projectDependencyProviderFactory: ProjectDependencyProviderFactory,
+    private val projectDependencyModuleFactory: ProjectDependencyFactory<ProjectDependencyModule>,
     private val clock: Supplier<Long>
 ) {
 
+    private val forms = appState.getData(DataKeys.FORMS, emptyList<Form>())
+    private val syncing = appState.getData(DataKeys.SYNC_STATUS_SYNCING, false)
+    private val serverError = appState.getData<FormSourceException?>(DataKeys.SYNC_STATUS_ERROR, null)
+    private val diskError = appState.getData<String?>(DataKeys.DISK_ERROR, null)
+
     fun getForms(projectId: String): Flow<List<Form>> {
-        return getFormsFlow(projectId)
+        return forms.get(projectId)
     }
 
     fun isSyncing(projectId: String): LiveData<Boolean> {
-        return getSyncingLiveData(projectId)
+        return syncing.get(projectId).asLiveData()
     }
 
     fun getServerError(projectId: String): LiveData<FormSourceException?> {
-        return getServerErrorLiveData(projectId)
+        return serverError.get(projectId).asLiveData()
     }
 
     fun getDiskError(projectId: String): LiveData<String?> {
-        return getDiskErrorLiveData(projectId)
+        return diskError.get(projectId).asLiveData()
     }
 
     fun clear(projectId: String) {
-        getServerErrorLiveData(projectId).value = null
+        serverError.set(projectId, null)
     }
 
     fun downloadForms(
@@ -51,13 +57,13 @@ class FormsDataService(
         progressReporter: (Int, Int) -> Unit,
         isCancelled: () -> Boolean
     ): Map<ServerFormDetails, FormDownloadException?> {
-        val projectDependencyProvider = projectDependencyProviderFactory.create(projectId)
+        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
         val formDownloader =
-            formDownloader(projectDependencyProvider, clock)
+            formDownloader(projectDependencyModule, clock)
 
         return ServerFormUseCases.downloadForms(
             forms,
-            projectDependencyProvider.formsLock,
+            projectDependencyModule.formsLock,
             formDownloader,
             progressReporter,
             isCancelled
@@ -69,7 +75,7 @@ class FormsDataService(
      * disabled the user will just be notified that there are updates available.
      */
     fun downloadUpdates(projectId: String) {
-        val projectDependencies = projectDependencyProviderFactory.create(projectId)
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
         projectDependencies.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
                 syncWithStorage(projectId)
@@ -111,7 +117,7 @@ class FormsDataService(
      */
     @JvmOverloads
     fun matchFormsWithServer(projectId: String, notify: Boolean = true): Boolean {
-        val projectDependencies = projectDependencyProviderFactory.create(projectId)
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
         return projectDependencies.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
                 startSync(projectId)
@@ -152,7 +158,7 @@ class FormsDataService(
     }
 
     fun deleteForm(projectId: String, formId: Long) {
-        val projectDependencies = projectDependencyProviderFactory.create(projectId)
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
         LocalFormUseCases.deleteForm(
             projectDependencies.formsRepository,
             projectDependencies.instancesRepository,
@@ -162,7 +168,7 @@ class FormsDataService(
     }
 
     fun update(projectId: String) {
-        val projectDependencies = projectDependencyProviderFactory.create(projectId)
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
         projectDependencies.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
                 startSync(projectId)
@@ -174,69 +180,50 @@ class FormsDataService(
     }
 
     private fun syncWithStorage(projectId: String) {
-        val projectDependencies = projectDependencyProviderFactory.create(projectId)
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
         val error = LocalFormUseCases.synchronizeWithDisk(
             projectDependencies.formsRepository,
             projectDependencies.formsDir
         )
 
-        getDiskErrorLiveData(projectId).postValue(error)
+        diskError.set(projectId, error)
     }
 
     private fun startSync(projectId: String) {
-        getSyncingLiveData(projectId).postValue(true)
+        syncing.set(projectId, true)
     }
 
     private fun finishSync(projectId: String, exception: FormSourceException? = null) {
-        getServerErrorLiveData(projectId).postValue(exception)
-        getSyncingLiveData(projectId).postValue(false)
+        serverError.set(projectId, exception)
+        syncing.set(projectId, false)
     }
 
     private fun syncWithDb(projectId: String) {
-        val projectDependencies = projectDependencyProviderFactory.create(projectId)
-        getFormsFlow(projectId).value = projectDependencies.formsRepository.all
-    }
-
-    private fun getFormsFlow(projectId: String): MutableStateFlow<List<Form>> {
-        return appState.get("forms:$projectId", MutableStateFlow(emptyList()))
-    }
-
-    private fun getSyncingLiveData(projectId: String) =
-        appState.get("$KEY_PREFIX_SYNCING:$projectId", MutableLiveData(false))
-
-    private fun getServerErrorLiveData(projectId: String) =
-        appState.get("$KEY_PREFIX_ERROR:$projectId", MutableLiveData<FormSourceException>(null))
-
-    private fun getDiskErrorLiveData(projectId: String): MutableLiveData<String?> =
-        appState.get("$KEY_PREFIX_DISK_ERROR:$projectId", MutableLiveData<String?>(null))
-
-    companion object {
-        const val KEY_PREFIX_SYNCING = "syncStatusSyncing"
-        const val KEY_PREFIX_ERROR = "syncStatusError"
-        const val KEY_PREFIX_DISK_ERROR = "diskError"
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
+        forms.set(projectId, projectDependencies.formsRepository.all)
     }
 }
 
 private fun formDownloader(
-    projectDependencyProvider: ProjectDependencyProvider,
+    projectDependencyModule: ProjectDependencyModule,
     clock: Supplier<Long>
 ): ServerFormDownloader {
     return ServerFormDownloader(
-        projectDependencyProvider.formSource,
-        projectDependencyProvider.formsRepository,
-        File(projectDependencyProvider.cacheDir),
-        projectDependencyProvider.formsDir,
+        projectDependencyModule.formSource,
+        projectDependencyModule.formsRepository,
+        File(projectDependencyModule.cacheDir),
+        projectDependencyModule.formsDir,
         FormMetadataParser(),
         clock,
-        projectDependencyProvider.entitiesRepository
+        projectDependencyModule.entitiesRepository
     )
 }
 
 private fun serverFormsDetailsFetcher(
-    projectDependencyProvider: ProjectDependencyProvider
+    projectDependencyModule: ProjectDependencyModule
 ): ServerFormsDetailsFetcher {
     return ServerFormsDetailsFetcher(
-        projectDependencyProvider.formsRepository,
-        projectDependencyProvider.formSource
+        projectDependencyModule.formsRepository,
+        projectDependencyModule.formSource
     )
 }

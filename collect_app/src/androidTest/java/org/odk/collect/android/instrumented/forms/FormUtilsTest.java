@@ -56,7 +56,7 @@ public class FormUtilsTest {
     @Test
     public void sessionRootTranslatorOrderDoesNotMatter() throws Exception {
         final String formPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + BASIC_FORM;
-        final Form form = new FormsRepositoryProvider(ApplicationProvider.getApplicationContext()).get().getOneByPath(formPath);
+        final Form form = new FormsRepositoryProvider(ApplicationProvider.getApplicationContext()).create().getOneByPath(formPath);
         final Uri formUri = FormsContract.getUri("DEMO", form.getDbId());
 
         // Load the form in order to populate the ReferenceManager

@@ -1,7 +1,5 @@
 package org.odk.collect.android.instancemanagement
 
-import android.app.Application
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -15,55 +13,45 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.openrosa.HttpGetResult
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface
-import org.odk.collect.android.projects.ProjectDependencyProviderFactory
-import org.odk.collect.android.utilities.ChangeLockProvider
-import org.odk.collect.android.utilities.FormsRepositoryProvider
-import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.android.projects.ProjectDependencyModule
+import org.odk.collect.android.utilities.ChangeLocks
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.instances.Instance.STATUS_COMPLETE
 import org.odk.collect.formstest.FormFixtures
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceFixtures
-import org.odk.collect.projects.Project
-import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.settings.InMemSettings
 import org.odk.collect.testshared.BooleanChangeLock
 
 @RunWith(AndroidJUnit4::class)
 class InstancesDataServiceTest {
 
-    private val application = ApplicationProvider.getApplicationContext<Application>()
-
-    val project = Project.Saved("1", "Test", "T", "#000000")
-
-    private val formsRepositoryProvider = mock<FormsRepositoryProvider>().apply {
-        whenever(get(project.uuid)).thenReturn(InMemFormsRepository())
+    private val settings = InMemSettings().also {
+        it.save(ProjectKeys.KEY_SERVER_URL, "http://example.com")
     }
 
-    private val instancesRepositoryProvider = mock<InstancesRepositoryProvider>().apply {
-        whenever(get(project.uuid)).thenReturn(InMemInstancesRepository())
+    private val changeLocks = ChangeLocks(BooleanChangeLock(), BooleanChangeLock())
+    private val formsRepository = InMemFormsRepository()
+    private val instancesRepository = InMemInstancesRepository()
+
+    private val projectsDependencyModuleFactory = ProjectDependencyFactory {
+        ProjectDependencyModule(
+            it,
+            { settings },
+            { formsRepository },
+            { instancesRepository },
+            mock(),
+            { changeLocks },
+            mock(),
+            mock(),
+            mock()
+        )
     }
 
-    private val changeLockProvider = ChangeLockProvider { BooleanChangeLock() }
-
-    val settingsProvider = InMemSettingsProvider().also {
-        it.getUnprotectedSettings(project.uuid)
-            .save(ProjectKeys.KEY_SERVER_URL, "http://example.com")
-    }
-
-    private val projectsDependencyProviderFactory = ProjectDependencyProviderFactory(
-        settingsProvider,
-        formsRepositoryProvider,
-        instancesRepositoryProvider,
-        mock(),
-        changeLockProvider,
-        mock(),
-        mock(),
-        mock()
-    )
-
-    private val projectDependencyProvider = projectsDependencyProviderFactory.create(project.uuid)
+    private val projectDependencyModule = projectsDependencyModuleFactory.create("blah")
     private val httpInterface = mock<OpenRosaHttpInterface>()
     private val notifier = mock<Notifier>()
 
@@ -71,7 +59,7 @@ class InstancesDataServiceTest {
         InstancesDataService(
             AppState(),
             mock(),
-            projectsDependencyProviderFactory,
+            projectsDependencyModuleFactory,
             notifier,
             mock(),
             httpInterface,
@@ -80,41 +68,41 @@ class InstancesDataServiceTest {
 
     @Test
     fun `instances should not be deleted if the instances database is locked`() {
-        (projectDependencyProvider.instancesLock as BooleanChangeLock).lock()
-        val result = instancesDataService.deleteInstances(project.uuid, longArrayOf(1))
+        (projectDependencyModule.instancesLock as BooleanChangeLock).lock()
+        val result = instancesDataService.deleteInstances("projectId", longArrayOf(1))
         assertThat(result, equalTo(false))
     }
 
     @Test
     fun `instances should be deleted if the instances database is not locked`() {
-        val result = instancesDataService.deleteInstances(project.uuid, longArrayOf(1))
+        val result = instancesDataService.deleteInstances("projectId", longArrayOf(1))
         assertThat(result, equalTo(true))
     }
 
     @Test
     fun `sendInstances() returns true when there are no instances to send`() {
-        val result = instancesDataService.sendInstances(project.uuid)
+        val result = instancesDataService.sendInstances("projectId")
         assertThat(result, equalTo(true))
     }
 
     @Test
     fun `sendInstances() does not notify when there are no instances to send`() {
-        instancesDataService.sendInstances(project.uuid)
+        instancesDataService.sendInstances("projectId")
         verifyNoInteractions(notifier)
     }
 
     @Test
     fun `sendInstances() returns false when an instance fails to send`() {
-        val formsRepository = projectDependencyProvider.formsRepository
+        val formsRepository = projectDependencyModule.formsRepository
         val form = formsRepository.save(FormFixtures.form())
 
-        val instancesRepository = projectDependencyProvider.instancesRepository
+        val instancesRepository = projectDependencyModule.instancesRepository
         instancesRepository.save(InstanceFixtures.instance(form = form, status = STATUS_COMPLETE))
 
         whenever(httpInterface.executeGetRequest(any(), any(), any()))
             .doReturn(HttpGetResult(null, emptyMap(), "", 500))
 
-        val result = instancesDataService.sendInstances(project.uuid)
+        val result = instancesDataService.sendInstances("projectId")
         assertThat(result, equalTo(false))
     }
 }

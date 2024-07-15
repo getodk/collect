@@ -69,7 +69,7 @@ public class FormLoaderTaskTest {
     @Test
     public void loadSearchFromExternalCSVmultipleTimes() throws Exception {
         final String formPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM;
-        final Form form = new FormsRepositoryProvider(ApplicationProvider.getApplicationContext()).get().getOneByPath(formPath);
+        final Form form = new FormsRepositoryProvider(ApplicationProvider.getApplicationContext()).create().getOneByPath(formPath);
         final Uri formUri = FormsContract.getUri("DEMO", form.getDbId());
 
         // initial load with side effects
