@@ -306,7 +306,7 @@ public interface AppDependencyComponent {
 
     FormsDataService formsDataService();
 
-    ProjectDependencyModuleFactory projectDependencyProviderFactory();
+    ProjectDependencyModuleFactory projectDependencyModuleFactory();
 
     ExternalWebPageHelper externalWebPageHelper();
 }

@@ -52,8 +52,8 @@ class InstancesDataService(
     }
 
     fun update(projectId: String) {
-        val projectDependencyProvider = projectDependencyModuleFactory.create(projectId)
-        val instancesRepository = projectDependencyProvider.instancesRepository
+        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
+        val instancesRepository = projectDependencyModule.instancesRepository
 
         val sendableInstances = instancesRepository.getCountByStatus(
             Instance.STATUS_COMPLETE,
@@ -154,11 +154,11 @@ class InstancesDataService(
     }
 
     fun deleteInstances(projectId: String, instanceIds: LongArray): Boolean {
-        val projectDependencyProvider = projectDependencyModuleFactory.create(projectId)
-        val instancesRepository = projectDependencyProvider.instancesRepository
-        val formsRepository = projectDependencyProvider.formsRepository
+        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
+        val instancesRepository = projectDependencyModule.instancesRepository
+        val formsRepository = projectDependencyModule.formsRepository
 
-        return projectDependencyProvider.instancesLock.withLock { acquiredLock: Boolean ->
+        return projectDependencyModule.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
                 instanceIds.forEach { instanceId ->
                     InstanceDeleter(
@@ -178,11 +178,11 @@ class InstancesDataService(
     }
 
     fun deleteAll(projectId: String): Boolean {
-        val projectDependencyProvider =
+        val projectDependencyModule =
             projectDependencyModuleFactory.create(projectId)
-        val instancesRepository = projectDependencyProvider.instancesRepository
+        val instancesRepository = projectDependencyModule.instancesRepository
 
-        return projectDependencyProvider.instancesLock.withLock { acquiredLock: Boolean ->
+        return projectDependencyModule.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
                 instancesRepository.deleteAll()
                 update(projectId)
@@ -194,28 +194,28 @@ class InstancesDataService(
     }
 
     fun sendInstances(projectId: String, formAutoSend: Boolean = false): Boolean {
-        val projectDependencyProvider =
+        val projectDependencyModule =
             projectDependencyModuleFactory.create(projectId)
 
         val instanceSubmitter = InstanceSubmitter(
-            projectDependencyProvider.formsRepository,
-            projectDependencyProvider.generalSettings,
+            projectDependencyModule.formsRepository,
+            projectDependencyModule.generalSettings,
             propertyManager,
             httpInterface,
-            projectDependencyProvider.instancesRepository
+            projectDependencyModule.instancesRepository
         )
 
-        return projectDependencyProvider.instancesLock.withLock { acquiredLock: Boolean ->
+        return projectDependencyModule.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
                 val toUpload = InstanceAutoSendFetcher.getInstancesToAutoSend(
-                    projectDependencyProvider.instancesRepository,
-                    projectDependencyProvider.formsRepository,
+                    projectDependencyModule.instancesRepository,
+                    projectDependencyModule.formsRepository,
                     formAutoSend
                 )
 
                 if (toUpload.isNotEmpty()) {
                     val results = instanceSubmitter.submitInstances(toUpload)
-                    notifier.onSubmission(results, projectDependencyProvider.projectId)
+                    notifier.onSubmission(results, projectDependencyModule.projectId)
                     update(projectId)
 
                     FormsUploadResultInterpreter.allFormsUploadedSuccessfully(results)

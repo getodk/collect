@@ -61,14 +61,14 @@ class DeleteFormsActivity : LocalizedActivity() {
         DaggerUtils.getComponent(this).inject(this)
 
         val projectId = projectsDataService.getCurrentProject().uuid
-        val projectDependencyProvider = projectDependencyModuleFactory.create(projectId)
+        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
 
         val viewModelFactory = ViewModelFactory(
-            projectDependencyProvider.instancesRepository,
+            projectDependencyModule.instancesRepository,
             this.application,
             formsDataService,
             scheduler,
-            projectDependencyProvider.generalSettings,
+            projectDependencyModule.generalSettings,
             projectId,
             instanceDataService
         )

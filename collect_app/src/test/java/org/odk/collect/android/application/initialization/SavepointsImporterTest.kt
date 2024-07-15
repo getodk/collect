@@ -26,17 +26,17 @@ class SavepointsImporterTest {
     private val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Context>() as Application)
 
     private val projectsRepository = component.projectsRepository()
-    private val projectDependencyProviderFactory = component.projectDependencyProviderFactory()
+    private val projectDependencyProviderFactory = component.projectDependencyModuleFactory()
 
     private val savepointsImporter =
         SavepointsImporter(projectsRepository, projectDependencyProviderFactory)
 
     private val project = projectsRepository.save(Project.DEMO_PROJECT)
-    private val projectDependencyProvider = projectDependencyProviderFactory.create(project.uuid)
-    private val savepointsRepository = projectDependencyProvider.savepointsRepository
+    private val projectDependencyModule = projectDependencyProviderFactory.create(project.uuid)
+    private val savepointsRepository = projectDependencyModule.savepointsRepository
     private val storagePathProvider = component.storagePathProvider()
-    private val formsRepository = projectDependencyProvider.formsRepository
-    private val instancesRepository = projectDependencyProvider.instancesRepository
+    private val formsRepository = projectDependencyModule.formsRepository
+    private val instancesRepository = projectDependencyModule.instancesRepository
 
     @Test
     fun ifABlankFormHasNoSavepoint_nothingShouldBeImported() {

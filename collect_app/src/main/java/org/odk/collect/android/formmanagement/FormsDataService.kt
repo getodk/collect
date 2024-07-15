@@ -57,13 +57,13 @@ class FormsDataService(
         progressReporter: (Int, Int) -> Unit,
         isCancelled: () -> Boolean
     ): Map<ServerFormDetails, FormDownloadException?> {
-        val projectDependencyProvider = projectDependencyModuleFactory.create(projectId)
+        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
         val formDownloader =
-            formDownloader(projectDependencyProvider, clock)
+            formDownloader(projectDependencyModule, clock)
 
         return ServerFormUseCases.downloadForms(
             forms,
-            projectDependencyProvider.formsLock,
+            projectDependencyModule.formsLock,
             formDownloader,
             progressReporter,
             isCancelled

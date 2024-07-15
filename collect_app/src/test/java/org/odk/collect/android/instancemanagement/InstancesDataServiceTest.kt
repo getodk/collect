@@ -57,7 +57,7 @@ class InstancesDataServiceTest {
         )
     }
 
-    private val projectDependencyProvider = projectsDependencyModuleFactory.create("blah")
+    private val projectDependencyModule = projectsDependencyModuleFactory.create("blah")
     private val httpInterface = mock<OpenRosaHttpInterface>()
     private val notifier = mock<Notifier>()
 
@@ -74,7 +74,7 @@ class InstancesDataServiceTest {
 
     @Test
     fun `instances should not be deleted if the instances database is locked`() {
-        (projectDependencyProvider.instancesLock as BooleanChangeLock).lock()
+        (projectDependencyModule.instancesLock as BooleanChangeLock).lock()
         val result = instancesDataService.deleteInstances("projectId", longArrayOf(1))
         assertThat(result, equalTo(false))
     }
@@ -99,10 +99,10 @@ class InstancesDataServiceTest {
 
     @Test
     fun `sendInstances() returns false when an instance fails to send`() {
-        val formsRepository = projectDependencyProvider.formsRepository
+        val formsRepository = projectDependencyModule.formsRepository
         val form = formsRepository.save(FormFixtures.form())
 
-        val instancesRepository = projectDependencyProvider.instancesRepository
+        val instancesRepository = projectDependencyModule.instancesRepository
         instancesRepository.save(InstanceFixtures.instance(form = form, status = STATUS_COMPLETE))
 
         whenever(httpInterface.executeGetRequest(any(), any(), any()))
