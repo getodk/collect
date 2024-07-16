@@ -197,6 +197,18 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#save does not clear empty entity lists`() {
+        val repository = buildSubject()
+
+        repository.addList("wines")
+        repository.addList("blah")
+        assertThat(repository.getLists(), containsInAnyOrder("wines", "blah"))
+
+        repository.save(Entity("wines", "blah", "Blah"))
+        assertThat(repository.getLists(), containsInAnyOrder("wines", "blah"))
+    }
+
+    @Test
     fun `#clear deletes all entities`() {
         val repository = buildSubject()
 
