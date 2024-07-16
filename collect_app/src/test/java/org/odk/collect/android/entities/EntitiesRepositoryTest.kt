@@ -57,7 +57,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#save updates existing entity with matching id in different list`() {
+    fun `#save creates entity with matching id in different list`() {
         val repository = buildSubject()
 
         val wine = Entity("wines", "1", "Léoville Barton 2008", version = 1)
@@ -67,7 +67,7 @@ abstract class EntitiesRepositoryTest {
         repository.save(updatedWine)
 
         val wines = repository.getEntities("wines")
-        assertThat(wines.size, equalTo(0))
+        assertThat(wines, contains(wine))
         val whiskys = repository.getEntities("whisky")
         assertThat(whiskys, contains(updatedWine))
     }
