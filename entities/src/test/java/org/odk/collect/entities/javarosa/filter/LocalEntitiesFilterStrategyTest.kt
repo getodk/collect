@@ -21,8 +21,14 @@ import org.javarosa.test.XFormsElement.mainInstance
 import org.javarosa.test.XFormsElement.model
 import org.javarosa.test.XFormsElement.t
 import org.javarosa.test.XFormsElement.title
+import org.javarosa.xform.parse.ExternalInstanceParser
+import org.javarosa.xform.util.XFormUtils
 import org.javarosa.xpath.expr.XPathExpression
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
+import org.odk.collect.entities.javarosa.intance.LocalEntitiesExternalInstanceParserFactory
+import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.InMemEntitiesRepository
 import java.util.function.Supplier
 
@@ -36,6 +42,18 @@ class LocalEntitiesFilterStrategyTest {
             it.addFilterStrategy(LocalEntitiesFilterStrategy(entitiesRepository))
             it.addFilterStrategy(fallthroughFilterStrategy)
         }
+    }
+
+    @Before
+    fun setup() {
+        XFormUtils.setExternalInstanceParserFactory(
+            LocalEntitiesExternalInstanceParserFactory(::entitiesRepository)
+        )
+    }
+
+    @After
+    fun teardown() {
+        XFormUtils.setExternalInstanceParserFactory { ExternalInstanceParser() }
     }
 
     @Test
@@ -55,10 +73,7 @@ class LocalEntitiesFilterStrategyTest {
                                 t("calculate")
                             )
                         ),
-                        instance(
-                            "things",
-                            t("item", t("label", "Thing"), t("name", "thing"))
-                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
                         bind("/data/question").type("string"),
                         bind("/data/calculate").type("string")
                             .calculate("instance('things')/root/item[name='other']/label")
@@ -77,7 +92,7 @@ class LocalEntitiesFilterStrategyTest {
 
     @Test
     fun `works correctly with name != expressions`() {
-        entitiesRepository.addList("things")
+        entitiesRepository.save(Entity.New("things", "thing", "Thing"))
 
         val scenario = Scenario.init(
             "Secondary instance form",
@@ -92,10 +107,7 @@ class LocalEntitiesFilterStrategyTest {
                                 t("calculate")
                             )
                         ),
-                        instance(
-                            "things",
-                            t("item", t("label", "Thing"), t("name", "thing"))
-                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
                         bind("/data/question").type("string"),
                         bind("/data/calculate").type("string")
                             .calculate("instance('things')/root/item[name!='other']/label")
@@ -113,7 +125,7 @@ class LocalEntitiesFilterStrategyTest {
 
     @Test
     fun `works correctly with non eq name expressions`() {
-        entitiesRepository.addList("things")
+        entitiesRepository.save(Entity.New("things", "thing", "Thing"))
 
         val scenario = Scenario.init(
             "Secondary instance form",
@@ -128,10 +140,7 @@ class LocalEntitiesFilterStrategyTest {
                                 t("calculate")
                             )
                         ),
-                        instance(
-                            "things",
-                            t("item", t("label", "Thing"), t("name", "thing"))
-                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
                         bind("/data/question").type("string"),
                         bind("/data/calculate").type("string")
                             .calculate("instance('things')/root/item[starts-with(name, 'thing')]/label")
