@@ -20,34 +20,36 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
     }
 
     override fun save(vararg entities: Entity) {
-        val storedEntities = readEntities()
+        val json = readJson()
 
         entities.forEach { entity ->
-            val existing = storedEntities.find { it.id == entity.id }
+            val entityList = json.getOrPut(entity.list) { mutableListOf() }
+            val existing = json.values.flatten().find { it.id == entity.id }
 
             if (existing != null) {
-                val state = when (existing.state) {
-                    Entity.State.OFFLINE -> entity.state
-                    Entity.State.ONLINE -> Entity.State.ONLINE
+                val state = if (existing.offline) {
+                    entity.state
+                } else {
+                    Entity.State.ONLINE
                 }
 
-                storedEntities.remove(existing)
-                storedEntities.add(
+                entityList.remove(existing)
+                entityList.add(
                     Entity(
                         entity.list,
                         entity.id,
                         entity.label ?: existing.label,
                         version = entity.version,
-                        properties = mergeProperties(existing, entity),
+                        properties = mergeProperties(existing.toEntity(entity.list), entity),
                         state = state
-                    )
+                    ).toJson()
                 )
             } else {
-                storedEntities.add(entity)
+                entityList.add(entity.toJson())
             }
         }
 
-        writeEntities(storedEntities)
+        writeJson(json)
     }
 
     override fun clear() {
@@ -103,7 +105,10 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             val json = entitiesFile.readText()
             return if (json.isNotBlank()) {
                 val parsedJson =
-                    Gson().fromJson<MutableMap<String, MutableList<JsonEntity>>>(json, typeToken.type)
+                    Gson().fromJson<MutableMap<String, MutableList<JsonEntity>>>(
+                        json,
+                        typeToken.type
+                    )
 
                 parsedJson
             } else {
