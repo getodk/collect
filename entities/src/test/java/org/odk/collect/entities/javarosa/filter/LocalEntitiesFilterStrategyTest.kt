@@ -57,6 +57,40 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
+    fun `returns matching nodes when entity matches name`() {
+        entitiesRepository.save(Entity.New("things", "thing", "Thing"))
+
+        val scenario = Scenario.init(
+            "Secondary instance form",
+            html(
+                head(
+                    title("Secondary instance form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("question"),
+                                t("calculate")
+                            )
+                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
+                        bind("/data/question").type("string"),
+                        bind("/data/calculate").type("string")
+                            .calculate("instance('things')/root/item[name='thing']/label")
+                    )
+                ),
+                body(
+                    input("/data/calculate")
+                )
+            ),
+            controllerSupplier
+        )
+
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
+        assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing"))
+    }
+
+    @Test
     fun `returns empty nodeset when no entity matches name`() {
         entitiesRepository.addList("things")
 
