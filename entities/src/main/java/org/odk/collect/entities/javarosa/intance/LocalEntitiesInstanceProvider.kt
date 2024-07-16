@@ -6,14 +6,14 @@ import org.javarosa.xform.parse.ExternalInstanceParser
 import org.odk.collect.entities.browser.EntityItemElement
 import org.odk.collect.entities.storage.EntitiesRepository
 
-internal class LocalEntitiesFileInstanceParser(private val entitiesRepositoryProvider: () -> EntitiesRepository) :
-    ExternalInstanceParser.FileInstanceParser {
+internal class LocalEntitiesInstanceProvider(private val entitiesRepositoryProvider: () -> EntitiesRepository) :
+    ExternalInstanceParser.InstanceProvider {
 
-    override fun parse(instanceId: String, path: String): TreeElement {
-        return parse(instanceId, path, false)
+    override fun get(instanceId: String, instanceSrc: String): TreeElement {
+        return get(instanceId, instanceSrc, false)
     }
 
-    override fun parse(instanceId: String, path: String, partial: Boolean): TreeElement {
+    override fun get(instanceId: String, instanceSrc: String, partial: Boolean): TreeElement {
         val root = TreeElement("root", 0)
 
         val entitiesRepository = entitiesRepositoryProvider()

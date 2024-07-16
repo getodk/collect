@@ -4,11 +4,11 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.odk.collect.entities.browser.EntityItemElement
-import org.odk.collect.entities.javarosa.intance.LocalEntitiesFileInstanceParser
+import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceProvider
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.InMemEntitiesRepository
 
-class LocalEntitiesFileInstanceParserTest {
+class LocalEntitiesInstanceProviderTest {
 
     private val entitiesRepository = InMemEntitiesRepository()
 
@@ -23,8 +23,8 @@ class LocalEntitiesFileInstanceParserTest {
             )
         entitiesRepository.save(entity)
 
-        val parser = LocalEntitiesFileInstanceParser { entitiesRepository }
-        val instance = parser.parse("people", "people.csv")
+        val parser = LocalEntitiesInstanceProvider { entitiesRepository }
+        val instance = parser.get("people", "people.csv")
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
@@ -44,8 +44,8 @@ class LocalEntitiesFileInstanceParserTest {
             )
         entitiesRepository.save(entity)
 
-        val parser = LocalEntitiesFileInstanceParser { entitiesRepository }
-        val instance = parser.parse("people", "people.csv")
+        val parser = LocalEntitiesInstanceProvider { entitiesRepository }
+        val instance = parser.get("people", "people.csv")
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
@@ -65,8 +65,8 @@ class LocalEntitiesFileInstanceParserTest {
             )
         entitiesRepository.save(entity)
 
-        val parser = LocalEntitiesFileInstanceParser { entitiesRepository }
-        val instance = parser.parse("people", "people.csv", true)
+        val parser = LocalEntitiesInstanceProvider { entitiesRepository }
+        val instance = parser.get("people", "people.csv", true)
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
@@ -95,8 +95,8 @@ class LocalEntitiesFileInstanceParserTest {
         val repository = InMemEntitiesRepository()
         repository.save(*entities)
 
-        val parser = LocalEntitiesFileInstanceParser { repository }
-        val instance = parser.parse("people", "people.csv", false)
+        val parser = LocalEntitiesInstanceProvider { repository }
+        val instance = parser.get("people", "people.csv", false)
 
         val first = instance.getChildAt(0)!!
         assertThat(first.getFirstChild("name")!!.value!!.value, equalTo("1"))
