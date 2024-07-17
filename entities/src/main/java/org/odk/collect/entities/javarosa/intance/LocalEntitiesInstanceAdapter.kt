@@ -1,7 +1,6 @@
 package org.odk.collect.entities.javarosa.intance
 
 import org.javarosa.core.model.data.StringData
-import org.javarosa.core.model.instance.DataInstance
 import org.javarosa.core.model.instance.TreeElement
 import org.odk.collect.entities.browser.EntityItemElement
 import org.odk.collect.entities.storage.EntitiesRepository
@@ -11,21 +10,26 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
 
     private val lists = entitiesRepository.getLists()
 
-    fun supportsInstance(sourceInstance: DataInstance<*>): Boolean {
-        return lists.contains(sourceInstance.instanceId)
+    fun supportsInstance(instanceId: String): Boolean {
+        return lists.contains(instanceId)
     }
 
-    fun queryEq(sourceInstance: DataInstance<*>, child: String, value: String): List<TreeElement>? {
+    fun getAll(instanceId: String, partial: Boolean): List<TreeElement> {
+        return entitiesRepository.getEntities(instanceId).map { entity ->
+            convertToElement(entity, partial)
+        }
+    }
+
+    fun queryEq(instanceId: String, child: String, value: String): List<TreeElement>? {
         return when {
             child == "name" -> {
                 val entity = entitiesRepository.getById(
-                    sourceInstance.instanceId,
+                    instanceId,
                     value
                 )
 
                 if (entity != null) {
-                    val element = convertToElement(sourceInstance, entity)
-                    listOf(element)
+                    listOf(convertToElement(entity, false))
                 } else {
                     emptyList()
                 }
@@ -33,42 +37,44 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
 
             !listOf("label", "__version").contains(child) -> {
                 val entities = entitiesRepository.getAllByProperty(
-                    sourceInstance.instanceId,
+                    instanceId,
                     child,
                     value
                 )
 
-                entities.map { convertToElement(sourceInstance, it) }
+                entities.map { convertToElement(it, false) }
             }
 
             else -> null
         }
     }
 
-    private fun convertToElement(
-        sourceInstance: DataInstance<*>,
-        entity: Entity.Saved
-    ): TreeElement {
+    private fun convertToElement(entity: Entity.Saved, partial: Boolean): TreeElement {
         val name = TreeElement(EntityItemElement.ID)
         val label = TreeElement(EntityItemElement.LABEL)
         val version = TreeElement(EntityItemElement.VERSION)
 
-        name.value = StringData(entity.id)
-        label.value = StringData(entity.label)
-        version.value = StringData(entity.version.toString())
+        if (!partial) {
+            name.value = StringData(entity.id)
+            label.value = StringData(entity.label)
+            version.value = StringData(entity.version.toString())
+        }
 
-        val item = TreeElement("item", entity.index)
+        val item = TreeElement("item", entity.index, partial)
         item.addChild(name)
         item.addChild(label)
         item.addChild(version)
 
         entity.properties.forEach { property ->
             val propertyElement = TreeElement(property.first)
-            propertyElement.value = StringData(property.second)
+
+            if (!partial) {
+                propertyElement.value = StringData(property.second)
+            }
+
             item.addChild(propertyElement)
         }
 
-        item.parent = sourceInstance.root
         return item
     }
 }

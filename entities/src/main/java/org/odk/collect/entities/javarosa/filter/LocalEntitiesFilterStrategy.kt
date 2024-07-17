@@ -24,7 +24,7 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         evaluationContext: EvaluationContext,
         next: Supplier<MutableList<TreeReference>>
     ): List<TreeReference> {
-        if (!dataAdapter.supportsInstance(sourceInstance)) {
+        if (!dataAdapter.supportsInstance(sourceInstance.instanceId)) {
             return next.get()
         }
 
@@ -35,10 +35,17 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
                     val child = candidate.nodeSide.steps[0].name.name
                     val value = candidate.evalContextSide(sourceInstance, evaluationContext)
 
-                    val results = dataAdapter.queryEq(sourceInstance, child, value as String)
+                    val results = dataAdapter.queryEq(
+                        sourceInstance.instanceId,
+                        child,
+                        value as String
+                    )
                     return if (results != null) {
                         sourceInstance.replacePartialElements(results)
-                        results.map { it.ref }
+                        results.map {
+                            it.parent = sourceInstance.root
+                            it.ref
+                        }
                     } else {
                         next.get()
                     }
