@@ -29,7 +29,7 @@ class InMemEntitiesRepository : EntitiesRepository {
     override fun save(vararg entities: Entity) {
         entities.forEach { entity ->
             lists.add(entity.list)
-            val existing = this.entities.find { it.id == entity.id }
+            val existing = this.entities.find { it.id == entity.id && it.list == entity.list }
 
             if (existing != null) {
                 val state = when (existing.state) {
