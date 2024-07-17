@@ -47,6 +47,7 @@ import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
+import org.odk.collect.testshared.WaitFor
 import org.odk.collect.webpage.ExternalWebPageHelper
 
 @RunWith(AndroidJUnit4::class)
@@ -353,28 +354,32 @@ class OfflineMapLayersPickerTest {
         scheduler.flush()
 
         Interactions.clickOn(withText("layer1"))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
-            matches(
-                not(isChecked())
+        WaitFor.waitFor {
+            onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
+                matches(
+                    not(isChecked())
+                )
             )
-        )
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
-            matches(
-                isChecked()
+            onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
+                matches(
+                    isChecked()
+                )
             )
-        )
+        }
 
         Interactions.clickOn(withText(string.none))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
-            matches(
-                isChecked()
+        WaitFor.waitFor {
+            onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
+                matches(
+                    isChecked()
+                )
             )
-        )
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
-            matches(
-                not(isChecked())
+            onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
+                matches(
+                    not(isChecked())
+                )
             )
-        )
+        }
     }
 
     @Test
@@ -531,9 +536,9 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        expandLayer(1)
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(3))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(3, R.id.arrow)).perform(click())
+        expandLayer(3)
 
         scenario.recreate()
         scheduler.flush()
@@ -558,9 +563,9 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        expandLayer(1)
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(2))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.arrow)).perform(click())
+        expandLayer(2)
 
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.path)).check(
             matches(
@@ -590,7 +595,7 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        expandLayer(1)
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
             scrollTo(),
             click()
@@ -613,7 +618,7 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        expandLayer(1)
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
             scrollTo(),
             click()
@@ -653,7 +658,7 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        expandLayer(1)
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
             scrollTo(),
             click()
@@ -693,7 +698,7 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        expandLayer(1)
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
             scrollTo(),
             click()
@@ -734,7 +739,7 @@ class OfflineMapLayersPickerTest {
         scheduler.flush()
 
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(2))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.arrow)).perform(click())
+        expandLayer(2)
         onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.delete_layer)).perform(
             scrollTo(),
             click()
@@ -777,7 +782,7 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.arrow)).perform(click())
+        expandLayer(1)
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
             scrollTo(),
             click()
@@ -791,6 +796,37 @@ class OfflineMapLayersPickerTest {
 
         onView(withId(R.id.progress_indicator)).check(matches(not(isDisplayed())))
         onView(withId(R.id.layers)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun `the confirmation dialog is dismissed o activity recreation`() {
+        val scenario = launchFragment()
+
+        uris.add(Uri.parse("blah"))
+        Interactions.clickOn(withText(string.add_layer))
+
+        scenario.onFragment {
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
+                instanceOf(OfflineMapLayersImporter::class.java)
+            )
+        }
+
+        scenario.recreate()
+
+        scenario.onFragment {
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
+                equalTo(null)
+            )
+        }
+    }
+
+    private fun expandLayer(position: Int) {
+        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.arrow)).perform(click())
+        WaitFor.waitFor {
+            assertLayerExpanded(position)
+        }
     }
 
     private fun assertLayerCollapsed(position: Int) {
@@ -823,30 +859,6 @@ class OfflineMapLayersPickerTest {
         onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.delete_layer)).check(
             matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))
         )
-    }
-
-    @Test
-    fun `the confirmation dialog is dismissed o activity recreation`() {
-        val scenario = launchFragment()
-
-        uris.add(Uri.parse("blah"))
-        Interactions.clickOn(withText(string.add_layer))
-
-        scenario.onFragment {
-            assertThat(
-                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
-                instanceOf(OfflineMapLayersImporter::class.java)
-            )
-        }
-
-        scenario.recreate()
-
-        scenario.onFragment {
-            assertThat(
-                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
-                equalTo(null)
-            )
-        }
     }
 
     private fun launchFragment(): FragmentScenario<OfflineMapLayersPicker> {
