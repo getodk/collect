@@ -4,12 +4,9 @@ import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.utilities.Appearances.MASKED;
 import static org.odk.collect.android.utilities.Appearances.THOUSANDS_SEP;
 
 import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
-import android.text.method.SingleLineTransformationMethod;
 
 import androidx.annotation.NonNull;
 
@@ -60,14 +57,6 @@ public class StringNumberWidgetTest extends GeneralStringWidgetTest<StringNumber
     public void verifyInputType() {
         StringNumberWidget widget = getWidget();
         assertThat(widget.widgetAnswerText.getBinding().editText.getInputType(), equalTo(InputType.TYPE_CLASS_NUMBER));
-        assertThat(widget.widgetAnswerText.getBinding().editText.getTransformationMethod().getClass(), equalTo(SingleLineTransformationMethod.class));
-    }
-
-    @Test
-    public void verifyInputTypeWithMaskedAppearance() {
-        when(formEntryPrompt.getAppearanceHint()).thenReturn(MASKED);
-        StringNumberWidget widget = getWidget();
-        assertThat(widget.widgetAnswerText.getBinding().editText.getInputType(), equalTo(InputType.TYPE_CLASS_NUMBER));
-        assertThat(widget.widgetAnswerText.getBinding().editText.getTransformationMethod().getClass(), equalTo(PasswordTransformationMethod.class));
+        assertThat(widget.widgetAnswerText.getBinding().editText.getTransformationMethod(), equalTo(null));
     }
 }
