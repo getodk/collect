@@ -1,6 +1,7 @@
 package org.odk.collect.entities.javarosa.filter
 
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.FormDef
 import org.javarosa.core.model.condition.EvaluationContext
@@ -20,6 +21,7 @@ import org.javarosa.test.XFormsElement.input
 import org.javarosa.test.XFormsElement.instance
 import org.javarosa.test.XFormsElement.mainInstance
 import org.javarosa.test.XFormsElement.model
+import org.javarosa.test.XFormsElement.select1Dynamic
 import org.javarosa.test.XFormsElement.t
 import org.javarosa.test.XFormsElement.title
 import org.javarosa.xform.parse.ExternalInstanceParser
@@ -264,6 +266,192 @@ class LocalEntitiesFilterStrategyTest {
         )
 
         assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing"))
+    }
+
+    @Test
+    fun `returns matching nodes when entity matches property`() {
+        entitiesRepository.save(
+            Entity.New(
+                "things",
+                "thing1",
+                "Thing1",
+                properties = listOf("property" to "value")
+            ),
+            Entity.New(
+                "things",
+                "thing2",
+                "Thing2",
+                properties = listOf("property" to "value")
+            ),
+            Entity.New(
+                "things",
+                "other",
+                "Other",
+                properties = listOf("property" to "other")
+            )
+        )
+
+        val scenario = Scenario.init(
+            "Secondary instance form",
+            html(
+                head(
+                    title("Secondary instance form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("question"),
+                            )
+                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
+                        bind("/data/question").type("string")
+                    )
+                ),
+                body(
+                    select1Dynamic(
+                        "/data/question",
+                        "instance('things')/root/item[property='value']",
+                        "name",
+                        "label"
+                    )
+                )
+            ),
+            controllerSupplier
+        )
+
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
+        val choices = scenario.choicesOf("/data/question").map { it.value }
+        assertThat(choices, containsInAnyOrder("thing1", "thing2"))
+    }
+
+    @Test
+    fun `replaces partial elements when entity matches property`() {
+        entitiesRepository.save(
+            Entity.New(
+                "things",
+                "thing1",
+                "Thing1",
+                properties = listOf("property" to "value")
+            )
+        )
+
+        val scenario = Scenario.init(
+            "Secondary instance form",
+            html(
+                head(
+                    title("Secondary instance form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("question"),
+                            )
+                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
+                        bind("/data/question").type("string")
+                    )
+                ),
+                body(
+                    select1Dynamic(
+                        "/data/question",
+                        "instance('things')/root/item[property='value']",
+                        "name",
+                        "label"
+                    )
+                )
+            ),
+            controllerSupplier
+        )
+
+        scenario.choicesOf("/data/question") // Calculate choices
+        assertThat(instanceProvider.fullParsePerformed, equalTo(false))
+    }
+
+    @Test
+    fun `works correctly with label = expressions`() {
+        entitiesRepository.save(
+            Entity.New(
+                "things",
+                "thing1",
+                "Thing1",
+                properties = listOf("property" to "value")
+            )
+        )
+
+        val scenario = Scenario.init(
+            "Secondary instance form",
+            html(
+                head(
+                    title("Secondary instance form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("question"),
+                            )
+                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
+                        bind("/data/question").type("string")
+                    )
+                ),
+                body(
+                    select1Dynamic(
+                        "/data/question",
+                        "instance('things')/root/item[label='Thing1']",
+                        "name",
+                        "label"
+                    )
+                )
+            ),
+            controllerSupplier
+        )
+
+        val choices = scenario.choicesOf("/data/question").map { it.value }
+        assertThat(choices, containsInAnyOrder("thing1"))
+    }
+
+    @Test
+    fun `works correctly with version = expressions`() {
+        entitiesRepository.save(
+            Entity.New(
+                "things",
+                "thing1",
+                "Thing1",
+                version = 2,
+                properties = listOf("property" to "value")
+            )
+        )
+
+        val scenario = Scenario.init(
+            "Secondary instance form",
+            html(
+                head(
+                    title("Secondary instance form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("question"),
+                            )
+                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
+                        bind("/data/question").type("string")
+                    )
+                ),
+                body(
+                    select1Dynamic(
+                        "/data/question",
+                        "instance('things')/root/item[__version='2']",
+                        "name",
+                        "label"
+                    )
+                )
+            ),
+            controllerSupplier
+        )
+
+        val choices = scenario.choicesOf("/data/question").map { it.value }
+        assertThat(choices, containsInAnyOrder("thing1"))
     }
 }
 

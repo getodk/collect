@@ -32,18 +32,18 @@ class LocalEntitiesFilterStrategy(private val entitiesRepository: EntitiesReposi
         }
 
         val candidate = CompareToNodeExpression.parse(predicate)
-
         return when (val original = candidate?.original) {
             is XPathEqExpr -> {
                 if (original.isEqual) {
+                    val filterChild = candidate.nodeSide.steps[0].name.name
+
                     when {
-                        (candidate.nodeSide.steps[0].name.name == "name") -> {
+                        filterChild == "name" -> {
                             val value = candidate.evalContextSide(sourceInstance, evaluationContext)
-                            val entity =
-                                entitiesRepository.getById(
-                                    sourceInstance.instanceId,
-                                    value as String
-                                )
+                            val entity = entitiesRepository.getById(
+                                sourceInstance.instanceId,
+                                value as String
+                            )
 
                             if (entity != null) {
                                 val element = convertToElement(sourceInstance, entity)
@@ -52,6 +52,19 @@ class LocalEntitiesFilterStrategy(private val entitiesRepository: EntitiesReposi
                             } else {
                                 emptyList()
                             }
+                        }
+
+                        !listOf("label", "__version").contains(filterChild) -> {
+                            val value = candidate.evalContextSide(sourceInstance, evaluationContext)
+                            val entities = entitiesRepository.getAllByProperty(
+                                sourceInstance.instanceId,
+                                filterChild,
+                                value as String
+                            )
+
+                            val elements = entities.map { convertToElement(sourceInstance, it) }
+                            sourceInstance.replacePartialElements(elements)
+                            elements.map { it.ref }
                         }
 
                         else -> next.get()
