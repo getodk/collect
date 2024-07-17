@@ -312,4 +312,13 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         accesses += 1
         return wrapped.getById(list, id)
     }
+
+    override fun getAllByProperty(
+        list: String,
+        property: String,
+        value: String
+    ): List<Entity.Saved> {
+        accesses += 1
+        return wrapped.getAllByProperty(list, property, value)
+    }
 }
