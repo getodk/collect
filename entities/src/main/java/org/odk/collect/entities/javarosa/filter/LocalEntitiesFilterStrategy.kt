@@ -16,6 +16,9 @@ import java.util.function.Supplier
 
 class LocalEntitiesFilterStrategy(private val entitiesRepository: EntitiesRepository) :
     FilterStrategy {
+
+    private val lists = entitiesRepository.getLists()
+
     override fun filter(
         sourceInstance: DataInstance<*>,
         nodeSet: TreeReference,
@@ -24,7 +27,7 @@ class LocalEntitiesFilterStrategy(private val entitiesRepository: EntitiesReposi
         evaluationContext: EvaluationContext,
         next: Supplier<MutableList<TreeReference>>
     ): List<TreeReference> {
-        if (!entitiesRepository.getLists().contains(sourceInstance.instanceId)) {
+        if (!lists.contains(sourceInstance.instanceId)) {
             return next.get()
         }
 
