@@ -353,8 +353,8 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        WaitFor.tryAgainOnFail {
-            Interactions.clickOn(withText("layer1"))
+        Interactions.clickOn(withText("layer1"))
+        WaitFor.waitFor {
             onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
                 matches(
                     not(isChecked())
@@ -367,8 +367,8 @@ class OfflineMapLayersPickerTest {
             )
         }
 
-        WaitFor.tryAgainOnFail {
-            Interactions.clickOn(withText(string.none))
+        Interactions.clickOn(withText(string.none))
+        WaitFor.waitFor {
             onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
                 matches(
                     isChecked()
@@ -536,9 +536,9 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        toggleLayer(1)
+        expandLayer(1)
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(3))
-        toggleLayer(3)
+        expandLayer(3)
 
         scenario.recreate()
         scheduler.flush()
@@ -563,9 +563,9 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        toggleLayer(1)
+        expandLayer(1)
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(2))
-        toggleLayer(2)
+        expandLayer(2)
 
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.path)).check(
             matches(
@@ -595,7 +595,7 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        toggleLayer(1)
+        expandLayer(1)
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
             scrollTo(),
             click()
@@ -618,7 +618,7 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        toggleLayer(1)
+        expandLayer(1)
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
             scrollTo(),
             click()
@@ -658,7 +658,7 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        toggleLayer(1)
+        expandLayer(1)
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
             scrollTo(),
             click()
@@ -698,7 +698,7 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        toggleLayer(1)
+        expandLayer(1)
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
             scrollTo(),
             click()
@@ -739,7 +739,7 @@ class OfflineMapLayersPickerTest {
         scheduler.flush()
 
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(2))
-        toggleLayer(2)
+        expandLayer(2)
         onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.delete_layer)).perform(
             scrollTo(),
             click()
@@ -782,7 +782,7 @@ class OfflineMapLayersPickerTest {
 
         scheduler.flush()
 
-        toggleLayer(1)
+        expandLayer(1)
         onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
             scrollTo(),
             click()
@@ -822,9 +822,11 @@ class OfflineMapLayersPickerTest {
         }
     }
 
-    private fun toggleLayer(position: Int) {
+    private fun expandLayer(position: Int) {
         onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.arrow)).perform(click())
-        WaitFor.wait250ms()
+        WaitFor.waitFor {
+            assertLayerExpanded(position)
+        }
     }
 
     private fun assertLayerCollapsed(position: Int) {
