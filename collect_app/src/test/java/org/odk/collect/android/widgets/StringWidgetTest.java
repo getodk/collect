@@ -69,4 +69,10 @@ public class StringWidgetTest extends GeneralStringWidgetTest<StringWidget, Stri
         assertThat(getSpyWidget().widgetAnswerText.getBinding().editText.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
         assertThat(getSpyWidget().widgetAnswerText.getBinding().textView.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
     }
+
+    @Test
+    public void whenNumberOfRowsSpecifiedEditTextShouldHaveProperNumberOfMinLines() {
+        when(questionDef.getAdditionalAttribute(null, "rows")).thenReturn("5");
+        assertThat(getWidget().widgetAnswerText.getBinding().editText.getMinLines(), equalTo(5));
+    }
 }

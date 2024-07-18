@@ -84,4 +84,10 @@ public class ExStringWidgetTest extends GeneralExStringWidgetTest<ExStringWidget
         assertThat(getSpyWidget().binding.widgetAnswerText.getBinding().editText.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
         assertThat(getSpyWidget().binding.widgetAnswerText.getBinding().textView.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
     }
+
+    @Test
+    public void whenNumberOfRowsSpecifiedEditTextShouldHaveProperNumberOfMinLines() {
+        when(questionDef.getAdditionalAttribute(null, "rows")).thenReturn("5");
+        assertThat(getWidget().binding.widgetAnswerText.getBinding().editText.getMinLines(), equalTo(5));
+    }
 }
