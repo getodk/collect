@@ -2,7 +2,7 @@ package org.odk.collect.entities.javarosa.intance
 
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.instance.TreeElement
-import org.odk.collect.entities.browser.EntityItemElement
+import org.odk.collect.entities.javarosa.parse.EntityItemElement
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 
@@ -35,7 +35,7 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
                 }
             }
 
-            !listOf("label", "__version").contains(child) -> {
+            !listOf(EntityItemElement.LABEL, EntityItemElement.VERSION).contains(child) -> {
                 val entities = entitiesRepository.getAllByProperty(
                     instanceId,
                     child,

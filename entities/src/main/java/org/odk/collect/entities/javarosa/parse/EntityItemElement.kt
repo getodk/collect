@@ -1,4 +1,4 @@
-package org.odk.collect.entities.browser
+package org.odk.collect.entities.javarosa.parse
 
 internal object EntityItemElement {
     const val ID = "name"

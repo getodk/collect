@@ -1,6 +1,6 @@
 package org.odk.collect.entities.javarosa.spec
 
-internal object EntityConstants {
+internal object FormEntityElement {
     const val ELEMENT_ENTITY = "entity"
     const val ELEMENT_LABEL = "label"
 

@@ -8,10 +8,10 @@ import org.odk.collect.entities.javarosa.spec.EntityFormParser;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.odk.collect.entities.javarosa.spec.EntityConstants.ATTRIBUTE_CREATE;
-import static org.odk.collect.entities.javarosa.spec.EntityConstants.ATTRIBUTE_UPDATE;
-import static org.odk.collect.entities.javarosa.spec.EntityConstants.ELEMENT_ENTITY;
-import static org.odk.collect.entities.javarosa.spec.EntityConstants.ELEMENT_LABEL;
+import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ATTRIBUTE_CREATE;
+import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ATTRIBUTE_UPDATE;
+import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ELEMENT_ENTITY;
+import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ELEMENT_LABEL;
 
 public class EntityFormParserTest {
 
