@@ -18,9 +18,6 @@ class CollectFormEntryControllerFactory :
             Collect.getInstance().externalDataManager = it
         }
 
-        val externalDataHandlerPull = ExternalDataHandlerPull(externalDataManager)
-        formDef.evaluationContext.addFunctionHandler(externalDataHandlerPull)
-
         val projectsDataService = Collect.getInstance().component.currentProjectProvider()
         val projectId = projectsDataService.getCurrentProject().uuid
 
