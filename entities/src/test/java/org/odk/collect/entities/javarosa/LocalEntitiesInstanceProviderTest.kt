@@ -54,27 +54,39 @@ class LocalEntitiesInstanceProviderTest {
     }
 
     @Test
-    fun `partial parse returns elements without values`() {
-        val entity =
+    fun `partial parse returns elements without values for first item and just item for others`() {
+        val entity = arrayOf(
             Entity.New(
                 "people",
                 "1",
                 "Shiv Roy",
                 properties = listOf(Pair("age", "35")),
                 version = 1
+            ),
+            Entity.New(
+                "people",
+                "2",
+                "Kendall Roy",
+                properties = listOf(Pair("age", "40")),
+                version = 1
             )
-        entitiesRepository.save(entity)
+        )
+        entitiesRepository.save(*entity)
 
         val parser = LocalEntitiesInstanceProvider { entitiesRepository }
         val instance = parser.get("people", "people.csv", true)
-        assertThat(instance.numChildren, equalTo(1))
+        assertThat(instance.numChildren, equalTo(2))
 
-        val item = instance.getChildAt(0)!!
-        assertThat(item.isPartial, equalTo(true))
-        assertThat(item.numChildren, equalTo(4))
-        0.until(item.numChildren).forEach {
-            assertThat(item.getChildAt(it).value?.value, equalTo(null))
+        val item1 = instance.getChildAt(0)!!
+        assertThat(item1.isPartial, equalTo(true))
+        assertThat(item1.numChildren, equalTo(4))
+        0.until(item1.numChildren).forEach {
+            assertThat(item1.getChildAt(it).value?.value, equalTo(null))
         }
+
+        val item2 = instance.getChildAt(1)!!
+        assertThat(item2.isPartial, equalTo(true))
+        assertThat(item2.numChildren, equalTo(0))
     }
 
     @Test

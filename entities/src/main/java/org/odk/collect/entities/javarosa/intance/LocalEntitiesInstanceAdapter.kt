@@ -15,8 +15,14 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
     }
 
     fun getAll(instanceId: String, partial: Boolean): List<TreeElement> {
-        return entitiesRepository.getEntities(instanceId).map { entity ->
-            convertToElement(entity, partial)
+        return entitiesRepository.getEntities(instanceId).mapIndexed { index, entity ->
+            if (partial && index == 0) {
+                convertToElement(entity, true)
+            } else if (partial) {
+                TreeElement("item", entity.index, true)
+            } else {
+                convertToElement(entity, false)
+            }
         }
     }
 
