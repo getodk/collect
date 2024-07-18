@@ -107,7 +107,7 @@ class InstancesDataService(
 
                 val formMediaDir = File(form.formMediaPath)
                 val formEntryController =
-                    CollectFormEntryControllerFactory().create(formDef, formMediaDir)
+                    CollectFormEntryControllerFactory(entitiesRepository).create(formDef, formMediaDir)
                 val formController =
                     FormEntryUseCases.loadDraft(form, instance, formEntryController)
                 if (formController == null) {

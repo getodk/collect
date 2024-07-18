@@ -9,21 +9,19 @@ import org.odk.collect.android.dynamicpreload.handler.ExternalDataHandlerPull
 import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory
 import org.odk.collect.entities.javarosa.filter.LocalEntitiesFilterStrategy
 import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor
+import org.odk.collect.entities.storage.EntitiesRepository
 import java.io.File
 
-class CollectFormEntryControllerFactory :
+class CollectFormEntryControllerFactory(val entitiesRepository: EntitiesRepository) :
     FormEntryControllerFactory {
     override fun create(formDef: FormDef, formMediaDir: File): FormEntryController {
         val externalDataManager = ExternalDataManagerImpl(formMediaDir).also {
             Collect.getInstance().externalDataManager = it
         }
 
-        val projectsDataService = Collect.getInstance().component.currentProjectProvider()
-        val projectId = projectsDataService.getCurrentProject().uuid
-
         return FormEntryController(FormEntryModel(formDef)).also {
             it.addFunctionHandler(ExternalDataHandlerPull(externalDataManager))
-            it.addFilterStrategy(LocalEntitiesFilterStrategy(Collect.getInstance().component.entitiesRepositoryProvider().create(projectId)))
+            it.addFilterStrategy(LocalEntitiesFilterStrategy(entitiesRepository))
             it.addPostProcessor(EntityFormFinalizationProcessor())
         }
     }
