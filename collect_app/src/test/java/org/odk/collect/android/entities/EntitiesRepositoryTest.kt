@@ -29,8 +29,22 @@ abstract class EntitiesRepositoryTest {
     fun `#getEntities returns entities for list`() {
         val repository = buildSubject()
 
-        val wine = Entity.New("wines", "1", "Léoville Barton 2008")
-        val whisky = Entity.New("whiskys", "2", "Lagavulin 16")
+        val wine = Entity.New(
+            "wines",
+            "1",
+            "Léoville Barton 2008",
+            version = 2,
+            trunkVersion = 1
+        )
+
+        val whisky = Entity.New(
+            "whiskys",
+            "2",
+            "Lagavulin 16",
+            version = 3,
+            trunkVersion = 1
+        )
+
         repository.save(wine)
         repository.save(whisky)
 
@@ -47,10 +61,15 @@ abstract class EntitiesRepositoryTest {
     fun `#save updates existing entity with matching id`() {
         val repository = buildSubject()
 
-        val wine = Entity.New("wines", "1", "Léoville Barton 2008", version = 1)
+        val wine = Entity.New(
+            "wines",
+            "1",
+            "Léoville Barton 2008",
+            trunkVersion = 1
+        )
         repository.save(wine)
 
-        val updatedWine = Entity.New("wines", wine.id, "Léoville Barton 2009", version = 2)
+        val updatedWine = wine.copy(label = "Léoville Barton 2009", version = 2)
         repository.save(updatedWine)
 
         val wines = repository.getEntities("wines")

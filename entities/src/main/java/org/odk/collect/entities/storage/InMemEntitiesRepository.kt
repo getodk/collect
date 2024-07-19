@@ -18,7 +18,8 @@ class InMemEntitiesRepository : EntitiesRepository {
                 entity.version,
                 entity.properties,
                 entity.state,
-                index
+                index,
+                entity.trunkVersion
             )
         }
     }
@@ -69,7 +70,8 @@ class InMemEntitiesRepository : EntitiesRepository {
                         entity.label ?: existing.label,
                         version = entity.version,
                         properties = mergeProperties(existing, entity),
-                        state = state
+                        state = state,
+                        trunkVersion = entity.trunkVersion
                     )
                 )
             } else {
@@ -80,7 +82,8 @@ class InMemEntitiesRepository : EntitiesRepository {
                         entity.label,
                         entity.version,
                         entity.properties,
-                        entity.state
+                        entity.state,
+                        entity.trunkVersion
                     )
                 )
             }
