@@ -266,11 +266,12 @@ abstract class EntitiesRepositoryTest {
     fun `#save does not change index when updating an existing entity`() {
         val repository = buildSubject()
 
-        val wine = Entity.New("wines", "1", "Léoville Barton 2008", version = 1)
-        repository.save(wine)
+        val first = Entity.New("wines", "1", "Léoville Barton 2008")
+        val second = Entity.New("wines", "2", "Pontet Canet 2014")
+        repository.save(first, second)
         assertThat(repository.getEntities("wines")[0].index, equalTo(0))
 
-        val updatedWine = wine.copy(label = "Léoville Barton 2009")
+        val updatedWine = first.copy(label = "Léoville Barton 2009")
         repository.save(updatedWine)
 
         assertThat(repository.getEntities("wines")[0].index, equalTo(0))

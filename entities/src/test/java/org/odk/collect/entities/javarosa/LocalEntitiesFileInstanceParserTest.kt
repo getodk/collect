@@ -79,20 +79,31 @@ class LocalEntitiesFileInstanceParserTest {
 
     @Test
     fun `uses entity index for multiplicity`() {
-        val entity =
+        val entities = arrayOf(
             Entity.New(
                 "people",
                 "1",
-                "Shiv Roy",
-                version = 1
+                "Shiv Roy"
+            ),
+            Entity.New(
+                "people",
+                "2",
+                "Kendall Roy"
             )
+        )
+
         val repository = InMemEntitiesRepository()
-        repository.save(entity)
+        repository.save(*entities)
 
         val parser = LocalEntitiesFileInstanceParser { repository }
-        val instance = parser.parse("people", "people.csv", true)
+        val instance = parser.parse("people", "people.csv", false)
 
-        val item = instance.getChildAt(0)!!
-        assertThat(item.multiplicity, equalTo(0))
+        val first = instance.getChildAt(0)!!
+        assertThat(first.getFirstChild("name")!!.value!!.value, equalTo("1"))
+        assertThat(first.multiplicity, equalTo(0))
+
+        val second = instance.getChildAt(1)!!
+        assertThat(second.getFirstChild("name")!!.value!!.value, equalTo("2"))
+        assertThat(second.multiplicity, equalTo(1))
     }
 }
