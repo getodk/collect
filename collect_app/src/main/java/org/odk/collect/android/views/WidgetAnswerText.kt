@@ -59,11 +59,9 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
             }
         })
         if (isMasked) {
-            binding.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            binding.editText.inputType = binding.editText.inputType or InputType.TYPE_TEXT_VARIATION_PASSWORD
             binding.editText.transformationMethod = PasswordTransformationMethod.getInstance()
             binding.textView.transformationMethod = PasswordTransformationMethod.getInstance()
-        } else {
-            binding.editText.inputType = InputType.TYPE_CLASS_TEXT
         }
     }
 

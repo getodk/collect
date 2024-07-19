@@ -4,10 +4,8 @@ import static junit.framework.Assert.assertTrue;
 
 import android.view.View;
 
-import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.widgets.StringWidget;
@@ -24,15 +22,6 @@ import java.util.List;
  */
 public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends IAnswerData>
         extends QuestionWidgetTest<W, A> {
-
-    @Mock
-    QuestionDef questionDef;
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        when(formEntryPrompt.getQuestion()).thenReturn(questionDef);
-    }
 
     @Override
     public void callingClearShouldRemoveTheExistingAnswer() {
