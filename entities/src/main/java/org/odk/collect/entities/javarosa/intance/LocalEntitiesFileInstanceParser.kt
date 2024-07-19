@@ -17,7 +17,7 @@ internal class LocalEntitiesFileInstanceParser(private val entitiesRepositoryPro
         val root = TreeElement("root", 0)
 
         val entitiesRepository = entitiesRepositoryProvider()
-        entitiesRepository.getEntities(instanceId).forEachIndexed { index, entity ->
+        entitiesRepository.getEntities(instanceId).forEach { entity ->
             val name = TreeElement(EntityItemElement.ID)
             val label = TreeElement(EntityItemElement.LABEL)
             val version = TreeElement(EntityItemElement.VERSION)
@@ -28,7 +28,7 @@ internal class LocalEntitiesFileInstanceParser(private val entitiesRepositoryPro
                 version.value = StringData(entity.version.toString())
             }
 
-            val item = TreeElement("item", index, partial)
+            val item = TreeElement("item", entity.index, partial)
             item.addChild(name)
             item.addChild(label)
             item.addChild(version)

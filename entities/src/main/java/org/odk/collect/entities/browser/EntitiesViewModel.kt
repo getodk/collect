@@ -21,8 +21,8 @@ class EntitiesViewModel(
         }
     }
 
-    fun getEntities(list: String): LiveData<List<Entity>> {
-        val result = MutableLiveData<List<Entity>>(emptyList())
+    fun getEntities(list: String): LiveData<List<Entity.Saved>> {
+        val result = MutableLiveData<List<Entity.Saved>>(emptyList())
         scheduler.immediate {
             result.postValue(entitiesRepository.getEntities(list))
         }

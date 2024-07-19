@@ -20,7 +20,7 @@ object LocalEntityUseCases {
             val id = formEntity.id
             if (id != null && entitiesRepository.getLists().contains(formEntity.dataset)) {
                 if (formEntity.action != EntityAction.UPDATE || entitiesRepository.getEntities(formEntity.dataset).any { it.id == id }) {
-                    val entity = Entity(
+                    val entity = Entity.New(
                         formEntity.dataset,
                         id,
                         formEntity.label,
@@ -100,7 +100,7 @@ object LocalEntityUseCases {
                 }
             }
 
-        val entity = Entity(list, id, label, version, properties, state = Entity.State.ONLINE)
+        val entity = Entity.New(list, id, label, version, properties, state = Entity.State.ONLINE)
         return entity
     }
 }

@@ -4,6 +4,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
+import org.odk.collect.android.entities.support.EntitySameAsMatcher.Companion.sameEntityAs
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.shared.TempFiles
@@ -24,10 +25,10 @@ class JsonFileEntitiesRepositoryTest : EntitiesRepositoryTest() {
         val two = JsonFileEntitiesRepository(directory)
         val three = JsonFileEntitiesRepository(File(TempFiles.getPathInTempDir()))
 
-        val entity = Entity("stuff", "1", "A thing")
+        val entity = Entity.New("stuff", "1", "A thing")
         one.save(entity)
         assertThat(two.getLists(), contains("stuff"))
-        assertThat(two.getEntities("stuff"), contains(entity))
+        assertThat(two.getEntities("stuff"), contains(sameEntityAs(entity)))
         assertThat(three.getLists().size, equalTo(0))
     }
 
@@ -35,7 +36,7 @@ class JsonFileEntitiesRepositoryTest : EntitiesRepositoryTest() {
     fun `clears data if backing file can't be parsed by current code`() {
         val repository = buildSubject()
         repository.addList("stuff")
-        repository.save(Entity("stuff", "123", null))
+        repository.save(Entity.New("stuff", "123", null))
 
         val filesInDir = directory.listFiles()
         assertThat(filesInDir!!.size, equalTo(1))
@@ -44,7 +45,7 @@ class JsonFileEntitiesRepositoryTest : EntitiesRepositoryTest() {
 
         assertThat(repository.getEntities("stuff").size, equalTo(0))
 
-        repository.save(Entity("stuff", "123", null))
+        repository.save(Entity.New("stuff", "123", null))
         assertThat(repository.getEntities("stuff").size, equalTo(1))
     }
 }

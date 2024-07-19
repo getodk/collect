@@ -11,7 +11,7 @@ class EntityItemView(context: Context) : FrameLayout(context) {
 
     val binding = EntityItemLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
-    fun setEntity(entity: Entity) {
+    fun setEntity(entity: Entity.Saved) {
         binding.label.text = entity.label
         binding.properties.text = entity.properties
             .sortedBy { it.first }

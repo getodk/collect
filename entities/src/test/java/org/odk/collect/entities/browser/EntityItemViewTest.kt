@@ -20,11 +20,12 @@ class EntityItemViewTest {
     fun `sorts order of properties`() {
         val view = EntityItemView(context)
         view.setEntity(
-            Entity(
+            Entity.Saved(
                 "songs",
                 "1",
                 "S.D.O.S",
-                properties = listOf(Pair("name", "S.D.O.S"), Pair("length", "2:50"))
+                properties = listOf(Pair("name", "S.D.O.S"), Pair("length", "2:50")),
+                index = 0
             )
         )
 
@@ -35,7 +36,7 @@ class EntityItemViewTest {
     @Test
     fun `shows offline pill when entity is offline`() {
         val view = EntityItemView(context)
-        val entity = Entity("songs", "1", "S.D.O.S")
+        val entity = Entity.Saved("songs", "1", "S.D.O.S", index = 0)
 
         view.setEntity(entity.copy(state = Entity.State.OFFLINE))
         assertThat(view.binding.offlinePill.isVisible, equalTo(true))

@@ -15,7 +15,7 @@ class LocalEntitiesFileInstanceParserTest {
     @Test
     fun `includes properties in local entity elements`() {
         val entity =
-            Entity(
+            Entity.New(
                 "people",
                 "1",
                 "Shiv Roy",
@@ -36,7 +36,7 @@ class LocalEntitiesFileInstanceParserTest {
     @Test
     fun `includes version in local entity elements`() {
         val entity =
-            Entity(
+            Entity.New(
                 "people",
                 "1",
                 "Shiv Roy",
@@ -56,7 +56,7 @@ class LocalEntitiesFileInstanceParserTest {
     @Test
     fun `partial parse returns elements without values`() {
         val entity =
-            Entity(
+            Entity.New(
                 "people",
                 "1",
                 "Shiv Roy",
@@ -75,5 +75,35 @@ class LocalEntitiesFileInstanceParserTest {
         0.until(item.numChildren).forEach {
             assertThat(item.getChildAt(it).value?.value, equalTo(null))
         }
+    }
+
+    @Test
+    fun `uses entity index for multiplicity`() {
+        val entities = arrayOf(
+            Entity.New(
+                "people",
+                "1",
+                "Shiv Roy"
+            ),
+            Entity.New(
+                "people",
+                "2",
+                "Kendall Roy"
+            )
+        )
+
+        val repository = InMemEntitiesRepository()
+        repository.save(*entities)
+
+        val parser = LocalEntitiesFileInstanceParser { repository }
+        val instance = parser.parse("people", "people.csv", false)
+
+        val first = instance.getChildAt(0)!!
+        assertThat(first.getFirstChild("name")!!.value!!.value, equalTo("1"))
+        assertThat(first.multiplicity, equalTo(0))
+
+        val second = instance.getChildAt(1)!!
+        assertThat(second.getFirstChild("name")!!.value!!.value, equalTo("2"))
+        assertThat(second.multiplicity, equalTo(1))
     }
 }

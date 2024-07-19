@@ -15,8 +15,18 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         return readJson().keys
     }
 
-    override fun getEntities(list: String): List<Entity> {
-        return readEntities().filter { it.list == list }
+    override fun getEntities(list: String): List<Entity.Saved> {
+        return readEntities().filter { it.list == list }.mapIndexed { index, entity ->
+            Entity.Saved(
+                entity.list,
+                entity.id,
+                entity.label,
+                entity.version,
+                entity.properties,
+                entity.state,
+                index
+            )
+        }
     }
 
     override fun save(vararg entities: Entity) {
@@ -35,7 +45,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
 
                 entityList.remove(existing)
                 entityList.add(
-                    Entity(
+                    Entity.New(
                         entity.list,
                         entity.id,
                         entity.label ?: existing.label,
@@ -72,7 +82,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         writeEntities(existing)
     }
 
-    private fun writeEntities(entities: MutableList<Entity>) {
+    private fun writeEntities(entities: List<Entity.New>) {
         val map = mutableMapOf<String, MutableList<JsonEntity>>()
         entities.forEach {
             map.getOrPut(it.list) { mutableListOf() }.add(it.toJson())
@@ -81,7 +91,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         writeJson(map)
     }
 
-    private fun readEntities(): MutableList<Entity> {
+    private fun readEntities(): MutableList<Entity.New> {
         return readJson().entries.flatMap { (list, entities) ->
             entities.map { it.toEntity(list) }
         }.toMutableList()
@@ -146,14 +156,14 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         val offline: Boolean
     )
 
-    private fun JsonEntity.toEntity(list: String): Entity {
+    private fun JsonEntity.toEntity(list: String): Entity.New {
         val state = if (this.offline) {
             Entity.State.OFFLINE
         } else {
             Entity.State.ONLINE
         }
 
-        return Entity(
+        return Entity.New(
             list,
             this.id,
             this.label,
