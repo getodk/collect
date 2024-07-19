@@ -38,6 +38,7 @@ import bikramsambat.BsCalendar;
 import bikramsambat.BsException;
 import bikramsambat.BsGregorianDate;
 import mmcalendar.MyanmarDate;
+import mmcalendar.MyanmarDateConverter;
 import timber.log.Timber;
 
 public class DateTimeWidgetUtils {
@@ -110,10 +111,10 @@ public class DateTimeWidgetUtils {
                 break;
             case MYANMAR:
                 customDate = new DateTime(date);
-                MyanmarDate myanmarDate = MyanmarDate.of(customDate.getYear(),
+                MyanmarDate myanmarDate = MyanmarDateConverter.convert(customDate.getYear(),
                         customDate.getMonthOfYear(), customDate.getDayOfMonth(), customDate.getHourOfDay(),
                         customDate.getMinuteOfHour(), customDate.getSecondOfMinute());
-                monthArray = MyanmarDateUtils.getMyanmarMonthsArray(myanmarDate.getYearValue());
+                monthArray = MyanmarDateUtils.getMyanmarMonthsArray(myanmarDate.getYearInt());
                 break;
             case PERSIAN:
                 customDate = new DateTime(date).withChronology(PersianChronologyKhayyamBorkowski.getInstance());
@@ -150,17 +151,17 @@ public class DateTimeWidgetUtils {
                 }
                 break;
             case MYANMAR: {
-                MyanmarDate myanmarDate = MyanmarDate.of(customDate.getYear(),
+                MyanmarDate myanmarDate = MyanmarDateConverter.convert(customDate.getYear(),
                         customDate.getMonthOfYear(), customDate.getDayOfMonth(), customDate.getHourOfDay(),
                         customDate.getMinuteOfHour(), customDate.getSecondOfMinute());
 
-                String day = datePickerDetails.isSpinnerMode() ? myanmarDate.getDayOfMonth() + " " : "";
+                String day = datePickerDetails.isSpinnerMode() ? myanmarDate.getMonthDay() + " " : "";
                 String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? monthArray[MyanmarDateUtils.getMonthId(myanmarDate)] + " " : "";
 
                 if (containsTime) {
-                    customDateText = day + month + myanmarDate.getYearValue() + ", " + df.format(customDate.toDate());
+                    customDateText = day + month + myanmarDate.getYearInt() + ", " + df.format(customDate.toDate());
                 } else {
-                    customDateText = day + month + myanmarDate.getYearValue();
+                    customDateText = day + month + myanmarDate.getYearInt();
                 }
                 break;
             }
