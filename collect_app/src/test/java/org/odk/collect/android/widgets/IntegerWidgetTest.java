@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.Appearances.THOUSANDS_SEP;
 
 import android.text.InputType;
-import android.text.method.SingleLineTransformationMethod;
 
 import androidx.annotation.NonNull;
 
@@ -60,6 +59,6 @@ public class IntegerWidgetTest extends GeneralStringWidgetTest<IntegerWidget, In
     public void verifyInputType() {
         IntegerWidget widget = getWidget();
         assertThat(widget.widgetAnswerText.getBinding().editText.getInputType(), equalTo(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED));
-        assertThat(widget.widgetAnswerText.getBinding().editText.getTransformationMethod().getClass(), equalTo(SingleLineTransformationMethod.class));
+        assertThat(widget.widgetAnswerText.getBinding().editText.getTransformationMethod(), equalTo(null));
     }
 }
