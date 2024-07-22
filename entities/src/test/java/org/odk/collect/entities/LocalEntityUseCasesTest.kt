@@ -6,6 +6,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
+import org.odk.collect.entities.javarosa.finalization.FormEntity
 import org.odk.collect.entities.javarosa.parse.EntityItemElement
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.storage.EntitiesRepository
@@ -20,18 +21,11 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromForm does not save updated entity that doesn't already exist`() {
-        val entity =
-            org.odk.collect.entities.javarosa.finalization.Entity(
-                EntityAction.UPDATE,
-                "things",
-                "1",
-                "1",
-                1,
-                emptyList()
-            )
+        val formEntity =
+            FormEntity(EntityAction.UPDATE, "things", "1", "1", 1, emptyList())
         val formEntities =
             EntitiesExtra(
-                listOf(entity)
+                listOf(formEntity)
             )
         entitiesRepository.addList("things")
 
@@ -41,18 +35,11 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromForm does not save entity that doesn't have an ID`() {
-        val entity =
-            org.odk.collect.entities.javarosa.finalization.Entity(
-                EntityAction.CREATE,
-                "things",
-                null,
-                "1",
-                1,
-                emptyList()
-            )
+        val formEntity =
+            FormEntity(EntityAction.CREATE, "things", null, "1", 1, emptyList())
         val formEntities =
             EntitiesExtra(
-                listOf(entity)
+                listOf(formEntity)
             )
         entitiesRepository.addList("things")
 
