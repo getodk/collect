@@ -20,6 +20,31 @@ class LocalEntityUseCasesTest {
     private val entitiesRepository = InMemEntitiesRepository()
 
     @Test
+    fun `updateLocalEntitiesFromForm does not override trunk version`() {
+        entitiesRepository.save(
+            Entity.New(
+                "things",
+                "id",
+                "label",
+                version = 1,
+                trunkVersion = 1
+            )
+        )
+
+        val formEntity =
+            FormEntity(EntityAction.UPDATE, "things", "id", "label", 2, emptyList())
+        val formEntities =
+            EntitiesExtra(
+                listOf(formEntity)
+            )
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        val entities = entitiesRepository.getEntities("things")
+        assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].trunkVersion, equalTo(1))
+    }
+
+    @Test
     fun `updateLocalEntitiesFromForm does not save updated entity that doesn't already exist`() {
         val formEntity =
             FormEntity(EntityAction.UPDATE, "things", "1", "1", 1, emptyList())

@@ -19,16 +19,15 @@ object LocalEntityUseCases {
         formEntities?.entities?.forEach { formEntity ->
             val id = formEntity.id
             if (id != null && entitiesRepository.getLists().contains(formEntity.dataset)) {
-                if (formEntity.action != EntityAction.UPDATE || entitiesRepository.getEntities(
-                        formEntity.dataset
-                    ).any { it.id == id }
-                ) {
+                val existing = entitiesRepository.getById(formEntity.dataset, formEntity.id)
+                if (formEntity.action != EntityAction.UPDATE || existing != null) {
                     val entity = Entity.New(
                         formEntity.dataset,
                         id,
                         formEntity.label,
                         formEntity.version,
-                        formEntity.properties
+                        formEntity.properties,
+                        trunkVersion = existing?.trunkVersion
                     )
 
                     entitiesRepository.save(entity)
