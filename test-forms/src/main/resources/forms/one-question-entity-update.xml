@@ -2,7 +2,7 @@
 <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:entities="http://www.opendatakit.org/xforms/entities">
 	<h:head>
 		<h:title>One Question Entity Update</h:title>
-		<model odk:xforms-version="1.0.0" entities:entities-version="2023.1.0">
+		<model odk:xforms-version="1.0.0" entities:entities-version="2024.1.0">
 			<instance>
 				<data id="one_question_entity_update" version="1">
 					<person/>
@@ -10,7 +10,7 @@
 					<meta>
 						<instanceID/>
 						<instanceName/>
-						<entity dataset="people" update="true" id="" baseVersion="">
+						<entity dataset="people" update="true" id="" baseVersion="" trunkVersion="">
 							<label/>
 						</entity>
 					</meta>
@@ -27,6 +27,7 @@
 			<bind nodeset="/data/meta/entity/@id" type="string" calculate="/data/person"/>
 			<bind calculate="/data/name" nodeset="/data/meta/entity/label" type="string"/>
 			<bind nodeset="/data/meta/entity/@baseVersion" calculate="instance('people')/root/item[name=/data/person]/__version" type="string"/>
+			<bind nodeset="/data/meta/entity/@trunkVersion" calculate="instance('people')/root/item[name=/data/person]/__trunkVersion" type="string"/>
 		</model>
 	</h:head>
 	<h:body>
