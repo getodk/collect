@@ -57,10 +57,12 @@ class LocalEntityUseCasesTest {
         assertThat(songs.size, equalTo(1))
         assertThat(songs[0].label, equalTo("Noah"))
         assertThat(songs[0].version, equalTo(2))
+        assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
+        assertThat(songs[0].trunkVersion, equalTo(2))
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer does not override offline version if the online version is older`() {
+    fun `updateLocalEntitiesFromServer updates trunkVersion and state if the online version is older`() {
         entitiesRepository.save(Entity.New("songs", "noah", "Noah", 2))
         val csv = createEntityList(Entity.New("songs", "noah", "Noa", 1))
 
@@ -69,10 +71,12 @@ class LocalEntityUseCasesTest {
         assertThat(songs.size, equalTo(1))
         assertThat(songs[0].label, equalTo("Noah"))
         assertThat(songs[0].version, equalTo(2))
+        assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
+        assertThat(songs[0].trunkVersion, equalTo(1))
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer does not override offline version if the online version is the same`() {
+    fun `updateLocalEntitiesFromServer updates trunkVersion and state if the online version is the same`() {
         entitiesRepository.save(Entity.New("songs", "noah", "Noah", 2))
         val csv = createEntityList(Entity.New("songs", "noah", "Noa", 2))
 
@@ -81,6 +85,8 @@ class LocalEntityUseCasesTest {
         assertThat(songs.size, equalTo(1))
         assertThat(songs[0].label, equalTo("Noah"))
         assertThat(songs[0].version, equalTo(2))
+        assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
+        assertThat(songs[0].trunkVersion, equalTo(2))
     }
 
     @Test

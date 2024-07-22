@@ -19,7 +19,10 @@ object LocalEntityUseCases {
         formEntities?.entities?.forEach { formEntity ->
             val id = formEntity.id
             if (id != null && entitiesRepository.getLists().contains(formEntity.dataset)) {
-                if (formEntity.action != EntityAction.UPDATE || entitiesRepository.getEntities(formEntity.dataset).any { it.id == id }) {
+                if (formEntity.action != EntityAction.UPDATE || entitiesRepository.getEntities(
+                        formEntity.dataset
+                    ).any { it.id == id }
+                ) {
                     val entity = Entity.New(
                         formEntity.dataset,
                         id,
@@ -57,7 +60,9 @@ object LocalEntityUseCases {
             if (existing == null || existing.version < entity.version) {
                 Pair(new + entity, missing)
             } else if (existing.state == Entity.State.OFFLINE) {
-                Pair(new + existing.copy(state = Entity.State.ONLINE), missing)
+                val update =
+                    existing.copy(state = Entity.State.ONLINE, trunkVersion = entity.version)
+                Pair(new + update, missing)
             } else {
                 Pair(new, missing)
             }
@@ -100,7 +105,14 @@ object LocalEntityUseCases {
                 }
             }
 
-        val entity = Entity.New(list, id, label, version, properties, state = Entity.State.ONLINE)
-        return entity
+        return Entity.New(
+            list,
+            id,
+            label,
+            version,
+            properties,
+            state = Entity.State.ONLINE,
+            trunkVersion = version
+        )
     }
 }
