@@ -236,6 +236,7 @@ public class ExStringWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public void hideError() {
+        super.hideError();
         binding.widgetAnswerText.setError(null);
     }
 

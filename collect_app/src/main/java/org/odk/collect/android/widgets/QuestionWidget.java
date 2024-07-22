@@ -75,7 +75,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
-    protected final View errorLayout;
+    public final View errorLayout;
     protected final Settings settings;
     private AtomicBoolean expanded;
     protected final ThemeUtils themeUtils;
