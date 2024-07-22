@@ -429,7 +429,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 autoSendSettingsProvider,
                 formsRepositoryProvider,
                 instancesRepositoryProvider,
-                new SavepointsRepositoryProvider(this, storagePathProvider),
+                savepointsRepositoryProvider,
                 new QRCodeCreatorImpl(),
                 new HtmlPrinter(),
                 instancesDataService
