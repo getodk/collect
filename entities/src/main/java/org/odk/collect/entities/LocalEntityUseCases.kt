@@ -8,6 +8,7 @@ import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import java.io.File
+import java.util.UUID
 
 object LocalEntityUseCases {
 
@@ -71,6 +72,13 @@ object LocalEntityUseCases {
 
             if (existing == null || existing.version < entity.version) {
                 Pair(new + entity, missing)
+            } else if (existing.version == entity.version) {
+                val update = existing.copy(
+                    state = Entity.State.ONLINE,
+                    trunkVersion = entity.version,
+                    branchId = UUID.randomUUID().toString()
+                )
+                Pair(new + update, missing)
             } else if (existing.state == Entity.State.OFFLINE) {
                 val update =
                     existing.copy(state = Entity.State.ONLINE, trunkVersion = entity.version)
