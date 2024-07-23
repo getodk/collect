@@ -20,6 +20,50 @@ class LocalEntityUseCasesTest {
     private val entitiesRepository = InMemEntitiesRepository()
 
     @Test
+    fun `updateLocalEntitiesFromForm increments version on update`() {
+        entitiesRepository.save(
+            Entity.New(
+                "things",
+                "id",
+                "label",
+                version = 1
+            )
+        )
+
+        val formEntity =
+            FormEntity(EntityAction.UPDATE, "things", "id", "label", -1, emptyList())
+        val formEntities = EntitiesExtra(listOf(formEntity))
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        val entities = entitiesRepository.getEntities("things")
+        assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].version, equalTo(2))
+    }
+
+    @Test
+    fun `updateLocalEntitiesFromForm updates properties on update`() {
+        entitiesRepository.save(
+            Entity.New(
+                "things",
+                "id",
+                "label",
+                version = 1,
+                properties = listOf("prop" to "value")
+            )
+        )
+
+        val formEntity =
+            FormEntity(EntityAction.UPDATE, "things", "id", "label", -1, emptyList())
+        val formEntities = EntitiesExtra(listOf(formEntity))
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        val entities = entitiesRepository.getEntities("things")
+        assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].properties.size, equalTo(1))
+        assertThat(entities[0].properties[0], equalTo("prop" to "value"))
+    }
+
+    @Test
     fun `updateLocalEntitiesFromForm does not override trunk version`() {
         entitiesRepository.save(
             Entity.New(
@@ -33,10 +77,7 @@ class LocalEntityUseCasesTest {
 
         val formEntity =
             FormEntity(EntityAction.UPDATE, "things", "id", "label", 2, emptyList())
-        val formEntities =
-            EntitiesExtra(
-                listOf(formEntity)
-            )
+        val formEntities = EntitiesExtra(listOf(formEntity))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
         val entities = entitiesRepository.getEntities("things")
@@ -48,10 +89,7 @@ class LocalEntityUseCasesTest {
     fun `updateLocalEntitiesFromForm does not save updated entity that doesn't already exist`() {
         val formEntity =
             FormEntity(EntityAction.UPDATE, "things", "1", "1", 1, emptyList())
-        val formEntities =
-            EntitiesExtra(
-                listOf(formEntity)
-            )
+        val formEntities = EntitiesExtra(listOf(formEntity))
         entitiesRepository.addList("things")
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -62,10 +100,7 @@ class LocalEntityUseCasesTest {
     fun `updateLocalEntitiesFromForm does not save entity that doesn't have an ID`() {
         val formEntity =
             FormEntity(EntityAction.CREATE, "things", null, "1", 1, emptyList())
-        val formEntities =
-            EntitiesExtra(
-                listOf(formEntity)
-            )
+        val formEntities = EntitiesExtra(listOf(formEntity))
         entitiesRepository.addList("things")
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
