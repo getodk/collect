@@ -3,6 +3,7 @@ package org.odk.collect.entities
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.blankOrNullString
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Test
@@ -19,6 +20,20 @@ import java.io.File
 class LocalEntityUseCasesTest {
 
     private val entitiesRepository = InMemEntitiesRepository()
+
+    @Test
+    fun `updateLocalEntitiesFromForm creates a new branchId for new entities`() {
+        entitiesRepository.addList("things")
+
+        val formEntity =
+            FormEntity(EntityAction.CREATE, "things", "id", "label", emptyList())
+        val formEntities = EntitiesExtra(listOf(formEntity))
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+
+        val entities = entitiesRepository.getEntities("things")
+        assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].branchId, not(blankOrNullString()))
+    }
 
     @Test
     fun `updateLocalEntitiesFromForm increments version on update`() {
@@ -65,14 +80,15 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromForm does not override trunk version`() {
+    fun `updateLocalEntitiesFromForm does not override trunk version or branchId on update`() {
         entitiesRepository.save(
             Entity.New(
                 "things",
                 "id",
                 "label",
                 version = 1,
-                trunkVersion = 1
+                trunkVersion = 1,
+                branchId = "branch-1"
             )
         )
 
@@ -84,6 +100,7 @@ class LocalEntityUseCasesTest {
         val entities = entitiesRepository.getEntities("things")
         assertThat(entities.size, equalTo(1))
         assertThat(entities[0].trunkVersion, equalTo(1))
+        assertThat(entities[0].branchId, equalTo("branch-1"))
     }
 
     @Test
