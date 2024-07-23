@@ -7,6 +7,5 @@ class FormEntity(
     @JvmField val dataset: String,
     @JvmField val id: String?,
     @JvmField val label: String?,
-    @JvmField val version: Int,
     @JvmField val properties: List<Pair<String, String>>
 )

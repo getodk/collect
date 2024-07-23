@@ -35,13 +35,8 @@ public class EntityFormFinalizationProcessor implements FormEntryFinalizationPro
             EntityAction action = EntityFormParser.parseAction(entityElement);
             String dataset = EntityFormParser.parseDataset(entityElement);
 
-            if (action == EntityAction.CREATE) {
-                FormEntity entity = createEntity(entityElement, 1, dataset, saveTos, mainInstance, action);
-                formEntryModel.getExtras().put(new EntitiesExtra(asList(entity)));
-            } else if (action == EntityAction.UPDATE) {
-                int baseVersion = EntityFormParser.parseBaseVersion(entityElement);
-                int newVersion = baseVersion + 1;
-                FormEntity entity = createEntity(entityElement, newVersion, dataset, saveTos, mainInstance, action);
+            if (action == EntityAction.CREATE || action == EntityAction.UPDATE) {
+                FormEntity entity = createEntity(entityElement, dataset, saveTos, mainInstance, action);
                 formEntryModel.getExtras().put(new EntitiesExtra(asList(entity)));
             } else {
                 formEntryModel.getExtras().put(new EntitiesExtra(emptyList()));
@@ -49,7 +44,7 @@ public class EntityFormFinalizationProcessor implements FormEntryFinalizationPro
         }
     }
 
-    private FormEntity createEntity(TreeElement entityElement, int version, String dataset, List<Pair<XPathReference, String>> saveTos, FormInstance mainInstance, EntityAction action) {
+    private FormEntity createEntity(TreeElement entityElement, String dataset, List<Pair<XPathReference, String>> saveTos, FormInstance mainInstance, EntityAction action) {
         List<Pair<String, String>> fields = saveTos.stream().map(saveTo -> {
             IDataReference reference = saveTo.getFirst();
             IAnswerData answerData = mainInstance.resolveReference(reference).getValue();
@@ -63,6 +58,6 @@ public class EntityFormFinalizationProcessor implements FormEntryFinalizationPro
 
         String id = EntityFormParser.parseId(entityElement);
         String label = EntityFormParser.parseLabel(entityElement);
-        return new FormEntity(action, dataset, id, label, version, fields);
+        return new FormEntity(action, dataset, id, label, fields);
     }
 }

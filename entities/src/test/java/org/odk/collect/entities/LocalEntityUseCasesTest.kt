@@ -31,7 +31,7 @@ class LocalEntityUseCasesTest {
         )
 
         val formEntity =
-            FormEntity(EntityAction.UPDATE, "things", "id", "label", -1, emptyList())
+            FormEntity(EntityAction.UPDATE, "things", "id", "label", emptyList())
         val formEntities = EntitiesExtra(listOf(formEntity))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -53,7 +53,7 @@ class LocalEntityUseCasesTest {
         )
 
         val formEntity =
-            FormEntity(EntityAction.UPDATE, "things", "id", "label", -1, emptyList())
+            FormEntity(EntityAction.UPDATE, "things", "id", "label", emptyList())
         val formEntities = EntitiesExtra(listOf(formEntity))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -76,7 +76,7 @@ class LocalEntityUseCasesTest {
         )
 
         val formEntity =
-            FormEntity(EntityAction.UPDATE, "things", "id", "label", 2, emptyList())
+            FormEntity(EntityAction.UPDATE, "things", "id", "label", emptyList())
         val formEntities = EntitiesExtra(listOf(formEntity))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -88,7 +88,7 @@ class LocalEntityUseCasesTest {
     @Test
     fun `updateLocalEntitiesFromForm does not save updated entity that doesn't already exist`() {
         val formEntity =
-            FormEntity(EntityAction.UPDATE, "things", "1", "1", 1, emptyList())
+            FormEntity(EntityAction.UPDATE, "things", "1", "1", emptyList())
         val formEntities = EntitiesExtra(listOf(formEntity))
         entitiesRepository.addList("things")
 
@@ -99,7 +99,7 @@ class LocalEntityUseCasesTest {
     @Test
     fun `updateLocalEntitiesFromForm does not save entity that doesn't have an ID`() {
         val formEntity =
-            FormEntity(EntityAction.CREATE, "things", null, "1", 1, emptyList())
+            FormEntity(EntityAction.CREATE, "things", null, "1", emptyList())
         val formEntities = EntitiesExtra(listOf(formEntity))
         entitiesRepository.addList("things")
 

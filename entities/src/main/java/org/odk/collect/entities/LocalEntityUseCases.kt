@@ -25,7 +25,7 @@ object LocalEntityUseCases {
                             formEntity.dataset,
                             id,
                             formEntity.label,
-                            formEntity.version,
+                            1,
                             formEntity.properties
                         )
 

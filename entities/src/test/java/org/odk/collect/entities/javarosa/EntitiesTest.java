@@ -127,7 +127,6 @@ public class EntitiesTest {
         assertThat(entities.get(0).dataset, equalTo("people"));
         assertThat(entities.get(0).id, equalTo(scenario.answerOf("/data/meta/entity/@id").getValue()));
         assertThat(entities.get(0).label, equalTo("Tom Wambsgans"));
-        assertThat(entities.get(0).version, equalTo(1));
         assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("name", "Tom Wambsgans"))));
         assertThat(entities.get(0).action, equalTo(EntityAction.CREATE));
     }
@@ -213,7 +212,6 @@ public class EntitiesTest {
         assertThat(entities.get(0).dataset, equalTo("people"));
         assertThat(entities.get(0).id, equalTo("123"));
         assertThat(entities.get(0).label, equalTo("Tom Wambsgans"));
-        assertThat(entities.get(0).version, equalTo(2));
         assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("name", "Tom Wambsgans"))));
         assertThat(entities.get(0).action, equalTo(EntityAction.UPDATE));
     }
@@ -255,7 +253,6 @@ public class EntitiesTest {
         assertThat(entities.get(0).dataset, equalTo("people"));
         assertThat(entities.get(0).id, equalTo("123"));
         assertThat(entities.get(0).label, equalTo(null));
-        assertThat(entities.get(0).version, equalTo(2));
         assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("name", "Tom Wambsgans"))));
     }
 
@@ -296,7 +293,7 @@ public class EntitiesTest {
     }
 
     @Test
-    public void fillingFormWithCreateAndUpdate_makesEntityAvailableAsSecondVersion() throws IOException, XFormParser.ParseException {
+    public void fillingFormWithCreateAndUpdate_makesEntityAvailableAsUpdateVersion() throws IOException, XFormParser.ParseException {
         Scenario scenario = Scenario.init("Create entity form", XFormsElement.html(
             asList(
                 new Pair<>("entities", "http://www.opendatakit.org/xforms/entities")
@@ -334,13 +331,12 @@ public class EntitiesTest {
         assertThat(entities.get(0).dataset, equalTo("people"));
         assertThat(entities.get(0).id, equalTo("123"));
         assertThat(entities.get(0).label, equalTo("Tom Wambsgans"));
-        assertThat(entities.get(0).version, equalTo(2));
         assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("name", "Tom Wambsgans"))));
         assertThat(entities.get(0).action, equalTo(EntityAction.UPDATE));
     }
 
     @Test
-    public void fillingFormWithCreateAndUpdate_butNoBaseVersion_makesEntityAvailableAsFirstVersion() throws IOException, XFormParser.ParseException {
+    public void fillingFormWithCreateAndUpdate_butNoBaseVersion_makesEntityAvailableAsUpdate() throws IOException, XFormParser.ParseException {
         Scenario scenario = Scenario.init("Create entity form", XFormsElement.html(
             asList(
                 new Pair<>("entities", "http://www.opendatakit.org/xforms/entities")
@@ -378,7 +374,6 @@ public class EntitiesTest {
         assertThat(entities.get(0).dataset, equalTo("people"));
         assertThat(entities.get(0).id, equalTo("123"));
         assertThat(entities.get(0).label, equalTo("Tom Wambsgans"));
-        assertThat(entities.get(0).version, equalTo(1));
         assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("name", "Tom Wambsgans"))));
         assertThat(entities.get(0).action, equalTo(EntityAction.UPDATE));
     }

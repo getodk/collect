@@ -1,19 +1,18 @@
 package org.odk.collect.entities.javarosa.spec;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.instance.FormInstance;
-import org.javarosa.core.model.instance.TreeElement;
-import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ATTRIBUTE_BASE_VERSION;
 import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ATTRIBUTE_CREATE;
 import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ATTRIBUTE_DATASET;
 import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ATTRIBUTE_ID;
 import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ATTRIBUTE_UPDATE;
 import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ELEMENT_ENTITY;
 import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ELEMENT_LABEL;
+
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.instance.FormInstance;
+import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityFormParser {
 
@@ -45,14 +44,6 @@ public class EntityFormParser {
     @Nullable
     public static String parseId(TreeElement entity) {
         return entity.getAttributeValue("", ATTRIBUTE_ID);
-    }
-
-    public static Integer parseBaseVersion(TreeElement entity) {
-        try {
-            return Integer.valueOf(entity.getAttributeValue("", ATTRIBUTE_BASE_VERSION));
-        } catch (NumberFormatException e) {
-            return 0;
-        }
     }
 
     @Nullable
