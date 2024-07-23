@@ -10,7 +10,7 @@
 					<meta>
 						<instanceID/>
 						<instanceName/>
-						<entity dataset="people" update="true" id="" baseVersion="" trunkVersion="">
+						<entity dataset="people" update="true" id="" baseVersion="" trunkVersion="" branchId="">
 							<label/>
 						</entity>
 					</meta>
@@ -28,6 +28,7 @@
 			<bind calculate="/data/name" nodeset="/data/meta/entity/label" type="string"/>
 			<bind nodeset="/data/meta/entity/@baseVersion" calculate="instance('people')/root/item[name=/data/person]/__version" type="string"/>
 			<bind nodeset="/data/meta/entity/@trunkVersion" calculate="instance('people')/root/item[name=/data/person]/__trunkVersion" type="string"/>
+			<bind nodeset="/data/meta/entity/@branchId" calculate="instance('people')/root/item[name=/data/person]/__branchId" type="string"/>
 		</model>
 	</h:head>
 	<h:body>
