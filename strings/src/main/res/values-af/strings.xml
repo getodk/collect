@@ -95,8 +95,6 @@
   <string name="activity_not_found">Geen aktiwiteit om te hanteer nie: %s</string>
   <string name="no_app">Die program of app wat u aangevra het word vermis. Tik asb self die lesing in.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Begin druk</string>
-  <string name="no_printer">Die aangevraagde drukker is nie geïnstalleer nie. Installeer asseblief die drukker .</string>
   <string name="open_url">Maak Url oop</string>
   <string name="capture_osm">Loods OpenMapKit</string>
   <string name="recapture_osm">Doen OSM-tagging oor</string>

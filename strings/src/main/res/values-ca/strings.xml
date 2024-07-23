@@ -103,8 +103,6 @@
   <string name="activity_not_found">Cap activitat pendent trobada: %s</string>
   <string name="no_app">L\'aplicació sol·licitada no s\'ha trobat.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Inicia la impressió</string>
-  <string name="no_printer">Impressora no trobada. Si us plau, instal·li la impressora.</string>
   <string name="open_url">Obrir Url</string>
   <string name="capture_osm">Executa OpenMapKit</string>
   <string name="recapture_osm">Refer signatura OSM</string>

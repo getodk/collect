@@ -83,7 +83,6 @@
   <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
   <string name="activity_not_found"> കൈകാര്യം ചെയ്യാൻ പ്രവർത്തനങ്ങളൊന്നും കണ്ടെത്തിയില്ല: %s</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">പ്രിന്റ് ചെയ്തു തുടങ്ങുക </string>
   <string name="open_url">Url തുറക്കുക </string>
   <string name="capture_osm">OpenMapKit സമാരംഭിക്കുക</string>
   <string name="recapture_osm">OSM ടാഗ്ഗിംഗ് വീണ്ടും ചെയ്യുക</string>

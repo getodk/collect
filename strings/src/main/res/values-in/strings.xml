@@ -172,8 +172,6 @@
   <string name="no_app">Aplikasi yang dibutuhkan tidak tersedia. Silahkan pasang secara manual.</string>
   <string name="null_intent_value">Aplikasi eksternal tidak menyediakan informasi yang dibutuhkan.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Memulai Pencetakan</string>
-  <string name="no_printer">Printer yang dipilih belum terinstal. Mohon instal printer terlebih dahulu.</string>
   <string name="open_url">Buka URL</string>
   <string name="capture_osm">Jalankan OpenMapKit</string>
   <string name="recapture_osm">Tandai Ulang OSM</string>

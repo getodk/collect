@@ -101,8 +101,6 @@
   <string name="activity_not_found">လုပ်ဆောင်ရန် အလုပ်မတွေ့ပါ%s</string>
   <string name="no_app">လုပ္ေဆာင္မွုလြဲေခ်ာ္ေနပါသည္၊ ေသခ်ာစြာဖတ္ရွု၍ ၿဖည့္သြင္းပါ</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Initiate Printing</string>
-  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="capture_osm">OpenMapKit ကိုဖွင့်ပါ</string>
   <string name="recapture_osm">OSM စာကပ်ခြင်း ပြန်လုပ်ပါ</string>
   <string name="get_barcode">ဘာကုတ္(ဒ္) ရယူပါ</string>

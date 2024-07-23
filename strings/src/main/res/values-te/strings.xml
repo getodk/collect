@@ -139,8 +139,6 @@
   <string name="no_app">అభ్యర్థించిన అప్లికేషన్ లేదు. దయచేసి రీడింగ్ మాన్యువల్‌గా నమోదు చేయండి.</string>
   <string name="null_intent_value">ఎక్స్టర్నల్ అప్లికేషన్ ఆశించిన సమాచారాన్ని అందించలేదు.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">ప్రింటింగ్ ప్రారంభించండి</string>
-  <string name="no_printer">అభ్యర్థించిన ప్రింటర్ ఇన్‌స్టాల్ చేయబడలేదు. దయచేసి ప్రింటర్‌ను ఇన్‌స్టాల్ చేయండి.</string>
   <string name="open_url">Url  ఓపెన్ చెయ్యి  </string>
   <string name="capture_osm">ఓపెన్‌మ్యాప్‌కిట్‌ను ప్రారంభించండి</string>
   <string name="recapture_osm">ఓఎస్ఎం టాగింగ్‌ను మరలా  చేయండి</string>

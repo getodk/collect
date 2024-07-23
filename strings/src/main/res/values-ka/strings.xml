@@ -133,8 +133,6 @@
   <string name="activity_not_found">არ არსებობს განსახილველი ფუნქცია: %s</string>
   <string name="no_app">მოთხოვნილი აპლიკაცია არ მოიძებნა, გთხოვთ მიუთითოთ ხელით.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">ბეჭდვის გაშვება</string>
-  <string name="no_printer">მოთხოვნილი პრინტერი არ არის დაყენებული. გთხოვთ, დააყენოთ პრინტერი</string>
   <string name="open_url">ბმულის გახსნა</string>
   <string name="capture_osm">OpenMapKit-ის ჩართვა</string>
   <string name="recapture_osm">OSM-მარკირების უკან დაბრუნება</string>

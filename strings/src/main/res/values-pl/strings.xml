@@ -139,8 +139,6 @@
   <string name="no_app">Brakuje żądanej aplikacji. Proszę, wprowadź ręcznie odczytane wartości.</string>
   <string name="null_intent_value">Zewnętrzna aplikacja nie dostarczyła oczekiwanych informacji.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Inicjalizuj Drukowanie</string>
-  <string name="no_printer">Żądana drukarka nie jest zainstalowana. Proszę, zainstaluj drukarkę.</string>
   <string name="open_url">Otwórz URL</string>
   <string name="capture_osm">Uruchom OpenMapKit</string>
   <string name="recapture_osm">Ponów oznaczanie OSM </string>

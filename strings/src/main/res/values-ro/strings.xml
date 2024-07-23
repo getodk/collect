@@ -96,8 +96,6 @@
   <string name="activity_not_found">Nu s-a găsit nicio activitate care să se ocupe de : %s</string>
   <string name="no_app">Aplicația solicitată lipsește. Vă rugăm să introduceți manual textul.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Printare inițializată</string>
-  <string name="no_printer">Imprimanta specificată nu este instalată. Vă rugăm să instalați implimanta.</string>
   <string name="open_url">Deschideți Url</string>
   <string name="capture_osm">Lansează OpenMapKit</string>
   <string name="recapture_osm">Reface etichetare (tagging) OSM</string>

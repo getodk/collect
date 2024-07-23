@@ -176,8 +176,6 @@
   <string name="null_intent_value">L\'applicativo esterno non ha fornito l\'informazione attesa.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="print">Stampa</string>
-  <string name="launch_printer">Inizio Stampa</string>
-  <string name="no_printer">La stampante richiesta non è installata. Per piacere installa la stampante.</string>
   <string name="open_url">Apri URL</string>
   <string name="capture_osm">Lancia OpenMapKit</string>
   <string name="recapture_osm">Rifai tag a OSM</string>

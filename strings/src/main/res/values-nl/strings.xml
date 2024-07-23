@@ -147,8 +147,6 @@
   <string name="activity_not_found">Geen programma gevonden voor: %s</string>
   <string name="no_app">Benodigde applicatie ontbreekt. Voer de waarde handmatig in.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Start printen</string>
-  <string name="no_printer">De gevraagde printer is niet geinstalleerd. Installeer de printer.</string>
   <string name="open_url">Open Url</string>
   <string name="capture_osm">OpenMapKit starten</string>
   <string name="recapture_osm">OSM Tagging opnieuw uitvoeren</string>

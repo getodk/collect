@@ -176,8 +176,6 @@
   <string name="null_intent_value">Zunanja aplikacija ni zagotovila pričakovanih informacij.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="print">Tisk</string>
-  <string name="launch_printer">Zaženi tiskanje</string>
-  <string name="no_printer">Želen tiskalnik ni nameščen. Namesti tiskalnik.</string>
   <string name="open_url">Odpri URL</string>
   <string name="capture_osm">Zaženi OpenMapKit</string>
   <string name="recapture_osm">Ponovi OSM označevanje</string>

@@ -84,8 +84,6 @@
   <string name="activity_not_found">Hindi mapangasiwaan: %s</string>
   <string name="no_app">Ang hiniling na application ay nawawala. Paki-pasok ng mano-mano ang detalye.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Initiate Printing</string>
-  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="get_barcode">Kunin ang Barcode</string>
   <string name="replace_barcode">Palitan ang Barcode</string>
   <string name="capture_image">Kumuha ng Larawan</string>

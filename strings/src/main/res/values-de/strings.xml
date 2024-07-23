@@ -176,8 +176,6 @@
   <string name="null_intent_value">Die externe App hat die erwartete Information nicht geliefert.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="print">Drucken</string>
-  <string name="launch_printer">Drucken starten</string>
-  <string name="no_printer">Der gewählte Drucker ist nicht installiert. Bitte installieren Sie den Drucker.</string>
   <string name="open_url">URL öffnen</string>
   <string name="capture_osm">OpenMapKit starten</string>
   <string name="recapture_osm">OSM-Tagging ändern</string>

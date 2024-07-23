@@ -176,8 +176,6 @@
   <string name="null_intent_value">外部應用程式未提供預期訊息。</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="print">列印</string>
-  <string name="launch_printer">初始化列印</string>
-  <string name="no_printer">請求的印表機未被安裝. 請安裝印表機.</string>
   <string name="open_url">打開Url</string>
   <string name="capture_osm">啟動 OpenMapKit</string>
   <string name="recapture_osm">重做OSM標記</string>

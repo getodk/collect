@@ -176,8 +176,6 @@
   <string name="null_intent_value">L\'application externe n\'a pas fourni les informations attendues.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="print">Imprimer</string>
-  <string name="launch_printer">Lancer l\'impression</string>
-  <string name="no_printer">L\'imprimante demandée n\'est pas installée. Merci d\'installer l\'imprimante.</string>
   <string name="open_url">Ouvrir l\'URL</string>
   <string name="capture_osm">Lancer OpenMapKit</string>
   <string name="recapture_osm">Refaire le balisage d\'OSM</string>

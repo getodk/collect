@@ -98,7 +98,6 @@
   <string name="launch_app">አስጀምር</string>
   <string name="activity_not_found">የሚስተናገዱ ምንም እንቅስቃሴዎች አልተገኙም: 1 %s</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">ማተምን ያስጀምሩ</string>
   <string name="open_url">ዩአርኤል ይክፈቱ</string>
   <string name="capture_osm">OpenMapKitን አስጀምር</string>
   <string name="alert">ማንቂያ</string>

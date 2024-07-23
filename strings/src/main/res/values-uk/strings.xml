@@ -134,8 +134,6 @@
   <string name="no_app">Потрібна програма відсутня. Будь ласка, введіть показники вручну.</string>
   <string name="null_intent_value">Зовнішня програма не надала інформацію, що очікувалась.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Друк</string>
-  <string name="no_printer">Потрібний принтер не встановлений. Будь ласка, встановіть принтер.</string>
   <string name="open_url">Відкрити посилання</string>
   <string name="capture_osm">Запустити OpenMapKit</string>
   <string name="recapture_osm">Зробити наново OSM тегування</string>

@@ -176,8 +176,6 @@
   <string name="null_intent_value">Ulkoinen sovellus ei toimittanut odotettua tietoa.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="print">Tulosta</string>
-  <string name="launch_printer">Käynnistä tulostus</string>
-  <string name="no_printer">Pyydettyä tulostinta ei ole asennettu. Asenna tulostin.</string>
   <string name="open_url">Avaa URL</string>
   <string name="capture_osm">Käynnistä OpenMapKit</string>
   <string name="recapture_osm">Uusi OSM-tägi</string>

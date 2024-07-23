@@ -110,8 +110,6 @@
   <string name="activity_not_found">Ingen aktivitet at handle på 1%s</string>
   <string name="no_app">Den efterspurgte applikation mangler. Prøv manuelt at tilgå den.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Start udprint</string>
-  <string name="no_printer">Den valgte printer er ikke installeret. Sørg for at få den installeret først.</string>
   <string name="open_url">Åbn webadresse</string>
   <string name="capture_osm">Åbn OpenMapKit</string>
   <string name="recapture_osm">Omgør OSM-tagging</string>

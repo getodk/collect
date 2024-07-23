@@ -219,8 +219,6 @@
     <string name="null_intent_value">The external application did not provide expected information.</string>
     <!-- Text on button that is part of print questions. Tapping the button prints the value of the question. -->
     <string name="print">Print</string>
-    <string name="launch_printer">Initiate Printing</string>
-    <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
 
     <string name="open_url">Open Url</string>
 
