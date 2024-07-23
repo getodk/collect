@@ -24,7 +24,7 @@ class EntityFormTest {
         .around(rule)
 
     @Test
-    fun fillingEntityRegistrationForm_beforeCreatingEntityList_doesNotCreateEntityForFollowUpForms() {
+    fun fillingEntityRegistrationForm_doesNotShowEntitiesInNonEntityListForm() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
         testDependencies.server.addForm(
             "one-question-entity-update.xml",
