@@ -110,6 +110,49 @@ class EntityFormTest {
     }
 
     @Test
+    fun fillingEntityCreateForm_withUpdate_doesNotCreateEntityForFollowUpForms() {
+        testDependencies.server.addForm("one-question-entity-create-and-update.xml")
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
+            .enableLocalEntitiesInForms()
+
+            .startBlankForm("One Question Entity Registration")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+
+            .startBlankForm("One Question Entity Update")
+            .assertQuestion("Select person")
+            .assertText("Roman Roy")
+            .assertTextDoesNotExist("Logan Roy")
+    }
+
+    @Test
+    fun fillingEntityUpdateForm_withCreate_doesNotUpdateEntityForFollowUpForms() {
+        testDependencies.server.addForm(
+            "one-question-entity-update-and-create.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
+            .enableLocalEntitiesInForms()
+
+            .startBlankForm("One Question Entity Update")
+            .assertQuestion("Select person")
+            .clickOnText("Roman Roy")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Romulus Roy")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .startBlankForm("One Question Entity Update")
+            .assertTextDoesNotExist("Romulus Roy")
+            .assertText("Roman Roy")
+    }
+
+    @Test
     fun entityListSecondaryInstancesAreConsistentBetweenFollowUpForms() {
         testDependencies.server.apply {
             addForm(
