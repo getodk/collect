@@ -25,7 +25,8 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
                 entity.properties,
                 entity.state,
                 index,
-                entity.trunkVersion
+                entity.trunkVersion,
+                entity.branchId
             )
         }
     }
@@ -53,7 +54,8 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
                         version = entity.version,
                         properties = mergeProperties(existing.toEntity(entity.list), entity),
                         state = state,
-                        trunkVersion = entity.trunkVersion
+                        trunkVersion = entity.trunkVersion,
+                        branchId = entity.branchId
                     ).toJson()
                 )
             } else {
@@ -170,7 +172,8 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         val version: Int,
         val properties: Map<String, String>,
         val offline: Boolean,
-        val trunkVersion: Int?
+        val trunkVersion: Int?,
+        val branchId: String
     )
 
     private fun JsonEntity.toEntity(list: String): Entity.New {
@@ -187,7 +190,8 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             this.version,
             this.properties.entries.map { Pair(it.key, it.value) },
             state,
-            this.trunkVersion
+            this.trunkVersion,
+            this.branchId
         )
     }
 
@@ -198,7 +202,8 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             this.version,
             this.properties.toMap(),
             this.state == Entity.State.OFFLINE,
-            this.trunkVersion
+            this.trunkVersion,
+            this.branchId
         )
     }
 }

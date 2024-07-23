@@ -60,11 +60,13 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
         val label = TreeElement(EntityItemElement.LABEL)
         val version = TreeElement(EntityItemElement.VERSION)
         val trunkVersion = TreeElement(EntityItemElement.TRUNK_VERSION)
+        val branchId = TreeElement(EntityItemElement.BRANCH_ID)
 
         if (!partial) {
             name.value = StringData(entity.id)
             label.value = StringData(entity.label)
             version.value = StringData(entity.version.toString())
+            branchId.value = StringData(entity.branchId)
 
             if (entity.trunkVersion != null) {
                 trunkVersion.value = StringData(entity.trunkVersion.toString())
@@ -76,6 +78,7 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
         item.addChild(label)
         item.addChild(version)
         item.addChild(trunkVersion)
+        item.addChild(branchId)
 
         entity.properties.forEach { property ->
             val propertyElement = TreeElement(property.first)

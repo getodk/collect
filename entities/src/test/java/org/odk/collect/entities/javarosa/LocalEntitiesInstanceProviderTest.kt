@@ -28,7 +28,7 @@ class LocalEntitiesInstanceProviderTest {
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
-        assertThat(item.numChildren, equalTo(6))
+        assertThat(item.numChildren, equalTo(7))
         assertThat(item.getFirstChild("age")?.value?.value, equalTo("35"))
         assertThat(item.getFirstChild("born")?.value?.value, equalTo("England"))
     }
@@ -49,7 +49,7 @@ class LocalEntitiesInstanceProviderTest {
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
-        assertThat(item.numChildren, equalTo(4))
+        assertThat(item.numChildren, equalTo(5))
         assertThat(item.getFirstChild(EntityItemElement.VERSION)?.value?.value, equalTo("1"))
     }
 
@@ -69,8 +69,31 @@ class LocalEntitiesInstanceProviderTest {
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
-        assertThat(item.numChildren, equalTo(4))
+        assertThat(item.numChildren, equalTo(5))
         assertThat(item.getFirstChild(EntityItemElement.TRUNK_VERSION)?.value?.value, equalTo("1"))
+    }
+
+    @Test
+    fun `includes branch id in local entity elements`() {
+        val entity =
+            Entity.New(
+                "people",
+                "1",
+                "Shiv Roy",
+                branchId = "branch-1"
+            )
+        entitiesRepository.save(entity)
+
+        val parser = LocalEntitiesInstanceProvider { entitiesRepository }
+        val instance = parser.get("people", "people.csv")
+        assertThat(instance.numChildren, equalTo(1))
+
+        val item = instance.getChildAt(0)!!
+        assertThat(item.numChildren, equalTo(5))
+        assertThat(
+            item.getFirstChild(EntityItemElement.BRANCH_ID)?.value?.value,
+            equalTo("branch-1")
+        )
     }
 
     @Test
@@ -118,7 +141,7 @@ class LocalEntitiesInstanceProviderTest {
 
         val item1 = instance.getChildAt(0)!!
         assertThat(item1.isPartial, equalTo(true))
-        assertThat(item1.numChildren, equalTo(5))
+        assertThat(item1.numChildren, equalTo(6))
         0.until(item1.numChildren).forEach {
             assertThat(item1.getChildAt(it).value?.value, equalTo(null))
         }

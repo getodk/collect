@@ -19,7 +19,8 @@ class InMemEntitiesRepository : EntitiesRepository {
                 entity.properties,
                 entity.state,
                 index,
-                entity.trunkVersion
+                entity.trunkVersion,
+                entity.branchId
             )
         }
     }
@@ -71,7 +72,8 @@ class InMemEntitiesRepository : EntitiesRepository {
                         version = entity.version,
                         properties = mergeProperties(existing, entity),
                         state = state,
-                        trunkVersion = entity.trunkVersion
+                        trunkVersion = entity.trunkVersion,
+                        branchId = entity.branchId
                     )
                 )
             } else {
@@ -83,7 +85,8 @@ class InMemEntitiesRepository : EntitiesRepository {
                         entity.version,
                         entity.properties,
                         entity.state,
-                        entity.trunkVersion
+                        entity.trunkVersion,
+                        entity.branchId
                     )
                 )
             }
