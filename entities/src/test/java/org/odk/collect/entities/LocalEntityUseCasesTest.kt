@@ -4,6 +4,7 @@ import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.blankOrNullString
+import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Test
@@ -142,7 +143,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer updates trunkVersion and state if the online version is older`() {
+    fun `updateLocalEntitiesFromServer updates state if the online version is older`() {
         val offline = Entity.New("songs", "noah", "Noah", 2)
         entitiesRepository.save(offline)
         val csv = createEntityList(Entity.New("songs", "noah", "Noa", 1))
@@ -153,20 +154,29 @@ class LocalEntityUseCasesTest {
         assertThat(songs[0].label, equalTo("Noah"))
         assertThat(songs[0].version, equalTo(2))
         assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
-        assertThat(songs[0].trunkVersion, equalTo(1))
+        assertThat(songs[0].trunkVersion, equalTo(null))
         assertThat(songs[0].branchId, equalTo(offline.branchId))
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer updates trunkVersion, branchId and state if the online version is the same`() {
+    fun `updateLocalEntitiesFromServer overrides offline version if the online version is the same`() {
         val offline = Entity.New("songs", "noah", "Noah", 2)
         entitiesRepository.save(offline)
-        val csv = createEntityList(Entity.New("songs", "noah", "Noa", 2))
+        val csv = createEntityList(
+            Entity.New(
+                "songs",
+                "noah",
+                "Noa",
+                2,
+                properties = listOf("length" to "4:33")
+            )
+        )
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(songs.size, equalTo(1))
-        assertThat(songs[0].label, equalTo("Noah"))
+        assertThat(songs[0].label, equalTo("Noa"))
+        assertThat(songs[0].properties, containsInAnyOrder("length" to "4:33"))
         assertThat(songs[0].version, equalTo(2))
         assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
         assertThat(songs[0].trunkVersion, equalTo(2))
@@ -178,17 +188,16 @@ class LocalEntityUseCasesTest {
         val offline = Entity.New("songs", "noah", "Noah", 2)
         entitiesRepository.save(offline)
 
-        val csv1 = createEntityList(Entity.New("songs", "noah", "Noa", 2))
+        val csv1 = createEntityList(Entity.New("songs", "noah", "Noah", 2))
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv1, entitiesRepository)
 
         val onlineBranched = Entity.New("songs", "noah", "Noah", 3)
         entitiesRepository.save(onlineBranched)
-        val csv2 = createEntityList(Entity.New("songs", "noah", "Noa", 3))
+        val csv2 = createEntityList(Entity.New("songs", "noah", "Noah", 3))
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv2, entitiesRepository)
 
         val songs = entitiesRepository.getEntities("songs")
         assertThat(songs.size, equalTo(1))
-        assertThat(songs[0].label, equalTo("Noah"))
         assertThat(songs[0].version, equalTo(3))
         assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
         assertThat(songs[0].trunkVersion, equalTo(3))
