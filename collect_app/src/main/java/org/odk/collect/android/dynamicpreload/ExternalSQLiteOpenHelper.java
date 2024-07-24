@@ -31,7 +31,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.AltDatabasePathContext;
+import org.odk.collect.androidshared.sqlite.AltDatabasePathContext;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.CustomSQLiteQueryExecutor;

@@ -9,7 +9,7 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.work.Configuration;
 import androidx.work.WorkManager;
 
-import org.odk.collect.android.database.DatabaseConnection;
+import org.odk.collect.androidshared.sqlite.DatabaseConnection;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.crashhandler.CrashHandler;
 import org.robolectric.shadows.ShadowApplication;

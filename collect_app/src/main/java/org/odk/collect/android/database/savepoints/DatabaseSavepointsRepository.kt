@@ -4,12 +4,12 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteQueryBuilder
-import org.odk.collect.android.database.DatabaseConnection
 import org.odk.collect.android.database.DatabaseConstants
 import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_DATABASE_NAME
 import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_DATABASE_VERSION
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.FORM_DB_ID
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.INSTANCE_DB_ID
+import org.odk.collect.androidshared.sqlite.DatabaseConnection
 import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.forms.savepoints.SavepointsRepository
 import org.odk.collect.shared.PathUtils

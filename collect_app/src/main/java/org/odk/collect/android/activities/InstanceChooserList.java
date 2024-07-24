@@ -39,7 +39,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
-import org.odk.collect.android.database.DatabaseConnection;
+import org.odk.collect.androidshared.sqlite.DatabaseConnection;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.FormUriActivity;

@@ -5,12 +5,12 @@ import androidx.test.core.app.ApplicationProvider
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import org.odk.collect.android.database.DatabaseConnection
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyComponent
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.views.DecoratedBarcodeView
+import org.odk.collect.androidshared.sqlite.DatabaseConnection
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.material.BottomSheetBehavior

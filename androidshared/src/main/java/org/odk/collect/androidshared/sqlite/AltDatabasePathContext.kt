@@ -1,4 +1,4 @@
-package org.odk.collect.android.database
+package org.odk.collect.androidshared.sqlite
 
 import android.content.Context
 import android.content.ContextWrapper

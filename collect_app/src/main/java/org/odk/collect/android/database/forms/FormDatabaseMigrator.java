@@ -3,7 +3,7 @@ package org.odk.collect.android.database.forms;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.odk.collect.android.database.DatabaseMigrator;
+import org.odk.collect.androidshared.sqlite.DatabaseMigrator;
 import org.odk.collect.android.utilities.SQLiteUtils;
 
 import static android.provider.BaseColumns._ID;

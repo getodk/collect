@@ -4,8 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns._ID
-import org.odk.collect.android.database.DatabaseConnection
-import org.odk.collect.android.database.DatabaseMigrator
+import org.odk.collect.androidshared.sqlite.DatabaseConnection
+import org.odk.collect.androidshared.sqlite.DatabaseMigrator
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 
@@ -82,7 +82,8 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 }
 
-class EntitiesDatabaseMigrator : DatabaseMigrator {
+class EntitiesDatabaseMigrator :
+    DatabaseMigrator {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             """
