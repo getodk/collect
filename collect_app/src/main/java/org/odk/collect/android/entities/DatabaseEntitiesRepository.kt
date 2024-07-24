@@ -4,8 +4,11 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns._ID
+import org.odk.collect.androidshared.sqlite.CursorExt.foldAndClose
+import org.odk.collect.androidshared.sqlite.CursorExt.getString
 import org.odk.collect.androidshared.sqlite.DatabaseConnection
 import org.odk.collect.androidshared.sqlite.DatabaseMigrator
+import org.odk.collect.androidshared.sqlite.SQLiteDatabaseExt.query
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 
@@ -24,31 +27,20 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     )
 
     override fun save(vararg entities: Entity) {
-        entities.forEach {
-            val contentValues = ContentValues()
-            contentValues.put(LISTS_NAME, it.list)
+        entities.forEach { entity ->
+            val contentValues = ContentValues().also {
+                it.put(LISTS_NAME, entity.list)
+            }
+
             databaseConnection.writeableDatabase.insertOrThrow(LISTS_TABLE, null, contentValues)
         }
     }
 
     override fun getLists(): Set<String> {
-        val lists = mutableSetOf<String>()
-        databaseConnection.readableDatabase.query(
-            LISTS_TABLE,
-            arrayOf(LISTS_NAME),
-            null,
-            null,
-            null,
-            null,
-            null
-        ).use {
-            it.moveToPosition(-1)
-            while (it.moveToNext()) {
-                lists.add(it.getString(0))
-            }
-        }
-
-        return lists
+        return databaseConnection
+            .readableDatabase
+            .query(LISTS_TABLE)
+            .foldAndClose(emptySet()) { set, cursor -> set + cursor.getString(LISTS_NAME) }
     }
 
     override fun getEntities(list: String): List<Entity.Saved> {
