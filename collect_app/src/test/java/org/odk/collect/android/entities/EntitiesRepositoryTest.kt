@@ -26,6 +26,12 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#getEntities returns empty list when there are not entities`() {
+        val repository = buildSubject()
+        assertThat(repository.getEntities("wines").size, equalTo(0))
+    }
+
+    @Test
     fun `#getEntities returns entities for list`() {
         val repository = buildSubject()
 

@@ -113,10 +113,15 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     override fun getEntities(list: String): List<Entity.Saved> {
         var index = 0
-        return databaseConnection.readableDatabase.query(list)
-            .foldAndClose(emptyList()) { entities, cursor ->
-                entities + mapCursorRowToEntity(list, cursor, index++)
-            }
+
+        return try {
+            databaseConnection.readableDatabase.query(list)
+                .foldAndClose(emptyList()) { entities, cursor ->
+                    entities + mapCursorRowToEntity(list, cursor, index++)
+                }
+        } catch (e: SQLiteException) {
+            emptyList()
+        }
     }
 
     override fun clear() {
