@@ -37,6 +37,9 @@ public abstract class WidgetTest {
 
     protected final SettingsProvider settingsProvider = TestSettingsProvider.getSettingsProvider();
 
+    @Mock
+    protected QuestionDef questionDef;
+
     @Before
     @OverridingMethodsMustInvokeSuper
     public void setUp() throws Exception {
@@ -48,7 +51,7 @@ public abstract class WidgetTest {
         when(formEntryPrompt.getIndex()).thenReturn(mock(FormIndex.class));
         when(formEntryPrompt.getIndex().toString()).thenReturn("0, 0");
         when(formEntryPrompt.getFormElement()).thenReturn(formElement);
-        when(formEntryPrompt.getQuestion()).thenReturn(mock(QuestionDef.class));
+        when(formEntryPrompt.getQuestion()).thenReturn(questionDef);
     }
 
     @Test

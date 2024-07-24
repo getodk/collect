@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.Appearances.THOUSANDS_SEP;
 
 import android.text.InputType;
-import android.text.method.SingleLineTransformationMethod;
 
 import androidx.annotation.NonNull;
 
@@ -99,7 +98,7 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
     public void verifyInputType() {
         ExDecimalWidget widget = getWidget();
         assertThat(widget.binding.widgetAnswerText.getBinding().editText.getInputType(), equalTo(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL));
-        assertThat(widget.binding.widgetAnswerText.getBinding().editText.getTransformationMethod().getClass(), equalTo(SingleLineTransformationMethod.class));
+        assertThat(widget.binding.widgetAnswerText.getBinding().editText.getTransformationMethod(), equalTo(null));
         assertThat(widget.binding.widgetAnswerText.getBinding().textView.getTransformationMethod(), equalTo(null));
     }
 }

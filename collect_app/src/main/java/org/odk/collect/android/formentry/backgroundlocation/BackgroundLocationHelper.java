@@ -6,6 +6,8 @@ import android.location.Location;
 
 import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formentry.FormSession;
+import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -13,7 +15,7 @@ import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.shared.settings.Settings;
 
-import java.util.function.Supplier;
+import javax.annotation.Nullable;
 
 /**
  * Wrapper on resources needed by {@link BackgroundLocationManager} to make testing easier.
@@ -29,12 +31,19 @@ public class BackgroundLocationHelper {
 
     private final PermissionsProvider permissionsProvider;
     private final Settings generalSettings;
-    private final Supplier<FormController> formControllerProvider;
+    private final FormSessionRepository formSessionRepository;
+    private final String sessionId;
 
-    public BackgroundLocationHelper(PermissionsProvider permissionsProvider, Settings generalSettings, Supplier<FormController> formControllerProvider) {
+    public BackgroundLocationHelper(
+            PermissionsProvider permissionsProvider,
+            Settings generalSettings,
+            FormSessionRepository formSessionRepository,
+            String sessionId
+    ) {
         this.permissionsProvider = permissionsProvider;
         this.generalSettings = generalSettings;
-        this.formControllerProvider = formControllerProvider;
+        this.formSessionRepository = formSessionRepository;
+        this.sessionId = sessionId;
     }
 
     boolean isAndroidLocationPermissionGranted() {
@@ -53,7 +62,7 @@ public class BackgroundLocationHelper {
      * @return true if the global form controller has been initialized.
      */
     boolean isCurrentFormSet() {
-        return formControllerProvider.get() != null;
+        return getFormController() != null;
     }
 
     /**
@@ -62,7 +71,7 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     boolean currentFormCollectsBackgroundLocation() {
-        return formControllerProvider.get().currentFormCollectsBackgroundLocation();
+        return getFormController().currentFormCollectsBackgroundLocation();
     }
 
     /**
@@ -72,7 +81,7 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     boolean currentFormAuditsLocation() {
-        return formControllerProvider.get().currentFormAuditsLocation();
+        return getFormController().currentFormAuditsLocation();
     }
 
     /**
@@ -81,7 +90,7 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     AuditConfig getCurrentFormAuditConfig() {
-        return formControllerProvider.get().getSubmissionMetadata().auditConfig;
+        return getFormController().getSubmissionMetadata().auditConfig;
     }
 
     /**
@@ -90,7 +99,7 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     void logAuditEvent(AuditEvent.AuditEventType eventType) {
-        formControllerProvider.get().getAuditEventLogger().logEvent(eventType, false, System.currentTimeMillis());
+        getFormController().getAuditEventLogger().logEvent(eventType, false, System.currentTimeMillis());
     }
 
     /**
@@ -99,6 +108,12 @@ public class BackgroundLocationHelper {
      * Precondition: the global form controller has been initialized.
      */
     void provideLocationToAuditLogger(Location location) {
-        formControllerProvider.get().getAuditEventLogger().addLocation(location);
+        getFormController().getAuditEventLogger().addLocation(location);
+    }
+
+    @Nullable
+    private FormController getFormController() {
+        FormSession formSession = formSessionRepository.get(sessionId).getValue();
+        return formSession == null ? null : formSession.getFormController();
     }
 }

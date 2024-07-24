@@ -10,7 +10,6 @@ import static org.odk.collect.android.utilities.Appearances.MASKED;
 
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
-import android.text.method.SingleLineTransformationMethod;
 
 import androidx.annotation.NonNull;
 
@@ -45,16 +44,15 @@ public class StringWidgetTest extends GeneralStringWidgetTest<StringWidget, Stri
     @Test
     public void verifyInputType() {
         StringWidget widget = getWidget();
-        assertThat(widget.widgetAnswerText.getBinding().editText.getInputType(), equalTo(InputType.TYPE_CLASS_TEXT));
-        assertThat(widget.widgetAnswerText.getBinding().editText.getTransformationMethod().getClass(), equalTo(SingleLineTransformationMethod.class));
-        assertThat(widget.widgetAnswerText.getBinding().textView.getTransformationMethod(), equalTo(null));
+        assertThat(widget.widgetAnswerText.getBinding().editText.getInputType(), equalTo(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE));
+        assertThat(widget.widgetAnswerText.getBinding().editText.getTransformationMethod(), equalTo(null));
     }
 
     @Test
     public void verifyInputTypeWithMaskedAppearance() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn(MASKED);
         StringWidget widget = getWidget();
-        assertThat(widget.widgetAnswerText.getBinding().editText.getInputType(), equalTo(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD));
+        assertThat(widget.widgetAnswerText.getBinding().editText.getInputType(), equalTo(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_VARIATION_PASSWORD));
         assertThat(widget.widgetAnswerText.getBinding().editText.getTransformationMethod().getClass(), equalTo(PasswordTransformationMethod.class));
     }
 
@@ -70,5 +68,11 @@ public class StringWidgetTest extends GeneralStringWidgetTest<StringWidget, Stri
 
         assertThat(getSpyWidget().widgetAnswerText.getBinding().editText.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
         assertThat(getSpyWidget().widgetAnswerText.getBinding().textView.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
+    }
+
+    @Test
+    public void whenNumberOfRowsSpecifiedEditTextShouldHaveProperNumberOfMinLines() {
+        when(questionDef.getAdditionalAttribute(null, "rows")).thenReturn("5");
+        assertThat(getWidget().widgetAnswerText.getBinding().editText.getMinLines(), equalTo(5));
     }
 }

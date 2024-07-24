@@ -129,10 +129,10 @@ class FormEntryViewModelFactory(
                     fusedLocationClient,
                     BackgroundLocationHelper(
                         permissionsProvider,
-                        settingsProvider.getUnprotectedSettings()
-                    ) {
-                        formSessionRepository.get(sessionId).value?.formController
-                    }
+                        settingsProvider.getUnprotectedSettings(),
+                        formSessionRepository,
+                        sessionId
+                    )
                 )
 
                 BackgroundLocationViewModel(locationManager)
