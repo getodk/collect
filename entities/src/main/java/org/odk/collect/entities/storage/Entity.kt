@@ -35,9 +35,15 @@ sealed interface Entity {
         override val branchId: String = UUID.randomUUID().toString()
     ) : Entity
 
-    enum class State {
-        OFFLINE,
-        ONLINE
+    enum class State(val id: Int) {
+        OFFLINE(0),
+        ONLINE(1);
+
+        companion object {
+            fun fromId(id: Int): State {
+                return entries.first { it.id == id }
+            }
+        }
     }
 
     fun sameAs(entity: Entity): Boolean {

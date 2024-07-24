@@ -16,4 +16,8 @@ object SQLiteDatabaseExt {
 
         return qb.query(this, null, selection, selectionArgs, null, null, null)
     }
+
+    fun SQLiteDatabase.delete(table: String) {
+        this.delete(table, null, null)
+    }
 }

@@ -380,7 +380,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#getById returns entities with matching property value`() {
+    fun `#getByAllByProperty returns entities with matching property value`() {
         val repository = buildSubject()
 
         val leoville = Entity.New(

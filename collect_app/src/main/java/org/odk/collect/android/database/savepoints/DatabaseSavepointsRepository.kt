@@ -10,6 +10,7 @@ import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.FOR
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.INSTANCE_DB_ID
 import org.odk.collect.androidshared.sqlite.CursorExt.foldAndClose
 import org.odk.collect.androidshared.sqlite.DatabaseConnection
+import org.odk.collect.androidshared.sqlite.SQLiteDatabaseExt.delete
 import org.odk.collect.androidshared.sqlite.SQLiteDatabaseExt.query
 import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.forms.savepoints.SavepointsRepository
@@ -97,7 +98,7 @@ class DatabaseSavepointsRepository(
 
         databaseConnection
             .writeableDatabase
-            .delete(SAVEPOINTS_TABLE_NAME, null, null)
+            .delete(SAVEPOINTS_TABLE_NAME)
     }
 
     private fun getSavepointsFromCursor(cursor: Cursor?): List<Savepoint> {
