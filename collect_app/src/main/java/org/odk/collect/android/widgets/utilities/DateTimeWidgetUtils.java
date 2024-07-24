@@ -127,7 +127,7 @@ public class DateTimeWidgetUtils {
                 break;
             case BUDDHIST:
                 customDate = new DateTime(date).withChronology(BuddhistChronology.getInstance());
-                monthArray = context.getResources().getStringArray(R.array.buddhist_months);
+                monthArray = BuddhistDatePickerDialog.MONTHS;
                 break;
             default:
                 Timber.w("Not supported date type.");

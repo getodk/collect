@@ -147,20 +147,6 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/persian_month_11</item>
         <item>@string/persian_month_12</item>
     </string-array>
-    <string-array name="buddhist_months">
-        <item>มกราคม</item>
-        <item>กุมภาพันธ์</item>
-        <item>มีนาคม</item>
-        <item>เมษายน</item>
-        <item>พฤษภาคม</item>
-        <item>มิถุนายน</item>
-        <item>กรกฎาคม</item>
-        <item>สิงหาคม</item>
-        <item>กันยายน</item>
-        <item>ตุลาคม</item>
-        <item>พฤศจิกายน</item>
-        <item>ธันวาคม</item>
-    </string-array>
     <string-array name="periodic_form_updates_check_entry_values">
         <item>@string/every_fifteen_minutes_value</item>
         <item>@string/every_one_hour_value</item>

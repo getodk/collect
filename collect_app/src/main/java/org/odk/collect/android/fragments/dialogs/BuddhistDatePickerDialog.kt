@@ -2,20 +2,11 @@ package org.odk.collect.android.fragments.dialogs
 
 import org.joda.time.LocalDateTime
 import org.joda.time.chrono.BuddhistChronology
-import org.odk.collect.android.R
 import org.odk.collect.android.utilities.DateTimeUtils
 
 class BuddhistDatePickerDialog : CustomDatePickerDialog() {
-    companion object {
-        const val MIN_SUPPORTED_YEAR = 2443 // 1900 in Gregorian calendar
-        const val MAX_SUPPORTED_YEAR = 2643 // 2100 in Gregorian calendar
-    }
-
-    private lateinit var monthsArray: Array<String>
-
     override fun onResume() {
         super.onResume()
-        monthsArray = resources.getStringArray(R.array.buddhist_months)
         setUpValues()
     }
 
@@ -36,7 +27,7 @@ class BuddhistDatePickerDialog : CustomDatePickerDialog() {
             .toLocalDateTime()
 
         setUpDayPicker(buddhistDate.dayOfMonth, buddhistDate.dayOfMonth().maximumValue)
-        setUpMonthPicker(buddhistDate.monthOfYear, monthsArray)
+        setUpMonthPicker(buddhistDate.monthOfYear, MONTHS)
         setUpYearPicker(buddhistDate.year, MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR)
     }
 
@@ -47,7 +38,7 @@ class BuddhistDatePickerDialog : CustomDatePickerDialog() {
 
     private fun getCurrentBuddhistDate(): LocalDateTime {
         var buddhistDay = day
-        val buddhistMonth = monthsArray.indexOf(month)
+        val buddhistMonth = MONTHS.indexOf(month)
         val buddhistYear = year
 
         val buddhistDate = LocalDateTime(
@@ -73,6 +64,17 @@ class BuddhistDatePickerDialog : CustomDatePickerDialog() {
             0,
             0,
             BuddhistChronology.getInstance()
+        )
+    }
+
+    companion object {
+        const val MIN_SUPPORTED_YEAR = 2443 // 1900 in Gregorian calendar
+        const val MAX_SUPPORTED_YEAR = 2643 // 2100 in Gregorian calendar
+
+        @JvmField
+        val MONTHS = arrayOf(
+            "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+            "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
         )
     }
 }
