@@ -88,7 +88,7 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
 
     override fun getAllByProperty(list: String, property: String, value: String): List<Entity.Saved> {
         return getEntities(list).filter { entity ->
-            entity.properties.firstOrNull { it.first == property }?.second == value
+            entity.properties.any { (first, second) -> first == property && second == value }
         }
     }
 
