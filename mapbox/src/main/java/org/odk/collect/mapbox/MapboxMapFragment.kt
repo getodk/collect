@@ -7,13 +7,13 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.startup.AppInitializer
 import com.google.android.gms.location.LocationListener
 import com.mapbox.geojson.Point
 import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.ImageHolder
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
@@ -508,8 +508,7 @@ class MapboxMapFragment :
         mapView.location.updateSettings {
             this.enabled = true
             this.locationPuck = LocationPuck2D(
-                AppCompatResources.getDrawable(
-                    requireContext(),
+                ImageHolder.Companion.from(
                     org.odk.collect.maps.R.drawable.ic_crosshairs
                 )
             )

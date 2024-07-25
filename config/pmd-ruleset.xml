@@ -26,10 +26,13 @@
         <exclude name="JUnitUseExpected" /> <!-- Favor using fail explicitly to test correct exception -->
         <exclude name="LiteralsFirstInComparisons" />
         <exclude name="LooseCoupling" />
+        <exclude name="MissingOverride" />
         <exclude name="PositionLiteralsFirstInCaseInsensitiveComparisons" />
         <exclude name="PositionLiteralsFirstInComparisons" />
         <exclude name="PreserveStackTrace" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
+        <exclude name="UnusedAssignment" />
+        <exclude name="UnusedPrivateMethod" />
         <exclude name="UseVarargs" />
         <exclude name="UseTryWithResources" />
     </rule>
@@ -45,6 +48,7 @@
         <exclude name="DefaultPackage" />
         <exclude name="EmptyControlStatement" />
         <exclude name="FieldDeclarationsShouldBeAtStartOfClass" />
+        <exclude name="LambdaCanBeMethodReference" />
         <exclude name="LongVariable" />
         <exclude name="LocalVariableCouldBeFinal" />
         <exclude name="MIsLeadingVariableName" />
@@ -59,6 +63,10 @@
         <exclude name="UseUnderscoresInNumericLiterals" />
         <exclude name="LinguisticNaming" />
         <exclude name="UnnecessaryFullyQualifiedName" />
+        <exclude name="UnnecessaryCast" />
+        <exclude name="UnnecessaryImport" />
+        <exclude name="UnnecessaryReturn" />
+        <exclude name="UseDiamondOperator" />
         <exclude name="UselessParentheses" />               <!-- Decided not to use in #1519 -->
     </rule>
 
@@ -70,6 +78,7 @@
         <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal" />
         <exclude name="CognitiveComplexity" />
         <exclude name="CollapsibleIfStatements" />
+        <exclude name="CouplingBetweenObjects" />
         <exclude name="CyclomaticComplexity" />
         <exclude name="DataClass" />
         <exclude name="ExceptionAsFlowControl" />
@@ -77,6 +86,7 @@
         <exclude name="ExcessiveMethodLength" />
         <exclude name="ExcessivePublicCount" />
         <exclude name="ExcessiveClassLength" />
+        <exclude name="FinalFieldCouldBeStatic" />
         <exclude name="GodClass" />
         <exclude name="ImmutableField" />
         <exclude name="LawOfDemeter" />
@@ -85,6 +95,7 @@
         <exclude name="NcssCount" />
         <exclude name="NPathComplexity" />
         <exclude name="SignatureDeclareThrowsException" />
+        <exclude name="SimplifyBooleanReturns" />
         <exclude name="SwitchDensity" />
         <exclude name="TooManyFields" />
         <exclude name="TooManyMethods" />
@@ -113,6 +124,7 @@
         <exclude name="AvoidLiteralsInIfCondition" />
         <exclude name="BeanMembersShouldSerialize" />
         <exclude name="CloseResource" />
+        <exclude name="ConfusingArgumentToVarargsMethod" />
         <exclude name="ConstructorCallsOverridableMethod" />
         <exclude name="DataflowAnomalyAnalysis" />
         <exclude name="DetachedTestCase" />
@@ -123,6 +135,7 @@
         <exclude name="JUnitSpelling" />
         <exclude name="MissingBreakInSwitch" />
         <exclude name="MissingSerialVersionUID" />
+        <exclude name="MissingStaticMethodInNonInstantiatableClass" />
         <exclude name="NullAssignment" />
         <exclude name="ReturnEmptyCollectionRatherThanNull" />
         <exclude name="TestClassWithoutTestCases" />
@@ -135,12 +148,18 @@
     </rule>
 
     <rule ref="category/java/performance.xml">
+        <exclude name="AvoidArrayLoops" />
         <exclude name="AvoidFileStream" />
         <exclude name="AvoidInstantiatingObjectsInLoops" />
+        <exclude name="BigIntegerInstantiation" />
+        <exclude name="ConsecutiveAppendsShouldReuse" />
+        <exclude name="InefficientEmptyStringCheck" />
         <exclude name="InefficientStringBuffering" />
         <exclude name="InsufficientStringBufferDeclaration" />
         <exclude name="SimplifyStartsWith" />
         <exclude name="TooFewBranchesForASwitchStatement" /> <!-- Decided not to use in #2564 -->
+        <exclude name="UseArraysAsList" />
+        <exclude name="UseIndexOfChar" />
         <exclude name="UseStringBufferForStringAppends" />
     </rule>
 

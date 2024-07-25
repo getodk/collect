@@ -319,13 +319,13 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun inputText(text: String?): T {
+    fun inputText(text: String): T {
         onView(withClassName(endsWith("EditText"))).perform(replaceText(text))
         closeSoftKeyboard()
         return this as T
     }
 
-    fun inputText(hint: Int, text: String?): T {
+    fun inputText(hint: Int, text: String): T {
         onView(withHint(getTranslatedString(hint))).perform(replaceText(text))
         closeSoftKeyboard()
         return this as T
