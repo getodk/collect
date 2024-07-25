@@ -210,28 +210,30 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     private fun createList(list: String, properties: List<String>) {
-        val contentValues = ContentValues()
-        contentValues.put(ListsTable.COLUMN_NAME, list)
-        databaseConnection.writeableDatabase.insertOrThrow(
-            ListsTable.TABLE_NAME,
-            null,
-            contentValues
-        )
+        if (!listExists(list)) {
+            val contentValues = ContentValues()
+            contentValues.put(ListsTable.COLUMN_NAME, list)
+            databaseConnection.writeableDatabase.insertOrThrow(
+                ListsTable.TABLE_NAME,
+                null,
+                contentValues
+            )
 
-        databaseConnection.writeableDatabase.execSQL(
-            """
-            CREATE TABLE IF NOT EXISTS $list (
-                $_ID integer PRIMARY KEY, 
-                ${EntitiesTable.COLUMN_ID} text,
-                ${EntitiesTable.COLUMN_LABEL} text,
-                ${EntitiesTable.COLUMN_VERSION} integer,
-                ${EntitiesTable.COLUMN_TRUNK_VERSION} integer,
-                ${EntitiesTable.COLUMN_BRANCH_ID} text,
-                ${EntitiesTable.COLUMN_STATE} integer NOT NULL,
-                UNIQUE(${EntitiesTable.COLUMN_ID})
-            );
-            """.trimIndent()
-        )
+            databaseConnection.writeableDatabase.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS $list (
+                    $_ID integer PRIMARY KEY, 
+                    ${EntitiesTable.COLUMN_ID} text,
+                    ${EntitiesTable.COLUMN_LABEL} text,
+                    ${EntitiesTable.COLUMN_VERSION} integer,
+                    ${EntitiesTable.COLUMN_TRUNK_VERSION} integer,
+                    ${EntitiesTable.COLUMN_BRANCH_ID} text,
+                    ${EntitiesTable.COLUMN_STATE} integer NOT NULL,
+                    UNIQUE(${EntitiesTable.COLUMN_ID})
+                );
+                """.trimIndent()
+            )
+        }
 
         properties.forEach {
             try {
