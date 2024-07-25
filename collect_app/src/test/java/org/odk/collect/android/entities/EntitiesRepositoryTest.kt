@@ -370,8 +370,14 @@ abstract class EntitiesRepositoryTest {
             "Léoville Barton 2008",
             properties = listOf("vintage" to "2008")
         )
-        val canet =
-            Entity.New("wines", "2", "Pontet-Canet 2014", properties = listOf("vintage" to "2014"))
+
+        val canet = Entity.New(
+            "wines",
+            "2",
+            "Pontet-Canet 2014",
+            properties = listOf("vintage" to "2014")
+        )
+
         repository.save(leoville, canet)
 
         val wines = repository.getEntities("wines")
@@ -391,10 +397,15 @@ abstract class EntitiesRepositoryTest {
             "Léoville Barton 2008",
             properties = listOf("vintage" to "2008")
         )
-        val canet =
-            Entity.New("wines", "2", "Pontet-Canet 2014", properties = listOf("vintage" to "2014"))
-        repository.save(leoville, canet)
 
+        val canet = Entity.New(
+            "wines",
+            "2",
+            "Pontet-Canet 2014",
+            properties = listOf("vintage" to "2014")
+        )
+
+        repository.save(leoville, canet)
         assertThat(repository.getAllByProperty("wines", "vintage", "2024"), equalTo(emptyList()))
     }
 
@@ -408,10 +419,14 @@ abstract class EntitiesRepositoryTest {
             "Léoville Barton 2008",
             properties = listOf("vintage" to "2008")
         )
-        val dows =
-            Entity.New("ports", "2", "Dow's 1983", properties = listOf("vintage" to "1983"))
-        repository.save(leoville, dows)
+        val dows = Entity.New(
+            "ports",
+            "2",
+            "Dow's 1983",
+            properties = listOf("vintage" to "1983")
+        )
 
+        repository.save(leoville, dows)
         assertThat(repository.getAllByProperty("wines", "vintage", "1983"), equalTo(emptyList()))
     }
 }
