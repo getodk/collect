@@ -172,8 +172,6 @@
   <string name="no_app">Požadovaná aplikace chybí. Zadejte prosím údaje ručně.</string>
   <string name="null_intent_value">Externí aplikace neposkytla očekávané informace.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Tisknout</string>
-  <string name="no_printer">Vybraná tiskárna není nainstalována. Nejdříve ji nainstalujte.</string>
   <string name="open_url">Otevřít URL</string>
   <string name="capture_osm">Spustit OpenMapKit</string>
   <string name="recapture_osm">Znovu provést OSM tagování</string>

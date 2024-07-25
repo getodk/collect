@@ -171,8 +171,6 @@
   <string name="no_app">Запрошенное приложение отсутствует. Пожалуйста, выполните ручной ввод.</string>
   <string name="null_intent_value">Внешнее приложение не предоставило ожидаемую информацию</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Распечатать</string>
-  <string name="no_printer">Принтер не установлен или не подключен.</string>
   <string name="open_url">Открыть адрес</string>
   <string name="capture_osm">Запустить OpenMapKit</string>
   <string name="recapture_osm">Повторить теги OSM</string>

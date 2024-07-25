@@ -117,8 +117,6 @@
   <string name="activity_not_found">%s:के नियंत्रण के लिए कोई गतिविधि नहीं  मिली</string>
   <string name="no_app">अनुरोधित एप्लिकेशन लापता है कृपया रीडिंग स्वयं दर्ज करें।</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">प्रिंटिंग शुरू करें</string>
-  <string name="no_printer">अनुरोधित प्रिंटर इंस्टॉल नहीं है कृपया प्रिंटर इंस्टॉल करें</string>
   <string name="open_url">Url खोलें</string>
   <string name="capture_osm">OpenMapKit लॉन्च करें </string>
   <string name="recapture_osm">OSM टैगिंग दुबारा करें</string>

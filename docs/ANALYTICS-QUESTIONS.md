@@ -12,4 +12,3 @@ A list of questions asked and answered via analytics already sectioned by the da
 - How often is partial form finalization used? Never.
 - How many forms use auto send attribute? 200+ (max recordable) with 1.5k users.
 - How many forms use auto delete attribute? 200+ (max recordable) with 1k users.
-- How often is old printer widget (`ExPrinterWidget`) used? Never.

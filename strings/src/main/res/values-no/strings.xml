@@ -94,8 +94,6 @@
   <string name="activity_not_found">Fant ingen handling: %s</string>
   <string name="no_app">Applikasjon mangler. Vennligst tast inn teksten manuelt</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Initiate Printing</string>
-  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="open_url">Åpne URL</string>
   <string name="capture_osm">Start OpenMapKit</string>
   <string name="recapture_osm">Gjør om OSM tagging</string>

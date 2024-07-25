@@ -171,8 +171,6 @@
   <string name="no_app"> درخواستی برای فورمه موجود نیست. لطفاً خواندن را به صورت دستی وارد کنید.</string>
   <string name="null_intent_value">درخواست نامه خارجی اطلاعات مورد انتظار را ارائه نکرد.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">چاپ را آغاز کنید</string>
-  <string name="no_printer">چاپ کننده درخواستی نصب نشده است. لطفا چاپ کننده را نصب کنید.</string>
   <string name="open_url">باز نمودن آدرس انترنتی</string>
   <string name="capture_osm">راه اندازی ابزار نقشه</string>
   <string name="recapture_osm">برچسپ گذاری مجدد OSM</string>

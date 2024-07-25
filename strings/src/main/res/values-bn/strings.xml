@@ -82,8 +82,6 @@
   <string name="activity_not_found">পরিচালনা করার মত কোন কর্মকাণ্ড পাওয়া যায় নিঃ %s</string>
   <string name="no_app">অনুরোধকৃত  application অনুপস্থিত. অনুগ্রহ করে ম্যানোয়েলি তত্ত্ব নিন।</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">প্রিন্টার চালু</string>
-  <string name="no_printer">প্রিন্টার নেই</string>
   <string name="capture_osm">OpenMapKit চালু করুন</string>
   <string name="recapture_osm">পুনরায় OSM ট্যাগিং করুন</string>
   <string name="get_barcode">বারকোড নিন</string>

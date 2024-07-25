@@ -176,8 +176,6 @@
   <string name="no_app">درخواست کی گئی ایپلیکیشن موجود نہیں ہے۔ براو مہربانی اعداد و شمار کو خود درج کریں۔</string>
   <string name="null_intent_value">ایکسٹرنل اپلیکیشن  نے متوقع معلومات فراہم نہیں کی.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">پرنٹنگ کا آغاز کریں</string>
-  <string name="no_printer">مطلوبہ پرینٹر انسٹال نہیں ہے۔ براہ مہربانی پرینٹر انسٹال کریں۔</string>
   <string name="open_url">یوآرایل کھولیں </string>
   <string name="capture_osm">OpenMapKit شروع کریں</string>
   <string name="recapture_osm"> او ایس ایم ٹیگنگ دوبارہ کریں</string>

@@ -160,8 +160,6 @@
   <string name="no_app">Ombi lilioombwa halipo. Tafadhali ingiza kwa Kuandika.</string>
   <string name="null_intent_value">Programu ya nje haijatoa taarifa iliyotarajiwa.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Anza uchapishaji</string>
-  <string name="no_printer">Kichapishi kilichoombwa hakijasakinishwa. Tafadhali sakinisha kichapishi.</string>
   <string name="open_url">Fungua URL</string>
   <string name="capture_osm">Fungua OpenMapKit</string>
   <string name="recapture_osm">Rudia kuweka taarifa za OSM</string>

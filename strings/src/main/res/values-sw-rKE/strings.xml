@@ -100,8 +100,6 @@
   <string name="activity_not_found">Hakuna shughuli iliyopatikana kushughulikia: %s</string>
   <string name="no_app">Application unayotaka haipo. Tafadhali wasilisha matokeo</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Anzisha uchapishaji</string>
-  <string name="no_printer">Printer utakayo haipo. Tafadhali weka Printer</string>
   <string name="open_url">Url wazi</string>
   <string name="capture_osm">Anzisha OpenMapkit</string>
   <string name="get_barcode">Weka Barcode</string>

@@ -148,8 +148,6 @@
   <string name="no_app">ការ​ស្នើ​សុំ​របស់កម្មវិធី​បានបាត់បង់ ។​ សូមធ្វើការអាន​ដោយ​ដៃ ។</string>
   <string name="null_intent_value">កម្មវិធីខាងក្រៅមិនបានផ្តល់នូវព័ត៌មានដូចការរំពឹងទុក</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">ការផ្តួចផ្តើមបោះពុម្ភ</string>
-  <string name="no_printer">ម៉ាស៊ីន​បោះ​ពុម្ព​ដែល​បាន​ស្នើ​មិន​ត្រូវ​បាន​ដំឡើង​។ សូម​ដំឡើង​ម៉ាស៊ីន​បោះ​ពុម្ព​។</string>
   <string name="open_url">បើក​អាសយដ្ឋាន</string>
   <string name="capture_osm">បើក OpenMapKit</string>
   <string name="recapture_osm">ធ្វើម្តងទៀត OSM tagging</string>

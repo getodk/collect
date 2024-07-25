@@ -112,8 +112,6 @@
   <string name="activity_not_found">हाताळण्यासाठी कोणतीही गतिविधी आढळली नाही: %s</string>
   <string name="no_app">विनंती केलेले अनुप्रयोग गहाळ आहे. कृपया स्वतः वाचन प्रविष्ट करा.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">मुद्रण प्रारंभ करा</string>
-  <string name="no_printer">विनंती केलेले प्रिंटर स्थापित नाही. प्रिंटर स्थापित करा.</string>
   <string name="open_url">युरएल उघडा</string>
   <string name="capture_osm">OpenMapKit लाँच करा</string>
   <string name="recapture_osm">OSM टॅगिंग पुन्हा करा</string>

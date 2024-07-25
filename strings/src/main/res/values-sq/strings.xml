@@ -123,8 +123,6 @@
   <string name="no_app">Aplikacioni i kërkuar mungon. Lutemi, futni të dhënat manualisht.</string>
   <string name="null_intent_value">Aplikacioni i jashtëm nuk dha informacionin e pritshëm.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Printo</string>
-  <string name="no_printer">Printeri i kërkuar nuk është i instaluar. Lutemi, instaloni printerin.</string>
   <string name="open_url">Hap URL</string>
   <string name="capture_osm">Hap OpenMapKit</string>
   <string name="recapture_osm">Etiketo sërish OSM</string>

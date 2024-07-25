@@ -107,8 +107,6 @@
   <string name="activity_not_found">%s teostamiseks ei leidu toimingut</string>
   <string name="no_app">Soovitud rakendust ei ole. Palun sisestage käsitsi.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Alusta printimist</string>
-  <string name="no_printer">Soovitud printer ei ole paigaldatud. Palun paigaldage printer.</string>
   <string name="open_url">Ava veebiaadress</string>
   <string name="capture_osm">Ava OpenMapKit</string>
   <string name="recapture_osm">Korda OSM sildistamist</string>

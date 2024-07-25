@@ -143,8 +143,6 @@
   <string name="no_app">要求したアプリケーションがありません。手動で読みを入力してください。</string>
   <string name="null_intent_value">外部アプリケーションが、期待した情報を提供しませんでした。</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">印刷を開始</string>
-  <string name="no_printer">要求されたプリンターがインストールされていません。プリンターをインストールしてください。</string>
   <string name="open_url">URL を開く</string>
   <string name="capture_osm">OpenMapKit を起動</string>
   <string name="recapture_osm">OSM タグ付けを繰り返す</string>

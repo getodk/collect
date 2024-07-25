@@ -100,8 +100,6 @@
   <string name="activity_not_found">ไม่มีกิจกรรมให้ดำเนินการ: %s</string>
   <string name="no_app">ไม่พบโปรแกรมที่เรียกใช้ กรุณากรอกข้อมูลด้วยตนเอง</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">เริ่มต้นการพิมพ์</string>
-  <string name="no_printer">เครื่องพิมพ์ที่เลือกยังไม่ได้ติดตั้ง กรุณาติดตั้งเครื่องพิมพ์</string>
   <string name="open_url">ไปที่ Url</string>
   <string name="capture_osm">เปิด OpenMapKit</string>
   <string name="edited_osm_file">แก้ไขไฟล์ OSM XML:</string>

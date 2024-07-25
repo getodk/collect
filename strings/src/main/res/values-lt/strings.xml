@@ -83,8 +83,6 @@
   <string name="activity_not_found">Nerasta, kas galėtų valdyti: %s</string>
   <string name="no_app">Nerasta nurodyta programa. Atskaitą įveskite rankiniu būdu.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Initiate Printing</string>
-  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="get_barcode">Nuskaityti brūkšninį kodą</string>
   <string name="replace_barcode">Pakeisti brūkšninį kodą</string>
   <string name="capture_image">Užfiksuoti kadrą</string>

@@ -135,8 +135,6 @@
   <string name="no_app">Det begärda programmet saknas. Vänligen mata in värdet manuellt.</string>
   <string name="null_intent_value">Den externa applikationen gav inte förväntad information.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Starta utskrift</string>
-  <string name="no_printer">Den valda skrivaren är inte installerad. Vänligen installera skrivaren.</string>
   <string name="open_url">Öppna URL</string>
   <string name="capture_osm">Starta OpenMapKit</string>
   <string name="recapture_osm">Upprepa OSM-taggning</string>

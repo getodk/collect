@@ -89,8 +89,6 @@
   <string name="launch_app">آغاز</string>
   <string name="activity_not_found">‎%s‏  کو کر نے کیلیے کوئی سرگرمی نہی پا ئ گئ</string>
   <string name="no_app">درخواست کیا گیا ایپلیکیشن موجود نہیں ہے۔ براو مہربانی اعداد و شمار کو خود درج کریں۔</string>
-  <string name="launch_printer">پرنٹنگ کا آغاز کریں</string>
-  <string name="no_printer">مطلوبہ پرینٹر انسٹال نہیں ہے۔ براہ مہربانی پرینٹر انسٹال کریں۔</string>
   <string name="get_barcode">بارکوڈ حاصل کریں</string>
   <string name="replace_barcode">مقام کو بدل دیں</string>
   <string name="capture_image">تصویر لیں</string>

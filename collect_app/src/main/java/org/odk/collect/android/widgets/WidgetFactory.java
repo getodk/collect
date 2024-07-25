@@ -185,8 +185,6 @@ public class WidgetFactory {
                             questionWidget = getSelectOneWidget(appearance, questionDetails);
                         } else if (appearance.equals(Appearances.PRINTER)) {
                             questionWidget = new PrinterWidget(activity, questionDetails, printerWidgetViewModel, questionMediaManager);
-                        } else if (appearance.startsWith(Appearances.PRINTER)) {
-                            questionWidget = new ExPrinterWidget(activity, questionDetails, waitingForDataRegistry);
                         } else if (appearance.contains(Appearances.EX)) {
                             questionWidget = new ExStringWidget(activity, questionDetails, waitingForDataRegistry, stringRequester);
                         } else if (appearance.contains(Appearances.NUMBERS)) {

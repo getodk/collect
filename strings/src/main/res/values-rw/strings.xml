@@ -146,8 +146,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="no_app">Ibyo mwasabye ntibiboneka. Nimubyandikemo bisanzwe</string>
   <string name="null_intent_value">Ntabwo habashije kuboneka amakuru mwifuzaga </string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Tangira Gucapa</string>
-  <string name="no_printer">Imashini icapa wahisemo ntiwemerewe kuyikoresha aka kanya. yinsitare ubone kuyikoresha</string>
   <string name="open_url">Fungura Url</string>
   <string name="capture_osm">Tangiza OpenMapKit </string>
   <string name="recapture_osm">Subiramo ibyagaragajwe kuri OSM.</string>

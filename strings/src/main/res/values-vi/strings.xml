@@ -84,8 +84,6 @@
   <string name="activity_not_found">Không có hành động phù hợp với: %s</string>
   <string name="no_app">Không tìm thấy chương trình yêu cầu. Hãy chỉ rõ chương trình đọc.</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
-  <string name="launch_printer">Initiate Printing</string>
-  <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="capture_osm">Mở OpenMapKit</string>
   <string name="recapture_osm">Ghi lại Đánh dấu OSM</string>
   <string name="get_barcode">Lấy mã vạch</string>

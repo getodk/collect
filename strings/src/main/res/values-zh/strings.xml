@@ -176,8 +176,6 @@
   <string name="null_intent_value">外部应用程序未提供预期信息。</string>
   <!--Text on button that is part of print questions. Tapping the button prints the value of the question.-->
   <string name="print">列印</string>
-  <string name="launch_printer">初始化打印</string>
-  <string name="no_printer">请求的打印机未被安装. 请安装打印机.</string>
   <string name="open_url">打开Url</string>
   <string name="capture_osm">启动 OpenMapKit</string>
   <string name="recapture_osm">重做OSM标记</string>
