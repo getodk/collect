@@ -31,6 +31,7 @@ private object EntitiesTable {
     const val COLUMN_TRUNK_VERSION = "trunk_version"
     const val COLUMN_BRANCH_ID = "branch_id"
     const val COLUMN_STATE = "state"
+    const val COLUMN_ROW_NUMBER = "row_number"
 }
 
 class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRepository {
@@ -112,12 +113,21 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     override fun getEntities(list: String): List<Entity.Saved> {
-        var index = 0
-
         return try {
-            databaseConnection.readableDatabase.query(list)
+            databaseConnection.readableDatabase
+                .rawQuery(
+                    """
+                    SELECT (SELECT COUNT(*) FROM $list r WHERE e._id > r._id) ${EntitiesTable.COLUMN_ROW_NUMBER}, *
+                    FROM $list e
+                    """.trimIndent(),
+                    null
+                )
                 .foldAndClose(emptyList()) { entities, cursor ->
-                    entities + mapCursorRowToEntity(list, cursor, index++)
+                    entities + mapCursorRowToEntity(
+                        list,
+                        cursor,
+                        cursor.getInt(EntitiesTable.COLUMN_ROW_NUMBER)
+                    )
                 }
         } catch (e: SQLiteException) {
             emptyList()
@@ -147,7 +157,17 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     override fun getById(list: String, id: String): Entity.Saved? {
-        return getEntities(list).firstOrNull { it.id == id }
+        return databaseConnection.readableDatabase
+            .rawQuery(
+                """
+                SELECT (SELECT COUNT(*) FROM $list r WHERE e._id > r._id) ${EntitiesTable.COLUMN_ROW_NUMBER}, *
+                FROM $list e
+                WHERE e.id = ?
+                """.trimIndent(),
+                arrayOf(id)
+            ).first {
+                mapCursorRowToEntity(list, it, it.getInt(EntitiesTable.COLUMN_ROW_NUMBER))
+            }
     }
 
     override fun getAllByProperty(
@@ -155,9 +175,21 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         property: String,
         value: String
     ): List<Entity.Saved> {
-        return getEntities(list).filter { entity ->
-            entity.properties.firstOrNull { it.first == property }?.second == value
-        }
+        return databaseConnection.readableDatabase
+            .rawQuery(
+                """
+                SELECT (SELECT COUNT(*) FROM $list r WHERE e._id > r._id) ${EntitiesTable.COLUMN_ROW_NUMBER}, *
+                FROM $list e
+                WHERE e.$property = ?
+                """.trimIndent(),
+                arrayOf(value)
+            ).foldAndClose(emptyList()) { entities, cursor ->
+                entities + mapCursorRowToEntity(
+                    list,
+                    cursor,
+                    cursor.getInt(EntitiesTable.COLUMN_ROW_NUMBER)
+                )
+            }
     }
 
     private fun createList(list: String, properties: List<String>) {
@@ -188,14 +220,13 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             try {
                 databaseConnection.writeableDatabase.execSQL(
                     """
-                ALTER TABLE $list ADD $it text;
-                """.trimIndent()
+                    ALTER TABLE $list ADD $it text;
+                    """.trimIndent()
                 )
             } catch (e: SQLiteException) {
                 // Ignore errors creating duplicate columns
             }
         }
-
     }
 
     private fun mapCursorRowToEntity(
@@ -212,6 +243,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 EntitiesTable.COLUMN_TRUNK_VERSION,
                 EntitiesTable.COLUMN_BRANCH_ID,
                 EntitiesTable.COLUMN_STATE,
+                EntitiesTable.COLUMN_ROW_NUMBER
             ).contains(it)
         }
 

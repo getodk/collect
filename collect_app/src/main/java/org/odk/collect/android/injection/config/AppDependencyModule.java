@@ -362,7 +362,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public EntitiesRepositoryProvider provideEntitiesRepositoryProvider(Context context,StoragePathProvider storagePathProvider) {
+    public EntitiesRepositoryProvider provideEntitiesRepositoryProvider(Context context, StoragePathProvider storagePathProvider) {
         return new EntitiesRepositoryProvider(context, storagePathProvider);
     }
 
