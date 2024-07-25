@@ -113,25 +113,25 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     override fun getEntities(list: String): List<Entity.Saved> {
-        return try {
-            databaseConnection.readableDatabase
-                .rawQuery(
-                    """
-                    SELECT (SELECT COUNT(*) FROM $list r WHERE e._id > r._id) ${EntitiesTable.COLUMN_ROW_NUMBER}, *
-                    FROM $list e
-                    """.trimIndent(),
-                    null
-                )
-                .foldAndClose(emptyList()) { entities, cursor ->
-                    entities + mapCursorRowToEntity(
-                        list,
-                        cursor,
-                        cursor.getInt(EntitiesTable.COLUMN_ROW_NUMBER)
-                    )
-                }
-        } catch (e: SQLiteException) {
-            emptyList()
+        if (!listExists(list)) {
+            return emptyList()
         }
+
+        return databaseConnection.readableDatabase
+            .rawQuery(
+                """
+                SELECT (SELECT COUNT(*) FROM $list r WHERE e._id > r._id) ${EntitiesTable.COLUMN_ROW_NUMBER}, *
+                FROM $list e
+                """.trimIndent(),
+                null
+            )
+            .foldAndClose(emptyList()) { entities, cursor ->
+                entities + mapCursorRowToEntity(
+                    list,
+                    cursor,
+                    cursor.getInt(EntitiesTable.COLUMN_ROW_NUMBER)
+                )
+            }
     }
 
     override fun clear() {
@@ -157,6 +157,10 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     override fun getById(list: String, id: String): Entity.Saved? {
+        if (!listExists(list)) {
+            return null
+        }
+
         return databaseConnection.readableDatabase
             .rawQuery(
                 """
@@ -175,6 +179,10 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         property: String,
         value: String
     ): List<Entity.Saved> {
+        if (!listExists(list)) {
+            return emptyList()
+        }
+
         return databaseConnection.readableDatabase
             .rawQuery(
                 """
@@ -190,6 +198,15 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     cursor.getInt(EntitiesTable.COLUMN_ROW_NUMBER)
                 )
             }
+    }
+
+    private fun listExists(list: String): Boolean {
+        return databaseConnection.readableDatabase
+            .query(
+                ListsTable.TABLE_NAME,
+                selection = "${ListsTable.COLUMN_NAME} = ?",
+                selectionArgs = arrayOf(list)
+            ).use { it.count } > 0
     }
 
     private fun createList(list: String, properties: List<String>) {

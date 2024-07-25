@@ -386,6 +386,12 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#getById returns null where there are no entities in the list`() {
+        val repository = buildSubject()
+        assertThat(repository.getById("wines", "3"), equalTo(null))
+    }
+
+    @Test
     fun `#getByAllByProperty returns entities with matching property value`() {
         val repository = buildSubject()
 
@@ -452,6 +458,12 @@ abstract class EntitiesRepositoryTest {
         )
 
         repository.save(leoville, dows)
+        assertThat(repository.getAllByProperty("wines", "vintage", "1983"), equalTo(emptyList()))
+    }
+
+    @Test
+    fun `#getAllByProperty returns empty list when there are no entities`() {
+        val repository = buildSubject()
         assertThat(repository.getAllByProperty("wines", "vintage", "1983"), equalTo(emptyList()))
     }
 }
