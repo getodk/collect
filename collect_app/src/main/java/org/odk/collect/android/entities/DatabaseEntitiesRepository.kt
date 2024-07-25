@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.provider.BaseColumns._ID
+import androidx.core.database.sqlite.transaction
 import org.odk.collect.androidshared.sqlite.CursorExt.first
 import org.odk.collect.androidshared.sqlite.CursorExt.foldAndClose
 import org.odk.collect.androidshared.sqlite.CursorExt.getInt
@@ -211,28 +212,30 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     private fun createList(list: String, properties: List<String>) {
         if (!listExists(list)) {
-            val contentValues = ContentValues()
-            contentValues.put(ListsTable.COLUMN_NAME, list)
-            databaseConnection.writeableDatabase.insertOrThrow(
-                ListsTable.TABLE_NAME,
-                null,
-                contentValues
-            )
+            databaseConnection.writeableDatabase.transaction {
+                val contentValues = ContentValues()
+                contentValues.put(ListsTable.COLUMN_NAME, list)
+                insertOrThrow(
+                    ListsTable.TABLE_NAME,
+                    null,
+                    contentValues
+                )
 
-            databaseConnection.writeableDatabase.execSQL(
-                """
-                CREATE TABLE IF NOT EXISTS $list (
-                    $_ID integer PRIMARY KEY, 
-                    ${EntitiesTable.COLUMN_ID} text,
-                    ${EntitiesTable.COLUMN_LABEL} text,
-                    ${EntitiesTable.COLUMN_VERSION} integer,
-                    ${EntitiesTable.COLUMN_TRUNK_VERSION} integer,
-                    ${EntitiesTable.COLUMN_BRANCH_ID} text,
-                    ${EntitiesTable.COLUMN_STATE} integer NOT NULL,
-                    UNIQUE(${EntitiesTable.COLUMN_ID})
-                );
-                """.trimIndent()
-            )
+                execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS $list (
+                        $_ID integer PRIMARY KEY,
+                        ${EntitiesTable.COLUMN_ID} text,
+                        ${EntitiesTable.COLUMN_LABEL} text,
+                        ${EntitiesTable.COLUMN_VERSION} integer,
+                        ${EntitiesTable.COLUMN_TRUNK_VERSION} integer,
+                        ${EntitiesTable.COLUMN_BRANCH_ID} text,
+                        ${EntitiesTable.COLUMN_STATE} integer NOT NULL,
+                        UNIQUE(${EntitiesTable.COLUMN_ID})
+                    );
+                    """.trimIndent()
+                )
+            }
         }
 
         properties.forEach {
