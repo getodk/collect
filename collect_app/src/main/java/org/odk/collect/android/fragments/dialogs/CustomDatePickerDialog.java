@@ -67,7 +67,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         viewModel.setDatePickerDetails((DatePickerDetails) getArguments().getSerializable(DateTimeWidgetUtils.DATE_PICKER_DETAILS));
 
         viewModel.getSelectedDate().observe(this, localDateTime -> {
-            if (localDateTime != null) {
+            if (localDateTime != null && dateChangeListener != null) {
                 dateChangeListener.onDateChanged(localDateTime);
             }
         });
