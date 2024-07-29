@@ -47,9 +47,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     )
 
     override fun save(vararg entities: Entity) {
+        val listsCreated = mutableListOf<String>()
+
         entities.forEach { entity ->
             val list = entity.list
-            createList(list, entity.properties.map { it.first })
+            if (!listsCreated.contains(list)) {
+                createList(list, entity.properties.map { it.first })
+                listsCreated.add(list)
+            }
 
             val existing = databaseConnection.readableDatabase.query(
                 list,
@@ -233,6 +238,12 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                         ${EntitiesTable.COLUMN_STATE} integer NOT NULL,
                         UNIQUE(${EntitiesTable.COLUMN_ID})
                     );
+                    """.trimIndent()
+                )
+
+                execSQL(
+                    """
+                    CREATE INDEX entities_${list}_id_idx ON $list (${EntitiesTable.COLUMN_ID});
                     """.trimIndent()
                 )
             }
