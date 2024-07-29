@@ -245,15 +245,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                         ${EntitiesTable.COLUMN_VERSION} integer,
                         ${EntitiesTable.COLUMN_TRUNK_VERSION} integer,
                         ${EntitiesTable.COLUMN_BRANCH_ID} text,
-                        ${EntitiesTable.COLUMN_STATE} integer NOT NULL,
-                        UNIQUE(${EntitiesTable.COLUMN_ID})
+                        ${EntitiesTable.COLUMN_STATE} integer NOT NULL
                     );
                 """.trimIndent()
             )
 
             execSQL(
                 """
-                    CREATE INDEX entities_${list}_id_idx ON $list (${EntitiesTable.COLUMN_ID});
+                    CREATE UNIQUE INDEX ${list}_id_idx ON $list (${EntitiesTable.COLUMN_ID});
                 """.trimIndent()
             )
         }
