@@ -64,6 +64,7 @@ dependencies {
     implementation(Dependencies.android_material)
     implementation(Dependencies.androidx_navigation_fragment_ktx)
     implementation(Dependencies.androidx_navigation_ui)
+    implementation(Dependencies.timber)
     implementation(Dependencies.dagger)
     kapt(Dependencies.dagger_compiler)
 

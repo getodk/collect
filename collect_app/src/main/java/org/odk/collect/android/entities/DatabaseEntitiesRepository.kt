@@ -32,7 +32,6 @@ private object EntitiesTable {
     const val COLUMN_TRUNK_VERSION = "trunk_version"
     const val COLUMN_BRANCH_ID = "branch_id"
     const val COLUMN_STATE = "state"
-    const val COLUMN_ROW_NUMBER = "row_number"
 }
 
 class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRepository {
@@ -120,6 +119,8 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 )
             }
         }
+
+        updateRowNumbers()
     }
 
     override fun getLists(): Set<String> {
@@ -137,8 +138,9 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         return databaseConnection.readableDatabase
             .rawQuery(
                 """
-                SELECT (SELECT COUNT(*) FROM $list r WHERE e._id > r._id) ${EntitiesTable.COLUMN_ROW_NUMBER}, *
-                FROM $list e
+                SELECT *, i.rowid
+                FROM $list e, ${list}_row_numbers i
+                WHERE e._id = i._id
                 """.trimIndent(),
                 null
             )
@@ -146,7 +148,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 entities + mapCursorRowToEntity(
                     list,
                     cursor,
-                    cursor.getInt(EntitiesTable.COLUMN_ROW_NUMBER)
+                    cursor.getInt("rowid")
                 )
             }
     }
@@ -161,6 +163,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     override fun addList(list: String) {
         createList(list)
+        updateRowNumbers()
     }
 
     override fun delete(id: String) {
@@ -171,6 +174,8 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 arrayOf(id)
             )
         }
+
+        updateRowNumbers()
     }
 
     override fun getById(list: String, id: String): Entity.Saved? {
@@ -181,13 +186,13 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         return databaseConnection.readableDatabase
             .rawQuery(
                 """
-                SELECT (SELECT COUNT(*) FROM $list r WHERE e._id > r._id) ${EntitiesTable.COLUMN_ROW_NUMBER}, *
-                FROM $list e
-                WHERE e.id = ?
+                SELECT *, i.rowid
+                FROM $list e, ${list}_row_numbers i
+                WHERE e._id = i._id AND e.id = ?
                 """.trimIndent(),
                 arrayOf(id)
             ).first {
-                mapCursorRowToEntity(list, it, it.getInt(EntitiesTable.COLUMN_ROW_NUMBER))
+                mapCursorRowToEntity(list, it, it.getInt("rowid"))
             }
     }
 
@@ -203,16 +208,16 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         return databaseConnection.readableDatabase
             .rawQuery(
                 """
-                SELECT (SELECT COUNT(*) FROM $list r WHERE e._id > r._id) ${EntitiesTable.COLUMN_ROW_NUMBER}, *
-                FROM $list e
-                WHERE e.$property = ?
+                SELECT *, i.rowid
+                FROM $list e, ${list}_row_numbers i
+                WHERE e._id = i._id AND e.$property = ?
                 """.trimIndent(),
                 arrayOf(value)
             ).foldAndClose(emptyList()) { entities, cursor ->
                 entities + mapCursorRowToEntity(
                     list,
                     cursor,
-                    cursor.getInt(EntitiesTable.COLUMN_ROW_NUMBER)
+                    cursor.getInt("rowid")
                 )
             }
     }
@@ -252,7 +257,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
             execSQL(
                 """
-                    CREATE UNIQUE INDEX ${list}_id_idx ON $list (${EntitiesTable.COLUMN_ID});
+                CREATE UNIQUE INDEX ${list}_unique_id_index ON $list (${EntitiesTable.COLUMN_ID});
                 """.trimIndent()
             )
         }
@@ -263,7 +268,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             try {
                 databaseConnection.writeableDatabase.execSQL(
                     """
-                        ALTER TABLE ${entity.list} ADD $it text;
+                    ALTER TABLE ${entity.list} ADD $it text;
                     """.trimIndent()
                 )
             } catch (e: SQLiteException) {
@@ -272,10 +277,26 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
+    private fun updateRowNumbers() {
+        getLists().forEach {
+            databaseConnection.writeableDatabase.execSQL(
+                """
+                DROP TABLE IF EXISTS ${it}_row_numbers;
+                """.trimIndent()
+            )
+
+            databaseConnection.writeableDatabase.execSQL(
+                """
+                CREATE TABLE ${it}_row_numbers AS SELECT _id FROM $it;
+                """.trimIndent()
+            )
+        }
+    }
+
     private fun mapCursorRowToEntity(
         list: String,
         cursor: Cursor,
-        index: Int
+        rowId: Int
     ): Entity.Saved {
         val propertyColumns = cursor.columnNames.filter {
             !listOf(
@@ -286,7 +307,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 EntitiesTable.COLUMN_TRUNK_VERSION,
                 EntitiesTable.COLUMN_BRANCH_ID,
                 EntitiesTable.COLUMN_STATE,
-                EntitiesTable.COLUMN_ROW_NUMBER
+                "rowid"
             ).contains(it)
         }
 
@@ -302,7 +323,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             cursor.getInt(EntitiesTable.COLUMN_VERSION),
             properties,
             Entity.State.fromId(cursor.getInt(EntitiesTable.COLUMN_STATE)),
-            index,
+            rowId - 1,
             cursor.getIntOrNull(EntitiesTable.COLUMN_TRUNK_VERSION),
             cursor.getString(EntitiesTable.COLUMN_BRANCH_ID)
         )
