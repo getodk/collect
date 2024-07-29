@@ -94,15 +94,16 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.androidshared.bitmap.ImageCompressor;
-import org.odk.collect.async.network.ConnectivityProvider;
-import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.async.network.ConnectivityProvider;
+import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
+import org.odk.collect.entities.storage.EntitiesRepository;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.imageloader.GlideImageLoader;
 import org.odk.collect.imageloader.ImageLoader;
@@ -624,7 +625,9 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory(SettingsProvider settingsProvider) {
-        return new CollectFormEntryControllerFactory();
+    public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory(ProjectsDataService projectsDataService, EntitiesRepositoryProvider entitiesRepositoryProvider, SettingsProvider settingsProvider) {
+        String projectId = projectsDataService.getCurrentProject().getUuid();
+        EntitiesRepository entitiesRepository = entitiesRepositoryProvider.create(projectId);
+        return new CollectFormEntryControllerFactory(entitiesRepository, settingsProvider.getUnprotectedSettings(projectId));
     }
 }

@@ -12,7 +12,7 @@ class LocalEntitiesExternalInstanceParserFactory(
         val parser = ExternalInstanceParser()
 
         if (enabled()) {
-            parser.addFileInstanceParser(LocalEntitiesFileInstanceParser(entitiesRepositoryProvider))
+            parser.addInstanceProvider(LocalEntitiesInstanceProvider(entitiesRepositoryProvider))
         }
 
         return parser

@@ -3,12 +3,12 @@ package org.odk.collect.entities.javarosa
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
-import org.odk.collect.entities.browser.EntityItemElement
-import org.odk.collect.entities.javarosa.intance.LocalEntitiesFileInstanceParser
+import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceProvider
+import org.odk.collect.entities.javarosa.parse.EntityItemElement
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.InMemEntitiesRepository
 
-class LocalEntitiesFileInstanceParserTest {
+class LocalEntitiesInstanceProviderTest {
 
     private val entitiesRepository = InMemEntitiesRepository()
 
@@ -23,8 +23,8 @@ class LocalEntitiesFileInstanceParserTest {
             )
         entitiesRepository.save(entity)
 
-        val parser = LocalEntitiesFileInstanceParser { entitiesRepository }
-        val instance = parser.parse("people", "people.csv")
+        val parser = LocalEntitiesInstanceProvider { entitiesRepository }
+        val instance = parser.get("people", "people.csv")
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
@@ -44,8 +44,8 @@ class LocalEntitiesFileInstanceParserTest {
             )
         entitiesRepository.save(entity)
 
-        val parser = LocalEntitiesFileInstanceParser { entitiesRepository }
-        val instance = parser.parse("people", "people.csv")
+        val parser = LocalEntitiesInstanceProvider { entitiesRepository }
+        val instance = parser.get("people", "people.csv")
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
@@ -54,27 +54,39 @@ class LocalEntitiesFileInstanceParserTest {
     }
 
     @Test
-    fun `partial parse returns elements without values`() {
-        val entity =
+    fun `partial parse returns elements without values for first item and just item for others`() {
+        val entity = arrayOf(
             Entity.New(
                 "people",
                 "1",
                 "Shiv Roy",
                 properties = listOf(Pair("age", "35")),
                 version = 1
+            ),
+            Entity.New(
+                "people",
+                "2",
+                "Kendall Roy",
+                properties = listOf(Pair("age", "40")),
+                version = 1
             )
-        entitiesRepository.save(entity)
+        )
+        entitiesRepository.save(*entity)
 
-        val parser = LocalEntitiesFileInstanceParser { entitiesRepository }
-        val instance = parser.parse("people", "people.csv", true)
-        assertThat(instance.numChildren, equalTo(1))
+        val parser = LocalEntitiesInstanceProvider { entitiesRepository }
+        val instance = parser.get("people", "people.csv", true)
+        assertThat(instance.numChildren, equalTo(2))
 
-        val item = instance.getChildAt(0)!!
-        assertThat(item.isPartial, equalTo(true))
-        assertThat(item.numChildren, equalTo(4))
-        0.until(item.numChildren).forEach {
-            assertThat(item.getChildAt(it).value?.value, equalTo(null))
+        val item1 = instance.getChildAt(0)!!
+        assertThat(item1.isPartial, equalTo(true))
+        assertThat(item1.numChildren, equalTo(4))
+        0.until(item1.numChildren).forEach {
+            assertThat(item1.getChildAt(it).value?.value, equalTo(null))
         }
+
+        val item2 = instance.getChildAt(1)!!
+        assertThat(item2.isPartial, equalTo(true))
+        assertThat(item2.numChildren, equalTo(0))
     }
 
     @Test
@@ -95,8 +107,8 @@ class LocalEntitiesFileInstanceParserTest {
         val repository = InMemEntitiesRepository()
         repository.save(*entities)
 
-        val parser = LocalEntitiesFileInstanceParser { repository }
-        val instance = parser.parse("people", "people.csv", false)
+        val parser = LocalEntitiesInstanceProvider { repository }
+        val instance = parser.get("people", "people.csv", false)
 
         val first = instance.getChildAt(0)!!
         assertThat(first.getFirstChild("name")!!.value!!.value, equalTo("1"))

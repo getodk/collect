@@ -36,6 +36,20 @@ class InMemEntitiesRepository : EntitiesRepository {
         entities.removeIf { it.id == id }
     }
 
+    override fun getById(list: String, id: String): Entity.Saved? {
+        return getEntities(list).firstOrNull { it.id == id }
+    }
+
+    override fun getAllByProperty(
+        list: String,
+        property: String,
+        value: String
+    ): List<Entity.Saved> {
+        return getEntities(list).filter { entity ->
+            entity.properties.any { (first, second) -> first == property && second == value }
+        }
+    }
+
     override fun save(vararg entities: Entity) {
         entities.forEach { entity ->
             lists.add(entity.list)

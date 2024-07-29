@@ -7,4 +7,6 @@ interface EntitiesRepository {
     fun clear()
     fun addList(list: String)
     fun delete(id: String)
+    fun getById(list: String, id: String): Entity.Saved?
+    fun getAllByProperty(list: String, property: String, value: String): List<Entity.Saved>
 }

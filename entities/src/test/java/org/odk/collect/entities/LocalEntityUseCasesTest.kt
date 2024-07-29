@@ -5,8 +5,8 @@ import org.apache.commons.csv.CSVPrinter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
-import org.odk.collect.entities.browser.EntityItemElement
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
+import org.odk.collect.entities.javarosa.parse.EntityItemElement
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
@@ -306,5 +306,19 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
     override fun delete(id: String) {
         accesses += 1
         wrapped.delete(id)
+    }
+
+    override fun getById(list: String, id: String): Entity.Saved? {
+        accesses += 1
+        return wrapped.getById(list, id)
+    }
+
+    override fun getAllByProperty(
+        list: String,
+        property: String,
+        value: String
+    ): List<Entity.Saved> {
+        accesses += 1
+        return wrapped.getAllByProperty(list, property, value)
     }
 }
