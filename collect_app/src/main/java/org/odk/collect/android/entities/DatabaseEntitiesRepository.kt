@@ -47,20 +47,31 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     )
 
     override fun save(vararg entities: Entity) {
-        val listsCreated = mutableListOf<String>()
+        val existingLists = getLists()
+        val createdLists = mutableListOf<String>()
+        val modifiedList = mutableListOf<String>()
 
         entities.forEach { entity ->
             val list = entity.list
-            if (!listsCreated.contains(list)) {
-                createList(list, entity.properties.map { it.first })
-                listsCreated.add(list)
+            if (!existingLists.contains(list) && !createdLists.contains(list)) {
+                createList(list)
+                createdLists.add(list)
             }
 
-            val existing = databaseConnection.readableDatabase.query(
-                list,
-                "${EntitiesTable.COLUMN_ID} = ?",
-                arrayOf(entity.id)
-            ).first { mapCursorRowToEntity(list, it, 0) }
+            if (!modifiedList.contains(list)) {
+                updateProperties(entity)
+                modifiedList.add(list)
+            }
+
+            val existing = if (existingLists.contains(list)) {
+                databaseConnection.readableDatabase.query(
+                    list,
+                    "${EntitiesTable.COLUMN_ID} = ?",
+                    arrayOf(entity.id)
+                ).first { mapCursorRowToEntity(list, it, 0) }
+            } else {
+                null
+            }
 
             if (existing != null) {
                 val state = if (existing.state == Entity.State.OFFLINE) {
@@ -149,7 +160,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     override fun addList(list: String) {
-        createList(list, emptyList())
+        createList(list)
     }
 
     override fun delete(id: String) {
@@ -215,19 +226,18 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             ).use { it.count } > 0
     }
 
-    private fun createList(list: String, properties: List<String>) {
-        if (!listExists(list)) {
-            databaseConnection.writeableDatabase.transaction {
-                val contentValues = ContentValues()
-                contentValues.put(ListsTable.COLUMN_NAME, list)
-                insertOrThrow(
-                    ListsTable.TABLE_NAME,
-                    null,
-                    contentValues
-                )
+    private fun createList(list: String) {
+        databaseConnection.writeableDatabase.transaction {
+            val contentValues = ContentValues()
+            contentValues.put(ListsTable.COLUMN_NAME, list)
+            insertOrThrow(
+                ListsTable.TABLE_NAME,
+                null,
+                contentValues
+            )
 
-                execSQL(
-                    """
+            execSQL(
+                """
                     CREATE TABLE IF NOT EXISTS $list (
                         $_ID integer PRIMARY KEY,
                         ${EntitiesTable.COLUMN_ID} text,
@@ -238,26 +248,27 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                         ${EntitiesTable.COLUMN_STATE} integer NOT NULL,
                         UNIQUE(${EntitiesTable.COLUMN_ID})
                     );
-                    """.trimIndent()
-                )
+                """.trimIndent()
+            )
 
-                execSQL(
-                    """
+            execSQL(
+                """
                     CREATE INDEX entities_${list}_id_idx ON $list (${EntitiesTable.COLUMN_ID});
-                    """.trimIndent()
-                )
-            }
+                """.trimIndent()
+            )
         }
+    }
 
-        properties.forEach {
+    private fun updateProperties(entity: Entity) {
+        entity.properties.map { it.first }.forEach {
             try {
                 databaseConnection.writeableDatabase.execSQL(
                     """
-                    ALTER TABLE $list ADD $it text;
+                        ALTER TABLE ${entity.list} ADD $it text;
                     """.trimIndent()
                 )
             } catch (e: SQLiteException) {
-                // Ignore errors creating duplicate columns
+                println(e)
             }
         }
     }
@@ -282,7 +293,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
         val properties =
             propertyColumns.fold(emptyList<Pair<String, String>>()) { accum, property ->
-                accum + Pair(property, cursor.getString(property))
+                accum + Pair(property, cursor.getStringOrNull(property) ?: "")
             }
 
         return Entity.Saved(
