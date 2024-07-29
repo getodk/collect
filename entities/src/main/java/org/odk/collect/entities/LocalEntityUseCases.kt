@@ -7,6 +7,7 @@ import org.odk.collect.entities.javarosa.parse.EntityItemElement
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import timber.log.Timber
 import java.io.File
 
 object LocalEntityUseCases {
@@ -54,12 +55,15 @@ object LocalEntityUseCases {
         serverList: File,
         entitiesRepository: EntitiesRepository
     ) {
+        Timber.d("SQLite: starting local entity update")
+
         val root = try {
             CsvExternalInstance().parse(list, serverList.absolutePath)
         } catch (e: Exception) {
             return
         }
 
+        Timber.d("SQLite: processing server entities")
         val localEntities = entitiesRepository.getEntities(list)
         val serverEntities = root.getChildrenWithName("item")
 
@@ -79,13 +83,17 @@ object LocalEntityUseCases {
             }
         }
 
+        Timber.d("SQLite: deleting missing entities from DB")
         missingFromServer.values.forEach {
             if (it.state == Entity.State.ONLINE) {
                 entitiesRepository.delete(it.id)
             }
         }
 
+        Timber.d("SQLite: saving entities to DB")
         entitiesRepository.save(*newAndUpdated)
+
+        Timber.d("SQLite: done updating local entities")
     }
 
     private fun parseEntityFromItem(

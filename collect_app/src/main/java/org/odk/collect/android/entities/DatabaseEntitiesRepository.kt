@@ -50,73 +50,75 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         val createdLists = mutableListOf<String>()
         val modifiedList = mutableListOf<String>()
 
-        entities.forEach { entity ->
-            val list = entity.list
-            if (!existingLists.contains(list) && !createdLists.contains(list)) {
-                createList(list)
-                createdLists.add(list)
-            }
+        databaseConnection.writeableDatabase.transaction {
+            entities.forEach { entity ->
+                val list = entity.list
+                if (!existingLists.contains(list) && !createdLists.contains(list)) {
+                    createList(list)
+                    createdLists.add(list)
+                }
 
-            if (!modifiedList.contains(list)) {
-                updateProperties(entity)
-                modifiedList.add(list)
-            }
+                if (!modifiedList.contains(list)) {
+                    updateProperties(entity)
+                    modifiedList.add(list)
+                }
 
-            val existing = if (existingLists.contains(list)) {
-                databaseConnection.readableDatabase.query(
-                    list,
-                    "${EntitiesTable.COLUMN_ID} = ?",
-                    arrayOf(entity.id)
-                ).first { mapCursorRowToEntity(list, it, 0) }
-            } else {
-                null
-            }
-
-            if (existing != null) {
-                val state = if (existing.state == Entity.State.OFFLINE) {
-                    entity.state
+                val existing = if (existingLists.contains(list)) {
+                    query(
+                        list,
+                        "${EntitiesTable.COLUMN_ID} = ?",
+                        arrayOf(entity.id)
+                    ).first { mapCursorRowToEntity(list, it, 0) }
                 } else {
-                    Entity.State.ONLINE
+                    null
                 }
 
-                val contentValues = ContentValues().also {
-                    it.put(EntitiesTable.COLUMN_ID, entity.id)
-                    it.put(EntitiesTable.COLUMN_LABEL, entity.label ?: existing.label)
-                    it.put(EntitiesTable.COLUMN_VERSION, entity.version)
-                    it.put(EntitiesTable.COLUMN_TRUNK_VERSION, entity.trunkVersion)
-                    it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
-                    it.put(EntitiesTable.COLUMN_STATE, state.id)
-
-                    entity.properties.forEach { (name, value) ->
-                        it.put(name, value)
+                if (existing != null) {
+                    val state = if (existing.state == Entity.State.OFFLINE) {
+                        entity.state
+                    } else {
+                        Entity.State.ONLINE
                     }
-                }
 
-                databaseConnection.writeableDatabase.update(
-                    list,
-                    contentValues,
-                    "${EntitiesTable.COLUMN_ID} = ?",
-                    arrayOf(entity.id)
-                )
-            } else {
-                val contentValues = ContentValues().also {
-                    it.put(EntitiesTable.COLUMN_ID, entity.id)
-                    it.put(EntitiesTable.COLUMN_LABEL, entity.label)
-                    it.put(EntitiesTable.COLUMN_VERSION, entity.version)
-                    it.put(EntitiesTable.COLUMN_TRUNK_VERSION, entity.trunkVersion)
-                    it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
-                    it.put(EntitiesTable.COLUMN_STATE, entity.state.id)
+                    val contentValues = ContentValues().also {
+                        it.put(EntitiesTable.COLUMN_ID, entity.id)
+                        it.put(EntitiesTable.COLUMN_LABEL, entity.label ?: existing.label)
+                        it.put(EntitiesTable.COLUMN_VERSION, entity.version)
+                        it.put(EntitiesTable.COLUMN_TRUNK_VERSION, entity.trunkVersion)
+                        it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
+                        it.put(EntitiesTable.COLUMN_STATE, state.id)
 
-                    entity.properties.forEach { (name, value) ->
-                        it.put(name, value)
+                        entity.properties.forEach { (name, value) ->
+                            it.put(name, value)
+                        }
                     }
-                }
 
-                databaseConnection.writeableDatabase.insertOrThrow(
-                    list,
-                    null,
-                    contentValues
-                )
+                    update(
+                        list,
+                        contentValues,
+                        "${EntitiesTable.COLUMN_ID} = ?",
+                        arrayOf(entity.id)
+                    )
+                } else {
+                    val contentValues = ContentValues().also {
+                        it.put(EntitiesTable.COLUMN_ID, entity.id)
+                        it.put(EntitiesTable.COLUMN_LABEL, entity.label)
+                        it.put(EntitiesTable.COLUMN_VERSION, entity.version)
+                        it.put(EntitiesTable.COLUMN_TRUNK_VERSION, entity.trunkVersion)
+                        it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
+                        it.put(EntitiesTable.COLUMN_STATE, entity.state.id)
+
+                        entity.properties.forEach { (name, value) ->
+                            it.put(name, value)
+                        }
+                    }
+
+                    insertOrThrow(
+                        list,
+                        null,
+                        contentValues
+                    )
+                }
             }
         }
 
