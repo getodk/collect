@@ -10,9 +10,14 @@ import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory
 import org.odk.collect.entities.javarosa.filter.LocalEntitiesFilterStrategy
 import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor
 import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.settings.Settings
 import java.io.File
 
-class CollectFormEntryControllerFactory(val entitiesRepository: EntitiesRepository) :
+class CollectFormEntryControllerFactory(
+    private val entitiesRepository: EntitiesRepository,
+    private val settings: Settings
+) :
     FormEntryControllerFactory {
     override fun create(formDef: FormDef, formMediaDir: File): FormEntryController {
         val externalDataManager = ExternalDataManagerImpl(formMediaDir).also {
@@ -21,8 +26,11 @@ class CollectFormEntryControllerFactory(val entitiesRepository: EntitiesReposito
 
         return FormEntryController(FormEntryModel(formDef)).also {
             it.addFunctionHandler(ExternalDataHandlerPull(externalDataManager))
-            it.addFilterStrategy(LocalEntitiesFilterStrategy(entitiesRepository))
             it.addPostProcessor(EntityFormFinalizationProcessor())
+
+            if (settings.getBoolean(ProjectKeys.KEY_LOCAL_ENTITIES)) {
+                it.addFilterStrategy(LocalEntitiesFilterStrategy(entitiesRepository))
+            }
         }
     }
 }

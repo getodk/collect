@@ -625,8 +625,9 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory(ProjectsDataService projectsDataService, EntitiesRepositoryProvider entitiesRepositoryProvider) {
-        EntitiesRepository entitiesRepository = entitiesRepositoryProvider.create(projectsDataService.getCurrentProject().getUuid());
-        return new CollectFormEntryControllerFactory(entitiesRepository);
+    public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory(ProjectsDataService projectsDataService, EntitiesRepositoryProvider entitiesRepositoryProvider, SettingsProvider settingsProvider) {
+        String projectId = projectsDataService.getCurrentProject().getUuid();
+        EntitiesRepository entitiesRepository = entitiesRepositoryProvider.create(projectId);
+        return new CollectFormEntryControllerFactory(entitiesRepository, settingsProvider.getUnprotectedSettings(projectId));
     }
 }
