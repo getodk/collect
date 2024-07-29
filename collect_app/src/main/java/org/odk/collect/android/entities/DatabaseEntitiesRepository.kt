@@ -146,8 +146,8 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 """.trimIndent(),
                 null
             )
-            .foldAndClose(emptyList()) { entities, cursor ->
-                entities + mapCursorRowToEntity(
+            .foldAndClose { cursor ->
+                mapCursorRowToEntity(
                     list,
                     cursor,
                     cursor.getInt("rowid")

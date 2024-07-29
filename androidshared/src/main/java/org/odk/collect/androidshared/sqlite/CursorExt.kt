@@ -18,6 +18,19 @@ object CursorExt {
         }
     }
 
+    fun <T> Cursor.foldAndClose(operation: (Cursor) -> T): List<T> {
+        return this.use {
+            it.moveToPosition(-1)
+
+            val accumulator = ArrayList<T>(it.count)
+            while (it.moveToNext()) {
+                accumulator.add(operation(it))
+            }
+
+            accumulator
+        }
+    }
+
     fun <T> Cursor.first(map: (Cursor) -> T): T? {
         return this.use {
             if (it.count >= 1) {
