@@ -66,7 +66,8 @@ class LocalEntitiesFilterStrategyTest {
 
     @Test
     fun `returns matching nodes when entity matches name`() {
-        entitiesRepository.save(Entity.New("things", "thing", "Thing"))
+        entitiesRepository.save(Entity.New("things", "thing1", "Thing 1"))
+        entitiesRepository.save(Entity.New("things", "thing2", "Thing 2"))
 
         val scenario = Scenario.init(
             "Secondary instance form",
@@ -84,7 +85,7 @@ class LocalEntitiesFilterStrategyTest {
                         t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
                         bind("/data/question").type("string"),
                         bind("/data/calculate").type("string")
-                            .calculate("instance('things')/root/item[name='thing']/label")
+                            .calculate("instance('things')/root/item[name='thing1']/label")
                     )
                 ),
                 body(
@@ -95,7 +96,7 @@ class LocalEntitiesFilterStrategyTest {
         )
 
         assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
-        assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing"))
+        assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing 1"))
     }
 
     @Test
