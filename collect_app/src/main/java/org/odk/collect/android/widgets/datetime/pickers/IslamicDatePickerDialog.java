@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.fragments.dialogs;
+package org.odk.collect.android.widgets.datetime.pickers;
 
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.IslamicChronology;
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.datetime.DateTimeUtils;
 
 import java.util.Arrays;
 

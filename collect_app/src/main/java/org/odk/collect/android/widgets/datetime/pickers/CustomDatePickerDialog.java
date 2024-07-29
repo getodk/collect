@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.fragments.dialogs;
+package org.odk.collect.android.widgets.datetime.pickers;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -30,8 +30,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.DatePickerDetails;
-import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.datetime.DatePickerDetails;
+import org.odk.collect.android.widgets.datetime.DateTimeUtils;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 

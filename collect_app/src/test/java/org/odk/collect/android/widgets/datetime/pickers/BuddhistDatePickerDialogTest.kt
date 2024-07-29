@@ -1,4 +1,4 @@
-package org.odk.collect.android.fragments.dialogs
+package org.odk.collect.android.widgets.datetime.pickers
 
 import android.os.Bundle
 import androidx.fragment.app.testing.FragmentScenario
@@ -16,9 +16,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
-import org.odk.collect.android.logic.DatePickerDetails
-import org.odk.collect.android.logic.DatePickerDetails.DatePickerMode
 import org.odk.collect.android.support.Actions
+import org.odk.collect.android.widgets.datetime.DatePickerDetails
+import org.odk.collect.android.widgets.datetime.DatePickerDetails.DatePickerMode
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.strings.R.string
@@ -295,7 +295,10 @@ class BuddhistDatePickerDialogTest {
             )
             putSerializable(
                 DateTimeWidgetUtils.DATE_PICKER_DETAILS,
-                DatePickerDetails(DatePickerDetails.DatePickerType.BUDDHIST, datePickerMode)
+                DatePickerDetails(
+                    DatePickerDetails.DatePickerType.BUDDHIST,
+                    datePickerMode
+                )
             )
         }
 

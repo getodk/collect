@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.widgets.datetime;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 

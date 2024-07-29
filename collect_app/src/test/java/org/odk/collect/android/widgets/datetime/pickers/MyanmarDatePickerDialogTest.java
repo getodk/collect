@@ -1,4 +1,4 @@
-package org.odk.collect.android.fragments.dialogs;
+package org.odk.collect.android.widgets.datetime.pickers;
 
 import android.content.DialogInterface;
 
@@ -9,16 +9,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fragments.support.DialogFragmentHelpers;
-import org.odk.collect.android.logic.DatePickerDetails;
+import org.odk.collect.android.widgets.datetime.DatePickerDetails;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.testshared.RobolectricHelpers;
 
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
-public class PersianDatePickerDialogTest {
+public class MyanmarDatePickerDialogTest {
     private FragmentManager fragmentManager;
-    private PersianDatePickerDialog dialogFragment;
+    private MyanmarDatePickerDialog dialogFragment;
     private DatePickerDetails datePickerDetails;
     private DialogFragmentHelpers.DatePickerTestActivity activity;
 
@@ -27,8 +27,8 @@ public class PersianDatePickerDialogTest {
         activity = CollectHelpers.createThemedActivity(DialogFragmentHelpers.DatePickerTestActivity.class);
         fragmentManager = activity.getSupportFragmentManager();
 
-        dialogFragment = new PersianDatePickerDialog();
-        datePickerDetails = DialogFragmentHelpers.setUpDatePickerDetails(DatePickerDetails.DatePickerType.PERSIAN);
+        dialogFragment = new MyanmarDatePickerDialog();
+        datePickerDetails = DialogFragmentHelpers.setUpDatePickerDetails(DatePickerDetails.DatePickerType.MYANMAR);
         dialogFragment.setArguments(DialogFragmentHelpers.getDialogFragmentArguments(datePickerDetails));
     }
 
@@ -45,7 +45,7 @@ public class PersianDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogShowsCorrectDate(1399, 1, 23, "23 Ordibehesht 1399 (May 12, 2020)");
+        DialogFragmentHelpers.assertDialogShowsCorrectDate(1382, 1, 21, "21 ကဆုန် 1382 (May 12, 2020)");
     }
 
     @Test
@@ -55,7 +55,7 @@ public class PersianDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogShowsCorrectDateForYearMode(1399, "1399 (2020)");
+        DialogFragmentHelpers.assertDialogShowsCorrectDateForYearMode(1382, "1381 (2020)");
     }
 
     @Test
@@ -65,7 +65,7 @@ public class PersianDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(1399, 1, "Ordibehesht 1399 (Apr 2020)");
+        DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(1382, 1, "ကဆုန် 1382 (Apr 2020)");
     }
 
     @Test
@@ -73,12 +73,12 @@ public class PersianDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("23 Ordibehesht 1399 (May 12, 2020)", 1399, 1, 23);
+        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("21 ကဆုန် 1382 (May 12, 2020)", 1382, 1, 21);
     }
 
     @Test
     public void whenScreenIsRotated_dialogShouldRetainDateInDatePickerAndTextView() {
-        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "23 Ordibehesht 1399 (May 12, 2020)", 1399, 1, 23);
+        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "21 ကဆုန် 1382 (May 12, 2020)", 1382, 1, 21);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class PersianDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 1399, 1, 23);
+        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 1382, 1, 21);
     }
 
     @Test

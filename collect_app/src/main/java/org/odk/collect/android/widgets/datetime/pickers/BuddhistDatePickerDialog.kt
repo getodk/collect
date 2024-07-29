@@ -1,8 +1,8 @@
-package org.odk.collect.android.fragments.dialogs
+package org.odk.collect.android.widgets.datetime.pickers
 
 import org.joda.time.LocalDateTime
 import org.joda.time.chrono.BuddhistChronology
-import org.odk.collect.android.utilities.DateTimeUtils
+import org.odk.collect.android.widgets.datetime.DateTimeUtils
 
 class BuddhistDatePickerDialog : CustomDatePickerDialog() {
     override fun onResume() {
