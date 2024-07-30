@@ -17,8 +17,8 @@ public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragme
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        adminSettings = settingsProvider.getProtectedSettings();
         projectId = projectsDataService.getCurrentProject().getUuid();
+        adminSettings = settingsProvider.getProtectedSettings(projectId);
     }
 
     @Override
