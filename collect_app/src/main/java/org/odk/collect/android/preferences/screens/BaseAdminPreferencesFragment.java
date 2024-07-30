@@ -6,12 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.shared.settings.Settings;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragment {
 
@@ -21,8 +17,6 @@ public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragme
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        DaggerUtils.getComponent(context).inject(this);
-
         adminSettings = settingsProvider.getProtectedSettings();
         projectId = projectsDataService.getCurrentProject().getUuid();
     }
