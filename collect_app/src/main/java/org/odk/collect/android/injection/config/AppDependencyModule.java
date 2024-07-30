@@ -401,12 +401,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    @Named("ADMIN_SETTINGS_STORE")
-    public SettingsStore providesAdminSettingsStore(SettingsProvider settingsProvider) {
-        return new SettingsStore(settingsProvider.getProtectedSettings());
-    }
-
-    @Provides
     public ExternalWebPageHelper providesExternalWebPageHelper() {
         return new ExternalWebPageHelper();
     }
