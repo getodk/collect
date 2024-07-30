@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.source.SettingsStore;
+import org.odk.collect.shared.settings.Settings;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,10 +19,16 @@ public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragme
     @Named("ADMIN_SETTINGS_STORE")
     SettingsStore adminSettingsStore;
 
+    String projectId;
+    Settings adminSettings;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
+
+        adminSettings = settingsProvider.getProtectedSettings();
+        projectId = projectsDataService.getCurrentProject().getUuid();
     }
 
     @Override
@@ -32,17 +39,17 @@ public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragme
     @Override
     public void onResume() {
         super.onResume();
-        settingsProvider.getProtectedSettings().registerOnSettingChangeListener(this);
+        adminSettings.registerOnSettingChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        settingsProvider.getProtectedSettings().unregisterOnSettingChangeListener(this);
+        adminSettings.unregisterOnSettingChangeListener(this);
     }
 
     @Override
     public void onSettingChanged(@NotNull String key) {
-        settingsChangeHandler.onSettingChanged(projectsDataService.getCurrentProject().getUuid(), settingsProvider.getProtectedSettings().getAll().get(key), key);
+        settingsChangeHandler.onSettingChanged(projectId, adminSettings.getAll().get(key), key);
     }
 }
