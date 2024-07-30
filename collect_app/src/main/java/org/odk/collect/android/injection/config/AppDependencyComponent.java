@@ -230,8 +230,6 @@ public interface AppDependencyComponent {
 
     void inject(BaseProjectPreferencesFragment baseProjectPreferencesFragment);
 
-    void inject(BaseAdminPreferencesFragment baseAdminPreferencesFragment);
-
     void inject(AndroidShortcutsActivity androidShortcutsActivity);
 
     void inject(ProjectSettingsDialog projectSettingsDialog);
