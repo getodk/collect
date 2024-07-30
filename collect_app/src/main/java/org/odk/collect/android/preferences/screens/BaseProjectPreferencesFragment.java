@@ -14,15 +14,11 @@ import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
 import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
+import org.odk.collect.shared.settings.Settings;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public abstract class BaseProjectPreferencesFragment extends BasePreferencesFragment {
-
-    @Inject
-    @Named("GENERAL_SETTINGS_STORE")
-    SettingsStore generalSettingsStore;
 
     @Inject
     AdminPasswordProvider adminPasswordProvider;
@@ -34,17 +30,22 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
     PreferenceVisibilityHandler preferenceVisibilityHandler;
 
     protected ProjectPreferencesViewModel projectPreferencesViewModel;
+    private Settings settings;
+    private String projectId;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
         projectPreferencesViewModel = new ViewModelProvider(requireActivity(), factory).get(ProjectPreferencesViewModel.class);
+
+        projectId = projectsDataService.getCurrentProject().getUuid();
+        settings = settingsProvider.getUnprotectedSettings(projectId);
     }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        getPreferenceManager().setPreferenceDataStore(generalSettingsStore);
+        getPreferenceManager().setPreferenceDataStore(new SettingsStore(settings));
     }
 
     @Override
@@ -56,17 +57,17 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
     @Override
     public void onResume() {
         super.onResume();
-        settingsProvider.getUnprotectedSettings().registerOnSettingChangeListener(this);
+        settings.registerOnSettingChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        settingsProvider.getUnprotectedSettings().unregisterOnSettingChangeListener(this);
+        settings.unregisterOnSettingChangeListener(this);
     }
 
     @Override
     public void onSettingChanged(@NotNull String key) {
-        settingsChangeHandler.onSettingChanged(projectsDataService.getCurrentProject().getUuid(), settingsProvider.getUnprotectedSettings().getAll().get(key), key);
+        settingsChangeHandler.onSettingChanged(projectId, settings.getAll().get(key), key);
     }
 }

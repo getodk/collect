@@ -69,7 +69,6 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvide
 import org.odk.collect.android.preferences.Defaults;
 import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
-import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.preferences.source.SharedPreferencesSettingsProvider;
 import org.odk.collect.android.projects.ProjectCreator;
 import org.odk.collect.android.projects.ProjectDeleter;
@@ -392,12 +391,6 @@ public class AppDependencyModule {
     @Provides
     public FormSessionRepository providesFormSessionStore(Application application) {
         return new AppStateFormSessionRepository(application);
-    }
-
-    @Provides
-    @Named("GENERAL_SETTINGS_STORE")
-    public SettingsStore providesGeneralSettingsStore(SettingsProvider settingsProvider) {
-        return new SettingsStore(settingsProvider.getUnprotectedSettings());
     }
 
     @Provides
