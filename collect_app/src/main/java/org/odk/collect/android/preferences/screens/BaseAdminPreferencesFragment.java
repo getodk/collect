@@ -15,10 +15,6 @@ import javax.inject.Named;
 
 public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragment {
 
-    @Inject
-    @Named("ADMIN_SETTINGS_STORE")
-    SettingsStore adminSettingsStore;
-
     String projectId;
     Settings adminSettings;
 
@@ -33,7 +29,7 @@ public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragme
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        getPreferenceManager().setPreferenceDataStore(adminSettingsStore);
+        getPreferenceManager().setPreferenceDataStore(new SettingsStore(adminSettings));
     }
 
     @Override
