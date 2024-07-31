@@ -1,5 +1,4 @@
 def configDir = "${project.rootDir}/config"
-def reportsDir = "${project.layout.buildDirectory}/reports"
 
 //------------------------Checkstyle------------------------//
 
@@ -39,11 +38,9 @@ tasks.register("pmd", Pmd) {
     reports {
         xml {
             enabled false
-            setDestination new File("$reportsDir/pmd/pmd.xml")
         }
         html {
             enabled true
-            setDestination new File("$reportsDir/pmd/pmd.html")
         }
     }
 }
