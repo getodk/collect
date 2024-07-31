@@ -19,16 +19,31 @@ object LocalEntityUseCases {
         formEntities?.entities?.forEach { formEntity ->
             val id = formEntity.id
             if (id != null && entitiesRepository.getLists().contains(formEntity.dataset)) {
-                if (formEntity.action != EntityAction.UPDATE || entitiesRepository.getEntities(formEntity.dataset).any { it.id == id }) {
-                    val entity = Entity.New(
-                        formEntity.dataset,
-                        id,
-                        formEntity.label,
-                        formEntity.version,
-                        formEntity.properties
-                    )
+                when (formEntity.action) {
+                    EntityAction.CREATE -> {
+                        val entity = Entity.New(
+                            formEntity.dataset,
+                            id,
+                            formEntity.label,
+                            1,
+                            formEntity.properties
+                        )
 
-                    entitiesRepository.save(entity)
+                        entitiesRepository.save(entity)
+                    }
+
+                    EntityAction.UPDATE -> {
+                        val existing = entitiesRepository.getById(formEntity.dataset, formEntity.id)
+                        if (existing != null) {
+                            entitiesRepository.save(
+                                existing.copy(
+                                    label = formEntity.label,
+                                    properties = formEntity.properties,
+                                    version = existing.version + 1
+                                )
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -54,10 +69,11 @@ object LocalEntityUseCases {
             val entity = parseEntityFromItem(item, list) ?: return
             val existing = missing.remove(entity.id)
 
-            if (existing == null || existing.version < entity.version) {
+            if (existing == null || existing.version <= entity.version) {
                 Pair(new + entity, missing)
             } else if (existing.state == Entity.State.OFFLINE) {
-                Pair(new + existing.copy(state = Entity.State.ONLINE), missing)
+                val update = existing.copy(state = Entity.State.ONLINE)
+                Pair(new + update, missing)
             } else {
                 Pair(new, missing)
             }
@@ -100,7 +116,14 @@ object LocalEntityUseCases {
                 }
             }
 
-        val entity = Entity.New(list, id, label, version, properties, state = Entity.State.ONLINE)
-        return entity
+        return Entity.New(
+            list,
+            id,
+            label,
+            version,
+            properties,
+            state = Entity.State.ONLINE,
+            trunkVersion = version
+        )
     }
 }

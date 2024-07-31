@@ -9,7 +9,7 @@
 					<meta>
 						<instanceID/>
 						<instanceName/>
-						<entity dataset="people" create="1" id="">
+						<entity dataset="people" create="1" update="1" id="">
 							<label/>
 						</entity>
 					</meta>

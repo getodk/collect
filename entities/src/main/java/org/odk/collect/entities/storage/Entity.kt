@@ -1,5 +1,7 @@
 package org.odk.collect.entities.storage
 
+import java.util.UUID
+
 sealed interface Entity {
     val list: String
     val id: String
@@ -7,6 +9,8 @@ sealed interface Entity {
     val version: Int
     val properties: List<Pair<String, String>>
     val state: State
+    val trunkVersion: Int?
+    val branchId: String
 
     data class New(
         override val list: String,
@@ -14,7 +18,9 @@ sealed interface Entity {
         override val label: String?,
         override val version: Int = 1,
         override val properties: List<Pair<String, String>> = emptyList(),
-        override val state: State = State.OFFLINE
+        override val state: State = State.OFFLINE,
+        override val trunkVersion: Int? = null,
+        override val branchId: String = UUID.randomUUID().toString()
     ) : Entity
 
     data class Saved(
@@ -24,7 +30,9 @@ sealed interface Entity {
         override val version: Int = 1,
         override val properties: List<Pair<String, String>> = emptyList(),
         override val state: State = State.OFFLINE,
-        val index: Int
+        val index: Int,
+        override val trunkVersion: Int? = null,
+        override val branchId: String = UUID.randomUUID().toString()
     ) : Entity
 
     enum class State {
@@ -45,7 +53,9 @@ sealed interface Entity {
             entity.label,
             entity.version,
             entity.properties,
-            entity.state
+            entity.state,
+            entity.trunkVersion,
+            entity.branchId
         )
     }
 }

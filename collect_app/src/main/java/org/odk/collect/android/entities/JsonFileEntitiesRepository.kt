@@ -24,7 +24,9 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
                 entity.version,
                 entity.properties,
                 entity.state,
-                index
+                index,
+                entity.trunkVersion,
+                entity.branchId
             )
         }
     }
@@ -51,7 +53,9 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
                         entity.label ?: existing.label,
                         version = entity.version,
                         properties = mergeProperties(existing.toEntity(entity.list), entity),
-                        state = state
+                        state = state,
+                        trunkVersion = entity.trunkVersion,
+                        branchId = entity.branchId
                     ).toJson()
                 )
             } else {
@@ -86,7 +90,11 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         return getEntities(list).firstOrNull { it.id == id }
     }
 
-    override fun getAllByProperty(list: String, property: String, value: String): List<Entity.Saved> {
+    override fun getAllByProperty(
+        list: String,
+        property: String,
+        value: String
+    ): List<Entity.Saved> {
         return getEntities(list).filter { entity ->
             entity.properties.any { (first, second) -> first == property && second == value }
         }
@@ -163,7 +171,9 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
         val label: String?,
         val version: Int,
         val properties: Map<String, String>,
-        val offline: Boolean
+        val offline: Boolean,
+        val trunkVersion: Int?,
+        val branchId: String
     )
 
     private fun JsonEntity.toEntity(list: String): Entity.New {
@@ -179,7 +189,9 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             this.label,
             this.version,
             this.properties.entries.map { Pair(it.key, it.value) },
-            state
+            state,
+            this.trunkVersion,
+            this.branchId
         )
     }
 
@@ -189,7 +201,9 @@ class JsonFileEntitiesRepository(directory: File) : EntitiesRepository {
             this.label,
             this.version,
             this.properties.toMap(),
-            this.state == Entity.State.OFFLINE
+            this.state == Entity.State.OFFLINE,
+            this.trunkVersion,
+            this.branchId
         )
     }
 }

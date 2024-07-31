@@ -3,9 +3,13 @@ package org.odk.collect.entities
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.blankOrNullString
+import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.not
 import org.junit.Test
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
+import org.odk.collect.entities.javarosa.finalization.FormEntity
 import org.odk.collect.entities.javarosa.parse.EntityItemElement
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.storage.EntitiesRepository
@@ -19,20 +23,95 @@ class LocalEntityUseCasesTest {
     private val entitiesRepository = InMemEntitiesRepository()
 
     @Test
-    fun `updateLocalEntitiesFromForm does not save updated entity that doesn't already exist`() {
-        val entity =
-            org.odk.collect.entities.javarosa.finalization.Entity(
-                EntityAction.UPDATE,
+    fun `updateLocalEntitiesFromForm saves a new entity on create`() {
+        entitiesRepository.addList("things")
+
+        val formEntity =
+            FormEntity(EntityAction.CREATE, "things", "id", "label", listOf("property" to "value"))
+        val formEntities = EntitiesExtra(listOf(formEntity))
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+
+        val entities = entitiesRepository.getEntities("things")
+        assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].id, equalTo(formEntity.id))
+        assertThat(entities[0].label, equalTo(formEntity.label))
+        assertThat(entities[0].properties, equalTo(formEntity.properties))
+        assertThat(entities[0].branchId, not(blankOrNullString()))
+    }
+
+    @Test
+    fun `updateLocalEntitiesFromForm increments version on update`() {
+        entitiesRepository.save(
+            Entity.New(
                 "things",
-                "1",
-                "1",
-                1,
-                emptyList()
+                "id",
+                "label",
+                version = 1
             )
-        val formEntities =
-            EntitiesExtra(
-                listOf(entity)
+        )
+
+        val formEntity =
+            FormEntity(EntityAction.UPDATE, "things", "id", "label", emptyList())
+        val formEntities = EntitiesExtra(listOf(formEntity))
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        val entities = entitiesRepository.getEntities("things")
+        assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].version, equalTo(2))
+    }
+
+    @Test
+    fun `updateLocalEntitiesFromForm updates properties on update`() {
+        entitiesRepository.save(
+            Entity.New(
+                "things",
+                "id",
+                "label",
+                version = 1,
+                properties = listOf("prop" to "value")
             )
+        )
+
+        val formEntity =
+            FormEntity(EntityAction.UPDATE, "things", "id", "label", listOf("prop" to "value 2"))
+        val formEntities = EntitiesExtra(listOf(formEntity))
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        val entities = entitiesRepository.getEntities("things")
+        assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].properties.size, equalTo(1))
+        assertThat(entities[0].properties[0], equalTo("prop" to "value 2"))
+    }
+
+    @Test
+    fun `updateLocalEntitiesFromForm does not override trunk version or branchId on update`() {
+        entitiesRepository.save(
+            Entity.New(
+                "things",
+                "id",
+                "label",
+                version = 1,
+                trunkVersion = 1,
+                branchId = "branch-1"
+            )
+        )
+
+        val formEntity =
+            FormEntity(EntityAction.UPDATE, "things", "id", "label", emptyList())
+        val formEntities = EntitiesExtra(listOf(formEntity))
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        val entities = entitiesRepository.getEntities("things")
+        assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].trunkVersion, equalTo(1))
+        assertThat(entities[0].branchId, equalTo("branch-1"))
+    }
+
+    @Test
+    fun `updateLocalEntitiesFromForm does not save updated entity that doesn't already exist`() {
+        val formEntity =
+            FormEntity(EntityAction.UPDATE, "things", "1", "1", emptyList())
+        val formEntities = EntitiesExtra(listOf(formEntity))
         entitiesRepository.addList("things")
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -41,19 +120,9 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromForm does not save entity that doesn't have an ID`() {
-        val entity =
-            org.odk.collect.entities.javarosa.finalization.Entity(
-                EntityAction.CREATE,
-                "things",
-                null,
-                "1",
-                1,
-                emptyList()
-            )
-        val formEntities =
-            EntitiesExtra(
-                listOf(entity)
-            )
+        val formEntity =
+            FormEntity(EntityAction.CREATE, "things", null, "1", emptyList())
+        val formEntities = EntitiesExtra(listOf(formEntity))
         entitiesRepository.addList("things")
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -62,7 +131,8 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromServer overrides offline version if the online version is newer`() {
-        entitiesRepository.save(Entity.New("songs", "noah", "Noa", 1))
+        val offline = Entity.New("songs", "noah", "Noa", 1)
+        entitiesRepository.save(offline)
         val csv = createEntityList(Entity.New("songs", "noah", "Noah", 2))
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
@@ -70,11 +140,15 @@ class LocalEntityUseCasesTest {
         assertThat(songs.size, equalTo(1))
         assertThat(songs[0].label, equalTo("Noah"))
         assertThat(songs[0].version, equalTo(2))
+        assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
+        assertThat(songs[0].trunkVersion, equalTo(2))
+        assertThat(songs[0].branchId, not(equalTo(offline.branchId)))
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer does not override offline version if the online version is older`() {
-        entitiesRepository.save(Entity.New("songs", "noah", "Noah", 2))
+    fun `updateLocalEntitiesFromServer updates state if the online version is older`() {
+        val offline = Entity.New("songs", "noah", "Noah", 2)
+        entitiesRepository.save(offline)
         val csv = createEntityList(Entity.New("songs", "noah", "Noa", 1))
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
@@ -82,18 +156,55 @@ class LocalEntityUseCasesTest {
         assertThat(songs.size, equalTo(1))
         assertThat(songs[0].label, equalTo("Noah"))
         assertThat(songs[0].version, equalTo(2))
+        assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
+        assertThat(songs[0].trunkVersion, equalTo(null))
+        assertThat(songs[0].branchId, equalTo(offline.branchId))
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer does not override offline version if the online version is the same`() {
-        entitiesRepository.save(Entity.New("songs", "noah", "Noah", 2))
-        val csv = createEntityList(Entity.New("songs", "noah", "Noa", 2))
+    fun `updateLocalEntitiesFromServer overrides offline version if the online version is the same`() {
+        val offline = Entity.New("songs", "noah", "Noah", 2)
+        entitiesRepository.save(offline)
+        val csv = createEntityList(
+            Entity.New(
+                "songs",
+                "noah",
+                "Noa",
+                2,
+                properties = listOf("length" to "4:33")
+            )
+        )
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
         val songs = entitiesRepository.getEntities("songs")
         assertThat(songs.size, equalTo(1))
-        assertThat(songs[0].label, equalTo("Noah"))
+        assertThat(songs[0].label, equalTo("Noa"))
+        assertThat(songs[0].properties, containsInAnyOrder("length" to "4:33"))
         assertThat(songs[0].version, equalTo(2))
+        assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
+        assertThat(songs[0].trunkVersion, equalTo(2))
+        assertThat(songs[0].branchId, not(equalTo(offline.branchId)))
+    }
+
+    @Test
+    fun `updateLocalEntitiesFromServer updates trunkVersion, branchId and state if the online version catches up to an offline branch`() {
+        val offline = Entity.New("songs", "noah", "Noah", 2)
+        entitiesRepository.save(offline)
+
+        val csv1 = createEntityList(Entity.New("songs", "noah", "Noah", 2))
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv1, entitiesRepository)
+
+        val onlineBranched = Entity.New("songs", "noah", "Noah", 3)
+        entitiesRepository.save(onlineBranched)
+        val csv2 = createEntityList(Entity.New("songs", "noah", "Noah", 3))
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv2, entitiesRepository)
+
+        val songs = entitiesRepository.getEntities("songs")
+        assertThat(songs.size, equalTo(1))
+        assertThat(songs[0].version, equalTo(3))
+        assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
+        assertThat(songs[0].trunkVersion, equalTo(3))
+        assertThat(songs[0].branchId, not(equalTo(onlineBranched.branchId)))
     }
 
     @Test

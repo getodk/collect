@@ -27,7 +27,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra;
-import org.odk.collect.entities.javarosa.finalization.Entity;
+import org.odk.collect.entities.javarosa.finalization.FormEntity;
 import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor;
 import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory;
 import org.odk.collect.entities.javarosa.spec.EntityAction;
@@ -82,7 +82,7 @@ public class EntitiesTest {
         scenario.answer("Tom Wambsgans");
 
         scenario.finalizeInstance();
-        List<Entity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
+        List<FormEntity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
         assertThat(entities.size(), equalTo(0));
     }
 
@@ -122,12 +122,11 @@ public class EntitiesTest {
         scenario.answer("Tom Wambsgans");
 
         scenario.finalizeInstance();
-        List<Entity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
+        List<FormEntity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
         assertThat(entities.size(), equalTo(1));
         assertThat(entities.get(0).dataset, equalTo("people"));
         assertThat(entities.get(0).id, equalTo(scenario.answerOf("/data/meta/entity/@id").getValue()));
         assertThat(entities.get(0).label, equalTo("Tom Wambsgans"));
-        assertThat(entities.get(0).version, equalTo(1));
         assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("name", "Tom Wambsgans"))));
         assertThat(entities.get(0).action, equalTo(EntityAction.CREATE));
     }
@@ -166,7 +165,7 @@ public class EntitiesTest {
         scenario.getFormEntryController().addPostProcessor(new EntityFormFinalizationProcessor());
         scenario.finalizeInstance();
 
-        List<Entity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
+        List<FormEntity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
         assertThat(entities.size(), equalTo(1));
         assertThat(entities.get(0).dataset, equalTo("people"));
         assertThat(entities.get(0).id, equalTo(null));
@@ -208,12 +207,11 @@ public class EntitiesTest {
         scenario.answer("Tom Wambsgans");
 
         scenario.finalizeInstance();
-        List<Entity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
+        List<FormEntity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
         assertThat(entities.size(), equalTo(1));
         assertThat(entities.get(0).dataset, equalTo("people"));
         assertThat(entities.get(0).id, equalTo("123"));
         assertThat(entities.get(0).label, equalTo("Tom Wambsgans"));
-        assertThat(entities.get(0).version, equalTo(2));
         assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("name", "Tom Wambsgans"))));
         assertThat(entities.get(0).action, equalTo(EntityAction.UPDATE));
     }
@@ -250,12 +248,11 @@ public class EntitiesTest {
         scenario.answer("Tom Wambsgans");
 
         scenario.finalizeInstance();
-        List<Entity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
+        List<FormEntity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
         assertThat(entities.size(), equalTo(1));
         assertThat(entities.get(0).dataset, equalTo("people"));
         assertThat(entities.get(0).id, equalTo("123"));
         assertThat(entities.get(0).label, equalTo(null));
-        assertThat(entities.get(0).version, equalTo(2));
         assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("name", "Tom Wambsgans"))));
     }
 
@@ -288,7 +285,7 @@ public class EntitiesTest {
         scenario.getFormEntryController().addPostProcessor(new EntityFormFinalizationProcessor());
         scenario.finalizeInstance();
 
-        List<Entity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
+        List<FormEntity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
         assertThat(entities.size(), equalTo(1));
         assertThat(entities.get(0).dataset, equalTo("people"));
         assertThat(entities.get(0).id, equalTo(null));
@@ -296,7 +293,7 @@ public class EntitiesTest {
     }
 
     @Test
-    public void fillingFormWithCreateAndUpdate_makesEntityAvailableAsSecondVersion() throws IOException, XFormParser.ParseException {
+    public void fillingFormWithCreateAndUpdate_doesNotMakeEntityAvailable() throws IOException, XFormParser.ParseException {
         Scenario scenario = Scenario.init("Create entity form", XFormsElement.html(
             asList(
                 new Pair<>("entities", "http://www.opendatakit.org/xforms/entities")
@@ -329,58 +326,8 @@ public class EntitiesTest {
         scenario.answer("Tom Wambsgans");
 
         scenario.finalizeInstance();
-        List<Entity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
-        assertThat(entities.size(), equalTo(1));
-        assertThat(entities.get(0).dataset, equalTo("people"));
-        assertThat(entities.get(0).id, equalTo("123"));
-        assertThat(entities.get(0).label, equalTo("Tom Wambsgans"));
-        assertThat(entities.get(0).version, equalTo(2));
-        assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("name", "Tom Wambsgans"))));
-        assertThat(entities.get(0).action, equalTo(EntityAction.UPDATE));
-    }
-
-    @Test
-    public void fillingFormWithCreateAndUpdate_butNoBaseVersion_makesEntityAvailableAsFirstVersion() throws IOException, XFormParser.ParseException {
-        Scenario scenario = Scenario.init("Create entity form", XFormsElement.html(
-            asList(
-                new Pair<>("entities", "http://www.opendatakit.org/xforms/entities")
-            ),
-            head(
-                title("Upsert entity form"),
-                model(asList(new Pair<>("entities:entities-version", "2023.1.0")),
-                    mainInstance(
-                        t("data id=\"upsert-entity-form\"",
-                            t("name"),
-                            t("meta",
-                                t("entity dataset=\"people\" create=\"1\" update=\"1\" id=\"123\"",
-                                    t("label")
-                                )
-                            )
-                        )
-                    ),
-                    bind("/data/name").type("string").withAttribute("entities", "saveto", "name"),
-                    bind("/data/meta/entity/label").type("string").calculate("/data/name")
-                )
-            ),
-            body(
-                input("/data/name")
-            )
-        ));
-
-        scenario.getFormEntryController().addPostProcessor(new EntityFormFinalizationProcessor());
-
-        scenario.next();
-        scenario.answer("Tom Wambsgans");
-
-        scenario.finalizeInstance();
-        List<Entity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
-        assertThat(entities.size(), equalTo(1));
-        assertThat(entities.get(0).dataset, equalTo("people"));
-        assertThat(entities.get(0).id, equalTo("123"));
-        assertThat(entities.get(0).label, equalTo("Tom Wambsgans"));
-        assertThat(entities.get(0).version, equalTo(1));
-        assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("name", "Tom Wambsgans"))));
-        assertThat(entities.get(0).action, equalTo(EntityAction.UPDATE));
+        List<FormEntity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
+        assertThat(entities.size(), equalTo(0));
     }
 
     @Test
@@ -419,7 +366,7 @@ public class EntitiesTest {
         scenario.answer(scenario.choicesOf("/data/join").get(0));
 
         scenario.finalizeInstance();
-        List<Entity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
+        List<FormEntity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
         assertThat(entities.size(), equalTo(1));
 
         scenario.newInstance();
@@ -468,7 +415,7 @@ public class EntitiesTest {
         deserializedScenario.answer("Shiv Roy");
 
         deserializedScenario.finalizeInstance();
-        List<Entity> entities = deserializedScenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
+        List<FormEntity> entities = deserializedScenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
         assertThat(entities.size(), equalTo(1));
         assertThat(entities.get(0).dataset, equalTo("people"));
         assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("name", "Shiv Roy"))));
@@ -505,7 +452,7 @@ public class EntitiesTest {
         scenario.answer("Tom Wambsgans");
 
         scenario.finalizeInstance();
-        List<Entity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
+        List<FormEntity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
         assertThat(entities.size(), equalTo(1));
         assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("name", "Tom Wambsgans"))));
     }
@@ -541,7 +488,7 @@ public class EntitiesTest {
         scenario.answer(scenario.choicesOf("/data/team").get(0));
 
         scenario.finalizeInstance();
-        List<Entity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
+        List<FormEntity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
         assertThat(entities.size(), equalTo(1));
         assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("team", "kendall"))));
     }
@@ -574,7 +521,7 @@ public class EntitiesTest {
         scenario.getFormEntryController().addPostProcessor(new EntityFormFinalizationProcessor());
         scenario.finalizeInstance();
 
-        List<Entity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
+        List<FormEntity> entities = scenario.getFormEntryController().getModel().getExtras().get(EntitiesExtra.class).getEntities();
         assertThat(entities.size(), equalTo(1));
         assertThat(entities.get(0).properties, equalTo(asList(new Pair<>("name", ""))));
     }

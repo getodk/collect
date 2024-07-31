@@ -10,7 +10,7 @@
 					<meta>
 						<instanceID/>
 						<instanceName/>
-						<entity dataset="people" update="true" id="" baseVersion="" trunkVersion="" branchId="">
+						<entity dataset="people" create="true" update="true" id="" baseVersion="" trunkVersion="" branchId="">
 							<label/>
 						</entity>
 					</meta>

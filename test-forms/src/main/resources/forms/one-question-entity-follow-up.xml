@@ -2,7 +2,7 @@
 <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:entities="http://www.opendatakit.org/xforms/entities">
 	<h:head>
 		<h:title>One Question Entity Follow Up</h:title>
-		<model odk:xforms-version="1.0.0" entities:entities-version="2023.1.0">
+		<model odk:xforms-version="1.0.0" entities:entities-version="2024.1.0">
 			<instance>
 				<data id="one_question_entity_follow_up" version="1">
 					<person/>
