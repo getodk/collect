@@ -915,8 +915,7 @@
   <!--Title for setting that controls whether local entity features are enabled or not-->
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <!--Text for button that deletes all entities for the project-->
-  <string name="clear_entities">Deseleziona tutto</string>
-  <!--Text for button that adds a new entity list-->
+    <!--Text for button that adds a new entity list-->
   <!--Label for entity that has been created offline and is not on the server yet-->
   <!--##############################################
     # Crash handling

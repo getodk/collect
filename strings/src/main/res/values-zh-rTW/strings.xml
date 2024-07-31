@@ -933,8 +933,7 @@
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">查看實體列表</string>
   <!--Text for button that deletes all entities for the project-->
-  <string name="clear_entities">全部清除</string>
-  <!--Text for button that adds a new entity list-->
+    <!--Text for button that adds a new entity list-->
     <!--Label for entity that has been created offline and is not on the server yet-->
   <string name="offline">離線</string>
   <!--##############################################
