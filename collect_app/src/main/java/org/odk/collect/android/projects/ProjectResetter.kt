@@ -22,7 +22,9 @@ import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.android.utilities.WebCredentialsUtils
+import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.metadata.PropertyManager
+import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.SettingsProvider
 import java.io.File
 
@@ -33,7 +35,8 @@ class ProjectResetter(
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
     private val instancesDataService: InstancesDataService,
-    private val projectId: String
+    private val projectId: String,
+    private val entitiesRepositoryFactory: ProjectDependencyFactory<EntitiesRepository>
 ) {
 
     private var failedResetActions = mutableListOf<Int>()
@@ -67,6 +70,8 @@ class ProjectResetter(
     }
 
     private fun resetInstances() {
+        entitiesRepositoryFactory.create(projectId).clear()
+
         if (!instancesDataService.deleteAll(projectId) ||
             !deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES))) {
             failedResetActions.add(ResetAction.RESET_INSTANCES)
