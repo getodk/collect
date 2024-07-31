@@ -130,6 +130,13 @@
         <!-- Sets up theme correction for anything using `AlertDialog.Builder` -->
         <item name="alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
         <item name="android:alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
+
+        <item name="linearProgressIndicatorStyle">@style/Widget.Collect.LinearProgressIndicator</item>
+    </style>
+
+    <style name="Widget.Collect.LinearProgressIndicator" parent="Widget.Material3.LinearProgressIndicator">
+        <item name="trackStopIndicatorSize">@null</item>
+        <item name="indicatorTrackGapSize">@null</item>
     </style>
 
     <style name="Theme.Collect.SplashScreen" parent="Theme.SplashScreen">
