@@ -11,11 +11,12 @@ import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.strings.R
 
-class ResetApplicationTest {
-    private var rule = CollectTestRule()
+class ResetProjectTest {
+
+    private val rule = CollectTestRule()
 
     @get:Rule
-    var copyFormChain: RuleChain = chain().around(rule)
+    val copyFormChain: RuleChain = chain().around(rule)
 
     @Test
     fun when_rotateScreen_should_resetDialogNotDisappear() {
