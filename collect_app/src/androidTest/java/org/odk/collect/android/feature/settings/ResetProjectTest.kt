@@ -36,34 +36,43 @@ class ResetProjectTest {
     }
 
     @Test
-    fun savedAndBlankForms_shouldBeReset() {
+    fun canResetBlankForms() {
+        rule.startAtMainMenu()
+            .copyForm("all-widgets.xml")
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickProjectManagement()
+            .clickOnResetApplication()
+            .assertDisabled(R.string.reset_settings_button_reset)
+            .clickOnString(R.string.reset_blank_forms)
+            .clickOnString(R.string.reset_settings_button_reset)
+            .clickOKOnDialog(MainMenuPage())
+            .clickFillBlankForm()
+            .assertTextDoesNotExist("All widgets")
+    }
+
+    @Test
+    fun canResetSavedForms() {
         rule.startAtMainMenu()
             .copyForm("all-widgets.xml")
             .startBlankForm("All widgets")
             .clickGoToArrow()
             .clickJumpEndButton()
             .clickSaveAsDraft()
-            .clickDrafts()
-            .assertText("All widgets")
-            .pressBack(MainMenuPage())
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
             .clickOnResetApplication()
             .assertDisabled(R.string.reset_settings_button_reset)
             .clickOnString(R.string.reset_saved_forms)
-            .clickOnString(R.string.reset_blank_forms)
             .clickOnString(R.string.reset_settings_button_reset)
             .clickOKOnDialog(MainMenuPage())
-            .clickFillBlankForm()
-            .assertTextDoesNotExist("All widgets")
-            .pressBack(MainMenuPage())
-            .clickDrafts(false)
+            .clickDrafts()
             .assertTextDoesNotExist("All widgets")
     }
 
     @Test
-    fun adminSettings_shouldBeReset() {
+    fun canResetAdminSettings() {
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
             .clickSettings()
@@ -90,7 +99,7 @@ class ResetProjectTest {
     }
 
     @Test
-    fun userInterfaceSettings_shouldBeReset() {
+    fun canResetUserInterfaceSettings() {
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
             .clickSettings()
