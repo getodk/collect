@@ -953,7 +953,7 @@
     <string name="select_all">Select All</string>
     <string name="clear_all">Clear All</string>
     <string name="reset_settings">All settings (internal settings, saved settings)</string>
-    <string name="reset_saved_forms">Saved forms (instances folder, instances database)</string>
+    <string name="reset_saved_forms">Saved forms and entities (instances folder, instances database, entities database)</string>
     <string name="reset_blank_forms">Blank forms (forms folder, forms database, itemsets database)</string>
     <string name="reset_layers">Map layers (layers folder)</string>
     <string name="reset_cache">Form load cache (.cache folder)</string>
