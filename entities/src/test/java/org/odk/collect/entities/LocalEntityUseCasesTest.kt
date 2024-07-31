@@ -23,16 +23,19 @@ class LocalEntityUseCasesTest {
     private val entitiesRepository = InMemEntitiesRepository()
 
     @Test
-    fun `updateLocalEntitiesFromForm creates a new branchId for new entities`() {
+    fun `updateLocalEntitiesFromForm saves a new entity on create`() {
         entitiesRepository.addList("things")
 
         val formEntity =
-            FormEntity(EntityAction.CREATE, "things", "id", "label", emptyList())
+            FormEntity(EntityAction.CREATE, "things", "id", "label", listOf("property" to "value"))
         val formEntities = EntitiesExtra(listOf(formEntity))
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
 
         val entities = entitiesRepository.getEntities("things")
         assertThat(entities.size, equalTo(1))
+        assertThat(entities[0].id, equalTo(formEntity.id))
+        assertThat(entities[0].label, equalTo(formEntity.label))
+        assertThat(entities[0].properties, equalTo(formEntity.properties))
         assertThat(entities[0].branchId, not(blankOrNullString()))
     }
 
@@ -70,14 +73,14 @@ class LocalEntityUseCasesTest {
         )
 
         val formEntity =
-            FormEntity(EntityAction.UPDATE, "things", "id", "label", emptyList())
+            FormEntity(EntityAction.UPDATE, "things", "id", "label", listOf("prop" to "value 2"))
         val formEntities = EntitiesExtra(listOf(formEntity))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
         val entities = entitiesRepository.getEntities("things")
         assertThat(entities.size, equalTo(1))
         assertThat(entities[0].properties.size, equalTo(1))
-        assertThat(entities[0].properties[0], equalTo("prop" to "value"))
+        assertThat(entities[0].properties[0], equalTo("prop" to "value 2"))
     }
 
     @Test
