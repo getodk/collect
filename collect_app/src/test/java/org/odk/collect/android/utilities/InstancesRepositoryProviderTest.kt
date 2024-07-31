@@ -26,7 +26,9 @@ class InstancesRepositoryProviderTest {
                 "",
                 instancesDir.absolutePath,
                 "",
-                dbDir.absolutePath
+                dbDir.absolutePath,
+                "",
+                ""
             )
         }
 
