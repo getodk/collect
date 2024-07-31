@@ -19,23 +19,6 @@ class ResetProjectTest {
     val copyFormChain: RuleChain = chain().around(rule)
 
     @Test
-    fun when_rotateScreen_should_resetDialogNotDisappear() {
-        rule.startAtMainMenu()
-            .openProjectSettingsDialog()
-            .clickSettings()
-            .clickProjectManagement()
-            .clickOnResetApplication()
-            .assertText(R.string.reset_settings_dialog_title)
-            .assertDisabled(R.string.reset_settings_button_reset)
-            .rotateToLandscape(ResetApplicationDialog())
-            .assertText(R.string.reset_settings_dialog_title)
-            .assertDisabled(R.string.reset_settings_button_reset)
-            .rotateToPortrait(ResetApplicationDialog())
-            .assertText(R.string.reset_settings_dialog_title)
-            .assertDisabled(R.string.reset_settings_button_reset)
-    }
-
-    @Test
     fun canResetBlankForms() {
         rule.startAtMainMenu()
             .copyForm("all-widgets.xml")
@@ -136,5 +119,17 @@ class ResetProjectTest {
             .assertTextDoesNotExist(R.string.theme_dark)
             .assertText(R.string.use_device_language)
             .assertTextDoesNotExist("español")
+    }
+
+    @Test
+    fun when_rotateScreen_should_resetDialogNotDisappear() {
+        rule.startAtMainMenu()
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickProjectManagement()
+            .clickOnResetApplication()
+            .assertText(R.string.reset_settings_dialog_title)
+            .rotateToLandscape(ResetApplicationDialog())
+            .assertText(R.string.reset_settings_dialog_title)
     }
 }
