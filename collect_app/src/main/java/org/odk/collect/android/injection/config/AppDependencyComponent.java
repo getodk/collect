@@ -16,8 +16,8 @@ import org.odk.collect.android.application.initialization.ApplicationInitializer
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.audio.AudioRecordingControllerFragment;
 import org.odk.collect.android.audio.AudioRecordingErrorDialogFragment;
-import org.odk.collect.android.backgroundwork.SendFormsTaskSpec;
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec;
+import org.odk.collect.android.backgroundwork.SendFormsTaskSpec;
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
 import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
@@ -47,7 +47,6 @@ import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
-import org.odk.collect.android.preferences.screens.BaseAdminPreferencesFragment;
 import org.odk.collect.android.preferences.screens.BasePreferencesFragment;
 import org.odk.collect.android.preferences.screens.BaseProjectPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ExperimentalPreferencesFragment;
@@ -77,8 +76,8 @@ import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
-import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.draw.DrawActivity;
 import org.odk.collect.googlemaps.GoogleMapFragment;
 import org.odk.collect.location.LocationClient;
@@ -229,8 +228,6 @@ public interface AppDependencyComponent {
     void inject(ThemeUtils themeUtils);
 
     void inject(BaseProjectPreferencesFragment baseProjectPreferencesFragment);
-
-    void inject(BaseAdminPreferencesFragment baseAdminPreferencesFragment);
 
     void inject(AndroidShortcutsActivity androidShortcutsActivity);
 
