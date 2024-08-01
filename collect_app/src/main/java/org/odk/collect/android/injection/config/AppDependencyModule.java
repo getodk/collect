@@ -27,6 +27,7 @@ import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.MapboxClassInstanceCreator;
 import org.odk.collect.android.application.initialization.AnalyticsInitializer;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.application.initialization.CachedFormsCleaner;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.application.initialization.ExistingSettingsMigrator;
 import org.odk.collect.android.application.initialization.GoogleDriveProjectsDeleter;
@@ -547,7 +548,8 @@ public class AppDependencyModule {
                 existingSettingsMigrator,
                 scheduledWorkUpgrade,
                 googleDriveProjectsDeleter,
-                new SavepointsImporter(projectsRepository, projectDependencyModuleFactory)
+                new SavepointsImporter(projectsRepository, projectDependencyModuleFactory),
+                new CachedFormsCleaner(projectsRepository, projectDependencyModuleFactory)
         );
     }
 

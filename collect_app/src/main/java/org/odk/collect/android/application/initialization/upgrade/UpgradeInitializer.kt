@@ -2,6 +2,7 @@ package org.odk.collect.android.application.initialization.upgrade
 
 import android.content.Context
 import org.odk.collect.android.BuildConfig
+import org.odk.collect.android.application.initialization.CachedFormsCleaner
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator
 import org.odk.collect.android.application.initialization.ExistingSettingsMigrator
 import org.odk.collect.android.application.initialization.GoogleDriveProjectsDeleter
@@ -18,7 +19,8 @@ class UpgradeInitializer(
     private val existingSettingsMigrator: ExistingSettingsMigrator,
     private val scheduledWorkUpgrade: ScheduledWorkUpgrade,
     private val googleDriveProjectsDeleter: GoogleDriveProjectsDeleter,
-    private val savepointsImporter: SavepointsImporter
+    private val savepointsImporter: SavepointsImporter,
+    private val cachedFormsCleaner: CachedFormsCleaner
 ) {
 
     fun initialize() {
@@ -32,7 +34,8 @@ class UpgradeInitializer(
                 existingSettingsMigrator,
                 scheduledWorkUpgrade,
                 googleDriveProjectsDeleter,
-                savepointsImporter
+                savepointsImporter,
+                cachedFormsCleaner
             )
         ).upgradeIfNeeded()
     }
