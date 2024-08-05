@@ -153,7 +153,9 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
-                        if (appearance.contains(Appearances.EX)) {
+                        if (appearance.equalsIgnoreCase(Appearances.COUNTER)) {
+                            questionWidget = new CounterWidget(activity, questionDetails);
+                        } else if (appearance.contains(Appearances.EX)) {
                             questionWidget = new ExIntegerWidget(activity, questionDetails, waitingForDataRegistry, stringRequester);
                         } else {
                             questionWidget = new IntegerWidget(activity, questionDetails);

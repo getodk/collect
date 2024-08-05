@@ -88,6 +88,7 @@ object Appearances {
     const val URL = "url"
     const val RATING = "rating"
     const val MASKED = "masked"
+    const val COUNTER = "counter"
 
     // Get appearance hint and clean it up so it is lower case, without the search function and never null.
     @JvmStatic
