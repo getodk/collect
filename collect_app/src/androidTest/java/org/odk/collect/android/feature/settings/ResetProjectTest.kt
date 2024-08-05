@@ -49,8 +49,6 @@ class ResetProjectTest {
         )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
 
