@@ -19,7 +19,7 @@ object LocalEntityUseCases {
     ) {
         formEntities?.entities?.forEach { formEntity ->
             val id = formEntity.id
-            if (id != null && entitiesRepository.getLists().contains(formEntity.dataset)) {
+            if (id != null) {
                 when (formEntity.action) {
                     EntityAction.CREATE -> {
                         val entity = Entity.New(

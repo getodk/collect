@@ -6,7 +6,6 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
-import org.odk.collect.android.support.StubOpenRosaServer.MediaFileItem
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -22,26 +21,6 @@ class EntityFormTest {
     @get:Rule
     val ruleChain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(rule)
-
-    @Test
-    fun fillingEntityRegistrationForm_doesNotShowEntitiesInNonEntityListForm() {
-        testDependencies.server.addForm("one-question-entity-registration.xml")
-        testDependencies.server.addForm(
-            "one-question-entity-update.xml",
-            listOf(MediaFileItem("people.csv"))
-        )
-
-        rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-
-            .startBlankForm("One Question Entity Registration")
-            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
-
-            .startBlankForm("One Question Entity Update")
-            .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertTextDoesNotExist("Logan Roy")
-    }
 
     @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpForms() {
