@@ -256,4 +256,18 @@ class WidgetFactoryTest {
         val widget = widgetFactory.createWidgetFromPrompt(prompt, null)
         assertThat(widget, instanceOf(ExDecimalWidget::class.java))
     }
+
+    @Test
+    fun testCreatingCounterWidget() {
+        listOf("counter", "CouNTer").forEach { appearance ->
+            val prompt = MockFormEntryPromptBuilder()
+                .withControlType(Constants.CONTROL_INPUT)
+                .withDataType(Constants.DATATYPE_INTEGER)
+                .withAppearance(appearance)
+                .build()
+
+            val widget = widgetFactory.createWidgetFromPrompt(prompt, null)
+            assertThat(widget, instanceOf(CounterWidget::class.java))
+        }
+    }
 }
