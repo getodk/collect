@@ -6,7 +6,9 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
+import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.DeleteSavedFormPage
+import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
@@ -15,14 +17,16 @@ import org.odk.collect.strings.R.string
 @RunWith(AndroidJUnit4::class)
 class DeleteSavedFormTest {
 
-    private val rule: CollectTestRule = CollectTestRule()
+    private val rule = CollectTestRule(useDemoProject = false)
+    private val testDependencies = TestDependencies()
 
     @get:Rule
-    val chain: RuleChain = chain().around(rule)
+    val chain: RuleChain = chain(testDependencies).around(rule)
 
     @Test
     fun deletingAForm_removesFormFromFinalizedForms() {
-        rule.startAtMainMenu()
+        rule.startAtFirstLaunch()
+            .clickTryCollect()
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .answerQuestion("what is your age", "30")
@@ -40,8 +44,21 @@ class DeleteSavedFormTest {
     }
 
     @Test
+    fun whenFormHasCreatedEntity_doesNotAppearInListToDelete() {
+        testDependencies.server.addForm("one-question-entity-registration.xml")
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
+            .startBlankForm("One Question Entity Registration")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+
+            .clickDeleteSavedForm()
+            .assertTextDoesNotExist("One Question Entity Registration")
+    }
+
+    @Test
     fun accessingSortMenuInDeleteSavedInstancesShouldNotCrashTheAppAfterRotatingTheDevice() {
-        rule.startAtMainMenu()
+        rule.startAtFirstLaunch()
+            .clickTryCollect()
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .answerQuestion("what is your age", "30")
