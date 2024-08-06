@@ -155,8 +155,9 @@ object FormEntryUseCases {
         entitiesRepository: EntitiesRepository,
     ): Instance? {
         formController.finalizeForm()
+        val formEntities = formController.getEntities()
         LocalEntityUseCases.updateLocalEntitiesFromForm(
-            formController.getEntities(),
+            formEntities,
             entitiesRepository
         )
 
@@ -166,6 +167,7 @@ object FormEntryUseCases {
                 .status(Instance.STATUS_COMPLETE)
                 .canEditWhenComplete(formController.isSubmissionEntireForm())
                 .displayName(instanceName ?: instance.displayName)
+                .canDeleteBeforeSend(formEntities == null)
                 .build()
         )
     }

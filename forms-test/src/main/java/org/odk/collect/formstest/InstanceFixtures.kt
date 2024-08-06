@@ -26,6 +26,7 @@ object InstanceFixtures {
                 }
             }
             .deletedDate(deletedDate)
+            .canDeleteBeforeSend(true)
             .build()
     }
 }
