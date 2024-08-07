@@ -164,8 +164,10 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     override fun addList(list: String) {
-        createList(list)
-        updateRowNumbers()
+        if (!listExists(list)) {
+            createList(list)
+            updateRowNumbers()
+        }
     }
 
     override fun delete(id: String) {
@@ -259,7 +261,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
             execSQL(
                 """
-                CREATE UNIQUE INDEX ${list}_unique_id_index ON $list (${EntitiesTable.COLUMN_ID});
+                CREATE UNIQUE INDEX IF NOT EXISTS ${list}_unique_id_index ON $list (${EntitiesTable.COLUMN_ID});
                 """.trimIndent()
             )
         }

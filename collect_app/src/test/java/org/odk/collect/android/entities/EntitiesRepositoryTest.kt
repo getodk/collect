@@ -247,6 +247,12 @@ abstract class EntitiesRepositoryTest {
         assertThat(repository.getLists().size, equalTo(0))
         assertThat(repository.getEntities("wines").size, equalTo(0))
         assertThat(repository.getEntities("whiskys").size, equalTo(0))
+
+        repository.addList("wines")
+        assertThat(repository.getEntities("wines").size, equalTo(0))
+
+        repository.addList("whiskys")
+        assertThat(repository.getEntities("whiskys").size, equalTo(0))
     }
 
     @Test
@@ -306,6 +312,16 @@ abstract class EntitiesRepositoryTest {
     fun `#addList adds a list with no entities`() {
         val repository = buildSubject()
 
+        repository.addList("wine")
+        assertThat(repository.getLists(), containsInAnyOrder("wine"))
+        assertThat(repository.getEntities("wine").size, equalTo(0))
+    }
+
+    @Test
+    fun `#addList works if list already exists`() {
+        val repository = buildSubject()
+
+        repository.addList("wine")
         repository.addList("wine")
         assertThat(repository.getLists(), containsInAnyOrder("wine"))
         assertThat(repository.getEntities("wine").size, equalTo(0))
