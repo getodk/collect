@@ -84,13 +84,11 @@ class CounterWidgetTest : QuestionWidgetTest<CounterWidget, IAnswerData>() {
 
     @Test
     fun `clicking the plus button increases the value`() {
-        whenever(formEntryPrompt.answerValue).thenReturn(IntegerData(10))
+        widget.binding.plusButton.performClick()
+        assertThat(widget.binding.value.text.toString(), equalTo("1"))
 
         widget.binding.plusButton.performClick()
-        assertThat(widget.binding.value.text.toString(), equalTo("11"))
-
-        widget.binding.plusButton.performClick()
-        assertThat(widget.binding.value.text.toString(), equalTo("12"))
+        assertThat(widget.binding.value.text.toString(), equalTo("2"))
     }
 
     @Test
