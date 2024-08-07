@@ -276,7 +276,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     """.trimIndent()
                 )
             } catch (e: SQLiteException) {
-                println(e)
+                // Ignored
             }
         }
     }
