@@ -28,7 +28,7 @@ private object ListsTable {
 private object EntitiesTable {
     const val COLUMN_ID = "id"
     const val COLUMN_LABEL = "label"
-    const val COLUMN_VERSION = "vesion"
+    const val COLUMN_VERSION = "version"
     const val COLUMN_TRUNK_VERSION = "trunk_version"
     const val COLUMN_BRANCH_ID = "branch_id"
     const val COLUMN_STATE = "state"
