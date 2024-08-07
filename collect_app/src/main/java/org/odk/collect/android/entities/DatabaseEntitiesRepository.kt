@@ -59,7 +59,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 }
 
                 if (!modifiedList.contains(list)) {
-                    updateProperties(entity)
+                    updatePropertyColumns(entity)
                     modifiedList.add(list)
                 }
 
@@ -267,7 +267,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    private fun updateProperties(entity: Entity) {
+    private fun updatePropertyColumns(entity: Entity) {
         entity.properties.map { it.first }.forEach {
             try {
                 databaseConnection.writeableDatabase.execSQL(
