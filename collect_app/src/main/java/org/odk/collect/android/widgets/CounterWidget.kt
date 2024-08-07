@@ -1,10 +1,8 @@
 package org.odk.collect.android.widgets
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
-import androidx.core.widget.doOnTextChanged
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.databinding.CounterWidgetBinding
@@ -17,37 +15,29 @@ class CounterWidget(
 ) : QuestionWidget(context, questionDetails) {
     lateinit var binding: CounterWidgetBinding
 
+    private var value: Int? = null
+        set(newValue) {
+            field = newValue?.takeIf { it in 0..999999999 }
+            binding.value.text = field?.toString().orEmpty()
+            updateButtonStates(field)
+        }
+
     init {
         render()
     }
 
-    @SuppressLint("SetTextI18n")
+    private fun updateButtonStates(value: Int?) {
+        binding.minusButton.isEnabled = value != null && value > 0
+        binding.plusButton.isEnabled = value == null || value < 999999999
+    }
+
     override fun onCreateAnswerView(
         context: Context,
         prompt: FormEntryPrompt,
         answerFontSize: Int
     ): View {
         binding = CounterWidgetBinding.inflate(LayoutInflater.from(context))
-
-        binding.value.doOnTextChanged { text, _, _, _ ->
-            if (text.isNullOrBlank() || Integer.parseInt(text.toString()) == 0) {
-                binding.minusButton.isEnabled = false
-            } else if (Integer.parseInt(text.toString()) == 999999999) {
-                binding.plusButton.isEnabled = false
-            } else {
-                binding.minusButton.isEnabled = true
-                binding.plusButton.isEnabled = true
-            }
-        }
-
-        formEntryPrompt.answerValue?.let {
-            val value = Integer.parseInt(it.value.toString())
-            if (value in 0..999999999) {
-                binding.value.text = value.toString()
-            }
-        } ?: run {
-            binding.value.text = null
-        }
+        value = formEntryPrompt.answerValue?.value as Int?
 
         if (formEntryPrompt.isReadOnly) {
             binding.minusButton.isEnabled = false
@@ -55,18 +45,12 @@ class CounterWidget(
         }
 
         binding.minusButton.setOnClickListener {
-            val currentValue = Integer.parseInt(binding.value.text.toString())
-            binding.value.text = (currentValue - 1).toString()
+            value = value?.minus(1)
             widgetValueChanged()
         }
 
         binding.plusButton.setOnClickListener {
-            if (binding.value.text.isNullOrBlank()) {
-                binding.value.text = "1"
-            } else {
-                val currentValue = Integer.parseInt(binding.value.text.toString())
-                binding.value.text = (currentValue + 1).toString()
-            }
+            value = value?.plus(1) ?: 1
             widgetValueChanged()
         }
         return binding.root
@@ -75,11 +59,11 @@ class CounterWidget(
     override fun setOnLongClickListener(listener: OnLongClickListener?) = Unit
 
     override fun getAnswer(): IAnswerData? {
-        return StringWidgetUtils.getIntegerData(binding.value.text.toString(), formEntryPrompt)
+        return StringWidgetUtils.getIntegerData(value?.toString().orEmpty(), formEntryPrompt)
     }
 
     override fun clearAnswer() {
-        binding.value.text = null
+        value = null
         widgetValueChanged()
     }
 }
