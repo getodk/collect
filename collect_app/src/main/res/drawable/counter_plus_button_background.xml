@@ -6,10 +6,7 @@
             <corners
                 android:topRightRadius="10dp"
                 android:bottomRightRadius="10dp" />
-            <stroke
-                android:color="?colorSurfaceContainerHighest"
-                android:width="2dp" />
-            <solid android:color="?colorSurfaceContainerLow" />
+            <solid android:color="?colorSurfaceContainerHighest" />
         </shape>
     </item>
 </ripple>
