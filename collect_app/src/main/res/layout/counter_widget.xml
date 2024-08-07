@@ -21,7 +21,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:background="@drawable/counter_value_background"
-        android:textSize="20sp"
+        android:textSize="25sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/minus_button"
