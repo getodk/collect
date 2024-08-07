@@ -5,9 +5,11 @@ import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.IntegerData
 import org.junit.Test
+import org.mockito.Mockito.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.base.QuestionWidgetTest
+import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
 
 class CounterWidgetTest : QuestionWidgetTest<CounterWidget, IAnswerData>() {
 
@@ -107,6 +109,23 @@ class CounterWidgetTest : QuestionWidgetTest<CounterWidget, IAnswerData>() {
         widget.binding.plusButton.performClick()
         assertThat(widget.binding.value.text.toString(), equalTo("999999999"))
         assertThat(widget.binding.plusButton.isEnabled, equalTo(false))
+    }
+
+    @Test
+    fun `clicking the minus button calls widgetValueChanged listener`() {
+        whenever(formEntryPrompt.answerValue).thenReturn(IntegerData(1))
+        val valueChangedListener = QuestionWidgetHelpers.mockValueChangedListener<QuestionWidget>(widget)
+
+        widget.binding.minusButton.performClick()
+        verify(valueChangedListener).widgetValueChanged(widget)
+    }
+
+    @Test
+    fun `clicking the plus button calls widgetValueChanged listener`() {
+        val valueChangedListener = QuestionWidgetHelpers.mockValueChangedListener<QuestionWidget>(widget)
+
+        widget.binding.plusButton.performClick()
+        verify(valueChangedListener).widgetValueChanged(widget)
     }
 
     @Test
