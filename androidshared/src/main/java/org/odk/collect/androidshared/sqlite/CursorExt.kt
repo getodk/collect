@@ -33,9 +33,7 @@ object CursorExt {
 
     fun <T> Cursor.first(map: (Cursor) -> T): T? {
         return this.use {
-            if (it.count >= 1) {
-                it.moveToPosition(-1)
-                it.moveToNext()
+            if (it.moveToFirst()) {
                 map(it)
             } else {
                 return null
