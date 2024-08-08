@@ -31,7 +31,7 @@ class ResetProjectTest {
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
-            .clickOnResetApplication()
+            .clickOnResetProject()
             .assertDisabled(R.string.reset_settings_button_reset)
             .clickOnString(R.string.reset_blank_forms)
             .clickOnString(R.string.reset_settings_button_reset)
@@ -55,7 +55,7 @@ class ResetProjectTest {
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
-            .clickOnResetApplication()
+            .clickOnResetProject()
             .assertDisabled(R.string.reset_settings_button_reset)
             .clickOnString(R.string.reset_saved_forms)
             .clickOnString(R.string.reset_settings_button_reset)
@@ -70,7 +70,7 @@ class ResetProjectTest {
     }
 
     @Test
-    fun canResetAdminSettings() {
+    fun canResetProtectedSettings() {
         rule.startAtFirstLaunch()
             .clickTryCollect()
             .openProjectSettingsDialog()
@@ -88,7 +88,7 @@ class ResetProjectTest {
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
-            .clickOnResetApplication()
+            .clickOnResetProject()
             .clickOnString(R.string.reset_settings)
             .clickOnString(R.string.reset_settings_button_reset)
             .clickOKOnDialog(MainMenuPage())
@@ -125,7 +125,7 @@ class ResetProjectTest {
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
-            .clickOnResetApplication()
+            .clickOnResetProject()
             .clickOnString(R.string.reset_settings)
             .clickOnString(R.string.reset_settings_button_reset)
             .clickOKOnDialog(MainMenuPage())
@@ -145,7 +145,7 @@ class ResetProjectTest {
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
-            .clickOnResetApplication()
+            .clickOnResetProject()
             .assertText(R.string.reset_settings_dialog_title)
             .rotateToLandscape(ResetApplicationDialog())
             .assertText(R.string.reset_settings_dialog_title)
