@@ -16,4 +16,5 @@ object DatabaseInstanceColumns : BaseColumns {
     const val DELETED_DATE = "deletedDate"
     const val GEOMETRY = "geometry"
     const val GEOMETRY_TYPE = "geometryType"
+    const val CAN_DELETE_BEFORE_SEND = "canDeleteBeforeSend"
 }

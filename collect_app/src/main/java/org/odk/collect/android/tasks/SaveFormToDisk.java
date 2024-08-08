@@ -127,7 +127,8 @@ public class SaveFormToDisk {
         }
 
         if (shouldFinalize) {
-            FormEntryUseCases.finalizeFormController(formController, entitiesRepository);
+            Instance instance = updateInstanceDatabase(true, true, validationResult);
+            FormEntryUseCases.finalizeFormController(instance, formController, instancesRepository, entitiesRepository);
         }
 
         // close all open databases of external data.

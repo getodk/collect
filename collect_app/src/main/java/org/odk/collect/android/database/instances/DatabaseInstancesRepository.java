@@ -22,6 +22,7 @@ import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromCurrentCursorPosition;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromInstance;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_DELETE_BEFORE_SEND;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
@@ -243,7 +244,8 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                     LAST_STATUS_CHANGE_DATE,
                     DELETED_DATE,
                     GEOMETRY,
-                    GEOMETRY_TYPE
+                    GEOMETRY_TYPE,
+                    CAN_DELETE_BEFORE_SEND
             };
         }
 

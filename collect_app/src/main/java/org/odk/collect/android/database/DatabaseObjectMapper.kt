@@ -174,6 +174,8 @@ object DatabaseObjectMapper {
         val geometryTypeColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.GEOMETRY_TYPE)
         val geometryColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.GEOMETRY)
         val databaseIdIndex = cursor.getColumnIndex(BaseColumns._ID)
+        val canDeleteBeforeSendIndex =
+            cursor.getColumnIndex(DatabaseInstanceColumns.CAN_DELETE_BEFORE_SEND)
         return Instance.Builder()
             .dbId(dbId)
             .displayName(cursor.getString(displayNameColumnIndex))
@@ -201,6 +203,7 @@ object DatabaseObjectMapper {
             .geometryType(cursor.getString(geometryTypeColumnIndex))
             .geometry(cursor.getString(geometryColumnIndex))
             .dbId(cursor.getLong(databaseIdIndex))
+            .canDeleteBeforeSend(Boolean.valueOf(cursor.getString(canDeleteBeforeSendIndex)))
             .build()
     }
 
@@ -225,6 +228,11 @@ object DatabaseObjectMapper {
         values.put(DatabaseInstanceColumns.DELETED_DATE, instance.deletedDate)
         values.put(DatabaseInstanceColumns.GEOMETRY, instance.geometry)
         values.put(DatabaseInstanceColumns.GEOMETRY_TYPE, instance.geometryType)
+        values.put(
+            DatabaseInstanceColumns.CAN_DELETE_BEFORE_SEND,
+            Boolean.toString(instance.canDeleteBeforeSend())
+        )
+
         return values
     }
 }
