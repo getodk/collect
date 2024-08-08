@@ -22,10 +22,23 @@ public class TestDependencies extends AppDependencyModule {
     public final TestScheduler scheduler = new TestScheduler(networkStateProvider);
     public final StoragePathProvider storagePathProvider = new StoragePathProvider();
     public final StubBarcodeViewDecoder stubBarcodeViewDecoder = new StubBarcodeViewDecoder();
+    private final boolean useRealServer;
+
+    public TestDependencies() {
+        this(false);
+    }
+
+    public TestDependencies(boolean useRealServer) {
+        this.useRealServer = useRealServer;
+    }
 
     @Override
     public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider, Application application, VersionInformation versionInformation) {
-        return server;
+        if (useRealServer) {
+            return super.provideHttpInterface(mimeTypeMap, userAgentProvider, application, versionInformation);
+        } else {
+            return server;
+        }
     }
 
     @Override
