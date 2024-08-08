@@ -336,7 +336,7 @@ jobs:
               --device model=MediumPhone.arm,version=34,locale=en,orientation=portrait \
               --results-bucket opendatakit-collect-test-results \
               --directories-to-pull /sdcard --timeout 20m \
-              --test-targets "notPackage org.odk.collect.android.regression"
+              --test-targets "notPackage org.odk.collect.android.regression" "notPackage org.odk.collect.android.benchmark"
             fi
           no_output_timeout: 25m
 

@@ -106,7 +106,8 @@ tasks.register('testLab') {
                     '--device', 'model=MediumPhone.arm,version=34,locale=en,orientation=portrait',
                     '--timeout', '10m',
                     '--directories-to-pull', '/sdcard',
-                    '--test-targets', "notPackage org.odk.collect.android.regression"
+                    '--test-targets', "notPackage org.odk.collect.android.regression",
+                    '--test-targets', "notPackage org.odk.collect.android.benchmark"
             )
         }
     }
