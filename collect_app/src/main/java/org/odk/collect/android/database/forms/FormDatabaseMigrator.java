@@ -4,7 +4,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.odk.collect.androidshared.sqlite.DatabaseMigrator;
-import org.odk.collect.android.utilities.SQLiteUtils;
+import org.odk.collect.androidshared.sqlite.SQLiteUtils;
 
 import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;

@@ -27,7 +27,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.rules.RunnableRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
-import org.odk.collect.android.utilities.CustomSQLiteQueryExecutor;
+import org.odk.collect.androidshared.sqlite.CustomSQLiteQueryExecutor;
 
 import java.io.File;
 import java.io.IOException;

@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.database.forms.FormDatabaseMigrator;
-import org.odk.collect.android.utilities.SQLiteUtils;
+import org.odk.collect.androidshared.sqlite.SQLiteUtils;
 
 import java.util.List;
 

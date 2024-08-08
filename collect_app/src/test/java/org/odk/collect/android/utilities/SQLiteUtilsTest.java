@@ -7,6 +7,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.androidshared.sqlite.CustomSQLiteQueryBuilder;
+import org.odk.collect.androidshared.sqlite.CustomSQLiteQueryExecutor;
+import org.odk.collect.androidshared.sqlite.SQLiteUtils;
 
 import java.util.ArrayList;
 import java.util.List;

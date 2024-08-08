@@ -12,9 +12,9 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
+import org.odk.collect.androidshared.sqlite.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.SQLiteUtils;
+import org.odk.collect.androidshared.sqlite.SQLiteUtils;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.BufferedWriter;

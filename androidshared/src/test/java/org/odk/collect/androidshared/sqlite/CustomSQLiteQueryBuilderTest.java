@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.androidshared.sqlite;
+
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 public class CustomSQLiteQueryBuilderTest {
 
