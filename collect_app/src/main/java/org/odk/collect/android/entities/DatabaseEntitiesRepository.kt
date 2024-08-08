@@ -15,6 +15,7 @@ import org.odk.collect.androidshared.sqlite.CursorExt.getString
 import org.odk.collect.androidshared.sqlite.CursorExt.getStringOrNull
 import org.odk.collect.androidshared.sqlite.DatabaseConnection
 import org.odk.collect.androidshared.sqlite.DatabaseMigrator
+import org.odk.collect.androidshared.sqlite.SQLiteColumns.ROW_ID
 import org.odk.collect.androidshared.sqlite.SQLiteDatabaseExt.delete
 import org.odk.collect.androidshared.sqlite.SQLiteDatabaseExt.query
 import org.odk.collect.entities.storage.EntitiesRepository
@@ -140,7 +141,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         return databaseConnection.readableDatabase
             .rawQuery(
                 """
-                SELECT *, i.rowid
+                SELECT *, i.$ROW_ID
                 FROM $list e, ${list}_row_numbers i
                 WHERE e._id = i._id
                 """.trimIndent(),
@@ -150,7 +151,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 mapCursorRowToEntity(
                     list,
                     cursor,
-                    cursor.getInt("rowid")
+                    cursor.getInt(ROW_ID)
                 )
             }
     }
@@ -190,13 +191,13 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         return databaseConnection.readableDatabase
             .rawQuery(
                 """
-                SELECT *, i.rowid
+                SELECT *, i.$ROW_ID
                 FROM $list e, ${list}_row_numbers i
                 WHERE e._id = i._id AND e.id = ?
                 """.trimIndent(),
                 arrayOf(id)
             ).first {
-                mapCursorRowToEntity(list, it, it.getInt("rowid"))
+                mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
             }
     }
 
@@ -212,7 +213,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         return databaseConnection.readableDatabase
             .rawQuery(
                 """
-                SELECT *, i.rowid
+                SELECT *, i.$ROW_ID
                 FROM $list e, ${list}_row_numbers i
                 WHERE e._id = i._id AND e.$property = ?
                 """.trimIndent(),
@@ -221,7 +222,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 entities + mapCursorRowToEntity(
                     list,
                     cursor,
-                    cursor.getInt("rowid")
+                    cursor.getInt(ROW_ID)
                 )
             }
     }
@@ -311,7 +312,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 EntitiesTable.COLUMN_TRUNK_VERSION,
                 EntitiesTable.COLUMN_BRANCH_ID,
                 EntitiesTable.COLUMN_STATE,
-                "rowid"
+                ROW_ID
             ).contains(it)
         }
 
