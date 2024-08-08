@@ -7,10 +7,10 @@ import static java.util.Collections.emptyList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.javarosa.core.model.FormDef;
-import org.javarosa.xform.parse.XFormParser;
-import org.javarosa.xform.util.XFormUtils;
 import org.jetbrains.annotations.NotNull;
+import org.kxml2.io.KXmlParser;
+import org.kxml2.kdom.Document;
+import org.kxml2.kdom.Element;
 import org.odk.collect.android.openrosa.CaseInsensitiveEmptyHeaders;
 import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
@@ -23,6 +23,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.shared.TempFiles;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.strings.RandomString;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -142,11 +143,8 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
     public void addForm(String formXML, List<MediaFileItem> mediaFiles) {
         try (InputStream formDefStream = getResourceAsStream("forms/" + formXML)) {
-            FormDef formDef = XFormUtils.getFormFromInputStream(formDefStream);
-            String formId = formDef.getMainInstance().getRoot().getAttributeValue(null, "id");
-            String version = formDef.getMainInstance().getRoot().getAttributeValue(null, "version");
-            forms.add(new XFormItem(formDef.getTitle(), formXML, formId, version, mediaFiles));
-        } catch (IOException | XFormParser.ParseException e) {
+            addFormFromInputStream(formXML, mediaFiles, formDefStream);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -315,6 +313,40 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         XFormItem xformItem = forms.get(Integer.parseInt(formID));
         String actualFileName = xformItem.getMediaFiles().stream().filter(mediaFile -> mediaFile.getName().equals(mediaFileName)).findFirst().get().getFile();
         return getResourceAsStream("media/" + actualFileName);
+    }
+
+    private void addFormFromInputStream(String formXML, List<MediaFileItem> mediaFiles, InputStream formDefStream) {
+        try {
+            KXmlParser xmlParser = new KXmlParser();
+            xmlParser.setInput(formDefStream, "UTF-8");
+
+            Document doc = new Document();
+            doc.parse(xmlParser);
+
+            Element head = doc.getRootElement().getElement(null, "h:head");
+            String title = (String) head.getElement(null, "h:title").getChild(0);
+
+            Element model = head.getElement(null, "model");
+            Element mainInstance = null;
+            for (int i = 0; i < model.getChildCount(); i++) {
+                Element child = model.getElement(i);
+                if (child == null) {
+                    continue;
+                }
+
+                if (child.getName().equals("instance") && child.getAttributeCount() == 0) {
+                    mainInstance = child;
+                }
+            }
+
+            Element mainInstanceRoot = mainInstance.getElement(1);
+            String id = mainInstanceRoot.getAttributeValue(null, "id");
+            String version = mainInstanceRoot.getAttributeValue(null, "version");
+
+            forms.add(new XFormItem(title, formXML, id, version, mediaFiles));
+        } catch (XmlPullParserException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static class XFormItem {

@@ -17,24 +17,27 @@ package org.odk.collect.android.projects
 
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter
 import org.odk.collect.android.instancemanagement.InstancesDataService
-import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.utilities.FormsRepositoryProvider
-import org.odk.collect.android.utilities.SavepointsRepositoryProvider
+import org.odk.collect.android.storage.StoragePaths
 import org.odk.collect.android.utilities.WebCredentialsUtils
+import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.forms.FormsRepository
+import org.odk.collect.forms.savepoints.SavepointsRepository
 import org.odk.collect.metadata.PropertyManager
+import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.SettingsProvider
 import java.io.File
 
 class ProjectResetter(
-    private val storagePathProvider: StoragePathProvider,
+    storagePathProvider: ProjectDependencyFactory<StoragePaths>,
     private val propertyManager: PropertyManager,
     private val settingsProvider: SettingsProvider,
-    private val formsRepositoryProvider: FormsRepositoryProvider,
-    private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
+    private val formsRepositoryProvider: ProjectDependencyFactory<FormsRepository>,
+    private val savepointsRepositoryProvider: ProjectDependencyFactory<SavepointsRepository>,
     private val instancesDataService: InstancesDataService,
-    private val projectId: String
+    private val projectId: String,
+    private val entitiesRepositoryFactory: ProjectDependencyFactory<EntitiesRepository>
 ) {
+    private val storagePaths = storagePathProvider.create(projectId)
 
     private var failedResetActions = mutableListOf<Int>()
 
@@ -59,7 +62,7 @@ class ProjectResetter(
         settingsProvider.getProtectedSettings().clear()
         settingsProvider.getProtectedSettings().setDefaultForAllSettingsWithoutValues()
 
-        if (!deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS))) {
+        if (!deleteFolderContent(storagePaths.settingsDir)) {
             failedResetActions.add(ResetAction.RESET_PREFERENCES)
         }
 
@@ -67,31 +70,34 @@ class ProjectResetter(
     }
 
     private fun resetInstances() {
+        entitiesRepositoryFactory.create(projectId).clear()
+
         if (!instancesDataService.deleteAll(projectId) ||
-            !deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES))) {
+            !deleteFolderContent(storagePaths.instancesDir)
+        ) {
             failedResetActions.add(ResetAction.RESET_INSTANCES)
         }
     }
 
     private fun resetForms() {
-        formsRepositoryProvider.create().deleteAll()
+        formsRepositoryProvider.create(projectId).deleteAll()
 
-        File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA) + File.separator + ItemsetDbAdapter.DATABASE_NAME).delete()
+        File(storagePaths.metaDir + File.separator + ItemsetDbAdapter.DATABASE_NAME).delete()
 
-        if (!deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS))) {
+        if (!deleteFolderContent(storagePaths.formsDir)) {
             failedResetActions.add(ResetAction.RESET_FORMS)
         }
     }
 
     private fun resetLayers() {
-        if (!deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS))) {
+        if (!deleteFolderContent(storagePaths.layersDir)) {
             failedResetActions.add(ResetAction.RESET_LAYERS)
         }
     }
 
     private fun resetCache() {
-        savepointsRepositoryProvider.create().deleteAll()
-        if (!deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE))) {
+        savepointsRepositoryProvider.create(projectId).deleteAll()
+        if (!deleteFolderContent(storagePaths.cacheDir)) {
             failedResetActions.add(ResetAction.RESET_CACHE)
         }
     }

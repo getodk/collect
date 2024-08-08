@@ -2,13 +2,9 @@ package org.odk.collect.entities.browser
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -44,30 +40,6 @@ class EntityListsFragment(
 
         entitiesViewModel.lists.observe(viewLifecycleOwner) {
             binding.list.adapter = ListsAdapter(it, findNavController())
-        }
-
-        menuHost().addMenuProvider(
-            ListsMenuProvider(entitiesViewModel),
-            viewLifecycleOwner
-        )
-    }
-}
-
-private class ListsMenuProvider(
-    private val entitiesViewModel: EntitiesViewModel
-) : MenuProvider {
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.entity_lists, menu)
-    }
-
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
-            R.id.clear_entities -> {
-                entitiesViewModel.clearAll()
-                true
-            }
-
-            else -> false
         }
     }
 }

@@ -294,7 +294,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     @NotNull
-    public MainMenuPage enableLocalEntitiesInForms() {
+    public MainMenuPage disableLocalEntitiesInForms() {
         return openProjectSettingsDialog()
                 .clickSettings()
                 .clickExperimental()

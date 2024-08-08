@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages
 
-import org.odk.collect.android.R
-
 class ProjectManagementPage : Page<ProjectManagementPage>() {
 
     override fun assertOnPage(): ProjectManagementPage {
@@ -9,7 +7,7 @@ class ProjectManagementPage : Page<ProjectManagementPage>() {
         return this
     }
 
-    fun clickOnResetApplication(): ProjectManagementPage {
+    fun clickOnResetProject(): ProjectManagementPage {
         clickOnString(org.odk.collect.strings.R.string.reset_project_settings_title)
         return this
     }

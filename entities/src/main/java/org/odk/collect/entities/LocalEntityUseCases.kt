@@ -18,7 +18,7 @@ object LocalEntityUseCases {
     ) {
         formEntities?.entities?.forEach { formEntity ->
             val id = formEntity.id
-            if (id != null && entitiesRepository.getLists().contains(formEntity.dataset)) {
+            if (id != null) {
                 when (formEntity.action) {
                     EntityAction.CREATE -> {
                         val entity = Entity.New(
@@ -63,19 +63,17 @@ object LocalEntityUseCases {
         val localEntities = entitiesRepository.getEntities(list)
         val serverEntities = root.getChildrenWithName("item")
 
-        val accumulator =
-            Pair(arrayOf<Entity>(), localEntities.associateBy { it.id }.toMutableMap())
-        val (newAndUpdated, missingFromServer) = serverEntities.fold(accumulator) { (new, missing), item ->
-            val entity = parseEntityFromItem(item, list) ?: return
-            val existing = missing.remove(entity.id)
+        val missingFromServer = localEntities.associateBy { it.id }.toMutableMap()
+        val newAndUpdated = ArrayList<Entity>()
+        serverEntities.forEach { item ->
+            val serverEntity = parseEntityFromItem(item, list) ?: return
+            val existing = missingFromServer.remove(serverEntity.id)
 
-            if (existing == null || existing.version <= entity.version) {
-                Pair(new + entity, missing)
+            if (existing == null || existing.version <= serverEntity.version) {
+                newAndUpdated.add(serverEntity)
             } else if (existing.state == Entity.State.OFFLINE) {
                 val update = existing.copy(state = Entity.State.ONLINE)
-                Pair(new + update, missing)
-            } else {
-                Pair(new, missing)
+                newAndUpdated.add(update)
             }
         }
 
@@ -85,7 +83,7 @@ object LocalEntityUseCases {
             }
         }
 
-        entitiesRepository.save(*newAndUpdated)
+        entitiesRepository.save(*newAndUpdated.toTypedArray())
     }
 
     private fun parseEntityFromItem(

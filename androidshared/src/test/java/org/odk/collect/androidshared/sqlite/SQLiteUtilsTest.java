@@ -1,19 +1,19 @@
-package org.odk.collect.android.utilities;
-
-import android.database.sqlite.SQLiteDatabase;
-
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.odk.collect.android.application.Collect;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.odk.collect.androidshared.sqlite;
 
 import static android.content.Context.MODE_PRIVATE;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
+
+import android.database.sqlite.SQLiteDatabase;
+
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class SQLiteUtilsTest {
@@ -22,7 +22,7 @@ public class SQLiteUtilsTest {
     public void doesColumnExistTest() {
         String tableName = "testTable";
 
-        SQLiteDatabase db = Collect.getInstance().openOrCreateDatabase("testDatabase", MODE_PRIVATE, null);
+        SQLiteDatabase db = ApplicationProvider.getApplicationContext().openOrCreateDatabase("testDatabase", MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE " + tableName + " (id integer, column1 text);");
 
         assertTrue(SQLiteUtils.doesColumnExist(db, tableName, "id"));
@@ -36,7 +36,7 @@ public class SQLiteUtilsTest {
         final String tableName = "testTable";
         final String columnName = CustomSQLiteQueryBuilder.quoteIdentifier("col");
 
-        SQLiteDatabase db = Collect.getInstance().openOrCreateDatabase("testDatabase", MODE_PRIVATE, null);
+        SQLiteDatabase db = ApplicationProvider.getApplicationContext().openOrCreateDatabase("testDatabase", MODE_PRIVATE, null);
 
         assertFalse(SQLiteUtils.doesTableExist(db, tableName));
 

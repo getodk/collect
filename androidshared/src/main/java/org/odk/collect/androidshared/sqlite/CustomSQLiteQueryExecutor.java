@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.androidshared.sqlite;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;

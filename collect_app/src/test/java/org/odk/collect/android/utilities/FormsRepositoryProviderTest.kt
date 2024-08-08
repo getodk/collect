@@ -33,7 +33,9 @@ class FormsRepositoryProviderTest {
                     formsDir.absolutePath,
                     "",
                     cacheDir.absolutePath,
-                    metaDir.absolutePath
+                    metaDir.absolutePath,
+                    "",
+                    ""
                 )
             },
             mock()

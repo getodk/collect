@@ -362,9 +362,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    @Singleton
-    public EntitiesRepositoryProvider provideEntitiesRepositoryProvider(ProjectsDataService projectsDataService, StoragePathProvider storagePathProvider) {
-        return new EntitiesRepositoryProvider(storagePathProvider);
+    public EntitiesRepositoryProvider provideEntitiesRepositoryProvider(Context context, StoragePathProvider storagePathProvider) {
+        return new EntitiesRepositoryProvider(context, storagePathProvider);
     }
 
     @Provides
@@ -562,8 +561,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ProjectResetter providesProjectResetter(StoragePathProvider storagePathProvider, PropertyManager propertyManager, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, SavepointsRepositoryProvider savepointsRepositoryProvider, InstancesDataService instancesDataService, ProjectsDataService projectsDataService) {
-        return new ProjectResetter(storagePathProvider, propertyManager, settingsProvider, formsRepositoryProvider, savepointsRepositoryProvider, instancesDataService, projectsDataService.getCurrentProject().getUuid());
+    public ProjectResetter providesProjectResetter(StoragePathProvider storagePathProvider, PropertyManager propertyManager, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, SavepointsRepositoryProvider savepointsRepositoryProvider, InstancesDataService instancesDataService, ProjectsDataService projectsDataService, EntitiesRepositoryProvider entitiesRepositoryProvider) {
+        return new ProjectResetter(storagePathProvider, propertyManager, settingsProvider, formsRepositoryProvider, savepointsRepositoryProvider, instancesDataService, projectsDataService.getCurrentProject().getUuid(), entitiesRepositoryProvider);
     }
 
     @Provides

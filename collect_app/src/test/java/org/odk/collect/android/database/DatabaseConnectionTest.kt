@@ -7,6 +7,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.database.forms.FormDatabaseMigrator
+import org.odk.collect.androidshared.sqlite.DatabaseConnection
 import org.odk.collect.shared.TempFiles.createTempDir
 import java.io.File
 

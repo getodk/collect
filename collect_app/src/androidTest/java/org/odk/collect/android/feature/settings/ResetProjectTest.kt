@@ -3,7 +3,10 @@ package org.odk.collect.android.feature.settings
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
+import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
+import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.AccessControlPage
+import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.pages.ResetApplicationDialog
@@ -11,59 +14,65 @@ import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.strings.R
 
-class ResetApplicationTest {
-    private var rule = CollectTestRule()
+class ResetProjectTest {
+
+    private val rule = CollectTestRule(useDemoProject = false)
+    private val testDependencies = TestDependencies()
 
     @get:Rule
-    var copyFormChain: RuleChain = chain().around(rule)
+    val ruleChain: RuleChain = chain(testDependencies)
+        .around(rule)
 
     @Test
-    fun when_rotateScreen_should_resetDialogNotDisappear() {
-        rule.startAtMainMenu()
-            .openProjectSettingsDialog()
-            .clickSettings()
-            .clickProjectManagement()
-            .clickOnResetApplication()
-            .assertText(R.string.reset_settings_dialog_title)
-            .assertDisabled(R.string.reset_settings_button_reset)
-            .rotateToLandscape(ResetApplicationDialog())
-            .assertText(R.string.reset_settings_dialog_title)
-            .assertDisabled(R.string.reset_settings_button_reset)
-            .rotateToPortrait(ResetApplicationDialog())
-            .assertText(R.string.reset_settings_dialog_title)
-            .assertDisabled(R.string.reset_settings_button_reset)
-    }
-
-    @Test
-    fun savedAndBlankForms_shouldBeReset() {
-        rule.startAtMainMenu()
+    fun canResetBlankForms() {
+        rule.startAtFirstLaunch()
+            .clickTryCollect()
             .copyForm("all-widgets.xml")
-            .startBlankForm("All widgets")
-            .clickGoToArrow()
-            .clickJumpEndButton()
-            .clickSaveAsDraft()
-            .clickDrafts()
-            .assertText("All widgets")
-            .pressBack(MainMenuPage())
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
-            .clickOnResetApplication()
+            .clickOnResetProject()
             .assertDisabled(R.string.reset_settings_button_reset)
-            .clickOnString(R.string.reset_saved_forms)
             .clickOnString(R.string.reset_blank_forms)
             .clickOnString(R.string.reset_settings_button_reset)
             .clickOKOnDialog(MainMenuPage())
             .clickFillBlankForm()
             .assertTextDoesNotExist("All widgets")
-            .pressBack(MainMenuPage())
-            .clickDrafts(false)
-            .assertTextDoesNotExist("All widgets")
     }
 
     @Test
-    fun adminSettings_shouldBeReset() {
-        rule.startAtMainMenu()
+    fun canResetSavedFormsAndEntities() {
+        testDependencies.server.addForm("one-question-entity-registration.xml")
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
+            .startBlankForm("One Question Entity Registration")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickProjectManagement()
+            .clickOnResetProject()
+            .assertDisabled(R.string.reset_settings_button_reset)
+            .clickOnString(R.string.reset_saved_forms)
+            .clickOnString(R.string.reset_settings_button_reset)
+            .clickOKOnDialog(MainMenuPage())
+
+            .clickDrafts()
+            .assertTextDoesNotExist("One Question Entity Registration")
+            .pressBack(MainMenuPage())
+
+            .startBlankForm("One Question Entity Update")
+            .assertTextDoesNotExist("Logan Roy")
+    }
+
+    @Test
+    fun canResetProtectedSettings() {
+        rule.startAtFirstLaunch()
+            .clickTryCollect()
             .openProjectSettingsDialog()
             .clickSettings()
             .clickAccessControl()
@@ -79,7 +88,7 @@ class ResetApplicationTest {
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
-            .clickOnResetApplication()
+            .clickOnResetProject()
             .clickOnString(R.string.reset_settings)
             .clickOnString(R.string.reset_settings_button_reset)
             .clickOKOnDialog(MainMenuPage())
@@ -89,8 +98,9 @@ class ResetApplicationTest {
     }
 
     @Test
-    fun userInterfaceSettings_shouldBeReset() {
-        rule.startAtMainMenu()
+    fun canResetUserInterfaceSettings() {
+        rule.startAtFirstLaunch()
+            .clickTryCollect()
             .openProjectSettingsDialog()
             .clickSettings()
             .clickOnUserInterface()
@@ -115,7 +125,7 @@ class ResetApplicationTest {
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
-            .clickOnResetApplication()
+            .clickOnResetProject()
             .clickOnString(R.string.reset_settings)
             .clickOnString(R.string.reset_settings_button_reset)
             .clickOKOnDialog(MainMenuPage())
@@ -126,5 +136,18 @@ class ResetApplicationTest {
             .assertTextDoesNotExist(R.string.theme_dark)
             .assertText(R.string.use_device_language)
             .assertTextDoesNotExist("español")
+    }
+
+    @Test
+    fun when_rotateScreen_should_resetDialogNotDisappear() {
+        rule.startAtFirstLaunch()
+            .clickTryCollect()
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickProjectManagement()
+            .clickOnResetProject()
+            .assertText(R.string.reset_settings_dialog_title)
+            .rotateToLandscape(ResetApplicationDialog())
+            .assertText(R.string.reset_settings_dialog_title)
     }
 }

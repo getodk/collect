@@ -3,14 +3,15 @@ package org.odk.collect.android.database.savepoints
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns._ID
 import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_TABLE_NAME
-import org.odk.collect.android.database.DatabaseMigrator
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.FORM_DB_ID
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.INSTANCE_DB_ID
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.INSTANCE_FILE_PATH
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.SAVEPOINT_FILE_PATH
-import org.odk.collect.android.utilities.SQLiteUtils
+import org.odk.collect.androidshared.sqlite.DatabaseMigrator
+import org.odk.collect.androidshared.sqlite.SQLiteUtils
 
-class SavepointsDatabaseMigrator : DatabaseMigrator {
+class SavepointsDatabaseMigrator :
+    DatabaseMigrator {
     override fun onCreate(db: SQLiteDatabase) {
         createSavepointsTableV1(db)
     }

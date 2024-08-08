@@ -6,7 +6,6 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
-import org.odk.collect.android.support.StubOpenRosaServer.MediaFileItem
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -24,26 +23,6 @@ class EntityFormTest {
         .around(rule)
 
     @Test
-    fun fillingEntityRegistrationForm_doesNotShowEntitiesInNonEntityListForm() {
-        testDependencies.server.addForm("one-question-entity-registration.xml")
-        testDependencies.server.addForm(
-            "one-question-entity-update.xml",
-            listOf(MediaFileItem("people.csv"))
-        )
-
-        rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-
-            .startBlankForm("One Question Entity Registration")
-            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
-
-            .startBlankForm("One Question Entity Update")
-            .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertTextDoesNotExist("Logan Roy")
-    }
-
-    @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpForms() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
         testDependencies.server.addForm(
@@ -52,8 +31,6 @@ class EntityFormTest {
         )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
 
@@ -72,8 +49,6 @@ class EntityFormTest {
         )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-
             .startBlankForm("One Question Entity Update") // Open to create cached form def
             .pressBackAndDiscardForm()
 
@@ -94,8 +69,6 @@ class EntityFormTest {
         )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
             .clickOnText("Roman Roy")
@@ -118,8 +91,6 @@ class EntityFormTest {
         )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
 
@@ -137,8 +108,6 @@ class EntityFormTest {
         )
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .enableLocalEntitiesInForms()
-
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
             .clickOnText("Roman Roy")
@@ -167,8 +136,6 @@ class EntityFormTest {
         }
 
         rule.withProject(testDependencies.server)
-            .enableLocalEntitiesInForms()
-
             .clickGetBlankForm()
             .clickClearAll()
             .clickForm("One Question Entity Update")
@@ -184,5 +151,25 @@ class EntityFormTest {
             .startBlankForm("One Question Entity Update")
             .assertText("Ro-Ro Roy")
             .assertTextDoesNotExist("Roman Roy")
+    }
+
+    @Test
+    fun disablingLocalEntities_stopsThemFromBeingShownInFollowUpForms() {
+        testDependencies.server.addForm("one-question-entity-registration.xml")
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
+            .startBlankForm("One Question Entity Registration")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+
+            .disableLocalEntitiesInForms()
+
+            .startBlankForm("One Question Entity Update")
+            .assertQuestion("Select person")
+            .assertText("Roman Roy")
+            .assertTextDoesNotExist("Logan Roy")
     }
 }
