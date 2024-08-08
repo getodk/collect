@@ -141,8 +141,7 @@
     </style>
 
     <style name="Widget.Collect.Slider" parent="Widget.Material3.Slider">
-        <item name="trackStopIndicatorSize">0dp</item>
-        <item name="thumbTrackGapSize">0dp</item>
+        <item name="labelBehavior">gone</item>
     </style>
 
     <style name="Theme.Collect.SplashScreen" parent="Theme.SplashScreen">
