@@ -1,6 +1,7 @@
 package org.odk.collect.android.entities
 
 import android.content.Context
+import org.odk.collect.android.database.entities.DatabaseEntitiesRepository
 import org.odk.collect.android.storage.StoragePaths
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.projects.ProjectDependencyFactory
