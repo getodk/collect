@@ -44,4 +44,13 @@ class EntityItemViewTest {
         view.setEntity(entity.copy(state = Entity.State.ONLINE))
         assertThat(view.binding.offlinePill.isVisible, equalTo(false))
     }
+
+    @Test
+    fun `shows id and version`() {
+        val view = EntityItemView(context)
+        val entity = Entity.Saved("songs", "1", "S.D.O.S", version = 11, index = 0)
+
+        view.setEntity(entity.copy(state = Entity.State.OFFLINE))
+        assertThat(view.binding.id.text, equalTo("${entity.id} (${entity.version})"))
+    }
 }
