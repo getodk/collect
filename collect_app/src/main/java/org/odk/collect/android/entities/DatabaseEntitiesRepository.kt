@@ -123,7 +123,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             }
         }
 
-        updateRowNumbers()
+        updateRowIdTable()
     }
 
     override fun getLists(): Set<String> {
@@ -138,15 +138,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return emptyList()
         }
 
-        return databaseConnection.readableDatabase
-            .rawQuery(
-                """
-                SELECT *, i.$ROW_ID
-                FROM $list e, ${list}_row_numbers i
-                WHERE e._id = i._id
-                """.trimIndent(),
-                null
-            )
+        return queryWithAttachedRowId(list)
             .foldAndClose { cursor ->
                 mapCursorRowToEntity(
                     list,
@@ -167,7 +159,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     override fun addList(list: String) {
         if (!listExists(list)) {
             createList(list)
-            updateRowNumbers()
+            updateRowIdTable()
         }
     }
 
@@ -180,7 +172,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             )
         }
 
-        updateRowNumbers()
+        updateRowIdTable()
     }
 
     override fun getById(list: String, id: String): Entity.Saved? {
@@ -188,17 +180,13 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return null
         }
 
-        return databaseConnection.readableDatabase
-            .rawQuery(
-                """
-                SELECT *, i.$ROW_ID
-                FROM $list e, ${list}_row_numbers i
-                WHERE e._id = i._id AND e.id = ?
-                """.trimIndent(),
-                arrayOf(id)
-            ).first {
-                mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
-            }
+        return queryWithAttachedRowId(
+            list,
+            selectionColumn = EntitiesTable.COLUMN_ID,
+            selectionArg = id
+        ).first {
+            mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+        }
     }
 
     override fun getAllByProperty(
@@ -210,22 +198,67 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return emptyList()
         }
 
+        return queryWithAttachedRowId(
+            list,
+            selectionColumn = property,
+            selectionArg = value
+        ).foldAndClose {
+            mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+        }
+    }
+
+    private fun queryWithAttachedRowId(list: String): Cursor {
         return databaseConnection.readableDatabase
             .rawQuery(
                 """
                 SELECT *, i.$ROW_ID
-                FROM $list e, ${list}_row_numbers i
-                WHERE e._id = i._id AND e.$property = ?
+                FROM $list e, ${getRowIdTableName(list)} i
+                WHERE e._id = i._id
                 """.trimIndent(),
-                arrayOf(value)
-            ).foldAndClose(emptyList()) { entities, cursor ->
-                entities + mapCursorRowToEntity(
-                    list,
-                    cursor,
-                    cursor.getInt(ROW_ID)
-                )
-            }
+                null
+            )
     }
+
+    private fun queryWithAttachedRowId(
+        list: String,
+        selectionColumn: String,
+        selectionArg: String
+    ): Cursor {
+        return databaseConnection.readableDatabase
+            .rawQuery(
+                """
+                SELECT *, i.$ROW_ID
+                FROM $list e, ${getRowIdTableName(list)} i
+                WHERE e._id = i._id AND $selectionColumn = ?
+                """.trimIndent(),
+                arrayOf(selectionArg)
+            )
+    }
+
+    /**
+     * Dropping and recreating this table on every change allows to maintain a sequential
+     * "positions" for each entity that can be used as [Entity.Saved.index]. This method appears
+     * to be faster than using a nested query to generate these at query time (calculating how many
+     * _ids are higher than each entity _id). This might be replaceable with SQLite's `row_number()`
+     * function, but that's not available in all the supported versions of Android.
+     */
+    private fun updateRowIdTable() {
+        getLists().forEach {
+            databaseConnection.writeableDatabase.execSQL(
+                """
+                DROP TABLE IF EXISTS ${getRowIdTableName(it)};
+                """.trimIndent()
+            )
+
+            databaseConnection.writeableDatabase.execSQL(
+                """
+                CREATE TABLE ${getRowIdTableName(it)} AS SELECT _id FROM $it;
+                """.trimIndent()
+            )
+        }
+    }
+
+    private fun getRowIdTableName(it: String) = "${it}_row_numbers"
 
     private fun listExists(list: String): Boolean {
         return databaseConnection.readableDatabase
@@ -248,15 +281,15 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
             execSQL(
                 """
-                    CREATE TABLE IF NOT EXISTS $list (
-                        $_ID integer PRIMARY KEY,
-                        ${EntitiesTable.COLUMN_ID} text,
-                        ${EntitiesTable.COLUMN_LABEL} text,
-                        ${EntitiesTable.COLUMN_VERSION} integer,
-                        ${EntitiesTable.COLUMN_TRUNK_VERSION} integer,
-                        ${EntitiesTable.COLUMN_BRANCH_ID} text,
-                        ${EntitiesTable.COLUMN_STATE} integer NOT NULL
-                    );
+                CREATE TABLE IF NOT EXISTS $list (
+                    $_ID integer PRIMARY KEY,
+                    ${EntitiesTable.COLUMN_ID} text,
+                    ${EntitiesTable.COLUMN_LABEL} text,
+                    ${EntitiesTable.COLUMN_VERSION} integer,
+                    ${EntitiesTable.COLUMN_TRUNK_VERSION} integer,
+                    ${EntitiesTable.COLUMN_BRANCH_ID} text,
+                    ${EntitiesTable.COLUMN_STATE} integer NOT NULL
+                );
                 """.trimIndent()
             )
 
@@ -279,22 +312,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             } catch (e: SQLiteException) {
                 // Ignored
             }
-        }
-    }
-
-    private fun updateRowNumbers() {
-        getLists().forEach {
-            databaseConnection.writeableDatabase.execSQL(
-                """
-                DROP TABLE IF EXISTS ${it}_row_numbers;
-                """.trimIndent()
-            )
-
-            databaseConnection.writeableDatabase.execSQL(
-                """
-                CREATE TABLE ${it}_row_numbers AS SELECT _id FROM $it;
-                """.trimIndent()
-            )
         }
     }
 
