@@ -87,7 +87,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                         it.put(EntitiesTable.COLUMN_VERSION, entity.version)
                         it.put(EntitiesTable.COLUMN_TRUNK_VERSION, entity.trunkVersion)
                         it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
-                        it.put(EntitiesTable.COLUMN_STATE, state.id)
+                        it.put(EntitiesTable.COLUMN_STATE, convertStateToInt(state))
 
                         entity.properties.forEach { (name, value) ->
                             it.put(name, value)
@@ -107,7 +107,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                         it.put(EntitiesTable.COLUMN_VERSION, entity.version)
                         it.put(EntitiesTable.COLUMN_TRUNK_VERSION, entity.trunkVersion)
                         it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
-                        it.put(EntitiesTable.COLUMN_STATE, entity.state.id)
+                        it.put(EntitiesTable.COLUMN_STATE, convertStateToInt(entity.state))
 
                         entity.properties.forEach { (name, value) ->
                             it.put(name, value)
@@ -338,17 +338,34 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 accum + Pair(property, cursor.getStringOrNull(property) ?: "")
             }
 
+        val state = if (cursor.getInt(EntitiesTable.COLUMN_STATE) == 0) {
+            Entity.State.OFFLINE
+        } else {
+            Entity.State.ONLINE
+        }
+
         return Entity.Saved(
             list,
             cursor.getString(EntitiesTable.COLUMN_ID),
             cursor.getStringOrNull(EntitiesTable.COLUMN_LABEL),
             cursor.getInt(EntitiesTable.COLUMN_VERSION),
             properties,
-            Entity.State.fromId(cursor.getInt(EntitiesTable.COLUMN_STATE)),
+            state,
             rowId - 1,
             cursor.getIntOrNull(EntitiesTable.COLUMN_TRUNK_VERSION),
             cursor.getString(EntitiesTable.COLUMN_BRANCH_ID)
         )
+    }
+
+    /**
+     * Store state as an Int rather than a string to avoid increasing the storage needed for
+     * entities.
+     */
+    private fun convertStateToInt(state: Entity.State): Int {
+        return when (state) {
+            Entity.State.OFFLINE -> 0
+            Entity.State.ONLINE -> 1
+        }
     }
 }
 
