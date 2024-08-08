@@ -334,7 +334,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 }
 
-class EntitiesDatabaseMigrator :
+private class EntitiesDatabaseMigrator :
     DatabaseMigrator {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
