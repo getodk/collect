@@ -1,0 +1,135 @@
+package org.odk.collect.android.feature.formentry
+
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.MatcherAssert
+import org.hamcrest.Matchers
+import org.junit.Rule
+import org.junit.Test
+import org.junit.rules.RuleChain
+import org.junit.runner.RunWith
+import org.odk.collect.android.support.StorageUtils.getAuditLogForFirstInstance
+import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.TestRuleChain.chain
+import org.odk.collect.strings.R
+
+@RunWith(AndroidJUnit4::class)
+class RequiredQuestionTest {
+    var rule: CollectTestRule = CollectTestRule()
+
+    @get:Rule
+    var ruleChain: RuleChain = chain()
+        .around(rule)
+
+    @Test
+    fun `requiredQuestionIsMarkedWithAnAsterisk`() {
+        rule.startAtMainMenu()
+            .copyForm("requiredJR275.xml")
+            .startBlankForm("required")
+            .assertText("* Foo")
+    }
+
+    @Test // https://github.com/getodk/collect/issues/6327
+    fun requiredQuestionWithAudioIsMarkedWithAnAsterisk() {
+        rule.startAtMainMenu()
+            .copyForm("requiredJR275.xml")
+            .startBlankForm("required")
+            .answerQuestion("* Foo", "blah")
+            .swipeToNextQuestion("* Text with audio")
+    }
+
+    @Test
+    fun requiredQuestionDisplaysACustomErrorMessageIfSpecified() {
+        rule.startAtMainMenu()
+            .copyForm("requiredJR275.xml")
+            .startBlankForm("required")
+            .swipeToNextQuestionWithConstraintViolation("Custom required message")
+    }
+
+    @Test
+    fun validatingFormByPressingValidateInOptionsMenuOnSameScreen_usesNewlyAddedAnswers() {
+        rule.startAtMainMenu()
+            .copyForm("requiredJR275.xml")
+            .startBlankForm("required")
+            .answerQuestion("Foo", true, "blah")
+            .clickOptionsIcon()
+            .clickOnString(R.string.validate)
+            .assertText(R.string.success_form_validation)
+            .assertTextDoesNotExist("Custom required message")
+    }
+
+    @Test
+    fun validatingFormByPressingValidateInOptionsMenuOnDifferentScreen_movesToTheQuestionWithErrorAndDisplaysError() {
+        rule.startAtMainMenu()
+            .copyForm("requiredJR275.xml")
+            .startBlankForm("required")
+            .clickGoToArrow()
+            .clickGoToEnd()
+            .clickOptionsIcon()
+            .clickOnString(R.string.validate)
+            .assertConstraintDisplayed("Custom required message")
+            .assertQuestion("Foo", true)
+    }
+
+    @Test
+    fun validatingFormByPressingValidateInOptionsMenuOnDifferentScreen_movesToTheQuestionWithErrorAndDisplaysError_whenTheQuestionIsInFieldList() {
+        rule.startAtMainMenu()
+            .copyForm("requiredQuestionInFieldList.xml")
+            .startBlankForm("requiredQuestionInFieldList")
+            .clickGoToArrow()
+            .clickGoToEnd()
+            .clickOptionsIcon()
+            .clickOnString(R.string.validate)
+            .assertConstraintDisplayed("Custom required message") // Make sure both questions are still displayed on the same screen
+            .assertQuestion("Foo", true)
+            .assertQuestion("Bar", true)
+    }
+
+    @Test
+    fun emptyRequiredQuestion_isNotSavedToAuditLogOnMovingForward() {
+        rule.startAtMainMenu()
+            .copyForm("requiredJR275.xml")
+            .startBlankForm("required")
+            .swipeToNextQuestionWithConstraintViolation("Custom required message")
+
+        val auditLog = getAuditLogForFirstInstance()
+        MatcherAssert.assertThat(auditLog.size, Matchers.equalTo(1))
+        MatcherAssert.assertThat(auditLog[0][0], Matchers.equalTo("form start"))
+    }
+
+    @Test
+    fun emptyRequiredQuestion_isNotSavedToAuditLogOnFormValidation() {
+        rule.startAtMainMenu()
+            .copyForm("requiredJR275.xml")
+            .startBlankForm("required")
+            .clickOptionsIcon()
+            .clickOnString(R.string.validate)
+
+        val auditLog = getAuditLogForFirstInstance()
+        MatcherAssert.assertThat(auditLog.size, Matchers.equalTo(1))
+        MatcherAssert.assertThat(auditLog[0][0], Matchers.equalTo("form start"))
+    }
+
+    @Test
+    fun emptyRequiredQuestionInFieldListAndNotFirst_isValidatedProperly() {
+        rule.startAtMainMenu()
+            .copyForm("requiredQuestionInFieldList.xml")
+            .startBlankForm("requiredQuestionInFieldList")
+            .answerQuestion("Foo", true, "blah")
+            .swipeToNextQuestionWithConstraintViolation("Custom required message2")
+            .clickOptionsIcon()
+            .clickOnString(R.string.validate)
+            .assertText("Custom required message2")
+            .clickGoToArrow()
+            .clickGoToEnd()
+            .clickSaveAndExitWithError("Custom required message2")
+    }
+
+    @Test // https://github.com/getodk/collect/issues/5847
+    fun savingFormWithInvalidQuestion_doesNotChangeTheCurrentQuestionIndex() {
+        rule.startAtMainMenu()
+            .copyForm("two-question-required.xml")
+            .startBlankForm("Two Question Required")
+            .clickSave()
+            .swipeToNextQuestion("What is your age?")
+    }
+}
