@@ -10,6 +10,4 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         tools:title="Title" />
-
-    <include layout="@layout/app_bar_shadow"/>
 </com.google.android.material.appbar.AppBarLayout>
