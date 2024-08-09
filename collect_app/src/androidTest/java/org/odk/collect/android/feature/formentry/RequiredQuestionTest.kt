@@ -1,8 +1,8 @@
 package org.odk.collect.android.feature.formentry
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.MatcherAssert
-import org.hamcrest.Matchers
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -91,8 +91,8 @@ class RequiredQuestionTest {
             .swipeToNextQuestionWithConstraintViolation("Custom message")
 
         val auditLog = getAuditLogForFirstInstance()
-        MatcherAssert.assertThat(auditLog.size, Matchers.equalTo(1))
-        MatcherAssert.assertThat(auditLog[0][0], Matchers.equalTo("form start"))
+        assertThat(auditLog.size, equalTo(1))
+        assertThat(auditLog[0][0], equalTo("form start"))
     }
 
     @Test
@@ -104,8 +104,8 @@ class RequiredQuestionTest {
             .clickOnString(R.string.validate)
 
         val auditLog = getAuditLogForFirstInstance()
-        MatcherAssert.assertThat(auditLog.size, Matchers.equalTo(1))
-        MatcherAssert.assertThat(auditLog[0][0], Matchers.equalTo("form start"))
+        assertThat(auditLog.size, equalTo(1))
+        assertThat(auditLog[0][0], equalTo("form start"))
     }
 
     @Test
