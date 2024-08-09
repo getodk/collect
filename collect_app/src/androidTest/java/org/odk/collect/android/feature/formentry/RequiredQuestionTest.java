@@ -124,4 +124,13 @@ public class RequiredQuestionTest {
                 .clickSave()
                 .swipeToNextQuestion("What is your age?");
     }
+
+    @Test // https://github.com/getodk/collect/issues/6327
+    public void requiredQuestionsWithAudio_ShouldDisplayAsterisk() {
+        rule.startAtMainMenu()
+                .copyForm("requiredJR275.xml")
+                .startBlankForm("required")
+                .answerQuestion("* Foo", "blah")
+                .swipeToNextQuestion("* Text with audio");
+    }
 }

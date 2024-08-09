@@ -3,9 +3,18 @@
   <h:head>
     <h:title>required</h:title>
     <model>
+      <itext>
+        <translation lang="default" default="true()">
+          <text id="/required/text2:label">
+            <value>Text with audio</value>
+            <value form="audio">jr://audio/blah.mp3</value>
+          </text>
+        </translation>
+      </itext>
       <instance>
         <required id="required">
           <text/>
+          <text2/>
           <meta>
             <instanceID/>
             <orx:audit/>
@@ -13,6 +22,7 @@
         </required>
       </instance>
       <bind jr:requiredMsg="Custom required message" nodeset="/required/text" required="true()" type="string"/>
+      <bind nodeset="/required/text2" required="true()" type="string"/>
       <bind nodeset="/data/orx:meta/audit" type="binary" />
       <bind calculate="concat('uuid:', uuid())" nodeset="/required/meta/instanceID" readonly="true()" type="string"/>
     </model>
@@ -20,6 +30,9 @@
   <h:body>
     <input ref="/required/text">
       <label>Foo</label>
+    </input>
+    <input ref="/required/text2">
+      <label ref="jr:itext('/required/text2:label')"/>
     </input>
   </h:body>
 </h:html>
