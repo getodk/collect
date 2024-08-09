@@ -94,8 +94,8 @@ public class RangeIntegerWidgetTest {
 
         assertThat(widget.slider.getValueFrom(), equalTo(1.0F));
         assertThat(widget.slider.getValueTo(), equalTo(10.0F));
-        assertThat(widget.slider.getStepSize(), equalTo(1.0F));
         assertThat(widget.slider.getValue(), equalTo(4.0F));
+        assertThat(widget.slider.isTickVisible(), equalTo(true));
     }
 
     @Test
@@ -109,8 +109,8 @@ public class RangeIntegerWidgetTest {
 
         assertThat(widget.slider.getValueFrom(), equalTo(1.0F));
         assertThat(widget.slider.getValueTo(), equalTo(10.0F));
-        assertThat(widget.slider.getStepSize(), equalTo(0.0F));
         assertThat(widget.slider.getValue(), equalTo(4.0F));
+        assertThat(widget.slider.isTickVisible(), equalTo(false));
     }
 
     @Test

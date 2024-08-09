@@ -94,7 +94,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
     @Override
     public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
         if (fromUser) {
-            BigDecimal actualValue = RangeWidgetUtils.getActualValue(getFormEntryPrompt(), slider, value);
+            BigDecimal actualValue = RangeWidgetUtils.getActualValue(getFormEntryPrompt(), value);
             setUpActualValueLabel(actualValue);
             widgetValueChanged();
         }
