@@ -19,8 +19,8 @@ import androidx.fragment.app.testing.FragmentScenario;
 
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
-import org.odk.collect.android.logic.DatePickerDetails;
+import org.odk.collect.android.widgets.datetime.pickers.CustomDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.DatePickerDetails;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.Robolectric;

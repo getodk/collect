@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.widgets.datetime;
 
 import org.javarosa.core.model.data.TimeData;
 import org.joda.time.DateTime;

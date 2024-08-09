@@ -1,4 +1,4 @@
-package org.odk.collect.android.fragments.dialogs;
+package org.odk.collect.android.widgets.datetime.pickers;
 
 import android.content.DialogInterface;
 
@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fragments.support.DialogFragmentHelpers;
-import org.odk.collect.android.logic.DatePickerDetails;
+import org.odk.collect.android.widgets.datetime.DatePickerDetails;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.testshared.RobolectricHelpers;
 

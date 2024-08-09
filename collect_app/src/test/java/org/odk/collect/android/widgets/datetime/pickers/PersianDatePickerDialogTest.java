@@ -1,6 +1,4 @@
-package org.odk.collect.android.fragments.dialogs;
-
-import static org.mockito.Mockito.when;
+package org.odk.collect.android.widgets.datetime.pickers;
 
 import android.content.DialogInterface;
 
@@ -11,14 +9,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fragments.support.DialogFragmentHelpers;
-import org.odk.collect.android.logic.DatePickerDetails;
+import org.odk.collect.android.widgets.datetime.DatePickerDetails;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.testshared.RobolectricHelpers;
 
+import static org.mockito.Mockito.when;
+
 @RunWith(AndroidJUnit4.class)
-public class BikramSambatDatePickerDialogTest {
+public class PersianDatePickerDialogTest {
     private FragmentManager fragmentManager;
-    private BikramSambatDatePickerDialog dialogFragment;
+    private PersianDatePickerDialog dialogFragment;
     private DatePickerDetails datePickerDetails;
     private DialogFragmentHelpers.DatePickerTestActivity activity;
 
@@ -27,8 +27,8 @@ public class BikramSambatDatePickerDialogTest {
         activity = CollectHelpers.createThemedActivity(DialogFragmentHelpers.DatePickerTestActivity.class);
         fragmentManager = activity.getSupportFragmentManager();
 
-        dialogFragment = new BikramSambatDatePickerDialog();
-        datePickerDetails = DialogFragmentHelpers.setUpDatePickerDetails(DatePickerDetails.DatePickerType.BIKRAM_SAMBAT);
+        dialogFragment = new PersianDatePickerDialog();
+        datePickerDetails = DialogFragmentHelpers.setUpDatePickerDetails(DatePickerDetails.DatePickerType.PERSIAN);
         dialogFragment.setArguments(DialogFragmentHelpers.getDialogFragmentArguments(datePickerDetails));
     }
 
@@ -45,29 +45,27 @@ public class BikramSambatDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogShowsCorrectDate(2077, 0, 30, "30 बैशाख 2077 (May 12, 2020)");
+        DialogFragmentHelpers.assertDialogShowsCorrectDate(1399, 1, 23, "23 Ordibehesht 1399 (May 12, 2020)");
     }
 
     @Test
     public void dialogShouldShowCorrectDate_forYearMode() {
         when(datePickerDetails.isYearMode()).thenReturn(true);
         when(datePickerDetails.isSpinnerMode()).thenReturn(false);
-
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogShowsCorrectDateForYearMode(2077, "2077 (2020)");
+        DialogFragmentHelpers.assertDialogShowsCorrectDateForYearMode(1399, "1399 (2020)");
     }
 
     @Test
     public void dialogShouldShowCorrectDate_forMonthMode() {
         when(datePickerDetails.isMonthYearMode()).thenReturn(true);
         when(datePickerDetails.isSpinnerMode()).thenReturn(false);
-
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(2077, 0, "बैशाख 2077 (Apr 2020)");
+        DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(1399, 1, "Ordibehesht 1399 (Apr 2020)");
     }
 
     @Test
@@ -75,12 +73,12 @@ public class BikramSambatDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("30 बैशाख 2077 (May 12, 2020)", 2077, 0, 30);
+        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("23 Ordibehesht 1399 (May 12, 2020)", 1399, 1, 23);
     }
 
     @Test
     public void whenScreenIsRotated_dialogShouldRetainDateInDatePickerAndTextView() {
-        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "30 बैशाख 2077 (May 12, 2020)", 2077, 0, 30);
+        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "23 Ordibehesht 1399 (May 12, 2020)", 1399, 1, 23);
     }
 
     @Test
@@ -88,7 +86,7 @@ public class BikramSambatDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 2077, 0, 30);
+        DialogFragmentHelpers.assertDateUpdateInActivity(activity, 1399, 1, 23);
     }
 
     @Test

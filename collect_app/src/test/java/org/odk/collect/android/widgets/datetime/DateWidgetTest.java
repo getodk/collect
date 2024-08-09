@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.datetime;
 
 import android.view.View;
 
@@ -13,9 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.support.WidgetTestActivity;
-import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 

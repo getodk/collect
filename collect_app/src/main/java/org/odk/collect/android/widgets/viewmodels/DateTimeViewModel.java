@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModel;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
-import org.odk.collect.android.logic.DatePickerDetails;
-import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.datetime.DatePickerDetails;
+import org.odk.collect.android.widgets.datetime.DateTimeUtils;
 
 public class DateTimeViewModel extends ViewModel {
     private final MutableLiveData<LocalDateTime> selectedDate = new MutableLiveData<>();

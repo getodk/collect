@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.fragments.dialogs;
+package org.odk.collect.android.widgets.datetime.pickers;
 
 import org.joda.time.LocalDateTime;
 

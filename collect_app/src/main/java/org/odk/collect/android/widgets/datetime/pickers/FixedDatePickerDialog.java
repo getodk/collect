@@ -1,4 +1,4 @@
-package org.odk.collect.android.fragments.dialogs;
+package org.odk.collect.android.widgets.datetime.pickers;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -19,7 +19,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.joda.time.LocalDateTime;
-import org.odk.collect.android.logic.DatePickerDetails;
+import org.odk.collect.android.widgets.datetime.DatePickerDetails;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
