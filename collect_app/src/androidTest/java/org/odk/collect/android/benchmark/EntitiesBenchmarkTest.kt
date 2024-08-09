@@ -40,7 +40,7 @@ class EntitiesBenchmarkTest {
     @Test
     fun run() {
         assertThat("Need to set PROJECT_URL before running!", PROJECT_URL, not(blankOrNullString()))
-        clearAndroidCache() // Make sure HTTP cache doesn't affect anything
+        clearAndroidCache()
 
         val stopwatch = Stopwatch()
 
@@ -55,8 +55,20 @@ class EntitiesBenchmarkTest {
             }
 
             .clickOK(MainMenuPage())
+            .clickDeleteSavedForm()
+            .clickBlankForms()
+            .clickForm("100k Entities Filter")
+            .clickDeleteSelected(1)
+            .clickDeleteForms()
+            .pressBack(MainMenuPage())
             .clickGetBlankForm()
-            .benchmark("Updating form", stopwatch) {
+            .benchmark("Downloading form with http cache", stopwatch) {
+                it.clickGetSelected()
+            }
+
+            .clickOK(MainMenuPage())
+            .clickGetBlankForm()
+            .benchmark("Updating form with http cache", stopwatch) {
                 it.clickGetSelected()
             }
 
@@ -77,8 +89,8 @@ class EntitiesBenchmarkTest {
                 it.swipeToNextQuestion("Filtered select")
             }
 
-        assertThat(stopwatch.getTime("Downloading form"), lessThan(120))
-        assertThat(stopwatch.getTime("Updating form"), lessThan(90))
+        assertThat(stopwatch.getTime("Downloading form with http cache"), lessThan(75))
+        assertThat(stopwatch.getTime("Updating form with http cache"), lessThan(90))
         assertThat(stopwatch.getTime("Loading form first time"), lessThan(30))
         assertThat(stopwatch.getTime("Loading form second time"), lessThan(30))
         assertThat(stopwatch.getTime("Filtering select"), lessThan(5))
