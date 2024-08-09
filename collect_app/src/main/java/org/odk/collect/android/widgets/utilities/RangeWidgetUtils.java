@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.material.slider.Slider;
-
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
@@ -119,6 +117,11 @@ public class RangeWidgetUtils {
         }
 
         if (isRangeSliderWidgetValid(rangeQuestion, slider)) {
+            if (prompt.getAppearanceHint() != null && prompt.getAppearanceHint().contains(NO_TICKS_APPEARANCE)) {
+                slider.setTickVisible(false);
+                slider.setTrackStopIndicatorSize(0);
+            }
+
             if (rangeEnd.compareTo(rangeStart) > -1) {
                 slider.setValueFrom(rangeStart.floatValue());
                 slider.setValueTo(rangeEnd.floatValue());
@@ -127,12 +130,10 @@ public class RangeWidgetUtils {
                 slider.setValueTo(rangeStart.floatValue());
             }
 
-            if (prompt.getAppearanceHint() == null || !prompt.getAppearanceHint().contains(NO_TICKS_APPEARANCE)) {
-                if (isIntegerType) {
-                    slider.setStepSize(rangeStep.intValue());
-                } else {
-                    slider.setStepSize(rangeStep.floatValue());
-                }
+            if (isIntegerType) {
+                slider.setStepSize(rangeStep.intValue());
+            } else {
+                slider.setStepSize(rangeStep.floatValue());
             }
 
             if (actualValue != null) {
@@ -166,25 +167,12 @@ public class RangeWidgetUtils {
         }
     }
 
-    public static BigDecimal getActualValue(FormEntryPrompt prompt, Slider slider, float value) {
+    public static BigDecimal getActualValue(FormEntryPrompt prompt, float value) {
         RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
-        BigDecimal rangeStep = rangeQuestion.getRangeStep() == null ? BigDecimal.ONE : rangeQuestion.getRangeStep().abs();
         BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
-
-        if (rangeEnd.compareTo(rangeStart) < 0) {
-            rangeStart = rangeQuestion.getRangeEnd();
-        }
-
         BigDecimal actualValue = BigDecimal.valueOf(value);
-        if (prompt.getAppearanceHint() != null && prompt.getAppearanceHint().contains(NO_TICKS_APPEARANCE)) {
-            int progress = (actualValue.subtract(rangeStart).abs().divide(rangeStep)).intValue();
-            actualValue = rangeStart.add(rangeStep.multiply(new BigDecimal(String.valueOf(progress))));
 
-            slider.setValue(actualValue.floatValue());
-        }
-
-        rangeStart = rangeQuestion.getRangeStart();
         if (rangeEnd.compareTo(rangeStart) < 0) {
             actualValue = rangeEnd.add(rangeStart).subtract(actualValue);
         }
