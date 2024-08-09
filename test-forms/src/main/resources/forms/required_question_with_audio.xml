@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<h:html
+    xmlns="http://www.w3.org/2002/xforms"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:odk="http://www.opendatakit.org/xforms">
+    <h:head>
+        <h:title>required_question_with_audio</h:title>
+        <model odk:xforms-version="1.0.0">
+            <itext>
+                <translation lang="default" default="true()">
+                    <text id="/data/q1:label">
+                        <value>Required question with audio</value>
+                        <value form="audio">jr://audio/blah.mp3</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <data id="required_question_with_audio">
+                    <q1/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/q1" type="string" required="true()"/>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/q1">
+            <label ref="jr:itext('/data/q1:label')"/>
+        </input>
+    </h:body>
+</h:html>

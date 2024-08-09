@@ -23,51 +23,50 @@ class RequiredQuestionTest {
     @Test
     fun `requiredQuestionIsMarkedWithAnAsterisk`() {
         rule.startAtMainMenu()
-            .copyForm("requiredJR275.xml")
-            .startBlankForm("required")
-            .assertText("* Foo")
+            .copyForm("required_question_with_custom_error_message.xml")
+            .startBlankForm("required_question_with_custom_error_message")
+            .assertText("* Required question")
     }
 
     @Test // https://github.com/getodk/collect/issues/6327
     fun requiredQuestionWithAudioIsMarkedWithAnAsterisk() {
         rule.startAtMainMenu()
-            .copyForm("requiredJR275.xml")
-            .startBlankForm("required")
-            .answerQuestion("* Foo", "blah")
-            .swipeToNextQuestion("* Text with audio")
+            .copyForm("required_question_with_audio.xml")
+            .startBlankForm("required_question_with_audio")
+            .swipeToNextQuestion("* Required question with audio")
     }
 
     @Test
     fun requiredQuestionDisplaysACustomErrorMessageIfSpecified() {
         rule.startAtMainMenu()
-            .copyForm("requiredJR275.xml")
-            .startBlankForm("required")
-            .swipeToNextQuestionWithConstraintViolation("Custom required message")
+            .copyForm("required_question_with_custom_error_message.xml")
+            .startBlankForm("required_question_with_custom_error_message")
+            .swipeToNextQuestionWithConstraintViolation("Custom message")
     }
 
     @Test
     fun validatingFormByPressingValidateInOptionsMenuOnSameScreen_usesNewlyAddedAnswers() {
         rule.startAtMainMenu()
-            .copyForm("requiredJR275.xml")
-            .startBlankForm("required")
-            .answerQuestion("Foo", true, "blah")
+            .copyForm("required_question_with_custom_error_message.xml")
+            .startBlankForm("required_question_with_custom_error_message")
+            .answerQuestion("* Required question", "blah")
             .clickOptionsIcon()
             .clickOnString(R.string.validate)
             .assertText(R.string.success_form_validation)
-            .assertTextDoesNotExist("Custom required message")
+            .assertTextDoesNotExist("Custom message")
     }
 
     @Test
     fun validatingFormByPressingValidateInOptionsMenuOnDifferentScreen_movesToTheQuestionWithErrorAndDisplaysError() {
         rule.startAtMainMenu()
-            .copyForm("requiredJR275.xml")
-            .startBlankForm("required")
+            .copyForm("required_question_with_custom_error_message.xml")
+            .startBlankForm("required_question_with_custom_error_message")
             .clickGoToArrow()
             .clickGoToEnd()
             .clickOptionsIcon()
             .clickOnString(R.string.validate)
-            .assertConstraintDisplayed("Custom required message")
-            .assertQuestion("Foo", true)
+            .assertConstraintDisplayed("Custom message")
+            .assertQuestion("Required question", true)
     }
 
     @Test
@@ -87,9 +86,9 @@ class RequiredQuestionTest {
     @Test
     fun emptyRequiredQuestion_isNotSavedToAuditLogOnMovingForward() {
         rule.startAtMainMenu()
-            .copyForm("requiredJR275.xml")
-            .startBlankForm("required")
-            .swipeToNextQuestionWithConstraintViolation("Custom required message")
+            .copyForm("required_question_with_custom_error_message.xml")
+            .startBlankForm("required_question_with_custom_error_message")
+            .swipeToNextQuestionWithConstraintViolation("Custom message")
 
         val auditLog = getAuditLogForFirstInstance()
         MatcherAssert.assertThat(auditLog.size, Matchers.equalTo(1))
@@ -99,8 +98,8 @@ class RequiredQuestionTest {
     @Test
     fun emptyRequiredQuestion_isNotSavedToAuditLogOnFormValidation() {
         rule.startAtMainMenu()
-            .copyForm("requiredJR275.xml")
-            .startBlankForm("required")
+            .copyForm("required_question_with_custom_error_message.xml")
+            .startBlankForm("required_question_with_custom_error_message")
             .clickOptionsIcon()
             .clickOnString(R.string.validate)
 
