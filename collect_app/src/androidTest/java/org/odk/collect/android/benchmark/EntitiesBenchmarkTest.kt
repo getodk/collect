@@ -16,6 +16,7 @@ import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
+import org.odk.collect.strings.R
 
 private const val PROJECT_URL = ""
 
@@ -49,18 +50,19 @@ class EntitiesBenchmarkTest {
             .inputUrl(PROJECT_URL)
             .addProject()
 
+            // Populate http cache and clear out form/entities
             .clickGetBlankForm()
-            .benchmark("Downloading form", stopwatch) {
-                it.clickGetSelected()
-            }
-
+            .clickGetSelected()
             .clickOK(MainMenuPage())
-            .clickDeleteSavedForm()
-            .clickBlankForms()
-            .clickForm("100k Entities Filter")
-            .clickDeleteSelected(1)
-            .clickDeleteForms()
-            .pressBack(MainMenuPage())
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickProjectManagement()
+            .clickOnResetProject()
+            .clickOnString(R.string.reset_blank_forms)
+            .clickOnString(R.string.reset_saved_forms)
+            .clickOnString(R.string.reset_settings_button_reset)
+            .clickOKOnDialog(MainMenuPage())
+
             .clickGetBlankForm()
             .benchmark("Downloading form with http cache", stopwatch) {
                 it.clickGetSelected()
