@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class StubOpenRosaServer implements OpenRosaHttpInterface {
@@ -291,7 +292,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
                 }
 
                 stringBuilder
-                        .append("<downloadUrl>" + getURL() + "/mediaFile/" + formID + "/" + mediaFile.getName() + "</downloadUrl>\n")
+                        .append("<downloadUrl>" + getURL() + "/mediaFile/" + formID + "/" + mediaFile.getId() + "</downloadUrl>\n")
                         .append("</mediaFile>\n");
             }
 
@@ -309,9 +310,9 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     @NotNull
     private InputStream getMediaFile(URI uri) throws IOException {
         String formID = uri.getPath().split("/mediaFile/")[1].split("/")[0];
-        String mediaFileName = uri.getPath().split("/mediaFile/")[1].split("/")[1];
+        String id = uri.getPath().split("/mediaFile/")[1].split("/")[1];
         XFormItem xformItem = forms.get(Integer.parseInt(formID));
-        String actualFileName = xformItem.getMediaFiles().stream().filter(mediaFile -> mediaFile.getName().equals(mediaFileName)).findFirst().get().getFile();
+        String actualFileName = xformItem.getMediaFiles().stream().filter(mediaFile -> mediaFile.getId().equals(id)).findFirst().get().getFile();
         return getResourceAsStream("media/" + actualFileName);
     }
 
@@ -393,6 +394,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     public static class MediaFileItem {
         private final String name;
         private final String file;
+        private final String id = UUID.randomUUID().toString();
 
         private final String hash;
 
@@ -420,6 +422,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
         public String getHash() {
             return hash;
+        }
+
+        public String getId() {
+            return id;
         }
     }
 
