@@ -24,7 +24,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CursorAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -63,7 +62,6 @@ public abstract class AppListActivity extends LocalizedActivity {
     protected List<FormListSortingOption> sortingOptions;
     protected Integer selectedSortingOrder;
     protected ListView listView;
-    protected LinearLayout llParent;
     protected ProgressBar progressBar;
 
     private String filterText;
@@ -137,7 +135,6 @@ public abstract class AppListActivity extends LocalizedActivity {
         listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
         listView.setEmptyView(findViewById(android.R.id.empty));
         progressBar = findViewById(R.id.progressBar);
-        llParent = findViewById(R.id.llParent);
 
         // Use the nicer-looking drawable with Material Design insets.
         listView.setDivider(ContextCompat.getDrawable(this, org.odk.collect.androidshared.R.drawable.list_item_divider));
