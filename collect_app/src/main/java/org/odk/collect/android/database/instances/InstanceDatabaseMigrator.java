@@ -1,16 +1,5 @@
 package org.odk.collect.android.database.instances;
 
-import android.database.sqlite.SQLiteDatabase;
-
-import org.odk.collect.androidshared.sqlite.DatabaseMigrator;
-import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.androidshared.sqlite.SQLiteUtils;
-
-import java.util.Arrays;
-import java.util.List;
-
-import timber.log.Timber;
-
 import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_DELETE_BEFORE_SEND;
@@ -25,6 +14,17 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_URI;
+
+import android.database.sqlite.SQLiteDatabase;
+
+import org.odk.collect.androidshared.sqlite.DatabaseMigrator;
+import org.odk.collect.androidshared.sqlite.SQLiteUtils;
+import org.odk.collect.forms.instances.Instance;
+
+import java.util.Arrays;
+import java.util.List;
+
+import timber.log.Timber;
 
 public class InstanceDatabaseMigrator implements DatabaseMigrator {
     private static final String[] COLUMN_NAMES_V5 = {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
@@ -63,11 +63,6 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
             default:
                 Timber.i("Unknown version %d", oldVersion);
         }
-    }
-
-    private void upgradeToVersion8(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, CAN_DELETE_BEFORE_SEND, "text");
-        db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " + CAN_DELETE_BEFORE_SEND + " = 'true';");
     }
 
     public void onDowngrade(SQLiteDatabase db) {
@@ -147,6 +142,11 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
         createInstancesTableV7(db);
         SQLiteUtils.copyRows(db, temporaryTable, COLUMN_NAMES_V6, INSTANCES_TABLE_NAME);
         SQLiteUtils.dropTable(db, temporaryTable);
+    }
+
+    private void upgradeToVersion8(SQLiteDatabase db) {
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, CAN_DELETE_BEFORE_SEND, "text");
+        db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " + CAN_DELETE_BEFORE_SEND + " = 'true';");
     }
 
     private void createInstancesTableV5(SQLiteDatabase db, String name) {
