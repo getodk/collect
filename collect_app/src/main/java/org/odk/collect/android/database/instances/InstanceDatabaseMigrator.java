@@ -72,7 +72,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
 
     public void onDowngrade(SQLiteDatabase db) {
         SQLiteUtils.dropTable(db, INSTANCES_TABLE_NAME);
-        createInstancesTableV7(db);
+        createInstancesTableV8(db);
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
