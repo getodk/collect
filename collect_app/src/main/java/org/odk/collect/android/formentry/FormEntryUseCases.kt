@@ -133,17 +133,9 @@ object FormEntryUseCases {
         val valid = validationResult !is FailedValidationResult
 
         return if (valid) {
-            finalizeFormController(formController, entitiesRepository)
+            val newInstance = finalizeFormController(instance, formController, instancesRepository, entitiesRepository)
             saveInstanceToDisk(formController)
-            val instanceName = formController.getSubmissionMetadata()?.instanceName
-
-            instancesRepository.save(
-                Instance.Builder(instance)
-                    .status(Instance.STATUS_COMPLETE)
-                    .canEditWhenComplete(formController.isSubmissionEntireForm())
-                    .displayName(instanceName ?: instance.displayName)
-                    .build()
-            )
+            newInstance
         } else {
             instancesRepository.save(
                 Instance.Builder(instance)
@@ -157,13 +149,26 @@ object FormEntryUseCases {
 
     @JvmStatic
     fun finalizeFormController(
+        instance: Instance,
         formController: FormController,
-        entitiesRepository: EntitiesRepository
-    ) {
+        instancesRepository: InstancesRepository,
+        entitiesRepository: EntitiesRepository,
+    ): Instance? {
         formController.finalizeForm()
+        val formEntities = formController.getEntities()
         LocalEntityUseCases.updateLocalEntitiesFromForm(
-            formController.getEntities(),
+            formEntities,
             entitiesRepository
+        )
+
+        val instanceName = formController.getSubmissionMetadata()?.instanceName
+        return instancesRepository.save(
+            Instance.Builder(instance)
+                .status(Instance.STATUS_COMPLETE)
+                .canEditWhenComplete(formController.isSubmissionEntireForm())
+                .displayName(instanceName ?: instance.displayName)
+                .canDeleteBeforeSend(formEntities == null)
+                .build()
         )
     }
 

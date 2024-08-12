@@ -16,6 +16,7 @@
 
 package org.odk.collect.forms.instances;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -49,6 +50,7 @@ public final class Instance {
     private final String geometry;
 
     private final Long dbId;
+    private final boolean canDeleteBeforeSend;
 
     private Instance(Builder builder) {
         displayName = builder.displayName;
@@ -62,6 +64,7 @@ public final class Instance {
         deletedDate = builder.deletedDate;
         geometryType = builder.geometryType;
         geometry = builder.geometry;
+        canDeleteBeforeSend = builder.canDeleteBeforeSend;
 
         dbId = builder.dbId;
     }
@@ -80,6 +83,7 @@ public final class Instance {
         private String geometry;
 
         private Long dbId;
+        private boolean canDeleteBeforeSend;
 
         public Builder() {
 
@@ -98,6 +102,7 @@ public final class Instance {
             deletedDate = instance.deletedDate;
             geometryType = instance.geometryType;
             geometry = instance.geometry;
+            canDeleteBeforeSend = instance.canDeleteBeforeSend;
         }
 
         public Builder displayName(String displayName) {
@@ -160,6 +165,12 @@ public final class Instance {
             return this;
         }
 
+        @NotNull
+        public Builder canDeleteBeforeSend(boolean canDeleteBeforeSend) {
+            this.canDeleteBeforeSend = canDeleteBeforeSend;
+            return this;
+        }
+
         public Instance build() {
             return new Instance(this);
         }
@@ -212,6 +223,10 @@ public final class Instance {
 
     public Long getDbId() {
         return dbId;
+    }
+
+    public boolean canDeleteBeforeSend() {
+        return canDeleteBeforeSend;
     }
 
     @Override
