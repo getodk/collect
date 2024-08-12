@@ -135,7 +135,7 @@ object FormEntryUseCases {
         return if (valid) {
             val newInstance = finalizeFormController(instance, formController, instancesRepository, entitiesRepository)
             saveInstanceToDisk(formController)
-            return newInstance
+            newInstance
         } else {
             instancesRepository.save(
                 Instance.Builder(instance)
