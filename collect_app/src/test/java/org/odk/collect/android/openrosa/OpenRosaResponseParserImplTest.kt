@@ -71,4 +71,29 @@ class OpenRosaResponseParserImplTest {
         val formList = OpenRosaResponseParserImpl().parseManifest(Document())
         assertThat(formList, equalTo(null))
     }
+
+    @Test
+    fun `parseManifest() sanitizes media file names`() {
+        val response = StringBuilder()
+            .appendLine("<?xml version='1.0' encoding='UTF-8' ?>")
+            .appendLine("<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">")
+            .appendLine("<mediaFile>")
+            .appendLine("<filename>/../badgers.csv</filename>")
+            .appendLine("<hash>blah</hash>")
+            .appendLine("<downloadUrl>http://funk.appspot.com/binaryData?blobKey=%3A477e3</downloadUrl>")
+            .appendLine("</mediaFile>")
+            .appendLine("</manifest>")
+            .toString()
+
+        val doc = StringReader(response).use { reader ->
+            val parser = KXmlParser()
+            parser.setInput(reader)
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
+            Document().also { it.parse(parser) }
+        }
+
+        val mediaFiles = OpenRosaResponseParserImpl().parseManifest(doc)!!
+        assertThat(mediaFiles.size, equalTo(1))
+        assertThat(mediaFiles[0].filename, equalTo("badgers.csv"))
+    }
 }
