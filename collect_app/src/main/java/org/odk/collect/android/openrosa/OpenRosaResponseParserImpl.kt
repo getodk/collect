@@ -179,6 +179,9 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                             if (filename != null && filename.isEmpty()) {
                                 filename = null
                             }
+                            if (filename != null) {
+                                filename = filename.substringAfterLast("/", filename)
+                            }
                         }
                         "hash" -> {
                             hash = XFormParser.getXMLText(child, true)
