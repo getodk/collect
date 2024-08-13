@@ -6,6 +6,7 @@ import org.kxml2.kdom.Element
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.MediaFile
 import org.odk.collect.shared.strings.StringUtils.isBlank
+import java.io.File
 
 class OpenRosaResponseParserImpl : OpenRosaResponseParser {
 
@@ -180,7 +181,7 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                                 filename = null
                             }
                             if (filename != null) {
-                                filename = filename.substringAfterLast("/", filename)
+                                filename = File(filename).name
                             }
                         }
                         "hash" -> {
