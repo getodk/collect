@@ -93,8 +93,8 @@ public class RangeDecimalWidgetTest {
 
         assertThat(widget.slider.getValueFrom(), equalTo(1.5F));
         assertThat(widget.slider.getValueTo(), equalTo(5.5F));
-        assertThat(widget.slider.getStepSize(), equalTo(0.5F));
         assertThat(widget.slider.getValue(), equalTo(2.5F));
+        assertThat(widget.slider.isTickVisible(), equalTo(true));
     }
 
     @Test
@@ -108,8 +108,8 @@ public class RangeDecimalWidgetTest {
 
         assertThat(widget.slider.getValueFrom(), equalTo(1.5F));
         assertThat(widget.slider.getValueTo(), equalTo(5.5F));
-        assertThat(widget.slider.getStepSize(), equalTo(0.0F));
         assertThat(widget.slider.getValue(), equalTo(2.5F));
+        assertThat(widget.slider.isTickVisible(), equalTo(false));
     }
 
     @Test

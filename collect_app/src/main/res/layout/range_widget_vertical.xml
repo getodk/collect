@@ -38,7 +38,6 @@ limitations under the License.
 
         <org.odk.collect.android.views.TrackingTouchSlider
             android:id="@+id/slider"
-            style="@style/SliderTheme"
             android:layout_width="330dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
