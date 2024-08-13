@@ -93,8 +93,8 @@ class EntitiesBenchmarkTest {
 
         assertThat(stopwatch.getTime("Downloading form with http cache"), lessThan(75))
         assertThat(stopwatch.getTime("Updating form with http cache"), lessThan(90))
-        assertThat(stopwatch.getTime("Loading form first time"), lessThan(10))
-        assertThat(stopwatch.getTime("Loading form second time"), lessThan(10))
+        assertThat(stopwatch.getTime("Loading form first time"), lessThan(5))
+        assertThat(stopwatch.getTime("Loading form second time"), lessThan(5))
         assertThat(stopwatch.getTime("Filtering select"), lessThan(5))
     }
 
