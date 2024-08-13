@@ -95,12 +95,11 @@ class ManualProjectCreatorDialog :
     }
 
     override fun getToolbar(): Toolbar {
-        return binding.toolbar
+        return binding.toolbarLayout.toolbar
     }
 
     private fun setUpToolbar() {
         toolbar.setTitle(org.odk.collect.strings.R.string.add_project)
-        toolbar.navigationIcon = null
     }
 
     private fun handleAddingNewProject() {
