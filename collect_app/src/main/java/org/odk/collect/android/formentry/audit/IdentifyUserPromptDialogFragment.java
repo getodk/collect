@@ -86,7 +86,7 @@ public class IdentifyUserPromptDialogFragment extends MaterialFullScreenDialogFr
 
     @Override
     protected Toolbar getToolbar() {
-        return getView().findViewById(R.id.toolbar);
+        return getView().findViewById(org.odk.collect.androidshared.R.id.toolbar);
     }
 
     @Override

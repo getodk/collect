@@ -140,7 +140,7 @@ public abstract class AppListActivity extends LocalizedActivity {
         listView.setDivider(ContextCompat.getDrawable(this, org.odk.collect.androidshared.R.drawable.list_item_divider));
         listView.setDividerHeight(1);
 
-        setSupportActionBar(findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(org.odk.collect.androidshared.R.id.toolbar));
     }
 
     @Override

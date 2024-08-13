@@ -739,7 +739,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
 
     private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(org.odk.collect.androidshared.R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(getString(org.odk.collect.strings.R.string.loading_form));
     }

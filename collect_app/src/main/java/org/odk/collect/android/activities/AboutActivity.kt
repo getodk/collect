@@ -59,7 +59,7 @@ class AboutActivity : LocalizedActivity(), AboutItemClickListener {
     }
 
     private fun initToolbar() {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val toolbar = findViewById<Toolbar>(org.odk.collect.androidshared.R.id.toolbar)
         title = getString(org.odk.collect.strings.R.string.about_preferences)
         setSupportActionBar(toolbar)
     }
