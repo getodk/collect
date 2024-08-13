@@ -35,6 +35,17 @@
         tools:text="Label" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:layout_marginBottom="@dimen/margin_standard"
+        android:textAppearance="?textAppearanceLabelMedium"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/label"
+        tools:text="e636bbe8-7707-4c6b-bee1-41698005ac23 (12)" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/properties"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,7 +54,7 @@
         android:textAppearance="?textAppearanceBodyMedium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/label"
+        app:layout_constraintTop_toBottomOf="@id/id"
         tools:text="property1: value1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
