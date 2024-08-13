@@ -80,8 +80,6 @@ public class ChoicesRecyclerView extends RecyclerView {
         if (getAdapter().getItemCount() > MAX_ITEMS_WITHOUT_SCREEN_BOUND) {
             // Only let the RecyclerView take up 90% of the screen height in order to speed up loading if there are many items
             getLayoutParams().height = (int) (ScreenUtils.getScreenHeight(getContext()) * 0.9);
-        } else {
-            setNestedScrollingEnabled(false);
         }
     }
 
