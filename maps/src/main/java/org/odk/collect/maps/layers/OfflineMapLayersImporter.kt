@@ -40,6 +40,7 @@ class OfflineMapLayersImporter(
         savedInstanceState: Bundle?
     ): View {
         val binding = OfflineMapLayersImporterBinding.inflate(inflater)
+        binding.toolbarLayout.toolbar.setTitle(R.string.add_layer)
 
         binding.cancelButton.setOnClickListener {
             dismiss()
@@ -92,7 +93,7 @@ class OfflineMapLayersImporter(
     }
 
     override fun getToolbar(): Toolbar {
-        return OfflineMapLayersImporterBinding.bind(requireView()).toolbar
+        return OfflineMapLayersImporterBinding.bind(requireView()).toolbarLayout.toolbar
     }
 
     private fun showNoSupportedLayersWarning(numberOfLayers: Int) {
