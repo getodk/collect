@@ -49,14 +49,14 @@ public class WebViewActivity extends LocalizedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(org.odk.collect.androidshared.R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(org.odk.collect.icons.R.drawable.ic_close);
 
         String url = getIntent().getStringExtra(ExternalWebPageHelper.OPEN_URL);
         webView = findViewById(R.id.webView);
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(org.odk.collect.androidshared.R.id.progressBar);
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
