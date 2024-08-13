@@ -10,4 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         tools:title="Title" />
+
+    <org.odk.collect.androidshared.ui.ObviousProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appBarLayout"
+        android:layout_marginTop="-7dp"
+        android:indeterminate="true"
+        android:visibility="gone" />
 </com.google.android.material.appbar.AppBarLayout>

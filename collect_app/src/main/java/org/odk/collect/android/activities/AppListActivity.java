@@ -134,7 +134,7 @@ public abstract class AppListActivity extends LocalizedActivity {
         listView = findViewById(android.R.id.list);
         listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
         listView.setEmptyView(findViewById(android.R.id.empty));
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(org.odk.collect.androidshared.R.id.progressBar);
 
         // Use the nicer-looking drawable with Material Design insets.
         listView.setDivider(ContextCompat.getDrawable(this, org.odk.collect.androidshared.R.drawable.list_item_divider));

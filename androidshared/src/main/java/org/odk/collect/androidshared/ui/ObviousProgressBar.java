@@ -1,4 +1,4 @@
-package org.odk.collect.android.views;
+package org.odk.collect.androidshared.ui;
 
 import android.content.Context;
 import android.os.Handler;
