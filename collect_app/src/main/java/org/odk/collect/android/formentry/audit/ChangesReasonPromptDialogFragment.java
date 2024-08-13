@@ -34,6 +34,7 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
 
         Toolbar toolbar = getToolbar();
         toolbar.setTitle(viewModel.getFormName());
+        toolbar.setNavigationIcon(org.odk.collect.icons.R.drawable.ic_close);
         toolbar.inflateMenu(R.menu.changes_reason_dialog);
 
         EditText reasonField = view.findViewById(R.id.reason);
