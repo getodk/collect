@@ -14,9 +14,7 @@
 
 package org.odk.collect.android.external;
 
-import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromCurrentCursorPosition;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromValues;
-import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromInstance;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns._ID;
 import static org.odk.collect.android.external.InstancesContract.CONTENT_ITEM_TYPE;
 import static org.odk.collect.android.external.InstancesContract.CONTENT_TYPE;
@@ -37,12 +35,10 @@ import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.SettingsProvider;
 
@@ -197,67 +193,7 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
-        DaggerUtils.getComponent(getContext()).inject(this);
-
-        String projectId = getProjectId(uri);
-        logServerEvent(projectId, AnalyticsEvents.INSTANCE_PROVIDER_UPDATE);
-
-        InstancesRepository instancesRepository = instancesRepositoryProvider.create(projectId);
-        String instancesPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, projectId);
-
-        int count;
-
-        switch (URI_MATCHER.match(uri)) {
-            case INSTANCES:
-                try (Cursor cursor = dbQuery(projectId, null, where, whereArgs, null)) {
-                    while (cursor.moveToNext()) {
-                        Instance instance = getInstanceFromCurrentCursorPosition(cursor, instancesPath);
-                        ContentValues existingValues = getValuesFromInstance(instance, instancesPath);
-
-                        existingValues.putAll(values);
-                        instancesRepository.save(getInstanceFromValues(existingValues));
-                    }
-
-                    count = cursor.getCount();
-                }
-
-                break;
-
-            case INSTANCE_ID:
-                long instanceId = ContentUriHelper.getIdFromUri(uri);
-                if (whereArgs == null || whereArgs.length == 0) {
-                    Instance instance = instancesRepository.get(instanceId);
-                    ContentValues existingValues = getValuesFromInstance(instance, instancesPath);
-
-                    existingValues.putAll(values);
-                    instancesRepository.save(getInstanceFromValues(existingValues));
-                    count = 1;
-                } else {
-                    try (Cursor cursor = dbQuery(projectId, new String[]{_ID}, where, whereArgs, null)) {
-                        while (cursor.moveToNext()) {
-                            if (cursor.getLong(cursor.getColumnIndex(_ID)) == instanceId) {
-                                Instance instance = getInstanceFromCurrentCursorPosition(cursor, instancesPath);
-                                ContentValues existingValues = getValuesFromInstance(instance, instancesPath);
-
-                                existingValues.putAll(values);
-                                instancesRepository.save(getInstanceFromValues(existingValues));
-                                break;
-                            }
-                        }
-                    }
-
-                    count = 1;
-                }
-
-                break;
-
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
-        }
-
-        getContext().getContentResolver().notifyChange(uri, null);
-
-        return count;
+        return 0;
     }
 
     private String getProjectId(@NonNull Uri uri) {
