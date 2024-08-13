@@ -25,6 +25,10 @@ class InMemEntitiesRepository : EntitiesRepository {
         }
     }
 
+    override fun getCount(list: String): Int {
+        return getEntities(list).count()
+    }
+
     override fun clear() {
         entities.clear()
         lists.clear()
@@ -49,7 +53,7 @@ class InMemEntitiesRepository : EntitiesRepository {
     ): List<Entity.Saved> {
         return getEntities(list).filter { entity ->
             entity.properties.any { (first, second) -> first == property && second == value }
-        }
+        }.toList()
     }
 
     override fun save(vararg entities: Entity) {

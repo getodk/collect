@@ -337,7 +337,10 @@ abstract class EntitiesRepositoryTest {
 
         repository.delete("1")
 
-        assertThat(repository.getEntities("wines"), containsInAnyOrder(sameEntityAs(canet)))
+        assertThat(
+            repository.getEntities("wines"),
+            containsInAnyOrder(sameEntityAs(canet))
+        )
     }
 
     @Test
@@ -481,5 +484,34 @@ abstract class EntitiesRepositoryTest {
     fun `#getAllByProperty returns empty list when there are no entities`() {
         val repository = buildSubject()
         assertThat(repository.getAllByProperty("wines", "vintage", "1983"), equalTo(emptyList()))
+    }
+
+    @Test
+    fun `#getCount returns 0 when a list is empty`() {
+        val repository = buildSubject()
+        repository.addList("wines")
+
+        assertThat(repository.getCount("wines"), equalTo(0))
+    }
+
+    @Test
+    fun `#getCount returns 0 when a list does not exist`() {
+        val repository = buildSubject()
+        assertThat(repository.getCount("wines"), equalTo(0))
+    }
+
+    @Test
+    fun `#getCount returns number of entities in list`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("wines", "1", "Léoville Barton 2008")
+        val dows = Entity.New("wines", "2", "Dow's 1983")
+        repository.save(leoville, dows)
+
+        val springbank = Entity.New("whiskys", "1", "Springbank 10")
+        repository.save(springbank)
+
+        assertThat(repository.getCount("wines"), equalTo(2))
+        assertThat(repository.getCount("whiskys"), equalTo(1))
     }
 }

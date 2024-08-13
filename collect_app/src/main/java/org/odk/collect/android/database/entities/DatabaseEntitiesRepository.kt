@@ -138,14 +138,29 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return emptyList()
         }
 
-        return queryWithAttachedRowId(list)
-            .foldAndClose { cursor ->
-                mapCursorRowToEntity(
-                    list,
-                    cursor,
-                    cursor.getInt(ROW_ID)
-                )
-            }
+        return queryWithAttachedRowId(list).foldAndClose {
+            mapCursorRowToEntity(
+                list,
+                it,
+                it.getInt(ROW_ID)
+            )
+        }
+    }
+
+    override fun getCount(list: String): Int {
+        if (!listExists(list)) {
+            return 0
+        }
+
+        return databaseConnection.readableDatabase.rawQuery(
+            """
+            SELECT COUNT(*)
+            FROM $list
+            """.trimIndent(),
+            null
+        ).first {
+            it.getInt(0)
+        }!!
     }
 
     override fun clear() {
