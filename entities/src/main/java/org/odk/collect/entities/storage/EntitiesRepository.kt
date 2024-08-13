@@ -10,4 +10,5 @@ interface EntitiesRepository {
     fun delete(id: String)
     fun getById(list: String, id: String): Entity.Saved?
     fun getAllByProperty(list: String, property: String, value: String): List<Entity.Saved>
+    fun getByIndex(list: String, index: Int): Entity.Saved?
 }

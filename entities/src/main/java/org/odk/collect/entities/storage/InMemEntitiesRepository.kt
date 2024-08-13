@@ -56,6 +56,10 @@ class InMemEntitiesRepository : EntitiesRepository {
         }.toList()
     }
 
+    override fun getByIndex(list: String, index: Int): Entity.Saved? {
+        return getEntities(list).firstOrNull { it.index == index }
+    }
+
     override fun save(vararg entities: Entity) {
         entities.forEach { entity ->
             lists.add(entity.list)

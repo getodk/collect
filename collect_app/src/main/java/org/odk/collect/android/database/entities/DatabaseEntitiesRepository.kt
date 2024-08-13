@@ -222,6 +222,16 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
+    override fun getByIndex(list: String, index: Int): Entity.Saved? {
+        if (!listExists(list)) {
+            return null
+        }
+
+        return queryWithAttachedRowId(list, "i.$ROW_ID", (index + 1).toString()).first {
+            mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+        }
+    }
+
     private fun queryWithAttachedRowId(list: String): Cursor {
         return databaseConnection.readableDatabase
             .rawQuery(

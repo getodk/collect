@@ -514,4 +514,30 @@ abstract class EntitiesRepositoryTest {
         assertThat(repository.getCount("wines"), equalTo(2))
         assertThat(repository.getCount("whiskys"), equalTo(1))
     }
+
+    @Test
+    fun `#getByIndex returns matching entity`() {
+        val repository = buildSubject()
+
+        val springbank = Entity.New("whiskys", "1", "Springbank 10")
+        val aultmore = Entity.New("whiskys", "2", "Aultmore 12")
+        repository.save(springbank, aultmore)
+
+        val aultmoreIndex = repository.getEntities("whiskys").first { it.id == aultmore.id }.index
+        assertThat(repository.getByIndex("whiskys", aultmoreIndex), sameEntityAs(aultmore))
+    }
+
+    @Test
+    fun `#getByIndex returns null when the list does not exist`() {
+        val repository = buildSubject()
+        assertThat(repository.getByIndex("wine", 0), equalTo(null))
+    }
+
+    @Test
+    fun `#getByIndex returns null when the list is empty`() {
+        val repository = buildSubject()
+        repository.addList("wine")
+
+        assertThat(repository.getByIndex("wine", 0), equalTo(null))
+    }
 }
