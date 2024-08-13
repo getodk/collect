@@ -11,7 +11,13 @@ object PathUtils {
 
     @JvmStatic
     fun getAbsoluteFilePath(dirPath: String, filePath: String): String {
-        return if (filePath.startsWith(dirPath)) filePath else dirPath + File.separator + filePath
+        val absolutePath = if (filePath.startsWith(dirPath)) filePath else dirPath + File.separator + filePath
+
+        if (File(absolutePath).canonicalPath.startsWith(dirPath)) {
+            return absolutePath
+        } else {
+            throw SecurityException()
+        }
     }
 
     // https://stackoverflow.com/questions/2679699/what-characters-allowed-in-file-names-on-android
