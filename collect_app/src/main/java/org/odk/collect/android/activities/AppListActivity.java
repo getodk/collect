@@ -299,7 +299,7 @@ public abstract class AppListActivity extends LocalizedActivity {
     }
 
     private void hideProgressBar() {
-        progressBar.hide(View.GONE);
+        progressBar.hide();
     }
 
     protected void showProgressBar() {

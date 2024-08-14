@@ -542,7 +542,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     }
 
     private void hideProgressBar() {
-        progressBar.hide(View.GONE);
+        progressBar.hide();
     }
 
     private CharSequence getFilterText() {

@@ -94,7 +94,7 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
             if (isLoading) {
                 findViewById<ObviousProgressBar>(org.odk.collect.androidshared.R.id.progressBar).show()
             } else {
-                findViewById<ObviousProgressBar>(org.odk.collect.androidshared.R.id.progressBar).hide(View.GONE)
+                findViewById<ObviousProgressBar>(org.odk.collect.androidshared.R.id.progressBar).hide()
             }
         }
 

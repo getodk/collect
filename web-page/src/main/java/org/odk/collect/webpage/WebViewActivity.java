@@ -19,7 +19,6 @@ import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.widget.Toolbar;
-import android.view.View;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -76,14 +75,14 @@ public class WebViewActivity extends LocalizedActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                progressBar.hide(View.GONE);
+                progressBar.hide();
                 getSupportActionBar().setTitle(view.getTitle());
             }
 
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                progressBar.hide(View.GONE);
+                progressBar.hide();
             }
         });
         webView.getSettings().setJavaScriptEnabled(true);

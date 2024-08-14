@@ -41,7 +41,7 @@ public class ObviousProgressBar extends ProgressBar {
         super.setVisibility(View.VISIBLE);
     }
 
-    public void hide(int visibility) {
+    public void hide() {
         if (shownAt != null) {
             long timeShown = System.currentTimeMillis() - shownAt;
 
@@ -49,17 +49,17 @@ public class ObviousProgressBar extends ProgressBar {
                 long delay = MINIMUM_SHOW_TIME - timeShown;
 
                 handler.removeCallbacksAndMessages(null);
-                handler.postDelayed(() -> makeHiddenOrGone(visibility), delay);
+                handler.postDelayed(this::makeGone, delay);
             } else {
-                makeHiddenOrGone(visibility);
+                makeGone();
             }
         } else {
-            makeHiddenOrGone(visibility);
+            makeGone();
         }
     }
 
-    private void makeHiddenOrGone(int visibility) {
-        super.setVisibility(visibility);
+    private void makeGone() {
+        super.setVisibility(View.GONE);
         shownAt = null;
     }
 }
