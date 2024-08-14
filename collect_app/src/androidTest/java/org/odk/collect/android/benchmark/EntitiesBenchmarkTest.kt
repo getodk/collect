@@ -16,9 +16,8 @@ import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
+import org.odk.collect.android.test.BuildConfig.ENTITIES_FILTER_TEST_PROJECT_URL
 import org.odk.collect.strings.R
-
-private const val PROJECT_URL = ""
 
 /**
  * Benchmarks the performance of entity follow up forms. [PROJECT_URL] should be set to a project
@@ -40,14 +39,18 @@ class EntitiesBenchmarkTest {
 
     @Test
     fun run() {
-        assertThat("Need to set PROJECT_URL before running!", PROJECT_URL, not(blankOrNullString()))
+        assertThat(
+            "Need to set ENTITIES_FILTER_TEST_PROJECT_URL before running!",
+            ENTITIES_FILTER_TEST_PROJECT_URL,
+            not(blankOrNullString())
+        )
         clearAndroidCache()
 
         val stopwatch = Stopwatch()
 
         rule.startAtFirstLaunch()
             .clickManuallyEnterProjectDetails()
-            .inputUrl(PROJECT_URL)
+            .inputUrl(ENTITIES_FILTER_TEST_PROJECT_URL)
             .addProject()
 
             // Populate http cache and clear out form/entities
