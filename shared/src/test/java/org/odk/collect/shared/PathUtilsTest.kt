@@ -24,6 +24,11 @@ class PathUtilsTest {
         assertThat(path, equalTo("/root/dir/file"))
     }
 
+    @Test(expected = SecurityException::class)
+    fun `getAbsoluteFilePath() throws SecurityException when filePath is outside the dirPath`() {
+        PathUtils.getAbsoluteFilePath("/root/dir", "../tmp/file")
+    }
+
     @Test
     fun `getRelativeFilePath() returns filePath with dirPath removed`() {
         val path = PathUtils.getRelativeFilePath("/root/dir", "/root/dir/file")
