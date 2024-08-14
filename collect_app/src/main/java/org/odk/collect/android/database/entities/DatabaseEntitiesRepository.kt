@@ -227,9 +227,17 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return null
         }
 
-        return queryWithAttachedRowId(list, "i.$ROW_ID", (index + 1).toString()).first {
-            mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
-        }
+        return databaseConnection.readableDatabase
+            .rawQuery(
+                """
+                SELECT *, i.$ROW_ID
+                FROM $list e, ${getRowIdTableName(list)} i
+                WHERE e._id = i._id AND i.$ROW_ID = ?
+                """.trimIndent(),
+                arrayOf((index + 1).toString())
+            ).first {
+                mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+            }
     }
 
     private fun queryWithAttachedRowId(list: String): Cursor {
