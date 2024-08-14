@@ -31,7 +31,7 @@ class InstanceUploadActionTest {
         .around(rule)
 
     @Test
-    fun canUploadInstanceToDifferentServer() {
+    fun whenIntentIncludesURLExtra_instancesAreUploadedToThatURL() {
         rule.startAtFirstLaunch().clickTryCollect()
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
