@@ -17,7 +17,7 @@ class CounterWidget(
 
     private var value: Int? = null
         set(newValue) {
-            field = newValue?.takeIf { it in 0..999999999 }
+            field = newValue?.takeIf { it in 0..MAX_VALUE }
             binding.value.text = field?.toString().orEmpty()
             updateButtonStates(field)
         }
@@ -28,7 +28,7 @@ class CounterWidget(
 
     private fun updateButtonStates(value: Int?) {
         binding.minusButton.isEnabled = value != null && value > 0
-        binding.plusButton.isEnabled = value == null || value < 999999999
+        binding.plusButton.isEnabled = value == null || value < MAX_VALUE
     }
 
     override fun onCreateAnswerView(
@@ -65,5 +65,9 @@ class CounterWidget(
     override fun clearAnswer() {
         value = null
         widgetValueChanged()
+    }
+
+    companion object {
+        const val MAX_VALUE = 999999999
     }
 }

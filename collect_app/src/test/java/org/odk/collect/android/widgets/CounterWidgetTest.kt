@@ -8,6 +8,7 @@ import org.junit.Test
 import org.mockito.Mockito.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.formentry.questions.QuestionDetails
+import org.odk.collect.android.widgets.CounterWidget.Companion.MAX_VALUE
 import org.odk.collect.android.widgets.base.QuestionWidgetTest
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
 
@@ -49,7 +50,7 @@ class CounterWidgetTest : QuestionWidgetTest<CounterWidget, IAnswerData>() {
 
     @Test
     fun `only the plus button should be disabled when the answer is 999 999 999`() {
-        whenever(formEntryPrompt.answerValue).thenReturn(IntegerData(999999999))
+        whenever(formEntryPrompt.answerValue).thenReturn(IntegerData(MAX_VALUE))
 
         assertThat(widget.binding.minusButton.isEnabled, equalTo(true))
         assertThat(widget.binding.plusButton.isEnabled, equalTo(false))
@@ -65,7 +66,7 @@ class CounterWidgetTest : QuestionWidgetTest<CounterWidget, IAnswerData>() {
 
     @Test
     fun `the max supported value is 999 999 999`() {
-        whenever(formEntryPrompt.answerValue).thenReturn(IntegerData(1000000000))
+        whenever(formEntryPrompt.answerValue).thenReturn(IntegerData(MAX_VALUE + 1))
 
         assertThat(widget.binding.value.text, equalTo(""))
         assertThat(widget.answer, equalTo(null))
@@ -102,10 +103,10 @@ class CounterWidgetTest : QuestionWidgetTest<CounterWidget, IAnswerData>() {
 
     @Test
     fun `clicking the plus button disables the button when the value is the max supported one`() {
-        whenever(formEntryPrompt.answerValue).thenReturn(IntegerData(999999998))
+        whenever(formEntryPrompt.answerValue).thenReturn(IntegerData(MAX_VALUE - 1))
 
         widget.binding.plusButton.performClick()
-        assertThat(widget.binding.value.text.toString(), equalTo("999999999"))
+        assertThat(widget.binding.value.text.toString(), equalTo(MAX_VALUE.toString()))
         assertThat(widget.binding.plusButton.isEnabled, equalTo(false))
     }
 
