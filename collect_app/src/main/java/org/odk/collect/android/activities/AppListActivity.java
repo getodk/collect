@@ -25,7 +25,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
@@ -38,6 +37,7 @@ import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.androidshared.ui.ObviousProgressBar;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
@@ -62,7 +62,7 @@ public abstract class AppListActivity extends LocalizedActivity {
     protected List<FormListSortingOption> sortingOptions;
     protected Integer selectedSortingOrder;
     protected ListView listView;
-    protected ProgressBar progressBar;
+    protected ObviousProgressBar progressBar;
 
     private String filterText;
     private String savedFilterText;
@@ -299,10 +299,10 @@ public abstract class AppListActivity extends LocalizedActivity {
     }
 
     private void hideProgressBar() {
-        progressBar.setVisibility(View.GONE);
+        progressBar.hide(View.GONE);
     }
 
     protected void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressBar.show();
     }
 }

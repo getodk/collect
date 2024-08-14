@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.ProgressBar
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +14,7 @@ import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
+import org.odk.collect.androidshared.ui.ObviousProgressBar
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.async.network.NetworkStateProvider
 import org.odk.collect.lists.EmptyListView
@@ -91,8 +91,11 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
     private fun initObservers() {
         viewModel.isLoading.observe(this) { isLoading ->
-            findViewById<ProgressBar>(org.odk.collect.androidshared.R.id.progressBar).visibility =
-                if (isLoading) View.VISIBLE else View.GONE
+            if (isLoading) {
+                findViewById<ObviousProgressBar>(org.odk.collect.androidshared.R.id.progressBar).show()
+            } else {
+                findViewById<ObviousProgressBar>(org.odk.collect.androidshared.R.id.progressBar).hide(View.GONE)
+            }
         }
 
         viewModel.syncResult.observe(this) { result ->

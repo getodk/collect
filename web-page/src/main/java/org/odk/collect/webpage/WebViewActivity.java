@@ -24,14 +24,14 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
 
+import org.odk.collect.androidshared.ui.ObviousProgressBar;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 public class WebViewActivity extends LocalizedActivity {
 
     private WebView webView;
-    private ProgressBar progressBar;
+    private ObviousProgressBar progressBar;
 
     private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
@@ -63,7 +63,7 @@ public class WebViewActivity extends LocalizedActivity {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 getSupportActionBar().setTitle(url);
-                progressBar.setVisibility(View.VISIBLE);
+                progressBar.show();
                 invalidateOptionsMenu();
             }
 
@@ -76,14 +76,14 @@ public class WebViewActivity extends LocalizedActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                progressBar.setVisibility(View.GONE);
+                progressBar.hide(View.GONE);
                 getSupportActionBar().setTitle(view.getTitle());
             }
 
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                progressBar.setVisibility(View.GONE);
+                progressBar.hide(View.GONE);
             }
         });
         webView.getSettings().setJavaScriptEnabled(true);

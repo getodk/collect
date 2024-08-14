@@ -32,7 +32,6 @@ import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -64,6 +63,7 @@ import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.androidshared.ui.MenuExtKt;
+import org.odk.collect.androidshared.ui.ObviousProgressBar;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.network.NetworkStateProvider;
@@ -125,7 +125,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     private InstanceUploaderAdapter listAdapter;
     private Integer selectedSortingOrder;
     private List<FormListSortingOption> sortingOptions;
-    private ProgressBar progressBar;
+    private ObviousProgressBar progressBar;
     private String filterText;
 
     private MultiSelectViewModel<Object> multiSelectViewModel;
@@ -534,7 +534,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     }
 
     private void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressBar.show();
     }
 
     private void hideProgressBarAndAllow() {
@@ -542,7 +542,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     }
 
     private void hideProgressBar() {
-        progressBar.setVisibility(View.GONE);
+        progressBar.hide(View.GONE);
     }
 
     private CharSequence getFilterText() {
