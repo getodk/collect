@@ -270,7 +270,8 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 - add a release to Github [here](https://github.com/getodk/collect/releases), generate release notes and attach the APK
 - upload APK to Play Store
 - if there was an active beta before release (this can happen with point releases), publish a new beta release to replace the previous one which was disabled by the production release
-- backup dependencies for the release by downloading the `vX.X.X.tar` artifact from the `create_dependency_backup` job on Circle CI (for the release commit) and then uploading it to the "Collect Dependency Backups" folder in GetODK's Google Drive
+- backup dependencies for the release by downloading the `vX.X.X.tar` artifact from the `create_dependency_backup` job on Circle CI (for the release commit) and then uploading it to [this folder](https://drive.google.com/drive/folders/1_tMKBFLdhzFZF9GKNeob4FbARjdfbtJu?usp=share_link)
+- backup a self signed release APK by downloading the `selfSignedRelease.apk` from the `build_release` job on Circle CI (for the release commit) and then upload to [this folder](https://drive.google.com/drive/folders/1pbbeNaMTziFhtZmedOs0If3BeYu3Ex5x?usp=share_link)
 
 ## Compiling a previous release using backed-up dependencies
 
