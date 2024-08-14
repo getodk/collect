@@ -29,8 +29,10 @@ public class IdentifyUserPromptDialogFragment extends MaterialFullScreenDialogFr
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getToolbar().setTitle(viewModel.getFormTitle());
-        getToolbar().setNavigationIcon(org.odk.collect.icons.R.drawable.ic_close);
+        Toolbar toolbar = getToolbar();
+        toolbar.setTitle(viewModel.getFormTitle());
+        toolbar.setNavigationIcon(org.odk.collect.icons.R.drawable.ic_close);
+        toolbar.setNavigationContentDescription(org.odk.collect.strings.R.string.close);
 
         EditText identityField = view.findViewById(R.id.identity);
         identityField.setText(viewModel.getUser());
