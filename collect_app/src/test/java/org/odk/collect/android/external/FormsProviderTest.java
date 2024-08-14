@@ -1,5 +1,23 @@
 package org.odk.collect.android.external;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isOneOf;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.DATE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_FILE_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_MEDIA_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE_FILE_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
+import static org.odk.collect.android.external.FormsContract.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.external.FormsContract.CONTENT_TYPE;
+import static org.odk.collect.android.external.FormsContract.getUri;
+
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -24,23 +42,6 @@ import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
 import java.io.IOException;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isOneOf;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.DATE;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.DISPLAY_NAME;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_FILE_PATH;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_MEDIA_PATH;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE_FILE_PATH;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
-import static org.odk.collect.android.external.FormsContract.CONTENT_ITEM_TYPE;
-import static org.odk.collect.android.external.FormsContract.CONTENT_TYPE;
-import static org.odk.collect.android.external.FormsContract.getUri;
 
 @RunWith(AndroidJUnit4.class)
 public class FormsProviderTest {
@@ -101,51 +102,20 @@ public class FormsProviderTest {
     }
 
     @Test
-    public void update_updatesForm_andReturns1() {
+    public void update_doesNotUpdateForms_andReturns0() {
         Uri formUri = addFormsToDirAndDb(firstProjectId, "external_app_form", "External app form", "1");
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(LANGUAGE, "English");
 
         int updateCount = contentResolver.update(formUri, contentValues, null, null);
-        assertThat(updateCount, is(1));
+        assertThat(updateCount, is(0));
         try (Cursor cursor = contentResolver.query(formUri, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
-            assertThat(cursor.getString(cursor.getColumnIndex(LANGUAGE)), is("English"));
+            assertThat(cursor.getString(cursor.getColumnIndex(LANGUAGE)), equalTo(null));
         }
-    }
-
-    @Test
-    public void update_withSelection_onlyUpdatesMatchingForms() {
-        addFormsToDirAndDb(firstProjectId, "form1", "Matching form", "1");
-        addFormsToDirAndDb(firstProjectId, "form2", "Not matching form", "1");
-        addFormsToDirAndDb(firstProjectId, "form3", "Matching form", "1");
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(LANGUAGE, "English");
-
-        contentResolver.update(getUri(firstProjectId), contentValues, DISPLAY_NAME + "=?", new String[]{"Matching form"});
-        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null)) {
-            assertThat(cursor.getCount(), is(3));
-
-            cursor.moveToNext();
-            if (cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)).equals("Matching form")) {
-                assertThat(cursor.getString(cursor.getColumnIndex(LANGUAGE)), is("English"));
-            } else {
-                assertThat(cursor.isNull(cursor.getColumnIndex(LANGUAGE)), is(true));
-            }
-        }
-    }
-
-    @Test
-    public void update_whenFormDoesNotExist_returns0() {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(LANGUAGE, "English");
-
-        int updatedCount = contentResolver.update(Uri.withAppendedPath(getUri(firstProjectId), String.valueOf(1)), contentValues, null, null);
-        assertThat(updatedCount, is(0));
     }
 
     @Test

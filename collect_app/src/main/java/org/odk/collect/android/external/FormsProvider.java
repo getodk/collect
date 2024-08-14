@@ -15,9 +15,7 @@
 package org.odk.collect.android.external;
 
 import static android.provider.BaseColumns._ID;
-import static org.odk.collect.android.database.DatabaseObjectMapper.getFormFromCurrentCursorPosition;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getFormFromValues;
-import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromForm;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.AUTO_DELETE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.AUTO_SEND;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY;
@@ -248,53 +246,7 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
-        deferDaggerInit();
-
-        String projectId = getProjectId(uri);
-        logServerEvent(projectId, AnalyticsEvents.FORMS_PROVIDER_UPDATE);
-
-        FormsRepository formsRepository = getFormsRepository(projectId);
-        String formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId);
-        String cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId);
-
-        int count;
-
-        switch (URI_MATCHER.match(uri)) {
-            case FORMS:
-                try (Cursor cursor = databaseQuery(projectId, null, where, whereArgs, null, null, null)) {
-                    while (cursor.moveToNext()) {
-                        Form form = getFormFromCurrentCursorPosition(cursor, formsPath, cachePath);
-                        ContentValues existingValues = getValuesFromForm(form, formsPath);
-                        existingValues.putAll(values);
-
-                        formsRepository.save(getFormFromValues(existingValues, formsPath, cachePath));
-                    }
-
-                    count = cursor.getCount();
-                }
-                break;
-
-            case FORM_ID:
-                Form form = formsRepository.get(ContentUriHelper.getIdFromUri(uri));
-                if (form != null) {
-                    ContentValues existingValues = getValuesFromForm(form, formsPath);
-                    existingValues.putAll(values);
-
-                    formsRepository.save(getFormFromValues(existingValues, formsPath, cachePath));
-                    count = 1;
-                } else {
-                    count = 0;
-                }
-
-                break;
-
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
-        }
-
-        getContext().getContentResolver().notifyChange(uri, null);
-
-        return count;
+        return 0;
     }
 
     @NotNull
