@@ -22,7 +22,7 @@ import org.odk.collect.android.utilities.ApplicationConstants
 @RunWith(AndroidJUnit4::class)
 class InstanceUploadActionTest {
 
-    private val rule = CollectTestRule(useDemoProject = false)
+    private val rule = CollectTestRule()
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val testDependencies = TestDependencies()
 
@@ -32,7 +32,7 @@ class InstanceUploadActionTest {
 
     @Test
     fun whenIntentIncludesURLExtra_instancesAreUploadedToThatURL() {
-        rule.startAtFirstLaunch().clickTryCollect()
+        rule.startAtMainMenu()
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("what is your age", "34"))
@@ -56,7 +56,7 @@ class InstanceUploadActionTest {
 
     @Test
     fun whenInstanceDoesNotExist_showsError() {
-        rule.startAtFirstLaunch().clickTryCollect()
+        rule.startAtMainMenu()
 
         val intent = Intent("org.odk.collect.android.INSTANCE_UPLOAD")
         intent.type = InstancesContract.CONTENT_TYPE
