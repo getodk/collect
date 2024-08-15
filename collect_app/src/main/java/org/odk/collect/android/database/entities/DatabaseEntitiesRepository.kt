@@ -339,7 +339,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             try {
                 databaseConnection.writeableDatabase.execSQL(
                     """
-                    ALTER TABLE ${entity.list} ADD $it text;
+                    ALTER TABLE ${entity.list} ADD $it text NOT NULL DEFAULT "";
                     """.trimIndent()
                 )
             } catch (e: SQLiteException) {
