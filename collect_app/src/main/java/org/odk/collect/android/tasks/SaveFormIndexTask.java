@@ -18,14 +18,16 @@ package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
 
+import org.apache.commons.io.serialization.ValidatingObjectInputStream;
 import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.javarosawrapper.FormController;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import timber.log.Timber;
 
@@ -90,7 +92,8 @@ public class SaveFormIndexTask extends AsyncTask<Void, Void, String> {
             String instanceName = formController
                     .getInstanceFile()
                     .getName();
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(SaveFormToDisk.getFormIndexFile(instanceName)));
+            ValidatingObjectInputStream ois = new ValidatingObjectInputStream(new FileInputStream(SaveFormToDisk.getFormIndexFile(instanceName)));
+            ois.accept(FormIndex.class, TreeReference.class, String.class, ArrayList.class);
             formIndex = (FormIndex) ois.readObject();
             ois.close();
         } catch (Exception e) {
