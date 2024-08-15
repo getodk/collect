@@ -18,6 +18,7 @@ import org.odk.collect.androidshared.sqlite.DatabaseMigrator
 import org.odk.collect.androidshared.sqlite.SQLiteColumns.ROW_ID
 import org.odk.collect.androidshared.sqlite.SQLiteDatabaseExt.delete
 import org.odk.collect.androidshared.sqlite.SQLiteDatabaseExt.query
+import org.odk.collect.androidshared.sqlite.SQLiteUtils
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 
@@ -213,12 +214,20 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return emptyList()
         }
 
-        return queryWithAttachedRowId(
-            list,
-            selectionColumn = property,
-            selectionArg = value
-        ).foldAndClose {
-            mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+        return if (SQLiteUtils.doesColumnExist(databaseConnection.readableDatabase, list, property)) {
+            queryWithAttachedRowId(
+                list,
+                selectionColumn = property,
+                selectionArg = value
+            ).foldAndClose {
+                mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+            }
+        } else if (value == "") {
+            queryWithAttachedRowId(list).foldAndClose {
+                mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+            }
+        } else {
+            emptyList()
         }
     }
 

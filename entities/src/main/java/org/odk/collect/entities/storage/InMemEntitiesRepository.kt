@@ -52,9 +52,15 @@ class InMemEntitiesRepository : EntitiesRepository {
         property: String,
         value: String
     ): List<Entity.Saved> {
-        return getEntities(list).filter { entity ->
-            entity.properties.any { (first, second) -> first == property && second == value }
-        }.toList()
+        return if (listProperties[list]?.contains(property) == true) {
+            getEntities(list).filter { entity ->
+                entity.properties.any { (first, second) -> first == property && second == value }
+            }.toList()
+        } else if (value == "") {
+            getEntities(list)
+        } else {
+            emptyList()
+        }
     }
 
     override fun getByIndex(list: String, index: Int): Entity.Saved? {

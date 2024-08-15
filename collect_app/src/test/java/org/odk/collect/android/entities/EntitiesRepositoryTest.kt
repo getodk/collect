@@ -489,6 +489,36 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#getByAllByProperty returns entities when searching for empty string for property that doesn't exist`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New(
+            "wines",
+            "1",
+            "Léoville Barton 2008",
+            properties = listOf("vintage" to "2008")
+        )
+
+        repository.save(leoville)
+        assertThat(repository.getAllByProperty("wines", "score", "").size, equalTo(1))
+    }
+
+    @Test
+    fun `#getByAllByProperty returns empty list when searching for non empty string for property that doesn't exist`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New(
+            "wines",
+            "1",
+            "Léoville Barton 2008",
+            properties = listOf("vintage" to "2008")
+        )
+
+        repository.save(leoville)
+        assertThat(repository.getAllByProperty("wines", "score", "92").size, equalTo(0))
+    }
+
+    @Test
     fun `#getAllByProperty returns empty list when there are no matches`() {
         val repository = buildSubject()
 
