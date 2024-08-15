@@ -14,21 +14,28 @@
 
 package org.odk.collect.android.tasks;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
+import android.net.Uri;
+import android.os.AsyncTask;
+
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.projects.ProjectsDataService;
-import org.odk.collect.android.utilities.InstanceAutoDeleteChecker;
-import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.upload.InstanceServerUploader;
+import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.upload.FormUploadAuthRequestedException;
 import org.odk.collect.android.upload.FormUploadException;
+import org.odk.collect.android.upload.InstanceServerUploader;
+import org.odk.collect.android.utilities.InstanceAutoDeleteChecker;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.settings.SettingsProvider;
@@ -40,12 +47,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
-
-import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
-import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
-
-import android.net.Uri;
-import android.os.AsyncTask;
 
 /**
  * Background task for uploading completed forms.
@@ -99,6 +100,10 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             Instance instance = instancesToUpload.get(i);
 
             publishProgress(i + 1, instancesToUpload.size());
+
+            if (completeDestinationUrl != null) {
+                Analytics.log(AnalyticsEvents.INSTANCE_UPLOAD_CUSTOM_SERVER);
+            }
 
             try {
                 String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl, null);
