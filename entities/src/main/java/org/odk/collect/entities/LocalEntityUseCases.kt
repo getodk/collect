@@ -1,7 +1,7 @@
 package org.odk.collect.entities
 
-import org.javarosa.core.model.instance.CsvExternalInstance
-import org.javarosa.core.model.instance.TreeElement
+import org.apache.commons.csv.CSVRecord
+import org.javarosa.core.model.instance.SecondaryInstanceCSVParserBuilder
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.parse.EntityItemElement
 import org.odk.collect.entities.javarosa.spec.EntityAction
@@ -54,26 +54,29 @@ object LocalEntityUseCases {
         serverList: File,
         entitiesRepository: EntitiesRepository
     ) {
-        val root = try {
-            CsvExternalInstance().parse(list, serverList.absolutePath)
-        } catch (e: Exception) {
+        val csvParser = try {
+            SecondaryInstanceCSVParserBuilder()
+                .path(serverList.absolutePath)
+                .build()
+        } catch (_: Exception) {
             return
         }
 
         val localEntities = entitiesRepository.getEntities(list)
-        val serverEntities = root.getChildrenWithName("item")
 
         val missingFromServer = localEntities.associateBy { it.id }.toMutableMap()
         val newAndUpdated = ArrayList<Entity>()
-        serverEntities.forEach { item ->
-            val serverEntity = parseEntityFromItem(item, list) ?: return
-            val existing = missingFromServer.remove(serverEntity.id)
+        csvParser.use {
+            it.forEach { record ->
+                val serverEntity = parseEntityFromRecord(record, list) ?: return
+                val existing = missingFromServer.remove(serverEntity.id)
 
-            if (existing == null || existing.version <= serverEntity.version) {
-                newAndUpdated.add(serverEntity)
-            } else if (existing.state == Entity.State.OFFLINE) {
-                val update = existing.copy(state = Entity.State.ONLINE)
-                newAndUpdated.add(update)
+                if (existing == null || existing.version <= serverEntity.version) {
+                    newAndUpdated.add(serverEntity)
+                } else if (existing.state == Entity.State.OFFLINE) {
+                    val update = existing.copy(state = Entity.State.ONLINE)
+                    newAndUpdated.add(update)
+                }
             }
         }
 
@@ -86,33 +89,22 @@ object LocalEntityUseCases {
         entitiesRepository.save(*newAndUpdated.toTypedArray())
     }
 
-    private fun parseEntityFromItem(
-        item: TreeElement,
+    private fun parseEntityFromRecord(
+        record: CSVRecord,
         list: String
     ): Entity? {
-        val id = item.getFirstChild(EntityItemElement.ID)?.value?.value as? String
-        val label = item.getFirstChild(EntityItemElement.LABEL)?.value?.value as? String
-        val version =
-            (item.getFirstChild(EntityItemElement.VERSION)?.value?.value as? String)?.toInt()
+        val map = record.toMap().toMutableMap()
+
+        val id = map.remove(EntityItemElement.ID)
+        val label = map.remove(EntityItemElement.LABEL)
+        val version = map.remove(EntityItemElement.VERSION)?.toInt()
         if (id == null || label == null || version == null) {
             return null
         }
 
-        val properties = 0.until(item.numChildren)
-            .fold(emptyList<Pair<String, String>>()) { properties, index ->
-                val child = item.getChildAt(index)
-
-                if (!listOf(
-                        EntityItemElement.ID,
-                        EntityItemElement.LABEL,
-                        EntityItemElement.VERSION
-                    ).contains(child.name)
-                ) {
-                    properties + Pair(child.name, child.value!!.value as String)
-                } else {
-                    properties
-                }
-            }
+        val properties = map.entries.fold(emptyList<Pair<String, String>>()) { properties, entry ->
+            properties + Pair(entry.key, entry.value)
+        }
 
         return Entity.New(
             list,
