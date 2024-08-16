@@ -17,8 +17,8 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 
 import android.database.sqlite.SQLiteDatabase;
 
-import org.odk.collect.androidshared.sqlite.DatabaseMigrator;
-import org.odk.collect.androidshared.sqlite.SQLiteUtils;
+import org.odk.collect.db.sqlite.DatabaseMigrator;
+import org.odk.collect.db.sqlite.SQLiteUtils;
 import org.odk.collect.forms.instances.Instance;
 
 import java.util.Arrays;

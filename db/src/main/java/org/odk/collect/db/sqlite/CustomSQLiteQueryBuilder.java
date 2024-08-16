@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.androidshared.sqlite;
+package org.odk.collect.db.sqlite;
 
 import org.odk.collect.shared.strings.StringUtils;
 
