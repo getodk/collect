@@ -1,5 +1,20 @@
 package org.odk.collect.android.external;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isOneOf;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_FILE_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_MEDIA_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE_FILE_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
+import static org.odk.collect.android.external.FormsContract.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.external.FormsContract.CONTENT_TYPE;
+import static org.odk.collect.android.external.FormsContract.getUri;
+
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,10 +29,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.formstest.FormUtils;
 import org.odk.collect.projects.Project;
 import org.odk.collect.shared.strings.Md5;
@@ -25,127 +44,55 @@ import org.odk.collect.shared.strings.Md5;
 import java.io.File;
 import java.io.IOException;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isOneOf;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.DATE;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.DISPLAY_NAME;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_FILE_PATH;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_MEDIA_PATH;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE_FILE_PATH;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
-import static org.odk.collect.android.external.FormsContract.CONTENT_ITEM_TYPE;
-import static org.odk.collect.android.external.FormsContract.CONTENT_TYPE;
-import static org.odk.collect.android.external.FormsContract.getUri;
-
 @RunWith(AndroidJUnit4.class)
 public class FormsProviderTest {
 
     private ContentResolver contentResolver;
     private StoragePathProvider storagePathProvider;
     private String firstProjectId;
+    private AppDependencyComponent component;
 
     @Before
     public void setup() {
         Context context = ApplicationProvider.getApplicationContext();
-        storagePathProvider = DaggerUtils.getComponent(context).storagePathProvider();
+        component = DaggerUtils.getComponent(context);
+        storagePathProvider = component.storagePathProvider();
 
         firstProjectId = CollectHelpers.createDemoProject();
         contentResolver = context.getContentResolver();
     }
 
     @Test
-    public void insert_addsForm() {
+    public void insert_doesNotInsertForms_andReturnsNull() {
         String formId = "external_app_form";
         String formVersion = "1";
         String formName = "External app form";
         File formFile = addFormToFormsDir(firstProjectId, formId, formVersion, formName);
-        String md5Hash = Md5.getMd5Hash(formFile);
 
         ContentValues values = getContentValues(formId, formVersion, formName, formFile);
-        contentResolver.insert(getUri(firstProjectId), values);
+        Uri uri = contentResolver.insert(getUri(firstProjectId), values);
+        assertThat(uri, equalTo(null));
 
         try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
-            assertThat(cursor.getCount(), is(1));
-
-            cursor.moveToNext();
-            assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), is(formName));
-            assertThat(cursor.getString(cursor.getColumnIndex(JR_FORM_ID)), is(formId));
-            assertThat(cursor.getString(cursor.getColumnIndex(JR_VERSION)), is(formVersion));
-            assertThat(cursor.getString(cursor.getColumnIndex(FORM_FILE_PATH)), is(formFile.getName()));
-
-            assertThat(cursor.getString(cursor.getColumnIndex(DATE)), is(notNullValue()));
-            assertThat(cursor.getString(cursor.getColumnIndex(MD5_HASH)), is(md5Hash));
-            assertThat(cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH)), is(md5Hash + ".formdef"));
-            assertThat(cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH)), is(mediaPathForFormFile(formFile)));
+            assertThat(cursor.getCount(), is(0));
         }
     }
 
     @Test
-    public void insert_returnsFormUri() {
-        String formId = "external_app_form";
-        String formVersion = "1";
-        String formName = "External app form";
-        File formFile = addFormToFormsDir(firstProjectId, formId, formVersion, formName);
-
-        ContentValues values = getContentValues(formId, formVersion, formName, formFile);
-        Uri newFormUri = contentResolver.insert(getUri(firstProjectId), values);
-
-        try (Cursor cursor = contentResolver.query(newFormUri, null, null, null, null)) {
-            assertThat(cursor.getCount(), is(1));
-        }
-    }
-
-    @Test
-    public void update_updatesForm_andReturns1() {
+    public void update_doesNotUpdateForms_andReturns0() {
         Uri formUri = addFormsToDirAndDb(firstProjectId, "external_app_form", "External app form", "1");
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(LANGUAGE, "English");
 
         int updateCount = contentResolver.update(formUri, contentValues, null, null);
-        assertThat(updateCount, is(1));
+        assertThat(updateCount, is(0));
         try (Cursor cursor = contentResolver.query(formUri, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
-            assertThat(cursor.getString(cursor.getColumnIndex(LANGUAGE)), is("English"));
+            assertThat(cursor.getString(cursor.getColumnIndex(LANGUAGE)), equalTo(null));
         }
-    }
-
-    @Test
-    public void update_withSelection_onlyUpdatesMatchingForms() {
-        addFormsToDirAndDb(firstProjectId, "form1", "Matching form", "1");
-        addFormsToDirAndDb(firstProjectId, "form2", "Not matching form", "1");
-        addFormsToDirAndDb(firstProjectId, "form3", "Matching form", "1");
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(LANGUAGE, "English");
-
-        contentResolver.update(getUri(firstProjectId), contentValues, DISPLAY_NAME + "=?", new String[]{"Matching form"});
-        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null)) {
-            assertThat(cursor.getCount(), is(3));
-
-            cursor.moveToNext();
-            if (cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)).equals("Matching form")) {
-                assertThat(cursor.getString(cursor.getColumnIndex(LANGUAGE)), is("English"));
-            } else {
-                assertThat(cursor.isNull(cursor.getColumnIndex(LANGUAGE)), is(true));
-            }
-        }
-    }
-
-    @Test
-    public void update_whenFormDoesNotExist_returns0() {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(LANGUAGE, "English");
-
-        int updatedCount = contentResolver.update(Uri.withAppendedPath(getUri(firstProjectId), String.valueOf(1)), contentValues, null, null);
-        assertThat(updatedCount, is(0));
     }
 
     @Test
@@ -289,8 +236,19 @@ public class FormsProviderTest {
 
     private Uri addFormsToDirAndDb(String projectId, String id, String name, String version) {
         File formFile = addFormToFormsDir(projectId, id, version, name);
-        ContentValues values = getContentValues(id, version, name, formFile);
-        return contentResolver.insert(getUri(projectId), values);
+
+        FormsRepositoryProvider formsRepositoryProvider = component.formsRepositoryProvider();
+        FormsRepository formsRepository = formsRepositoryProvider.get(projectId);
+        Form form = formsRepository.save(
+                new Form.Builder()
+                        .formId(id)
+                        .displayName(name)
+                        .version(version)
+                        .formFilePath(formFile.getAbsolutePath())
+                        .build()
+        );
+
+        return FormsContract.getUri(projectId, form.getDbId());
     }
 
     @NotNull
@@ -340,10 +298,6 @@ public class FormsProviderTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private String mediaPathForFormFile(File newFile) {
-        return newFile.getName().substring(0, newFile.getName().lastIndexOf(".")) + "-media";
     }
 
     @NotNull
