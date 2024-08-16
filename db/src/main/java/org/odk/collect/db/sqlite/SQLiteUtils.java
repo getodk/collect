@@ -1,5 +1,7 @@
 package org.odk.collect.db.sqlite;
 
+import static org.odk.collect.db.sqlite.SQLiteDatabaseExt.doesColumnExist;
+
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -7,6 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @deprecated use {@link SQLiteDatabaseExt} instead.
+ */
+@Deprecated
 public final class SQLiteUtils {
     private SQLiteUtils() {
     }
@@ -28,10 +34,6 @@ public final class SQLiteUtils {
         boolean foundTable = cursor.getCount() == 1;
         cursor.close();
         return foundTable;
-    }
-
-    public static boolean doesColumnExist(SQLiteDatabase db, String tableName, String columnName) {
-        return getColumnNames(db, tableName).contains(columnName);
     }
 
     public static List<String> getColumnNames(SQLiteDatabase db, String tableName) {

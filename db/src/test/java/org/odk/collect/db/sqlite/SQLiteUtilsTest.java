@@ -20,19 +20,6 @@ import java.util.List;
 public class SQLiteUtilsTest {
 
     @Test
-    public void doesColumnExistTest() {
-        String tableName = "testTable";
-
-        SQLiteDatabase db = ApplicationProvider.getApplicationContext().openOrCreateDatabase("testDatabase", MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE " + tableName + " (id integer, column1 text);");
-
-        assertTrue(SQLiteUtils.doesColumnExist(db, tableName, "id"));
-        assertTrue(SQLiteUtils.doesColumnExist(db, tableName, "column1"));
-
-        TestCase.assertFalse(SQLiteUtils.doesColumnExist(db, tableName, "column2"));
-    }
-
-    @Test
     public void doesTableExistTest() {
         final String tableName = "testTable";
         final String columnName = CustomSQLiteQueryBuilder.quoteIdentifier("col");

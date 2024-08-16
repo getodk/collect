@@ -20,4 +20,9 @@ object SQLiteDatabaseExt {
     fun SQLiteDatabase.delete(table: String) {
         this.delete(table, null, null)
     }
+
+    @JvmStatic
+    fun SQLiteDatabase.doesColumnExist(table: String, column: String): Boolean {
+        return SQLiteUtils.getColumnNames(this, table).contains(column)
+    }
 }
