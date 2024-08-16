@@ -266,6 +266,7 @@ dependencies {
     implementation project(':printer')
     implementation project(':lists')
     implementation project(':web-page')
+    implementation project(':db')
 
     if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')
