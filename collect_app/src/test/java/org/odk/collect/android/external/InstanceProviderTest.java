@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -29,6 +30,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.fail;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
@@ -77,6 +79,19 @@ public class InstanceProviderTest {
 
             assertThat(cursor.getLong(cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE)), is(notNullValue()));
             assertThat(cursor.getString(cursor.getColumnIndex(STATUS)), is(STATUS_INCOMPLETE));
+        }
+    }
+
+    @Test
+    public void insert_withSubmissionUri_throwsException() {
+        ContentValues values = getContentValues("/blah", "External app form", "external_app_form", "1");
+        values.put(DatabaseInstanceColumns.SUBMISSION_URI, "https://blah.com/submission");
+
+        try {
+            contentResolver.insert(getUri(firstProjectId), values);
+            fail();
+        } catch (SecurityException e) {
+            // Expected
         }
     }
 

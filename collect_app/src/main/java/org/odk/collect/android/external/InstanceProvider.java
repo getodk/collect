@@ -31,6 +31,7 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.dao.CursorLoaderFactory;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
@@ -130,6 +131,10 @@ public class InstanceProvider extends ContentProvider {
         // Validate the requested uri
         if (URI_MATCHER.match(uri) != INSTANCES) {
             throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        if (initialValues.containsKey(DatabaseInstanceColumns.SUBMISSION_URI)) {
+            throw new SecurityException();
         }
 
         Instance newInstance = instancesRepositoryProvider.create(projectId).save(getInstanceFromValues(initialValues));
