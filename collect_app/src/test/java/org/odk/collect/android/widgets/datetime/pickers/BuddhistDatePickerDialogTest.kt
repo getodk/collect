@@ -16,7 +16,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
-import org.odk.collect.android.support.Actions
 import org.odk.collect.android.widgets.datetime.DatePickerDetails
 import org.odk.collect.android.widgets.datetime.DatePickerDetails.DatePickerMode
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils
@@ -24,6 +23,7 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.Assertions
 import org.odk.collect.testshared.Interactions
+import org.odk.collect.testshared.ViewActions
 
 @RunWith(AndroidJUnit4::class)
 class BuddhistDatePickerDialogTest {
@@ -272,13 +272,13 @@ class BuddhistDatePickerDialogTest {
 
     private fun updateDate(day: Int? = null, month: Int? = null, year: Int? = null) {
         day?.let {
-            onView(withId(R.id.day_picker)).inRoot(isDialog()).perform(Actions.scrollNumberPickerToValue(it))
+            onView(withId(R.id.day_picker)).inRoot(isDialog()).perform(ViewActions.scrollNumberPickerToValue(it))
         }
         month?.let {
-            onView(withId(R.id.month_picker)).inRoot(isDialog()).perform(Actions.scrollNumberPickerToValue(it))
+            onView(withId(R.id.month_picker)).inRoot(isDialog()).perform(ViewActions.scrollNumberPickerToValue(it))
         }
         year?.let {
-            onView(withId(R.id.year_picker)).inRoot(isDialog()).perform(Actions.scrollNumberPickerToValue(it))
+            onView(withId(R.id.year_picker)).inRoot(isDialog()).perform(ViewActions.scrollNumberPickerToValue(it))
         }
     }
 
