@@ -25,7 +25,7 @@ class RequiredQuestionTest {
         rule.startAtMainMenu()
             .copyForm("required_question_with_custom_error_message.xml")
             .startBlankForm("required_question_with_custom_error_message")
-            .assertText("* Required question")
+            .assertQuestion("Required question", true)
     }
 
     @Test // https://github.com/getodk/collect/issues/6327
@@ -33,7 +33,7 @@ class RequiredQuestionTest {
         rule.startAtMainMenu()
             .copyForm("required_question_with_audio.xml")
             .startBlankForm("required_question_with_audio")
-            .swipeToNextQuestion("* Required question with audio")
+            .swipeToNextQuestion("Required question with audio", true)
     }
 
     @Test
