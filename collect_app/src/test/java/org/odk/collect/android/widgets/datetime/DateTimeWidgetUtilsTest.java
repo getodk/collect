@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets.utilities;
+package org.odk.collect.android.widgets.datetime;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -7,15 +7,16 @@ import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
-import org.odk.collect.android.fragments.dialogs.EthiopianDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.IslamicDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.MyanmarDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
-import org.odk.collect.android.logic.DatePickerDetails;
+import org.odk.collect.android.widgets.datetime.pickers.BikramSambatDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.BuddhistDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.CopticDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.CustomTimePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.EthiopianDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.FixedDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.IslamicDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.MyanmarDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.PersianDatePickerDialog;
+import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.odk.collect.android.support.WidgetTestActivity;
 
@@ -25,13 +26,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.BIKRAM_SAMBAT;
-import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.COPTIC;
-import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.ETHIOPIAN;
-import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.GREGORIAN;
-import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.ISLAMIC;
-import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.MYANMAR;
-import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.PERSIAN;
+import static org.odk.collect.android.widgets.datetime.DatePickerDetails.DatePickerType.BIKRAM_SAMBAT;
+import static org.odk.collect.android.widgets.datetime.DatePickerDetails.DatePickerType.BUDDHIST;
+import static org.odk.collect.android.widgets.datetime.DatePickerDetails.DatePickerType.COPTIC;
+import static org.odk.collect.android.widgets.datetime.DatePickerDetails.DatePickerType.ETHIOPIAN;
+import static org.odk.collect.android.widgets.datetime.DatePickerDetails.DatePickerType.GREGORIAN;
+import static org.odk.collect.android.widgets.datetime.DatePickerDetails.DatePickerType.ISLAMIC;
+import static org.odk.collect.android.widgets.datetime.DatePickerDetails.DatePickerType.MYANMAR;
+import static org.odk.collect.android.widgets.datetime.DatePickerDetails.DatePickerType.PERSIAN;
 
 import android.app.DatePickerDialog;
 
@@ -72,6 +74,10 @@ public class DateTimeWidgetUtilsTest {
     private DatePickerDetails persianMonthYear;
     private DatePickerDetails persianYear;
 
+    private DatePickerDetails buddhist;
+    private DatePickerDetails buddhistMonthYear;
+    private DatePickerDetails buddhistYear;
+
     @Before
     public void setUp() {
         dateTimeWidgetUtils = new DateTimeWidgetUtils();
@@ -110,6 +116,10 @@ public class DateTimeWidgetUtilsTest {
         persian = new DatePickerDetails(DatePickerDetails.DatePickerType.PERSIAN, DatePickerDetails.DatePickerMode.SPINNERS);
         persianMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.PERSIAN, DatePickerDetails.DatePickerMode.MONTH_YEAR);
         persianYear = new DatePickerDetails(DatePickerDetails.DatePickerType.PERSIAN, DatePickerDetails.DatePickerMode.YEAR);
+
+        buddhist = new DatePickerDetails(DatePickerDetails.DatePickerType.BUDDHIST, DatePickerDetails.DatePickerMode.SPINNERS);
+        buddhistMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.BUDDHIST, DatePickerDetails.DatePickerMode.MONTH_YEAR);
+        buddhistYear = new DatePickerDetails(DatePickerDetails.DatePickerType.BUDDHIST, DatePickerDetails.DatePickerMode.YEAR);
     }
 
     @Test
@@ -195,6 +205,17 @@ public class DateTimeWidgetUtilsTest {
         assertEquals(persianYear, DateTimeWidgetUtils.getDatePickerDetails(appearance));
         appearance = "year persian";
         assertEquals(persianYear, DateTimeWidgetUtils.getDatePickerDetails(appearance));
+
+        appearance = "buddhist";
+        assertEquals(buddhist, DateTimeWidgetUtils.getDatePickerDetails(appearance));
+        appearance = "Buddhist month-year";
+        assertEquals(buddhistMonthYear, DateTimeWidgetUtils.getDatePickerDetails(appearance));
+        appearance = "month-year buddhist";
+        assertEquals(buddhistMonthYear, DateTimeWidgetUtils.getDatePickerDetails(appearance));
+        appearance = "Buddhist year";
+        assertEquals(buddhistYear, DateTimeWidgetUtils.getDatePickerDetails(appearance));
+        appearance = "year buddhist";
+        assertEquals(buddhistYear, DateTimeWidgetUtils.getDatePickerDetails(appearance));
     }
 
     @Test
@@ -239,6 +260,11 @@ public class DateTimeWidgetUtilsTest {
     @Test
     public void displayDatePickerDialog_showsPersianDatePickerDialog_whenDatePickerTypeIsPersian() {
         assertDialogIsShowing(PERSIAN, PersianDatePickerDialog.class);
+    }
+
+    @Test
+    public void displayDatePickerDialog_showsBuddhistDatePickerDialog_whenDatePickerTypeIsBuddhist() {
+        assertDialogIsShowing(BUDDHIST, BuddhistDatePickerDialog.class);
     }
 
     @Test

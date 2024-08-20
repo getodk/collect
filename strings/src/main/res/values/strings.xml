@@ -413,6 +413,32 @@
     <string name="persian_month_10">Dey</string>
     <string name="persian_month_11">Bahman</string>
     <string name="persian_month_12">Esfand</string>
+
+    <!-- 1st month in the Buddhist calendar -->
+    <string name="buddhist_month_1">มกราคม</string>
+    <!-- 2nd month in the Buddhist calendar -->
+    <string name="buddhist_month_2">กุมภาพันธ์</string>
+    <!-- 3rd month in the Buddhist calendar -->
+    <string name="buddhist_month_3">มีนาคม</string>
+    <!-- 4th month in the Buddhist calendar -->
+    <string name="buddhist_month_4">เมษายน</string>
+    <!-- 5th month in the Buddhist calendar -->
+    <string name="buddhist_month_5">พฤษภาคม</string>
+    <!-- 6th month in the Buddhist calendar -->
+    <string name="buddhist_month_6">มิถุนายน</string>
+    <!-- 7th month in the Buddhist calendar -->
+    <string name="buddhist_month_7">กรกฎาคม</string>
+    <!-- 8th month in the Buddhist calendar -->
+    <string name="buddhist_month_8">สิงหาคม</string>
+    <!-- 9th month in the Buddhist calendar -->
+    <string name="buddhist_month_9">กันยายน</string>
+    <!-- 10th month in the Buddhist calendar -->
+    <string name="buddhist_month_10">ตุลาคม</string>
+    <!-- 11th month in the Buddhist calendar -->
+    <string name="buddhist_month_11">พฤศจิกายน</string>
+    <!-- 12th month in the Buddhist calendar -->
+    <string name="buddhist_month_12">ธันวาคม</string>
+
     <!-- Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order -->
     <string name="custom_date">%1$s (%2$s)</string>
 

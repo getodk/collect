@@ -29,6 +29,7 @@ object Appearances {
     const val BIKRAM_SAMBAT = "bikram-sambat"
     const val MYANMAR = "myanmar"
     const val PERSIAN = "persian"
+    const val BUDDHIST = "buddhist"
     const val NO_CALENDAR = "no-calendar"
     const val MONTH_YEAR = "month-year"
     const val YEAR = "year"

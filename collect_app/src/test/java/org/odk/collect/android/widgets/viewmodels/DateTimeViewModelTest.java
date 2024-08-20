@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.datetime.DateTimeUtils;
 
 @RunWith(AndroidJUnit4.class)
 public class DateTimeViewModelTest {

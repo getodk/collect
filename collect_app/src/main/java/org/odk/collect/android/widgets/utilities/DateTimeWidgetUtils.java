@@ -8,20 +8,22 @@ import androidx.fragment.app.FragmentActivity;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+import org.joda.time.chrono.BuddhistChronology;
 import org.joda.time.chrono.CopticChronology;
 import org.joda.time.chrono.EthiopicChronology;
 import org.joda.time.chrono.IslamicChronology;
 import org.joda.time.chrono.PersianChronologyKhayyamBorkowski;
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
-import org.odk.collect.android.fragments.dialogs.EthiopianDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.IslamicDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.MyanmarDatePickerDialog;
-import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
-import org.odk.collect.android.logic.DatePickerDetails;
+import org.odk.collect.android.widgets.datetime.pickers.BikramSambatDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.BuddhistDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.CopticDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.CustomTimePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.EthiopianDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.FixedDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.IslamicDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.MyanmarDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.PersianDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.DatePickerDetails;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.MyanmarDateUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -69,6 +71,9 @@ public class DateTimeWidgetUtils {
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
             } else if (appearance.contains(Appearances.PERSIAN)) {
                 datePickerType = DatePickerDetails.DatePickerType.PERSIAN;
+                datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
+            } else if (appearance.contains(Appearances.BUDDHIST)) {
+                datePickerType = DatePickerDetails.DatePickerType.BUDDHIST;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
             } else if (appearance.contains(Appearances.NO_CALENDAR)) {
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
@@ -119,6 +124,10 @@ public class DateTimeWidgetUtils {
             case PERSIAN:
                 customDate = new DateTime(date).withChronology(PersianChronologyKhayyamBorkowski.getInstance());
                 monthArray = context.getResources().getStringArray(R.array.persian_months);
+                break;
+            case BUDDHIST:
+                customDate = new DateTime(date).withChronology(BuddhistChronology.getInstance());
+                monthArray = context.getResources().getStringArray(R.array.buddhist_months);
                 break;
             default:
                 Timber.w("Not supported date type.");
@@ -214,6 +223,8 @@ public class DateTimeWidgetUtils {
                 return MyanmarDatePickerDialog.class;
             case PERSIAN:
                 return PersianDatePickerDialog.class;
+            case BUDDHIST:
+                return BuddhistDatePickerDialog.class;
             default:
                 return FixedDatePickerDialog.class;
         }
