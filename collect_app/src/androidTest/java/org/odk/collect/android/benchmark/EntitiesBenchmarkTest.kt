@@ -74,7 +74,7 @@ class EntitiesBenchmarkTest {
 
             .clickOK(MainMenuPage())
             .clickGetBlankForm()
-            .benchmark("Updating form with http cache", 90, benchmarker) {
+            .benchmark("Downloading form second time with http cache", 90, benchmarker) {
                 it.clickGetSelected()
             }
 
