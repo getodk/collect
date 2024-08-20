@@ -79,10 +79,8 @@ class BulkFinalizationTest {
             .clickFinalize()
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_success, 2)
 
-        val finalizedForms = instancesRepository.all
-
-        val firstFinalizedForm = finalizedForms.find { it.instanceFilePath == draftForms[0].instanceFilePath }!!
-        val secondFinalizedForm = finalizedForms.find { it.instanceFilePath == draftForms[1].instanceFilePath }!!
+        val firstFinalizedForm = instancesRepository.all.find { it.instanceFilePath == draftForms[0].instanceFilePath }!!
+        val secondFinalizedForm = instancesRepository.all.find { it.instanceFilePath == draftForms[1].instanceFilePath }!!
 
         assertThat(firstFinalizedForm.lastStatusChangeDate < secondFinalizedForm.lastStatusChangeDate, equalTo(true))
     }

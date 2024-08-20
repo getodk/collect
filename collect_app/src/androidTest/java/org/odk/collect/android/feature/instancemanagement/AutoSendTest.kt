@@ -232,7 +232,7 @@ class AutoSendTest {
             .swipeToEndScreen()
             .clickSend()
 
-        val savedForms = instancesRepository.all.sortedBy { it.lastStatusChangeDate }
+        val finalizedForms = instancesRepository.all.sortedBy { it.lastStatusChangeDate }
 
         testDependencies.scheduler.runDeferredTasks()
 
@@ -240,12 +240,12 @@ class AutoSendTest {
 
         assertThat(
             sentForms[0].absolutePath,
-            equalTo(savedForms[0].instanceFilePath)
+            equalTo(finalizedForms[0].instanceFilePath)
         )
 
         assertThat(
             sentForms[1].absolutePath,
-            equalTo(savedForms[1].instanceFilePath)
+            equalTo(finalizedForms[1].instanceFilePath)
         )
     }
 }

@@ -90,7 +90,11 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         Outcome outcome = new Outcome();
 
         InstanceServerUploader uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils, settingsProvider.getUnprotectedSettings(), instancesRepository);
-        List<Instance> instancesToUpload = uploader.getInstancesFromIds(instanceIdsToUpload).stream().sorted(Comparator.comparing(Instance::getLastStatusChangeDate)).collect(Collectors.toList());
+        List<Instance> instancesToUpload = uploader
+                .getInstancesFromIds(instanceIdsToUpload)
+                .stream()
+                .sorted(Comparator.comparing(Instance::getLastStatusChangeDate))
+                .collect(Collectors.toList());
 
         String deviceId = propertyManager.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
 
