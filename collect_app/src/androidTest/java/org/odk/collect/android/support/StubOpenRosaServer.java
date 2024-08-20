@@ -50,7 +50,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     private boolean noHashPrefixInMediaFiles;
     private boolean randomHash;
 
-    private final List<File> submittedFormsDir = new ArrayList<>();
+    /**
+     * A list of submitted forms, maintained in the original order of submission, with the oldest forms appearing first.
+     */
+    private final List<File> submittedForms = new ArrayList<>();
 
     @NonNull
     @Override
@@ -119,7 +122,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         } else if (credentialsIncorrect(credentials)) {
             return new HttpPostResult("", 401, "");
         } else if (uri.getPath().equals(OpenRosaConstants.SUBMISSION)) {
-            submittedFormsDir.add(submissionFile);
+            submittedForms.add(submissionFile);
             return new HttpPostResult("", 201, "");
         } else {
             return new HttpPostResult("", 404, "");
@@ -184,7 +187,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     }
 
     public List<File> getSubmissions() {
-        return submittedFormsDir;
+        return submittedForms;
     }
 
     private boolean credentialsIncorrect(HttpCredentialsInterface credentials) {
