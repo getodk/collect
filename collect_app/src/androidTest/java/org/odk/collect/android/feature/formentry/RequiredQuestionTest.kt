@@ -21,7 +21,7 @@ class RequiredQuestionTest {
         .around(rule)
 
     @Test
-    fun `requiredQuestionIsMarkedWithAnAsterisk`() {
+    fun requiredQuestionIsMarkedWithAnAsterisk() {
         rule.startAtMainMenu()
             .copyForm("required_question_with_custom_error_message.xml")
             .startBlankForm("required_question_with_custom_error_message")
