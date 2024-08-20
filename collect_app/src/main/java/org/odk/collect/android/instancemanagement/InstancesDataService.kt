@@ -90,7 +90,7 @@ class InstancesDataService(
             Instance.STATUS_INCOMPLETE,
             Instance.STATUS_INVALID,
             Instance.STATUS_VALID
-        )
+        ).sortedBy { it.lastStatusChangeDate }
 
         val result = instances.fold(FinalizeAllResult(0, 0, false)) { result, instance ->
             val formDefAndForm = FormEntryUseCases.loadFormDef(
