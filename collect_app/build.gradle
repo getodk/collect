@@ -64,6 +64,7 @@ def getVersionName = { ->
 def secrets = getSecrets()
 def googleMapsApiKey = secrets.getProperty('GOOGLE_MAPS_API_KEY', '')
 def mapboxAccessToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
+def entitiesFilterTestProjectUrl = secrets.getProperty('ENTITIES_FILTER_TEST_PROJECT_URL', '')
 
 android {
     compileSdk Versions.android_compile_sdk
@@ -144,6 +145,7 @@ android {
             debuggable(true)
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
+            buildConfigField("String", "ENTITIES_FILTER_TEST_PROJECT_URL", "\"$entitiesFilterTestProjectUrl\"")
         }
     }
 

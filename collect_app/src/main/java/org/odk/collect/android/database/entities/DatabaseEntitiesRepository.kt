@@ -138,14 +138,29 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return emptyList()
         }
 
-        return queryWithAttachedRowId(list)
-            .foldAndClose { cursor ->
-                mapCursorRowToEntity(
-                    list,
-                    cursor,
-                    cursor.getInt(ROW_ID)
-                )
-            }
+        return queryWithAttachedRowId(list).foldAndClose {
+            mapCursorRowToEntity(
+                list,
+                it,
+                it.getInt(ROW_ID)
+            )
+        }
+    }
+
+    override fun getCount(list: String): Int {
+        if (!listExists(list)) {
+            return 0
+        }
+
+        return databaseConnection.readableDatabase.rawQuery(
+            """
+            SELECT COUNT(*)
+            FROM $list
+            """.trimIndent(),
+            null
+        ).first {
+            it.getInt(0)
+        }!!
     }
 
     override fun clear() {
@@ -205,6 +220,24 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         ).foldAndClose {
             mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
         }
+    }
+
+    override fun getByIndex(list: String, index: Int): Entity.Saved? {
+        if (!listExists(list)) {
+            return null
+        }
+
+        return databaseConnection.readableDatabase
+            .rawQuery(
+                """
+                SELECT *, i.$ROW_ID
+                FROM $list e, ${getRowIdTableName(list)} i
+                WHERE e._id = i._id AND i.$ROW_ID = ?
+                """.trimIndent(),
+                arrayOf((index + 1).toString())
+            ).first {
+                mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+            }
     }
 
     private fun queryWithAttachedRowId(list: String): Cursor {

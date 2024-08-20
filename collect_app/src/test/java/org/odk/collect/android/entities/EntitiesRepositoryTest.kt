@@ -337,7 +337,10 @@ abstract class EntitiesRepositoryTest {
 
         repository.delete("1")
 
-        assertThat(repository.getEntities("wines"), containsInAnyOrder(sameEntityAs(canet)))
+        assertThat(
+            repository.getEntities("wines"),
+            containsInAnyOrder(sameEntityAs(canet))
+        )
     }
 
     @Test
@@ -481,5 +484,60 @@ abstract class EntitiesRepositoryTest {
     fun `#getAllByProperty returns empty list when there are no entities`() {
         val repository = buildSubject()
         assertThat(repository.getAllByProperty("wines", "vintage", "1983"), equalTo(emptyList()))
+    }
+
+    @Test
+    fun `#getCount returns 0 when a list is empty`() {
+        val repository = buildSubject()
+        repository.addList("wines")
+
+        assertThat(repository.getCount("wines"), equalTo(0))
+    }
+
+    @Test
+    fun `#getCount returns 0 when a list does not exist`() {
+        val repository = buildSubject()
+        assertThat(repository.getCount("wines"), equalTo(0))
+    }
+
+    @Test
+    fun `#getCount returns number of entities in list`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("wines", "1", "Léoville Barton 2008")
+        val dows = Entity.New("wines", "2", "Dow's 1983")
+        repository.save(leoville, dows)
+
+        val springbank = Entity.New("whiskys", "1", "Springbank 10")
+        repository.save(springbank)
+
+        assertThat(repository.getCount("wines"), equalTo(2))
+        assertThat(repository.getCount("whiskys"), equalTo(1))
+    }
+
+    @Test
+    fun `#getByIndex returns matching entity`() {
+        val repository = buildSubject()
+
+        val springbank = Entity.New("whiskys", "1", "Springbank 10")
+        val aultmore = Entity.New("whiskys", "2", "Aultmore 12")
+        repository.save(springbank, aultmore)
+
+        val aultmoreIndex = repository.getEntities("whiskys").first { it.id == aultmore.id }.index
+        assertThat(repository.getByIndex("whiskys", aultmoreIndex), sameEntityAs(aultmore))
+    }
+
+    @Test
+    fun `#getByIndex returns null when the list does not exist`() {
+        val repository = buildSubject()
+        assertThat(repository.getByIndex("wine", 0), equalTo(null))
+    }
+
+    @Test
+    fun `#getByIndex returns null when the list is empty`() {
+        val repository = buildSubject()
+        repository.addList("wine")
+
+        assertThat(repository.getByIndex("wine", 0), equalTo(null))
     }
 }

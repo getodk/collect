@@ -404,6 +404,10 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         return wrapped.getEntities(list)
     }
 
+    override fun getCount(list: String): Int {
+        return wrapped.getCount(list)
+    }
+
     override fun clear() {
         accesses += 1
         wrapped.clear()
@@ -431,5 +435,9 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
     ): List<Entity.Saved> {
         accesses += 1
         return wrapped.getAllByProperty(list, property, value)
+    }
+
+    override fun getByIndex(list: String, index: Int): Entity.Saved? {
+        return wrapped.getByIndex(list, index)
     }
 }
