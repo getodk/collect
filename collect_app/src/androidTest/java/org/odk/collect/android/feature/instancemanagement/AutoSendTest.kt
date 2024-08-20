@@ -1,10 +1,15 @@
 package org.odk.collect.android.feature.instancemanagement
 
+import android.app.Application
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -204,5 +209,43 @@ class AutoSendTest {
         testDependencies.scheduler.runDeferredTasks()
 
         mainMenuPage.assertNumberOfFinalizedForms(1)
+    }
+
+    @Test
+    fun whenFormHasAutoSend_formsAreSentInOldestFirstOrder() {
+        val application = ApplicationProvider.getApplicationContext<Application>()
+        val component = DaggerUtils.getComponent(application)
+        val currentProject = DaggerUtils.getComponent(application).currentProjectProvider().getCurrentProject()
+        val instancesRepository = component.instancesRepositoryProvider().create(currentProject.uuid)
+
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .copyForm("one-question-autosend.xml")
+
+            .startBlankForm("One Question Autosend")
+            .inputText("31")
+            .swipeToEndScreen()
+            .clickSend()
+
+            .startBlankForm("One Question Autosend")
+            .inputText("32")
+            .swipeToEndScreen()
+            .clickSend()
+
+        val savedForms = instancesRepository.all.sortedBy { it.lastStatusChangeDate }
+
+        testDependencies.scheduler.runDeferredTasks()
+
+        val sentForms = testDependencies.server.submissions
+
+        assertThat(
+            sentForms[0].absolutePath,
+            equalTo(savedForms[0].instanceFilePath)
+        )
+
+        assertThat(
+            sentForms[1].absolutePath,
+            equalTo(savedForms[1].instanceFilePath)
+        )
     }
 }
