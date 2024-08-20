@@ -47,7 +47,7 @@ class EntitiesBenchmarkTest {
         )
         clearAndroidCache()
 
-        val stopwatch = Stopwatch()
+        val benchmarker = Benchmarker()
 
         rule.startAtFirstLaunch()
             .clickManuallyEnterProjectDetails()
@@ -68,38 +68,34 @@ class EntitiesBenchmarkTest {
             .clickOKOnDialog(MainMenuPage())
 
             .clickGetBlankForm()
-            .benchmark("Downloading form with http cache", stopwatch) {
+            .benchmark("Downloading form with http cache", 75, benchmarker) {
                 it.clickGetSelected()
             }
 
             .clickOK(MainMenuPage())
             .clickGetBlankForm()
-            .benchmark("Updating form with http cache", stopwatch) {
+            .benchmark("Updating form with http cache", 90, benchmarker) {
                 it.clickGetSelected()
             }
 
             .clickOK(MainMenuPage())
             .clickFillBlankForm()
-            .benchmark("Loading form first time", stopwatch) {
+            .benchmark("Loading form first time", 5, benchmarker) {
                 it.clickOnForm("100k Entities Filter")
             }
 
             .pressBackAndDiscardForm()
             .clickFillBlankForm()
-            .benchmark("Loading form second time", stopwatch) {
+            .benchmark("Loading form second time", 5, benchmarker) {
                 it.clickOnForm("100k Entities Filter")
             }
 
             .answerQuestion("Which value do you want to filter by?", "1024")
-            .benchmark("Filtering select", stopwatch) {
+            .benchmark("Filtering select", 5, benchmarker) {
                 it.swipeToNextQuestion("Filtered select")
             }
 
-        assertThat(stopwatch.getTime("Downloading form with http cache"), lessThan(75))
-        assertThat(stopwatch.getTime("Updating form with http cache"), lessThan(90))
-        assertThat(stopwatch.getTime("Loading form first time"), lessThan(5))
-        assertThat(stopwatch.getTime("Loading form second time"), lessThan(5))
-        assertThat(stopwatch.getTime("Filtering select"), lessThan(5))
+        benchmarker.assertResults()
     }
 
     private fun clearAndroidCache() {
@@ -129,10 +125,39 @@ private class Stopwatch {
 
 private fun <T : Page<T>, Y : Page<Y>> Y.benchmark(
     name: String,
-    stopwatch: Stopwatch,
+    target: Long,
+    benchmarker: Benchmarker,
     action: (Y) -> T
 ): T {
-    return stopwatch.time(name) {
+    return benchmarker.benchmark(name, target) {
         action(this)
+    }
+}
+
+private class Benchmarker {
+    private val stopwatch = Stopwatch()
+    private val targets = mutableMapOf<String, Long>()
+
+    fun <T> benchmark(name: String, target: Long, action: () -> T): T {
+        targets[name] = target
+        return stopwatch.time(name) {
+            action()
+        }
+    }
+
+    fun assertResults() {
+        printResults()
+
+        targets.entries.forEach {
+            val time = stopwatch.getTime(it.key)
+            assertThat("\"${it.key}\" took ${time}s!", time, lessThan(it.value))
+        }
+    }
+
+    private fun printResults() {
+        println("Benchmark results:")
+        targets.keys.forEach {
+            println("$it: ${stopwatch.getTime(it)}s")
+        }
     }
 }
