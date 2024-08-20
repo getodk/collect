@@ -16,7 +16,7 @@ object PathUtils {
         if (File(absolutePath).canonicalPath.startsWith(dirPath)) {
             return absolutePath
         } else {
-            throw SecurityException()
+            throw SecurityException("Invalid path: $absolutePath")
         }
     }
 
