@@ -17,6 +17,7 @@ import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.android.test.BuildConfig.ENTITIES_FILTER_TEST_PROJECT_URL
+import org.odk.collect.shared.TimeInMs
 import org.odk.collect.strings.R
 
 /**
@@ -117,7 +118,7 @@ private class Stopwatch {
         val result = action()
         val endTime = System.currentTimeMillis()
 
-        times[name] = (endTime - startTime) / 1000
+        times[name] = (endTime - startTime) / TimeInMs.ONE_SECOND
         return result
     }
 
