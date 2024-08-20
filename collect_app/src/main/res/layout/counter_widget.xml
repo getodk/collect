@@ -15,13 +15,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/value" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/value"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
         android:background="@drawable/counter_value_background"
-        android:textSize="25sp"
+        android:textAppearance="?textAppearanceHeadlineSmall"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/minus_button"
