@@ -84,7 +84,7 @@ object TempFiles {
     }
 
     private fun getTempDir(): File {
-        val tmpDir = File(System.getProperty("java.io.tmpdir", "."), " org.odk.collect.shared.TempFiles")
+        val tmpDir = File(System.getProperty("java.io.tmpdir", "."), "org.odk.collect.shared.TempFiles")
         if (!tmpDir.exists()) {
             tmpDir.mkdir()
         }

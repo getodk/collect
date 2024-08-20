@@ -13,7 +13,7 @@ object PathUtils {
     fun getAbsoluteFilePath(dirPath: String, filePath: String): String {
         val absolutePath = if (filePath.startsWith(dirPath)) filePath else dirPath + File.separator + filePath
 
-        if (File(absolutePath).canonicalPath.startsWith(dirPath)) {
+        if (File(absolutePath).canonicalPath.startsWith(File(dirPath).canonicalPath)) {
             return absolutePath
         } else {
             throw SecurityException("Invalid path: $absolutePath")
