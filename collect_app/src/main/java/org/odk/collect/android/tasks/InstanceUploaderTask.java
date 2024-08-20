@@ -34,9 +34,11 @@ import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -88,7 +90,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         Outcome outcome = new Outcome();
 
         InstanceServerUploader uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils, settingsProvider.getUnprotectedSettings(), instancesRepository);
-        List<Instance> instancesToUpload = uploader.getInstancesFromIds(instanceIdsToUpload);
+        List<Instance> instancesToUpload = uploader.getInstancesFromIds(instanceIdsToUpload).stream().sorted(Comparator.comparing(Instance::getLastStatusChangeDate)).collect(Collectors.toList());
 
         String deviceId = propertyManager.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
 
