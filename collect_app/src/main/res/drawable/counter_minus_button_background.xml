@@ -4,8 +4,8 @@
     <item>
         <shape android:shape="rectangle">
             <corners
-                android:topLeftRadius="10dp"
-                android:bottomLeftRadius="10dp" />
+                android:topLeftRadius="?dialogCornerRadius"
+                android:bottomLeftRadius="?dialogCornerRadius" />
             <solid android:color="?colorSurfaceContainerHighest" />
         </shape>
     </item>
