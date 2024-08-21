@@ -130,6 +130,7 @@
         <!-- Sets up theme correction for anything using `AlertDialog.Builder` -->
         <item name="alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
         <item name="android:alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
+        <item name="dialogCornerRadius">8dp</item>
 
         <item name="linearProgressIndicatorStyle">@style/Widget.Collect.LinearProgressIndicator</item>
         <item name="sliderStyle">@style/Widget.Collect.Slider</item>
@@ -151,7 +152,6 @@
     </style>
 
     <style name="Theme.Collect.Dialog.Alert" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="dialogCornerRadius">8dp</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.Collect.Dialog.PositiveButton</item>
     </style>
 
