@@ -1,13 +1,12 @@
 <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
   <h:head>
-    <h:title>g6Error2</h:title>
+    <h:title>repeat_in_field_list</h:title>
     <model>
       <instance>
-        <data id="build_g6Error_15175684082">
+        <data id="repeat_in_field_list">
           <meta>
             <instanceID/>
           </meta>
-          <text0/>
           <g1>
             <text1/>
             <g2 jr:template="">
@@ -25,9 +24,6 @@
           <text id="/data/g1/text1:label">
             <value>text1</value>
           </text>
-          <text id="/data/text0:label">
-            <value>text0</value>
-          </text>
           <text id="/data/g1/g2:label">
             <value>g2</value>
           </text>
@@ -40,16 +36,12 @@
         </translation>
       </itext>
       <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
-      <bind nodeset="/data/text0" type="string"/>
       <bind nodeset="/data/g1/text1" type="string"/>
       <bind nodeset="/data/g1/g2/text2" type="string"/>
       <bind nodeset="/data/text3" type="string"/>
     </model>
   </h:head>
   <h:body>
-    <input ref="/data/text0">
-      <label ref="jr:itext('/data/text0:label')"/>
-    </input>
     <group appearance="field-list">
       <label ref="jr:itext('/data/g1:label')"/>
       <input ref="/data/g1/text1">

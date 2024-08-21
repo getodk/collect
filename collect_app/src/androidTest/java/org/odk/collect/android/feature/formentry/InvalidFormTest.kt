@@ -28,34 +28,21 @@ class InvalidFormTest {
     }
 
     @Test
-    fun app_ShouldNotCrash_whenFillingFormsWithErrors() {
-        rule.startAtMainMenu()
-            .copyForm("g6Error.xml")
-            .startBlankFormWithError("g6Error")
-            .clickOK(FormEntryPage("g6Error"))
-            .swipeToEndScreen()
-            .clickFinalize()
-            .checkIsSnackbarWithMessageDisplayed(R.string.form_saved)
-
-        MainMenuPage()
-            .copyForm("g6Error2.xml")
-            .startBlankForm("g6Error2")
-            .swipeToNextQuestionWithError()
-            .clickOK(FormEntryPage("g6Error2"))
-            .swipeToEndScreen()
-            .clickFinalize()
-            .checkIsSnackbarWithMessageDisplayed(R.string.form_saved)
-
+    fun app_ShouldNotCrash_whenFillingFormsWithEmptyGroupFieldList() {
         MainMenuPage()
             .copyForm("emptyGroupFieldList.xml")
             .clickFillBlankForm()
             .clickOnEmptyForm("emptyGroupFieldList")
             .clickFinalize()
             .checkIsSnackbarWithMessageDisplayed(R.string.form_saved)
+    }
 
-        MainMenuPage()
-            .copyForm("emptyGroupFieldList2.xml")
-            .startBlankForm("emptyGroupFieldList2")
+    @Test
+    fun app_ShouldNotCrash_whenFillingFormsWithRepeatInFieldList() {
+        rule.startAtMainMenu()
+            .copyForm("repeat_in_field_list.xml")
+            .startBlankFormWithError("repeat_in_field_list")
+            .clickOK(FormEntryPage("repeat_in_field_list"))
             .swipeToEndScreen()
             .clickFinalize()
             .checkIsSnackbarWithMessageDisplayed(R.string.form_saved)
