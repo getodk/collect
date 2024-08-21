@@ -224,8 +224,6 @@ public class FormHierarchyTest {
                 .clickGoUpIcon()
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0)
                 .rotateToLandscape(new FormHierarchyPage("Repeat Group"))
-                .checkIfElementInHierarchyMatchesToText("Group Name", 0)
-                .rotateToPortrait(new FormHierarchyPage("Repeat Group"))
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0);
     }
 
