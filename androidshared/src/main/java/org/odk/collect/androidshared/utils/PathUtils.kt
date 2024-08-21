@@ -1,17 +1,26 @@
 package org.odk.collect.androidshared.utils
 
+import timber.log.Timber
 import java.io.File
 
 object PathUtils {
     @JvmStatic
     fun getAbsoluteFilePath(dirPath: String, filePath: String): String {
-        val absolutePath =
+        val absoluteFilePath =
             if (filePath.startsWith(dirPath)) filePath else dirPath + File.separator + filePath
 
-        if (File(absolutePath).canonicalPath.startsWith(File(dirPath).canonicalPath)) {
-            return absolutePath
-        } else {
-            throw SecurityException("Contact support@getodk.org. Attempt to access file outside of Collect directory: $absolutePath")
+        val canonicalAbsoluteFilePath = File(absoluteFilePath).canonicalPath
+        val canonicalDirPath = File(dirPath).canonicalPath
+        if (!canonicalAbsoluteFilePath.startsWith(canonicalDirPath)) {
+            Timber.e(
+                "Attempt to access file outside of Collect directory:\n" +
+                    "dirPath: $dirPath\n" +
+                    "filePath: $filePath\n" +
+                    "absoluteFilePath: $absoluteFilePath\n" +
+                    "canonicalAbsoluteFilePath: $canonicalAbsoluteFilePath\n" +
+                    "canonicalDirPath: $canonicalDirPath\n"
+            )
         }
+        return absoluteFilePath
     }
 }
