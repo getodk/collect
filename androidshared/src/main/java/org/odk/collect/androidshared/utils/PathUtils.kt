@@ -18,7 +18,7 @@ object PathUtils {
                     "filePath: $filePath\n" +
                     "absoluteFilePath: $absoluteFilePath\n" +
                     "canonicalAbsoluteFilePath: $canonicalAbsoluteFilePath\n" +
-                    "canonicalDirPath: $canonicalDirPath\n"
+                    "canonicalDirPath: $canonicalDirPath"
             )
         }
         return absoluteFilePath
