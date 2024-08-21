@@ -10,6 +10,7 @@ import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_DATABASE_NA
 import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_DATABASE_VERSION
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.FORM_DB_ID
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.INSTANCE_DB_ID
+import org.odk.collect.androidshared.utils.PathUtils.getAbsoluteFilePath
 import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.forms.savepoints.SavepointsRepository
 import org.odk.collect.shared.PathUtils
@@ -129,11 +130,11 @@ class DatabaseSavepointsRepository(
         return Savepoint(
             cursor.getLong(formDbIdColumnIndex),
             if (cursor.isNull(instanceDbIdColumnIndex)) null else cursor.getLong(instanceDbIdColumnIndex),
-            PathUtils.getAbsoluteFilePath(
+            getAbsoluteFilePath(
                 cachePath,
                 cursor.getString(savepointFilePathColumnIndex)
             ),
-            PathUtils.getAbsoluteFilePath(
+            getAbsoluteFilePath(
                 instancesPath,
                 cursor.getString(instanceDirPathColumnIndex)
             )
