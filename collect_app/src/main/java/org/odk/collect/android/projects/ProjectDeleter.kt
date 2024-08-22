@@ -5,7 +5,7 @@ import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
-import org.odk.collect.androidshared.sqlite.DatabaseConnection
+import org.odk.collect.db.sqlite.DatabaseConnection
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository

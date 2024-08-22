@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.StrictMode;
 
-import org.odk.collect.androidshared.sqlite.DatabaseConnection;
+import org.odk.collect.db.sqlite.DatabaseConnection;
 import org.odk.collect.android.database.DatabaseConstants;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;

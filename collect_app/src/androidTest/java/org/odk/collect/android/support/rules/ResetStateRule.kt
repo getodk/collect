@@ -10,9 +10,9 @@ import org.odk.collect.android.injection.config.AppDependencyComponent
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.views.DecoratedBarcodeView
-import org.odk.collect.androidshared.sqlite.DatabaseConnection
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
+import org.odk.collect.db.sqlite.DatabaseConnection
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.shared.files.DirectoryUtils
 import java.io.IOException

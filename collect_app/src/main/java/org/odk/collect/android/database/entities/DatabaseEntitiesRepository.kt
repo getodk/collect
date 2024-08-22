@@ -7,17 +7,18 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.provider.BaseColumns._ID
 import androidx.core.database.sqlite.transaction
-import org.odk.collect.androidshared.sqlite.CursorExt.first
-import org.odk.collect.androidshared.sqlite.CursorExt.foldAndClose
-import org.odk.collect.androidshared.sqlite.CursorExt.getInt
-import org.odk.collect.androidshared.sqlite.CursorExt.getIntOrNull
-import org.odk.collect.androidshared.sqlite.CursorExt.getString
-import org.odk.collect.androidshared.sqlite.CursorExt.getStringOrNull
-import org.odk.collect.androidshared.sqlite.DatabaseConnection
-import org.odk.collect.androidshared.sqlite.DatabaseMigrator
-import org.odk.collect.androidshared.sqlite.SQLiteColumns.ROW_ID
-import org.odk.collect.androidshared.sqlite.SQLiteDatabaseExt.delete
-import org.odk.collect.androidshared.sqlite.SQLiteDatabaseExt.query
+import org.odk.collect.db.sqlite.CursorExt.first
+import org.odk.collect.db.sqlite.CursorExt.foldAndClose
+import org.odk.collect.db.sqlite.CursorExt.getInt
+import org.odk.collect.db.sqlite.CursorExt.getIntOrNull
+import org.odk.collect.db.sqlite.CursorExt.getString
+import org.odk.collect.db.sqlite.CursorExt.getStringOrNull
+import org.odk.collect.db.sqlite.DatabaseConnection
+import org.odk.collect.db.sqlite.DatabaseMigrator
+import org.odk.collect.db.sqlite.SQLiteColumns.ROW_ID
+import org.odk.collect.db.sqlite.SQLiteDatabaseExt.delete
+import org.odk.collect.db.sqlite.SQLiteDatabaseExt.doesColumnExist
+import org.odk.collect.db.sqlite.SQLiteDatabaseExt.query
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 
@@ -213,12 +214,20 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return emptyList()
         }
 
-        return queryWithAttachedRowId(
-            list,
-            selectionColumn = property,
-            selectionArg = value
-        ).foldAndClose {
-            mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+        return if (databaseConnection.readableDatabase.doesColumnExist(list, property)) {
+            queryWithAttachedRowId(
+                list,
+                selectionColumn = property,
+                selectionArg = value
+            ).foldAndClose {
+                mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+            }
+        } else if (value == "") {
+            queryWithAttachedRowId(list).foldAndClose {
+                mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+            }
+        } else {
+            emptyList()
         }
     }
 
@@ -339,7 +348,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             try {
                 databaseConnection.writeableDatabase.execSQL(
                     """
-                    ALTER TABLE ${entity.list} ADD $it text;
+                    ALTER TABLE ${entity.list} ADD $it text NOT NULL DEFAULT "";
                     """.trimIndent()
                 )
             } catch (e: SQLiteException) {

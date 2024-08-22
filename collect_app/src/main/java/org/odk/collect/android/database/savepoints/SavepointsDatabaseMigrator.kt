@@ -7,8 +7,8 @@ import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.FOR
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.INSTANCE_DB_ID
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.INSTANCE_FILE_PATH
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.SAVEPOINT_FILE_PATH
-import org.odk.collect.androidshared.sqlite.DatabaseMigrator
-import org.odk.collect.androidshared.sqlite.SQLiteUtils
+import org.odk.collect.db.sqlite.DatabaseMigrator
+import org.odk.collect.db.sqlite.SQLiteUtils
 
 class SavepointsDatabaseMigrator :
     DatabaseMigrator {

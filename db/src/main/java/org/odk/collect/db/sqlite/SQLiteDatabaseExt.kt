@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.sqlite
+package org.odk.collect.db.sqlite
 
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -19,5 +19,10 @@ object SQLiteDatabaseExt {
 
     fun SQLiteDatabase.delete(table: String) {
         this.delete(table, null, null)
+    }
+
+    @JvmStatic
+    fun SQLiteDatabase.doesColumnExist(table: String, column: String): Boolean {
+        return SQLiteUtils.getColumnNames(this, table).contains(column)
     }
 }

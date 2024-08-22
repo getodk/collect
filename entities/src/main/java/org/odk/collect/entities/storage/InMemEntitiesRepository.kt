@@ -3,6 +3,7 @@ package org.odk.collect.entities.storage
 class InMemEntitiesRepository : EntitiesRepository {
 
     private val lists = mutableSetOf<String>()
+    private val listProperties = mutableMapOf<String, MutableSet<String>>()
     private val entities = mutableListOf<Entity.New>()
 
     override fun getLists(): Set<String> {
@@ -16,7 +17,7 @@ class InMemEntitiesRepository : EntitiesRepository {
                 entity.id,
                 entity.label,
                 entity.version,
-                entity.properties,
+                buildProperties(entity),
                 entity.state,
                 index,
                 entity.trunkVersion,
@@ -51,9 +52,15 @@ class InMemEntitiesRepository : EntitiesRepository {
         property: String,
         value: String
     ): List<Entity.Saved> {
-        return getEntities(list).filter { entity ->
-            entity.properties.any { (first, second) -> first == property && second == value }
-        }.toList()
+        return if (listProperties[list]?.contains(property) == true) {
+            getEntities(list).filter { entity ->
+                entity.properties.any { (first, second) -> first == property && second == value }
+            }.toList()
+        } else if (value == "") {
+            getEntities(list)
+        } else {
+            emptyList()
+        }
     }
 
     override fun getByIndex(list: String, index: Int): Entity.Saved? {
@@ -62,7 +69,7 @@ class InMemEntitiesRepository : EntitiesRepository {
 
     override fun save(vararg entities: Entity) {
         entities.forEach { entity ->
-            lists.add(entity.list)
+            updateLists(entity)
             val existing = this.entities.find { it.id == entity.id && it.list == entity.list }
 
             if (existing != null) {
@@ -101,6 +108,13 @@ class InMemEntitiesRepository : EntitiesRepository {
         }
     }
 
+    private fun updateLists(entity: Entity) {
+        lists.add(entity.list)
+        listProperties.getOrPut(entity.list) {
+            mutableSetOf()
+        }.addAll(entity.properties.map { it.first })
+    }
+
     private fun mergeProperties(
         existing: Entity,
         new: Entity
@@ -111,5 +125,14 @@ class InMemEntitiesRepository : EntitiesRepository {
         }
 
         return existingProperties.map { Pair(it.key, it.value) }
+    }
+
+    private fun buildProperties(entity: Entity.New): List<Pair<String, String>> {
+        return listProperties[entity.list]?.map { property ->
+            Pair(
+                property,
+                entity.properties.find { it.first == property }?.second ?: ""
+            )
+        } ?: emptyList()
     }
 }

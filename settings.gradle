@@ -38,9 +38,10 @@ include ':test-forms'
 include ':printer'
 include ':draw'
 include ':lists'
+include ':web-page'
+include ':db'
 
 apply from: 'secrets.gradle'
 if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
     include ':mapbox'
 }
-include ':web-page'

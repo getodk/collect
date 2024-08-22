@@ -24,7 +24,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.StrictMode;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.androidshared.sqlite.DatabaseConnection;
+import org.odk.collect.db.sqlite.DatabaseConnection;
 import org.odk.collect.android.database.DatabaseConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.forms.Form;

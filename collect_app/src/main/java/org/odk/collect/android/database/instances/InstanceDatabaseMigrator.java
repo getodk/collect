@@ -14,11 +14,12 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_URI;
+import static org.odk.collect.db.sqlite.SQLiteDatabaseExt.doesColumnExist;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import org.odk.collect.androidshared.sqlite.DatabaseMigrator;
-import org.odk.collect.androidshared.sqlite.SQLiteUtils;
+import org.odk.collect.db.sqlite.DatabaseMigrator;
+import org.odk.collect.db.sqlite.SQLiteUtils;
 import org.odk.collect.forms.instances.Instance;
 
 import java.util.Arrays;
@@ -71,7 +72,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
-        if (!SQLiteUtils.doesColumnExist(db, INSTANCES_TABLE_NAME, CAN_EDIT_WHEN_COMPLETE)) {
+        if (!doesColumnExist(db, INSTANCES_TABLE_NAME, CAN_EDIT_WHEN_COMPLETE)) {
             SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, CAN_EDIT_WHEN_COMPLETE, "text");
 
             db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "

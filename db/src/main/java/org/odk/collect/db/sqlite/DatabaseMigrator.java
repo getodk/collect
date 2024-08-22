@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.sqlite;
+package org.odk.collect.db.sqlite;
 
 import android.database.sqlite.SQLiteDatabase;
 
