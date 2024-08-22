@@ -47,7 +47,6 @@ dependencies {
     implementation(Dependencies.androidx_core_ktx)
     implementation(Dependencies.timber)
 
-    testImplementation(Dependencies.junit)
     testImplementation(Dependencies.androidx_test_ext_junit)
     testImplementation(Dependencies.robolectric)
 }
