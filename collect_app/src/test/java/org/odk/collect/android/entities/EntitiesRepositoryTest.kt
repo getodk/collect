@@ -5,6 +5,7 @@ import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
+import org.mockito.kotlin.eq
 import org.odk.collect.android.entities.support.EntitySameAsMatcher.Companion.sameEntityAs
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
@@ -480,12 +481,15 @@ abstract class EntitiesRepositoryTest {
             "wines",
             "2",
             "Pontet-Canet 2014",
-            properties = listOf("score" to "")
+            properties = listOf("score" to "93")
         )
 
         repository.save(leoville)
         repository.save(canet)
-        assertThat(repository.getAllByProperty("wines", "score", "").size, equalTo(2))
+
+        val allByProperty = repository.getAllByProperty("wines", "score", "")
+        assertThat(allByProperty.size, equalTo(1))
+        assertThat(allByProperty[0].id, equalTo("1"))
     }
 
     @Test
