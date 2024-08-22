@@ -14,4 +14,6 @@ java {
 
 dependencies {
     implementation(Dependencies.kotlin_stdlib)
+    testImplementation(Dependencies.junit)
+    testImplementation(Dependencies.hamcrest)
 }
