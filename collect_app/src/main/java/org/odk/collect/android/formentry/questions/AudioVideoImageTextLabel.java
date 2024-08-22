@@ -53,7 +53,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     private TextView textLabel;
     private int originalTextColor;
     private int playTextColor = Color.BLUE;
-    private CharSequence questionText;
     private SelectItemClickListener listener;
     private File videoFile;
     private File bigImageFile;
@@ -72,8 +71,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     }
 
     public void setTextView(TextView questionText) {
-        this.questionText = questionText.getText();
-
         textLabel = questionText;
         textLabel.setId(R.id.text_label);
         textLabel.setOnClickListener(v -> {
@@ -87,8 +84,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     }
 
     public void setText(String questionText, boolean isRequiredQuestion, float fontSize) {
-        this.questionText = questionText;
-
         if (questionText != null && !questionText.isEmpty()) {
             textLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize);
             textLabel.setText(FormEntryPromptUtils.styledQuestionText(questionText, isRequiredQuestion));
@@ -216,8 +211,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
                 textLabel.setTextColor(playTextColor);
             } else {
                 textLabel.setTextColor(originalTextColor);
-                // then set the text to our original (brings back any html formatting)
-                textLabel.setText(questionText);
             }
         });
     }
