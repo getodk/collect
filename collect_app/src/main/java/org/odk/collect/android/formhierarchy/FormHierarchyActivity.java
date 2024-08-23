@@ -250,7 +250,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         EmptyListView emptyView = findViewById(android.R.id.empty);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(org.odk.collect.androidshared.R.id.toolbar);
         setSupportActionBar(toolbar);
 
         formEntryViewModel = new ViewModelProvider(this, viewModelFactory).get(FormEntryViewModel.class);

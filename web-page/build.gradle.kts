@@ -46,8 +46,10 @@ android {
 dependencies {
     coreLibraryDesugaring(Dependencies.desugar)
 
+    implementation(project(":androidshared"))
     implementation(project(":icons"))
     implementation(project(":strings"))
+    implementation(Dependencies.android_material)
     implementation(Dependencies.androidx_browser)
 
     testImplementation(Dependencies.androidx_test_ext_junit)

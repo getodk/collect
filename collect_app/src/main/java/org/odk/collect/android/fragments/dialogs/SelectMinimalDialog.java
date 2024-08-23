@@ -106,7 +106,7 @@ public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragme
     @Nullable
     @Override
     protected Toolbar getToolbar() {
-        return getView().findViewById(R.id.toolbar);
+        return getView().findViewById(org.odk.collect.androidshared.R.id.toolbar);
     }
 
     private void initToolbar() {

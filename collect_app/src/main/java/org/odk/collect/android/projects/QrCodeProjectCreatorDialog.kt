@@ -135,6 +135,7 @@ class QrCodeProjectCreatorDialog :
         this.savedInstanceState = savedInstanceState
 
         binding = QrCodeProjectCreatorDialogLayoutBinding.inflate(inflater)
+        binding.toolbarLayout.toolbar.setTitle(org.odk.collect.strings.R.string.add_project)
 
         configureMenu()
 
@@ -169,12 +170,12 @@ class QrCodeProjectCreatorDialog :
     }
 
     private fun configureMenu() {
-        val menu = binding.toolbar.menu
+        val menu = binding.toolbarLayout.toolbar.menu
         menu.enableIconsVisibility()
 
         menu.removeItem(R.id.menu_item_share)
 
-        binding.toolbar.setOnMenuItemClickListener {
+        binding.toolbarLayout.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_item_scan_sd_card -> {
                     val photoPickerIntent = Intent(Intent.ACTION_GET_CONTENT)
@@ -233,7 +234,7 @@ class QrCodeProjectCreatorDialog :
     }
 
     override fun getToolbar(): Toolbar? {
-        return binding.toolbar
+        return binding.toolbarLayout.toolbar
     }
 
     private fun startScanning(savedInstanceState: Bundle?) {

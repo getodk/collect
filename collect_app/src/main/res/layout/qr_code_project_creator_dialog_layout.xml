@@ -1,105 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/add_new_project_appbar"
-        style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/app_bar_layout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            style="@style/Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls"
-            app:title="@string/add_project"
-            app:menu="@menu/qr_code_scan_menu"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/shadow_up"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <include layout="@layout/app_bar_shadow"/>
-    </com.google.android.material.appbar.AppBarLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_standard"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/shadow_up"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_new_project_appbar">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/scan_configuration_qr_code"
+                    android:layout_marginTop="@dimen/margin_standard"
+                    style="@style/TextAppearance.Collect.Subtitle1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+                <org.odk.collect.android.views.DecoratedBarcodeView
+                    android:id="@+id/barcode_view"
+                    app:layout_constraintWidth_percent="0.75"
+                    app:layout_constraintDimensionRatio="w,1:1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/margin_extra_large"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/title" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/or"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/or"
+                    android:layout_marginTop="@dimen/margin_standard"
+                    style="@style/TextAppearance.Collect.Subtitle1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/barcode_view" />
+
+                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
+                    android:id="@+id/configure_manually_button"
+                    style="?materialButtonOutlinedIconStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_standard"
+                    android:text="@string/configure_manually"
+                    app:icon="@drawable/ic_outline_edit_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/or" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <ImageView
+            android:id="@+id/shadow_up"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/margin_standard"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout">
+            android:src="@drawable/shadow_up"
+            app:layout_constraintBottom_toTopOf="@+id/cancel_button" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/scan_configuration_qr_code"
-                android:layout_marginTop="@dimen/margin_standard"
-                style="@style/TextAppearance.Collect.Subtitle1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
+            android:id="@+id/cancel_button"
+            style="?borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-            <org.odk.collect.android.views.DecoratedBarcodeView
-                android:id="@+id/barcode_view"
-                app:layout_constraintWidth_percent="0.75"
-                app:layout_constraintDimensionRatio="w,1:1"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/margin_extra_large"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/or"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/or"
-                android:layout_marginTop="@dimen/margin_standard"
-                style="@style/TextAppearance.Collect.Subtitle1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/barcode_view" />
-
-            <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
-                android:id="@+id/configure_manually_button"
-                style="?materialButtonOutlinedIconStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_standard"
-                android:text="@string/configure_manually"
-                app:icon="@drawable/ic_outline_edit_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/or" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-
-    <ImageView
-        android:id="@+id/shadow_up"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/shadow_up"
-        app:layout_constraintBottom_toTopOf="@+id/cancel_button" />
-
-    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
-        android:id="@+id/cancel_button"
-        style="?borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

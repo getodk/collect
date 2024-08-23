@@ -146,7 +146,7 @@ class MainMenuFragment(
     }
 
     private fun initToolbar(binding: MainMenuBinding) {
-        val toolbar = binding.root.findViewById<Toolbar>(org.odk.collect.android.R.id.toolbar)
+        val toolbar = binding.root.findViewById<Toolbar>(org.odk.collect.androidshared.R.id.toolbar)
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
     }
 

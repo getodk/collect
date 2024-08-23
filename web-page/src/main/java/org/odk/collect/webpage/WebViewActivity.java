@@ -19,19 +19,18 @@ import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.widget.Toolbar;
-import android.view.View;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
 
+import org.odk.collect.androidshared.ui.ObviousProgressBar;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 public class WebViewActivity extends LocalizedActivity {
 
     private WebView webView;
-    private ProgressBar progressBar;
+    private ObviousProgressBar progressBar;
 
     private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
@@ -49,21 +48,21 @@ public class WebViewActivity extends LocalizedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(org.odk.collect.androidshared.R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(org.odk.collect.icons.R.drawable.ic_close);
 
         String url = getIntent().getStringExtra(ExternalWebPageHelper.OPEN_URL);
         webView = findViewById(R.id.webView);
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(org.odk.collect.androidshared.R.id.progressBar);
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 getSupportActionBar().setTitle(url);
-                progressBar.setVisibility(View.VISIBLE);
+                progressBar.show();
                 invalidateOptionsMenu();
             }
 
@@ -76,14 +75,14 @@ public class WebViewActivity extends LocalizedActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                progressBar.setVisibility(View.GONE);
+                progressBar.hide();
                 getSupportActionBar().setTitle(view.getTitle());
             }
 
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                progressBar.setVisibility(View.GONE);
+                progressBar.hide();
             }
         });
         webView.getSettings().setJavaScriptEnabled(true);

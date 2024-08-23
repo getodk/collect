@@ -34,6 +34,8 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
 
         Toolbar toolbar = getToolbar();
         toolbar.setTitle(viewModel.getFormName());
+        toolbar.setNavigationIcon(org.odk.collect.icons.R.drawable.ic_close);
+        toolbar.setNavigationContentDescription(org.odk.collect.strings.R.string.close);
         toolbar.inflateMenu(R.menu.changes_reason_dialog);
 
         EditText reasonField = view.findViewById(R.id.reason);
@@ -76,7 +78,7 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
 
     @Override
     protected Toolbar getToolbar() {
-        return getView().findViewById(R.id.toolbar);
+        return getView().findViewById(org.odk.collect.androidshared.R.id.toolbar);
     }
 
     @Override

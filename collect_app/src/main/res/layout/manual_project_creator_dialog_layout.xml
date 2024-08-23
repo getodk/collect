@@ -1,151 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/add_project_toolbar"
-        style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/app_bar_layout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            style="@style/Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls.CloseIcon"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
-
-        <include layout="@layout/app_bar_shadow"/>
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/shadow_up"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_project_toolbar">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/margin_standard"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/url"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/server_url"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/url_input_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/username"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/username"
-                app:layout_constraintTop_toBottomOf="@+id/url">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/username_input_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/password"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/password"
-                app:layout_constraintTop_toBottomOf="@+id/username"
-                tools:layout_editor_absoluteX="16dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/password_input_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:singleLine="true" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/shadow_up"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/config_tip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
-                app:layout_constraintTop_toBottomOf="@+id/password">
+                android:paddingBottom="@dimen/margin_standard"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout">
 
-                <ImageView
-                    android:id="@+id/tip_icon"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/url"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_outline_info_24"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/server_url"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/tip_text"
-                    android:layout_width="0dp"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/url_input_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/username"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_extra_small"
-                    android:text="@string/project_config_tip"
-                    android:textAppearance="?textAppearanceBody1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tip_icon"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/username"
+                    app:layout_constraintTop_toBottomOf="@+id/url">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/username_input_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/password"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/password"
+                    app:layout_constraintTop_toBottomOf="@+id/username"
+                    tools:layout_editor_absoluteX="16dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/password_input_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/config_tip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_standard"
+                    app:layout_constraintTop_toBottomOf="@+id/password">
+
+                    <ImageView
+                        android:id="@+id/tip_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_outline_info_24"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tip_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_extra_small"
+                        android:text="@string/project_config_tip"
+                        android:textAppearance="?textAppearanceBody1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tip_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
-    <ImageView
-        android:id="@+id/shadow_up"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/shadow_up"
-        app:layout_constraintBottom_toTopOf="@+id/cancel_button" />
+        <ImageView
+            android:id="@+id/shadow_up"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/shadow_up"
+            app:layout_constraintBottom_toTopOf="@+id/cancel_button" />
 
-    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
-        android:id="@+id/cancel_button"
-        style="?borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        app:layout_constraintBottom_toBottomOf="@+id/add_button"
-        app:layout_constraintEnd_toStartOf="@+id/add_button"
-        app:layout_constraintTop_toTopOf="@+id/add_button" />
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
+            android:id="@+id/cancel_button"
+            style="?borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            app:layout_constraintBottom_toBottomOf="@+id/add_button"
+            app:layout_constraintEnd_toStartOf="@+id/add_button"
+            app:layout_constraintTop_toTopOf="@+id/add_button" />
 
-    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
-        android:id="@+id/add_button"
-        style="?borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_extra_extra_small"
-        android:enabled="false"
-        android:text="@string/add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
+            android:id="@+id/add_button"
+            style="?borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_extra_extra_small"
+            android:enabled="false"
+            android:text="@string/add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
