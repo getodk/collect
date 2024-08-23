@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -27,9 +28,9 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.fail;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
@@ -82,6 +83,19 @@ public class InstanceProviderTest {
     }
 
     @Test
+    public void insert_withSubmissionUri_throwsException() {
+        ContentValues values = getContentValues("/blah", "External app form", "external_app_form", "1");
+        values.put(DatabaseInstanceColumns.SUBMISSION_URI, "https://blah.com/submission");
+
+        try {
+            contentResolver.insert(getUri(firstProjectId), values);
+            fail();
+        } catch (SecurityException e) {
+            // Expected
+        }
+    }
+
+    @Test
     public void insert_returnsInstanceUri() {
         ContentValues values = getContentValues("/blah", "External app form", "external_app_form", "1");
         Uri uri = contentResolver.insert(getUri(firstProjectId), values);
@@ -92,7 +106,7 @@ public class InstanceProviderTest {
     }
 
     @Test
-    public void update_updatesInstance_andReturns1() {
+    public void update_doesNotUpdateInstance_andReturns0() {
         ContentValues values = getContentValues("/blah", "External app form", "external_app_form", "1");
 
         long originalStatusChangeDate = 0L;
@@ -103,78 +117,14 @@ public class InstanceProviderTest {
         updateValues.put(STATUS, STATUS_COMPLETE);
 
         int updatedCount = contentResolver.update(instanceUri, updateValues, null, null);
-        assertThat(updatedCount, is(1));
+        assertThat(updatedCount, is(0));
         try (Cursor cursor = contentResolver.query(instanceUri, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
-            assertThat(cursor.getString(cursor.getColumnIndex(STATUS)), is(STATUS_COMPLETE));
-            assertThat(cursor.getLong(cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE)), is(not(originalStatusChangeDate)));
-            assertThat(cursor.getLong(cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE)), is(notNullValue()));
-        }
-    }
-
-    @Test
-    public void update_whenDeletedDateIsIncluded_doesNotUpdateStatusChangeDate() {
-        ContentValues values = getContentValues("/blah", "External app form", "external_app_form", "1");
-
-        long originalStatusChangeDate = 0L;
-        values.put(LAST_STATUS_CHANGE_DATE, originalStatusChangeDate);
-        Uri instanceUri = contentResolver.insert(getUri(firstProjectId), values);
-
-        ContentValues updateValues = new ContentValues();
-        updateValues.put(DELETED_DATE, 123L);
-
-        contentResolver.update(instanceUri, updateValues, null, null);
-        try (Cursor cursor = contentResolver.query(instanceUri, null, null, null)) {
-            assertThat(cursor.getCount(), is(1));
-
-            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(STATUS)), is(STATUS_INCOMPLETE));
             assertThat(cursor.getLong(cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE)), is(originalStatusChangeDate));
-        }
-    }
-
-    @Test
-    public void update_withSelection_onlyUpdatesMatchingInstance() {
-        addInstanceToDb(firstProjectId, "/blah1", "Instance 1");
-        addInstanceToDb(firstProjectId, "/blah2", "Instance 2");
-
-        ContentValues updateValues = new ContentValues();
-        updateValues.put(STATUS, STATUS_COMPLETE);
-        contentResolver.update(getUri(firstProjectId), updateValues, INSTANCE_FILE_PATH + "=?", new String[]{"/blah2"});
-
-        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
-            assertThat(cursor.getCount(), is(2));
-
-            while (cursor.moveToNext()) {
-                if (cursor.getString(cursor.getColumnIndex(INSTANCE_FILE_PATH)).equals("/blah2")) {
-                    assertThat(cursor.getString(cursor.getColumnIndex(STATUS)), is(STATUS_COMPLETE));
-                } else {
-                    assertThat(cursor.getString(cursor.getColumnIndex(STATUS)), is(STATUS_INCOMPLETE));
-                }
-            }
-        }
-    }
-
-    /**
-     * It's not clear when this is used. A hypothetical might be updating an instance but wanting
-     * that to be a no-op if it has already been soft deleted.
-     */
-    @Test
-    public void update_withInstanceUri_andSelection_doesNotUpdateInstanceThatDoesNotMatchSelection() {
-        Uri uri = addInstanceToDb(firstProjectId, "/blah1", "Instance 1");
-        addInstanceToDb(firstProjectId, "/blah1", "Instance 2");
-
-        ContentValues updateValues = new ContentValues();
-        updateValues.put(STATUS, STATUS_COMPLETE);
-        contentResolver.update(uri, updateValues, DISPLAY_NAME + "=?", new String[]{"Instance 2"});
-
-        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
-            assertThat(cursor.getCount(), is(2));
-
-            while (cursor.moveToNext()) {
-                assertThat(cursor.getString(cursor.getColumnIndex(STATUS)), is(STATUS_INCOMPLETE));
-            }
+            assertThat(cursor.getLong(cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE)), is(0L));
         }
     }
 
@@ -200,11 +150,11 @@ public class InstanceProviderTest {
     @Test
     public void delete_whenStatusIsSubmitted_deletesFilesButSoftDeletesInstance() {
         File instanceFile = createInstanceDirAndFile(firstProjectId);
-        Uri uri = addInstanceToDb(firstProjectId, instanceFile.getAbsolutePath(), "Instance 1");
 
-        ContentValues updateValues = new ContentValues();
-        updateValues.put(STATUS, STATUS_SUBMITTED);
-        contentResolver.update(uri, updateValues, null, null);
+        ContentValues values = getContentValues(instanceFile.getAbsolutePath(), "Instance 1", "external_app_form", "1");
+        values.put(STATUS, STATUS_SUBMITTED);
+
+        Uri uri = contentResolver.insert(getUri(firstProjectId), values);
 
         contentResolver.delete(uri, null, null);
         assertThat(instanceFile.getParentFile().exists(), is(false));
@@ -220,13 +170,13 @@ public class InstanceProviderTest {
     @Test
     public void delete_whenStatusIsSubmitted_clearsGeometryFields() {
         File instanceFile = createInstanceDirAndFile(firstProjectId);
-        Uri uri = addInstanceToDb(firstProjectId, instanceFile.getAbsolutePath(), "Instance 1");
 
-        ContentValues updateValues = new ContentValues();
-        updateValues.put(STATUS, STATUS_SUBMITTED);
-        updateValues.put(GEOMETRY, "something");
-        updateValues.put(GEOMETRY_TYPE, "something else");
-        contentResolver.update(uri, updateValues, null, null);
+        ContentValues values = getContentValues(instanceFile.getAbsolutePath(), "Instance 1", "external_app_form", "1");
+        values.put(STATUS, STATUS_SUBMITTED);
+        values.put(GEOMETRY, "something");
+        values.put(GEOMETRY_TYPE, "something else");
+
+        Uri uri = contentResolver.insert(getUri(firstProjectId), values);
 
         contentResolver.delete(uri, null, null);
         assertThat(instanceFile.getParentFile().exists(), is(false));

@@ -85,8 +85,6 @@ object AnalyticsEvents {
 
     const val INSTANCE_PROVIDER_INSERT = "InstanceProviderInsert"
 
-    const val INSTANCE_PROVIDER_UPDATE = "InstanceProviderUpdate"
-
     const val INSTANCE_PROVIDER_DELETE = "InstanceProviderDelete"
 
     /**
@@ -101,4 +99,9 @@ object AnalyticsEvents {
     const val DELETE_SAVED_FORM_FEW = "DeleteSavedFormFew" // < 10
     const val DELETE_SAVED_FORM_TENS = "DeleteSavedFormTens" // >= 10
     const val DELETE_SAVED_FORM_HUNDREDS = "DeleteSavedFormHundreds" // >= 100
+
+    /**
+     * Tracks how often the INSTANCE_UPLOAD action is used with a custom server URL
+     */
+    const val INSTANCE_UPLOAD_CUSTOM_SERVER = "InstanceUploadCustomServer"
 }
