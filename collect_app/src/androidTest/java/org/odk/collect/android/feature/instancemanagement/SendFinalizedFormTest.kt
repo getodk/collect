@@ -152,8 +152,9 @@ class SendFinalizedFormTest {
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "124"))
 
             .clickSendFinalizedForm(2)
-            .selectForm(1)
+            .sortByDateNewestFirst()
             .selectForm(0)
+            .selectForm(1)
             .clickSendSelected()
             .clickOK(SendFinalizedFormPage())
 
