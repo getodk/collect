@@ -93,7 +93,7 @@ object LocalEntityUseCases {
         record: CSVRecord,
         list: String
     ): Entity? {
-        val map = record.toMap().toMutableMap()
+        val map = record.toMap()
 
         val id = map.remove(EntityItemElement.ID)
         val label = map.remove(EntityItemElement.LABEL)
@@ -102,16 +102,12 @@ object LocalEntityUseCases {
             return null
         }
 
-        val properties = map.entries.fold(emptyList<Pair<String, String>>()) { properties, entry ->
-            properties + Pair(entry.key, entry.value)
-        }
-
         return Entity.New(
             list,
             id,
             label,
             version,
-            properties,
+            map.toList(),
             state = Entity.State.ONLINE,
             trunkVersion = version
         )
