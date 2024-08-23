@@ -1,7 +1,5 @@
 package org.odk.collect.android.feature.instancemanagement
 
-import android.app.Application
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -9,7 +7,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.injection.DaggerUtils
+import org.kxml2.io.KXmlParser
+import org.kxml2.kdom.Document
+import org.kxml2.kdom.Element
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -19,7 +19,8 @@ import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
-import org.odk.collect.forms.instances.Instance
+import java.io.File
+import java.io.StringReader
 
 @RunWith(AndroidJUnit4::class)
 class SendFinalizedFormTest {
@@ -143,20 +144,12 @@ class SendFinalizedFormTest {
 
     @Test
     fun formsAreSentInOldestFirstOrder() {
-        var savedForms = emptyList<Instance>()
-
         rule.withProject(testDependencies.server.url)
             .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "123"))
             .startBlankForm("One Question")
-            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "124")).also {
-                val application = ApplicationProvider.getApplicationContext<Application>()
-                val component = DaggerUtils.getComponent(application)
-                val currentProject = DaggerUtils.getComponent(application).currentProjectProvider().getCurrentProject()
-                val instancesRepository = component.instancesRepositoryProvider().create(currentProject.uuid)
-                savedForms = instancesRepository.all.sortedBy { it.lastStatusChangeDate }
-            }
+            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "124"))
 
             .clickSendFinalizedForm(2)
             .selectForm(1)
@@ -164,16 +157,18 @@ class SendFinalizedFormTest {
             .clickSendSelected()
             .clickOK(SendFinalizedFormPage())
 
-        val sentForms = testDependencies.server.submissions
+        val root1 = parseXml(testDependencies.server.submissions[0]).rootElement
+        val root2 = parseXml(testDependencies.server.submissions[1]).rootElement
 
-        assertThat(
-            sentForms[0].absolutePath,
-            equalTo(savedForms[0].instanceFilePath)
-        )
+        assertThat((root1.getChild(0) as Element).getChild(0), equalTo("123"))
+        assertThat((root2.getChild(0) as Element).getChild(0), equalTo("124"))
+    }
 
-        assertThat(
-            sentForms[1].absolutePath,
-            equalTo(savedForms[1].instanceFilePath)
-        )
+    private fun parseXml(file: File): Document {
+        return StringReader(String(file.readBytes())).use { reader ->
+            val parser = KXmlParser()
+            parser.setInput(reader)
+            Document().also { it.parse(parser) }
+        }
     }
 }

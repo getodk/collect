@@ -1,7 +1,5 @@
 package org.odk.collect.android.feature.instancemanagement
 
-import android.app.Application
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -9,7 +7,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.injection.DaggerUtils
+import org.kxml2.io.KXmlParser
+import org.kxml2.kdom.Document
+import org.kxml2.kdom.Element
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -20,6 +20,8 @@ import org.odk.collect.android.support.rules.NotificationDrawerRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.async.Scheduler
 import org.odk.collect.strings.R
+import java.io.File
+import java.io.StringReader
 
 @RunWith(AndroidJUnit4::class)
 class AutoSendTest {
@@ -213,11 +215,6 @@ class AutoSendTest {
 
     @Test
     fun whenFormHasAutoSend_formsAreSentInOldestFirstOrder() {
-        val application = ApplicationProvider.getApplicationContext<Application>()
-        val component = DaggerUtils.getComponent(application)
-        val currentProject = DaggerUtils.getComponent(application).currentProjectProvider().getCurrentProject()
-        val instancesRepository = component.instancesRepositoryProvider().create(currentProject.uuid)
-
         rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
             .copyForm("one-question-autosend.xml")
@@ -232,20 +229,20 @@ class AutoSendTest {
             .swipeToEndScreen()
             .clickSend()
 
-        val finalizedForms = instancesRepository.all.sortedBy { it.lastStatusChangeDate }
-
         testDependencies.scheduler.runDeferredTasks()
 
-        val sentForms = testDependencies.server.submissions
+        val root1 = parseXml(testDependencies.server.submissions[0]).rootElement
+        val root2 = parseXml(testDependencies.server.submissions[1]).rootElement
 
-        assertThat(
-            sentForms[0].absolutePath,
-            equalTo(finalizedForms[0].instanceFilePath)
-        )
+        assertThat((root1.getChild(0) as Element).getChild(0), equalTo("31"))
+        assertThat((root2.getChild(0) as Element).getChild(0), equalTo("32"))
+    }
 
-        assertThat(
-            sentForms[1].absolutePath,
-            equalTo(finalizedForms[1].instanceFilePath)
-        )
+    private fun parseXml(file: File): Document {
+        return StringReader(String(file.readBytes())).use { reader ->
+            val parser = KXmlParser()
+            parser.setInput(reader)
+            Document().also { it.parse(parser) }
+        }
     }
 }
