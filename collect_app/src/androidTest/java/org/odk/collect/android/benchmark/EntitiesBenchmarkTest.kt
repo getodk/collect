@@ -66,7 +66,7 @@ class EntitiesBenchmarkTest {
             .clickOKOnDialog(MainMenuPage())
 
             .clickGetBlankForm()
-            .benchmark("Downloading form with http cache", 30, benchmarker) {
+            .benchmark("Downloading form with http cache", 20, benchmarker) {
                 it.clickGetSelected()
             }
 
