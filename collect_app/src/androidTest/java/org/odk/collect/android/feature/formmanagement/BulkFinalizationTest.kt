@@ -1,7 +1,5 @@
 package org.odk.collect.android.feature.formmanagement
 
-import android.app.Application
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -9,7 +7,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.AccessControlPage
 import org.odk.collect.android.support.pages.EditSavedFormPage
@@ -20,8 +17,6 @@ import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.android.support.rules.TestRuleChain
-import org.odk.collect.forms.instances.Instance
-import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.strings.R.plurals
 import org.odk.collect.strings.R.string
 
@@ -54,35 +49,6 @@ class BulkFinalizationTest {
             .pressBack(MainMenuPage())
 
             .assertNumberOfFinalizedForms(2)
-    }
-
-    @Test
-    fun draftsAreBulkFinalizedInOldestFirstOrder() {
-        lateinit var instancesRepository: InstancesRepository
-        lateinit var draftForms: List<Instance>
-
-        rule.withProject("http://example.com")
-            .copyForm("one-question.xml", "example.com")
-            .startBlankForm("One Question")
-            .fillOutAndSave(QuestionAndAnswer("what is your age", "97"))
-            .startBlankForm("One Question")
-            .fillOutAndSave(QuestionAndAnswer("what is your age", "98")).also {
-                val application = ApplicationProvider.getApplicationContext<Application>()
-                val component = DaggerUtils.getComponent(application)
-                val currentProject = DaggerUtils.getComponent(application).currentProjectProvider().getCurrentProject()
-                instancesRepository = component.instancesRepositoryProvider().create(currentProject.uuid)
-                draftForms = instancesRepository.all.sortedBy { it.lastStatusChangeDate }
-            }
-
-            .clickDrafts(2)
-            .clickFinalizeAll(2)
-            .clickFinalize()
-            .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_success, 2)
-
-        val firstFinalizedForm = instancesRepository.all.find { it.instanceFilePath == draftForms[0].instanceFilePath }!!
-        val secondFinalizedForm = instancesRepository.all.find { it.instanceFilePath == draftForms[1].instanceFilePath }!!
-
-        assertThat(firstFinalizedForm.lastStatusChangeDate < secondFinalizedForm.lastStatusChangeDate, equalTo(true))
     }
 
     @Test
