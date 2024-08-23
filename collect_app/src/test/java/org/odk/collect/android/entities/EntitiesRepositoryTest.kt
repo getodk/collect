@@ -263,6 +263,19 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#save supports properties with dots and dashes`() {
+        val repository = buildSubject()
+        val entity = Entity.New(
+            "things",
+            "1",
+            "One",
+            properties = listOf(Pair("a.property", "value"), Pair("a-property", "value"))
+        )
+        repository.save(entity)
+        assertThat(repository.getEntities("things")[0], sameEntityAs(entity))
+    }
+
+    @Test
     fun `#clear deletes all entities`() {
         val repository = buildSubject()
 
