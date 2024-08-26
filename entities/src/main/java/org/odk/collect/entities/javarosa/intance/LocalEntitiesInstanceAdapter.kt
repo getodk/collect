@@ -79,10 +79,7 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
             label.value = StringData(entity.label)
             version.value = StringData(entity.version.toString())
             branchId.value = StringData(entity.branchId)
-
-            if (entity.trunkVersion != null) {
-                trunkVersion.value = StringData(entity.trunkVersion.toString())
-            }
+            trunkVersion.value = StringData(entity.trunkVersion?.toString() ?: "")
         }
 
         val item = TreeElement("item", entity.index, partial)

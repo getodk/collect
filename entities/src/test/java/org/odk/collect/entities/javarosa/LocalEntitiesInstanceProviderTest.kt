@@ -2,6 +2,7 @@ package org.odk.collect.entities.javarosa
 
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
+import org.javarosa.core.model.data.StringData
 import org.junit.Test
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceProvider
 import org.odk.collect.entities.javarosa.parse.EntityItemElement
@@ -112,7 +113,7 @@ class LocalEntitiesInstanceProviderTest {
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
-        assertThat(item.getFirstChild(EntityItemElement.TRUNK_VERSION)?.value, equalTo(null))
+        assertThat(item.getFirstChild(EntityItemElement.TRUNK_VERSION)?.value, equalTo(StringData("")))
     }
 
     @Test
