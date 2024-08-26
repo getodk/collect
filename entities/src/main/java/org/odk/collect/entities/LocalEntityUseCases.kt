@@ -73,8 +73,16 @@ object LocalEntityUseCases {
                 val serverEntity = parseEntityFromRecord(record, list) ?: return
                 val existing = missingFromServer.remove(serverEntity.id)
 
-                if (existing == null || existing.version <= serverEntity.version) {
+                if (existing == null || existing.version < serverEntity.version) {
                     newAndUpdated.add(serverEntity.copy(branchId = UUID.randomUUID().toString()))
+                } else if (existing.version == serverEntity.version) {
+                    val hasDifferentProperties = existing.properties != serverEntity.properties
+                    val hasDifferentTrunkVersion =
+                        existing.trunkVersion != serverEntity.trunkVersion
+                    if (hasDifferentProperties || hasDifferentTrunkVersion) {
+                        val update = serverEntity.copy(branchId = UUID.randomUUID().toString())
+                        newAndUpdated.add(update)
+                    }
                 } else if (existing.state == Entity.State.OFFLINE) {
                     val update = existing.copy(state = Entity.State.ONLINE)
                     newAndUpdated.add(update)
@@ -88,7 +96,9 @@ object LocalEntityUseCases {
             }
         }
 
-        entitiesRepository.save(*newAndUpdated.toTypedArray())
+        if (newAndUpdated.isNotEmpty()) {
+            entitiesRepository.save(*newAndUpdated.toTypedArray())
+        }
     }
 
     private fun parseEntityFromRecord(

@@ -189,6 +189,18 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
+    fun `updateLocalEntitiesFromServer does not write to repository if online and local are exactly the same`() {
+        val local = Entity.New("songs", "noah", "Noah", 2, properties = listOf("length" to "4:33"))
+        val csv = createEntityList(local)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
+
+        val entitiesRepository = MeasurableEntitiesRepository(entitiesRepository)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
+
+        assertThat(entitiesRepository.accesses, equalTo(1))
+    }
+
+    @Test
     fun `updateLocalEntitiesFromServer updates trunkVersion, branchId and state if the online version catches up to an offline branch`() {
         val offline = Entity.New("songs", "noah", "Noah", 2)
         entitiesRepository.save(offline)
@@ -441,6 +453,7 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
     }
 
     override fun getByIndex(list: String, index: Int): Entity.Saved? {
+        accesses += 1
         return wrapped.getByIndex(list, index)
     }
 }
