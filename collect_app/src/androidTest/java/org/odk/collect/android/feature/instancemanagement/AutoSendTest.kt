@@ -228,10 +228,10 @@ class AutoSendTest {
 
         testDependencies.scheduler.runDeferredTasks()
 
-        val root1 = XFormParser.parseXml(testDependencies.server.submissions[0]).rootElement
-        val root2 = XFormParser.parseXml(testDependencies.server.submissions[1]).rootElement
+        val firstFormRootElement = XFormParser.parseXml(testDependencies.server.submissions[0]).rootElement
+        val secondFormRootElement = XFormParser.parseXml(testDependencies.server.submissions[1]).rootElement
 
-        assertThat((root1.getChild(0) as Element).getChild(0), equalTo("31"))
-        assertThat((root2.getChild(0) as Element).getChild(0), equalTo("32"))
+        assertThat((firstFormRootElement.getChild(0) as Element).getChild(0), equalTo("31"))
+        assertThat((secondFormRootElement.getChild(0) as Element).getChild(0), equalTo("32"))
     }
 }
