@@ -8,7 +8,6 @@ import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.javarosawrapper.XFormParser;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -48,21 +47,15 @@ class OpenRosaXmlFetcher {
         Document doc;
         HttpGetResult inputStreamResult;
 
-        try {
-            inputStreamResult = fetch(urlString, HTTP_CONTENT_TYPE_TEXT_XML);
+        inputStreamResult = fetch(urlString, HTTP_CONTENT_TYPE_TEXT_XML);
 
-            if (inputStreamResult.getStatusCode() != HttpURLConnection.HTTP_OK) {
-                String error = "getXML failed while accessing "
-                        + urlString + " with status code: " + inputStreamResult.getStatusCode();
-                return new DocumentFetchResult(error, inputStreamResult.getStatusCode());
-            }
-
-            try (InputStream resultInputStream = inputStreamResult.getInputStream()) {
-                doc = XFormParser.parseXml(resultInputStream);
-            }
-        } catch (Exception e) {
-            throw e;
+        if (inputStreamResult.getStatusCode() != HttpURLConnection.HTTP_OK) {
+            String error = "getXML failed while accessing "
+                    + urlString + " with status code: " + inputStreamResult.getStatusCode();
+            return new DocumentFetchResult(error, inputStreamResult.getStatusCode());
         }
+
+        doc = XFormParser.parseXml(inputStreamResult.getInputStream());
 
         return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(), inputStreamResult.getHash());
     }
