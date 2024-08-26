@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
-import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
+import org.odk.collect.android.javarosawrapper.XFormParserKt;
 import org.odk.collect.android.openrosa.CaseInsensitiveEmptyHeaders;
 import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
@@ -19,6 +19,7 @@ import org.odk.collect.android.openrosa.HttpHeadResult;
 import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.javarosawrapper.XFormParser;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.strings.RandomString;
 import org.xmlpull.v1.XmlPullParserException;
@@ -318,16 +319,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
     private void addFormFromInputStream(String formXML, List<MediaFileItem> mediaFiles, InputStream formDefStream) {
         try {
-            KXmlParser xmlParser = new KXmlParser();
-            xmlParser.setInput(formDefStream, "UTF-8");
+            Document doc = XFormParser.parseXml(formDefStream);
+            String title = XFormParserKt.getTitle(doc);
+            Element model = XFormParserKt.getModel(doc);
 
-            Document doc = new Document();
-            doc.parse(xmlParser);
-
-            Element head = doc.getRootElement().getElement(null, "h:head");
-            String title = (String) head.getElement(null, "h:title").getChild(0);
-
-            Element model = head.getElement(null, "model");
             Element mainInstance = null;
             for (int i = 0; i < model.getChildCount(); i++) {
                 Element child = model.getElement(i);
@@ -340,12 +335,12 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
                 }
             }
 
-            Element mainInstanceRoot = mainInstance.getElement(1);
+            Element mainInstanceRoot = mainInstance.getElement(0);
             String id = mainInstanceRoot.getAttributeValue(null, "id");
             String version = mainInstanceRoot.getAttributeValue(null, "version");
 
             forms.add(new XFormItem(title, formXML, id, version, mediaFiles));
-        } catch (XmlPullParserException | IOException e) {
+        } catch (XmlPullParserException e) {
             throw new RuntimeException(e);
         }
     }

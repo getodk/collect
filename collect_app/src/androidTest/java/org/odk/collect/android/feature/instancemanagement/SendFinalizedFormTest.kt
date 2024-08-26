@@ -7,9 +7,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.kxml2.io.KXmlParser
-import org.kxml2.kdom.Document
 import org.kxml2.kdom.Element
+import org.odk.collect.android.javarosawrapper.XFormParser
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -19,8 +18,6 @@ import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
-import java.io.File
-import java.io.StringReader
 
 @RunWith(AndroidJUnit4::class)
 class SendFinalizedFormTest {
@@ -158,18 +155,10 @@ class SendFinalizedFormTest {
             .clickSendSelected()
             .clickOK(SendFinalizedFormPage())
 
-        val root1 = parseXml(testDependencies.server.submissions[0]).rootElement
-        val root2 = parseXml(testDependencies.server.submissions[1]).rootElement
+        val root1 = XFormParser.parseXml(testDependencies.server.submissions[0]).rootElement
+        val root2 = XFormParser.parseXml(testDependencies.server.submissions[1]).rootElement
 
         assertThat((root1.getChild(0) as Element).getChild(0), equalTo("123"))
         assertThat((root2.getChild(0) as Element).getChild(0), equalTo("124"))
-    }
-
-    private fun parseXml(file: File): Document {
-        return StringReader(String(file.readBytes())).use { reader ->
-            val parser = KXmlParser()
-            parser.setInput(reader)
-            Document().also { it.parse(parser) }
-        }
     }
 }

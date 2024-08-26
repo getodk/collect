@@ -3,10 +3,8 @@ package org.odk.collect.android.openrosa
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
-import org.kxml2.io.KXmlParser
 import org.kxml2.kdom.Document
-import org.xmlpull.v1.XmlPullParser
-import java.io.StringReader
+import org.odk.collect.android.javarosawrapper.XFormParser
 
 class OpenRosaResponseParserImplTest {
 
@@ -31,13 +29,7 @@ class OpenRosaResponseParserImplTest {
             .appendLine("</xforms>")
             .toString()
 
-        val doc = StringReader(response).use { reader ->
-            val parser = KXmlParser()
-            parser.setInput(reader)
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
-            Document().also { it.parse(parser) }
-        }
-
+        val doc = XFormParser.parseXml(response.byteInputStream())
         val formList = OpenRosaResponseParserImpl().parseFormList(doc)
         assertThat(formList!![0].hash, equalTo(null))
     }
@@ -55,13 +47,7 @@ class OpenRosaResponseParserImplTest {
             .appendLine("</manifest>")
             .toString()
 
-        val doc = StringReader(response).use { reader ->
-            val parser = KXmlParser()
-            parser.setInput(reader)
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
-            Document().also { it.parse(parser) }
-        }
-
+        val doc = XFormParser.parseXml(response.byteInputStream())
         val mediaFiles = OpenRosaResponseParserImpl().parseManifest(doc)
         assertThat(mediaFiles, equalTo(null))
     }
@@ -85,13 +71,7 @@ class OpenRosaResponseParserImplTest {
             .appendLine("</manifest>")
             .toString()
 
-        val doc = StringReader(response).use { reader ->
-            val parser = KXmlParser()
-            parser.setInput(reader)
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
-            Document().also { it.parse(parser) }
-        }
-
+        val doc = XFormParser.parseXml(response.byteInputStream())
         val mediaFiles = OpenRosaResponseParserImpl().parseManifest(doc)!!
         assertThat(mediaFiles.size, equalTo(1))
         assertThat(mediaFiles[0].isEntityList, equalTo(true))
@@ -110,13 +90,7 @@ class OpenRosaResponseParserImplTest {
             .appendLine("</manifest>")
             .toString()
 
-        val doc = StringReader(response).use { reader ->
-            val parser = KXmlParser()
-            parser.setInput(reader)
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
-            Document().also { it.parse(parser) }
-        }
-
+        val doc = XFormParser.parseXml(response.byteInputStream())
         val mediaFiles = OpenRosaResponseParserImpl().parseManifest(doc)!!
         assertThat(mediaFiles.size, equalTo(1))
         assertThat(mediaFiles[0].isEntityList, equalTo(false))

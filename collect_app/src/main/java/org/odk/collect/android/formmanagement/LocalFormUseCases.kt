@@ -2,7 +2,6 @@ package org.odk.collect.android.formmanagement
 
 import android.database.SQLException
 import org.javarosa.xform.parse.XFormParser
-import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.androidshared.utils.Validator

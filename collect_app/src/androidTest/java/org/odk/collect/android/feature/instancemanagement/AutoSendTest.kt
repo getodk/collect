@@ -7,9 +7,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.kxml2.io.KXmlParser
-import org.kxml2.kdom.Document
 import org.kxml2.kdom.Element
+import org.odk.collect.android.javarosawrapper.XFormParser
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -20,8 +19,6 @@ import org.odk.collect.android.support.rules.NotificationDrawerRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.async.Scheduler
 import org.odk.collect.strings.R
-import java.io.File
-import java.io.StringReader
 
 @RunWith(AndroidJUnit4::class)
 class AutoSendTest {
@@ -231,18 +228,10 @@ class AutoSendTest {
 
         testDependencies.scheduler.runDeferredTasks()
 
-        val root1 = parseXml(testDependencies.server.submissions[0]).rootElement
-        val root2 = parseXml(testDependencies.server.submissions[1]).rootElement
+        val root1 = XFormParser.parseXml(testDependencies.server.submissions[0]).rootElement
+        val root2 = XFormParser.parseXml(testDependencies.server.submissions[1]).rootElement
 
         assertThat((root1.getChild(0) as Element).getChild(0), equalTo("31"))
         assertThat((root2.getChild(0) as Element).getChild(0), equalTo("32"))
-    }
-
-    private fun parseXml(file: File): Document {
-        return StringReader(String(file.readBytes())).use { reader ->
-            val parser = KXmlParser()
-            parser.setInput(reader)
-            Document().also { it.parse(parser) }
-        }
     }
 }
