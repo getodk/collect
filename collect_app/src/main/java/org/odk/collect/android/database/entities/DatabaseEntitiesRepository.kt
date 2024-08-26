@@ -10,9 +10,8 @@ import androidx.core.database.sqlite.transaction
 import org.odk.collect.db.sqlite.CursorExt.first
 import org.odk.collect.db.sqlite.CursorExt.foldAndClose
 import org.odk.collect.db.sqlite.CursorExt.getInt
-import org.odk.collect.db.sqlite.CursorExt.getIntOrNull
 import org.odk.collect.db.sqlite.CursorExt.getString
-import org.odk.collect.db.sqlite.CursorExt.getStringOrNull
+import org.odk.collect.db.sqlite.CursorExt.rowToMap
 import org.odk.collect.db.sqlite.DatabaseConnection
 import org.odk.collect.db.sqlite.DatabaseMigrator
 import org.odk.collect.db.sqlite.SQLiteColumns.ROW_ID
@@ -111,7 +110,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                         it.put(EntitiesTable.COLUMN_STATE, convertStateToInt(entity.state))
 
                         entity.properties.forEach { (name, value) ->
-                            it.put(name, value)
+                            it.put("\"$name\"", value)
                         }
                     }
 
@@ -348,7 +347,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             try {
                 databaseConnection.writeableDatabase.execSQL(
                     """
-                    ALTER TABLE ${entity.list} ADD $it text NOT NULL DEFAULT "";
+                    ALTER TABLE ${entity.list} ADD "$it" text NOT NULL DEFAULT "";
                     """.trimIndent()
                 )
             } catch (e: SQLiteException) {
@@ -362,7 +361,9 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         cursor: Cursor,
         rowId: Int
     ): Entity.Saved {
-        val propertyColumns = cursor.columnNames.filter {
+        val map = cursor.rowToMap()
+
+        val propertyColumns = map.keys.filter {
             !listOf(
                 _ID,
                 EntitiesTable.COLUMN_ID,
@@ -377,10 +378,10 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
         val properties =
             propertyColumns.fold(emptyList<Pair<String, String>>()) { accum, property ->
-                accum + Pair(property, cursor.getStringOrNull(property) ?: "")
+                accum + Pair(property, map[property] ?: "")
             }
 
-        val state = if (cursor.getInt(EntitiesTable.COLUMN_STATE) == 0) {
+        val state = if (map[EntitiesTable.COLUMN_STATE]!!.toInt() == 0) {
             Entity.State.OFFLINE
         } else {
             Entity.State.ONLINE
@@ -388,14 +389,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
         return Entity.Saved(
             list,
-            cursor.getString(EntitiesTable.COLUMN_ID),
-            cursor.getStringOrNull(EntitiesTable.COLUMN_LABEL),
-            cursor.getInt(EntitiesTable.COLUMN_VERSION),
+            map[EntitiesTable.COLUMN_ID]!!,
+            map[EntitiesTable.COLUMN_LABEL],
+            map[EntitiesTable.COLUMN_VERSION]!!.toInt(),
             properties,
             state,
             rowId - 1,
-            cursor.getIntOrNull(EntitiesTable.COLUMN_TRUNK_VERSION),
-            cursor.getString(EntitiesTable.COLUMN_BRANCH_ID)
+            map[EntitiesTable.COLUMN_TRUNK_VERSION]?.toInt(),
+            map[EntitiesTable.COLUMN_BRANCH_ID]!!
         )
     }
 
