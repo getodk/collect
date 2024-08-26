@@ -14,7 +14,7 @@ import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
 @RunWith(AndroidJUnit4::class)
-class PartialSubmissionTet {
+class PartialSubmissionTest {
 
     private val testDependencies = TestDependencies()
     private val rule = CollectTestRule(useDemoProject = false)
