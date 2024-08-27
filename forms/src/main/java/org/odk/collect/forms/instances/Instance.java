@@ -83,7 +83,7 @@ public final class Instance {
         private String geometry;
 
         private Long dbId;
-        private boolean canDeleteBeforeSend;
+        private boolean canDeleteBeforeSend = true;
 
         public Builder() {
 

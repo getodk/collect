@@ -44,7 +44,7 @@ class DeleteSavedFormTest {
     }
 
     @Test
-    fun whenFormHasCreatedEntity_doesNotAppearInListToDelete() {
+    fun whenFinalizedFormHasCreatedALocalEntity_doesNotAppearInListToDelete() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
 
         rule.withMatchExactlyProject(testDependencies.server.url)
