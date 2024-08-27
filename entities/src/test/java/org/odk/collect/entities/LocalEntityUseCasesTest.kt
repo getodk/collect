@@ -190,14 +190,16 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromServer does not write to repository if online and local are exactly the same`() {
-        val local = Entity.New("songs", "noah", "Noah", 2, properties = listOf("length" to "4:33"))
-        val csv = createEntityList(local)
-        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
-
         val entitiesRepository = MeasurableEntitiesRepository(entitiesRepository)
-        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
 
-        assertThat(entitiesRepository.accesses, equalTo(1))
+        val local = Entity.New("songs", "noah", "Noah", 2, properties = listOf("length" to "4:33"))
+        val csv1 = createEntityList(local)
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv1, entitiesRepository)
+        assertThat(entitiesRepository.savedEntities, equalTo(1))
+
+        val csv2 = createEntityList(local, Entity.New("songs", "perception", "Perception"))
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv2, entitiesRepository)
+        assertThat(entitiesRepository.savedEntities, equalTo(2))
     }
 
     @Test
@@ -404,8 +406,12 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
     var accesses: Int = 0
         private set
 
+    var savedEntities: Int = 0
+        private set
+
     override fun save(vararg entities: Entity) {
         accesses += 1
+        savedEntities += entities.size
         wrapped.save(*entities)
     }
 
