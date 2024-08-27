@@ -71,13 +71,7 @@ class OpenRosaResponseParserImplTest {
             .appendLine("</manifest>")
             .toString()
 
-        val doc = StringReader(response).use { reader ->
-            val parser = KXmlParser()
-            parser.setInput(reader)
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
-            Document().also { it.parse(parser) }
-        }
-
+        val doc = XFormParser.getXMLDocument(response.reader())
         val mediaFiles = OpenRosaResponseParserImpl().parseManifest(doc)!!
         assertThat(mediaFiles.size, equalTo(1))
         assertThat(mediaFiles[0].filename, equalTo("badgers.csv"))
