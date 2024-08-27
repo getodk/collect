@@ -34,7 +34,7 @@ class InstanceSubmitter(
 
         val uploader = setUpODKUploader()
 
-        for (instance in toUpload) {
+        for (instance in toUpload.sortedBy { it.lastStatusChangeDate }) {
             try {
                 val destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, null, null)
                 uploader.uploadOneSubmission(instance, destinationUrl)

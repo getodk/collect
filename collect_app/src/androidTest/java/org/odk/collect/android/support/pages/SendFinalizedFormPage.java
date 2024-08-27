@@ -10,6 +10,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
+import org.odk.collect.android.R;
+
 public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
 
     @Override
@@ -40,6 +42,12 @@ public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
 
     public SendFinalizedFormPage selectForm(int index) {
         onView(withIndex(withId(androidx.appcompat.R.id.checkbox), index)).perform(click());
+        return this;
+    }
+
+    public SendFinalizedFormPage sortByDateNewestFirst() {
+        onView(withId(R.id.menu_sort)).perform(click());
+        clickOnString(org.odk.collect.strings.R.string.sort_by_date_desc);
         return this;
     }
 }

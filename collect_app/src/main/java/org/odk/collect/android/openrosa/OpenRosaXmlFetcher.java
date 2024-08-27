@@ -3,13 +3,11 @@ package org.odk.collect.android.openrosa;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.kxml2.io.KXmlParser;
+import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.xmlpull.v1.XmlPullParser;
 
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -50,27 +48,15 @@ class OpenRosaXmlFetcher {
         Document doc;
         HttpGetResult inputStreamResult;
 
-        try {
-            inputStreamResult = fetch(urlString, HTTP_CONTENT_TYPE_TEXT_XML);
+        inputStreamResult = fetch(urlString, HTTP_CONTENT_TYPE_TEXT_XML);
 
-            if (inputStreamResult.getStatusCode() != HttpURLConnection.HTTP_OK) {
-                String error = "getXML failed while accessing "
-                        + urlString + " with status code: " + inputStreamResult.getStatusCode();
-                return new DocumentFetchResult(error, inputStreamResult.getStatusCode());
-            }
-
-            try (InputStream resultInputStream = inputStreamResult.getInputStream();
-                 InputStreamReader streamReader = new InputStreamReader(resultInputStream, "UTF-8")) {
-
-                doc = new Document();
-                KXmlParser parser = new KXmlParser();
-                parser.setInput(streamReader);
-                parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-                doc.parse(parser);
-            }
-        } catch (Exception e) {
-            throw e;
+        if (inputStreamResult.getStatusCode() != HttpURLConnection.HTTP_OK) {
+            String error = "getXML failed while accessing "
+                    + urlString + " with status code: " + inputStreamResult.getStatusCode();
+            return new DocumentFetchResult(error, inputStreamResult.getStatusCode());
         }
+
+        doc = XFormParser.getXMLDocument(new InputStreamReader(inputStreamResult.getInputStream()));
 
         return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(), inputStreamResult.getHash());
     }

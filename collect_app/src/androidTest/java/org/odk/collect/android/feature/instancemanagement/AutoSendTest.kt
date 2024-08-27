@@ -1,10 +1,14 @@
 package org.odk.collect.android.feature.instancemanagement
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
+import org.javarosa.xform.parse.XFormParser
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.kxml2.kdom.Element
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -204,5 +208,30 @@ class AutoSendTest {
         testDependencies.scheduler.runDeferredTasks()
 
         mainMenuPage.assertNumberOfFinalizedForms(1)
+    }
+
+    @Test
+    fun whenFormHasAutoSend_formsAreSentInOldestFirstOrder() {
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .copyForm("one-question-autosend.xml")
+
+            .startBlankForm("One Question Autosend")
+            .inputText("31")
+            .swipeToEndScreen()
+            .clickSend()
+
+            .startBlankForm("One Question Autosend")
+            .inputText("32")
+            .swipeToEndScreen()
+            .clickSend()
+
+        testDependencies.scheduler.runDeferredTasks()
+
+        val firstFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[0].inputStream().reader()).rootElement
+        val secondFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[1].inputStream().reader()).rootElement
+
+        assertThat((firstFormRootElement.getChild(0) as Element).getChild(0), equalTo("31"))
+        assertThat((secondFormRootElement.getChild(0) as Element).getChild(0), equalTo("32"))
     }
 }

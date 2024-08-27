@@ -37,7 +37,7 @@ public class OpenRosaXmlFetcherTest {
         HashMap<String, String> headers = new HashMap<>();
         headers.put(OpenRosaConstants.VERSION_HEADER, "1.0");
         when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(
-                new ByteArrayInputStream("".getBytes()),
+                new ByteArrayInputStream("<xml></xml>".getBytes()),
                 headers,
                 "hash",
                 200

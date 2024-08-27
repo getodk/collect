@@ -7,8 +7,8 @@ import static java.util.Collections.emptyList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
-import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.openrosa.CaseInsensitiveEmptyHeaders;
@@ -19,16 +19,14 @@ import org.odk.collect.android.openrosa.HttpHeadResult;
 import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.shared.TempFiles;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.strings.RandomString;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +50,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     private boolean noHashPrefixInMediaFiles;
     private boolean randomHash;
 
-    private final File submittedFormsDir = TempFiles.createTempDir();
+    /**
+     * A list of submitted forms, maintained in the original order of submission, with the oldest forms appearing first.
+     */
+    private final List<File> submittedForms = new ArrayList<>();
 
     @NonNull
     @Override
@@ -121,8 +122,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         } else if (credentialsIncorrect(credentials)) {
             return new HttpPostResult("", 401, "");
         } else if (uri.getPath().equals(OpenRosaConstants.SUBMISSION)) {
-            File destFile = new File(submittedFormsDir, String.valueOf(submittedFormsDir.listFiles().length));
-            FileUtils.copyFile(submissionFile, destFile);
+            submittedForms.add(submissionFile);
             return new HttpPostResult("", 201, "");
         } else {
             return new HttpPostResult("", 404, "");
@@ -187,7 +187,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     }
 
     public List<File> getSubmissions() {
-        return asList(submittedFormsDir.listFiles());
+        return submittedForms;
     }
 
     private boolean credentialsIncorrect(HttpCredentialsInterface credentials) {
@@ -318,16 +318,12 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
     private void addFormFromInputStream(String formXML, List<MediaFileItem> mediaFiles, InputStream formDefStream) {
         try {
-            KXmlParser xmlParser = new KXmlParser();
-            xmlParser.setInput(formDefStream, "UTF-8");
-
-            Document doc = new Document();
-            doc.parse(xmlParser);
-
-            Element head = doc.getRootElement().getElement(null, "h:head");
-            String title = (String) head.getElement(null, "h:title").getChild(0);
+            Document doc = XFormParser.getXMLDocument(new InputStreamReader(formDefStream));
+            Element head = doc.getRootElement().getElement(null, "head");
+            String title = (String) head.getElement(null, "title").getChild(0);
 
             Element model = head.getElement(null, "model");
+
             Element mainInstance = null;
             for (int i = 0; i < model.getChildCount(); i++) {
                 Element child = model.getElement(i);
@@ -340,12 +336,12 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
                 }
             }
 
-            Element mainInstanceRoot = mainInstance.getElement(1);
+            Element mainInstanceRoot = mainInstance.getElement(0);
             String id = mainInstanceRoot.getAttributeValue(null, "id");
             String version = mainInstanceRoot.getAttributeValue(null, "version");
 
             forms.add(new XFormItem(title, formXML, id, version, mediaFiles));
-        } catch (XmlPullParserException | IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
