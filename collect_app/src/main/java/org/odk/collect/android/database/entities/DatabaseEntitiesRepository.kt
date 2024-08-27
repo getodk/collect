@@ -11,6 +11,7 @@ import org.odk.collect.db.sqlite.CursorExt.first
 import org.odk.collect.db.sqlite.CursorExt.foldAndClose
 import org.odk.collect.db.sqlite.CursorExt.getInt
 import org.odk.collect.db.sqlite.CursorExt.getString
+import org.odk.collect.db.sqlite.CursorExt.getStringOrNull
 import org.odk.collect.db.sqlite.CursorExt.rowToMap
 import org.odk.collect.db.sqlite.DatabaseConnection
 import org.odk.collect.db.sqlite.DatabaseMigrator
@@ -22,6 +23,7 @@ import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 
 private object ListsTable {
+    const val MD5 = "md5"
     const val TABLE_NAME = "lists"
     const val COLUMN_NAME = "name"
 }
@@ -123,7 +125,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             }
         }
 
-        updateRowIdTable()
+        updateRowIdTables()
     }
 
     override fun getLists(): Set<String> {
@@ -131,6 +133,31 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             .readableDatabase
             .query(ListsTable.TABLE_NAME)
             .foldAndClose(emptySet()) { set, cursor -> set + cursor.getString(ListsTable.COLUMN_NAME) }
+    }
+
+    override fun updateListMD5(list: String, md5: String) {
+        createList(list)
+        updateRowIdTables()
+
+        val contentValues = ContentValues().also {
+            it.put(ListsTable.MD5, md5)
+        }
+
+        databaseConnection
+            .writeableDatabase
+            .update(
+                ListsTable.TABLE_NAME,
+                contentValues,
+                "${ListsTable.COLUMN_NAME} = ?",
+                arrayOf(list)
+            )
+    }
+
+    override fun getListMD5(list: String): String? {
+        return databaseConnection
+            .readableDatabase
+            .query(ListsTable.TABLE_NAME, "${ListsTable.COLUMN_NAME} = ?", arrayOf(list))
+            .first { it.getStringOrNull(ListsTable.MD5) }
     }
 
     override fun getEntities(list: String): List<Entity.Saved> {
@@ -174,7 +201,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     override fun addList(list: String) {
         if (!listExists(list)) {
             createList(list)
-            updateRowIdTable()
+            updateRowIdTables()
         }
     }
 
@@ -187,7 +214,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             )
         }
 
-        updateRowIdTable()
+        updateRowIdTables()
     }
 
     override fun getById(list: String, id: String): Entity.Saved? {
@@ -283,7 +310,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
      * _ids are higher than each entity _id). This might be replaceable with SQLite's `row_number()`
      * function, but that's not available in all the supported versions of Android.
      */
-    private fun updateRowIdTable() {
+    private fun updateRowIdTables() {
         getLists().forEach {
             databaseConnection.writeableDatabase.execSQL(
                 """
@@ -419,7 +446,8 @@ private class EntitiesDatabaseMigrator :
             """
             CREATE TABLE IF NOT EXISTS ${ListsTable.TABLE_NAME} (
                     $_ID integer PRIMARY KEY, 
-                    ${ListsTable.COLUMN_NAME} text NOT NULL
+                    ${ListsTable.COLUMN_NAME} text NOT NULL,
+                    ${ListsTable.MD5} text
             );
             """.trimIndent()
         )

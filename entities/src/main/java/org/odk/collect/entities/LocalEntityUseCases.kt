@@ -7,6 +7,7 @@ import org.odk.collect.entities.javarosa.parse.EntityItemElement
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.shared.strings.Md5
 import java.io.File
 import java.util.UUID
 
@@ -56,6 +57,14 @@ object LocalEntityUseCases {
         serverList: File,
         entitiesRepository: EntitiesRepository
     ) {
+        val listMD5 = Md5.getMd5Hash(serverList)
+        val existingListMD5 = entitiesRepository.getListMD5(list)
+        if (listMD5 == existingListMD5) {
+            return
+        } else {
+            entitiesRepository.updateListMD5(list, listMD5!!)
+        }
+
         val csvParser = try {
             SecondaryInstanceCSVParserBuilder()
                 .path(serverList.absolutePath)

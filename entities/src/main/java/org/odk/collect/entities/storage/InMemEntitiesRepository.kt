@@ -67,6 +67,14 @@ class InMemEntitiesRepository : EntitiesRepository {
         return getEntities(list).firstOrNull { it.index == index }
     }
 
+    override fun updateListMD5(list: String, md5: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getListMD5(list: String): String? {
+        TODO("Not yet implemented")
+    }
+
     override fun save(vararg entities: Entity) {
         entities.forEach { entity ->
             updateLists(entity)
