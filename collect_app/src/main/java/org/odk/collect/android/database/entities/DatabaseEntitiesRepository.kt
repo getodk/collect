@@ -425,8 +425,4 @@ private class EntitiesDatabaseMigrator :
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int) = Unit
-
-    override fun onDowngrade(db: SQLiteDatabase?) {
-        TODO("Not yet implemented")
-    }
 }

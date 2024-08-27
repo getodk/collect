@@ -8,7 +8,6 @@ import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.INS
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.INSTANCE_FILE_PATH
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.SAVEPOINT_FILE_PATH
 import org.odk.collect.db.sqlite.DatabaseMigrator
-import org.odk.collect.db.sqlite.SQLiteUtils
 
 class SavepointsDatabaseMigrator :
     DatabaseMigrator {
@@ -23,11 +22,6 @@ class SavepointsDatabaseMigrator :
                 // upgradeToVersion2(db);
             }
         }
-    }
-
-    override fun onDowngrade(db: SQLiteDatabase) {
-        SQLiteUtils.dropTable(db, SAVEPOINTS_TABLE_NAME)
-        createSavepointsTableV1(db)
     }
 
     private fun createSavepointsTableV1(db: SQLiteDatabase) {

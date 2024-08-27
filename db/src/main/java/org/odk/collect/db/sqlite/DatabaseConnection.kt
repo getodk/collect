@@ -97,7 +97,7 @@ open class DatabaseConnection @JvmOverloads constructor(
 }
 
 /**
- * [SQLiteOpenHelper] that delegates `onCreate`, `onUpdate`, `onDowngrade` to a [DatabaseMigrator].
+ * [SQLiteOpenHelper] that delegates `onCreate`, `onUpdate` to a [DatabaseMigrator].
  */
 private class DatabaseMigratorSQLiteOpenHelper(
     context: Context,
@@ -116,16 +116,6 @@ private class DatabaseMigratorSQLiteOpenHelper(
         databaseMigrator.onUpgrade(db, oldVersion)
         Timber.i(
             "Upgrading database from version %d to %d completed with success.",
-            oldVersion,
-            newVersion
-        )
-    }
-
-    override fun onDowngrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion)
-        databaseMigrator.onDowngrade(db)
-        Timber.i(
-            "Downgrading database from %d to %d completed with success.",
             oldVersion,
             newVersion
         )
