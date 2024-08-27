@@ -3,11 +3,12 @@ package org.odk.collect.android.openrosa;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.utilities.DocumentFetchResult;
-import org.odk.collect.android.javarosawrapper.XFormParser;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -55,7 +56,7 @@ class OpenRosaXmlFetcher {
             return new DocumentFetchResult(error, inputStreamResult.getStatusCode());
         }
 
-        doc = XFormParser.parseXml(inputStreamResult.getInputStream());
+        doc = XFormParser.getXMLDocument(new InputStreamReader(inputStreamResult.getInputStream()));
 
         return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(), inputStreamResult.getHash());
     }

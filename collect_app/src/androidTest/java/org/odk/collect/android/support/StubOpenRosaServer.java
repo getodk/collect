@@ -7,10 +7,10 @@ import static java.util.Collections.emptyList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
-import org.odk.collect.android.javarosawrapper.XFormParserKt;
 import org.odk.collect.android.openrosa.CaseInsensitiveEmptyHeaders;
 import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
@@ -19,15 +19,14 @@ import org.odk.collect.android.openrosa.HttpHeadResult;
 import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.javarosawrapper.XFormParser;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.strings.RandomString;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -319,9 +318,11 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
     private void addFormFromInputStream(String formXML, List<MediaFileItem> mediaFiles, InputStream formDefStream) {
         try {
-            Document doc = XFormParser.parseXml(formDefStream);
-            String title = XFormParserKt.getTitle(doc);
-            Element model = XFormParserKt.getModel(doc);
+            Document doc = XFormParser.getXMLDocument(new InputStreamReader(formDefStream));
+            Element head = doc.getRootElement().getElement(null, "head");
+            String title = (String) head.getElement(null, "title").getChild(0);
+
+            Element model = head.getElement(null, "model");
 
             Element mainInstance = null;
             for (int i = 0; i < model.getChildCount(); i++) {
@@ -340,7 +341,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
             String version = mainInstanceRoot.getAttributeValue(null, "version");
 
             forms.add(new XFormItem(title, formXML, id, version, mediaFiles));
-        } catch (XmlPullParserException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

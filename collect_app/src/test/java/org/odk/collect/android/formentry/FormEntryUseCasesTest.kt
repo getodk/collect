@@ -7,11 +7,11 @@ import org.javarosa.core.model.data.IntegerData
 import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
 import org.javarosa.model.xform.XFormsModule
+import org.javarosa.xform.parse.XFormParser
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.odk.collect.android.javarosawrapper.FormController
-import org.odk.collect.android.javarosawrapper.XFormParser
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.entities.storage.InMemEntitiesRepository
 import org.odk.collect.forms.Form
@@ -156,7 +156,7 @@ class FormEntryUseCasesTest {
         val updatedInstance = instancesRepository.get(instance.dbId)!!
         assertThat(updatedInstance.canEditWhenComplete(), equalTo(false))
 
-        val root = XFormParser.parseXml(File(updatedInstance.instanceFilePath)).rootElement
+        val root = XFormParser.getXMLDocument(File(updatedInstance.instanceFilePath).inputStream().reader()).rootElement
         assertThat(root.name, equalTo("age"))
         assertThat(root.childCount, equalTo(1))
         assertThat(root.getChild(0), equalTo("64"))
