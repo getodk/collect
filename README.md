@@ -18,13 +18,13 @@ Please note that the `master` branch reflects ongoing development and is not pro
 * Contributing
   * [Contributing code](#contributing-code)
   * [Contributing translations](#contributing-translations)
-  * [Contributing testing](#contributing-testing)
 * Developing
   * [Setting up your development environment](#setting-up-your-development-environment)
   * [Testing a form without a server](#testing-a-form-without-a-server)
   * [Using APIs for local development](#using-apis-for-local-development)
   * [Debugging JavaRosa](#debugging-javarosa)
   * [Troubleshooting](#troubleshooting)
+  * [Test devices](#test-devices)
 * [Creating signed releases for Google Play Store](#creating-signed-releases-for-google-play-store)
 
 ## Learn more about ODK Collect
@@ -69,24 +69,6 @@ If you're ready to contribute code, see [the contribution guide](docs/CONTRIBUTI
 If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/getodk/collect/).
 
 Translations are updated right before the first beta for a release and before the release itself. To update translations, download the zip from https://www.transifex.com/getodk/collect/strings/. The contents of each folder then need to be moved to the Android project folders. A quick script like [the one in this gist](https://gist.github.com/lognaturel/9974fab4e7579fac034511cd4944176b) can help. We currently copy everything from Transifex to minimize manual intervention. Sometimes translation files will only get comment changes. When new languages are updated in Transifex, they need to be added to the script above. Additionally, `ApplicationConstants.TRANSLATIONS_AVAILABLE` needs to be updated. This array provides the choices for the language preference in settings. Ideally the list could be dynamically generated.
-
-## Contributing testing
-Pull requests are verified on the following devices:
-* Xiaomi Redmi 9T 4GB - Android 10
-* Pixel 7a 8GB - Android 14
-* LG Nexus 5X 2GB - Android 8.1
-* Samsung Galaxy M12 4GB - Android 11
-* Samsung Galaxy M23 4GB - Android 14
-* Xiaomi Redmi 7 3GB - Android 10
-* Pixel 6a 6GB - Android 13
-* Pixel 3a 4GB - Android 12
-* Huawei Y560-L01 1GB - Android 5.1
-
-The best way to help us test is to build from source! If you aren't a developer and want to help us test release candidates, join the [beta program](https://play.google.com/apps/testing/org.odk.collect.android)!
-
-Testing checklists can be found on the [Collect testing plan](https://docs.google.com/spreadsheets/d/1ITmOW2MFs_8-VM6MTwganTRWDjpctz9CI8QKojXrnjE/edit?usp=sharing).
-
-If you have finished testing a pull request, please use a template from [Testing result templates](.github/TESTING_RESULT_TEMPLATES.md) to report your insights.
 
 ## Setting up your development environment
 
@@ -228,6 +210,20 @@ This is encountered when Robolectric has problems downloading the jars it needs 
 ```
 ./download-robolectric-deps.sh
 ```
+
+## Test devices
+
+Devices that @getodk/testers have available for testing are as follows:
+
+* Xiaomi Redmi 9T 4GB - Android 10
+* Pixel 7a 8GB - Android 14
+* LG Nexus 5X 2GB - Android 8.1
+* Samsung Galaxy M12 4GB - Android 11
+* Samsung Galaxy M23 4GB - Android 14
+* Xiaomi Redmi 7 3GB - Android 10
+* Pixel 6a 6GB - Android 13
+* Pixel 3a 4GB - Android 12
+* Huawei Y560-L01 1GB - Android 5.1
 
 ## Creating signed releases for Google Play Store
 Maintainers keep a folder with a clean checkout of the code and use [jenv.be](https://www.jenv.be) in that folder to ensure compilation with Java 17.
