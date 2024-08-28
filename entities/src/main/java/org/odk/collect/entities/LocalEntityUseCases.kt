@@ -61,8 +61,6 @@ object LocalEntityUseCases {
         val existingListMD5 = entitiesRepository.getListMD5(list)
         if (listMD5 == existingListMD5) {
             return
-        } else {
-            entitiesRepository.updateListMD5(list, listMD5!!)
         }
 
         val csvParser = try {
@@ -108,6 +106,8 @@ object LocalEntityUseCases {
         if (newAndUpdated.isNotEmpty()) {
             entitiesRepository.save(*newAndUpdated.toTypedArray())
         }
+
+        entitiesRepository.updateListMD5(list, listMD5!!)
     }
 
     private fun parseEntityFromRecord(
