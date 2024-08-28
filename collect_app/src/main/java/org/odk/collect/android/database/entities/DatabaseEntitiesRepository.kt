@@ -23,9 +23,9 @@ import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 
 private object ListsTable {
-    const val MD5 = "md5"
     const val TABLE_NAME = "lists"
     const val COLUMN_NAME = "name"
+    const val COLUMN_VERSION = "version"
 }
 
 private object EntitiesTable {
@@ -129,7 +129,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     override fun updateListVersion(list: String, version: String) {
         val contentValues = ContentValues().also {
-            it.put(ListsTable.MD5, version)
+            it.put(ListsTable.COLUMN_VERSION, version)
         }
 
         databaseConnection
@@ -146,7 +146,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         return databaseConnection
             .readableDatabase
             .query(ListsTable.TABLE_NAME, "${ListsTable.COLUMN_NAME} = ?", arrayOf(list))
-            .first { it.getStringOrNull(ListsTable.MD5) }
+            .first { it.getStringOrNull(ListsTable.COLUMN_VERSION) }
     }
 
     override fun getEntities(list: String): List<Entity.Saved> {
@@ -435,7 +435,7 @@ private class EntitiesDatabaseMigrator :
             CREATE TABLE IF NOT EXISTS ${ListsTable.TABLE_NAME} (
                     $_ID integer PRIMARY KEY, 
                     ${ListsTable.COLUMN_NAME} text NOT NULL,
-                    ${ListsTable.MD5} text
+                    ${ListsTable.COLUMN_VERSION} text
             );
             """.trimIndent()
         )
