@@ -19,9 +19,13 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -72,7 +76,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class GoogleMapFragment extends SupportMapFragment implements
+public class GoogleMapFragment extends Fragment implements
         MapFragment, LocationListener, LocationClient.LocationClientListener,
         GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener,
@@ -100,6 +104,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
     );
 
     private GoogleMap map;
+    private ReadyListener readyListener;
+    private ErrorListener errorListener;
     private Marker locationCrosshairs;
     private Circle accuracyCircle;
     private final List<ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
@@ -121,9 +127,25 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private boolean hasCenter;
 
     @Override
-    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
-        getMapAsync((GoogleMap googleMap) -> {
+        this.readyListener = readyListener;
+        this.errorListener = errorListener;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mapFragmentDelegate.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.map_layout, container, false);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync((GoogleMap googleMap) -> {
             if (googleMap == null) {
                 ToastUtils.showShortToast(requireContext(), org.odk.collect.strings.R.string.google_play_services_error_occured);
                 if (errorListener != null) {
@@ -144,7 +166,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             googleMap.setMyLocationEnabled(false);
             googleMap.setMinZoomPreference(1);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
+                    toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
             loadReferenceOverlay();
 
             // If the screen is rotated before the map is ready, this fragment
@@ -155,12 +177,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 readyListener.onReady(this);
             }
         });
-    }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mapFragmentDelegate.onCreate(savedInstanceState);
+        return view;
     }
 
     @Override public void onAttach(@NonNull Context context) {
