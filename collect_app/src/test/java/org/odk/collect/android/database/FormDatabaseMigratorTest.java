@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.database.forms.FormDatabaseMigrator;
-import org.odk.collect.db.sqlite.SQLiteUtils;
 
 import java.util.List;
 
@@ -306,59 +305,6 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
             assertThat(cursor.isNull(cursor.getColumnIndex(DELETED_DATE)), is(true));
             assertThat(cursor.getString(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(nullValue()));
-        }
-    }
-
-    @Test
-    public void onDowngrade_fromVersionWithExtraColumn() {
-        FormDatabaseMigrator formDatabaseMigrator = new FormDatabaseMigrator();
-        formDatabaseMigrator.onCreate(database);
-        SQLiteUtils.addColumn(database, FORMS_TABLE_NAME, "new_column", "text");
-        ContentValues contentValues = createVersion8Form();
-        contentValues.put("new_column", "blah");
-        database.insert(FORMS_TABLE_NAME, null, contentValues);
-
-        formDatabaseMigrator.onDowngrade(database);
-
-        try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
-            assertThat(cursor.getColumnCount(), is(18));
-            assertThat(cursor.getCount(), is(0));
-            assertThat(asList(cursor.getColumnNames()), is(CURRENT_VERSION_COLUMNS));
-        }
-    }
-
-    @Test
-    public void onDowngrade_fromVersionWithMissingColumn() {
-        // Create form table with out JR Cache column
-        FormDatabaseMigrator formDatabaseMigrator = new FormDatabaseMigrator();
-        database.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
-                + _ID + " integer primary key, "
-                + DISPLAY_NAME + " text not null, "
-                + DESCRIPTION + " text, "
-                + JR_FORM_ID + " text not null, "
-                + JR_VERSION + " text, "
-                + MD5_HASH + " text not null, "
-                + DATE + " integer not null, "
-                + FORM_MEDIA_PATH + " text not null, "
-                + FORM_FILE_PATH + " text not null, "
-                + LANGUAGE + " text, "
-                + SUBMISSION_URI + " text, "
-                + BASE64_RSA_PUBLIC_KEY + " text, "
-                + AUTO_SEND + " text, "
-                + AUTO_DELETE + " text, "
-                + LAST_DETECTED_FORM_VERSION_HASH + " text, "
-                + GEOMETRY_XPATH + " text);");
-
-        ContentValues contentValues = createVersion8Form();
-        contentValues.remove(JRCACHE_FILE_PATH);
-        database.insert(FORMS_TABLE_NAME, null, contentValues);
-
-        formDatabaseMigrator.onDowngrade(database);
-
-        try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
-            assertThat(cursor.getColumnCount(), is(18));
-            assertThat(cursor.getCount(), is(0));
-            assertThat(asList(cursor.getColumnNames()), is(CURRENT_VERSION_COLUMNS));
         }
     }
 

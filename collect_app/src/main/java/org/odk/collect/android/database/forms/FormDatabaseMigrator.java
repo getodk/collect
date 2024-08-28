@@ -80,11 +80,6 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
         }
     }
 
-    public void onDowngrade(SQLiteDatabase db) throws SQLException {
-        SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
-        createFormsTableV13(db);
-    }
-
     private void upgradeToVersion2(SQLiteDatabase db) {
         SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
         onCreate(db);
