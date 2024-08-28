@@ -24,7 +24,6 @@ object LocalEntityUseCases {
                 when (formEntity.action) {
                     EntityAction.CREATE -> {
                         val entity = Entity.New(
-                            formEntity.dataset,
                             id,
                             formEntity.label,
                             1,
@@ -32,13 +31,14 @@ object LocalEntityUseCases {
                             branchId = UUID.randomUUID().toString()
                         )
 
-                        entitiesRepository.save(entity)
+                        entitiesRepository.save(formEntity.dataset, entity)
                     }
 
                     EntityAction.UPDATE -> {
                         val existing = entitiesRepository.getById(formEntity.dataset, formEntity.id)
                         if (existing != null) {
                             entitiesRepository.save(
+                                formEntity.dataset,
                                 existing.copy(
                                     label = formEntity.label,
                                     properties = formEntity.properties,
@@ -104,7 +104,7 @@ object LocalEntityUseCases {
         }
 
         if (newAndUpdated.isNotEmpty()) {
-            entitiesRepository.save(*newAndUpdated.toTypedArray())
+            entitiesRepository.save(list, *newAndUpdated.toTypedArray())
         }
 
         entitiesRepository.updateListVersion(list, listVersion)
@@ -128,7 +128,6 @@ object LocalEntityUseCases {
         }
 
         return Entity.New(
-            list,
             id,
             label,
             version,

@@ -16,7 +16,6 @@ class LocalEntitiesInstanceProviderTest {
     fun `includes properties in local entity elements`() {
         val entity =
             Entity.New(
-                "people",
                 "1",
                 "Shiv Roy",
                 properties = listOf(Pair("age", "35"), Pair("born", "England"))
@@ -37,7 +36,6 @@ class LocalEntitiesInstanceProviderTest {
     fun `includes version in local entity elements`() {
         val entity =
             Entity.New(
-                "people",
                 "1",
                 "Shiv Roy",
                 version = 1
@@ -57,7 +55,6 @@ class LocalEntitiesInstanceProviderTest {
     fun `includes trunk version in local entity elements`() {
         val entity =
             Entity.New(
-                "people",
                 "1",
                 "Shiv Roy",
                 trunkVersion = 1
@@ -77,7 +74,6 @@ class LocalEntitiesInstanceProviderTest {
     fun `includes branch id in local entity elements`() {
         val entity =
             Entity.New(
-                "people",
                 "1",
                 "Shiv Roy",
                 branchId = "branch-1"
@@ -100,7 +96,6 @@ class LocalEntitiesInstanceProviderTest {
     fun `includes blank trunk version when it is null`() {
         val entity =
             Entity.New(
-                "people",
                 "1",
                 "Shiv Roy",
                 trunkVersion = null
@@ -119,14 +114,12 @@ class LocalEntitiesInstanceProviderTest {
     fun `partial parse returns elements without values for first item and just item for others`() {
         val entity = arrayOf(
             Entity.New(
-                "people",
                 "1",
                 "Shiv Roy",
                 properties = listOf(Pair("age", "35")),
                 version = 1
             ),
             Entity.New(
-                "people",
                 "2",
                 "Kendall Roy",
                 properties = listOf(Pair("age", "40")),
@@ -155,12 +148,10 @@ class LocalEntitiesInstanceProviderTest {
     fun `uses entity index for multiplicity`() {
         val entities = arrayOf(
             Entity.New(
-                "people",
                 "1",
                 "Shiv Roy"
             ),
             Entity.New(
-                "people",
                 "2",
                 "Kendall Roy"
             )

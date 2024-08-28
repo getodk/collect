@@ -48,22 +48,16 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         true
     )
 
-    override fun save(vararg entities: Entity) {
-        val first = entities.first()
-        val list = first.list
+    override fun save(list: String, vararg entities: Entity) {
         val listExists = listExists(list)
         if (!listExists) {
             createList(list)
         }
 
-        updatePropertyColumns(first)
+        updatePropertyColumns(list, entities.first())
 
         databaseConnection.writeableDatabase.transaction {
             entities.forEach { entity ->
-                if (entity.list != list) {
-                    throw IllegalArgumentException()
-                }
-
                 val existing = if (listExists) {
                     query(
                         list,
@@ -364,12 +358,12 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    private fun updatePropertyColumns(entity: Entity) {
+    private fun updatePropertyColumns(list: String, entity: Entity) {
         entity.properties.map { it.first }.forEach {
             try {
                 databaseConnection.writeableDatabase.execSQL(
                     """
-                    ALTER TABLE ${entity.list} ADD "$it" text NOT NULL DEFAULT "";
+                    ALTER TABLE $list ADD "$it" text NOT NULL DEFAULT "";
                     """.trimIndent()
                 )
             } catch (e: SQLiteException) {
@@ -410,7 +404,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         return Entity.Saved(
-            list,
             map[EntitiesTable.COLUMN_ID]!!,
             map[EntitiesTable.COLUMN_LABEL],
             map[EntitiesTable.COLUMN_VERSION]!!.toInt(),

@@ -1,7 +1,7 @@
 package org.odk.collect.entities.storage
 
 interface EntitiesRepository {
-    fun save(vararg entities: Entity)
+    fun save(list: String, vararg entities: Entity)
     fun getLists(): Set<String>
     fun getEntities(list: String): List<Entity.Saved>
     fun getCount(list: String): Int

@@ -1,7 +1,6 @@
 package org.odk.collect.entities.storage
 
 sealed interface Entity {
-    val list: String
     val id: String
     val label: String?
     val version: Int
@@ -11,7 +10,6 @@ sealed interface Entity {
     val branchId: String
 
     data class New(
-        override val list: String,
         override val id: String,
         override val label: String?,
         override val version: Int = 1,
@@ -22,7 +20,6 @@ sealed interface Entity {
     ) : Entity
 
     data class Saved(
-        override val list: String,
         override val id: String,
         override val label: String?,
         override val version: Int = 1,
@@ -46,7 +43,6 @@ sealed interface Entity {
 
     private fun convertToNew(entity: Entity): New {
         return New(
-            entity.list,
             entity.id,
             entity.label,
             entity.version,
