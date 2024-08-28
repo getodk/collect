@@ -77,7 +77,7 @@ object LocalEntityUseCases {
         val newAndUpdated = ArrayList<Entity>()
         csvParser.use {
             it.forEach { record ->
-                val serverEntity = parseEntityFromRecord(record, list) ?: return
+                val serverEntity = parseEntityFromRecord(record) ?: return
                 val existing = missingFromServer.remove(serverEntity.id)
 
                 if (existing == null || existing.version < serverEntity.version) {
@@ -114,10 +114,7 @@ object LocalEntityUseCases {
         return "md5:${Md5.getMd5Hash(serverList)!!}"
     }
 
-    private fun parseEntityFromRecord(
-        record: CSVRecord,
-        list: String
-    ): Entity.New? {
+    private fun parseEntityFromRecord(record: CSVRecord): Entity.New? {
         val map = record.toMap()
 
         val id = map.remove(EntityItemElement.ID)

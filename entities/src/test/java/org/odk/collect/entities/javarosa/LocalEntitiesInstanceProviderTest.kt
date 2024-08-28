@@ -20,7 +20,7 @@ class LocalEntitiesInstanceProviderTest {
                 "Shiv Roy",
                 properties = listOf(Pair("age", "35"), Pair("born", "England"))
             )
-        entitiesRepository.save(entity)
+        entitiesRepository.save("people", entity)
 
         val parser = LocalEntitiesInstanceProvider { entitiesRepository }
         val instance = parser.get("people", "people.csv")
@@ -40,7 +40,7 @@ class LocalEntitiesInstanceProviderTest {
                 "Shiv Roy",
                 version = 1
             )
-        entitiesRepository.save(entity)
+        entitiesRepository.save("people", entity)
 
         val parser = LocalEntitiesInstanceProvider { entitiesRepository }
         val instance = parser.get("people", "people.csv")
@@ -59,7 +59,7 @@ class LocalEntitiesInstanceProviderTest {
                 "Shiv Roy",
                 trunkVersion = 1
             )
-        entitiesRepository.save(entity)
+        entitiesRepository.save("people", entity)
 
         val parser = LocalEntitiesInstanceProvider { entitiesRepository }
         val instance = parser.get("people", "people.csv")
@@ -78,7 +78,7 @@ class LocalEntitiesInstanceProviderTest {
                 "Shiv Roy",
                 branchId = "branch-1"
             )
-        entitiesRepository.save(entity)
+        entitiesRepository.save("people", entity)
 
         val parser = LocalEntitiesInstanceProvider { entitiesRepository }
         val instance = parser.get("people", "people.csv")
@@ -100,7 +100,7 @@ class LocalEntitiesInstanceProviderTest {
                 "Shiv Roy",
                 trunkVersion = null
             )
-        entitiesRepository.save(entity)
+        entitiesRepository.save("people", entity)
 
         val parser = LocalEntitiesInstanceProvider { entitiesRepository }
         val instance = parser.get("people", "people.csv")
@@ -126,7 +126,7 @@ class LocalEntitiesInstanceProviderTest {
                 version = 1
             )
         )
-        entitiesRepository.save(*entity)
+        entitiesRepository.save("people", *entity)
 
         val parser = LocalEntitiesInstanceProvider { entitiesRepository }
         val instance = parser.get("people", "people.csv", true)
@@ -158,7 +158,7 @@ class LocalEntitiesInstanceProviderTest {
         )
 
         val repository = InMemEntitiesRepository()
-        repository.save(*entities)
+        repository.save("people", *entities)
 
         val parser = LocalEntitiesInstanceProvider { repository }
         val instance = parser.get("people", "people.csv", false)

@@ -42,6 +42,7 @@ class LocalEntityUseCasesTest {
     @Test
     fun `updateLocalEntitiesFromForm increments version on update`() {
         entitiesRepository.save(
+            "things",
             Entity.New(
                 "id",
                 "label",
@@ -62,6 +63,7 @@ class LocalEntityUseCasesTest {
     @Test
     fun `updateLocalEntitiesFromForm updates properties on update`() {
         entitiesRepository.save(
+            "things",
             Entity.New(
                 "id",
                 "label",
@@ -84,6 +86,7 @@ class LocalEntityUseCasesTest {
     @Test
     fun `updateLocalEntitiesFromForm does not override trunk version or branchId on update`() {
         entitiesRepository.save(
+            "things",
             Entity.New(
                 "id",
                 "label",
@@ -129,7 +132,7 @@ class LocalEntityUseCasesTest {
     @Test
     fun `updateLocalEntitiesFromServer overrides offline version if the online version is newer`() {
         val offline = Entity.New("noah", "Noa", 1)
-        entitiesRepository.save(offline)
+        entitiesRepository.save("songs", offline)
         val csv = createEntityList(Entity.New("noah", "Noah", 2))
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
@@ -146,7 +149,7 @@ class LocalEntityUseCasesTest {
     @Test
     fun `updateLocalEntitiesFromServer updates state if the online version is older`() {
         val offline = Entity.New("noah", "Noah", 2)
-        entitiesRepository.save(offline)
+        entitiesRepository.save("songs", offline)
         val csv = createEntityList(Entity.New("noah", "Noa", 1))
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
@@ -162,7 +165,7 @@ class LocalEntityUseCasesTest {
     @Test
     fun `updateLocalEntitiesFromServer overrides offline version if the online version is the same`() {
         val offline = Entity.New("noah", "Noah", 2)
-        entitiesRepository.save(offline)
+        entitiesRepository.save("songs", offline)
         val csv = createEntityList(
             Entity.New(
                 "noah",
@@ -201,13 +204,13 @@ class LocalEntityUseCasesTest {
     @Test
     fun `updateLocalEntitiesFromServer updates trunkVersion, branchId and state if the online version catches up to an offline branch`() {
         val offline = Entity.New("noah", "Noah", 2)
-        entitiesRepository.save(offline)
+        entitiesRepository.save("songs", offline)
 
         val csv1 = createEntityList(Entity.New("noah", "Noah", 2))
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv1, entitiesRepository)
 
         val onlineBranched = Entity.New("noah", "Noah", 3)
-        entitiesRepository.save(onlineBranched)
+        entitiesRepository.save("songs", onlineBranched)
         val csv2 = createEntityList(Entity.New("noah", "Noah", 3))
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv2, entitiesRepository)
 
@@ -222,7 +225,7 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromServer ignores properties not in offline version from older online version`() {
-        entitiesRepository.save(Entity.New("noah", "Noah", 3))
+        entitiesRepository.save("songs", Entity.New("noah", "Noah", 3))
         val csv =
             createEntityList(Entity.New("noah", "Noah", 2, listOf(Pair("length", "6:38"))))
 
@@ -235,6 +238,7 @@ class LocalEntityUseCasesTest {
     @Test
     fun `updateLocalEntitiesFromServer overrides properties in offline version from newer list version`() {
         entitiesRepository.save(
+            "songs",
             Entity.New("noah", "Noah", 1, listOf(Pair("length", "6:38")))
         )
         val csv =
@@ -315,7 +319,7 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromServer does not remove offline entities that are not in online entities`() {
-        entitiesRepository.save(Entity.New("noah", "Noah"))
+        entitiesRepository.save("songs", Entity.New("noah", "Noah"))
         val csv = createEntityList(Entity.New("cathedrals", "Cathedrals"))
 
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
@@ -325,7 +329,7 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromServer removes offline entity that was in online list, but isn't any longer`() {
-        entitiesRepository.save(Entity.New("cathedrals", "Cathedrals"))
+        entitiesRepository.save("songs", Entity.New("cathedrals", "Cathedrals"))
 
         val firstCsv = createEntityList(Entity.New("cathedrals", "Cathedrals"))
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", firstCsv, entitiesRepository)
@@ -340,7 +344,7 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromServer removes offline entity that was updated in online list, but isn't any longer`() {
-        entitiesRepository.save(Entity.New("cathedrals", "Cathedrals", version = 1))
+        entitiesRepository.save("songs", Entity.New("cathedrals", "Cathedrals", version = 1))
 
         val firstCsv =
             createEntityList(Entity.New("cathedrals", "Cathedrals (A Song)", version = 2))
@@ -405,10 +409,10 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
     var savedEntities: Int = 0
         private set
 
-    override fun save(vararg entities: Entity) {
+    override fun save(list: String, vararg entities: Entity) {
         accesses += 1
         savedEntities += entities.size
-        wrapped.save(*entities)
+        wrapped.save(list, *entities)
     }
 
     override fun getLists(): Set<String> {
