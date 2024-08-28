@@ -135,12 +135,12 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             .foldAndClose(emptySet()) { set, cursor -> set + cursor.getString(ListsTable.COLUMN_NAME) }
     }
 
-    override fun updateListMD5(list: String, md5: String) {
+    override fun updateListVersion(list: String, version: String) {
         createList(list)
         updateRowIdTables()
 
         val contentValues = ContentValues().also {
-            it.put(ListsTable.MD5, md5)
+            it.put(ListsTable.MD5, version)
         }
 
         databaseConnection
@@ -153,7 +153,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             )
     }
 
-    override fun getListMD5(list: String): String? {
+    override fun getListVersion(list: String): String? {
         return databaseConnection
             .readableDatabase
             .query(ListsTable.TABLE_NAME, "${ListsTable.COLUMN_NAME} = ?", arrayOf(list))

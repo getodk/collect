@@ -57,9 +57,9 @@ object LocalEntityUseCases {
         serverList: File,
         entitiesRepository: EntitiesRepository
     ) {
-        val listMD5 = Md5.getMd5Hash(serverList)
-        val existingListMD5 = entitiesRepository.getListMD5(list)
-        if (listMD5 == existingListMD5) {
+        val listVersion = Md5.getMd5Hash(serverList)
+        val existingListVersion = entitiesRepository.getListVersion(list)
+        if (listVersion == existingListVersion) {
             return
         }
 
@@ -107,7 +107,7 @@ object LocalEntityUseCases {
             entitiesRepository.save(*newAndUpdated.toTypedArray())
         }
 
-        entitiesRepository.updateListMD5(list, listMD5!!)
+        entitiesRepository.updateListVersion(list, listVersion!!)
     }
 
     private fun parseEntityFromRecord(

@@ -67,11 +67,11 @@ class InMemEntitiesRepository : EntitiesRepository {
         return getEntities(list).firstOrNull { it.index == index }
     }
 
-    override fun updateListMD5(list: String, md5: String) {
+    override fun updateListVersion(list: String, version: String) {
         TODO("Not yet implemented")
     }
 
-    override fun getListMD5(list: String): String? {
+    override fun getListVersion(list: String): String? {
         TODO("Not yet implemented")
     }
 
