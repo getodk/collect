@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.github.pengrad.mapscaleview.MapScaleView;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -104,6 +105,7 @@ public class GoogleMapFragment extends Fragment implements
     );
 
     private GoogleMap map;
+    private MapScaleView scaleView;
     private ReadyListener readyListener;
     private ErrorListener errorListener;
     private Marker locationCrosshairs;
@@ -144,6 +146,8 @@ public class GoogleMapFragment extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_layout, container, false);
 
+        scaleView = view.findViewById(R.id.scale_view);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync((GoogleMap googleMap) -> {
             if (googleMap == null) {
@@ -167,6 +171,8 @@ public class GoogleMapFragment extends Fragment implements
             googleMap.setMinZoomPreference(1);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                     toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
+            googleMap.setOnCameraMoveListener(() -> scaleView.update(googleMap.getCameraPosition().zoom, googleMap.getCameraPosition().target.latitude));
+            googleMap.setOnCameraIdleListener(() -> scaleView.update(googleMap.getCameraPosition().zoom, googleMap.getCameraPosition().target.latitude));
             loadReferenceOverlay();
 
             // If the screen is rotated before the map is ready, this fragment

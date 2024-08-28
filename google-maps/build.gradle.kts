@@ -58,6 +58,7 @@ dependencies {
     implementation(Dependencies.androidx_preference_ktx)
     implementation(Dependencies.play_services_maps)
     implementation(Dependencies.play_services_location)
+    implementation(Dependencies.mapscaleview)
     implementation(Dependencies.timber)
     implementation(Dependencies.android_material)
 
