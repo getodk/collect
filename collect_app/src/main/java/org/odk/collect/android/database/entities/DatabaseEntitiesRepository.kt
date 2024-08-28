@@ -136,9 +136,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     override fun updateListVersion(list: String, version: String) {
-        createList(list)
-        updateRowIdTables()
-
         val contentValues = ContentValues().also {
             it.put(ListsTable.MD5, version)
         }

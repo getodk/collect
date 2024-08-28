@@ -637,4 +637,13 @@ abstract class EntitiesRepositoryTest {
 
         assertThat(repository.getByIndex("wine", 0), equalTo(null))
     }
+
+    @Test
+    fun `#getListVersion returns list version`() {
+        val repository = buildSubject()
+
+        repository.addList("wine")
+        repository.updateListVersion("wine", "2024")
+        assertThat(repository.getListVersion("wine"), equalTo("2024"))
+    }
 }

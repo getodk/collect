@@ -306,7 +306,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer accesses entities repo only twice when saving multiple entities`() {
+    fun `updateLocalEntitiesFromServer accesses entities repo only 4 times when saving multiple entities`() {
         val csv = createEntityList(
             Entity.New("songs", "noah", "Noah"),
             Entity.New("songs", "seven-trumpets", "Seven Trumpets")
@@ -314,7 +314,7 @@ class LocalEntityUseCasesTest {
 
         val entitiesRepository = MeasurableEntitiesRepository(entitiesRepository)
         LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
-        assertThat(entitiesRepository.accesses, equalTo(2))
+        assertThat(entitiesRepository.accesses, equalTo(4))
     }
 
     @Test
@@ -461,5 +461,15 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
     override fun getByIndex(list: String, index: Int): Entity.Saved? {
         accesses += 1
         return wrapped.getByIndex(list, index)
+    }
+
+    override fun updateListVersion(list: String, version: String) {
+        accesses += 1
+        wrapped.updateListVersion(list, version)
+    }
+
+    override fun getListVersion(list: String): String? {
+        accesses += 1
+        return wrapped.getListVersion(list)
     }
 }

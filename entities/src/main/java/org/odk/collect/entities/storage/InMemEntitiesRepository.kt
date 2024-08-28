@@ -4,6 +4,7 @@ class InMemEntitiesRepository : EntitiesRepository {
 
     private val lists = mutableSetOf<String>()
     private val listProperties = mutableMapOf<String, MutableSet<String>>()
+    private val listVersions = mutableMapOf<String, String>()
     private val entities = mutableListOf<Entity.New>()
 
     override fun getLists(): Set<String> {
@@ -68,11 +69,11 @@ class InMemEntitiesRepository : EntitiesRepository {
     }
 
     override fun updateListVersion(list: String, version: String) {
-        TODO("Not yet implemented")
+        listVersions[list] = version
     }
 
     override fun getListVersion(list: String): String? {
-        TODO("Not yet implemented")
+        return listVersions[list]
     }
 
     override fun save(vararg entities: Entity) {
