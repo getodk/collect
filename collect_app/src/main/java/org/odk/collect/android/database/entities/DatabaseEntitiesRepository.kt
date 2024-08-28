@@ -49,24 +49,22 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     )
 
     override fun save(vararg entities: Entity) {
-        val existingLists = getLists()
-        val createdLists = mutableListOf<String>()
-        val modifiedList = mutableListOf<String>()
+        val first = entities.first()
+        val list = first.list
+        val listExists = listExists(list)
+        if (!listExists) {
+            createList(list)
+        }
+
+        updatePropertyColumns(first)
 
         databaseConnection.writeableDatabase.transaction {
             entities.forEach { entity ->
-                val list = entity.list
-                if (!existingLists.contains(list) && !createdLists.contains(list)) {
-                    createList(list)
-                    createdLists.add(list)
+                if (entity.list != list) {
+                    throw IllegalArgumentException()
                 }
 
-                if (!modifiedList.contains(list)) {
-                    updatePropertyColumns(entity)
-                    modifiedList.add(list)
-                }
-
-                val existing = if (existingLists.contains(list)) {
+                val existing = if (listExists) {
                     query(
                         list,
                         "${EntitiesTable.COLUMN_ID} = ?",

@@ -77,7 +77,13 @@ class InMemEntitiesRepository : EntitiesRepository {
     }
 
     override fun save(vararg entities: Entity) {
+        val list = entities.first().list
+
         entities.forEach { entity ->
+            if (entity.list != list) {
+                throw IllegalArgumentException()
+            }
+
             updateLists(entity)
             val existing = this.entities.find { it.id == entity.id && it.list == entity.list }
 

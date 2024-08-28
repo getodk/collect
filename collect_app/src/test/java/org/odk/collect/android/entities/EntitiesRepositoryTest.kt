@@ -4,6 +4,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
+import org.junit.Assert.fail
 import org.junit.Test
 import org.odk.collect.android.entities.support.EntitySameAsMatcher.Companion.sameEntityAs
 import org.odk.collect.entities.storage.EntitiesRepository
@@ -276,6 +277,21 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#save throws an exception when used to save multiple lists`() {
+        val repository = buildSubject()
+
+        val wine = Entity.New("wine", "1", "1")
+        val whisky = Entity.New("whisky", "2", "2")
+
+        try {
+            repository.save(wine, whisky)
+            fail()
+        } catch (e: IllegalArgumentException) {
+            // expected
+        }
+    }
+
+    @Test
     fun `#clear deletes all entities`() {
         val repository = buildSubject()
 
@@ -300,11 +316,11 @@ abstract class EntitiesRepositoryTest {
     fun `#save can save multiple entities`() {
         val repository = buildSubject()
 
-        val wine = Entity.New("wines", "1", "Léoville Barton 2008")
-        val whisky = Entity.New("whiskys", "2", "Lagavulin 16")
-        repository.save(wine, whisky)
+        val wine1 = Entity.New("wines", "1", "Léoville Barton 2008")
+        val wine2 = Entity.New("wines", "2", "Chateau Pontet Canet")
+        repository.save(wine1, wine2)
 
-        assertThat(repository.getLists(), containsInAnyOrder("wines", "whiskys"))
+        assertThat(repository.getEntities("wines").size, equalTo(2))
     }
 
     @Test
@@ -440,7 +456,8 @@ abstract class EntitiesRepositoryTest {
 
         val leoville = Entity.New("wines", "1", "Léoville Barton 2008")
         val ardbeg = Entity.New("whisky", "2", "Ardbeg 10")
-        repository.save(leoville, ardbeg)
+        repository.save(leoville)
+        repository.save(ardbeg)
 
         assertThat(repository.getById("whisky", "1"), equalTo(null))
     }
@@ -573,7 +590,8 @@ abstract class EntitiesRepositoryTest {
             properties = listOf("vintage" to "1983")
         )
 
-        repository.save(leoville, dows)
+        repository.save(leoville)
+        repository.save(dows)
         assertThat(repository.getAllByProperty("wines", "vintage", "1983"), equalTo(emptyList()))
     }
 
