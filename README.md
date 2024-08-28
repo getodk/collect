@@ -18,13 +18,13 @@ Please note that the `master` branch reflects ongoing development and is not pro
 * Contributing
   * [Contributing code](#contributing-code)
   * [Contributing translations](#contributing-translations)
-  * [Contributing testing](#contributing-testing)
 * Developing
   * [Setting up your development environment](#setting-up-your-development-environment)
   * [Testing a form without a server](#testing-a-form-without-a-server)
   * [Using APIs for local development](#using-apis-for-local-development)
   * [Debugging JavaRosa](#debugging-javarosa)
   * [Troubleshooting](#troubleshooting)
+  * [Test devices](#test-devices)
 * [Creating signed releases for Google Play Store](#creating-signed-releases-for-google-play-store)
 
 ## Learn more about ODK Collect
@@ -69,28 +69,6 @@ If you're ready to contribute code, see [the contribution guide](docs/CONTRIBUTI
 If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/getodk/collect/).
 
 Translations are updated right before the first beta for a release and before the release itself. To update translations, download the zip from https://www.transifex.com/getodk/collect/strings/. The contents of each folder then need to be moved to the Android project folders. A quick script like [the one in this gist](https://gist.github.com/lognaturel/9974fab4e7579fac034511cd4944176b) can help. We currently copy everything from Transifex to minimize manual intervention. Sometimes translation files will only get comment changes. When new languages are updated in Transifex, they need to be added to the script above. Additionally, `ApplicationConstants.TRANSLATIONS_AVAILABLE` needs to be updated. This array provides the choices for the language preference in settings. Ideally the list could be dynamically generated.
-
-## Contributing testing
-All pull requests are verified on the following devices (ordered by Android version):
-* [Huawei Y560-L01](http://www.gsmarena.com/huawei_y560-7829.php) - Android 5.1.1
-* [Sony Xperia Z3 D6603](http://www.gsmarena.com/sony_xperia_z3-6539.php) - Android 6.0.1 (used irregularly)
-* [Samsung Galaxy S7 SM-G930F](https://www.gsmarena.com/samsung_galaxy_s7-7821.php) - Android 7.0.0 (used irregularly)
-* [Motorola Moto G4 Play](https://www.gsmarena.com/motorola_moto_g4_play-8104.php) - Android 7.1.1 (used irregularly)
-* [LG Nexus 5X](https://www.gsmarena.com/lg_nexus_5x-7556.php) - Android 8.1
-* [Xiaomi Redmi 7](https://www.gsmarena.com/xiaomi_redmi_7-9498.php) - Android 9.0 (used irregularly)
-* [Samsung Galaxy M11 SM-M115F/DSN](https://www.gsmarena.com/samsung_galaxy_m11-10124.php) - Android 10.0
-* [Google Pixel 3a](https://www.gsmarena.com/google_pixel_3a-9408.php) - Android 11.0
-
-Our regular code contributors use these devices (ordered by Android version):
-* [Samsung Galaxy Tab SM-T285](http://www.gsmarena.com/samsung_galaxy_tab_a_7_0_(2016)-7880.php) - Android 5.1.1 [@lognaturel](https://github.com/lognaturel)
-* [Motorola G 5th Gen XT1671](https://www.gsmarena.com/motorola_moto_g5-8454.php) - Android 7.0 [@lognaturel](https://github.com/lognaturel)
-
-
-The best way to help us test is to build from source! If you aren't a developer and want to help us test release candidates, join the [beta program](https://play.google.com/apps/testing/org.odk.collect.android)!
-
-Testing checklists can be found on the [Collect testing plan](https://docs.google.com/spreadsheets/d/1ITmOW2MFs_8-VM6MTwganTRWDjpctz9CI8QKojXrnjE/edit?usp=sharing).
-
-If you have finished testing a pull request, please use a template from [Testing result templates](.github/TESTING_RESULT_TEMPLATES.md) to report your insights.
 
 ## Setting up your development environment
 
@@ -232,6 +210,20 @@ This is encountered when Robolectric has problems downloading the jars it needs 
 ```
 ./download-robolectric-deps.sh
 ```
+
+## Test devices
+
+Devices that @getodk/testers have available for testing are as follows:
+
+* Xiaomi Redmi 9T 4GB - Android 10
+* Pixel 7a 8GB - Android 14
+* LG Nexus 5X 2GB - Android 8.1
+* Samsung Galaxy M12 4GB - Android 11
+* Samsung Galaxy M23 4GB - Android 14
+* Xiaomi Redmi 7 3GB - Android 10
+* Pixel 6a 6GB - Android 13
+* Pixel 3a 4GB - Android 12
+* Huawei Y560-L01 1GB - Android 5.1
 
 ## Creating signed releases for Google Play Store
 Maintainers keep a folder with a clean checkout of the code and use [jenv.be](https://www.jenv.be) in that folder to ensure compilation with Java 17.
