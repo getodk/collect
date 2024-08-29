@@ -1,7 +1,7 @@
 package org.odk.collect.android.preferences.screens
 
-import android.content.Context
 import androidx.preference.Preference
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -11,19 +11,19 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.R
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.metadata.InstallIDProvider
-import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 
 @RunWith(AndroidJUnit4::class)
 class FormMetadataPreferencesFragmentTest {
     private val installIDProvider = mock<InstallIDProvider>()
-    private val settingsProvider = InMemSettingsProvider()
+    private val settingsProvider =
+        ApplicationProvider.getApplicationContext<Collect>().component.settingsProvider()
 
     @get:Rule
     var launcherRule = FragmentScenarioLauncherRule()
@@ -34,11 +34,9 @@ class FormMetadataPreferencesFragmentTest {
             override fun providesInstallIDProvider(settingsProvider: SettingsProvider): InstallIDProvider {
                 return installIDProvider
             }
-
-            override fun providesSettingsProvider(context: Context): SettingsProvider {
-                return settingsProvider
-            }
         })
+
+        CollectHelpers.setupDemoProject()
     }
 
     @Test
@@ -72,7 +70,8 @@ class FormMetadataPreferencesFragmentTest {
         whenever(installIDProvider.installID).thenReturn("123456789")
         settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_METADATA_USERNAME, "John")
         settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_METADATA_PHONENUMBER, "789")
-        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_METADATA_EMAIL, "john@gmail.com")
+        settingsProvider.getUnprotectedSettings()
+            .save(ProjectKeys.KEY_METADATA_EMAIL, "john@gmail.com")
 
         launcherRule
             .launch(FormMetadataPreferencesFragment::class.java)

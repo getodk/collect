@@ -6,43 +6,40 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.source.SettingsStore;
-
-import javax.inject.Inject;
-import javax.inject.Named;
+import org.odk.collect.shared.settings.Settings;
 
 public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragment {
 
-    @Inject
-    @Named("ADMIN_SETTINGS_STORE")
-    SettingsStore adminSettingsStore;
+    private String projectId;
+    private Settings adminSettings;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        DaggerUtils.getComponent(context).inject(this);
+        projectId = projectsDataService.getCurrentProject().getUuid();
+        adminSettings = settingsProvider.getProtectedSettings(projectId);
     }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        getPreferenceManager().setPreferenceDataStore(adminSettingsStore);
+        getPreferenceManager().setPreferenceDataStore(new SettingsStore(adminSettings));
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        settingsProvider.getProtectedSettings().registerOnSettingChangeListener(this);
+        adminSettings.registerOnSettingChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        settingsProvider.getProtectedSettings().unregisterOnSettingChangeListener(this);
+        adminSettings.unregisterOnSettingChangeListener(this);
     }
 
     @Override
     public void onSettingChanged(@NotNull String key) {
-        settingsChangeHandler.onSettingChanged(projectsDataService.getCurrentProject().getUuid(), settingsProvider.getProtectedSettings().getAll().get(key), key);
+        settingsChangeHandler.onSettingChanged(projectId, adminSettings.getAll().get(key), key);
     }
 }
