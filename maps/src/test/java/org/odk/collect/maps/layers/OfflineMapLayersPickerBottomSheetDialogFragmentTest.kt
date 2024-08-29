@@ -51,7 +51,7 @@ import org.odk.collect.testshared.WaitFor
 import org.odk.collect.webpage.ExternalWebPageHelper
 
 @RunWith(AndroidJUnit4::class)
-class OfflineMapLayersPickerTest {
+class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
     private val referenceLayerRepository = mock<ReferenceLayerRepository>()
     private val scheduler = FakeScheduler()
     private val settingsProvider = InMemSettingsProvider()
@@ -62,8 +62,8 @@ class OfflineMapLayersPickerTest {
     @get:Rule
     val fragmentScenarioLauncherRule = FragmentScenarioLauncherRule(
         FragmentFactoryBuilder()
-            .forClass(OfflineMapLayersPicker::class) {
-                OfflineMapLayersPicker(
+            .forClass(OfflineMapLayersPickerBottomSheetDialogFragment::class) {
+                OfflineMapLayersPickerBottomSheetDialogFragment(
                     testRegistry,
                     referenceLayerRepository,
                     scheduler,
@@ -401,8 +401,8 @@ class OfflineMapLayersPickerTest {
 
         scenario.onFragment {
             assertThat(
-                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
-                instanceOf(OfflineMapLayersImporter::class.java)
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporterDialogFragment::class.java.name),
+                instanceOf(OfflineMapLayersImporterDialogFragment::class.java)
             )
         }
     }
@@ -415,7 +415,7 @@ class OfflineMapLayersPickerTest {
 
         scenario.onFragment {
             assertThat(
-                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporterDialogFragment::class.java.name),
                 equalTo(null)
             )
         }
@@ -790,8 +790,8 @@ class OfflineMapLayersPickerTest {
 
         scenario.onFragment {
             assertThat(
-                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
-                instanceOf(OfflineMapLayersImporter::class.java)
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporterDialogFragment::class.java.name),
+                instanceOf(OfflineMapLayersImporterDialogFragment::class.java)
             )
         }
 
@@ -799,7 +799,7 @@ class OfflineMapLayersPickerTest {
 
         scenario.onFragment {
             assertThat(
-                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporter::class.java.name),
+                it.childFragmentManager.findFragmentByTag(OfflineMapLayersImporterDialogFragment::class.java.name),
                 equalTo(null)
             )
         }
@@ -844,8 +844,8 @@ class OfflineMapLayersPickerTest {
         )
     }
 
-    private fun launchFragment(): FragmentScenario<OfflineMapLayersPicker> {
-        return fragmentScenarioLauncherRule.launchInContainer(OfflineMapLayersPicker::class.java)
+    private fun launchFragment(): FragmentScenario<OfflineMapLayersPickerBottomSheetDialogFragment> {
+        return fragmentScenarioLauncherRule.launchInContainer(OfflineMapLayersPickerBottomSheetDialogFragment::class.java)
     }
 
     private class TestRegistry : ActivityResultRegistry() {

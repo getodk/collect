@@ -31,7 +31,7 @@ import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.webpage.ExternalWebPageHelper
 
-class OfflineMapLayersPicker(
+class OfflineMapLayersPickerBottomSheetDialogFragment(
     registry: ActivityResultRegistry,
     private val referenceLayerRepository: ReferenceLayerRepository,
     private val scheduler: Scheduler,
@@ -74,7 +74,7 @@ class OfflineMapLayersPicker(
         if (uris.isNotEmpty()) {
             sharedViewModel.loadLayersToImport(uris, requireContext())
             DialogFragmentUtils.showIfNotShowing(
-                OfflineMapLayersImporter::class.java,
+                OfflineMapLayersImporterDialogFragment::class.java,
                 childFragmentManager
             )
         }
@@ -87,8 +87,8 @@ class OfflineMapLayersPicker(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(OfflineMapLayersImporter::class) {
-                OfflineMapLayersImporter(referenceLayerRepository, scheduler, settingsProvider)
+            .forClass(OfflineMapLayersImporterDialogFragment::class) {
+                OfflineMapLayersImporterDialogFragment(referenceLayerRepository, scheduler, settingsProvider)
             }
             .build()
 
@@ -124,7 +124,7 @@ class OfflineMapLayersPicker(
 
         if (sharedViewModel.layersToImport.value?.value == null) {
             DialogFragmentUtils.dismissDialog(
-                OfflineMapLayersImporter::class.java,
+                OfflineMapLayersImporterDialogFragment::class.java,
                 childFragmentManager
             )
         }
