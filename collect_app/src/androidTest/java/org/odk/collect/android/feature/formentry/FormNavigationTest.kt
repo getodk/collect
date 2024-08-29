@@ -33,7 +33,7 @@ class FormNavigationTest {
     var copyFormChain: RuleChain = TestRuleChain.chain()
         .around(rule)
 
-    @Test // TestCase14
+    @Test
     fun showsAndHidesButtonsCorrectlyOnEachScreen() {
         rule.startAtMainMenu()
             .copyForm("two-question.xml")

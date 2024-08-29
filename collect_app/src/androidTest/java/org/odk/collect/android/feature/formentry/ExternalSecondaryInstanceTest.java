@@ -20,7 +20,6 @@ import java.util.Collections;
  * @see <a href="https://getodk.github.io/xforms-spec/#secondary-instances---external">External secondary  instances</a>
  */
 
-// Issue number NODK-377
 @RunWith(AndroidJUnit4.class)
 public class ExternalSecondaryInstanceTest {
 
