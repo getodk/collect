@@ -11,8 +11,8 @@ import org.odk.collect.shared.settings.Settings;
 
 public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragment {
 
-    String projectId;
-    Settings adminSettings;
+    private String projectId;
+    private Settings adminSettings;
 
     @Override
     public void onAttach(@NonNull Context context) {
