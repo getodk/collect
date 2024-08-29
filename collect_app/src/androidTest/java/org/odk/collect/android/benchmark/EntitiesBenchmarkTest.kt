@@ -5,27 +5,25 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.blankOrNullString
-import org.hamcrest.Matchers.lessThan
 import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.benchmark.support.Benchmarker
+import org.odk.collect.android.benchmark.support.benchmark
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
-import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.android.test.BuildConfig.ENTITIES_FILTER_TEST_PROJECT_URL
-import org.odk.collect.shared.TimeInMs
 import org.odk.collect.strings.R
 
 /**
- * Benchmarks the performance of entity follow up forms. [PROJECT_URL] should be set to a project
- * that contains the "100k Entities Filter" form.
+ * Benchmarks the performance of entity follow up forms. [ENTITIES_FILTER_TEST_PROJECT_URL] should
+ * be set to a project that contains the "100k Entities Filter" form.
  *
  * Devices that currently pass:
- * - Pixel 4a
  * - Fairphone 3
  *
  */
@@ -68,13 +66,13 @@ class EntitiesBenchmarkTest {
             .clickOKOnDialog(MainMenuPage())
 
             .clickGetBlankForm()
-            .benchmark("Downloading form with http cache", 75, benchmarker) {
+            .benchmark("Downloading form with http cache", 25, benchmarker) {
                 it.clickGetSelected()
             }
 
             .clickOK(MainMenuPage())
             .clickGetBlankForm()
-            .benchmark("Downloading form second time with http cache", 90, benchmarker) {
+            .benchmark("Downloading form second time with http cache", 75, benchmarker) {
                 it.clickGetSelected()
             }
 
@@ -97,67 +95,10 @@ class EntitiesBenchmarkTest {
 
         benchmarker.assertResults()
     }
-
-    private fun clearAndroidCache() {
-        val application = ApplicationProvider.getApplicationContext<Application>()
-        application.cacheDir.deleteRecursively()
-        application.cacheDir.mkdir()
-    }
 }
 
-private class Stopwatch {
-
-    private val times = mutableMapOf<String, Long>()
-
-    fun <T> time(name: String, action: () -> T): T {
-        val startTime = System.currentTimeMillis()
-        val result = action()
-        val endTime = System.currentTimeMillis()
-
-        times[name] = (endTime - startTime) / TimeInMs.ONE_SECOND
-        return result
-    }
-
-    fun getTime(name: String): Long {
-        return times[name]!!
-    }
-}
-
-private fun <T : Page<T>, Y : Page<Y>> Y.benchmark(
-    name: String,
-    target: Long,
-    benchmarker: Benchmarker,
-    action: (Y) -> T
-): T {
-    return benchmarker.benchmark(name, target) {
-        action(this)
-    }
-}
-
-private class Benchmarker {
-    private val stopwatch = Stopwatch()
-    private val targets = mutableMapOf<String, Long>()
-
-    fun <T> benchmark(name: String, target: Long, action: () -> T): T {
-        targets[name] = target
-        return stopwatch.time(name) {
-            action()
-        }
-    }
-
-    fun assertResults() {
-        printResults()
-
-        targets.entries.forEach {
-            val time = stopwatch.getTime(it.key)
-            assertThat("\"${it.key}\" took ${time}s!", time, lessThan(it.value))
-        }
-    }
-
-    private fun printResults() {
-        println("Benchmark results:")
-        targets.keys.forEach {
-            println("$it: ${stopwatch.getTime(it)}s")
-        }
-    }
+private fun clearAndroidCache() {
+    val application = ApplicationProvider.getApplicationContext<Application>()
+    application.cacheDir.deleteRecursively()
+    application.cacheDir.mkdir()
 }

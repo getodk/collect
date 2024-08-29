@@ -65,4 +65,17 @@ object CursorExt {
         val columnIndex = this.getColumnIndex(column)
         return this.getIntOrNull(columnIndex)
     }
+
+    /**
+     * Prevents doing repeated [Cursor.getColumnIndex] lookups and also works around the lack of
+     * support for column names including a "." there (due to the mysterious bug 903852).
+     *
+     * @see [SQLiteCursor source](https://cs.android.com/android/platform/superproject/main/+/main:frameworks/base/core/java/android/database/sqlite/SQLiteCursor.java;l=178?q=sqlitecursor)
+     */
+    fun Cursor.rowToMap(): Map<String, String> {
+        return this.columnNames.foldIndexed(mutableMapOf()) { index, map, column ->
+            map[column] = this.getString(index)
+            map
+        }
+    }
 }

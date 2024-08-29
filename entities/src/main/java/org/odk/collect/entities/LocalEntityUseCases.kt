@@ -8,6 +8,7 @@ import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import java.io.File
+import java.util.UUID
 
 object LocalEntityUseCases {
 
@@ -26,7 +27,8 @@ object LocalEntityUseCases {
                             id,
                             formEntity.label,
                             1,
-                            formEntity.properties
+                            formEntity.properties,
+                            branchId = UUID.randomUUID().toString()
                         )
 
                         entitiesRepository.save(entity)
@@ -72,7 +74,7 @@ object LocalEntityUseCases {
                 val existing = missingFromServer.remove(serverEntity.id)
 
                 if (existing == null || existing.version <= serverEntity.version) {
-                    newAndUpdated.add(serverEntity)
+                    newAndUpdated.add(serverEntity.copy(branchId = UUID.randomUUID().toString()))
                 } else if (existing.state == Entity.State.OFFLINE) {
                     val update = existing.copy(state = Entity.State.ONLINE)
                     newAndUpdated.add(update)
@@ -92,8 +94,8 @@ object LocalEntityUseCases {
     private fun parseEntityFromRecord(
         record: CSVRecord,
         list: String
-    ): Entity? {
-        val map = record.toMap().toMutableMap()
+    ): Entity.New? {
+        val map = record.toMap()
 
         val id = map.remove(EntityItemElement.ID)
         val label = map.remove(EntityItemElement.LABEL)
@@ -102,16 +104,12 @@ object LocalEntityUseCases {
             return null
         }
 
-        val properties = map.entries.fold(emptyList<Pair<String, String>>()) { properties, entry ->
-            properties + Pair(entry.key, entry.value)
-        }
-
         return Entity.New(
             list,
             id,
             label,
             version,
-            properties,
+            map.toList(),
             state = Entity.State.ONLINE,
             trunkVersion = version
         )

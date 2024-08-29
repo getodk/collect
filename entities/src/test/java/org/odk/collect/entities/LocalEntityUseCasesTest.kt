@@ -142,6 +142,7 @@ class LocalEntityUseCasesTest {
         assertThat(songs[0].version, equalTo(2))
         assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
         assertThat(songs[0].trunkVersion, equalTo(2))
+        assertThat(songs[0].branchId, not(blankOrNullString()))
         assertThat(songs[0].branchId, not(equalTo(offline.branchId)))
     }
 
@@ -183,6 +184,7 @@ class LocalEntityUseCasesTest {
         assertThat(songs[0].version, equalTo(2))
         assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
         assertThat(songs[0].trunkVersion, equalTo(2))
+        assertThat(songs[0].branchId, not(blankOrNullString()))
         assertThat(songs[0].branchId, not(equalTo(offline.branchId)))
     }
 
@@ -204,6 +206,7 @@ class LocalEntityUseCasesTest {
         assertThat(songs[0].version, equalTo(3))
         assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
         assertThat(songs[0].trunkVersion, equalTo(3))
+        assertThat(songs[0].branchId, not(blankOrNullString()))
         assertThat(songs[0].branchId, not(equalTo(onlineBranched.branchId)))
     }
 
