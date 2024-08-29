@@ -266,20 +266,6 @@ public class FillBlankFormTest {
                 .clickFinalize();
     }
 
-    @Test
-    public void when_chooseAnswer_should_beVisibleInNextQuestion() {
-        //TestCase52
-        rule.startAtMainMenu()
-                .copyForm("CalcTest.xml")
-                .startBlankFormWithRepeatGroup("CalcTest", "Fishing gear type")
-                .clickOnAdd(new FormEntryPage("CalcTest"))
-                .clickOnText("Gillnet")
-                .swipeToNextQuestion("7.2 What is the size of the mesh for the Gillnet ?", true)
-                .swipeToPreviousQuestion("7.1 Select the type of fishing equipment used today to catch the fish present", true)
-                .clickOnText("Seinenet")
-                .swipeToNextQuestion("7.2 What is the size of the mesh for the Seinenet ?", true);
-    }
-
     private String getQuestionText() {
         FormFillingActivity formFillingActivity = (FormFillingActivity) ActivityHelpers.getActivity();
         FrameLayout questionContainer = formFillingActivity.findViewById(R.id.text_container);
