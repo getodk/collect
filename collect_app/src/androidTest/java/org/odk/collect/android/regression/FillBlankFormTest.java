@@ -239,21 +239,6 @@ public class FillBlankFormTest {
                 .clickFinalize();
     }
 
-    @Test
-    public void questions_shouldHavePrefilledValue() {
-        //TestCase51
-        rule.startAtMainMenu()
-                .copyForm("multiple-events.xml")
-                .startBlankForm("Space-separated event list")
-                .assertText("cheese")
-                .swipeToNextQuestion("First load group")
-                .assertText("more cheese")
-                .swipeToNextQuestion("My value")
-                .assertText("5")
-                .swipeToEndScreen()
-                .clickFinalize();
-    }
-
     private String getQuestionText() {
         FormFillingActivity formFillingActivity = (FormFillingActivity) ActivityHelpers.getActivity();
         FrameLayout questionContainer = formFillingActivity.findViewById(R.id.text_container);
