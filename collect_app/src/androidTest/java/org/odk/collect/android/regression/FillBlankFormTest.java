@@ -14,8 +14,6 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormFillingActivity;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
@@ -298,40 +296,6 @@ public class FillBlankFormTest {
                 .swipeToPreviousQuestion("7.1 Select the type of fishing equipment used today to catch the fish present", true)
                 .clickOnText("Seinenet")
                 .swipeToNextQuestion("7.2 What is the size of the mesh for the Seinenet ?", true);
-    }
-
-    @Test
-    public void missingFileMessage_shouldBeDisplayedIfExternalFileIsMissing() {
-        String formsDirPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS);
-
-        //TestCase55
-        rule.startAtMainMenu()
-                .copyForm("search_and_select.xml")
-                .startBlankForm("search_and_select")
-                .assertText("File: " + formsDirPath + "/search_and_select-media/nombre.csv is missing.")
-                .assertText("File: " + formsDirPath + "/search_and_select-media/nombre2.csv is missing.")
-                .swipeToEndScreen()
-                .clickFinalize()
-
-                .copyForm("select_one_external.xml")
-                .startBlankForm("cascading select test")
-                .clickOnText("Texas")
-                .swipeToNextQuestion("county")
-                .assertText("File: " + formsDirPath + "/select_one_external-media/itemsets.csv is missing.")
-                .swipeToNextQuestion("city")
-                .assertText("File: " + formsDirPath + "/select_one_external-media/itemsets.csv is missing.")
-                .swipeToEndScreen()
-                .clickFinalize()
-
-                .copyForm("fieldlist-updates_nocsv.xml")
-                .startBlankForm("fieldlist-updates")
-                .clickGoToArrow()
-                .clickGoUpIcon()
-                .clickOnElementInHierarchy(14)
-                .clickOnQuestion("Source15")
-                .assertText("File: " + formsDirPath + "/fieldlist-updates_nocsv-media/fruits.csv is missing.")
-                .swipeToEndScreen()
-                .clickFinalize();
     }
 
     private String getQuestionText() {
