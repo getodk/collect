@@ -34,7 +34,6 @@ class FormMediaTest {
     fun missingFileMessage_shouldBeDisplayedIfExternalFileIsMissing() {
         val formsDirPath = StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
 
-        //TestCase55
         rule.startAtMainMenu()
             .copyForm("search_and_select.xml")
             .startBlankForm("search_and_select")
