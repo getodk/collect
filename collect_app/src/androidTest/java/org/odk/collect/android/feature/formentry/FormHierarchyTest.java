@@ -225,4 +225,17 @@ public class FormHierarchyTest {
                 .rotateToLandscape(new FormHierarchyPage("Repeat Group"))
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0);
     }
+
+    @Test
+    public void theListOfQuestionsShouldBeScrolledToTheLastDisplayedQuestionAfterOpeningTheHierarchy() {
+        rule.startAtMainMenu()
+                .copyForm("manyQ.xml")
+                .startBlankForm("manyQ")
+                .swipeToNextQuestion("t2")
+                .swipeToNextQuestion("n1")
+                .clickGoToArrow()
+                .assertText("n1")
+                .assertTextDoesNotExist("t1")
+                .assertTextDoesNotExist("t2");
+    }
 }

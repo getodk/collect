@@ -219,20 +219,6 @@ public class FillBlankFormTest {
     }
 
     @Test
-    public void question_ShouldBeVisibleOnTheTopOfHierarchy() {
-        //TestCase23
-        rule.startAtMainMenu()
-                .copyForm("manyQ.xml")
-                .startBlankForm("manyQ")
-                .swipeToNextQuestion("t2")
-                .swipeToNextQuestion("n1")
-                .clickGoToArrow()
-                .assertText("n1")
-                .assertTextDoesNotExist("t1")
-                .assertTextDoesNotExist("t2");
-    }
-
-    @Test
     public void noDataLost_ShouldRememberAnswersForMultiSelectWidget() {
         //TestCase44
         rule.startAtMainMenu()
