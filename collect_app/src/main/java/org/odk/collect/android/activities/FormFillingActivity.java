@@ -65,6 +65,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.javarosa.core.model.FormDef;
@@ -263,6 +264,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private Animation inAnimation;
     private Animation outAnimation;
 
+    private AppBarLayout appBarLayout;
     private FrameLayout questionHolder;
     private SwipeHandler.View currentView;
 
@@ -468,6 +470,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
         formError = null;
 
+        appBarLayout = findViewById(org.odk.collect.androidshared.R.id.appBarLayout);
         questionHolder = findViewById(R.id.questionholder);
 
         initToolbar();
@@ -1417,6 +1420,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         } else {
             animationCompletionSet = 2;
         }
+        appBarLayout.setLiftOnScrollTargetViewId(R.id.odk_view_container);
         // start InAnimation for transition...
         currentView.startAnimation(inAnimation);
 
