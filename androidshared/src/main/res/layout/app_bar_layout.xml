@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+     When scrolling, the top app bar fills with a contrasting color to create a visual separation.
+     This works automatically if your scrolling view (e.g., `RecyclerView`, `ListView`) is placed directly
+     beneath the `AppBarLayout`. However, if the scrolling view is nested within another view
+     (such as a `ConstraintLayout`, which is common in this app), you need to help the app bar determine
+     whether it should lift by setting `app:liftOnScrollTargetViewId` to the ID of the scrolling view.
+     Since this `AppBarLayout` is used throughout the app with various scrolling views, it’s best to
+     use a shared ID like `scrollable_container`.
+     If the scrollable view is added programmatically, it may not work as expected anyway, and
+     `app:liftOnScrollTargetViewId` might need to be updated programmatically after adding such a view.
+     The `ODKView` and its `odk_view_container` is a good example of this scenario.
+-->
 <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
