@@ -107,9 +107,6 @@ object LocalEntityUseCases {
                     serverEntity.version != existing.trunkVersion
                 ) {
                     val update = existing.copy(
-                        label = serverEntity.label,
-                        version = serverEntity.version,
-                        properties = serverEntity.properties.toList(),
                         state = Entity.State.ONLINE,
                         branchId = UUID.randomUUID().toString(),
                         trunkVersion = serverEntity.version
