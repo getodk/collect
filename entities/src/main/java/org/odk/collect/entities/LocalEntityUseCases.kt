@@ -80,16 +80,28 @@ object LocalEntityUseCases {
                 val serverEntity = parseEntityFromRecord(record) ?: return
                 val existing = missingFromServer.remove(serverEntity.id)
 
-                if (existing == null || existing.version < serverEntity.version) {
-                    newAndUpdated.add(serverEntity.copy(branchId = UUID.randomUUID().toString()))
-                } else if (existing.version == serverEntity.version) {
-                    val hasDifferentProperties = existing.properties != serverEntity.properties
-                    val hasDifferentTrunkVersion =
-                        existing.trunkVersion != serverEntity.trunkVersion
-                    if (hasDifferentProperties || hasDifferentTrunkVersion) {
-                        val update = serverEntity.copy(branchId = UUID.randomUUID().toString())
-                        newAndUpdated.add(update)
-                    }
+                if (existing == null) {
+                    newAndUpdated.add(
+                        Entity.New(
+                            serverEntity.id,
+                            serverEntity.label,
+                            serverEntity.version,
+                            serverEntity.properties.toList(),
+                            state = Entity.State.ONLINE,
+                            trunkVersion = serverEntity.version,
+                            branchId = UUID.randomUUID().toString()
+                        )
+                    )
+                } else if (existing.version <= serverEntity.version) {
+                    val update = existing.copy(
+                        label = serverEntity.label,
+                        version = serverEntity.version,
+                        properties = serverEntity.properties.toList(),
+                        state = Entity.State.ONLINE,
+                        branchId = UUID.randomUUID().toString(),
+                        trunkVersion = serverEntity.version
+                    )
+                    newAndUpdated.add(update)
                 } else if (existing.state == Entity.State.OFFLINE) {
                     val update = existing.copy(state = Entity.State.ONLINE)
                     newAndUpdated.add(update)
@@ -114,7 +126,7 @@ object LocalEntityUseCases {
         return "md5:${Md5.getMd5Hash(serverList)!!}"
     }
 
-    private fun parseEntityFromRecord(record: CSVRecord): Entity.New? {
+    private fun parseEntityFromRecord(record: CSVRecord): ServerEntity? {
         val map = record.toMap()
 
         val id = map.remove(EntityItemElement.ID)
@@ -124,13 +136,18 @@ object LocalEntityUseCases {
             return null
         }
 
-        return Entity.New(
+        return ServerEntity(
             id,
             label,
             version,
-            map.toList(),
-            state = Entity.State.ONLINE,
-            trunkVersion = version
+            map
         )
     }
 }
+
+private data class ServerEntity(
+    val id: String,
+    val label: String,
+    val version: Int,
+    val properties: Map<String, String>
+)
