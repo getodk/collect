@@ -7,9 +7,10 @@
      whether it should lift by setting `app:liftOnScrollTargetViewId` to the ID of the scrolling view.
      Since this `AppBarLayout` is used throughout the app with various scrolling views, it’s best to
      use a shared ID like `scrollable_container`.
-     If the scrollable view is added programmatically, it may not work as expected anyway, and
-     `app:liftOnScrollTargetViewId` might need to be updated programmatically after adding such a view.
-     The `ODKView` and its `odk_view_container` is a good example of this scenario.
+     If the scrollable view is added programmatically or it is displayed in a `ViewPager` with a
+     shared id, it may not work as expected anyway, and `app:liftOnScrollTargetViewId` might
+     need to be updated programmatically after adding such a view.
+     The `ODKView` and its `odk_view_container` or `DeleteFormsActivity` are good examples of this scenario.
 -->
 <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
