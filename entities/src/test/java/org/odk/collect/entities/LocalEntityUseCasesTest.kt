@@ -211,7 +211,6 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    @Ignore
     fun `updateLocalEntitiesFromServer does not write to repository if online and local are exactly the same`() {
         val entitiesRepository = MeasurableEntitiesRepository(entitiesRepository)
 

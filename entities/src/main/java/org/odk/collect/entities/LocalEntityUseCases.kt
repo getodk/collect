@@ -92,7 +92,20 @@ object LocalEntityUseCases {
                             branchId = UUID.randomUUID().toString()
                         )
                     )
-                } else if (existing.version <= serverEntity.version) {
+                } else if (existing.version < serverEntity.version) {
+                    val update = existing.copy(
+                        label = serverEntity.label,
+                        version = serverEntity.version,
+                        properties = serverEntity.properties.toList(),
+                        state = Entity.State.ONLINE,
+                        branchId = UUID.randomUUID().toString(),
+                        trunkVersion = serverEntity.version
+                    )
+                    newAndUpdated.add(update)
+                } else if (
+                    existing.version == serverEntity.version &&
+                    serverEntity.version != existing.trunkVersion
+                ) {
                     val update = existing.copy(
                         label = serverEntity.label,
                         version = serverEntity.version,
