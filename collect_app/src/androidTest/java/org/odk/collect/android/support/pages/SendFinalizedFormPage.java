@@ -10,6 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
+import org.hamcrest.Matcher;
 import org.odk.collect.android.R;
 
 public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
@@ -40,6 +41,10 @@ public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
         return this;
     }
 
+    /**
+     * @deprecated uses the deprecated {@link org.odk.collect.android.support.matchers.CustomMatchers#withIndex(Matcher, int)})} helper.
+     */
+    @Deprecated
     public SendFinalizedFormPage selectForm(int index) {
         onView(withIndex(withId(androidx.appcompat.R.id.checkbox), index)).perform(click());
         return this;

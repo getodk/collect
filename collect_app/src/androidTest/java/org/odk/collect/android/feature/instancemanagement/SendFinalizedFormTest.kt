@@ -150,8 +150,7 @@ class SendFinalizedFormTest {
 
             .clickSendFinalizedForm(2)
             .sortByDateNewestFirst()
-            .selectForm(0)
-            .selectForm(1)
+            .clickSelectAll()
             .clickSendSelected()
             .clickOK(SendFinalizedFormPage())
 
