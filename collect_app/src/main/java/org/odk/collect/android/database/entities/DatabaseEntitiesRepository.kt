@@ -83,9 +83,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                         it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
                         it.put(EntitiesTable.COLUMN_STATE, convertStateToInt(state))
 
-                        entity.properties.forEach { (name, value) ->
-                            it.put(name, value)
-                        }
+                        addPropertiesToContentValues(it, entity)
                     }
 
                     update(
@@ -103,9 +101,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                         it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
                         it.put(EntitiesTable.COLUMN_STATE, convertStateToInt(entity.state))
 
-                        entity.properties.forEach { (name, value) ->
-                            it.put("\"$name\"", value)
-                        }
+                        addPropertiesToContentValues(it, entity)
                     }
 
                     insertOrThrow(
@@ -423,6 +419,12 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         return when (state) {
             Entity.State.OFFLINE -> 0
             Entity.State.ONLINE -> 1
+        }
+    }
+
+    private fun addPropertiesToContentValues(contentValues: ContentValues, entity: Entity) {
+        entity.properties.forEach { (name, value) ->
+            contentValues.put("\"$name\"", value)
         }
     }
 }

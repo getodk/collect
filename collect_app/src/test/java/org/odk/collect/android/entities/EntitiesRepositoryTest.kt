@@ -259,8 +259,14 @@ abstract class EntitiesRepositoryTest {
             "One",
             properties = listOf(Pair("a.property", "value"), Pair("a-property", "value"))
         )
+
         repository.save("things", entity)
-        assertThat(repository.getEntities("things")[0], sameEntityAs(entity))
+        val savedEntity = repository.getEntities("things")[0]
+        assertThat(savedEntity, sameEntityAs(entity))
+
+        // Check update works as well
+        repository.save("things", savedEntity)
+        assertThat(repository.getEntities("things")[0], sameEntityAs(savedEntity))
     }
 
     @Test
