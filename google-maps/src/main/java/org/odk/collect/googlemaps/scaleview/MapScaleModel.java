@@ -32,7 +32,9 @@ class MapScaleModel {
         if (maxWidth != width) {
             maxWidth = width;
             return true;
-        } else return false;
+        } else {
+            return false;
+        }
     }
 
     void setTileSize(int tileSize) {
@@ -51,7 +53,9 @@ class MapScaleModel {
     Scale update(boolean meters) {
         float zoom = lastZoom;
         double latitude = lastLatitude;
-        if (zoom < 0 || Math.abs(latitude) > 90) return null;
+        if (zoom < 0 || Math.abs(latitude) > 90) {
+            return null;
+        }
 
         double tileSizeAtZoom0 = meters ? tileSizeMetersAt0Zoom : tileSizeFeetAt0Zoom;
         float[] distances = meters ? METERS : FT;
@@ -74,12 +78,19 @@ class MapScaleModel {
 
     private String text(float distance, boolean meters) {
         if (meters) {
-            if (distance < 1) return (int) (distance * 100) + " cm";
-            if (distance < 1000) return (int) distance + " m";
-            else return (int) distance / 1000 + " km";
+            if (distance < 1) {
+                return (int) (distance * 100) + " cm";
+            } else if (distance < 1000) {
+                return (int) distance + " m";
+            } else {
+                return (int) distance / 1000 + " km";
+            }
         } else {
-            if (distance < FT_IN_MILE) return (int) distance + " ft";
-            else return (int) distance / FT_IN_MILE + " mi";
+            if (distance < FT_IN_MILE) {
+                return (int) distance + " ft";
+            } else {
+                return (int) distance / FT_IN_MILE + " mi";
+            }
         }
     }
 }

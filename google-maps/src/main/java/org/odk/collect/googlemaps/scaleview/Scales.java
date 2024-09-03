@@ -3,7 +3,8 @@ package org.odk.collect.googlemaps.scaleview;
 import androidx.annotation.Nullable;
 
 class Scales {
-    private final Scale top, bottom;
+    private final Scale top;
+    private final Scale bottom;
 
     Scales(Scale top, Scale bottom) {
         this.top = top;

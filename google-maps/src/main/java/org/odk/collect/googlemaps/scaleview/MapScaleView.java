@@ -88,8 +88,11 @@ public class MapScaleView extends View {
      */
     @Deprecated
     public void setIsMiles(boolean miles) {
-        if (miles) milesOnly();
-        else metersAndMiles();
+        if (miles) {
+            milesOnly();
+        } else {
+            metersAndMiles();
+        }
     }
 
     public void metersOnly() {
@@ -113,7 +116,8 @@ public class MapScaleView extends View {
     }
 
     private void updateScales() {
-        Scale top, bottom = null;
+        Scale top;
+        Scale bottom = null;
 
         if (scaleType == ScaleType.MILES_ONLY) {
             top = mapScaleModel.update(false);

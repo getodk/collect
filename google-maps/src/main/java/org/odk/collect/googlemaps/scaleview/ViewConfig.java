@@ -18,7 +18,6 @@ class ViewConfig {
     final boolean expandRtl;
 
     ViewConfig(Context context, AttributeSet attrs) {
-//        float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
         float density = context.getResources().getDisplayMetrics().density;
 
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.MapScaleView, 0, 0);
