@@ -28,18 +28,20 @@ public class EntityFormFinalizationProcessor implements FormEntryFinalizationPro
         FormInstance mainInstance = formDef.getMainInstance();
 
         EntityFormExtra entityFormExtra = formDef.getExtras().get(EntityFormExtra.class);
-        List<Pair<XPathReference, String>> saveTos = entityFormExtra.getSaveTos();
+        if (entityFormExtra != null) {
+            List<Pair<XPathReference, String>> saveTos = entityFormExtra.getSaveTos();
 
-        TreeElement entityElement = EntityFormParser.getEntityElement(mainInstance);
-        if (entityElement != null) {
-            EntityAction action = EntityFormParser.parseAction(entityElement);
-            String dataset = EntityFormParser.parseDataset(entityElement);
+            TreeElement entityElement = EntityFormParser.getEntityElement(mainInstance);
+            if (entityElement != null) {
+                EntityAction action = EntityFormParser.parseAction(entityElement);
+                String dataset = EntityFormParser.parseDataset(entityElement);
 
-            if (action == EntityAction.CREATE || action == EntityAction.UPDATE) {
-                FormEntity entity = createEntity(entityElement, dataset, saveTos, mainInstance, action);
-                formEntryModel.getExtras().put(new EntitiesExtra(asList(entity)));
-            } else {
-                formEntryModel.getExtras().put(new EntitiesExtra(emptyList()));
+                if (action == EntityAction.CREATE || action == EntityAction.UPDATE) {
+                    FormEntity entity = createEntity(entityElement, dataset, saveTos, mainInstance, action);
+                    formEntryModel.getExtras().put(new EntitiesExtra(asList(entity)));
+                } else {
+                    formEntryModel.getExtras().put(new EntitiesExtra(emptyList()));
+                }
             }
         }
     }
