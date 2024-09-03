@@ -27,7 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.github.pengrad.mapscaleview.MapScaleView;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -51,6 +50,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
+import org.odk.collect.googlemaps.scaleview.MapScaleView;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
