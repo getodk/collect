@@ -1,3 +1,7 @@
+/*
+ * This file includes code from MapScaleView (https://github.com/pengrad/MapScaleView),
+ * licensed under the Apache License, Version 2.0.
+ */
 package org.odk.collect.googlemaps.scaleview;
 
 class MapScaleModel {
