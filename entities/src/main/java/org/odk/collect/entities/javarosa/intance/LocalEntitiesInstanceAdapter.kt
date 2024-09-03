@@ -76,9 +76,12 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
 
         if (!partial) {
             name.value = StringData(entity.id)
-            label.value = StringData(entity.label)
             version.value = StringData(entity.version.toString())
             branchId.value = StringData(entity.branchId)
+
+            if (entity.label != null) {
+                label.value = StringData(entity.label)
+            }
 
             if (entity.trunkVersion != null) {
                 trunkVersion.value = StringData(entity.trunkVersion.toString())

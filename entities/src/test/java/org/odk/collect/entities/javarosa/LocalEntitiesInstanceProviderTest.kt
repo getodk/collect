@@ -171,4 +171,21 @@ class LocalEntitiesInstanceProviderTest {
         assertThat(second.getFirstChild("name")!!.value!!.value, equalTo("2"))
         assertThat(second.multiplicity, equalTo(1))
     }
+
+    @Test
+    fun `includes blank label version when it is null`() {
+        val entity =
+            Entity.New(
+                "1",
+                label = null
+            )
+        entitiesRepository.save("people", entity)
+
+        val parser = LocalEntitiesInstanceProvider { entitiesRepository }
+        val instance = parser.get("people", "people.csv")
+        assertThat(instance.numChildren, equalTo(1))
+
+        val item = instance.getChildAt(0)!!
+        assertThat(item.getFirstChild(EntityItemElement.LABEL)?.value, equalTo(null))
+    }
 }
