@@ -4,6 +4,7 @@ import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.blankOrNullString
+import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Test
@@ -217,6 +218,31 @@ class LocalEntityUseCasesTest {
         assertThat(songs[0].trunkVersion, equalTo(3))
         assertThat(songs[0].branchId, not(blankOrNullString()))
         assertThat(songs[0].branchId, not(equalTo(onlineBranched.branchId)))
+    }
+
+    @Test
+    fun `updateLocalEntitiesFromServer overrides offline version if the online version is the same`() {
+        val offline = Entity.New("noah", "Noah", 2)
+        entitiesRepository.save("songs", offline)
+        val csv = createEntityList(
+            Entity.New(
+                "noah",
+                "Noa",
+                2,
+                properties = listOf("length" to "4:33")
+            )
+        )
+
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
+        val songs = entitiesRepository.getEntities("songs")
+        assertThat(songs.size, equalTo(1))
+        assertThat(songs[0].label, equalTo("Noa"))
+        assertThat(songs[0].properties, containsInAnyOrder("length" to "4:33"))
+        assertThat(songs[0].version, equalTo(2))
+        assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
+        assertThat(songs[0].trunkVersion, equalTo(2))
+        assertThat(songs[0].branchId, not(blankOrNullString()))
+        assertThat(songs[0].branchId, not(equalTo(offline.branchId)))
     }
 
     @Test

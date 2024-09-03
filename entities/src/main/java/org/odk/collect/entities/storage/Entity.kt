@@ -9,6 +9,10 @@ sealed interface Entity {
     val trunkVersion: Int?
     val branchId: String
 
+    fun isDirty(): Boolean {
+        return version != trunkVersion
+    }
+
     data class New(
         override val id: String,
         override val label: String?,
