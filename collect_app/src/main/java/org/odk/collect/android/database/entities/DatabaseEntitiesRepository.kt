@@ -25,7 +25,7 @@ import org.odk.collect.entities.storage.Entity
 private object ListsTable {
     const val TABLE_NAME = "lists"
     const val COLUMN_NAME = "name"
-    const val COLUMN_VERSION = "version"
+    const val COLUMN_HASH = "hash"
 }
 
 private object EntitiesTable {
@@ -123,9 +123,9 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             .foldAndClose(emptySet()) { set, cursor -> set + cursor.getString(ListsTable.COLUMN_NAME) }
     }
 
-    override fun updateListVersion(list: String, version: String) {
+    override fun updateListHash(list: String, hash: String) {
         val contentValues = ContentValues().also {
-            it.put(ListsTable.COLUMN_VERSION, version)
+            it.put(ListsTable.COLUMN_HASH, hash)
         }
 
         databaseConnection
@@ -138,11 +138,11 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             )
     }
 
-    override fun getListVersion(list: String): String? {
+    override fun getListHash(list: String): String? {
         return databaseConnection
             .readableDatabase
             .query(ListsTable.TABLE_NAME, "${ListsTable.COLUMN_NAME} = ?", arrayOf(list))
-            .first { it.getStringOrNull(ListsTable.COLUMN_VERSION) }
+            .first { it.getStringOrNull(ListsTable.COLUMN_HASH) }
     }
 
     override fun getEntities(list: String): List<Entity.Saved> {
@@ -437,7 +437,7 @@ private class EntitiesDatabaseMigrator :
             CREATE TABLE IF NOT EXISTS ${ListsTable.TABLE_NAME} (
                     $_ID integer PRIMARY KEY, 
                     ${ListsTable.COLUMN_NAME} text NOT NULL,
-                    ${ListsTable.COLUMN_VERSION} text
+                    ${ListsTable.COLUMN_HASH} text
             );
             """.trimIndent()
         )

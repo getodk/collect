@@ -11,6 +11,6 @@ interface EntitiesRepository {
     fun getById(list: String, id: String): Entity.Saved?
     fun getAllByProperty(list: String, property: String, value: String): List<Entity.Saved>
     fun getByIndex(list: String, index: Int): Entity.Saved?
-    fun updateListVersion(list: String, version: String)
-    fun getListVersion(list: String): String?
+    fun updateListHash(list: String, hash: String)
+    fun getListHash(list: String): String?
 }

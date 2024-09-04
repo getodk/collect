@@ -70,11 +70,11 @@ class InMemEntitiesRepository : EntitiesRepository {
         return getEntities(list).firstOrNull { it.index == index }
     }
 
-    override fun updateListVersion(list: String, version: String) {
-        listVersions[list] = version
+    override fun updateListHash(list: String, hash: String) {
+        listVersions[list] = hash
     }
 
-    override fun getListVersion(list: String): String? {
+    override fun getListHash(list: String): String? {
         return listVersions[list]
     }
 

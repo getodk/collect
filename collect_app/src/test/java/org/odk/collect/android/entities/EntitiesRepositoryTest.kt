@@ -629,7 +629,7 @@ abstract class EntitiesRepositoryTest {
         val repository = buildSubject()
 
         repository.addList("wine")
-        repository.updateListVersion("wine", "2024")
-        assertThat(repository.getListVersion("wine"), equalTo("2024"))
+        repository.updateListHash("wine", "2024")
+        assertThat(repository.getListHash("wine"), equalTo("2024"))
     }
 }

@@ -485,13 +485,13 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         return wrapped.getByIndex(list, index)
     }
 
-    override fun updateListVersion(list: String, version: String) {
+    override fun updateListHash(list: String, hash: String) {
         accesses += 1
-        wrapped.updateListVersion(list, version)
+        wrapped.updateListHash(list, hash)
     }
 
-    override fun getListVersion(list: String): String? {
+    override fun getListHash(list: String): String? {
         accesses += 1
-        return wrapped.getListVersion(list)
+        return wrapped.getListHash(list)
     }
 }
