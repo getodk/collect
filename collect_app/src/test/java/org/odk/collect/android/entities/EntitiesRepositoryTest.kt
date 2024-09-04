@@ -252,7 +252,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#save supports properties with dots and dashes`() {
+    fun `#save supports properties with dots and dashes when saving new entities and updating existing ones`() {
         val repository = buildSubject()
         val entity = Entity.New(
             "1",
@@ -264,7 +264,6 @@ abstract class EntitiesRepositoryTest {
         val savedEntity = repository.getEntities("things")[0]
         assertThat(savedEntity, sameEntityAs(entity))
 
-        // Check update works as well
         repository.save("things", savedEntity)
         assertThat(repository.getEntities("things")[0], sameEntityAs(savedEntity))
     }
