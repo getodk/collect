@@ -117,10 +117,7 @@ object LocalEntityUseCases {
             }
         }
 
-        if (newAndUpdated.isNotEmpty()) {
-            entitiesRepository.save(list, *newAndUpdated.toTypedArray())
-        }
-
+        entitiesRepository.save(list, *newAndUpdated.toTypedArray())
         entitiesRepository.updateListVersion(list, listVersion)
     }
 
