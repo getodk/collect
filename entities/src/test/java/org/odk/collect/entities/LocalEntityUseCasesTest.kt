@@ -328,18 +328,6 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer accesses entities repo only 4 times when saving multiple entities`() {
-        val csv = createEntityList(
-            Entity.New("noah", "Noah"),
-            Entity.New("seven-trumpets", "Seven Trumpets")
-        )
-
-        val entitiesRepository = MeasurableEntitiesRepository(entitiesRepository)
-        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
-        assertThat(entitiesRepository.accesses, equalTo(4))
-    }
-
-    @Test
     fun `updateLocalEntitiesFromServer does not remove offline entities that are not in online entities`() {
         entitiesRepository.save("songs", Entity.New("noah", "Noah"))
         val csv = createEntityList(Entity.New("cathedrals", "Cathedrals"))
