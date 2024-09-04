@@ -79,6 +79,12 @@ class NotificationDrawer {
     ): D {
         val device = waitForNotification(appName, title)
         device.findObject(By.text(title)).click()
+
+        val manage = device.findObject(By.text("Manage"))
+        if (manage != null) {
+            device.pressBack()
+        }
+
         isOpen = false
 
         return waitFor {
