@@ -269,6 +269,13 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#save with no entities works`() {
+        val repository = buildSubject()
+        repository.save("blah")
+        assertThat(repository.getLists(), equalTo(emptySet()))
+    }
+
+    @Test
     fun `#clear deletes all entities`() {
         val repository = buildSubject()
 

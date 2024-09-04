@@ -49,6 +49,10 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     )
 
     override fun save(list: String, vararg entities: Entity) {
+        if (entities.isEmpty()) {
+            return
+        }
+
         val listExists = listExists(list)
         if (!listExists) {
             createList(list)
