@@ -60,6 +60,7 @@ class NotificationDrawer {
         val actionElement = getExpandedElement(device, appName, actionText) ?: getExpandedElement(device, appName, actionText.uppercase())
         if (actionElement != null) {
             actionElement.click()
+            closeNotificationDrawerIfOpened()
             isOpen = false
         } else {
             throw AssertionError("Could not find \"$actionText\"")
@@ -99,7 +100,7 @@ class NotificationDrawer {
         }
 
         device.wait(Until.gone(By.text("No notifications")), 1000L)
-
+        closeNotificationDrawerIfOpened()
         isOpen = false
     }
 
