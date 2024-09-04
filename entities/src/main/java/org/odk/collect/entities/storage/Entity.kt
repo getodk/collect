@@ -6,7 +6,16 @@ sealed interface Entity {
     val version: Int
     val properties: List<Pair<String, String>>
     val state: State
+
+    /**
+     * The server version (from an entity list CSV) this is based on.
+     */
     val trunkVersion: Int?
+
+    /**
+     * The offline "branch" identifier. Should be updated whenever the local version is modified
+     * from the latest server version.
+     */
     val branchId: String
 
     fun isDirty(): Boolean {
