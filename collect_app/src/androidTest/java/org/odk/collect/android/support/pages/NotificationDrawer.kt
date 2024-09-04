@@ -88,12 +88,6 @@ class NotificationDrawer {
         }
     }
 
-    fun pressBack() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.pressBack()
-        isOpen = false
-    }
-
     fun clearAll() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val clearAll = device.findObject(By.text("Clear all"))
@@ -101,7 +95,7 @@ class NotificationDrawer {
             clearAll.click()
         } else {
             // "Clear all" doesn't exist because there are notifications to clear - just press back
-            pressBack()
+            device.pressBack()
         }
 
         device.wait(Until.gone(By.text("Notifications")), 1000L)
