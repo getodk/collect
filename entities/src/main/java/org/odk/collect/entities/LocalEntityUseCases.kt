@@ -7,7 +7,7 @@ import org.odk.collect.entities.javarosa.parse.EntityItemElement
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
-import org.odk.collect.shared.strings.Md5
+import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.File
 import java.util.UUID
 
@@ -122,7 +122,7 @@ object LocalEntityUseCases {
     }
 
     private fun getListHash(serverList: File): String {
-        return "md5:${Md5.getMd5Hash(serverList)!!}"
+        return "md5:${serverList.getMd5Hash()!!}"
     }
 
     private fun parseEntityFromRecord(record: CSVRecord): ServerEntity? {

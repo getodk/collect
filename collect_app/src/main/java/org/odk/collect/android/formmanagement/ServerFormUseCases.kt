@@ -12,7 +12,7 @@ import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.MediaFile
 import org.odk.collect.shared.locks.ChangeLock
-import org.odk.collect.shared.strings.Md5
+import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.File
 import java.io.IOException
 
@@ -92,14 +92,14 @@ object ServerFormUseCases {
             val existingFile = searchForExistingMediaFile(formsRepository, formToDownload, mediaFile)
             existingFile.also {
                 if (it != null) {
-                    if (Md5.getMd5Hash(it).contentEquals(mediaFile.hash)) {
+                    if (it.getMd5Hash().contentEquals(mediaFile.hash)) {
                         FileUtils.copyFile(it, tempMediaFile)
                     } else {
-                        val existingFileHash = Md5.getMd5Hash(it)
+                        val existingFileHash = it.getMd5Hash()
                         val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
                         FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
 
-                        if (!Md5.getMd5Hash(tempMediaFile).contentEquals(existingFileHash)) {
+                        if (!tempMediaFile.getMd5Hash().contentEquals(existingFileHash)) {
                             atLeastOneNewMediaFileDetected = true
                         }
                     }

@@ -23,7 +23,7 @@ import org.odk.collect.formstest.FormFixtures
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.shared.TempFiles
-import org.odk.collect.shared.strings.Md5
+import org.odk.collect.shared.strings.Md5.getMd5Hash
 import org.odk.collect.testshared.BooleanChangeLock
 import java.io.File
 
@@ -187,7 +187,7 @@ class ServerFormUseCasesTest {
         formsRepository.save(form2)
 
         // Set up same media file on server
-        val existingMediaFileHash = Md5.getMd5Hash(File(form2.formMediaPath, "file"))!!
+        val existingMediaFileHash = File(form2.formMediaPath, "file").getMd5Hash()!!
         val mediaFile = MediaFile("file", existingMediaFileHash, "downloadUrl")
         val manifestFile = ManifestFile(null, listOf(mediaFile))
         val serverFormDetails =
