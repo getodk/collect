@@ -10,6 +10,7 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.odk.collect.shared.TimeInMs
 import org.odk.collect.testshared.WaitFor.waitFor
 
 class NotificationDrawer {
@@ -79,16 +80,7 @@ class NotificationDrawer {
     ): D {
         val device = waitForNotification(appName, title)
         device.findObject(By.text(title)).click()
-
-        /*
-        It appears that sometimes the notification drawer does not close automatically
-        after clicking on a notification. This could be due to a bug in Android.
-         */
-        val manageButton = device.findObject(By.text("Manage"))
-        if (manageButton != null) {
-            device.pressBack()
-        }
-
+        closeNotificationDrawerIfOpened()
         isOpen = false
 
         return waitFor {
@@ -162,6 +154,19 @@ class NotificationDrawer {
                 `is`(true)
             )
             device
+        }
+    }
+
+    /*
+    It appears that sometimes the notification drawer does not close automatically
+    after clicking on a notification. This could be due to a bug in Android.
+    */
+    private fun closeNotificationDrawerIfOpened() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.wait(Until.hasObject(By.text("Manage")), TimeInMs.ONE_SECOND)
+        val manageButton = device.findObject(By.text("Manage"))
+        if (manageButton != null) {
+            device.pressBack()
         }
     }
 }
