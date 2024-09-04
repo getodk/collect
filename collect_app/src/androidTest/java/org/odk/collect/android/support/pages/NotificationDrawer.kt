@@ -80,6 +80,10 @@ class NotificationDrawer {
         val device = waitForNotification(appName, title)
         device.findObject(By.text(title)).click()
 
+        /*
+        It appears that sometimes the notification drawer does not close automatically
+        after clicking on a notification. This could be due to a bug in Android.
+         */
         val manage = device.findObject(By.text("Manage"))
         if (manage != null) {
             device.pressBack()
