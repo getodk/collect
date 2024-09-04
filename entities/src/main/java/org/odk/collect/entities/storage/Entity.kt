@@ -8,7 +8,9 @@ sealed interface Entity {
     val state: State
 
     /**
-     * The server version (from an entity list CSV) this is based on.
+     * The server version (from an entity list CSV) this is based on. This should only be updated
+     * when updating an entity from the server where as [version] should be incremented whenever
+     * there is a local change.
      */
     val trunkVersion: Int?
 
