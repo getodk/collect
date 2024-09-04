@@ -98,7 +98,7 @@ class NotificationDrawer {
             device.pressBack()
         }
 
-        device.wait(Until.gone(By.text("Notifications")), 1000L)
+        device.wait(Until.gone(By.text("No notifications")), 1000L)
 
         isOpen = false
     }
