@@ -236,25 +236,17 @@ public class FieldListUpdateTest {
     @Test
     public void clearingParentSelect_ShouldUpdateAllDependentLevels() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
-                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
-
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Cascading select"), isDisplayed())).perform(click());
-        onView(withText(startsWith("Level1"))).perform(click());
-
-        onView(withText("A")).perform(click());
-
-        onView(withText("A1")).perform(scrollTo(), click());
-        onView(withText("A1B")).perform(scrollTo(), click());
-
-        onView(withText("Level1")).perform(scrollTo(), longClick());
-        onView(withText(org.odk.collect.strings.R.string.clear_answer)).perform(click());
-        onView(withText(org.odk.collect.strings.R.string.discard_answer)).perform(click());
-
-        onView(withIndex(withClassName(endsWith("RadioButton")), 0)).check(matches(isNotChecked()));
-        onView(withText("A1")).check(doesNotExist());
-        onView(withText("A1B")).check(doesNotExist());
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Cascading select")
+                .clickOnQuestion("Level1")
+                .clickOnText("A")
+                .clickOnText("A1")
+                .clickOnText("A1B")
+                .longPressOnQuestion("Level1")
+                .removeResponse()
+                .assertTextsDoNotExist("A1", "A1B");
     }
 
     @Test
