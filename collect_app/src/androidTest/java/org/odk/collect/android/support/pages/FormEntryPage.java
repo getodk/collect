@@ -9,6 +9,8 @@ import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -432,6 +434,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage assertQuestionsOrder(String questionAbove, String questionBelow) {
         onView(withText(questionBelow)).check(isCompletelyBelow(withText(questionAbove)));
+        return this;
+    }
+
+    public FormEntryPage assertQuestionHasFocus(String questionText) {
+        onView(getQuestionFieldMatcher(questionText)).check(matches(isCompletelyDisplayed()));
+        onView(getQuestionFieldMatcher(questionText)).check(matches(hasFocus()));
         return this;
     }
 

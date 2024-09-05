@@ -18,9 +18,7 @@ package org.odk.collect.android.feature.formentry;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
@@ -29,7 +27,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -263,18 +260,15 @@ public class FieldListUpdateTest {
     @Test
     public void questionsAppearingBeforeCurrentTextQuestion_ShouldNotChangeFocus() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
-                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
-
-        jumpToGroupWithText("Push off screen");
-        onView(withText(startsWith("Source9"))).perform(click());
-
-        onView(withText("Target9-15")).check(doesNotExist());
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText("A"));
-
-        onView(withText("Target9-15")).check(matches(isDisplayed()));
-
-        onView(withIndex(withClassName(endsWith("EditText")), 15)).check(matches(isCompletelyDisplayed()));
-        onView(withIndex(withClassName(endsWith("EditText")), 15)).check(matches(hasFocus()));
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Push off screen")
+                .clickOnQuestion("Source9")
+                .assertTextDoesNotExist("Target9-15")
+                .answerQuestion("Source9", "A")
+                .assertQuestion("Target9-15")
+                .assertQuestionHasFocus("Source9");
     }
 
     @Test
