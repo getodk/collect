@@ -36,6 +36,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.google.android.gms.common.util.CollectionUtils.listOf;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.core.IsNot.not;
@@ -65,7 +66,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.rules.BlankFormTestRule;
+import org.odk.collect.android.support.rules.FormEntryActivityTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.androidtest.RecordedIntentsRule;
 import org.odk.collect.settings.keys.ProjectKeys;
@@ -73,19 +74,11 @@ import org.odk.collect.settings.keys.ProjectKeys;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Random;
 import java.util.UUID;
 
 public class FieldListUpdateTest {
-
-    private static final String FIELD_LIST_TEST_FORM = "fieldlist-updates.xml";
-
-    public BlankFormTestRule rule = new BlankFormTestRule(
-            FIELD_LIST_TEST_FORM,
-            "fieldlist-updates",
-            Collections.singletonList("fruits.csv")
-    );
+    public FormEntryActivityTestRule rule = new FormEntryActivityTestRule();
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
@@ -94,6 +87,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void relevanceChangeAtEnd_ShouldToggleLastWidgetVisibility() {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         jumpToGroupWithText("Single relevance at end");
         onView(withText("Source1")).perform(click());
 
@@ -109,6 +105,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void relevanceChangeAtBeginning_ShouldToggleFirstWidgetVisibility() {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         jumpToGroupWithText("Single relevance at beginning");
         onView(withText("Source2")).perform(click());
 
@@ -124,6 +123,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void relevanceChangeInMiddle_ShouldToggleMiddleWidgetVisibility() {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         jumpToGroupWithText("Single relevance in middle");
         onView(withText("Source3")).perform(click());
 
@@ -140,7 +142,8 @@ public class FieldListUpdateTest {
 
     @Test
     public void longPress_ShouldClearAndUpdate() {
-        rule.startInFormEntry()
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickOnGroup("Single relevance in middle")
@@ -158,6 +161,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void changeInValueUsedInLabel_ShouldChangeLabelText() {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         jumpToGroupWithText("Label change");
         onView(withText(startsWith("Hello"))).perform(click());
 
@@ -173,6 +179,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void changeInValueUsedInHint_ShouldChangeHintText() {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         jumpToGroupWithText("Hint change");
         onView(withText(startsWith("What is your"))).perform(click());
 
@@ -189,6 +198,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void changeInValueUsedInOtherField_ShouldChangeValue() {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.menu_go_up)).perform(click());
         onView(allOf(withText("Value change"), isDisplayed())).perform(click());
@@ -209,6 +221,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void selectionChangeAtFirstCascadeLevel_ShouldUpdateNextLevels() {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         jumpToGroupWithText("Cascading select");
         onView(withText(startsWith("Level1"))).perform(click());
 
@@ -242,6 +257,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void clearingParentSelect_ShouldUpdateAllDependentLevels() {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.menu_go_up)).perform(click());
         onView(allOf(withText("Cascading select"), isDisplayed())).perform(click());
@@ -263,6 +281,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void selectionChangeAtOneCascadeLevelWithMinimalAppearance_ShouldUpdateNextLevels() {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         new FormEntryPage("fieldlist-updates")
                 .clickGoToArrow()
                 .clickGoUpIcon()
@@ -288,6 +309,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void questionsAppearingBeforeCurrentTextQuestion_ShouldNotChangeFocus() {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         jumpToGroupWithText("Push off screen");
         onView(withText(startsWith("Source9"))).perform(click());
 
@@ -302,6 +326,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void questionsAppearingBeforeCurrentBinaryQuestion_ShouldNotChangeFocus() throws IOException {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         jumpToGroupWithText("Push off screen binary");
         onView(withText(startsWith("Source10"))).perform(click());
 
@@ -324,6 +351,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void changeInValueUsedInGuidanceHint_ShouldChangeGuidanceHintText() {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext())
                 .settingsProvider()
                 .getUnprotectedSettings()
@@ -340,6 +370,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void selectingADateForDateTime_ShouldChangeRelevanceOfRelatedField() {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         jumpToGroupWithText("Date time");
         onView(withText(startsWith("Source12"))).perform(click());
 
@@ -353,6 +386,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void selectingARating_ShouldChangeRelevanceOfRelatedField() throws Exception {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         jumpToGroupWithText("Rating");
         onView(withText(startsWith("Source13"))).perform(click());
 
@@ -368,6 +404,9 @@ public class FieldListUpdateTest {
 
     @Test
     public void manuallySelectingAValueForMissingExternalApp_ShouldTriggerUpdate() {
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
+
         jumpToGroupWithText("External app");
         onView(withText(startsWith("Source14"))).perform(click());
 
@@ -379,7 +418,8 @@ public class FieldListUpdateTest {
 
     @Test
     public void searchMinimalInFieldList() {
-        new FormEntryPage("fieldlist-updates")
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickOnGroup("Search in field-list")
@@ -393,7 +433,8 @@ public class FieldListUpdateTest {
 
     @Test
     public void listOfQuestionsShouldNotBeScrolledToTheLastEditedQuestionAfterClickingOnAQuestion() {
-        new FormEntryPage("fieldlist-updates")
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickOnGroup("Long list of questions")
@@ -405,7 +446,8 @@ public class FieldListUpdateTest {
 
     @Test
     public void recordingAudio_ShouldChangeRelevanceOfRelatedField() {
-        new FormEntryPage("fieldlist-updates")
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickOnGroup("Audio")
@@ -421,7 +463,8 @@ public class FieldListUpdateTest {
 
     @Test
     public void changeInValueUsedToDetermineIfAQuestionIsRequired_ShouldUpdateTheRelatedRequiredQuestion() {
-        new FormEntryPage("fieldlist-updates")
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickOnGroup("Dynamic required question")
