@@ -200,37 +200,25 @@ public class FieldListUpdateTest {
     @Test
     public void selectionChangeAtFirstCascadeLevel_ShouldUpdateNextLevels() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
-                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
-
-        jumpToGroupWithText("Cascading select");
-        onView(withText(startsWith("Level1"))).perform(click());
-
-        // No choices should be shown for levels 2 and 3 when no selection is made for level 1
-        onView(withText("A1")).check(doesNotExist());
-        onView(withText("B1")).check(doesNotExist());
-        onView(withText("C1")).check(doesNotExist());
-        onView(withText("A1A")).check(doesNotExist());
-
-        // Selecting C for level 1 should only reveal options for C at level 2
-        onView(withText("C")).perform(click());
-        onView(withText("A1")).check(doesNotExist());
-        onView(withText("B1")).check(doesNotExist());
-        onView(withText("C1")).check(matches(isDisplayed()));
-        onView(withText("A1A")).check(doesNotExist());
-
-        // Selecting A for level 1 should reveal options for A at level 2
-        onView(withText("A")).perform(click());
-        onView(withText("A1")).check(matches(isDisplayed()));
-        onView(withText("A1A")).check(doesNotExist());
-        onView(withText("B1")).check(doesNotExist());
-        onView(withText("C1")).check(doesNotExist());
-
-        // Selecting A1 for level 2 should reveal options for A1 at level 3
-        onView(withText("A1")).perform(click());
-        onView(withText("A1A")).perform(scrollTo());
-        onView(withText("A1A")).check(matches(isDisplayed()));
-        onView(withText("B1")).check(doesNotExist());
-        onView(withText("C1")).check(doesNotExist());
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Cascading select")
+                .clickOnQuestion("Level1")
+                // No choices should be shown for levels 2 and 3 when no selection is made for level 1
+                .assertTextsDoNotExist("A1", "B1", "C1", "A1A")
+                // Selecting C for level 1 should only reveal options for C at level 2
+                .clickOnText("C")
+                .assertTextsDoNotExist("A1", "B1", "A1A")
+                .assertText("C1")
+                // Selecting A for level 1 should reveal options for A at level 2
+                .clickOnText("A")
+                .assertTextsDoNotExist("A1A", "B1", "C1")
+                .assertText("A1")
+                // Selecting A1 for level 2 should reveal options for A1 at level 3
+                .clickOnText("A1")
+                .assertText("A1A")
+                .assertTextsDoNotExist("B1", "C1");
     }
 
     @Test
