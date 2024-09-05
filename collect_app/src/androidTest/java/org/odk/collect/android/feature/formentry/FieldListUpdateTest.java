@@ -405,15 +405,15 @@ public class FieldListUpdateTest {
     @Test
     public void manuallySelectingAValueForMissingExternalApp_ShouldTriggerUpdate() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
-                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
-
-        jumpToGroupWithText("External app");
-        onView(withText(startsWith("Source14"))).perform(click());
-
-        onView(withText(startsWith("Launch"))).perform(click());
-        onView(withClassName(endsWith("EditText"))).perform(replaceText(String.valueOf(new Random().nextInt())));
-
-        onView(withText("Target14")).check(matches(isDisplayed()));
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("External app")
+                .clickOnQuestion("Source14")
+                .clickOnText("Launch")
+                .assertTextDoesNotExist("Target14")
+                .answerQuestion("Source14", String.valueOf(new Random().nextInt()))
+                .assertQuestion("Target14");
     }
 
     @Test
