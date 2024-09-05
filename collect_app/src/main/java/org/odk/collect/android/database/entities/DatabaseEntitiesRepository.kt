@@ -124,6 +124,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         updateRowIdTable()
+        DatabaseConnection.closeAll()
     }
 
     override fun getLists(): Set<String> {
