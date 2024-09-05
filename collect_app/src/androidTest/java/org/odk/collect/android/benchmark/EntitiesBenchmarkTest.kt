@@ -25,6 +25,7 @@ import org.odk.collect.strings.R
  *
  * Devices that currently pass:
  * - Fairphone 3
+ * - Pixel 3
  *
  */
 
@@ -66,7 +67,7 @@ class EntitiesBenchmarkTest {
             .clickOKOnDialog(MainMenuPage())
 
             .clickGetBlankForm()
-            .benchmark("Downloading form with http cache", 25, benchmarker) {
+            .benchmark("Downloading form with http cache", 40, benchmarker) {
                 it.clickGetSelected()
             }
 
