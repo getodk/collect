@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<h:html
+	xmlns="http://www.w3.org/2002/xforms"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:jr="http://openrosa.org/javarosa"
+	xmlns:orx="http://openrosa.org/xforms"
+	xmlns:odk="http://www.opendatakit.org/xforms"
+	xmlns:entities="http://www.opendatakit.org/xforms/entities">
+	<h:head>
+		<h:title>Cactus Monitoring</h:title>
+		<model odk:xforms-version="1.0.0" entities:entities-version="2024.1.0">
+			<instance>
+				<data id="cactus_monitoring" version="20240724154512_offline_fixed">
+					<cactus/>
+					<species/>
+					<tag/>
+					<existing_height/>
+					<height/>
+					<spikes/>
+					<health/>
+					<maintenance/>
+					<maintenance_time/>
+					<meta>
+						<instanceID/>
+						<entity dataset="cacti" id="" update="1" baseVersion="" trunkVersion="" branchId="">
+							<label/>
+						</entity>
+					</meta>
+				</data>
+			</instance>
+			<instance id="cacti" src="jr://file-csv/cacti.csv"/>
+			<bind nodeset="/data/cactus" type="string"/>
+			<bind nodeset="/data/species" type="string" calculate="instance('cacti')/root/item[name =  /data/cactus ]/species"/>
+			<bind nodeset="/data/tag" type="string" calculate="instance('cacti')/root/item[name =  /data/cactus ]/tag"/>
+			<bind nodeset="/data/existing_height" type="string" calculate="instance('cacti')/root/item[name =  /data/cactus ]/height"/>
+			<bind nodeset="/data/height" type="int" entities:saveto="height"/>
+			<bind nodeset="/data/spikes" type="int" entities:saveto="spikes"/>
+			<bind nodeset="/data/health" type="string" entities:saveto="health"/>
+			<bind nodeset="/data/maintenance" type="string" entities:saveto="last_maintenance"/>
+			<bind nodeset="/data/maintenance_time" type="time" entities:saveto="last_maintenance_time" calculate="now()"/>
+			<bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+			<bind nodeset="/data/meta/entity/@id" type="string" readonly="true()" calculate=" /data/cactus "/>
+			<bind nodeset="/data/meta/entity/@baseVersion" calculate="instance('cacti')/root/item[name= /data/cactus ]/__version" type="string" readonly="true()"/>
+			<bind nodeset="/data/meta/entity/@trunkVersion" calculate="instance('cacti')/root/item[name= /data/cactus ]/__trunkVersion" type="string" readonly="true()"/>
+			<bind nodeset="/data/meta/entity/@branchId" calculate="instance('cacti')/root/item[name= /data/cactus ]/__branchId" type="string" readonly="true()"/>
+			<bind nodeset="/data/meta/entity/label" calculate="concat( /data/species , ' Tag #',  /data/tag )" type="string" readonly="true()"/>
+		</model>
+	</h:head>
+	<h:body>
+		<select1 ref="/data/cactus">
+			<label>Select the cactus you are visiting</label>
+			<itemset nodeset="instance('cacti')/root/item">
+				<value ref="name"/>
+				<label ref="label"/>
+			</itemset>
+		</select1>
+		<input ref="/data/height">
+			<label>Measured height</label>
+			<hint> Previous height: 
+				<output value=" /data/existing_height "/>
+			</hint>
+		</input>
+		<input ref="/data/spikes">
+			<label>Number of spikes</label>
+		</input>
+		<input ref="/data/health">
+			<label>Health</label>
+		</input>
+		<input ref="/data/maintenance">
+			<label>Plant maintenance performed</label>
+		</input>
+		<input ref="/data/maintenance_time">
+			<label>Time of last maintenance</label>
+		</input>
+	</h:body>
+</h:html>

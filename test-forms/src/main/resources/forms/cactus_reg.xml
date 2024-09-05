@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<h:html
+	xmlns="http://www.w3.org/2002/xforms"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:jr="http://openrosa.org/javarosa"
+	xmlns:orx="http://openrosa.org/xforms"
+	xmlns:odk="http://www.opendatakit.org/xforms"
+	xmlns:entities="http://www.opendatakit.org/xforms/entities">
+	<h:head>
+		<h:title>Cactus Registration</h:title>
+		<model odk:xforms-version="1.0.0" entities:entities-version="2024.1.0">
+			<instance>
+				<data id="cactus_reg" version="20240724152904_offline">
+					<species/>
+					<tag/>
+					<height/>
+					<meta>
+						<instanceID/>
+						<entity dataset="cacti" id="" create="1" trunkVersion="" branchId="" baseVersion="">
+							<label/>
+						</entity>
+					</meta>
+				</data>
+			</instance>
+			<instance id="species">
+				<root>
+					<item>
+						<name>prickly_pear</name>
+						<label>Prickly Pear</label>
+					</item>
+					<item>
+						<name>saguaro</name>
+						<label>Saguaro</label>
+					</item>
+					<item>
+						<name>barrel</name>
+						<label>Barrel</label>
+					</item>
+					<item>
+						<name>golden_barrel</name>
+						<label>Golden Barrel</label>
+					</item>
+					<item>
+						<name>parodia</name>
+						<label>Parodia</label>
+					</item>
+					<item>
+						<name>hedgehog</name>
+						<label>Hedgehog</label>
+					</item>
+				</root>
+			</instance>
+			<bind nodeset="/data/species" type="string" required="true()" entities:saveto="species"/>
+			<bind nodeset="/data/tag" type="string" required="true()" entities:saveto="tag"/>
+			<bind nodeset="/data/height" type="int" entities:saveto="height"/>
+			<bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+			<bind nodeset="/data/meta/entity/@id" type="string" readonly="true()"/>
+			<setvalue ref="/data/meta/entity/@id" event="odk-instance-first-load" type="string" readonly="true()" value="uuid()"/>
+			<bind nodeset="/data/meta/entity/label" calculate="concat( /data/species , &quot; #&quot;,  /data/tag )" type="string" readonly="true()"/>
+		</model>
+	</h:head>
+	<h:body>
+		<select1 ref="/data/species">
+			<label>Cactus species</label>
+			<itemset nodeset="instance('species')/root/item">
+				<value ref="name"/>
+				<label ref="label"/>
+			</itemset>
+		</select1>
+		<input ref="/data/tag">
+			<label>Tag</label>
+		</input>
+		<input ref="/data/height">
+			<label>Height in cm</label>
+		</input>
+	</h:body>
+</h:html>

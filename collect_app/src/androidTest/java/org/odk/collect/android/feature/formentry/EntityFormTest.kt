@@ -83,6 +83,53 @@ class EntityFormTest {
     }
 
     @Test
+    fun blah() {
+        testDependencies.server.addForm("cactus_reg.xml")
+        testDependencies.server.addForm(
+            "cactus_monitoring.xml",
+            listOf(EntityListItem("cacti.csv"))
+        )
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
+            .startBlankForm("Cactus Registration")
+            .clickOnText("Prickly Pear")
+            .swipeToNextQuestion("Tag", true)
+            .answerQuestion("Tag", true, "Blah")
+            .clickGoToArrow()
+            .clickGoToEnd()
+            .clickFinalize()
+
+            .startBlankForm("Cactus Monitoring")
+            .clickOnText("prickly_pear #Blah")
+            .swipeToNextQuestion("Measured height")
+            .answerQuestion("Measured height", "12")
+            .clickGoToArrow()
+            .clickGoToEnd()
+            .clickFinalize()
+
+            .startBlankForm("Cactus Monitoring")
+            .clickOnText("prickly_pear Tag #Blah")
+            .swipeToNextQuestion("Measured height")
+            .answerQuestion("Measured height", "13")
+            .clickGoToArrow()
+            .clickGoToEnd()
+            .clickFinalize()
+
+            .also {
+                testDependencies.server.removeForm("Cactus Monitoring")
+                testDependencies.server.addForm(
+                    "cactus_monitoring.xml",
+                    listOf(EntityListItem("cacti.csv", "cacti-new-property.csv"))
+                )
+            }
+
+            .clickFillBlankForm()
+            .clickRefresh()
+            .clickOnForm("Cactus Monitoring")
+            .assertText("prickly_pear Tag #Blah")
+    }
+
+    @Test
     fun fillingEntityCreateForm_withUpdate_doesNotCreateEntityForFollowUpForms() {
         testDependencies.server.addForm("one-question-entity-create-and-update.xml")
         testDependencies.server.addForm(
