@@ -7,6 +7,7 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
+import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -421,6 +422,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage setRating(float value) {
         onView(allOf(withId(R.id.rating_bar1), isDisplayed())).perform(ViewActions.setRating(value));
+        return this;
+    }
+
+    public FormEntryPage assertQuestionsOrder(String questionAbove, String questionBelow) {
+        onView(withText(questionBelow)).check(isCompletelyBelow(withText(questionAbove)));
         return this;
     }
 

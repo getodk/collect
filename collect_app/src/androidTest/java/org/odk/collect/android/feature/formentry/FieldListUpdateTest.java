@@ -83,19 +83,13 @@ public class FieldListUpdateTest {
     @Test
     public void relevanceChangeAtEnd_ShouldToggleLastWidgetVisibility() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
-                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
-
-        jumpToGroupWithText("Single relevance at end");
-        onView(withText("Source1")).perform(click());
-
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withText("Target1")).check(doesNotExist());
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText("A"));
-        onView(withText("Target1")).check(matches(isDisplayed()));
-        onView(withText("Target1")).check(isCompletelyBelow(withText("Source1")));
-
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withText("Target1")).check(doesNotExist());
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
+                .assertTextDoesNotExist("Target1")
+                .answerQuestion("Source1", "A")
+                .assertQuestion("Target1")
+                .assertQuestionsOrder("Source1", "Target1")
+                .answerQuestion("Source1", "")
+                .assertTextDoesNotExist("Target1");
     }
 
     @Test
