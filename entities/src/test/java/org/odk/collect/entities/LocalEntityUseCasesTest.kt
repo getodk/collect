@@ -153,7 +153,24 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromServer overrides offline version if the online version is newer`() {
-        val offline = Entity.New("noah", "Noa", 1)
+        val offline = Entity.New("noah", "Noa", 1, trunkVersion = 1)
+        entitiesRepository.save("songs", offline)
+        val csv = createEntityList(Entity.New("noah", "Noah", 2))
+
+        LocalEntityUseCases.updateLocalEntitiesFromServer("songs", csv, entitiesRepository)
+        val songs = entitiesRepository.getEntities("songs")
+        assertThat(songs.size, equalTo(1))
+        assertThat(songs[0].label, equalTo("Noah"))
+        assertThat(songs[0].version, equalTo(2))
+        assertThat(songs[0].state, equalTo(Entity.State.ONLINE))
+        assertThat(songs[0].trunkVersion, equalTo(2))
+        assertThat(songs[0].branchId, not(blankOrNullString()))
+        assertThat(songs[0].branchId, not(equalTo(offline.branchId)))
+    }
+
+    @Test
+    fun `updateLocalEntitiesFromServer overrides offline version if the online version is newer and the offline version is dirty`() {
+        val offline = Entity.New("noah", "Noa", 1, trunkVersion = null)
         entitiesRepository.save("songs", offline)
         val csv = createEntityList(Entity.New("noah", "Noah", 2))
 

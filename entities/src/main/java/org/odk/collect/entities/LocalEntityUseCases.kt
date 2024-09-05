@@ -93,7 +93,7 @@ object LocalEntityUseCases {
                         )
                     )
                 } else if (existing.version <= serverEntity.version) {
-                    if (existing.isDirty()) {
+                    if (existing.isDirty() || serverEntity.version > existing.version) {
                         val update = existing.copy(
                             label = serverEntity.label,
                             version = serverEntity.version,
