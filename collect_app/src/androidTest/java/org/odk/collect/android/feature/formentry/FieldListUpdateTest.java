@@ -48,16 +48,11 @@ import android.app.Application;
 import android.app.Instrumentation;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.view.View;
-import android.widget.RatingBar;
 
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 
-import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -387,19 +382,17 @@ public class FieldListUpdateTest {
     @Test
     public void selectingARating_ShouldChangeRelevanceOfRelatedField() throws Exception {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
-                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
-
-        jumpToGroupWithText("Rating");
-        onView(withText(startsWith("Source13"))).perform(click());
-
-        onView(withText("Target13")).check(doesNotExist());
-        onView(allOf(withId(R.id.rating_bar1), isDisplayed())).perform(setRating(3.0f));
-        onView(withText("Target13")).check(matches(isDisplayed()));
-
-        onView(withText("Source13")).perform(longClick());
-        onView(withText(org.odk.collect.strings.R.string.clear_answer)).perform(click());
-        onView(withText(org.odk.collect.strings.R.string.discard_answer)).perform(click());
-        onView(withText("Target13")).check(doesNotExist());
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Rating")
+                .clickOnQuestion("Source13")
+                .assertTextDoesNotExist("Target13")
+                .setRating(3.0f)
+                .assertQuestion("Target13")
+                .longPressOnQuestion("Source13")
+                .removeResponse()
+                .assertTextDoesNotExist("Target13");
     }
 
     @Test
@@ -486,25 +479,5 @@ public class FieldListUpdateTest {
         onView(withId(R.id.list)).perform(RecyclerViewActions.scrollTo(hasDescendant(withText(text))));
 
         onView(allOf(isDisplayed(), withText(text))).perform(click());
-    }
-
-    public static ViewAction setRating(final float rating) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return ViewMatchers.isAssignableFrom(RatingBar.class);
-            }
-
-            @Override
-            public String getDescription() {
-                return "Custom view action to set rating on RatingBar";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                RatingBar ratingBar = (RatingBar) view;
-                ratingBar.setRating(rating);
-            }
-        };
     }
 }
