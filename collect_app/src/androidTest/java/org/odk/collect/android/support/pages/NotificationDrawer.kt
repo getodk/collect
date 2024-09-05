@@ -158,9 +158,8 @@ class NotificationDrawer {
      */
     private fun closeNotificationDrawerIfOpened() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.wait(Until.hasObject(By.text("Manage")), TimeInMs.ONE_SECOND)
-        val manageButton = device.findObject(By.text("Manage"))
-        if (manageButton != null) {
+        val isManageButtonGone = device.wait(Until.gone(By.text("Manage")), TimeInMs.THREE_SECONDS)
+        if (!isManageButtonGone) {
             device.pressBack()
         }
     }
