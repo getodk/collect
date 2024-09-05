@@ -161,21 +161,18 @@ public class FieldListUpdateTest {
     @Test
     public void changeInValueUsedInHint_ShouldChangeHintText() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
-                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
-
-        jumpToGroupWithText("Hint change");
-        onView(withText(startsWith("What is your"))).perform(click());
-
-        String name = UUID.randomUUID().toString();
-
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withText("Please don't use your calculator, !")).check(matches(isDisplayed()));
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(name));
-        onView(withText("Please don't use your calculator, " + name + "!")).check(matches(isDisplayed()));
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withText("Please don't use your calculator, !")).check(matches(isDisplayed()));
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Hint change")
+                .clickOnQuestion("What is your name?")
+                .assertText("Please don't use your calculator, !")
+                .answerQuestion("What is your name?", "John")
+                .assertText("Please don't use your calculator, John!")
+                .longPressOnQuestion("What is your name?")
+                .removeResponse()
+                .assertText("Please don't use your calculator, !");
     }
-
 
     @Test
     public void changeInValueUsedInOtherField_ShouldChangeValue() {
