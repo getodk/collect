@@ -18,6 +18,7 @@ class ObviousProgressBar(
 
     init {
         super.setVisibility(GONE)
+        super.setIndeterminate(true)
     }
 
     override fun show() {
