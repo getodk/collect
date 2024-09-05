@@ -21,8 +21,6 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyAbove;
-import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
@@ -147,19 +145,17 @@ public class FieldListUpdateTest {
     @Test
     public void changeInValueUsedInLabel_ShouldChangeLabelText() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
-                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
-
-        jumpToGroupWithText("Label change");
-        onView(withText(startsWith("Hello"))).perform(click());
-
-        String name = UUID.randomUUID().toString();
-
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).perform(replaceText(""));
-        onView(withText("Hello, , how are you today?")).check(matches(isDisplayed()));
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).perform(replaceText(name));
-        onView(withText("Hello, " + name + ", how are you today?")).check(matches(isDisplayed()));
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).perform(replaceText(""));
-        onView(withText("Hello, , how are you today?")).check(matches(isDisplayed()));
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Label change")
+                .clickOnQuestion("Hello, , how are you today?")
+                .assertQuestion("Hello, , how are you today?")
+                .answerQuestion("What is your name?", "John")
+                .assertQuestion("Hello, John, how are you today?")
+                .longPressOnQuestion("What is your name?")
+                .removeResponse()
+                .assertQuestion("Hello, , how are you today?");
     }
 
     @Test
