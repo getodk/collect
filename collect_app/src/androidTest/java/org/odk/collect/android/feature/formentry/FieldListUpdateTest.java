@@ -366,17 +366,15 @@ public class FieldListUpdateTest {
     @Test
     public void selectingADateForDateTime_ShouldChangeRelevanceOfRelatedField() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
-                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
-
-        jumpToGroupWithText("Date time");
-        onView(withText(startsWith("Source12"))).perform(click());
-
-        onView(withText("Target12")).check(doesNotExist());
-
-        onView(withText(org.odk.collect.strings.R.string.select_date)).perform(click());
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withText("Target12")).check(matches(isDisplayed()));
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Date time")
+                .clickOnQuestion("Source12")
+                .assertTextDoesNotExist("Target12")
+                .clickOnString(org.odk.collect.strings.R.string.select_date)
+                .clickOKOnDialog()
+                .assertQuestion("Target12");
     }
 
     @Test
