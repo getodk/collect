@@ -95,19 +95,17 @@ public class FieldListUpdateTest {
     @Test
     public void relevanceChangeAtBeginning_ShouldToggleFirstWidgetVisibility() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
-                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
-
-        jumpToGroupWithText("Single relevance at beginning");
-        onView(withText("Source2")).perform(click());
-
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withText("Target2")).check(doesNotExist());
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText("A"));
-        onView(withText("Target2")).check(matches(isDisplayed()));
-        onView(withText("Target2")).check(isCompletelyAbove(withText("Source2")));
-
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).perform(replaceText(""));
-        onView(withText("Target2")).check(doesNotExist());
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Single relevance at beginning")
+                .clickOnQuestion("Source2")
+                .assertTextDoesNotExist("Target2")
+                .answerQuestion("Source2", "A")
+                .assertQuestion("Target2")
+                .assertQuestionsOrder("Target2", "Source2")
+                .answerQuestion("Source2", "")
+                .assertTextDoesNotExist("Target2");
     }
 
     @Test
