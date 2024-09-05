@@ -327,6 +327,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEntryPage assertAnswer(String questionText, String answer) {
+        onView(getQuestionFieldMatcher(questionText)).check(matches(withText(answer)));
+        return this;
+    }
+
     public FormEntryPage clickOnQuestionField(String questionText) {
         Interactions.clickOn(getQuestionFieldMatcher(questionText));
         return this;

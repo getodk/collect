@@ -68,7 +68,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
-import java.util.UUID;
 
 public class FieldListUpdateTest {
     public FormEntryActivityTestRule rule = new FormEntryActivityTestRule();
@@ -177,24 +176,20 @@ public class FieldListUpdateTest {
     @Test
     public void changeInValueUsedInOtherField_ShouldChangeValue() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
-                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
-
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(allOf(withText("Value change"), isDisplayed())).perform(click());
-        onView(withText(startsWith("What is your"))).perform(click());
-
-        String name = UUID.randomUUID().toString();
-
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
-        onView(withIndex(withClassName(endsWith("EditText")), 2)).check(matches(withText("")));
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(name));
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText(String.valueOf(name.length()))));
-        onView(withIndex(withClassName(endsWith("EditText")), 2)).check(matches(withText(String.valueOf(name.charAt(0)))));
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("0")));
-        onView(withIndex(withClassName(endsWith("EditText")), 2)).check(matches(withText("")));
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Value change")
+                .clickOnQuestion("What is your name?")
+                .assertAnswer("Name length", "0")
+                .assertAnswer("First name letter", "")
+                .answerQuestion("What is your name?", "John")
+                .assertAnswer("Name length", "4")
+                .assertAnswer("First name letter", "J")
+                .longPressOnQuestion("What is your name?")
+                .removeResponse()
+                .assertAnswer("Name length", "0")
+                .assertAnswer("First name letter", "");
     }
 
     @Test
