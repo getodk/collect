@@ -269,7 +269,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#save with no entities works`() {
+    fun `#save does not create a list when no entities are provided`() {
         val repository = buildSubject()
         repository.save("blah")
         assertThat(repository.getLists(), equalTo(emptySet()))
