@@ -346,7 +346,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void changeInValueUsedInGuidanceHint_ShouldChangeGuidanceHintText() {
-        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+        FormEntryPage page = rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
                 .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
 
         DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext())
@@ -354,13 +354,13 @@ public class FieldListUpdateTest {
                 .getUnprotectedSettings()
                 .save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES.toString());
 
-        jumpToGroupWithText("Guidance hint");
-        onView(withText(startsWith("Source11"))).perform(click());
-
-        onView(withText("10")).check(doesNotExist());
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText("5"));
-        onView(withText("10")).check(matches(isDisplayed()));
-        onView(withText("10")).check(isCompletelyBelow(withText("Target11")));
+        page.clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Guidance hint")
+                .clickOnQuestion("Source11")
+                .assertTextDoesNotExist("10")
+                .answerQuestion("Source11", "5")
+                .assertQuestion("10");
     }
 
     @Test
