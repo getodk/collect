@@ -89,6 +89,8 @@ object LocalEntityUseCases {
         }
 
         entitiesRepository.save(*newAndUpdated.toTypedArray())
+        entitiesRepository.getEntities(list)
+        entitiesRepository.getByIndex(list, 0)
     }
 
     private fun parseEntityFromRecord(
