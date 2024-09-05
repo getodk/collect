@@ -111,20 +111,18 @@ public class FieldListUpdateTest {
     @Test
     public void relevanceChangeInMiddle_ShouldToggleMiddleWidgetVisibility() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
-                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
-
-        jumpToGroupWithText("Single relevance in middle");
-        onView(withText("Source3")).perform(click());
-
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withText("Target3")).check(doesNotExist());
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText("A"));
-        onView(withText("Target3")).check(matches(isDisplayed()));
-        onView(withText("Target3")).check(isCompletelyBelow(withText("Source3")));
-        onView(withText("Target3")).check(isCompletelyAbove(withText("Filler3")));
-
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withText("Target3")).check(doesNotExist());
+                .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Single relevance in middle")
+                .clickOnQuestion("Source3")
+                .assertTextDoesNotExist("Target3")
+                .answerQuestion("Source3", "A")
+                .assertQuestion("Target3")
+                .assertQuestionsOrder("Source3", "Filler3")
+                .assertQuestionsOrder("Target3", "Filler3")
+                .answerQuestion("Source3", "")
+                .assertTextDoesNotExist("Target3");
     }
 
     @Test
