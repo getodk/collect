@@ -16,38 +16,17 @@
 
 package org.odk.collect.android.feature.formentry;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
-import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.google.android.gms.common.util.CollectionUtils.listOf;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.endsWith;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.StringStartsWith.startsWith;
-import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
+import static org.hamcrest.Matchers.not;
 
 import android.app.Activity;
 import android.app.Application;
 import android.app.Instrumentation;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.espresso.matcher.ViewMatchers;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -273,13 +252,8 @@ public class FieldListUpdateTest {
 
     @Test
     public void questionsAppearingBeforeCurrentBinaryQuestion_ShouldNotChangeFocus() throws IOException {
-        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
+        FormEntryPage page = rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
                 .fillNewForm("fieldlist-updates.xml", "fieldlist-updates");
-
-        jumpToGroupWithText("Push off screen binary");
-        onView(withText(startsWith("Source10"))).perform(click());
-
-        onView(withText("Target10-15")).check(doesNotExist());
 
         // FormFillingActivity expects an image at a fixed path so copy the app logo there
         Bitmap icon = BitmapFactory.decodeResource(ApplicationProvider.getApplicationContext().getResources(), R.drawable.notes);
@@ -287,13 +261,16 @@ public class FieldListUpdateTest {
         tmpJpg.createNewFile();
         FileOutputStream fos = new FileOutputStream(tmpJpg);
         icon.compress(Bitmap.CompressFormat.JPEG, 90, fos);
-
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
 
-        onView(withId(R.id.capture_button)).perform(click());
-
-        onView(withText("Target10-15")).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-        onView(withId(R.id.capture_button)).check(matches(isCompletelyDisplayed()));
+        page.clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Push off screen binary")
+                .clickOnQuestion("Source10")
+                .assertTextDoesNotExist("Target10-15")
+                .clickOnString(org.odk.collect.strings.R.string.capture_image)
+                .assertText("Target10-15")
+                .assertText(org.odk.collect.strings.R.string.capture_image);
     }
 
     @Test
@@ -419,15 +396,5 @@ public class FieldListUpdateTest {
                 .answerQuestion(0, "")
                 .assertQuestion("Target17")
                 .assertTextDoesNotExist(org.odk.collect.strings.R.string.required_answer_error);
-    }
-
-    // Scroll down until the desired group name is visible. This is needed to make the tests work
-    // on devices with screens of different heights.
-    private void jumpToGroupWithText(String text) {
-        onView(withId(R.id.menu_goto)).perform(click());
-        onView(withId(R.id.menu_go_up)).perform(click());
-        onView(withId(R.id.list)).perform(RecyclerViewActions.scrollTo(hasDescendant(withText(text))));
-
-        onView(allOf(isDisplayed(), withText(text))).perform(click());
     }
 }
