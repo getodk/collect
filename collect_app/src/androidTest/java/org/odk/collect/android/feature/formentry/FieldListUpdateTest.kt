@@ -42,7 +42,8 @@ class FieldListUpdateTest {
             .answerQuestion("Source1", "A")
             .assertQuestion("Target1")
             .assertQuestionsOrder("Source1", "Target1")
-            .answerQuestion("Source1", "")
+            .longPressOnQuestion("Source1")
+            .removeResponse()
             .assertNoQuestion("Target1")
     }
 
@@ -58,7 +59,8 @@ class FieldListUpdateTest {
             .answerQuestion("Source2", "A")
             .assertQuestion("Target2")
             .assertQuestionsOrder("Target2", "Source2")
-            .answerQuestion("Source2", "")
+            .longPressOnQuestion("Source2")
+            .removeResponse()
             .assertNoQuestion("Target2")
     }
 
@@ -75,7 +77,8 @@ class FieldListUpdateTest {
             .assertQuestion("Target3")
             .assertQuestionsOrder("Source3", "Filler3")
             .assertQuestionsOrder("Target3", "Filler3")
-            .answerQuestion("Source3", "")
+            .longPressOnQuestion("Source3")
+            .removeResponse()
             .assertNoQuestion("Target3")
     }
 
@@ -166,6 +169,9 @@ class FieldListUpdateTest {
             .clickOnText("A1")
             .assertText("A1A")
             .assertTextsDoNotExist("B1", "C1")
+            .longPressOnQuestion("Level1")
+            .removeResponse()
+            .assertTextsDoNotExist("A1", "B1", "C1", "A1A")
     }
 
     @Test
@@ -271,6 +277,9 @@ class FieldListUpdateTest {
             .assertTextDoesNotExist("10")
             .answerQuestion("Source11", "5")
             .assertQuestion("10")
+            .longPressOnQuestion("Source11")
+            .removeResponse()
+            .assertTextDoesNotExist("10")
     }
 
     @Test
@@ -285,6 +294,9 @@ class FieldListUpdateTest {
             .clickOnString(org.odk.collect.strings.R.string.select_date)
             .clickOKOnDialog()
             .assertQuestion("Target12")
+            .longPressOnQuestion("Source12")
+            .removeResponse()
+            .assertNoQuestion("Target12")
     }
 
     @Test
@@ -315,6 +327,9 @@ class FieldListUpdateTest {
             .assertNoQuestion("Target14")
             .answerQuestion("Source14", Random().nextInt().toString())
             .assertQuestion("Target14")
+            .longPressOnQuestion("Source14")
+            .removeResponse()
+            .assertNoQuestion("Target14")
     }
 
     @Test
@@ -325,11 +340,17 @@ class FieldListUpdateTest {
             .clickGoUpIcon()
             .clickOnGroup("Search in field-list")
             .clickOnQuestion("Source15")
+            .assertSelectMinimalDialogAnswer(null)
+            .assertNoQuestion("Target15")
             .openSelectMinimalDialog()
             .assertTexts("Mango", "Oranges", "Strawberries")
             .selectItem("Strawberries")
             .assertQuestion("Target15")
             .assertSelectMinimalDialogAnswer("Strawberries")
+            .longPressOnQuestion("Source15")
+            .removeResponse()
+            .assertSelectMinimalDialogAnswer(null)
+            .assertNoQuestion("Target15")
     }
 
     @Test
