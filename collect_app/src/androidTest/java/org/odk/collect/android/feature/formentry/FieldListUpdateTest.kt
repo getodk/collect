@@ -367,18 +367,15 @@ class FieldListUpdateTest {
 
     @Test
     fun changeInValueUsedToDetermineIfAQuestionIsRequired_ShouldUpdateTheRelatedRequiredQuestion() {
-        rule.setUpProjectAndCopyForm("fieldlist-updates.xml")
-            .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
-            .clickGoToArrow()
-            .clickGoUpIcon()
-            .clickOnGroup("Dynamic required question")
-            .clickOnQuestion("Source17")
-            .assertQuestion("Target17")
-            .answerQuestion(0, "blah")
-            .assertQuestion("Target17", true)
+        rule.setUpProjectAndCopyForm("dynamic_required_question.xml")
+            .fillNewForm("dynamic_required_question.xml", "dynamic_required_question")
+            .assertQuestion("Target", false)
+            .answerQuestion("Source", "blah")
+            .assertQuestion("Target", true)
             .swipeToNextQuestionWithConstraintViolation(org.odk.collect.strings.R.string.required_answer_error)
-            .answerQuestion(0, "")
-            .assertQuestion("Target17")
+            .longPressOnQuestion("Source")
+            .removeResponse()
+            .assertQuestion("Target", false)
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.required_answer_error)
     }
 }
