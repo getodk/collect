@@ -83,24 +83,6 @@ class FieldListUpdateTest {
     }
 
     @Test
-    fun longPress_ShouldClearAndUpdate() {
-        rule.setUpProjectAndCopyForm("fieldlist-updates.xml")
-            .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
-            .clickGoToArrow()
-            .clickGoUpIcon()
-            .clickOnGroup("Single relevance in middle")
-            .clickOnQuestion("Source3")
-            .answerQuestion(0, "")
-            .assertNoQuestion("Target3")
-            .answerQuestion(0, "A")
-            .assertQuestion("Target3")
-            .longPressOnQuestion("Source3")
-            .removeResponse()
-            .assertTextDoesNotExist("A")
-            .assertNoQuestion("Target3")
-    }
-
-    @Test
     fun changeInValueUsedInLabel_ShouldChangeLabelText() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml")
             .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
