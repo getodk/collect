@@ -124,7 +124,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         updateRowIdTable()
-        DatabaseConnection.closeAll()
     }
 
     override fun getLists(): Set<String> {
@@ -285,18 +284,27 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
      * function, but that's not available in all the supported versions of Android.
      */
     private fun updateRowIdTable() {
-        getLists().forEach {
+        getLists().forEach { list ->
             databaseConnection.writeableDatabase.execSQL(
                 """
-                DROP TABLE IF EXISTS ${getRowIdTableName(it)};
+                DROP TABLE IF EXISTS ${getRowIdTableName(list)};
                 """.trimIndent()
             )
 
             databaseConnection.writeableDatabase.execSQL(
                 """
-                CREATE TABLE ${getRowIdTableName(it)} AS SELECT _id FROM $it;
+                CREATE TABLE ${getRowIdTableName(list)} AS SELECT _id FROM $list;
                 """.trimIndent()
             )
+
+            databaseConnection.readableDatabase.rawQuery(
+                    """
+                    SELECT *, i.$ROW_ID
+                    FROM $list e, ${getRowIdTableName(list)} i
+                    WHERE e._id = i._id AND i.$ROW_ID = ?
+                    """.trimIndent(),
+                    arrayOf((-1).toString())
+                ).use { it.moveToFirst() }
         }
     }
 
