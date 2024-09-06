@@ -319,7 +319,7 @@ class FieldListUpdateTest {
 
     @Test
     fun searchMinimalInFieldList() {
-        rule.setUpProjectAndCopyForm("fieldlist-updates.xml")
+        rule.setUpProjectAndCopyForm("fieldlist-updates.xml", listOf("fruits.csv"))
             .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
             .clickGoToArrow()
             .clickGoUpIcon()
