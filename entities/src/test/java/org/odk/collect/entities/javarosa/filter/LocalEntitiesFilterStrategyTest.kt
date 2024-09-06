@@ -66,8 +66,8 @@ class LocalEntitiesFilterStrategyTest {
 
     @Test
     fun `returns matching nodes when entity matches name`() {
-        entitiesRepository.save(Entity.New("things", "thing1", "Thing 1"))
-        entitiesRepository.save(Entity.New("things", "thing2", "Thing 2"))
+        entitiesRepository.save("things", Entity.New("thing1", "Thing 1"))
+        entitiesRepository.save("things", Entity.New("thing2", "Thing 2"))
 
         val scenario = Scenario.init(
             "Secondary instance form",
@@ -102,8 +102,9 @@ class LocalEntitiesFilterStrategyTest {
     @Test
     fun `replaces partial elements when entity matches name`() {
         entitiesRepository.save(
-            Entity.New("things", "thing", "Thing"),
-            Entity.New("things", "other", "Other")
+            "things",
+            Entity.New("thing", "Thing"),
+            Entity.New("other", "Other")
         )
 
         Scenario.init(
@@ -171,7 +172,7 @@ class LocalEntitiesFilterStrategyTest {
 
     @Test
     fun `works correctly with name != expressions`() {
-        entitiesRepository.save(Entity.New("things", "thing", "Thing"))
+        entitiesRepository.save("things", Entity.New("thing", "Thing"))
 
         val scenario = Scenario.init(
             "Secondary instance form",
@@ -204,7 +205,7 @@ class LocalEntitiesFilterStrategyTest {
 
     @Test
     fun `works correctly with non eq name expressions`() {
-        entitiesRepository.save(Entity.New("things", "thing", "Thing"))
+        entitiesRepository.save("things", Entity.New("thing", "Thing"))
 
         val scenario = Scenario.init(
             "Secondary instance form",
@@ -272,20 +273,18 @@ class LocalEntitiesFilterStrategyTest {
     @Test
     fun `returns matching nodes when entity matches property`() {
         entitiesRepository.save(
+            "things",
             Entity.New(
-                "things",
                 "thing1",
                 "Thing1",
                 properties = listOf("property" to "value")
             ),
             Entity.New(
-                "things",
                 "thing2",
                 "Thing2",
                 properties = listOf("property" to "value")
             ),
             Entity.New(
-                "things",
                 "other",
                 "Other",
                 properties = listOf("property" to "other")
@@ -328,8 +327,8 @@ class LocalEntitiesFilterStrategyTest {
     @Test
     fun `replaces partial elements when entity matches property`() {
         entitiesRepository.save(
+            "things",
             Entity.New(
-                "things",
                 "thing1",
                 "Thing1",
                 properties = listOf("property" to "value")
@@ -371,8 +370,8 @@ class LocalEntitiesFilterStrategyTest {
     @Test
     fun `works correctly with label = expressions`() {
         entitiesRepository.save(
+            "things",
             Entity.New(
-                "things",
                 "thing1",
                 "Thing1",
                 properties = listOf("property" to "value")
@@ -414,8 +413,8 @@ class LocalEntitiesFilterStrategyTest {
     @Test
     fun `works correctly with version = expressions`() {
         entitiesRepository.save(
+            "things",
             Entity.New(
-                "things",
                 "thing1",
                 "Thing1",
                 version = 2,

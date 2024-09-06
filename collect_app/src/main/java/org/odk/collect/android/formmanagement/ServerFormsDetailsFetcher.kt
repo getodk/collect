@@ -128,7 +128,7 @@ open class ServerFormsDetailsFetcher(
         }
 
         return localMediaFiles.any {
-            newMediaFile.hash == getMd5Hash(it)
+            newMediaFile.hash == it.getMd5Hash()
         }
     }
 }

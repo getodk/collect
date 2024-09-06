@@ -240,7 +240,7 @@ class FormsDataServiceTest {
                     "http://$formId",
                     formId,
                     formVersion,
-                    getMd5Hash(updatedXForm),
+                    updatedXForm.getMd5Hash(),
                     "blah",
                     null
                 )

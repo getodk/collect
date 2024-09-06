@@ -11,6 +11,7 @@ import org.odk.collect.db.sqlite.CursorExt.first
 import org.odk.collect.db.sqlite.CursorExt.foldAndClose
 import org.odk.collect.db.sqlite.CursorExt.getInt
 import org.odk.collect.db.sqlite.CursorExt.getString
+import org.odk.collect.db.sqlite.CursorExt.getStringOrNull
 import org.odk.collect.db.sqlite.CursorExt.rowToMap
 import org.odk.collect.db.sqlite.DatabaseConnection
 import org.odk.collect.db.sqlite.DatabaseMigrator
@@ -24,6 +25,7 @@ import org.odk.collect.entities.storage.Entity
 private object ListsTable {
     const val TABLE_NAME = "lists"
     const val COLUMN_NAME = "name"
+    const val COLUMN_HASH = "hash"
 }
 
 private object EntitiesTable {
@@ -46,25 +48,21 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         true
     )
 
-    override fun save(vararg entities: Entity) {
-        val existingLists = getLists()
-        val createdLists = mutableListOf<String>()
-        val modifiedList = mutableListOf<String>()
+    override fun save(list: String, vararg entities: Entity) {
+        if (entities.isEmpty()) {
+            return
+        }
+
+        val listExists = listExists(list)
+        if (!listExists) {
+            createList(list)
+        }
+
+        updatePropertyColumns(list, entities.first())
 
         databaseConnection.writeableDatabase.transaction {
             entities.forEach { entity ->
-                val list = entity.list
-                if (!existingLists.contains(list) && !createdLists.contains(list)) {
-                    createList(list)
-                    createdLists.add(list)
-                }
-
-                if (!modifiedList.contains(list)) {
-                    updatePropertyColumns(entity)
-                    modifiedList.add(list)
-                }
-
-                val existing = if (existingLists.contains(list)) {
+                val existing = if (listExists) {
                     query(
                         list,
                         "${EntitiesTable.COLUMN_ID} = ?",
@@ -89,9 +87,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                         it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
                         it.put(EntitiesTable.COLUMN_STATE, convertStateToInt(state))
 
-                        entity.properties.forEach { (name, value) ->
-                            it.put(name, value)
-                        }
+                        addPropertiesToContentValues(it, entity)
                     }
 
                     update(
@@ -109,9 +105,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                         it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
                         it.put(EntitiesTable.COLUMN_STATE, convertStateToInt(entity.state))
 
-                        entity.properties.forEach { (name, value) ->
-                            it.put("\"$name\"", value)
-                        }
+                        addPropertiesToContentValues(it, entity)
                     }
 
                     insertOrThrow(
@@ -123,7 +117,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             }
         }
 
-        updateRowIdTable()
+        updateRowIdTables()
     }
 
     override fun getLists(): Set<String> {
@@ -131,6 +125,28 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             .readableDatabase
             .query(ListsTable.TABLE_NAME)
             .foldAndClose(emptySet()) { set, cursor -> set + cursor.getString(ListsTable.COLUMN_NAME) }
+    }
+
+    override fun updateListHash(list: String, hash: String) {
+        val contentValues = ContentValues().also {
+            it.put(ListsTable.COLUMN_HASH, hash)
+        }
+
+        databaseConnection
+            .writeableDatabase
+            .update(
+                ListsTable.TABLE_NAME,
+                contentValues,
+                "${ListsTable.COLUMN_NAME} = ?",
+                arrayOf(list)
+            )
+    }
+
+    override fun getListHash(list: String): String? {
+        return databaseConnection
+            .readableDatabase
+            .query(ListsTable.TABLE_NAME, "${ListsTable.COLUMN_NAME} = ?", arrayOf(list))
+            .first { it.getStringOrNull(ListsTable.COLUMN_HASH) }
     }
 
     override fun getEntities(list: String): List<Entity.Saved> {
@@ -174,7 +190,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     override fun addList(list: String) {
         if (!listExists(list)) {
             createList(list)
-            updateRowIdTable()
+            updateRowIdTables()
         }
     }
 
@@ -187,7 +203,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             )
         }
 
-        updateRowIdTable()
+        updateRowIdTables()
     }
 
     override fun getById(list: String, id: String): Entity.Saved? {
@@ -283,7 +299,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
      * _ids are higher than each entity _id). This might be replaceable with SQLite's `row_number()`
      * function, but that's not available in all the supported versions of Android.
      */
-    private fun updateRowIdTable() {
+    private fun updateRowIdTables() {
         getLists().forEach {
             databaseConnection.writeableDatabase.execSQL(
                 """
@@ -342,12 +358,12 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    private fun updatePropertyColumns(entity: Entity) {
+    private fun updatePropertyColumns(list: String, entity: Entity) {
         entity.properties.map { it.first }.forEach {
             try {
                 databaseConnection.writeableDatabase.execSQL(
                     """
-                    ALTER TABLE ${entity.list} ADD "$it" text NOT NULL DEFAULT "";
+                    ALTER TABLE $list ADD "$it" text NOT NULL DEFAULT "";
                     """.trimIndent()
                 )
             } catch (e: SQLiteException) {
@@ -388,7 +404,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         return Entity.Saved(
-            list,
             map[EntitiesTable.COLUMN_ID]!!,
             map[EntitiesTable.COLUMN_LABEL],
             map[EntitiesTable.COLUMN_VERSION]!!.toInt(),
@@ -410,6 +425,12 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             Entity.State.ONLINE -> 1
         }
     }
+
+    private fun addPropertiesToContentValues(contentValues: ContentValues, entity: Entity) {
+        entity.properties.forEach { (name, value) ->
+            contentValues.put("\"$name\"", value)
+        }
+    }
 }
 
 private class EntitiesDatabaseMigrator :
@@ -419,7 +440,8 @@ private class EntitiesDatabaseMigrator :
             """
             CREATE TABLE IF NOT EXISTS ${ListsTable.TABLE_NAME} (
                     $_ID integer PRIMARY KEY, 
-                    ${ListsTable.COLUMN_NAME} text NOT NULL
+                    ${ListsTable.COLUMN_NAME} text NOT NULL,
+                    ${ListsTable.COLUMN_HASH} text
             );
             """.trimIndent()
         )

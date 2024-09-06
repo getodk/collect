@@ -7,6 +7,7 @@ import org.odk.collect.entities.javarosa.parse.EntityItemElement
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.File
 import java.util.UUID
 
@@ -23,7 +24,6 @@ object LocalEntityUseCases {
                 when (formEntity.action) {
                     EntityAction.CREATE -> {
                         val entity = Entity.New(
-                            formEntity.dataset,
                             id,
                             formEntity.label,
                             1,
@@ -31,13 +31,14 @@ object LocalEntityUseCases {
                             branchId = UUID.randomUUID().toString()
                         )
 
-                        entitiesRepository.save(entity)
+                        entitiesRepository.save(formEntity.dataset, entity)
                     }
 
                     EntityAction.UPDATE -> {
                         val existing = entitiesRepository.getById(formEntity.dataset, formEntity.id)
                         if (existing != null) {
                             entitiesRepository.save(
+                                formEntity.dataset,
                                 existing.copy(
                                     label = formEntity.label,
                                     properties = formEntity.properties,
@@ -56,6 +57,12 @@ object LocalEntityUseCases {
         serverList: File,
         entitiesRepository: EntitiesRepository
     ) {
+        val listHash = getListHash(serverList)
+        val existingListVersion = entitiesRepository.getListHash(list)
+        if (listHash == existingListVersion) {
+            return
+        }
+
         val csvParser = try {
             SecondaryInstanceCSVParserBuilder()
                 .path(serverList.absolutePath)
@@ -70,11 +77,27 @@ object LocalEntityUseCases {
         val newAndUpdated = ArrayList<Entity>()
         csvParser.use {
             it.forEach { record ->
-                val serverEntity = parseEntityFromRecord(record, list) ?: return
+                val serverEntity = parseEntityFromRecord(record) ?: return
                 val existing = missingFromServer.remove(serverEntity.id)
 
-                if (existing == null || existing.version <= serverEntity.version) {
-                    newAndUpdated.add(serverEntity.copy(branchId = UUID.randomUUID().toString()))
+                if (existing == null) {
+                    newAndUpdated.add(
+                        Entity.New(
+                            serverEntity.id,
+                            serverEntity.label,
+                            serverEntity.version,
+                            serverEntity.properties.toList(),
+                            state = Entity.State.ONLINE,
+                            trunkVersion = serverEntity.version,
+                            branchId = UUID.randomUUID().toString()
+                        )
+                    )
+                } else if (existing.version < serverEntity.version) {
+                    newAndUpdated.add(serverEntity.updateLocal(existing))
+                } else if (existing.version == serverEntity.version) {
+                    if (existing.isDirty()) {
+                        newAndUpdated.add(serverEntity.updateLocal(existing))
+                    }
                 } else if (existing.state == Entity.State.OFFLINE) {
                     val update = existing.copy(state = Entity.State.ONLINE)
                     newAndUpdated.add(update)
@@ -88,13 +111,15 @@ object LocalEntityUseCases {
             }
         }
 
-        entitiesRepository.save(*newAndUpdated.toTypedArray())
+        entitiesRepository.save(list, *newAndUpdated.toTypedArray())
+        entitiesRepository.updateListHash(list, listHash)
     }
 
-    private fun parseEntityFromRecord(
-        record: CSVRecord,
-        list: String
-    ): Entity.New? {
+    private fun getListHash(serverList: File): String {
+        return "md5:${serverList.getMd5Hash()!!}"
+    }
+
+    private fun parseEntityFromRecord(record: CSVRecord): ServerEntity? {
         val map = record.toMap()
 
         val id = map.remove(EntityItemElement.ID)
@@ -104,14 +129,29 @@ object LocalEntityUseCases {
             return null
         }
 
-        return Entity.New(
-            list,
+        return ServerEntity(
             id,
             label,
             version,
-            map.toList(),
+            map
+        )
+    }
+}
+
+private data class ServerEntity(
+    val id: String,
+    val label: String,
+    val version: Int,
+    val properties: Map<String, String>) {
+
+    fun updateLocal(local: Entity.Saved): Entity.Saved {
+        return local.copy(
+            label = this.label,
+            version = this.version,
+            properties = this.properties.toList(),
             state = Entity.State.ONLINE,
-            trunkVersion = version
+            branchId = UUID.randomUUID().toString(),
+            trunkVersion = this.version
         )
     }
 }

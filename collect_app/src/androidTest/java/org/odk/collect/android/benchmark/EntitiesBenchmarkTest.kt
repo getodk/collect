@@ -25,6 +25,7 @@ import org.odk.collect.strings.R
  *
  * Devices that currently pass:
  * - Fairphone 3
+ * - Pixel 3
  *
  */
 
@@ -66,30 +67,30 @@ class EntitiesBenchmarkTest {
             .clickOKOnDialog(MainMenuPage())
 
             .clickGetBlankForm()
-            .benchmark("Downloading form with http cache", 25, benchmarker) {
+            .benchmark("Downloading form with http cache", 40, benchmarker) {
                 it.clickGetSelected()
             }
 
             .clickOK(MainMenuPage())
             .clickGetBlankForm()
-            .benchmark("Downloading form second time with http cache", 75, benchmarker) {
+            .benchmark("Downloading form second time with http cache", 5, benchmarker) {
                 it.clickGetSelected()
             }
 
             .clickOK(MainMenuPage())
             .clickFillBlankForm()
-            .benchmark("Loading form first time", 5, benchmarker) {
+            .benchmark("Loading form first time", 2, benchmarker) {
                 it.clickOnForm("100k Entities Filter")
             }
 
             .pressBackAndDiscardForm()
             .clickFillBlankForm()
-            .benchmark("Loading form second time", 5, benchmarker) {
+            .benchmark("Loading form second time", 2, benchmarker) {
                 it.clickOnForm("100k Entities Filter")
             }
 
             .answerQuestion("Which value do you want to filter by?", "1024")
-            .benchmark("Filtering select", 5, benchmarker) {
+            .benchmark("Filtering select", 3, benchmarker) {
                 it.swipeToNextQuestion("Filtered select")
             }
 

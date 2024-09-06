@@ -4,20 +4,21 @@ class InMemEntitiesRepository : EntitiesRepository {
 
     private val lists = mutableSetOf<String>()
     private val listProperties = mutableMapOf<String, MutableSet<String>>()
-    private val entities = mutableListOf<Entity.New>()
+    private val listVersions = mutableMapOf<String, String>()
+    private val entities = mutableMapOf<String, MutableList<Entity.New>>()
 
     override fun getLists(): Set<String> {
         return lists
     }
 
     override fun getEntities(list: String): List<Entity.Saved> {
-        return entities.filter { it.list == list }.mapIndexed { index, entity ->
+        val entities = entities[list] ?: emptyList()
+        return entities.mapIndexed { index, entity ->
             Entity.Saved(
-                entity.list,
                 entity.id,
                 entity.label,
                 entity.version,
-                buildProperties(entity),
+                buildProperties(list, entity),
                 entity.state,
                 index,
                 entity.trunkVersion,
@@ -40,7 +41,9 @@ class InMemEntitiesRepository : EntitiesRepository {
     }
 
     override fun delete(id: String) {
-        entities.removeIf { it.id == id }
+        entities.forEach { (_, list) ->
+            list.removeIf { it.id == id }
+        }
     }
 
     override fun getById(list: String, id: String): Entity.Saved? {
@@ -67,10 +70,20 @@ class InMemEntitiesRepository : EntitiesRepository {
         return getEntities(list).firstOrNull { it.index == index }
     }
 
-    override fun save(vararg entities: Entity) {
+    override fun updateListHash(list: String, hash: String) {
+        listVersions[list] = hash
+    }
+
+    override fun getListHash(list: String): String? {
+        return listVersions[list]
+    }
+
+    override fun save(list: String, vararg entities: Entity) {
+        val entityList = this.entities.getOrPut(list) { mutableListOf() }
+
         entities.forEach { entity ->
-            updateLists(entity)
-            val existing = this.entities.find { it.id == entity.id && it.list == entity.list }
+            updateLists(list, entity)
+            val existing = entityList.find { it.id == entity.id }
 
             if (existing != null) {
                 val state = when (existing.state) {
@@ -78,10 +91,9 @@ class InMemEntitiesRepository : EntitiesRepository {
                     Entity.State.ONLINE -> Entity.State.ONLINE
                 }
 
-                this.entities.remove(existing)
-                this.entities.add(
+                entityList.remove(existing)
+                entityList.add(
                     Entity.New(
-                        entity.list,
                         entity.id,
                         entity.label ?: existing.label,
                         version = entity.version,
@@ -92,9 +104,8 @@ class InMemEntitiesRepository : EntitiesRepository {
                     )
                 )
             } else {
-                this.entities.add(
+                entityList.add(
                     Entity.New(
-                        entity.list,
                         entity.id,
                         entity.label,
                         entity.version,
@@ -108,9 +119,9 @@ class InMemEntitiesRepository : EntitiesRepository {
         }
     }
 
-    private fun updateLists(entity: Entity) {
-        lists.add(entity.list)
-        listProperties.getOrPut(entity.list) {
+    private fun updateLists(list: String, entity: Entity) {
+        lists.add(list)
+        listProperties.getOrPut(list) {
             mutableSetOf()
         }.addAll(entity.properties.map { it.first })
     }
@@ -127,8 +138,8 @@ class InMemEntitiesRepository : EntitiesRepository {
         return existingProperties.map { Pair(it.key, it.value) }
     }
 
-    private fun buildProperties(entity: Entity.New): List<Pair<String, String>> {
-        return listProperties[entity.list]?.map { property ->
+    private fun buildProperties(list: String, entity: Entity.New): List<Pair<String, String>> {
+        return listProperties[list]?.map { property ->
             Pair(
                 property,
                 entity.properties.find { it.first == property }?.second ?: ""

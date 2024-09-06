@@ -8,7 +8,7 @@ import org.odk.collect.androidshared.utils.Validator
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.InstancesRepository
-import org.odk.collect.shared.strings.Md5
+import org.odk.collect.shared.strings.Md5.getMd5Hash
 import org.odk.collect.strings.localization.getLocalizedString
 import timber.log.Timber
 import java.io.File
@@ -75,7 +75,7 @@ object LocalFormUseCases {
                         // remove it from the list of forms (we only want forms
                         // we haven't added at the end)
                         formsToAdd.remove(sqlFile)
-                        val md5Computed = Md5.getMd5Hash(sqlFile)
+                        val md5Computed = sqlFile.getMd5Hash()
                         if (md5Computed == null || md5 == null || md5Computed != md5) {
                             // Probably someone overwrite the file on the sdcard
                             // So re-parse it and update it's information

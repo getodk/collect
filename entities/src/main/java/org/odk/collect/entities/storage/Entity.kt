@@ -1,17 +1,30 @@
 package org.odk.collect.entities.storage
 
 sealed interface Entity {
-    val list: String
     val id: String
     val label: String?
     val version: Int
     val properties: List<Pair<String, String>>
     val state: State
+
+    /**
+     * The server version (from an entity list CSV) this is based on. This should only be updated
+     * when updating an entity from the server where as [version] should be incremented whenever
+     * there is a local change.
+     */
     val trunkVersion: Int?
+
+    /**
+     * The offline "branch" identifier. Should be updated whenever the local version is modified
+     * from the latest server version.
+     */
     val branchId: String
 
+    fun isDirty(): Boolean {
+        return version != trunkVersion
+    }
+
     data class New(
-        override val list: String,
         override val id: String,
         override val label: String?,
         override val version: Int = 1,
@@ -22,7 +35,6 @@ sealed interface Entity {
     ) : Entity
 
     data class Saved(
-        override val list: String,
         override val id: String,
         override val label: String?,
         override val version: Int = 1,
@@ -46,7 +58,6 @@ sealed interface Entity {
 
     private fun convertToNew(entity: Entity): New {
         return New(
-            entity.list,
             entity.id,
             entity.label,
             entity.version,
