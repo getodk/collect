@@ -56,11 +56,17 @@ public class EntityFormParseProcessor implements XFormParser.BindAttributeProces
 
     @Override
     public void processFormDef(FormDef formDef) throws XFormParser.ParseException {
-        if (version == null && EntityFormParser.getEntityElement(formDef.getMainInstance()) != null) {
-            throw new XFormParser.MissingModelAttributeException(ENTITIES_NAMESPACE, "entities-version");
-        } else if (version != null && Stream.of(LOCAL_ENTITY_VERSIONS).anyMatch(version::startsWith)) {
-            EntityFormExtra entityFormExtra = new EntityFormExtra(saveTos);
-            formDef.getExtras().put(entityFormExtra);
+        if (isEntityForm(formDef)) {
+            if (version == null) {
+                throw new XFormParser.MissingModelAttributeException(ENTITIES_NAMESPACE, "entities-version");
+            } else if (Stream.of(LOCAL_ENTITY_VERSIONS).anyMatch(version::startsWith)) {
+                EntityFormExtra entityFormExtra = new EntityFormExtra(saveTos);
+                formDef.getExtras().put(entityFormExtra);
+            }
         }
+    }
+
+    private static boolean isEntityForm(FormDef formDef) {
+        return EntityFormParser.getEntityElement(formDef.getMainInstance()) != null;
     }
 }
