@@ -28,6 +28,7 @@ import android.os.Build;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.test.core.app.ApplicationProvider;
 
 import org.hamcrest.Matcher;
@@ -388,8 +389,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new SelectMinimalDialogPage(formName).assertOnPage();
     }
 
-    public FormEntryPage assertSelectMinimalDialogAnswer(String answer) {
-        onView(withId(R.id.answer)).check(matches(withText(answer)));
+    public FormEntryPage assertSelectMinimalDialogAnswer(@Nullable String answer) {
+        if (answer == null) {
+            onView(withId(R.id.answer)).check(matches(withText(org.odk.collect.strings.R.string.select_answer)));
+        } else {
+            onView(withId(R.id.answer)).check(matches(withText(answer)));
+        }
         return this;
     }
 
