@@ -353,6 +353,20 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEntryPage assertNoQuestion(String text) {
+        return assertNoQuestion(text, false);
+    }
+
+    public FormEntryPage assertNoQuestion(String text, boolean isRequired) {
+        if (isRequired) {
+            assertTextDoesNotExist("* " + text);
+        } else {
+            assertTextDoesNotExist(text);
+        }
+
+        return this;
+    }
+
     private void flingLeft() {
         tryFlakyAction(() -> {
             onView(withId(R.id.questionholder)).perform(swipeLeft());

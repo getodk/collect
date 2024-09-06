@@ -38,12 +38,12 @@ class FieldListUpdateTest {
     fun relevanceChangeAtEnd_ShouldToggleLastWidgetVisibility() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml")
             .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
-            .assertTextDoesNotExist("Target1")
+            .assertNoQuestion("Target1")
             .answerQuestion("Source1", "A")
             .assertQuestion("Target1")
             .assertQuestionsOrder("Source1", "Target1")
             .answerQuestion("Source1", "")
-            .assertTextDoesNotExist("Target1")
+            .assertNoQuestion("Target1")
     }
 
     @Test
@@ -54,12 +54,12 @@ class FieldListUpdateTest {
             .clickGoUpIcon()
             .clickOnGroup("Single relevance at beginning")
             .clickOnQuestion("Source2")
-            .assertTextDoesNotExist("Target2")
+            .assertNoQuestion("Target2")
             .answerQuestion("Source2", "A")
             .assertQuestion("Target2")
             .assertQuestionsOrder("Target2", "Source2")
             .answerQuestion("Source2", "")
-            .assertTextDoesNotExist("Target2")
+            .assertNoQuestion("Target2")
     }
 
     @Test
@@ -70,13 +70,13 @@ class FieldListUpdateTest {
             .clickGoUpIcon()
             .clickOnGroup("Single relevance in middle")
             .clickOnQuestion("Source3")
-            .assertTextDoesNotExist("Target3")
+            .assertNoQuestion("Target3")
             .answerQuestion("Source3", "A")
             .assertQuestion("Target3")
             .assertQuestionsOrder("Source3", "Filler3")
             .assertQuestionsOrder("Target3", "Filler3")
             .answerQuestion("Source3", "")
-            .assertTextDoesNotExist("Target3")
+            .assertNoQuestion("Target3")
     }
 
     @Test
@@ -88,13 +88,13 @@ class FieldListUpdateTest {
             .clickOnGroup("Single relevance in middle")
             .clickOnQuestion("Source3")
             .answerQuestion(0, "")
-            .assertTextDoesNotExist("Target3")
+            .assertNoQuestion("Target3")
             .answerQuestion(0, "A")
-            .assertText("Target3")
+            .assertQuestion("Target3")
             .longPressOnQuestion("Source3")
             .removeResponse()
             .assertTextDoesNotExist("A")
-            .assertTextDoesNotExist("Target3")
+            .assertNoQuestion("Target3")
     }
 
     @Test
@@ -218,7 +218,7 @@ class FieldListUpdateTest {
             .clickGoUpIcon()
             .clickOnGroup("Push off screen")
             .clickOnQuestion("Source9")
-            .assertTextDoesNotExist("Target9-15")
+            .assertNoQuestion("Target9-15")
             .answerQuestion("Source9", "A")
             .assertQuestion("Target9-15")
             .assertQuestionHasFocus("Source9")
@@ -248,9 +248,9 @@ class FieldListUpdateTest {
             .clickGoUpIcon()
             .clickOnGroup("Push off screen binary")
             .clickOnQuestion("Source10")
-            .assertTextDoesNotExist("Target10-15")
+            .assertNoQuestion("Target10-15")
             .clickOnString(org.odk.collect.strings.R.string.capture_image)
-            .assertText("Target10-15")
+            .assertQuestion("Target10-15")
             .assertText(org.odk.collect.strings.R.string.capture_image)
     }
 
@@ -281,7 +281,7 @@ class FieldListUpdateTest {
             .clickGoUpIcon()
             .clickOnGroup("Date time")
             .clickOnQuestion("Source12")
-            .assertTextDoesNotExist("Target12")
+            .assertNoQuestion("Target12")
             .clickOnString(org.odk.collect.strings.R.string.select_date)
             .clickOKOnDialog()
             .assertQuestion("Target12")
@@ -295,12 +295,12 @@ class FieldListUpdateTest {
             .clickGoUpIcon()
             .clickOnGroup("Rating")
             .clickOnQuestion("Source13")
-            .assertTextDoesNotExist("Target13")
+            .assertNoQuestion("Target13")
             .setRating(3.0f)
             .assertQuestion("Target13")
             .longPressOnQuestion("Source13")
             .removeResponse()
-            .assertTextDoesNotExist("Target13")
+            .assertNoQuestion("Target13")
     }
 
     @Test
@@ -312,7 +312,7 @@ class FieldListUpdateTest {
             .clickOnGroup("External app")
             .clickOnQuestion("Source14")
             .clickOnText("Launch")
-            .assertTextDoesNotExist("Target14")
+            .assertNoQuestion("Target14")
             .answerQuestion("Source14", Random().nextInt().toString())
             .assertQuestion("Target14")
     }
@@ -328,7 +328,7 @@ class FieldListUpdateTest {
             .openSelectMinimalDialog()
             .assertTexts("Mango", "Oranges", "Strawberries")
             .selectItem("Strawberries")
-            .assertText("Target15")
+            .assertQuestion("Target15")
             .assertSelectMinimalDialogAnswer("Strawberries")
     }
 
@@ -342,7 +342,7 @@ class FieldListUpdateTest {
             .clickOnQuestion("Question1")
             .answerQuestion(0, "X")
             .clickOnQuestionField("Question20")
-            .assertText("Question20")
+            .assertQuestion("Question20")
     }
 
     @Test
@@ -353,16 +353,16 @@ class FieldListUpdateTest {
             .clickGoUpIcon()
             .clickOnGroup("Audio")
             .clickOnQuestion("Source16")
-            .assertTextDoesNotExist("Target16")
+            .assertNoQuestion("Target16")
             .clickOnString(org.odk.collect.strings.R.string.capture_audio)
             .clickOnContentDescription(org.odk.collect.strings.R.string.stop_recording)
-            .assertText("Target16")
+            .assertQuestion("Target16")
             .clickOnString(org.odk.collect.strings.R.string.delete_answer_file)
             .clickOnTextInDialog(
                 org.odk.collect.strings.R.string.delete_answer_file,
                 FormEntryPage("fieldlist-updates")
             )
-            .assertTextDoesNotExist("Target16")
+            .assertNoQuestion("Target16")
     }
 
     @Test
