@@ -92,17 +92,11 @@ object LocalEntityUseCases {
                             branchId = UUID.randomUUID().toString()
                         )
                     )
-                } else if (existing.version <= serverEntity.version) {
-                    if (existing.isDirty() || serverEntity.version > existing.version) {
-                        val update = existing.copy(
-                            label = serverEntity.label,
-                            version = serverEntity.version,
-                            properties = serverEntity.properties.toList(),
-                            state = Entity.State.ONLINE,
-                            branchId = UUID.randomUUID().toString(),
-                            trunkVersion = serverEntity.version
-                        )
-                        newAndUpdated.add(update)
+                } else if (existing.version < serverEntity.version) {
+                    newAndUpdated.add(serverEntity.updateLocal(existing))
+                } else if (existing.version == serverEntity.version) {
+                    if (existing.isDirty()) {
+                        newAndUpdated.add(serverEntity.updateLocal(existing))
                     }
                 } else if (existing.state == Entity.State.OFFLINE) {
                     val update = existing.copy(state = Entity.State.ONLINE)
@@ -148,5 +142,16 @@ private data class ServerEntity(
     val id: String,
     val label: String,
     val version: Int,
-    val properties: Map<String, String>
-)
+    val properties: Map<String, String>) {
+
+    fun updateLocal(local: Entity.Saved): Entity.Saved {
+        return local.copy(
+            label = this.label,
+            version = this.version,
+            properties = this.properties.toList(),
+            state = Entity.State.ONLINE,
+            branchId = UUID.randomUUID().toString(),
+            trunkVersion = this.version
+        )
+    }
+}
