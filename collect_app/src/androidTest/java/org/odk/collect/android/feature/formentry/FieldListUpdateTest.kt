@@ -25,6 +25,7 @@ import org.odk.collect.settings.keys.ProjectKeys
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Random
+import java.util.UUID
 
 class FieldListUpdateTest {
     private var rule: FormEntryActivityTestRule = FormEntryActivityTestRule()
@@ -84,6 +85,8 @@ class FieldListUpdateTest {
 
     @Test
     fun changeInValueUsedInLabel_ShouldChangeLabelText() {
+        val name = UUID.randomUUID().toString()
+
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml")
             .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
             .clickGoToArrow()
@@ -91,8 +94,8 @@ class FieldListUpdateTest {
             .clickOnGroup("Label change")
             .clickOnQuestion("Hello, , how are you today?")
             .assertQuestion("Hello, , how are you today?")
-            .answerQuestion("What is your name?", "John")
-            .assertQuestion("Hello, John, how are you today?")
+            .answerQuestion("What is your name?", name)
+            .assertQuestion("Hello, $name, how are you today?")
             .longPressOnQuestion("What is your name?")
             .removeResponse()
             .assertQuestion("Hello, , how are you today?")
@@ -100,6 +103,8 @@ class FieldListUpdateTest {
 
     @Test
     fun changeInValueUsedInHint_ShouldChangeHintText() {
+        val name = UUID.randomUUID().toString()
+
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml")
             .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
             .clickGoToArrow()
@@ -107,8 +112,8 @@ class FieldListUpdateTest {
             .clickOnGroup("Hint change")
             .clickOnQuestion("What is your name?")
             .assertText("Please don't use your calculator, !")
-            .answerQuestion("What is your name?", "John")
-            .assertText("Please don't use your calculator, John!")
+            .answerQuestion("What is your name?", name)
+            .assertText("Please don't use your calculator, $name!")
             .longPressOnQuestion("What is your name?")
             .removeResponse()
             .assertText("Please don't use your calculator, !")
@@ -116,6 +121,8 @@ class FieldListUpdateTest {
 
     @Test
     fun changeInValueUsedInOtherField_ShouldChangeValue() {
+        val name = UUID.randomUUID().toString()
+
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml")
             .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
             .clickGoToArrow()
@@ -124,9 +131,9 @@ class FieldListUpdateTest {
             .clickOnQuestion("What is your name?")
             .assertAnswer("Name length", "0")
             .assertAnswer("First name letter", "")
-            .answerQuestion("What is your name?", "John")
-            .assertAnswer("Name length", "4")
-            .assertAnswer("First name letter", "J")
+            .answerQuestion("What is your name?", name)
+            .assertAnswer("Name length", name.length.toString())
+            .assertAnswer("First name letter", name.first().toString())
             .longPressOnQuestion("What is your name?")
             .removeResponse()
             .assertAnswer("Name length", "0")
