@@ -391,13 +391,16 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             entity.properties.map { it.first }.filterNot { columnNames.contains(it) }
         if (missingColumns.isNotEmpty()) {
             databaseConnection.withConnection {
-                missingColumns.forEach {
-                    writeableDatabase.execSQL(
-                        """
-                        ALTER TABLE $list ADD "$it" text NOT NULL DEFAULT "";
-                        """.trimIndent()
-                    )
+                writeableDatabase.transaction {
+                    missingColumns.forEach {
+                        execSQL(
+                            """
+                            ALTER TABLE $list ADD "$it" text NOT NULL DEFAULT "";
+                            """.trimIndent()
+                        )
+                    }
                 }
+
 
                 reset()
             }
