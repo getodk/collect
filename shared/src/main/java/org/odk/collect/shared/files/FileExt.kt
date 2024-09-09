@@ -11,6 +11,9 @@ object FileExt {
      * /Android/data/ part of the path, such as /storage/emulated/0/android/data/... or /storage/emulated/0/Android/Data/...
      * instead of the expected /storage/emulated/0/Android/data/...
      * Since the Android file system is case-sensitive, this behavior appears to be a bug.
+     *
+     * For more details, see the discussion on Stack Overflow:
+     * https://stackoverflow.com/questions/78965720/file-getcanonicalpath-returns-inconsistent-letter-casing-in-path
      */
     fun File.sanitizedCanonicalPath(): String {
         val androidDataSegment = "/Android/data/"
