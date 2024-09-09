@@ -24,6 +24,8 @@ open class DatabaseConnection @JvmOverloads constructor(
     private val strict: Boolean = false
 ) {
 
+    private val databasePath = path + File.separator + name
+
     val writeableDatabase: SQLiteDatabase
         get() {
             StrictMode.noteSlowCall("Accessing writable DB")
@@ -40,32 +42,32 @@ open class DatabaseConnection @JvmOverloads constructor(
 
     private val dbHelper: SQLiteOpenHelper
         get() {
-            val databasePath = path + File.separator + name
-            if (openHelpers.containsKey(databasePath) && !File(databasePath).exists()) {
-                /**
-                 * Ideally we should close the database here as well but it was causing crashes in
-                 * our tests as DB connections seem to be getting used after being closed. These
-                 * "removed" helpers will be closed in [closeAll] rather than when they are
-                 * replaced.
-                 */
-                openHelpers.remove(databasePath)?.let {
-                    toClose.add(it)
+            return synchronized(openHelpers) {
+                if (openHelpers.containsKey(databasePath) && !File(databasePath).exists()) {
+                    /**
+                     * Ideally we should close the database here as well but it was causing crashes in
+                     * our tests as DB connections seem to be getting used after being closed. These
+                     * "removed" helpers will be closed in [closeAll] rather than when they are
+                     * replaced.
+                     */
+                    openHelpers.remove(databasePath)?.let {
+                        toClose.add(it)
+                    }
                 }
-            }
 
-            return openHelpers.getOrPut(databasePath) {
-                DatabaseMigratorSQLiteOpenHelper(
-                    AltDatabasePathContext(path, context),
-                    name,
-                    null,
-                    databaseVersion,
-                    migrator
-                )
+                openHelpers.getOrPut(databasePath) {
+                    DatabaseMigratorSQLiteOpenHelper(
+                        AltDatabasePathContext(path, context),
+                        name,
+                        null,
+                        databaseVersion,
+                        migrator
+                    )
+                }
             }
         }
 
     fun reset() {
-        val databasePath = path + File.separator + name
         openHelpers.remove(databasePath)?.close()
     }
 
