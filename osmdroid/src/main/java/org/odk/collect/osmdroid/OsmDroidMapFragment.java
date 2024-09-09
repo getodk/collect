@@ -67,6 +67,7 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.TilesOverlay;
 import org.osmdroid.views.overlay.mylocation.IMyLocationConsumer;
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
@@ -201,6 +202,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         map.getController().setZoom((int) INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
         map.setFlingEnabled(false);
+        map.getOverlays().add(new ScaleBarOverlay(map));
         addAttributionAndMapEventsOverlays();
         loadReferenceOverlay();
         addMapLayoutChangeListener(map);

@@ -44,7 +44,6 @@ import com.mapbox.maps.plugin.gestures.OnMapLongClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapLongClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
-import com.mapbox.maps.plugin.scalebar.scalebar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.odk.collect.androidshared.utils.ScreenUtils
@@ -152,7 +151,6 @@ class MapboxMapFragment :
         savedInstanceState: Bundle?
     ): View {
         mapView = MapView(inflater.context).apply {
-            scalebar.enabled = false
             compass.position = Gravity.TOP or Gravity.START
             compass.marginTop = 36f
             compass.marginBottom = 36f

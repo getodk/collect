@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    This file includes code from MapScaleView (https://github.com/pengrad/MapScaleView),
+    licensed under the Apache License, Version 2.0.
+-->
+<resources>
+    <declare-styleable name="MapScaleView">
+        <attr name="scale_maxWidth" format="dimension"/>
+        <attr name="scale_textSize" format="dimension"/>
+        <attr name="scale_strokeWidth" format="dimension"/>
+        <attr name="scale_color" format="color"/>
+        <attr name="scale_miles" format="boolean"/>
+        <attr name="scale_outline" format="boolean"/>
+        <attr name="scale_expandRtl" format="boolean"/>
+    </declare-styleable>
+</resources>
