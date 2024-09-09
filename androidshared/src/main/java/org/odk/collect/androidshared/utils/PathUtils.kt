@@ -1,5 +1,6 @@
 package org.odk.collect.androidshared.utils
 
+import org.odk.collect.shared.files.FileExt.sanitizedCanonicalPath
 import timber.log.Timber
 import java.io.File
 
@@ -9,8 +10,8 @@ object PathUtils {
         val absoluteFilePath =
             if (filePath.startsWith(dirPath)) filePath else dirPath + File.separator + filePath
 
-        val canonicalAbsoluteFilePath = File(absoluteFilePath).canonicalPath
-        val canonicalDirPath = File(dirPath).canonicalPath
+        val canonicalAbsoluteFilePath = File(absoluteFilePath).sanitizedCanonicalPath()
+        val canonicalDirPath = File(dirPath).sanitizedCanonicalPath()
         if (!canonicalAbsoluteFilePath.startsWith(canonicalDirPath)) {
             Timber.e(
                 "Attempt to access file outside of Collect directory:\n" +
