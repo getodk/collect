@@ -267,10 +267,10 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             readableDatabase
                 .rawQuery(
                     """
-                SELECT *, i.$ROW_ID
-                FROM $list e, ${getRowIdTableName(list)} i
-                WHERE e._id = i._id AND i.$ROW_ID = ?
-                """.trimIndent(),
+                    SELECT *, i.$ROW_ID
+                    FROM $list e, ${getRowIdTableName(list)} i
+                    WHERE e._id = i._id AND i.$ROW_ID = ?
+                    """.trimIndent(),
                     arrayOf((index + 1).toString())
                 ).first {
                     mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
@@ -321,18 +321,17 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             getLists().forEach {
                 writeableDatabase.execSQL(
                     """
-                DROP TABLE IF EXISTS ${getRowIdTableName(it)};
-                """.trimIndent()
+                    DROP TABLE IF EXISTS ${getRowIdTableName(it)};
+                    """.trimIndent()
                 )
 
                 writeableDatabase.execSQL(
                     """
-                CREATE TABLE ${getRowIdTableName(it)} AS SELECT _id FROM $it;
-                """.trimIndent()
+                    CREATE TABLE ${getRowIdTableName(it)} AS SELECT _id FROM $it;
+                    """.trimIndent()
                 )
             }
         }
-
     }
 
     private fun getRowIdTableName(it: String) = "${it}_row_numbers"
@@ -346,7 +345,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     selectionArgs = arrayOf(list)
                 ).use { it.count } > 0
         }
-
     }
 
     private fun createList(list: String) {
@@ -362,22 +360,22 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
                 execSQL(
                     """
-                CREATE TABLE IF NOT EXISTS $list (
-                    $_ID integer PRIMARY KEY,
-                    ${EntitiesTable.COLUMN_ID} text,
-                    ${EntitiesTable.COLUMN_LABEL} text,
-                    ${EntitiesTable.COLUMN_VERSION} integer,
-                    ${EntitiesTable.COLUMN_TRUNK_VERSION} integer,
-                    ${EntitiesTable.COLUMN_BRANCH_ID} text,
-                    ${EntitiesTable.COLUMN_STATE} integer NOT NULL
-                );
-                """.trimIndent()
+                    CREATE TABLE IF NOT EXISTS $list (
+                        $_ID integer PRIMARY KEY,
+                        ${EntitiesTable.COLUMN_ID} text,
+                        ${EntitiesTable.COLUMN_LABEL} text,
+                        ${EntitiesTable.COLUMN_VERSION} integer,
+                        ${EntitiesTable.COLUMN_TRUNK_VERSION} integer,
+                        ${EntitiesTable.COLUMN_BRANCH_ID} text,
+                        ${EntitiesTable.COLUMN_STATE} integer NOT NULL
+                    );
+                    """.trimIndent()
                 )
 
                 execSQL(
                     """
-                CREATE UNIQUE INDEX IF NOT EXISTS ${list}_unique_id_index ON $list (${EntitiesTable.COLUMN_ID});
-                """.trimIndent()
+                    CREATE UNIQUE INDEX IF NOT EXISTS ${list}_unique_id_index ON $list (${EntitiesTable.COLUMN_ID});
+                    """.trimIndent()
                 )
             }
         }

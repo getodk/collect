@@ -67,10 +67,29 @@ open class DatabaseConnection @JvmOverloads constructor(
             }
         }
 
+    /**
+     * Closes the underlying connection and clears state so that subsequent accesses will create
+     * a new connection.
+     *
+     * This can be dangerous if the database is being access by multiple threads as the connection
+     * might be closed while a transaction is running or while another thread is using a
+     * [SQLiteDatabase] instance obtained via [writeableDatabase] or [readableDatabase]. Using
+     * [SynchronizedDatabaseConnection] is recommended in those scenarios.
+     */
     fun reset() {
         openHelpers.remove(databasePath)?.close()
     }
 
+    /**
+     * Access the database in a synchronized manner. This is not usually required, but should be
+     * used if a calls to [reset] will be made.
+     *
+     * Does not guarantee synchronized access if this or another [DatabaseConnection] for the
+     * same `.db` file uses [writeableDatabase] or [readableDatabase].
+     * [SynchronizedDatabaseConnection] can be used to ensure synchronized writes/reads to the
+     * underlying DB.
+     *
+     */
     fun <T> withSynchronizedConnection(block: DatabaseConnection.() -> T): T {
         return synchronized(dbHelper) {
             block(this)
