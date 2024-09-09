@@ -10,6 +10,7 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.odk.collect.shared.TimeInMs
 import org.odk.collect.testshared.WaitFor.waitFor
 
 class NotificationDrawer {
@@ -59,6 +60,7 @@ class NotificationDrawer {
         val actionElement = getExpandedElement(device, appName, actionText) ?: getExpandedElement(device, appName, actionText.uppercase())
         if (actionElement != null) {
             actionElement.click()
+            closeNotificationDrawerIfOpened()
             isOpen = false
         } else {
             throw AssertionError("Could not find \"$actionText\"")
@@ -79,17 +81,12 @@ class NotificationDrawer {
     ): D {
         val device = waitForNotification(appName, title)
         device.findObject(By.text(title)).click()
+        closeNotificationDrawerIfOpened()
         isOpen = false
 
         return waitFor {
             destination.assertOnPage()
         }
-    }
-
-    fun pressBack() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.pressBack()
-        isOpen = false
     }
 
     fun clearAll() {
@@ -99,11 +96,11 @@ class NotificationDrawer {
             clearAll.click()
         } else {
             // "Clear all" doesn't exist because there are notifications to clear - just press back
-            pressBack()
+            device.pressBack()
         }
 
-        device.wait(Until.gone(By.text("Notifications")), 1000L)
-
+        device.wait(Until.gone(By.text("No notifications")), 1000L)
+        closeNotificationDrawerIfOpened()
         isOpen = false
     }
 
@@ -152,6 +149,18 @@ class NotificationDrawer {
                 `is`(true)
             )
             device
+        }
+    }
+
+    /**
+     * It appears that sometimes the notification drawer does not close automatically when it should
+     * such as after clicking on a notification or its action. This could be due to a bug in Android.
+     */
+    private fun closeNotificationDrawerIfOpened() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val isManageButtonGone = device.wait(Until.gone(By.text("Manage")), TimeInMs.THREE_SECONDS)
+        if (!isManageButtonGone) {
+            device.pressBack()
         }
     }
 }
