@@ -5,7 +5,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns._ID
-import androidx.core.database.sqlite.transaction
 import org.odk.collect.db.sqlite.CursorExt.first
 import org.odk.collect.db.sqlite.CursorExt.foldAndClose
 import org.odk.collect.db.sqlite.CursorExt.getInt
@@ -59,61 +58,59 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
         updatePropertyColumns(list, entities.first())
 
-        databaseConnection.withConnection {
-            writeableDatabase.transaction {
-                entities.forEach { entity ->
-                    val existing = if (listExists) {
-                        query(
-                            list,
-                            "${EntitiesTable.COLUMN_ID} = ?",
-                            arrayOf(entity.id)
-                        ).first { mapCursorRowToEntity(list, it, 0) }
+        databaseConnection.transaction {
+            entities.forEach { entity ->
+                val existing = if (listExists) {
+                    query(
+                        list,
+                        "${EntitiesTable.COLUMN_ID} = ?",
+                        arrayOf(entity.id)
+                    ).first { mapCursorRowToEntity(list, it, 0) }
+                } else {
+                    null
+                }
+
+                if (existing != null) {
+                    val state = if (existing.state == Entity.State.OFFLINE) {
+                        entity.state
                     } else {
-                        null
+                        Entity.State.ONLINE
                     }
 
-                    if (existing != null) {
-                        val state = if (existing.state == Entity.State.OFFLINE) {
-                            entity.state
-                        } else {
-                            Entity.State.ONLINE
-                        }
+                    val contentValues = ContentValues().also {
+                        it.put(EntitiesTable.COLUMN_ID, entity.id)
+                        it.put(EntitiesTable.COLUMN_LABEL, entity.label ?: existing.label)
+                        it.put(EntitiesTable.COLUMN_VERSION, entity.version)
+                        it.put(EntitiesTable.COLUMN_TRUNK_VERSION, entity.trunkVersion)
+                        it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
+                        it.put(EntitiesTable.COLUMN_STATE, convertStateToInt(state))
 
-                        val contentValues = ContentValues().also {
-                            it.put(EntitiesTable.COLUMN_ID, entity.id)
-                            it.put(EntitiesTable.COLUMN_LABEL, entity.label ?: existing.label)
-                            it.put(EntitiesTable.COLUMN_VERSION, entity.version)
-                            it.put(EntitiesTable.COLUMN_TRUNK_VERSION, entity.trunkVersion)
-                            it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
-                            it.put(EntitiesTable.COLUMN_STATE, convertStateToInt(state))
-
-                            addPropertiesToContentValues(it, entity)
-                        }
-
-                        update(
-                            list,
-                            contentValues,
-                            "${EntitiesTable.COLUMN_ID} = ?",
-                            arrayOf(entity.id)
-                        )
-                    } else {
-                        val contentValues = ContentValues().also {
-                            it.put(EntitiesTable.COLUMN_ID, entity.id)
-                            it.put(EntitiesTable.COLUMN_LABEL, entity.label)
-                            it.put(EntitiesTable.COLUMN_VERSION, entity.version)
-                            it.put(EntitiesTable.COLUMN_TRUNK_VERSION, entity.trunkVersion)
-                            it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
-                            it.put(EntitiesTable.COLUMN_STATE, convertStateToInt(entity.state))
-
-                            addPropertiesToContentValues(it, entity)
-                        }
-
-                        insertOrThrow(
-                            list,
-                            null,
-                            contentValues
-                        )
+                        addPropertiesToContentValues(it, entity)
                     }
+
+                    update(
+                        list,
+                        contentValues,
+                        "${EntitiesTable.COLUMN_ID} = ?",
+                        arrayOf(entity.id)
+                    )
+                } else {
+                    val contentValues = ContentValues().also {
+                        it.put(EntitiesTable.COLUMN_ID, entity.id)
+                        it.put(EntitiesTable.COLUMN_LABEL, entity.label)
+                        it.put(EntitiesTable.COLUMN_VERSION, entity.version)
+                        it.put(EntitiesTable.COLUMN_TRUNK_VERSION, entity.trunkVersion)
+                        it.put(EntitiesTable.COLUMN_BRANCH_ID, entity.branchId)
+                        it.put(EntitiesTable.COLUMN_STATE, convertStateToInt(entity.state))
+
+                        addPropertiesToContentValues(it, entity)
+                    }
+
+                    insertOrThrow(
+                        list,
+                        null,
+                        contentValues
+                    )
                 }
             }
         }
@@ -349,36 +346,34 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     private fun createList(list: String) {
-        databaseConnection.withConnection {
-            writeableDatabase.transaction {
-                val contentValues = ContentValues()
-                contentValues.put(ListsTable.COLUMN_NAME, list)
-                insertOrThrow(
-                    ListsTable.TABLE_NAME,
-                    null,
-                    contentValues
-                )
+        databaseConnection.transaction {
+            val contentValues = ContentValues()
+            contentValues.put(ListsTable.COLUMN_NAME, list)
+            insertOrThrow(
+                ListsTable.TABLE_NAME,
+                null,
+                contentValues
+            )
 
-                execSQL(
-                    """
-                    CREATE TABLE IF NOT EXISTS $list (
-                        $_ID integer PRIMARY KEY,
-                        ${EntitiesTable.COLUMN_ID} text,
-                        ${EntitiesTable.COLUMN_LABEL} text,
-                        ${EntitiesTable.COLUMN_VERSION} integer,
-                        ${EntitiesTable.COLUMN_TRUNK_VERSION} integer,
-                        ${EntitiesTable.COLUMN_BRANCH_ID} text,
-                        ${EntitiesTable.COLUMN_STATE} integer NOT NULL
-                    );
-                    """.trimIndent()
-                )
+            execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS $list (
+                    $_ID integer PRIMARY KEY,
+                    ${EntitiesTable.COLUMN_ID} text,
+                    ${EntitiesTable.COLUMN_LABEL} text,
+                    ${EntitiesTable.COLUMN_VERSION} integer,
+                    ${EntitiesTable.COLUMN_TRUNK_VERSION} integer,
+                    ${EntitiesTable.COLUMN_BRANCH_ID} text,
+                    ${EntitiesTable.COLUMN_STATE} integer NOT NULL
+                );
+                """.trimIndent()
+            )
 
-                execSQL(
-                    """
-                    CREATE UNIQUE INDEX IF NOT EXISTS ${list}_unique_id_index ON $list (${EntitiesTable.COLUMN_ID});
-                    """.trimIndent()
-                )
-            }
+            execSQL(
+                """
+                CREATE UNIQUE INDEX IF NOT EXISTS ${list}_unique_id_index ON $list (${EntitiesTable.COLUMN_ID});
+                """.trimIndent()
+            )
         }
     }
 
@@ -390,19 +385,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         val missingColumns =
             entity.properties.map { it.first }.filterNot { columnNames.contains(it) }
         if (missingColumns.isNotEmpty()) {
-            databaseConnection.withConnection {
-                writeableDatabase.transaction {
-                    missingColumns.forEach {
-                        execSQL(
-                            """
-                            ALTER TABLE $list ADD "$it" text NOT NULL DEFAULT "";
-                            """.trimIndent()
-                        )
-                    }
+            databaseConnection.resetTransaction {
+                missingColumns.forEach {
+                    execSQL(
+                        """
+                        ALTER TABLE $list ADD "$it" text NOT NULL DEFAULT "";
+                        """.trimIndent()
+                    )
                 }
-
-
-                reset()
             }
         }
     }
