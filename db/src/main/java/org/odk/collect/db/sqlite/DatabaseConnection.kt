@@ -64,6 +64,11 @@ open class DatabaseConnection @JvmOverloads constructor(
             }
         }
 
+    fun reset() {
+        val databasePath = path + File.separator + name
+        openHelpers.remove(databasePath)?.close()
+    }
+
     companion object {
 
         private val openHelpers = mutableMapOf<String, SQLiteOpenHelper>()

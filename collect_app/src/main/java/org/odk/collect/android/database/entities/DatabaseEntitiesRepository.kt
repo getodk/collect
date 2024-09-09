@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteException
 import android.provider.BaseColumns._ID
 import androidx.core.database.sqlite.transaction
 import org.odk.collect.db.sqlite.CursorExt.first
@@ -360,14 +359,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     private fun updatePropertyColumns(list: String, entity: Entity) {
         entity.properties.map { it.first }.forEach {
-            try {
+            if (!databaseConnection.readableDatabase.doesColumnExist(list, it)) {
                 databaseConnection.writeableDatabase.execSQL(
                     """
                     ALTER TABLE $list ADD "$it" text NOT NULL DEFAULT "";
                     """.trimIndent()
                 )
-            } catch (e: SQLiteException) {
-                // Ignored
+
+                databaseConnection.reset()
             }
         }
     }
