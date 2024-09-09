@@ -25,6 +25,17 @@ object FileExt {
         return canonicalPath
     }
 
+    fun File.listFilesRecursively(): List<File> {
+        val listFiles = listFiles() ?: emptyArray()
+        return listFiles.flatMap {
+            if (it.isDirectory) {
+                it.listFilesRecursively()
+            } else {
+                listOf(it)
+            }
+        }
+    }
+
     @Throws(IOException::class)
     @JvmStatic
     fun File.saveToFile(inputStream: InputStream) {
