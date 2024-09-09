@@ -69,6 +69,12 @@ open class DatabaseConnection @JvmOverloads constructor(
         openHelpers.remove(databasePath)?.close()
     }
 
+    fun <T> withSynchronizedConnection(block: DatabaseConnection.() -> T): T {
+        return synchronized(dbHelper) {
+            block(this)
+        }
+    }
+
     companion object {
 
         private val openHelpers = mutableMapOf<String, SQLiteOpenHelper>()
