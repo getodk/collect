@@ -15,8 +15,8 @@ import org.odk.collect.db.sqlite.DatabaseMigrator
 import org.odk.collect.db.sqlite.SQLiteColumns.ROW_ID
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.delete
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.doesColumnExist
+import org.odk.collect.db.sqlite.SQLiteDatabaseExt.getColumnNames
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.query
-import org.odk.collect.db.sqlite.SQLiteUtils
 import org.odk.collect.db.sqlite.SynchronizedDatabaseConnection
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
@@ -379,7 +379,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     private fun updatePropertyColumns(list: String, entity: Entity) {
         val columnNames = databaseConnection.withConnection {
-            SQLiteUtils.getColumnNames(readableDatabase, list)
+            readableDatabase.getColumnNames(list)
         }
 
         val missingColumns =
