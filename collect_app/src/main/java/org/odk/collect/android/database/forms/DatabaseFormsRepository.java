@@ -30,7 +30,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.savepoints.SavepointsRepository;
-import org.odk.collect.shared.files.DirectoryUtils;
+import org.odk.collect.shared.files.FileExt;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
@@ -302,7 +302,7 @@ public class DatabaseFormsRepository implements FormsRepository {
             File mediaDir = new File(form.getFormMediaPath());
 
             if (mediaDir.isDirectory()) {
-                DirectoryUtils.deleteDirectory(mediaDir);
+                FileExt.deleteDirectory(mediaDir);
             } else {
                 mediaDir.delete();
             }

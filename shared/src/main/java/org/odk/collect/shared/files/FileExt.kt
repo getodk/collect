@@ -36,6 +36,11 @@ object FileExt {
         }
     }
 
+    @JvmStatic
+    fun File.deleteDirectory() {
+        deleteRecursively()
+    }
+
     @Throws(IOException::class)
     @JvmStatic
     fun File.saveToFile(inputStream: InputStream) {

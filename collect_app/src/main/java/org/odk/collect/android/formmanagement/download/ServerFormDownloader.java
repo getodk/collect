@@ -16,7 +16,7 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.shared.files.DirectoryUtils;
+import org.odk.collect.shared.files.FileExt;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
@@ -79,7 +79,7 @@ public class ServerFormDownloader implements FormDownloader {
         } catch (FormSourceException e) {
             throw new FormDownloadException.FormSourceError(e);
         } finally {
-            DirectoryUtils.deleteDirectory(tempDir);
+            FileExt.deleteDirectory(tempDir);
             for (Form formToDelete : preExistingFormsWithSameIdAndVersion) {
                 formsRepository.delete(formToDelete.getDbId());
             }
