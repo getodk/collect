@@ -5,7 +5,9 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
+import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.files.FileExt.sanitizedCanonicalPath
+import org.odk.collect.shared.files.FileExt.saveToFile
 import java.io.File
 
 class FileExtTest {
@@ -34,5 +36,14 @@ class FileExtTest {
         }
 
         assertThat(file.sanitizedCanonicalPath(), equalTo(file.canonicalPath))
+    }
+
+    @Test
+    fun `saveToFile saves data to file`() {
+        val file = TempFiles.createTempFile().apply {
+            saveToFile("blah".byteInputStream())
+        }
+
+        assertThat(file.readText(), equalTo("blah"))
     }
 }
