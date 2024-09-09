@@ -1,6 +1,5 @@
 package org.odk.collect.entities.javarosa.parse;
 
-import kotlin.Pair;
 import org.javarosa.core.model.DataBinding;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.model.xform.XPathReference;
@@ -14,13 +13,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import kotlin.Pair;
+
 public class EntityFormParseProcessor implements XFormParser.BindAttributeProcessor, XFormParser.FormDefProcessor, XFormParser.ModelAttributeProcessor {
 
     private static final String ENTITIES_NAMESPACE = "http://www.opendatakit.org/xforms/entities";
     private static final String[] SUPPORTED_VERSIONS = {"2022.1", "2023.1", "2024.1"};
+    private static final String[] LOCAL_ENTITY_VERSIONS = {"2024.1"};
 
     private final List<Pair<XPathReference, String>> saveTos = new ArrayList<>();
-    private boolean versionPresent;
+    private String version;
 
     @Override
     public Set<Pair<String, String>> getModelAttributes() {
@@ -32,7 +34,7 @@ public class EntityFormParseProcessor implements XFormParser.BindAttributeProces
 
     @Override
     public void processModelAttribute(String name, String value) throws XFormParser.ParseException {
-        versionPresent = true;
+        version = value;
 
         if (Stream.of(SUPPORTED_VERSIONS).noneMatch(value::startsWith)) {
             throw new UnrecognizedEntityVersionException();
@@ -54,11 +56,17 @@ public class EntityFormParseProcessor implements XFormParser.BindAttributeProces
 
     @Override
     public void processFormDef(FormDef formDef) throws XFormParser.ParseException {
-        if (!versionPresent && EntityFormParser.getEntityElement(formDef.getMainInstance()) != null) {
-            throw new XFormParser.MissingModelAttributeException(ENTITIES_NAMESPACE, "entities-version");
+        if (isEntityForm(formDef)) {
+            if (version == null) {
+                throw new XFormParser.MissingModelAttributeException(ENTITIES_NAMESPACE, "entities-version");
+            } else if (Stream.of(LOCAL_ENTITY_VERSIONS).anyMatch(version::startsWith)) {
+                EntityFormExtra entityFormExtra = new EntityFormExtra(saveTos);
+                formDef.getExtras().put(entityFormExtra);
+            }
         }
+    }
 
-        EntityFormExtra entityFormExtra = new EntityFormExtra(saveTos);
-        formDef.getExtras().put(entityFormExtra);
+    private static boolean isEntityForm(FormDef formDef) {
+        return EntityFormParser.getEntityElement(formDef.getMainInstance()) != null;
     }
 }

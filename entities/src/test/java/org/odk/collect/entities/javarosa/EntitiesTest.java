@@ -59,7 +59,7 @@ public class EntitiesTest {
             ),
             head(
                 title("Entity form"),
-                model(asList(new Pair<>("entities:entities-version", "2022.1.1")),
+                model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"entity-form\"",
                             t("name"),
@@ -94,7 +94,7 @@ public class EntitiesTest {
             ),
             head(
                 title("Create entity form"),
-                model(asList(new Pair<>("entities:entities-version", "2022.1.1")),
+                model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"create-entity-form\"",
                             t("name"),
@@ -139,7 +139,7 @@ public class EntitiesTest {
             ),
             head(
                 title("Create entity form"),
-                model(asList(new Pair<>("entities:entities-version", "2022.1.1")),
+                model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"create-entity-form\"",
                             t("id"),
@@ -180,7 +180,7 @@ public class EntitiesTest {
             ),
             head(
                 title("Update entity form"),
-                model(asList(new Pair<>("entities:entities-version", "2023.1.0")),
+                model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"update-entity-form\"",
                             t("name"),
@@ -224,7 +224,7 @@ public class EntitiesTest {
             ),
             head(
                 title("Update entity form"),
-                model(asList(new Pair<>("entities:entities-version", "2023.1.0")),
+                model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"update-entity-form\"",
                             t("name"),
@@ -264,7 +264,7 @@ public class EntitiesTest {
             ),
             head(
                 title("Update entity form"),
-                model(asList(new Pair<>("entities:entities-version", "2023.1.0")),
+                model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"update-entity-form\"",
                             t("id"),
@@ -300,7 +300,7 @@ public class EntitiesTest {
             ),
             head(
                 title("Upsert entity form"),
-                model(asList(new Pair<>("entities:entities-version", "2023.1.0")),
+                model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"upsert-entity-form\"",
                             t("name"),
@@ -338,7 +338,7 @@ public class EntitiesTest {
             ),
             head(
                 title("Create entity form"),
-                model(asList(new Pair<>("entities:entities-version", "2022.1.1")),
+                model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"create-entity-form\"",
                             t("name"),
@@ -389,7 +389,7 @@ public class EntitiesTest {
             ),
             head(
                 title("Create entity form"),
-                model(asList(new Pair<>("entities:entities-version", "2022.1.1")),
+                model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"create-entity-form\"",
                             t("name"),
@@ -429,7 +429,7 @@ public class EntitiesTest {
             ),
             head(
                 title("Create entity form"),
-                model(asList(new Pair<>("blah:entities-version", "2022.1.1")),
+                model(asList(new Pair<>("blah:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"create-entity-form\"",
                             t("name"),
@@ -465,7 +465,7 @@ public class EntitiesTest {
             ),
             head(
                 title("Create entity form"),
-                model(asList(new Pair<>("entities:entities-version", "2022.1.1")),
+                model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"create-entity-form\"",
                             t("team"),
@@ -501,7 +501,7 @@ public class EntitiesTest {
             ),
             head(
                 title("Create entity form"),
-                model(asList(new Pair<>("entities:entities-version", "2022.1.1")),
+                model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"create-entity-form\"",
                             t("name"),
@@ -534,7 +534,7 @@ public class EntitiesTest {
             ),
             head(
                 title("Create entity form"),
-                model(asList(new Pair<>("entities:entities-version", "2022.1.1")),
+                model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"create-entity-form\"",
                             t("name"),
