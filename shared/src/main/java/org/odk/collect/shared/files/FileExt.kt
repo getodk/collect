@@ -17,15 +17,9 @@ object FileExt {
      */
     fun File.sanitizedCanonicalPath(): String {
         val androidDataSegment = "/Android/data/"
+        val regex = Regex(androidDataSegment, RegexOption.IGNORE_CASE)
 
-        val canonicalPath = canonicalPath
-
-        if (canonicalPath.contains(androidDataSegment, true)) {
-            val regex = Regex(androidDataSegment, RegexOption.IGNORE_CASE)
-            return canonicalPath.replace(regex, androidDataSegment)
-        }
-
-        return canonicalPath
+        return canonicalPath.replace(regex, androidDataSegment)
     }
 
     fun File.listFilesRecursively(): List<File> {

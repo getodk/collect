@@ -41,6 +41,15 @@ class FileExtTest {
     }
 
     @Test
+    fun `sanitizedCanonicalPath returns original canonicalPath if it does not contain the androidData part`() {
+        val file = mock<File>().apply {
+            whenever(canonicalPath).thenReturn("/data/data/DEMO/files/blah")
+        }
+
+        assertThat(file.sanitizedCanonicalPath(), equalTo(file.canonicalPath))
+    }
+
+    @Test
     fun `saveToFile saves data to file`() {
         val file = TempFiles.createTempFile().apply {
             saveToFile("blah".byteInputStream())
