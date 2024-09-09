@@ -5,7 +5,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.async.SchedulerAsyncTaskMimic
 import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.forms.savepoints.SavepointsRepository
-import org.odk.collect.shared.files.FileUtils
+import org.odk.collect.shared.files.FileExt.saveToFile
 import timber.log.Timber
 import java.io.File
 
@@ -32,7 +32,7 @@ class SavepointTask(
             val savepoint = Savepoint(formDbId, instanceDbId, savepointFile.absolutePath, formController.getInstanceFile()!!.absolutePath)
 
             if (priority == lastPriorityUsed) {
-                FileUtils.saveToFile(formController.getFilledInFormXml().payloadStream, savepointFile.absolutePath)
+                savepointFile.saveToFile(formController.getFilledInFormXml().payloadStream)
                 savepointsRepository.save(savepoint)
             }
 

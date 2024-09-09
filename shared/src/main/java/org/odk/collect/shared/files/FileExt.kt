@@ -1,6 +1,9 @@
 package org.odk.collect.shared.files
 
 import java.io.File
+import java.io.IOException
+import java.io.InputStream
+import kotlin.jvm.Throws
 
 object FileExt {
     /**
@@ -20,5 +23,19 @@ object FileExt {
         }
 
         return canonicalPath
+    }
+
+    @Throws(IOException::class)
+    @JvmStatic
+    fun File.saveToFile(inputStream: InputStream) {
+        if (exists() && !delete()) {
+            throw IOException("Cannot overwrite $absolutePath. Perhaps the file is locked?")
+        }
+
+        inputStream.use { input ->
+            outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
     }
 }
