@@ -127,6 +127,27 @@ class SavepointsImporterTest {
     }
 
     @Test
+    fun formFileNameShouldBeEscapedAndTreatedAsLiteralTextToAvoidPatternSyntaxException() {
+        val form1Name = "sampleForm("
+
+        // create blank forms
+        val blankForm1 = createBlankForm(project, form1Name, "1")
+
+        // create savepoints
+        val savepointFile1 = createFileInCache(project, "${form1Name}_2024-04-10_01-35-41.xml.save")
+
+        // trigger importing
+        savepointsImporter.run()
+
+        // verify import
+        val savepoints = savepointsRepository.getAll()
+        val expectedSavepoint1 =
+            Savepoint(blankForm1.dbId, null, savepointFile1.absolutePath, "${storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, project.uuid)}/${form1Name}_2024-04-10_01-35-41/${form1Name}_2024-04-10_01-35-41.xml")
+
+        assertThat(savepoints, contains(expectedSavepoint1))
+    }
+
+    @Test
     fun ifThereAreMultipleVersionsOfTheSameBlankFormWithSavepoints_allSavepointsShouldBeImported() {
         val form1Name = "sampleForm"
         val form2Name = "sampleForm_1"
