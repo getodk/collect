@@ -4,21 +4,20 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteException
 import android.provider.BaseColumns._ID
-import androidx.core.database.sqlite.transaction
 import org.odk.collect.db.sqlite.CursorExt.first
 import org.odk.collect.db.sqlite.CursorExt.foldAndClose
 import org.odk.collect.db.sqlite.CursorExt.getInt
 import org.odk.collect.db.sqlite.CursorExt.getString
 import org.odk.collect.db.sqlite.CursorExt.getStringOrNull
 import org.odk.collect.db.sqlite.CursorExt.rowToMap
-import org.odk.collect.db.sqlite.DatabaseConnection
 import org.odk.collect.db.sqlite.DatabaseMigrator
 import org.odk.collect.db.sqlite.SQLiteColumns.ROW_ID
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.delete
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.doesColumnExist
+import org.odk.collect.db.sqlite.SQLiteDatabaseExt.getColumnNames
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.query
+import org.odk.collect.db.sqlite.SynchronizedDatabaseConnection
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 
@@ -39,13 +38,12 @@ private object EntitiesTable {
 
 class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRepository {
 
-    private val databaseConnection: DatabaseConnection = DatabaseConnection(
+    private val databaseConnection = SynchronizedDatabaseConnection(
         context,
         dbPath,
         "entities.db",
         EntitiesDatabaseMigrator(),
-        1,
-        true
+        1
     )
 
     override fun save(list: String, vararg entities: Entity) {
@@ -60,7 +58,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
         updatePropertyColumns(list, entities.first())
 
-        databaseConnection.writeableDatabase.transaction {
+        databaseConnection.transaction {
             entities.forEach { entity ->
                 val existing = if (listExists) {
                     query(
@@ -121,10 +119,11 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     override fun getLists(): Set<String> {
-        return databaseConnection
-            .readableDatabase
-            .query(ListsTable.TABLE_NAME)
-            .foldAndClose(emptySet()) { set, cursor -> set + cursor.getString(ListsTable.COLUMN_NAME) }
+        return databaseConnection.withConnection {
+            readableDatabase
+                .query(ListsTable.TABLE_NAME)
+                .foldAndClose(emptySet()) { set, cursor -> set + cursor.getString(ListsTable.COLUMN_NAME) }
+        }
     }
 
     override fun updateListHash(list: String, hash: String) {
@@ -132,21 +131,22 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             it.put(ListsTable.COLUMN_HASH, hash)
         }
 
-        databaseConnection
-            .writeableDatabase
-            .update(
+        databaseConnection.withConnection {
+            writableDatabase.update(
                 ListsTable.TABLE_NAME,
                 contentValues,
                 "${ListsTable.COLUMN_NAME} = ?",
                 arrayOf(list)
             )
+        }
     }
 
     override fun getListHash(list: String): String? {
-        return databaseConnection
-            .readableDatabase
-            .query(ListsTable.TABLE_NAME, "${ListsTable.COLUMN_NAME} = ?", arrayOf(list))
-            .first { it.getStringOrNull(ListsTable.COLUMN_HASH) }
+        return databaseConnection.withConnection {
+            readableDatabase
+                .query(ListsTable.TABLE_NAME, "${ListsTable.COLUMN_NAME} = ?", arrayOf(list))
+                .first { it.getStringOrNull(ListsTable.COLUMN_HASH) }
+        }
     }
 
     override fun getEntities(list: String): List<Entity.Saved> {
@@ -168,23 +168,27 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return 0
         }
 
-        return databaseConnection.readableDatabase.rawQuery(
-            """
-            SELECT COUNT(*)
-            FROM $list
-            """.trimIndent(),
-            null
-        ).first {
-            it.getInt(0)
-        }!!
+        return databaseConnection.withConnection {
+            readableDatabase.rawQuery(
+                """
+                SELECT COUNT(*)
+                FROM $list
+                """.trimIndent(),
+                null
+            ).first {
+                it.getInt(0)
+            }!!
+        }
     }
 
     override fun clear() {
-        getLists().forEach {
-            databaseConnection.writeableDatabase.delete(it)
-        }
+        databaseConnection.withConnection {
+            getLists().forEach {
+                writableDatabase.delete(it)
+            }
 
-        databaseConnection.writeableDatabase.delete(ListsTable.TABLE_NAME)
+            writableDatabase.delete(ListsTable.TABLE_NAME)
+        }
     }
 
     override fun addList(list: String) {
@@ -195,12 +199,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     override fun delete(id: String) {
-        getLists().forEach {
-            databaseConnection.writeableDatabase.delete(
-                it,
-                "${EntitiesTable.COLUMN_ID} = ?",
-                arrayOf(id)
-            )
+        databaseConnection.withConnection {
+            getLists().forEach {
+                writableDatabase.delete(
+                    it,
+                    "${EntitiesTable.COLUMN_ID} = ?",
+                    arrayOf(id)
+                )
+            }
         }
 
         updateRowIdTables()
@@ -229,7 +235,11 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return emptyList()
         }
 
-        return if (databaseConnection.readableDatabase.doesColumnExist(list, property)) {
+        val propertyExists = databaseConnection.withConnection {
+            readableDatabase.doesColumnExist(list, property)
+        }
+
+        return if (propertyExists) {
             queryWithAttachedRowId(
                 list,
                 selectionColumn = property,
@@ -251,29 +261,33 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return null
         }
 
-        return databaseConnection.readableDatabase
-            .rawQuery(
-                """
-                SELECT *, i.$ROW_ID
-                FROM $list e, ${getRowIdTableName(list)} i
-                WHERE e._id = i._id AND i.$ROW_ID = ?
-                """.trimIndent(),
-                arrayOf((index + 1).toString())
-            ).first {
-                mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
-            }
+        return databaseConnection.withConnection {
+            readableDatabase
+                .rawQuery(
+                    """
+                    SELECT *, i.$ROW_ID
+                    FROM $list e, ${getRowIdTableName(list)} i
+                    WHERE e._id = i._id AND i.$ROW_ID = ?
+                    """.trimIndent(),
+                    arrayOf((index + 1).toString())
+                ).first {
+                    mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+                }
+        }
     }
 
     private fun queryWithAttachedRowId(list: String): Cursor {
-        return databaseConnection.readableDatabase
-            .rawQuery(
-                """
-                SELECT *, i.$ROW_ID
-                FROM $list e, ${getRowIdTableName(list)} i
-                WHERE e._id = i._id
-                """.trimIndent(),
-                null
-            )
+        return databaseConnection.withConnection {
+            readableDatabase
+                .rawQuery(
+                    """
+                    SELECT *, i.$ROW_ID
+                    FROM $list e, ${getRowIdTableName(list)} i
+                    WHERE e._id = i._id
+                    """.trimIndent(),
+                    null
+                )
+        }
     }
 
     private fun queryWithAttachedRowId(
@@ -281,8 +295,8 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         selectionColumn: String,
         selectionArg: String
     ): Cursor {
-        return databaseConnection.readableDatabase
-            .rawQuery(
+        return databaseConnection.withConnection {
+            readableDatabase.rawQuery(
                 """
                 SELECT *, i.$ROW_ID
                 FROM $list e, ${getRowIdTableName(list)} i
@@ -290,6 +304,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 """.trimIndent(),
                 arrayOf(selectionArg)
             )
+        }
     }
 
     /**
@@ -300,34 +315,38 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
      * function, but that's not available in all the supported versions of Android.
      */
     private fun updateRowIdTables() {
-        getLists().forEach {
-            databaseConnection.writeableDatabase.execSQL(
-                """
-                DROP TABLE IF EXISTS ${getRowIdTableName(it)};
-                """.trimIndent()
-            )
+        databaseConnection.withConnection {
+            getLists().forEach {
+                writableDatabase.execSQL(
+                    """
+                    DROP TABLE IF EXISTS ${getRowIdTableName(it)};
+                    """.trimIndent()
+                )
 
-            databaseConnection.writeableDatabase.execSQL(
-                """
-                CREATE TABLE ${getRowIdTableName(it)} AS SELECT _id FROM $it;
-                """.trimIndent()
-            )
+                writableDatabase.execSQL(
+                    """
+                    CREATE TABLE ${getRowIdTableName(it)} AS SELECT _id FROM $it;
+                    """.trimIndent()
+                )
+            }
         }
     }
 
     private fun getRowIdTableName(it: String) = "${it}_row_numbers"
 
     private fun listExists(list: String): Boolean {
-        return databaseConnection.readableDatabase
-            .query(
-                ListsTable.TABLE_NAME,
-                selection = "${ListsTable.COLUMN_NAME} = ?",
-                selectionArgs = arrayOf(list)
-            ).use { it.count } > 0
+        return databaseConnection.withConnection {
+            readableDatabase
+                .query(
+                    ListsTable.TABLE_NAME,
+                    selection = "${ListsTable.COLUMN_NAME} = ?",
+                    selectionArgs = arrayOf(list)
+                ).use { it.count } > 0
+        }
     }
 
     private fun createList(list: String) {
-        databaseConnection.writeableDatabase.transaction {
+        databaseConnection.transaction {
             val contentValues = ContentValues()
             contentValues.put(ListsTable.COLUMN_NAME, list)
             insertOrThrow(
@@ -359,15 +378,21 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     private fun updatePropertyColumns(list: String, entity: Entity) {
-        entity.properties.map { it.first }.forEach {
-            try {
-                databaseConnection.writeableDatabase.execSQL(
-                    """
-                    ALTER TABLE $list ADD "$it" text NOT NULL DEFAULT "";
-                    """.trimIndent()
-                )
-            } catch (e: SQLiteException) {
-                // Ignored
+        val columnNames = databaseConnection.withConnection {
+            readableDatabase.getColumnNames(list)
+        }
+
+        val missingColumns =
+            entity.properties.map { it.first }.filterNot { columnNames.contains(it) }
+        if (missingColumns.isNotEmpty()) {
+            databaseConnection.resetTransaction {
+                missingColumns.forEach {
+                    execSQL(
+                        """
+                        ALTER TABLE $list ADD "$it" text NOT NULL DEFAULT "";
+                        """.trimIndent()
+                    )
+                }
             }
         }
     }

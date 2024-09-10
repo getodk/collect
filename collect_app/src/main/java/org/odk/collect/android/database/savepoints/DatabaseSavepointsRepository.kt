@@ -66,7 +66,7 @@ class DatabaseSavepointsRepository(
         val values = getValuesFromSavepoint(savepoint, cachePath, instancesPath)
 
         databaseConnection
-            .writeableDatabase
+            .writableDatabase
             .insertOrThrow(SAVEPOINTS_TABLE_NAME, null, values)
     }
 
@@ -86,7 +86,7 @@ class DatabaseSavepointsRepository(
         }
 
         databaseConnection
-            .writeableDatabase
+            .writableDatabase
             .delete(SAVEPOINTS_TABLE_NAME, selection, selectionArgs)
 
         File(savepoint.savepointFilePath).delete()
@@ -98,7 +98,7 @@ class DatabaseSavepointsRepository(
         }
 
         databaseConnection
-            .writeableDatabase
+            .writableDatabase
             .delete(SAVEPOINTS_TABLE_NAME)
     }
 

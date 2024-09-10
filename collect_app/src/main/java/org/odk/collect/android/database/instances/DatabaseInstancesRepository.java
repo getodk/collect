@@ -144,7 +144,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     public void delete(Long id) {
         Instance instance = get(id);
 
-        databaseConnection.getWriteableDatabase().delete(
+        databaseConnection.getWritableDatabase().delete(
                 INSTANCES_TABLE_NAME,
                 _ID + "=?",
                 new String[]{String.valueOf(id)}
@@ -157,7 +157,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     public void deleteAll() {
         List<Instance> instances = getAll();
 
-        databaseConnection.getWriteableDatabase().delete(
+        databaseConnection.getWritableDatabase().delete(
                 INSTANCES_TABLE_NAME,
                 null,
                 null
@@ -253,7 +253,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     private long insert(ContentValues values) {
-        return databaseConnection.getWriteableDatabase().insertOrThrow(
+        return databaseConnection.getWritableDatabase().insertOrThrow(
                 INSTANCES_TABLE_NAME,
                 null,
                 values
@@ -261,7 +261,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     private void update(Long instanceId, ContentValues values) {
-        databaseConnection.getWriteableDatabase().update(
+        databaseConnection.getWritableDatabase().update(
                 INSTANCES_TABLE_NAME,
                 values,
                 _ID + "=?",

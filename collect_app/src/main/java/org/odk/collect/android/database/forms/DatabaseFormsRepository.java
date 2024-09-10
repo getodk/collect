@@ -238,13 +238,13 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     private Long insertForm(ContentValues values) {
-        SQLiteDatabase writeableDatabase = databaseConnection.getWriteableDatabase();
-        return writeableDatabase.insertOrThrow(FORMS_TABLE_NAME, null, values);
+        SQLiteDatabase writableDatabase = databaseConnection.getWritableDatabase();
+        return writableDatabase.insertOrThrow(FORMS_TABLE_NAME, null, values);
     }
 
     private void updateForm(Long id, ContentValues values) {
-        SQLiteDatabase writeableDatabase = databaseConnection.getWriteableDatabase();
-        writeableDatabase.update(FORMS_TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(id)});
+        SQLiteDatabase writableDatabase = databaseConnection.getWritableDatabase();
+        writableDatabase.update(FORMS_TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(id)});
     }
 
     private void deleteForms(String selection, String[] selectionArgs) {
@@ -255,8 +255,8 @@ public class DatabaseFormsRepository implements FormsRepository {
             deleteFilesForForm(form);
         }
 
-        SQLiteDatabase writeableDatabase = databaseConnection.getWriteableDatabase();
-        writeableDatabase.delete(FORMS_TABLE_NAME, selection, selectionArgs);
+        SQLiteDatabase writableDatabase = databaseConnection.getWritableDatabase();
+        writableDatabase.delete(FORMS_TABLE_NAME, selection, selectionArgs);
     }
 
     @NotNull
