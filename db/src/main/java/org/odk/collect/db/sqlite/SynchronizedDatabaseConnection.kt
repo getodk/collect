@@ -27,7 +27,7 @@ class SynchronizedDatabaseConnection(
         body: SQLiteDatabase.() -> T
     ) {
         return withConnection {
-            writeableDatabase.transaction {
+            writableDatabase.transaction {
                 body()
             }
         }

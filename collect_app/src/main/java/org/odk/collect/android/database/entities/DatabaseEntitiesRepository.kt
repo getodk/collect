@@ -132,7 +132,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         databaseConnection.withConnection {
-            writeableDatabase.update(
+            writableDatabase.update(
                 ListsTable.TABLE_NAME,
                 contentValues,
                 "${ListsTable.COLUMN_NAME} = ?",
@@ -184,10 +184,10 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     override fun clear() {
         databaseConnection.withConnection {
             getLists().forEach {
-                writeableDatabase.delete(it)
+                writableDatabase.delete(it)
             }
 
-            writeableDatabase.delete(ListsTable.TABLE_NAME)
+            writableDatabase.delete(ListsTable.TABLE_NAME)
         }
     }
 
@@ -201,7 +201,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     override fun delete(id: String) {
         databaseConnection.withConnection {
             getLists().forEach {
-                writeableDatabase.delete(
+                writableDatabase.delete(
                     it,
                     "${EntitiesTable.COLUMN_ID} = ?",
                     arrayOf(id)
@@ -317,13 +317,13 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     private fun updateRowIdTables() {
         databaseConnection.withConnection {
             getLists().forEach {
-                writeableDatabase.execSQL(
+                writableDatabase.execSQL(
                     """
                     DROP TABLE IF EXISTS ${getRowIdTableName(it)};
                     """.trimIndent()
                 )
 
-                writeableDatabase.execSQL(
+                writableDatabase.execSQL(
                     """
                     CREATE TABLE ${getRowIdTableName(it)} AS SELECT _id FROM $it;
                     """.trimIndent()

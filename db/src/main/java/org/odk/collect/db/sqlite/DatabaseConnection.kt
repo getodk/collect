@@ -26,7 +26,7 @@ open class DatabaseConnection @JvmOverloads constructor(
 
     private val databasePath = path + File.separator + name
 
-    val writeableDatabase: SQLiteDatabase
+    val writableDatabase: SQLiteDatabase
         get() {
             StrictMode.noteSlowCall("Accessing writable DB")
             return dbHelper.writableDatabase
@@ -73,7 +73,7 @@ open class DatabaseConnection @JvmOverloads constructor(
      *
      * This can be dangerous if the database is being access by multiple threads as the connection
      * might be closed while a transaction is running or while another thread is using a
-     * [SQLiteDatabase] instance obtained via [writeableDatabase] or [readableDatabase]. Using
+     * [SQLiteDatabase] instance obtained via [writableDatabase] or [readableDatabase]. Using
      * [SynchronizedDatabaseConnection] is recommended in those scenarios.
      */
     fun reset() {
@@ -85,10 +85,9 @@ open class DatabaseConnection @JvmOverloads constructor(
      * used if a calls to [reset] will be made.
      *
      * Does not guarantee synchronized access if this or another [DatabaseConnection] for the
-     * same `.db` file uses [writeableDatabase] or [readableDatabase].
+     * same `.db` file uses [writableDatabase] or [readableDatabase].
      * [SynchronizedDatabaseConnection] can be used to ensure synchronized writes/reads to the
      * underlying DB.
-     *
      */
     fun <T> withSynchronizedConnection(block: DatabaseConnection.() -> T): T {
         return synchronized(dbHelper) {
