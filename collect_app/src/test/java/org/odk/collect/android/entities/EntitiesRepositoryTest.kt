@@ -309,15 +309,21 @@ abstract class EntitiesRepositoryTest {
 
     @Test
     fun `#save assigns an index to each entity in insert order when saving multiple entities`() {
-        val first = Entity.New("1", "Léoville Barton 2008")
-        val second = Entity.New("2", "Pontet Canet 2014")
+        /**
+         * first and second have alphabetically out of order IDs/names here so that any indexing on
+         * them is tested. We'd likely never see this fail if they were ordered.
+         */
+        val first = Entity.New("2", "B")
+        val second = Entity.New("1", "A")
 
         val repository = buildSubject()
         repository.save("wines", first, second)
 
         val entities = repository.getEntities("wines")
         assertThat(entities[0].index, equalTo(0))
+        assertThat(entities[0].id, equalTo(first.id))
         assertThat(entities[1].index, equalTo(1))
+        assertThat(entities[1].id, equalTo(second.id))
     }
 
     @Test
