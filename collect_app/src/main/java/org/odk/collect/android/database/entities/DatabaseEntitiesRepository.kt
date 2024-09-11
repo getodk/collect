@@ -327,7 +327,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
                 writableDatabase.execSQL(
                     """
-                    CREATE TABLE ${getRowIdTableName(it)} AS SELECT _id FROM $it;
+                    CREATE TABLE ${getRowIdTableName(it)} AS SELECT _id FROM $it ORDER BY _id;
                     """.trimIndent()
                 )
             }
