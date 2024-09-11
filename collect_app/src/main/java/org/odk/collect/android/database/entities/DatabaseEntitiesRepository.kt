@@ -284,6 +284,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     SELECT *, i.$ROW_ID
                     FROM $list e, ${getRowIdTableName(list)} i
                     WHERE e._id = i._id
+                    ORDER BY i.$ROW_ID
                     """.trimIndent(),
                     null
                 )
@@ -301,6 +302,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 SELECT *, i.$ROW_ID
                 FROM $list e, ${getRowIdTableName(list)} i
                 WHERE e._id = i._id AND $selectionColumn = ?
+                ORDER BY i.$ROW_ID
                 """.trimIndent(),
                 arrayOf(selectionArg)
             )
