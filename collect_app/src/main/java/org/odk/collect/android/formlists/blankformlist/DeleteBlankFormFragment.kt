@@ -12,8 +12,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle.State
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -44,8 +42,6 @@ class DeleteBlankFormFragment(
             }
         )
     }
-    private var appBarLayout: AppBarLayout? = null
-    private lateinit var list: RecyclerView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -61,8 +57,7 @@ class DeleteBlankFormFragment(
                     it.empty.setTitle(getString(string.empty_list_of_forms_to_delete_title))
                     it.empty.setSubtitle(getString(string.empty_list_of_blank_forms_to_delete_subtitle))
 
-                    list = it.list
-                    list.addItemDecoration(RecyclerViewUtils.verticalLineDivider(context))
+                    it.list.addItemDecoration(RecyclerViewUtils.verticalLineDivider(context))
                 }
             }
             .build()
@@ -85,15 +80,9 @@ class DeleteBlankFormFragment(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        appBarLayout = requireActivity().findViewById(org.odk.collect.androidshared.R.id.appBarLayout)
         val blankFormListMenuProvider =
             BlankFormListMenuProvider(requireActivity(), blankFormListViewModel)
         menuHost.addMenuProvider(blankFormListMenuProvider, viewLifecycleOwner, State.RESUMED)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        appBarLayout?.setLiftOnScrollTargetView(list)
     }
 
     private fun onDeleteSelected(selected: LongArray) {
