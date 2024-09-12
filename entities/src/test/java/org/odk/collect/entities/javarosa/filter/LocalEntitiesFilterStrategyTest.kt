@@ -6,6 +6,7 @@ import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.FormDef
 import org.javarosa.core.model.condition.EvaluationContext
 import org.javarosa.core.model.condition.FilterStrategy
+import org.javarosa.core.model.data.IntegerData
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.instance.DataInstance
 import org.javarosa.core.model.instance.TreeElement
@@ -14,6 +15,7 @@ import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
 import org.javarosa.test.BindBuilderXFormsElement.bind
 import org.javarosa.test.Scenario
+import org.javarosa.test.XFormsElement
 import org.javarosa.test.XFormsElement.body
 import org.javarosa.test.XFormsElement.head
 import org.javarosa.test.XFormsElement.html
@@ -268,6 +270,44 @@ class LocalEntitiesFilterStrategyTest {
         )
 
         assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing"))
+    }
+
+    @Test
+    fun `works correctly with filtering on a repeat`() {
+        val scenario = Scenario.init(
+            "Count people underage",
+            html(
+                head(
+                    title("Count people underage"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"count_people_underage\"",
+                                t("people",
+                                    t("name"),
+                                    t("age")
+                                ),
+                                t("total_underage")
+                            )
+                        ),
+                        bind("/data/people/name").type("string"),
+                        bind("/data/people/age").type("int"),
+                        bind("/data/question").type("string"),
+                        bind("/data/total_underage").type("string").calculate("count( /data/people [age&lt;18])")
+                    )
+                ),
+                body(
+                    XFormsElement.repeat("/data/people",
+                        input("/data/people/name"),
+                        input("/data/people/age")
+                    ),
+                    input("/data/total_underage")
+                )
+            ),
+            controllerSupplier
+        )
+
+        assertThat(scenario.answerOf<IntegerData>("/data/total_underage").value, equalTo(0))
     }
 
     @Test
