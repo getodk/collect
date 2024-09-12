@@ -4,7 +4,6 @@ import static org.odk.collect.androidshared.ui.PrefUtils.createListPref;
 import static org.odk.collect.androidshared.ui.PrefUtils.getInt;
 import static kotlin.collections.SetsKt.setOf;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -14,6 +13,7 @@ import androidx.preference.Preference;
 
 import com.google.android.gms.maps.GoogleMap;
 
+import org.odk.collect.androidshared.system.OpenGLVersionChecker;
 import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.maps.MapConfigurator;
@@ -55,10 +55,11 @@ public class GoogleMapConfigurator implements MapConfigurator {
     }
 
     private static boolean isGoogleMapsSdkAvailable(Context context) {
-        // The Google Maps SDK for Android requires OpenGL ES version 2.
-        // See https://developers.google.com/maps/documentation/android-sdk/config
-        return ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE))
-                .getDeviceConfigurationInfo().reqGlEsVersion >= 0x20000;
+        /*
+         * The Google Maps SDK for Android requires OpenGL ES version 2.
+         * See: https://developers.google.com/maps/documentation/android-sdk/config
+         */
+        return OpenGLVersionChecker.isOpenGLv2Supported(context);
     }
 
     @Override public void showUnavailableMessage(Context context) {

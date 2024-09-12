@@ -10,6 +10,7 @@ import androidx.preference.Preference;
 
 import com.mapbox.maps.Style;
 
+import org.odk.collect.androidshared.system.OpenGLVersionChecker;
 import org.odk.collect.androidshared.ui.PrefUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.maps.MapConfigurator;
@@ -42,8 +43,11 @@ public class MapboxMapConfigurator implements MapConfigurator {
     }
 
     @Override public boolean isAvailable(Context context) {
-        // If the app builds that means mapbox is available
-        return true;
+        /*
+         * The Mapbox SDK for Android requires OpenGL ES version 3.
+         * See: https://github.com/mapbox/mapbox-maps-android/blob/main/CHANGELOG.md#1100-november-29-2023
+         */
+        return OpenGLVersionChecker.isOpenGLv3Supported(context);
     }
 
     @Override public void showUnavailableMessage(Context context) {
