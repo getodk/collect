@@ -32,7 +32,7 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         evaluationContext: EvaluationContext,
         next: Supplier<MutableList<TreeReference>>
     ): List<TreeReference> {
-        if (!dataAdapter.supportsInstance(sourceInstance.instanceId)) {
+        if (sourceInstance.instanceId == null || !dataAdapter.supportsInstance(sourceInstance.instanceId)) {
             return next.get()
         }
 
