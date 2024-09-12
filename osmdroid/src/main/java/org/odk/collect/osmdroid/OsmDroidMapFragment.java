@@ -552,6 +552,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private void loadReferenceOverlay() {
         if (referenceOverlay != null) {
             map.getOverlays().remove(referenceOverlay);
+            referenceOverlay.onDetach(map);
             referenceOverlay = null;
         }
         if (referenceLayerFile != null) {
