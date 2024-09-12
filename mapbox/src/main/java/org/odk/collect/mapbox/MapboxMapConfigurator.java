@@ -43,8 +43,10 @@ public class MapboxMapConfigurator implements MapConfigurator {
     }
 
     @Override public boolean isAvailable(Context context) {
-        // The Mapbox SDK for Android requires OpenGL ES version 3.
-        // See https://github.com/mapbox/mapbox-maps-android/blob/main/CHANGELOG.md#1100-november-29-2023
+        /*
+         * The Mapbox SDK for Android requires OpenGL ES version 3.
+         * See: https://github.com/mapbox/mapbox-maps-android/blob/main/CHANGELOG.md#1100-november-29-2023
+         */
         return OpenGLVersionChecker.isOpenGLv3Supported(context);
     }
 

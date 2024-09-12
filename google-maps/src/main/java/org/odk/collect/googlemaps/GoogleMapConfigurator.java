@@ -55,8 +55,10 @@ public class GoogleMapConfigurator implements MapConfigurator {
     }
 
     private static boolean isGoogleMapsSdkAvailable(Context context) {
-        // The Google Maps SDK for Android requires OpenGL ES version 2.
-        // See https://developers.google.com/maps/documentation/android-sdk/config
+        /*
+         * The Google Maps SDK for Android requires OpenGL ES version 2.
+         * See: https://developers.google.com/maps/documentation/android-sdk/config
+         */
         return OpenGLVersionChecker.isOpenGLv2Supported(context);
     }
 
