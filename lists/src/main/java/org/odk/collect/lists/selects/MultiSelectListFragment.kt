@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.AppBarLayout
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.lists.R
 import org.odk.collect.lists.databinding.MultiSelectListBinding
@@ -18,6 +20,9 @@ class MultiSelectListFragment<T, VH : MultiSelectAdapter.ViewHolder<T>>(
     private val viewHolderFactory: (ViewGroup) -> VH,
     private val onViewCreated: (MultiSelectListBinding) -> Unit = {}
 ) : Fragment() {
+
+    private var appBarLayout: AppBarLayout? = null
+    private lateinit var list: RecyclerView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -50,15 +55,19 @@ class MultiSelectListFragment<T, VH : MultiSelectAdapter.ViewHolder<T>>(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        appBarLayout = requireActivity().findViewById(org.odk.collect.androidshared.R.id.appBarLayout)
+
         val binding = MultiSelectListBinding.bind(view)
         onViewCreated(binding)
 
-        binding.list.layoutManager = LinearLayoutManager(requireContext())
+        list = binding.list
+        list.layoutManager = LinearLayoutManager(requireContext())
         val adapter = MultiSelectAdapter(
             multiSelectViewModel,
             viewHolderFactory
         )
-        binding.list.adapter = adapter
+        list.adapter = adapter
+
         multiSelectViewModel.getData().observe(viewLifecycleOwner) {
             adapter.data = it
             binding.empty.isVisible = it.isEmpty()
@@ -67,5 +76,10 @@ class MultiSelectListFragment<T, VH : MultiSelectAdapter.ViewHolder<T>>(
         multiSelectViewModel.getSelected().observe(viewLifecycleOwner) {
             adapter.selected = it
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        appBarLayout?.setLiftOnScrollTargetView(list)
     }
 }

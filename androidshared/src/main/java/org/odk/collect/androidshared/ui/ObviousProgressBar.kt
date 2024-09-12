@@ -3,23 +3,31 @@ package org.odk.collect.androidshared.ui
 import android.content.Context
 import android.os.Handler
 import android.util.AttributeSet
-import android.widget.ProgressBar
+import com.google.android.material.progressindicator.LinearProgressIndicator
 
 /**
  * A progress bar that shows for a minimum amount fo time so it's obvious to the user that
  * something has happened.
  */
-class ObviousProgressBar(context: Context, attrs: AttributeSet?) : ProgressBar(context, attrs) {
+class ObviousProgressBar(
+    context: Context,
+    attrs: AttributeSet?
+) : LinearProgressIndicator(context, attrs) {
     private val handler = Handler()
     private var shownAt: Long? = null
 
-    fun show() {
+    init {
+        super.setVisibility(GONE)
+        super.setIndeterminate(true)
+    }
+
+    override fun show() {
         handler.removeCallbacksAndMessages(null)
         shownAt = System.currentTimeMillis()
         super.setVisibility(VISIBLE)
     }
 
-    fun hide() {
+    override fun hide() {
         if (shownAt != null) {
             val timeShown = System.currentTimeMillis() - shownAt!!
 

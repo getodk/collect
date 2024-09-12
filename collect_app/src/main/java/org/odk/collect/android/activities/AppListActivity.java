@@ -131,7 +131,7 @@ public abstract class AppListActivity extends LocalizedActivity {
     }
 
     private void init() {
-        listView = findViewById(android.R.id.list);
+        listView = findViewById(R.id.scrollable_container);
         listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
         listView.setEmptyView(findViewById(android.R.id.empty));
         progressBar = findViewById(org.odk.collect.androidshared.R.id.progressBar);

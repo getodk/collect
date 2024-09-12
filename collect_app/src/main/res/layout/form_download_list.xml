@@ -21,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ListView
-                android:id="@android:id/list"
+                android:id="@+id/scrollable_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:nestedScrollingEnabled="true"
