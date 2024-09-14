@@ -83,6 +83,7 @@ class GlideImageLoader : ImageLoader {
                     }
                 })
                 .apply(requestOptions)
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .into(imageView)
         }
     }
