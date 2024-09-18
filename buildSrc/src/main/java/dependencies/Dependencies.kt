@@ -15,7 +15,6 @@ object Dependencies {
     const val androidx_appcompat = "androidx.appcompat:appcompat:1.7.0"
     const val androidx_work_runtime = "androidx.work:work-runtime:${Versions.work}"
     const val androidx_exinterface = "androidx.exifinterface:exifinterface:1.3.7"
-    const val androidx_multidex = "androidx.multidex:multidex:2.0.1"
     const val androidx_preference_ktx = "androidx.preference:preference-ktx:1.2.1"
     const val androidx_fragment_ktx = "androidx.fragment:fragment-ktx:${Versions.androidx_fragment}"
     const val android_material = "com.google.android.material:material:1.12.0"
@@ -85,6 +84,5 @@ object Dependencies {
     const val okhttp3_mockwebserver = "com.squareup.okhttp3:mockwebserver:${Versions.okhttp3}"
     const val hamcrest = "org.hamcrest:hamcrest:2.2"
     const val robolectric = "org.robolectric:robolectric:${Versions.robolectric}"
-    const val robolectric_shadows_multidex = "org.robolectric:shadows-multidex:${Versions.robolectric}"
     const val uiautomator = "androidx.test.uiautomator:uiautomator:2.3.0"
 }
