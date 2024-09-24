@@ -190,4 +190,36 @@ class EntityFormTest {
             .assertText("Roman Roy")
             .assertTextDoesNotExist("Logan Roy")
     }
+
+    @Test
+    fun manualEntityFormDownload_withUnsupportedSpecVersion_completesSuccessfully() {
+        testDependencies.server.addForm("one-question-entity-registration-v2020.1.xml")
+
+        rule.withProject(testDependencies.server)
+            .clickGetBlankForm()
+            .clickClearAll()
+            .clickForm("One Question Entity Registration")
+            .clickGetSelected()
+            .clickOK(MainMenuPage())
+            .clickFillBlankForm()
+            .clickOnForm("One Question Entity Registration")
+    }
+
+    @Test
+    fun automaticEntityFormDownload_withUnsupportedSpecVersion_completesSuccessfully() {
+        testDependencies.server.addForm("one-question-entity-registration-v2020.1.xml")
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
+            .clickFillBlankForm()
+            .clickOnForm("One Question Entity Registration")
+    }
+
+    @Test
+    fun syncEntityFormFromDisc_withUnsupportedSpecVersion_completesSuccessfully() {
+        rule.startAtFirstLaunch()
+            .clickTryCollect()
+            .copyForm("one-question-entity-registration-v2020.1.xml")
+            .clickFillBlankForm()
+            .clickOnForm("One Question Entity Registration")
+    }
 }
