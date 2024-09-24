@@ -62,12 +62,10 @@ object FormMetadataParser {
      *          before (1) or (1) if there is no geopoint defined before it in the instance.
      */
     private fun getOverallFirstGeoPointXPath(model: Element, mainInstance: Element, element: Element): String? {
-        val firstTopLevelBodyGeoPoint = getFirstToplevelBodyGeoPointXPath(model, mainInstance, element)
-
         return if (containsSetgeopointAction(model)) {
-            getInstanceGeoPointBeforeXPath(firstTopLevelBodyGeoPoint, model, mainInstance)
+            getInstanceGeoPointBeforeXPath(model, mainInstance)
         } else {
-            firstTopLevelBodyGeoPoint
+            getFirstToplevelBodyGeoPointXPath(model, mainInstance, element)
         }
     }
 
@@ -91,17 +89,15 @@ object FormMetadataParser {
      * Returns the XPath path for the first geopoint in the primary instance that is before the given
      * reference and not in a repeat.
      */
-    private fun getInstanceGeoPointBeforeXPath(firstTopLevelBodyGeoPoint: String?, model: Element, mainInstance: Element): String? {
+    private fun getInstanceGeoPointBeforeXPath(model: Element, mainInstance: Element): String? {
         val mainInstanceRoot = mainInstance.getElement(0)
         for (elementId in 0 until mainInstanceRoot.childCount) {
             val child = mainInstanceRoot.getElement(elementId)
             val ref = "/${mainInstanceRoot.name}/${child.name}"
-            if (ref == firstTopLevelBodyGeoPoint) {
-                return null
-            } else if (isGeopoint(model, ref)) {
+            if (isGeopoint(model, ref)) {
                 return ref
             } else if (child.childCount > 0) {
-                return getInstanceGeoPointBeforeXPath(firstTopLevelBodyGeoPoint, model, child)
+                return getInstanceGeoPointBeforeXPath(model, child)
             }
         }
         return null
