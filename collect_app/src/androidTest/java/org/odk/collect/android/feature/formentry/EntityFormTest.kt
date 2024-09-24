@@ -192,7 +192,7 @@ class EntityFormTest {
     }
 
     @Test
-    fun manualEntityFormDownload_withUnsupportedSpecVersion_completesSuccessfully() {
+    fun manualEntityFormDownload_withUnsupportedSpecVersion_completesSuccessfully_butThrowsAnErrorAfterOpeningIt() {
         testDependencies.server.addForm("one-question-entity-registration-v2020.1.xml")
 
         rule.withProject(testDependencies.server)
@@ -203,23 +203,29 @@ class EntityFormTest {
             .clickOK(MainMenuPage())
             .clickFillBlankForm()
             .clickOnForm("One Question Entity Registration")
+            .assertTextInDialog(org.odk.collect.strings.R.string.unrecognized_entity_version)
+            .clickOKOnDialog(MainMenuPage())
     }
 
     @Test
-    fun automaticEntityFormDownload_withUnsupportedSpecVersion_completesSuccessfully() {
+    fun automaticEntityFormDownload_withUnsupportedSpecVersion_completesSuccessfully_butThrowsAnErrorAfterOpeningIt() {
         testDependencies.server.addForm("one-question-entity-registration-v2020.1.xml")
 
         rule.withMatchExactlyProject(testDependencies.server.url)
             .clickFillBlankForm()
             .clickOnForm("One Question Entity Registration")
+            .assertTextInDialog(org.odk.collect.strings.R.string.unrecognized_entity_version)
+            .clickOKOnDialog(MainMenuPage())
     }
 
     @Test
-    fun syncEntityFormFromDisc_withUnsupportedSpecVersion_completesSuccessfully() {
+    fun syncEntityFormFromDisc_withUnsupportedSpecVersion_completesSuccessfully_butThrowsAnErrorAfterOpeningIt() {
         rule.startAtFirstLaunch()
             .clickTryCollect()
             .copyForm("one-question-entity-registration-v2020.1.xml")
             .clickFillBlankForm()
             .clickOnForm("One Question Entity Registration")
+            .assertTextInDialog(org.odk.collect.strings.R.string.unrecognized_entity_version)
+            .clickOKOnDialog(MainMenuPage())
     }
 }
