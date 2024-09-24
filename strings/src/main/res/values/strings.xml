@@ -1185,6 +1185,9 @@
     <!-- Label for entity that has been created offline and is not on the server yet -->
     <string name="offline">Offline</string>
 
+    <!-- Error message displayed when a user opens a form with an unrecognized entity version -->
+    <string name="unrecognized_entity_version">The form contains an unrecognized entity version. Please update the form and download it again.</string>
+
     <!--
     ##############################################
     # Crash handling
