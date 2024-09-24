@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -29,9 +28,8 @@ public class FormMetadataParserTest {
         File externalInstance = new File(mediaDir, "external-data.xml");
         FileUtils.write(externalInstance, EXTERNAL_INSTANCE.getBytes());
 
-        FormMetadataParser formMetadataParser = new FormMetadataParser();
-        Map<String, String> metaData = formMetadataParser.parse(formXml, mediaDir);
-        assertThat(metaData.get(FileUtils.FORMID), is("basic-external-xml-instance"));
+        FormMetadata formMetadata = FormMetadataParser.readMetadata(formXml);
+        assertThat(formMetadata.getId(), is("basic-external-xml-instance"));
     }
 
     @Test
@@ -42,9 +40,8 @@ public class FormMetadataParserTest {
         File externalInstance = new File(mediaDir, "external-data.csv");
         FileUtils.write(externalInstance, CSV_EXTERNAL_INSTANCE.getBytes());
 
-        FormMetadataParser formMetadataParser = new FormMetadataParser();
-        Map<String, String> metaData = formMetadataParser.parse(formXml, mediaDir);
-        assertThat(metaData.get(FileUtils.FORMID), is("basic-external-csv-instance"));
+        FormMetadata formMetadata = FormMetadataParser.readMetadata(formXml);
+        assertThat(formMetadata.getId(), is("basic-external-csv-instance"));
     }
 
     @Test
@@ -52,9 +49,8 @@ public class FormMetadataParserTest {
         File formXml = File.createTempFile("form", ".xml");
         FileUtils.write(formXml, LAST_SAVED.getBytes());
 
-        FormMetadataParser formMetadataParser = new FormMetadataParser();
-        Map<String, String> metaData = formMetadataParser.parse(formXml, mediaDir);
-        assertThat(metaData.get(FileUtils.FORMID), is("basic-last-saved"));
+        FormMetadata formMetadata = FormMetadataParser.readMetadata(formXml);
+        assertThat(formMetadata.getId(), is("basic-last-saved"));
     }
 
     @Test
@@ -62,9 +58,7 @@ public class FormMetadataParserTest {
         File formXml = File.createTempFile("form", ".xml");
         FileUtils.write(formXml, LAST_SAVED.getBytes());
 
-        FormMetadataParser formMetadataParser = new FormMetadataParser();
-        formMetadataParser.parse(formXml, mediaDir);
-
+        FormMetadataParser.readMetadata(formXml);
         assertThat(mediaDir.listFiles().length, is(0));
     }
 

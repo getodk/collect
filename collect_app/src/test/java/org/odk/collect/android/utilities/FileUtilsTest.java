@@ -1,14 +1,14 @@
 package org.odk.collect.android.utilities;
 
 import org.hamcrest.Matchers;
-import org.javarosa.xform.parse.XFormParser;
 import org.junit.Test;
+import org.odk.collect.android.formmanagement.FormMetadata;
+import org.odk.collect.android.formmanagement.FormMetadataParser;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -30,7 +30,7 @@ public class FileUtilsTest {
         assertEquals(expected, FileUtils.constructMediaPath("sample-file.docx"));
     }
 
-    @Test public void getMetadataFromFormDefinition_withoutSubmission_returnsMetaDataFields() throws IOException, XFormParser.ParseException {
+    @Test public void readMetadata_withoutSubmission_returnsMetaDataFields() throws IOException {
         String simpleForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns=\"http://www.w3.org/2002/xforms\"\n" +
                 "        xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
@@ -55,15 +55,15 @@ public class FileUtilsTest {
         out.write(simpleForm);
         out.close();
 
-        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
+        FormMetadata formMetadata = FormMetadataParser.readMetadata(temp);
 
-        assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("My Survey"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("mysurvey"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.VERSION), is(nullValue()));
-        assertThat(metadataFromFormDefinition.get(FileUtils.BASE64_RSA_PUBLIC_KEY), is(nullValue()));
+        assertThat(formMetadata.getTitle(), is("My Survey"));
+        assertThat(formMetadata.getId(), is("mysurvey"));
+        assertThat(formMetadata.getVersion(), is(nullValue()));
+        assertThat(formMetadata.getBase64RsaPublicKey(), is(nullValue()));
     }
 
-    @Test public void getMetadataFromFormDefinition_withSubmission_returnsMetaDataFields() throws IOException, XFormParser.ParseException {
+    @Test public void readMetadata_withSubmission_returnsMetaDataFields() throws IOException {
         String submissionForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns=\"http://www.w3.org/2002/xforms\"\n" +
                 "        xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
@@ -94,19 +94,19 @@ public class FileUtilsTest {
         out.write(submissionForm);
         out.close();
 
-        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
+        FormMetadata formMetadata = FormMetadataParser.readMetadata(temp);
 
-        assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("My Survey"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("mysurvey"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.VERSION), is("2014083101"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.SUBMISSIONURI), is("foo"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.AUTO_SEND), is("bar"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.AUTO_DELETE), is("baz"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.BASE64_RSA_PUBLIC_KEY), is("quux"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is(nullValue()));
+        assertThat(formMetadata.getTitle(), is("My Survey"));
+        assertThat(formMetadata.getId(), is("mysurvey"));
+        assertThat(formMetadata.getVersion(), is("2014083101"));
+        assertThat(formMetadata.getSubmissionUri(), is("foo"));
+        assertThat(formMetadata.getAutoSend(), is("bar"));
+        assertThat(formMetadata.getAutoDelete(), is("baz"));
+        assertThat(formMetadata.getBase64RsaPublicKey(), is("quux"));
+        assertThat(formMetadata.getGeometryXPath(), is(nullValue()));
     }
 
-    @Test public void getMetadataFromFormDefinition_withGeopointsAtTopLevel_returnsFirstGeopointBasedOnBodyOrder() throws IOException, XFormParser.ParseException {
+    @Test public void readMetadata_withGeopointsAtTopLevel_returnsFirstGeopointBasedOnBodyOrder() throws IOException {
         String submissionForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
                 "    xmlns=\"http://www.w3.org/2002/xforms\">\n" +
@@ -139,14 +139,14 @@ public class FileUtilsTest {
         out.write(submissionForm);
         out.close();
 
-        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
+        FormMetadata formMetadata = FormMetadataParser.readMetadata(temp);
 
-        assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("Two geopoints"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("two-geopoints"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location1"));
+        assertThat(formMetadata.getTitle(), is("Two geopoints"));
+        assertThat(formMetadata.getId(), is("two-geopoints"));
+        assertThat(formMetadata.getGeometryXPath(), is("/data/location1"));
     }
 
-    @Test public void getMetadataFromFormDefinition_withGeopointInGroup_returnsFirstGeopointBasedOnBodyOrder() throws IOException, XFormParser.ParseException {
+    @Test public void readMetadata_withGeopointInGroup_returnsFirstGeopointBasedOnBodyOrder() throws IOException {
         String submissionForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
                 "    xmlns=\"http://www.w3.org/2002/xforms\">\n" +
@@ -181,14 +181,14 @@ public class FileUtilsTest {
         out.write(submissionForm);
         out.close();
 
-        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
+        FormMetadata formMetadata = FormMetadataParser.readMetadata(temp);
 
-        assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("Two geopoints in group"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("two-geopoints-group"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/my-group/location1"));
+        assertThat(formMetadata.getTitle(), is("Two geopoints in group"));
+        assertThat(formMetadata.getId(), is("two-geopoints-group"));
+        assertThat(formMetadata.getGeometryXPath(), is("/data/my-group/location1"));
     }
 
-    @Test public void getMetadataFromFormDefinition_withGeopointInRepeat_returnsFirstGeopointBasedOnBodyOrder() throws IOException, XFormParser.ParseException {
+    @Test public void readMetadata_withGeopointInRepeat_returnsFirstGeopointBasedOnBodyOrder() throws IOException {
         String submissionForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
                 "    xmlns=\"http://www.w3.org/2002/xforms\">\n" +
@@ -222,14 +222,14 @@ public class FileUtilsTest {
         out.write(submissionForm);
         out.close();
 
-        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
+        FormMetadata formMetadata = FormMetadataParser.readMetadata(temp);
 
-        assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("Two geopoints repeat"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("two-geopoints-repeat"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location2"));
+        assertThat(formMetadata.getTitle(), is("Two geopoints repeat"));
+        assertThat(formMetadata.getId(), is("two-geopoints-repeat"));
+        assertThat(formMetadata.getGeometryXPath(), is("/data/location2"));
     }
 
-    @Test public void getMetadataFromFormDefinition_withSetGeopointBeforeBodyGeopoint_returnsFirstGeopointInInstance() throws IOException, XFormParser.ParseException {
+    @Test public void readMetadata_withSetGeopointBeforeBodyGeopoint_returnsFirstGeopointInInstance() throws IOException {
         String submissionForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
                 "    xmlns:odk=\"http://www.opendatakit.org/xforms\"\n" +
@@ -260,14 +260,14 @@ public class FileUtilsTest {
         out.write(submissionForm);
         out.close();
 
-        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
+        FormMetadata formMetadata = FormMetadataParser.readMetadata(temp);
 
-        assertThat(metadataFromFormDefinition.get(FileUtils.TITLE), is("Setgeopoint before"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.FORMID), is("set-geopoint-before"));
-        assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location1"));
+        assertThat(formMetadata.getTitle(), is("Setgeopoint before"));
+        assertThat(formMetadata.getId(), is("set-geopoint-before"));
+        assertThat(formMetadata.getGeometryXPath(), is("/data/location1"));
     }
 
-    @Test public void whenFormVersionIsEmpty_shouldBeTreatedAsNull() throws IOException, XFormParser.ParseException {
+    @Test public void whenFormVersionIsEmpty_shouldBeTreatedAsNull() throws IOException {
         String simpleForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns=\"http://www.w3.org/2002/xforms\"\n" +
                 "        xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
@@ -292,8 +292,8 @@ public class FileUtilsTest {
         out.write(simpleForm);
         out.close();
 
-        HashMap<String, String> metadataFromFormDefinition = FileUtils.getMetadataFromFormDefinition(temp);
-        assertThat(metadataFromFormDefinition.get(FileUtils.VERSION), is(nullValue()));
+        FormMetadata formMetadata = FormMetadataParser.readMetadata(temp);
+        assertThat(formMetadata.getVersion(), is(nullValue()));
     }
 
     @Test

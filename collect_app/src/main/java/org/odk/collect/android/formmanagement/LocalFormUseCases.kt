@@ -213,9 +213,8 @@ object LocalFormUseCases {
         // Probably someone overwrite the file on the sdcard
         // So re-parse it and update it's information
         val builder = Form.Builder()
-        val fields: HashMap<String, String>
-        fields = try {
-            FileUtils.getMetadataFromFormDefinition(formDefFile)
+        val formMetadata: FormMetadata = try {
+            FormMetadataParser.readMetadata(formDefFile!!)
         } catch (e: RuntimeException) {
             throw IllegalArgumentException(formDefFile!!.name + " :: " + e.toString())
         } catch (e: XFormParser.ParseException) {
@@ -225,7 +224,7 @@ object LocalFormUseCases {
         // update date
         val now = System.currentTimeMillis()
         builder.date(now)
-        val title = fields[FileUtils.TITLE]
+        val title = formMetadata.title
         if (title != null) {
             builder.displayName(title)
         } else {
@@ -238,7 +237,7 @@ object LocalFormUseCases {
                     )
             )
         }
-        val formid = fields[FileUtils.FORMID]
+        val formid = formMetadata.id
         if (formid != null) {
             builder.formId(formid)
         } else {
@@ -251,11 +250,11 @@ object LocalFormUseCases {
                     )
             )
         }
-        val version = fields[FileUtils.VERSION]
+        val version = formMetadata.version
         if (version != null) {
             builder.version(version)
         }
-        val submission = fields[FileUtils.SUBMISSIONURI]
+        val submission = formMetadata.submissionUri
         if (submission != null) {
             if (Validator.isUrlValid(submission)) {
                 builder.submissionUri(submission)
@@ -269,13 +268,13 @@ object LocalFormUseCases {
                 )
             }
         }
-        val base64RsaPublicKey = fields[FileUtils.BASE64_RSA_PUBLIC_KEY]
+        val base64RsaPublicKey = formMetadata.base64RsaPublicKey
         if (base64RsaPublicKey != null) {
             builder.base64RSAPublicKey(base64RsaPublicKey)
         }
-        builder.autoDelete(fields[FileUtils.AUTO_DELETE])
-        builder.autoSend(fields[FileUtils.AUTO_SEND])
-        builder.geometryXpath(fields[FileUtils.GEOMETRY_XPATH])
+        builder.autoDelete(formMetadata.autoDelete)
+        builder.autoSend(formMetadata.autoSend)
+        builder.geometryXpath(formMetadata.geometryXPath)
 
         // Note, the path doesn't change here, but it needs to be included so the
         // update will automatically update the .md5 and the cache path.

@@ -213,7 +213,7 @@ private fun formDownloader(
         projectDependencyModule.formsRepository,
         File(projectDependencyModule.cacheDir),
         projectDependencyModule.formsDir,
-        FormMetadataParser(),
+        FormMetadataParser,
         clock,
         projectDependencyModule.entitiesRepository
     )
