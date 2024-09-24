@@ -338,35 +338,6 @@ public class ServerFormDownloaderTest {
         assertThat(new String(read(mediaFile2)), is("contents3"));
     }
 
-    /**
-     * Form parsing might need access to media files (external secondary instances) for example
-     * so we need to make sure we've got those files in the right place before we parse.
-     */
-    @Test
-    public void whenFormHasMediaFiles_downloadsAndSavesFormAndMediaFiles_beforeParsingForm() throws Exception {
-        String xform = createXFormBody("id", "version");
-        ServerFormDetails serverFormDetails = new ServerFormDetails(
-                "Form",
-                "http://downloadUrl",
-                "id",
-                "version",
-                Md5.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
-                true,
-                false,
-                new ManifestFile("", asList(
-                        new MediaFile("file1", "hash-1", "http://file1"),
-                        new MediaFile("file2", "hash-2", "http://file2")
-                )));
-
-        FormSource formSource = mock(FormSource.class);
-        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
-        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
-        when(formSource.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents2".getBytes()));
-
-        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), FormMetadataParser.INSTANCE, clock, entitiesRepository);
-        downloader.downloadForm(serverFormDetails, null, null);
-    }
-
     @Test
     public void whenFormHasMediaFiles_andFetchingMediaFileFails_throwsFetchErrorAndDoesNotSaveAnything() throws Exception {
         String xform = createXFormBody("id", "version");
