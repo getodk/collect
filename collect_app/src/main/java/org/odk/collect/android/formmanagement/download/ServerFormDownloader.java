@@ -3,8 +3,8 @@ package org.odk.collect.android.formmanagement.download;
 import static org.odk.collect.android.utilities.FileUtils.interuptablyWriteFile;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.formmanagement.FormMetadata;
-import org.odk.collect.android.formmanagement.FormMetadataParser;
+import org.odk.collect.android.formmanagement.metadata.FormMetadata;
+import org.odk.collect.android.formmanagement.metadata.FormMetadataParser;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormUseCases;
 import org.odk.collect.android.utilities.FileUtils;

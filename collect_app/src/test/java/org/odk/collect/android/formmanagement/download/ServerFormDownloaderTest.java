@@ -19,7 +19,7 @@ import static java.util.Arrays.asList;
 import com.google.common.io.Files;
 
 import org.junit.Test;
-import org.odk.collect.android.formmanagement.FormMetadataParser;
+import org.odk.collect.android.formmanagement.metadata.FormMetadataParser;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.entities.storage.EntitiesRepository;
 import org.odk.collect.entities.storage.InMemEntitiesRepository;

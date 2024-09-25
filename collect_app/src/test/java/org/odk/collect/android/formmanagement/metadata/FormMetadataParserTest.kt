@@ -1,9 +1,9 @@
-package org.odk.collect.android.formmanagement
+package org.odk.collect.android.formmanagement.metadata
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
-import org.odk.collect.android.formmanagement.FormMetadataParser.readMetadata
+import org.odk.collect.android.formmanagement.metadata.FormMetadataParser.readMetadata
 
 class FormMetadataParserTest {
     @Test

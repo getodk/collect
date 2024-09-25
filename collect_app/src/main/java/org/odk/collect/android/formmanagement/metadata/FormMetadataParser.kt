@@ -1,4 +1,4 @@
-package org.odk.collect.android.formmanagement
+package org.odk.collect.android.formmanagement.metadata
 
 import org.javarosa.core.model.actions.setgeopoint.SetGeopointActionHandler
 import org.javarosa.xform.parse.XFormParser
@@ -129,14 +129,3 @@ object FormMetadataParser {
         return false
     }
 }
-
-data class FormMetadata(
-    val title: String?,
-    val id: String?,
-    val version: String?,
-    val submissionUri: String?,
-    val base64RsaPublicKey: String?,
-    val autoDelete: String?,
-    val autoSend: String?,
-    val geometryXPath: String?
-)
