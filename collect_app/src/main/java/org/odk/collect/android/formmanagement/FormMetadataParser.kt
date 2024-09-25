@@ -20,25 +20,29 @@ object FormMetadataParser {
         val body = doc.getRootElement().getElement(null, "body")
         val title = head.getElement(null, "title").getChild(0).toString()
 
-        lateinit var mainInstance: Element
+        lateinit var mainInstanceRoot: Element
         var submission: Element? = null
         for (i in 0 until model.childCount) {
             val child = model.getElement(i) ?: continue
 
             if (child.name == "instance" && child.attributeCount == 0) {
-                mainInstance = child
+                for (j in 0 until child.childCount) {
+                    val mainInstanceChild = child.getElement(j) ?: continue
+                    mainInstanceRoot = mainInstanceChild
+                    break
+                }
             } else if (child.name == "submission") {
                 submission = child
             }
         }
 
-        val id = mainInstance.getElement(0).getAttributeValue(null, "id")
-        val version = mainInstance.getElement(0).getAttributeValue(null, "version")
+        val id = mainInstanceRoot.getAttributeValue(null, "id")
+        val version = mainInstanceRoot.getAttributeValue(null, "version")
         val submissionUri = submission?.getAttributeValue(null, "action")
         val base64RsaPublicKey = submission?.getAttributeValue(null, "base64RsaPublicKey")
         val autoDelete = submission?.getAttributeValue(null, "auto-delete")
         val autoSend = submission?.getAttributeValue(null, "auto-send")
-        val geometryXPath = getOverallFirstGeoPointXPath(model, mainInstance, body)
+        val geometryXPath = getOverallFirstGeoPointXPath(model, mainInstanceRoot, body)
 
         return FormMetadata(
             title,
@@ -61,25 +65,25 @@ object FormMetadataParser {
      *      (2) if the form has a setgeopoint action, the first geopoint in the instance that occurs
      *          before (1) or (1) if there is no geopoint defined before it in the instance.
      */
-    private fun getOverallFirstGeoPointXPath(model: Element, mainInstance: Element, element: Element): String? {
+    private fun getOverallFirstGeoPointXPath(model: Element, mainInstanceRoot: Element, body: Element): String? {
         return if (containsSetgeopointAction(model)) {
-            getInstanceGeoPointBeforeXPath(model, mainInstance)
+            getInstanceGeoPointBeforeXPath(model, mainInstanceRoot)
         } else {
-            getFirstToplevelBodyGeoPointXPath(model, mainInstance, element)
+            getFirstToplevelBodyGeoPointXPath(model, body)
         }
     }
 
     /**
      * Returns the reference of the first geopoint in the body that is not in a repeat.
      */
-    private fun getFirstToplevelBodyGeoPointXPath(model: Element, mainInstance: Element, element: Element): String? {
-        for (elementId in 0 until element.childCount) {
-            val child = element.getElement(elementId)
+    private fun getFirstToplevelBodyGeoPointXPath(model: Element, body: Element): String? {
+        for (elementId in 0 until body.childCount) {
+            val child = body.getElement(elementId) ?: continue
             val ref = child.getAttributeValue(null, "ref")
             if (child.name == "input" && isGeopoint(model, ref)) {
                 return ref
             } else if (child.name == "group") {
-                return getFirstToplevelBodyGeoPointXPath(model, mainInstance, child)
+                return getFirstToplevelBodyGeoPointXPath(model, child)
             }
         }
         return null
@@ -89,10 +93,9 @@ object FormMetadataParser {
      * Returns the XPath path for the first geopoint in the primary instance that is before the given
      * reference and not in a repeat.
      */
-    private fun getInstanceGeoPointBeforeXPath(model: Element, mainInstance: Element): String? {
-        val mainInstanceRoot = mainInstance.getElement(0)
+    private fun getInstanceGeoPointBeforeXPath(model: Element, mainInstanceRoot: Element): String? {
         for (elementId in 0 until mainInstanceRoot.childCount) {
-            val child = mainInstanceRoot.getElement(elementId)
+            val child = mainInstanceRoot.getElement(elementId) ?: continue
             val ref = "/${mainInstanceRoot.name}/${child.name}"
             if (isGeopoint(model, ref)) {
                 return ref
@@ -105,7 +108,7 @@ object FormMetadataParser {
 
     private fun containsSetgeopointAction(model: Element): Boolean {
         for (elementId in 0 until model.childCount) {
-            val child = model.getElement(elementId)
+            val child = model.getElement(elementId) ?: continue
             if (child.name == SetGeopointActionHandler.ELEMENT_NAME) {
                 return true
             }
@@ -115,7 +118,7 @@ object FormMetadataParser {
 
     private fun isGeopoint(model: Element, ref: String): Boolean {
         for (elementId in 0 until model.childCount) {
-            val child = model.getElement(elementId)
+            val child = model.getElement(elementId) ?: continue
             if (child.name == "bind" &&
                 child.getAttributeValue(null, "nodeset") == ref &&
                 child.getAttributeValue(null, "type") == "geopoint"

@@ -267,4 +267,53 @@ class FormMetadataParserTest {
 
         assertThat(formMetadata.version, equalTo(null))
     }
+
+    @Test
+    fun formWithComments_isParsedSuccessfully() {
+        readMetadata(
+            """
+                <?xml version="1.0"?>
+                <!-- Blah -->
+                <h:html xmlns:h="http://www.w3.org/1999/xhtml"
+                        xmlns="http://www.w3.org/2002/xforms">
+                    <!-- Blah -->
+                    <h:head>
+                        <!-- Blah -->
+                        <h:title>Two geopoints</h:title>
+                        <!-- Blah -->
+                        <model>
+                            <!-- Blah -->
+                            <instance>
+                                <!-- Blah -->
+                                <data id="two-geopoints">
+                                    <!-- Blah -->
+                                    <location2 />
+                                    <name />
+                                    <location1 />
+                                </data>
+                                <!-- Blah -->
+                            </instance>
+                            <!-- Blah -->
+                            <bind nodeset="/data/name" type="string" />
+                            <bind nodeset="/data/location2" type="geopoint" />
+                            <bind nodeset="/data/location1" type="geopoint" />
+                        </model>
+                    </h:head>
+                    <h:body>
+                        <!-- Blah -->
+                        <input ref="/data/location1">
+                            <!-- Blah -->
+                            <label>Location</label>
+                        </input>
+                        <input ref="/data/name">
+                            <label>Name</label>
+                        </input>
+                        <input ref="/data/location2">
+                            <label>Location</label>
+                        </input>
+                    </h:body>
+                </h:html>
+            """.trimIndent().byteInputStream()
+        )
+    }
 }
