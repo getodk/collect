@@ -199,7 +199,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
             Timber.e(e);
             errorMsg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.too_complex_form);
         } catch (UnrecognizedEntityVersionException e) {
-            errorMsg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.unrecognized_entity_version);
+            errorMsg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.unrecognized_entity_version, e.getEntityVersion());
         } catch (Exception e) {
             Timber.w(e);
             errorMsg = "An unknown error has occurred. Please ask your project leadership to email support@getodk.org with information about this form.";

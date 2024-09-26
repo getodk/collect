@@ -203,7 +203,7 @@ class EntityFormTest {
             .clickOK(MainMenuPage())
             .clickFillBlankForm()
             .clickOnForm("One Question Entity Registration")
-            .assertTextInDialog(org.odk.collect.strings.R.string.unrecognized_entity_version)
+            .assertTextInDialog(org.odk.collect.strings.R.string.unrecognized_entity_version, "2020.1.0")
             .clickOKOnDialog(MainMenuPage())
     }
 
@@ -214,7 +214,7 @@ class EntityFormTest {
         rule.withMatchExactlyProject(testDependencies.server.url)
             .clickFillBlankForm()
             .clickOnForm("One Question Entity Registration")
-            .assertTextInDialog(org.odk.collect.strings.R.string.unrecognized_entity_version)
+            .assertTextInDialog(org.odk.collect.strings.R.string.unrecognized_entity_version, "2020.1.0")
             .clickOKOnDialog(MainMenuPage())
     }
 
@@ -225,7 +225,7 @@ class EntityFormTest {
             .copyForm("one-question-entity-registration-v2020.1.xml")
             .clickFillBlankForm()
             .clickOnForm("One Question Entity Registration")
-            .assertTextInDialog(org.odk.collect.strings.R.string.unrecognized_entity_version)
+            .assertTextInDialog(org.odk.collect.strings.R.string.unrecognized_entity_version, "2020.1.0")
             .clickOKOnDialog(MainMenuPage())
     }
 }

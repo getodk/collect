@@ -1186,7 +1186,7 @@
     <string name="offline">Offline</string>
 
     <!-- Error message displayed when a user opens a form with an unrecognized entity version -->
-    <string name="unrecognized_entity_version">The form contains an unrecognized entity version. Please update the form and download it again.</string>
+    <string name="unrecognized_entity_version">This form is not supported by this version of ODK Collect. Please upgrade Collect. If you keep having this problem, report it to the person who asked you to collect data.\n\nForm Entities spec version: %s</string>
 
     <!--
     ##############################################
