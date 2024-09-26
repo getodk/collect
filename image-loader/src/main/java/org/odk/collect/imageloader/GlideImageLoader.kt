@@ -9,6 +9,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.signature.ObjectKey
 import org.odk.collect.imageloader.svg.SvgSoftwareLayerSetter
 import java.io.File
 
@@ -60,6 +61,7 @@ class GlideImageLoader : ImageLoader {
         } else {
             Glide.with(imageView)
                 .load(imageFile)
+                .signature(ObjectKey(imageFile.lastModified()))
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
                         e: GlideException?,
