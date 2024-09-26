@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<h:html
+    xmlns="http://www.w3.org/2002/xforms"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:odk="http://www.opendatakit.org/xforms">
+    <h:head>
+        <h:title>form_with_images</h:title>
+        <model odk:xforms-version="1.0.0">
+            <itext>
+                <translation lang="default" default="true()">
+                    <text id="/data/img1:label">
+                        <value>JPG</value>
+                        <value form="image">jr://images/rect.jpg</value>
+                    </text>
+                    <text id="/data/img2:label">
+                        <value>SVG</value>
+                        <value form="image">jr://images/rect.svg</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <data id="form_with_images">
+                    <img1/>
+                    <img2/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/img1" type="string"/>
+            <bind nodeset="/data/img2" type="string"/>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/img1">
+            <label ref="jr:itext('/data/img1:label')"/>
+        </input>
+        <input ref="/data/img2">
+            <label ref="jr:itext('/data/img2:label')"/>
+        </input>
+    </h:body>
+</h:html>
