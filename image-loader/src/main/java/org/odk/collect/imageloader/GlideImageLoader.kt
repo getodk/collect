@@ -34,6 +34,7 @@ class GlideImageLoader : ImageLoader {
                 .`as`(PictureDrawable::class.java)
                 .listener(SvgSoftwareLayerSetter())
                 .load(imageFile)
+                .signature(ObjectKey(imageFile.lastModified()))
                 .listener(object : RequestListener<PictureDrawable> {
                     override fun onLoadFailed(
                         e: GlideException?,
@@ -57,6 +58,7 @@ class GlideImageLoader : ImageLoader {
                     }
                 })
                 .apply(requestOptions)
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .into(imageView)
         } else {
             Glide.with(imageView)
