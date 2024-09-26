@@ -11,6 +11,7 @@ import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
+import org.odk.collect.strings.R
 
 @RunWith(AndroidJUnit4::class)
 class EntityFormTest {
@@ -201,9 +202,8 @@ class EntityFormTest {
             .clickForm("One Question Entity Registration")
             .clickGetSelected()
             .clickOK(MainMenuPage())
-            .clickFillBlankForm()
-            .clickOnForm("One Question Entity Registration")
-            .assertTextInDialog(org.odk.collect.strings.R.string.unrecognized_entity_version, "2020.1.0")
+            .startBlankFormWithError("One Question Entity Registration", true)
+            .assertTextInDialog(R.string.unrecognized_entity_version, "2020.1.0")
             .clickOKOnDialog(MainMenuPage())
     }
 
@@ -212,9 +212,8 @@ class EntityFormTest {
         testDependencies.server.addForm("one-question-entity-registration-v2020.1.xml")
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .clickFillBlankForm()
-            .clickOnForm("One Question Entity Registration")
-            .assertTextInDialog(org.odk.collect.strings.R.string.unrecognized_entity_version, "2020.1.0")
+            .startBlankFormWithError("One Question Entity Registration", true)
+            .assertTextInDialog(R.string.unrecognized_entity_version, "2020.1.0")
             .clickOKOnDialog(MainMenuPage())
     }
 
@@ -223,9 +222,8 @@ class EntityFormTest {
         rule.startAtFirstLaunch()
             .clickTryCollect()
             .copyForm("one-question-entity-registration-v2020.1.xml")
-            .clickFillBlankForm()
-            .clickOnForm("One Question Entity Registration")
-            .assertTextInDialog(org.odk.collect.strings.R.string.unrecognized_entity_version, "2020.1.0")
+            .startBlankFormWithError("One Question Entity Registration", true)
+            .assertTextInDialog(R.string.unrecognized_entity_version, "2020.1.0")
             .clickOKOnDialog(MainMenuPage())
     }
 }

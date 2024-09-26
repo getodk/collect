@@ -22,8 +22,7 @@ class InvalidFormTest {
     fun brokenForm_isVisibleOnFormList_butThrowsAnErrorAfterOpeningIt() {
         rule.startAtMainMenu()
             .copyForm("invalid-form.xml")
-            .clickFillBlankForm()
-            .clickOnForm("invalid-form")
+            .startBlankFormWithError("invalid-form", true)
             .assertTextInDialog("An unknown error has occurred. Please ask your project leadership to email support@getodk.org with information about this form.\n" +
                 "\n" +
                 "Cycle detected in form's relevant and calculation logic!\n" +
@@ -46,7 +45,7 @@ class InvalidFormTest {
     fun app_ShouldNotCrash_whenFillingFormsWithRepeatInFieldList() {
         rule.startAtMainMenu()
             .copyForm("repeat_in_field_list.xml")
-            .startBlankFormWithError("repeat_in_field_list")
+            .startBlankFormWithError("repeat_in_field_list", false)
             .clickOK(FormEntryPage("repeat_in_field_list"))
             .swipeToEndScreen()
             .clickFinalize()

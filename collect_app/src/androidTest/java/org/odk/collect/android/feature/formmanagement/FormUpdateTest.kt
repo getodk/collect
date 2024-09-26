@@ -162,8 +162,7 @@ class FormUpdateTest {
             .clickGetBlankForm()
             .clickGetSelected()
             .clickOKOnDialog(MainMenuPage())
-            .startBlankFormWithError("external select")
-            .assertText(org.odk.collect.strings.R.string.error_occured)
+            .startBlankFormWithError("external select", true)
             .clickOKOnDialog(MainMenuPage())
 
         testDependencies.server.addForm(

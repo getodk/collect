@@ -188,6 +188,8 @@
     <string name="bad_uri">Bad URI: %s</string>
     <!-- Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown -->
     <string name="unrecognized_uri">Unrecognized URI: %s</string>
+    <!-- Displayed when an attempt is made to start form filling, but the form is broken -->
+    <string name="form_cannot_be_used">Form can\'t be used</string>
 
     <!-- Text displayed when audio recording fails to start -->
     <string name="start_recording_failed">Could not start recording.</string>

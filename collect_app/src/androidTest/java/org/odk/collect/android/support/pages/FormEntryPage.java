@@ -145,9 +145,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return WaitFor.waitFor(() -> new FormEndPage(formName).assertOnPage());
     }
 
-    public ErrorDialog swipeToNextQuestionWithError() {
+    public ErrorDialog swipeToNextQuestionWithError(boolean isFatal) {
         flingLeft();
-        return new ErrorDialog().assertOnPage();
+        return new ErrorDialog().assertOnPage(isFatal);
     }
 
     public FormEntryPage swipeToNextQuestionWithConstraintViolation(int constraintText) {
