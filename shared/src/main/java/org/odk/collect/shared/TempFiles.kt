@@ -4,6 +4,14 @@ import org.odk.collect.shared.strings.RandomString
 import java.io.File
 
 object TempFiles {
+    @JvmStatic
+    fun createTempFileWithName(name: String): File {
+        val tmpDir = getTempDir()
+        return File(tmpDir, name).also {
+            it.createNewFile()
+            it.deleteOnExit()
+        }
+    }
 
     @JvmStatic
     fun createTempFile(): File {
