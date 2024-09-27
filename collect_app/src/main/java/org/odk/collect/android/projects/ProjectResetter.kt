@@ -68,7 +68,9 @@ class ProjectResetter(
     }
 
     private fun resetInstances() {
-        if (!instancesDataService.reset(projectId)) {
+        if (instancesDataService.reset(projectId)) {
+            savepointsRepositoryProvider.create(projectId).deleteAll()
+        } else {
             failedResetActions.add(ResetAction.RESET_INSTANCES)
         }
     }
