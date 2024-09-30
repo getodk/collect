@@ -1,6 +1,5 @@
 package org.odk.collect.android.formmanagement.metadata
 
-import org.javarosa.core.model.actions.setgeopoint.SetGeopointActionHandler
 import org.javarosa.xform.parse.XFormParser
 import org.kxml2.kdom.Element
 import java.io.File
@@ -42,7 +41,7 @@ object FormMetadataParser {
         val base64RsaPublicKey = submission?.getAttributeValue(null, "base64RsaPublicKey")
         val autoDelete = submission?.getAttributeValue(null, "auto-delete")
         val autoSend = submission?.getAttributeValue(null, "auto-send")
-        val geometryXPath = getOverallFirstGeoPointXPath(model, mainInstanceRoot, body)
+        val geometryXPath = getFirstGeopointXPath(model, mainInstanceRoot, body)
 
         return FormMetadata(
             title,
@@ -57,75 +56,70 @@ object FormMetadataParser {
     }
 
     /**
-     * Returns an XPath path representing the first geopoint of this form definition or null if the
-     * definition does not contain any field of type geopoint.
+     * Finds the first geopoint reference in the primary instance by:
+     * 1. Retrieving all geopoint binds from the model.
+     * 2. Iterating through the elements of the primary instance root.
+     * 3. Returning the first reference found in the primary instance that matches one of
+     *    the geopoint binds and is not inside a repeat.
      *
-     * The first geopoint is either of:
-     *      (1) the first geopoint in the body that is not in a repeat
-     *      (2) if the form has a setgeopoint action, the first geopoint in the instance that occurs
-     *          before (1) or (1) if there is no geopoint defined before it in the instance.
+     * This solution is not perfect because it assumes that the references in the model
+     * appear in the same order as in the body, which is not guaranteed by XForms.
+     * However, in practice, this is typically the case.
+     *
      */
-    private fun getOverallFirstGeoPointXPath(model: Element, mainInstanceRoot: Element, body: Element): String? {
-        return if (containsSetgeopointAction(model)) {
-            getInstanceGeoPointBeforeXPath(model, mainInstanceRoot)
+    private fun getFirstGeopointXPath(model: Element, mainInstanceRoot: Element, body: Element): String? {
+        val geopointXPaths = getGeopointXPaths(model)
+        return if (geopointXPaths.isEmpty()) {
+            null
         } else {
-            getFirstToplevelBodyGeoPointXPath(model, body)
+            val repeatXPaths = getRepeatXPaths(body)
+            getFirstPrimaryInstanceGeopointXPath(geopointXPaths, repeatXPaths, mainInstanceRoot, null)
         }
     }
 
-    /**
-     * Returns the reference of the first geopoint in the body that is not in a repeat.
-     */
-    private fun getFirstToplevelBodyGeoPointXPath(model: Element, body: Element): String? {
+    private fun getGeopointXPaths(model: Element): List<String> {
+        val geopointXPaths = mutableListOf<String>()
+        for (elementId in 0 until model.childCount) {
+            val child = model.getElement(elementId) ?: continue
+            if (child.name == "bind" && child.getAttributeValue(null, "type") == "geopoint") {
+                geopointXPaths.add(child.getAttributeValue(null, "nodeset"))
+            }
+        }
+        return geopointXPaths
+    }
+
+    private fun getRepeatXPaths(body: Element): List<String> {
+        val repeatXPaths = mutableListOf<String>()
         for (elementId in 0 until body.childCount) {
             val child = body.getElement(elementId) ?: continue
-            val ref = child.getAttributeValue(null, "ref")
-            if (child.name == "input" && isGeopoint(model, ref)) {
-                return ref
-            } else if (child.name == "group") {
-                return getFirstToplevelBodyGeoPointXPath(model, child)
+            if (child.name == "repeat") {
+                repeatXPaths.add(child.getAttributeValue(null, "nodeset"))
+            } else if (child.childCount > 0) {
+                repeatXPaths.addAll(getRepeatXPaths(child))
             }
         }
-        return null
+        return repeatXPaths
     }
 
-    /**
-     * Returns the XPath path for the first geopoint in the primary instance that is before the given
-     * reference and not in a repeat.
-     */
-    private fun getInstanceGeoPointBeforeXPath(model: Element, mainInstanceRoot: Element): String? {
+    private fun getFirstPrimaryInstanceGeopointXPath(
+        geopointXPaths: List<String>,
+        repeatXPaths: List<String>,
+        mainInstanceRoot: Element,
+        parentXPath: String?
+    ): String? {
         for (elementId in 0 until mainInstanceRoot.childCount) {
             val child = mainInstanceRoot.getElement(elementId) ?: continue
-            val ref = "/${mainInstanceRoot.name}/${child.name}"
-            if (isGeopoint(model, ref)) {
-                return ref
-            } else if (child.childCount > 0) {
-                return getInstanceGeoPointBeforeXPath(model, child)
+            val xpath = if (parentXPath == null) {
+                "/${mainInstanceRoot.name}/${child.name}"
+            } else {
+                "$parentXPath/${child.name}"
+            }
+            if (geopointXPaths.contains(xpath)) {
+                return xpath
+            } else if (child.childCount > 0 && !repeatXPaths.contains(xpath)) {
+                return getFirstPrimaryInstanceGeopointXPath(geopointXPaths, repeatXPaths, child, xpath)
             }
         }
         return null
-    }
-
-    private fun containsSetgeopointAction(model: Element): Boolean {
-        for (elementId in 0 until model.childCount) {
-            val child = model.getElement(elementId) ?: continue
-            if (child.name == SetGeopointActionHandler.ELEMENT_NAME) {
-                return true
-            }
-        }
-        return false
-    }
-
-    private fun isGeopoint(model: Element, ref: String): Boolean {
-        for (elementId in 0 until model.childCount) {
-            val child = model.getElement(elementId) ?: continue
-            if (child.name == "bind" &&
-                child.getAttributeValue(null, "nodeset") == ref &&
-                child.getAttributeValue(null, "type") == "geopoint"
-            ) {
-                return true
-            }
-        }
-        return false
     }
 }
