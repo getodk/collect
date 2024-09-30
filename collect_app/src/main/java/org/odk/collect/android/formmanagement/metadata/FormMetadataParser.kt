@@ -79,8 +79,8 @@ object FormMetadataParser {
 
     private fun getGeopointXPaths(model: Element): List<String> {
         val geopointXPaths = mutableListOf<String>()
-        for (elementId in 0 until model.childCount) {
-            val child = model.getElement(elementId) ?: continue
+        for (position in 0 until model.childCount) {
+            val child = model.getElement(position) ?: continue
             if (child.name == "bind" && child.getAttributeValue(null, "type") == "geopoint") {
                 geopointXPaths.add(child.getAttributeValue(null, "nodeset"))
             }
@@ -90,8 +90,8 @@ object FormMetadataParser {
 
     private fun getRepeatXPaths(body: Element): List<String> {
         val repeatXPaths = mutableListOf<String>()
-        for (elementId in 0 until body.childCount) {
-            val child = body.getElement(elementId) ?: continue
+        for (position in 0 until body.childCount) {
+            val child = body.getElement(position) ?: continue
             if (child.name == "repeat") {
                 repeatXPaths.add(child.getAttributeValue(null, "nodeset"))
             } else if (child.childCount > 0) {
@@ -104,13 +104,13 @@ object FormMetadataParser {
     private fun getFirstPrimaryInstanceGeopointXPath(
         geopointXPaths: List<String>,
         repeatXPaths: List<String>,
-        mainInstanceRoot: Element,
+        parentRoot: Element,
         parentXPath: String?
     ): String? {
-        for (elementId in 0 until mainInstanceRoot.childCount) {
-            val child = mainInstanceRoot.getElement(elementId) ?: continue
+        for (position in 0 until parentRoot.childCount) {
+            val child = parentRoot.getElement(position) ?: continue
             val xpath = if (parentXPath == null) {
-                "/${mainInstanceRoot.name}/${child.name}"
+                "/${parentRoot.name}/${child.name}"
             } else {
                 "$parentXPath/${child.name}"
             }
