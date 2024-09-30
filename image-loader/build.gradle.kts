@@ -34,6 +34,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":shared"))
+
     implementation(Dependencies.glide)
     implementation(Dependencies.caverock_androidsvg)
     kapt(Dependencies.glide_compiler)

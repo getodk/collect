@@ -8,10 +8,10 @@ import org.javarosa.core.model.data.StringData;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
+import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -28,11 +28,7 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
 
     @Override
     public Object createBinaryData(StringData answerData) {
-        File file = mock(File.class);
-        when(file.exists()).thenReturn(true);
-        when(file.getName()).thenReturn(answerData.getDisplayText());
-        when(file.getAbsolutePath()).thenReturn(answerData.getDisplayText());
-        return file;
+        return TempFiles.createTempFileWithName(answerData.getDisplayText());
     }
 
     @Override
