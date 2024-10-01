@@ -2,7 +2,7 @@ package org.odk.collect.android.instancemanagement.send
 
 import android.app.Application
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.FrameLayout
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -27,7 +27,7 @@ class ReadyToSendBannerTest {
             it.setData(data)
         }
 
-        assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.GONE))
+        assertThat(view.findViewById<FrameLayout>(R.id.banner).visibility, equalTo(View.GONE))
     }
 
     @Test
@@ -37,12 +37,12 @@ class ReadyToSendBannerTest {
             it.setData(data)
         }
 
-        assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.GONE))
+        assertThat(view.findViewById<FrameLayout>(R.id.banner).visibility, equalTo(View.GONE))
 
         data = ReadyToSendViewModel.Data(1, 1, 0)
         view.setData(data)
 
-        assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<FrameLayout>(R.id.banner).visibility, equalTo(View.VISIBLE))
     }
 
     @Test
@@ -52,12 +52,12 @@ class ReadyToSendBannerTest {
             it.setData(data)
         }
 
-        assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<FrameLayout>(R.id.banner).visibility, equalTo(View.VISIBLE))
 
         data = ReadyToSendViewModel.Data(0, 0, 0)
         view.setData(data)
 
-        assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.GONE))
+        assertThat(view.findViewById<FrameLayout>(R.id.banner).visibility, equalTo(View.GONE))
     }
 
     @Test
@@ -67,7 +67,7 @@ class ReadyToSendBannerTest {
             it.setData(data)
         }
 
-        assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.GONE))
+        assertThat(view.findViewById<FrameLayout>(R.id.banner).visibility, equalTo(View.GONE))
     }
 
     @Test
@@ -77,7 +77,7 @@ class ReadyToSendBannerTest {
             it.setData(data)
         }
 
-        assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.GONE))
+        assertThat(view.findViewById<FrameLayout>(R.id.banner).visibility, equalTo(View.GONE))
     }
 
     @Test
@@ -88,7 +88,7 @@ class ReadyToSendBannerTest {
         }
 
         assertThat(
-            view.findViewById<ConstraintLayout>(R.id.banner).visibility,
+            view.findViewById<FrameLayout>(R.id.banner).visibility,
             equalTo(View.VISIBLE)
         )
     }

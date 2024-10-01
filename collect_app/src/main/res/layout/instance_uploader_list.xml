@@ -16,6 +16,8 @@
             android:id="@+id/ready_to_send_banner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_extra_small"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -26,6 +28,7 @@
             android:layout_height="0dp"
             android:nestedScrollingEnabled="true"
             android:divider="@drawable/list_item_divider"
+            android:layout_marginTop="@dimen/margin_extra_small"
             app:layout_constraintBottom_toTopOf="@id/buttonholder"
             app:layout_constraintTop_toBottomOf="@id/ready_to_send_banner" />
 
