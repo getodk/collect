@@ -11,7 +11,7 @@ import org.odk.collect.db.sqlite.DatabaseConnection;
 import org.odk.collect.android.database.DatabaseConstants;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
-import org.odk.collect.shared.files.DirectoryUtils;
+import org.odk.collect.shared.files.FileExt;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -270,7 +270,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     private void deleteInstanceFiles(Instance instance) {
-        DirectoryUtils.deleteDirectory(new File(instance.getInstanceFilePath()).getParentFile());
+        FileExt.deleteDirectory(new File(instance.getInstanceFilePath()).getParentFile());
     }
 
     private static List<Instance> getInstancesFromCursor(Cursor cursor, String instancesPath) {

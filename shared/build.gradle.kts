@@ -18,6 +18,7 @@ dependencies {
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.hamcrest)
+    testImplementation(Dependencies.mockito_kotlin)
 }
 
 tasks.register("testDebug") {

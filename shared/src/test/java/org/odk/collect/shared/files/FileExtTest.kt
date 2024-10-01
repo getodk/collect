@@ -4,14 +4,63 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.whenever
 import org.odk.collect.shared.TempFiles
+import org.odk.collect.shared.files.FileExt.listFilesRecursively
+import org.odk.collect.shared.files.FileExt.sanitizedCanonicalPath
+import org.odk.collect.shared.files.FileExt.saveToFile
 import java.io.File
 
-class DirectoryUtilsTest {
+class FileExtTest {
+    @Test
+    fun `sanitizedCanonicalPath returns sanitized canonicalPath if androidData path segment is incorrect`() {
+        val file = mock<File>().apply {
+            whenever(canonicalPath).thenReturn("/storage/emulated/0/android/Data/org.odk.collect.android/files/projects/DEMO/blah")
+        }
+
+        assertThat(file.sanitizedCanonicalPath(), equalTo("/storage/emulated/0/Android/data/org.odk.collect.android/files/projects/DEMO/blah"))
+    }
+
+    @Test
+    fun `sanitizedCanonicalPath returns original canonicalPath if androidData path segment is correct`() {
+        val file = mock<File>().apply {
+            whenever(canonicalPath).thenReturn("/storage/emulated/0/Android/data/org.odk.collect.android/files/projects/DEMO/blah")
+        }
+
+        assertThat(file.sanitizedCanonicalPath(), equalTo(file.canonicalPath))
+    }
+
+    @Test
+    fun `sanitizedCanonicalPath returns original canonicalPath if other part of the path than the androidData is incorrect`() {
+        val file = mock<File>().apply {
+            whenever(canonicalPath).thenReturn("/Storage/Emulated/0/Android/data/org.odk.collect.android/files/projects/DEMO/blah")
+        }
+
+        assertThat(file.sanitizedCanonicalPath(), equalTo(file.canonicalPath))
+    }
+
+    @Test
+    fun `sanitizedCanonicalPath returns original canonicalPath if it does not contain the androidData part`() {
+        val file = mock<File>().apply {
+            whenever(canonicalPath).thenReturn("/data/data/DEMO/files/blah")
+        }
+
+        assertThat(file.sanitizedCanonicalPath(), equalTo(file.canonicalPath))
+    }
+
+    @Test
+    fun `saveToFile saves data to file`() {
+        val file = TempFiles.createTempFile().apply {
+            saveToFile("blah".byteInputStream())
+        }
+
+        assertThat(file.readText(), equalTo("blah"))
+    }
 
     @Test
     fun listFilesRecursively_withEmptyDirectory_returnsEmptyList() {
-        val files = DirectoryUtils.listFilesRecursively(TempFiles.createTempDir())
+        val files = TempFiles.createTempDir().listFilesRecursively()
         assertThat(files.size, equalTo(0))
     }
 
@@ -21,7 +70,7 @@ class DirectoryUtilsTest {
         val file1 = TempFiles.createTempFile(directory, "blah1", ".txt")
         val file2 = TempFiles.createTempFile(directory, "blah2", ".txt")
 
-        val files = DirectoryUtils.listFilesRecursively(directory)
+        val files = directory.listFilesRecursively()
         assertThat(files, containsInAnyOrder(file1, file2))
     }
 
@@ -32,7 +81,7 @@ class DirectoryUtilsTest {
         val file2 = TempFiles.createTempFile(directory, "blah2", ".txt")
         File(directory, "blah").mkdir()
 
-        val files = DirectoryUtils.listFilesRecursively(directory)
+        val files = directory.listFilesRecursively()
         assertThat(files, containsInAnyOrder(file1, file2))
     }
 
@@ -45,7 +94,7 @@ class DirectoryUtilsTest {
         val directory2 = File(directory1, "blah").also { it.mkdir() }
         val file3 = TempFiles.createTempFile(directory2, "blah3", ".txt")
 
-        val files = DirectoryUtils.listFilesRecursively(directory1)
+        val files = directory1.listFilesRecursively()
         assertThat(files, containsInAnyOrder(file1, file2, file3))
     }
 
@@ -61,14 +110,14 @@ class DirectoryUtilsTest {
         val directory3 = File(directory2, "blah").also { it.mkdir() }
         val file4 = TempFiles.createTempFile(directory3, "blah4", ".txt")
 
-        val files = DirectoryUtils.listFilesRecursively(directory1)
+        val files = directory1.listFilesRecursively()
         assertThat(files, containsInAnyOrder(file1, file2, file3, file4))
     }
 
     @Test
     fun listFilesRecursively_whenDirectoryDoesNotExist_returnsEmptyList() {
         val directory = File(TempFiles.getPathInTempDir())
-        val files = DirectoryUtils.listFilesRecursively(directory)
+        val files = directory.listFilesRecursively()
         assertThat(files.size, equalTo(0))
     }
 }
