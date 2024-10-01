@@ -28,20 +28,8 @@ import androidx.annotation.Nullable;
 import com.google.common.base.CharMatcher;
 
 import org.apache.commons.io.IOUtils;
-import org.javarosa.core.model.Constants;
-import org.javarosa.core.model.FormDef;
-import org.javarosa.core.model.GroupDef;
-import org.javarosa.core.model.IFormElement;
-import org.javarosa.core.model.QuestionDef;
-import org.javarosa.core.model.actions.setgeopoint.SetGeopointActionHandler;
-import org.javarosa.core.model.instance.FormInstance;
-import org.javarosa.core.model.instance.TreeElement;
-import org.javarosa.core.model.instance.TreeReference;
-import org.javarosa.xform.parse.XFormParser;
-import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.async.OngoingWorkListener;
-import org.odk.collect.shared.strings.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,11 +43,8 @@ import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import timber.log.Timber;
 
@@ -69,16 +54,6 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public final class FileUtils {
-
-    public static final String FORMID = "formid";
-    public static final String VERSION = "version"; // arbitrary string in OpenRosa 1.0
-    public static final String TITLE = "title";
-    public static final String SUBMISSIONURI = "submission";
-    public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
-    public static final String AUTO_DELETE = "autoDelete";
-    public static final String AUTO_SEND = "autoSend";
-    public static final String GEOMETRY_XPATH = "geometryXpath";
-
     /** Suffix for the form media directory. */
     public static final String MEDIA_SUFFIX = "-media";
 
@@ -161,127 +136,6 @@ public final class FileUtils {
             IOUtils.closeQuietly(src);
             IOUtils.closeQuietly(dst);
         }
-    }
-
-    /**
-     * Given a form definition file, return a map containing form metadata. The form ID is required
-     * by the specification and will always be included. Title and version are optionally included.
-     * If the form definition contains a submission block, any or all of submission URI, base 64 RSA
-     * public key, auto-delete and auto-send may be included.
-     */
-    public static HashMap<String, String> getMetadataFromFormDefinition(File formDefinitionXml) throws XFormParser.ParseException {
-        FormDef formDef = XFormUtils.getFormFromFormXml(formDefinitionXml.getAbsolutePath(), "jr://file/" + LAST_SAVED_FILENAME);
-
-        final HashMap<String, String> fields = new HashMap<>();
-
-        fields.put(TITLE, formDef.getTitle());
-        fields.put(FORMID, formDef.getMainInstance().getRoot().getAttributeValue(null, "id"));
-        String version = formDef.getMainInstance().getRoot().getAttributeValue(null, "version");
-        if (version != null && StringUtils.isBlank(version)) {
-            version = null;
-        }
-        fields.put(VERSION, version);
-
-        if (formDef.getSubmissionProfile() != null) {
-            fields.put(SUBMISSIONURI, formDef.getSubmissionProfile().getAction());
-
-            final String key = formDef.getSubmissionProfile().getAttribute("base64RsaPublicKey");
-            if (key != null && key.trim().length() > 0) {
-                fields.put(BASE64_RSA_PUBLIC_KEY, key.trim());
-            }
-
-            fields.put(AUTO_DELETE, formDef.getSubmissionProfile().getAttribute("auto-delete"));
-            fields.put(AUTO_SEND, formDef.getSubmissionProfile().getAttribute("auto-send"));
-        }
-
-        fields.put(GEOMETRY_XPATH, getOverallFirstGeoPoint(formDef));
-        return fields;
-    }
-
-    /**
-     * Returns an XPath path representing the first geopoint of this form definition or null if the
-     * definition does not contain any field of type geopoint.
-     *
-     * The first geopoint is either of:
-     *      (1) the first geopoint in the body that is not in a repeat
-     *      (2) if the form has a setgeopoint action, the first geopoint in the instance that occurs
-     *          before (1) or (1) if there is no geopoint defined before it in the instance.
-     */
-    private static String getOverallFirstGeoPoint(FormDef formDef) {
-        TreeReference firstTopLevelBodyGeoPoint = getFirstToplevelBodyGeoPoint(formDef);
-
-        if (!formDef.hasAction(SetGeopointActionHandler.ELEMENT_NAME)) {
-            return firstTopLevelBodyGeoPoint == null ? null : firstTopLevelBodyGeoPoint.toString(false);
-        } else {
-            return getInstanceGeoPointBefore(firstTopLevelBodyGeoPoint, formDef.getMainInstance().getRoot());
-        }
-    }
-
-    /**
-     * Returns the reference of the first geopoint in the body that is not in a repeat.
-     */
-    private static TreeReference getFirstToplevelBodyGeoPoint(FormDef formDef) {
-        if (formDef.getChildren().size() == 0) {
-            return null;
-        } else {
-            return getFirstTopLevelBodyGeoPoint(formDef, formDef.getMainInstance());
-        }
-    }
-
-    /**
-     * Returns the reference of the first child of the given element that is of type geopoint and
-     * is not contained in a repeat.
-     */
-    private static TreeReference getFirstTopLevelBodyGeoPoint(IFormElement element, FormInstance primaryInstance) {
-        if (element instanceof QuestionDef) {
-            QuestionDef question = (QuestionDef) element;
-            int dataType = primaryInstance.resolveReference((TreeReference) element.getBind().getReference()).getDataType();
-
-            if (dataType == Constants.DATATYPE_GEOPOINT) {
-                return (TreeReference) question.getBind().getReference();
-            }
-        } else if (element instanceof FormDef || element instanceof GroupDef) {
-            if (element instanceof GroupDef && ((GroupDef) element).getRepeat()) {
-                return null;
-            } else {
-                for (IFormElement child : element.getChildren()) {
-                    // perform recursive depth-first search
-                    TreeReference geoRef = getFirstTopLevelBodyGeoPoint(child, primaryInstance);
-                    if (geoRef != null) {
-                        return geoRef;
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns the XPath path for the first geopoint in the primary instance that is before the given
-     * reference and not in a repeat.
-     */
-    private static String getInstanceGeoPointBefore(TreeReference firstBodyGeoPoint, TreeElement element) {
-        if (element.getRef().equals(firstBodyGeoPoint)) {
-            return null;
-        } else if (element.getDataType() == Constants.DATATYPE_GEOPOINT) {
-            return element.getRef().toString(false);
-        } else if (element.hasChildren()) {
-            Set<TreeElement> childrenToAvoid = new HashSet<>();
-
-            for (int i = 0; i < element.getNumChildren(); i++) {
-                if (element.getChildAt(i).getMultiplicity() == TreeReference.INDEX_TEMPLATE) {
-                    childrenToAvoid.addAll(element.getChildrenWithName(element.getChildAt(i).getName()));
-                } else if (!childrenToAvoid.contains(element.getChildAt(i))) {
-                    String geoPath = getInstanceGeoPointBefore(firstBodyGeoPoint, element.getChildAt(i));
-                    if (geoPath != null) {
-                        return geoPath;
-                    }
-                }
-            }
-        }
-
-        return null;
     }
 
     public static void deleteAndReport(File file) {
@@ -401,19 +255,6 @@ public final class FileUtils {
         } catch (IOException e) {
             Timber.e(e);
         }
-    }
-
-    /** Sorts file paths as if sorting the path components and extensions lexicographically. */
-    public static int comparePaths(String a, String b) {
-        // Regular string compareTo() is incorrect, because it will sort "/" and "."
-        // after other punctuation (e.g. "foo/bar" will sort AFTER "foo-2/bar" and
-        // "pic.jpg" will sort AFTER "pic-2.jpg").  Replacing these delimiters with
-        // '\u0000' and '\u0001' causes paths to sort correctly (assuming the paths
-        // don't already contain '\u0000' or '\u0001').  This is a bit of a hack,
-        // but it's a lot simpler and faster than comparing components one by one.
-        String sortKeyA = a.replace('/', '\u0000').replace('.', '\u0001');
-        String sortKeyB = b.replace('/', '\u0000').replace('.', '\u0001');
-        return sortKeyA.compareTo(sortKeyB);
     }
 
     public static String getFileExtension(String fileName) {

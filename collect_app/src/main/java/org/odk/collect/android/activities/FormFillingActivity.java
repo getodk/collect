@@ -1512,7 +1512,11 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         formError = error;
 
         alertDialog = new MaterialAlertDialogBuilder(this).create();
-        alertDialog.setTitle(getString(org.odk.collect.strings.R.string.error_occured));
+        if (formError instanceof FormError.Fatal) {
+            alertDialog.setTitle(getString(org.odk.collect.strings.R.string.form_cannot_be_used));
+        } else {
+            alertDialog.setTitle(getString(org.odk.collect.strings.R.string.error_occured));
+        }
         alertDialog.setMessage(formError.getMessage());
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override

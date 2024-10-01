@@ -491,8 +491,8 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertTextInDialog(text: Int): T {
-        return assertTextInDialog(getTranslatedString(text))
+    fun assertTextInDialog(text: Int, vararg formatArgs: Any): T {
+        return assertTextInDialog(getTranslatedString(text, *formatArgs))
     }
 
     fun closeSnackbar(): T {

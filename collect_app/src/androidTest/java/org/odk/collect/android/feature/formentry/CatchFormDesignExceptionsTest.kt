@@ -43,8 +43,7 @@ class CatchFormDesignExceptionsTest {
     fun whenFormHasNonFatalErrors_explanationDialogShouldBeDisplayedAndTheFormShouldNotBeClosedAfterClickingOK() {
         rule.startAtMainMenu()
             .copyForm("g6Error.xml")
-            .startBlankFormWithError("g6Error")
-            .assertText(org.odk.collect.strings.R.string.error_occured)
+            .startBlankFormWithError("g6Error", false)
             .clickOK(FormEntryPage("g6Error"))
     }
 
@@ -52,8 +51,7 @@ class CatchFormDesignExceptionsTest {
     fun whenFormHasNonFatalErrors_explanationDialogShouldNotSurviveActivityRecreation() {
         rule.startAtMainMenu()
             .copyForm("g6Error.xml")
-            .startBlankFormWithError("g6Error")
-            .assertText(org.odk.collect.strings.R.string.error_occured)
+            .startBlankFormWithError("g6Error", false)
             .clickOK(FormEntryPage("g6Error"))
             .rotateToLandscape(FormEntryPage("g6Error"))
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.error_occured)

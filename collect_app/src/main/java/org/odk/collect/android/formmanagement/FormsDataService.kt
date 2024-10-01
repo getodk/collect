@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
+import org.odk.collect.android.formmanagement.metadata.FormMetadataParser
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.state.DataKeys
@@ -213,7 +214,7 @@ private fun formDownloader(
         projectDependencyModule.formsRepository,
         File(projectDependencyModule.cacheDir),
         projectDependencyModule.formsDir,
-        FormMetadataParser(),
+        FormMetadataParser,
         clock,
         projectDependencyModule.entitiesRepository
     )

@@ -54,9 +54,9 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new AddNewRepeatDialog(repeatName).assertOnPage();
     }
 
-    public ErrorDialog startBlankFormWithError(String formName) {
+    public ErrorDialog startBlankFormWithError(String formName, boolean isFatal) {
         goToBlankForm(formName);
-        return new ErrorDialog().assertOnPage();
+        return new ErrorDialog().assertOnPage(isFatal);
     }
 
     public OkDialog startBlankFormWithDialog(String formName) {

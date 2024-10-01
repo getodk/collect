@@ -56,6 +56,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.ZipUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.SchedulerAsyncTaskMimic;
+import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.savepoints.Savepoint;
@@ -197,6 +198,8 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         } catch (StackOverflowError e) {
             Timber.e(e);
             errorMsg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.too_complex_form);
+        } catch (UnrecognizedEntityVersionException e) {
+            errorMsg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.unrecognized_entity_version, e.getEntityVersion());
         } catch (Exception e) {
             Timber.w(e);
             errorMsg = "An unknown error has occurred. Please ask your project leadership to email support@getodk.org with information about this form.";

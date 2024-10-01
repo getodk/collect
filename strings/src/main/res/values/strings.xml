@@ -188,6 +188,8 @@
     <string name="bad_uri">Bad URI: %s</string>
     <!-- Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown -->
     <string name="unrecognized_uri">Unrecognized URI: %s</string>
+    <!-- Displayed when an attempt is made to start form filling, but the form is broken -->
+    <string name="form_cannot_be_used">Form can\'t be used</string>
 
     <!-- Text displayed when audio recording fails to start -->
     <string name="start_recording_failed">Could not start recording.</string>
@@ -1184,6 +1186,9 @@
 
     <!-- Label for entity that has been created offline and is not on the server yet -->
     <string name="offline">Offline</string>
+
+    <!-- Error message displayed when a user opens a form with an unrecognized entity version -->
+    <string name="unrecognized_entity_version">This form is not supported by this version of ODK Collect. Please upgrade Collect. If you keep having this problem, report it to the person who asked you to collect data.\n\nForm Entities spec version: %s</string>
 
     <!--
     ##############################################

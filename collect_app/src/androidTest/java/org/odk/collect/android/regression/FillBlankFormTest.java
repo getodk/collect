@@ -324,7 +324,7 @@ public class FillBlankFormTest {
                 .startBlankForm("validate")
                 .longPressOnQuestion("year")
                 .removeResponse()
-                .swipeToNextQuestionWithError()
+                .swipeToNextQuestionWithError(false)
                 .checkIsTextDisplayedOnDialog("The value \"-01-01\" can't be converted to a date.");
     }
 

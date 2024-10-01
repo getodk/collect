@@ -11,6 +11,7 @@ import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
+import org.odk.collect.strings.R
 
 @RunWith(AndroidJUnit4::class)
 class EntityFormTest {
@@ -189,5 +190,40 @@ class EntityFormTest {
             .assertQuestion("Select person")
             .assertText("Roman Roy")
             .assertTextDoesNotExist("Logan Roy")
+    }
+
+    @Test
+    fun manualEntityFormDownload_withUnsupportedSpecVersion_completesSuccessfully_butThrowsAnErrorAfterOpeningIt() {
+        testDependencies.server.addForm("one-question-entity-registration-v2020.1.xml")
+
+        rule.withProject(testDependencies.server)
+            .clickGetBlankForm()
+            .clickClearAll()
+            .clickForm("One Question Entity Registration")
+            .clickGetSelected()
+            .clickOK(MainMenuPage())
+            .startBlankFormWithError("One Question Entity Registration", true)
+            .assertTextInDialog(R.string.unrecognized_entity_version, "2020.1.0")
+            .clickOKOnDialog(MainMenuPage())
+    }
+
+    @Test
+    fun automaticEntityFormDownload_withUnsupportedSpecVersion_completesSuccessfully_butThrowsAnErrorAfterOpeningIt() {
+        testDependencies.server.addForm("one-question-entity-registration-v2020.1.xml")
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
+            .startBlankFormWithError("One Question Entity Registration", true)
+            .assertTextInDialog(R.string.unrecognized_entity_version, "2020.1.0")
+            .clickOKOnDialog(MainMenuPage())
+    }
+
+    @Test
+    fun syncEntityFormFromDisc_withUnsupportedSpecVersion_completesSuccessfully_butThrowsAnErrorAfterOpeningIt() {
+        rule.startAtFirstLaunch()
+            .clickTryCollect()
+            .copyForm("one-question-entity-registration-v2020.1.xml")
+            .startBlankFormWithError("One Question Entity Registration", true)
+            .assertTextInDialog(R.string.unrecognized_entity_version, "2020.1.0")
+            .clickOKOnDialog(MainMenuPage())
     }
 }

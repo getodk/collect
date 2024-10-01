@@ -37,7 +37,7 @@ public class EntityFormParseProcessor implements XFormParser.BindAttributeProces
         version = value;
 
         if (Stream.of(SUPPORTED_VERSIONS).noneMatch(value::startsWith)) {
-            throw new UnrecognizedEntityVersionException();
+            throw new UnrecognizedEntityVersionException(version);
         }
     }
 
