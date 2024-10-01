@@ -39,13 +39,17 @@ object DrawableMatcher {
             }
 
             override fun matchesSafely(imageView: ImageView): Boolean {
+                if (match == null) {
+                    return false
+                }
+
                 val actual: Bitmap? = when (val drawable = imageView.drawable) {
                     is BitmapDrawable -> drawable.bitmap
-                    is PictureDrawable -> drawable.toBitmap()
+                    is PictureDrawable -> drawable.toBitmap(match.width, match.height)
                     else -> null
                 }
 
-                if (match == null || actual == null) {
+                if (actual == null) {
                     return false
                 } else {
                     val originalThreadPolicy = StrictMode.getThreadPolicy()
