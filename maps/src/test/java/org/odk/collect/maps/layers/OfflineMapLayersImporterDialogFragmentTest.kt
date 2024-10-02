@@ -46,7 +46,11 @@ class OfflineMapLayersImporterDialogFragmentTest {
     val fragmentScenarioLauncherRule = FragmentScenarioLauncherRule(
         FragmentFactoryBuilder()
             .forClass(OfflineMapLayersImporterDialogFragment::class) {
-                OfflineMapLayersImporterDialogFragment(referenceLayerRepository, scheduler, settingsProvider)
+                OfflineMapLayersImporterDialogFragment(
+                    referenceLayerRepository,
+                    scheduler,
+                    settingsProvider
+                )
             }.build()
     )
 
@@ -79,7 +83,10 @@ class OfflineMapLayersImporterDialogFragmentTest {
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
         launchFragment().onFragment {
-            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
+            it.viewModel.loadLayersToImport(
+                listOf(file1.toUri(), file2.toUri()),
+                it.requireContext()
+            )
         }
 
         onView(withId(org.odk.collect.maps.R.id.progress_indicator)).check(matches(isDisplayed()))
@@ -156,14 +163,33 @@ class OfflineMapLayersImporterDialogFragmentTest {
         val file2 = TempFiles.createTempFile("layerA", MbtilesFile.FILE_EXTENSION)
 
         launchFragment().onFragment {
-            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
+            it.viewModel.loadLayersToImport(
+                listOf(file1.toUri(), file2.toUri()),
+                it.requireContext()
+            )
         }
 
         scheduler.flush()
 
-        onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
-        onView(withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(0, org.odk.collect.maps.R.id.layer_name)).check(matches(withText(file2.name)))
-        onView(withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(1, org.odk.collect.maps.R.id.layer_name)).check(matches(withText(file1.name)))
+        onView(withId(org.odk.collect.maps.R.id.layers)).check(
+            matches(
+                RecyclerViewMatcher.withListSize(
+                    2
+                )
+            )
+        )
+        onView(
+            withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(
+                0,
+                org.odk.collect.maps.R.id.layer_name
+            )
+        ).check(matches(withText(file2.name)))
+        onView(
+            withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(
+                1,
+                org.odk.collect.maps.R.id.layer_name
+            )
+        ).check(matches(withText(file1.name)))
     }
 
     @Test
@@ -172,16 +198,35 @@ class OfflineMapLayersImporterDialogFragmentTest {
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
         val scenario = launchFragment().onFragment {
-            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
+            it.viewModel.loadLayersToImport(
+                listOf(file1.toUri(), file2.toUri()),
+                it.requireContext()
+            )
         }
 
         scheduler.flush()
 
         scenario.recreate()
 
-        onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
-        onView(withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(0, org.odk.collect.maps.R.id.layer_name)).check(matches(withText(file1.name)))
-        onView(withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(1, org.odk.collect.maps.R.id.layer_name)).check(matches(withText(file2.name)))
+        onView(withId(org.odk.collect.maps.R.id.layers)).check(
+            matches(
+                RecyclerViewMatcher.withListSize(
+                    2
+                )
+            )
+        )
+        onView(
+            withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(
+                0,
+                org.odk.collect.maps.R.id.layer_name
+            )
+        ).check(matches(withText(file1.name)))
+        onView(
+            withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(
+                1,
+                org.odk.collect.maps.R.id.layer_name
+            )
+        ).check(matches(withText(file2.name)))
     }
 
     @Test
@@ -190,13 +235,27 @@ class OfflineMapLayersImporterDialogFragmentTest {
         val file2 = TempFiles.createTempFile("layer2", ".txt")
 
         launchFragment().onFragment {
-            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
+            it.viewModel.loadLayersToImport(
+                listOf(file1.toUri(), file2.toUri()),
+                it.requireContext()
+            )
         }
 
         scheduler.flush()
 
-        onView(withId(org.odk.collect.maps.R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(1)))
-        onView(withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(0, org.odk.collect.maps.R.id.layer_name)).check(matches(withText(file1.name)))
+        onView(withId(org.odk.collect.maps.R.id.layers)).check(
+            matches(
+                RecyclerViewMatcher.withListSize(
+                    1
+                )
+            )
+        )
+        onView(
+            withRecyclerView(org.odk.collect.maps.R.id.layers).atPositionOnView(
+                0,
+                org.odk.collect.maps.R.id.layer_name
+            )
+        ).check(matches(withText(file1.name)))
     }
 
     @Test
@@ -205,7 +264,10 @@ class OfflineMapLayersImporterDialogFragmentTest {
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
         launchFragment().onFragment {
-            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
+            it.viewModel.loadLayersToImport(
+                listOf(file1.toUri(), file2.toUri()),
+                it.requireContext()
+            )
         }
 
         scheduler.flush()
@@ -216,7 +278,10 @@ class OfflineMapLayersImporterDialogFragmentTest {
         val fileCaptor = argumentCaptor<File>()
         val booleanCaptor = argumentCaptor<Boolean>()
 
-        verify(referenceLayerRepository, times(2)).addLayer(fileCaptor.capture(), booleanCaptor.capture())
+        verify(referenceLayerRepository, times(2)).addLayer(
+            fileCaptor.capture(),
+            booleanCaptor.capture()
+        )
         assertThat(fileCaptor.allValues.any { file -> file.name == file1.name }, equalTo(true))
         assertThat(fileCaptor.allValues.any { file -> file.name == file2.name }, equalTo(true))
         assertThat(booleanCaptor.firstValue, equalTo(true))
@@ -229,7 +294,10 @@ class OfflineMapLayersImporterDialogFragmentTest {
         val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
 
         launchFragment().onFragment {
-            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
+            it.viewModel.loadLayersToImport(
+                listOf(file1.toUri(), file2.toUri()),
+                it.requireContext()
+            )
         }
 
         scheduler.flush()
@@ -241,7 +309,10 @@ class OfflineMapLayersImporterDialogFragmentTest {
         val fileCaptor = argumentCaptor<File>()
         val booleanCaptor = argumentCaptor<Boolean>()
 
-        verify(referenceLayerRepository, times(2)).addLayer(fileCaptor.capture(), booleanCaptor.capture())
+        verify(referenceLayerRepository, times(2)).addLayer(
+            fileCaptor.capture(),
+            booleanCaptor.capture()
+        )
         assertThat(fileCaptor.allValues.any { file -> file.name == file1.name }, equalTo(true))
         assertThat(fileCaptor.allValues.any { file -> file.name == file2.name }, equalTo(true))
         assertThat(booleanCaptor.firstValue, equalTo(false))
@@ -254,13 +325,25 @@ class OfflineMapLayersImporterDialogFragmentTest {
         val file2 = TempFiles.createTempFile("layerB", MbtilesFile.FILE_EXTENSION)
 
         launchFragment().onFragment {
-            it.viewModel.loadLayersToImport(listOf(file1.toUri(), file2.toUri()), it.requireContext())
+            it.viewModel.loadLayersToImport(
+                listOf(file1.toUri(), file2.toUri()),
+                it.requireContext()
+            )
 
             scheduler.flush()
 
             val context = ApplicationProvider.getApplicationContext<Application>()
-            onView(withText(context.getLocalizedQuantityString(R.plurals.non_mbtiles_files_selected_title, 1, 1))).inRoot(isDialog()).check(matches(isDisplayed()))
-            onView(withText(R.string.some_non_mbtiles_files_selected_message)).inRoot(isDialog()).check(matches(isDisplayed()))
+            onView(
+                withText(
+                    context.getLocalizedQuantityString(
+                        R.plurals.non_mbtiles_files_selected_title,
+                        1,
+                        1
+                    )
+                )
+            ).inRoot(isDialog()).check(matches(isDisplayed()))
+            onView(withText(R.string.some_non_mbtiles_files_selected_message)).inRoot(isDialog())
+                .check(matches(isDisplayed()))
             onView(withText(R.string.ok)).inRoot(isDialog()).check(matches(isDisplayed()))
 
             assertThat(it.isVisible, equalTo(true))
@@ -277,8 +360,17 @@ class OfflineMapLayersImporterDialogFragmentTest {
             scheduler.flush()
 
             val context = ApplicationProvider.getApplicationContext<Application>()
-            onView(withText(context.getLocalizedQuantityString(R.plurals.non_mbtiles_files_selected_title, 1, 1))).inRoot(isDialog()).check(matches(isDisplayed()))
-            onView(withText(R.string.all_non_mbtiles_files_selected_message)).inRoot(isDialog()).check(matches(isDisplayed()))
+            onView(
+                withText(
+                    context.getLocalizedQuantityString(
+                        R.plurals.non_mbtiles_files_selected_title,
+                        1,
+                        1
+                    )
+                )
+            ).inRoot(isDialog()).check(matches(isDisplayed()))
+            onView(withText(R.string.all_non_mbtiles_files_selected_message)).inRoot(isDialog())
+                .check(matches(isDisplayed()))
             onView(withText(R.string.ok)).inRoot(isDialog()).check(matches(isDisplayed()))
 
             assertThat(it.isVisible, equalTo(false))
@@ -300,7 +392,15 @@ class OfflineMapLayersImporterDialogFragmentTest {
                 context
             )
             scheduler.flush()
-            onView(withText(context.getLocalizedQuantityString(R.plurals.non_mbtiles_files_selected_title, 3, 3))).inRoot(isDialog()).check(matches(isDisplayed()))
+            onView(
+                withText(
+                    context.getLocalizedQuantityString(
+                        R.plurals.non_mbtiles_files_selected_title,
+                        3,
+                        3
+                    )
+                )
+            ).inRoot(isDialog()).check(matches(isDisplayed()))
         }
 
         launchFragment().onFragment {
@@ -314,7 +414,15 @@ class OfflineMapLayersImporterDialogFragmentTest {
                 context
             )
             scheduler.flush()
-            onView(withText(context.getLocalizedQuantityString(R.plurals.non_mbtiles_files_selected_title, 2, 2))).inRoot(isDialog()).check(matches(isDisplayed()))
+            onView(
+                withText(
+                    context.getLocalizedQuantityString(
+                        R.plurals.non_mbtiles_files_selected_title,
+                        2,
+                        2
+                    )
+                )
+            ).inRoot(isDialog()).check(matches(isDisplayed()))
         }
 
         launchFragment().onFragment {
@@ -328,7 +436,15 @@ class OfflineMapLayersImporterDialogFragmentTest {
                 context
             )
             scheduler.flush()
-            onView(withText(context.getLocalizedQuantityString(R.plurals.non_mbtiles_files_selected_title, 1, 1))).inRoot(isDialog()).check(matches(isDisplayed()))
+            onView(
+                withText(
+                    context.getLocalizedQuantityString(
+                        R.plurals.non_mbtiles_files_selected_title,
+                        1,
+                        1
+                    )
+                )
+            ).inRoot(isDialog()).check(matches(isDisplayed()))
         }
     }
 
