@@ -806,7 +806,12 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
     }
 
     private fun expandLayer(position: Int) {
-        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.arrow)).perform(click())
+        onView(
+            withRecyclerView(R.id.layers).atPositionOnView(
+                position,
+                R.id.arrow
+            )
+        ).perform(click())
         WaitFor.waitFor {
             assertLayerExpanded(position)
         }
@@ -845,7 +850,9 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
     }
 
     private fun launchFragment(): FragmentScenario<OfflineMapLayersPickerBottomSheetDialogFragment> {
-        return fragmentScenarioLauncherRule.launchInContainer(OfflineMapLayersPickerBottomSheetDialogFragment::class.java)
+        return fragmentScenarioLauncherRule.launchInContainer(
+            OfflineMapLayersPickerBottomSheetDialogFragment::class.java
+        )
     }
 
     private class TestRegistry : ActivityResultRegistry() {
@@ -857,7 +864,10 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
             input: I,
             options: ActivityOptionsCompat?
         ) {
-            assertThat(contract, instanceOf(ActivityResultContracts.GetMultipleContents()::class.java))
+            assertThat(
+                contract,
+                instanceOf(ActivityResultContracts.GetMultipleContents()::class.java)
+            )
             assertThat(input, equalTo("*/*"))
             dispatchResult(requestCode, uris)
         }
