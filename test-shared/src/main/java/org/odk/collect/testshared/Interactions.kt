@@ -4,10 +4,12 @@ import android.view.View
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Root
+import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import org.hamcrest.Matcher
+import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.WaitFor.tryAgainOnFail
 
 object Interactions {
@@ -56,5 +58,15 @@ object Interactions {
     fun replaceText(view: Matcher<View>, text: String) {
         onView(view).perform(ViewActions.replaceText(text))
         closeSoftKeyboard()
+    }
+
+    fun onListItem(listId: Int, position: Int, childViewId: Int): ViewInteraction {
+        return onView(
+            withRecyclerView(listId)
+                .atPositionOnView(
+                    position,
+                    childViewId
+                )
+        )
     }
 }

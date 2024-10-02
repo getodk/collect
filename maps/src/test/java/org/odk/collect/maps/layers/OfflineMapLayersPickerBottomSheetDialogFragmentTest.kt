@@ -45,8 +45,8 @@ import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.Interactions
+import org.odk.collect.testshared.Interactions.onListItem
 import org.odk.collect.testshared.RecyclerViewMatcher
-import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.WaitFor
 import org.odk.collect.webpage.ExternalWebPageHelper
 
@@ -175,16 +175,11 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         scheduler.flush()
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
-            matches(
-                isChecked()
-            )
-        )
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
-            matches(
-                not(isChecked())
-            )
-        )
+        onListItem(R.id.layers, 0, R.id.radio_button)
+            .check(matches(isChecked()))
+
+        onListItem(R.id.layers, 1, R.id.radio_button)
+            .check(matches(not(isChecked())))
     }
 
     @Test
@@ -202,21 +197,14 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         scheduler.flush()
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
-            matches(
-                not(isChecked())
-            )
-        )
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
-            matches(
-                not(isChecked())
-            )
-        )
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.radio_button)).check(
-            matches(
-                isChecked()
-            )
-        )
+        onListItem(R.id.layers, 0, R.id.radio_button)
+            .check(matches(not(isChecked())))
+
+        onListItem(R.id.layers, 1, R.id.radio_button)
+            .check(matches(not(isChecked())))
+
+        onListItem(R.id.layers, 2, R.id.radio_button)
+            .check(matches(isChecked()))
     }
 
     @Test
@@ -232,17 +220,12 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                0,
-                R.id.title
-            )
-        ).check(matches(withText(string.none)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
-            matches(
-                isChecked()
-            )
-        )
+
+        onListItem(R.id.layers, 0, R.id.title)
+            .check(matches(withText(string.none)))
+
+        onListItem(R.id.layers, 0, R.id.radio_button)
+            .check(matches(isChecked()))
     }
 
     @Test
@@ -286,12 +269,9 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(1)))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                0,
-                R.id.title
-            )
-        ).check(matches(withText(string.none)))
+
+        onListItem(R.id.layers, 0, R.id.title)
+            .check(matches(withText(string.none)))
     }
 
     @Test
@@ -308,24 +288,15 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                0,
-                R.id.title
-            )
-        ).check(matches(withText(string.none)))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                1,
-                R.id.title
-            )
-        ).check(matches(withText("layerA")))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                2,
-                R.id.title
-            )
-        ).check(matches(withText("layerB")))
+
+        onListItem(R.id.layers, 0, R.id.title)
+            .check(matches(withText(string.none)))
+
+        onListItem(R.id.layers, 1, R.id.title)
+            .check(matches(withText("layerA")))
+
+        onListItem(R.id.layers, 2, R.id.title)
+            .check(matches(withText("layerB")))
     }
 
     @Test
@@ -340,30 +311,20 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         Interactions.clickOn(withText("layer1"))
         WaitFor.waitFor {
-            onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
-                matches(
-                    not(isChecked())
-                )
-            )
-            onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
-                matches(
-                    isChecked()
-                )
-            )
+            onListItem(R.id.layers, 0, R.id.radio_button)
+                .check(matches(not(isChecked())))
+
+            onListItem(R.id.layers, 1, R.id.radio_button)
+                .check(matches(isChecked()))
         }
 
         Interactions.clickOn(withText(string.none))
         WaitFor.waitFor {
-            onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
-                matches(
-                    isChecked()
-                )
-            )
-            onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
-                matches(
-                    not(isChecked())
-                )
-            )
+            onListItem(R.id.layers, 0, R.id.radio_button)
+                .check(matches(isChecked()))
+
+            onListItem(R.id.layers, 1, R.id.radio_button)
+                .check(matches(not(isChecked())))
         }
     }
 
@@ -380,16 +341,11 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         Interactions.clickOn(withText("layer1"))
         scenario.recreate()
         scheduler.flush()
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
-            matches(
-                not(isChecked())
-            )
-        )
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.radio_button)).check(
-            matches(
-                isChecked()
-            )
-        )
+        onListItem(R.id.layers, 0, R.id.radio_button)
+            .check(matches(not(isChecked())))
+
+        onListItem(R.id.layers, 1, R.id.radio_button)
+            .check(matches(isChecked()))
     }
 
     @Test
@@ -468,24 +424,15 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                0,
-                R.id.title
-            )
-        ).check(matches(withText(string.none)))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                1,
-                R.id.title
-            )
-        ).check(matches(withText(file1.name)))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                2,
-                R.id.title
-            )
-        ).check(matches(withText(file2.name)))
+
+        onListItem(R.id.layers, 0, R.id.title)
+            .check(matches(withText(string.none)))
+
+        onListItem(R.id.layers, 1, R.id.title)
+            .check(matches(withText(file1.name)))
+
+        onListItem(R.id.layers, 2, R.id.title)
+            .check(matches(withText(file2.name)))
     }
 
     @Test
@@ -550,20 +497,11 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(2))
         expandLayer(2)
 
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.path)).check(
-            matches(
-                withText(
-                    file1.absolutePath
-                )
-            )
-        )
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.path)).check(
-            matches(
-                withText(
-                    file2.absolutePath
-                )
-            )
-        )
+        onListItem(R.id.layers, 1, R.id.path)
+            .check(matches(withText(file1.absolutePath)))
+
+        onListItem(R.id.layers, 2, R.id.path)
+            .check(matches(withText(file2.absolutePath)))
     }
 
     @Test
@@ -579,10 +517,8 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         expandLayer(1)
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
-            scrollTo(),
-            click()
-        )
+        onListItem(R.id.layers, 1, R.id.delete_layer)
+            .perform(scrollTo(), click())
 
         onView(withText(string.cancel)).inRoot(isDialog()).check(matches(isDisplayed()))
         onView(withText(string.delete_layer)).inRoot(isDialog()).check(matches(isDisplayed()))
@@ -602,27 +538,17 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         expandLayer(1)
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
-            scrollTo(),
-            click()
-        )
+        onListItem(R.id.layers, 1, R.id.delete_layer)
+            .perform(scrollTo(), click())
 
         onView(withText(string.cancel)).inRoot(isDialog()).perform(click())
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(0))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                0,
-                R.id.title
-            )
-        ).check(matches(withText(string.none)))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                1,
-                R.id.title
-            )
-        ).check(matches(withText("layer1")))
+        onListItem(R.id.layers, 0, R.id.title)
+            .check(matches(withText(string.none)))
+        onListItem(R.id.layers, 1, R.id.title)
+            .check(matches(withText("layer1")))
         verify(referenceLayerRepository, never()).delete("1")
     }
 
@@ -642,27 +568,17 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         expandLayer(1)
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
-            scrollTo(),
-            click()
-        )
+        onListItem(R.id.layers, 1, R.id.delete_layer)
+            .perform(scrollTo(), click())
 
         onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                0,
-                R.id.title
-            )
-        ).check(matches(withText(string.none)))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                1,
-                R.id.title
-            )
-        ).check(matches(withText("layer2")))
+        onListItem(R.id.layers, 0, R.id.title)
+            .check(matches(withText(string.none)))
+        onListItem(R.id.layers, 1, R.id.title)
+            .check(matches(withText("layer2")))
         verify(referenceLayerRepository).delete("1")
         verify(referenceLayerRepository, never()).delete("2")
     }
@@ -682,25 +598,16 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         expandLayer(1)
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
-            scrollTo(),
-            click()
-        )
+        onListItem(R.id.layers, 1, R.id.delete_layer)
+            .perform(scrollTo(), click())
 
         onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
         scheduler.flush()
 
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                0,
-                R.id.title
-            )
-        ).check(matches(withText(string.none)))
-        onView(withRecyclerView(R.id.layers).atPositionOnView(0, R.id.radio_button)).check(
-            matches(
-                isChecked()
-            )
-        )
+        onListItem(R.id.layers, 0, R.id.title)
+            .check(matches(withText(string.none)))
+        onListItem(R.id.layers, 0, R.id.radio_button)
+            .check(matches(isChecked()))
         assertThat(
             settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER),
             equalTo(null)
@@ -723,33 +630,19 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(2))
         expandLayer(2)
-        onView(withRecyclerView(R.id.layers).atPositionOnView(2, R.id.delete_layer)).perform(
-            scrollTo(),
-            click()
-        )
+        onListItem(R.id.layers, 2, R.id.delete_layer)
+            .perform(scrollTo(), click())
 
         onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                0,
-                R.id.title
-            )
-        ).check(matches(withText(string.none)))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                1,
-                R.id.title
-            )
-        ).check(matches(withText("layerA")))
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                2,
-                R.id.title
-            )
-        ).check(matches(withText("layerC")))
+        onListItem(R.id.layers, 0, R.id.title)
+            .check(matches(withText(string.none)))
+        onListItem(R.id.layers, 1, R.id.title)
+            .check(matches(withText("layerA")))
+        onListItem(R.id.layers, 2, R.id.title)
+            .check(matches(withText("layerC")))
     }
 
     @Test
@@ -766,10 +659,8 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         expandLayer(1)
-        onView(withRecyclerView(R.id.layers).atPositionOnView(1, R.id.delete_layer)).perform(
-            scrollTo(),
-            click()
-        )
+        onListItem(R.id.layers, 1, R.id.delete_layer)
+            .perform(scrollTo(), click())
         onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
 
         onView(withId(R.id.progress_indicator)).check(matches(isDisplayed()))
@@ -806,47 +697,55 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
     }
 
     private fun expandLayer(position: Int) {
-        onView(
-            withRecyclerView(R.id.layers).atPositionOnView(
-                position,
-                R.id.arrow
-            )
-        ).perform(click())
+        onListItem(R.id.layers, position, R.id.arrow)
+            .perform(click())
         WaitFor.waitFor {
             assertLayerExpanded(position)
         }
     }
 
     private fun assertLayerCollapsed(position: Int) {
-        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.arrow)).check(
-            matches(
-                withImageDrawable(org.odk.collect.icons.R.drawable.ic_baseline_expand_24)
+        onListItem(R.id.layers, position, R.id.arrow)
+            .check(
+                matches(
+                    withImageDrawable(org.odk.collect.icons.R.drawable.ic_baseline_expand_24)
+                )
             )
-        )
-        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.path)).check(
-            matches(
-                withEffectiveVisibility(ViewMatchers.Visibility.GONE)
+        onListItem(R.id.layers, position, R.id.path)
+            .check(
+                matches(
+                    withEffectiveVisibility(ViewMatchers.Visibility.GONE)
+                )
             )
-        )
-        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.delete_layer)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE))
-        )
+        onListItem(R.id.layers, position, R.id.delete_layer)
+            .check(
+                matches(
+                    withEffectiveVisibility(ViewMatchers.Visibility.GONE)
+                )
+            )
     }
 
     private fun assertLayerExpanded(position: Int) {
-        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.arrow)).check(
-            matches(
-                withImageDrawable(org.odk.collect.icons.R.drawable.ic_baseline_collapse_24)
+        onListItem(R.id.layers, position, R.id.arrow)
+            .check(
+                matches(
+                    withImageDrawable(org.odk.collect.icons.R.drawable.ic_baseline_collapse_24)
+                )
             )
-        )
-        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.path)).check(
-            matches(
-                withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
+
+        onListItem(R.id.layers, position, R.id.path)
+            .check(
+                matches(
+                    withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
+                )
             )
-        )
-        onView(withRecyclerView(R.id.layers).atPositionOnView(position, R.id.delete_layer)).check(
-            matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))
-        )
+
+        onListItem(R.id.layers, position, R.id.delete_layer)
+            .check(
+                matches(
+                    withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
+                )
+            )
     }
 
     private fun launchFragment(): FragmentScenario<OfflineMapLayersPickerBottomSheetDialogFragment> {
