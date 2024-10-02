@@ -5,9 +5,10 @@ import java.io.File
 
 object TempFiles {
     @JvmStatic
-    fun createTempFileWithName(name: String): File {
+    @JvmOverloads
+    fun createTempFileWithName(name: String, extension: String = ""): File {
         val tmpDir = getTempDir()
-        return File(tmpDir, name).also {
+        return File(tmpDir, name + extension).also {
             it.createNewFile()
             it.deleteOnExit()
         }

@@ -16,13 +16,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.containsInAnyOrder
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.times
-import org.mockito.kotlin.verify
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.InMemSettingsProvider
@@ -34,12 +31,11 @@ import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.RobolectricHelpers
-import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class OfflineMapLayersImporterDialogFragmentTest {
     private val scheduler = FakeScheduler()
-    private val referenceLayerRepository = mock<ReferenceLayerRepository>()
+    private val referenceLayerRepository = InMemReferenceLayerRepository()
     private val settingsProvider = InMemSettingsProvider()
 
     @get:Rule
@@ -275,17 +271,10 @@ class OfflineMapLayersImporterDialogFragmentTest {
         Interactions.clickOn(withId(org.odk.collect.maps.R.id.add_layer_button))
         scheduler.flush()
 
-        val fileCaptor = argumentCaptor<File>()
-        val booleanCaptor = argumentCaptor<Boolean>()
-
-        verify(referenceLayerRepository, times(2)).addLayer(
-            fileCaptor.capture(),
-            booleanCaptor.capture()
-        )
-        assertThat(fileCaptor.allValues.any { file -> file.name == file1.name }, equalTo(true))
-        assertThat(fileCaptor.allValues.any { file -> file.name == file2.name }, equalTo(true))
-        assertThat(booleanCaptor.firstValue, equalTo(true))
-        assertThat(booleanCaptor.secondValue, equalTo(true))
+        assertThat(referenceLayerRepository.projectLayers.size, equalTo(0))
+        assertThat(referenceLayerRepository.sharedLayers.size, equalTo(2))
+        val filesInSharedLayersDir = referenceLayerRepository.sharedLayers.map { it.file.name }
+        assertThat(filesInSharedLayersDir, containsInAnyOrder(file1.name, file2.name))
     }
 
     @Test
@@ -306,17 +295,10 @@ class OfflineMapLayersImporterDialogFragmentTest {
         Interactions.clickOn(withId(org.odk.collect.maps.R.id.add_layer_button))
         scheduler.flush()
 
-        val fileCaptor = argumentCaptor<File>()
-        val booleanCaptor = argumentCaptor<Boolean>()
-
-        verify(referenceLayerRepository, times(2)).addLayer(
-            fileCaptor.capture(),
-            booleanCaptor.capture()
-        )
-        assertThat(fileCaptor.allValues.any { file -> file.name == file1.name }, equalTo(true))
-        assertThat(fileCaptor.allValues.any { file -> file.name == file2.name }, equalTo(true))
-        assertThat(booleanCaptor.firstValue, equalTo(false))
-        assertThat(booleanCaptor.secondValue, equalTo(false))
+        assertThat(referenceLayerRepository.sharedLayers.size, equalTo(0))
+        assertThat(referenceLayerRepository.projectLayers.size, equalTo(2))
+        val filesInProjectLayersDir = referenceLayerRepository.projectLayers.map { it.file.name }
+        assertThat(filesInProjectLayersDir, containsInAnyOrder(file1.name, file2.name))
     }
 
     @Test

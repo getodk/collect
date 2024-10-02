@@ -32,9 +32,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidtest.DrawableMatcher.withImageDrawable
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
@@ -52,7 +50,7 @@ import org.odk.collect.webpage.ExternalWebPageHelper
 
 @RunWith(AndroidJUnit4::class)
 class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
-    private val referenceLayerRepository = mock<ReferenceLayerRepository>()
+    private val referenceLayerRepository = InMemReferenceLayerRepository()
     private val scheduler = FakeScheduler()
     private val settingsProvider = InMemSettingsProvider()
     private val externalWebPageHelper = mock<ExternalWebPageHelper>()
@@ -86,8 +84,8 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `clicking the 'cancel' button does not save the layer`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION), true
         )
 
         launchFragment()
@@ -132,8 +130,8 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `clicking the 'save' button saves null when 'None' option is checked`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION), true
         )
 
         launchFragment()
@@ -149,26 +147,25 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `clicking the 'save' button saves the layer id if any is checked`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
-        )
+        val file = TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION)
+        referenceLayerRepository.addLayer(file, true)
 
         launchFragment()
 
         scheduler.flush()
 
-        Interactions.clickOn(withText("layer1"))
+        Interactions.clickOn(withText("layer1${MbtilesFile.FILE_EXTENSION}"))
         Interactions.clickOn(withText(string.save))
         assertThat(
             settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER),
-            equalTo("1")
+            equalTo(file.absolutePath)
         )
     }
 
     @Test
     fun `when no layer id is saved in settings the 'None' option should be checked`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION), true
         )
 
         launchFragment()
@@ -184,14 +181,12 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `when layer id is saved in settings the layer it belongs to should be checked`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(
-                ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
-                ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
-            )
-        )
+        val file1 = TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION)
+        val file2 = TempFiles.createTempFileWithName("layer2", MbtilesFile.FILE_EXTENSION)
+        referenceLayerRepository.addLayer(file1, true)
+        referenceLayerRepository.addLayer(file2, true)
 
-        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, "2")
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, file2.absolutePath)
 
         launchFragment()
 
@@ -209,8 +204,8 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `when layer id is saved in settings but the layer it belongs to does not exist the 'None' option should be checked`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION), true
         )
 
         settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, "2")
@@ -276,11 +271,11 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `if there are multiple layers all of them are displayed along with the 'None' and sorted in A-Z order`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(
-                ReferenceLayer("1", TempFiles.createTempFile(), "layerB"),
-                ReferenceLayer("2", TempFiles.createTempFile(), "layerA")
-            )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layerB", MbtilesFile.FILE_EXTENSION), true
+        )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layerA", MbtilesFile.FILE_EXTENSION), true
         )
 
         launchFragment()
@@ -293,23 +288,23 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
             .check(matches(withText(string.none)))
 
         onListItem(R.id.layers, 1, R.id.title)
-            .check(matches(withText("layerA")))
+            .check(matches(withText("layerA${MbtilesFile.FILE_EXTENSION}")))
 
         onListItem(R.id.layers, 2, R.id.title)
-            .check(matches(withText("layerB")))
+            .check(matches(withText("layerB${MbtilesFile.FILE_EXTENSION}")))
     }
 
     @Test
     fun `checking layers sets selection correctly`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION), true
         )
 
         launchFragment()
 
         scheduler.flush()
 
-        Interactions.clickOn(withText("layer1"))
+        Interactions.clickOn(withText("layer1${MbtilesFile.FILE_EXTENSION}"))
         WaitFor.waitFor {
             onListItem(R.id.layers, 0, R.id.radio_button)
                 .check(matches(not(isChecked())))
@@ -330,15 +325,15 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `recreating maintains selection`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(ReferenceLayer("1", TempFiles.createTempFile(), "layer1"))
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION), true
         )
 
         val scenario = launchFragment()
 
         scheduler.flush()
 
-        Interactions.clickOn(withText("layer1"))
+        Interactions.clickOn(withText("layer1${MbtilesFile.FILE_EXTENSION}"))
         scenario.recreate()
         scheduler.flush()
         onListItem(R.id.layers, 0, R.id.radio_button)
@@ -379,8 +374,8 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `progress indicator is displayed during loading layers after receiving new ones`() {
-        val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
-        val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
+        val file1 = TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION)
+        val file2 = TempFiles.createTempFileWithName("layer2", MbtilesFile.FILE_EXTENSION)
 
         launchFragment()
 
@@ -403,27 +398,23 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `when new layers added the list should be updated`() {
-        val file1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
-        val file2 = TempFiles.createTempFile("layer2", MbtilesFile.FILE_EXTENSION)
+        val file1 = TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION)
+        val file2 = TempFiles.createTempFileWithName("layer2", MbtilesFile.FILE_EXTENSION)
 
         launchFragment()
-
         scheduler.flush()
+        onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(1)))
 
         testRegistry.addUris(file1.toUri(), file2.toUri())
 
         Interactions.clickOn(withText(string.add_layer))
         scheduler.flush()
         onView(withId(R.id.add_layer_button)).inRoot(isDialog()).perform(scrollTo(), click())
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(
-                ReferenceLayer("1", TempFiles.createTempFile(), file1.name),
-                ReferenceLayer("2", TempFiles.createTempFile(), file2.name)
-            )
-        )
         scheduler.flush()
 
-        onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
+        WaitFor.waitFor {
+            onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
+        }
 
         onListItem(R.id.layers, 0, R.id.title)
             .check(matches(withText(string.none)))
@@ -437,11 +428,11 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `layers are collapsed by default`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(
-                ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
-                ReferenceLayer("2", TempFiles.createTempFile(), "layer2")
-            )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION), true
+        )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer2", MbtilesFile.FILE_EXTENSION), true
         )
 
         launchFragment()
@@ -454,12 +445,14 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `recreating maintains expanded layers`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(
-                ReferenceLayer("1", TempFiles.createTempFile(), "layer1"),
-                ReferenceLayer("2", TempFiles.createTempFile(), "layer2"),
-                ReferenceLayer("3", TempFiles.createTempFile(), "layer3")
-            )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION), true
+        )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer2", MbtilesFile.FILE_EXTENSION), true
+        )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer3", MbtilesFile.FILE_EXTENSION), true
         )
 
         val scenario = launchFragment()
@@ -480,14 +473,10 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `correct path is displayed after expanding layers`() {
-        val file1 = TempFiles.createTempFile()
-        val file2 = TempFiles.createTempFile()
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(
-                ReferenceLayer("1", file1, "layer1"),
-                ReferenceLayer("2", file2, "layer2")
-            )
-        )
+        val file1 = TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION)
+        val file2 = TempFiles.createTempFileWithName("layer2", MbtilesFile.FILE_EXTENSION)
+        referenceLayerRepository.addLayer(file1, true)
+        referenceLayerRepository.addLayer(file2, true)
 
         launchFragment()
 
@@ -506,10 +495,8 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `clicking delete shows the confirmation dialog`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(
-                ReferenceLayer("1", TempFiles.createTempFile(), "layer1")
-            )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION), true
         )
 
         launchFragment()
@@ -526,11 +513,8 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `clicking delete and canceling does not remove the layer`() {
-        val layerFile1 = TempFiles.createTempFile()
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(
-                ReferenceLayer("1", layerFile1, "layer1")
-            )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION), true
         )
 
         launchFragment()
@@ -548,19 +532,17 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         onListItem(R.id.layers, 0, R.id.title)
             .check(matches(withText(string.none)))
         onListItem(R.id.layers, 1, R.id.title)
-            .check(matches(withText("layer1")))
-        verify(referenceLayerRepository, never()).delete("1")
+            .check(matches(withText("layer1${MbtilesFile.FILE_EXTENSION}")))
+        assertThat(referenceLayerRepository.getAll().size, equalTo(1))
     }
 
     @Test
     fun `clicking delete and confirming removes the layer`() {
-        val layerFile1 = TempFiles.createTempFile()
-        val layerFile2 = TempFiles.createTempFile()
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(
-                ReferenceLayer("1", layerFile1, "layer1"),
-                ReferenceLayer("2", layerFile2, "layer2")
-            )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION), true
+        )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer2", MbtilesFile.FILE_EXTENSION), true
         )
 
         launchFragment()
@@ -578,20 +560,16 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         onListItem(R.id.layers, 0, R.id.title)
             .check(matches(withText(string.none)))
         onListItem(R.id.layers, 1, R.id.title)
-            .check(matches(withText("layer2")))
-        verify(referenceLayerRepository).delete("1")
-        verify(referenceLayerRepository, never()).delete("2")
+            .check(matches(withText("layer2${MbtilesFile.FILE_EXTENSION}")))
+
+        assertThat(referenceLayerRepository.getAll().size, equalTo(1))
     }
 
     @Test
     fun `deleting the selected layer changes selection to 'none' and saves it`() {
-        val layerFile1 = TempFiles.createTempFile()
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(
-                ReferenceLayer("1", layerFile1, "layer1")
-            )
-        )
-        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, "1")
+        val file = TempFiles.createTempFileWithName("layer1.${MbtilesFile.FILE_EXTENSION}", MbtilesFile.FILE_EXTENSION)
+        referenceLayerRepository.addLayer(file, true)
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_REFERENCE_LAYER, file.absolutePath)
 
         launchFragment()
 
@@ -616,12 +594,14 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
     @Test
     fun `deleting one of the layers keeps the list sorted in A-Z order`() {
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(
-                ReferenceLayer("1", TempFiles.createTempFile(), "layerC"),
-                ReferenceLayer("2", TempFiles.createTempFile(), "layerB"),
-                ReferenceLayer("3", TempFiles.createTempFile(), "layerA")
-            )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layerC", MbtilesFile.FILE_EXTENSION), true
+        )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layerB", MbtilesFile.FILE_EXTENSION), true
+        )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layerA", MbtilesFile.FILE_EXTENSION), true
         )
 
         launchFragment()
@@ -640,18 +620,15 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         onListItem(R.id.layers, 0, R.id.title)
             .check(matches(withText(string.none)))
         onListItem(R.id.layers, 1, R.id.title)
-            .check(matches(withText("layerA")))
+            .check(matches(withText("layerA${MbtilesFile.FILE_EXTENSION}")))
         onListItem(R.id.layers, 2, R.id.title)
-            .check(matches(withText("layerC")))
+            .check(matches(withText("layerC${MbtilesFile.FILE_EXTENSION}")))
     }
 
     @Test
     fun `progress indicator is displayed during deleting layers`() {
-        val layerFile1 = TempFiles.createTempFile("layer1", MbtilesFile.FILE_EXTENSION)
-        whenever(referenceLayerRepository.getAll()).thenReturn(
-            listOf(
-                ReferenceLayer("1", layerFile1, "layer1"),
-            )
+        referenceLayerRepository.addLayer(
+            TempFiles.createTempFileWithName("layer1", MbtilesFile.FILE_EXTENSION), true
         )
 
         launchFragment()
