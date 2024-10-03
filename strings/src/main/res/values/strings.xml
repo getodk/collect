@@ -1161,6 +1161,8 @@
     -->
     <string name="show_details">Show details</string>
     <string name="errors">Errors</string>
+    <!-- Error shown when a user tries to open a form when forms update is being applied in the background  -->
+    <string name="cannot_open_form_because_of_forms_update">The form cannot be opened because forms update is being applied in the background. This process may take a few minutes. Please try again later.</string>
 
     <!--
     ##############################################
