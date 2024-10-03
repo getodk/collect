@@ -13,6 +13,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormFillingActivity
@@ -326,10 +329,15 @@ private class FormUriViewModel(
 
     private fun assertFormsUpdateNotInProgress(): String? {
         val projectId = projectsDataService.getCurrentProject().uuid
-        val isFormsDbLocked = changeLockProvider.create(projectId).formsLock.isLocked()
-        return if (isFormsDbLocked) {
+        val formsLock = changeLockProvider.create(projectId).formsLock
+        return if (formsLock.isLocked()) {
             resources.getString(string.cannot_open_form_because_of_forms_update)
         } else {
+            runBlocking {
+                launch(Dispatchers.Main) {
+                    formsLock.lock()
+                }
+            }
             null
         }
     }
