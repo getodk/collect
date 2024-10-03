@@ -182,4 +182,24 @@ class MatchExactlyTest {
 
         assertThat(testDependencies.scheduler.getDeferredTasks(), `is`(empty()))
     }
+
+    @Test
+    fun whenMatchExactlyEnabled_doesNotGetLatestFormsFromServerDuringFormFilling() {
+        testDependencies.server.addForm(
+            "One Question Updated",
+            "one_question",
+            "2",
+            "one-question-updated.xml"
+        )
+
+        rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .setServer(testDependencies.server.url)
+            .enableMatchExactly()
+            .startBlankForm("One Question")
+            .also { testDependencies.scheduler.runDeferredTasks() }
+            .pressBackAndDiscardForm()
+            .clickFillBlankForm()
+            .assertFormDoesNotExist("One Question Updated")
+    }
 }

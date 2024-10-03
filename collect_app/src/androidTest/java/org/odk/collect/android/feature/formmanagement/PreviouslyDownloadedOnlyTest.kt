@@ -156,4 +156,22 @@ class PreviouslyDownloadedOnlyTest {
 
         assertThat(testDependencies.scheduler.getDeferredTasks(), equalTo(emptyList()))
     }
+
+    @Test
+    fun whenPreviouslyDownloadedOnlyEnabledWithAutomaticDownload_doesNotGetLatestFormsFromServerDuringFormFilling() {
+        testDependencies.server.addForm(
+            "One Question Updated",
+            "one_question",
+            "2",
+            "one-question-updated.xml"
+        )
+
+        rule.withProject(testDependencies.server, "one-question.xml")
+            .enablePreviouslyDownloadedOnlyUpdatesWithAutomaticDownload()
+            .startBlankForm("One Question")
+            .also { testDependencies.scheduler.runDeferredTasks() }
+            .pressBackAndDiscardForm()
+            .clickFillBlankForm()
+            .assertFormDoesNotExist("One Question Updated")
+    }
 }
