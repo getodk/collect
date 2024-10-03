@@ -42,6 +42,7 @@ import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
+import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
@@ -62,6 +63,7 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.strings.UUIDGenerator
+import org.odk.collect.testshared.BooleanChangeLock
 import org.odk.collect.testshared.FakeScheduler
 import java.io.File
 import java.text.SimpleDateFormat
@@ -79,11 +81,12 @@ class FormUriActivityTest {
     private val settingsProvider = InMemSettingsProvider().apply {
         getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
     }
-
     private val savepointsRepository = InMemSavepointsRepository()
     private val savepointsRepositoryProvider = mock<SavepointsRepositoryProvider>().apply {
         whenever(create()).thenReturn(savepointsRepository)
     }
+    private val changeLock = BooleanChangeLock()
+    private val changeLockProvider = ChangeLockProvider { changeLock }
 
     @get:Rule
     val activityRule = RecordedIntentsRule()
@@ -137,6 +140,10 @@ class FormUriActivityTest {
 
             override fun providesSavepointsRepositoryProvider(context: Context?, storagePathProvider: StoragePathProvider?): SavepointsRepositoryProvider {
                 return savepointsRepositoryProvider
+            }
+
+            override fun providesChangeLockProvider(): ChangeLockProvider {
+                return changeLockProvider
             }
         })
     }
@@ -1029,6 +1036,59 @@ class FormUriActivityTest {
         assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true))
         assertThat(instanceDirFile.exists(), equalTo(true))
         assertThat(instanceFile.exists(), equalTo(true))
+    }
+
+    @Test
+    fun `When attempting to start a new form and the forms database is locked then display alert dialog`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
+
+        changeLock.lock()
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
+        fakeScheduler.flush()
+
+        assertErrorDialogAndClickCancelButton(
+            scenario,
+            context.getString(org.odk.collect.strings.R.string.cannot_open_form_because_of_forms_update)
+        )
+    }
+
+    @Test
+    fun `When attempting to edit a form and the forms database is locked then display alert dialog`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
+
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .build()
+        )
+
+        changeLock.lock()
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        fakeScheduler.flush()
+
+        assertErrorDialogAndClickCancelButton(
+            scenario,
+            context.getString(org.odk.collect.strings.R.string.cannot_open_form_because_of_forms_update)
+        )
     }
 
     private fun getBlankFormIntent(projectId: String?, dbId: Long) =
