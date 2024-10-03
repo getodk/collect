@@ -23,6 +23,7 @@ import org.odk.collect.android.instancemanagement.canBeEdited
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.savepoints.SavepointUseCases
 import org.odk.collect.android.utilities.ApplicationConstants
+import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -65,6 +66,9 @@ class FormUriActivity : LocalizedActivity() {
     @Inject
     lateinit var scheduler: Scheduler
 
+    @Inject
+    lateinit var changeLockProvider: ChangeLockProvider
+
     private var formFillingAlreadyStarted = false
 
     private val openForm =
@@ -85,6 +89,7 @@ class FormUriActivity : LocalizedActivity() {
                     formsRepositoryProvider,
                     instanceRepositoryProvider,
                     savepointsRepositoryProvider,
+                    changeLockProvider,
                     resources
                 ) as T
             }
@@ -189,6 +194,7 @@ private class FormUriViewModel(
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
+    private val changeLockProvider: ChangeLockProvider,
     private val resources: Resources
 ) : ViewModel() {
 
@@ -203,6 +209,7 @@ private class FormUriViewModel(
                     ?: assertValidUri()
                     ?: assertFormExists()
                     ?: assertFormNotEncrypted()
+                    ?: assertFormsUpdateNotInProgress()
                 if (error != null) {
                     FormInspectionResult.Error(error)
                 } else {
@@ -312,6 +319,16 @@ private class FormUriViewModel(
             } else {
                 resources.getString(string.encrypted_form)
             }
+        } else {
+            null
+        }
+    }
+
+    private fun assertFormsUpdateNotInProgress(): String? {
+        val projectId = projectsDataService.getCurrentProject().uuid
+        val isFormsDbLocked = changeLockProvider.create(projectId).formsLock.isLocked()
+        return if (isFormsDbLocked) {
+            resources.getString(string.cannot_open_form_because_of_forms_update)
         } else {
             null
         }
