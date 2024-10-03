@@ -17,4 +17,16 @@ class ReentrantLockChangeLock : ChangeLock {
             }
         }
     }
+
+    override fun isLocked(): Boolean {
+        return lock.isLocked
+    }
+
+    override fun lock() {
+        lock.tryLock()
+    }
+
+    override fun unlock() {
+        lock.unlock()
+    }
 }
