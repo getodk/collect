@@ -28,6 +28,7 @@ import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.javarosawrapper.ValidationResult;
+import org.odk.collect.android.utilities.ChangeLocks;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.androidshared.async.TrackableWorker;
 import org.odk.collect.androidshared.data.Consumable;
@@ -71,13 +72,14 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     private final Cancellable formSessionObserver;
     private final FormsRepository formsRepository;
+    private final ChangeLocks changeLocks;
 
     private final Map<FormIndex, List<SelectChoice>> choices = new HashMap<>();
 
     private final TrackableWorker worker;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository, String sessionId, FormsRepository formsRepository) {
+    public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository, String sessionId, FormsRepository formsRepository, ChangeLocks changeLocks) {
         this.clock = clock;
         this.formSessionRepository = formSessionRepository;
         worker = new TrackableWorker(scheduler);
@@ -91,6 +93,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             this.hasBackgroundRecording.setValue(hasBackgroundRecording);
         });
         this.formsRepository = formsRepository;
+        this.changeLocks = changeLocks;
     }
 
     public String getSessionId() {
@@ -360,6 +363,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     public void exit() {
         formSessionRepository.clear(sessionId);
         ReferenceManager.instance().reset();
+        changeLocks.getFormsLock().unlock();
     }
 
     public void validate() {
