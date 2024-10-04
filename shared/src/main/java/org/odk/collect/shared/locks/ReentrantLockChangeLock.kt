@@ -10,11 +10,7 @@ class ReentrantLockChangeLock : ChangeLock {
         return try {
             function.apply(lock.tryLock())
         } finally {
-            try {
-                lock.unlock()
-            } catch (ignored: IllegalMonitorStateException) {
-                // Ignored
-            }
+            unlock()
         }
     }
 
@@ -27,6 +23,10 @@ class ReentrantLockChangeLock : ChangeLock {
     }
 
     override fun unlock() {
-        lock.unlock()
+        try {
+            lock.unlock()
+        } catch (ignored: IllegalMonitorStateException) {
+            // Ignored
+        }
     }
 }
