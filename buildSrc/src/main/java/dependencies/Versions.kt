@@ -15,4 +15,5 @@ object Versions {
     const val lifecycle = "2.8.3"
     const val camerax = "1.3.4"
     const val navigation = "2.7.7"
+    const val coroutines = "1.8.1"
 }
