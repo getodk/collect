@@ -1132,6 +1132,7 @@ class FormUriActivityTest {
     }
 
     private fun assertErrorDialogAndClickCancelButton(scenario: ActivityScenario<FormUriActivity>, message: String) {
+        onView(withText(org.odk.collect.strings.R.string.form_cannot_be_used)).inRoot(isDialog()).check(matches(isDisplayed()))
         onView(withText(message)).inRoot(isDialog()).check(matches(isDisplayed()))
         onView(withId(android.R.id.button1)).perform(click())
 

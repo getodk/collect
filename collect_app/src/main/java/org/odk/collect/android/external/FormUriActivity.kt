@@ -157,6 +157,7 @@ class FormUriActivity : LocalizedActivity() {
 
     private fun displayErrorDialog(message: String) {
         MaterialAlertDialogBuilder(this)
+            .setTitle(string.form_cannot_be_used)
             .setMessage(message)
             .setPositiveButton(string.ok) { _, _ -> finish() }
             .setOnCancelListener { finish() }
