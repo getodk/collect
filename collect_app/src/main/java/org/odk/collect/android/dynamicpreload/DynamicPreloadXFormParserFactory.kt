@@ -50,7 +50,9 @@ class DynamicPreloadParseProcessor :
     }
 
     override fun processFormDef(formDef: FormDef) {
-        formDef.extras.put(DynamicPreloadExtra(containsPullData || containsSearch))
+        if (containsPullData || containsSearch) {
+            formDef.extras.put(DynamicPreloadExtra(true))
+        }
     }
 }
 
