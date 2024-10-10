@@ -30,7 +30,7 @@ import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
-import org.odk.collect.maps.layers.OfflineMapLayersPicker
+import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
@@ -96,8 +96,8 @@ class SelectionMapFragment(
             .forClass(MapFragment::class.java) {
                 mapFragmentFactory.createMapFragment() as Fragment
             }
-            .forClass(OfflineMapLayersPicker::class) {
-                OfflineMapLayersPicker(requireActivity().activityResultRegistry, referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
+            .forClass(OfflineMapLayersPickerBottomSheetDialogFragment::class) {
+                OfflineMapLayersPickerBottomSheetDialogFragment(requireActivity().activityResultRegistry, referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
             }
             .build()
 
@@ -198,7 +198,7 @@ class SelectionMapFragment(
 
         binding.layerMenu.setMultiClickSafeOnClickListener {
             DialogFragmentUtils.showIfNotShowing(
-                OfflineMapLayersPicker::class.java,
+                OfflineMapLayersPickerBottomSheetDialogFragment::class.java,
                 childFragmentManager
             )
         }

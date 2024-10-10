@@ -34,42 +34,44 @@ class OfflineMapLayersViewModel(
     private lateinit var tempLayersDir: File
 
     fun loadExistingLayers() {
-        trackableWorker.immediate(
-            background = {
-                val layers = referenceLayerRepository.getAll().sortedBy { it.name }
-                _existingLayers.postValue(layers)
-            }
-        )
+        trackableWorker.immediate {
+            val layers = referenceLayerRepository.getAll().sortedBy { it.name }
+            _existingLayers.postValue(layers)
+        }
     }
 
     fun loadLayersToImport(uris: List<Uri>, context: Context) {
-        trackableWorker.immediate(
-            background = {
-                tempLayersDir = TempFiles.createTempDir().also {
-                    it.deleteOnExit()
-                }
-                val layers = mutableListOf<ReferenceLayer>()
-                uris.forEach { uri ->
-                    if (uri.getFileExtension(context) == MbtilesFile.FILE_EXTENSION) {
-                        uri.getFileName(context)?.let { fileName ->
-                            val layerFile = File(tempLayersDir, fileName).also { file ->
-                                uri.copyToFile(context, file)
-                            }
-                            layers.add(ReferenceLayer(layerFile.absolutePath, layerFile, MbtilesFile.readName(layerFile) ?: layerFile.name))
+        trackableWorker.immediate {
+            tempLayersDir = TempFiles.createTempDir().also {
+                it.deleteOnExit()
+            }
+            val layers = mutableListOf<ReferenceLayer>()
+            uris.forEach { uri ->
+                if (uri.getFileExtension(context) == MbtilesFile.FILE_EXTENSION) {
+                    uri.getFileName(context)?.let { fileName ->
+                        val layerFile = File(tempLayersDir, fileName).also { file ->
+                            uri.copyToFile(context, file)
                         }
+                        layers.add(
+                            ReferenceLayer(
+                                layerFile.absolutePath,
+                                layerFile,
+                                MbtilesFile.readName(layerFile) ?: layerFile.name
+                            )
+                        )
                     }
                 }
-                _layersToImport.postValue(
-                    Consumable(
-                        LayersToImport(
-                            uris.size,
-                            uris.size - layers.size,
-                            layers.sortedBy { it.name }
-                        )
+            }
+            _layersToImport.postValue(
+                Consumable(
+                    LayersToImport(
+                        uris.size,
+                        uris.size - layers.size,
+                        layers.sortedBy { it.name }
                     )
                 )
-            }
-        )
+            )
+        }
     }
 
     fun importNewLayers(shared: Boolean) {

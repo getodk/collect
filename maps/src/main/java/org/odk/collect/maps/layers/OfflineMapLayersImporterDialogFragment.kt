@@ -17,7 +17,7 @@ import org.odk.collect.strings.R
 import org.odk.collect.strings.localization.getLocalizedQuantityString
 import org.odk.collect.strings.localization.getLocalizedString
 
-class OfflineMapLayersImporter(
+class OfflineMapLayersImporterDialogFragment(
     private val referenceLayerRepository: ReferenceLayerRepository,
     private val scheduler: Scheduler,
     private val settingsProvider: SettingsProvider
