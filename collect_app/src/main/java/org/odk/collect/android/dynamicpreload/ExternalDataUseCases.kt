@@ -16,7 +16,7 @@ object ExternalDataUseCases {
         isCancelled: Supplier<Boolean>,
         progressReporter: Consumer<Function<Resources, String>>
     ) {
-        if (form.extras.get(DynamicPreloadExtra::class.java)?.usesDynamicPreload == false) {
+        if (form.extras.get(DynamicPreloadExtra::class.java) == null) {
             return
         }
 
