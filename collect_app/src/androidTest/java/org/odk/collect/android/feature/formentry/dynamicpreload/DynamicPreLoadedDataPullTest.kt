@@ -3,8 +3,10 @@ package org.odk.collect.android.feature.formentry.dynamicpreload
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
+import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
 import org.odk.collect.android.support.StubOpenRosaServer.MediaFileItem
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 
@@ -27,5 +29,23 @@ class DynamicPreLoadedDataPullTest {
         rule.withMatchExactlyProject(testDependencies.server.url)
             .startBlankForm("pull_data")
             .assertText("The fruit Mango is pulled csv data.")
+    }
+
+    @Test
+    fun canUsePullDataFunctionToPullDataFromLocalEntities() {
+        testDependencies.server.addForm("one-question-entity-registration.xml")
+        testDependencies.server.addForm(
+            "entity-update-pulldata.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
+            .startBlankForm("One Question Entity Registration")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+
+            .startBlankForm("Entity Update Pull Data")
+            .clickOnText("Logan Roy")
+            .swipeToNextQuestion("Name")
+            .assertText("Logan Roy")
     }
 }
