@@ -63,6 +63,16 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
                 entities.filter { it.version == value.toInt() }.map { convertToElement(it, false) }
             }
 
+            child == EntityItemElement.TRUNK_VERSION -> {
+                val entities = entitiesRepository.getEntities(instanceId)
+                entities.filter { it.trunkVersion == value.toInt() }.map { convertToElement(it, false) }
+            }
+
+            child == EntityItemElement.BRANCH_ID -> {
+                val entities = entitiesRepository.getEntities(instanceId)
+                entities.filter { it.branchId == value }.map { convertToElement(it, false) }
+            }
+
             !listOf(EntityItemElement.LABEL, EntityItemElement.VERSION).contains(child) -> {
                 val entities = entitiesRepository.getAllByProperty(
                     instanceId,
