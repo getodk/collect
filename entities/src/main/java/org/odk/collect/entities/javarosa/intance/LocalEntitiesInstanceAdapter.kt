@@ -40,7 +40,7 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
 
     fun queryEq(instanceId: String, child: String, value: String): List<TreeElement>? {
         return when {
-            child == "name" -> {
+            child == EntityItemElement.ID -> {
                 val entity = entitiesRepository.getById(
                     instanceId,
                     value
@@ -53,9 +53,14 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
                 }
             }
 
-            child == "label" -> {
+            child == EntityItemElement.LABEL -> {
                 val entities = entitiesRepository.getEntities(instanceId)
                 entities.filter { it.label == value }.map { convertToElement(it, false) }
+            }
+
+            child == EntityItemElement.VERSION -> {
+                val entities = entitiesRepository.getEntities(instanceId)
+                entities.filter { it.version == value.toInt() }.map { convertToElement(it, false) }
             }
 
             !listOf(EntityItemElement.LABEL, EntityItemElement.VERSION).contains(child) -> {
