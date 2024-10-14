@@ -8,7 +8,7 @@ import org.odk.collect.entities.storage.EntitiesRepository
 
 class PullDataFunctionHandler(
     entitiesRepository: EntitiesRepository,
-    private val fallback: IFunctionHandler
+    private val fallback: IFunctionHandler? = null
 ) : IFunctionHandler {
 
     private val entitiesDataAdapter = LocalEntitiesInstanceAdapter(entitiesRepository)
@@ -36,9 +36,10 @@ class PullDataFunctionHandler(
         val filterValue = XPathFuncExpr.toString(args[3])
 
         return if (entitiesDataAdapter.supportsInstance(instanceId)) {
-            entitiesDataAdapter.queryEq(instanceId, filterChild, filterValue)!!.firstOrNull()?.getFirstChild(child)?.value?.value ?: ""
+            entitiesDataAdapter.queryEq(instanceId, filterChild, filterValue)!!.firstOrNull()
+                ?.getFirstChild(child)?.value?.value ?: ""
         } else {
-            fallback.eval(args, ec)
+            fallback?.eval(args, ec) ?: ""
         }
     }
 
