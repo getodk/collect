@@ -54,26 +54,22 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
             }
 
             child == EntityItemElement.LABEL -> {
-                val entities = entitiesRepository.getEntities(instanceId)
-                entities.filter { it.label == value }.map { convertToElement(it, false) }
+                filterAndConvertEntities(instanceId) { it.label == value }
             }
 
             child == EntityItemElement.VERSION -> {
-                val entities = entitiesRepository.getEntities(instanceId)
-                entities.filter { it.version == value.toInt() }.map { convertToElement(it, false) }
+                filterAndConvertEntities(instanceId) { it.version == value.toInt() }
             }
 
             child == EntityItemElement.TRUNK_VERSION -> {
-                val entities = entitiesRepository.getEntities(instanceId)
-                entities.filter { it.trunkVersion == value.toInt() }.map { convertToElement(it, false) }
+                filterAndConvertEntities(instanceId) { it.trunkVersion == value.toInt() }
             }
 
             child == EntityItemElement.BRANCH_ID -> {
-                val entities = entitiesRepository.getEntities(instanceId)
-                entities.filter { it.branchId == value }.map { convertToElement(it, false) }
+                filterAndConvertEntities(instanceId) { it.branchId == value }
             }
 
-            !listOf(EntityItemElement.LABEL, EntityItemElement.VERSION).contains(child) -> {
+            else -> {
                 val entities = entitiesRepository.getAllByProperty(
                     instanceId,
                     child,
@@ -82,9 +78,15 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
 
                 entities.map { convertToElement(it, false) }
             }
-
-            else -> null
         }
+    }
+
+    private fun filterAndConvertEntities(
+        list: String,
+        filter: (Entity.Saved) -> Boolean
+    ): List<TreeElement> {
+        val entities = entitiesRepository.getEntities(list)
+        return entities.filter(filter).map { convertToElement(it, false) }
     }
 
     private fun convertToElement(entity: Entity.Saved, partial: Boolean): TreeElement {
