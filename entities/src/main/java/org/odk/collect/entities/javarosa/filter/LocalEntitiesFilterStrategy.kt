@@ -22,7 +22,7 @@ import java.util.function.Supplier
 class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
     FilterStrategy {
 
-    private val dataAdapter = LocalEntitiesInstanceAdapter(entitiesRepository)
+    private val instanceAdapter = LocalEntitiesInstanceAdapter(entitiesRepository)
 
     override fun filter(
         sourceInstance: DataInstance<*>,
@@ -32,7 +32,7 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         evaluationContext: EvaluationContext,
         next: Supplier<MutableList<TreeReference>>
     ): List<TreeReference> {
-        if (sourceInstance.instanceId == null || !dataAdapter.supportsInstance(sourceInstance.instanceId)) {
+        if (sourceInstance.instanceId == null || !instanceAdapter.supportsInstance(sourceInstance.instanceId)) {
             return next.get()
         }
 
@@ -43,7 +43,7 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
                     val child = candidate.nodeSide.steps[0].name.name
                     val value = candidate.evalContextSide(sourceInstance, evaluationContext)
 
-                    val results = dataAdapter.queryEq(
+                    val results = instanceAdapter.queryEq(
                         sourceInstance.instanceId,
                         child,
                         value as String

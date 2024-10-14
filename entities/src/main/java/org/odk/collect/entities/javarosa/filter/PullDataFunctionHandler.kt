@@ -11,7 +11,7 @@ class PullDataFunctionHandler(
     private val fallback: IFunctionHandler? = null
 ) : IFunctionHandler {
 
-    private val entitiesDataAdapter = LocalEntitiesInstanceAdapter(entitiesRepository)
+    private val instanceAdapter = LocalEntitiesInstanceAdapter(entitiesRepository)
 
     override fun getName(): String {
         return NAME
@@ -35,8 +35,8 @@ class PullDataFunctionHandler(
         val filterChild = XPathFuncExpr.toString(args[2])
         val filterValue = XPathFuncExpr.toString(args[3])
 
-        return if (entitiesDataAdapter.supportsInstance(instanceId)) {
-            entitiesDataAdapter.queryEq(instanceId, filterChild, filterValue)!!.firstOrNull()
+        return if (instanceAdapter.supportsInstance(instanceId)) {
+            instanceAdapter.queryEq(instanceId, filterChild, filterValue)!!.firstOrNull()
                 ?.getFirstChild(child)?.value?.value ?: ""
         } else {
             fallback?.eval(args, ec) ?: ""
