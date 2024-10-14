@@ -53,6 +53,11 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
                 }
             }
 
+            child == "label" -> {
+                val entities = entitiesRepository.getEntities(instanceId)
+                entities.filter { it.label == value }.map { convertToElement(it, false) }
+            }
+
             !listOf(EntityItemElement.LABEL, EntityItemElement.VERSION).contains(child) -> {
                 val entities = entitiesRepository.getAllByProperty(
                     instanceId,
