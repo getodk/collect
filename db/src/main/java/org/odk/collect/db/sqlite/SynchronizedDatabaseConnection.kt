@@ -16,7 +16,8 @@ class SynchronizedDatabaseConnection(
         path,
         name,
         migrator,
-        databaseVersion
+        databaseVersion,
+        true
     )
 
     fun <T> withConnection(block: DatabaseConnection.() -> T): T {
