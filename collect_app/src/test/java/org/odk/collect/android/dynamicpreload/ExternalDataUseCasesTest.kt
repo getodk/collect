@@ -25,7 +25,7 @@ class ExternalDataUseCasesTest {
     }
 
     @Test
-    fun `create() does not create a db file if the FormDef has not a DynamicPreloadExtra()`() {
+    fun `create() does not create a db file if the FormDef does not have a DynamicPreloadExtra`() {
         val form = FormDef()
 
         val mediaDir = TempFiles.createTempDir().also {
@@ -37,7 +37,7 @@ class ExternalDataUseCasesTest {
     }
 
     @Test
-    fun `create() creates a db file if the FormDef has a DynamicPreloadExtra()`() {
+    fun `create() creates a db file if the FormDef has a DynamicPreloadExtra`() {
         val form = FormDef().also {
             it.extras.put(DynamicPreloadExtra())
         }

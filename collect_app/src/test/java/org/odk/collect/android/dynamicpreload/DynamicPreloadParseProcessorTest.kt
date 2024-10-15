@@ -15,7 +15,7 @@ class DynamicPreloadParseProcessorTest {
     private val processor = DynamicPreloadParseProcessor()
 
     @Test
-    fun `usesDynamicPreload is null when xpath does not contain pulldata`() {
+    fun `DynamicPreloadExtra is null when xpath does not contain pulldata`() {
         val formDef = FormDef()
 
         processor.processXPath(createNonPullDataExpression())
@@ -27,7 +27,7 @@ class DynamicPreloadParseProcessorTest {
     }
 
     @Test
-    fun `usesDynamicPreload is not null when xpath does contain pulldata`() {
+    fun `DynamicPreloadExtra is not null when xpath does contain pulldata`() {
         val formDef = FormDef()
 
         processor.processXPath(createPullDataExpression())
@@ -39,7 +39,7 @@ class DynamicPreloadParseProcessorTest {
     }
 
     @Test
-    fun `usesDynamicPreload is null when question appearance does not contain search`() {
+    fun `DynamicPreloadExtra is null when question appearance does not contain search`() {
         val formDef = FormDef()
 
         processor.processQuestion(createQuestion(appearance = "minimal"))
@@ -51,7 +51,7 @@ class DynamicPreloadParseProcessorTest {
     }
 
     @Test
-    fun `usesDynamicPreload is not null when question appearance does contain search`() {
+    fun `DynamicPreloadExtra is not null when question appearance does contain search`() {
         val formDef = FormDef()
 
         processor.processQuestion(createQuestion(appearance = "search('fruits')"))
