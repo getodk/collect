@@ -2,7 +2,6 @@ package org.odk.collect.android.dynamicpreload
 
 import org.javarosa.core.model.FormDef
 import org.javarosa.core.model.QuestionDef
-import org.javarosa.core.util.externalizable.ExtUtil
 import org.javarosa.core.util.externalizable.Externalizable
 import org.javarosa.core.util.externalizable.PrototypeFactory
 import org.javarosa.xform.parse.IXFormParserFactory
@@ -50,22 +49,14 @@ class DynamicPreloadParseProcessor :
     }
 
     override fun processFormDef(formDef: FormDef) {
-        formDef.extras.put(DynamicPreloadExtra(containsPullData || containsSearch))
+        if (containsPullData || containsSearch) {
+            formDef.extras.put(DynamicPreloadExtra())
+        }
     }
 }
 
-class DynamicPreloadExtra(usesDynamicPreload: Boolean) : Externalizable {
+class DynamicPreloadExtra : Externalizable {
+    override fun readExternal(`in`: DataInputStream?, pf: PrototypeFactory?) = Unit
 
-    constructor() : this(false)
-
-    var usesDynamicPreload = usesDynamicPreload
-        private set
-
-    override fun readExternal(`in`: DataInputStream?, pf: PrototypeFactory?) {
-        usesDynamicPreload = ExtUtil.read(`in`, Boolean::class.javaObjectType) as Boolean
-    }
-
-    override fun writeExternal(out: DataOutputStream?) {
-        ExtUtil.write(out, usesDynamicPreload)
-    }
+    override fun writeExternal(out: DataOutputStream?) = Unit
 }
