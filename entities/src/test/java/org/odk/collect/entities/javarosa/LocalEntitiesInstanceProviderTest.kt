@@ -111,7 +111,7 @@ class LocalEntitiesInstanceProviderTest {
     }
 
     @Test
-    fun `partial parse returns elements without values for first item and just item for others`() {
+    fun `partial parse returns the full first item and just item for others`() {
         val entity = arrayOf(
             Entity.New(
                 "1",
@@ -133,11 +133,9 @@ class LocalEntitiesInstanceProviderTest {
         assertThat(instance.numChildren, equalTo(2))
 
         val item1 = instance.getChildAt(0)!!
-        assertThat(item1.isPartial, equalTo(true))
+        assertThat(item1.isPartial, equalTo(false))
         assertThat(item1.numChildren, equalTo(6))
-        0.until(item1.numChildren).forEach {
-            assertThat(item1.getChildAt(it).value?.value, equalTo(null))
-        }
+        assertThat(item1.getFirstChild("name")!!.value!!.value, equalTo("1"))
 
         val item2 = instance.getChildAt(1)!!
         assertThat(item2.isPartial, equalTo(true))
