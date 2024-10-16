@@ -303,7 +303,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + LAST_DETECTED_FORM_VERSION_HASH + " text);");
     }
 
-    private void createFormsTableV7(SQLiteDatabase db) {
+    public void createFormsTableV7(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
@@ -323,7 +323,28 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + LAST_DETECTED_FORM_VERSION_HASH + " text);");
     }
 
-    private void createFormsTableV9(SQLiteDatabase db) {
+    public void createFormsTableV8(SQLiteDatabase database) {
+        database.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
+                + _ID + " integer primary key, "
+                + DISPLAY_NAME + " text not null, "
+                + DESCRIPTION + " text, "
+                + JR_FORM_ID + " text not null, "
+                + JR_VERSION + " text, "
+                + MD5_HASH + " text not null, "
+                + DATE + " integer not null, "
+                + FORM_MEDIA_PATH + " text not null, "
+                + FORM_FILE_PATH + " text not null, "
+                + LANGUAGE + " text, "
+                + SUBMISSION_URI + " text, "
+                + BASE64_RSA_PUBLIC_KEY + " text, "
+                + JRCACHE_FILE_PATH + " text not null, "
+                + AUTO_SEND + " text, "
+                + AUTO_DELETE + " text, "
+                + LAST_DETECTED_FORM_VERSION_HASH + " text, "
+                + GEOMETRY_XPATH + " text);");
+    }
+
+    public void createFormsTableV9(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
@@ -344,7 +365,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + "deleted" + " boolean default(0));");
     }
 
-    private void createFormsTableV10(SQLiteDatabase db) {
+    public void createFormsTableV10(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
@@ -365,7 +386,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + DELETED_DATE + " integer);");
     }
 
-    private void createFormsTableV11(SQLiteDatabase db) {
+    public void createFormsTableV11(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "
