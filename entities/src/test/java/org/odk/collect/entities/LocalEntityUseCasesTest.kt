@@ -141,6 +141,17 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
+    fun `updateLocalEntitiesFromForm does not save entity that has an empty label`() {
+        val formEntity =
+            FormEntity(EntityAction.CREATE, "things", "1", "", emptyList())
+        val formEntities = EntitiesExtra(listOf(formEntity))
+        entitiesRepository.addList("things")
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+        assertThat(entitiesRepository.getEntities("things").size, equalTo(0))
+    }
+
+    @Test
     fun `updateLocalEntitiesFromServer saves entity from server`() {
         val csv = createEntityList(
             Entity.New(

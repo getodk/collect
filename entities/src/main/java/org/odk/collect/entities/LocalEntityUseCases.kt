@@ -21,7 +21,7 @@ object LocalEntityUseCases {
         formEntities?.entities?.forEach { formEntity ->
             val id = formEntity.id
             val label = formEntity.label
-            if (id != null && label != null) {
+            if (id != null && !label.isNullOrEmpty()) {
                 when (formEntity.action) {
                     EntityAction.CREATE -> {
                         val entity = Entity.New(
