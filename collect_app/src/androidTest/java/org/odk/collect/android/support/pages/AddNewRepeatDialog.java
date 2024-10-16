@@ -27,7 +27,7 @@ public class AddNewRepeatDialog extends Page<AddNewRepeatDialog> {
     }
 
     public <D extends Page<D>> D clickOnDoNotAdd(D destination) {
-        return clickOnTextInDialog(org.odk.collect.strings.R.string.dont_add_repeat, destination);
+        return clickOnTextInDialog(org.odk.collect.strings.R.string.cancel, destination);
     }
 
 }

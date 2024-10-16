@@ -117,6 +117,7 @@
     <string name="add_repeat">Add</string>
     <string name="dont_add_repeat">Do not add</string>
     <string name="add_another_menu">Add another</string>
+    <string name="add_another_question">Add another?</string>
 
     <!-- Title of overlay menu displayed when long pressing on a question in a form -->
     <string name="edit_prompt">Edit Prompt</string>
