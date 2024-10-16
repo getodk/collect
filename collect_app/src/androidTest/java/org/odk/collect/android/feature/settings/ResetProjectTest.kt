@@ -3,7 +3,6 @@ package org.odk.collect.android.feature.settings
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
-import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.AccessControlPage
 import org.odk.collect.android.support.pages.FormEntryPage
