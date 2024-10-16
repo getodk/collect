@@ -120,10 +120,10 @@ When you first run Collect, it is set to download forms from [https://demo.getod
 
 1. Once you have the XForm, use [adb](https://developer.android.com/studio/command-line/adb.html) to push the form to your device (after [enabling USB debugging](https://www.kingoapp.com/root-tutorials/how-to-enable-usb-debugging-mode-on-android.htm)) or emulator.
 	```
-	adb push my_form.xml /sdcard/Android/data/org.odk.collect.android/files/forms
+	adb push my_form.xml /sdcard/Android/data/org.odk.collect.android/files/formsprojects/DEMO/forms
 	```
 
-1. Launch ODK Collect and tap `Fill Blank Form`. The new form will be there.
+1. Launch ODK Collect and tap `+ Start new form`. The new form will be there.
 
 ## Using APIs for local development
 
