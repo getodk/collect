@@ -52,7 +52,7 @@ public class FormDatabaseMigratorTest {
 
     @Before
     public void setup() {
-        assertThat("Test expects different Forms DB version", DatabaseConstants.FORMS_DATABASE_VERSION, is(13));
+        assertThat("Test expects different Forms DB version", DatabaseConstants.FORMS_DATABASE_VERSION, is(14));
         database = SQLiteDatabase.create(null);
     }
 
@@ -66,7 +66,7 @@ public class FormDatabaseMigratorTest {
         FormDatabaseMigrator formDatabaseMigrator = new FormDatabaseMigrator();
         formDatabaseMigrator.onCreate(database);
 
-        ContentValues contentValues = getContentValuesForFormV12();
+        ContentValues contentValues = getContentValuesForFormV13();
         database.insert(FORMS_TABLE_NAME, null, contentValues);
         try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
             assertThat(cursor.getCount(), is(1));
@@ -80,6 +80,45 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getCount(), is(1));
             cursor.moveToFirst();
             assertThat(cursor.getInt(cursor.getColumnIndex(_ID)), is(2));
+        }
+    }
+
+    @Test
+    public void onUpgrade_fromVersion13() {
+        int oldVersion = 13;
+        database.setVersion(oldVersion);
+        FormDatabaseMigrator formDatabaseMigrator = new FormDatabaseMigrator();
+
+        formDatabaseMigrator.createFormsTableV13(database);
+        ContentValues contentValues = getContentValuesForFormV13();
+        database.insert(FORMS_TABLE_NAME, null, contentValues);
+
+        formDatabaseMigrator.onUpgrade(database, oldVersion);
+
+        try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
+            assertThat(cursor.getColumnCount(), is(19));
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToFirst();
+
+            assertThat(cursor.getInt(cursor.getColumnIndex(_ID)), is(1));
+            assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), is(contentValues.getAsString(DISPLAY_NAME)));
+            assertThat(cursor.getString(cursor.getColumnIndex(DESCRIPTION)), is(contentValues.getAsString(DESCRIPTION)));
+            assertThat(cursor.getString(cursor.getColumnIndex(JR_FORM_ID)), is(contentValues.getAsString(JR_FORM_ID)));
+            assertThat(cursor.getString(cursor.getColumnIndex(JR_VERSION)), is(contentValues.getAsString(JR_VERSION)));
+            assertThat(cursor.getString(cursor.getColumnIndex(MD5_HASH)), is(contentValues.getAsString(MD5_HASH)));
+            assertThat(cursor.getInt(cursor.getColumnIndex(DATE)), is(contentValues.getAsInteger(DATE)));
+            assertThat(cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH)), is(contentValues.getAsString(FORM_MEDIA_PATH)));
+            assertThat(cursor.getString(cursor.getColumnIndex(FORM_FILE_PATH)), is(contentValues.getAsString(FORM_FILE_PATH)));
+            assertThat(cursor.getString(cursor.getColumnIndex(LANGUAGE)), is(contentValues.getAsString(LANGUAGE)));
+            assertThat(cursor.getString(cursor.getColumnIndex(SUBMISSION_URI)), is(contentValues.getAsString(SUBMISSION_URI)));
+            assertThat(cursor.getString(cursor.getColumnIndex(BASE64_RSA_PUBLIC_KEY)), is(contentValues.getAsString(BASE64_RSA_PUBLIC_KEY)));
+            assertThat(cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH)), is(contentValues.getAsString(JRCACHE_FILE_PATH)));
+            assertThat(cursor.getString(cursor.getColumnIndex(AUTO_SEND)), is(contentValues.getAsString(AUTO_SEND)));
+            assertThat(cursor.getString(cursor.getColumnIndex(AUTO_DELETE)), is(contentValues.getAsString(AUTO_DELETE)));
+            assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
+            assertThat(cursor.getInt(cursor.getColumnIndex(DELETED_DATE)), is(contentValues.getAsInteger(DELETED_DATE)));
+            assertThat(cursor.getInt(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(contentValues.getAsInteger(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)));
         }
     }
 
@@ -432,6 +471,10 @@ public class FormDatabaseMigratorTest {
         contentValues.put(DELETED_DATE, 0);
         contentValues.put(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE, 0);
         return contentValues;
+    }
+
+    private ContentValues getContentValuesForFormV13() {
+        return getContentValuesForFormV12(); // there were no new columns added in v12
     }
 
     private void createVersion7Database(SQLiteDatabase database) {
