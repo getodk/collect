@@ -11,8 +11,12 @@ class BooleanChangeLock : ChangeLock {
     }
 
     override fun tryLock(): Boolean {
-        isLocked = true
-        return true
+        if (!isLocked) {
+            isLocked = true
+            return true
+        } else {
+            return false
+        }
     }
 
     override fun unlock() {

@@ -1064,7 +1064,7 @@ class FormUriActivityTest {
             ).build()
         )
 
-        changeLock.lock()
+        changeLock.tryLock()
         val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
         fakeScheduler.flush()
 
@@ -1093,7 +1093,7 @@ class FormUriActivityTest {
                 .build()
         )
 
-        changeLock.lock()
+        changeLock.tryLock()
         val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
         fakeScheduler.flush()
 
