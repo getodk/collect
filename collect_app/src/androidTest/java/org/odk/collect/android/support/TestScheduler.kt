@@ -34,6 +34,14 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         return wrappedScheduler.repeat({ foreground.run() }, repeatPeriod)
     }
 
+    override fun <T> immediate(background: suspend () -> T, foreground: (T) -> Unit) {
+        increment()
+        wrappedScheduler.immediate(background) { t: T ->
+            foreground(t)
+            decrement()
+        }
+    }
+
     override fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>) {
         increment()
         wrappedScheduler.immediate(background) { t: T ->
