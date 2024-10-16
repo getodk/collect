@@ -330,13 +330,13 @@ private class FormUriViewModel(
     private suspend fun assertFormsUpdateNotInProgress(): String? {
         val projectId = projectsDataService.getCurrentProject().uuid
         val formsLock = changeLockProvider.create(projectId).formsLock
-        return if (formsLock.isLocked()) {
-            resources.getString(string.cannot_open_form_because_of_forms_update)
-        } else {
-            withContext(Dispatchers.Main) {
-                formsLock.lock()
-            }
+        val isLocAcquired = withContext(Dispatchers.Main) {
+            formsLock.tryLock()
+        }
+        return if (isLocAcquired) {
             null
+        } else {
+            resources.getString(string.cannot_open_form_because_of_forms_update)
         }
     }
 

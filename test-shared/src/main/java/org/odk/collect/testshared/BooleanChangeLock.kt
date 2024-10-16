@@ -10,12 +10,9 @@ class BooleanChangeLock : ChangeLock {
         return function.apply(!isLocked)
     }
 
-    override fun isLocked(): Boolean {
-        return isLocked
-    }
-
-    override fun lock() {
+    override fun tryLock(): Boolean {
         isLocked = true
+        return true
     }
 
     override fun unlock() {
