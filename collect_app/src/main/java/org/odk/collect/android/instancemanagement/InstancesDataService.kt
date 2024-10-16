@@ -190,7 +190,7 @@ class InstancesDataService(
         return projectDependencyModule.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
                 instancesRepository.all.forEach {
-                    if (it.canDeleteBeforeSend() || it.status != STATUS_COMPLETE && it.status != STATUS_SUBMISSION_FAILED) {
+                    if (it.canDelete()) {
                         instancesRepository.delete(it.dbId)
                     }
                 }
