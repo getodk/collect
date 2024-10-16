@@ -1168,7 +1168,7 @@
     <!-- Error shown when a user tries to open a form but there is more than one form with the same form ID -->
     <string name="survey_multiple_forms_error">You have downloaded two different forms with the same form ID and version. Maybe they were the same form uploaded at different times or to different servers. In any case, you should delete one.</string>
     <!-- Error shown when a user tries to open a form when forms update is being applied in the background -->
-    <string name="cannot_open_form_because_of_forms_update">The form cannot be opened because forms update is being applied in the background. This process may take a few minutes. Please try again later.</string>
+    <string name="cannot_open_form_because_of_forms_update">This form cannot be opened right now because forms are being updated. Please try again shortly.</string>
 
     <!--
     ##############################################
