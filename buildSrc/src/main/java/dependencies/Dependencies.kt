@@ -34,7 +34,7 @@ object Dependencies {
     const val rarepebble_colorpicker = "com.github.martin-stone:hsv-alpha-color-picker-android:3.1.0"
     const val commons_io = "commons-io:commons-io:2.5" // Commons 2.6+ introduce java.nio usage that we can't access until our minSdkVersion >= 26 (https://developer.android.com/reference/java/io/File#toPath())
     const val opencsv = "com.opencsv:opencsv:5.9"
-    const val javarosa_online = "org.getodk:javarosa:5.0.0-SNAPSHOT-30ef2a9"
+    const val javarosa_online = "org.getodk:javarosa:5.0.0-SNAPSHOT-6ce1352"
     const val javarosa_local = "org.getodk:javarosa:local"
     const val javarosa = javarosa_online
     const val karumi_dexter = "com.karumi:dexter:6.2.3"
