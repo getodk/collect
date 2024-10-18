@@ -47,8 +47,7 @@
   <string name="jump_to_beginning">Punta sa Simula</string>
   <string name="jump_to_end">Punta sa Dulo</string>
   <string name="jump_to_previous">Punta Pataas</string>
-  <string name="dont_add_repeat">Huwag I-dagdag</string>
-    <string name="loading_form">Kina-karga ang Form</string>
+  <string name="loading_form">Kina-karga ang Form</string>
   <string name="load_remote_form_error">May Mali sa pag-karga ng Listahan ng Form</string>
     <string name="location_accuracy">Ang kawastuhan ay %1$s m</string>
     <string name="manage_files">Burahin ang Inimpok na Form</string>

@@ -16,7 +16,13 @@ public class AddNewRepeatDialog extends Page<AddNewRepeatDialog> {
 
     @Override
     public AddNewRepeatDialog assertOnPage() {
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.add_repeat_question, repeatName)))
+        String dialogMessage;
+        if (repeatName.isBlank()) {
+            dialogMessage = getTranslatedString(org.odk.collect.strings.R.string.add_another_question);
+        } else {
+            dialogMessage = getTranslatedString(org.odk.collect.strings.R.string.add_repeat_question, repeatName);
+        }
+        onView(withText(dialogMessage))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()));
         return this;
@@ -27,7 +33,7 @@ public class AddNewRepeatDialog extends Page<AddNewRepeatDialog> {
     }
 
     public <D extends Page<D>> D clickOnDoNotAdd(D destination) {
-        return clickOnTextInDialog(org.odk.collect.strings.R.string.dont_add_repeat, destination);
+        return clickOnTextInDialog(org.odk.collect.strings.R.string.cancel, destination);
     }
 
 }
