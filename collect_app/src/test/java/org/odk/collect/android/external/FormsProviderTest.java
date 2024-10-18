@@ -152,7 +152,7 @@ public class FormsProviderTest {
         Uri uri = addFormsToDirAndDb(firstProjectId, "external_app_form", "External app form", "1");
 
         try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
-            assertThat(cursor.getColumnCount(), is(18));
+            assertThat(cursor.getColumnCount(), is(19));
         }
     }
 
