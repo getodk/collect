@@ -277,6 +277,7 @@ object LocalFormUseCases {
         builder.autoDelete(formMetadata.autoDelete)
         builder.autoSend(formMetadata.autoSend)
         builder.geometryXpath(formMetadata.geometryXPath)
+        builder.entitiesVersion(formMetadata.entitiesVersion)
 
         // Note, the path doesn't change here, but it needs to be included so the
         // update will automatically update the .md5 and the cache path.
