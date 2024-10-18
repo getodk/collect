@@ -43,7 +43,7 @@ object Dependencies {
     const val dagger_compiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     const val dagger_android = "com.google.dagger:dagger-android:${Versions.dagger}"
     const val dagger_android_processor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
-    const val kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
+    const val kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
     const val armen101_audio_recorder_view = "com.github.Armen101:AudioRecordView:1.0.5"
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
     const val glide_compiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
@@ -85,4 +85,5 @@ object Dependencies {
     const val hamcrest = "org.hamcrest:hamcrest:2.2"
     const val robolectric = "org.robolectric:robolectric:${Versions.robolectric}"
     const val uiautomator = "androidx.test.uiautomator:uiautomator:2.3.0"
+    const val kotlinx_coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
 }

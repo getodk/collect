@@ -46,6 +46,7 @@ public final class Form {
     private final String geometryXPath;
     private final boolean deleted;
     private final Long lastDetectedAttachmentsUpdateDate;
+    private final String entitiesVersion;
 
     private Form(Form.Builder builder) {
         dbId = builder.dbId;
@@ -66,6 +67,7 @@ public final class Form {
         geometryXPath = builder.geometryXpath;
         deleted = builder.deleted;
         lastDetectedAttachmentsUpdateDate = builder.lastDetectedAttachmentsUpdateDate;
+        entitiesVersion = builder.entitiesVersion;
     }
 
     public static class Builder {
@@ -87,6 +89,7 @@ public final class Form {
         private String geometryXpath;
         private boolean deleted;
         private Long lastDetectedAttachmentsUpdateDate;
+        private String entitiesVersion;
 
         public Builder() {
         }
@@ -110,6 +113,7 @@ public final class Form {
             geometryXpath = form.geometryXPath;
             deleted = form.deleted;
             lastDetectedAttachmentsUpdateDate = form.lastDetectedAttachmentsUpdateDate;
+            entitiesVersion = form.entitiesVersion;
         }
 
         public Builder dbId(Long id) {
@@ -202,6 +206,11 @@ public final class Form {
             return this;
         }
 
+        public Builder entitiesVersion(String entitiesVersion) {
+            this.entitiesVersion = entitiesVersion;
+            return this;
+        }
+
         public Form build() {
             return new Form(this);
         }
@@ -283,6 +292,10 @@ public final class Form {
         return lastDetectedAttachmentsUpdateDate;
     }
 
+    public String getEntitiesVersion() {
+        return entitiesVersion;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -294,12 +307,33 @@ public final class Form {
         }
 
         Form form = (Form) o;
-        return deleted == form.deleted && Objects.equals(dbId, form.dbId) && Objects.equals(displayName, form.displayName) && Objects.equals(description, form.description) && Objects.equals(formId, form.formId) && Objects.equals(version, form.version) && Objects.equals(formFilePath, form.formFilePath) && Objects.equals(submissionUri, form.submissionUri) && Objects.equals(base64RSAPublicKey, form.base64RSAPublicKey) && Objects.equals(md5Hash, form.md5Hash) && Objects.equals(date, form.date) && Objects.equals(jrCacheFilePath, form.jrCacheFilePath) && Objects.equals(formMediaPath, form.formMediaPath) && Objects.equals(language, form.language) && Objects.equals(autoSend, form.autoSend) && Objects.equals(autoDelete, form.autoDelete) && Objects.equals(geometryXPath, form.geometryXPath) && Objects.equals(lastDetectedAttachmentsUpdateDate, form.lastDetectedAttachmentsUpdateDate);
+        return deleted == form.deleted &&
+                Objects.equals(dbId, form.dbId) &&
+                Objects.equals(displayName, form.displayName) &&
+                Objects.equals(description, form.description) &&
+                Objects.equals(formId, form.formId) &&
+                Objects.equals(version, form.version) &&
+                Objects.equals(formFilePath, form.formFilePath) &&
+                Objects.equals(submissionUri, form.submissionUri) &&
+                Objects.equals(base64RSAPublicKey, form.base64RSAPublicKey) &&
+                Objects.equals(md5Hash, form.md5Hash) &&
+                Objects.equals(date, form.date) &&
+                Objects.equals(jrCacheFilePath, form.jrCacheFilePath) &&
+                Objects.equals(formMediaPath, form.formMediaPath) &&
+                Objects.equals(language, form.language) &&
+                Objects.equals(autoSend, form.autoSend) &&
+                Objects.equals(autoDelete, form.autoDelete) &&
+                Objects.equals(geometryXPath, form.geometryXPath) &&
+                Objects.equals(lastDetectedAttachmentsUpdateDate, form.lastDetectedAttachmentsUpdateDate) &&
+                Objects.equals(entitiesVersion, form.entitiesVersion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dbId, displayName, description, formId, version, formFilePath, submissionUri, base64RSAPublicKey, md5Hash, date, jrCacheFilePath, formMediaPath, language, autoSend, autoDelete, geometryXPath, deleted, lastDetectedAttachmentsUpdateDate);
+        return Objects.hash(dbId, displayName, description, formId, version, formFilePath,
+                submissionUri, base64RSAPublicKey, md5Hash, date, jrCacheFilePath, formMediaPath,
+                language, autoSend, autoDelete, geometryXPath, deleted, lastDetectedAttachmentsUpdateDate,
+                entitiesVersion);
     }
 
     @Override

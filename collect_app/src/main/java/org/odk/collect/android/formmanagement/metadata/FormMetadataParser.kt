@@ -42,6 +42,7 @@ object FormMetadataParser {
         val autoDelete = submission?.getAttributeValue(null, "auto-delete")
         val autoSend = submission?.getAttributeValue(null, "auto-send")
         val geometryXPath = getFirstGeopointXPath(model, mainInstanceRoot, body)
+        val entitiesVersion = model.getAttributeValue(null, "entities-version")
 
         return FormMetadata(
             title,
@@ -51,7 +52,8 @@ object FormMetadataParser {
             base64RsaPublicKey,
             autoDelete,
             autoSend,
-            geometryXPath
+            geometryXPath,
+            entitiesVersion
         )
     }
 

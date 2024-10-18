@@ -34,7 +34,7 @@ class ServerFormUseCasesTest {
         val changeLock = BooleanChangeLock()
         val formDownloader = mock<FormDownloader>()
 
-        changeLock.lock()
+        changeLock.tryLock()
 
         val serverForm =
             ServerFormDetails("", "", "", "", "", false, true, ManifestFile("", emptyList()))
