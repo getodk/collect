@@ -95,6 +95,7 @@ class FormMetadataParserTest {
         assertThat(formMetadata.autoDelete, equalTo(null))
         assertThat(formMetadata.base64RsaPublicKey, equalTo(null))
         assertThat(formMetadata.geometryXPath, equalTo(null))
+        assertThat(formMetadata.entitiesVersion, equalTo(null))
     }
 
     @Test
@@ -104,10 +105,11 @@ class FormMetadataParserTest {
                 <?xml version="1.0"?>
                 <h:html xmlns="http://www.w3.org/2002/xforms"
                         xmlns:h="http://www.w3.org/1999/xhtml"
-                        xmlns:orx="http://openrosa.org/xforms">
+                        xmlns:orx="http://openrosa.org/xforms"
+                        xmlns:entities="http://www.opendatakit.org/xforms/entities">
                     <h:head>
                         <h:title>My Survey</h:title>
-                        <model>
+                        <model entities:entities-version="2024.1.0">
                             <instance>
                                 <data id="mysurvey" orx:version="2014083101">
                                     <location1 />
@@ -137,6 +139,7 @@ class FormMetadataParserTest {
         assertThat(formMetadata.autoDelete, equalTo("baz"))
         assertThat(formMetadata.base64RsaPublicKey, equalTo("quux"))
         assertThat(formMetadata.geometryXPath, equalTo("/data/location1"))
+        assertThat(formMetadata.entitiesVersion, equalTo("2024.1.0"))
     }
 
     @Test
