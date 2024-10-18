@@ -408,7 +408,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + LAST_DETECTED_ATTACHMENTS_UPDATE_DATE + " integer);"); // milliseconds
     }
 
-    private void createFormsTableV13(SQLiteDatabase db) {
+    public void createFormsTableV13(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
                 + _ID + " integer primary key autoincrement, "
                 + DISPLAY_NAME + " text not null, "
