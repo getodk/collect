@@ -212,7 +212,7 @@ private class FormUriViewModel(
                     ?: assertValidUri()
                     ?: assertFormExists()
                     ?: assertFormNotEncrypted()
-                    ?: assertFormsUpdateNotInProgress()
+                    ?: assertDoesNotUseEntitiesOrFormsUpdateNotInProgress()
                 if (error != null) {
                     FormInspectionResult.Error(error)
                 } else {
@@ -327,16 +327,31 @@ private class FormUriViewModel(
         }
     }
 
-    private suspend fun assertFormsUpdateNotInProgress(): String? {
+    private suspend fun assertDoesNotUseEntitiesOrFormsUpdateNotInProgress(): String? {
+        val uriMimeType = contentResolver.getType(uri!!)
         val projectId = projectsDataService.getCurrentProject().uuid
-        val formsLock = changeLockProvider.create(projectId).formsLock
-        val isLocAcquired = withContext(Dispatchers.Main) {
-            formsLock.tryLock()
-        }
-        return if (isLocAcquired) {
-            null
+
+        val usesEntities = if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
+            val form = formsRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
+            form.entitiesVersion != null
         } else {
-            resources.getString(string.cannot_open_form_because_of_forms_update)
+            val instance = instancesRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
+            val form = formsRepositoryProvider.create().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
+            form.entitiesVersion != null
+        }
+
+        if (usesEntities) {
+            val formsLock = changeLockProvider.create(projectId).formsLock
+            val isLocAcquired = withContext(Dispatchers.Main) {
+                formsLock.tryLock()
+            }
+            return if (isLocAcquired) {
+                null
+            } else {
+                resources.getString(string.cannot_open_form_because_of_forms_update)
+            }
+        } else {
+            return null
         }
     }
 
