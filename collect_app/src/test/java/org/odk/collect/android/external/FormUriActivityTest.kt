@@ -1051,7 +1051,7 @@ class FormUriActivityTest {
     }
 
     @Test
-    fun `When attempting to start a new form and the forms database is locked then display alert dialog`() {
+    fun `When attempting to start a new form that does not use entities and the forms database is locked then start form filling`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
         whenever(projectsDataService.getCurrentProject()).thenReturn(project)
@@ -1061,6 +1061,28 @@ class FormUriActivityTest {
                 "1",
                 "1",
                 TempFiles.createTempDir().absolutePath
+            ).build()
+        )
+
+        changeLock.tryLock()
+        launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
+        fakeScheduler.flush()
+
+        assertStartBlankFormIntent(project.uuid, form.dbId)
+    }
+
+    @Test
+    fun `When attempting to start a new form that uses entities and the forms database is locked then display alert dialog`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath,
+                entitiesVersion = "2024.1.0"
             ).build()
         )
 
@@ -1075,13 +1097,44 @@ class FormUriActivityTest {
     }
 
     @Test
-    fun `When attempting to edit a form and the forms database is locked then display alert dialog`() {
+    fun `When attempting to edit a form that does not use entities and the forms database is locked then start form filling`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
         whenever(projectsDataService.getCurrentProject()).thenReturn(project)
 
         formsRepository.save(
             FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
+
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .build()
+        )
+
+        changeLock.tryLock()
+        launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        fakeScheduler.flush()
+
+        assertStartSavedFormIntent(project.uuid, instance.dbId, true)
+    }
+
+    @Test
+    fun `When attempting to edit a form that uses entities and the forms database is locked then display alert dialog`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath,
+                entitiesVersion = "2024.1.0"
+            ).build()
         )
 
         val instance = instancesRepository.save(
