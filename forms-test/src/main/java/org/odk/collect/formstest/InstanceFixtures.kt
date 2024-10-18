@@ -12,7 +12,8 @@ object InstanceFixtures {
         displayName: String? = null,
         dbId: Long? = null,
         form: Form? = null,
-        deletedDate: Long? = null
+        deletedDate: Long? = null,
+        canDeleteBeforeSend: Boolean = true
     ): Instance {
         val instancesDir = TempFiles.createTempDir()
         return InstanceUtils.buildInstance("formId", "version", instancesDir.absolutePath)
@@ -26,7 +27,7 @@ object InstanceFixtures {
                 }
             }
             .deletedDate(deletedDate)
-            .canDeleteBeforeSend(true)
+            .canDeleteBeforeSend(canDeleteBeforeSend)
             .build()
     }
 }

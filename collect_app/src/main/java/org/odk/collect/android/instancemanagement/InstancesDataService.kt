@@ -180,14 +180,14 @@ class InstancesDataService(
         }
     }
 
-    fun deleteAll(projectId: String): Boolean {
+    fun reset(projectId: String): Boolean {
         val projectDependencyModule =
             projectDependencyModuleFactory.create(projectId)
         val instancesRepository = projectDependencyModule.instancesRepository
 
         return projectDependencyModule.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
-                instancesRepository.deleteAll()
+                LocalInstanceUseCases.reset(instancesRepository)
                 update(projectId)
                 true
             } else {
