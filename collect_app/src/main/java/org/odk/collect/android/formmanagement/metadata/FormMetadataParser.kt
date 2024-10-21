@@ -117,7 +117,10 @@ object FormMetadataParser {
             if (geopointXPaths.contains(xpath)) {
                 return xpath
             } else if (child.childCount > 0 && !repeatXPaths.contains(xpath)) {
-                return getFirstPrimaryInstanceGeopointXPath(geopointXPaths, repeatXPaths, child, xpath)
+                val result = getFirstPrimaryInstanceGeopointXPath(geopointXPaths, repeatXPaths, child, xpath)
+                if (result != null) {
+                    return result
+                }
             }
         }
         return null
