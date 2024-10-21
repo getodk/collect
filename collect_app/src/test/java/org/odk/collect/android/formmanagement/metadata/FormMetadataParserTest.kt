@@ -286,6 +286,49 @@ class FormMetadataParserTest {
     }
 
     @Test
+    fun readMetadata_withGeopointInNonFirstGroup_returnsExpectedGeopointXPath() {
+        val formMetadata = readMetadata(
+            """
+                <?xml version="1.0"?>
+                <h:html xmlns:h="http://www.w3.org/1999/xhtml"
+                        xmlns="http://www.w3.org/2002/xforms">
+                    <h:head>
+                        <h:title>Two geopoints in group</h:title>
+                        <model>
+                            <instance>
+                                <data id="two-geopoints-group">
+                                    <my-group1>
+                                        <name />
+                                    </my-group1>
+                                    <my-group2>
+                                        <location />
+                                    </my-group2>
+                                </data>
+                            </instance>
+                            <bind nodeset="/data/my-group1/name" type="string" />
+                            <bind nodeset="/data/my-group2/location" type="geopoint" />
+                        </model>
+                    </h:head>
+                    <h:body>
+                        <group ref="/data/my-group1">
+                            <input ref="/data/my-group1/name">
+                                <label>Name</label>
+                            </input>
+                        </group>
+                        <group ref="/data/my-group2">
+                            <input ref="/data/my-group2/location">
+                                <label>Location</label>
+                            </input>
+                        </group>
+                    </h:body>
+                </h:html>
+            """.trimIndent().byteInputStream()
+        )
+
+        assertThat(formMetadata.geometryXPath, equalTo("/data/my-group2/location"))
+    }
+
+    @Test
     fun readMetadata_withGeopointInRepeat_returnsFirstGeopointXPathThatIsNotInsideRepeat() {
         val formMetadata = readMetadata(
             """
