@@ -1,5 +1,6 @@
 package org.odk.collect.android.formmanagement
 
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.FormDownloader
 import org.odk.collect.android.utilities.FileUtils
@@ -111,13 +112,27 @@ object ServerFormUseCases {
             }
 
             if (mediaFile.isEntityList) {
-                val dataset = mediaFile.filename.substringBefore(".csv")
-                LocalEntityUseCases.updateLocalEntitiesFromServer(dataset, tempMediaFile, entitiesRepository)
+                val entityListName = getEntityListFromFileName(mediaFile)
+                LocalEntityUseCases.updateLocalEntitiesFromServer(entityListName, tempMediaFile, entitiesRepository)
+            } else {
+                /**
+                 * Track CSVs that have names that clash with entity lists in the project. If
+                 * these CSVs are being used as part of a `select_one_from_file` question, the
+                 * instance ID will be the file name with the extension removed.
+                 */
+                val isCsv = mediaFile.filename.endsWith(".csv")
+                val mostLikelyInstanceId = getEntityListFromFileName(mediaFile)
+                if (isCsv && entitiesRepository.getLists().contains(mostLikelyInstanceId)) {
+                    Analytics.setUserProperty("HasEntityListCollision", "true")
+                }
             }
         }
 
         return atLeastOneNewMediaFileDetected
     }
+
+    private fun getEntityListFromFileName(mediaFile: MediaFile) =
+        mediaFile.filename.substringBefore(".csv")
 
     private fun searchForExistingMediaFile(
         formsRepository: FormsRepository,
