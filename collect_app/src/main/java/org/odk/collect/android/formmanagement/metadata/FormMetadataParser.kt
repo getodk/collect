@@ -109,15 +109,18 @@ object FormMetadataParser {
     ): String? {
         for (position in 0 until parentRoot.childCount) {
             val child = parentRoot.getElement(position) ?: continue
-            val xpath = if (parentXPath == null) {
+            val currentXPath = if (parentXPath == null) {
                 "/${parentRoot.name}/${child.name}"
             } else {
                 "$parentXPath/${child.name}"
             }
-            if (geopointXPaths.contains(xpath)) {
-                return xpath
-            } else if (child.childCount > 0 && !repeatXPaths.contains(xpath)) {
-                return getFirstPrimaryInstanceGeopointXPath(geopointXPaths, repeatXPaths, child, xpath)
+            if (geopointXPaths.contains(currentXPath)) {
+                return currentXPath
+            } else if (child.childCount > 0 && !repeatXPaths.contains(currentXPath)) {
+                val nestedXPath = getFirstPrimaryInstanceGeopointXPath(geopointXPaths, repeatXPaths, child, currentXPath)
+                if (nestedXPath != null) {
+                    return nestedXPath
+                }
             }
         }
         return null
