@@ -13,8 +13,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormFillingActivity
@@ -327,7 +325,7 @@ private class FormUriViewModel(
         }
     }
 
-    private suspend fun assertDoesNotUseEntitiesOrFormsUpdateNotInProgress(): String? {
+    private fun assertDoesNotUseEntitiesOrFormsUpdateNotInProgress(): String? {
         val uriMimeType = contentResolver.getType(uri!!)
         val projectId = projectsDataService.getCurrentProject().uuid
 
@@ -342,9 +340,8 @@ private class FormUriViewModel(
 
         if (usesEntities) {
             val formsLock = changeLockProvider.create(projectId).formsLock
-            val isLocAcquired = withContext(Dispatchers.Main) {
-                formsLock.tryLock()
-            }
+            val isLocAcquired = formsLock.tryLock()
+
             return if (isLocAcquired) {
                 null
             } else {

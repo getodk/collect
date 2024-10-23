@@ -24,15 +24,10 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.WorkManager
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -151,13 +146,6 @@ class FormUriActivityTest {
                 return changeLockProvider
             }
         })
-
-        Dispatchers.setMain(UnconfinedTestDispatcher())
-    }
-
-    @After
-    fun teardown() {
-        Dispatchers.resetMain()
     }
 
     @Test
