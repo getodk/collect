@@ -5,7 +5,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.runBlocking
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
@@ -26,17 +25,6 @@ class FakeScheduler : Scheduler {
     private var foregroundTasks = LinkedList<Runnable>()
     private var backgroundTasks = LinkedList<Runnable>()
     private var repeatTasks = ArrayList<RepeatTask>()
-
-    override fun <T> immediate(background: suspend () -> T, foreground: (T) -> Unit) {
-        backgroundTasks.addLast(
-            Runnable {
-                val result = runBlocking {
-                    background()
-                }
-                foregroundTasks.add(Runnable { foreground(result) })
-            }
-        )
-    }
 
     override fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>) {
         backgroundTasks.addLast(

@@ -13,13 +13,6 @@ import kotlin.coroutines.CoroutineContext
 
 open class CoroutineScheduler(private val foregroundContext: CoroutineContext, private val backgroundContext: CoroutineContext) : Scheduler {
 
-    override fun <T> immediate(background: suspend () -> T, foreground: (T) -> Unit) {
-        CoroutineScope(foregroundContext).launch {
-            val result = withContext(backgroundContext) { background() }
-            foreground(result)
-        }
-    }
-
     override fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>) {
         CoroutineScope(foregroundContext).launch {
             val result = withContext(backgroundContext) { background.get() }

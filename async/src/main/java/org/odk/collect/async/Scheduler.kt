@@ -20,15 +20,6 @@ interface Scheduler {
      * @param background the task to be run
      * @param foreground run on the foreground once the task is complete
      */
-    fun <T> immediate(background: suspend () -> T, foreground: (T) -> Unit)
-
-    /**
-     * Run work in the background (off the UI thread) and then use the result of that work
-     * in the foreground. Cancelled if application closed.
-     *
-     * @param background the task to be run
-     * @param foreground run on the foreground once the task is complete
-     */
     fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>)
 
     /**
