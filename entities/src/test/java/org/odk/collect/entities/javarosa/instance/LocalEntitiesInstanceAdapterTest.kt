@@ -18,7 +18,7 @@ class LocalEntitiesInstanceAdapterTest {
 
         val instanceAdapter = LocalEntitiesInstanceAdapter(entitiesRepository)
         val results = instanceAdapter.queryEq("things", EntityItemElement.LABEL, "Thing 2")
-        assertThat(results!!.size, equalTo(1))
+        assertThat(results.size, equalTo(1))
         assertThat(results.first().getFirstChild("name")!!.value!!.value, equalTo("thing2"))
     }
 
@@ -30,7 +30,7 @@ class LocalEntitiesInstanceAdapterTest {
 
         val instanceAdapter = LocalEntitiesInstanceAdapter(entitiesRepository)
         val results = instanceAdapter.queryEq("things", EntityItemElement.VERSION, "2")
-        assertThat(results!!.size, equalTo(1))
+        assertThat(results.size, equalTo(1))
         assertThat(results.first().getFirstChild("name")!!.value!!.value, equalTo("thing2"))
     }
 
@@ -42,7 +42,7 @@ class LocalEntitiesInstanceAdapterTest {
 
         val instanceAdapter = LocalEntitiesInstanceAdapter(entitiesRepository)
         val results = instanceAdapter.queryEq("things", EntityItemElement.TRUNK_VERSION, "2")
-        assertThat(results!!.size, equalTo(1))
+        assertThat(results.size, equalTo(1))
         assertThat(results.first().getFirstChild("name")!!.value!!.value, equalTo("thing2"))
     }
 
@@ -54,7 +54,7 @@ class LocalEntitiesInstanceAdapterTest {
 
         val instanceAdapter = LocalEntitiesInstanceAdapter(entitiesRepository)
         val results = instanceAdapter.queryEq("things", EntityItemElement.BRANCH_ID, "branch2")
-        assertThat(results!!.size, equalTo(1))
+        assertThat(results.size, equalTo(1))
         assertThat(results.first().getFirstChild("name")!!.value!!.value, equalTo("thing2"))
     }
 }
