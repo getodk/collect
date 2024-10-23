@@ -16,7 +16,7 @@ class TaskSpecWorker(
     override fun doWork(): Result {
         val cellularOnly = inputData.getBoolean(DATA_CELLULAR_ONLY, false)
         if (cellularOnly && connectivityProvider.currentNetwork != Scheduler.NetworkType.CELLULAR) {
-            Analytics.setUserProperty("EncounteredMeteredNonCellularInTasks", "true")
+            Analytics.setUserProperty("SawMeteredNonCellular", "true")
             return Result.retry()
         }
 
