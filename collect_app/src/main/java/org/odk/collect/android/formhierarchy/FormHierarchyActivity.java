@@ -930,8 +930,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-
         CollectStrictMode.enable();
+        super.onDestroy();
     }
 }
