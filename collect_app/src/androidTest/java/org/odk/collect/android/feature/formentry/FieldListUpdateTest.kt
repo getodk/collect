@@ -1,7 +1,6 @@
 package org.odk.collect.android.feature.formentry
 
 import android.app.Activity
-import android.app.Application
 import android.app.Instrumentation
 import android.content.Context
 import android.graphics.Bitmap
@@ -14,14 +13,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.R
-import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.GuidanceHint
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.pages.FormEntryPage
+import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.rules.FormEntryActivityTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
-import org.odk.collect.settings.keys.ProjectKeys
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Random
@@ -253,12 +250,13 @@ class FieldListUpdateTest {
     fun changeInValueUsedInGuidanceHint_ShouldChangeGuidanceHintText() {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml")
             .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
-            .apply {
-                DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
-                    .settingsProvider()
-                    .getUnprotectedSettings()
-                    .save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES.toString())
-            }
+            .clickOptionsIcon()
+            .clickGeneralSettings()
+            .clickFormManagement()
+            .openShowGuidanceForQuestions()
+            .clickOnString(org.odk.collect.strings.R.string.guidance_yes)
+            .pressBack(ProjectSettingsPage())
+            .pressBack(FormEntryPage("fieldlist-updates"))
             .clickGoToArrow()
             .clickGoUpIcon()
             .clickOnGroup("Guidance hint")
