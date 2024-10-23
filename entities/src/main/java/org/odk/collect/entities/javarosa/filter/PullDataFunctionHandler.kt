@@ -31,11 +31,12 @@ class PullDataFunctionHandler(
 
     override fun eval(args: Array<Any>, ec: EvaluationContext): Any {
         val instanceId = XPathFuncExpr.toString(args[0])
-        val child = XPathFuncExpr.toString(args[1])
-        val filterChild = XPathFuncExpr.toString(args[2])
-        val filterValue = XPathFuncExpr.toString(args[3])
 
         return if (instanceAdapter.supportsInstance(instanceId)) {
+            val child = XPathFuncExpr.toString(args[1])
+            val filterChild = XPathFuncExpr.toString(args[2])
+            val filterValue = XPathFuncExpr.toString(args[3])
+
             instanceAdapter.queryEq(instanceId, filterChild, filterValue).firstOrNull()
                 ?.getFirstChild(child)?.value?.value ?: ""
         } else {
