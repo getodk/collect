@@ -38,7 +38,7 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
         }
     }
 
-    fun queryEq(instanceId: String, child: String, value: String): List<TreeElement>? {
+    fun queryEq(instanceId: String, child: String, value: String): List<TreeElement> {
         return when {
             child == EntityItemElement.ID -> {
                 val entity = entitiesRepository.getById(
