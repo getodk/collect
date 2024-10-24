@@ -184,7 +184,7 @@ class MatchExactlyTest {
     }
 
     @Test
-    fun whenMatchExactlyEnabled_doesNotGetLatestFormsFromServerDuringFormFilling() {
+    fun whenMatchExactlyEnabled_getsLatestFormsFromServerDuringFillingAFormWithoutEntities() {
         testDependencies.server.addForm(
             "One Question Updated",
             "one_question",
@@ -197,6 +197,27 @@ class MatchExactlyTest {
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
             .startBlankForm("One Question")
+            .also { testDependencies.scheduler.runDeferredTasks() }
+            .pressBackAndDiscardForm()
+            .clickFillBlankForm()
+            .assertFormExists("One Question Updated")
+    }
+
+    @Test
+    fun whenMatchExactlyEnabled_doesNotGetLatestFormsFromServerDuringFillingAFormWithEntities() {
+        testDependencies.server.addForm(
+            "One Question Updated",
+            "one_question",
+            "2",
+            "one-question-updated.xml"
+        )
+
+        rule.startAtMainMenu()
+            .copyForm("one-question-entity-registration.xml")
+            .copyForm("one-question.xml")
+            .setServer(testDependencies.server.url)
+            .enableMatchExactly()
+            .startBlankForm("One Question Entity Registration")
             .also { testDependencies.scheduler.runDeferredTasks() }
             .pressBackAndDiscardForm()
             .clickFillBlankForm()
