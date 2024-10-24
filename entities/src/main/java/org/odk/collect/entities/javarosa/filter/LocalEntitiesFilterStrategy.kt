@@ -48,14 +48,11 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
                         child,
                         value as String
                     )
-                    return if (results != null) {
-                        sourceInstance.replacePartialElements(results)
-                        results.map {
-                            it.parent = sourceInstance.root
-                            it.ref
-                        }
-                    } else {
-                        next.get()
+
+                    sourceInstance.replacePartialElements(results)
+                    results.map {
+                        it.parent = sourceInstance.root
+                        it.ref
                     }
                 } else {
                     next.get()
