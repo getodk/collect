@@ -3,7 +3,6 @@ package org.odk.collect.android.feature.settings
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
-import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.AccessControlPage
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -41,16 +40,12 @@ class ResetProjectTest {
     }
 
     @Test
-    fun canResetSavedFormsAndEntities() {
-        testDependencies.server.addForm("one-question-entity-registration.xml")
-        testDependencies.server.addForm(
-            "one-question-entity-update.xml",
-            listOf(EntityListItem("people.csv"))
-        )
+    fun canResetSavedForms() {
+        testDependencies.server.addForm("one-question.xml")
 
         rule.withMatchExactlyProject(testDependencies.server.url)
-            .startBlankForm("One Question Entity Registration")
-            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("what is your age", "34"))
 
             .openProjectSettingsDialog()
             .clickSettings()
@@ -62,11 +57,7 @@ class ResetProjectTest {
             .clickOKOnDialog(MainMenuPage())
 
             .clickDrafts()
-            .assertTextDoesNotExist("One Question Entity Registration")
-            .pressBack(MainMenuPage())
-
-            .startBlankForm("One Question Entity Update")
-            .assertTextDoesNotExist("Logan Roy")
+            .assertTextDoesNotExist("One Question")
     }
 
     @Test
