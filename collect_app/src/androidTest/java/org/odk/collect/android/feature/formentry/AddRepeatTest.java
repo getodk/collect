@@ -120,12 +120,11 @@ public class AddRepeatTest {
     }
 
     @Test
-    public void whenInEmptyRepeat_swipingNext_andClickingAdd_addsAnotherRepeat() {
+    public void whenInRepeatWithoutLabel_swipingNext_andClickingAdd_addsAnotherRepeat() {
         rule.startAtMainMenu()
                 .copyForm(REPEAT_WITHOUT_LABEL)
                 .startBlankForm("Repeat without label")
                 .assertText("> 1")
-                .assertQuestion("First name", true)
                 .answerQuestion("First name", true, "Karan")
                 .swipeToNextQuestionWithRepeatGroup("")
                 .clickOnAdd(new FormEntryPage("Repeat without label"))
