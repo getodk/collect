@@ -12,7 +12,6 @@ import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.MediaFile
-import org.odk.collect.shared.locks.ChangeLock
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.File
 import java.io.IOException
@@ -21,35 +20,30 @@ object ServerFormUseCases {
 
     fun downloadForms(
         forms: List<ServerFormDetails>,
-        changeLock: ChangeLock,
         formDownloader: FormDownloader,
         progressReporter: ((Int, Int) -> Unit)? = null,
         isCancelled: (() -> Boolean)? = null,
     ): Map<ServerFormDetails, FormDownloadException?> {
         val results = mutableMapOf<ServerFormDetails, FormDownloadException?>()
-        changeLock.withLock { acquiredLock: Boolean ->
-            if (acquiredLock) {
-                for (index in forms.indices) {
-                    val form = forms[index]
+        for (index in forms.indices) {
+            val form = forms[index]
 
-                    try {
-                        formDownloader.downloadForm(
-                            form,
-                            object : FormDownloader.ProgressReporter {
-                                override fun onDownloadingMediaFile(count: Int) {
-                                    progressReporter?.invoke(index, count)
-                                }
-                            },
-                            { isCancelled?.invoke() ?: false }
-                        )
+            try {
+                formDownloader.downloadForm(
+                    form,
+                    object : FormDownloader.ProgressReporter {
+                        override fun onDownloadingMediaFile(count: Int) {
+                            progressReporter?.invoke(index, count)
+                        }
+                    },
+                    { isCancelled?.invoke() ?: false }
+                )
 
-                        results[form] = null
-                    } catch (e: FormDownloadException.DownloadingInterrupted) {
-                        break
-                    } catch (e: FormDownloadException) {
-                        results[form] = e
-                    }
-                }
+                results[form] = null
+            } catch (e: FormDownloadException.DownloadingInterrupted) {
+                break
+            } catch (e: FormDownloadException) {
+                results[form] = e
             }
         }
 
