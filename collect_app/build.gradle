@@ -363,7 +363,6 @@ dependencies {
     testImplementation Dependencies.androidx_arch_core_testing
     testImplementation Dependencies.okhttp3_mockwebserver
     testImplementation Dependencies.squareup_okhttp_tls
-    testImplementation Dependencies.kotlinx_coroutines_test
 
     testImplementation Dependencies.hamcrest
 
