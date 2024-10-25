@@ -231,6 +231,9 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
             /*
              For some reason passing null as the projection doesn't always give us all the
              columns so we hardcode them here so it's explicit that we need these all back.
+             The problem can occur, for example, when a new column is added to a database and the
+             database needs to be updated. After the upgrade, the new column might not be returned,
+             even though it already exists.
              */
             projection = new String[]{
                     _ID,
