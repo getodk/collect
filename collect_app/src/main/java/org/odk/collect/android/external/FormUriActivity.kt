@@ -331,11 +331,11 @@ private class FormUriViewModel(
 
         val usesEntities = if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
             val form = formsRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
-            form.usesEntities() != null
+            form.usesEntities()
         } else {
             val instance = instancesRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
             val form = formsRepositoryProvider.create().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
-            form.usesEntities() != null
+            form.usesEntities()
         }
 
         if (usesEntities) {
