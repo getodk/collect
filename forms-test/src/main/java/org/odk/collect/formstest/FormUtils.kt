@@ -52,7 +52,7 @@ object FormUtils {
         formFilesPath: String,
         xform: String = createXFormBody(formId, version),
         autosend: String? = null,
-        entitiesVersion: String? = null
+        usesEntities: String? = null
     ): Form.Builder {
         val formFilePath = createFormFixtureFile(formId, version, formFilesPath, xform)
 
@@ -62,7 +62,7 @@ object FormUtils {
             .version(version)
             .formFilePath(formFilePath)
             .autoSend(autosend)
-            .entitiesVersion(entitiesVersion)
+            .usesEntities(usesEntities)
     }
 
     fun createFormFixtureFile(

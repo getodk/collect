@@ -24,7 +24,7 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.DATE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.DELETED_DATE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.DESCRIPTION;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.DISPLAY_NAME;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.ENTITIES_VERSION;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.USES_ENTITIES;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_FILE_PATH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_MEDIA_PATH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.GEOMETRY_XPATH;
@@ -112,7 +112,7 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
             assertThat(cursor.getInt(cursor.getColumnIndex(DELETED_DATE)), is(contentValues.getAsInteger(DELETED_DATE)));
             assertThat(cursor.getInt(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(contentValues.getAsInteger(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)));
-            assertThat(cursor.getString(cursor.getColumnIndex(ENTITIES_VERSION)), is(nullValue()));
+            assertThat(cursor.getString(cursor.getColumnIndex(USES_ENTITIES)), is(nullValue()));
         }
     }
 
@@ -152,7 +152,7 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
             assertThat(cursor.getInt(cursor.getColumnIndex(DELETED_DATE)), is(contentValues.getAsInteger(DELETED_DATE)));
             assertThat(cursor.getInt(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(contentValues.getAsInteger(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)));
-            assertThat(cursor.getString(cursor.getColumnIndex(ENTITIES_VERSION)), is(nullValue()));
+            assertThat(cursor.getString(cursor.getColumnIndex(USES_ENTITIES)), is(nullValue()));
         }
     }
 
@@ -192,7 +192,7 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
             assertThat(cursor.getInt(cursor.getColumnIndex(DELETED_DATE)), is(contentValues.getAsInteger(DELETED_DATE)));
             assertThat(cursor.getString(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(nullValue()));
-            assertThat(cursor.getString(cursor.getColumnIndex(ENTITIES_VERSION)), is(nullValue()));
+            assertThat(cursor.getString(cursor.getColumnIndex(USES_ENTITIES)), is(nullValue()));
         }
     }
 
@@ -232,7 +232,7 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
             assertThat(cursor.getInt(cursor.getColumnIndex(DELETED_DATE)), is(contentValues.getAsInteger(DELETED_DATE)));
             assertThat(cursor.getString(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(nullValue()));
-            assertThat(cursor.getString(cursor.getColumnIndex(ENTITIES_VERSION)), is(nullValue()));
+            assertThat(cursor.getString(cursor.getColumnIndex(USES_ENTITIES)), is(nullValue()));
         }
     }
 
@@ -273,7 +273,7 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getInt(cursor.getColumnIndex(DELETED_DATE)), is(0));
             assertThat(cursor.getColumnIndex("deleted"), is(-1));
             assertThat(cursor.getString(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(nullValue()));
-            assertThat(cursor.getString(cursor.getColumnIndex(ENTITIES_VERSION)), is(nullValue()));
+            assertThat(cursor.getString(cursor.getColumnIndex(USES_ENTITIES)), is(nullValue()));
         }
     }
 
@@ -313,7 +313,7 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
             assertThat(cursor.isNull(cursor.getColumnIndex(DELETED_DATE)), is(true));
             assertThat(cursor.getString(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(nullValue()));
-            assertThat(cursor.getString(cursor.getColumnIndex(ENTITIES_VERSION)), is(nullValue()));
+            assertThat(cursor.getString(cursor.getColumnIndex(USES_ENTITIES)), is(nullValue()));
         }
     }
 
@@ -353,7 +353,7 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
             assertThat(cursor.isNull(cursor.getColumnIndex(DELETED_DATE)), is(true));
             assertThat(cursor.getString(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(nullValue()));
-            assertThat(cursor.getString(cursor.getColumnIndex(ENTITIES_VERSION)), is(nullValue()));
+            assertThat(cursor.getString(cursor.getColumnIndex(USES_ENTITIES)), is(nullValue()));
         }
     }
 

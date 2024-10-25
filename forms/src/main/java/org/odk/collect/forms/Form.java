@@ -46,7 +46,7 @@ public final class Form {
     private final String geometryXPath;
     private final boolean deleted;
     private final Long lastDetectedAttachmentsUpdateDate;
-    private final String entitiesVersion;
+    private final String usesEntities;
 
     private Form(Form.Builder builder) {
         dbId = builder.dbId;
@@ -67,7 +67,7 @@ public final class Form {
         geometryXPath = builder.geometryXpath;
         deleted = builder.deleted;
         lastDetectedAttachmentsUpdateDate = builder.lastDetectedAttachmentsUpdateDate;
-        entitiesVersion = builder.entitiesVersion;
+        usesEntities = builder.usesEntities;
     }
 
     public static class Builder {
@@ -89,7 +89,7 @@ public final class Form {
         private String geometryXpath;
         private boolean deleted;
         private Long lastDetectedAttachmentsUpdateDate;
-        private String entitiesVersion;
+        private String usesEntities;
 
         public Builder() {
         }
@@ -113,7 +113,7 @@ public final class Form {
             geometryXpath = form.geometryXPath;
             deleted = form.deleted;
             lastDetectedAttachmentsUpdateDate = form.lastDetectedAttachmentsUpdateDate;
-            entitiesVersion = form.entitiesVersion;
+            usesEntities = form.usesEntities;
         }
 
         public Builder dbId(Long id) {
@@ -206,8 +206,8 @@ public final class Form {
             return this;
         }
 
-        public Builder entitiesVersion(String entitiesVersion) {
-            this.entitiesVersion = entitiesVersion;
+        public Builder usesEntities(String usesEntities) {
+            this.usesEntities = usesEntities;
             return this;
         }
 
@@ -292,8 +292,8 @@ public final class Form {
         return lastDetectedAttachmentsUpdateDate;
     }
 
-    public String getEntitiesVersion() {
-        return entitiesVersion;
+    public String usesEntities() {
+        return usesEntities;
     }
 
     @Override
@@ -325,7 +325,7 @@ public final class Form {
                 Objects.equals(autoDelete, form.autoDelete) &&
                 Objects.equals(geometryXPath, form.geometryXPath) &&
                 Objects.equals(lastDetectedAttachmentsUpdateDate, form.lastDetectedAttachmentsUpdateDate) &&
-                Objects.equals(entitiesVersion, form.entitiesVersion);
+                Objects.equals(usesEntities, form.usesEntities);
     }
 
     @Override
@@ -333,7 +333,7 @@ public final class Form {
         return Objects.hash(dbId, displayName, description, formId, version, formFilePath,
                 submissionUri, base64RSAPublicKey, md5Hash, date, jrCacheFilePath, formMediaPath,
                 language, autoSend, autoDelete, geometryXPath, deleted, lastDetectedAttachmentsUpdateDate,
-                entitiesVersion);
+                usesEntities);
     }
 
     @Override

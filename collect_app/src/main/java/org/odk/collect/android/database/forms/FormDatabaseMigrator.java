@@ -16,7 +16,7 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.DELETED
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.DESCRIPTION;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.DISPLAY_NAME;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.DISPLAY_SUBTEXT;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.ENTITIES_VERSION;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.USES_ENTITIES;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_FILE_PATH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_MEDIA_PATH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.GEOMETRY_XPATH;
@@ -276,7 +276,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToVersion14(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, ENTITIES_VERSION, "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, USES_ENTITIES, "text");
     }
 
     private void createFormsTableV4(SQLiteDatabase db, String tableName) {
@@ -468,6 +468,6 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + GEOMETRY_XPATH + " text, "
                 + DELETED_DATE + " integer, "
                 + LAST_DETECTED_ATTACHMENTS_UPDATE_DATE + " integer, " // milliseconds
-                + ENTITIES_VERSION + " text);");
+                + USES_ENTITIES + " text);");
     }
 }
