@@ -12,7 +12,9 @@ class BooleanChangeLock : ChangeLock {
         return try {
             function.apply(acquired)
         } finally {
-            unlock()
+            if (acquired) {
+                unlock()
+            }
         }
     }
 

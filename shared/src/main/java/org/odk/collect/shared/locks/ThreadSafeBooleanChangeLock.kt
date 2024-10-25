@@ -11,7 +11,9 @@ class ThreadSafeBooleanChangeLock : ChangeLock {
         return try {
             function.apply(acquired)
         } finally {
-            unlock()
+            if (acquired) {
+                unlock()
+            }
         }
     }
 
