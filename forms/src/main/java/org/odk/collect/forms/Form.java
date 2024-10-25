@@ -46,7 +46,7 @@ public final class Form {
     private final String geometryXPath;
     private final boolean deleted;
     private final Long lastDetectedAttachmentsUpdateDate;
-    private final String usesEntities;
+    private final boolean usesEntities;
 
     private Form(Form.Builder builder) {
         dbId = builder.dbId;
@@ -89,7 +89,7 @@ public final class Form {
         private String geometryXpath;
         private boolean deleted;
         private Long lastDetectedAttachmentsUpdateDate;
-        private String usesEntities;
+        private boolean usesEntities;
 
         public Builder() {
         }
@@ -206,7 +206,7 @@ public final class Form {
             return this;
         }
 
-        public Builder usesEntities(String usesEntities) {
+        public Builder usesEntities(boolean usesEntities) {
             this.usesEntities = usesEntities;
             return this;
         }
@@ -292,7 +292,7 @@ public final class Form {
         return lastDetectedAttachmentsUpdateDate;
     }
 
-    public String usesEntities() {
+    public boolean usesEntities() {
         return usesEntities;
     }
 

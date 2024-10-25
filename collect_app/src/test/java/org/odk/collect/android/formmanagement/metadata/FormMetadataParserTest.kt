@@ -95,7 +95,7 @@ class FormMetadataParserTest {
         assertThat(formMetadata.autoDelete, equalTo(null))
         assertThat(formMetadata.base64RsaPublicKey, equalTo(null))
         assertThat(formMetadata.geometryXPath, equalTo(null))
-        assertThat(formMetadata.entitiesVersion, equalTo(null))
+        assertThat(formMetadata.isEntityForm, equalTo(false))
     }
 
     @Test
@@ -139,7 +139,7 @@ class FormMetadataParserTest {
         assertThat(formMetadata.autoDelete, equalTo("baz"))
         assertThat(formMetadata.base64RsaPublicKey, equalTo("quux"))
         assertThat(formMetadata.geometryXPath, equalTo("/data/location1"))
-        assertThat(formMetadata.entitiesVersion, equalTo("2024.1.0"))
+        assertThat(formMetadata.isEntityForm, equalTo(true))
     }
 
     @Test

@@ -35,7 +35,7 @@ object DatabaseObjectMapper {
         values.put(DatabaseFormColumns.AUTO_DELETE, form.autoDelete)
         values.put(DatabaseFormColumns.GEOMETRY_XPATH, form.geometryXpath)
         values.put(DatabaseFormColumns.LAST_DETECTED_ATTACHMENTS_UPDATE_DATE, form.lastDetectedAttachmentsUpdateDate)
-        values.put(DatabaseFormColumns.USES_ENTITIES, form.usesEntities())
+        values.put(DatabaseFormColumns.USES_ENTITIES, Boolean.toString(form.usesEntities()))
         return values
     }
 
@@ -100,7 +100,7 @@ object DatabaseObjectMapper {
             .geometryXpath(cursor.getString(geometryXpathColumnIndex))
             .deleted(!cursor.isNull(deletedDateColumnIndex))
             .lastDetectedAttachmentsUpdateDate(if (cursor.isNull(lastDetectedAttachmentsUpdateDateColumnIndex)) null else cursor.getLong(lastDetectedAttachmentsUpdateDateColumnIndex))
-            .usesEntities(cursor.getString(usesEntitiesColumnIndex))
+            .usesEntities(Boolean.valueOf(cursor.getString(usesEntitiesColumnIndex)))
             .build()
     }
 

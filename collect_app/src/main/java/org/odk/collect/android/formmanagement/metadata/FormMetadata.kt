@@ -9,5 +9,5 @@ data class FormMetadata(
     val autoDelete: String?,
     val autoSend: String?,
     val geometryXPath: String?,
-    val entitiesVersion: String?
+    val isEntityForm: Boolean
 )

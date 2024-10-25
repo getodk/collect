@@ -1070,7 +1070,7 @@ class FormUriActivityTest {
                 "1",
                 "1",
                 TempFiles.createTempDir().absolutePath,
-                entitiesVersion = "2024.1.0"
+                usesEntities = true
             ).build()
         )
 
@@ -1121,7 +1121,7 @@ class FormUriActivityTest {
                 "1",
                 "1",
                 TempFiles.createTempDir().absolutePath,
-                entitiesVersion = "2024.1.0"
+                usesEntities = true
             ).build()
         )
 

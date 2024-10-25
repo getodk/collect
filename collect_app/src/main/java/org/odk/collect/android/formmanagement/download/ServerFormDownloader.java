@@ -234,7 +234,7 @@ public class ServerFormDownloader implements FormDownloader {
                 .autoDelete(formMetadata.getAutoDelete())
                 .autoSend(formMetadata.getAutoSend())
                 .geometryXpath(formMetadata.getGeometryXPath())
-                .usesEntities(formMetadata.getEntitiesVersion())
+                .usesEntities(formMetadata.isEntityForm())
                 .build();
 
         return formsRepository.save(form);

@@ -52,7 +52,7 @@ object FormUtils {
         formFilesPath: String,
         xform: String = createXFormBody(formId, version),
         autosend: String? = null,
-        usesEntities: String? = null
+        usesEntities: Boolean = false
     ): Form.Builder {
         val formFilePath = createFormFixtureFile(formId, version, formFilesPath, xform)
 
