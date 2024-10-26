@@ -25,8 +25,8 @@ import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.settings.enums.FormUpdateMode
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.locks.ThreadSafeBooleanChangeLock
 import org.odk.collect.shared.settings.InMemSettings
-import org.odk.collect.testshared.BooleanChangeLock
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.getOrAwaitValue
 
@@ -47,7 +47,7 @@ class BlankFormListViewModelTest {
     private val changeLockProvider: ChangeLockProvider = mock()
     private val projectId = "projectId"
 
-    private val changeLock = BooleanChangeLock()
+    private val changeLock = ThreadSafeBooleanChangeLock()
     private lateinit var viewModel: BlankFormListViewModel
 
     @Test

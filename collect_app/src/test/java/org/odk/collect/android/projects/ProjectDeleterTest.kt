@@ -24,7 +24,7 @@ import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
-import org.odk.collect.testshared.BooleanChangeLock
+import org.odk.collect.shared.locks.ThreadSafeBooleanChangeLock
 import java.io.File
 
 class ProjectDeleterTest {
@@ -44,8 +44,8 @@ class ProjectDeleterTest {
         whenever(getProjectRootDirPath(project1.uuid)).thenReturn("")
     }
     private val changeLockProvider = mock<ChangeLockProvider> {
-        on { getFormLock(any()) } doReturn BooleanChangeLock()
-        on { getInstanceLock(any()) } doReturn BooleanChangeLock()
+        on { getFormLock(any()) } doReturn ThreadSafeBooleanChangeLock()
+        on { getInstanceLock(any()) } doReturn ThreadSafeBooleanChangeLock()
     }
     private val deleter = ProjectDeleter(
         projectsRepository,
@@ -152,7 +152,7 @@ class ProjectDeleterTest {
 
     @Test
     fun `If there are running background jobs that use blank forms the project should not be deleted`() {
-        val formChangeLock = BooleanChangeLock().apply {
+        val formChangeLock = ThreadSafeBooleanChangeLock().apply {
             tryLock()
         }
         whenever(changeLockProvider.getFormLock(any())).thenReturn(formChangeLock)
@@ -165,7 +165,7 @@ class ProjectDeleterTest {
 
     @Test
     fun `If there are running background jobs that use saved forms the project should not be deleted`() {
-        val changeLock = BooleanChangeLock().apply {
+        val changeLock = ThreadSafeBooleanChangeLock().apply {
             tryLock()
         }
         whenever(changeLockProvider.getInstanceLock(any())).thenReturn(changeLock)

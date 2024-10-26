@@ -36,7 +36,7 @@ import org.odk.collect.android.utilities.ChangeLocks;
 import org.odk.collect.androidshared.data.Consumable;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.formstest.InMemFormsRepository;
-import org.odk.collect.testshared.BooleanChangeLock;
+import org.odk.collect.shared.locks.ThreadSafeBooleanChangeLock;
 import org.odk.collect.testshared.FakeScheduler;
 
 import java.io.FileNotFoundException;
@@ -54,7 +54,7 @@ public class FormEntryViewModelTest {
     private FakeScheduler scheduler;
     private final FormSessionRepository formSessionRepository = new InMemFormSessionRepository();
     private final FormsRepository formsRepository = new InMemFormsRepository();
-    private final ChangeLocks changeLocks = new ChangeLocks(new BooleanChangeLock(), new BooleanChangeLock());
+    private final ChangeLocks changeLocks = new ChangeLocks(new ThreadSafeBooleanChangeLock(), new ThreadSafeBooleanChangeLock());
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
