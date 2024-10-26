@@ -20,6 +20,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import org.odk.collect.android.activities.FormFillingActivity;
@@ -177,7 +178,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
             instanceUploaderTask = new InstanceUploaderTask();
 
             if (url != null) {
-                instanceUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION);
+                instanceUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerHost(), true);
 
                 if (deleteInstanceAfterUpload != null) {
                     instanceUploaderTask.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
@@ -376,7 +377,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
         // TODO: is this really needed here? When would the task not have gotten a server set in
         // init already?
         if (url != null) {
-            instanceUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, false);
+            instanceUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerHost(), false);
         }
         instanceUploaderTask.setRepositories(instancesRepository, formsRepository, settingsProvider);
         instanceUploaderTask.execute(instancesToSend);
@@ -385,5 +386,15 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
     @Override
     public void cancelledUpdatingCredentials() {
         finish();
+    }
+
+    private String getReferrerHost() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            Uri referrerUri = getReferrer();
+            if (referrerUri != null) {
+                return referrerUri.getHost();
+            }
+        }
+        return "unknown";
     }
 }
