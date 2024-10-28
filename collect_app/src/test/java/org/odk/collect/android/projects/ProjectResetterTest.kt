@@ -214,11 +214,13 @@ class ProjectResetterTest {
     fun `Reset instances clears instances for current project`() {
         saveTestInstanceFiles(currentProjectId)
         setupTestInstancesDatabase(currentProjectId)
+        val instancesRepository = instancesRepositoryProvider.create(currentProjectId)
+        val instance = instancesRepository.all[0]
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_INSTANCES))
 
-        assertEquals(0, instancesRepositoryProvider.create(currentProjectId).all.size)
-        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, currentProjectId))
+        assertEquals(0, instancesRepository.all.size)
+        assertEquals(false, File(instance.instanceFilePath).parentFile.exists())
     }
 
     @Test

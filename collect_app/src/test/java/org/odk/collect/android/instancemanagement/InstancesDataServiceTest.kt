@@ -30,6 +30,7 @@ import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.locks.ThreadSafeBooleanChangeLock
 import org.odk.collect.shared.settings.InMemSettings
+import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class InstancesDataServiceTest {
@@ -129,5 +130,7 @@ class InstancesDataServiceTest {
         assertThat(remainingInstances.size, equalTo(2))
         assertThat(remainingInstances.any { it.status == STATUS_COMPLETE }, equalTo(true))
         assertThat(remainingInstances.any { it.status == STATUS_SUBMISSION_FAILED }, equalTo(true))
+        assertThat(File(remainingInstances[0].instanceFilePath).parentFile?.exists(), equalTo(true))
+        assertThat(File(remainingInstances[1].instanceFilePath).parentFile?.exists(), equalTo(true))
     }
 }
