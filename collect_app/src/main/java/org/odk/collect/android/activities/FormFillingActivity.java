@@ -127,6 +127,7 @@ import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formhierarchy.FormHierarchyActivity;
 import org.odk.collect.android.formhierarchy.ViewOnlyFormHierarchyActivity;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
+import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.widgets.datetime.pickers.CustomDatePickerDialog;
 import org.odk.collect.android.widgets.datetime.pickers.CustomTimePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
@@ -366,6 +367,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     @Inject
     public SavepointsRepositoryProvider savepointsRepositoryProvider;
 
+    @Inject
+    public ChangeLockProvider changeLockProvider;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -434,7 +438,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 savepointsRepositoryProvider,
                 new QRCodeCreatorImpl(),
                 new HtmlPrinter(),
-                instancesDataService
+                instancesDataService,
+                changeLockProvider
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()

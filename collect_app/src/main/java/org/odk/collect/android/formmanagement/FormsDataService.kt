@@ -58,17 +58,23 @@ class FormsDataService(
         progressReporter: (Int, Int) -> Unit,
         isCancelled: () -> Boolean
     ): Map<ServerFormDetails, FormDownloadException?> {
-        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
-        val formDownloader =
-            formDownloader(projectDependencyModule, clock)
+        var results = mutableMapOf<ServerFormDetails, FormDownloadException?>()
 
-        return ServerFormUseCases.downloadForms(
-            forms,
-            projectDependencyModule.formsLock,
-            formDownloader,
-            progressReporter,
-            isCancelled
-        )
+        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
+        projectDependencyModule.formsLock.withLock { acquiredLock ->
+            if (acquiredLock) {
+                val formDownloader =
+                    formDownloader(projectDependencyModule, clock)
+
+                results.putAll(ServerFormUseCases.downloadForms(
+                    forms,
+                    formDownloader,
+                    progressReporter,
+                    isCancelled
+                ))
+            }
+        }
+        return results
     }
 
     /**
@@ -94,7 +100,6 @@ class FormsDataService(
                         if (projectDependencies.generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE)) {
                             val results = ServerFormUseCases.downloadForms(
                                 updatedForms,
-                                projectDependencies.formsLock,
                                 formDownloader
                             )
 

@@ -9,12 +9,14 @@ import java.nio.charset.Charset
 object FormUtils {
     @JvmStatic
     @JvmOverloads
-    fun createXFormBody(formId: String, version: String?, title: String = "Test Form"): String {
+    fun createXFormBody(formId: String, version: String?, title: String = "Test Form", entitiesVersion: String? = null): String {
+        val entitiesVersionAttribute = entitiesVersion?.let { """entities:entities-version="$it"""" } ?: ""
+
         return """<?xml version="1.0"?>
-                    <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:entities="http://www.opendatakit.org/xforms/entities">
                         <h:head>
                             <h:title>$title</h:title>
-                            <model>
+                            <model $entitiesVersionAttribute>
                                 <instance>
                                     <data id="$formId" orx:version="$version">
                                         <question/>
@@ -51,7 +53,8 @@ object FormUtils {
         version: String?,
         formFilesPath: String,
         xform: String = createXFormBody(formId, version),
-        autosend: String? = null
+        autosend: String? = null,
+        usesEntities: Boolean = false
     ): Form.Builder {
         val formFilePath = createFormFixtureFile(formId, version, formFilesPath, xform)
 
@@ -61,6 +64,7 @@ object FormUtils {
             .version(version)
             .formFilePath(formFilePath)
             .autoSend(autosend)
+            .usesEntities(usesEntities)
     }
 
     fun createFormFixtureFile(

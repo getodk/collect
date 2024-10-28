@@ -226,4 +226,14 @@ class EntityFormTest {
             .assertTextInDialog(R.string.unrecognized_entity_version, "2020.1.0")
             .clickOKOnDialog(MainMenuPage())
     }
+
+    @Test
+    fun closingEntityForm_releasesTheLockAndLetsOtherEntityFormsToBeStarted() {
+        rule.startAtFirstLaunch()
+            .clickTryCollect()
+            .copyForm("one-question-entity-registration.xml")
+            .startBlankForm("One Question Entity Registration")
+            .pressBackAndDiscardForm()
+            .startBlankForm("One Question Entity Registration")
+    }
 }

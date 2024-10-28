@@ -32,8 +32,8 @@ import org.odk.collect.forms.FormSourceException
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.locks.ThreadSafeBooleanChangeLock
 import org.odk.collect.shared.strings.Md5.getMd5Hash
-import org.odk.collect.testshared.BooleanChangeLock
 
 @RunWith(AndroidJUnit4::class)
 class FormsDataServiceTest {
@@ -50,7 +50,7 @@ class FormsDataServiceTest {
     private val notifier = mock<Notifier>()
     private val analytics = mock<Analytics>()
 
-    private val changeLockProvider = ChangeLockProvider { BooleanChangeLock() }
+    private val changeLockProvider = ChangeLockProvider { ThreadSafeBooleanChangeLock() }
 
     private val formSource = mock<FormSource> {
         on { fetchFormList() } doReturn emptyList()
@@ -113,8 +113,8 @@ class FormsDataServiceTest {
     fun `downloadUpdates() does nothing when change lock is locked`() {
         val isSyncing = formsDataService.isSyncing(project.uuid)
 
-        val changeLock = changeLockProvider.create(project.uuid).formsLock as BooleanChangeLock
-        changeLock.lock()
+        val changeLock = changeLockProvider.create(project.uuid).formsLock as ThreadSafeBooleanChangeLock
+        changeLock.tryLock()
 
         isSyncing.recordValues { projectValues ->
             formsDataService.downloadUpdates(project.uuid)
@@ -130,8 +130,8 @@ class FormsDataServiceTest {
     fun `matchFormsWithServer() does nothing when change lock is locked`() {
         val isSyncing = formsDataService.isSyncing(project.uuid)
 
-        val changeLock = changeLockProvider.create(project.uuid).formsLock as BooleanChangeLock
-        changeLock.lock()
+        val changeLock = changeLockProvider.create(project.uuid).formsLock as ThreadSafeBooleanChangeLock
+        changeLock.tryLock()
 
         isSyncing.recordValues { projectValues ->
             formsDataService.matchFormsWithServer(project.uuid)
@@ -149,8 +149,8 @@ class FormsDataServiceTest {
      */
     @Test
     fun `matchFormsWithServer() returns false when change lock is locked`() {
-        val changeLock = changeLockProvider.create(project.uuid).formsLock as BooleanChangeLock
-        changeLock.lock()
+        val changeLock = changeLockProvider.create(project.uuid).formsLock as ThreadSafeBooleanChangeLock
+        changeLock.tryLock()
 
         assertThat(formsDataService.matchFormsWithServer(project.uuid), equalTo(false))
     }
@@ -224,8 +224,8 @@ class FormsDataServiceTest {
     fun `update() does nothing when change lock is locked`() {
         val isSyncing = formsDataService.isSyncing(project.uuid)
 
-        val changeLock = changeLockProvider.create(project.uuid).formsLock as BooleanChangeLock
-        changeLock.lock()
+        val changeLock = changeLockProvider.create(project.uuid).formsLock as ThreadSafeBooleanChangeLock
+        changeLock.tryLock()
 
         isSyncing.recordValues { projectValues ->
             formsDataService.update(project.uuid)

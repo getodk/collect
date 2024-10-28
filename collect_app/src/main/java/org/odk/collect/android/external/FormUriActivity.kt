@@ -23,6 +23,7 @@ import org.odk.collect.android.instancemanagement.canBeEdited
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.savepoints.SavepointUseCases
 import org.odk.collect.android.utilities.ApplicationConstants
+import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -65,6 +66,9 @@ class FormUriActivity : LocalizedActivity() {
     @Inject
     lateinit var scheduler: Scheduler
 
+    @Inject
+    lateinit var changeLockProvider: ChangeLockProvider
+
     private var formFillingAlreadyStarted = false
 
     private val openForm =
@@ -85,6 +89,7 @@ class FormUriActivity : LocalizedActivity() {
                     formsRepositoryProvider,
                     instanceRepositoryProvider,
                     savepointsRepositoryProvider,
+                    changeLockProvider,
                     resources
                 ) as T
             }
@@ -149,6 +154,7 @@ class FormUriActivity : LocalizedActivity() {
 
     private fun displayErrorDialog(message: String) {
         MaterialAlertDialogBuilder(this)
+            .setTitle(string.form_cannot_be_used)
             .setMessage(message)
             .setPositiveButton(string.ok) { _, _ -> finish() }
             .setOnCancelListener { finish() }
@@ -189,6 +195,7 @@ private class FormUriViewModel(
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
+    private val changeLockProvider: ChangeLockProvider,
     private val resources: Resources
 ) : ViewModel() {
 
@@ -203,6 +210,7 @@ private class FormUriViewModel(
                     ?: assertValidUri()
                     ?: assertFormExists()
                     ?: assertFormNotEncrypted()
+                    ?: assertDoesNotUseEntitiesOrFormsUpdateNotInProgress()
                 if (error != null) {
                     FormInspectionResult.Error(error)
                 } else {
@@ -314,6 +322,33 @@ private class FormUriViewModel(
             }
         } else {
             null
+        }
+    }
+
+    private fun assertDoesNotUseEntitiesOrFormsUpdateNotInProgress(): String? {
+        val uriMimeType = contentResolver.getType(uri!!)
+        val projectId = projectsDataService.getCurrentProject().uuid
+
+        val usesEntities = if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
+            val form = formsRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
+            form.usesEntities()
+        } else {
+            val instance = instancesRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
+            val form = formsRepositoryProvider.create().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
+            form.usesEntities()
+        }
+
+        if (usesEntities) {
+            val formsLock = changeLockProvider.create(projectId).formsLock
+            val isLocAcquired = formsLock.tryLock()
+
+            return if (isLocAcquired) {
+                null
+            } else {
+                resources.getString(string.cannot_open_form_because_of_forms_update)
+            }
+        } else {
+            return null
         }
     }
 
