@@ -106,8 +106,17 @@ object ServerFormUseCases {
             }
 
             if (mediaFile.isEntityList) {
-                val entityListName = getEntityListFromFileName(mediaFile)
-                LocalEntityUseCases.updateLocalEntitiesFromServer(entityListName, tempMediaFile, entitiesRepository)
+                /**
+                 * We wrap and then rethrow exceptions that happen here to make them easier to
+                 * track in Crashlytics. This can be removed in the next release once any
+                 * unexpected exceptions "in the wild" are identified.
+                 */
+                try {
+                    val entityListName = getEntityListFromFileName(mediaFile)
+                    LocalEntityUseCases.updateLocalEntitiesFromServer(entityListName, tempMediaFile, entitiesRepository)
+                } catch (t: Throwable) {
+                    throw EntityListUpdateException(t)
+                }
             } else {
                 /**
                  * Track CSVs that have names that clash with entity lists in the project. If
@@ -143,3 +152,5 @@ object ServerFormUseCases {
         }
     }
 }
+
+class EntityListUpdateException(cause: Throwable) : Exception(cause)
