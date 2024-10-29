@@ -68,9 +68,7 @@ class ProjectResetter(
     }
 
     private fun resetInstances() {
-        if (!instancesDataService.reset(projectId) ||
-            !deleteFolderContent(storagePaths.instancesDir)
-        ) {
+        if (!instancesDataService.reset(projectId)) {
             failedResetActions.add(ResetAction.RESET_INSTANCES)
         }
     }
