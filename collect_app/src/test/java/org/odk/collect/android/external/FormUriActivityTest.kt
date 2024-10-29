@@ -62,8 +62,8 @@ import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
+import org.odk.collect.shared.locks.BooleanChangeLock
 import org.odk.collect.shared.strings.UUIDGenerator
-import org.odk.collect.testshared.BooleanChangeLock
 import org.odk.collect.testshared.FakeScheduler
 import java.io.File
 import java.text.SimpleDateFormat

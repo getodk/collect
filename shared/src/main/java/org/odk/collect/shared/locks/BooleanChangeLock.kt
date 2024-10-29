@@ -1,6 +1,5 @@
-package org.odk.collect.testshared
+package org.odk.collect.shared.locks
 
-import org.odk.collect.shared.locks.ChangeLock
 import java.util.function.Function
 
 class BooleanChangeLock : ChangeLock {

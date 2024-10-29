@@ -36,7 +36,7 @@ import org.odk.collect.android.utilities.ChangeLocks;
 import org.odk.collect.androidshared.data.Consumable;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.formstest.InMemFormsRepository;
-import org.odk.collect.testshared.BooleanChangeLock;
+import org.odk.collect.shared.locks.BooleanChangeLock;
 import org.odk.collect.testshared.FakeScheduler;
 
 import java.io.FileNotFoundException;

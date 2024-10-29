@@ -28,8 +28,8 @@ import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.locks.BooleanChangeLock
 import org.odk.collect.shared.settings.InMemSettings
-import org.odk.collect.testshared.BooleanChangeLock
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)

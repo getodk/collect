@@ -24,7 +24,7 @@ import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
-import org.odk.collect.testshared.BooleanChangeLock
+import org.odk.collect.shared.locks.BooleanChangeLock
 import java.io.File
 
 class ProjectDeleterTest {
