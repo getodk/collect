@@ -53,6 +53,6 @@ dependencies {
 
     testImplementation(project(":test-shared"))
     testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.mockito_inline)
+    testImplementation(Dependencies.mockito_core)
     testImplementation(Dependencies.hamcrest)
 }
