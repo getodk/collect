@@ -112,6 +112,17 @@ class TaskSpecWorkerTest {
         worker.doWork()
         assertThat(TestTaskSpec.wasLastUniqueExecution, equalTo(true))
     }
+
+    @Test
+    fun `when there is an exception, calls onException`() {
+        val exception = IllegalStateException()
+
+        TestTaskSpec
+            .doThrow(exception)
+
+        worker.doWork()
+        assertThat(TestTaskSpec.onExceptionCalledWith, equalTo(exception))
+    }
 }
 
 private class TestTaskSpec : TaskSpec {
@@ -120,14 +131,20 @@ private class TestTaskSpec : TaskSpec {
 
         private var maxRetries: Int? = null
         private var returnValue = true
+        private var exception: Throwable? = null
 
         var wasLastUniqueExecution = false
+            private set
+
+        var onExceptionCalledWith: Throwable? = null
             private set
 
         fun reset() {
             returnValue = true
             maxRetries = null
+            exception = null
             wasLastUniqueExecution = false
+            onExceptionCalledWith = null
         }
 
         fun doReturn(value: Boolean): Companion {
@@ -138,6 +155,10 @@ private class TestTaskSpec : TaskSpec {
         fun withMaxRetries(maxRetries: Int): Companion {
             this.maxRetries = maxRetries
             return this
+        }
+
+        fun doThrow(exception: Throwable) {
+            this.exception = exception
         }
     }
 
@@ -153,7 +174,15 @@ private class TestTaskSpec : TaskSpec {
         wasLastUniqueExecution = isLastUniqueExecution
 
         return Supplier {
+            exception?.let {
+                throw it
+            }
+
             returnValue
         }
+    }
+
+    override fun onException(exception: Throwable) {
+        onExceptionCalledWith = exception
     }
 }

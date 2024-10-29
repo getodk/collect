@@ -17,6 +17,7 @@ package org.odk.collect.android.backgroundwork
 
 import android.content.Context
 import androidx.work.BackoffPolicy
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.async.TaskSpec
@@ -42,5 +43,9 @@ class AutoUpdateTaskSpec : TaskSpec {
                 throw IllegalArgumentException("No project ID provided!")
             }
         }
+    }
+
+    override fun onException(exception: Throwable) {
+        Analytics.logNonFatal(exception)
     }
 }
