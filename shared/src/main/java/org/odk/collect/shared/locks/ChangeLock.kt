@@ -14,36 +14,3 @@ interface ChangeLock {
 
     fun unlock()
 }
-
-class ThreadSafeBooleanChangeLock : ChangeLock {
-    private var locked = false
-
-    override fun <T> withLock(function: Function<Boolean, T>): T {
-        val acquired = tryLock()
-
-        return try {
-            function.apply(acquired)
-        } finally {
-            if (acquired) {
-                unlock()
-            }
-        }
-    }
-
-    override fun tryLock(): Boolean {
-        return synchronized(this) {
-            if (locked) {
-                false
-            } else {
-                locked = true
-                true
-            }
-        }
-    }
-
-    override fun unlock() {
-        synchronized(this) {
-            locked = false
-        }
-    }
-}
