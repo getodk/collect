@@ -8,7 +8,7 @@ class ThreadSafeBooleanChangeLockTest {
     private val changeLock = ThreadSafeBooleanChangeLock()
 
     @Test
-    fun `tryLock acquires the lock if it is no acquired`() {
+    fun `tryLock acquires the lock if it is not acquired`() {
         val acquired = changeLock.tryLock()
 
         assertThat(acquired, equalTo(true))
@@ -23,6 +23,20 @@ class ThreadSafeBooleanChangeLockTest {
     }
 
     @Test
+    fun `lock acquires the lock if it is not acquired`() {
+        changeLock.lock()
+        val acquired = changeLock.tryLock()
+
+        assertThat(acquired, equalTo(false))
+    }
+
+    @Test(expected = IllegalStateException::class)
+    fun `lock throws an exception if the lock is already acquired`() {
+        changeLock.lock()
+        changeLock.lock()
+    }
+
+    @Test
     fun `unlock releases the lock`() {
         changeLock.tryLock()
         changeLock.unlock()
@@ -32,7 +46,7 @@ class ThreadSafeBooleanChangeLockTest {
     }
 
     @Test
-    fun `withLock acquires the lock if it is no acquired`() {
+    fun `withLock acquires the lock if it is not acquired`() {
         changeLock.withLock { acquired ->
             assertThat(acquired, equalTo(true))
         }
