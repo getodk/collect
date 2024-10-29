@@ -114,7 +114,7 @@ class FormsDataServiceTest {
         val isSyncing = formsDataService.isSyncing(project.uuid)
 
         val changeLock = changeLockProvider.create(project.uuid).formsLock
-        changeLock.tryLock()
+        changeLock.lock()
 
         isSyncing.recordValues { projectValues ->
             formsDataService.downloadUpdates(project.uuid)
@@ -131,7 +131,7 @@ class FormsDataServiceTest {
         val isSyncing = formsDataService.isSyncing(project.uuid)
 
         val changeLock = changeLockProvider.create(project.uuid).formsLock
-        changeLock.tryLock()
+        changeLock.lock()
 
         isSyncing.recordValues { projectValues ->
             formsDataService.matchFormsWithServer(project.uuid)
@@ -150,7 +150,7 @@ class FormsDataServiceTest {
     @Test
     fun `matchFormsWithServer() returns false when change lock is locked`() {
         val changeLock = changeLockProvider.create(project.uuid).formsLock
-        changeLock.tryLock()
+        changeLock.lock()
 
         assertThat(formsDataService.matchFormsWithServer(project.uuid), equalTo(false))
     }
@@ -225,7 +225,7 @@ class FormsDataServiceTest {
         val isSyncing = formsDataService.isSyncing(project.uuid)
 
         val changeLock = changeLockProvider.create(project.uuid).formsLock
-        changeLock.tryLock()
+        changeLock.lock()
 
         isSyncing.recordValues { projectValues ->
             formsDataService.update(project.uuid)

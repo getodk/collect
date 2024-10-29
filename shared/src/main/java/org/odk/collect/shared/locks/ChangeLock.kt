@@ -12,5 +12,7 @@ interface ChangeLock {
 
     fun tryLock(): Boolean
 
+    fun lock()
+
     fun unlock()
 }

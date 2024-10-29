@@ -28,6 +28,14 @@ class ThreadSafeBooleanChangeLock : ChangeLock {
         }
     }
 
+    override fun lock() {
+        if (locked) {
+            throw IllegalStateException()
+        } else {
+            locked = true
+        }
+    }
+
     override fun unlock() {
         synchronized(this) {
             locked = false
