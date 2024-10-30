@@ -23,7 +23,7 @@ tasks.register("checkstyle", Checkstyle) {
 apply plugin: 'pmd'
 
 pmd {
-    toolVersion = '7.3.0'
+    toolVersion = '7.7.0'
 }
 
 tasks.register("pmd", Pmd) {
