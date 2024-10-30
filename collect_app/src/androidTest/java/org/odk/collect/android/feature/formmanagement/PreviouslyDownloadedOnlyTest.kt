@@ -176,6 +176,28 @@ class PreviouslyDownloadedOnlyTest {
     }
 
     @Test
+    fun whenPreviouslyDownloadedOnlyEnabledWithAutomaticDownload_getsLatestFormsFromServerDuringViewingAFormWithEntities() {
+        testDependencies.server.addForm(
+            "One Question Updated",
+            "one_question",
+            "2",
+            "one-question-updated.xml"
+        )
+
+        rule.withProject(testDependencies.server, "one-question-entity-registration.xml", "one-question.xml")
+            .enablePreviouslyDownloadedOnlyUpdatesWithAutomaticDownload()
+            .startBlankForm("One Question Entity Registration")
+            .fillOutAndFinalize()
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question Entity Registration")
+            .also { testDependencies.scheduler.runDeferredTasks() }
+            .clickOnExit()
+            .pressBack(MainMenuPage())
+            .clickFillBlankForm()
+            .assertFormExists("One Question Updated")
+    }
+
+    @Test
     fun whenPreviouslyDownloadedOnlyEnabledWithAutomaticDownload_doesNotGetLatestFormsFromServerDuringFillingAFormWithEntities() {
         testDependencies.server.addForm(
             "One Question Updated",
