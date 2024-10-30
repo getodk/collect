@@ -50,7 +50,10 @@ public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFrag
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        inFormEntry = requireArguments().getBoolean(ARG_IN_FORM_ENTRY);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            inFormEntry = arguments.getBoolean(ARG_IN_FORM_ENTRY);
+        }
     }
 
     @Override
