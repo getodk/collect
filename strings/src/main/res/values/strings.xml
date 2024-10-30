@@ -949,6 +949,9 @@
     <!-- Label for an item displayed in the project settings menu to indicate that settings are unlocked -->
     <string name="settings_unlocked">Settings unlocked</string>
 
+    <!-- Summary on setting that's currently not available because the user has entered settings from form entry -->
+    <string name="setting_not_available_during_form_entry">Setting not available during form entry</string>
+
     <!--
      ##############################################
      # PROTECTED SETTINGS

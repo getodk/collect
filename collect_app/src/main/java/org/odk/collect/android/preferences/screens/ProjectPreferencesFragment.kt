@@ -71,7 +71,10 @@ class ProjectPreferencesFragment(private val inFormEntry: Boolean) :
         findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
 
         if (inFormEntry) {
-            findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.isEnabled = false
+            findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.also {
+                it.isEnabled = false
+                it.setSummary(org.odk.collect.strings.R.string.setting_not_available_during_form_entry)
+            }
         }
     }
 

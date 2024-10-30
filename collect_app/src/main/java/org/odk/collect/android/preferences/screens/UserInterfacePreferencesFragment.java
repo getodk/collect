@@ -81,6 +81,7 @@ public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFrag
                 });
             } else {
                 pref.setEnabled(false);
+                pref.setSummary(org.odk.collect.strings.R.string.setting_not_available_during_form_entry);
             }
         }
     }
@@ -145,6 +146,7 @@ public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFrag
                 });
             } else {
                 pref.setEnabled(false);
+                pref.setSummary(org.odk.collect.strings.R.string.setting_not_available_during_form_entry);
             }
         }
     }
