@@ -109,7 +109,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             publishProgress(i + 1, instancesToUpload.size());
 
             if (completeDestinationUrl != null) {
-                Analytics.log(AnalyticsEvents.INSTANCE_UPLOAD_CUSTOM_SERVER, "referrer", referrer);
+                Analytics.log(AnalyticsEvents.INSTANCE_UPLOAD_CUSTOM_SERVER, "label", referrer);
             }
 
             try {
