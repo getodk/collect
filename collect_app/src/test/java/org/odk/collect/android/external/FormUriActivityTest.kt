@@ -62,7 +62,7 @@ import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
-import org.odk.collect.shared.locks.ThreadSafeBooleanChangeLock
+import org.odk.collect.shared.locks.BooleanChangeLock
 import org.odk.collect.shared.strings.UUIDGenerator
 import org.odk.collect.testshared.FakeScheduler
 import java.io.File
@@ -85,7 +85,7 @@ class FormUriActivityTest {
     private val savepointsRepositoryProvider = mock<SavepointsRepositoryProvider>().apply {
         whenever(create()).thenReturn(savepointsRepository)
     }
-    private val changeLock = ThreadSafeBooleanChangeLock()
+    private val changeLock = BooleanChangeLock()
     private val changeLockProvider = ChangeLockProvider { changeLock }
 
     @get:Rule
@@ -1052,7 +1052,7 @@ class FormUriActivityTest {
             ).build()
         )
 
-        changeLock.tryLock()
+        changeLock.lock()
         launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
         fakeScheduler.flush()
 
@@ -1074,7 +1074,7 @@ class FormUriActivityTest {
             ).build()
         )
 
-        changeLock.tryLock()
+        changeLock.lock()
         val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
         fakeScheduler.flush()
 
@@ -1103,7 +1103,7 @@ class FormUriActivityTest {
                 .build()
         )
 
-        changeLock.tryLock()
+        changeLock.lock()
         launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
         fakeScheduler.flush()
 
@@ -1134,7 +1134,7 @@ class FormUriActivityTest {
                 .build()
         )
 
-        changeLock.tryLock()
+        changeLock.lock()
         val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
         fakeScheduler.flush()
 

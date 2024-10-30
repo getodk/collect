@@ -33,7 +33,7 @@ import org.odk.collect.projects.Project
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
-import org.odk.collect.shared.locks.ThreadSafeBooleanChangeLock
+import org.odk.collect.shared.locks.BooleanChangeLock
 import org.odk.collect.shared.settings.Settings
 import java.io.File
 
@@ -49,7 +49,7 @@ class ProjectResetterTest {
     private lateinit var anotherProjectId: String
 
     private val propertyManager = mock<PropertyManager>()
-    private val changeLockProvider = ChangeLockProvider { ThreadSafeBooleanChangeLock() }
+    private val changeLockProvider = ChangeLockProvider { BooleanChangeLock() }
 
     @Before
     fun setup() {
@@ -202,7 +202,7 @@ class ProjectResetterTest {
         saveTestInstanceFiles(currentProjectId)
         setupTestInstancesDatabase(currentProjectId)
 
-        (changeLockProvider.create(currentProjectId).instancesLock as ThreadSafeBooleanChangeLock).tryLock()
+        changeLockProvider.create(currentProjectId).instancesLock.lock()
         val failedResetActions = projectResetter.reset(listOf(ProjectResetter.ResetAction.RESET_INSTANCES))
         assertEquals(1, failedResetActions.size)
 

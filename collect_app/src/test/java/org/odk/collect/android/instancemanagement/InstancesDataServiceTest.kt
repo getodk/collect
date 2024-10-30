@@ -28,7 +28,7 @@ import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
-import org.odk.collect.shared.locks.ThreadSafeBooleanChangeLock
+import org.odk.collect.shared.locks.BooleanChangeLock
 import org.odk.collect.shared.settings.InMemSettings
 import java.io.File
 
@@ -39,7 +39,7 @@ class InstancesDataServiceTest {
         it.save(ProjectKeys.KEY_SERVER_URL, "http://example.com")
     }
 
-    private val changeLocks = ChangeLocks(ThreadSafeBooleanChangeLock(), ThreadSafeBooleanChangeLock())
+    private val changeLocks = ChangeLocks(BooleanChangeLock(), BooleanChangeLock())
     private val formsRepository = InMemFormsRepository()
     private val instancesRepository = InMemInstancesRepository()
 
@@ -74,7 +74,7 @@ class InstancesDataServiceTest {
 
     @Test
     fun `instances should not be deleted if the instances database is locked`() {
-        (projectDependencyModule.instancesLock as ThreadSafeBooleanChangeLock).tryLock()
+        projectDependencyModule.instancesLock.lock()
         val result = instancesDataService.deleteInstances("projectId", longArrayOf(1))
         assertThat(result, equalTo(false))
     }

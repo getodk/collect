@@ -58,7 +58,7 @@ class FormsDataService(
         progressReporter: (Int, Int) -> Unit,
         isCancelled: () -> Boolean
     ): Map<ServerFormDetails, FormDownloadException?> {
-        var results = mutableMapOf<ServerFormDetails, FormDownloadException?>()
+        val results = mutableMapOf<ServerFormDetails, FormDownloadException?>()
 
         val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
         projectDependencyModule.formsLock.withLock { acquiredLock ->
