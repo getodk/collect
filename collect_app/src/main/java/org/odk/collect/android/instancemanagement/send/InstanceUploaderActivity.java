@@ -178,7 +178,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
             instanceUploaderTask = new InstanceUploaderTask();
 
             if (url != null) {
-                instanceUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerHost(), true);
+                instanceUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerUri(), true);
 
                 if (deleteInstanceAfterUpload != null) {
                     instanceUploaderTask.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
@@ -377,7 +377,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
         // TODO: is this really needed here? When would the task not have gotten a server set in
         // init already?
         if (url != null) {
-            instanceUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerHost(), false);
+            instanceUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerUri(), false);
         }
         instanceUploaderTask.setRepositories(instancesRepository, formsRepository, settingsProvider);
         instanceUploaderTask.execute(instancesToSend);
@@ -388,11 +388,11 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
         finish();
     }
 
-    private String getReferrerHost() {
+    private String getReferrerUri() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             Uri referrerUri = getReferrer();
             if (referrerUri != null) {
-                return referrerUri.getHost();
+                return referrerUri.toString();
             }
         }
         return "unknown";
