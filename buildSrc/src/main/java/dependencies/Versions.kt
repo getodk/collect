@@ -1,7 +1,7 @@
 package dependencies
 
 object Versions {
-    const val android_compile_sdk = 34
+    const val android_compile_sdk = 35
     const val android_min_sdk = 21
     const val android_target_sdk = 34
 
