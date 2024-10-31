@@ -7,9 +7,4 @@ class ViewFormPage(private val formName: String) : Page<ViewFormPage>() {
         assertText(org.odk.collect.strings.R.string.exit)
         return this
     }
-
-    fun clickOnExit(): SendFinalizedFormPage {
-        clickOnString(org.odk.collect.strings.R.string.exit)
-        return SendFinalizedFormPage()
-    }
 }
