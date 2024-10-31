@@ -7,7 +7,10 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
+import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -25,6 +28,7 @@ import android.os.Build;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.test.core.app.ApplicationProvider;
 
 import org.hamcrest.Matcher;
@@ -32,6 +36,7 @@ import org.hamcrest.Matchers;
 import org.odk.collect.android.R;
 import org.odk.collect.androidtest.DrawableMatcher;
 import org.odk.collect.testshared.Interactions;
+import org.odk.collect.testshared.ViewActions;
 import org.odk.collect.testshared.WaitFor;
 
 import java.util.concurrent.Callable;
@@ -325,6 +330,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEntryPage assertAnswer(String questionText, String answer) {
+        onView(getQuestionFieldMatcher(questionText)).check(matches(withText(answer)));
+        return this;
+    }
+
     public FormEntryPage clickOnQuestionField(String questionText) {
         Interactions.clickOn(getQuestionFieldMatcher(questionText));
         return this;
@@ -339,6 +349,20 @@ public class FormEntryPage extends Page<FormEntryPage> {
             waitForText("* " + text);
         } else {
             waitForText(text);
+        }
+
+        return this;
+    }
+
+    public FormEntryPage assertNoQuestion(String text) {
+        return assertNoQuestion(text, false);
+    }
+
+    public FormEntryPage assertNoQuestion(String text, boolean isRequired) {
+        if (isRequired) {
+            assertTextDoesNotExist("* " + text);
+        } else {
+            assertTextDoesNotExist(text);
         }
 
         return this;
@@ -365,8 +389,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new SelectMinimalDialogPage(formName).assertOnPage();
     }
 
-    public FormEntryPage assertSelectMinimalDialogAnswer(String answer) {
-        onView(withId(R.id.answer)).check(matches(withText(answer)));
+    public FormEntryPage assertSelectMinimalDialogAnswer(@Nullable String answer) {
+        if (answer == null) {
+            onView(withId(R.id.answer)).check(matches(withText(org.odk.collect.strings.R.string.select_answer)));
+        } else {
+            onView(withId(R.id.answer)).check(matches(withText(answer)));
+        }
         return this;
     }
 
@@ -415,6 +443,22 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage assertBackgroundLocationSnackbarShown() {
         onView(withId(com.google.android.material.R.id.snackbar_text))
                 .check(matches(withText(String.format(ApplicationProvider.getApplicationContext().getString(org.odk.collect.strings.R.string.background_location_enabled), "⋮"))));
+        return this;
+    }
+
+    public FormEntryPage setRating(float value) {
+        onView(allOf(withId(R.id.rating_bar1), isDisplayed())).perform(ViewActions.setRating(value));
+        return this;
+    }
+
+    public FormEntryPage assertQuestionsOrder(String questionAbove, String questionBelow) {
+        onView(withText(questionBelow)).check(isCompletelyBelow(withText(questionAbove)));
+        return this;
+    }
+
+    public FormEntryPage assertQuestionHasFocus(String questionText) {
+        onView(getQuestionFieldMatcher(questionText)).check(matches(isCompletelyDisplayed()));
+        onView(getQuestionFieldMatcher(questionText)).check(matches(hasFocus()));
         return this;
     }
 

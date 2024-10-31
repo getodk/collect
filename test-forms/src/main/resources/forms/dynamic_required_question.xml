@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<h:html
+    xmlns="http://www.w3.org/2002/xforms"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:odk="http://www.opendatakit.org/xforms">
+    <h:head>
+        <h:title>dynamic_required_question</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="dynamic_required_question">
+                    <group>
+                        <source/>
+                        <target/>
+                    </group>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/group/source" type="string"/>
+            <bind nodeset="/data/group/target" type="string" required=" /data/group/source !=&quot;&quot;"/>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+        </model>
+    </h:head>
+    <h:body>
+        <group appearance="field-list" ref="/data/group">
+            <input ref="/data/group/source">
+                <label>Source</label>
+            </input>
+            <input ref="/data/group/target">
+                <label>Target</label>
+            </input>
+        </group>
+    </h:body>
+</h:html>

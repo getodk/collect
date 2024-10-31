@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
+import android.widget.RatingBar
 import androidx.annotation.StringRes
 import androidx.core.view.allViews
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -80,6 +81,24 @@ object ViewActions {
                     GeneralLocation.BOTTOM_CENTER,
                     Press.FINGER
                 ).perform(uiController, view)
+            }
+        }
+    }
+
+    @JvmStatic
+    fun setRating(rating: Float): ViewAction {
+        return object : ViewAction {
+            override fun getConstraints(): Matcher<View> {
+                return ViewMatchers.isAssignableFrom(RatingBar::class.java)
+            }
+
+            override fun getDescription(): String {
+                return "Custom view action to set rating on RatingBar"
+            }
+
+            override fun perform(uiController: UiController, view: View) {
+                val ratingBar = view as RatingBar
+                ratingBar.rating = rating
             }
         }
     }
