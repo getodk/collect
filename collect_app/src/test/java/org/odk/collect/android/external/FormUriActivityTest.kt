@@ -1168,11 +1168,41 @@ class FormUriActivityTest {
                 .build()
         )
 
-        changeLock.tryLock()
+        changeLock.lock()
         launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
         fakeScheduler.flush()
 
         assertStartSavedFormIntent(project.uuid, instance.dbId, false)
+    }
+
+    @Test
+    fun `When attempting to view a non-editable form that uses entities then do not lock the forms database`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath,
+                usesEntities = true
+            ).build()
+        )
+
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_COMPLETE)
+                .build()
+        )
+
+        launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        fakeScheduler.flush()
+
+        assertThat(changeLock.tryLock(), equalTo(true))
     }
 
     private fun getBlankFormIntent(projectId: String?, dbId: Long) =
