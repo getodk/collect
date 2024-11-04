@@ -168,7 +168,11 @@ public class ServerFormDownloader implements FormDownloader {
             if (newAttachmentsDetected) {
                 Form existingForm = formsRepository.getOneByPath(formFile.getAbsolutePath());
                 if (existingForm != null) {
-                    formsRepository.save(new Form.Builder(existingForm).lastDetectedAttachmentsUpdateDate(clock.get()).build());
+                    formsRepository.save(new Form.Builder(existingForm)
+                            .lastDetectedAttachmentsUpdateDate(clock.get())
+                            .usesEntities(entityAttachmentsDetected)
+                            .build()
+                    );
                 }
             }
         }
