@@ -74,6 +74,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     // Custom submission URL, username and password that can be sent via intent extras by external
     // applications
     private String completeDestinationUrl;
+    private String referrer;
     private String customUsername;
     private String customPassword;
     private InstancesRepository instancesRepository;
@@ -108,7 +109,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             publishProgress(i + 1, instancesToUpload.size());
 
             if (completeDestinationUrl != null) {
-                Analytics.log(AnalyticsEvents.INSTANCE_UPLOAD_CUSTOM_SERVER);
+                Analytics.log(AnalyticsEvents.INSTANCE_UPLOAD_CUSTOM_SERVER, "label", referrer != null ? referrer : "");
             }
 
             try {
@@ -202,12 +203,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         this.settingsProvider = settingsProvider;
     }
 
-    public void setCompleteDestinationUrl(String completeDestinationUrl) {
-        setCompleteDestinationUrl(completeDestinationUrl, true);
-    }
-
-    public void setCompleteDestinationUrl(String completeDestinationUrl, boolean clearPreviousConfig) {
+    public void setCompleteDestinationUrl(String completeDestinationUrl, String referrer, boolean clearPreviousConfig) {
         this.completeDestinationUrl = completeDestinationUrl;
+        this.referrer = referrer;
         if (clearPreviousConfig) {
             setTemporaryCredentials();
         }
