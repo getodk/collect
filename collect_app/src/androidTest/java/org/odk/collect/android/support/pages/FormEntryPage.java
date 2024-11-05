@@ -179,7 +179,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return clickOptionsIcon(org.odk.collect.strings.R.string.project_settings);
     }
 
-    public ProjectSettingsPage clickGeneralSettings() {
+    public ProjectSettingsPage clickProjectSettings() {
         onView(withText(getTranslatedString(org.odk.collect.strings.R.string.project_settings))).perform(click());
         return new ProjectSettingsPage().assertOnPage();
     }

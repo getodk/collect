@@ -22,6 +22,7 @@ import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MovingBac
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.ResetSettingsResultDialogListener
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.MainMenuActivity
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
@@ -37,6 +38,12 @@ class ProjectPreferencesActivity :
     lateinit var propertyManager: PropertyManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
+            .forClass(ProjectPreferencesFragment::class.java) {
+                ProjectPreferencesFragment(intent.getBooleanExtra(EXTRA_IN_FORM_ENTRY, false))
+            }
+            .build()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preferences_layout)
         DaggerUtils.getComponent(this).inject(this)
@@ -67,4 +74,8 @@ class ProjectPreferencesActivity :
     }
 
     fun isInstanceStateSaved() = isInstanceStateSaved
+
+    companion object {
+        const val EXTRA_IN_FORM_ENTRY = "in_form_entry"
+    }
 }

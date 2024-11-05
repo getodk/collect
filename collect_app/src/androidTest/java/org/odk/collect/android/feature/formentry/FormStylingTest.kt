@@ -3,7 +3,6 @@ package org.odk.collect.android.feature.formentry
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
-import org.odk.collect.android.R
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
@@ -58,7 +57,7 @@ class FormStylingTest {
             .startBlankForm(FORM_NAME)
             .assertText("Guidance text")
             .clickOptionsIcon()
-            .clickGeneralSettings()
+            .clickProjectSettings()
             .openFormManagement()
             .openShowGuidanceForQuestions()
             .clickOnString(org.odk.collect.strings.R.string.guidance_yes_collapsed)

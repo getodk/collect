@@ -69,7 +69,7 @@ class AuditTest {
             .startBlankForm("One Question Audit Track Changes")
             .fillOut(FormEntryPage.QuestionAndAnswer("What is your age?", "31"))
             .clickOptionsIcon()
-            .clickGeneralSettings()
+            .clickProjectSettings()
 
         val auditLog = StorageUtils.getAuditLogForFirstInstance()
         assertThat(auditLog[1].get("event"), equalTo("question"))

@@ -16,6 +16,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.settings.Settings
@@ -30,8 +31,13 @@ class ProjectPreferencesFragmentTest {
     }
     private val projectPreferencesViewModel = ProjectPreferencesViewModel(adminPasswordProvider)
 
+    private val fragmentFactory = FragmentFactoryBuilder()
+        .forClass(ProjectPreferencesFragment::class) {
+            ProjectPreferencesFragment(false)
+        }.build()
+
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule()
+    val launcherRule = FragmentScenarioLauncherRule(defaultFactory = fragmentFactory)
 
     @Before
     fun setup() {
