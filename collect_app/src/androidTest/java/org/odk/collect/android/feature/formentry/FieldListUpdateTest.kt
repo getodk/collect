@@ -244,7 +244,7 @@ class FieldListUpdateTest {
         rule.setUpProjectAndCopyForm("fieldlist-updates.xml")
             .fillNewForm("fieldlist-updates.xml", "fieldlist-updates")
             .clickOptionsIcon()
-            .clickGeneralSettings()
+            .clickProjectSettings()
             .clickFormManagement()
             .openShowGuidanceForQuestions()
             .clickOnString(org.odk.collect.strings.R.string.guidance_yes)
