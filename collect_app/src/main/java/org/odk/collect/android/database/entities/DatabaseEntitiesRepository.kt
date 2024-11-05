@@ -34,7 +34,7 @@ private object EntitiesTable {
     const val COLUMN_TRUNK_VERSION = "trunk_version"
     const val COLUMN_BRANCH_ID = "branch_id"
     const val COLUMN_STATE = "state"
-    const val COLUMN_PROPERTY_PREFIX = "prop_"
+    const val COLUMN_PROPERTY_PREFIX = "p_"
 
     fun getPropertyColumn(property: String) = "$COLUMN_PROPERTY_PREFIX$property"
 }
