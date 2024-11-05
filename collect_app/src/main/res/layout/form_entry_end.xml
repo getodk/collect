@@ -95,8 +95,6 @@ the specific language governing permissions and limitations under the License.
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="64dp"
-            android:divider="@drawable/margin_standard_list_divider"
-            android:showDividers="middle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -113,6 +111,11 @@ the specific language governing permissions and limitations under the License.
                 app:icon="@drawable/ic_save_menu_24"
                 app:iconGravity="textStart"
                 app:screenName="@string/form_end_screen" />
+
+            <Space
+                android:id="@+id/divider"
+                android:layout_width="@dimen/margin_standard"
+                android:layout_height="match_parent" />
 
             <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
                 android:id="@+id/finalize"

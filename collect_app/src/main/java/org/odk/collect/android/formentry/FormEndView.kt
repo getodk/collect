@@ -42,6 +42,8 @@ class FormEndView(
             listener.onSaveClicked(true)
         }
 
+        binding.divider.isVisible = binding.saveAsDraft.isVisible && binding.finalize.isVisible
+
         val shouldFormBeSentAutomatically = formEndViewModel.shouldFormBeSentAutomatically()
         if (shouldFormBeSentAutomatically) {
             binding.finalize.text = context.getString(org.odk.collect.strings.R.string.send)
