@@ -3,6 +3,7 @@ package org.odk.collect.android.formhierarchy
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import androidx.activity.OnBackPressedCallback
 import org.javarosa.core.model.FormIndex
 import org.odk.collect.android.R
 import org.odk.collect.android.javarosawrapper.FormController
@@ -14,7 +15,16 @@ import org.odk.collect.android.javarosawrapper.FormController
 class ViewOnlyFormHierarchyActivity : FormHierarchyActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         onBackPressedCallback.remove()
+        onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                setResult(RESULT_OK)
+                finish()
+                val sessionId = intent.getStringExtra(EXTRA_SESSION_ID)!!
+                formSessionRepository.clear(sessionId)
+            }
+        })
     }
 
     /**
@@ -23,10 +33,7 @@ class ViewOnlyFormHierarchyActivity : FormHierarchyActivity() {
      */
     public override fun configureButtons(formController: FormController) {
         val exitButton = findViewById<Button>(R.id.exitButton)
-        exitButton.setOnClickListener {
-            setResult(RESULT_OK)
-            finish()
-        }
+        exitButton.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
         exitButton.visibility = View.VISIBLE
         jumpBeginningButton.visibility = View.GONE
         jumpEndButton.visibility = View.GONE
