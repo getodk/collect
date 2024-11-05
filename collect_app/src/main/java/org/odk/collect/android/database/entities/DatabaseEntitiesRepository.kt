@@ -65,7 +65,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                         list,
                         "${EntitiesTable.COLUMN_ID} = ?",
                         arrayOf(entity.id)
-                    ).first { mapCursorRowToEntity(list, it, 0) }
+                    ).first { mapCursorRowToEntity(it, 0) }
                 } else {
                     null
                 }
@@ -156,7 +156,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
         return queryWithAttachedRowId(list).foldAndClose {
             mapCursorRowToEntity(
-                list,
                 it,
                 it.getInt(ROW_ID)
             )
@@ -222,7 +221,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             selectionColumn = EntitiesTable.COLUMN_ID,
             selectionArg = id
         ).first {
-            mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+            mapCursorRowToEntity(it, it.getInt(ROW_ID))
         }
     }
 
@@ -236,20 +235,20 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         val propertyExists = databaseConnection.withConnection {
-            readableDatabase.doesColumnExist(list, property)
+            readableDatabase.doesColumnExist(list, "prop_$property")
         }
 
         return if (propertyExists) {
             queryWithAttachedRowId(
                 list,
-                selectionColumn = property,
+                selectionColumn = "prop_$property",
                 selectionArg = value
             ).foldAndClose {
-                mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+                mapCursorRowToEntity(it, it.getInt(ROW_ID))
             }
         } else if (value == "") {
             queryWithAttachedRowId(list).foldAndClose {
-                mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+                mapCursorRowToEntity(it, it.getInt(ROW_ID))
             }
         } else {
             emptyList()
@@ -271,7 +270,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     """.trimIndent(),
                     arrayOf((index + 1).toString())
                 ).first {
-                    mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+                    mapCursorRowToEntity(it, it.getInt(ROW_ID))
                 }
         }
     }
@@ -385,13 +384,13 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         val missingColumns =
-            entity.properties.map { it.first }.filterNot { columnNames.contains(it) }
+            entity.properties.map { it.first }.filterNot { columnNames.contains("prop_$it") }
         if (missingColumns.isNotEmpty()) {
             databaseConnection.resetTransaction {
                 missingColumns.forEach {
                     execSQL(
                         """
-                        ALTER TABLE $list ADD "$it" text NOT NULL DEFAULT "";
+                        ALTER TABLE $list ADD "prop_$it" text NOT NULL DEFAULT "";
                         """.trimIndent()
                     )
                 }
@@ -399,29 +398,25 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
+    private fun addPropertiesToContentValues(contentValues: ContentValues, entity: Entity) {
+        entity.properties.forEach { (name, value) ->
+            contentValues.put("\"prop_$name\"", value)
+        }
+    }
+
     private fun mapCursorRowToEntity(
-        list: String,
         cursor: Cursor,
         rowId: Int
     ): Entity.Saved {
         val map = cursor.rowToMap()
 
         val propertyColumns = map.keys.filter {
-            !listOf(
-                _ID,
-                EntitiesTable.COLUMN_ID,
-                EntitiesTable.COLUMN_LABEL,
-                EntitiesTable.COLUMN_VERSION,
-                EntitiesTable.COLUMN_TRUNK_VERSION,
-                EntitiesTable.COLUMN_BRANCH_ID,
-                EntitiesTable.COLUMN_STATE,
-                ROW_ID
-            ).contains(it)
+            it.startsWith("prop_")
         }
 
         val properties =
             propertyColumns.fold(emptyList<Pair<String, String>>()) { accum, property ->
-                accum + Pair(property, map[property] ?: "")
+                accum + Pair(property.removePrefix("prop_"), map[property] ?: "")
             }
 
         val state = if (map[EntitiesTable.COLUMN_STATE]!!.toInt() == 0) {
@@ -450,12 +445,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         return when (state) {
             Entity.State.OFFLINE -> 0
             Entity.State.ONLINE -> 1
-        }
-    }
-
-    private fun addPropertiesToContentValues(contentValues: ContentValues, entity: Entity) {
-        entity.properties.forEach { (name, value) ->
-            contentValues.put("\"$name\"", value)
         }
     }
 }
