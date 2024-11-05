@@ -819,7 +819,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void whenFormAlreadyDownloadedDoesNotHaveEntities_andHasNewMediaFilesWithEntities_downloadsAndMarkTheFormAsAFormThatUsesEntities() throws Exception {
+    public void whenFormAlreadyDownloadedDoesNotHaveEntities_andOneOfTheAttachmentsBecomesMarkedAsAnEntityList_downloadsAndMarkTheFormAsAFormThatUsesEntities() throws Exception {
         String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
@@ -856,11 +856,11 @@ public class ServerFormDownloaderTest {
                 false,
                 false,
                 new ManifestFile("", List.of(
-                        new MediaFile("file1", Md5.getMd5Hash(new ByteArrayInputStream("contents-updated".getBytes())), "http://file1", true)
+                        new MediaFile("file1", Md5.getMd5Hash(new ByteArrayInputStream("contents".getBytes())), "http://file1", true)
                 )));
 
         when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
-        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents-updated".getBytes()));
+        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
 
         // Second download
         downloader.downloadForm(serverFormDetailsUpdatedMediaFile, null, null);
