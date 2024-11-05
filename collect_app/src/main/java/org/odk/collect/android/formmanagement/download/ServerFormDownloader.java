@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement.download;
 import static org.odk.collect.android.utilities.FileUtils.interuptablyWriteFile;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.formmanagement.MediaFilesDownloadResult;
 import org.odk.collect.android.formmanagement.metadata.FormMetadata;
 import org.odk.collect.android.formmanagement.metadata.FormMetadataParser;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
@@ -16,7 +17,6 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.forms.MediaFile;
 import org.odk.collect.shared.files.FileExt;
 import org.odk.collect.shared.strings.Md5;
 
@@ -90,8 +90,7 @@ public class ServerFormDownloader implements FormDownloader {
         // use a temporary media path until everything is ok.
         String tempMediaPath = new File(tempDir, "media").getAbsolutePath();
         FileResult fileResult = null;
-        boolean newAttachmentsDetected = false;
-        boolean entityAttachmentsDetected = false;
+        MediaFilesDownloadResult mediaFilesDownloadResult;
 
         try {
             // get the xml file
@@ -100,8 +99,9 @@ public class ServerFormDownloader implements FormDownloader {
 
             // download media files if there are any
             if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
-                newAttachmentsDetected = ServerFormUseCases.downloadMediaFiles(fd, formSource, formsRepository, tempMediaPath, tempDir, entitiesRepository, stateListener);
-                entityAttachmentsDetected = fd.getManifest().getMediaFiles().stream().anyMatch(MediaFile::isEntityList);
+                mediaFilesDownloadResult = ServerFormUseCases.downloadMediaFiles(fd, formSource, formsRepository, tempMediaPath, tempDir, entitiesRepository, stateListener);
+            } else {
+                mediaFilesDownloadResult = new MediaFilesDownloadResult(false, false);
             }
 
             ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(formsRepository, fd.getFormId(), tempMediaPath);
@@ -141,7 +141,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
 
         try {
-            installEverything(tempMediaPath, fileResult, formMetadata, formsDirPath, newAttachmentsDetected, entityAttachmentsDetected);
+            installEverything(tempMediaPath, fileResult, formMetadata, formsDirPath, mediaFilesDownloadResult);
         } catch (FormDownloadException.DiskError e) {
             cleanUp(fileResult, tempMediaPath);
             throw e;
@@ -153,7 +153,7 @@ public class ServerFormDownloader implements FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    private void installEverything(String tempMediaPath, FileResult fileResult, FormMetadata formMetadata, String formsDirPath, boolean newAttachmentsDetected, boolean entityAttachmentsDetected) throws FormDownloadException.DiskError {
+    private void installEverything(String tempMediaPath, FileResult fileResult, FormMetadata formMetadata, String formsDirPath, MediaFilesDownloadResult mediaFilesDownloadResult) throws FormDownloadException.DiskError {
         FormResult formResult;
 
         File formFile;
@@ -165,7 +165,7 @@ public class ServerFormDownloader implements FormDownloader {
         } else {
             formFile = fileResult.file;
 
-            if (newAttachmentsDetected) {
+            if (mediaFilesDownloadResult.getNewAttachmentsDownloaded()) {
                 Form existingForm = formsRepository.getOneByPath(formFile.getAbsolutePath());
                 if (existingForm != null) {
                     formsRepository.save(new Form.Builder(existingForm)
@@ -175,7 +175,7 @@ public class ServerFormDownloader implements FormDownloader {
                 }
             }
 
-            if (entityAttachmentsDetected) {
+            if (mediaFilesDownloadResult.getEntitiesDownloaded()) {
                 Form existingForm = formsRepository.getOneByPath(formFile.getAbsolutePath());
                 if (existingForm != null) {
                     formsRepository.save(new Form.Builder(existingForm)
@@ -187,7 +187,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
 
         // Save form in database
-        formResult = findOrCreateForm(formFile, formMetadata, entityAttachmentsDetected);
+        formResult = findOrCreateForm(formFile, formMetadata, mediaFilesDownloadResult);
 
         // move the media files in the media folder
         if (tempMediaPath != null) {
@@ -224,14 +224,14 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private FormResult findOrCreateForm(File formFile, FormMetadata formMetadata, boolean entityAttachmentsDetected) {
+    private FormResult findOrCreateForm(File formFile, FormMetadata formMetadata, MediaFilesDownloadResult mediaFilesDownloadResult) {
         final String formFilePath = formFile.getAbsolutePath();
         String mediaPath = FileUtils.constructMediaPath(formFilePath);
 
         Form existingForm = formsRepository.getOneByPath(formFile.getAbsolutePath());
 
         if (existingForm == null) {
-            Form newForm = saveNewForm(formMetadata, formFile, mediaPath, entityAttachmentsDetected);
+            Form newForm = saveNewForm(formMetadata, formFile, mediaPath, mediaFilesDownloadResult.getEntitiesDownloaded());
             return new FormResult(newForm, true);
         } else {
             return new FormResult(existingForm, false);

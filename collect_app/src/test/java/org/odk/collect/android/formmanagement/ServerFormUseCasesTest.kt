@@ -179,7 +179,7 @@ class ServerFormUseCasesTest {
             mock()
         )
 
-        assertThat(result, equalTo(false))
+        assertThat(result, equalTo(MediaFilesDownloadResult(false, false)))
     }
 
     @Test
@@ -222,6 +222,6 @@ class ServerFormUseCasesTest {
             mock()
         )
 
-        assertThat(result, equalTo(false))
+        assertThat(result, equalTo(MediaFilesDownloadResult(false, false)))
     }
 }
