@@ -43,7 +43,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         dbPath,
         "entities.db",
         EntitiesDatabaseMigrator(),
-        1
+        DATABASE_VERSION
     )
 
     override fun save(list: String, vararg entities: Entity) {
@@ -120,9 +120,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     override fun getLists(): Set<String> {
         return databaseConnection.withConnection {
-            readableDatabase
-                .query(ListsTable.TABLE_NAME)
-                .foldAndClose(emptySet()) { set, cursor -> set + cursor.getString(ListsTable.COLUMN_NAME) }
+            getListsFromDB(readableDatabase)
         }
     }
 
@@ -182,11 +180,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     override fun clear() {
         databaseConnection.withConnection {
-            getLists().forEach {
-                writableDatabase.delete(it)
-            }
-
-            writableDatabase.delete(ListsTable.TABLE_NAME)
+            dropAllTablesFromDB(writableDatabase)
         }
     }
 
@@ -447,10 +441,15 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             Entity.State.ONLINE -> 1
         }
     }
+
+    companion object {
+        private const val DATABASE_VERSION = 2
+    }
 }
 
 private class EntitiesDatabaseMigrator :
     DatabaseMigrator {
+
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             """
@@ -463,5 +462,21 @@ private class EntitiesDatabaseMigrator :
         )
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int) = Unit
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int) {
+        dropAllTablesFromDB(db)
+    }
+}
+
+private fun dropAllTablesFromDB(db: SQLiteDatabase) {
+    getListsFromDB(db).forEach {
+        db.delete(it)
+    }
+
+    db.delete(ListsTable.TABLE_NAME)
+}
+
+private fun getListsFromDB(db: SQLiteDatabase): Set<String> {
+    return db
+        .query(ListsTable.TABLE_NAME)
+        .foldAndClose(emptySet()) { set, cursor -> set + cursor.getString(ListsTable.COLUMN_NAME) }
 }
