@@ -34,6 +34,9 @@ private object EntitiesTable {
     const val COLUMN_TRUNK_VERSION = "trunk_version"
     const val COLUMN_BRANCH_ID = "branch_id"
     const val COLUMN_STATE = "state"
+    const val COLUMN_PROPERTY_PREFIX = "prop_"
+
+    fun getPropertyColumn(property: String) = "$COLUMN_PROPERTY_PREFIX$property"
 }
 
 class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRepository {
@@ -229,13 +232,13 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         val propertyExists = databaseConnection.withConnection {
-            readableDatabase.doesColumnExist(list, "prop_$property")
+            readableDatabase.doesColumnExist(list, EntitiesTable.getPropertyColumn(property))
         }
 
         return if (propertyExists) {
             queryWithAttachedRowId(
                 list,
-                selectionColumn = "prop_$property",
+                selectionColumn = EntitiesTable.getPropertyColumn(property),
                 selectionArg = value
             ).foldAndClose {
                 mapCursorRowToEntity(it, it.getInt(ROW_ID))
@@ -377,14 +380,16 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             readableDatabase.getColumnNames(list)
         }
 
-        val missingColumns =
-            entity.properties.map { it.first }.filterNot { columnNames.contains("prop_$it") }
+        val missingColumns = entity.properties
+            .map { EntitiesTable.getPropertyColumn(it.first) }
+            .filterNot { columnNames.contains(it) }
+
         if (missingColumns.isNotEmpty()) {
             databaseConnection.resetTransaction {
                 missingColumns.forEach {
                     execSQL(
                         """
-                        ALTER TABLE $list ADD "prop_$it" text NOT NULL DEFAULT "";
+                        ALTER TABLE $list ADD "$it" text NOT NULL DEFAULT "";
                         """.trimIndent()
                     )
                 }
@@ -394,7 +399,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     private fun addPropertiesToContentValues(contentValues: ContentValues, entity: Entity) {
         entity.properties.forEach { (name, value) ->
-            contentValues.put("\"prop_$name\"", value)
+            contentValues.put("\"${EntitiesTable.getPropertyColumn(name)}\"", value)
         }
     }
 
@@ -405,12 +410,15 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         val map = cursor.rowToMap()
 
         val propertyColumns = map.keys.filter {
-            it.startsWith("prop_")
+            it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX)
         }
 
         val properties =
             propertyColumns.fold(emptyList<Pair<String, String>>()) { accum, property ->
-                accum + Pair(property.removePrefix("prop_"), map[property] ?: "")
+                accum + Pair(
+                    property.removePrefix(EntitiesTable.COLUMN_PROPERTY_PREFIX),
+                    map[property] ?: ""
+                )
             }
 
         val state = if (map[EntitiesTable.COLUMN_STATE]!!.toInt() == 0) {
