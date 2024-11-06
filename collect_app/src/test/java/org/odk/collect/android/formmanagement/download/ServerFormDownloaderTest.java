@@ -818,6 +818,59 @@ public class ServerFormDownloaderTest {
         assertThat(form.usesEntities(), is(false));
     }
 
+    @Test
+    public void whenFormAlreadyDownloadedDoesNotHaveEntities_andOneOfTheAttachmentsBecomesMarkedAsAnEntityList_downloadsAndMarkTheFormAsAFormThatUsesEntities() throws Exception {
+        String xform = createXFormBody("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                Md5.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                true,
+                false,
+                new ManifestFile("", List.of(
+                        new MediaFile("file1", Md5.getMd5Hash(new ByteArrayInputStream("contents".getBytes())), "http://file1")
+                )));
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
+
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), FormMetadataParser.INSTANCE, clock, entitiesRepository);
+
+        // Initial download
+        downloader.downloadForm(serverFormDetails, null, null);
+
+        List<Form> allForms = formsRepository.getAll();
+        assertThat(allForms.size(), is(1));
+        Form form = allForms.get(0);
+        assertThat(form.usesEntities(), is(false));
+
+        ServerFormDetails serverFormDetailsUpdatedMediaFile = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                Md5.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                false,
+                false,
+                new ManifestFile("", List.of(
+                        new MediaFile("file1", Md5.getMd5Hash(new ByteArrayInputStream("contents".getBytes())), "http://file1", true)
+                )));
+
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
+
+        // Second download
+        downloader.downloadForm(serverFormDetailsUpdatedMediaFile, null, null);
+
+        allForms = formsRepository.getAll();
+        assertThat(allForms.size(), is(1));
+        form = allForms.get(0);
+        assertThat(form.usesEntities(), is(true));
+    }
+
     private String getFormFilesPath() {
         return formsDir.getAbsolutePath();
     }

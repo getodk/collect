@@ -75,8 +75,10 @@ object ServerFormUseCases {
         tempDir: File,
         entitiesRepository: EntitiesRepository,
         stateListener: OngoingWorkListener
-    ): Boolean {
-        var atLeastOneNewMediaFileDetected = false
+    ): MediaFilesDownloadResult {
+        var newAttachmentsDownloaded = false
+        var entitiesDownloaded = false
+
         val tempMediaDir = File(tempMediaPath).also { it.mkdir() }
 
         formToDownload.manifest!!.mediaFiles.forEachIndexed { i, mediaFile ->
@@ -95,13 +97,13 @@ object ServerFormUseCases {
                         FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
 
                         if (!tempMediaFile.getMd5Hash().contentEquals(existingFileHash)) {
-                            atLeastOneNewMediaFileDetected = true
+                            newAttachmentsDownloaded = true
                         }
                     }
                 } else {
                     val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
                     FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
-                    atLeastOneNewMediaFileDetected = true
+                    newAttachmentsDownloaded = true
                 }
             }
 
@@ -114,6 +116,7 @@ object ServerFormUseCases {
                 try {
                     val entityListName = getEntityListFromFileName(mediaFile)
                     LocalEntityUseCases.updateLocalEntitiesFromServer(entityListName, tempMediaFile, entitiesRepository)
+                    entitiesDownloaded = true
                 } catch (t: Throwable) {
                     throw EntityListUpdateException(t)
                 }
@@ -131,7 +134,7 @@ object ServerFormUseCases {
             }
         }
 
-        return atLeastOneNewMediaFileDetected
+        return MediaFilesDownloadResult(newAttachmentsDownloaded, entitiesDownloaded)
     }
 
     private fun getEntityListFromFileName(mediaFile: MediaFile) =
@@ -154,3 +157,8 @@ object ServerFormUseCases {
 }
 
 class EntityListUpdateException(cause: Throwable) : Exception(cause)
+
+data class MediaFilesDownloadResult(
+    val newAttachmentsDownloaded: Boolean,
+    val entitiesDownloaded: Boolean
+)
