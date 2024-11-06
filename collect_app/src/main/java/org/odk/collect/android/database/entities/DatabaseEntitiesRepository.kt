@@ -34,6 +34,9 @@ private object EntitiesTable {
     const val COLUMN_TRUNK_VERSION = "trunk_version"
     const val COLUMN_BRANCH_ID = "branch_id"
     const val COLUMN_STATE = "state"
+    const val COLUMN_PROPERTY_PREFIX = "p_"
+
+    fun getPropertyColumn(property: String) = "$COLUMN_PROPERTY_PREFIX$property"
 }
 
 class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRepository {
@@ -43,7 +46,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         dbPath,
         "entities.db",
         EntitiesDatabaseMigrator(),
-        1
+        DATABASE_VERSION
     )
 
     override fun save(list: String, vararg entities: Entity) {
@@ -65,7 +68,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                         list,
                         "${EntitiesTable.COLUMN_ID} = ?",
                         arrayOf(entity.id)
-                    ).first { mapCursorRowToEntity(list, it, 0) }
+                    ).first { mapCursorRowToEntity(it, 0) }
                 } else {
                     null
                 }
@@ -120,9 +123,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     override fun getLists(): Set<String> {
         return databaseConnection.withConnection {
-            readableDatabase
-                .query(ListsTable.TABLE_NAME)
-                .foldAndClose(emptySet()) { set, cursor -> set + cursor.getString(ListsTable.COLUMN_NAME) }
+            getListsFromDB(readableDatabase)
         }
     }
 
@@ -156,7 +157,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
         return queryWithAttachedRowId(list).foldAndClose {
             mapCursorRowToEntity(
-                list,
                 it,
                 it.getInt(ROW_ID)
             )
@@ -183,11 +183,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     override fun clear() {
         databaseConnection.withConnection {
-            getLists().forEach {
-                writableDatabase.delete(it)
-            }
-
-            writableDatabase.delete(ListsTable.TABLE_NAME)
+            dropAllTablesFromDB(writableDatabase)
         }
     }
 
@@ -222,7 +218,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             selectionColumn = EntitiesTable.COLUMN_ID,
             selectionArg = id
         ).first {
-            mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+            mapCursorRowToEntity(it, it.getInt(ROW_ID))
         }
     }
 
@@ -236,20 +232,20 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         val propertyExists = databaseConnection.withConnection {
-            readableDatabase.doesColumnExist(list, property)
+            readableDatabase.doesColumnExist(list, EntitiesTable.getPropertyColumn(property))
         }
 
         return if (propertyExists) {
             queryWithAttachedRowId(
                 list,
-                selectionColumn = property,
+                selectionColumn = EntitiesTable.getPropertyColumn(property),
                 selectionArg = value
             ).foldAndClose {
-                mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+                mapCursorRowToEntity(it, it.getInt(ROW_ID))
             }
         } else if (value == "") {
             queryWithAttachedRowId(list).foldAndClose {
-                mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+                mapCursorRowToEntity(it, it.getInt(ROW_ID))
             }
         } else {
             emptyList()
@@ -271,7 +267,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     """.trimIndent(),
                     arrayOf((index + 1).toString())
                 ).first {
-                    mapCursorRowToEntity(list, it, it.getInt(ROW_ID))
+                    mapCursorRowToEntity(it, it.getInt(ROW_ID))
                 }
         }
     }
@@ -384,8 +380,10 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             readableDatabase.getColumnNames(list)
         }
 
-        val missingColumns =
-            entity.properties.map { it.first }.filterNot { columnNames.contains(it) }
+        val missingColumns = entity.properties
+            .map { EntitiesTable.getPropertyColumn(it.first) }
+            .filterNot { columnNames.contains(it) }
+
         if (missingColumns.isNotEmpty()) {
             databaseConnection.resetTransaction {
                 missingColumns.forEach {
@@ -399,29 +397,28 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
+    private fun addPropertiesToContentValues(contentValues: ContentValues, entity: Entity) {
+        entity.properties.forEach { (name, value) ->
+            contentValues.put("\"${EntitiesTable.getPropertyColumn(name)}\"", value)
+        }
+    }
+
     private fun mapCursorRowToEntity(
-        list: String,
         cursor: Cursor,
         rowId: Int
     ): Entity.Saved {
         val map = cursor.rowToMap()
 
         val propertyColumns = map.keys.filter {
-            !listOf(
-                _ID,
-                EntitiesTable.COLUMN_ID,
-                EntitiesTable.COLUMN_LABEL,
-                EntitiesTable.COLUMN_VERSION,
-                EntitiesTable.COLUMN_TRUNK_VERSION,
-                EntitiesTable.COLUMN_BRANCH_ID,
-                EntitiesTable.COLUMN_STATE,
-                ROW_ID
-            ).contains(it)
+            it.startsWith(EntitiesTable.COLUMN_PROPERTY_PREFIX)
         }
 
         val properties =
             propertyColumns.fold(emptyList<Pair<String, String>>()) { accum, property ->
-                accum + Pair(property, map[property] ?: "")
+                accum + Pair(
+                    property.removePrefix(EntitiesTable.COLUMN_PROPERTY_PREFIX),
+                    map[property] ?: ""
+                )
             }
 
         val state = if (map[EntitiesTable.COLUMN_STATE]!!.toInt() == 0) {
@@ -453,15 +450,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    private fun addPropertiesToContentValues(contentValues: ContentValues, entity: Entity) {
-        entity.properties.forEach { (name, value) ->
-            contentValues.put("\"$name\"", value)
-        }
+    companion object {
+        private const val DATABASE_VERSION = 2
     }
 }
 
 private class EntitiesDatabaseMigrator :
     DatabaseMigrator {
+
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             """
@@ -474,5 +470,21 @@ private class EntitiesDatabaseMigrator :
         )
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int) = Unit
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int) {
+        dropAllTablesFromDB(db)
+    }
+}
+
+private fun dropAllTablesFromDB(db: SQLiteDatabase) {
+    getListsFromDB(db).forEach {
+        db.delete(it)
+    }
+
+    db.delete(ListsTable.TABLE_NAME)
+}
+
+private fun getListsFromDB(db: SQLiteDatabase): Set<String> {
+    return db
+        .query(ListsTable.TABLE_NAME)
+        .foldAndClose(emptySet()) { set, cursor -> set + cursor.getString(ListsTable.COLUMN_NAME) }
 }
