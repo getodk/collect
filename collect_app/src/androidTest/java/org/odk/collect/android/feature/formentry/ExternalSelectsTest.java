@@ -3,6 +3,8 @@ package org.odk.collect.android.feature.formentry;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
@@ -30,5 +32,30 @@ public class ExternalSelectsTest {
                 .swipeToNextQuestion("county")
                 .assertText("King")
                 .assertText("Cameron");
+    }
+
+    @Test
+    public void missingFileMessage_shouldBeDisplayedIfExternalFileWithChoicesIsMissing() {
+        String formsDirPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS);
+
+        rule.startAtMainMenu()
+                .copyForm("select_one_external.xml")
+                .startBlankForm("cascading select test")
+                .clickOnText("Texas")
+                .swipeToNextQuestion("county")
+                .assertText("File: $formsDirPath/select_one_external-media/itemsets.csv is missing.")
+                .swipeToNextQuestion("city")
+                .assertText("File: $formsDirPath/select_one_external-media/itemsets.csv is missing.");
+    }
+
+    @Test
+    public void missingFileMessage_shouldBeDisplayedIfExternalFileWithChoicesUsedBySearchFunctionIsMissing() {
+        String formsDirPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS);
+
+        rule.startAtMainMenu()
+                .copyForm("search_and_select.xml")
+                .startBlankForm("search_and_select")
+                .assertText("File: $formsDirPath/search_and_select-media/nombre.csv is missing.")
+                .assertText("File: $formsDirPath/search_and_select-media/nombre2.csv is missing.");
     }
 }
