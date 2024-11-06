@@ -56,4 +56,15 @@ class CatchFormDesignExceptionsTest {
             .rotateToLandscape(FormEntryPage("g6Error"))
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.error_occured)
     }
+
+    @Test
+    fun typeMismatchErrorMessage_shouldBeDisplayedWhenItOccurs() {
+        rule.startAtMainMenu()
+            .copyForm("validate.xml")
+            .startBlankForm("validate")
+            .longPressOnQuestion("year")
+            .removeResponse()
+            .swipeToNextQuestionWithError()
+            .checkIsTextDisplayedOnDialog("The value \"-01-01\" can't be converted to a date.")
+    }
 }
