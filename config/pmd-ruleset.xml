@@ -68,7 +68,6 @@
         <exclude name="UnnecessaryFullyQualifiedName" />
         <exclude name="UnnecessaryCast" />
         <exclude name="UnnecessaryReturn" />
-        <exclude name="UseDiamondOperator" />
         <exclude name="UselessParentheses" />               <!-- Decided not to use in #1519 -->
     </rule>
 

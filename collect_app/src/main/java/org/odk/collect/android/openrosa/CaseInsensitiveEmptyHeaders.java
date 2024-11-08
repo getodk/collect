@@ -10,7 +10,7 @@ public class CaseInsensitiveEmptyHeaders implements CaseInsensitiveHeaders {
     @Nullable
     @Override
     public Set<String> getHeaders() {
-        return new TreeSet<String>();
+        return new TreeSet<>();
     }
 
     @Override
