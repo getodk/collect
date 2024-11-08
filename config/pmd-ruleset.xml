@@ -17,7 +17,6 @@
         <exclude name="AvoidReassigningParameters" />
         <exclude name="AvoidStringBufferField" />
         <exclude name="ForLoopCanBeForeach" />
-        <exclude name="GuardLogStatement" />
         <exclude name="JUnit4TestShouldUseBeforeAnnotation" />
         <exclude name="JUnit4TestShouldUseTestAnnotation" />
         <exclude name="JUnitAssertionsShouldIncludeMessage" />
