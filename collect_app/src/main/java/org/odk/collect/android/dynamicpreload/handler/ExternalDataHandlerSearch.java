@@ -281,11 +281,11 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
             if (columnIndex > 1) {
                 sb.append(' ');
             }
-            sb.append('(');
-            sb.append(selectColumnMap.get(columnName));
-            sb.append(": ");
-            sb.append(value);
-            sb.append(')');
+            sb.append('(')
+                .append(selectColumnMap.get(columnName))
+                .append(": ")
+                .append(value)
+                .append(')');
         }
         return sb.toString();
     }

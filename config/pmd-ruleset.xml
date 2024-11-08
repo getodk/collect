@@ -153,7 +153,6 @@
         <exclude name="AvoidFileStream" />
         <exclude name="AvoidInstantiatingObjectsInLoops" />
         <exclude name="BigIntegerInstantiation" />
-        <exclude name="ConsecutiveAppendsShouldReuse" />
         <exclude name="InefficientEmptyStringCheck" />
         <exclude name="InefficientStringBuffering" />
         <exclude name="InsufficientStringBufferDeclaration" />
