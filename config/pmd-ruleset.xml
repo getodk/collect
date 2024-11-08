@@ -161,7 +161,6 @@
         <exclude name="TooFewBranchesForASwitchStatement" /> <!-- Decided not to use in #2564 -->
         <exclude name="TooFewBranchesForSwitch" />
         <exclude name="UseArraysAsList" />
-        <exclude name="UseIndexOfChar" />
         <exclude name="UseStringBufferForStringAppends" />
     </rule>
 
