@@ -52,7 +52,6 @@
         <exclude name="DefaultPackage" />
         <exclude name="EmptyControlStatement" />
         <exclude name="FieldDeclarationsShouldBeAtStartOfClass" />
-        <exclude name="LambdaCanBeMethodReference" />
         <exclude name="LongVariable" />
         <exclude name="LocalVariableCouldBeFinal" />
         <exclude name="MIsLeadingVariableName" />
