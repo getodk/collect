@@ -67,7 +67,6 @@
         <exclude name="LinguisticNaming" />
         <exclude name="UnnecessaryFullyQualifiedName" />
         <exclude name="UnnecessaryCast" />
-        <exclude name="UnnecessaryImport" />
         <exclude name="UnnecessaryReturn" />
         <exclude name="UseDiamondOperator" />
         <exclude name="UselessParentheses" />               <!-- Decided not to use in #1519 -->
