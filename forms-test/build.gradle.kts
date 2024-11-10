@@ -1,5 +1,3 @@
-import dependencies.Dependencies
-
 plugins {
     id("java-library")
     id("kotlin")
@@ -15,11 +13,11 @@ java {
 dependencies {
     implementation(project(":forms"))
     implementation(project(":shared"))
-    implementation(Dependencies.kotlin_stdlib)
-    implementation(Dependencies.commons_io)
-    implementation(Dependencies.junit)
-    implementation(Dependencies.mockito_kotlin)
-    implementation(Dependencies.hamcrest)
+    implementation(libs.kotlinStdlib)
+    implementation(libs.commonsIo)
+    implementation(libs.junit)
+    implementation(libs.mockitoKotlin)
+    implementation(libs.hamcrest)
 }
 
 tasks.register("testDebug") {

@@ -1,5 +1,3 @@
-import dependencies.Versions
-
 apply(from = "../config/quality.gradle")
 
 plugins {
@@ -9,11 +7,11 @@ plugins {
 
 android {
     namespace = "org.odk.collect.printer"
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
-        targetSdk = Versions.android_target_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

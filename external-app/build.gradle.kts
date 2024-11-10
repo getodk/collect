@@ -1,6 +1,3 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
     id("com.android.library")
     id("kotlin-android")
@@ -10,10 +7,10 @@ plugins {
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -39,11 +36,11 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.androidx_core_ktx)
+    implementation(libs.androidxCoreKtx)
 
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.robolectric)
-    testImplementation(Dependencies.mockito_kotlin)
+    testImplementation(libs.junit)
+    testImplementation(libs.hamcrest)
+    testImplementation(libs.androidxTestExtJunit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.mockitoKotlin)
 }
