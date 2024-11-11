@@ -41,7 +41,7 @@
     </h:head>
     <h:body>
         <select1 appearance="search('fruits')" ref="/different-search-appearances/fruit1">
-            <label>Select from a CSV using search() appearance/function</label>
+            <label>Select one from a CSV using search() appearance/function</label>
             <item>
                 <label>name</label>
                 <value>name_key</value>
@@ -53,7 +53,7 @@
             </label>
         </input>
         <select1 ref="/different-search-appearances/animal1">
-            <label>Static select with no appearance</label>
+            <label>Static select one with no appearance</label>
             <item>
                 <label>Wolf</label>
                 <value>wolf</value>
@@ -72,7 +72,7 @@
             </item>
         </select1>
         <select1 appearance="search" ref="/different-search-appearances/animal2">
-            <label>Static select with search appearance</label>
+            <label>Static select one with search appearance</label>
             <item>
                 <label>Wolf</label>
                 <value>wolf</value>
@@ -91,7 +91,7 @@
             </item>
         </select1>
         <select1 appearance="autocomplete" ref="/different-search-appearances/animal3">
-            <label>Static select with autocomplete appearance</label>
+            <label>Static select one with autocomplete appearance</label>
             <item>
                 <label>Wolf</label>
                 <value>wolf</value>
@@ -110,28 +110,28 @@
             </item>
         </select1>
         <select1 appearance="search search('fruits')" ref="/different-search-appearances/fruit2">
-            <label>Select from a CSV using search() appearance/function and search appearance</label>
+            <label>Select one from a CSV using search() appearance/function and search appearance</label>
             <item>
                 <label>name</label>
                 <value>name_key</value>
             </item>
         </select1>
         <select1 appearance="autocomplete search('fruits')" ref="/different-search-appearances/fruit3">
-            <label>Select from a CSV using search() appearance/function and autocomplete appearance</label>
+            <label>Select one from a CSV using search() appearance/function and autocomplete appearance</label>
             <item>
                 <label>name</label>
                 <value>name_key</value>
             </item>
         </select1>
         <select appearance="search('fruits')" ref="/different-search-appearances/fruit4">
-            <label>Select from a CSV using search() appearance/function</label>
+            <label>Select multiple from a CSV using search() appearance/function</label>
             <item>
                 <label>name</label>
                 <value>name_key</value>
             </item>
         </select>
         <select ref="/different-search-appearances/animal4">
-            <label>Static select with no appearance</label>
+            <label>Static select multiple with no appearance</label>
             <item>
                 <label>Wolf</label>
                 <value>wolf</value>
@@ -150,7 +150,7 @@
             </item>
         </select>
         <select appearance="search" ref="/different-search-appearances/animal5">
-            <label>Static select with search appearance</label>
+            <label>Static select multiple with search appearance</label>
             <item>
                 <label>Wolf</label>
                 <value>wolf</value>
@@ -169,7 +169,7 @@
             </item>
         </select>
         <select appearance="autocomplete" ref="/different-search-appearances/animal6">
-            <label>Static select with autocomplete appearance</label>
+            <label>Static select multiple with autocomplete appearance</label>
             <item>
                 <label>Wolf</label>
                 <value>wolf</value>
@@ -188,14 +188,14 @@
             </item>
         </select>
         <select appearance="search search('fruits')" ref="/different-search-appearances/fruit5">
-            <label>Select from a CSV using search() appearance/function and search appearance</label>
+            <label>Select multiple from a CSV using search() appearance/function and search appearance</label>
             <item>
                 <label>name</label>
                 <value>name_key</value>
             </item>
         </select>
         <select appearance="autocomplete search('fruits')" ref="/different-search-appearances/fruit6">
-            <label>Select from a CSV using search() appearance/function and autocomplete appearance</label>
+            <label>Select multiple from a CSV using search() appearance/function and autocomplete appearance</label>
             <item>
                 <label>name</label>
                 <value>name_key</value>
