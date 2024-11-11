@@ -1,6 +1,6 @@
 plugins {
-    id("java-library")
-    id("kotlin")
+    alias(libs.plugins.javaLibrary)
+    alias(libs.plugins.kotlinLibrary)
 }
 
 apply(from = "../config/quality.gradle")

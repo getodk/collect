@@ -98,3 +98,12 @@ robolectric = { group = "org.robolectric", name = "robolectric", version = "4.13
 uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version = "2.3.0" }
 
 [plugins]
+androidApplication = { id = "com.android.application" }
+androidLibrary = { id = "com.android.library" }
+javaLibrary = { id = "java-library" }
+kotlinLibrary = { id = "kotlin" }
+kotlinAndroid = { id = "kotlin-android" }
+kotlinKapt = { id = "kotlin-kapt" }
+kotlinParcelize = { id = "kotlin-parcelize" }
+safeargsKotlin = { id = "androidx.navigation.safeargs.kotlin" }
+ossLicenses = { id = "com.google.android.gms.oss-licenses-plugin" }
