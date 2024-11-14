@@ -125,6 +125,7 @@ import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragmen
 import org.odk.collect.android.formentry.saving.SaveAnswerFileProgressDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formhierarchy.FormHierarchyActivity;
+import org.odk.collect.android.formhierarchy.FormHierarchyFragmentHostActivity;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
@@ -2029,7 +2030,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                             } else {
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
                                 formControllerAvailable(formController, form, instance);
-                                Intent intent = new Intent(this, FormHierarchyActivity.class);
+                                Intent intent = new Intent(this, FormHierarchyFragmentHostActivity.class);
                                 intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
                                 startActivityForResult(intent, RequestCodes.HIERARCHY_ACTIVITY);
                             }
@@ -2038,7 +2039,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 } else {
                     formControllerAvailable(formController, form, instance);
                     if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                        Intent intent = new Intent(this, FormHierarchyActivity.class);
+                        Intent intent = new Intent(this, FormHierarchyFragmentHostActivity.class);
                         intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
                         intent.putExtra(FormHierarchyActivity.EXTRA_VIEW_ONLY, true);
                         startActivity(intent);
