@@ -93,6 +93,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
 
     public static final int RESULT_ADD_REPEAT = 2;
     public static final String EXTRA_SESSION_ID = "session_id";
+    public static final String EXTRA_VIEW_ONLY = "view_only";
     /**
      * The questions and repeats at the current level.
      * Recreated every time {@link #refreshView()} is called.
@@ -214,6 +215,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
             finish();
         }
     };
+    private boolean viewOnly;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -221,6 +223,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
 
         DaggerUtils.getComponent(this).inject(this);
 
+        viewOnly = getIntent().getBooleanExtra(EXTRA_VIEW_ONLY, false);
         String sessionId = getIntent().getStringExtra(EXTRA_SESSION_ID);
         FormEntryViewModelFactory viewModelFactory = new FormEntryViewModelFactory(this,
                 ApplicationConstants.FormModes.EDIT_SAVED,
@@ -305,7 +308,18 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
             });
         }
 
-        getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
+        if (viewOnly) {
+            getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    setResult(RESULT_OK);
+                    finish();
+                    formSessionRepository.clear(getIntent().getStringExtra(EXTRA_SESSION_ID));
+                }
+            });
+        } else {
+            getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
+        }
     }
 
     @Override
@@ -349,10 +363,10 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
         boolean isGroupSizeLocked = shouldShowPicker
                 ? isGroupSizeLocked(repeatGroupPickerIndex) : isGroupSizeLocked(screenIndex);
 
-        boolean shouldShowDelete = isInRepeat && !shouldShowPicker && !isGroupSizeLocked;
+        boolean shouldShowDelete = isInRepeat && !shouldShowPicker && !isGroupSizeLocked && !viewOnly;
         showDeleteButton(shouldShowDelete);
 
-        boolean shouldShowAdd = shouldShowPicker && !isGroupSizeLocked;
+        boolean shouldShowAdd = shouldShowPicker && !isGroupSizeLocked && !viewOnly;
         showAddButton(shouldShowAdd);
 
         boolean shouldShowGoUp = !isAtBeginning;
@@ -418,21 +432,30 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
      * Configure the navigation buttons at the bottom of the screen.
      */
     void configureButtons(FormController formController) {
-        jumpBeginningButton.setOnClickListener(v -> {
-            formController.getAuditEventLogger().flush();
-            formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+        if (viewOnly) {
+            Button exitButton = findViewById(R.id.exitButton);
+            exitButton.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+            exitButton.setVisibility(View.VISIBLE);
+            jumpBeginningButton.setVisibility(View.GONE);
+            jumpEndButton.setVisibility(View.GONE);
+        } else {
+            jumpBeginningButton.setOnClickListener(v -> {
+                formController.getAuditEventLogger().flush();
+                formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
 
-            setResult(RESULT_OK);
-            finish();
-        });
+                setResult(RESULT_OK);
+                finish();
+            });
 
-        jumpEndButton.setOnClickListener(v -> {
-            formController.getAuditEventLogger().flush();
-            formController.jumpToIndex(FormIndex.createEndOfFormIndex());
+            jumpEndButton.setOnClickListener(v -> {
+                formController.getAuditEventLogger().flush();
+                formController.jumpToIndex(FormIndex.createEndOfFormIndex());
 
-            setResult(RESULT_OK);
-            finish();
-        });
+                setResult(RESULT_OK);
+                finish();
+            });
+        }
+
     }
 
     /**
@@ -854,6 +877,10 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
      * If the selected question is in a field list, show the entire field list.
      */
     void onQuestionClicked(FormIndex index) {
+        if (viewOnly) {
+            return;
+        }
+
         formEntryViewModel.getFormController().jumpToIndex(index);
         if (formEntryViewModel.getFormController().indexIsInFieldList()) {
             try {

@@ -125,7 +125,6 @@ import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragmen
 import org.odk.collect.android.formentry.saving.SaveAnswerFileProgressDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formhierarchy.FormHierarchyActivity;
-import org.odk.collect.android.formhierarchy.ViewOnlyFormHierarchyActivity;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
@@ -2039,8 +2038,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 } else {
                     formControllerAvailable(formController, form, instance);
                     if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                        Intent intent = new Intent(this, ViewOnlyFormHierarchyActivity.class);
+                        Intent intent = new Intent(this, FormHierarchyActivity.class);
                         intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
+                        intent.putExtra(FormHierarchyActivity.EXTRA_VIEW_ONLY, true);
                         startActivity(intent);
                     }
 
