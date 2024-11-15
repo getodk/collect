@@ -52,7 +52,7 @@ public class EntityFormFinalizationProcessor implements FormEntryFinalizationPro
             IAnswerData answerData = mainInstance.resolveReference(reference).getValue();
 
             if (answerData != null) {
-                return new Pair<>(saveTo.getSecond(), answerData.getDisplayText());
+                return new Pair<>(saveTo.getSecond(), answerData.uncast().getString());
             } else {
                 return new Pair<>(saveTo.getSecond(), "");
             }
