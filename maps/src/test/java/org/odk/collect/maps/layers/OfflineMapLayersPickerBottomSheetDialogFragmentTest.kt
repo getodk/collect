@@ -43,8 +43,8 @@ import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.Interactions
-import org.odk.collect.testshared.Interactions.onListItem
 import org.odk.collect.testshared.RecyclerViewMatcher
+import org.odk.collect.testshared.ViewMatchers.atPositionInRecyclerView
 import org.odk.collect.testshared.WaitFor
 import org.odk.collect.webpage.ExternalWebPageHelper
 
@@ -172,10 +172,10 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         scheduler.flush()
 
-        onListItem(R.id.layers, 0, R.id.radio_button)
+        onView(atPositionInRecyclerView(R.id.layers, 0, R.id.radio_button))
             .check(matches(isChecked()))
 
-        onListItem(R.id.layers, 1, R.id.radio_button)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.radio_button))
             .check(matches(not(isChecked())))
     }
 
@@ -192,13 +192,13 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         scheduler.flush()
 
-        onListItem(R.id.layers, 0, R.id.radio_button)
+        onView(atPositionInRecyclerView(R.id.layers, 0, R.id.radio_button))
             .check(matches(not(isChecked())))
 
-        onListItem(R.id.layers, 1, R.id.radio_button)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.radio_button))
             .check(matches(not(isChecked())))
 
-        onListItem(R.id.layers, 2, R.id.radio_button)
+        onView(atPositionInRecyclerView(R.id.layers, 2, R.id.radio_button))
             .check(matches(isChecked()))
     }
 
@@ -216,10 +216,10 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
 
-        onListItem(R.id.layers, 0, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 0, R.id.title))
             .check(matches(withText(string.none)))
 
-        onListItem(R.id.layers, 0, R.id.radio_button)
+        onView(atPositionInRecyclerView(R.id.layers, 0, R.id.radio_button))
             .check(matches(isChecked()))
     }
 
@@ -265,7 +265,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(1)))
 
-        onListItem(R.id.layers, 0, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 0, R.id.title))
             .check(matches(withText(string.none)))
     }
 
@@ -284,13 +284,13 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
 
-        onListItem(R.id.layers, 0, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 0, R.id.title))
             .check(matches(withText(string.none)))
 
-        onListItem(R.id.layers, 1, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.title))
             .check(matches(withText("layerA${MbtilesFile.FILE_EXTENSION}")))
 
-        onListItem(R.id.layers, 2, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 2, R.id.title))
             .check(matches(withText("layerB${MbtilesFile.FILE_EXTENSION}")))
     }
 
@@ -306,19 +306,19 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         Interactions.clickOn(withText("layer1${MbtilesFile.FILE_EXTENSION}"))
         WaitFor.waitFor {
-            onListItem(R.id.layers, 0, R.id.radio_button)
+            onView(atPositionInRecyclerView(R.id.layers, 0, R.id.radio_button))
                 .check(matches(not(isChecked())))
 
-            onListItem(R.id.layers, 1, R.id.radio_button)
+            onView(atPositionInRecyclerView(R.id.layers, 1, R.id.radio_button))
                 .check(matches(isChecked()))
         }
 
         Interactions.clickOn(withText(string.none))
         WaitFor.waitFor {
-            onListItem(R.id.layers, 0, R.id.radio_button)
+            onView(atPositionInRecyclerView(R.id.layers, 0, R.id.radio_button))
                 .check(matches(isChecked()))
 
-            onListItem(R.id.layers, 1, R.id.radio_button)
+            onView(atPositionInRecyclerView(R.id.layers, 1, R.id.radio_button))
                 .check(matches(not(isChecked())))
         }
     }
@@ -336,10 +336,10 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         Interactions.clickOn(withText("layer1${MbtilesFile.FILE_EXTENSION}"))
         scenario.recreate()
         scheduler.flush()
-        onListItem(R.id.layers, 0, R.id.radio_button)
+        onView(atPositionInRecyclerView(R.id.layers, 0, R.id.radio_button))
             .check(matches(not(isChecked())))
 
-        onListItem(R.id.layers, 1, R.id.radio_button)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.radio_button))
             .check(matches(isChecked()))
     }
 
@@ -416,13 +416,13 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
             onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
         }
 
-        onListItem(R.id.layers, 0, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 0, R.id.title))
             .check(matches(withText(string.none)))
 
-        onListItem(R.id.layers, 1, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.title))
             .check(matches(withText(file1.name)))
 
-        onListItem(R.id.layers, 2, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 2, R.id.title))
             .check(matches(withText(file2.name)))
     }
 
@@ -486,10 +486,10 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(2))
         expandLayer(2)
 
-        onListItem(R.id.layers, 1, R.id.path)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.path))
             .check(matches(withText(file1.absolutePath)))
 
-        onListItem(R.id.layers, 2, R.id.path)
+        onView(atPositionInRecyclerView(R.id.layers, 2, R.id.path))
             .check(matches(withText(file2.absolutePath)))
     }
 
@@ -504,7 +504,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         expandLayer(1)
-        onListItem(R.id.layers, 1, R.id.delete_layer)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.delete_layer))
             .perform(scrollTo(), click())
 
         onView(withText(string.cancel)).inRoot(isDialog()).check(matches(isDisplayed()))
@@ -522,16 +522,16 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         expandLayer(1)
-        onListItem(R.id.layers, 1, R.id.delete_layer)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.delete_layer))
             .perform(scrollTo(), click())
 
         onView(withText(string.cancel)).inRoot(isDialog()).perform(click())
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(0))
-        onListItem(R.id.layers, 0, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 0, R.id.title))
             .check(matches(withText(string.none)))
-        onListItem(R.id.layers, 1, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.title))
             .check(matches(withText("layer1${MbtilesFile.FILE_EXTENSION}")))
         assertThat(referenceLayerRepository.getAll().size, equalTo(1))
     }
@@ -550,16 +550,16 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         expandLayer(1)
-        onListItem(R.id.layers, 1, R.id.delete_layer)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.delete_layer))
             .perform(scrollTo(), click())
 
         onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(2)))
-        onListItem(R.id.layers, 0, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 0, R.id.title))
             .check(matches(withText(string.none)))
-        onListItem(R.id.layers, 1, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.title))
             .check(matches(withText("layer2${MbtilesFile.FILE_EXTENSION}")))
 
         assertThat(referenceLayerRepository.getAll().size, equalTo(1))
@@ -576,15 +576,15 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         expandLayer(1)
-        onListItem(R.id.layers, 1, R.id.delete_layer)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.delete_layer))
             .perform(scrollTo(), click())
 
         onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
         scheduler.flush()
 
-        onListItem(R.id.layers, 0, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 0, R.id.title))
             .check(matches(withText(string.none)))
-        onListItem(R.id.layers, 0, R.id.radio_button)
+        onView(atPositionInRecyclerView(R.id.layers, 0, R.id.radio_button))
             .check(matches(isChecked()))
         assertThat(
             settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_REFERENCE_LAYER),
@@ -610,18 +610,18 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         onView(withId(R.id.layers)).perform(scrollToPosition<RecyclerView.ViewHolder>(2))
         expandLayer(2)
-        onListItem(R.id.layers, 2, R.id.delete_layer)
+        onView(atPositionInRecyclerView(R.id.layers, 2, R.id.delete_layer))
             .perform(scrollTo(), click())
 
         onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
         scheduler.flush()
 
         onView(withId(R.id.layers)).check(matches(RecyclerViewMatcher.withListSize(3)))
-        onListItem(R.id.layers, 0, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 0, R.id.title))
             .check(matches(withText(string.none)))
-        onListItem(R.id.layers, 1, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.title))
             .check(matches(withText("layerA${MbtilesFile.FILE_EXTENSION}")))
-        onListItem(R.id.layers, 2, R.id.title)
+        onView(atPositionInRecyclerView(R.id.layers, 2, R.id.title))
             .check(matches(withText("layerC${MbtilesFile.FILE_EXTENSION}")))
     }
 
@@ -636,7 +636,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
         scheduler.flush()
 
         expandLayer(1)
-        onListItem(R.id.layers, 1, R.id.delete_layer)
+        onView(atPositionInRecyclerView(R.id.layers, 1, R.id.delete_layer))
             .perform(scrollTo(), click())
         onView(withText(string.delete_layer)).inRoot(isDialog()).perform(click())
 
@@ -674,7 +674,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
     }
 
     private fun expandLayer(position: Int) {
-        onListItem(R.id.layers, position, R.id.arrow)
+        onView(atPositionInRecyclerView(R.id.layers, position, R.id.arrow))
             .perform(click())
         WaitFor.waitFor {
             assertLayerExpanded(position)
@@ -682,19 +682,19 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
     }
 
     private fun assertLayerCollapsed(position: Int) {
-        onListItem(R.id.layers, position, R.id.arrow)
+        onView(atPositionInRecyclerView(R.id.layers, position, R.id.arrow))
             .check(
                 matches(
                     withImageDrawable(org.odk.collect.icons.R.drawable.ic_baseline_expand_24)
                 )
             )
-        onListItem(R.id.layers, position, R.id.path)
+        onView(atPositionInRecyclerView(R.id.layers, position, R.id.path))
             .check(
                 matches(
                     withEffectiveVisibility(ViewMatchers.Visibility.GONE)
                 )
             )
-        onListItem(R.id.layers, position, R.id.delete_layer)
+        onView(atPositionInRecyclerView(R.id.layers, position, R.id.delete_layer))
             .check(
                 matches(
                     withEffectiveVisibility(ViewMatchers.Visibility.GONE)
@@ -703,21 +703,21 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
     }
 
     private fun assertLayerExpanded(position: Int) {
-        onListItem(R.id.layers, position, R.id.arrow)
+        onView(atPositionInRecyclerView(R.id.layers, position, R.id.arrow))
             .check(
                 matches(
                     withImageDrawable(org.odk.collect.icons.R.drawable.ic_baseline_collapse_24)
                 )
             )
 
-        onListItem(R.id.layers, position, R.id.path)
+        onView(atPositionInRecyclerView(R.id.layers, position, R.id.path))
             .check(
                 matches(
                     withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
                 )
             )
 
-        onListItem(R.id.layers, position, R.id.delete_layer)
+        onView(atPositionInRecyclerView(R.id.layers, position, R.id.delete_layer))
             .check(
                 matches(
                     withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
