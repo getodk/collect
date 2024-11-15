@@ -6,6 +6,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryViewModelFactory
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormSessionRepository
+import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
@@ -110,8 +111,15 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerUtils.getComponent(this).inject(this)
+
+        val viewOnly = intent.getBooleanExtra(FormHierarchyActivity.EXTRA_VIEW_ONLY, false)
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(FormHierarchyFragment::class) { FormHierarchyFragment(viewModelFactory) }
+            .forClass(FormHierarchyFragment::class) {
+                FormHierarchyFragment(viewOnly, viewModelFactory, this)
+            }
+            .forClass(DeleteRepeatDialogFragment::class) {
+                DeleteRepeatDialogFragment(viewModelFactory)
+            }
             .build()
 
         super.onCreate(savedInstanceState)
