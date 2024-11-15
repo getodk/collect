@@ -123,7 +123,12 @@ class InMemEntitiesRepository : EntitiesRepository {
         lists.add(list)
         listProperties.getOrPut(list) {
             mutableSetOf()
-        }.addAll(entity.properties.map { it.first })
+        }.addAll(
+            entity
+                .properties
+                .distinctBy { it.first.lowercase() }
+                .map { it.first }
+        )
     }
 
     private fun mergeProperties(
