@@ -13,9 +13,6 @@
 		<model odk:xforms-version="1.0.0" entities:entities-version="2024.1.0">
 			<itext>
 				<translation lang="English">
-					<text id="/data/name:label">
-						<value>Name</value>
-					</text>
 					<text id="/data/date:label">
 						<value>Select date</value>
 					</text>
@@ -23,7 +20,6 @@
 			</itext>
 			<instance>
 				<data id="entities-with-dates-registration">
-					<name/>
 					<date>2024-11-15</date>
 					<meta>
 						<instanceID/>
@@ -33,18 +29,14 @@
 					</meta>
 				</data>
 			</instance>
-			<bind nodeset="/data/name" type="string"/>
 			<bind nodeset="/data/date" type="date" entities:saveto="date"/>
 			<bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
 			<bind nodeset="/data/meta/entity/@id" type="string" readonly="true()"/>
 			<setvalue ref="/data/meta/entity/@id" event="odk-instance-first-load" type="string" readonly="true()" value="uuid()"/>
-			<bind nodeset="/data/meta/entity/label" calculate=" /data/name " type="string" readonly="true()"/>
+			<bind nodeset="/data/meta/entity/label" calculate=" /data/date " type="string" readonly="true()"/>
 		</model>
 	</h:head>
 	<h:body>
-		<input ref="/data/name">
-			<label ref="jr:itext('/data/name:label')"/>
-		</input>
 		<input ref="/data/date">
 			<label ref="jr:itext('/data/date:label')"/>
 		</input>

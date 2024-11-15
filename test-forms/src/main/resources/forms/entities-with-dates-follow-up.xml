@@ -5,6 +5,7 @@
         <model odk:xforms-version="1.0.0" entities:entities-version="2024.1.0">
             <instance>
                 <data id="entities-with-dates-follow_up" version="1">
+                    <label/>
                     <date/>
                     <meta>
                         <instanceID/>
@@ -14,11 +15,19 @@
 
             <instance id="dates" src="jr://file-csv/dates.csv"/>
 
+            <bind nodeset="/data/label" type="string"/>
             <bind nodeset="/data/date" type="string"/>
             <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
         </model>
     </h:head>
     <h:body>
+        <select1 ref="/data/label">
+            <label>Select label</label>
+            <itemset nodeset="instance('dates')/root/item">
+                <value ref="name"/>
+                <label ref="label"/>
+            </itemset>
+        </select1>
         <select1 ref="/data/date">
             <label>Select date</label>
             <itemset nodeset="instance('dates')/root/item">
