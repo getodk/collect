@@ -644,4 +644,19 @@ abstract class EntitiesRepositoryTest {
         repository.updateListHash("wine", "2024")
         assertThat(repository.getListHash("wine"), equalTo("2024"))
     }
+
+    @Test
+    fun `#save ignores case-insensitive duplicate properties`() {
+        val repository = buildSubject()
+        val entity = Entity.New(
+            "1",
+            "One",
+            properties = listOf(Pair("prop", "value"), Pair("Prop", "value"))
+        )
+
+        repository.save("things", entity)
+        val savedEntities = repository.getEntities("things")
+        assertThat(savedEntities[0].properties.size, equalTo(1))
+        assertThat(savedEntities[0].properties[0].first, equalTo("prop"))
+    }
 }
