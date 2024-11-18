@@ -21,18 +21,20 @@ object LocalEntityUseCases {
         formEntities?.entities?.forEach { formEntity ->
             val id = formEntity.id
             val label = formEntity.label
-            if (id != null && !label.isNullOrEmpty()) {
+            if (id != null) {
                 when (formEntity.action) {
                     EntityAction.CREATE -> {
-                        val entity = Entity.New(
-                            id,
-                            label,
-                            1,
-                            formEntity.properties,
-                            branchId = UUID.randomUUID().toString()
-                        )
+                        if (!label.isNullOrEmpty()) {
+                            val entity = Entity.New(
+                                id,
+                                label,
+                                1,
+                                formEntity.properties,
+                                branchId = UUID.randomUUID().toString()
+                            )
 
-                        entitiesRepository.save(formEntity.dataset, entity)
+                            entitiesRepository.save(formEntity.dataset, entity)
+                        }
                     }
 
                     EntityAction.UPDATE -> {
@@ -41,7 +43,7 @@ object LocalEntityUseCases {
                             entitiesRepository.save(
                                 formEntity.dataset,
                                 existing.copy(
-                                    label = label,
+                                    label = if (label.isNullOrBlank()) existing.label else label,
                                     properties = formEntity.properties,
                                     version = existing.version + 1
                                 )
