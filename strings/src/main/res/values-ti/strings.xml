@@ -34,13 +34,11 @@
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Displayed when an attempt is made to start form filling, but the form is broken-->
   <!--Text displayed when audio recording fails to start-->
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
-  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
   <!--##############################################
     # FORM FEATURES
@@ -83,6 +81,18 @@
   <string name="ethiopian_month_12">ነሓሰ</string>
   <string name="ethiopian_month_13">ጳጐሜን</string>
   <string name="persian_month_4">ጥሪ</string>
+  <!--1st month in the Buddhist calendar-->
+  <!--2nd month in the Buddhist calendar-->
+  <!--3rd month in the Buddhist calendar-->
+  <!--4th month in the Buddhist calendar-->
+  <!--5th month in the Buddhist calendar-->
+  <!--6th month in the Buddhist calendar-->
+  <!--7th month in the Buddhist calendar-->
+  <!--8th month in the Buddhist calendar-->
+  <!--9th month in the Buddhist calendar-->
+  <!--10th month in the Buddhist calendar-->
+  <!--11th month in the Buddhist calendar-->
+  <!--12th month in the Buddhist calendar-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
@@ -205,6 +215,7 @@
   <!--Displayed when a device property such as the phone number is not available-->
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -239,20 +250,28 @@
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
-  <!--Error shown when a user tries to open a form that's in a different project-->
-  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
     ##############################################-->
+  <!--##############################################
+    # Form opening errors
+    ##############################################-->
+  <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <!--Error shown when a user tries to edit a form but there is no corresponding blank form-->
+  <!--Error shown when a user tries to open a form but there is more than one form with the same form ID-->
+  <!--Error shown when a user tries to open a form when forms update is being applied in the background-->
   <!--##############################################
     # Permissions
     ##############################################-->
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--Title for setting that controls whether local entity features are enabled or not-->
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
-  <!--Text for button that deletes all entities for the project-->
-  <!--Text for button that adds a new entity list-->
   <!--Label for entity that has been created offline and is not on the server yet-->
+  <!--Error message displayed when a user opens a form with an unrecognized entity version-->
   <!--##############################################
     # Crash handling
     ##############################################-->

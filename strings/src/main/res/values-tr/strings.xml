@@ -114,18 +114,13 @@
   <string name="survey_saving_finalizing_message">SD karta tamamlanıyor…</string>
   <string name="survey_saving_encrypting_message">Veri şifreleniyor…</string>
   <string name="invalid_rsa_public_key">Hatalı RSA açık anahtar.</string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
-  <string name="bad_uri">Hatalı URI: %s</string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
-  <string name="unrecognized_uri">Tanınmayan URI: %s</string>
+  <!--Displayed when an attempt is made to start form filling, but the form is broken-->
   <!--Text displayed when audio recording fails to start-->
   <string name="start_recording_failed">Kaydetmeye başlanamadı.</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <string name="mic_in_use">Mikrofon zaten kullanımda.</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
-  <!--Error displayed when opened filled form has been deleted on disk-->
-  <string name="instance_deleted_message">Doldurulmuş form silindi!</string>
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
   <!--##############################################
     # FORM FEATURES
@@ -175,6 +170,18 @@
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="selected">Seçilen:</string>
   <string name="trigger">Tamam. Devam edin. Bekleme yapmayin </string>
+  <!--1st month in the Buddhist calendar-->
+  <!--2nd month in the Buddhist calendar-->
+  <!--3rd month in the Buddhist calendar-->
+  <!--4th month in the Buddhist calendar-->
+  <!--5th month in the Buddhist calendar-->
+  <!--6th month in the Buddhist calendar-->
+  <!--7th month in the Buddhist calendar-->
+  <!--8th month in the Buddhist calendar-->
+  <!--9th month in the Buddhist calendar-->
+  <!--10th month in the Buddhist calendar-->
+  <!--11th month in the Buddhist calendar-->
+  <!--12th month in the Buddhist calendar-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
   <string name="file_invalid">Dosya : %s geçersiz</string>
@@ -339,6 +346,7 @@
   <!--Displayed when a device property such as the phone number is not available-->
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -412,13 +420,25 @@
   <!--Preceded by "Don't have a project yet?" question-->
   <string name="try_demo">Demoyu dene</string>
   <string name="scan_configuration_qr_code">Ayar QR kodunu tarat</string>
-  <!--Error shown when a user tries to open a form that's in a different project-->
-  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
     ##############################################-->
   <string name="show_details">Detayları göster</string>
   <string name="errors">Hatalar</string>
+  <!--##############################################
+    # Form opening errors
+    ##############################################-->
+  <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">Tanınmayan URI: %s</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">Hatalı URI: %s</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">Doldurulmuş form silindi!</string>
+  <!--Error shown when a user tries to edit a form but there is no corresponding blank form-->
+  <!--Error shown when a user tries to open a form but there is more than one form with the same form ID-->
+  <!--Error shown when a user tries to open a form when forms update is being applied in the background-->
   <!--##############################################
     # Permissions
     ##############################################-->
@@ -426,9 +446,8 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--Title for setting that controls whether local entity features are enabled or not-->
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
-  <!--Text for button that deletes all entities for the project-->
-  <!--Text for button that adds a new entity list-->
   <!--Label for entity that has been created offline and is not on the server yet-->
+  <!--Error message displayed when a user opens a form with an unrecognized entity version-->
   <!--##############################################
     # Crash handling
     ##############################################-->

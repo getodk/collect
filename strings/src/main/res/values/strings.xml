@@ -1363,7 +1363,7 @@
     -->
     <!-- Title displayed in a dialog before starting a form if there is a work to recover -->
     <string name="savepoint_recovery_dialog_title">Recover your work?</string>
-    <!-- Message displayed in a dialog before starting a form if there is a work to recover -->
+    <!-- Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
     <string name="savepoint_recovery_dialog_message">\'Collect closed unexpectedly on \'EEE, MMM dd, yyyy \'at\' HH:mm\' and saved your work.\n\nWould you like to recover or discard it?\'</string>
     <!-- Text for the button that accepts the recovery of the work -->
     <string name="recover">Recover</string>

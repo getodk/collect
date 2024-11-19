@@ -69,7 +69,6 @@
   <string name="survey_loading_reading_csv_message">CSV فائلز دیکھی جا رہی ہیں</string>
   <string name="parse_error">معذرت،مگر فارم صحیح طرح پڑھا نہیں جا سکا</string>
   <string name="loading_form_failed">فارم لوڈ کرتے ہوئے ایک خرابی واقع ہوئی. دوبارہ کوشش کریں.</string>
-  <string name="parent_form_not_present">اس ڈرافٹ میں ترمیم نہیں ہو رہی، کیونکہ اسکا مماثل خالی فارم موجود نہیں یا پھر ڈیلیٹ کر دیا گیا ہے، فارم کی شناخت: ‎%1$s‏</string>
   <string name="cannot_edit_completed_form">اس فارم میں ترمیم نہیں کی جاسکتی اگر ایک مرتبہ اس کو حتمی شکل دےدی گئ ہو۔ اس کو انکرپٹ کیا جاسکتا ہے</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used"> غیر محفوظ شدہ تبدیلیاںسیو پوائنٹ سےبحال کرلی گئی</string>
@@ -150,10 +149,7 @@
   <string name="phone_does_not_support_rsa">فون آر ایس اے انکرپشن سپورٹ نہیں کرتا.</string>
   <string name="invalid_rsa_public_key">غلط آر ایس اے  پبلک کی.</string>
   <string name="encryption_error_message">%sفارم کو حتمی طور پر محفوظ نہیں کیا گیا ہے.</string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
-  <string name="bad_uri">خراب URI:%s </string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
-  <string name="unrecognized_uri">ناقابل شناخت URI:%s</string>
+  <!--Displayed when an attempt is made to start form filling, but the form is broken-->
   <!--Text displayed when audio recording fails to start-->
   <string name="start_recording_failed">ریکارڈنگ شروع نہیں ہو سکی۔</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
@@ -162,8 +158,6 @@
   <string name="answer_file_copy_failed_message">میڈیا اس فارم کے ساتھ اٹیچ نہیں ہو سکا، لیکن ابھی بھی %1$s پر موجود ہے۔</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">ریکارڈنگ بند ہے۔ 1%s میں دوبارہ سٹارٹ کریں۔</string>
-  <!--Error displayed when opened filled form has been deleted on disk-->
-  <string name="instance_deleted_message">بھرا ہوا فارم ختم کر دیا گیا ہے۔</string>
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
   <string name="update_widgets_error">ڈیٹا اپ ڈیٹ نہیں ہو پا رہا۔ اس کی عمومی وجہ یہ ہو سکتی ہے کہ فارم ڈیزائن میں Calculations کو صحیح طریقے سے استعمال نہیں کیا گیا۔ 
 اگر آپ کو بار بار یہی مسئلہ درپیش آ رہا ہے تو پراجیکٹ کے انچارج کو مطلع کریں۔</string>
@@ -336,6 +330,18 @@
   <string name="persian_month_10">Dey</string>
   <string name="persian_month_11">Bahman</string>
   <string name="persian_month_12">Esfand</string>
+  <!--1st month in the Buddhist calendar-->
+  <!--2nd month in the Buddhist calendar-->
+  <!--3rd month in the Buddhist calendar-->
+  <!--4th month in the Buddhist calendar-->
+  <!--5th month in the Buddhist calendar-->
+  <!--6th month in the Buddhist calendar-->
+  <!--7th month in the Buddhist calendar-->
+  <!--8th month in the Buddhist calendar-->
+  <!--9th month in the Buddhist calendar-->
+  <!--10th month in the Buddhist calendar-->
+  <!--11th month in the Buddhist calendar-->
+  <!--12th month in the Buddhist calendar-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
@@ -730,6 +736,7 @@
   <string name="unlock_settings">سیٹنگز کو کھولیں</string>
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">سیٹنگز کھل چکی ہیں</string>
+  <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -849,7 +856,6 @@ Constraint processing</string>
   <string name="fs_delete_media_path_if_file_error">\'%s\'ڈیلیٹ نہیں ھو سکا۔ برائے مہربانی فائل کو خود سے ڈٰیلیٹ کریں اور فارم دوبارہ ڈاؤنلوڈ کریں،</string>
   <string name="fs_create_media_folder_error">میڈیا فولڈر %s نہیں بن سکا.</string>
   <string name="fs_file_copy_error">کاپی نہیں کر سکا \'%1$s\' اوور \'%2$s\'. وجہ:%3$s</string>
-  <string name="survey_multiple_forms_error">آپ نے ایک ہی  ID اور ورژن کے ساتھ دو مختلف فارم ڈاؤن لوڈ کیے ہیں. شاید وہ وہی وقت تھے جو مختلف اوقات میں یا مختلف سرورز میں اپ لوڈ کیے گئے ہیں. کسی بھی صورت میں، آپ کو ایک کو ڈیلیٹ کرنا چاہئے.</string>
   <string name="select_odk_shortcut">او ڈی کے شارٹ کٹ منتخب کریں</string>
   <string name="background_audio_help">یہ فارم آوازکی ریکارڈنگ آپ کے فون کے مائک سے کرتا ہے۔
 
@@ -908,28 +914,40 @@ Constraint processing</string>
   <!--Preceded by "Don't have a project yet?" question-->
   <string name="try_demo">ڈیمو دیکھیں</string>
   <string name="scan_configuration_qr_code">سیٹنگز کا QR کوڈ سکین کریں</string>
-  <!--Error shown when a user tries to open a form that's in a different project-->
-  <string name="wrong_project_selected_for_form">اس فارم کو کھولنے کے لئے پہلے ODK Collect کھولیں اور اس پراجیکٹ کا انتخاب کریں جس میں یہ موجود ہے۔</string>
-  <!--Error shown when a user tries to open a form when there are no projects-->
-  <string name="app_not_configured">ODK Collect ابھی تک Configure نہیں کیا گیا۔ براہ مہربانی ODK Collect کو کھولیں اور سیٹنگ کریں۔
-
-اگر آپ نے کسی Shortcut پہ کلک کیا ہے، تو آپ کوODK Collect سیٹ کرنے کی بعد اس کو دوبارہ بنانا پڑے گا۔</string>
   <!--##############################################
     # Errors
     ##############################################-->
   <string name="show_details">تفصیلات دکھائیں</string>
   <string name="errors">غلطیاں</string>
   <!--##############################################
+    # Form opening errors
+    ##############################################-->
+  <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">اس فارم کو کھولنے کے لئے پہلے ODK Collect کھولیں اور اس پراجیکٹ کا انتخاب کریں جس میں یہ موجود ہے۔</string>
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <string name="app_not_configured">ODK Collect ابھی تک Configure نہیں کیا گیا۔ براہ مہربانی ODK Collect کو کھولیں اور سیٹنگ کریں۔
+
+اگر آپ نے کسی Shortcut پہ کلک کیا ہے، تو آپ کوODK Collect سیٹ کرنے کی بعد اس کو دوبارہ بنانا پڑے گا۔</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">ناقابل شناخت URI:%s</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">خراب URI:%s </string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">بھرا ہوا فارم ختم کر دیا گیا ہے۔</string>
+  <!--Error shown when a user tries to edit a form but there is no corresponding blank form-->
+  <string name="parent_form_not_present">اس ڈرافٹ میں ترمیم نہیں ہو رہی، کیونکہ اسکا مماثل خالی فارم موجود نہیں یا پھر ڈیلیٹ کر دیا گیا ہے، فارم کی شناخت: ‎%1$s‏</string>
+  <!--Error shown when a user tries to open a form but there is more than one form with the same form ID-->
+  <string name="survey_multiple_forms_error">آپ نے ایک ہی  ID اور ورژن کے ساتھ دو مختلف فارم ڈاؤن لوڈ کیے ہیں. شاید وہ وہی وقت تھے جو مختلف اوقات میں یا مختلف سرورز میں اپ لوڈ کیے گئے ہیں. کسی بھی صورت میں، آپ کو ایک کو ڈیلیٹ کرنا چاہئے.</string>
+  <!--Error shown when a user tries to open a form when forms update is being applied in the background-->
+  <!--##############################################
     # Permissions
     ##############################################-->
   <string name="open_settings">سیٹنگز کھولیں</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
-  <string name="entities_title">Entities</string>
   <!--Title for setting that controls whether local entity features are enabled or not-->
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
-  <!--Text for button that deletes all entities for the project-->
-  <!--Text for button that adds a new entity list-->
   <!--Label for entity that has been created offline and is not on the server yet-->
+  <!--Error message displayed when a user opens a form with an unrecognized entity version-->
   <!--##############################################
     # Crash handling
     ##############################################-->

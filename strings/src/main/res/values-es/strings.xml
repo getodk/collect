@@ -69,7 +69,6 @@
   <string name="survey_loading_reading_csv_message">Leyendo archivos CSV…</string>
   <string name="parse_error">No se pudo interpretar el formulario.</string>
   <string name="loading_form_failed">Ocurrió un error al cargar el formulario. Por favor intente de nuevo.</string>
-  <string name="parent_form_not_present">No se pudo editar este borrador por que el formulario en blanco que le corresponde no esta o fue borrado.\n\nID de Formulario: %1$s</string>
   <string name="cannot_edit_completed_form">Este formulario no puede ser editado una vez que ha sido marcado como finalizado. Puede estar encriptado.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">¡Cambios no guardados recuperados del punto de recuperación!</string>
@@ -150,10 +149,8 @@
   <string name="phone_does_not_support_rsa">El teléfono no es compatible con el cifrado RSA.</string>
   <string name="invalid_rsa_public_key">Clave publica RSA Invalida.</string>
   <string name="encryption_error_message">%s del Formulario no ha sido guardada como finalizado.</string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
-  <string name="bad_uri">URI erroneo: %s</string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
-  <string name="unrecognized_uri">URI no reconocido: %s</string>
+  <!--Displayed when an attempt is made to start form filling, but the form is broken-->
+  <string name="form_cannot_be_used">El formulario no se puede utilizar.</string>
   <!--Text displayed when audio recording fails to start-->
   <string name="start_recording_failed">No se pudo iniciar la grabación.</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
@@ -162,8 +159,6 @@
   <string name="answer_file_copy_failed_message">Los archivos multimedia no se pudieron adjuntar al formulario, pero están disponibles en %1$s</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">Grabación deshabilitada. Habilitar en %s</string>
-  <!--Error displayed when opened filled form has been deleted on disk-->
-  <string name="instance_deleted_message">Formulario lleno ha sido eliminado!</string>
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
   <string name="update_widgets_error">Error al intentar actualizar los valores. Esto generalmente se debe a un uso incorrecto de los cálculos en el diseño del formulario.\n\nSi sigue teniendo este problema, infórmelo a la persona que le pidió que recopilara los datos.</string>
   <!--##############################################
@@ -224,7 +219,9 @@
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Reanudar</string>
   <!--Displayed in the form filling menu when a form has background audio recording enabled-->
+  <string name="record_audio_on">Grabar audio: on</string>
   <!--Displayed in the form filling menu when a form has background audio recording disabled-->
+  <string name="record_audio_off">Grabar audio: off</string>
   <string name="background_audio_permission_explanation">Este formulario graba audio en segundo plano. Debe otorgar permiso para usar su micrófono. Si no lo hace, no podrá abrir este formulario.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <string name="stop_recording_confirmation">Este formulario solicita una grabación de audio de fondo. Si lo desactiva, se detendrá la grabación y se descartará el audio existente. ¿Estas seguro que deseas continuar?</string>
@@ -336,6 +333,30 @@
   <string name="persian_month_10">Dey</string>
   <string name="persian_month_11">Bahman</string>
   <string name="persian_month_12">Esfand</string>
+  <!--1st month in the Buddhist calendar-->
+  <string name="buddhist_month_1">Enero</string>
+  <!--2nd month in the Buddhist calendar-->
+  <string name="buddhist_month_2">Febrero</string>
+  <!--3rd month in the Buddhist calendar-->
+  <string name="buddhist_month_3">Marzo</string>
+  <!--4th month in the Buddhist calendar-->
+  <string name="buddhist_month_4">Abril</string>
+  <!--5th month in the Buddhist calendar-->
+  <string name="buddhist_month_5">Mayo</string>
+  <!--6th month in the Buddhist calendar-->
+  <string name="buddhist_month_6">Junio</string>
+  <!--7th month in the Buddhist calendar-->
+  <string name="buddhist_month_7">Julio</string>
+  <!--8th month in the Buddhist calendar-->
+  <string name="buddhist_month_8">Agosto</string>
+  <!--9th month in the Buddhist calendar-->
+  <string name="buddhist_month_9">Septiembre</string>
+  <!--10th month in the Buddhist calendar-->
+  <string name="buddhist_month_10">Octubre</string>
+  <!--11th month in the Buddhist calendar-->
+  <string name="buddhist_month_11">Noviembre</string>
+  <!--12th month in the Buddhist calendar-->
+  <string name="buddhist_month_12">Diciembre</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
@@ -388,20 +409,40 @@
   <string name="carto_map_style_positron">Positrón</string>
   <string name="carto_map_style_dark_matter">Materia oscura</string>
   <!--Title for the offline layer section of settings-->
+  <string name="offline_layer">Capas sin conexión</string>
   <!--Label for the offline layer setting-->
+  <string name="layer_data_file">Capa</string>
   <!--Title for the screen that allows the user to select a offline layer for maps-->
+  <string name="offline_layer_dialog_title">Seleccione capa sin conexión</string>
   <!--Description of how to add offline layers to the project-->
+  <string name="offline_layer_dialog_description">Seleccione la capa sin conexión para usar en todos los mapas de este proyecto. Puede agregar opciones a la lista seleccionando un archivo MBTiles de su dispositivo y también eliminar capas existentes de la lista.</string>
   <!--Text of button user can press to get help when setting up Offline Layers-->
+  <string name="get_help_with_offline_layers">Obtenga más información sobre cómo agregar MBTiles.</string>
   <!--Text for button that lets the user select a offline layer on their device to add-->
+  <string name="add_layer">Agregar capas</string>
   <!--Text for button that lets the user delete a offline layer-->
+  <string name="delete_layer">Borrar capa</string>
   <!--Text for title displayed in a dialog to inform that some/all the selected files are not MBTiles and they can't be imported-->
+  <plurals name="non_mbtiles_files_selected_title">
+    <item quantity="one">%d No se puede agregar la capa</item>
+    <item quantity="many">%d No se pueden agregar las capas</item>
+    <item quantity="other">%d no se pueden agregar capas</item>
+  </plurals>
   <!--Text for message displayed in a dialog to inform that all the selected files are not MBTiles and they can't be imported-->
+  <string name="all_non_mbtiles_files_selected_message">Los archivos seleccionados no son MBTiles. Sólo puede agregar archivos MBTiles.</string>
   <!--Text for message displayed in a dialog to inform that some of the selected files are not MBTiles and they can't be imported-->
+  <string name="some_non_mbtiles_files_selected_message">Los archivos seleccionados no son MBTiles. Sólo puede agregar archivos MBTiles.</string>
   <!--Text for title above list of layers-->
+  <string name="layers_list_title">Capas</string>
   <!--Text for title and subtitle above options for how the layer can be access-->
+  <string name="select_layer_access_title">Seleccionar acceso a capas</string>
+  <string name="select_layer_access_subtitle">¿Quiere que las capas estén disponibles en todos los proyectos o solo en su proyecto actual?</string>
   <!--Text for option where layer should be available to all projects-->
+  <string name="all_projects_option">Todos los proyectos </string>
   <!--Text for option where layer should be available to the current project only-->
+  <string name="current_project_option">Sólo proyecto actual</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
+  <string name="delete_layer_confirmation_message">¿Está seguro de que desea eliminar la capa sin conexión %1$s ?</string>
   <string name="record_geopoint">Registrando un punto</string>
   <string name="location_accuracy">Precisión: %1$s m</string>
   <string name="location_provider">Proveedor de Ubicación: %s</string>
@@ -412,7 +453,9 @@
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Ir a ajustes</string>
   <!--Displayed in the form filling menu when a form has background location enabled-->
+  <string name="track_location_on">Rastrear ubicación: on</string>
   <!--Displayed in the form filling menu when a form has background location disabled-->
+  <string name="track_location_off">Rastrear ubicación: off</string>
   <string name="background_location_disabled">Este formulario requiere registrar su localización, pero el rastreo esta deshabilitado. Favor habilitar en el menú de arriba %1$s .</string>
   <string name="background_location_enabled">Este formulario registra su localización. Puede deshabilitar el rastreo en el menú de arriba %1$s.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
@@ -733,6 +776,7 @@
   <string name="unlock_settings">Desbloquear ajustes</string>
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">Ajustes desbloqueados</string>
+  <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -843,8 +887,6 @@
   <string name="fs_delete_media_path_if_file_error">No puede borrar \'%s\'. Por favor, borre manualmente el archivo y recargue el formulario.</string>
   <string name="fs_create_media_folder_error">No pudo crear la carpeta de medios \'%s\'</string>
   <string name="fs_file_copy_error">No ha podido copiar \'%1$s\' sobre \'%2$s\'. Razón: %3$s</string>
-  <string name="survey_multiple_forms_error">Ha descargado dos formularios distintos con el mismo ID y versión. Puede que los cargara en diferentes momentos o de distintas procedencias. Debe de borrar uno.
-</string>
   <string name="select_odk_shortcut">Seleccionar acceso directo</string>
   <string name="background_audio_help">Este formulario graba el audio del micrófono de su dispositivo.\n\nY puede usar el indicador de volumen para asegurarse de que el micrófono esté lo suficientemente cerca del sonido que necesita grabar.\n\nPara detener la grabación, salga de este formulario.\n\nPara obtener más información, comuníquese con la persona que le pidió que recopilara datos.</string>
   <string name="loading">Cargando…</string>
@@ -897,26 +939,46 @@
   <!--Preceded by "Don't have a project yet?" question-->
   <string name="try_demo">Prueba una demostración</string>
   <string name="scan_configuration_qr_code">Escanear el código QR de configuración</string>
-  <!--Error shown when a user tries to open a form that's in a different project-->
-  <string name="wrong_project_selected_for_form">Para abrir este formulario, primero debe abrir la aplicación m´vil y cambiar al proyecto que lo contiene.</string>
-  <!--Error shown when a user tries to open a form when there are no projects-->
-  <string name="app_not_configured">No se ha configurado la aplicación móvil. Intente abrir la aplicación y configurarla.\n\nIfSi tocó un acceso directo, es posible que deba volver a crearlo después de configurarla.</string>
   <!--##############################################
     # Errors
     ##############################################-->
   <string name="show_details">Mostrar detalles</string>
   <string name="errors">Errores</string>
   <!--##############################################
+    # Form opening errors
+    ##############################################-->
+  <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">Para abrir este formulario, primero debe abrir la aplicación m´vil y cambiar al proyecto que lo contiene.</string>
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <string name="app_not_configured">No se ha configurado la aplicación móvil. Intente abrir la aplicación y configurarla.\n\nIfSi tocó un acceso directo, es posible que deba volver a crearlo después de configurarla.</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">URI no reconocido: %s</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">URI erroneo: %s</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">Formulario lleno ha sido eliminado!</string>
+  <!--Error shown when a user tries to edit a form but there is no corresponding blank form-->
+  <string name="parent_form_not_present">No se pudo editar este borrador por que el formulario en blanco que le corresponde no esta o fue borrado.\n\nID de Formulario: %1$s</string>
+  <!--Error shown when a user tries to open a form but there is more than one form with the same form ID-->
+  <string name="survey_multiple_forms_error">Ha descargado dos formularios distintos con el mismo ID y versión. Puede que los cargara en diferentes momentos o de distintas procedencias. Debe de borrar uno.
+</string>
+  <!--Error shown when a user tries to open a form when forms update is being applied in the background-->
+  <string name="cannot_open_form_because_of_forms_update">Este formulario no puede abrirse en este momento porque se están actualizando los formularios. Vuelva a intentarlo en breve.</string>
+  <!--##############################################
     # Permissions
     ##############################################-->
   <string name="open_settings">Abrir Configuración</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
-  <string name="entities_title">Entidades</string>
+  <string name="entities_title">Listas de entidades</string>
   <!--Title for setting that controls whether local entity features are enabled or not-->
+  <string name="include_local_entities_setting">Habilitar entidades locales</string>
+  <string name="local_entity_features_summary">Los formularios de seguimiento tendrán listas de entidades consistentes e incluirán entidades creadas o actualizadas localmente.</string>
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
-  <!--Text for button that deletes all entities for the project-->
-  <!--Text for button that adds a new entity list-->
+  <string name="entity_browser_button">Ver listas de entidades</string>
   <!--Label for entity that has been created offline and is not on the server yet-->
+  <string name="offline">Desconectado</string>
+  <!--Error message displayed when a user opens a form with an unrecognized entity version-->
+  <string name="unrecognized_entity_version">Este formulario no es compatible con esta versión de ODK Collect. Por favor, actualice Collect. Si sigues teniendo este problema, informa a la persona que te pidió que recopilaras los datos.\n\nForm Entities spec version: %s</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
@@ -952,18 +1014,60 @@
   <!--##############################################
     # Forms ready to send banner
     ##############################################-->
+  <plurals name="last_form_sent_seconds_ago">
+    <item quantity="one">Último formulario enviado: hace %d segundo</item>
+    <item quantity="many">Último formulario enviado: hace %d segundos</item>
+    <item quantity="other">Último formulario enviado: hace %d segundos</item>
+  </plurals>
+  <plurals name="last_form_sent_minutes_ago">
+    <item quantity="one">Último formulario enviado: hace %d minuto</item>
+    <item quantity="many">Último formulario enviado: hace %d minutos</item>
+    <item quantity="other">Último formulario enviado: hace %d minuto</item>
+  </plurals>
+  <plurals name="last_form_sent_hours_ago">
+    <item quantity="one">Último formulario enviado: hace %d hora</item>
+    <item quantity="many">Último formulario enviado: hace %d horas</item>
+    <item quantity="other">Último formulario enviado: hace %d horas</item>
+  </plurals>
+  <plurals name="last_form_sent_days_ago">
+    <item quantity="one">Último formulario enviado: hace %d día</item>
+    <item quantity="many">Último formulario enviado: hace %d días</item>
+    <item quantity="other">Último formulario enviado: hace %d días</item>
+  </plurals>
+  <plurals name="forms_ready_to_send">
+    <item quantity="one">%d formulario listo para enviar</item>
+    <item quantity="many">%d formularios listos para enviar</item>
+    <item quantity="other">%dformularios listos para enviar</item>
+  </plurals>
   <string name="edit_finalized_form_warning" tools:ignore="UnusedResources">En versiones posteriores, los formularios finalizados ya no serán editables. Guarde los formularios como borradores para editarlos más tarde.\n\nPuede comprobar si hay errores en un borrador de formulario tocando los tres puntos (⋮) y luego Comprobar si hay errores.</string>
   <!--Message showed on main menu to inform users that the ability to edit finalized forms is going away-->
   <string name="edit_finalized_form_deprecation_message" tools:ignore="UnusedResources">En versiones posteriores, los formularios finalizados ya no serán editables.</string>
   <!--Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend-->
   <string name="finalize_all_drafts">Finalizar todos los borradores</string>
   <!--Dialog title that asks if the user wants to finalize all drafts-->
+  <plurals name="bulk_finalize_confirmation">
+    <item quantity="one">¿Quiere finalizar %d borrador?</item>
+    <item quantity="many">¿Quiere finalizar %d borradores?</item>
+    <item quantity="other">¿Quiere finalizar %d borradores?</item>
+  </plurals>
   <!--Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel-->
   <string name="bulk_finalize_explanation">Una vez que finalice todos los borradores, estarán en \"Listo para enviar\" y no podrá realizar modificaciones. Los borradores que tengan errores no se finalizarán.\n\nNo podrás deshacer esta acción.</string>
   <!--Message shown after bulk finalization when finalizing all drafts has succeeded-->
+  <plurals name="bulk_finalize_success">
+    <item quantity="one">¡Bien! %d borrador finalizado.</item>
+    <item quantity="many">¡Bien! %d borradores finalizados.</item>
+    <item quantity="other">¡Bien! %d borradores finalizados.</item>
+  </plurals>
   <!--Message shown after bulk finalization when no drafts finalized successfully-->
+  <plurals name="bulk_finalize_failure">
+    <item quantity="one"> %d borrador tiene errores, debe corregirlo antes de finalizar.</item>
+    <item quantity="many">%d borradores tiene errores, debe corregirlos antes de finalizar.</item>
+    <item quantity="other">%d borradores tiene errores, debe corregirlo antes de finalizar.</item>
+  </plurals>
   <!--Message shown after bulk finalization when some drafts finalize successfully and others fail-->
+  <string name="bulk_finalize_partial_success">%d  borradores finalizados. %d borradores tienen errores que deben corregirse antes de finalizarlos.</string>
   <!--Message shown when some drafts finalize successfully but others need to be finalized manually-->
+  <string name="bulk_finalize_unsupported">%d borradores finalizados. Los borradores que quedan deben finalizarse manualmente.</string>
   <!--Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature.-->
   <string name="draft_errors">Errores</string>
   <!--Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature.-->
@@ -977,7 +1081,9 @@
   <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">No hay nada disponible para mostrar.</string>
   <!--Message displayed when the list of blank forms is empty-->
+  <string name="empty_list_of_blank_forms_title">No hay formularios en blanco</string>
   <!--Subtext displayed when the list of blank forms is empty-->
+  <string name="empty_list_of_blank_forms_subtitle">Descargue el formulario para comenzar</string>
   <!--Message displayed when the list of drafts is empty-->
   <string name="empty_list_of_drafts_title">Nada en borradores</string>
   <!--Subtext displayed when the list of drafts is empty-->
@@ -991,25 +1097,43 @@
   <!--Subtext of message displayed when the list of sent forms is empty-->
   <string name="empty_list_of_sent_forms_subtitle">Cuando envíe formularios finalizados, aparecerán aquí</string>
   <!--Message displayed when the list of forms to download is empty-->
+  <string name="empty_list_of_forms_to_download_title">No hay formularios para descargar</string>
+  <string name="empty_list_of_forms_to_download_subtitle">Descargue el formulario para comenzar</string>
   <!--Message displayed when the list of forms to delete is empty-->
+  <string name="empty_list_of_forms_to_delete_title">no hay formularios para eliminar</string>
   <!--Subtext displayed when the list of blank forms to delete is empty-->
+  <string name="empty_list_of_blank_forms_to_delete_subtitle">Cuando descargue formularios en blanco, aparecerán aquí</string>
   <!--Subtext displayed when the list of filled forms to delete is empty-->
+  <string name="empty_list_of_saved_forms_to_delete_subtitle">Cuando tenga formularios guardados, aparecerán aquí</string>
   <!--##############################################
     # Savepoint recovery dialog
     ##############################################-->
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
+  <string name="savepoint_recovery_dialog_title">¿Recuperar tu trabajo?</string>
   <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <string name="savepoint_recovery_dialog_message">\'Recolección cerrada inesperadamente el \'EEE, MMM dd, yyyy \'a las\' HH:mm\' y  se guardó su trabajo. \n\n¿Quiere recuperarlo o descartarlo?\'</string>
   <!--Text for the button that accepts the recovery of the work-->
+  <string name="recover">Recuperar</string>
   <!--Text for the button that declines the recovery of the work-->
   <string name="do_not_recover">Descartar</string>
   <!--Text for the button that initiates getting user location-->
+  <string name="get_point">Obtener punto</string>
   <!--Text for the button that displays a map for viewing or changing an already existing location-->
+  <string name="view_or_change_point">Ver o cambiar punto</string>
   <!--Text for the button that displays a map for viewing an already existing location-->
+  <string name="view_point">Ver punto</string>
   <!--Text for the button that initiates getting user location when one is already present-->
+  <string name="change_point">Cambiar punto</string>
   <!--Text for the button that displays a map for getting a new line-->
+  <string name="get_line">Obtener línea</string>
   <!--Text for the button that displays a map for viewing or changing an already existing line-->
+  <string name="view_or_change_line">Ver o cambiar línea</string>
   <!--Text for the button that displays a map for viewing an already existing line-->
+  <string name="view_line">Ver línea</string>
   <!--Text for the button that displays a map for getting a new polygon-->
+  <string name="get_polygon">Obtener polígono </string>
   <!--Text for the button that displays a map for viewing or changing an already existing polygon-->
+  <string name="view_or_change_polygon">Ver o cambiar polígono</string>
   <!--Text for the button that displays a map for viewing an already existing polygon-->
+  <string name="view_polygon">Ver polígono</string>
 </resources>
