@@ -89,15 +89,11 @@
   <string name="phone_does_not_support_rsa">Telefon ei toeta RSA krüpteerimist.</string>
   <string name="invalid_rsa_public_key">RSA avalik võti on sobimatu.</string>
   <string name="encryption_error_message">%s vorm ei ole salvestatud ja lõpetatud.</string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
-  <string name="bad_uri">Vale veebiaadress: %s</string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
-  <string name="unrecognized_uri">Tundmatu veebiaadress: %s</string>
+  <!--Displayed when an attempt is made to start form filling, but the form is broken-->
   <!--Text displayed when audio recording fails to start-->
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
-  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
   <!--##############################################
     # FORM FEATURES
@@ -180,6 +176,18 @@
   <string name="direction">Siht: %s</string>
   <string name="select_date">Vali kuupäev</string>
   <string name="no_date_selected">Kuupäev valimata</string>
+  <!--1st month in the Buddhist calendar-->
+  <!--2nd month in the Buddhist calendar-->
+  <!--3rd month in the Buddhist calendar-->
+  <!--4th month in the Buddhist calendar-->
+  <!--5th month in the Buddhist calendar-->
+  <!--6th month in the Buddhist calendar-->
+  <!--7th month in the Buddhist calendar-->
+  <!--8th month in the Buddhist calendar-->
+  <!--9th month in the Buddhist calendar-->
+  <!--10th month in the Buddhist calendar-->
+  <!--11th month in the Buddhist calendar-->
+  <!--12th month in the Buddhist calendar-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
   <string name="file_invalid">Fail %s on sobimatu.</string>
@@ -384,6 +392,7 @@
   <!--Displayed when a device property such as the phone number is not available-->
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -439,7 +448,6 @@
   <string name="fs_delete_media_path_if_file_error">\'%s\' kustutamine ebaõnnestus. Palun kusutage fail käsitsi ja laadige vorm uuesti alla.</string>
   <string name="fs_create_media_folder_error">\'%s\' meediakausta loomine ebaõnnestus.</string>
   <string name="fs_file_copy_error">\'%1$s\' kopeerimine \'%2$s\' ebaõnnestus. Põhjuseks: %3$s</string>
-  <string name="survey_multiple_forms_error">Olete alla laadinud kaks eri vormi millel on sama ID ja versioon. Võis juhtuda, et sama vorm oli üles laetud erinevatel aegadel või erinevatesse serveritesse. Igatahes peaksite ühe neist eemaldama.</string>
   <string name="select_odk_shortcut">Vali ODK otsetee</string>
   <!--##############################################
      # Projects
@@ -460,20 +468,31 @@
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
-  <!--Error shown when a user tries to open a form that's in a different project-->
-  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
     ##############################################-->
+  <!--##############################################
+    # Form opening errors
+    ##############################################-->
+  <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">Tundmatu veebiaadress: %s</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">Vale veebiaadress: %s</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <!--Error shown when a user tries to edit a form but there is no corresponding blank form-->
+  <!--Error shown when a user tries to open a form but there is more than one form with the same form ID-->
+  <string name="survey_multiple_forms_error">Olete alla laadinud kaks eri vormi millel on sama ID ja versioon. Võis juhtuda, et sama vorm oli üles laetud erinevatel aegadel või erinevatesse serveritesse. Igatahes peaksite ühe neist eemaldama.</string>
+  <!--Error shown when a user tries to open a form when forms update is being applied in the background-->
   <!--##############################################
     # Permissions
     ##############################################-->
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--Title for setting that controls whether local entity features are enabled or not-->
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
-  <!--Text for button that deletes all entities for the project-->
-  <!--Text for button that adds a new entity list-->
   <!--Label for entity that has been created offline and is not on the server yet-->
+  <!--Error message displayed when a user opens a form with an unrecognized entity version-->
   <!--##############################################
     # Crash handling
     ##############################################-->

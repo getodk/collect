@@ -69,7 +69,6 @@
   <string name="survey_loading_reading_csv_message">Lecture des fichiers CSV…</string>
   <string name="parse_error">Désolé. Impossible d\'analyser le formulaire.</string>
   <string name="loading_form_failed">Une erreur s\'est produite lors du chargement du formulaire. Veuillez réessayer.</string>
-  <string name="parent_form_not_present">Impossible d\'éditer cette ébauche car le formulaire vierge correspondant n\'est pas présent ou a été supprimé. \n\\nFrom ID : %1$s</string>
   <string name="cannot_edit_completed_form">Ce formulaire ne peut pas être modifié une fois finalisé. Il est peut-être encrypté.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Les modifications non enregistrées ont été récupérées à partir du point de sauvegarde !</string>
@@ -150,10 +149,8 @@
   <string name="phone_does_not_support_rsa">Le téléphone ne supporte pas le chiffrement RSA.</string>
   <string name="invalid_rsa_public_key">Clé publique RSA invalide.</string>
   <string name="encryption_error_message">Le formulaire %s n\'a pas été enregistré comme finalisé.</string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
-  <string name="bad_uri">Mauvais URI: %s</string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
-  <string name="unrecognized_uri">URI non reconnu: %s</string>
+  <!--Displayed when an attempt is made to start form filling, but the form is broken-->
+  <string name="form_cannot_be_used">Le formulaire ne peut être utilisé</string>
   <!--Text displayed when audio recording fails to start-->
   <string name="start_recording_failed">Impossible de commencer l\'enregistrement.</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
@@ -162,8 +159,6 @@
   <string name="answer_file_copy_failed_message">Le fichier n\'a pas pu être attaché au formulaire mais est disponible à %1$s</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">Enregistrement désactivé. Activez depuis %s</string>
-  <!--Error displayed when opened filled form has been deleted on disk-->
-  <string name="instance_deleted_message">Ce formulaire rempli ne peut pas être ouvert parce qu\'il a été supprimé hors de l\'application.</string>
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
   <string name="update_widgets_error">Échec de mise à jour des données. Ceci est généralement causé par un mauvais usage de \"calculates\" dans la définition du formulaire.\n\nSi vous continuez à avoir ce problème, avertissez la personne qui vous a demandé de collecter les données.</string>
   <!--##############################################
@@ -276,7 +271,7 @@
   <string name="ext_import_csv_missing_error">Les données externes pour %1$s n\'ont pas été importées. Vous avez peux-être oublié d\'inclure le fichier %2$s.csv avec votre formulaire ?</string>
   <string name="ext_search_generic_error">Erreur de syntaxe dans la fonction search(): %s</string>
   <string name="ext_assign_value_error">Impossible d\'attribuer la valeur à \'%s\'.</string>
-  <string name="parser_exception">Exception XPathParser: \"%s\"</string>
+  <string name="parser_exception">Exception XPathParser: \\"%s\\"</string>
   <string name="get_bearing">Enregistrer la Position</string>
   <string name="replace_bearing">Remplacer la Position</string>
   <string name="getting_bearing">Chargement de la Position</string>
@@ -338,6 +333,30 @@
   <string name="persian_month_10">Dey</string>
   <string name="persian_month_11">Bahman</string>
   <string name="persian_month_12">Esfand</string>
+  <!--1st month in the Buddhist calendar-->
+  <string name="buddhist_month_1">makara</string>
+  <!--2nd month in the Buddhist calendar-->
+  <string name="buddhist_month_2">kumbha</string>
+  <!--3rd month in the Buddhist calendar-->
+  <string name="buddhist_month_3">mīna</string>
+  <!--4th month in the Buddhist calendar-->
+  <string name="buddhist_month_4">meṣa</string>
+  <!--5th month in the Buddhist calendar-->
+  <string name="buddhist_month_5">vṛṣabha</string>
+  <!--6th month in the Buddhist calendar-->
+  <string name="buddhist_month_6">mithuna</string>
+  <!--7th month in the Buddhist calendar-->
+  <string name="buddhist_month_7">karkaṭa</string>
+  <!--8th month in the Buddhist calendar-->
+  <string name="buddhist_month_8">sinha</string>
+  <!--9th month in the Buddhist calendar-->
+  <string name="buddhist_month_9">kanyā</string>
+  <!--10th month in the Buddhist calendar-->
+  <string name="buddhist_month_10">tulā</string>
+  <!--11th month in the Buddhist calendar-->
+  <string name="buddhist_month_11">vṛścika</string>
+  <!--12th month in the Buddhist calendar-->
+  <string name="buddhist_month_12">dhanu</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
@@ -757,6 +776,8 @@
   <string name="unlock_settings">Déverrouiller les paramètres</string>
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">Paramètres déverrouillés</string>
+  <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
+  <string name="setting_not_available_during_form_entry">Paramètre non disponible durant la saisie de formulaire</string>
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -867,7 +888,6 @@
   <string name="fs_delete_media_path_if_file_error">Impossible de supprimer \'%s\'. Merci de supprimer le fichier manuellement et de re-télécharger le formulaire.</string>
   <string name="fs_create_media_folder_error">Impossible de créer le dossier multimédia: %s</string>
   <string name="fs_file_copy_error">Impossible de copier \'%1$s\' sur \'%2$s\'. Raison: %3$s</string>
-  <string name="survey_multiple_forms_error">Vous avez téléchargé deux formulaires différents avec le même numéro d\'identification et la même version. Peut-être que le même formulaire a été téléchargés deux fois ou à deux serveurs différents. Dans tous les cas, vous devez en supprimer un.</string>
   <string name="select_odk_shortcut">Sélectionnez le raccourci ODK</string>
   <string name="background_audio_help">Ce formulaire enregistre le son du micro de votre appareil.\n\nVous pouvez utiliser l\'indicateur de volume pour vous assurer que le micro est assez proche de son que vous devez enregistrer.\n\nQuittez le formulaire pour arrêter l\'enregistrement.\n\nPour plus d\'informations contacter la personne responsable de cette collecte de données.</string>
   <string name="loading">Chargement…</string>
@@ -920,30 +940,46 @@
   <!--Preceded by "Don't have a project yet?" question-->
   <string name="try_demo">Essayer une démo</string>
   <string name="scan_configuration_qr_code">Scanner un QR Code de configuration</string>
-  <!--Error shown when a user tries to open a form that's in a different project-->
-  <string name="wrong_project_selected_for_form">Pour ouvrir ce formulaire, vous devez d\'abord ouvrir ODK Collect et basculer sur le projet qui le contient.</string>
-  <!--Error shown when a user tries to open a form when there are no projects-->
-  <string name="app_not_configured">ODK Collect n\'a pas été configuré. Essayez d\'ouvrir ODK Collect et configure le.\n\nSi vous avez cliqué sur un raccourci, vous devrez le recréer après avoir configuré ODK Collect.</string>
   <!--##############################################
     # Errors
     ##############################################-->
   <string name="show_details">Montrer détails</string>
   <string name="errors">Erreurs</string>
   <!--##############################################
+    # Form opening errors
+    ##############################################-->
+  <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">Pour ouvrir ce formulaire, vous devez d\'abord ouvrir ODK Collect et basculer sur le projet qui le contient.</string>
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <string name="app_not_configured">ODK Collect n\'a pas été configuré. Essayez d\'ouvrir ODK Collect et configure le.\n\nSi vous avez cliqué sur un raccourci, vous devrez le recréer après avoir configuré ODK Collect.</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">URI non reconnu: %s</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">Mauvais URI: %s</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">Ce formulaire rempli ne peut pas être ouvert parce qu\'il a été supprimé hors de l\'application.</string>
+  <!--Error shown when a user tries to edit a form but there is no corresponding blank form-->
+  <string name="parent_form_not_present">Impossible d\'éditer cette ébauche car le formulaire vierge correspondant n\'est pas présent ou a été supprimé. \n\\nFrom ID : %1$s</string>
+  <!--Error shown when a user tries to open a form but there is more than one form with the same form ID-->
+  <string name="survey_multiple_forms_error">Vous avez téléchargé deux formulaires différents avec le même numéro d\'identification et la même version. Peut-être que le même formulaire a été téléchargés deux fois ou à deux serveurs différents. Dans tous les cas, vous devez en supprimer un.</string>
+  <!--Error shown when a user tries to open a form when forms update is being applied in the background-->
+  <string name="cannot_open_form_because_of_forms_update">Ce formulaire ne peut pas être ouvert parce qu\'une mise à jour de formulaires est en cours</string>
+  <!--##############################################
     # Permissions
     ##############################################-->
   <string name="open_settings">Ouvrir les paramètres</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
-  <string name="entities_title">Entités</string>
+  <string name="entities_title">Listes d\'entités</string>
   <!--Title for setting that controls whether local entity features are enabled or not-->
   <string name="include_local_entities_setting">Activer les entités locales</string>
   <string name="local_entity_features_summary">Les formulaires de suivi auront accès aux listes d\'entités partagées incluant les entités créées ou mises à jour localement.</string>
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">Voir liste d\'entités</string>
-  <!--Text for button that deletes all entities for the project-->
-    <!--Text for button that adds a new entity list-->
-    <!--Label for entity that has been created offline and is not on the server yet-->
+  <!--Label for entity that has been created offline and is not on the server yet-->
   <string name="offline">Hors ligne</string>
+  <!--Error message displayed when a user opens a form with an unrecognized entity version-->
+  <string name="unrecognized_entity_version">Ce formulaire n\'est pas supporté par cette version d\'ODK. Merci de mettre à jour Collect. Si vous continuez à avoir ce problème, faites-le savoir à la personne qui vous a demandé de collecter des données.
+\n\nVersion de la spécification des Entités de Formulaire : %s</string>
   <!--##############################################
     # Crash handling
     ##############################################-->

@@ -1,11 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:oat="http://schema.getodk.org/odkAndroidTools">
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
+  <string name="enter_data">Създай нов формуляр</string>
   <!--Text for an action button on the main screen.-->
+  <string name="review_data">Чернови</string>
   <!--Text for an action button on the main screen.-->
+  <string name="send_data">Готови за изпращане</string>
   <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">Изпратени</string>
   <!--Text for an action button on the main screen.-->
+  <string name="get_forms">Свали формуляр</string>
   <!--Text for an action button on the main screen.-->
+  <string name="manage_files">Изтрий формуляр</string>
   <string name="saved_forms">Запазени формуляри</string>
   <string name="version_number">Версия: %s</string>
   <string name="id_number">ID: %s</string>
@@ -23,6 +29,7 @@
   <string name="sending_failed_on_date_at_time">\'Неуспешно изпращане на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Изтрито на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
+  <string name="submission_deleted">Подаденият формуляр е изтрит</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="modified_on_date_at_time">\'Редактирано на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <string name="encrypted_form">Криптиран формуляр</string>
@@ -52,26 +59,90 @@
     # FILL BLANK FORM
     ##############################################-->
   <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
+  <string name="open_form_map">Зареди от карта</string>
+  <string name="instance_scan_count">Добавени са %1$d формуляри.</string>
+  <string name="finished_disk_scan">Сканирането приключи. Всички формуляри са заредени.</string>
+  <string name="xform_parse_error">XForm грешка  %1$s: %2$s липсва или е невалидно.</string>
+  <string name="loading_form">Зареждане на формуляр</string>
+  <string name="survey_loading_reading_form_message">Прочитане дефиницията на формуляра…</string>
+  <string name="survey_loading_reading_data_message">Прочитане на данните за проучването…</string>
+  <string name="survey_loading_reading_csv_message">Прочитане на CSV файловете…</string>
+  <string name="parse_error">Съжаляваме. Формулярът не може да бъде анализиран</string>
+  <string name="loading_form_failed">Възникна грешка при зареждане на формуляра. Моля опитайте пак.</string>
+  <string name="cannot_edit_completed_form">Този формуляр не може да се редактира понеже е маркиран като приключен. Възможно е и да е криптиран.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">Незапазените промени са възстановени от момента на запис!</string>
   <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">Смени език</string>
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">Премини до напомнянето</string>
   <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">Запази чернова</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">Към началото</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">Към края</string>
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">Нагоре</string>
   <!--Displayed below group names in a form's table of contents-->
+  <string name="group_label">Група</string>
   <!--Displayed below repeat names in a form's table of contents-->
+  <string name="repeatable_group_label">Повтаряща се група</string>
+  <string name="exit">Изход</string>
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">Добавяне на \"%s\"?</string>
+  <string name="add_repeat">Добави</string>
+  <string name="dont_add_repeat">Не добавяй</string>
+  <string name="add_another_menu">Добавябе ба друг</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">Редактиране на напомняне</string>
+  <string name="clearanswer_confirm">Премахване отговора на \"%s\"?</string>
+  <string name="clear_answer">Премахни отговора</string>
+  <string name="clear_answer_ask">Премахване на този отговор?</string>
+  <string name="clear_answer_no">Отмяна</string>
+  <string name="discard_answer">Премахни отговора</string>
+  <string name="discard_group">Премахни група</string>
+  <string name="delete_repeat">Премахни група</string>
+  <string name="delete_repeat_ask">Премахване на тази група?</string>
+  <string name="delete_repeat_confirm">Премахванае на група \"%s\" и всички подгрупи?</string>
+  <string name="delete_repeat_no">Отмяна</string>
+  <string name="invalid_answer_error">Oтговорът на този въпрос е невалиден!</string>
+  <string name="required_answer_error">Oтговорът на този въпрос е задължителен!</string>
+  <string name="success_form_validation">Успех! Не са открити грешки във вашият формуляр!</string>
+  <string name="invalid_space_in_answer_singular">Предупреждение: стойността %s съдържа празни символи </string>
+  <string name="invalid_space_in_answer_plural">Предупреждение: стойностите %s съдържат празни символи</string>
+  <string name="too_complex_form">Този формуляр е прекалено сложен за това устройство. Опитайте да го опростите или потърсете помощ във форума.</string>
+  <string name="survey_internal_error">Вътрешна грешка: преминавенето към подсказката е неуспешно.</string>
+  <string name="save_enter_data_description">Вие сте в края на %s</string>
+  <string name="form_edits_warning_title">Финализираните формуляри не могат да се редактират.</string>
+  <string name="form_edits_warning_title_auto_send_enabled">Изпратените формуляри не могат да се редактират.</string>
+  <string name="form_edits_warning_message">Ако се налага да правите промени във формуляра, използвайте \"Запази като чернова\" докато сте готови да го изпратите.</string>
+  <string name="form_edits_warning_learn_more">Научи повече</string>
+  <string name="save_as_draft">Запази като чернова</string>
+  <string name="finalize">Финализирай</string>
+  <string name="send">Изпрати</string>
+  <string name="data_saved_error">Запазването на формуляра беше неуспешно!</string>
+  <string name="data_saved_ok">Успешно запазване на формуляра!</string>
+  <string name="save_point_error">Грешка при запис на точка за възстановяване: %s</string>
   <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
+  <string name="quit_application">Изход %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="do_not_save">Отхвърли формуляра</string>
+  <string name="discard_changes">Отхвърли промените</string>
+  <string name="keep_changes">Запис на промените</string>
+  <string name="keep_editing">Продължи с редакцията</string>
+  <string name="quit_form_title">Запази формуляра?</string>
+  <string name="save_explanation">Може да запишeте този формуляр и той ще бъде достъпен във вашите чернови по всяко време.</string>
+  <string name="save_explanation_with_last_saved">Този формуляр бе последно записан на\' EEE, MMM dd, yyyy \' в \' HH:mm\'. Запишете като чернова за да запазите промените.</string>
+  <string name="quit_form_continue_title">Продължи с редактриането?</string>
+  <string name="discard_form_warning">Ако отхвърлите формуляр ще загубите всички промени.</string>
+  <string name="discard_changes_warning">Този формуляр бе последно записан на\' EEE, MMM dd, yyyy \' в \' HH:mm\'. Ако отхвърлите промените, ще загубите всички промени направени след това.</string>
+  <string name="saving_form">Запис на формуляр</string>
+  <!--Displayed when an attempt is made to start form filling, but the form is broken-->
   <!--Text displayed when audio recording fails to start-->
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
-  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
   <!--##############################################
     # FORM FEATURES
@@ -100,6 +171,18 @@
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
+  <!--1st month in the Buddhist calendar-->
+  <!--2nd month in the Buddhist calendar-->
+  <!--3rd month in the Buddhist calendar-->
+  <!--4th month in the Buddhist calendar-->
+  <!--5th month in the Buddhist calendar-->
+  <!--6th month in the Buddhist calendar-->
+  <!--7th month in the Buddhist calendar-->
+  <!--8th month in the Buddhist calendar-->
+  <!--9th month in the Buddhist calendar-->
+  <!--10th month in the Buddhist calendar-->
+  <!--11th month in the Buddhist calendar-->
+  <!--12th month in the Buddhist calendar-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
@@ -222,11 +305,13 @@
   <!--Displayed when a device property such as the phone number is not available-->
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">Запиши чернова</string>
   <!--##############################################
      # ABOUT
      ##############################################-->
@@ -237,9 +322,15 @@
      # MISC
      ##############################################-->
   <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">Отмяна</string>
+  <string name="cancel_loading_form">Отмяна</string>
+  <string name="cancel_location">Отмяна</string>
+  <string name="do_not_change">Отмяна</string>
+  <string name="do_not_exit">Отмяна</string>
   <!--##############################################
      # Projects
      ##############################################-->
+  <string name="add">Добави</string>
   <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
   <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
   <!--Button text for adding a duplicate project-->
@@ -256,26 +347,36 @@
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
-  <!--Error shown when a user tries to open a form that's in a different project-->
-  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
     ##############################################-->
+  <!--##############################################
+    # Form opening errors
+    ##############################################-->
+  <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <!--Error shown when a user tries to edit a form but there is no corresponding blank form-->
+  <string name="parent_form_not_present">Черновате не може да бъде редактирана защото съответната бланка не е налична, или е изтрита.\n\nID на формуляра: %1$s</string>
+  <!--Error shown when a user tries to open a form but there is more than one form with the same form ID-->
+  <!--Error shown when a user tries to open a form when forms update is being applied in the background-->
   <!--##############################################
     # Permissions
     ##############################################-->
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--Title for setting that controls whether local entity features are enabled or not-->
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
-  <!--Text for button that deletes all entities for the project-->
-  <!--Text for button that adds a new entity list-->
   <!--Label for entity that has been created offline and is not on the server yet-->
+  <!--Error message displayed when a user opens a form with an unrecognized entity version-->
   <!--##############################################
     # Crash handling
     ##############################################-->
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
+  <string name="learn_more_button_text">Научи повече</string>
   <!--##############################################
     # Developer tools
     ##############################################-->
