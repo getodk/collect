@@ -24,6 +24,22 @@ class EntityFormTest {
         .around(rule)
 
     @Test
+    fun fillingEntityRegistrationForm_createsEntityWithValuesTreatedAsOpaqueStrings() {
+        testDependencies.server.addForm("entities-with-dates-registration.xml")
+        testDependencies.server.addForm("entities-with-dates-follow-up.xml")
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
+            .startBlankForm("Entities With Dates Registration")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .startBlankForm("Entities With Dates Follow Up")
+            // .assertText("2024-11-15")
+            .swipeToNextQuestion("Select date")
+            .assertText("2024-11-15")
+    }
+
+    @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpForms() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
         testDependencies.server.addForm(

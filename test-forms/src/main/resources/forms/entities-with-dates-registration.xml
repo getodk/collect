@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<h:html
+	xmlns="http://www.w3.org/2002/xforms"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:jr="http://openrosa.org/javarosa"
+	xmlns:orx="http://openrosa.org/xforms"
+	xmlns:odk="http://www.opendatakit.org/xforms"
+	xmlns:entities="http://www.opendatakit.org/xforms/entities">
+	<h:head>
+		<h:title>Entities With Dates Registration</h:title>
+		<model odk:xforms-version="1.0.0" entities:entities-version="2024.1.0">
+			<itext>
+				<translation lang="English">
+					<text id="/data/date:label">
+						<value>Select date</value>
+					</text>
+				</translation>
+			</itext>
+			<instance>
+				<data id="entities-with-dates-registration">
+					<date>2024-11-15</date>
+					<meta>
+						<instanceID/>
+						<entity dataset="dates" id="" create="1">
+							<label/>
+						</entity>
+					</meta>
+				</data>
+			</instance>
+			<bind nodeset="/data/date" type="date" entities:saveto="date"/>
+			<bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+			<bind nodeset="/data/meta/entity/@id" type="string" readonly="true()"/>
+			<setvalue ref="/data/meta/entity/@id" event="odk-instance-first-load" type="string" readonly="true()" value="uuid()"/>
+			<bind nodeset="/data/meta/entity/label" calculate=" /data/date " type="string" readonly="true()"/>
+		</model>
+	</h:head>
+	<h:body>
+		<input ref="/data/date">
+			<label ref="jr:itext('/data/date:label')"/>
+		</input>
+	</h:body>
+</h:html>

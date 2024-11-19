@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:entities="http://www.opendatakit.org/xforms/entities">
+    <h:head>
+        <h:title>Entities With Dates Follow Up</h:title>
+        <model odk:xforms-version="1.0.0" entities:entities-version="2024.1.0">
+            <instance>
+                <data id="entities-with-dates-follow_up" version="1">
+                    <label/>
+                    <date/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+
+            <instance id="dates" src="jr://file-csv/dates.csv"/>
+
+            <bind nodeset="/data/label" type="string"/>
+            <bind nodeset="/data/date" type="string"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 ref="/data/label">
+            <label>Select label</label>
+            <itemset nodeset="instance('dates')/root/item">
+                <value ref="name"/>
+                <label ref="label"/>
+            </itemset>
+        </select1>
+        <select1 ref="/data/date">
+            <label>Select date</label>
+            <itemset nodeset="instance('dates')/root/item">
+                <value ref="name"/>
+                <label ref="date"/>
+            </itemset>
+        </select1>
+    </h:body>
+</h:html>
