@@ -2,24 +2,24 @@
 compileSdk = "35"
 minSdk = "21"
 targetSdk = "34"
-lifecycle = "2.8.6"
-navigation = "2.8.3"
-work = "2.9.1"
-androidxFragment = "1.8.4"
+lifecycle = "2.8.7"
+navigation = "2.8.4"
+work = "2.10.0"
+androidxFragment = "1.8.5"
 okhttp3 = "4.12.0"
 dagger = "2.52"
 glide = "4.16.0"
-camerax = "1.3.4"
+camerax = "1.4.0"
 espresso = "3.6.1"
 
 [libraries]
-desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.2" }
+desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.3" }
 androidxStartup = { group = "androidx.startup", name = "startup-runtime", version = "1.2.0" }
 androidxLifecycleRuntimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidxLifecycleLivedataKtx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidxLifecycleViewmodelKtx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidxViewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version = "1.1.0" }
-androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
+androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version = "1.15.0" }
 androidxBrowser = { group = "androidx.browser", name = "browser", version = "1.8.0" }
 androidxRecyclerview = { group = "androidx.recyclerview", name = "recyclerview", version = "1.3.2" }
 androidxNavigationFragmentKtx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
@@ -94,7 +94,7 @@ androidxTestEspressoIntents = { group = "androidx.test.espresso", name = "espres
 androidxTestExtJunit = { group = "androidx.test.ext", name = "junit-ktx", version = "1.2.1" }
 okhttp3Mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp3" }
 hamcrest = { group = "org.hamcrest", name = "hamcrest", version = "3.0" }
-robolectric = { group = "org.robolectric", name = "robolectric", version = "4.13" }
+robolectric = { group = "org.robolectric", name = "robolectric", version = "4.14" }
 uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version = "2.3.0" }
 
 [plugins]
