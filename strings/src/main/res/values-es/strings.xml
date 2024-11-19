@@ -1015,24 +1015,24 @@
     # Forms ready to send banner
     ##############################################-->
   <plurals name="last_form_sent_seconds_ago">
-    <item quantity="one">Ultimo formulario enviado: hace %d segundo</item>
-    <item quantity="many">Ultimo formulario enviado: hace %d segundos</item>
-    <item quantity="other">Ultimo formulario enviado: hace %d segundos</item>
+    <item quantity="one">Último formulario enviado: hace %d segundo</item>
+    <item quantity="many">Último formulario enviado: hace %d segundos</item>
+    <item quantity="other">Último formulario enviado: hace %d segundos</item>
   </plurals>
   <plurals name="last_form_sent_minutes_ago">
-    <item quantity="one">Ultimo formulario enviado: hace %d minuto</item>
-    <item quantity="many">Ultimo formulario enviado: hace %d minutos</item>
-    <item quantity="other">Ultimo formulario enviado: hace %d minuto</item>
+    <item quantity="one">Último formulario enviado: hace %d minuto</item>
+    <item quantity="many">Último formulario enviado: hace %d minutos</item>
+    <item quantity="other">Último formulario enviado: hace %d minuto</item>
   </plurals>
   <plurals name="last_form_sent_hours_ago">
-    <item quantity="one">Ultimo formulario enviado: hace %d hora</item>
-    <item quantity="many">Ultimo formulario enviado: hace %d horas</item>
-    <item quantity="other">Ultimo formulario enviado: hace %d horas</item>
+    <item quantity="one">Último formulario enviado: hace %d hora</item>
+    <item quantity="many">Último formulario enviado: hace %d horas</item>
+    <item quantity="other">Último formulario enviado: hace %d horas</item>
   </plurals>
   <plurals name="last_form_sent_days_ago">
-    <item quantity="one">Ultimo formulario enviado: hace %d día</item>
-    <item quantity="many">Ultimo formulario enviado: hace %d días</item>
-    <item quantity="other">Ultimo formulario enviado: hace %d días</item>
+    <item quantity="one">Último formulario enviado: hace %d día</item>
+    <item quantity="many">Último formulario enviado: hace %d días</item>
+    <item quantity="other">Último formulario enviado: hace %d días</item>
   </plurals>
   <plurals name="forms_ready_to_send">
     <item quantity="one">%d formulario listo para enviar</item>
