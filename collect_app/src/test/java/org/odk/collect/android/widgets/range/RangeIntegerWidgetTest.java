@@ -205,6 +205,41 @@ public class RangeIntegerWidgetTest {
         assertThat(widget1.slider.getId(), not(equalTo(widget2.slider.getId())));
     }
 
+    @Test
+    public void changingSliderValueToTheMinOneWhenSliderHasNoValue_setsTheValue() {
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+
+        widget.slider.measure(100, 10);
+        widget.slider.layout(0, 0, 100, 10);
+
+        long currentTime = System.currentTimeMillis();
+
+        MotionEvent downEvent = MotionEvent.obtain(
+                currentTime,
+                currentTime,
+                MotionEvent.ACTION_DOWN,
+                0,
+                0,
+                0
+        );
+        widget.slider.dispatchTouchEvent(downEvent);
+
+        MotionEvent upEvent = MotionEvent.obtain(
+                currentTime,
+                currentTime,
+                MotionEvent.ACTION_UP,
+                0,
+                0,
+                0
+        );
+        widget.slider.dispatchTouchEvent(upEvent);
+
+        assertThat(widget.currentValue.getText(), equalTo("1"));
+
+        downEvent.recycle();
+        upEvent.recycle();
+    }
+
     private RangeIntegerWidget createWidget(FormEntryPrompt prompt) {
         return new RangeIntegerWidget(widgetTestActivity(), new QuestionDetails(prompt));
     }
