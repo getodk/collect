@@ -17,9 +17,9 @@ public class TrackingTouchSlider extends Slider implements Slider.OnSliderTouchL
     private boolean trackingTouch;
     private boolean enabled;
 
-    private OnFirstValueChangedListener onFirstValueChangedListener;
+    private OnMinValueChangedListener onMinValueChangedListener;
 
-    public interface OnFirstValueChangedListener {
+    public interface OnMinValueChangedListener {
         void onFirstValueChanged();
     }
 
@@ -37,7 +37,7 @@ public class TrackingTouchSlider extends Slider implements Slider.OnSliderTouchL
                 case MotionEvent.ACTION_UP:
                     v.getParent().requestDisallowInterceptTouchEvent(false);
                     if (!enabled) {
-                        onFirstValueChangedListener.onFirstValueChanged();
+                        onMinValueChangedListener.onFirstValueChanged();
                     }
                     break;
             }
@@ -70,7 +70,7 @@ public class TrackingTouchSlider extends Slider implements Slider.OnSliderTouchL
         enabled = false;
     }
 
-    public void setOnFirstValueChanged(OnFirstValueChangedListener onFirstValueChangedListener) {
-        this.onFirstValueChangedListener = onFirstValueChangedListener;
+    public void setOnFirstValueChanged(OnMinValueChangedListener onMinValueChangedListener) {
+        this.onMinValueChangedListener = onMinValueChangedListener;
     }
 }

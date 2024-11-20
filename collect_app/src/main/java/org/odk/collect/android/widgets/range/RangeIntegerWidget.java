@@ -38,7 +38,7 @@ import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 import java.math.BigDecimal;
 
 @SuppressLint("ViewConstructor")
-public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChangeListener, TrackingTouchSlider.OnFirstValueChangedListener {
+public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChangeListener, TrackingTouchSlider.OnMinValueChangedListener {
     TrackingTouchSlider slider;
     TextView currentValue;
 
