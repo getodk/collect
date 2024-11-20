@@ -65,7 +65,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             entities.forEach { entity ->
                 val existing = if (listExists) {
                     query(
-                        list,
+                        "\"$list\"",
                         "${EntitiesTable.COLUMN_ID} = ?",
                         arrayOf(entity.id)
                     ).first { mapCursorRowToEntity(it, 0) }
@@ -92,7 +92,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     }
 
                     update(
-                        list,
+                        "\"$list\"",
                         contentValues,
                         "${EntitiesTable.COLUMN_ID} = ?",
                         arrayOf(entity.id)
@@ -110,7 +110,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     }
 
                     insertOrThrow(
-                        list,
+                        "\"$list\"",
                         null,
                         contentValues
                     )
@@ -172,7 +172,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             readableDatabase.rawQuery(
                 """
                 SELECT COUNT(*)
-                FROM $list
+                FROM "$list"
                 """.trimIndent(),
                 null
             ).first {
@@ -262,7 +262,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 .rawQuery(
                     """
                     SELECT *, i.$ROW_ID
-                    FROM $list e, ${getRowIdTableName(list)} i
+                    FROM "$list" e, "${getRowIdTableName(list)}" i
                     WHERE e._id = i._id AND i.$ROW_ID = ?
                     """.trimIndent(),
                     arrayOf((index + 1).toString())
@@ -278,7 +278,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 .rawQuery(
                     """
                     SELECT *, i.$ROW_ID
-                    FROM $list e, ${getRowIdTableName(list)} i
+                    FROM "$list" e, "${getRowIdTableName(list)}" i
                     WHERE e._id = i._id
                     ORDER BY i.$ROW_ID
                     """.trimIndent(),
@@ -296,7 +296,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             readableDatabase.rawQuery(
                 """
                 SELECT *, i.$ROW_ID
-                FROM $list e, ${getRowIdTableName(list)} i
+                FROM "$list" e, "${getRowIdTableName(list)}" i
                 WHERE e._id = i._id AND $selectionColumn = ?
                 ORDER BY i.$ROW_ID
                 """.trimIndent(),
@@ -317,13 +317,13 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             getLists().forEach {
                 writableDatabase.execSQL(
                     """
-                    DROP TABLE IF EXISTS ${getRowIdTableName(it)};
+                    DROP TABLE IF EXISTS "${getRowIdTableName(it)}";
                     """.trimIndent()
                 )
 
                 writableDatabase.execSQL(
                     """
-                    CREATE TABLE ${getRowIdTableName(it)} AS SELECT _id FROM $it ORDER BY _id;
+                    CREATE TABLE "${getRowIdTableName(it)}" AS SELECT _id FROM "$it" ORDER BY _id;
                     """.trimIndent()
                 )
             }
@@ -355,7 +355,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
             execSQL(
                 """
-                CREATE TABLE IF NOT EXISTS $list (
+                CREATE TABLE IF NOT EXISTS "$list" (
                     $_ID integer PRIMARY KEY,
                     ${EntitiesTable.COLUMN_ID} text,
                     ${EntitiesTable.COLUMN_LABEL} text,
@@ -369,7 +369,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
             execSQL(
                 """
-                CREATE UNIQUE INDEX IF NOT EXISTS ${list}_unique_id_index ON $list (${EntitiesTable.COLUMN_ID});
+                CREATE UNIQUE INDEX IF NOT EXISTS "${list}_unique_id_index" ON "$list" (${EntitiesTable.COLUMN_ID});
                 """.trimIndent()
             )
         }
@@ -377,7 +377,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     private fun updatePropertyColumns(list: String, entity: Entity) {
         val columnNames = databaseConnection.withConnection {
-            readableDatabase.getColumnNames(list)
+            readableDatabase.getColumnNames("\"$list\"")
         }
 
         val missingColumns = entity.properties
@@ -390,7 +390,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 missingColumns.forEach {
                     execSQL(
                         """
-                        ALTER TABLE $list ADD "$it" text NOT NULL DEFAULT "";
+                        ALTER TABLE "$list" ADD "$it" text NOT NULL DEFAULT "";
                         """.trimIndent()
                     )
                 }

@@ -163,6 +163,31 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#save adds new properties for lists with dashes`() {
+        val repository = buildSubject()
+
+        val wine = Entity.New(
+            "1",
+            "Léoville Barton 2008",
+            properties = listOf("window" to "2019-2038"),
+            version = 1
+        )
+        repository.save("favourite-wines", wine)
+
+        val updatedWine = Entity.New(
+            wine.id,
+            "Léoville Barton 2008",
+            properties = listOf("score" to "92"),
+            version = 2
+        )
+        repository.save("favourite-wines", updatedWine)
+
+        val wines = repository.getEntities("favourite-wines")
+        assertThat(wines.size, equalTo(1))
+        assertThat(wines[0].properties, contains("window" to "2019-2038", "score" to "92"))
+    }
+
+    @Test
     fun `#save adds new properties to existing entities`() {
         val repository = buildSubject()
 
@@ -273,6 +298,19 @@ abstract class EntitiesRepositoryTest {
         val repository = buildSubject()
         repository.save("blah")
         assertThat(repository.getLists(), equalTo(emptySet()))
+    }
+
+    @Test
+    fun `#save supports creating list names with with dots and dashes`() {
+        val repository = buildSubject()
+
+        val wine = Entity.New("1", "Léoville Barton 2008")
+
+        repository.save("favourite-wines", wine)
+        assertThat(repository.getEntities("favourite-wines")[0], sameEntityAs(wine))
+
+        repository.save("favourite.wines", wine)
+        assertThat(repository.getEntities("favourite.wines")[0], sameEntityAs(wine))
     }
 
     @Test
@@ -459,6 +497,25 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#getById supports list names with dots and dashes`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+        val canet = Entity.New("2", "Pontet-Canet 2014")
+        repository.save("favourite-wines", leoville)
+        repository.save("other.favourite.wines", canet)
+
+        val favouriteWines = repository.getEntities("favourite-wines")
+        val otherFavouriteWines = repository.getEntities("other.favourite.wines")
+
+        val queriedLeoville = repository.getById("favourite-wines", "1")
+        assertThat(queriedLeoville, equalTo(favouriteWines.first { it.id == "1" }))
+
+        val queriedCanet = repository.getById("other.favourite.wines", "2")
+        assertThat(queriedCanet, equalTo(otherFavouriteWines.first { it.id == "2" }))
+    }
+
+    @Test
     fun `#getByAllByProperty returns entities with matching property value`() {
         val repository = buildSubject()
 
@@ -611,6 +668,21 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#getCount supports list names with dots and dashes`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+        val dows = Entity.New("2", "Dow's 1983")
+        repository.save("favourite-wines", leoville, dows)
+
+        val springbank = Entity.New("1", "Springbank 10")
+        repository.save("favourite.whiskys", springbank)
+
+        assertThat(repository.getCount("favourite-wines"), equalTo(2))
+        assertThat(repository.getCount("favourite.whiskys"), equalTo(1))
+    }
+
+    @Test
     fun `#getByIndex returns matching entity`() {
         val repository = buildSubject()
 
@@ -634,6 +706,24 @@ abstract class EntitiesRepositoryTest {
         repository.addList("wine")
 
         assertThat(repository.getByIndex("wine", 0), equalTo(null))
+    }
+
+    @Test
+    fun `#getByIndex supports list names with dots and dashes`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+        val canet = Entity.New("2", "Pontet-Canet 2014")
+        repository.save("favourite-wines", leoville)
+        repository.save("other.favourite.wines", canet)
+
+        val leovilleIndex =
+            repository.getEntities("favourite-wines").first { it.id == leoville.id }.index
+        assertThat(repository.getByIndex("favourite-wines", leovilleIndex), sameEntityAs(leoville))
+
+        val canetIndex =
+            repository.getEntities("other.favourite.wines").first { it.id == canet.id }.index
+        assertThat(repository.getByIndex("other.favourite.wines", canetIndex), sameEntityAs(canet))
     }
 
     @Test
