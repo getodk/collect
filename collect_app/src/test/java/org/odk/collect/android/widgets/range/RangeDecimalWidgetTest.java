@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
+import org.odk.collect.androidtest.SliderExtKt;
 
 import java.math.BigDecimal;
 
@@ -205,36 +206,12 @@ public class RangeDecimalWidgetTest {
     @Test
     public void changingSliderValueToTheMinOneWhenSliderHasNoValue_setsTheValue() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-
         widget.slider.measure(100, 10);
         widget.slider.layout(0, 0, 100, 10);
 
-        long currentTime = System.currentTimeMillis();
-
-        MotionEvent downEvent = MotionEvent.obtain(
-                currentTime,
-                currentTime,
-                MotionEvent.ACTION_DOWN,
-                0,
-                0,
-                0
-        );
-        widget.slider.dispatchTouchEvent(downEvent);
-
-        MotionEvent upEvent = MotionEvent.obtain(
-                currentTime,
-                currentTime,
-                MotionEvent.ACTION_UP,
-                0,
-                0,
-                0
-        );
-        widget.slider.dispatchTouchEvent(upEvent);
+        SliderExtKt.clickOnStep(widget.slider, 1);
 
         assertThat(widget.currentValue.getText(), equalTo("1.5"));
-
-        downEvent.recycle();
-        upEvent.recycle();
     }
 
     private RangeDecimalWidget createWidget(FormEntryPrompt prompt) {

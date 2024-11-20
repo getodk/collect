@@ -42,5 +42,6 @@ dependencies {
     implementation(Dependencies.androidx_test_espresso_core)
     implementation(Dependencies.androidx_appcompat)
     implementation(Dependencies.androidx_test_espresso_intents)
+    implementation(Dependencies.android_material)
     implementation(Dependencies.timber)
 }
