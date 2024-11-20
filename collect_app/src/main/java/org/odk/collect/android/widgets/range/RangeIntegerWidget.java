@@ -38,7 +38,7 @@ import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 import java.math.BigDecimal;
 
 @SuppressLint("ViewConstructor")
-public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChangeListener {
+public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChangeListener, TrackingTouchSlider.OnFirstValueChangedListener {
     TrackingTouchSlider slider;
     TextView currentValue;
 
@@ -63,6 +63,7 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
 
         setUpActualValueLabel(RangeWidgetUtils.setUpSlider(prompt, slider, true));
 
+        slider.setOnFirstValueChanged(this);
         if (slider.isEnabled()) {
             slider.addOnChangeListener(this);
         }
@@ -90,6 +91,11 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
         widgetValueChanged();
     }
 
+    @Override
+    public void onFirstValueChanged() {
+        setUpActualValueLabel(BigDecimal.valueOf(slider.getValueFrom()));
+    }
+
     @SuppressLint("RestrictedApi")
     @Override
     public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
@@ -106,12 +112,14 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
             slider.setTickActiveTintList(defaultTickActiveTintList);
             slider.setThumbWidth(defaultThumbWidth);
             slider.setThumbTrackGapSize(defaultThumbTrackGapSize);
+            slider.enable();
         } else {
             slider.setValue(slider.getValueFrom());
             slider.setTickActiveTintList(ColorStateList.valueOf(MaterialColors.getColor(this, com.google.android.material.R.attr.colorPrimary)));
             slider.setThumbWidth(0);
             slider.setThumbTrackGapSize(0);
             currentValue.setText("");
+            slider.disable();
         }
     }
 }

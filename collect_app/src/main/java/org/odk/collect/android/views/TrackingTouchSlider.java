@@ -15,6 +15,13 @@ import org.jetbrains.annotations.NotNull;
 public class TrackingTouchSlider extends Slider implements Slider.OnSliderTouchListener {
 
     private boolean trackingTouch;
+    private boolean enabled;
+
+    private OnFirstValueChangedListener onFirstValueChangedListener;
+
+    public interface OnFirstValueChangedListener {
+        void onFirstValueChanged();
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     public TrackingTouchSlider(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -29,6 +36,9 @@ public class TrackingTouchSlider extends Slider implements Slider.OnSliderTouchL
                     break;
                 case MotionEvent.ACTION_UP:
                     v.getParent().requestDisallowInterceptTouchEvent(false);
+                    if (!enabled) {
+                        onFirstValueChangedListener.onFirstValueChanged();
+                    }
                     break;
             }
             v.onTouchEvent(event);
@@ -50,5 +60,17 @@ public class TrackingTouchSlider extends Slider implements Slider.OnSliderTouchL
     @Override
     public void onStartTrackingTouch(@NotNull Slider slider) {
         trackingTouch = true;
+    }
+
+    public void enable() {
+        enabled = true;
+    }
+
+    public void disable() {
+        enabled = false;
+    }
+
+    public void setOnFirstValueChanged(OnFirstValueChangedListener onFirstValueChangedListener) {
+        this.onFirstValueChangedListener = onFirstValueChangedListener;
     }
 }
