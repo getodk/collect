@@ -163,6 +163,31 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#save adds new properties for lists with dashes`() {
+        val repository = buildSubject()
+
+        val wine = Entity.New(
+            "1",
+            "Léoville Barton 2008",
+            properties = listOf("window" to "2019-2038"),
+            version = 1
+        )
+        repository.save("favourite-wines", wine)
+
+        val updatedWine = Entity.New(
+            wine.id,
+            "Léoville Barton 2008",
+            properties = listOf("score" to "92"),
+            version = 2
+        )
+        repository.save("favourite-wines", updatedWine)
+
+        val wines = repository.getEntities("favourite-wines")
+        assertThat(wines.size, equalTo(1))
+        assertThat(wines[0].properties, contains("window" to "2019-2038", "score" to "92"))
+    }
+
+    @Test
     fun `#save adds new properties to existing entities`() {
         val repository = buildSubject()
 

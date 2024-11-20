@@ -65,7 +65,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             entities.forEach { entity ->
                 val existing = if (listExists) {
                     query(
-                        list,
+                        "\"$list\"",
                         "${EntitiesTable.COLUMN_ID} = ?",
                         arrayOf(entity.id)
                     ).first { mapCursorRowToEntity(it, 0) }
@@ -92,7 +92,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     }
 
                     update(
-                        list,
+                        "\"$list\"",
                         contentValues,
                         "${EntitiesTable.COLUMN_ID} = ?",
                         arrayOf(entity.id)
@@ -390,7 +390,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 missingColumns.forEach {
                     execSQL(
                         """
-                        ALTER TABLE $list ADD "$it" text NOT NULL DEFAULT "";
+                        ALTER TABLE "$list" ADD "$it" text NOT NULL DEFAULT "";
                         """.trimIndent()
                     )
                 }
