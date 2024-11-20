@@ -276,6 +276,19 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#save supports creating list names with with dots and dashes`() {
+        val repository = buildSubject()
+
+        val wine = Entity.New("1", "Léoville Barton 2008")
+
+        repository.save("favourite-wines", wine)
+        assertThat(repository.getEntities("favourite-wines")[0], sameEntityAs(wine))
+
+        repository.save("favourite.wines", wine)
+        assertThat(repository.getEntities("favourite.wines")[0], sameEntityAs(wine))
+    }
+
+    @Test
     fun `#clear deletes all entities`() {
         val repository = buildSubject()
 

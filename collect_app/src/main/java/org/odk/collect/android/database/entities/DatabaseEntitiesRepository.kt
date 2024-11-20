@@ -110,7 +110,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     }
 
                     insertOrThrow(
-                        list,
+                        "\"$list\"",
                         null,
                         contentValues
                     )
@@ -278,7 +278,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 .rawQuery(
                     """
                     SELECT *, i.$ROW_ID
-                    FROM $list e, ${getRowIdTableName(list)} i
+                    FROM "$list" e, ${getRowIdTableName(list)} i
                     WHERE e._id = i._id
                     ORDER BY i.$ROW_ID
                     """.trimIndent(),
@@ -323,14 +323,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
                 writableDatabase.execSQL(
                     """
-                    CREATE TABLE ${getRowIdTableName(it)} AS SELECT _id FROM $it ORDER BY _id;
+                    CREATE TABLE ${getRowIdTableName(it)} AS SELECT _id FROM "$it" ORDER BY _id;
                     """.trimIndent()
                 )
             }
         }
     }
 
-    private fun getRowIdTableName(it: String) = "${it}_row_numbers"
+    private fun getRowIdTableName(it: String) = "\"${it}_row_numbers\""
 
     private fun listExists(list: String): Boolean {
         return databaseConnection.withConnection {
@@ -355,7 +355,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
             execSQL(
                 """
-                CREATE TABLE IF NOT EXISTS $list (
+                CREATE TABLE IF NOT EXISTS "$list" (
                     $_ID integer PRIMARY KEY,
                     ${EntitiesTable.COLUMN_ID} text,
                     ${EntitiesTable.COLUMN_LABEL} text,
@@ -369,7 +369,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
             execSQL(
                 """
-                CREATE UNIQUE INDEX IF NOT EXISTS ${list}_unique_id_index ON $list (${EntitiesTable.COLUMN_ID});
+                CREATE UNIQUE INDEX IF NOT EXISTS "${list}_unique_id_index" ON "$list" (${EntitiesTable.COLUMN_ID});
                 """.trimIndent()
             )
         }
@@ -377,7 +377,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     private fun updatePropertyColumns(list: String, entity: Entity) {
         val columnNames = databaseConnection.withConnection {
-            readableDatabase.getColumnNames(list)
+            readableDatabase.getColumnNames("\"$list\"")
         }
 
         val missingColumns = entity.properties
