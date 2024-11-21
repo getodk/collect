@@ -24,7 +24,7 @@ object LocalEntityUseCases {
             if (id != null) {
                 when (formEntity.action) {
                     EntityAction.CREATE -> {
-                        if (!label.isNullOrEmpty()) {
+                        if (!label.isNullOrBlank()) {
                             val entity = Entity.New(
                                 id,
                                 label,
