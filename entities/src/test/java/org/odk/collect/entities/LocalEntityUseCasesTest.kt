@@ -108,7 +108,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromForm updates properties and does not change label on update if label is empty`() {
+    fun `updateLocalEntitiesFromForm updates properties and does not change label on update if label is blank`() {
         entitiesRepository.save(
             "things",
             Entity.New(
@@ -120,7 +120,7 @@ class LocalEntityUseCasesTest {
         )
 
         val formEntity =
-            FormEntity(EntityAction.UPDATE, "things", "id", "", listOf("prop" to "value 2"))
+            FormEntity(EntityAction.UPDATE, "things", "id", " ", listOf("prop" to "value 2"))
         val formEntities = EntitiesExtra(listOf(formEntity))
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
@@ -189,9 +189,9 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromForm does not create entity that has an empty label`() {
+    fun `updateLocalEntitiesFromForm does not create entity that has a blank label`() {
         val formEntity =
-            FormEntity(EntityAction.CREATE, "things", "1", "", emptyList())
+            FormEntity(EntityAction.CREATE, "things", "1", " ", emptyList())
         val formEntities = EntitiesExtra(listOf(formEntity))
         entitiesRepository.addList("things")
 
