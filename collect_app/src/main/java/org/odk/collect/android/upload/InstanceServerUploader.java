@@ -215,8 +215,7 @@ public class InstanceServerUploader extends InstanceUploader {
             }
 
         } catch (Exception e) {
-            throw new FormUploadException(FAIL + "Generic Exception: "
-                    + (e.getMessage() != null ? e.getMessage() : e.toString()));
+            throw new FormUploadException(e.getMessage() != null ? e.getMessage() : e.toString());
         }
 
         markSubmissionComplete(instance);
