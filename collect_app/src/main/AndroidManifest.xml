@@ -327,6 +327,7 @@ the specific language governing permissions and limitations under the License.
             </intent-filter>
         </activity>
         <activity android:name="org.odk.collect.android.formhierarchy.FormHierarchyFragmentHostActivity" />
+        <activity android:name="org.odk.collect.android.formhierarchy.FormHierarchyActivity" />
 
     </application>
 
