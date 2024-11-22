@@ -2,9 +2,12 @@ package org.odk.collect.android.views
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import com.google.android.material.R
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.slider.Slider
 
 @SuppressLint("ClickableViewAccessibility")
@@ -12,6 +15,10 @@ class TrackingTouchSlider(
     context: Context,
     attrs: AttributeSet?
 ) : Slider(context, attrs), Slider.OnSliderTouchListener {
+    private var defaultTickActiveTintList: ColorStateList = tickActiveTintList
+    private var defaultThumbWidth = thumbWidth
+    private var defaultThumbTrackGapSize = thumbTrackGapSize
+
     var isTrackingTouch: Boolean = false
         private set
 
@@ -56,10 +63,24 @@ class TrackingTouchSlider(
     }
 
     fun enable() {
+        setTickActiveTintList(defaultTickActiveTintList)
+        setThumbWidth(defaultThumbWidth)
+        setThumbTrackGapSize(defaultThumbTrackGapSize)
         enabled = true
     }
 
     fun disable() {
+        value = valueFrom
+        setTickActiveTintList(
+            ColorStateList.valueOf(
+                MaterialColors.getColor(
+                    this,
+                    R.attr.colorPrimary
+                )
+            )
+        )
+        setThumbWidth(0)
+        setThumbTrackGapSize(0)
         enabled = false
     }
 
