@@ -12,10 +12,11 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.formhierarchy.FormHierarchyActivity
+import org.odk.collect.android.formhierarchy.FormHierarchyFragmentHostActivity
 import org.odk.collect.android.support.CollectHelpers
 
 @RunWith(AndroidJUnit4::class)
-class FormHierarchyActivityTest {
+class FormHierarchyFragmentHostActivityTest {
 
     @Before
     fun setup() {
@@ -28,7 +29,7 @@ class FormHierarchyActivityTest {
     @Test
     fun whenFormHasNotLoadedYet_finishes() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        val intent = Intent(context, FormHierarchyActivity::class.java).also {
+        val intent = Intent(context, FormHierarchyFragmentHostActivity::class.java).also {
             it.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, "blah")
         }
 
