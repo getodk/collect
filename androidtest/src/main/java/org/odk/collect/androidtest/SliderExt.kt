@@ -3,10 +3,15 @@ package org.odk.collect.androidtest
 import android.view.MotionEvent
 import com.google.android.material.slider.Slider
 
-fun Slider.clickOnStep(step: Float) {
-    val xPosition: Float = step * (width / valueTo)
-    val yPosition: Float = height / 2f
+fun Slider.clickOnMinValue() {
+    clickOnPosition(0f)
+}
 
+fun Slider.clickOnMaxValue() {
+    clickOnPosition(width.toFloat())
+}
+
+fun Slider.clickOnPosition(xPosition: Float) {
     val currentTime = System.currentTimeMillis()
 
     val downEvent = MotionEvent.obtain(
@@ -14,7 +19,7 @@ fun Slider.clickOnStep(step: Float) {
         currentTime,
         MotionEvent.ACTION_DOWN,
         xPosition,
-        yPosition,
+        0f,
         0
     )
     dispatchTouchEvent(downEvent)
@@ -24,7 +29,7 @@ fun Slider.clickOnStep(step: Float) {
         currentTime,
         MotionEvent.ACTION_UP,
         xPosition,
-        yPosition,
+        0f,
         0
     )
     dispatchTouchEvent(upEvent)

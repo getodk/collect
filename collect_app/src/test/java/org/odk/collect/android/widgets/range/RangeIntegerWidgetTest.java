@@ -207,14 +207,25 @@ public class RangeIntegerWidgetTest {
     }
 
     @Test
-    public void changingSliderValueToTheMinOneWhenSliderHasNoValue_setsTheValue() {
+    public void changingSliderValueToTheMinOneWhenSliderHasNoValue_setsTheValueCorrectly() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         widget.slider.measure(100, 10);
         widget.slider.layout(0, 0, 100, 10);
 
-        SliderExtKt.clickOnStep(widget.slider, 1);
+        SliderExtKt.clickOnMinValue(widget.slider);
 
         assertThat(widget.currentValue.getText(), equalTo("1"));
+    }
+
+    @Test
+    public void changingSliderValueToAnyOtherThanTheMinOne_setsTheValueCorrectly() {
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        widget.slider.measure(100, 10);
+        widget.slider.layout(0, 0, 100, 10);
+
+        SliderExtKt.clickOnMaxValue(widget.slider);
+
+        assertThat(widget.currentValue.getText(), equalTo("10"));
     }
 
     private RangeIntegerWidget createWidget(FormEntryPrompt prompt) {
