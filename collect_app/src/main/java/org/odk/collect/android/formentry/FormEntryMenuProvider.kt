@@ -12,7 +12,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel
 import org.odk.collect.android.formentry.questions.AnswersProvider
-import org.odk.collect.android.formhierarchy.FormHierarchyActivity
 import org.odk.collect.android.formhierarchy.FormHierarchyFragmentHostActivity
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.android.utilities.ApplicationConstants
@@ -128,7 +127,7 @@ class FormEntryMenuProvider(
                     formEntryViewModel.updateAnswersForScreen(answersProvider.answers, false)
                     formEntryViewModel.openHierarchy()
                     val i = Intent(activity, FormHierarchyFragmentHostActivity::class.java)
-                    i.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, formEntryViewModel.sessionId)
+                    i.putExtra(FormHierarchyFragmentHostActivity.EXTRA_SESSION_ID, formEntryViewModel.sessionId)
                     activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY)
                 }
                 true

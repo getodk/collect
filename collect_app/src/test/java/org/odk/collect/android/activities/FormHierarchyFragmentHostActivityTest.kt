@@ -11,7 +11,6 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.formhierarchy.FormHierarchyActivity
 import org.odk.collect.android.formhierarchy.FormHierarchyFragmentHostActivity
 import org.odk.collect.android.support.CollectHelpers
 
@@ -30,10 +29,10 @@ class FormHierarchyFragmentHostActivityTest {
     fun whenFormHasNotLoadedYet_finishes() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val intent = Intent(context, FormHierarchyFragmentHostActivity::class.java).also {
-            it.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, "blah")
+            it.putExtra(FormHierarchyFragmentHostActivity.EXTRA_SESSION_ID, "blah")
         }
 
-        ActivityScenario.launch<FormHierarchyActivity>(intent).use { scenario ->
+        ActivityScenario.launch<FormHierarchyFragmentHostActivity>(intent).use { scenario ->
             assertThat(scenario.state, equalTo(Lifecycle.State.DESTROYED))
         }
     }

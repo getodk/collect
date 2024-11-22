@@ -84,7 +84,7 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
     @Inject
     lateinit var changeLockProvider: ChangeLockProvider
 
-    private val sessionId by lazy { intent.getStringExtra(FormHierarchyActivity.EXTRA_SESSION_ID)!! }
+    private val sessionId by lazy { intent.getStringExtra(EXTRA_SESSION_ID)!! }
     private val viewModelFactory by lazy {
         FormEntryViewModelFactory(
             this,
@@ -114,7 +114,7 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerUtils.getComponent(this).inject(this)
 
-        val viewOnly = intent.getBooleanExtra(FormHierarchyActivity.EXTRA_VIEW_ONLY, false)
+        val viewOnly = intent.getBooleanExtra(EXTRA_VIEW_ONLY, false)
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(FormHierarchyFragment::class) {
                 FormHierarchyFragment(viewOnly, viewModelFactory, this)
@@ -135,5 +135,10 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
 
         setContentView(R.layout.hierarchy_host_layout)
         setSupportActionBar(findViewById(org.odk.collect.androidshared.R.id.toolbar))
+    }
+
+    companion object {
+        const val EXTRA_SESSION_ID = "session_id"
+        const val EXTRA_VIEW_ONLY = "view_only"
     }
 }
