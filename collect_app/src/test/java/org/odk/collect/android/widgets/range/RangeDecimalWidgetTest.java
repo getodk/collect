@@ -206,7 +206,6 @@ public class RangeDecimalWidgetTest {
     @Test
     public void changingSliderValueToTheMinOneWhenSliderHasNoValue_setsTheValue() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.measure(100, 10);
         widget.slider.layout(0, 0, 100, 10);
 
         SliderExtKt.clickOnMinValue(widget.slider);
@@ -217,7 +216,6 @@ public class RangeDecimalWidgetTest {
     @Test
     public void changingSliderValueToAnyOtherThanTheMinOne_setsTheValueCorrectly() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.measure(100, 10);
         widget.slider.layout(0, 0, 100, 10);
 
         SliderExtKt.clickOnMaxValue(widget.slider);
