@@ -1,4 +1,4 @@
-package org.odk.collect.androidtest
+package org.odk.collect.testshared
 
 import android.view.MotionEvent
 import com.google.android.material.slider.Slider

@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.androidtest.SliderExtKt;
+import org.odk.collect.testshared.SliderExtKt;
 
 import java.math.BigDecimal;
 
