@@ -11,9 +11,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.FileUtils.read;
-import static org.odk.collect.androidshared.utils.PathUtils.getAbsoluteFilePath;
 import static org.odk.collect.formstest.FormUtils.buildForm;
 import static org.odk.collect.formstest.FormUtils.createXFormBody;
+import static org.odk.collect.shared.PathUtils.getAbsoluteFilePath;
 import static java.util.Arrays.asList;
 
 import com.google.common.io.Files;
