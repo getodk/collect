@@ -10,7 +10,7 @@ import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity
-import org.odk.collect.android.databinding.BarcodeWidgetAnswerBinding
+import org.odk.collect.android.databinding.BarcodeWidgetBinding
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.utilities.Appearances.hasAppearance
@@ -30,14 +30,14 @@ class BarcodeWidget(
     private val cameraUtils: CameraUtils,
     dependencies: Dependencies
 ) : QuestionWidget(context, dependencies, questionDetails), WidgetDataReceiver {
-    lateinit var binding: BarcodeWidgetAnswerBinding
+    lateinit var binding: BarcodeWidgetBinding
 
     init {
         render()
     }
 
     override fun onCreateAnswerView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
-        binding = BarcodeWidgetAnswerBinding.inflate((context as Activity).layoutInflater)
+        binding = BarcodeWidgetBinding.inflate((context as Activity).layoutInflater)
 
         if (prompt.isReadOnly) {
             binding.barcodeButton.visibility = GONE
