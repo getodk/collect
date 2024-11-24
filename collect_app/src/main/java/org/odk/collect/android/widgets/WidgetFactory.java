@@ -184,7 +184,7 @@ public class WidgetFactory {
                                 MapConfiguratorProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_BARCODE:
-                        questionWidget = new BarcodeWidget(activity, questionDetails, waitingForDataRegistry, new CameraUtils(), dependencies);
+                        questionWidget = new BarcodeWidget(activity, questionDetails, new BarcodeWidgetAnswer(activity), waitingForDataRegistry, new CameraUtils(), dependencies);
                         break;
                     case Constants.DATATYPE_TEXT:
                         String query = prompt.getQuestion().getAdditionalAttribute(null, "query");
