@@ -155,7 +155,7 @@ class FormsDataService(
                 }
 
                 syncWithDb(projectId)
-                finishSync(projectId, exception)
+                finishSyncWithServer(projectId, exception)
                 exception == null
             } else {
                 false
@@ -180,7 +180,7 @@ class FormsDataService(
                 startSync(projectId)
                 syncWithStorage(projectId)
                 syncWithDb(projectId)
-                finishSync(projectId)
+                finishSyncWithStorage(projectId)
             }
         }
     }
@@ -199,8 +199,12 @@ class FormsDataService(
         syncing.set(projectId, true)
     }
 
-    private fun finishSync(projectId: String, exception: FormSourceException? = null) {
+    private fun finishSyncWithServer(projectId: String, exception: FormSourceException? = null) {
         serverError.set(projectId, exception)
+        syncing.set(projectId, false)
+    }
+
+    private fun finishSyncWithStorage(projectId: String) {
         syncing.set(projectId, false)
     }
 
