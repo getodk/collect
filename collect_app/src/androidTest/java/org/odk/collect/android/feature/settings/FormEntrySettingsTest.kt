@@ -5,6 +5,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.application.FeatureFlags
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.strings.R
@@ -27,7 +28,11 @@ class FormEntrySettingsTest {
             .assertDisabled(R.string.project_management_section_title)
 
             .clickOnUserInterface()
-            .assertDisabled(R.string.app_theme)
             .assertDisabled(R.string.language)
+            .also {
+                if (!FeatureFlags.NO_THEME_SETTING) {
+                    it.assertDisabled(R.string.app_theme)
+                }
+            }
     }
 }

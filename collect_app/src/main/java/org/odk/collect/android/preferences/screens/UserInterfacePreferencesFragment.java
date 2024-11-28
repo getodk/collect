@@ -26,6 +26,7 @@ import android.os.Bundle;
 import androidx.preference.ListPreference;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.FeatureFlags;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -68,23 +69,27 @@ public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFrag
     }
 
     private void initThemePrefs() {
-        final ListPreference pref = findPreference(KEY_APP_THEME);
+        if (FeatureFlags.NO_THEME_SETTING) {
+            getPreferenceScreen().removePreference(findPreference(KEY_APP_THEME));
+        } else {
+            final ListPreference pref = findPreference(KEY_APP_THEME);
 
-        if (pref != null) {
-            if (!inFormEntry) {
-                pref.setSummary(pref.getEntry());
-                pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                    String entry = (String) ((ListPreference) preference).getEntries()[index];
-                    if (pref.getEntry() == null || !pref.getEntry().equals(entry)) {
-                        preference.setSummary(entry);
-                        startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);
-                    }
-                    return true;
-                });
-            } else {
-                pref.setEnabled(false);
-                pref.setSummary(org.odk.collect.strings.R.string.setting_not_available_during_form_entry);
+            if (pref != null) {
+                if (!inFormEntry) {
+                    pref.setSummary(pref.getEntry());
+                    pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                        int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                        String entry = (String) ((ListPreference) preference).getEntries()[index];
+                        if (pref.getEntry() == null || !pref.getEntry().equals(entry)) {
+                            preference.setSummary(entry);
+                            startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);
+                        }
+                        return true;
+                    });
+                } else {
+                    pref.setEnabled(false);
+                    pref.setSummary(org.odk.collect.strings.R.string.setting_not_available_during_form_entry);
+                }
             }
         }
     }
