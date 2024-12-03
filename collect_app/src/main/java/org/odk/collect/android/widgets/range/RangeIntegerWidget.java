@@ -36,7 +36,7 @@ import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 import java.math.BigDecimal;
 
 @SuppressLint("ViewConstructor")
-public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChangeListener, TrackingTouchSlider.OnMinValueChangedListener {
+public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChangeListener {
     TrackingTouchSlider slider;
     TextView currentValue;
 
@@ -53,9 +53,8 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
 
         setUpActualValueLabel(RangeWidgetUtils.setUpSlider(prompt, slider, true));
 
-        slider.setOnFirstValueChanged(this);
         if (slider.isEnabled()) {
-            slider.addOnChangeListener(this);
+            slider.setListener(this);
         }
         return layoutElements.getAnswerView();
     }
@@ -79,11 +78,6 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
     public void clearAnswer() {
         setUpActualValueLabel(null);
         widgetValueChanged();
-    }
-
-    @Override
-    public void onFirstValueChanged() {
-        setUpActualValueLabel(BigDecimal.valueOf(slider.getValueFrom()));
     }
 
     @SuppressLint("RestrictedApi")

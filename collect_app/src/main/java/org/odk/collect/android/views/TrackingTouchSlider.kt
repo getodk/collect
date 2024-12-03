@@ -15,20 +15,14 @@ class TrackingTouchSlider(
     context: Context,
     attrs: AttributeSet?
 ) : Slider(context, attrs), Slider.OnSliderTouchListener {
+    private var listener: OnChangeListener? = null
+
     private var defaultTickActiveTintList: ColorStateList = tickActiveTintList
     private var defaultThumbWidth = thumbWidth
     private var defaultThumbTrackGapSize = thumbTrackGapSize
 
     var isTrackingTouch: Boolean = false
         private set
-
-    private var enabled = false
-
-    private lateinit var onMinValueChangedListener: OnMinValueChangedListener
-
-    interface OnMinValueChangedListener {
-        fun onFirstValueChanged()
-    }
 
     init {
         addOnSliderTouchListener(this)
@@ -42,9 +36,7 @@ class TrackingTouchSlider(
 
                 MotionEvent.ACTION_UP -> {
                     v.parent.requestDisallowInterceptTouchEvent(false)
-                    if (!enabled) {
-                        onMinValueChangedListener.onFirstValueChanged()
-                    }
+                    listener?.onValueChange(this, value, true)
                 }
             }
             v.onTouchEvent(event)
@@ -66,7 +58,6 @@ class TrackingTouchSlider(
         setTickActiveTintList(defaultTickActiveTintList)
         setThumbWidth(defaultThumbWidth)
         setThumbTrackGapSize(defaultThumbTrackGapSize)
-        enabled = true
     }
 
     fun disable() {
@@ -81,10 +72,9 @@ class TrackingTouchSlider(
         )
         setThumbWidth(0)
         setThumbTrackGapSize(0)
-        enabled = false
     }
 
-    fun setOnFirstValueChanged(onMinValueChangedListener: OnMinValueChangedListener) {
-        this.onMinValueChangedListener = onMinValueChangedListener
+    fun setListener(listener: OnChangeListener) {
+        this.listener = listener
     }
 }
