@@ -745,7 +745,16 @@ abstract class EntitiesRepositoryTest {
         )
 
         repository.save("things", entity)
-        val savedEntities = repository.getEntities("things")
+        var savedEntities = repository.getEntities("things")
+        assertThat(savedEntities[0].properties.size, equalTo(1))
+        assertThat(savedEntities[0].properties[0].first, equalTo("prop"))
+
+        /**
+         * Attempt to save again to ensure that duplicate properties are correctly compared, not only
+         * within the current entity list, but also against properties already saved in the database.
+         */
+        repository.save("things", entity)
+        savedEntities = repository.getEntities("things")
         assertThat(savedEntities[0].properties.size, equalTo(1))
         assertThat(savedEntities[0].properties[0].first, equalTo("prop"))
     }
