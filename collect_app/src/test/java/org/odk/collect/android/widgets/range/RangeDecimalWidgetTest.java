@@ -1,9 +1,7 @@
 package org.odk.collect.android.widgets.range;
 
-import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.test.core.view.MotionEventBuilder;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.RangeQuestion;
@@ -37,7 +35,6 @@ public class RangeDecimalWidgetTest {
     private static final String NO_TICKS_APPEARANCE = "no-ticks";
 
     private RangeQuestion rangeQuestion;
-    private MotionEvent motionEvent;
 
     @Before
     public void setup() {
@@ -45,10 +42,6 @@ public class RangeDecimalWidgetTest {
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.valueOf(1.5));
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(5.5));
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.valueOf(0.5));
-
-        motionEvent = MotionEventBuilder.newBuilder().build();
-        motionEvent.setAction(MotionEvent.ACTION_DOWN);
-        motionEvent.setLocation(50, 0);
     }
 
     @Test
@@ -139,14 +132,14 @@ public class RangeDecimalWidgetTest {
     @Test
     public void changingSliderValue_updatesAnswer() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.onTouchEvent(motionEvent);
+        SliderExtKt.clickOnMaxValue(widget.slider);
         assertThat(widget.currentValue.getText(), equalTo("5.5"));
     }
 
     @Test
     public void changingSliderValue_showsSliderThumb() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.onTouchEvent(motionEvent);
+        SliderExtKt.clickOnMinValue(widget.slider);
         assertThat(widget.slider.getThumbRadius(), not(0));
     }
 
@@ -156,7 +149,7 @@ public class RangeDecimalWidgetTest {
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(1.5));
 
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.onTouchEvent(motionEvent);
+        SliderExtKt.clickOnMaxValue(widget.slider);
 
         assertThat(widget.currentValue.getText(), equalTo("1.5"));
     }
@@ -165,7 +158,7 @@ public class RangeDecimalWidgetTest {
     public void changingSliderValue_callsValueChangeListener() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.slider.onTouchEvent(motionEvent);
+        SliderExtKt.clickOnMaxValue(widget.slider);
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }
@@ -206,7 +199,6 @@ public class RangeDecimalWidgetTest {
     @Test
     public void changingSliderValueToTheMinOneWhenSliderHasNoValue_setsTheValue() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.layout(0, 0, 100, 10);
 
         SliderExtKt.clickOnMinValue(widget.slider);
 
@@ -216,7 +208,6 @@ public class RangeDecimalWidgetTest {
     @Test
     public void changingSliderValueToAnyOtherThanTheMinOne_setsTheValueCorrectly() {
         RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.layout(0, 0, 100, 10);
 
         SliderExtKt.clickOnMaxValue(widget.slider);
 
@@ -224,6 +215,8 @@ public class RangeDecimalWidgetTest {
     }
 
     private RangeDecimalWidget createWidget(FormEntryPrompt prompt) {
-        return new RangeDecimalWidget(widgetTestActivity(), new QuestionDetails(prompt));
+        RangeDecimalWidget widget = new RangeDecimalWidget(widgetTestActivity(), new QuestionDetails(prompt));
+        widget.slider.layout(0, 0, 100, 10);
+        return widget;
     }
 }

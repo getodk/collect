@@ -1,9 +1,7 @@
 package org.odk.collect.android.widgets.range;
 
-import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.test.core.view.MotionEventBuilder;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.RangeQuestion;
@@ -38,7 +36,6 @@ public class RangeIntegerWidgetTest {
     private static final String NO_TICKS_APPEARANCE = "no-ticks";
 
     private RangeQuestion rangeQuestion;
-    private MotionEvent motionEvent;
 
     @Before
     public void setup() {
@@ -46,10 +43,6 @@ public class RangeIntegerWidgetTest {
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.ONE);
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.TEN);
         when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ONE);
-
-        motionEvent = MotionEventBuilder.newBuilder().build();
-        motionEvent.setAction(MotionEvent.ACTION_DOWN);
-        motionEvent.setLocation(50, 0);
     }
 
     @Test
@@ -123,7 +116,7 @@ public class RangeIntegerWidgetTest {
 
     @Test
     public void clearAnswer_hidesSliderThumb() {
-        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
+        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2")));
         widget.clearAnswer();
         assertThat(widget.slider.getThumbRadius(), equalTo(0));
     }
@@ -140,14 +133,14 @@ public class RangeIntegerWidgetTest {
     @Test
     public void changingSliderValue_showsSliderThumb() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.onTouchEvent(motionEvent);
+        SliderExtKt.clickOnMinValue(widget.slider);
         assertThat(widget.slider.getThumbRadius(), not(0));
     }
 
     @Test
     public void changingSliderValue_whenRangeStartIsSmallerThanRangeEnd_updatesAnswer() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.onTouchEvent(motionEvent);
+        SliderExtKt.clickOnMaxValue(widget.slider);
         assertThat(widget.currentValue.getText(), equalTo("10"));
     }
 
@@ -157,7 +150,7 @@ public class RangeIntegerWidgetTest {
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
 
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.onTouchEvent(motionEvent);
+        SliderExtKt.clickOnMaxValue(widget.slider);
 
         assertThat(widget.currentValue.getText(), equalTo("1"));
     }
@@ -166,7 +159,7 @@ public class RangeIntegerWidgetTest {
     public void changingSliderValue_callsValueChangeListener() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.slider.onTouchEvent(motionEvent);
+        SliderExtKt.clickOnMaxValue(widget.slider);
 
         verify(valueChangedListener).widgetValueChanged(widget);
     }
@@ -209,7 +202,6 @@ public class RangeIntegerWidgetTest {
     @Test
     public void changingSliderValueToTheMinOneWhenSliderHasNoValue_setsTheValueCorrectly() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.layout(0, 0, 100, 10);
 
         SliderExtKt.clickOnMinValue(widget.slider);
 
@@ -219,7 +211,6 @@ public class RangeIntegerWidgetTest {
     @Test
     public void changingSliderValueToAnyOtherThanTheMinOne_setsTheValueCorrectly() {
         RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-        widget.slider.layout(0, 0, 100, 10);
 
         SliderExtKt.clickOnMaxValue(widget.slider);
 
@@ -227,6 +218,8 @@ public class RangeIntegerWidgetTest {
     }
 
     private RangeIntegerWidget createWidget(FormEntryPrompt prompt) {
-        return new RangeIntegerWidget(widgetTestActivity(), new QuestionDetails(prompt));
+        RangeIntegerWidget widget = new RangeIntegerWidget(widgetTestActivity(), new QuestionDetails(prompt));
+        widget.slider.layout(0, 0, 100, 10);
+        return widget;
     }
 }
