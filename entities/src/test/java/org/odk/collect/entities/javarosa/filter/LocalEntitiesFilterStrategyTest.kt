@@ -409,14 +409,7 @@ class LocalEntitiesFilterStrategyTest {
 
     @Test
     fun `works correctly with label = expressions`() {
-        entitiesRepository.save(
-            "things",
-            Entity.New(
-                "thing1",
-                "Thing1",
-                properties = listOf("property" to "value")
-            )
-        )
+        entitiesRepository.save("things", Entity.New("thing1", "Thing1"))
 
         val scenario = Scenario.init(
             "Secondary instance form",
@@ -452,15 +445,7 @@ class LocalEntitiesFilterStrategyTest {
 
     @Test
     fun `works correctly with version = expressions`() {
-        entitiesRepository.save(
-            "things",
-            Entity.New(
-                "thing1",
-                "Thing1",
-                version = 2,
-                properties = listOf("property" to "value")
-            )
-        )
+        entitiesRepository.save("things", Entity.New("thing1", "Thing1", version = 2))
 
         val scenario = Scenario.init(
             "Secondary instance form",
