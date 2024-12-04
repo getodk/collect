@@ -67,7 +67,7 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
-    fun `returns matching nodes when entity matches name`() {
+    fun `returns matching nodes when id = value`() {
         entitiesRepository.save("things", Entity.New("thing1", "Thing 1"))
         entitiesRepository.save("things", Entity.New("thing2", "Thing 2"))
 
@@ -98,6 +98,41 @@ class LocalEntitiesFilterStrategyTest {
         )
 
         assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing 1"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
+    }
+
+    @Test
+    fun `returns matching nodes when id != value`() {
+        entitiesRepository.save("things", Entity.New("thing1", "Thing 1"))
+        entitiesRepository.save("things", Entity.New("thing2", "Thing 2"))
+
+        val scenario = Scenario.init(
+            "Secondary instance form",
+            html(
+                head(
+                    title("Secondary instance form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("question"),
+                                t("calculate")
+                            )
+                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
+                        bind("/data/question").type("string"),
+                        bind("/data/calculate").type("string")
+                            .calculate("instance('things')/root/item[name!='thing1']/label")
+                    )
+                ),
+                body(
+                    input("/data/calculate")
+                )
+            ),
+            controllerSupplier
+        )
+
+        assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing 2"))
         assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
     }
 
