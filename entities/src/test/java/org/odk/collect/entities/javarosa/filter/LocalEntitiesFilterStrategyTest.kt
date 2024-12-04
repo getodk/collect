@@ -97,8 +97,8 @@ class LocalEntitiesFilterStrategyTest {
             controllerSupplier
         )
 
-        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
         assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing 1"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
     }
 
     @Test
@@ -168,8 +168,8 @@ class LocalEntitiesFilterStrategyTest {
             controllerSupplier
         )
 
-        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
         assertThat(scenario.answerOf<StringData>("/data/calculate"), equalTo(null))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
     }
 
     @Test
@@ -359,9 +359,9 @@ class LocalEntitiesFilterStrategyTest {
             controllerSupplier
         )
 
-        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
         val choices = scenario.choicesOf("/data/question").map { it.value }
         assertThat(choices, containsInAnyOrder("thing1", "thing2"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
     }
 
     @Test
