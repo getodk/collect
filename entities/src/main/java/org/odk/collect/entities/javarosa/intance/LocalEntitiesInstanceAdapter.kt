@@ -54,7 +54,10 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
             }
 
             EntityItemElement.LABEL -> {
-                filterAndConvertEntities(instanceId) { it.label == value }
+                entitiesRepository.getByLabel(
+                    instanceId,
+                    value
+                ).map { convertToElement(it) }
             }
 
             EntityItemElement.VERSION -> {

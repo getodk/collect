@@ -50,6 +50,10 @@ class InMemEntitiesRepository : EntitiesRepository {
         return getEntities(list).firstOrNull { it.id == id }
     }
 
+    override fun getByLabel(list: String, label: String?): List<Entity.Saved> {
+        return getEntities(list).filter { it.label == label }
+    }
+
     override fun getAllByProperty(
         list: String,
         property: String,

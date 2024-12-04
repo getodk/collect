@@ -9,6 +9,7 @@ interface EntitiesRepository {
     fun addList(list: String)
     fun delete(id: String)
     fun getById(list: String, id: String): Entity.Saved?
+    fun getByLabel(list: String, label: String?): List<Entity.Saved>
     fun getAllByProperty(list: String, property: String, value: String): List<Entity.Saved>
     fun getByIndex(list: String, index: Int): Entity.Saved?
     fun updateListHash(list: String, hash: String)
