@@ -155,7 +155,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return emptyList()
         }
 
-        return queryWithAttachedRowId(list).foldAndClose {
+        return queryEqualWithAttachedRowId(list).foldAndClose {
             mapCursorRowToEntity(
                 it,
                 it.getInt(ROW_ID)
@@ -213,7 +213,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return null
         }
 
-        return queryWithAttachedRowId(
+        return queryEqualWithAttachedRowId(
             list,
             selectionColumn = EntitiesTable.COLUMN_ID,
             selectionArg = id
@@ -241,7 +241,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return emptyList()
         }
 
-        return queryWithAttachedRowId(
+        return queryEqualWithAttachedRowId(
             list,
             selectionColumn = EntitiesTable.COLUMN_LABEL,
             selectionArg = label
@@ -264,7 +264,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         return if (propertyExists) {
-            queryWithAttachedRowId(
+            queryEqualWithAttachedRowId(
                 list,
                 selectionColumn = EntitiesTable.getPropertyColumn(property),
                 selectionArg = value
@@ -272,7 +272,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 mapCursorRowToEntity(it, it.getInt(ROW_ID))
             }
         } else if (value == "") {
-            queryWithAttachedRowId(list).foldAndClose {
+            queryEqualWithAttachedRowId(list).foldAndClose {
                 mapCursorRowToEntity(it, it.getInt(ROW_ID))
             }
         } else {
@@ -300,7 +300,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    private fun queryWithAttachedRowId(list: String): Cursor {
+    private fun queryEqualWithAttachedRowId(list: String): Cursor {
         return databaseConnection.withConnection {
             readableDatabase
                 .rawQuery(
@@ -315,7 +315,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    private fun queryWithAttachedRowId(
+    private fun queryEqualWithAttachedRowId(
         list: String,
         selectionColumn: String,
         selectionArg: String?
