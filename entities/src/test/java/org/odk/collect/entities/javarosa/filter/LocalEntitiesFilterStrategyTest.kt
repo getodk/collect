@@ -208,39 +208,6 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
-    fun `works correctly with name != expressions`() {
-        entitiesRepository.save("things", Entity.New("thing", "Thing"))
-
-        val scenario = Scenario.init(
-            "Secondary instance form",
-            html(
-                head(
-                    title("Secondary instance form"),
-                    model(
-                        mainInstance(
-                            t(
-                                "data id=\"create-entity-form\"",
-                                t("question"),
-                                t("calculate")
-                            )
-                        ),
-                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
-                        bind("/data/question").type("string"),
-                        bind("/data/calculate").type("string")
-                            .calculate("instance('things')/root/item[name!='other']/label")
-                    )
-                ),
-                body(
-                    input("/data/calculate")
-                )
-            ),
-            controllerSupplier
-        )
-
-        assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing"))
-    }
-
-    @Test
     fun `works correctly with non eq name expressions`() {
         entitiesRepository.save("things", Entity.New("thing", "Thing"))
 
