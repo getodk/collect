@@ -54,7 +54,16 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
             }
 
             EntityItemElement.LABEL -> {
-                filterAndConvertEntities(instanceId) { it.label == value }
+                val entity = entitiesRepository.getByLabel(
+                    instanceId,
+                    value
+                )
+
+                if (entity != null) {
+                    listOf(convertToElement(entity))
+                } else {
+                    emptyList()
+                }
             }
 
             EntityItemElement.VERSION -> {
