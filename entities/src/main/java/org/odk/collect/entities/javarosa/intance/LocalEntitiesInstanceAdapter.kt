@@ -90,6 +90,25 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
         }
     }
 
+    fun queryNotEq(instanceId: String, child: String, value: String): List<TreeElement>? {
+        return when (child) {
+            EntityItemElement.ID -> {
+                val entity = entitiesRepository.getByIdNot(
+                    instanceId,
+                    value
+                )
+
+                if (entity != null) {
+                    listOf(convertToElement(entity))
+                } else {
+                    emptyList()
+                }
+            }
+
+            else -> null
+        }
+    }
+
     private fun filterAndConvertEntities(
         list: String,
         filter: (Entity.Saved) -> Boolean

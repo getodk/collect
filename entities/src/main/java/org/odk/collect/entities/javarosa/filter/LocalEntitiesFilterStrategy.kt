@@ -39,23 +39,31 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         val candidate = CompareToNodeExpression.parse(predicate)
         return when (val original = candidate?.original) {
             is XPathEqExpr -> {
-                if (original.isEqual) {
-                    val child = candidate.nodeSide.steps[0].name.name
-                    val value = candidate.evalContextSide(sourceInstance, evaluationContext)
+                val child = candidate.nodeSide.steps[0].name.name
+                val value = candidate.evalContextSide(sourceInstance, evaluationContext)
 
-                    val results = instanceAdapter.queryEq(
+                val results = if (original.isEqual) {
+                    instanceAdapter.queryEq(
                         sourceInstance.instanceId,
                         child,
                         value as String
                     )
+                } else {
+                    instanceAdapter.queryNotEq(
+                        sourceInstance.instanceId,
+                        child,
+                        value as String
+                    )
+                }
 
+                if (results == null) {
+                    next.get()
+                } else {
                     sourceInstance.replacePartialElements(results)
                     results.map {
                         it.parent = sourceInstance.root
                         it.ref
                     }
-                } else {
-                    next.get()
                 }
             }
 

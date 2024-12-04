@@ -222,6 +222,20 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
+    override fun getByIdNot(list: String, id: String): Entity.Saved? {
+        if (!listExists(list)) {
+            return null
+        }
+
+        return queryNotEqualWithAttachedRowId(
+            list,
+            selectionColumn = EntitiesTable.COLUMN_ID,
+            selectionArg = id
+        ).first {
+            mapCursorRowToEntity(it, it.getInt(ROW_ID))
+        }
+    }
+
     override fun getByLabel(list: String, label: String?): Entity.Saved? {
         if (!listExists(list)) {
             return null
@@ -304,7 +318,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     private fun queryWithAttachedRowId(
         list: String,
         selectionColumn: String,
-        selectionArg: String?
+        selectionArg: String?,
     ): Cursor {
         return databaseConnection.withConnection {
             if (selectionArg == null) {
@@ -323,6 +337,36 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     SELECT *, i.$ROW_ID
                     FROM "$list" e, "${getRowIdTableName(list)}" i
                     WHERE e._id = i._id AND $selectionColumn = ?
+                    ORDER BY i.$ROW_ID
+                    """.trimIndent(),
+                    arrayOf(selectionArg)
+                )
+            }
+        }
+    }
+
+    private fun queryNotEqualWithAttachedRowId(
+        list: String,
+        selectionColumn: String,
+        selectionArg: String?,
+    ): Cursor {
+        return databaseConnection.withConnection {
+            if (selectionArg == null) {
+                readableDatabase.rawQuery(
+                    """
+                    SELECT *, i.$ROW_ID
+                    FROM "$list" e, "${getRowIdTableName(list)}" i
+                    WHERE e._id = i._id AND $selectionColumn IS NOT NULL
+                    ORDER BY i.$ROW_ID
+                    """.trimIndent(),
+                    null
+                )
+            } else {
+                readableDatabase.rawQuery(
+                    """
+                    SELECT *, i.$ROW_ID
+                    FROM "$list" e, "${getRowIdTableName(list)}" i
+                    WHERE e._id = i._id AND $selectionColumn != ?
                     ORDER BY i.$ROW_ID
                     """.trimIndent(),
                     arrayOf(selectionArg)
