@@ -20,7 +20,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.external.FormUriActivity
 import org.odk.collect.android.external.FormsContract
-import org.odk.collect.android.formhierarchy.FormHierarchyActivity
+import org.odk.collect.android.formhierarchy.FormHierarchyFragmentHostActivity
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.config.AppDependencyComponent
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -105,7 +105,7 @@ class FormFillingActivityTest {
         }
 
         scheduler.flush()
-        assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
+        assertIntentsHelper.assertNewIntent(FormHierarchyFragmentHostActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
         val hierarchyIntent = shadowOf(recreated.get()).nextStartedActivityForResult.intent
@@ -138,7 +138,7 @@ class FormFillingActivityTest {
         assertText(withText("What is your age?"))
 
         Interactions.clickOn(withContentDescription(R.string.view_hierarchy))
-        assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
+        assertIntentsHelper.assertNewIntent(FormHierarchyFragmentHostActivity::class)
 
         // Recreate and assert we start FormHierarchyActivity
         val recreated = activityControllerRule.add {
@@ -146,7 +146,7 @@ class FormFillingActivityTest {
         }
 
         scheduler.flush()
-        assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
+        assertIntentsHelper.assertNewIntent(FormHierarchyFragmentHostActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
         val hierarchyIntent = shadowOf(recreated.get()).nextStartedActivityForResult.intent
@@ -191,7 +191,7 @@ class FormFillingActivityTest {
         }
 
         scheduler.flush()
-        assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
+        assertIntentsHelper.assertNewIntent(FormHierarchyFragmentHostActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
         val hierarchyIntent = shadowOf(recreated.get()).nextStartedActivityForResult.intent
