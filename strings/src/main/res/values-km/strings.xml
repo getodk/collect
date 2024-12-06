@@ -109,8 +109,6 @@
   <string name="data_saved_error">សុំទោស, រក្សា​ទុកសំណុំ​បែបបទ​មិន​បាន​សម្រេច!</string>
   <string name="data_saved_ok">បាន​រក្សាទុកសំណុំ​បែបបទ​ដោយ​ជោគជ័យ!</string>
   <string name="save_point_error">បញ្ហាក្នុងការរក្សាទុកនូវចំនុចស្តារឡើងវិញ: %s</string>
-  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
-  <string name="quit_application">ចាកចេញ %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="do_not_save">បោះបង់ទម្រង់</string>
   <string name="discard_changes">បោះបង់ការផ្លាស់ប្តូរ</string>
@@ -658,7 +656,6 @@
   <string name="cancel_loading_form">បោះបង់</string>
   <string name="cancel_location">បោះបង់</string>
   <string name="do_not_change">បោះបង់</string>
-  <string name="do_not_exit">បោះបង់</string>
   <string name="canceling">កំពុង​បោះបង់</string>
   <string name="notification_channel_name">ការជូនដំណឹង​ជាទូទៅ</string>
   <string name="success">ជោគជ័យ</string>
