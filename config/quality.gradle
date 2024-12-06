@@ -4,7 +4,7 @@ def configDir = "${project.rootDir}/config"
 
 apply plugin: 'checkstyle'
 
-checkstyle.toolVersion = '10.17.0'
+checkstyle.toolVersion = '10.19.0'
 
 tasks.register("checkstyle", Checkstyle) {
     configFile file("$configDir/checkstyle.xml")
@@ -23,7 +23,7 @@ tasks.register("checkstyle", Checkstyle) {
 apply plugin: 'pmd'
 
 pmd {
-    toolVersion = '7.3.0'
+    toolVersion = '7.7.0'
 }
 
 tasks.register("pmd", Pmd) {
@@ -50,5 +50,5 @@ tasks.register("pmd", Pmd) {
 apply plugin: "org.jlleitschuh.gradle.ktlint"
 
 ktlint {
-    version = "1.3.1"
+    version = "1.4.0"
 }

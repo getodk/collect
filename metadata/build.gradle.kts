@@ -1,9 +1,6 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 apply(from = "../config/quality.gradle")
@@ -11,10 +8,10 @@ apply(from = "../config/quality.gradle")
 android {
     namespace = "org.odk.collect.metadata"
 
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -38,19 +35,19 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":permissions"))
     implementation(project(":settings"))
     implementation(project(":shared"))
 
-    implementation(Dependencies.javarosa) {
+    implementation(libs.javarosa) {
         exclude(group = "joda-time")
         exclude(group = "org.hamcrest", module = "hamcrest-all")
     }
-    implementation(Dependencies.timber)
+    implementation(libs.timber)
 
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.mockito_kotlin)
+    testImplementation(libs.hamcrest)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockitoKotlin)
 }

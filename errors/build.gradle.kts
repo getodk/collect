@@ -1,18 +1,15 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -44,17 +41,17 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":strings"))
     implementation(project(":androidshared"))
-    implementation(Dependencies.androidx_core_ktx)
-    implementation(Dependencies.androidx_appcompat)
-    implementation(Dependencies.androidx_recyclerview)
-    implementation(Dependencies.android_material)
+    implementation(libs.androidxCoreKtx)
+    implementation(libs.androidxAppcompat)
+    implementation(libs.androidxRecyclerview)
+    implementation(libs.androidMaterial)
 
     testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.androidx_test_espresso_core)
+    testImplementation(libs.androidxTestExtJunit)
+    testImplementation(libs.androidxTestEspressoCore)
 }

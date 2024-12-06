@@ -1,19 +1,16 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinKapt)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -35,7 +32,7 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":shared"))
     implementation(project(":androidshared"))
@@ -45,12 +42,12 @@ dependencies {
     implementation(project(":settings"))
     implementation(project(":strings"))
 
-    implementation(Dependencies.osmdroid)
-    implementation(Dependencies.androidx_fragment_ktx)
-    implementation(Dependencies.androidx_preference_ktx)
-    implementation(Dependencies.timber)
-    implementation(Dependencies.play_services_location)
-    implementation(Dependencies.android_material)
-    implementation(Dependencies.dagger)
-    kapt(Dependencies.dagger_compiler)
+    implementation(libs.osmdroid)
+    implementation(libs.androidxFragmentKtx)
+    implementation(libs.androidxPreferenceKtx)
+    implementation(libs.timber)
+    implementation(libs.playServicesLocation)
+    implementation(libs.androidMaterial)
+    implementation(libs.dagger)
+    kapt(libs.daggerCompiler)
 }

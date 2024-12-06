@@ -284,7 +284,7 @@ public class FormsProviderTest {
 
     private void createExtraFormFiles(String projectId, File formFile, String md5Hash) {
         // Create a media directory (and file) so we can check deletion etc - wouldn't always be there
-        String mediaDirPath = getFormsDirPath(projectId) + formFile.getName().substring(0, formFile.getName().lastIndexOf(".")) + "-media";
+        String mediaDirPath = getFormsDirPath(projectId) + formFile.getName().substring(0, formFile.getName().lastIndexOf('.')) + "-media";
         new File(mediaDirPath).mkdir();
         try {
             new File(mediaDirPath, "blah.test").createNewFile();

@@ -1,20 +1,16 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("kotlin-parcelize")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinParcelize)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -46,7 +42,7 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":async"))
     implementation(project(":shared"))
@@ -58,21 +54,21 @@ dependencies {
     implementation(project(":web-page"))
     implementation(project(":analytics"))
     implementation(project(":lists"))
-    implementation(Dependencies.android_material)
-    implementation(Dependencies.kotlin_stdlib)
-    implementation(Dependencies.androidx_fragment_ktx)
-    implementation(Dependencies.androidx_preference_ktx)
-    implementation(Dependencies.timber)
+    implementation(libs.androidMaterial)
+    implementation(libs.kotlinStdlib)
+    implementation(libs.androidxFragmentKtx)
+    implementation(libs.androidxPreferenceKtx)
+    implementation(libs.timber)
 
     debugImplementation(project(":fragments-test"))
 
     testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.robolectric)
-    testImplementation(Dependencies.mockito_kotlin)
-    testImplementation(Dependencies.androidx_test_espresso_contrib)
-    testImplementation(Dependencies.androidx_test_espresso_core)
+    testImplementation(libs.junit)
+    testImplementation(libs.androidxTestExtJunit)
+    testImplementation(libs.hamcrest)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.mockitoKotlin)
+    testImplementation(libs.androidxTestEspressoContrib)
+    testImplementation(libs.androidxTestEspressoCore)
 }

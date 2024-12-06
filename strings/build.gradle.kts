@@ -1,18 +1,15 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -39,18 +36,18 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.androidx_core_ktx)
+    implementation(libs.androidxCoreKtx)
 
     /**
      * We need to expose [AppCompatActivity] for classes in separate modules that
      * extend [LocalizedActivity].
      */
-    api(Dependencies.androidx_appcompat)
+    api(libs.androidxAppcompat)
 
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.robolectric)
+    testImplementation(libs.junit)
+    testImplementation(libs.hamcrest)
+    testImplementation(libs.androidxTestExtJunit)
+    testImplementation(libs.robolectric)
 }
 
 repositories {

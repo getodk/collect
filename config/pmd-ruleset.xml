@@ -17,7 +17,6 @@
         <exclude name="AvoidReassigningParameters" />
         <exclude name="AvoidStringBufferField" />
         <exclude name="ForLoopCanBeForeach" />
-        <exclude name="GuardLogStatement" />
         <exclude name="JUnit4TestShouldUseBeforeAnnotation" />
         <exclude name="JUnit4TestShouldUseTestAnnotation" />
         <exclude name="JUnitAssertionsShouldIncludeMessage" />
@@ -27,10 +26,14 @@
         <exclude name="LiteralsFirstInComparisons" />
         <exclude name="LooseCoupling" />
         <exclude name="MissingOverride" />
+        <exclude name="NonExhaustiveSwitch" />
         <exclude name="PositionLiteralsFirstInCaseInsensitiveComparisons" />
         <exclude name="PositionLiteralsFirstInComparisons" />
         <exclude name="PreserveStackTrace" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
+        <exclude name="UnitTestContainsTooManyAsserts" />
+        <exclude name="UnitTestShouldIncludeAssert" />
+        <exclude name="UnitTestShouldUseBeforeAnnotation" />
         <exclude name="UnusedAssignment" />
         <exclude name="UnusedPrivateMethod" />
         <exclude name="UseVarargs" />
@@ -48,7 +51,6 @@
         <exclude name="DefaultPackage" />
         <exclude name="EmptyControlStatement" />
         <exclude name="FieldDeclarationsShouldBeAtStartOfClass" />
-        <exclude name="LambdaCanBeMethodReference" />
         <exclude name="LongVariable" />
         <exclude name="LocalVariableCouldBeFinal" />
         <exclude name="MIsLeadingVariableName" />
@@ -64,9 +66,6 @@
         <exclude name="LinguisticNaming" />
         <exclude name="UnnecessaryFullyQualifiedName" />
         <exclude name="UnnecessaryCast" />
-        <exclude name="UnnecessaryImport" />
-        <exclude name="UnnecessaryReturn" />
-        <exclude name="UseDiamondOperator" />
         <exclude name="UselessParentheses" />               <!-- Decided not to use in #1519 -->
     </rule>
 
@@ -143,6 +142,7 @@
 
     <rule ref="category/java/multithreading.xml">
         <exclude name="AvoidSynchronizedAtMethodLevel" />
+        <exclude name="AvoidSynchronizedStatement" />
         <exclude name="DoNotUseThreads" />
         <exclude name="UseConcurrentHashMap" />
     </rule>
@@ -152,14 +152,13 @@
         <exclude name="AvoidFileStream" />
         <exclude name="AvoidInstantiatingObjectsInLoops" />
         <exclude name="BigIntegerInstantiation" />
-        <exclude name="ConsecutiveAppendsShouldReuse" />
         <exclude name="InefficientEmptyStringCheck" />
         <exclude name="InefficientStringBuffering" />
         <exclude name="InsufficientStringBufferDeclaration" />
         <exclude name="SimplifyStartsWith" />
         <exclude name="TooFewBranchesForASwitchStatement" /> <!-- Decided not to use in #2564 -->
+        <exclude name="TooFewBranchesForSwitch" />
         <exclude name="UseArraysAsList" />
-        <exclude name="UseIndexOfChar" />
         <exclude name="UseStringBufferForStringAppends" />
     </rule>
 

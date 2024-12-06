@@ -53,7 +53,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
 
     @Override
     public List<Class[]> getPrototypes() {
-        return new ArrayList<Class[]>();
+        return new ArrayList<>();
     }
 
     @Override

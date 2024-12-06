@@ -1,19 +1,16 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinKapt)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -35,7 +32,7 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":androidshared"))
     implementation(project(":icons"))
@@ -45,14 +42,14 @@ dependencies {
     implementation(project(":shared"))
     implementation(project(":strings"))
     implementation(project(":async"))
-    implementation(Dependencies.play_services_location)
-    implementation(Dependencies.androidx_preference_ktx)
-    implementation(Dependencies.mapbox_android_sdk)
-    implementation(Dependencies.timber)
-    implementation(Dependencies.androidx_startup)
+    implementation(libs.playServicesLocation)
+    implementation(libs.androidxPreferenceKtx)
+    implementation(libs.mapboxAndroidSdk)
+    implementation(libs.timber)
+    implementation(libs.androidxStartup)
 
     testImplementation(project(":test-shared"))
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.mockito_inline)
-    testImplementation(Dependencies.hamcrest)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockitoCore)
+    testImplementation(libs.hamcrest)
 }

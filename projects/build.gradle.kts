@@ -1,19 +1,16 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinKapt)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -45,27 +42,27 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":shared"))
     implementation(project(":androidshared"))
     implementation(project(":material"))
-    implementation(Dependencies.kotlin_stdlib)
-    implementation(Dependencies.androidx_appcompat)
-    implementation(Dependencies.androidx_core_ktx)
-    implementation(Dependencies.androidx_fragment_ktx)
-    implementation(Dependencies.gson)
-    implementation(Dependencies.dagger)
-    kapt(Dependencies.dagger_compiler)
+    implementation(libs.kotlinStdlib)
+    implementation(libs.androidxAppcompat)
+    implementation(libs.androidxCoreKtx)
+    implementation(libs.androidxFragmentKtx)
+    implementation(libs.gson)
+    implementation(libs.dagger)
+    kapt(libs.daggerCompiler)
 
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.androidx_test_ext_junit)
+    testImplementation(libs.junit)
+    testImplementation(libs.hamcrest)
+    testImplementation(libs.androidxTestExtJunit)
     testImplementation(project(":test-shared"))
-    testImplementation(Dependencies.androidx_test_espresso_core)
-    testImplementation(Dependencies.mockito_kotlin)
+    testImplementation(libs.androidxTestEspressoCore)
+    testImplementation(libs.mockitoKotlin)
 
-    debugImplementation(Dependencies.androidx_fragment_testing) {
+    debugImplementation(libs.androidxFragmentTesting) {
         exclude(group = "androidx.test", module = "monitor") // fixes issue https://github.com/android/android-test/issues/731
     }
 }

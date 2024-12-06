@@ -67,7 +67,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -363,14 +362,11 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     }
 
     private void sortList() {
-        Collections.sort(filteredFormList, new Comparator<HashMap<String, String>>() {
-            @Override
-            public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
-                if (getSortingOrder().equals(SORT_BY_NAME_ASC)) {
-                    return lhs.get(FORMNAME).compareToIgnoreCase(rhs.get(FORMNAME));
-                } else {
-                    return rhs.get(FORMNAME).compareToIgnoreCase(lhs.get(FORMNAME));
-                }
+        Collections.sort(filteredFormList, (lhs, rhs) -> {
+            if (getSortingOrder().equals(SORT_BY_NAME_ASC)) {
+                return lhs.get(FORMNAME).compareToIgnoreCase(rhs.get(FORMNAME));
+            } else {
+                return rhs.get(FORMNAME).compareToIgnoreCase(lhs.get(FORMNAME));
             }
         });
     }

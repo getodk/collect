@@ -1,18 +1,15 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -33,7 +30,7 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(project(":async"))
@@ -41,18 +38,18 @@ dependencies {
     implementation(project(":androidshared"))
     implementation(project(":androidtest"))
     implementation(project(":service-test"))
-    implementation(Dependencies.androidx_recyclerview)
-    implementation(Dependencies.kotlin_stdlib)
-    implementation(Dependencies.androidx_core_ktx)
-    implementation(Dependencies.androidx_work_runtime)
-    implementation(Dependencies.androidx_appcompat)
-    implementation(Dependencies.robolectric)
-    implementation(Dependencies.junit)
-    implementation(Dependencies.androidx_test_espresso_intents)
-    implementation(Dependencies.androidx_test_espresso_contrib)
-    implementation(Dependencies.android_material)
-    implementation(Dependencies.danlew_android_joda)
-    implementation(Dependencies.androidx_fragment_testing) {
+    implementation(libs.androidxRecyclerview)
+    implementation(libs.kotlinStdlib)
+    implementation(libs.androidxCoreKtx)
+    implementation(libs.androidxWorkRuntime)
+    implementation(libs.androidxAppcompat)
+    implementation(libs.robolectric)
+    implementation(libs.junit)
+    implementation(libs.androidxTestEspressoIntents)
+    implementation(libs.androidxTestEspressoContrib)
+    implementation(libs.androidMaterial)
+    implementation(libs.danlewAndroidJoda)
+    implementation(libs.androidxFragmentTesting) {
         exclude(group = "androidx.test", module = "monitor") // fixes issue https://github.com/android/android-test/issues/731
     }
 }

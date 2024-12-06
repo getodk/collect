@@ -1,20 +1,17 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinKapt)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
     namespace = "org.odk.collect.draw"
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -39,7 +36,7 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":shared"))
     implementation(project(":androidshared"))
@@ -48,20 +45,20 @@ dependencies {
     implementation(project(":settings"))
     implementation(project(":icons"))
 
-    implementation(Dependencies.rarepebble_colorpicker)
-    implementation(Dependencies.androidx_lifecycle_livedata_ktx)
-    implementation(Dependencies.androidx_lifecycle_viewmodel_ktx)
-    implementation(Dependencies.androidx_fragment_ktx)
-    implementation(Dependencies.android_material)
-    implementation(Dependencies.timber)
+    implementation(libs.rarepebbleColorpicker)
+    implementation(libs.androidxLifecycleLivedataKtx)
+    implementation(libs.androidxLifecycleViewmodelKtx)
+    implementation(libs.androidxFragmentKtx)
+    implementation(libs.androidMaterial)
+    implementation(libs.timber)
 
-    implementation(Dependencies.dagger)
-    kapt(Dependencies.dagger_compiler)
+    implementation(libs.dagger)
+    kapt(libs.daggerCompiler)
 
     debugImplementation(project(":fragments-test"))
 
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.mockito_kotlin)
-    testImplementation(Dependencies.androidx_test_espresso_core)
-    testImplementation(Dependencies.robolectric)
+    testImplementation(libs.androidxTestExtJunit)
+    testImplementation(libs.mockitoKotlin)
+    testImplementation(libs.androidxTestEspressoCore)
+    testImplementation(libs.robolectric)
 }

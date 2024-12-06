@@ -1,19 +1,16 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinKapt)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -44,7 +41,7 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":shared"))
     implementation(project(":icons"))
@@ -59,25 +56,25 @@ dependencies {
     implementation(project(":maps"))
     implementation(project(":material"))
     implementation(project(":web-page"))
-    implementation(Dependencies.kotlin_stdlib)
-    implementation(Dependencies.androidx_appcompat)
-    implementation(Dependencies.androidx_lifecycle_livedata_ktx)
-    implementation(Dependencies.timber)
-    implementation(Dependencies.play_services_location)
-    implementation(Dependencies.androidx_fragment_ktx)
-    implementation(Dependencies.dagger)
-    kapt(Dependencies.dagger_compiler)
+    implementation(libs.kotlinStdlib)
+    implementation(libs.androidxAppcompat)
+    implementation(libs.androidxLifecycleLivedataKtx)
+    implementation(libs.timber)
+    implementation(libs.playServicesLocation)
+    implementation(libs.androidxFragmentKtx)
+    implementation(libs.dagger)
+    kapt(libs.daggerCompiler)
 
     debugImplementation(project(":fragments-test"))
 
     testImplementation(project(":androidtest"))
     testImplementation(project(":settings"))
     testImplementation(project(":test-shared"))
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.mockito_kotlin)
-    testImplementation(Dependencies.robolectric)
-    testImplementation(Dependencies.androidx_test_espresso_core)
-    testImplementation(Dependencies.androidx_arch_core_testing)
+    testImplementation(libs.junit)
+    testImplementation(libs.hamcrest)
+    testImplementation(libs.androidxTestExtJunit)
+    testImplementation(libs.mockitoKotlin)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidxTestEspressoCore)
+    testImplementation(libs.androidxArchCoreTesting)
 }
