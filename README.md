@@ -1,4 +1,5 @@
 # ODK Collect
+
 ![Platform](https://img.shields.io/badge/platform-Android-blue.svg)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Build status](https://circleci.com/gh/getodk/collect.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/getodk/collect)
@@ -120,10 +121,14 @@ When you first run Collect, it is set to download forms from [https://demo.getod
 
 1. Once you have the XForm, use [adb](https://developer.android.com/studio/command-line/adb.html) to push the form to your device (after [enabling USB debugging](https://www.kingoapp.com/root-tutorials/how-to-enable-usb-debugging-mode-on-android.htm)) or emulator.
 	```
-	adb push my_form.xml /sdcard/Android/data/org.odk.collect.android/files/forms
+	adb push my_form.xml /sdcard/Android/data/org.odk.collect.android/files/projects/{project-id}/forms
 	```
 
-1. Launch ODK Collect and tap `Fill Blank Form`. The new form will be there.
+If you are using the demo project, kindly replace `{project_id}` with `DEMO`
+
+4. Launch ODK Collect and tap `+ Start new form`. The new form will be there.
+
+More information about using Android Debug Bridge with Collect can be found [here](https://docs.getodk.org/collect-adb/).
 
 ## Using APIs for local development
 
