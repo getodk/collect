@@ -3,6 +3,7 @@ package org.odk.collect.androidshared.utils
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
+import org.odk.collect.shared.PathUtils
 import org.odk.collect.shared.TempFiles
 import java.io.File
 

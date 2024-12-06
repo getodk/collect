@@ -5,9 +5,9 @@ import android.database.Cursor
 import android.provider.BaseColumns
 import org.odk.collect.android.database.forms.DatabaseFormColumns
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns
-import org.odk.collect.androidshared.utils.PathUtils.getAbsoluteFilePath
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.shared.PathUtils.getAbsoluteFilePath
 import org.odk.collect.shared.PathUtils.getRelativeFilePath
 import java.lang.Boolean
 
