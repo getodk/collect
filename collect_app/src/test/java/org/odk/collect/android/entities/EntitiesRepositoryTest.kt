@@ -757,5 +757,14 @@ abstract class EntitiesRepositoryTest {
         savedEntities = repository.getEntities("things")
         assertThat(savedEntities[0].properties.size, equalTo(1))
         assertThat(savedEntities[0].properties[0].first, equalTo("prop"))
+
+        /**
+         * Attempt to save again to ensure that duplicate properties are correctly compared,
+         * even if they appear in a different order.
+         */
+        repository.save("things", entity.copy(properties = listOf(Pair("Prop", "value"), Pair("prop", "value"))))
+        savedEntities = repository.getEntities("things")
+        assertThat(savedEntities[0].properties.size, equalTo(1))
+        assertThat(savedEntities[0].properties[0].first, equalTo("prop"))
     }
 }
