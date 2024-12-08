@@ -121,13 +121,15 @@ class InMemEntitiesRepository : EntitiesRepository {
 
     private fun updateLists(list: String, entity: Entity) {
         lists.add(list)
-        listProperties.getOrPut(list) {
+        val properties = listProperties.getOrPut(list) {
             mutableSetOf()
-        }.addAll(
+        }
+        properties.addAll(
             entity
                 .properties
-                .distinctBy { it.first.lowercase() }
                 .map { it.first }
+                .distinctBy { it.lowercase() }
+                .filterNot { properties.any { property -> property.equals(it, ignoreCase = true) } }
         )
     }
 
