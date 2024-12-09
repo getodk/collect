@@ -736,7 +736,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#save ignores case-insensitive duplicate properties`() {
+    fun `#save ignores case-insensitive duplicate new properties`() {
         val repository = buildSubject()
         val entity = Entity.New(
             "1",
@@ -745,15 +745,26 @@ abstract class EntitiesRepositoryTest {
         )
 
         repository.save("things", entity)
+        val savedEntities = repository.getEntities("things")
+        assertThat(savedEntities[0].properties.size, equalTo(1))
+        assertThat(savedEntities[0].properties[0].first, equalTo("prop"))
+    }
+
+    @Test
+    fun `#save ignores case-insensitive duplicate properties if one of them has already been saved`() {
+        val repository = buildSubject()
+        val entity = Entity.New(
+            "1",
+            "One",
+            properties = listOf(Pair("prop", "value"))
+        )
+
+        repository.save("things", entity)
         var savedEntities = repository.getEntities("things")
         assertThat(savedEntities[0].properties.size, equalTo(1))
         assertThat(savedEntities[0].properties[0].first, equalTo("prop"))
 
-        /**
-         * Attempt to save again to ensure that duplicate properties are correctly compared, not only
-         * within the current entity list, but also against properties already saved in the database.
-         */
-        repository.save("things", entity)
+        repository.save("things", entity.copy(properties = listOf(Pair("Prop", "value"))))
         savedEntities = repository.getEntities("things")
         assertThat(savedEntities[0].properties.size, equalTo(1))
         assertThat(savedEntities[0].properties[0].first, equalTo("prop"))
