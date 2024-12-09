@@ -383,7 +383,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         val missingColumns = entity.properties
             .map { EntitiesTable.getPropertyColumn(it.first) }
             .distinctBy { it.lowercase() }
-            .filterNot { columnNames.contains(it) }
+            .filterNot { columnName -> columnNames.any { it.equals(columnName, ignoreCase = true) } }
 
         if (missingColumns.isNotEmpty()) {
             databaseConnection.resetTransaction {
