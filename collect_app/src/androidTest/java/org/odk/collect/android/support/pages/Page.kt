@@ -574,6 +574,11 @@ abstract class Page<T : Page<T>> {
         return destination
     }
 
+    fun assertNoId(id: Int): T {
+        onView(withId(id)).check(doesNotExist())
+        return this as T
+    }
+
     companion object {
         private fun rotateToLandscape(): ViewAction {
             return RotateAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
