@@ -155,7 +155,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return emptyList()
         }
 
-        return queryWithAttachedRowId(list).foldAndClose {
+        return queryEqualWithAttachedRowId(list).foldAndClose {
             mapCursorRowToEntity(
                 it,
                 it.getInt(ROW_ID)
@@ -213,10 +213,38 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return null
         }
 
-        return queryWithAttachedRowId(
+        return queryEqualWithAttachedRowId(
             list,
             selectionColumn = EntitiesTable.COLUMN_ID,
             selectionArg = id
+        ).first {
+            mapCursorRowToEntity(it, it.getInt(ROW_ID))
+        }
+    }
+
+    override fun getByIdNot(list: String, id: String): Entity.Saved? {
+        if (!listExists(list)) {
+            return null
+        }
+
+        return queryNotEqualWithAttachedRowId(
+            list,
+            selectionColumn = EntitiesTable.COLUMN_ID,
+            selectionArg = id
+        ).first {
+            mapCursorRowToEntity(it, it.getInt(ROW_ID))
+        }
+    }
+
+    override fun getByLabel(list: String, label: String?): Entity.Saved? {
+        if (!listExists(list)) {
+            return null
+        }
+
+        return queryEqualWithAttachedRowId(
+            list,
+            selectionColumn = EntitiesTable.COLUMN_LABEL,
+            selectionArg = label
         ).first {
             mapCursorRowToEntity(it, it.getInt(ROW_ID))
         }
@@ -236,7 +264,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         return if (propertyExists) {
-            queryWithAttachedRowId(
+            queryEqualWithAttachedRowId(
                 list,
                 selectionColumn = EntitiesTable.getPropertyColumn(property),
                 selectionArg = value
@@ -244,7 +272,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 mapCursorRowToEntity(it, it.getInt(ROW_ID))
             }
         } else if (value == "") {
-            queryWithAttachedRowId(list).foldAndClose {
+            queryEqualWithAttachedRowId(list).foldAndClose {
                 mapCursorRowToEntity(it, it.getInt(ROW_ID))
             }
         } else {
@@ -272,7 +300,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    private fun queryWithAttachedRowId(list: String): Cursor {
+    private fun queryEqualWithAttachedRowId(list: String): Cursor {
         return databaseConnection.withConnection {
             readableDatabase
                 .rawQuery(
@@ -287,21 +315,63 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    private fun queryWithAttachedRowId(
+    private fun queryEqualWithAttachedRowId(
         list: String,
         selectionColumn: String,
-        selectionArg: String
+        selectionArg: String?,
     ): Cursor {
         return databaseConnection.withConnection {
-            readableDatabase.rawQuery(
-                """
-                SELECT *, i.$ROW_ID
-                FROM "$list" e, "${getRowIdTableName(list)}" i
-                WHERE e._id = i._id AND $selectionColumn = ?
-                ORDER BY i.$ROW_ID
-                """.trimIndent(),
-                arrayOf(selectionArg)
-            )
+            if (selectionArg == null) {
+                readableDatabase.rawQuery(
+                    """
+                    SELECT *, i.$ROW_ID
+                    FROM "$list" e, "${getRowIdTableName(list)}" i
+                    WHERE e._id = i._id AND $selectionColumn IS NULL
+                    ORDER BY i.$ROW_ID
+                    """.trimIndent(),
+                    null
+                )
+            } else {
+                readableDatabase.rawQuery(
+                    """
+                    SELECT *, i.$ROW_ID
+                    FROM "$list" e, "${getRowIdTableName(list)}" i
+                    WHERE e._id = i._id AND $selectionColumn = ?
+                    ORDER BY i.$ROW_ID
+                    """.trimIndent(),
+                    arrayOf(selectionArg)
+                )
+            }
+        }
+    }
+
+    private fun queryNotEqualWithAttachedRowId(
+        list: String,
+        selectionColumn: String,
+        selectionArg: String?,
+    ): Cursor {
+        return databaseConnection.withConnection {
+            if (selectionArg == null) {
+                readableDatabase.rawQuery(
+                    """
+                    SELECT *, i.$ROW_ID
+                    FROM "$list" e, "${getRowIdTableName(list)}" i
+                    WHERE e._id = i._id AND $selectionColumn IS NOT NULL
+                    ORDER BY i.$ROW_ID
+                    """.trimIndent(),
+                    null
+                )
+            } else {
+                readableDatabase.rawQuery(
+                    """
+                    SELECT *, i.$ROW_ID
+                    FROM "$list" e, "${getRowIdTableName(list)}" i
+                    WHERE e._id = i._id AND $selectionColumn != ?
+                    ORDER BY i.$ROW_ID
+                    """.trimIndent(),
+                    arrayOf(selectionArg)
+                )
+            }
         }
     }
 

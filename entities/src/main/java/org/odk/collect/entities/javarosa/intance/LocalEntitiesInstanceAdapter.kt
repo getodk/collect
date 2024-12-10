@@ -54,7 +54,16 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
             }
 
             EntityItemElement.LABEL -> {
-                filterAndConvertEntities(instanceId) { it.label == value }
+                val entity = entitiesRepository.getByLabel(
+                    instanceId,
+                    value
+                )
+
+                if (entity != null) {
+                    listOf(convertToElement(entity))
+                } else {
+                    emptyList()
+                }
             }
 
             EntityItemElement.VERSION -> {
@@ -78,6 +87,25 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
 
                 entities.map { convertToElement(it) }
             }
+        }
+    }
+
+    fun queryNotEq(instanceId: String, child: String, value: String): List<TreeElement>? {
+        return when (child) {
+            EntityItemElement.ID -> {
+                val entity = entitiesRepository.getByIdNot(
+                    instanceId,
+                    value
+                )
+
+                if (entity != null) {
+                    listOf(convertToElement(entity))
+                } else {
+                    emptyList()
+                }
+            }
+
+            else -> null
         }
     }
 

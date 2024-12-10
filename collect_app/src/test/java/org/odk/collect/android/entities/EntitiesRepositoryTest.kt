@@ -516,6 +516,148 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#getByIdNot returns entities with not matching id`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+        val canet = Entity.New("2", "Pontet-Canet 2014")
+        repository.save("wines", leoville, canet)
+
+        val wines = repository.getEntities("wines")
+
+        val queriedLeoville = repository.getByIdNot("wines", "1")
+        assertThat(queriedLeoville, equalTo(wines.first { it.id == "2" }))
+
+        val queriedCanet = repository.getByIdNot("wines", "2")
+        assertThat(queriedCanet, equalTo(wines.first { it.id == "1" }))
+    }
+
+    @Test
+    fun `#getByIdNot returns null when there are no matches`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+        repository.save("wines", leoville)
+
+        assertThat(repository.getByIdNot("wines", "1"), equalTo(null))
+    }
+
+    @Test
+    fun `#getByIdNot returns null when there is a match in a different list`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+        val ardbeg = Entity.New("2", "Ardbeg 10")
+        repository.save("wines", leoville)
+        repository.save("whisky", ardbeg)
+
+        assertThat(repository.getByIdNot("whisky", "2"), equalTo(null))
+    }
+
+    @Test
+    fun `#getByIdNot returns null where there are no entities in the list`() {
+        val repository = buildSubject()
+        assertThat(repository.getByIdNot("wines", "3"), equalTo(null))
+    }
+
+    @Test
+    fun `#getByIdNot supports list names with dots and dashes`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+        val canet = Entity.New("2", "Pontet-Canet 2014")
+        repository.save("favourite-wines", leoville)
+        repository.save("other.favourite.wines", canet)
+
+        val favouriteWines = repository.getEntities("favourite-wines")
+        val otherFavouriteWines = repository.getEntities("other.favourite.wines")
+
+        val queriedLeoville = repository.getByIdNot("favourite-wines", "2")
+        assertThat(queriedLeoville, equalTo(favouriteWines.first { it.id == "1" }))
+
+        val queriedCanet = repository.getByIdNot("other.favourite.wines", "1")
+        assertThat(queriedCanet, equalTo(otherFavouriteWines.first { it.id == "2" }))
+    }
+
+    @Test
+    fun `#getByLabel returns entities with matching label`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+        val canet = Entity.New("2", "Pontet-Canet 2014")
+        repository.save("wines", leoville, canet)
+
+        val wines = repository.getEntities("wines")
+
+        val queriedLeoville = repository.getByLabel("wines", "Léoville Barton 2008")
+        assertThat(queriedLeoville, equalTo(wines.first { it.id == "1" }))
+
+        val queriedCanet = repository.getByLabel("wines", "Pontet-Canet 2014")
+        assertThat(queriedCanet, equalTo(wines.first { it.id == "2" }))
+    }
+
+    @Test
+    fun `#getByLabel returns entities with matching label when label is null`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", null)
+        val canet = Entity.New("2", "Pontet-Canet 2014")
+        repository.save("wines", leoville, canet)
+
+        val queriedNull = repository.getByLabel("wines", null)
+        val wines = repository.getEntities("wines")
+        assertThat(queriedNull, equalTo(wines.first { it.id == "1" }))
+    }
+
+    @Test
+    fun `#getByLabel returns null when there are no matches`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+        val canet = Entity.New("2", "Pontet-Canet 2014")
+        repository.save("wines", leoville, canet)
+
+        assertThat(repository.getByLabel("wines", "Ardbeg 10"), equalTo(null))
+    }
+
+    @Test
+    fun `#getByLabel returns null when there is a match in a different list`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+        val ardbeg = Entity.New("2", "Ardbeg 10")
+        repository.save("wines", leoville)
+        repository.save("whisky", ardbeg)
+
+        assertThat(repository.getByLabel("whisky", "Léoville Barton 2008"), equalTo(null))
+    }
+
+    @Test
+    fun `#getByLabel returns null where there are no entities in the list`() {
+        val repository = buildSubject()
+        assertThat(repository.getByLabel("wines", "Léoville Barton 2008"), equalTo(null))
+    }
+
+    @Test
+    fun `#getByLabel supports list names with dots and dashes`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+        val canet = Entity.New("2", "Pontet-Canet 2014")
+        repository.save("favourite-wines", leoville)
+        repository.save("other.favourite.wines", canet)
+
+        val favouriteWines = repository.getEntities("favourite-wines")
+        val otherFavouriteWines = repository.getEntities("other.favourite.wines")
+
+        val queriedLeoville = repository.getByLabel("favourite-wines", "Léoville Barton 2008")
+        assertThat(queriedLeoville, equalTo(favouriteWines.first { it.id == "1" }))
+
+        val queriedCanet = repository.getByLabel("other.favourite.wines", "Pontet-Canet 2014")
+        assertThat(queriedCanet, equalTo(otherFavouriteWines.first { it.id == "2" }))
+    }
+
+    @Test
     fun `#getByAllByProperty returns entities with matching property value`() {
         val repository = buildSubject()
 
