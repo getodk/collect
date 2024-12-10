@@ -18,13 +18,11 @@ package org.odk.collect.android.widgets.range;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.color.MaterialColors;
 import com.google.android.material.slider.Slider;
 
 import org.javarosa.core.model.data.DecimalData;
@@ -42,10 +40,6 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
     TrackingTouchSlider slider;
     TextView currentValue;
 
-    private ColorStateList defaultTickActiveTintList;
-    private int defaultThumbWidth;
-    private int defaultThumbTrackGapSize;
-
     public RangeDecimalWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
         render();
@@ -57,14 +51,10 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
         slider = layoutElements.getSlider();
         currentValue = layoutElements.getCurrentValue();
 
-        defaultTickActiveTintList = slider.getTickActiveTintList();
-        defaultThumbWidth = slider.getThumbWidth();
-        defaultThumbTrackGapSize = slider.getThumbTrackGapSize();
-
         setUpActualValueLabel(RangeWidgetUtils.setUpSlider(prompt, slider, false));
 
         if (slider.isEnabled()) {
-            slider.addOnChangeListener(this);
+            slider.setListener(this);
         }
         return layoutElements.getAnswerView();
     }
@@ -103,15 +93,9 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
     private void setUpActualValueLabel(BigDecimal actualValue) {
         if (actualValue != null) {
             currentValue.setText(String.valueOf(actualValue.doubleValue()));
-            slider.setTickActiveTintList(defaultTickActiveTintList);
-            slider.setThumbWidth(defaultThumbWidth);
-            slider.setThumbTrackGapSize(defaultThumbTrackGapSize);
         } else {
-            slider.setValue(slider.getValueFrom());
-            slider.setTickActiveTintList(ColorStateList.valueOf(MaterialColors.getColor(this, com.google.android.material.R.attr.colorPrimary)));
-            slider.setThumbWidth(0);
-            slider.setThumbTrackGapSize(0);
             currentValue.setText("");
+            slider.reset();
         }
     }
 }
