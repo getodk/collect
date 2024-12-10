@@ -22,6 +22,7 @@ public class AddRepeatTest {
     private static final String ONE_QUESTION_REPEAT = "one-question-repeat.xml";
     private static final String FIELD_LIST_REPEAT = "field-list-repeat.xml";
     private static final String FIXED_COUNT_REPEAT = "fixed-count-repeat.xml";
+    private static final String REPEAT_WITHOUT_LABEL = "repeat_without_label.xml";
 
     private final CollectTestRule rule = new CollectTestRule();
 
@@ -116,5 +117,17 @@ public class AddRepeatTest {
                 .clickGoUpIcon()
                 .addGroup()
                 .assertText("Person > 3");
+    }
+
+    @Test
+    public void whenInRepeatWithoutLabel_swipingNext_andClickingAdd_addsAnotherRepeat() {
+        rule.startAtMainMenu()
+                .copyForm(REPEAT_WITHOUT_LABEL)
+                .startBlankForm("Repeat without label")
+                .assertText("> 1")
+                .answerQuestion("First name", true, "Karan")
+                .swipeToNextQuestionWithRepeatGroup("")
+                .clickOnAdd(new FormEntryPage("Repeat without label"))
+                .assertText("> 2");
     }
 }
