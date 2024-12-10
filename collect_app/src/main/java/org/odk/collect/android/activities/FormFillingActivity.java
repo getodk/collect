@@ -482,7 +482,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         formIndexAnimationHandler = new FormIndexAnimationHandler(this);
         FormEntryMenuProvider menuProvider = new FormEntryMenuProvider(
                 this,
-                () -> getAnswers(),
+                this::getAnswers,
                 formEntryViewModel,
                 audioRecorder,
                 backgroundLocationViewModel,

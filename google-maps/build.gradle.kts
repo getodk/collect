@@ -1,10 +1,7 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinKapt)
 }
 
 apply(from = "../config/quality.gradle")
@@ -12,10 +9,10 @@ apply(from = "../config/quality.gradle")
 android {
     namespace = "org.odk.collect.googlemaps"
 
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -45,7 +42,7 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":shared"))
     implementation(project(":androidshared"))
@@ -55,12 +52,12 @@ dependencies {
     implementation(project(":strings"))
     implementation(project(":icons"))
 
-    implementation(Dependencies.androidx_preference_ktx)
-    implementation(Dependencies.play_services_maps)
-    implementation(Dependencies.play_services_location)
-    implementation(Dependencies.timber)
-    implementation(Dependencies.android_material)
+    implementation(libs.androidxPreferenceKtx)
+    implementation(libs.playServicesMaps)
+    implementation(libs.playServicesLocation)
+    implementation(libs.timber)
+    implementation(libs.androidMaterial)
 
-    implementation(Dependencies.dagger)
-    kapt(Dependencies.dagger_compiler)
+    implementation(libs.dagger)
+    kapt(libs.daggerCompiler)
 }

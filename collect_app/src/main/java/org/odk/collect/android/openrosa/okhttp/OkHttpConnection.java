@@ -68,7 +68,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
             discardEntityBytes(response);
             Timber.i("Error: %s (%s at %s", response.message(), String.valueOf(statusCode), uri.toString());
 
-            return new HttpGetResult(null, new HashMap<String, String>(), "", statusCode);
+            return new HttpGetResult(null, new HashMap<>(), "", statusCode);
         }
 
         ResponseBody body = response.body();

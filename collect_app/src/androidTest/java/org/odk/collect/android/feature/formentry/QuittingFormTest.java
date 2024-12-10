@@ -1,6 +1,5 @@
 package org.odk.collect.android.feature.formentry;
 
-import static org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -8,6 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;

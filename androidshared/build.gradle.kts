@@ -1,23 +1,20 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinKapt)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     buildFeatures {
         viewBinding = true
     }
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -42,33 +39,33 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":icons"))
     implementation(project(":strings"))
     implementation(project(":shared"))
     implementation(project(":async"))
-    implementation(Dependencies.kotlin_stdlib)
-    implementation(Dependencies.androidx_core_ktx)
-    implementation(Dependencies.androidx_lifecycle_livedata_ktx)
-    implementation(Dependencies.android_material)
-    implementation(Dependencies.androidx_fragment_ktx)
-    implementation(Dependencies.androidx_preference_ktx)
-    implementation(Dependencies.timber)
-    implementation(Dependencies.androidx_exinterface)
-    implementation(Dependencies.play_services_location)
+    implementation(libs.kotlinStdlib)
+    implementation(libs.androidxCoreKtx)
+    implementation(libs.androidxLifecycleLivedataKtx)
+    implementation(libs.androidMaterial)
+    implementation(libs.androidxFragmentKtx)
+    implementation(libs.androidxPreferenceKtx)
+    implementation(libs.timber)
+    implementation(libs.androidxExinterface)
+    implementation(libs.playServicesLocation)
 
     testImplementation(project(":test-shared"))
     testImplementation(project(":androidtest"))
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.androidx_test_espresso_core)
-    testImplementation(Dependencies.robolectric)
-    testImplementation(Dependencies.mockito_kotlin)
-    testImplementation(Dependencies.androidx_arch_core_testing)
+    testImplementation(libs.junit)
+    testImplementation(libs.androidxTestExtJunit)
+    testImplementation(libs.androidxTestEspressoCore)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.mockitoKotlin)
+    testImplementation(libs.androidxArchCoreTesting)
 
-    androidTestImplementation(Dependencies.androidx_test_ext_junit)
-    androidTestImplementation(Dependencies.junit)
+    androidTestImplementation(libs.androidxTestExtJunit)
+    androidTestImplementation(libs.junit)
 
     debugImplementation(project(":fragments-test"))
 }
