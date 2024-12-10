@@ -93,10 +93,9 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
     private void setUpActualValueLabel(BigDecimal actualValue) {
         if (actualValue != null) {
             currentValue.setText(String.valueOf(actualValue.doubleValue()));
-            slider.enable();
         } else {
             currentValue.setText("");
-            slider.disable();
+            slider.reset();
         }
     }
 }

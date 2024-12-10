@@ -36,6 +36,9 @@ class TrackingTouchSlider(
 
                 MotionEvent.ACTION_UP -> {
                     v.parent.requestDisallowInterceptTouchEvent(false)
+                    setTickActiveTintList(defaultTickActiveTintList)
+                    setThumbWidth(defaultThumbWidth)
+                    setThumbTrackGapSize(defaultThumbTrackGapSize)
                     listener?.onValueChange(this, value, true)
                 }
             }
@@ -54,13 +57,7 @@ class TrackingTouchSlider(
         isTrackingTouch = true
     }
 
-    fun enable() {
-        setTickActiveTintList(defaultTickActiveTintList)
-        setThumbWidth(defaultThumbWidth)
-        setThumbTrackGapSize(defaultThumbTrackGapSize)
-    }
-
-    fun disable() {
+    fun reset() {
         value = valueFrom
         setTickActiveTintList(
             ColorStateList.valueOf(
