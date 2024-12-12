@@ -40,30 +40,20 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         return when (val original = candidate?.original) {
             is XPathEqExpr -> {
                 val child = candidate.nodeSide.steps[0].name.name
-                val value = candidate.evalContextSide(sourceInstance, evaluationContext)
+                val value = candidate.evalContextSide(sourceInstance, evaluationContext) as String
 
-                val results = if (original.isEqual) {
-                    instanceAdapter.queryEq(
-                        sourceInstance.instanceId,
-                        child,
-                        value as String
-                    )
+                val selection = if (original.isEqual) {
+                    "$child = ?"
                 } else {
-                    instanceAdapter.queryNotEq(
-                        sourceInstance.instanceId,
-                        child,
-                        value as String
-                    )
+                    "$child != ?"
                 }
+                val selectionArgs = arrayOf(value)
 
-                if (results == null) {
-                    next.get()
-                } else {
-                    sourceInstance.replacePartialElements(results)
-                    results.map {
-                        it.parent = sourceInstance.root
-                        it.ref
-                    }
+                val results = instanceAdapter.query(sourceInstance.instanceId, selection, selectionArgs)
+                sourceInstance.replacePartialElements(results)
+                results.map {
+                    it.parent = sourceInstance.root
+                    it.ref
                 }
             }
 

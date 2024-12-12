@@ -38,6 +38,12 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
         }
     }
 
+    fun query(list: String, selection: String, selectionArgs: Array<String>): List<TreeElement> {
+        return entitiesRepository
+            .query(list, selection, selectionArgs)
+            .map { convertToElement(it) }
+    }
+
     fun queryEq(instanceId: String, child: String, value: String): List<TreeElement> {
         return when (child) {
             EntityItemElement.ID -> {

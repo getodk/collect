@@ -208,6 +208,26 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         updateRowIdTables()
     }
 
+    override fun query(list: String, selection: String, selectionArgs: Array<String>): List<Entity.Saved> {
+        return databaseConnection.withConnection {
+            readableDatabase
+                .rawQuery(
+                    """
+                    SELECT *, i.$ROW_ID
+                    FROM "$list" e, "${getRowIdTableName(list)}" i
+                    WHERE $selection
+                    ORDER BY i.$ROW_ID
+                    """.trimIndent(),
+                    selectionArgs
+                )
+        }.foldAndClose {
+            mapCursorRowToEntity(
+                it,
+                it.getInt(ROW_ID)
+            )
+        }
+    }
+
     override fun getById(list: String, id: String): Entity.Saved? {
         if (!listExists(list)) {
             return null

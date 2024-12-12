@@ -541,6 +541,15 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         wrapped.delete(id)
     }
 
+    override fun query(
+        list: String,
+        selection: String,
+        selectionArgs: Array<String>
+    ): List<Entity.Saved> {
+        accesses += 1
+        return wrapped.query(list, selection, selectionArgs)
+    }
+
     override fun getById(list: String, id: String): Entity.Saved? {
         accesses += 1
         return wrapped.getById(list, id)

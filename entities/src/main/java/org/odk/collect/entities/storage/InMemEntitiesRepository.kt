@@ -46,6 +46,30 @@ class InMemEntitiesRepository : EntitiesRepository {
         }
     }
 
+    override fun query(
+        list: String,
+        selection: String,
+        selectionArgs: Array<String>
+    ): List<Entity.Saved> {
+        return getEntities(list).filter { entity ->
+            val (fieldName, operator, _) = selection.split(" ").map { it }
+            val value = selectionArgs.first()
+
+            val fieldValue = when (fieldName) {
+                "name" -> entity.id
+                "label" -> entity.label
+                "__version" -> entity.version
+                else -> entity.properties.find { it.first == fieldName }?.second
+            }.toString()
+
+            when (operator) {
+                "=" -> fieldValue == value
+                "!=" -> fieldValue != value
+                else -> false
+            }
+        }
+    }
+
     override fun getById(list: String, id: String): Entity.Saved? {
         return getEntities(list).firstOrNull { it.id == id }
     }
