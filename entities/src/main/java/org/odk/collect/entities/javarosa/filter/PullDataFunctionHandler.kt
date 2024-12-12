@@ -37,7 +37,9 @@ class PullDataFunctionHandler(
             val filterChild = XPathFuncExpr.toString(args[2])
             val filterValue = XPathFuncExpr.toString(args[3])
 
-            instanceAdapter.queryEq(instanceId, filterChild, filterValue).firstOrNull()
+            val selection = "$filterChild = ?"
+            val selectionArgs = arrayOf(filterValue)
+            instanceAdapter.query(instanceId, selection, selectionArgs).firstOrNull()
                 ?.getFirstChild(child)?.value?.value ?: ""
         } else {
             fallback?.eval(args, ec) ?: ""
