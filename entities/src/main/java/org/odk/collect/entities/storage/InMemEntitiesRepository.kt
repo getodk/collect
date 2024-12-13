@@ -51,23 +51,51 @@ class InMemEntitiesRepository : EntitiesRepository {
         selection: String,
         selectionArgs: Array<String>
     ): List<Entity.Saved> {
+        val conditions = selection.split("AND", "OR").map { it.trim() }
+        val operators = Regex("(AND|OR)").findAll(selection).map { it.value }.toList()
+
         return getEntities(list).filter { entity ->
-            val (fieldName, operator, _) = selection.split(" ").map { it }
-            val value = selectionArgs.first()
+            val results = conditions.mapIndexed { index, condition ->
+                val (fieldName, operator, _) = condition.split(" ").map { it }
+                val value = selectionArgs.getOrNull(index) ?: ""
 
-            val fieldValue = when (fieldName) {
-                "name" -> entity.id
-                "label" -> entity.label
-                "__version" -> entity.version
-                else -> entity.properties.find { it.first == fieldName }?.second
-            }.toString()
+                evaluateCondition(entity, fieldName, operator, value)
+            }
+            combineResults(results, operators)
+        }
+    }
 
-            when (operator) {
-                "=" -> fieldValue == value
-                "!=" -> fieldValue != value
-                else -> false
+    private fun evaluateCondition(
+        entity: Entity.Saved,
+        fieldName: String,
+        operator: String,
+        value: String
+    ): Boolean {
+        val fieldValue = when (fieldName) {
+            "name" -> entity.id
+            "label" -> entity.label
+            "__version" -> entity.version
+            else -> entity.properties.find { it.first == fieldName }?.second
+        }.toString()
+
+        return when (operator) {
+            "=" -> fieldValue == value
+            "!=" -> fieldValue != value
+            else -> false
+        }
+    }
+
+    private fun combineResults(results: List<Boolean>, operators: List<String>): Boolean {
+        var combinedResult = results.firstOrNull() ?: false
+
+        for (i in 1 until results.size) {
+            when (operators.getOrNull(i - 1)) {
+                "AND" -> combinedResult = combinedResult && results[i]
+                "OR" -> combinedResult = combinedResult || results[i]
             }
         }
+
+        return combinedResult
     }
 
     override fun getById(list: String, id: String): Entity.Saved? {
