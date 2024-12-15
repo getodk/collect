@@ -12,6 +12,7 @@ import org.odk.collect.db.sqlite.CursorExt.getString
 import org.odk.collect.db.sqlite.CursorExt.getStringOrNull
 import org.odk.collect.db.sqlite.CursorExt.rowToMap
 import org.odk.collect.db.sqlite.DatabaseMigrator
+import org.odk.collect.db.sqlite.Query
 import org.odk.collect.db.sqlite.SQLiteColumns.ROW_ID
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.delete
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.doesColumnExist
@@ -208,17 +209,17 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         updateRowIdTables()
     }
 
-    override fun query(list: String, selection: String, selectionArgs: Array<String>): List<Entity.Saved> {
+    override fun query(list: String, query: Query): List<Entity.Saved> {
         return databaseConnection.withConnection {
             readableDatabase
                 .rawQuery(
                     """
                     SELECT *, i.$ROW_ID
                     FROM "$list" e, "${getRowIdTableName(list)}" i
-                    WHERE $selection
+                    WHERE ${query.selection}
                     ORDER BY i.$ROW_ID
                     """.trimIndent(),
-                    selectionArgs
+                    query.selectionArgs
                 )
         }.foldAndClose {
             mapCursorRowToEntity(

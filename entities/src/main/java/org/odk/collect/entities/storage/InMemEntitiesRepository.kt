@@ -1,5 +1,7 @@
 package org.odk.collect.entities.storage
 
+import org.odk.collect.db.sqlite.Query
+
 class InMemEntitiesRepository : EntitiesRepository {
 
     private val lists = mutableSetOf<String>()
@@ -46,56 +48,47 @@ class InMemEntitiesRepository : EntitiesRepository {
         }
     }
 
-    override fun query(
-        list: String,
-        selection: String,
-        selectionArgs: Array<String>
-    ): List<Entity.Saved> {
-        val conditions = selection.split("AND", "OR").map { it.trim() }
-        val operators = Regex("(AND|OR)").findAll(selection).map { it.value }.toList()
+    override fun query(list: String, query: Query): List<Entity.Saved> {
+        val entities = getEntities(list)
 
-        return getEntities(list).filter { entity ->
-            val results = conditions.mapIndexed { index, condition ->
-                val (fieldName, operator, _) = condition.split(" ").map { it }
-                val value = selectionArgs.getOrNull(index) ?: ""
-
-                evaluateCondition(entity, fieldName, operator, value)
+        return when (query) {
+            is Query.Eq -> {
+                entities.filter {
+                    val fieldName: String? = when (query.column) {
+                        "name" -> it.id
+                        "label" -> it.label
+                        "__version" -> it.version.toString()
+                        else -> it.properties.find { propertyName ->
+                            propertyName.first == query.column
+                        }?.second
+                    }
+                    fieldName == query.value
+                }
             }
-            combineResults(results, operators)
-        }
-    }
-
-    private fun evaluateCondition(
-        entity: Entity.Saved,
-        fieldName: String,
-        operator: String,
-        value: String
-    ): Boolean {
-        val fieldValue = when (fieldName) {
-            "name" -> entity.id
-            "label" -> entity.label
-            "__version" -> entity.version
-            else -> entity.properties.find { it.first == fieldName }?.second
-        }.toString()
-
-        return when (operator) {
-            "=" -> fieldValue == value
-            "!=" -> fieldValue != value
-            else -> false
-        }
-    }
-
-    private fun combineResults(results: List<Boolean>, operators: List<String>): Boolean {
-        var combinedResult = results.firstOrNull() ?: false
-
-        for (i in 1 until results.size) {
-            when (operators.getOrNull(i - 1)) {
-                "AND" -> combinedResult = combinedResult && results[i]
-                "OR" -> combinedResult = combinedResult || results[i]
+            is Query.NotEq -> {
+                entities.filter {
+                    val fieldName: String? = when (query.column) {
+                        "name" -> it.id
+                        "label" -> it.label
+                        "__version" -> it.version.toString()
+                        else -> it.properties.find { propertyName ->
+                            propertyName.first == query.column
+                        }?.second
+                    }
+                    fieldName != query.value
+                }
+            }
+            is Query.And -> {
+                val queryAResult = query(list, query.queryA)
+                val queryBResult = query(list, query.queryB)
+                queryAResult.intersect(queryBResult.toSet()).toList()
+            }
+            is Query.Or -> {
+                val queryAResult = query(list, query.queryA)
+                val queryBResult = query(list, query.queryB)
+                queryAResult.union(queryBResult.toSet()).toList()
             }
         }
-
-        return combinedResult
     }
 
     override fun getById(list: String, id: String): Entity.Saved? {

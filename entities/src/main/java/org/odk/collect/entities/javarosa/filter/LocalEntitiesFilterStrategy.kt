@@ -68,13 +68,11 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         val queryB = xPathExpressionToQuery(predicate.b, sourceInstance, evaluationContext)
 
         return if (queryA != null && queryB != null) {
-            val selection = if (predicate.op == XPathBoolExpr.AND) {
-                "(${queryA.selection} AND ${queryB.selection})"
+            if (predicate.op == XPathBoolExpr.AND) {
+                Query.And(queryA, queryB)
             } else {
-                "(${queryA.selection} OR ${queryB.selection})"
+                Query.Or(queryA, queryB)
             }
-
-            return Query(selection, arrayOf(*queryA.selectionArgs, *queryB.selectionArgs))
         } else {
             null
         }
@@ -91,14 +89,11 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
             val child = candidate.nodeSide.steps[0].name.name
             val value = candidate.evalContextSide(sourceInstance, evaluationContext) as String
 
-            val selection = if (predicate.isEqual) {
-                "$child = ?"
+            if (predicate.isEqual) {
+                Query.Eq(child, value)
             } else {
-                "$child != ?"
+                Query.NotEq(child, value)
             }
-            val selectionArgs = arrayOf(value)
-
-            Query(selection, selectionArgs)
         } else {
             null
         }
@@ -110,7 +105,7 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         next: Supplier<MutableList<TreeReference>>
     ): List<TreeReference> {
         return if (query != null) {
-            val results = instanceAdapter.query(sourceInstance.instanceId, query.selection, query.selectionArgs)
+            val results = instanceAdapter.query(sourceInstance.instanceId, query)
             sourceInstance.replacePartialElements(results)
             results.map {
                 it.parent = sourceInstance.root
