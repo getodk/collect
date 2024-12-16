@@ -156,7 +156,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return emptyList()
         }
 
-        return queryEqualWithAttachedRowId(list).foldAndClose {
+        return queryWithAttachedRowId(list).foldAndClose {
             mapCursorRowToEntity(
                 it,
                 it.getInt(ROW_ID)
@@ -234,7 +234,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return null
         }
 
-        return queryEqualWithAttachedRowId(
+        return queryWithAttachedRowId(
             list,
             selectionColumn = EntitiesTable.COLUMN_ID,
             selectionArg = id
@@ -257,7 +257,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         return if (propertyExists) {
-            queryEqualWithAttachedRowId(
+            queryWithAttachedRowId(
                 list,
                 selectionColumn = EntitiesTable.getPropertyColumn(property),
                 selectionArg = value
@@ -265,7 +265,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 mapCursorRowToEntity(it, it.getInt(ROW_ID))
             }
         } else if (value == "") {
-            queryEqualWithAttachedRowId(list).foldAndClose {
+            queryWithAttachedRowId(list).foldAndClose {
                 mapCursorRowToEntity(it, it.getInt(ROW_ID))
             }
         } else {
@@ -293,7 +293,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    private fun queryEqualWithAttachedRowId(list: String): Cursor {
+    private fun queryWithAttachedRowId(list: String): Cursor {
         return databaseConnection.withConnection {
             readableDatabase
                 .rawQuery(
@@ -308,7 +308,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    private fun queryEqualWithAttachedRowId(
+    private fun queryWithAttachedRowId(
         list: String,
         selectionColumn: String,
         selectionArg: String?
