@@ -48,8 +48,12 @@ class InMemEntitiesRepository : EntitiesRepository {
         }
     }
 
-    override fun query(list: String, query: Query): List<Entity.Saved> {
+    override fun query(list: String, query: Query?): List<Entity.Saved> {
         val entities = getEntities(list)
+
+        if (query == null) {
+            return entities
+        }
 
         return when (query) {
             is Query.Eq -> {
