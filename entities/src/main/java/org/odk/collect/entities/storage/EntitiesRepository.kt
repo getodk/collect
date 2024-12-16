@@ -12,8 +12,6 @@ interface EntitiesRepository {
     fun delete(id: String)
     fun query(list: String, query: Query): List<Entity.Saved>
     fun getById(list: String, id: String): Entity.Saved?
-    fun getByIdNot(list: String, id: String): List<Entity.Saved>
-    fun getByLabel(list: String, label: String?): List<Entity.Saved>
     fun getAllByProperty(list: String, property: String, value: String): List<Entity.Saved>
     fun getByIndex(list: String, index: Int): Entity.Saved?
     fun updateListHash(list: String, hash: String)
