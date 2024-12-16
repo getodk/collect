@@ -216,7 +216,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     """
                     SELECT *, i.$ROW_ID
                     FROM "$list" e, "${getRowIdTableName(list)}" i
-                    WHERE ${query.selection}
+                    WHERE e._id = i._id AND ${query.selection}
                     ORDER BY i.$ROW_ID
                     """.trimIndent(),
                     query.selectionArgs
