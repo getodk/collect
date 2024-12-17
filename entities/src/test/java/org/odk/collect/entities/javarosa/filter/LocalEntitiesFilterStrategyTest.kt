@@ -480,6 +480,64 @@ class LocalEntitiesFilterStrategyTest {
         val choices = scenario.choicesOf("/data/question").map { it.value }
         assertThat(choices, containsInAnyOrder("thing1"))
     }
+
+    @Test
+    fun `works correctly with complex expressions`() {
+        entitiesRepository.save(
+            "things",
+            Entity.New(
+                "thing1",
+                "Thing1",
+                version = 1,
+                properties = listOf("property" to "value1")
+            ),
+            Entity.New(
+                "thing2",
+                "Thing2",
+                version = 2,
+                properties = listOf("property" to "value2")
+            ),
+            Entity.New(
+                "thing3",
+                "Thing3",
+                version = 2,
+                properties = listOf("property" to "value3")
+            ),
+        )
+
+        val scenario = Scenario.init(
+            "Secondary instance form",
+            html(
+                head(
+                    title("Secondary instance form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("question"),
+                            )
+                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
+                        bind("/data/question").type("string")
+                    )
+                ),
+                body(
+                    select1Dynamic(
+                        "/data/question",
+                        "instance('things')/root/item[label='Thing1' or (__version='2' and property='value3')]",
+                        "name",
+                        "label"
+                    )
+                )
+            ),
+            controllerSupplier
+        )
+
+        val choices = scenario.choicesOf("/data/question").map { it.value }
+        assertThat(choices, containsInAnyOrder("thing1", "thing3"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
+        assertThat(instanceProvider.fullParsePerformed, equalTo(false))
+    }
 }
 
 private class FallthroughFilterStrategy : FilterStrategy {
