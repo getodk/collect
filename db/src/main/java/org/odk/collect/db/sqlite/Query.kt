@@ -23,4 +23,19 @@ sealed class Query(
         "(${queryA.selection} OR ${queryB.selection})",
         queryA.selectionArgs + queryB.selectionArgs
     )
+
+    fun copyWithMappedColumns(columnMapper: (String) -> String): Query {
+        return when (this) {
+            is Eq -> Eq(columnMapper(column), value)
+            is NotEq -> NotEq(columnMapper(column), value)
+            is And -> And(
+                queryA.copyWithMappedColumns(columnMapper),
+                queryB.copyWithMappedColumns(columnMapper)
+            )
+            is Or -> Or(
+                queryA.copyWithMappedColumns(columnMapper),
+                queryB.copyWithMappedColumns(columnMapper)
+            )
+        }
+    }
 }

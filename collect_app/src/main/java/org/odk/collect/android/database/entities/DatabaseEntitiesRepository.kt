@@ -19,6 +19,7 @@ import org.odk.collect.db.sqlite.SQLiteDatabaseExt.doesColumnExist
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.getColumnNames
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.query
 import org.odk.collect.db.sqlite.SynchronizedDatabaseConnection
+import org.odk.collect.entities.javarosa.parse.EntityItemElement
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 
@@ -156,7 +157,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return emptyList()
         }
 
-        return query(list, null)
+        return queryWithAttachedRowId(list, null)
     }
 
     override fun getCount(list: String): Int {
@@ -205,6 +206,58 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     override fun query(list: String, query: Query?): List<Entity.Saved> {
+        return queryWithAttachedRowId(list, query?.copyWithMappedColumns { columnName ->
+            when (columnName) {
+                EntityItemElement.ID -> EntitiesTable.COLUMN_ID
+                EntityItemElement.LABEL -> EntitiesTable.COLUMN_LABEL
+                EntityItemElement.VERSION -> EntitiesTable.COLUMN_VERSION
+                else -> EntitiesTable.getPropertyColumn(columnName)
+            }
+        })
+    }
+
+    override fun getById(list: String, id: String): Entity.Saved? {
+        if (!listExists(list)) {
+            return null
+        }
+
+        return queryWithAttachedRowId(list, Query.Eq(EntitiesTable.COLUMN_ID, id)).firstOrNull()
+    }
+
+    override fun getAllByProperty(
+        list: String,
+        property: String,
+        value: String
+    ): List<Entity.Saved> {
+        if (!listExists(list)) {
+            return emptyList()
+        }
+
+        val propertyExists = databaseConnection.withConnection {
+            readableDatabase.doesColumnExist(list, EntitiesTable.getPropertyColumn(property))
+        }
+
+        return if (propertyExists) {
+            queryWithAttachedRowId(
+                list,
+                Query.Eq(EntitiesTable.getPropertyColumn(property), value)
+            )
+        } else if (value == "") {
+            queryWithAttachedRowId(list, null)
+        } else {
+            emptyList()
+        }
+    }
+
+    override fun getByIndex(list: String, index: Int): Entity.Saved? {
+        if (!listExists(list)) {
+            return null
+        }
+
+        return queryWithAttachedRowId(list, Query.Eq("i.$ROW_ID", (index + 1).toString())).firstOrNull()
+    }
+
+    private fun queryWithAttachedRowId(list: String, query: Query?): List<Entity.Saved> {
         return if (query == null) {
             databaseConnection.withConnection {
                 readableDatabase
@@ -234,47 +287,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }.foldAndClose {
             mapCursorRowToEntity(it, it.getInt(ROW_ID))
         }
-    }
-
-    override fun getById(list: String, id: String): Entity.Saved? {
-        if (!listExists(list)) {
-            return null
-        }
-
-        return query(list, Query.Eq(EntitiesTable.COLUMN_ID, id)).firstOrNull()
-    }
-
-    override fun getAllByProperty(
-        list: String,
-        property: String,
-        value: String
-    ): List<Entity.Saved> {
-        if (!listExists(list)) {
-            return emptyList()
-        }
-
-        val propertyExists = databaseConnection.withConnection {
-            readableDatabase.doesColumnExist(list, EntitiesTable.getPropertyColumn(property))
-        }
-
-        return if (propertyExists) {
-            query(
-                list,
-                Query.Eq(EntitiesTable.getPropertyColumn(property), value)
-            )
-        } else if (value == "") {
-            query(list, null)
-        } else {
-            emptyList()
-        }
-    }
-
-    override fun getByIndex(list: String, index: Int): Entity.Saved? {
-        if (!listExists(list)) {
-            return null
-        }
-
-        return query(list, Query.Eq("i.$ROW_ID", (index + 1).toString())).firstOrNull()
     }
 
     /**
