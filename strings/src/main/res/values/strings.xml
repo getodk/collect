@@ -790,7 +790,7 @@
     <!-- Title of a settings section -->
     <string name="client">User interface</string>
     <!-- Subtext of a settings section -->
-    <string name="user_interface_settings_subtext">App language, theme, font size</string>
+    <string name="user_interface_settings_subtext">App language, font size, navigation</string>
     <!-- Title of a settings section -->
     <string name="maps">Maps</string>
     <!-- Subtext of a settings section -->
