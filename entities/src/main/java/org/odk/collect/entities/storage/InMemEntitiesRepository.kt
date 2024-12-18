@@ -1,7 +1,7 @@
 package org.odk.collect.entities.storage
 
-import org.odk.collect.db.sqlite.Query
 import org.odk.collect.entities.javarosa.parse.EntityItemElement
+import org.odk.collect.shared.Query
 
 class InMemEntitiesRepository : EntitiesRepository {
 

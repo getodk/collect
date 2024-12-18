@@ -12,16 +12,18 @@ import org.odk.collect.db.sqlite.CursorExt.getString
 import org.odk.collect.db.sqlite.CursorExt.getStringOrNull
 import org.odk.collect.db.sqlite.CursorExt.rowToMap
 import org.odk.collect.db.sqlite.DatabaseMigrator
-import org.odk.collect.db.sqlite.Query
 import org.odk.collect.db.sqlite.SQLiteColumns.ROW_ID
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.delete
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.doesColumnExist
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.getColumnNames
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.query
 import org.odk.collect.db.sqlite.SynchronizedDatabaseConnection
+import org.odk.collect.db.sqlite.toSql
 import org.odk.collect.entities.javarosa.parse.EntityItemElement
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.shared.Query
+import org.odk.collect.shared.mapColumns
 
 private object ListsTable {
     const val TABLE_NAME = "lists"
@@ -210,7 +212,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return emptyList()
         }
 
-        return queryWithAttachedRowId(list, query?.copyWithMappedColumns { columnName ->
+        return queryWithAttachedRowId(list, query?.mapColumns { columnName ->
             when (columnName) {
                 EntityItemElement.ID -> EntitiesTable.COLUMN_ID
                 EntityItemElement.LABEL -> EntitiesTable.COLUMN_LABEL
@@ -277,15 +279,16 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             }
         } else {
             databaseConnection.withConnection {
+                val sqlQuery = query.toSql()
                 readableDatabase
                     .rawQuery(
                         """
                         SELECT *, i.$ROW_ID
                         FROM "$list" e, "${getRowIdTableName(list)}" i
-                        WHERE e._id = i._id AND ${query.selection}
+                        WHERE e._id = i._id AND ${sqlQuery.selection}
                         ORDER BY i.$ROW_ID
                         """.trimIndent(),
-                        query.selectionArgs
+                        sqlQuery.selectionArgs
                     )
             }
         }.foldAndClose {
