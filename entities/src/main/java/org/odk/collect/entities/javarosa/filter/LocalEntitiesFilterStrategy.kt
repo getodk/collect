@@ -8,10 +8,10 @@ import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.xpath.expr.XPathBoolExpr
 import org.javarosa.xpath.expr.XPathEqExpr
 import org.javarosa.xpath.expr.XPathExpression
-import org.odk.collect.db.sqlite.Query
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceAdapter
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceProvider
 import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.shared.Query
 import java.util.function.Supplier
 
 /**
