@@ -67,6 +67,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -281,22 +282,30 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
     private void logFormDetails(File formFile, File formMediaDir) {
         long formFileBytesSize = formFile.length();
 
-        long csvFileBytesSize = 0L;
+        List<String> csvFileBytesSizes = new ArrayList<>();
         File[] files = formMediaDir.listFiles();
         if (files != null) {
             for (File mediaFile : files) {
                 if (mediaFile.getName().endsWith(".csv")) {
-                    csvFileBytesSize += mediaFile.length();
+                    csvFileBytesSizes.add(mediaFile.length() + "B");
                 }
             }
         }
 
-        Timber.i(
-                "Attempting to load from %s, file is %dB and has CSV files %dB",
-                formFile.getAbsolutePath(),
-                formFileBytesSize,
-                csvFileBytesSize
-        );
+        if (csvFileBytesSizes.isEmpty()) {
+            Timber.i(
+                    "Attempting to load from %s, file is %dB",
+                    formFile.getAbsolutePath(),
+                    formFileBytesSize
+            );
+        } else {
+            Timber.i(
+                    "Attempting to load from %s, file is %dB and has CSV files %s",
+                    formFile.getAbsolutePath(),
+                    formFileBytesSize,
+                    String.join(", ", csvFileBytesSizes)
+            );
+        }
     }
 
     private static void unzipMediaFiles(File formMediaDir) {
