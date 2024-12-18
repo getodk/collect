@@ -51,7 +51,6 @@ dependencies {
     implementation(project(":material"))
     implementation(project(":async"))
     implementation(project(":lists"))
-    implementation(project(":db"))
 
     implementation(libs.kotlinStdlib)
     implementation(libs.javarosa) {

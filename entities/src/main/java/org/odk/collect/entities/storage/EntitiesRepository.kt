@@ -1,6 +1,6 @@
 package org.odk.collect.entities.storage
 
-import org.odk.collect.db.sqlite.Query
+import org.odk.collect.shared.Query
 
 interface EntitiesRepository {
     fun save(list: String, vararg entities: Entity)

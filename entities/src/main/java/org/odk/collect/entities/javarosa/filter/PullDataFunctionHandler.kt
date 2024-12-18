@@ -3,9 +3,9 @@ package org.odk.collect.entities.javarosa.filter
 import org.javarosa.core.model.condition.EvaluationContext
 import org.javarosa.core.model.condition.IFunctionHandler
 import org.javarosa.xpath.expr.XPathFuncExpr
-import org.odk.collect.db.sqlite.Query
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceAdapter
 import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.shared.Query
 
 class PullDataFunctionHandler(
     entitiesRepository: EntitiesRepository,
