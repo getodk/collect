@@ -32,7 +32,7 @@ import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
-import org.odk.collect.android.formhierarchy.FormHierarchyActivity;
+import org.odk.collect.android.formhierarchy.FormHierarchyFragmentHostActivity;
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormsDataService;
@@ -171,8 +171,6 @@ public interface AppDependencyComponent {
 
     void inject(AdminPasswordDialogFragment adminPasswordDialogFragment);
 
-    void inject(FormHierarchyActivity formHierarchyActivity);
-
     void inject(FormManagementPreferencesFragment formManagementPreferencesFragment);
 
     void inject(IdentityPreferencesFragment identityPreferencesFragment);
@@ -256,6 +254,8 @@ public interface AppDependencyComponent {
     void inject(AppListActivity appListActivity);
 
     void inject(DownloadFormListTask downloadFormListTask);
+
+    void inject(FormHierarchyFragmentHostActivity formHierarchyFragmentHostActivity);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 
