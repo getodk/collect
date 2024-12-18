@@ -293,13 +293,13 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         }
 
         if (csvFileBytesSizes.isEmpty()) {
-            Timber.i(
+            Timber.w(
                     "Attempting to load from %s, file is %dB",
                     formFile.getAbsolutePath(),
                     formFileBytesSize
             );
         } else {
-            Timber.i(
+            Timber.w(
                     "Attempting to load from %s, file is %dB and has CSV files %s",
                     formFile.getAbsolutePath(),
                     formFileBytesSize,
