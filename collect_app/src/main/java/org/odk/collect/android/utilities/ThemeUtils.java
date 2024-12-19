@@ -29,6 +29,7 @@ import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.FeatureFlags;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
@@ -84,12 +85,12 @@ public final class ThemeUtils {
                 R.style.Theme_Collect_Light_Spinner_TimePicker_Dialog;
     }
 
-    public int getAccountPickerTheme() {
-        return isDarkTheme() ? 0 : 1;
-    }
-
     public boolean isSystemTheme() {
-        return getPrefsTheme().equals(context.getString(org.odk.collect.strings.R.string.app_theme_system));
+        if (FeatureFlags.NO_THEME_SETTING) {
+            return true;
+        } else {
+            return getPrefsTheme().equals(context.getString(org.odk.collect.strings.R.string.app_theme_system));
+        }
     }
 
     public boolean isDarkTheme() {
