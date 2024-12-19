@@ -5,6 +5,7 @@ import org.javarosa.core.model.condition.IFunctionHandler
 import org.javarosa.xpath.expr.XPathFuncExpr
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceAdapter
 import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.shared.Query
 
 class PullDataFunctionHandler(
     entitiesRepository: EntitiesRepository,
@@ -37,7 +38,7 @@ class PullDataFunctionHandler(
             val filterChild = XPathFuncExpr.toString(args[2])
             val filterValue = XPathFuncExpr.toString(args[3])
 
-            instanceAdapter.queryEq(instanceId, filterChild, filterValue).firstOrNull()
+            instanceAdapter.query(instanceId, Query.Eq(filterChild, filterValue)).firstOrNull()
                 ?.getFirstChild(child)?.value?.value ?: ""
         } else {
             fallback?.eval(args, ec) ?: ""

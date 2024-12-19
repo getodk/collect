@@ -8,6 +8,7 @@ import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Test
+import org.odk.collect.db.sqlite.Query
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.FormEntity
 import org.odk.collect.entities.javarosa.parse.EntityItemElement
@@ -539,6 +540,11 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
     override fun delete(id: String) {
         accesses += 1
         wrapped.delete(id)
+    }
+
+    override fun query(list: String, query: Query?): List<Entity.Saved> {
+        accesses += 1
+        return wrapped.query(list, query)
     }
 
     override fun getById(list: String, id: String): Entity.Saved? {
