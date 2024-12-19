@@ -58,9 +58,7 @@ class MainMenuActivity : LocalizedActivity() {
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
         currentProjectViewModel = viewModelProvider[CurrentProjectViewModel::class.java]
 
-        if (!FeatureFlags.NO_THEME_SETTING) {
-            ThemeUtils(this).setDarkModeForCurrentProject()
-        }
+        ThemeUtils(this).setDarkModeForCurrentProject()
 
         if (!currentProjectViewModel.hasCurrentProject()) {
             super.onCreate(null)
