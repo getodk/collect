@@ -85,10 +85,6 @@ public final class ThemeUtils {
                 R.style.Theme_Collect_Light_Spinner_TimePicker_Dialog;
     }
 
-    public int getAccountPickerTheme() {
-        return isDarkTheme() ? 0 : 1;
-    }
-
     public boolean isSystemTheme() {
         if (FeatureFlags.NO_THEME_SETTING) {
             return true;
