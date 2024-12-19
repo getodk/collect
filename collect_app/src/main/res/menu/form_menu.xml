@@ -28,7 +28,7 @@
 
     <item
         android:id="@+id/menu_goto"
-        android:icon="@drawable/ic_menu_goto_24"
+        android:icon="@drawable/ic_baseline_list_24"
         android:title="@string/view_hierarchy"
         app:showAsAction="always" />
 
