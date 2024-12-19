@@ -15,6 +15,7 @@ import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.InMemEntitiesRepository
+import org.odk.collect.shared.Query
 import org.odk.collect.shared.TempFiles
 import java.io.File
 
@@ -539,6 +540,11 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
     override fun delete(id: String) {
         accesses += 1
         wrapped.delete(id)
+    }
+
+    override fun query(list: String, query: Query?): List<Entity.Saved> {
+        accesses += 1
+        return wrapped.query(list, query)
     }
 
     override fun getById(list: String, id: String): Entity.Saved? {
