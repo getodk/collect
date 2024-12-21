@@ -207,12 +207,12 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         updateRowIdTables()
     }
 
-    override fun query(list: String, query: Query?): List<Entity.Saved> {
+    override fun query(list: String, query: Query): List<Entity.Saved> {
         if (!listExists(list)) {
             return emptyList()
         }
 
-        return queryWithAttachedRowId(list, query?.mapColumns { columnName ->
+        return queryWithAttachedRowId(list, query.mapColumns { columnName ->
             when (columnName) {
                 EntityItemElement.ID -> EntitiesTable.COLUMN_ID
                 EntityItemElement.LABEL -> EntitiesTable.COLUMN_LABEL
