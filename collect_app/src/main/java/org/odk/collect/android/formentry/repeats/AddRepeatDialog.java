@@ -25,7 +25,7 @@ public class AddRepeatDialog {
         };
 
         String dialogMessage;
-        if (groupLabel.isBlank()) {
+        if (groupLabel == null || groupLabel.isBlank()) {
             dialogMessage = context.getString(org.odk.collect.strings.R.string.add_another_question);
         } else {
             dialogMessage = context.getString(org.odk.collect.strings.R.string.add_repeat_question,
