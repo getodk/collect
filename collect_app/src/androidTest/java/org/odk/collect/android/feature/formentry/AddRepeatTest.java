@@ -121,15 +121,16 @@ public class AddRepeatTest {
     }
 
     @Test
-    public void whenInRepeatWithoutLabel_swipingNext_andClickingAdd_addsAnotherRepeat() {
+    public void whenInRepeatWithoutLabel_swipingNext_displaysTheAddRepeatDialog() {
         rule.startAtMainMenu()
                 .copyForm(REPEAT_WITHOUT_LABEL)
                 .startBlankForm("Repeat without label")
-                .assertText("> 1")
-                .answerQuestion("First name", true, "Karan")
+                // group with no label
                 .swipeToNextQuestionWithRepeatGroup("")
-                .clickOnAdd(new FormEntryPage("Repeat without label"))
-                .assertText("> 2");
+                .clickOnDoNotAdd(new FormEntryPage("Repeat without label"))
+                // group with blank label
+                .swipeToNextQuestionWithRepeatGroup("")
+                .clickOnDoNotAdd(new FormEntryPage("Repeat without label"));
     }
 
     @Test
