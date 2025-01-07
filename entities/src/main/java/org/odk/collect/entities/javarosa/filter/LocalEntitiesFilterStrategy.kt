@@ -41,7 +41,7 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         val query = xPathExpressionToQuery(predicate, sourceInstance, evaluationContext)
 
         return if (query != null) {
-            queryToTreeReferences(query, sourceInstance, next)
+            queryToTreeReferences(query, sourceInstance)
         } else {
             next.get()
         }
@@ -99,20 +99,12 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         }
     }
 
-    private fun queryToTreeReferences(
-        query: Query?,
-        sourceInstance: DataInstance<*>,
-        next: Supplier<MutableList<TreeReference>>
-    ): List<TreeReference> {
-        return if (query != null) {
-            val results = instanceAdapter.query(sourceInstance.instanceId, query)
-            sourceInstance.replacePartialElements(results)
-            results.map {
-                it.parent = sourceInstance.root
-                it.ref
-            }
-        } else {
-            next.get()
+    private fun queryToTreeReferences(query: Query, sourceInstance: DataInstance<*>): List<TreeReference> {
+        val results = instanceAdapter.query(sourceInstance.instanceId, query)
+        sourceInstance.replacePartialElements(results)
+        return results.map {
+            it.parent = sourceInstance.root
+            it.ref
         }
     }
 }
