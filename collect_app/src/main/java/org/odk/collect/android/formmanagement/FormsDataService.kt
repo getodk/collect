@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
+import org.odk.collect.android.formmanagement.metadata.FormMetadataParser
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.state.DataKeys
@@ -57,17 +58,23 @@ class FormsDataService(
         progressReporter: (Int, Int) -> Unit,
         isCancelled: () -> Boolean
     ): Map<ServerFormDetails, FormDownloadException?> {
-        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
-        val formDownloader =
-            formDownloader(projectDependencyModule, clock)
+        val results = mutableMapOf<ServerFormDetails, FormDownloadException?>()
 
-        return ServerFormUseCases.downloadForms(
-            forms,
-            projectDependencyModule.formsLock,
-            formDownloader,
-            progressReporter,
-            isCancelled
-        )
+        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
+        projectDependencyModule.formsLock.withLock { acquiredLock ->
+            if (acquiredLock) {
+                val formDownloader =
+                    formDownloader(projectDependencyModule, clock)
+
+                results.putAll(ServerFormUseCases.downloadForms(
+                    forms,
+                    formDownloader,
+                    progressReporter,
+                    isCancelled
+                ))
+            }
+        }
+        return results
     }
 
     /**
@@ -93,7 +100,6 @@ class FormsDataService(
                         if (projectDependencies.generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE)) {
                             val results = ServerFormUseCases.downloadForms(
                                 updatedForms,
-                                projectDependencies.formsLock,
                                 formDownloader
                             )
 
@@ -149,7 +155,7 @@ class FormsDataService(
                 }
 
                 syncWithDb(projectId)
-                finishSync(projectId, exception)
+                finishSyncWithServer(projectId, exception)
                 exception == null
             } else {
                 false
@@ -174,7 +180,7 @@ class FormsDataService(
                 startSync(projectId)
                 syncWithStorage(projectId)
                 syncWithDb(projectId)
-                finishSync(projectId)
+                finishSyncWithStorage(projectId)
             }
         }
     }
@@ -193,8 +199,12 @@ class FormsDataService(
         syncing.set(projectId, true)
     }
 
-    private fun finishSync(projectId: String, exception: FormSourceException? = null) {
+    private fun finishSyncWithServer(projectId: String, exception: FormSourceException? = null) {
         serverError.set(projectId, exception)
+        syncing.set(projectId, false)
+    }
+
+    private fun finishSyncWithStorage(projectId: String) {
         syncing.set(projectId, false)
     }
 
@@ -213,7 +223,7 @@ private fun formDownloader(
         projectDependencyModule.formsRepository,
         File(projectDependencyModule.cacheDir),
         projectDependencyModule.formsDir,
-        FormMetadataParser(),
+        FormMetadataParser,
         clock,
         projectDependencyModule.entitiesRepository
     )

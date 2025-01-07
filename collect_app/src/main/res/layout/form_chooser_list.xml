@@ -8,7 +8,7 @@
     <include layout="@layout/app_bar_layout"/>
 
     <ListView
-        android:id="@id/android:list"
+        android:id="@+id/scrollable_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:nestedScrollingEnabled="true"

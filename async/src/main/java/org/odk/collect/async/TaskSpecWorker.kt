@@ -16,7 +16,7 @@ class TaskSpecWorker(
     override fun doWork(): Result {
         val cellularOnly = inputData.getBoolean(DATA_CELLULAR_ONLY, false)
         if (cellularOnly && connectivityProvider.currentNetwork != Scheduler.NetworkType.CELLULAR) {
-            Analytics.setUserProperty("EncounteredMeteredNonCellularInTasks", "true")
+            Analytics.setUserProperty("SawMeteredNonCellular", "true")
             return Result.retry()
         }
 
@@ -24,16 +24,22 @@ class TaskSpecWorker(
         val spec = Class.forName(specClass).getConstructor().newInstance() as TaskSpec
 
         val stringInputData = inputData.keyValueMap.mapValues { it.value.toString() }
-        val completed =
-            spec.getTask(applicationContext, stringInputData, isLastUniqueExecution(spec)).get()
-        val maxRetries = spec.maxRetries
 
-        return if (completed) {
-            Result.success()
-        } else if (maxRetries == null || runAttemptCount < maxRetries) {
-            Result.retry()
-        } else {
-            Result.failure()
+        try {
+            val completed =
+                spec.getTask(applicationContext, stringInputData, isLastUniqueExecution(spec)).get()
+            val maxRetries = spec.maxRetries
+
+            return if (completed) {
+                Result.success()
+            } else if (maxRetries == null || runAttemptCount < maxRetries) {
+                Result.retry()
+            } else {
+                Result.failure()
+            }
+        } catch (t: Throwable) {
+            spec.onException(t)
+            return Result.failure()
         }
     }
 

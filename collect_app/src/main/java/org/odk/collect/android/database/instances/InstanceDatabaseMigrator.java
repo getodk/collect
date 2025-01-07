@@ -19,6 +19,7 @@ import static org.odk.collect.db.sqlite.SQLiteDatabaseExt.doesColumnExist;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.odk.collect.db.sqlite.DatabaseMigrator;
+import org.odk.collect.db.sqlite.SQLiteDatabaseExt;
 import org.odk.collect.db.sqlite.SQLiteUtils;
 import org.odk.collect.forms.instances.Instance;
 
@@ -57,12 +58,9 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
                 upgradeToVersion7(db);
             case 7:
                 upgradeToVersion8(db);
-                break;
             case 8:
                 // Remember to bump the database version number in {@link org.odk.collect.android.database.DatabaseConstants}
                 // upgradeToVersion9(db);
-            default:
-                Timber.i("Unknown version %d", oldVersion);
         }
     }
 
@@ -118,7 +116,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
      * @param temporaryTableName    the name of the temporary table to use and then drop
      */
     private void dropObsoleteColumns(SQLiteDatabase db, String[] relevantColumns, String temporaryTableName) {
-        List<String> columns = SQLiteUtils.getColumnNames(db, INSTANCES_TABLE_NAME);
+        List<String> columns = SQLiteDatabaseExt.getColumnNames(db, INSTANCES_TABLE_NAME);
         columns.retainAll(Arrays.asList(relevantColumns));
         String[] columnsToKeep = columns.toArray(new String[0]);
 

@@ -56,6 +56,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.ZipUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.SchedulerAsyncTaskMimic;
+import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.savepoints.Savepoint;
@@ -66,6 +67,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -191,12 +193,16 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         unzipMediaFiles(formMediaDir);
         setupReferenceManagerForForm(ReferenceManager.instance(), formMediaDir);
 
+        logFormDetails(formXml, formMediaDir);
+
         FormDef formDef = null;
         try {
             formDef = createFormDefFromCacheOrXml(form.getFormFilePath(), formXml);
         } catch (StackOverflowError e) {
             Timber.e(e);
             errorMsg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.too_complex_form);
+        } catch (UnrecognizedEntityVersionException e) {
+            errorMsg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.unrecognized_entity_version, e.getEntityVersion());
         } catch (Exception e) {
             Timber.w(e);
             errorMsg = "An unknown error has occurred. Please ask your project leadership to email support@getodk.org with information about this form.";
@@ -273,6 +279,35 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         return data;
     }
 
+    private void logFormDetails(File formFile, File formMediaDir) {
+        long formFileBytesSize = formFile.length();
+
+        List<String> csvFileBytesSizes = new ArrayList<>();
+        File[] files = formMediaDir.listFiles();
+        if (files != null) {
+            for (File mediaFile : files) {
+                if (mediaFile.getName().endsWith(".csv")) {
+                    csvFileBytesSizes.add(mediaFile.length() + "B");
+                }
+            }
+        }
+
+        if (csvFileBytesSizes.isEmpty()) {
+            Timber.w(
+                    "Attempting to load from %s, file is %dB",
+                    formFile.getAbsolutePath(),
+                    formFileBytesSize
+            );
+        } else {
+            Timber.w(
+                    "Attempting to load from %s, file is %dB and has CSV files %s",
+                    formFile.getAbsolutePath(),
+                    formFileBytesSize,
+                    String.join(", ", csvFileBytesSizes)
+            );
+        }
+    }
+
     private static void unzipMediaFiles(File formMediaDir) {
         File[] zipFiles = formMediaDir.listFiles(new FileFilter() {
             @Override
@@ -302,7 +337,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         }
 
         // no binary, read from xml
-        Timber.i("Attempting to load from: %s", formXml.getAbsolutePath());
         final long start = System.currentTimeMillis();
         String lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(formXml);
         FormDef formDefFromXml = XFormUtils.getFormFromFormXml(formPath, lastSavedSrc);

@@ -19,14 +19,10 @@ import static org.odk.collect.settings.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FI
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.Build;
-import android.os.StrictMode;
 
 import androidx.annotation.NonNull;
-import androidx.multidex.MultiDex;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
@@ -37,13 +33,14 @@ import org.odk.collect.android.injection.config.CollectOsmDroidDependencyModule;
 import org.odk.collect.android.injection.config.CollectProjectsDependencyModule;
 import org.odk.collect.android.injection.config.CollectSelfieCameraDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
+import org.odk.collect.android.utilities.CollectStrictMode;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;
 import org.odk.collect.androidshared.data.StateStore;
-import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.androidshared.system.ExternalFilesUtils;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.async.network.NetworkStateProvider;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
@@ -137,16 +134,6 @@ public class Collect extends Application implements
         this.externalDataManager = externalDataManager;
     }
 
-    /*
-        Adds support for multidex support library. For more info check out the link below,
-        https://developer.android.com/studio/build/multidex.html
-    */
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -160,31 +147,9 @@ public class Collect extends Application implements
 
                     applicationComponent.applicationInitializer().initialize();
                     fixGoogleBug154855417();
-                    setupStrictMode();
+                    CollectStrictMode.enable();
                 }
         );
-    }
-
-    /**
-     * Enable StrictMode and log violations to the system log.
-     * This catches disk and network access on the main thread, as well as leaked SQLite
-     * cursors and unclosed resources.
-     */
-    private void setupStrictMode() {
-        if (BuildConfig.DEBUG) {
-            StrictMode.ThreadPolicy.Builder policyBuilder = new StrictMode.ThreadPolicy.Builder()
-                    .detectAll()
-                    .permitDiskReads()  // shared preferences are being read on main thread (`GetAndSubmitFormTest`)
-                    .permitDiskWrites() // files are being created on the fly (`GetAndSubmitFormTest`)
-                    .penaltyDeath();
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                policyBuilder.permitUnbufferedIo(); // `ObjectInputStream#readObject` calls
-            }
-
-            StrictMode.setThreadPolicy(policyBuilder
-                    .build());
-        }
     }
 
     private void setupDagger() {

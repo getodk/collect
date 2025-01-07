@@ -85,7 +85,7 @@ class FormMetadataSettingsTest {
             .assertTexts("Chino", "664615", "chino@whitepony.com", installIDProvider.installID)
     }
 
-    @Test // Issue number NODK-238 TestCase4 TestCase5
+    @Test
     fun settingServerUsername_usedAsFallbackForMetadataUsername() {
         rule.startAtMainMenu()
             .copyForm("metadata.xml")

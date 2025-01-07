@@ -28,6 +28,7 @@ public class NoButtonsItem extends FrameLayout {
 
     public void setUpNoButtonsItem(File imageFile, String choiceText, String errorMsg, boolean isInGridView) {
         if (imageFile != null && imageFile.exists()) {
+            binding.imageView.layout(0, 0, 0, 0);
             binding.imageView.setVisibility(View.VISIBLE);
             if (isInGridView) {
                 imageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.FIT_CENTER, null);

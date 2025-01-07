@@ -1,23 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+     When scrolling, the top app bar fills with a contrasting color to create a visual separation.
+     This works automatically if your scrolling view (e.g., `RecyclerView`, `ListView`) is placed directly
+     beneath the `AppBarLayout`. However, if the scrolling view is nested within another view
+     (such as a `ConstraintLayout`, which is common in this app), you need to help the app bar determine
+     whether it should lift by setting `app:liftOnScrollTargetViewId` to the ID of the scrolling view.
+     Since this `AppBarLayout` is used throughout the app with various scrolling views, it’s best to
+     use a shared ID like `scrollable_container`.
+     If the scrollable view is added programmatically or it is displayed in a `ViewPager` with a
+     shared id, it may not work as expected anyway, and `app:liftOnScrollTargetViewId` might
+     need to be updated programmatically after adding such a view.
+     The `ODKView` and its `odk_view_container` or `DeleteFormsActivity` are good examples of this scenario.
+-->
 <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/appBarLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:liftOnScrollTargetViewId="@+id/scrollable_container">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        tools:title="Title" />
+        android:layout_height="wrap_content">
 
-    <org.odk.collect.androidshared.ui.ObviousProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/appBarLayout"
-        android:layout_marginTop="-7dp"
-        android:indeterminate="true"
-        android:visibility="gone" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:title="Title" />
+
+        <org.odk.collect.androidshared.ui.ObviousProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.appbar.AppBarLayout>

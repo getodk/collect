@@ -1,8 +1,6 @@
-import dependencies.Dependencies
-
 plugins {
-    id("java-library")
-    id("kotlin")
+    alias(libs.plugins.javaLibrary)
+    alias(libs.plugins.kotlinLibrary)
 }
 
 apply(from = "../config/quality.gradle")
@@ -13,11 +11,12 @@ java {
 }
 
 dependencies {
-    implementation(Dependencies.kotlin_stdlib)
-    implementation(Dependencies.emoji_java)
+    implementation(libs.kotlinStdlib)
+    implementation(libs.emojiJava)
 
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.hamcrest)
+    testImplementation(libs.junit)
+    testImplementation(libs.hamcrest)
+    testImplementation(libs.mockitoKotlin)
 }
 
 tasks.register("testDebug") {

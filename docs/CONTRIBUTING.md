@@ -41,7 +41,7 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
         git push
 
-1. Once you have completed your code changes, verify that you have followed the [style guidelines](https://github.com/getodk/collect/blob/master/CONTRIBUTING.md#style-guidelines).
+1. Once you have completed your code changes, verify that you have followed the [style guidelines](CODE-GUIDELINES.md).
 
 1. When your changes are ready to be added to the core ODK Collect project, [open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `getodk/collect`. Describe your changes in the comment, refer to any relevant issues using [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) and tag any person you think might need to know about the changes.
 

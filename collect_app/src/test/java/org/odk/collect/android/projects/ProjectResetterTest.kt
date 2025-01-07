@@ -33,8 +33,8 @@ import org.odk.collect.projects.Project
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
+import org.odk.collect.shared.locks.BooleanChangeLock
 import org.odk.collect.shared.settings.Settings
-import org.odk.collect.testshared.BooleanChangeLock
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -198,38 +198,46 @@ class ProjectResetterTest {
     }
 
     @Test
-    fun `Reset instances does not clear instances if the instances database is locked`() {
+    fun `Reset instances does not clear instances and savepoints if the instances database is locked`() {
         saveTestInstanceFiles(currentProjectId)
         setupTestInstancesDatabase(currentProjectId)
+        setupTestSavepointsDatabase(currentProjectId)
 
-        (changeLockProvider.create(currentProjectId).instancesLock as BooleanChangeLock).lock()
+        changeLockProvider.create(currentProjectId).instancesLock.lock()
         val failedResetActions = projectResetter.reset(listOf(ProjectResetter.ResetAction.RESET_INSTANCES))
         assertEquals(1, failedResetActions.size)
 
         assertEquals(1, instancesRepositoryProvider.create(currentProjectId).all.size)
         assertTestInstanceFiles(currentProjectId)
+        assertEquals(1, savepointsRepositoryProvider.create(currentProjectId).getAll().size)
     }
 
     @Test
-    fun `Reset instances clears instances for current project`() {
+    fun `Reset instances clears instances and savepoints for current project`() {
         saveTestInstanceFiles(currentProjectId)
         setupTestInstancesDatabase(currentProjectId)
+        setupTestSavepointsDatabase(anotherProjectId)
+        val instancesRepository = instancesRepositoryProvider.create(currentProjectId)
+        val instance = instancesRepository.all[0]
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_INSTANCES))
 
-        assertEquals(0, instancesRepositoryProvider.create(currentProjectId).all.size)
-        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, currentProjectId))
+        assertEquals(0, instancesRepository.all.size)
+        assertEquals(false, File(instance.instanceFilePath).parentFile.exists())
+        assertEquals(1, savepointsRepositoryProvider.create(anotherProjectId).getAll().size)
     }
 
     @Test
-    fun `Reset instances does not clear instances for another projects`() {
+    fun `Reset instances does not clear instances and savepoints for another projects`() {
         saveTestInstanceFiles(anotherProjectId)
         setupTestInstancesDatabase(anotherProjectId)
+        setupTestSavepointsDatabase(anotherProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_INSTANCES))
 
         assertEquals(1, instancesRepositoryProvider.create(anotherProjectId).all.size)
         assertTestInstanceFiles(anotherProjectId)
+        assertEquals(1, savepointsRepositoryProvider.create(anotherProjectId).getAll().size)
     }
 
     @Test

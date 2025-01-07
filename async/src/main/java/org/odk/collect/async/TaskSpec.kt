@@ -18,4 +18,9 @@ interface TaskSpec {
      * once instead of doing that after every single execution.
      */
     fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean>
+
+    /**
+     * Called if an exception is thrown while executing the work.
+     */
+    fun onException(exception: Throwable)
 }

@@ -75,7 +75,6 @@ public class EncryptedFormTest {
                 .assertOnPage();
     }
 
-    //TestCase47
     @Test
     public void instanceOfEncryptedFormWithoutInstanceID_failsFinalizationWithMessage() {
         rule.startAtMainMenu()
@@ -87,5 +86,17 @@ public class EncryptedFormTest {
                 .checkIsToastWithMessageDisplayed("This form does not specify an instanceID. You must specify one to enable encryption. Form has not been saved as finalized.")
                 .clickDrafts()
                 .checkInstanceState("encrypted-no-instanceID", Instance.STATUS_INCOMPLETE);
+    }
+
+    @Test
+    public void instanceOfEncryptedFormWithoutInstanceID_doesNotLeaveSavepointOnFinalization() {
+        rule.startAtMainMenu()
+                .copyForm("encrypted-no-instanceID.xml")
+                .startBlankForm("encrypted-no-instanceID")
+                .clickGoToArrow()
+                .clickGoToEnd()
+                .clickFinalize()
+                .checkIsToastWithMessageDisplayed("This form does not specify an instanceID. You must specify one to enable encryption. Form has not been saved as finalized.")
+                .startBlankForm("encrypted-no-instanceID");
     }
 }

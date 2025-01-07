@@ -7,10 +7,9 @@ import static java.util.Collections.emptyList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
-import org.kxml2.kdom.Document;
-import org.kxml2.kdom.Element;
+import org.odk.collect.android.formmanagement.metadata.FormMetadata;
+import org.odk.collect.android.formmanagement.metadata.FormMetadataParser;
 import org.odk.collect.android.openrosa.CaseInsensitiveEmptyHeaders;
 import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
@@ -26,7 +25,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -317,33 +315,8 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     }
 
     private void addFormFromInputStream(String formXML, List<MediaFileItem> mediaFiles, InputStream formDefStream) {
-        try {
-            Document doc = XFormParser.getXMLDocument(new InputStreamReader(formDefStream));
-            Element head = doc.getRootElement().getElement(null, "head");
-            String title = (String) head.getElement(null, "title").getChild(0);
-
-            Element model = head.getElement(null, "model");
-
-            Element mainInstance = null;
-            for (int i = 0; i < model.getChildCount(); i++) {
-                Element child = model.getElement(i);
-                if (child == null) {
-                    continue;
-                }
-
-                if (child.getName().equals("instance") && child.getAttributeCount() == 0) {
-                    mainInstance = child;
-                }
-            }
-
-            Element mainInstanceRoot = mainInstance.getElement(0);
-            String id = mainInstanceRoot.getAttributeValue(null, "id");
-            String version = mainInstanceRoot.getAttributeValue(null, "version");
-
-            forms.add(new XFormItem(title, formXML, id, version, mediaFiles));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        FormMetadata formMetadata = FormMetadataParser.readMetadata(formDefStream);
+        forms.add(new XFormItem(formMetadata.getTitle(), formXML, formMetadata.getId(), formMetadata.getVersion(), mediaFiles));
     }
 
     private static class XFormItem {

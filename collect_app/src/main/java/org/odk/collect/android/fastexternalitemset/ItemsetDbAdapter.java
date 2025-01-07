@@ -1,6 +1,6 @@
 package org.odk.collect.android.fastexternalitemset;
 
-import static org.odk.collect.androidshared.utils.PathUtils.getAbsoluteFilePath;
+import static org.odk.collect.shared.PathUtils.getAbsoluteFilePath;
 
 import android.content.ContentValues;
 import android.database.Cursor;

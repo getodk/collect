@@ -23,6 +23,16 @@ object SQLiteDatabaseExt {
 
     @JvmStatic
     fun SQLiteDatabase.doesColumnExist(table: String, column: String): Boolean {
-        return SQLiteUtils.getColumnNames(this, table).contains(column)
+        return this.getColumnNames(table).contains(column)
+    }
+
+    @JvmStatic
+    fun SQLiteDatabase.getColumnNames(table: String): List<String> {
+        var columnNames: Array<String>
+        this.query(table, null, null, null, null, null, null).use { c ->
+            columnNames = c.columnNames
+        }
+
+        return columnNames.toList()
     }
 }

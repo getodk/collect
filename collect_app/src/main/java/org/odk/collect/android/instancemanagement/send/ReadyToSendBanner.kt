@@ -3,13 +3,16 @@ package org.odk.collect.android.instancemanagement.send
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.FrameLayout
 import org.odk.collect.android.databinding.ReadyToSendBannerBinding
 import org.odk.collect.shared.TimeInMs
 import org.odk.collect.strings.R
 
-class ReadyToSendBanner(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
-    constructor(context: Context) : this(context, null)
+class ReadyToSendBanner @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : FrameLayout(context, attrs, defStyle) {
 
     private val binding = ReadyToSendBannerBinding.inflate(LayoutInflater.from(context), this, true)
 

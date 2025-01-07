@@ -2,11 +2,11 @@ package org.odk.collect.android.utilities
 
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.shared.locks.ChangeLock
-import org.odk.collect.shared.locks.ReentrantLockChangeLock
+import org.odk.collect.shared.locks.ThreadSafeBooleanChangeLock
 import javax.inject.Singleton
 
 @Singleton
-class ChangeLockProvider(private val changeLockFactory: () -> ChangeLock = { ReentrantLockChangeLock() }) :
+class ChangeLockProvider(private val changeLockFactory: () -> ChangeLock = { ThreadSafeBooleanChangeLock() }) :
     ProjectDependencyFactory<ChangeLocks> {
 
     private val locks: MutableMap<String, ChangeLock> = mutableMapOf()

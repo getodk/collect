@@ -1,5 +1,6 @@
 package org.odk.collect.android.formmanagement
 
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.FormDownloader
 import org.odk.collect.android.utilities.FileUtils
@@ -11,8 +12,7 @@ import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.MediaFile
-import org.odk.collect.shared.locks.ChangeLock
-import org.odk.collect.shared.strings.Md5
+import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.File
 import java.io.IOException
 
@@ -20,35 +20,30 @@ object ServerFormUseCases {
 
     fun downloadForms(
         forms: List<ServerFormDetails>,
-        changeLock: ChangeLock,
         formDownloader: FormDownloader,
         progressReporter: ((Int, Int) -> Unit)? = null,
         isCancelled: (() -> Boolean)? = null,
     ): Map<ServerFormDetails, FormDownloadException?> {
         val results = mutableMapOf<ServerFormDetails, FormDownloadException?>()
-        changeLock.withLock { acquiredLock: Boolean ->
-            if (acquiredLock) {
-                for (index in forms.indices) {
-                    val form = forms[index]
+        for (index in forms.indices) {
+            val form = forms[index]
 
-                    try {
-                        formDownloader.downloadForm(
-                            form,
-                            object : FormDownloader.ProgressReporter {
-                                override fun onDownloadingMediaFile(count: Int) {
-                                    progressReporter?.invoke(index, count)
-                                }
-                            },
-                            { isCancelled?.invoke() ?: false }
-                        )
+            try {
+                formDownloader.downloadForm(
+                    form,
+                    object : FormDownloader.ProgressReporter {
+                        override fun onDownloadingMediaFile(count: Int) {
+                            progressReporter?.invoke(index, count)
+                        }
+                    },
+                    { isCancelled?.invoke() ?: false }
+                )
 
-                        results[form] = null
-                    } catch (e: FormDownloadException.DownloadingInterrupted) {
-                        break
-                    } catch (e: FormDownloadException) {
-                        results[form] = e
-                    }
-                }
+                results[form] = null
+            } catch (e: FormDownloadException.DownloadingInterrupted) {
+                break
+            } catch (e: FormDownloadException) {
+                results[form] = e
             }
         }
 
@@ -80,8 +75,10 @@ object ServerFormUseCases {
         tempDir: File,
         entitiesRepository: EntitiesRepository,
         stateListener: OngoingWorkListener
-    ): Boolean {
-        var atLeastOneNewMediaFileDetected = false
+    ): MediaFilesDownloadResult {
+        var newAttachmentsDownloaded = false
+        var entitiesDownloaded = false
+
         val tempMediaDir = File(tempMediaPath).also { it.mkdir() }
 
         formToDownload.manifest!!.mediaFiles.forEachIndexed { i, mediaFile ->
@@ -92,32 +89,56 @@ object ServerFormUseCases {
             val existingFile = searchForExistingMediaFile(formsRepository, formToDownload, mediaFile)
             existingFile.also {
                 if (it != null) {
-                    if (Md5.getMd5Hash(it).contentEquals(mediaFile.hash)) {
+                    if (it.getMd5Hash().contentEquals(mediaFile.hash)) {
                         FileUtils.copyFile(it, tempMediaFile)
                     } else {
-                        val existingFileHash = Md5.getMd5Hash(it)
+                        val existingFileHash = it.getMd5Hash()
                         val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
                         FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
 
-                        if (!Md5.getMd5Hash(tempMediaFile).contentEquals(existingFileHash)) {
-                            atLeastOneNewMediaFileDetected = true
+                        if (!tempMediaFile.getMd5Hash().contentEquals(existingFileHash)) {
+                            newAttachmentsDownloaded = true
                         }
                     }
                 } else {
                     val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
                     FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
-                    atLeastOneNewMediaFileDetected = true
+                    newAttachmentsDownloaded = true
                 }
             }
 
             if (mediaFile.isEntityList) {
-                val dataset = mediaFile.filename.substringBefore(".csv")
-                LocalEntityUseCases.updateLocalEntitiesFromServer(dataset, tempMediaFile, entitiesRepository)
+                /**
+                 * We wrap and then rethrow exceptions that happen here to make them easier to
+                 * track in Crashlytics. This can be removed in the next release once any
+                 * unexpected exceptions "in the wild" are identified.
+                 */
+                try {
+                    val entityListName = getEntityListFromFileName(mediaFile)
+                    LocalEntityUseCases.updateLocalEntitiesFromServer(entityListName, tempMediaFile, entitiesRepository)
+                    entitiesDownloaded = true
+                } catch (t: Throwable) {
+                    throw EntityListUpdateException(t)
+                }
+            } else {
+                /**
+                 * Track CSVs that have names that clash with entity lists in the project. If
+                 * these CSVs are being used as part of a `select_one_from_file` question, the
+                 * instance ID will be the file name with the extension removed.
+                 */
+                val isCsv = mediaFile.filename.endsWith(".csv")
+                val mostLikelyInstanceId = getEntityListFromFileName(mediaFile)
+                if (isCsv && entitiesRepository.getLists().contains(mostLikelyInstanceId)) {
+                    Analytics.setUserProperty("HasEntityListCollision", "true")
+                }
             }
         }
 
-        return atLeastOneNewMediaFileDetected
+        return MediaFilesDownloadResult(newAttachmentsDownloaded, entitiesDownloaded)
     }
+
+    private fun getEntityListFromFileName(mediaFile: MediaFile) =
+        mediaFile.filename.substringBefore(".csv")
 
     private fun searchForExistingMediaFile(
         formsRepository: FormsRepository,
@@ -134,3 +155,10 @@ object ServerFormUseCases {
         }
     }
 }
+
+class EntityListUpdateException(cause: Throwable) : Exception(cause)
+
+data class MediaFilesDownloadResult(
+    val newAttachmentsDownloaded: Boolean,
+    val entitiesDownloaded: Boolean
+)

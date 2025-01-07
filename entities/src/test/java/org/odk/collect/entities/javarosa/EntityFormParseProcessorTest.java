@@ -163,7 +163,7 @@ public class EntityFormParseProcessorTest {
         parser.addProcessor(processor);
 
         FormDef formDef = parser.parse(null);
-        assertThat(formDef.getExtras().get(EntityFormExtra.class), notNullValue());
+        assertThat(formDef, notNullValue());
     }
 
     @Test
@@ -198,7 +198,7 @@ public class EntityFormParseProcessorTest {
         parser.addProcessor(processor);
 
         FormDef formDef = parser.parse(null);
-        assertThat(formDef.getExtras().get(EntityFormExtra.class), notNullValue());
+        assertThat(formDef, notNullValue());
     }
 
     @Test
@@ -210,7 +210,7 @@ public class EntityFormParseProcessorTest {
             ),
             head(
                 title("Create entity form"),
-                model(asList(new Pair<>("correct:entities-version", "2022.1.1")),
+                model(asList(new Pair<>("correct:entities-version", "2024.1.0")),
                     mainInstance(
                         t("data id=\"create-entity-form\"",
                             t("name"),

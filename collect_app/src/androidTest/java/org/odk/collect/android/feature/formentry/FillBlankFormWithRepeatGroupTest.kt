@@ -25,7 +25,7 @@ class FillBlankFormWithRepeatGroupTest {
             .copyForm("TestRepeat.xml")
             .startBlankForm("TestRepeat")
             .clickOptionsIcon()
-            .clickGeneralSettings()
+            .clickProjectSettings()
             .clickOnUserInterface()
             .clickNavigation()
             .clickUseSwipesAndButtons()

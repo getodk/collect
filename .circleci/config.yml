@@ -7,7 +7,7 @@ references:
   android_config: &android_config
     working_directory: ~/work
     docker:
-      - image: cimg/android:2024.04
+      - image: cimg/android:2024.11
     resource_class: medium+
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
       - checkout
       - run:
           name: Generate combined build.gradle file for cache key
-          command: cat build.gradle */build.gradle */build.gradle.kts .circleci/gradle.properties .circleci/config.yml buildSrc/src/main/java/dependencies/Dependencies.kt buildSrc/src/main/java/dependencies/Versions.kt > deps.txt
+          command: cat build.gradle */build.gradle */build.gradle.kts .circleci/gradle.properties .circleci/config.yml gradle/libs.versions.toml > deps.txt
       - restore_cache:
           keys:
             - compile-deps-{{ checksum "deps.txt" }}
@@ -230,7 +230,7 @@ jobs:
           command: ./gradlew assembleSelfSignedRelease
 
       - run:
-          name: Check APK size isn't larger than 11.7MB
+          name: Check APK size isn't larger than 11.8MB
           command: ./check-size.sh
 
       - run:

@@ -5,11 +5,9 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.mockito.Mockito.any
 import org.mockito.Mockito.doAnswer
-import org.mockito.Mockito.never
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 import org.mockito.stubbing.Answer
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.FormDownloader
@@ -23,38 +21,13 @@ import org.odk.collect.formstest.FormFixtures
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.shared.TempFiles
-import org.odk.collect.shared.strings.Md5
-import org.odk.collect.testshared.BooleanChangeLock
+import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.File
 
 class ServerFormUseCasesTest {
 
     @Test
-    fun `downloadUpdates does not download when change lock locked`() {
-        val changeLock = BooleanChangeLock()
-        val formDownloader = mock<FormDownloader>()
-
-        changeLock.lock()
-
-        val serverForm =
-            ServerFormDetails("", "", "", "", "", false, true, ManifestFile("", emptyList()))
-
-        ServerFormUseCases.downloadForms(
-            listOf(serverForm),
-            changeLock,
-            formDownloader
-        )
-
-        verify(formDownloader, never()).downloadForm(
-            any(),
-            any(),
-            any()
-        )
-    }
-
-    @Test
     fun `downloadUpdates returns completed downloads when cancelled`() {
-        val changeLock = BooleanChangeLock()
         val formDownloader = mock<FormDownloader>()
 
         val serverForms = listOf(
@@ -78,7 +51,6 @@ class ServerFormUseCasesTest {
 
         val results = ServerFormUseCases.downloadForms(
             serverForms,
-            changeLock,
             formDownloader
         )
 
@@ -187,7 +159,7 @@ class ServerFormUseCasesTest {
         formsRepository.save(form2)
 
         // Set up same media file on server
-        val existingMediaFileHash = Md5.getMd5Hash(File(form2.formMediaPath, "file"))!!
+        val existingMediaFileHash = File(form2.formMediaPath, "file").getMd5Hash()!!
         val mediaFile = MediaFile("file", existingMediaFileHash, "downloadUrl")
         val manifestFile = ManifestFile(null, listOf(mediaFile))
         val serverFormDetails =
@@ -207,7 +179,7 @@ class ServerFormUseCasesTest {
             mock()
         )
 
-        assertThat(result, equalTo(false))
+        assertThat(result, equalTo(MediaFilesDownloadResult(false, false)))
     }
 
     @Test
@@ -250,6 +222,6 @@ class ServerFormUseCasesTest {
             mock()
         )
 
-        assertThat(result, equalTo(false))
+        assertThat(result, equalTo(MediaFilesDownloadResult(false, false)))
     }
 }

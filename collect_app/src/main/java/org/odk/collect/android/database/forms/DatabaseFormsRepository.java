@@ -4,14 +4,24 @@ import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getFormFromCurrentCursorPosition;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromForm;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.AUTO_DELETE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.AUTO_SEND;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.DATE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.DELETED_DATE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.DESCRIPTION;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.USES_ENTITIES;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_FILE_PATH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_MEDIA_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.GEOMETRY_XPATH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE_FILE_PATH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.LAST_DETECTED_ATTACHMENTS_UPDATE_DATE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
 import static org.odk.collect.shared.PathUtils.getRelativeFilePath;
 
 import android.content.ContentValues;
@@ -30,7 +40,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.savepoints.SavepointsRepository;
-import org.odk.collect.shared.files.DirectoryUtils;
+import org.odk.collect.shared.files.FileExt;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
@@ -230,6 +240,37 @@ public class DatabaseFormsRepository implements FormsRepository {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
 
+        if (projection == null) {
+            /*
+             For some reason passing null as the projection doesn't always give us all the
+             columns so we hardcode them here so it's explicit that we need these all back.
+             The problem can occur, for example, when a new column is added to a database and the
+             database needs to be updated. After the upgrade, the new column might not be returned,
+             even though it already exists.
+             */
+            projection = new String[]{
+                    _ID,
+                    DISPLAY_NAME,
+                    DESCRIPTION,
+                    JR_FORM_ID,
+                    JR_VERSION,
+                    MD5_HASH,
+                    DATE,
+                    FORM_MEDIA_PATH,
+                    FORM_FILE_PATH,
+                    LANGUAGE,
+                    SUBMISSION_URI,
+                    BASE64_RSA_PUBLIC_KEY,
+                    JRCACHE_FILE_PATH,
+                    AUTO_SEND,
+                    AUTO_DELETE,
+                    GEOMETRY_XPATH,
+                    DELETED_DATE,
+                    LAST_DETECTED_ATTACHMENTS_UPDATE_DATE,
+                    USES_ENTITIES
+            };
+        }
+
         if (projectionMap != null) {
             qb.setProjectionMap(projectionMap);
         }
@@ -238,13 +279,13 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     private Long insertForm(ContentValues values) {
-        SQLiteDatabase writeableDatabase = databaseConnection.getWriteableDatabase();
-        return writeableDatabase.insertOrThrow(FORMS_TABLE_NAME, null, values);
+        SQLiteDatabase writableDatabase = databaseConnection.getWritableDatabase();
+        return writableDatabase.insertOrThrow(FORMS_TABLE_NAME, null, values);
     }
 
     private void updateForm(Long id, ContentValues values) {
-        SQLiteDatabase writeableDatabase = databaseConnection.getWriteableDatabase();
-        writeableDatabase.update(FORMS_TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(id)});
+        SQLiteDatabase writableDatabase = databaseConnection.getWritableDatabase();
+        writableDatabase.update(FORMS_TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(id)});
     }
 
     private void deleteForms(String selection, String[] selectionArgs) {
@@ -255,8 +296,8 @@ public class DatabaseFormsRepository implements FormsRepository {
             deleteFilesForForm(form);
         }
 
-        SQLiteDatabase writeableDatabase = databaseConnection.getWriteableDatabase();
-        writeableDatabase.delete(FORMS_TABLE_NAME, selection, selectionArgs);
+        SQLiteDatabase writableDatabase = databaseConnection.getWritableDatabase();
+        writableDatabase.delete(FORMS_TABLE_NAME, selection, selectionArgs);
     }
 
     @NotNull
@@ -302,7 +343,7 @@ public class DatabaseFormsRepository implements FormsRepository {
             File mediaDir = new File(form.getFormMediaPath());
 
             if (mediaDir.isDirectory()) {
-                DirectoryUtils.deleteDirectory(mediaDir);
+                FileExt.deleteDirectory(mediaDir);
             } else {
                 mediaDir.delete();
             }

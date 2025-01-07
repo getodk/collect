@@ -15,6 +15,7 @@ object DatabaseFormColumns : BaseColumns {
     const val SUBMISSION_URI = "submissionUri" // can be null
     const val BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey" // can be null
     const val AUTO_DELETE = "autoDelete" // can be null
+    const val USES_ENTITIES = "usesEntities" // can be null
 
     // Column is called autoSubmit for legacy support but the attribute is auto-send
     const val AUTO_SEND = "autoSubmit" // can be null

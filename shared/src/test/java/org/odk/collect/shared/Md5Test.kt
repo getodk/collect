@@ -1,8 +1,9 @@
 package org.odk.collect.shared
 
-import org.junit.Assert
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.Test
-import org.odk.collect.shared.strings.Md5
+import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.File
 import java.io.FileWriter
 
@@ -20,7 +21,7 @@ class Md5Test {
 
         for (bufSize in listOf(1, contents.length - 1, contents.length, 64 * 1024)) {
             val expectedResult = "bc6e6f16b8a077ef5fbc8d59d0b931b9" // From md5 command-line utility
-            Assert.assertEquals(expectedResult, Md5.getMd5Hash(tempFile, bufSize))
+            assertThat(tempFile.getMd5Hash(bufSize), equalTo(expectedResult))
         }
     }
 }

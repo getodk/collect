@@ -9,7 +9,9 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.signature.ObjectKey
 import org.odk.collect.imageloader.svg.SvgSoftwareLayerSetter
+import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.File
 
 class GlideImageLoader : ImageLoader {
@@ -20,7 +22,7 @@ class GlideImageLoader : ImageLoader {
         scaleType: ImageView.ScaleType,
         requestListener: ImageLoaderCallback?
     ) {
-        if (imageFile == null) {
+        if (imageFile == null || !imageFile.exists()) {
             return
         }
 
@@ -33,6 +35,7 @@ class GlideImageLoader : ImageLoader {
                 .`as`(PictureDrawable::class.java)
                 .listener(SvgSoftwareLayerSetter())
                 .load(imageFile)
+                .signature(ObjectKey(imageFile.getMd5Hash()!!))
                 .listener(object : RequestListener<PictureDrawable> {
                     override fun onLoadFailed(
                         e: GlideException?,
@@ -60,6 +63,7 @@ class GlideImageLoader : ImageLoader {
         } else {
             Glide.with(imageView)
                 .load(imageFile)
+                .signature(ObjectKey(imageFile.getMd5Hash()!!))
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
                         e: GlideException?,

@@ -23,6 +23,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.preference.Preference
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
@@ -33,7 +34,7 @@ import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
-class ProjectPreferencesFragment :
+class ProjectPreferencesFragment(private val inFormEntry: Boolean) :
     BaseProjectPreferencesFragment(),
     Preference.OnPreferenceClickListener {
 
@@ -66,8 +67,14 @@ class ProjectPreferencesFragment :
         findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(CHANGE_ADMIN_PASSWORD_PREFERENCE_KEY)!!.onPreferenceClickListener = this
-        findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
+        findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.also {
+            it.onPreferenceClickListener = this
+            if (inFormEntry) {
+                it.isEnabled = false
+                it.setSummary(org.odk.collect.strings.R.string.setting_not_available_during_form_entry)
+            }
+        }
     }
 
     override fun onPreferenceClick(preference: Preference): Boolean {
@@ -75,7 +82,12 @@ class ProjectPreferencesFragment :
             when (preference.key) {
                 PROTOCOL_PREFERENCE_KEY -> displayPreferences(ServerPreferencesFragment())
                 PROJECT_DISPLAY_PREFERENCE_KEY -> displayPreferences(ProjectDisplayPreferencesFragment())
-                USER_INTERFACE_PREFERENCE_KEY -> displayPreferences(UserInterfacePreferencesFragment())
+                USER_INTERFACE_PREFERENCE_KEY -> {
+                    val fragment = UserInterfacePreferencesFragment()
+                    fragment.arguments =
+                        bundleOf(UserInterfacePreferencesFragment.ARG_IN_FORM_ENTRY to inFormEntry)
+                    displayPreferences(fragment)
+                }
                 MAPS_PREFERENCE_KEY -> displayPreferences(MapsPreferencesFragment())
                 FORM_MANAGEMENT_PREFERENCE_KEY -> displayPreferences(FormManagementPreferencesFragment())
                 USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY -> displayPreferences(IdentityPreferencesFragment())

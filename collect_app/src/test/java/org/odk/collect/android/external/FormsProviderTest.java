@@ -152,7 +152,7 @@ public class FormsProviderTest {
         Uri uri = addFormsToDirAndDb(firstProjectId, "external_app_form", "External app form", "1");
 
         try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
-            assertThat(cursor.getColumnCount(), is(18));
+            assertThat(cursor.getColumnCount(), is(19));
         }
     }
 
@@ -284,7 +284,7 @@ public class FormsProviderTest {
 
     private void createExtraFormFiles(String projectId, File formFile, String md5Hash) {
         // Create a media directory (and file) so we can check deletion etc - wouldn't always be there
-        String mediaDirPath = getFormsDirPath(projectId) + formFile.getName().substring(0, formFile.getName().lastIndexOf(".")) + "-media";
+        String mediaDirPath = getFormsDirPath(projectId) + formFile.getName().substring(0, formFile.getName().lastIndexOf('.')) + "-media";
         new File(mediaDirPath).mkdir();
         try {
             new File(mediaDirPath, "blah.test").createNewFile();

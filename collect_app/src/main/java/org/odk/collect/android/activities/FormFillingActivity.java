@@ -65,6 +65,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.javarosa.core.model.FormDef;
@@ -126,8 +127,6 @@ import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formhierarchy.FormHierarchyActivity;
 import org.odk.collect.android.formhierarchy.ViewOnlyFormHierarchyActivity;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
-import org.odk.collect.android.widgets.datetime.pickers.CustomDatePickerDialog;
-import org.odk.collect.android.widgets.datetime.pickers.CustomTimePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
@@ -143,7 +142,6 @@ import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
-import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.savepoints.SavepointListener;
 import org.odk.collect.android.savepoints.SavepointTask;
@@ -152,6 +150,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.ControllableLifecyleOwner;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
@@ -161,8 +160,10 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SoftKeyboardController;
-import org.odk.collect.android.widgets.datetime.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.datetime.DateTimeWidget;
+import org.odk.collect.android.widgets.datetime.pickers.CustomDatePickerDialog;
+import org.odk.collect.android.widgets.datetime.pickers.CustomTimePickerDialog;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
 import org.odk.collect.android.widgets.range.RangePickerDecimalWidget;
@@ -263,6 +264,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private Animation inAnimation;
     private Animation outAnimation;
 
+    private AppBarLayout appBarLayout;
     private FrameLayout questionHolder;
     private SwipeHandler.View currentView;
 
@@ -364,6 +366,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     @Inject
     public SavepointsRepositoryProvider savepointsRepositoryProvider;
 
+    @Inject
+    public ChangeLockProvider changeLockProvider;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -432,7 +437,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 savepointsRepositoryProvider,
                 new QRCodeCreatorImpl(),
                 new HtmlPrinter(),
-                instancesDataService
+                instancesDataService,
+                changeLockProvider
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
@@ -468,6 +474,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
         formError = null;
 
+        appBarLayout = findViewById(org.odk.collect.androidshared.R.id.appBarLayout);
         questionHolder = findViewById(R.id.questionholder);
 
         initToolbar();
@@ -475,7 +482,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         formIndexAnimationHandler = new FormIndexAnimationHandler(this);
         FormEntryMenuProvider menuProvider = new FormEntryMenuProvider(
                 this,
-                () -> getAnswers(),
+                this::getAnswers,
                 formEntryViewModel,
                 audioRecorder,
                 backgroundLocationViewModel,
@@ -1417,6 +1424,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         } else {
             animationCompletionSet = 2;
         }
+        appBarLayout.setLiftOnScrollTargetViewId(R.id.odk_view_container);
         // start InAnimation for transition...
         currentView.startAnimation(inAnimation);
 
@@ -1508,7 +1516,11 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         formError = error;
 
         alertDialog = new MaterialAlertDialogBuilder(this).create();
-        alertDialog.setTitle(getString(org.odk.collect.strings.R.string.error_occured));
+        if (formError instanceof FormError.Fatal) {
+            alertDialog.setTitle(getString(org.odk.collect.strings.R.string.form_cannot_be_used));
+        } else {
+            alertDialog.setTitle(getString(org.odk.collect.strings.R.string.error_occured));
+        }
         alertDialog.setMessage(formError.getMessage());
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
@@ -1779,23 +1791,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 if (fec != null) {
                     loadingComplete(formLoaderTask, formLoaderTask.getFormDef(), null);
                 } else {
-                    DialogFragmentUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
-                    FormLoaderTask t = formLoaderTask;
-                    formLoaderTask = null;
-                    t.cancel();
-                    t.destroy();
-                    // there is no formController -- fire MainMenu activity?
-                    Timber.w("Starting MainMenuActivity because formController is null/formLoaderTask not null");
-                    startActivity(new Intent(this, MainMenuActivity.class));
+                    throw new IllegalStateException("Null formController!");
                 }
             }
         } else {
             if (formController == null && !identityPromptViewModel.requiresIdentityToContinue().getValue()) {
-                // there is no formController -- fire MainMenu activity?
-                Timber.w("Starting MainMenuActivity because formController is null/formLoaderTask is null");
-                startActivity(new Intent(this, MainMenuActivity.class));
-                exit();
-                return;
+                throw new IllegalStateException("Null formController!");
             }
         }
     }

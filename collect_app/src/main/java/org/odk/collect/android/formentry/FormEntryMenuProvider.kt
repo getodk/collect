@@ -110,8 +110,9 @@ class FormEntryMenuProvider(
                     showIfNotShowing(RecordingWarningDialogFragment::class.java, activity.supportFragmentManager)
                 } else {
                     formEntryViewModel.updateAnswersForScreen(answersProvider.answers, false)
-                    val pref = Intent(activity, ProjectPreferencesActivity::class.java)
-                    activity.startActivityForResult(pref, ApplicationConstants.RequestCodes.CHANGE_SETTINGS)
+                    val intent = Intent(activity, ProjectPreferencesActivity::class.java)
+                    intent.putExtra(ProjectPreferencesActivity.EXTRA_IN_FORM_ENTRY, true)
+                    activity.startActivityForResult(intent, ApplicationConstants.RequestCodes.CHANGE_SETTINGS)
                 }
                 true
             }

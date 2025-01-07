@@ -5,9 +5,9 @@ import android.database.Cursor
 import android.provider.BaseColumns
 import org.odk.collect.android.database.forms.DatabaseFormColumns
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns
-import org.odk.collect.androidshared.utils.PathUtils.getAbsoluteFilePath
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.shared.PathUtils.getAbsoluteFilePath
 import org.odk.collect.shared.PathUtils.getRelativeFilePath
 import java.lang.Boolean
 
@@ -35,44 +35,8 @@ object DatabaseObjectMapper {
         values.put(DatabaseFormColumns.AUTO_DELETE, form.autoDelete)
         values.put(DatabaseFormColumns.GEOMETRY_XPATH, form.geometryXpath)
         values.put(DatabaseFormColumns.LAST_DETECTED_ATTACHMENTS_UPDATE_DATE, form.lastDetectedAttachmentsUpdateDate)
+        values.put(DatabaseFormColumns.USES_ENTITIES, Boolean.toString(form.usesEntities()))
         return values
-    }
-
-    @JvmStatic
-    fun getFormFromValues(values: ContentValues, formsPath: String, cachePath: String): Form {
-        val formFilePath = getAbsoluteFilePath(
-            formsPath,
-            values.getAsString(DatabaseFormColumns.FORM_FILE_PATH)
-        )
-
-        val cacheFilePath = values.getAsString(DatabaseFormColumns.JRCACHE_FILE_PATH)?.let {
-            getAbsoluteFilePath(cachePath, it)
-        }
-
-        val mediaPath = values.getAsString(DatabaseFormColumns.FORM_MEDIA_PATH)?.let {
-            getAbsoluteFilePath(formsPath, it)
-        }
-
-        return Form.Builder()
-            .dbId(values.getAsLong(BaseColumns._ID))
-            .displayName(values.getAsString(DatabaseFormColumns.DISPLAY_NAME))
-            .description(values.getAsString(DatabaseFormColumns.DESCRIPTION))
-            .formId(values.getAsString(DatabaseFormColumns.JR_FORM_ID))
-            .version(values.getAsString(DatabaseFormColumns.JR_VERSION))
-            .formFilePath(formFilePath)
-            .submissionUri(values.getAsString(DatabaseFormColumns.SUBMISSION_URI))
-            .base64RSAPublicKey(values.getAsString(DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY))
-            .md5Hash(values.getAsString(DatabaseFormColumns.MD5_HASH))
-            .date(values.getAsLong(DatabaseFormColumns.DATE))
-            .jrCacheFilePath(cacheFilePath)
-            .formMediaPath(mediaPath)
-            .language(values.getAsString(DatabaseFormColumns.LANGUAGE))
-            .autoSend(values.getAsString(DatabaseFormColumns.AUTO_SEND))
-            .autoDelete(values.getAsString(DatabaseFormColumns.AUTO_DELETE))
-            .geometryXpath(values.getAsString(DatabaseFormColumns.GEOMETRY_XPATH))
-            .deleted(values.getAsLong(DatabaseFormColumns.DELETED_DATE) != null)
-            .lastDetectedAttachmentsUpdateDate(values.getAsLong(DatabaseFormColumns.LAST_DETECTED_ATTACHMENTS_UPDATE_DATE))
-            .build()
     }
 
     @JvmStatic
@@ -101,6 +65,7 @@ object DatabaseObjectMapper {
         val geometryXpathColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.GEOMETRY_XPATH)
         val deletedDateColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.DELETED_DATE)
         val lastDetectedAttachmentsUpdateDateColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)
+        val usesEntitiesColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.USES_ENTITIES)
         return Form.Builder()
             .dbId(cursor.getLong(idColumnIndex))
             .displayName(cursor.getString(displayNameColumnIndex))
@@ -135,6 +100,7 @@ object DatabaseObjectMapper {
             .geometryXpath(cursor.getString(geometryXpathColumnIndex))
             .deleted(!cursor.isNull(deletedDateColumnIndex))
             .lastDetectedAttachmentsUpdateDate(if (cursor.isNull(lastDetectedAttachmentsUpdateDateColumnIndex)) null else cursor.getLong(lastDetectedAttachmentsUpdateDateColumnIndex))
+            .usesEntities(Boolean.valueOf(cursor.getString(usesEntitiesColumnIndex)))
             .build()
     }
 

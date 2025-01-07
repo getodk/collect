@@ -18,7 +18,6 @@ package org.odk.collect.android.feature.formentry
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
-import org.odk.collect.android.R
 import org.odk.collect.android.support.pages.AccessControlPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -33,7 +32,7 @@ class FormNavigationTest {
     var copyFormChain: RuleChain = TestRuleChain.chain()
         .around(rule)
 
-    @Test // TestCase14
+    @Test
     fun showsAndHidesButtonsCorrectlyOnEachScreen() {
         rule.startAtMainMenu()
             .copyForm("two-question.xml")
@@ -111,7 +110,7 @@ class FormNavigationTest {
 
             // change settings to 'Horizontal swipes' mode'
             .clickOptionsIcon()
-            .clickGeneralSettings()
+            .clickProjectSettings()
             .clickOnUserInterface()
             .clickNavigation()
             .clickSwipes()
@@ -124,7 +123,7 @@ class FormNavigationTest {
 
             // change settings to 'Forward/backward buttons' mode'
             .clickOptionsIcon()
-            .clickGeneralSettings()
+            .clickProjectSettings()
             .clickOnUserInterface()
             .clickNavigation()
             .clickUseNavigationButtons()
@@ -138,7 +137,7 @@ class FormNavigationTest {
 
             // change settings to 'Swipes and buttons' mode'
             .clickOptionsIcon()
-            .clickGeneralSettings()
+            .clickProjectSettings()
             .clickOnUserInterface()
             .clickNavigation()
             .clickUseSwipesAndButtons()

@@ -52,7 +52,9 @@ class SavepointsImporter(
                 val formFileName = File(form.formFilePath).name.substringBeforeLast(".xml")
 
                 cacheDir.listFiles { file ->
-                    val match = """${formFileName}_(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})(.xml.save)""".toRegex().matchEntire(file.name)
+                    val match = """${Regex.escape(formFileName)}_(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})(.xml.save)"""
+                        .toRegex()
+                        .matchEntire(file.name)
                     match != null
                 }?.forEach { savepointFile ->
                     if (savepointFile.lastModified() > form.date) {

@@ -32,8 +32,8 @@ import org.odk.collect.forms.FormSourceException
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.locks.BooleanChangeLock
 import org.odk.collect.shared.strings.Md5.getMd5Hash
-import org.odk.collect.testshared.BooleanChangeLock
 
 @RunWith(AndroidJUnit4::class)
 class FormsDataServiceTest {
@@ -113,7 +113,7 @@ class FormsDataServiceTest {
     fun `downloadUpdates() does nothing when change lock is locked`() {
         val isSyncing = formsDataService.isSyncing(project.uuid)
 
-        val changeLock = changeLockProvider.create(project.uuid).formsLock as BooleanChangeLock
+        val changeLock = changeLockProvider.create(project.uuid).formsLock
         changeLock.lock()
 
         isSyncing.recordValues { projectValues ->
@@ -130,7 +130,7 @@ class FormsDataServiceTest {
     fun `matchFormsWithServer() does nothing when change lock is locked`() {
         val isSyncing = formsDataService.isSyncing(project.uuid)
 
-        val changeLock = changeLockProvider.create(project.uuid).formsLock as BooleanChangeLock
+        val changeLock = changeLockProvider.create(project.uuid).formsLock
         changeLock.lock()
 
         isSyncing.recordValues { projectValues ->
@@ -149,7 +149,7 @@ class FormsDataServiceTest {
      */
     @Test
     fun `matchFormsWithServer() returns false when change lock is locked`() {
-        val changeLock = changeLockProvider.create(project.uuid).formsLock as BooleanChangeLock
+        val changeLock = changeLockProvider.create(project.uuid).formsLock
         changeLock.lock()
 
         assertThat(formsDataService.matchFormsWithServer(project.uuid), equalTo(false))
@@ -184,6 +184,17 @@ class FormsDataServiceTest {
 
         assertThat(formsDataService.getServerError(project.uuid).getOrAwaitValue(), equalTo(error))
         assertThat(formsDataService.getServerError("other").getOrAwaitValue(), equalTo(null))
+    }
+
+    @Test
+    fun `update() called after matchFormsWithServer() does not clear error state`() {
+        val error = FormSourceException.FetchError()
+        whenever(formSource.fetchFormList()).thenThrow(error)
+        formsDataService.matchFormsWithServer(project.uuid)
+
+        assertThat(formsDataService.getServerError(project.uuid).getOrAwaitValue(), equalTo(error))
+        formsDataService.update(project.uuid)
+        assertThat(formsDataService.getServerError(project.uuid).getOrAwaitValue(), equalTo(error))
     }
 
     @Test
@@ -224,7 +235,7 @@ class FormsDataServiceTest {
     fun `update() does nothing when change lock is locked`() {
         val isSyncing = formsDataService.isSyncing(project.uuid)
 
-        val changeLock = changeLockProvider.create(project.uuid).formsLock as BooleanChangeLock
+        val changeLock = changeLockProvider.create(project.uuid).formsLock
         changeLock.lock()
 
         isSyncing.recordValues { projectValues ->
@@ -240,7 +251,7 @@ class FormsDataServiceTest {
                     "http://$formId",
                     formId,
                     formVersion,
-                    getMd5Hash(updatedXForm),
+                    updatedXForm.getMd5Hash(),
                     "blah",
                     null
                 )

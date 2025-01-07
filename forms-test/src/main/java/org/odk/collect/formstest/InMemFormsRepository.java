@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.savepoints.SavepointsRepository;
-import org.odk.collect.shared.files.DirectoryUtils;
+import org.odk.collect.shared.files.FileExt;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.TempFiles;
 
@@ -216,7 +216,7 @@ public class InMemFormsRepository implements FormsRepository {
             File mediaDir = new File(form.getFormMediaPath());
 
             if (mediaDir.isDirectory()) {
-                DirectoryUtils.deleteDirectory(mediaDir);
+                FileExt.deleteDirectory(mediaDir);
             } else {
                 mediaDir.delete();
             }

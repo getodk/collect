@@ -22,6 +22,8 @@ import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.androidshared.data.getData
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.forms.instances.Instance.STATUS_COMPLETE
+import org.odk.collect.forms.instances.Instance.STATUS_SUBMISSION_FAILED
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.projects.ProjectDependencyFactory
 import java.io.File
@@ -180,14 +182,18 @@ class InstancesDataService(
         }
     }
 
-    fun deleteAll(projectId: String): Boolean {
+    fun reset(projectId: String): Boolean {
         val projectDependencyModule =
             projectDependencyModuleFactory.create(projectId)
         val instancesRepository = projectDependencyModule.instancesRepository
 
         return projectDependencyModule.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
-                instancesRepository.deleteAll()
+                instancesRepository.all.forEach {
+                    if (it.canDelete()) {
+                        instancesRepository.delete(it.dbId)
+                    }
+                }
                 update(projectId)
                 true
             } else {

@@ -69,7 +69,6 @@
   <string name="survey_loading_reading_csv_message">正在读取CSV文件…</string>
   <string name="parse_error">无法读取表格.</string>
   <string name="loading_form_failed">加载表单时出错。请重试。</string>
-  <string name="parent_form_not_present">无法编辑此草稿，因为相应的空白表格不存在或已被删除。\n\n表格ID: %1$s</string>
   <string name="cannot_edit_completed_form">一旦此表格被标记为“最终版”，它便不能再次编辑，因为它可能已被加密。</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">已从自动保存点恢复未保存修改!</string>
@@ -93,7 +92,6 @@
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="add_repeat_question">添加 \"%s\"?</string>
   <string name="add_repeat">添加</string>
-  <string name="dont_add_repeat">不添加</string>
   <string name="add_another_menu">添加另一个</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">修改提示</string>
@@ -150,10 +148,7 @@
   <string name="phone_does_not_support_rsa">手机不支持RSA加密。</string>
   <string name="invalid_rsa_public_key">RSA公钥无效。</string>
   <string name="encryption_error_message">%s 表单尚未保存为完成状态。</string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
-  <string name="bad_uri">错误的URI: %s</string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
-  <string name="unrecognized_uri">无法识别的URI: %s</string>
+  <!--Displayed when an attempt is made to start form filling, but the form is broken-->
   <!--Text displayed when audio recording fails to start-->
   <string name="start_recording_failed">无法开始录制。</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
@@ -162,8 +157,6 @@
   <string name="answer_file_copy_failed_message">无法将媒体附加到表单，但可以在 %1$s获取</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">录制已禁用。在 %s中启用</string>
-  <!--Error displayed when opened filled form has been deleted on disk-->
-  <string name="instance_deleted_message">填写的表单已被删除！</string>
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
   <string name="update_widgets_error">尝试更新值失败。这通常是因为表单设计中计算单元没有正确配置。\n\n如果您一直存在此问题，请向要求您收集数据的人报告。</string>
   <!--##############################################
@@ -338,6 +331,18 @@
   <string name="persian_month_10">Dey</string>
   <string name="persian_month_11">Bahman</string>
   <string name="persian_month_12">Esfand</string>
+  <!--1st month in the Buddhist calendar-->
+  <!--2nd month in the Buddhist calendar-->
+  <!--3rd month in the Buddhist calendar-->
+  <!--4th month in the Buddhist calendar-->
+  <!--5th month in the Buddhist calendar-->
+  <!--6th month in the Buddhist calendar-->
+  <!--7th month in the Buddhist calendar-->
+  <!--8th month in the Buddhist calendar-->
+  <!--9th month in the Buddhist calendar-->
+  <!--10th month in the Buddhist calendar-->
+  <!--11th month in the Buddhist calendar-->
+  <!--12th month in the Buddhist calendar-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
@@ -749,6 +754,7 @@
   <string name="unlock_settings">解锁设置</string>
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">设置已解锁</string>
+  <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -859,7 +865,6 @@
   <string name="fs_delete_media_path_if_file_error">无法删除 \'%s\'. 请手动删除文件并重新下载表单.</string>
   <string name="fs_create_media_folder_error">无法创建媒体文件夹 \'%s\'.</string>
   <string name="fs_file_copy_error">不能拷贝 \'%1$s\' 到 \'%2$s\'. 原因: %3$s</string>
-  <string name="survey_multiple_forms_error">您下载了两个具有相同表单ID和版本的不同表单。也许它们是在不同的时间或不同的服务器上传的相同表单。无论如何，您都应该删除一个。</string>
   <string name="select_odk_shortcut">选择快捷方式</string>
   <string name="background_audio_help">此表单记录设备麦克风的音频。\n\n您可以使用音量指示器来确保麦克风足够接近您需要录制的声音。\n\n若要停止录制，请退出此表单。\n\n有关详细信息，请与要求您收集数据的人员联系。</string>
   <string name="loading">正在加载…</string>
@@ -912,30 +917,42 @@
   <!--Preceded by "Don't have a project yet?" question-->
   <string name="try_demo">尝试演示</string>
   <string name="scan_configuration_qr_code">扫描配置二维码</string>
-  <!--Error shown when a user tries to open a form that's in a different project-->
-  <string name="wrong_project_selected_for_form">要打开此表单，必须首先打开应用并切换到包含它的项目。</string>
-  <!--Error shown when a user tries to open a form when there are no projects-->
-  <string name="app_not_configured">尚未配置应用收集。尝试打开应用并对其进行配置。\n\n如果您点击了快捷方式，您可能需要在配置应用后重新创建它。</string>
   <!--##############################################
     # Errors
     ##############################################-->
   <string name="show_details">显示详细信息</string>
   <string name="errors">错误</string>
   <!--##############################################
+    # Form opening errors
+    ##############################################-->
+  <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">要打开此表单，必须首先打开应用并切换到包含它的项目。</string>
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <string name="app_not_configured">尚未配置应用收集。尝试打开应用并对其进行配置。\n\n如果您点击了快捷方式，您可能需要在配置应用后重新创建它。</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">无法识别的URI: %s</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">错误的URI: %s</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">填写的表单已被删除！</string>
+  <!--Error shown when a user tries to edit a form but there is no corresponding blank form-->
+  <string name="parent_form_not_present">无法编辑此草稿，因为相应的空白表格不存在或已被删除。\n\n表格ID: %1$s</string>
+  <!--Error shown when a user tries to open a form but there is more than one form with the same form ID-->
+  <string name="survey_multiple_forms_error">您下载了两个具有相同表单ID和版本的不同表单。也许它们是在不同的时间或不同的服务器上传的相同表单。无论如何，您都应该删除一个。</string>
+  <!--Error shown when a user tries to open a form when forms update is being applied in the background-->
+  <!--##############################################
     # Permissions
     ##############################################-->
   <string name="open_settings">打开设置</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
-  <string name="entities_title">实体</string>
   <!--Title for setting that controls whether local entity features are enabled or not-->
   <string name="include_local_entities_setting">启用本地实体</string>
   <string name="local_entity_features_summary">后续表格将具有一致的实体列表，并将包括本地创建或更新的实体。</string>
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">查看实体列表</string>
-  <!--Text for button that deletes all entities for the project-->
-    <!--Text for button that adds a new entity list-->
-    <!--Label for entity that has been created offline and is not on the server yet-->
+  <!--Label for entity that has been created offline and is not on the server yet-->
   <string name="offline">离线</string>
+  <!--Error message displayed when a user opens a form with an unrecognized entity version-->
   <!--##############################################
     # Crash handling
     ##############################################-->

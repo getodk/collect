@@ -60,6 +60,8 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ChangeLockProvider;
+import org.odk.collect.android.utilities.CollectStrictMode;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.HtmlUtils;
@@ -198,6 +200,9 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     @Inject
     public InstancesDataService instancesDataService;
 
+    @Inject
+    public ChangeLockProvider changeLockProvider;
+
     protected final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
@@ -212,6 +217,8 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        CollectStrictMode.disable();
+
         DaggerUtils.getComponent(this).inject(this);
 
         String sessionId = getIntent().getStringExtra(EXTRA_SESSION_ID);
@@ -234,7 +241,8 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 savepointsRepositoryProvider,
                 new QRCodeCreatorImpl(),
                 new HtmlPrinter(),
-                instancesDataService
+                instancesDataService,
+                changeLockProvider
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
@@ -923,5 +931,11 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
             goToPreviousEvent();
             goUpLevel();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        CollectStrictMode.enable();
+        super.onDestroy();
     }
 }

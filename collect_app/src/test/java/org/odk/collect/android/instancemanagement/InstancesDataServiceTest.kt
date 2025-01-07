@@ -17,14 +17,20 @@ import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.utilities.ChangeLocks
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.instances.Instance.STATUS_COMPLETE
+import org.odk.collect.forms.instances.Instance.STATUS_INCOMPLETE
+import org.odk.collect.forms.instances.Instance.STATUS_INVALID
+import org.odk.collect.forms.instances.Instance.STATUS_SUBMISSION_FAILED
+import org.odk.collect.forms.instances.Instance.STATUS_SUBMITTED
+import org.odk.collect.forms.instances.Instance.STATUS_VALID
 import org.odk.collect.formstest.FormFixtures
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.locks.BooleanChangeLock
 import org.odk.collect.shared.settings.InMemSettings
-import org.odk.collect.testshared.BooleanChangeLock
+import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class InstancesDataServiceTest {
@@ -68,7 +74,7 @@ class InstancesDataServiceTest {
 
     @Test
     fun `instances should not be deleted if the instances database is locked`() {
-        (projectDependencyModule.instancesLock as BooleanChangeLock).lock()
+        projectDependencyModule.instancesLock.lock()
         val result = instancesDataService.deleteInstances("projectId", longArrayOf(1))
         assertThat(result, equalTo(false))
     }
@@ -104,5 +110,27 @@ class InstancesDataServiceTest {
 
         val result = instancesDataService.sendInstances("projectId")
         assertThat(result, equalTo(false))
+    }
+
+    @Test
+    fun `#reset does not reset instances that can't be deleted before sending`() {
+        val formsRepository = projectDependencyModule.formsRepository
+        val form = formsRepository.save(FormFixtures.form())
+
+        val instancesRepository = projectDependencyModule.instancesRepository
+        instancesRepository.save(InstanceFixtures.instance(form = form, canDeleteBeforeSend = false, status = STATUS_INCOMPLETE))
+        instancesRepository.save(InstanceFixtures.instance(form = form, canDeleteBeforeSend = false, status = STATUS_COMPLETE))
+        instancesRepository.save(InstanceFixtures.instance(form = form, canDeleteBeforeSend = false, status = STATUS_INVALID))
+        instancesRepository.save(InstanceFixtures.instance(form = form, canDeleteBeforeSend = false, status = STATUS_VALID))
+        instancesRepository.save(InstanceFixtures.instance(form = form, canDeleteBeforeSend = false, status = STATUS_SUBMITTED))
+        instancesRepository.save(InstanceFixtures.instance(form = form, canDeleteBeforeSend = false, status = STATUS_SUBMISSION_FAILED))
+
+        instancesDataService.reset(projectDependencyModule.projectId)
+        val remainingInstances = instancesRepository.all
+        assertThat(remainingInstances.size, equalTo(2))
+        assertThat(remainingInstances.any { it.status == STATUS_COMPLETE }, equalTo(true))
+        assertThat(remainingInstances.any { it.status == STATUS_SUBMISSION_FAILED }, equalTo(true))
+        assertThat(File(remainingInstances[0].instanceFilePath).parentFile?.exists(), equalTo(true))
+        assertThat(File(remainingInstances[1].instanceFilePath).parentFile?.exists(), equalTo(true))
     }
 }

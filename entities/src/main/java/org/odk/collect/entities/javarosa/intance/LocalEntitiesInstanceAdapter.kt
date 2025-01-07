@@ -23,7 +23,7 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
 
                 0.until(count).map {
                     if (it == 0) {
-                        convertToElement(first, true)
+                        convertToElement(first)
                     } else {
                         TreeElement("item", it, true)
                     }
@@ -33,59 +33,82 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
             }
         } else {
             entitiesRepository.getEntities(instanceId).map { entity ->
-                convertToElement(entity, false)
+                convertToElement(entity)
             }
         }
     }
 
-    fun queryEq(instanceId: String, child: String, value: String): List<TreeElement>? {
-        return when {
-            child == "name" -> {
+    fun queryEq(instanceId: String, child: String, value: String): List<TreeElement> {
+        return when (child) {
+            EntityItemElement.ID -> {
                 val entity = entitiesRepository.getById(
                     instanceId,
                     value
                 )
 
                 if (entity != null) {
-                    listOf(convertToElement(entity, false))
+                    listOf(convertToElement(entity))
                 } else {
                     emptyList()
                 }
             }
 
-            !listOf(EntityItemElement.LABEL, EntityItemElement.VERSION).contains(child) -> {
+            EntityItemElement.LABEL -> {
+                filterAndConvertEntities(instanceId) { it.label == value }
+            }
+
+            EntityItemElement.VERSION -> {
+                filterAndConvertEntities(instanceId) { it.version == value.toInt() }
+            }
+
+            EntityItemElement.TRUNK_VERSION -> {
+                filterAndConvertEntities(instanceId) { it.trunkVersion == value.toInt() }
+            }
+
+            EntityItemElement.BRANCH_ID -> {
+                filterAndConvertEntities(instanceId) { it.branchId == value }
+            }
+
+            else -> {
                 val entities = entitiesRepository.getAllByProperty(
                     instanceId,
                     child,
                     value
                 )
 
-                entities.map { convertToElement(it, false) }
+                entities.map { convertToElement(it) }
             }
-
-            else -> null
         }
     }
 
-    private fun convertToElement(entity: Entity.Saved, partial: Boolean): TreeElement {
+    private fun filterAndConvertEntities(
+        list: String,
+        filter: (Entity.Saved) -> Boolean
+    ): List<TreeElement> {
+        val entities = entitiesRepository.getEntities(list)
+        return entities.filter(filter).map { convertToElement(it) }
+    }
+
+    private fun convertToElement(entity: Entity.Saved): TreeElement {
         val name = TreeElement(EntityItemElement.ID)
         val label = TreeElement(EntityItemElement.LABEL)
         val version = TreeElement(EntityItemElement.VERSION)
         val trunkVersion = TreeElement(EntityItemElement.TRUNK_VERSION)
         val branchId = TreeElement(EntityItemElement.BRANCH_ID)
 
-        if (!partial) {
-            name.value = StringData(entity.id)
-            label.value = StringData(entity.label)
-            version.value = StringData(entity.version.toString())
-            branchId.value = StringData(entity.branchId)
+        name.value = StringData(entity.id)
+        version.value = StringData(entity.version.toString())
+        branchId.value = StringData(entity.branchId)
 
-            if (entity.trunkVersion != null) {
-                trunkVersion.value = StringData(entity.trunkVersion.toString())
-            }
+        if (entity.label != null) {
+            label.value = StringData(entity.label)
         }
 
-        val item = TreeElement("item", entity.index, partial)
+        if (entity.trunkVersion != null) {
+            trunkVersion.value = StringData(entity.trunkVersion.toString())
+        }
+
+        val item = TreeElement("item", entity.index, false)
         item.addChild(name)
         item.addChild(label)
         item.addChild(version)
@@ -94,11 +117,7 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
 
         entity.properties.forEach { property ->
             val propertyElement = TreeElement(property.first)
-
-            if (!partial) {
-                propertyElement.value = StringData(property.second)
-            }
-
+            propertyElement.value = StringData(property.second)
             item.addChild(propertyElement)
         }
 

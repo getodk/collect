@@ -45,5 +45,9 @@ interface Analytics {
         fun setUserProperty(name: String, value: String) {
             instance.setUserProperty(name, value)
         }
+
+        fun logNonFatal(throwable: Throwable) {
+            instance.logNonFatal(throwable)
+        }
     }
 }

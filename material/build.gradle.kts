@@ -1,18 +1,15 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -44,23 +41,23 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":androidshared"))
     implementation(project(":strings"))
     implementation(project(":icons"))
-    implementation(Dependencies.androidx_appcompat)
-    api(Dependencies.android_material)
-    implementation(Dependencies.androidx_fragment_ktx)
-    implementation(Dependencies.kotlin_stdlib)
+    implementation(libs.androidxAppcompat)
+    api(libs.androidMaterial)
+    implementation(libs.androidxFragmentKtx)
+    implementation(libs.kotlinStdlib)
 
     debugImplementation(project(":fragments-test"))
 
     testImplementation(project(":test-shared"))
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.androidx_test_espresso_core)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.mockito_kotlin)
-    testImplementation(Dependencies.robolectric)
+    testImplementation(libs.junit)
+    testImplementation(libs.androidxTestExtJunit)
+    testImplementation(libs.androidxTestEspressoCore)
+    testImplementation(libs.hamcrest)
+    testImplementation(libs.mockitoKotlin)
+    testImplementation(libs.robolectric)
 }

@@ -19,7 +19,6 @@ import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.storage.StoragePaths
 import org.odk.collect.android.utilities.WebCredentialsUtils
-import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.savepoints.SavepointsRepository
 import org.odk.collect.metadata.PropertyManager
@@ -34,8 +33,7 @@ class ProjectResetter(
     private val formsRepositoryProvider: ProjectDependencyFactory<FormsRepository>,
     private val savepointsRepositoryProvider: ProjectDependencyFactory<SavepointsRepository>,
     private val instancesDataService: InstancesDataService,
-    private val projectId: String,
-    private val entitiesRepositoryFactory: ProjectDependencyFactory<EntitiesRepository>
+    private val projectId: String
 ) {
     private val storagePaths = storagePathProvider.create(projectId)
 
@@ -70,11 +68,9 @@ class ProjectResetter(
     }
 
     private fun resetInstances() {
-        entitiesRepositoryFactory.create(projectId).clear()
-
-        if (!instancesDataService.deleteAll(projectId) ||
-            !deleteFolderContent(storagePaths.instancesDir)
-        ) {
+        if (instancesDataService.reset(projectId)) {
+            savepointsRepositoryProvider.create(projectId).deleteAll()
+        } else {
             failedResetActions.add(ResetAction.RESET_INSTANCES)
         }
     }

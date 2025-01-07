@@ -23,6 +23,7 @@ import org.odk.collect.android.instancemanagement.canBeEdited
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.savepoints.SavepointUseCases
 import org.odk.collect.android.utilities.ApplicationConstants
+import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -65,6 +66,9 @@ class FormUriActivity : LocalizedActivity() {
     @Inject
     lateinit var scheduler: Scheduler
 
+    @Inject
+    lateinit var changeLockProvider: ChangeLockProvider
+
     private var formFillingAlreadyStarted = false
 
     private val openForm =
@@ -77,14 +81,16 @@ class FormUriActivity : LocalizedActivity() {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                 return FormUriViewModel(
-                    intent.data,
+                    intent,
                     scheduler,
                     projectsRepository,
                     projectsDataService,
                     contentResolver,
                     formsRepositoryProvider,
                     instanceRepositoryProvider,
+                    settingsProvider,
                     savepointsRepositoryProvider,
+                    changeLockProvider,
                     resources
                 ) as T
             }
@@ -137,37 +143,18 @@ class FormUriActivity : LocalizedActivity() {
                 action = intent.action
                 data = uri
                 intent.extras?.let { sourceExtras -> putExtras(sourceExtras) }
-                if (!canFormBeEdited()) {
-                    putExtra(
-                        ApplicationConstants.BundleKeys.FORM_MODE,
-                        ApplicationConstants.FormModes.VIEW_SENT
-                    )
-                }
             }
         )
     }
 
     private fun displayErrorDialog(message: String) {
         MaterialAlertDialogBuilder(this)
+            .setTitle(string.form_cannot_be_used)
             .setMessage(message)
             .setPositiveButton(string.ok) { _, _ -> finish() }
             .setOnCancelListener { finish() }
             .create()
             .show()
-    }
-
-    private fun canFormBeEdited(): Boolean {
-        val uri = intent.data!!
-        val uriMimeType = contentResolver.getType(uri)
-
-        val formEditingEnabled = if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
-            val instance = instanceRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))
-            instance!!.canBeEdited(settingsProvider)
-        } else {
-            true
-        }
-
-        return formEditingEnabled
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -181,16 +168,19 @@ class FormUriActivity : LocalizedActivity() {
 }
 
 private class FormUriViewModel(
-    private val uri: Uri?,
+    private val intent: Intent,
     private val scheduler: Scheduler,
     private val projectsRepository: ProjectsRepository,
     private val projectsDataService: ProjectsDataService,
     private val contentResolver: ContentResolver,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val settingsProvider: SettingsProvider,
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
+    private val changeLockProvider: ChangeLockProvider,
     private val resources: Resources
 ) : ViewModel() {
+    private val uri: Uri? = intent.data
 
     private val _formInspectionResult = MutableLiveData<FormInspectionResult>()
     val formInspectionResult: LiveData<FormInspectionResult> = _formInspectionResult
@@ -203,6 +193,8 @@ private class FormUriViewModel(
                     ?: assertValidUri()
                     ?: assertFormExists()
                     ?: assertFormNotEncrypted()
+                    ?: assertNonEditableFormsAreStartedWithCorrectMode()
+                    ?: assertDoesNotUseEntitiesOrFormsUpdateNotInProgress()
                 if (error != null) {
                     FormInspectionResult.Error(error)
                 } else {
@@ -317,6 +309,47 @@ private class FormUriViewModel(
         }
     }
 
+    private fun assertNonEditableFormsAreStartedWithCorrectMode(): String? {
+        if (!canFormBeEdited()) {
+            intent.putExtra(
+                ApplicationConstants.BundleKeys.FORM_MODE,
+                ApplicationConstants.FormModes.VIEW_SENT
+            )
+        }
+        return null
+    }
+
+    private fun assertDoesNotUseEntitiesOrFormsUpdateNotInProgress(): String? {
+        val uriMimeType = contentResolver.getType(uri!!)
+        val projectId = projectsDataService.getCurrentProject().uuid
+
+        if (intent.extras?.getString(ApplicationConstants.BundleKeys.FORM_MODE) == ApplicationConstants.FormModes.VIEW_SENT) {
+            return null
+        }
+
+        val usesEntities = if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
+            val form = formsRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
+            form.usesEntities()
+        } else {
+            val instance = instancesRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
+            val form = formsRepositoryProvider.create().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
+            form.usesEntities()
+        }
+
+        if (usesEntities) {
+            val formsLock = changeLockProvider.create(projectId).formsLock
+            val isLocAcquired = formsLock.tryLock()
+
+            return if (isLocAcquired) {
+                null
+            } else {
+                resources.getString(string.cannot_open_form_because_of_forms_update)
+            }
+        } else {
+            return null
+        }
+    }
+
     private fun getSavePoint(): Savepoint? {
         val uriMimeType = contentResolver.getType(uri!!)!!
 
@@ -341,6 +374,19 @@ private class FormUriViewModel(
                 _formInspectionResult.value = FormInspectionResult.Valid
             }
         )
+    }
+
+    private fun canFormBeEdited(): Boolean {
+        val uriMimeType = contentResolver.getType(uri!!)
+
+        val formEditingEnabled = if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
+            val instance = instancesRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))
+            instance!!.canBeEdited(settingsProvider)
+        } else {
+            true
+        }
+
+        return formEditingEnabled
     }
 }
 

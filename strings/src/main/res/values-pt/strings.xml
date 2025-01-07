@@ -69,7 +69,6 @@
   <string name="survey_loading_reading_csv_message">Lendo arquivos CSV…</string>
   <string name="parse_error">Desculpe, não é possível analisar formulário.</string>
   <string name="loading_form_failed">Um erro ocorreu enquanto o formulário era carregado. Por favor, tente novamente.</string>
-  <string name="parent_form_not_present">Não é possível alterar esse rascunho por que o formulário em branco correspondente não foi encontrado ou foi excluído.\n\nForm ID: %1$s</string>
   <string name="cannot_edit_completed_form">Este formulário não pode ser editado, pois ele foi marcado como finalizado. Ele pode estar criptografado.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Alterações não salvas recuperadas</string>
@@ -93,7 +92,6 @@
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="add_repeat_question">Adicionar \"%s\"?</string>
   <string name="add_repeat">Adicionar</string>
-  <string name="dont_add_repeat">Não adicionar</string>
   <string name="add_another_menu">Adicionar outra</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">Editar Prompt</string>
@@ -150,10 +148,7 @@
   <string name="phone_does_not_support_rsa">O telefone não suporta encriptação RSA.</string>
   <string name="invalid_rsa_public_key">Chave pública RSA inválida.</string>
   <string name="encryption_error_message">%s Formulário não foi salvo como finalizado.</string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
-  <string name="bad_uri">URI ruim: %s</string>
-  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
-  <string name="unrecognized_uri">URL não reconhecida: %s</string>
+  <!--Displayed when an attempt is made to start form filling, but the form is broken-->
   <!--Text displayed when audio recording fails to start-->
   <string name="start_recording_failed">Não foi possível iniciar a gravação</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
@@ -162,8 +157,6 @@
   <string name="answer_file_copy_failed_message">O arquivo de mídia não pode ser anexado ao formulário, mas está disponível em%1$s</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">Gravação interrompida. Reiniciar em %s</string>
-  <!--Error displayed when opened filled form has been deleted on disk-->
-  <string name="instance_deleted_message">O formulário preenchido foi excluído!</string>
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
   <string name="update_widgets_error">Falha ao tentar atualizar os valores. Isso ocorre geralmente por erros no campos calculados na definição do formulário.\n\nSe você continuar a ter esse problema, entre em contato com a pessoa que solicitou que você coletasse dados.</string>
   <!--##############################################
@@ -338,6 +331,18 @@
   <string name="persian_month_10">Dey</string>
   <string name="persian_month_11">Bahman</string>
   <string name="persian_month_12">Esfand</string>
+  <!--1st month in the Buddhist calendar-->
+  <!--2nd month in the Buddhist calendar-->
+  <!--3rd month in the Buddhist calendar-->
+  <!--4th month in the Buddhist calendar-->
+  <!--5th month in the Buddhist calendar-->
+  <!--6th month in the Buddhist calendar-->
+  <!--7th month in the Buddhist calendar-->
+  <!--8th month in the Buddhist calendar-->
+  <!--9th month in the Buddhist calendar-->
+  <!--10th month in the Buddhist calendar-->
+  <!--11th month in the Buddhist calendar-->
+  <!--12th month in the Buddhist calendar-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
@@ -743,6 +748,7 @@
   <string name="unlock_settings">Desbloquear configurações</string>
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">Configurações desbloqueadas</string>
+  <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -853,7 +859,6 @@
   <string name="fs_delete_media_path_if_file_error">Não foi possível apagar \'%s\'. Por favor apague o arquivo manualmente e descarregue o formulário novamente.</string>
   <string name="fs_create_media_folder_error">Não foi possível criar a pasta de mídia \'%s\'.</string>
   <string name="fs_file_copy_error">Não foi possível copiar os dados de \'%1$s\' para \'%2$s\'.. Motivo: %3$s</string>
-  <string name="survey_multiple_forms_error">Dois formulários foram descarregados com a mesma identificação e versão. Talvez eles sejam os mesmos formulários carregados várias vezes ou junto a servidores diferentes. De todo modo, um deles deve ser apagado.</string>
   <string name="select_odk_shortcut">Selecionar o Atalho ODK</string>
   <string name="background_audio_help">Esse formulário grava áudio do microfone do seu dispositivo.\n\nVocê pode usar o indicador de volume para garantir que o microfone esteja próximo o suficiente do som que você precisa gravar.\n\nPara parar a gravação, por favor, saia desse formulário.\n\nPara mais informações, por favor entre em contato com a pessoa que solicitou que você coletasse dados.</string>
   <string name="loading">Carregando…</string>
@@ -906,28 +911,40 @@
   <!--Preceded by "Don't have a project yet?" question-->
   <string name="try_demo">Tente a demonstração</string>
   <string name="scan_configuration_qr_code">Ler o QR Code de configuração</string>
-  <!--Error shown when a user tries to open a form that's in a different project-->
-  <string name="wrong_project_selected_for_form">Para abrir esse formulário, você deve primeiro abrir o ODK Collect e alternar para o projeto que o contém.</string>
-  <!--Error shown when a user tries to open a form when there are no projects-->
-  <string name="app_not_configured">O ODK Collect não foi configurado. Tente abrir o ODK Collect e configurá-lo;\n\nSe você clicou em um atalho, você pode precisar recriá-lo depois de configurar o ODK Collect.</string>
   <!--##############################################
     # Errors
     ##############################################-->
   <string name="show_details">Exibir detalhes</string>
   <string name="errors">Erros</string>
   <!--##############################################
+    # Form opening errors
+    ##############################################-->
+  <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">Para abrir esse formulário, você deve primeiro abrir o ODK Collect e alternar para o projeto que o contém.</string>
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <string name="app_not_configured">O ODK Collect não foi configurado. Tente abrir o ODK Collect e configurá-lo;\n\nSe você clicou em um atalho, você pode precisar recriá-lo depois de configurar o ODK Collect.</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">URL não reconhecida: %s</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">URI ruim: %s</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">O formulário preenchido foi excluído!</string>
+  <!--Error shown when a user tries to edit a form but there is no corresponding blank form-->
+  <string name="parent_form_not_present">Não é possível alterar esse rascunho por que o formulário em branco correspondente não foi encontrado ou foi excluído.\n\nForm ID: %1$s</string>
+  <!--Error shown when a user tries to open a form but there is more than one form with the same form ID-->
+  <string name="survey_multiple_forms_error">Dois formulários foram descarregados com a mesma identificação e versão. Talvez eles sejam os mesmos formulários carregados várias vezes ou junto a servidores diferentes. De todo modo, um deles deve ser apagado.</string>
+  <!--Error shown when a user tries to open a form when forms update is being applied in the background-->
+  <!--##############################################
     # Permissions
     ##############################################-->
   <string name="open_settings">Abrir configurações</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
-  <string name="entities_title">Entidades</string>
   <!--Title for setting that controls whether local entity features are enabled or not-->
   <string name="include_local_entities_setting">Habilitar entidades locais</string>
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">Ver listas de entidades</string>
-  <!--Text for button that deletes all entities for the project-->
-    <!--Text for button that adds a new entity list-->
-    <!--Label for entity that has been created offline and is not on the server yet-->
+  <!--Label for entity that has been created offline and is not on the server yet-->
+  <!--Error message displayed when a user opens a form with an unrecognized entity version-->
   <!--##############################################
     # Crash handling
     ##############################################-->
