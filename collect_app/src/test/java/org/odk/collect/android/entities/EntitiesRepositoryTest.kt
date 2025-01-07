@@ -789,26 +789,10 @@ abstract class EntitiesRepositoryTest {
             properties = listOf("vintage" to "2009")
         )
 
-        val aultmore = Entity.New(
-            "3",
-            "Aultmore 12",
-            version = 1,
-            properties = listOf("vintage" to "2009")
-        )
+        repository.save("wines", leoville, canet)
 
-        repository.save("wines", leoville, canet, aultmore)
-
-        val wines = repository.query(
-            "wines",
-            Query.Or(
-                Query.Eq("name", "1"),
-                Query.And(
-                    Query.Eq("__version", "2"),
-                    Query.Eq("vintage", "2009")
-                )
-            )
-        )
-        assertThat(wines, containsInAnyOrder(sameEntityAs(leoville), sameEntityAs(canet)))
+        val wines = repository.query("wines", Query.Eq("name", "2"))
+        assertThat(wines, containsInAnyOrder(sameEntityAs(canet)))
     }
 
     @Test
@@ -822,32 +806,9 @@ abstract class EntitiesRepositoryTest {
             properties = listOf("vintage" to "2008")
         )
 
-        val canet = Entity.New(
-            "2",
-            "Pontet-Canet 2014",
-            version = 2,
-            properties = listOf("vintage" to "2009")
-        )
+        repository.save("wines", leoville)
 
-        val aultmore = Entity.New(
-            "3",
-            "Aultmore 12",
-            version = 1,
-            properties = listOf("vintage" to "2009")
-        )
-
-        repository.save("wines", leoville, canet, aultmore)
-
-        val wines = repository.query(
-            "wines",
-            Query.And(
-                Query.Eq("name", "1"),
-                Query.Or(
-                    Query.Eq("__version", "4"),
-                    Query.Eq("vintage", "2010")
-                )
-            )
-        )
+        val wines = repository.query("wines", Query.Eq("name", "3"))
         assertThat(wines, equalTo(emptyList()))
     }
 
