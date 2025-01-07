@@ -174,6 +174,7 @@ the specific language governing permissions and limitations under the License.
             android:name="org.odk.collect.selfiecamera.CaptureSelfieActivity"
             android:theme="@style/Theme.Collect"
             tools:replace="android:theme">
+
         </activity>
 
         <!-- Configure this key by setting GOOGLE_MAPS_API_KEY in secrets.properties. -->
