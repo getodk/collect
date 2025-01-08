@@ -20,7 +20,7 @@ import org.odk.collect.android.TestSettingsProvider.getSettingsProvider
 import org.odk.collect.android.formentry.FormEntryMenuProvider.FormEntryMenuClickListener
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel
 import org.odk.collect.android.formentry.questions.AnswersProvider
-import org.odk.collect.android.formhierarchy.FormHierarchyActivity
+import org.odk.collect.android.formhierarchy.FormHierarchyFragmentHostActivity
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.android.utilities.ApplicationConstants
@@ -275,7 +275,7 @@ class FormEntryMenuProviderTest {
         val nextStartedActivity = Shadows.shadowOf(activity).nextStartedActivityForResult
 
         assertThat(nextStartedActivity, notNullValue())
-        assertThat(nextStartedActivity.intent.component!!.className, equalTo(FormHierarchyActivity::class.java.name))
+        assertThat(nextStartedActivity.intent.component!!.className, equalTo(FormHierarchyFragmentHostActivity::class.java.name))
         assertThat(nextStartedActivity.requestCode, equalTo(ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY))
     }
 

@@ -20,7 +20,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.external.FormUriActivity
 import org.odk.collect.android.external.FormsContract
-import org.odk.collect.android.formhierarchy.FormHierarchyActivity
+import org.odk.collect.android.formhierarchy.FormHierarchyFragmentHostActivity
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.config.AppDependencyComponent
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -99,15 +99,15 @@ class FormFillingActivityTest {
         scheduler.flush()
         assertText(withText("What is your age?"))
 
-        // Recreate and assert we start FormHierarchyActivity
+        // Recreate and assert we start FormHierarchyFragmentHostActivity
         val recreated = activityControllerRule.add {
             initial.recreateWithProcessRestore { resetProcess(dependencies) }
         }
 
         scheduler.flush()
-        assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
+        assertIntentsHelper.assertNewIntent(FormHierarchyFragmentHostActivity::class)
 
-        // Return to FormFillingActivity from FormHierarchyActivity
+        // Return to FormFillingActivity from FormHierarchyFragmentHostActivity
         val hierarchyIntent = shadowOf(recreated.get()).nextStartedActivityForResult.intent
         shadowOf(recreated.get()).receiveResult(hierarchyIntent, Activity.RESULT_CANCELED, null)
         scheduler.flush()
@@ -138,17 +138,17 @@ class FormFillingActivityTest {
         assertText(withText("What is your age?"))
 
         Interactions.clickOn(withContentDescription(R.string.view_hierarchy))
-        assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
+        assertIntentsHelper.assertNewIntent(FormHierarchyFragmentHostActivity::class)
 
-        // Recreate and assert we start FormHierarchyActivity
+        // Recreate and assert we start FormHierarchyFragmentHostActivity
         val recreated = activityControllerRule.add {
             initial.recreateWithProcessRestore { resetProcess(dependencies) }
         }
 
         scheduler.flush()
-        assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
+        assertIntentsHelper.assertNewIntent(FormHierarchyFragmentHostActivity::class)
 
-        // Return to FormFillingActivity from FormHierarchyActivity
+        // Return to FormFillingActivity from FormHierarchyFragmentHostActivity
         val hierarchyIntent = shadowOf(recreated.get()).nextStartedActivityForResult.intent
         shadowOf(recreated.get()).receiveResult(hierarchyIntent, Activity.RESULT_CANCELED, null)
         scheduler.flush()
@@ -185,15 +185,15 @@ class FormFillingActivityTest {
             equalTo(true)
         )
 
-        // Recreate and assert we start FormHierarchyActivity
+        // Recreate and assert we start FormHierarchyFragmentHostActivity
         val recreated = activityControllerRule.add {
             initial.recreateWithProcessRestore { resetProcess(dependencies) }
         }
 
         scheduler.flush()
-        assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
+        assertIntentsHelper.assertNewIntent(FormHierarchyFragmentHostActivity::class)
 
-        // Return to FormFillingActivity from FormHierarchyActivity
+        // Return to FormFillingActivity from FormHierarchyFragmentHostActivity
         val hierarchyIntent = shadowOf(recreated.get()).nextStartedActivityForResult.intent
         shadowOf(recreated.get()).receiveResult(hierarchyIntent, Activity.RESULT_CANCELED, null)
         scheduler.flush()
