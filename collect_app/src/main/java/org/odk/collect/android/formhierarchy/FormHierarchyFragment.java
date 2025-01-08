@@ -188,190 +188,7 @@ public class FormHierarchyFragment extends Fragment {
             // in the event of an error.
             formHierarchyViewModel.setCurrentIndex(formController.getFormIndex());
 
-            ArrayList<HierarchyItem> elementsToDisplay = new ArrayList<>();
-
-            jumpToHierarchyStartIndex();
-
-            int event = formController.getEvent();
-
-            if (event == FormEntryController.EVENT_BEGINNING_OF_FORM && !formHierarchyViewModel.shouldShowRepeatGroupPicker()) {
-                // The beginning of form has no valid prompt to display.
-                groupIcon.setVisibility(View.GONE);
-                groupPathTextView.setVisibility(View.GONE);
-            } else {
-                groupIcon.setVisibility(View.VISIBLE);
-                groupPathTextView.setVisibility(View.VISIBLE);
-                groupPathTextView.setText(getCurrentPath());
-
-                if (formController.indexContainsRepeatableGroup(formHierarchyViewModel.getScreenIndex()) || formHierarchyViewModel.shouldShowRepeatGroupPicker()) {
-                    groupIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_repeat));
-                } else {
-                    groupIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_folder_open));
-                }
-            }
-
-            // Refresh the current event in case we did step forward.
-            event = formController.getEvent();
-
-            // Ref to the parent group that's currently being displayed.
-            //
-            // Because of the guard conditions below, we will skip
-            // everything until we exit this group.
-            TreeReference visibleGroupRef = null;
-
-            while (event != FormEntryController.EVENT_END_OF_FORM) {
-                // get the ref to this element
-                TreeReference currentRef = formController.getFormIndex().getReference();
-
-                // retrieve the current group
-                TreeReference curGroup = (visibleGroupRef == null) ? formHierarchyViewModel.getContextGroupRef() : visibleGroupRef;
-
-                if (curGroup != null && !curGroup.isParentOf(currentRef, false)) {
-                    // We have left the current group
-                    if (visibleGroupRef == null) {
-                        // We are done.
-                        break;
-                    } else {
-                        // exit the inner group
-                        visibleGroupRef = null;
-                    }
-                }
-
-                if (visibleGroupRef != null) {
-                    // We're in a group within the one we want to list
-                    // skip this question/group/repeat and move to the next index.
-                    event =
-                            formController.stepToNextEvent(JavaRosaFormController.STEP_INTO_GROUP);
-                    continue;
-                }
-
-                switch (event) {
-                    case FormEntryController.EVENT_QUESTION: {
-                        // Nothing but repeat group instances should show up in the picker.
-                        if (formHierarchyViewModel.shouldShowRepeatGroupPicker()) {
-                            break;
-                        }
-
-                        FormEntryPrompt fp = formController.getQuestionPrompt();
-                        String label = fp.getShortText();
-                        String answerDisplay = QuestionAnswerProcessor.getQuestionAnswer(fp, requireContext(), formController);
-                        elementsToDisplay.add(
-                                new HierarchyItem(
-                                        fp.getIndex(),
-                                        HierarchyItemType.QUESTION,
-                                        FormEntryPromptUtils.styledQuestionText(label, fp.isRequired()),
-                                        answerDisplay
-                                )
-                        );
-                        break;
-                    }
-                    case FormEntryController.EVENT_GROUP: {
-                        if (!formController.isGroupRelevant()) {
-                            break;
-                        }
-                        // Nothing but repeat group instances should show up in the picker.
-                        if (formHierarchyViewModel.shouldShowRepeatGroupPicker()) {
-                            break;
-                        }
-
-                        FormIndex index = formController.getFormIndex();
-
-                        // Only display groups with a specific appearance attribute.
-                        if (!formController.isDisplayableGroup(index)) {
-                            break;
-                        }
-
-                        // Don't render other groups' children.
-                        TreeReference contextGroupRef = formHierarchyViewModel.getContextGroupRef();
-                        if (contextGroupRef != null && !contextGroupRef.isParentOf(currentRef, false)) {
-                            break;
-                        }
-
-                        visibleGroupRef = currentRef;
-
-                        FormEntryCaption caption = formController.getCaptionPrompt();
-
-                        elementsToDisplay.add(
-                                new HierarchyItem(
-                                        caption.getIndex(),
-                                        HierarchyItemType.VISIBLE_GROUP,
-                                        HtmlUtils.textToHtml(caption.getShortText())
-                                )
-                        );
-
-                        // Skip to the next item outside the group.
-                        event = formController.stepOverGroup();
-                        continue;
-                    }
-                    case FormEntryController.EVENT_PROMPT_NEW_REPEAT: {
-                        // this would display the 'add new repeat' dialog
-                        // ignore it.
-                        break;
-                    }
-                    case FormEntryController.EVENT_REPEAT: {
-                        boolean forPicker = formHierarchyViewModel.shouldShowRepeatGroupPicker();
-                        // Only break to exclude non-relevant repeat from picker
-                        if (!formController.isGroupRelevant() && forPicker) {
-                            break;
-                        }
-
-                        visibleGroupRef = currentRef;
-
-                        // Don't render other groups' children.
-                        TreeReference contextGroupRef = formHierarchyViewModel.getContextGroupRef();
-                        if (contextGroupRef != null && !contextGroupRef.isParentOf(currentRef, false)) {
-                            break;
-                        }
-
-                        FormEntryCaption fc = formController.getCaptionPrompt();
-
-                        if (forPicker) {
-                            // Don't render other groups' instances.
-                            String repeatGroupPickerRef = formHierarchyViewModel.getRepeatGroupPickerIndex().getReference().toString(false);
-                            if (!currentRef.toString(false).equals(repeatGroupPickerRef)) {
-                                break;
-                            }
-
-                            int itemNumber = fc.getMultiplicity() + 1;
-
-                            // e.g. `friends > 1`
-                            String repeatLabel = fc.getShortText() + " > " + itemNumber;
-
-                            // If the child of the group has a more descriptive label, use that instead.
-                            if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
-                                formController.stepToNextEvent(JavaRosaFormController.STEP_INTO_GROUP);
-                                String itemLabel = formController.getCaptionPrompt().getShortText();
-                                if (itemLabel != null) {
-                                    // e.g. `1. Alice`
-                                    repeatLabel = itemNumber + ".\u200E " + itemLabel;
-                                }
-                            }
-
-                            elementsToDisplay.add(
-                                    new HierarchyItem(
-                                            fc.getIndex(),
-                                            HierarchyItemType.REPEAT_INSTANCE,
-                                            HtmlUtils.textToHtml(repeatLabel)
-                                    )
-                            );
-                        } else if (fc.getMultiplicity() == 0) {
-                            elementsToDisplay.add(
-                                    new HierarchyItem(
-                                            fc.getIndex(),
-                                            HierarchyItemType.REPEATABLE_GROUP,
-                                            HtmlUtils.textToHtml(fc.getShortText())
-                                    )
-                            );
-                        }
-
-                        break;
-                    }
-                }
-
-                event = formController.stepToNextEvent(JavaRosaFormController.STEP_INTO_GROUP);
-            }
-
-            formHierarchyViewModel.setElementsToDisplay(elementsToDisplay);
+            calculateElementsToDisplay(formController, groupIcon, groupPathTextView);
             recyclerView.setAdapter(new HierarchyListAdapter(formHierarchyViewModel.getElementsToDisplay(), this::onElementClick));
 
             formController.jumpToIndex(formHierarchyViewModel.getCurrentIndex());
@@ -384,7 +201,7 @@ public class FormHierarchyFragment extends Fragment {
                     goUpLevel();
                 } else {
                     // Enter automatically.
-                    formController.jumpToIndex(elementsToDisplay.get(0).getFormIndex());
+                    formController.jumpToIndex(formHierarchyViewModel.getElementsToDisplay().get(0).getFormIndex());
                     refreshView();
                 }
             }
@@ -392,6 +209,193 @@ public class FormHierarchyFragment extends Fragment {
             Timber.e(e);
             createErrorDialog(e.getMessage());
         }
+    }
+
+    private void calculateElementsToDisplay(FormController formController, ImageView groupIcon, TextView groupPathTextView) {
+        List<HierarchyItem> elementsToDisplay = new ArrayList<>();
+
+        jumpToHierarchyStartIndex();
+
+        int event = formController.getEvent();
+
+        if (event == FormEntryController.EVENT_BEGINNING_OF_FORM && !formHierarchyViewModel.shouldShowRepeatGroupPicker()) {
+            // The beginning of form has no valid prompt to display.
+            groupIcon.setVisibility(View.GONE);
+            groupPathTextView.setVisibility(View.GONE);
+        } else {
+            groupIcon.setVisibility(View.VISIBLE);
+            groupPathTextView.setVisibility(View.VISIBLE);
+            groupPathTextView.setText(getCurrentPath());
+
+            if (formController.indexContainsRepeatableGroup(formHierarchyViewModel.getScreenIndex()) || formHierarchyViewModel.shouldShowRepeatGroupPicker()) {
+                groupIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_repeat));
+            } else {
+                groupIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_folder_open));
+            }
+        }
+
+        // Refresh the current event in case we did step forward.
+        event = formController.getEvent();
+
+        // Ref to the parent group that's currently being displayed.
+        //
+        // Because of the guard conditions below, we will skip
+        // everything until we exit this group.
+        TreeReference visibleGroupRef = null;
+
+        while (event != FormEntryController.EVENT_END_OF_FORM) {
+            // get the ref to this element
+            TreeReference currentRef = formController.getFormIndex().getReference();
+
+            // retrieve the current group
+            TreeReference curGroup = (visibleGroupRef == null) ? formHierarchyViewModel.getContextGroupRef() : visibleGroupRef;
+
+            if (curGroup != null && !curGroup.isParentOf(currentRef, false)) {
+                // We have left the current group
+                if (visibleGroupRef == null) {
+                    // We are done.
+                    break;
+                } else {
+                    // exit the inner group
+                    visibleGroupRef = null;
+                }
+            }
+
+            if (visibleGroupRef != null) {
+                // We're in a group within the one we want to list
+                // skip this question/group/repeat and move to the next index.
+                event =
+                        formController.stepToNextEvent(JavaRosaFormController.STEP_INTO_GROUP);
+                continue;
+            }
+
+            switch (event) {
+                case FormEntryController.EVENT_QUESTION: {
+                    // Nothing but repeat group instances should show up in the picker.
+                    if (formHierarchyViewModel.shouldShowRepeatGroupPicker()) {
+                        break;
+                    }
+
+                    FormEntryPrompt fp = formController.getQuestionPrompt();
+                    String label = fp.getShortText();
+                    String answerDisplay = QuestionAnswerProcessor.getQuestionAnswer(fp, requireContext(), formController);
+                    elementsToDisplay.add(
+                            new HierarchyItem(
+                                    fp.getIndex(),
+                                    HierarchyItemType.QUESTION,
+                                    FormEntryPromptUtils.styledQuestionText(label, fp.isRequired()),
+                                    answerDisplay
+                            )
+                    );
+                    break;
+                }
+                case FormEntryController.EVENT_GROUP: {
+                    if (!formController.isGroupRelevant()) {
+                        break;
+                    }
+                    // Nothing but repeat group instances should show up in the picker.
+                    if (formHierarchyViewModel.shouldShowRepeatGroupPicker()) {
+                        break;
+                    }
+
+                    FormIndex index = formController.getFormIndex();
+
+                    // Only display groups with a specific appearance attribute.
+                    if (!formController.isDisplayableGroup(index)) {
+                        break;
+                    }
+
+                    // Don't render other groups' children.
+                    TreeReference contextGroupRef = formHierarchyViewModel.getContextGroupRef();
+                    if (contextGroupRef != null && !contextGroupRef.isParentOf(currentRef, false)) {
+                        break;
+                    }
+
+                    visibleGroupRef = currentRef;
+
+                    FormEntryCaption caption = formController.getCaptionPrompt();
+
+                    elementsToDisplay.add(
+                            new HierarchyItem(
+                                    caption.getIndex(),
+                                    HierarchyItemType.VISIBLE_GROUP,
+                                    HtmlUtils.textToHtml(caption.getShortText())
+                            )
+                    );
+
+                    // Skip to the next item outside the group.
+                    event = formController.stepOverGroup();
+                    continue;
+                }
+                case FormEntryController.EVENT_PROMPT_NEW_REPEAT: {
+                    // this would display the 'add new repeat' dialog
+                    // ignore it.
+                    break;
+                }
+                case FormEntryController.EVENT_REPEAT: {
+                    boolean forPicker = formHierarchyViewModel.shouldShowRepeatGroupPicker();
+                    // Only break to exclude non-relevant repeat from picker
+                    if (!formController.isGroupRelevant() && forPicker) {
+                        break;
+                    }
+
+                    visibleGroupRef = currentRef;
+
+                    // Don't render other groups' children.
+                    TreeReference contextGroupRef = formHierarchyViewModel.getContextGroupRef();
+                    if (contextGroupRef != null && !contextGroupRef.isParentOf(currentRef, false)) {
+                        break;
+                    }
+
+                    FormEntryCaption fc = formController.getCaptionPrompt();
+
+                    if (forPicker) {
+                        // Don't render other groups' instances.
+                        String repeatGroupPickerRef = formHierarchyViewModel.getRepeatGroupPickerIndex().getReference().toString(false);
+                        if (!currentRef.toString(false).equals(repeatGroupPickerRef)) {
+                            break;
+                        }
+
+                        int itemNumber = fc.getMultiplicity() + 1;
+
+                        // e.g. `friends > 1`
+                        String repeatLabel = fc.getShortText() + " > " + itemNumber;
+
+                        // If the child of the group has a more descriptive label, use that instead.
+                        if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
+                            formController.stepToNextEvent(JavaRosaFormController.STEP_INTO_GROUP);
+                            String itemLabel = formController.getCaptionPrompt().getShortText();
+                            if (itemLabel != null) {
+                                // e.g. `1. Alice`
+                                repeatLabel = itemNumber + ".\u200E " + itemLabel;
+                            }
+                        }
+
+                        elementsToDisplay.add(
+                                new HierarchyItem(
+                                        fc.getIndex(),
+                                        HierarchyItemType.REPEAT_INSTANCE,
+                                        HtmlUtils.textToHtml(repeatLabel)
+                                )
+                        );
+                    } else if (fc.getMultiplicity() == 0) {
+                        elementsToDisplay.add(
+                                new HierarchyItem(
+                                        fc.getIndex(),
+                                        HierarchyItemType.REPEATABLE_GROUP,
+                                        HtmlUtils.textToHtml(fc.getShortText())
+                                )
+                        );
+                    }
+
+                    break;
+                }
+            }
+
+            event = formController.stepToNextEvent(JavaRosaFormController.STEP_INTO_GROUP);
+        }
+
+        formHierarchyViewModel.setElementsToDisplay(elementsToDisplay);
     }
 
     /**
