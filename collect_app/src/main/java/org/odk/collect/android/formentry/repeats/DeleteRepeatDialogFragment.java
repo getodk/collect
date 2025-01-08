@@ -26,8 +26,6 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
     private final ViewModelProvider.Factory viewModelFactory;
     private FormEntryViewModel formEntryViewModel;
 
-    private DeleteRepeatDialogCallback callback;
-
     public DeleteRepeatDialogFragment(ViewModelProvider.Factory viewModelFactory) {
         this.viewModelFactory = viewModelFactory;
     }
@@ -38,10 +36,6 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
         DaggerUtils.getComponent(context).inject(this);
 
         formEntryViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(FormEntryViewModel.class);
-
-        if (context instanceof DeleteRepeatDialogCallback) {
-            callback = (DeleteRepeatDialogCallback) context;
-        }
     }
 
     @NonNull
@@ -64,12 +58,7 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
             if (i == BUTTON_POSITIVE) { // yes
                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true, System.currentTimeMillis());
                 formController.deleteRepeat();
-
-                if (callback != null) {
-                    callback.deleteGroup();
-                } else {
-                    getParentFragmentManager().setFragmentResult("REPEAT_DELETED", new Bundle());
-                }
+                getParentFragmentManager().setFragmentResult("REPEAT_DELETED", new Bundle());
             }
             alertDialog.cancel();
             dismiss();
@@ -80,9 +69,5 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
         alertDialog.setButton(BUTTON_NEGATIVE, getActivity().getString(org.odk.collect.strings.R.string.delete_repeat_no), quitListener);
 
         return alertDialog;
-    }
-
-    public interface DeleteRepeatDialogCallback {
-        void deleteGroup();
     }
 }

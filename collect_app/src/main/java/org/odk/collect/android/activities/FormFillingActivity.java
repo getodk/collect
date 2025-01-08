@@ -228,7 +228,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
         WidgetValueChangedListener, ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
-        DeleteRepeatDialogFragment.DeleteRepeatDialogCallback,
         SelectMinimalDialog.SelectMinimalDialogListener, CustomDatePickerDialog.DateChangeListener,
         CustomTimePickerDialog.TimeChangeListener {
 
@@ -447,6 +446,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 .forClass(BackgroundAudioPermissionDialogFragment.class, () -> new BackgroundAudioPermissionDialogFragment(viewModelFactory))
                 .forClass(SelectOneFromMapDialogFragment.class, () -> new SelectOneFromMapDialogFragment(viewModelFactory))
                 .build());
+
+        getSupportFragmentManager().setFragmentResultListener("REPEAT_DELETED", this, (requestKey, result) -> deleteGroup());
 
         if (ProcessRestoreDetector.isProcessRestoring(this, savedInstanceState)) {
             if (savedInstanceState.containsKey(KEY_XPATH)) {
@@ -1056,7 +1057,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         return super.onContextItemSelected(item);
     }
 
-    @Override
     public void deleteGroup() {
         FormController formController = getFormController();
         if (formController != null && !formController.indexIsInFieldList()) {
