@@ -242,7 +242,7 @@ public class FormHierarchyTest {
     }
 
     @Test
-    public void whenViewFormInHierarchyForRepeat_noDeleteButtonAppears() {
+    public void whenViewFormInHierarchyForRepeatGroup_noDeleteButtonAppears() {
         rule.startAtMainMenu()
                 .copyForm("one-question-repeat.xml")
                 .startBlankForm("One Question Repeat")
