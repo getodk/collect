@@ -2,7 +2,7 @@ package org.odk.collect.entities.javarosa.intance
 
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.instance.TreeElement
-import org.odk.collect.entities.javarosa.parse.EntityItemElement
+import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.shared.Query
@@ -46,11 +46,11 @@ class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepos
     }
 
     private fun convertToElement(entity: Entity.Saved): TreeElement {
-        val name = TreeElement(EntityItemElement.ID)
-        val label = TreeElement(EntityItemElement.LABEL)
-        val version = TreeElement(EntityItemElement.VERSION)
-        val trunkVersion = TreeElement(EntityItemElement.TRUNK_VERSION)
-        val branchId = TreeElement(EntityItemElement.BRANCH_ID)
+        val name = TreeElement(EntitySchema.ID)
+        val label = TreeElement(EntitySchema.LABEL)
+        val version = TreeElement(EntitySchema.VERSION)
+        val trunkVersion = TreeElement(EntitySchema.TRUNK_VERSION)
+        val branchId = TreeElement(EntitySchema.BRANCH_ID)
 
         name.value = StringData(entity.id)
         version.value = StringData(entity.version.toString())

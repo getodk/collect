@@ -1,6 +1,6 @@
 package org.odk.collect.entities.storage
 
-import org.odk.collect.entities.javarosa.parse.EntityItemElement
+import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.shared.Query
 
 class InMemEntitiesRepository : EntitiesRepository {
@@ -56,9 +56,9 @@ class InMemEntitiesRepository : EntitiesRepository {
             is Query.Eq -> {
                 entities.filter {
                     val fieldName: String? = when (query.column) {
-                        EntityItemElement.ID -> it.id
-                        EntityItemElement.LABEL -> it.label
-                        EntityItemElement.VERSION -> it.version.toString()
+                        EntitySchema.ID -> it.id
+                        EntitySchema.LABEL -> it.label
+                        EntitySchema.VERSION -> it.version.toString()
                         else -> it.properties.find { propertyName ->
                             propertyName.first == query.column
                         }?.second
@@ -69,9 +69,9 @@ class InMemEntitiesRepository : EntitiesRepository {
             is Query.NotEq -> {
                 entities.filter {
                     val fieldName: String? = when (query.column) {
-                        EntityItemElement.ID -> it.id
-                        EntityItemElement.LABEL -> it.label
-                        EntityItemElement.VERSION -> it.version.toString()
+                        EntitySchema.ID -> it.id
+                        EntitySchema.LABEL -> it.label
+                        EntitySchema.VERSION -> it.version.toString()
                         else -> it.properties.find { propertyName ->
                             propertyName.first == query.column
                         }?.second

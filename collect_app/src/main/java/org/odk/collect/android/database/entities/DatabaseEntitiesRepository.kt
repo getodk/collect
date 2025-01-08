@@ -19,7 +19,7 @@ import org.odk.collect.db.sqlite.SQLiteDatabaseExt.getColumnNames
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.query
 import org.odk.collect.db.sqlite.SynchronizedDatabaseConnection
 import org.odk.collect.db.sqlite.toSql
-import org.odk.collect.entities.javarosa.parse.EntityItemElement
+import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.shared.Query
@@ -214,9 +214,9 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
         return queryWithAttachedRowId(list, query.mapColumns { columnName ->
             when (columnName) {
-                EntityItemElement.ID -> EntitiesTable.COLUMN_ID
-                EntityItemElement.LABEL -> EntitiesTable.COLUMN_LABEL
-                EntityItemElement.VERSION -> EntitiesTable.COLUMN_VERSION
+                EntitySchema.ID -> EntitiesTable.COLUMN_ID
+                EntitySchema.LABEL -> EntitiesTable.COLUMN_LABEL
+                EntitySchema.VERSION -> EntitiesTable.COLUMN_VERSION
                 else -> EntitiesTable.getPropertyColumn(columnName)
             }
         })
