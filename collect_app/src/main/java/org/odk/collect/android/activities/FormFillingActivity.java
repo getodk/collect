@@ -20,6 +20,7 @@ import static android.view.animation.AnimationUtils.loadAnimation;
 import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
+import static org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment.REQUEST_DELETE_REPEAT;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
@@ -447,7 +448,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 .forClass(SelectOneFromMapDialogFragment.class, () -> new SelectOneFromMapDialogFragment(viewModelFactory))
                 .build());
 
-        getSupportFragmentManager().setFragmentResultListener("REPEAT_DELETED", this, (requestKey, result) -> deleteGroup());
+        getSupportFragmentManager().setFragmentResultListener(REQUEST_DELETE_REPEAT, this, (requestKey, result) -> deleteGroup());
 
         if (ProcessRestoreDetector.isProcessRestoring(this, savedInstanceState)) {
             if (savedInstanceState.containsKey(KEY_XPATH)) {

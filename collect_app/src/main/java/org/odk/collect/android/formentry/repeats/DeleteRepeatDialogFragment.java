@@ -23,6 +23,8 @@ import org.odk.collect.android.javarosawrapper.FormController;
 
 public class DeleteRepeatDialogFragment extends DialogFragment {
 
+    public static final String REQUEST_DELETE_REPEAT = "DELETE_REPEAT";
+
     private final ViewModelProvider.Factory viewModelFactory;
     private FormEntryViewModel formEntryViewModel;
 
@@ -58,7 +60,7 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
             if (i == BUTTON_POSITIVE) { // yes
                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.DELETE_REPEAT, true, System.currentTimeMillis());
                 formController.deleteRepeat();
-                getParentFragmentManager().setFragmentResult("REPEAT_DELETED", new Bundle());
+                getParentFragmentManager().setFragmentResult(REQUEST_DELETE_REPEAT, new Bundle());
             }
             alertDialog.cancel();
             dismiss();

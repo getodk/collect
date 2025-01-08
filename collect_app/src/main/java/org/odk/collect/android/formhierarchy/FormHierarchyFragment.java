@@ -1,6 +1,7 @@
 package org.odk.collect.android.formhierarchy;
 
 import static android.app.Activity.RESULT_OK;
+import static org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment.REQUEST_DELETE_REPEAT;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
 
 import android.content.Context;
@@ -164,7 +165,7 @@ public class FormHierarchyFragment extends Fragment {
             });
         }
 
-        getChildFragmentManager().setFragmentResultListener("REPEAT_DELETED", getViewLifecycleOwner(), (requestKey, result) -> onRepeatDeleted());
+        getChildFragmentManager().setFragmentResultListener(REQUEST_DELETE_REPEAT, getViewLifecycleOwner(), (requestKey, result) -> onRepeatDeleted());
     }
 
     public void refreshView() {
