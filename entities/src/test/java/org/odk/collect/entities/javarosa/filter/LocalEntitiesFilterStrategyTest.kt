@@ -67,7 +67,7 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
-    fun `returns matching nodes when id = value`() {
+    fun `returns matching nodes in the optimized way when id = value`() {
         entitiesRepository.save("things", Entity.New("thing1", "Thing 1"))
         entitiesRepository.save("things", Entity.New("thing2", "Thing 2"))
 
@@ -102,7 +102,7 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
-    fun `returns matching nodes when id != value`() {
+    fun `returns matching nodes in the optimized way when id != value`() {
         entitiesRepository.save("things", Entity.New("thing1", "Thing 1"))
         entitiesRepository.save("things", Entity.New("thing2", "Thing 2"))
 
@@ -174,7 +174,7 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
-    fun `returns empty nodeset when no entity matches name`() {
+    fun `returns empty nodeset in the optimized way when no entity matches name`() {
         entitiesRepository.addList("things")
 
         val scenario = Scenario.init(
@@ -208,7 +208,7 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
-    fun `works correctly with non eq name expressions`() {
+    fun `works correctly but not in the optimized way with non eq name expressions`() {
         entitiesRepository.save("things", Entity.New("thing", "Thing"))
 
         val scenario = Scenario.init(
@@ -238,6 +238,7 @@ class LocalEntitiesFilterStrategyTest {
         )
 
         assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(true))
     }
 
     @Test
@@ -313,7 +314,7 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
-    fun `returns matching nodes when entity matches property`() {
+    fun `works correctly in the optimized way with property = expressions`() {
         entitiesRepository.save(
             "things",
             Entity.New(
@@ -410,7 +411,7 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
-    fun `works correctly with label = expressions`() {
+    fun `works correctly in the optimized way with label = expressions`() {
         entitiesRepository.save("things", Entity.New("thing1", "Thing1"))
 
         val scenario = Scenario.init(
@@ -443,10 +444,11 @@ class LocalEntitiesFilterStrategyTest {
 
         val choices = scenario.choicesOf("/data/question").map { it.value }
         assertThat(choices, containsInAnyOrder("thing1"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
     }
 
     @Test
-    fun `works correctly with version = expressions`() {
+    fun `works correctly in the optimized way with version = expressions`() {
         entitiesRepository.save("things", Entity.New("thing1", "Thing1", version = 2))
 
         val scenario = Scenario.init(
@@ -479,10 +481,11 @@ class LocalEntitiesFilterStrategyTest {
 
         val choices = scenario.choicesOf("/data/question").map { it.value }
         assertThat(choices, containsInAnyOrder("thing1"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
     }
 
     @Test
-    fun `works correctly with complex expressions`() {
+    fun `works correctly in the optimized way with combined eq expressions`() {
         entitiesRepository.save(
             "things",
             Entity.New(
