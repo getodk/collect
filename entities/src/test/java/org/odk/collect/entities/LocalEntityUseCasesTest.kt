@@ -10,11 +10,12 @@ import org.hamcrest.Matchers.not
 import org.junit.Test
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.FormEntity
-import org.odk.collect.entities.javarosa.parse.EntityItemElement
+import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.InMemEntitiesRepository
+import org.odk.collect.shared.Query
 import org.odk.collect.shared.TempFiles
 import java.io.File
 
@@ -457,9 +458,9 @@ class LocalEntityUseCasesTest {
     private fun createEntityList(vararg entities: Entity): File {
         if (entities.isNotEmpty()) {
             val header = listOf(
-                EntityItemElement.ID,
-                EntityItemElement.LABEL,
-                EntityItemElement.VERSION
+                EntitySchema.ID,
+                EntitySchema.LABEL,
+                EntitySchema.VERSION
             ) + entities[0].properties.map { it.first }
 
             val rows = entities.map { entity ->
@@ -473,9 +474,9 @@ class LocalEntityUseCasesTest {
             return createCsv(header, *rows)
         } else {
             val header = listOf(
-                EntityItemElement.ID,
-                EntityItemElement.LABEL,
-                EntityItemElement.VERSION
+                EntitySchema.ID,
+                EntitySchema.LABEL,
+                EntitySchema.VERSION
             )
 
             return createCsv(header)
@@ -539,6 +540,11 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
     override fun delete(id: String) {
         accesses += 1
         wrapped.delete(id)
+    }
+
+    override fun query(list: String, query: Query): List<Entity.Saved> {
+        accesses += 1
+        return wrapped.query(list, query)
     }
 
     override fun getById(list: String, id: String): Entity.Saved? {

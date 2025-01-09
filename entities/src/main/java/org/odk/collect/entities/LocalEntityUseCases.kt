@@ -3,7 +3,7 @@ package org.odk.collect.entities
 import org.apache.commons.csv.CSVRecord
 import org.javarosa.core.model.instance.SecondaryInstanceCSVParserBuilder
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
-import org.odk.collect.entities.javarosa.parse.EntityItemElement
+import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
@@ -125,9 +125,9 @@ object LocalEntityUseCases {
     private fun parseEntityFromRecord(record: CSVRecord): ServerEntity? {
         val map = record.toMap()
 
-        val id = map.remove(EntityItemElement.ID)
-        val label = map.remove(EntityItemElement.LABEL)
-        val version = map.remove(EntityItemElement.VERSION)?.toInt()
+        val id = map.remove(EntitySchema.ID)
+        val label = map.remove(EntitySchema.LABEL)
+        val version = map.remove(EntitySchema.VERSION)?.toInt()
         if (id == null || label == null || version == null) {
             return null
         }

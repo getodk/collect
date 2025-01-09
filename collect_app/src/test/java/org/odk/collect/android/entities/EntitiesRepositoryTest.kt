@@ -8,6 +8,7 @@ import org.junit.Test
 import org.odk.collect.android.entities.support.EntitySameAsMatcher.Companion.sameEntityAs
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.shared.Query
 
 abstract class EntitiesRepositoryTest {
 
@@ -768,5 +769,81 @@ abstract class EntitiesRepositoryTest {
         savedEntities = repository.getEntities("things")
         assertThat(savedEntities[0].properties.size, equalTo(1))
         assertThat(savedEntities[0].properties[0].first, equalTo("prop"))
+    }
+
+    @Test
+    fun `#query returns matching entities`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New(
+            "1",
+            "Léoville Barton 2008",
+            version = 1,
+            properties = listOf("vintage" to "2008")
+        )
+
+        val canet = Entity.New(
+            "2",
+            "Pontet-Canet 2014",
+            version = 2,
+            properties = listOf("vintage" to "2009")
+        )
+
+        repository.save("wines", leoville, canet)
+
+        val wines = repository.query("wines", Query.Eq("name", "2"))
+        assertThat(wines, containsInAnyOrder(sameEntityAs(canet)))
+    }
+
+    @Test
+    fun `#query returns empty list when there are no matches`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New(
+            "1",
+            "Léoville Barton 2008",
+            version = 1,
+            properties = listOf("vintage" to "2008")
+        )
+
+        repository.save("wines", leoville)
+
+        val wines = repository.query("wines", Query.Eq("name", "3"))
+        assertThat(wines, equalTo(emptyList()))
+    }
+
+    @Test
+    fun `#query returns empty list when there is a match in a different list`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+        val ardbeg = Entity.New("2", "Ardbeg 10",)
+
+        repository.save("wines", leoville)
+        repository.save("whisky", ardbeg)
+
+        assertThat(repository.query("wines", Query.Eq("label", "Ardbeg 10")), equalTo(emptyList()))
+    }
+
+    @Test
+    fun `#query returns empty list where there are no entities in the list`() {
+        val repository = buildSubject()
+        assertThat(repository.query("wines", Query.Eq("label", "Léoville Barton 2008")), equalTo(emptyList()))
+    }
+
+    @Test
+    fun `#query supports list names with dots and dashes`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+        val canet = Entity.New("2", "Pontet-Canet 2014")
+        repository.save("favourite-wines", leoville)
+        repository.save("other.favourite.wines", canet)
+
+        val queriedLeoville = repository.query("favourite-wines", Query.Eq("label", "Léoville Barton 2008"))
+        assertThat(queriedLeoville, containsInAnyOrder(sameEntityAs(leoville)))
+
+        val queriedCanet = repository.query("other.favourite.wines", Query.Eq("label", "Pontet-Canet 2014"))
+        assertThat(queriedCanet, containsInAnyOrder(sameEntityAs(canet)))
     }
 }
