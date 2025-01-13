@@ -12,6 +12,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.pages.EndOfFormPage;
+import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
@@ -106,7 +107,7 @@ public class AddRepeatTest {
     }
 
     @Test
-    public void whenInHierarchyForRepeat_clickingPlus_addsRepeatAtEndOfSeries() {
+    public void whenInHierarchyForRepeatGroup_clickingPlus_addsRepeatAtEndOfSeries() {
         rule.startAtMainMenu()
                 .copyForm(ONE_QUESTION_REPEAT)
                 .startBlankForm("One Question Repeat")
@@ -129,5 +130,20 @@ public class AddRepeatTest {
                 .swipeToNextQuestionWithRepeatGroup("")
                 .clickOnAdd(new FormEntryPage("Repeat without label"))
                 .assertText("> 2");
+    }
+
+    @Test
+    public void whenViewFormInHierarchyForRepeatGroup_noAddButtonAppears() {
+        rule.startAtMainMenu()
+                .copyForm(ONE_QUESTION_REPEAT)
+                .startBlankForm("One Question Repeat")
+                .swipeToNextQuestionWithRepeatGroup("Person")
+                .clickOnDoNotAdd(new FormEndPage("One Question Repeat"))
+                .clickFinalize()
+
+                .clickSendFinalizedForm(1)
+                .clickOnForm("One Question Repeat")
+                .clickOnGroup("Person")
+                .assertNoId(R.id.menu_add_repeat);
     }
 }

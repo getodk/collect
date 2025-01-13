@@ -143,8 +143,6 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name=".preferences.screens.ProjectPreferencesActivity"
             android:theme="@style/Theme.Collect.Settings" />
-        <activity android:name=".formhierarchy.FormHierarchyActivity" />
-        <activity android:name=".formhierarchy.ViewOnlyFormHierarchyActivity" />
         <activity
             android:name="org.odk.collect.geo.geopoint.GeoPointActivity"
             android:theme="@style/Theme.Collect"
@@ -328,6 +326,7 @@ the specific language governing permissions and limitations under the License.
                 <data android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
             </intent-filter>
         </activity>
+        <activity android:name="org.odk.collect.android.formhierarchy.FormHierarchyFragmentHostActivity" />
 
     </application>
 

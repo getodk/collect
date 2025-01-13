@@ -20,6 +20,7 @@ import static android.view.animation.AnimationUtils.loadAnimation;
 import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
+import static org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment.REQUEST_DELETE_REPEAT;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
@@ -124,8 +125,7 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileProgressDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
-import org.odk.collect.android.formhierarchy.FormHierarchyActivity;
-import org.odk.collect.android.formhierarchy.ViewOnlyFormHierarchyActivity;
+import org.odk.collect.android.formhierarchy.FormHierarchyFragmentHostActivity;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
@@ -229,7 +229,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
         WidgetValueChangedListener, ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
-        DeleteRepeatDialogFragment.DeleteRepeatDialogCallback,
         SelectMinimalDialog.SelectMinimalDialogListener, CustomDatePickerDialog.DateChangeListener,
         CustomTimePickerDialog.TimeChangeListener {
 
@@ -448,6 +447,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 .forClass(BackgroundAudioPermissionDialogFragment.class, () -> new BackgroundAudioPermissionDialogFragment(viewModelFactory))
                 .forClass(SelectOneFromMapDialogFragment.class, () -> new SelectOneFromMapDialogFragment(viewModelFactory))
                 .build());
+
+        getSupportFragmentManager().setFragmentResultListener(REQUEST_DELETE_REPEAT, this, (requestKey, result) -> deleteGroup());
 
         if (ProcessRestoreDetector.isProcessRestoring(this, savedInstanceState)) {
             if (savedInstanceState.containsKey(KEY_XPATH)) {
@@ -1057,7 +1058,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         return super.onContextItemSelected(item);
     }
 
-    @Override
     public void deleteGroup() {
         FormController formController = getFormController();
         if (formController != null && !formController.indexIsInFieldList()) {
@@ -1899,7 +1899,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     /**
      * Given a {@link FormLoaderTask} which has created a {@link FormController} for either a new or
-     * existing instance, shows that instance to the user. Either launches {@link FormHierarchyActivity}
+     * existing instance, shows that instance to the user. Either launches {@link FormHierarchyFragmentHostActivity}
      * if an existing instance is being edited or builds the view for the current question(s) if a
      * new instance is being created.
      * <p>
@@ -2030,8 +2030,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                             } else {
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
                                 formControllerAvailable(formController, form, instance);
-                                Intent intent = new Intent(this, FormHierarchyActivity.class);
-                                intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
+                                Intent intent = new Intent(this, FormHierarchyFragmentHostActivity.class);
+                                intent.putExtra(FormHierarchyFragmentHostActivity.EXTRA_SESSION_ID, sessionId);
                                 startActivityForResult(intent, RequestCodes.HIERARCHY_ACTIVITY);
                             }
                         }
@@ -2039,8 +2039,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 } else {
                     formControllerAvailable(formController, form, instance);
                     if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                        Intent intent = new Intent(this, ViewOnlyFormHierarchyActivity.class);
-                        intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
+                        Intent intent = new Intent(this, FormHierarchyFragmentHostActivity.class);
+                        intent.putExtra(FormHierarchyFragmentHostActivity.EXTRA_SESSION_ID, sessionId);
+                        intent.putExtra(FormHierarchyFragmentHostActivity.EXTRA_VIEW_ONLY, true);
                         startActivity(intent);
                     }
 

@@ -4,7 +4,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceProvider
-import org.odk.collect.entities.javarosa.parse.EntityItemElement
+import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.InMemEntitiesRepository
 
@@ -48,7 +48,7 @@ class LocalEntitiesInstanceProviderTest {
 
         val item = instance.getChildAt(0)!!
         assertThat(item.numChildren, equalTo(5))
-        assertThat(item.getFirstChild(EntityItemElement.VERSION)?.value?.value, equalTo("1"))
+        assertThat(item.getFirstChild(EntitySchema.VERSION)?.value?.value, equalTo("1"))
     }
 
     @Test
@@ -67,7 +67,7 @@ class LocalEntitiesInstanceProviderTest {
 
         val item = instance.getChildAt(0)!!
         assertThat(item.numChildren, equalTo(5))
-        assertThat(item.getFirstChild(EntityItemElement.TRUNK_VERSION)?.value?.value, equalTo("1"))
+        assertThat(item.getFirstChild(EntitySchema.TRUNK_VERSION)?.value?.value, equalTo("1"))
     }
 
     @Test
@@ -87,7 +87,7 @@ class LocalEntitiesInstanceProviderTest {
         val item = instance.getChildAt(0)!!
         assertThat(item.numChildren, equalTo(5))
         assertThat(
-            item.getFirstChild(EntityItemElement.BRANCH_ID)?.value?.value,
+            item.getFirstChild(EntitySchema.BRANCH_ID)?.value?.value,
             equalTo("branch-1")
         )
     }
@@ -107,7 +107,7 @@ class LocalEntitiesInstanceProviderTest {
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
-        assertThat(item.getFirstChild(EntityItemElement.TRUNK_VERSION)?.value, equalTo(null))
+        assertThat(item.getFirstChild(EntitySchema.TRUNK_VERSION)?.value, equalTo(null))
     }
 
     @Test
@@ -184,6 +184,6 @@ class LocalEntitiesInstanceProviderTest {
         assertThat(instance.numChildren, equalTo(1))
 
         val item = instance.getChildAt(0)!!
-        assertThat(item.getFirstChild(EntityItemElement.LABEL)?.value, equalTo(null))
+        assertThat(item.getFirstChild(EntitySchema.LABEL)?.value, equalTo(null))
     }
 }
