@@ -77,6 +77,13 @@ public interface MapFragment {
     void setCenter(@Nullable MapPoint center, boolean animate);
 
     /**
+     * Centers the map view on the current location, zooming in to the last zoom level set by the
+     * user if available, or to a close-up level deemed appropriate by
+     * the implementation, possibly with animation.
+     */
+    void zoomToCurrentLocation(@Nullable MapPoint center);
+
+    /**
      * Centers the map view on the given point, zooming in to a close-up level
      * deemed appropriate by the implementation, possibly with animation.
      */

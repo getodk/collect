@@ -250,6 +250,11 @@ public class GoogleMapFragment extends Fragment implements
         return map.getCameraPosition().zoom;
     }
 
+    @Override
+    public void zoomToCurrentLocation(@Nullable MapPoint center) {
+        zoomToPoint(center, POINT_ZOOM, true);
+    }
+
     @Override public void zoomToPoint(@Nullable MapPoint center, boolean animate) {
         zoomToPoint(center, POINT_ZOOM, animate);
     }

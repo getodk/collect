@@ -246,6 +246,10 @@ class MapboxMapFragment :
         hasCenter = true
     }
 
+    override fun zoomToCurrentLocation(center: MapPoint?) {
+        zoomToPoint(center, MapFragment.POINT_ZOOM.toDouble(), true)
+    }
+
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {
         zoomToPoint(center, MapFragment.POINT_ZOOM.toDouble(), animate)
     }

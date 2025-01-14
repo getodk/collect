@@ -55,6 +55,9 @@ class FakeMapFragment : Fragment(), MapFragment {
         hasCenter = true
     }
 
+    override fun zoomToCurrentLocation(center: MapPoint?) {
+    }
+
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {
         zoomBoundingBox = null
         this.center = center

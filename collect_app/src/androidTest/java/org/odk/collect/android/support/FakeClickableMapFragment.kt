@@ -32,6 +32,8 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
 
     override fun setCenter(center: MapPoint?, animate: Boolean) {}
 
+    override fun zoomToCurrentLocation(center: MapPoint?) {}
+
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {}
 
     override fun zoomToPoint(center: MapPoint?, zoom: Double, animate: Boolean) {}
