@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.startup.AppInitializer
 import com.google.android.gms.location.LocationListener
+import com.mapbox.android.gestures.StandardScaleGestureDetector
 import com.mapbox.geojson.Point
 import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.MapView
@@ -41,8 +42,10 @@ import com.mapbox.maps.plugin.annotation.generated.createPolylineAnnotationManag
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.OnMapLongClickListener
+import com.mapbox.maps.plugin.gestures.OnScaleListener
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapLongClickListener
+import com.mapbox.maps.plugin.gestures.addOnScaleListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -113,6 +116,7 @@ class MapboxMapFragment :
     )
 
     private var hasCenter = false
+    private var lastZoomLevelChangedByUser: Float? = null
 
     private val settingsProvider: SettingsProvider by lazy {
         (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider().provide(SettingsProvider::class.java)
@@ -164,6 +168,15 @@ class MapboxMapFragment :
             .apply {
                 addOnMapClickListener(this@MapboxMapFragment)
                 addOnMapLongClickListener(this@MapboxMapFragment)
+                addOnScaleListener(object : OnScaleListener {
+                    override fun onScale(detector: StandardScaleGestureDetector) = Unit
+
+                    override fun onScaleBegin(detector: StandardScaleGestureDetector) = Unit
+
+                    override fun onScaleEnd(detector: StandardScaleGestureDetector) {
+                        zoomLevelSetByUser = cameraState.zoom.toFloat()
+                    }
+                })
             }
 
         polylineAnnotationManager = mapView
@@ -231,10 +244,11 @@ class MapboxMapFragment :
     }
 
     override fun getZoomLevelSetByUser(): Float? {
-        return null
+        return lastZoomLevelChangedByUser
     }
 
     override fun setZoomLevelSetByUser(zoomLevel: Float?) {
+        lastZoomLevelChangedByUser = zoomLevel
     }
 
     override fun getCenter(): MapPoint {
