@@ -1,6 +1,7 @@
 package org.odk.collect.maps
 
 import android.os.Bundle
+import org.odk.collect.settings.keys.MetaKeys.LAST_KNOWN_ZOOM_LEVEL
 import org.odk.collect.shared.settings.Settings
 import org.odk.collect.shared.settings.Settings.OnSettingChangeListener
 import java.util.function.Consumer
@@ -8,12 +9,14 @@ import java.util.function.Consumer
 class MapFragmentDelegate(
     private val mapFragment: MapFragment,
     configuratorProvider: () -> MapConfigurator,
-    settingsProvider: () -> Settings,
+    unprotectedSettingsProvider: () -> Settings,
+    metaSettingsProvider: () -> Settings,
     private val onConfigChanged: Consumer<Bundle>
 ) : OnSettingChangeListener {
 
     private val configurator by lazy { configuratorProvider() }
-    private val settings by lazy { settingsProvider() }
+    private val unprotectedSettings by lazy { unprotectedSettingsProvider() }
+    private val metaSettings by lazy { metaSettingsProvider() }
 
     private var savedInstanceState: Bundle? = null
 
@@ -33,12 +36,13 @@ class MapFragmentDelegate(
     }
 
     fun onStart() {
-        onConfigChanged.accept(configurator.buildConfig(settings))
-        settings.registerOnSettingChangeListener(this)
+        onConfigChanged.accept(configurator.buildConfig(unprotectedSettings))
+        unprotectedSettings.registerOnSettingChangeListener(this)
     }
 
     fun onStop() {
-        settings.unregisterOnSettingChangeListener(this)
+        metaSettings.save(LAST_KNOWN_ZOOM_LEVEL, "")
+        unprotectedSettings.unregisterOnSettingChangeListener(this)
     }
 
     fun onSaveInstanceState(outState: Bundle) {
@@ -48,7 +52,7 @@ class MapFragmentDelegate(
 
     override fun onSettingChanged(key: String) {
         if (configurator.prefKeys.contains(key)) {
-            onConfigChanged.accept(configurator.buildConfig(settings))
+            onConfigChanged.accept(configurator.buildConfig(unprotectedSettings))
         }
     }
 

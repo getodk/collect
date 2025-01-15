@@ -110,6 +110,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             this,
             () -> mapConfigurator,
             () -> settingsProvider.getUnprotectedSettings(),
+            () -> settingsProvider.getMetaSettings(),
             this::onConfigChanged
     );
 

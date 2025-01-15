@@ -108,6 +108,7 @@ class MapboxMapFragment :
         this,
         { MapboxMapConfigurator() },
         { settingsProvider.getUnprotectedSettings() },
+        { settingsProvider.getMetaSettings() },
         this::onConfigChanged
     )
 

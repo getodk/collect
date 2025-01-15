@@ -98,9 +98,8 @@ public class GoogleMapFragment extends Fragment implements
     private final MapFragmentDelegate mapFragmentDelegate = new MapFragmentDelegate(
             this,
             this::createConfigurator,
-            () -> {
-                return settingsProvider.getUnprotectedSettings();
-            },
+            () -> settingsProvider.getUnprotectedSettings(),
+            () -> settingsProvider.getMetaSettings(),
             this::onConfigChanged
     );
 
