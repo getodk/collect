@@ -285,7 +285,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override
     public void zoomToCurrentLocation(@Nullable MapPoint center) {
-        zoomToPoint(center, POINT_ZOOM, true);
+        zoomToPoint(
+                center,
+                lastZoomLevelChangedByUser != null ? lastZoomLevelChangedByUser : POINT_ZOOM,
+                true
+        );
     }
 
     @Override

@@ -275,7 +275,11 @@ public class GoogleMapFragment extends Fragment implements
 
     @Override
     public void zoomToCurrentLocation(@Nullable MapPoint center) {
-        zoomToPoint(center, POINT_ZOOM, true);
+        zoomToPoint(
+                center,
+                lastZoomLevelChangedByUser != null ? lastZoomLevelChangedByUser : POINT_ZOOM,
+                true
+        );
     }
 
     @Override public void zoomToPoint(@Nullable MapPoint center, boolean animate) {
