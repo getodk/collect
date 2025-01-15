@@ -30,6 +30,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     private val polygons = mutableMapOf<Int, PolygonDescription>()
     private var hasCenter = false
     private val featureIds = mutableListOf<Int>()
+    private var zoomLevelSetByUser: Float? = null
 
     override fun init(
         readyListener: ReadyListener?,
@@ -43,10 +44,11 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     override fun getZoomLevelSetByUser(): Float? {
-        return null
+        return zoomLevelSetByUser
     }
 
     override fun setZoomLevelSetByUser(zoomLevel: Float?) {
+        zoomLevelSetByUser = zoomLevel
     }
 
     override fun getCenter(): MapPoint {
@@ -63,6 +65,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     override fun zoomToCurrentLocation(center: MapPoint?) {
+        zoomToPoint(center, zoomLevelSetByUser?.toDouble() ?: DEFAULT_POINT_ZOOM, true)
     }
 
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {

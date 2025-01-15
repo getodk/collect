@@ -328,7 +328,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `zooms to current location when there are no items`() {
+    fun `zooms to current location with default zoom level when there are no items and there is no zoom level saved`() {
         whenever(data.getMappableItems()).doReturn(MutableLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
@@ -339,6 +339,21 @@ class SelectionMapFragmentTest {
         map.setLocation(MapPoint(1.0, 2.0))
         assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
         assertThat(map.zoom, equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
+    }
+
+    @Test
+    fun `zooms to current location with saved zoom level when there are no items and there is last zoom level set by user saved`() {
+        whenever(data.getMappableItems()).doReturn(MutableLiveData(emptyList()))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.zoomLevelSetByUser = 10f
+        map.ready()
+
+        assertThat(map.hasCenter(), equalTo(false))
+
+        map.setLocation(MapPoint(1.0, 2.0))
+        assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
+        assertThat(map.zoom, equalTo(10.0))
     }
 
     @Test
