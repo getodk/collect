@@ -198,7 +198,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         databaseConnection.withConnection {
             getLists().forEach {
                 writableDatabase.delete(
-                    "`$it`",
+                    "\"$it\"",
                     "${EntitiesTable.COLUMN_ID} = ?",
                     arrayOf(id)
                 )
