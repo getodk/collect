@@ -223,6 +223,17 @@ public class GoogleMapFragment extends Fragment implements
         super.onDestroy();
     }
 
+    @Nullable
+    @Override
+    public Float getZoomLevelSetByUser() {
+        return null;
+    }
+
+    @Override
+    public void setZoomLevelSetByUser(@Nullable Float zoomLevel) {
+
+    }
+
     @Override public @NonNull MapPoint getCenter() {
         if (map == null) {  // during Robolectric tests, map will be null
             return INITIAL_CENTER;

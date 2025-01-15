@@ -22,6 +22,12 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         readyListener?.onReady(this)
     }
 
+    override fun getZoomLevelSetByUser(): Float? {
+        return null
+    }
+
+    override fun setZoomLevelSetByUser(zoomLevel: Float?) {}
+
     override fun getCenter(): MapPoint {
         return MapPoint(0.0, 0.0)
     }

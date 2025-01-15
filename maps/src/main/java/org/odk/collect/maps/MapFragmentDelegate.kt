@@ -36,12 +36,13 @@ class MapFragmentDelegate(
     }
 
     fun onStart() {
+        mapFragment.setZoomLevelSetByUser(metaSettings.getFloat(LAST_KNOWN_ZOOM_LEVEL))
         onConfigChanged.accept(configurator.buildConfig(unprotectedSettings))
         unprotectedSettings.registerOnSettingChangeListener(this)
     }
 
     fun onStop() {
-        metaSettings.save(LAST_KNOWN_ZOOM_LEVEL, "")
+        metaSettings.save(LAST_KNOWN_ZOOM_LEVEL, mapFragment.zoomLevelSetByUser)
         unprotectedSettings.unregisterOnSettingChangeListener(this)
     }
 

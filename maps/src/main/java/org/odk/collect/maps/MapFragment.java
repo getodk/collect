@@ -61,6 +61,10 @@ public interface MapFragment {
 
     void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener);
 
+    @Nullable Float getZoomLevelSetByUser();
+
+    void setZoomLevelSetByUser(@Nullable Float zoomLevel);
+
     /** Gets the point currently shown at the center of the map view. */
     @NonNull MapPoint getCenter();
 

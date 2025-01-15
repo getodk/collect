@@ -230,6 +230,13 @@ class MapboxMapFragment :
         }
     }
 
+    override fun getZoomLevelSetByUser(): Float? {
+        return null
+    }
+
+    override fun setZoomLevelSetByUser(zoomLevel: Float?) {
+    }
+
     override fun getCenter(): MapPoint {
         val point = mapboxMap.cameraState.center
         return MapPoint(point.latitude(), point.longitude())

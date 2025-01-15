@@ -228,6 +228,16 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         return view;
     }
 
+    @Nullable
+    @Override
+    public Float getZoomLevelSetByUser() {
+        return null;
+    }
+
+    @Override
+    public void setZoomLevelSetByUser(@Nullable Float zoomLevel) {
+    }
+
     @Override
     public @NonNull
     MapPoint getCenter() {
