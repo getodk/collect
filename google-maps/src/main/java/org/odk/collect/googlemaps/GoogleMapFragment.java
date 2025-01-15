@@ -126,6 +126,8 @@ public class GoogleMapFragment extends Fragment implements
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
     private boolean hasCenter;
+    private boolean isUserZooming;
+    private @Nullable Float lastZoomLevelChangedByUser;
 
     @Override
     public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
@@ -171,7 +173,18 @@ public class GoogleMapFragment extends Fragment implements
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                     toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
             googleMap.setOnCameraMoveListener(() -> scaleView.update(googleMap.getCameraPosition().zoom, googleMap.getCameraPosition().target.latitude));
-            googleMap.setOnCameraIdleListener(() -> scaleView.update(googleMap.getCameraPosition().zoom, googleMap.getCameraPosition().target.latitude));
+            googleMap.setOnCameraMoveStartedListener(reason -> {
+                if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+                    isUserZooming = true;
+                }
+            });
+            googleMap.setOnCameraIdleListener(() -> {
+                scaleView.update(googleMap.getCameraPosition().zoom, googleMap.getCameraPosition().target.latitude);
+                if (isUserZooming) {
+                    lastZoomLevelChangedByUser = googleMap.getCameraPosition().zoom;
+                    isUserZooming = false;
+                }
+            });
             loadReferenceOverlay();
 
             // If the screen is rotated before the map is ready, this fragment
@@ -226,12 +239,12 @@ public class GoogleMapFragment extends Fragment implements
     @Nullable
     @Override
     public Float getZoomLevelSetByUser() {
-        return null;
+        return lastZoomLevelChangedByUser;
     }
 
     @Override
     public void setZoomLevelSetByUser(@Nullable Float zoomLevel) {
-
+        lastZoomLevelChangedByUser = zoomLevel;
     }
 
     @Override public @NonNull MapPoint getCenter() {
