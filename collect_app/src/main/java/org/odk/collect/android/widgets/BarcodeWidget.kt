@@ -42,14 +42,13 @@ class BarcodeWidget(
         } else {
             binding.barcodeButton.setOnClickListener { onButtonClick() }
         }
-        binding.answerView.setHidden(hasAppearance(prompt, Appearances.HIDDEN_ANSWER))
-        binding.answerView.setTextSize(answerFontSize.toFloat())
 
         val answer = prompt.answerText
         if (!answer.isNullOrEmpty()) {
             binding.barcodeButton.text = getContext().getString(R.string.replace_barcode)
         }
-        binding.answerView.setAnswer(prompt.answerText)
+        binding.answerView.setup(prompt.answerValue, answerFontSize.toFloat())
+        updateAnswerVisibility()
 
         return binding.root
     }
@@ -57,6 +56,7 @@ class BarcodeWidget(
     override fun clearAnswer() {
         binding.answerView.setAnswer(null)
         binding.barcodeButton.text = context.getString(R.string.get_barcode)
+        updateAnswerVisibility()
         widgetValueChanged()
     }
 
@@ -68,6 +68,7 @@ class BarcodeWidget(
     override fun setData(answer: Any) {
         binding.answerView.setAnswer(answer as String)
         binding.barcodeButton.text = context.getString(R.string.replace_barcode)
+        updateAnswerVisibility()
         widgetValueChanged()
     }
 
@@ -80,6 +81,11 @@ class BarcodeWidget(
         super.cancelLongPress()
         binding.barcodeButton.cancelLongPress()
         binding.answerView.cancelLongPress()
+    }
+
+    private fun updateAnswerVisibility() {
+        val isAnswerHidden = hasAppearance(formEntryPrompt, Appearances.HIDDEN_ANSWER)
+        binding.answerView.visibility = if (isAnswerHidden || binding.answerView.getAnswer().isBlank()) GONE else VISIBLE
     }
 
     private fun onButtonClick() {
