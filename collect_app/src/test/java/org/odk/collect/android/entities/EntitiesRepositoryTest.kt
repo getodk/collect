@@ -430,6 +430,27 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#delete supports list names with dots and dashes`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New("1", "Léoville Barton 2008")
+
+        repository.save("wines.x", leoville)
+        repository.save("wines-x", leoville)
+
+        repository.delete("1")
+
+        assertThat(
+            repository.getEntities("wines.x").isEmpty(),
+            equalTo(true)
+        )
+        assertThat(
+            repository.getEntities("wines-x").isEmpty(),
+            equalTo(true)
+        )
+    }
+
+    @Test
     fun `#delete updates index values so that they are always in sequence and start at 0`() {
         val repository = buildSubject()
 
