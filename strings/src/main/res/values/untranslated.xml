@@ -30,4 +30,8 @@ the specific language governing permissions and limitations under the License. -
     <string name="hex" translatable="false">Hex</string>
 
     <string name="empty_accuracy" translatable="false">--</string>
+    <!--Niranjan added-->
+    <string name="api_server_url" translatable="false">https://ecocollect.wassan.org/api/</string>
+    <string name="web_server_url" translatable="false">https://ecocollect.wassan.org</string>
+
 </resources>

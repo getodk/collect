@@ -76,7 +76,7 @@ android {
     }
 
     defaultConfig {
-        applicationId('org.odk.collect.android')
+        applicationId('org.wassan.ecocollect.android')
         minSdk libs.versions.minSdk.get().toInteger()
         targetSdkVersion libs.versions.targetSdk.get().toInteger()
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
@@ -340,6 +340,8 @@ dependencies {
     }
 
     implementation libs.splashscreen
+    implementation libs.volley
+
 
     testImplementation project(':forms-test')
 

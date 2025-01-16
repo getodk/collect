@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/dashboard"
+        android:icon="@drawable/ic_access_time"
+        android:enabled="true"
+        android:title="@string/dashboard"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/crop"
+        android:icon="@drawable/ic_access_time"
+        android:enabled="true"
+        android:title="@string/crop"
+        android:visible="false"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/new_form"
+        android:title="" />
+
+    <item
+        android:id="@+id/community"
+        android:icon="@drawable/ic_access_time"
+        android:enabled="true"
+        android:title="@string/community"
+        android:visible="false"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/account"
+        android:icon="@drawable/ic_access_time"
+        android:enabled="true"
+        android:title="@string/account"
+        app:showAsAction="always"/>
+
+</menu>

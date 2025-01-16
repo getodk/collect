@@ -74,6 +74,10 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.wassan.activity.LoginActivity;
+import org.odk.collect.android.wassan.activity.MainActivity;
+import org.odk.collect.android.wassan.fragments.CalculatorFragment;
+import org.odk.collect.android.wassan.fragments.DashboardFragment;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
 import org.odk.collect.async.Scheduler;
@@ -256,6 +260,15 @@ public interface AppDependencyComponent {
     void inject(DownloadFormListTask downloadFormListTask);
 
     void inject(FormHierarchyFragmentHostActivity formHierarchyFragmentHostActivity);
+
+    //Niranjan Added
+    void inject(MainActivity mainActivity);
+
+    void inject(LoginActivity loginActivity);
+
+    void inject(DashboardFragment dashboardFragment);
+
+    void inject(CalculatorFragment formFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

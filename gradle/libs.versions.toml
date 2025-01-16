@@ -77,6 +77,8 @@ cameraxLifecycle = { group = "androidx.camera", name = "camera-lifecycle", versi
 cameraxCamera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
 cameraxVideo = { group = "androidx.camera", name = "camera-video", version.ref = "camerax" }
 jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.1" }
+#Niranjan added
+volley = { group = "com.android.volley", name = "volley", version = "1.2.1" }
 
 # Test dependencies
 junit = { group = "junit", name = "junit", version = "4.13.2" }

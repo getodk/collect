@@ -29,7 +29,7 @@ import org.odk.collect.android.database.forms.DatabaseFormColumns;
  */
 public final class FormsContract {
 
-    static final String AUTHORITY = "org.odk.collect.android.provider.odk.forms";
+    static final String AUTHORITY = "org.wassan.ecocollect.android.provider.odk.forms";
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.form";
 

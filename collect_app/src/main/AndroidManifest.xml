@@ -102,10 +102,8 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name=".activities.FirstLaunchActivity">
         </activity>
-
         <activity
-            android:name=".mainmenu.MainMenuActivity"
-            android:theme="@style/Theme.Collect.SplashScreen"
+            android:name=".wassan.activity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -216,11 +214,11 @@ the specific language governing permissions and limitations under the License.
 
         <provider
             android:name=".external.FormsProvider"
-            android:authorities="org.odk.collect.android.provider.odk.forms"
+            android:authorities="org.wassan.ecocollect.android.provider.odk.forms"
             android:exported="true" />
         <provider
             android:name=".external.InstanceProvider"
-            android:authorities="org.odk.collect.android.provider.odk.instances"
+            android:authorities="org.wassan.ecocollect.android.provider.odk.instances"
             android:exported="true" />
 
         <activity-alias

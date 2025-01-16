@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name">Name</string>
+    <string name="designation">Designation</string>
+    <string name="menu_rate">Rate us</string>
+    <string name="menu_about">About Us</string>
+    <string name="menu_logout">LogOut</string>
+    <string name="menu_share">Share App</string>
+    <string name="weather">Weather</string>
+    <string name="community">Community</string>
+    <string name="account">Account</string>
+    <string name="messages">Messages</string>
+    <string name="dashboard">Dashboard</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="open_nav">Open</string>
+    <string name="close_nav">Close</string>
+    <string name="form">Forms</string>
+    <string name="menu_form">Forms</string>
+    <string name="crop">crop Calculator</string>
+    <string name="sync_itemset">Sync Itemset</string>
+</resources>
