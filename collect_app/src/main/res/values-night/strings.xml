@@ -19,4 +19,9 @@
     <string name="menu_form">Forms</string>
     <string name="crop">crop Calculator</string>
     <string name="sync_itemset">Sync Itemset</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="qr_code_scanner">QR Code Scanner</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="login">Login</string>
 </resources>

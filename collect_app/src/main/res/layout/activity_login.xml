@@ -10,12 +10,15 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="center"
             android:layout_gravity="center_vertical"
             >
 
@@ -27,44 +30,68 @@
                 android:layout_margin="20dp"
                 app:srcCompat="@drawable/logoc" />
 
-            <EditText
-                android:id="@+id/editTextUsername"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:background="@drawable/edittext_gray_background"
-                android:drawableStart="@drawable/ic_username"
-                android:drawableTint="#000000"
-                android:drawablePadding="10dp"
-                android:paddingLeft="16dp"
-                android:hint="Username"
-                android:textColor="#4d4d4d"
-                android:textColorHint="#4d4d4d"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:textSize="18sp"
                 android:layout_marginTop="16dp"
-                />
-            <EditText
-                android:id="@+id/editTextPassword"
+                android:hint="@string/username"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="#4d4d4d"
+                app:boxStrokeWidthFocused="2dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:inputType="textPersonName"
+                    android:scrollbars="none"
+                    android:overScrollMode="never"
+                    android:backgroundTint="@android:color/transparent"
+                    android:drawableStart="@drawable/ic_username"
+                    android:drawableTint="#000000"
+                    android:drawablePadding="10dp"
+                    android:paddingStart="16dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textColor="#4d4d4d"
+                    android:textColorHint="#4d4d4d"
+                    android:textSize="18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:ems="10"
-                android:inputType="textPassword"
-                android:background="@drawable/edittext_gray_background"
-                android:drawableStart="@drawable/ic_password"
-                android:drawableTint="#000000"
-                android:drawablePadding="10dp"
-                android:paddingLeft="16dp"
-                android:hint="Password"
-                android:textColor="#4d4d4d"
-                android:textColorHint="#4d4d4d"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:textSize="18sp"
                 android:layout_marginTop="16dp"
-                />
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="#4d4d4d">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:inputType="textPassword"
+                    android:scrollbars="none"
+                    android:overScrollMode="never"
+                    android:singleLine="true"
+                    android:hint="@string/password"
+                    android:textColor="#4d4d4d"
+                    android:textColorHint="#4d4d4d"
+                    android:textSize="18sp"
+                    android:drawableStart="@drawable/ic_password"
+                    android:drawableTint="#000000"
+                    android:drawablePadding="10dp"
+                    android:paddingStart="16dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
 
             <Button
                 android:id="@+id/loginButton"
@@ -78,13 +105,13 @@
                 android:textColor="#ffffff"
                 android:textSize="23sp"
                 android:textStyle="bold"
-                android:text="Login" />
+                android:text="@string/login" />
 
             <TextView
                 android:id="@+id/textForgotPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Forgot Password"
+                android:text="@string/forgot_password"
                 android:textAlignment="center"
                 android:textSize="16sp"
                 android:textColor="#4d4d4d"
@@ -100,7 +127,7 @@
                 android:layout_marginTop="16dp"
                 android:background="@drawable/edittext_gray_background"
                 android:padding="12dp"
-                android:text="QR Code Scanner"
+                android:text="@string/qr_code_scanner"
                 android:textColor="#ffffff"
                 android:textStyle="bold"/>
         </LinearLayout>

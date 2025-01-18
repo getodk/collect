@@ -25,7 +25,7 @@ class SplashActivity : LocalizedActivity() {
 
 
         Handler().postDelayed({
-            val mainIntent = Intent(this, MainMenuActivity::class.java)
+            val mainIntent = Intent(this, MainActivity::class.java)
             startActivity(mainIntent)
             finish() // Close the splash activity
         }, 3000)

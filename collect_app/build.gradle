@@ -339,8 +339,11 @@ dependencies {
         exclude group: 'org.hamcrest'
     }
 
+    //Niranjan added
     implementation libs.splashscreen
     implementation libs.volley
+    implementation libs.glide
+
 
 
     testImplementation project(':forms-test')

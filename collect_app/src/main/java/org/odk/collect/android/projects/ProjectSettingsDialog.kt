@@ -17,6 +17,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.CurrentProjectViewModel
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
+import org.odk.collect.android.wassan.activity.MainActivity
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.projects.Project
@@ -35,6 +36,10 @@ class ProjectSettingsDialog(private val viewModelFactory: ViewModelProvider.Fact
     lateinit var binding: ProjectSettingsDialogLayoutBinding
 
     private lateinit var currentProjectViewModel: CurrentProjectViewModel
+
+    // Listener to delegate project switching to the hosting component
+    // niranjan added
+    var onProjectSwitchListener: ((Project.Saved) -> Unit)? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -104,7 +109,7 @@ class ProjectSettingsDialog(private val viewModelFactory: ViewModelProvider.Fact
         }
     }
 
-    private fun switchProject(project: Project.Saved) {
+    /*private fun switchProject(project: Project.Saved) {
         currentProjectViewModel.setCurrentProject(project)
 
         ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity::class.java)
@@ -113,5 +118,20 @@ class ProjectSettingsDialog(private val viewModelFactory: ViewModelProvider.Fact
             getString(org.odk.collect.strings.R.string.switched_project, project.name)
         )
         dismiss()
+    }*/
+
+    private fun switchProject(project: Project.Saved) {
+        //niranjan added
+        onProjectSwitchListener?.invoke(project) ?: run {
+            // Default internal logic
+            currentProjectViewModel.setCurrentProject(project)
+
+            ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainActivity::class.java)
+            ToastUtils.showLongToast(
+                requireContext(),
+                getString(org.odk.collect.strings.R.string.switched_project, project.name)
+            )
+            dismiss()
+        }
     }
 }

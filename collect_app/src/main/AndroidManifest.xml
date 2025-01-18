@@ -112,6 +112,23 @@ the specific language governing permissions and limitations under the License.
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".mainmenu.MainMenuActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Collect.SplashScreen" >
+        </activity>
+
+        <activity
+            android:name=".wassan.activity.MainActivity"
+            android:exported="false" >
+        </activity>
+
+        <activity
+            android:name=".wassan.activity.LoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+
         <activity android:name="org.odk.collect.android.activities.CrashHandlerActivity" />
 
         <activity
