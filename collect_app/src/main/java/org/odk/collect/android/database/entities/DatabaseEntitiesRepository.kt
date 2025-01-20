@@ -232,7 +232,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         val propertyExists = databaseConnection.withConnection {
-            readableDatabase.doesColumnExist(list, EntitiesTable.getPropertyColumn(property))
+            readableDatabase.doesColumnExist(quote(list), EntitiesTable.getPropertyColumn(property))
         }
 
         return if (propertyExists) {
