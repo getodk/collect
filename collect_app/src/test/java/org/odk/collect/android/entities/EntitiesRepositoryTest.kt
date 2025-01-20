@@ -660,6 +660,32 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
+    fun `#getAllByProperty supports list names with dots and dashes`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New(
+            "1",
+            "Léoville Barton 2008",
+            properties = listOf("vintage" to "2008")
+        )
+
+        repository.save("favourite-wines", leoville)
+        repository.save("favourite.wines", leoville)
+
+        var wines = repository.getEntities("favourite-wines")
+        assertThat(
+            repository.getAllByProperty("favourite-wines", "vintage", "2008"),
+            containsInAnyOrder(wines.first { it.id == "1" })
+        )
+
+        wines = repository.getEntities("favourite.wines")
+        assertThat(
+            repository.getAllByProperty("favourite.wines", "vintage", "2008"),
+            containsInAnyOrder(wines.first { it.id == "1" })
+        )
+    }
+
+    @Test
     fun `#getCount returns 0 when a list is empty`() {
         val repository = buildSubject()
         repository.addList("wines")
