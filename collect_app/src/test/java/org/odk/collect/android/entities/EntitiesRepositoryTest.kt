@@ -537,7 +537,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#getByAllByProperty returns entities with matching property value`() {
+    fun `#getAllByProperty returns entities with matching property value`() {
         val repository = buildSubject()
 
         val leoville = Entity.New(
@@ -562,7 +562,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#getByAllByProperty returns entities without property when searching for empty string`() {
+    fun `#getAllByProperty returns entities without property when searching for empty string`() {
         val repository = buildSubject()
 
         val leoville = Entity.New(
@@ -586,7 +586,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#getByAllByProperty returns entities when searching for empty string for property that doesn't exist`() {
+    fun `#getAllByProperty returns entities when searching for empty string for property that doesn't exist`() {
         val repository = buildSubject()
 
         val leoville = Entity.New(
@@ -600,7 +600,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#getByAllByProperty returns empty list when searching for non empty string for property that doesn't exist`() {
+    fun `#getAllByProperty returns empty list when searching for non empty string for property that doesn't exist`() {
         val repository = buildSubject()
 
         val leoville = Entity.New(
