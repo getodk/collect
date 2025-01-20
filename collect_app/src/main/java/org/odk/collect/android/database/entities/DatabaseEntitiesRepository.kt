@@ -181,12 +181,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    override fun clear() {
-        databaseConnection.withConnection {
-            dropAllTablesFromDB(writableDatabase)
-        }
-    }
-
     override fun addList(list: String) {
         if (!listExists(list)) {
             createList(list)

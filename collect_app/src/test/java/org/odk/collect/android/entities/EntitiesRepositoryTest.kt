@@ -314,27 +314,6 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#clear deletes all entities`() {
-        val repository = buildSubject()
-
-        val wine = Entity.New("1", "Léoville Barton 2008")
-        val whisky = Entity.New("2", "Lagavulin 16")
-        repository.save("wines", wine)
-        repository.save("whiskys", whisky)
-
-        repository.clear()
-        assertThat(repository.getLists().size, equalTo(0))
-        assertThat(repository.getEntities("wines").size, equalTo(0))
-        assertThat(repository.getEntities("whiskys").size, equalTo(0))
-
-        repository.addList("wines")
-        assertThat(repository.getEntities("wines").size, equalTo(0))
-
-        repository.addList("whiskys")
-        assertThat(repository.getEntities("whiskys").size, equalTo(0))
-    }
-
-    @Test
     fun `#save can save multiple entities`() {
         val repository = buildSubject()
 
