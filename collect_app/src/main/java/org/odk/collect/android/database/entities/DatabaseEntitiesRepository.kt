@@ -181,12 +181,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    override fun clear() {
-        databaseConnection.withConnection {
-            dropAllTablesFromDB(writableDatabase)
-        }
-    }
-
     override fun addList(list: String) {
         if (!listExists(list)) {
             createList(list)
@@ -232,7 +226,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         val propertyExists = databaseConnection.withConnection {
-            readableDatabase.doesColumnExist(list, EntitiesTable.getPropertyColumn(property))
+            readableDatabase.doesColumnExist(quote(list), EntitiesTable.getPropertyColumn(property))
         }
 
         return if (propertyExists) {
