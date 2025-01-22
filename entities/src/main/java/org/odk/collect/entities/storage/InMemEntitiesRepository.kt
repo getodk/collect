@@ -34,11 +34,6 @@ class InMemEntitiesRepository : EntitiesRepository {
         return getEntities(list).count()
     }
 
-    override fun clear() {
-        entities.clear()
-        lists.clear()
-    }
-
     override fun addList(list: String) {
         lists.add(list)
     }

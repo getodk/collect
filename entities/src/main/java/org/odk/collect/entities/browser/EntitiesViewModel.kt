@@ -29,11 +29,4 @@ class EntitiesViewModel(
 
         return result
     }
-
-    fun clearAll() {
-        scheduler.immediate {
-            entitiesRepository.clear()
-            _lists.postValue(entitiesRepository.getLists().toList())
-        }
-    }
 }
