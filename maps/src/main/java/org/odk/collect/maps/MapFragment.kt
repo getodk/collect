@@ -27,16 +27,7 @@ import org.odk.collect.maps.markers.MarkerIconDescription
 interface MapFragment {
     fun init(readyListener: ReadyListener?, errorListener: ErrorListener?)
 
-    /**
-     * Gets the current zoom level if it has been changed by the user through gestures.
-     * Programmatic zoom changes will not be considered.
-     */
-    fun getZoomLevelSetByUser(): Float?
-
-    /**
-     * Sets the remembered zoom level changed by the user through gestures.
-     */
-    fun setZoomLevelSetByUser(zoomLevel: Float?)
+    fun onZoomLevelChangedByUserListener(zoomLevel: Float?)
 
     /** Gets the point currently shown at the center of the map view.  */
     fun getCenter(): MapPoint

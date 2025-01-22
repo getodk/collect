@@ -16,12 +16,7 @@ class NoOpMapFragment : Fragment(), MapFragment {
     ) {
     }
 
-    override fun getZoomLevelSetByUser(): Float? {
-        return null
-    }
-
-    override fun setZoomLevelSetByUser(zoomLevel: Float?) {
-    }
+    override fun onZoomLevelChangedByUserListener(zoomLevel: Float?) {}
 
     override fun getCenter(): MapPoint {
         TODO("Not yet implemented")

@@ -116,7 +116,6 @@ class MapboxMapFragment :
     )
 
     private var hasCenter = false
-    private var lastZoomLevelChangedByUser: Float? = null
 
     private val settingsProvider: SettingsProvider by lazy {
         (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider().provide(SettingsProvider::class.java)
@@ -174,7 +173,7 @@ class MapboxMapFragment :
                     override fun onScaleBegin(detector: StandardScaleGestureDetector) = Unit
 
                     override fun onScaleEnd(detector: StandardScaleGestureDetector) {
-                        lastZoomLevelChangedByUser = cameraState.zoom.toFloat()
+                        onZoomLevelChangedByUserListener(cameraState.zoom.toFloat())
                     }
                 })
             }
@@ -243,12 +242,8 @@ class MapboxMapFragment :
         }
     }
 
-    override fun getZoomLevelSetByUser(): Float? {
-        return lastZoomLevelChangedByUser
-    }
-
-    override fun setZoomLevelSetByUser(zoomLevel: Float?) {
-        lastZoomLevelChangedByUser = zoomLevel
+    override fun onZoomLevelChangedByUserListener(zoomLevel: Float?) {
+        mapFragmentDelegate.onZoomLevelChangedByUserListener(zoomLevel)
     }
 
     override fun getCenter(): MapPoint {
@@ -271,7 +266,7 @@ class MapboxMapFragment :
     override fun zoomToCurrentLocation(center: MapPoint?) {
         zoomToPoint(
             center,
-            lastZoomLevelChangedByUser?.toDouble() ?: MapFragment.POINT_ZOOM.toDouble(),
+            mapFragmentDelegate.zoomLevel?.toDouble() ?: MapFragment.POINT_ZOOM.toDouble(),
             true
         )
     }

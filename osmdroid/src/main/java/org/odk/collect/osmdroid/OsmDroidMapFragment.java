@@ -132,7 +132,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private TilesOverlay referenceOverlay;
     private boolean hasCenter;
     private boolean isSystemZooming;
-    private @Nullable Float lastZoomLevelChangedByUser;
 
     @Override
     public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
@@ -210,7 +209,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             @Override
             public boolean onZoom(ZoomEvent event) {
                 if (!isSystemZooming) {
-                    lastZoomLevelChangedByUser = (float) event.getZoomLevel();
+                    onZoomLevelChangedByUserListener((float) event.getZoomLevel());
                 }
                 return false;
             }
@@ -244,18 +243,12 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         return view;
     }
 
-    @Nullable
     @Override
-    public Float getZoomLevelSetByUser() {
-        return lastZoomLevelChangedByUser;
-    }
-
-    @Override
-    public void setZoomLevelSetByUser(@Nullable Float zoomLevel) {
+    public void onZoomLevelChangedByUserListener(@Nullable Float zoomLevel) {
         if (zoomLevel != null && zoomLevel < 2) {
-            lastZoomLevelChangedByUser = 2f;
+            mapFragmentDelegate.onZoomLevelChangedByUserListener(2f);
         } else {
-            lastZoomLevelChangedByUser = zoomLevel;
+            mapFragmentDelegate.onZoomLevelChangedByUserListener(zoomLevel);
         }
     }
 
@@ -285,9 +278,10 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override
     public void zoomToCurrentLocation(@Nullable MapPoint center) {
+        Float zoomLevel = mapFragmentDelegate.getZoomLevel();
         zoomToPoint(
                 center,
-                lastZoomLevelChangedByUser != null ? lastZoomLevelChangedByUser : POINT_ZOOM,
+                zoomLevel != null ? zoomLevel : POINT_ZOOM,
                 true
         );
     }

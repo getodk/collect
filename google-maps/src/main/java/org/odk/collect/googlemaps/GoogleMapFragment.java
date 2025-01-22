@@ -127,7 +127,6 @@ public class GoogleMapFragment extends Fragment implements
     private TileOverlay referenceOverlay;
     private boolean hasCenter;
     private boolean isUserZooming;
-    private @Nullable Float lastZoomLevelChangedByUser;
 
     @Override
     public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
@@ -181,7 +180,7 @@ public class GoogleMapFragment extends Fragment implements
             googleMap.setOnCameraIdleListener(() -> {
                 scaleView.update(googleMap.getCameraPosition().zoom, googleMap.getCameraPosition().target.latitude);
                 if (isUserZooming) {
-                    lastZoomLevelChangedByUser = googleMap.getCameraPosition().zoom;
+                    onZoomLevelChangedByUserListener(googleMap.getCameraPosition().zoom);
                     isUserZooming = false;
                 }
             });
@@ -236,15 +235,9 @@ public class GoogleMapFragment extends Fragment implements
         super.onDestroy();
     }
 
-    @Nullable
     @Override
-    public Float getZoomLevelSetByUser() {
-        return lastZoomLevelChangedByUser;
-    }
-
-    @Override
-    public void setZoomLevelSetByUser(@Nullable Float zoomLevel) {
-        lastZoomLevelChangedByUser = zoomLevel;
+    public void onZoomLevelChangedByUserListener(@Nullable Float zoomLevel) {
+        mapFragmentDelegate.onZoomLevelChangedByUserListener(zoomLevel);
     }
 
     @Override public @NonNull MapPoint getCenter() {
@@ -275,9 +268,10 @@ public class GoogleMapFragment extends Fragment implements
 
     @Override
     public void zoomToCurrentLocation(@Nullable MapPoint center) {
+        Float zoomLevel = mapFragmentDelegate.getZoomLevel();
         zoomToPoint(
                 center,
-                lastZoomLevelChangedByUser != null ? lastZoomLevelChangedByUser : POINT_ZOOM,
+                zoomLevel != null ? zoomLevel : POINT_ZOOM,
                 true
         );
     }

@@ -43,11 +43,7 @@ class FakeMapFragment : Fragment(), MapFragment {
         readyListener?.onReady(this)
     }
 
-    override fun getZoomLevelSetByUser(): Float? {
-        return zoomLevelSetByUser
-    }
-
-    override fun setZoomLevelSetByUser(zoomLevel: Float?) {
+    override fun onZoomLevelChangedByUserListener(zoomLevel: Float?) {
         zoomLevelSetByUser = zoomLevel
     }
 
