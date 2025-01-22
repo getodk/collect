@@ -44,15 +44,15 @@ class MapFragmentDelegate(
     }
 
     fun onStop() {
-        if (mapFragment.zoomLevelSetByUser != null) {
-            metaSettings.save(LAST_KNOWN_ZOOM_LEVEL, mapFragment.zoomLevelSetByUser)
+        if (mapFragment.getZoomLevelSetByUser() != null) {
+            metaSettings.save(LAST_KNOWN_ZOOM_LEVEL, mapFragment.getZoomLevelSetByUser())
         }
         unprotectedSettings.unregisterOnSettingChangeListener(this)
     }
 
     fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelable(MAP_CENTER_KEY, mapFragment.center)
-        outState.putDouble(MAP_ZOOM_KEY, mapFragment.zoom)
+        outState.putParcelable(MAP_CENTER_KEY, mapFragment.getCenter())
+        outState.putDouble(MAP_ZOOM_KEY, mapFragment.getZoom())
     }
 
     override fun onSettingChanged(key: String) {

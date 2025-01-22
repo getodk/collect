@@ -189,7 +189,7 @@ class SelectionMapFragment(
         map = newMapFragment
 
         binding.zoomToLocation.setMultiClickSafeOnClickListener {
-            map.zoomToCurrentLocation(map.gpsLocation)
+            map.zoomToCurrentLocation(map.getGpsLocation())
         }
 
         binding.zoomToBounds.setMultiClickSafeOnClickListener {
@@ -312,7 +312,7 @@ class SelectionMapFragment(
                         val point = item.point
 
                         if (maintainZoom) {
-                            map.zoomToPoint(MapPoint(point.latitude, point.longitude), map.zoom, true)
+                            map.zoomToPoint(MapPoint(point.latitude, point.longitude), map.getZoom(), true)
                         } else {
                             map.zoomToPoint(MapPoint(point.latitude, point.longitude), true)
                         }

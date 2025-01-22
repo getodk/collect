@@ -201,7 +201,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
         map.setMinZoomLevel(2.0);
         map.setMaxZoomLevel(22.0);
-        map.getController().setCenter(toGeoPoint(INITIAL_CENTER));
+        map.getController().setCenter(toGeoPoint(MapFragment.Companion.getINITIAL_CENTER()));
         map.getController().setZoom((int) INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
         map.setFlingEnabled(false);
@@ -313,7 +313,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
-    public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate) {
+    public void zoomToBoundingBox(@Nullable Iterable<MapPoint> points, double scaleFactor, boolean animate) {
         if (points != null) {
             int count = 0;
             List<GeoPoint> geoPoints = new ArrayList<>();
@@ -684,7 +684,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         return marker;
     }
 
-    private float getIconAnchorValueX(@IconAnchor String iconAnchor) {
+    private float getIconAnchorValueX(@MapFragment.Companion.IconAnchor String iconAnchor) {
         switch (iconAnchor) {
             case BOTTOM:
             default:
@@ -692,7 +692,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
     }
 
-    private float getIconAnchorValueY(@IconAnchor String iconAnchor) {
+    private float getIconAnchorValueY(@MapFragment.Companion.IconAnchor String iconAnchor) {
         switch (iconAnchor) {
             case BOTTOM:
                 return Marker.ANCHOR_BOTTOM;

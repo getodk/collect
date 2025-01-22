@@ -174,7 +174,7 @@ class MapboxMapFragment :
                     override fun onScaleBegin(detector: StandardScaleGestureDetector) = Unit
 
                     override fun onScaleEnd(detector: StandardScaleGestureDetector) {
-                        zoomLevelSetByUser = cameraState.zoom.toFloat()
+                        lastZoomLevelChangedByUser = cameraState.zoom.toFloat()
                     }
                 })
             }

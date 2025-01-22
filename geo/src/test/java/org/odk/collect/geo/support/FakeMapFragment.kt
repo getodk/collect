@@ -83,17 +83,19 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     override fun zoomToBoundingBox(
-        points: Iterable<MapPoint>,
+        points: Iterable<MapPoint>?,
         scaleFactor: Double,
         animate: Boolean
     ) {
-        center = null
-        zoom = 0.0
-        zoomBoundingBox = Pair(
-            points.toList(), // Clone list to prevent original changing captured values
-            scaleFactor
-        )
-        hasCenter = true
+        points?.let {
+            center = null
+            zoom = 0.0
+            zoomBoundingBox = Pair(
+                it.toList(), // Clone list to prevent original changing captured values
+                scaleFactor
+            )
+            hasCenter = true
+        }
     }
 
     override fun addMarker(markerDescription: MarkerDescription): Int {

@@ -45,7 +45,7 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
     override fun zoomToPoint(center: MapPoint?, zoom: Double, animate: Boolean) {}
 
     override fun zoomToBoundingBox(
-        points: MutableIterable<MapPoint>?,
+        points: Iterable<MapPoint>?,
         scaleFactor: Double,
         animate: Boolean
     ) {}
