@@ -297,7 +297,7 @@ class SelectionMapFragmentTest {
         map.setCenter(MapPoint(12.3, 45.6), false)
         map.ready()
 
-        assertThat(map.center, equalTo(MapPoint(12.3, 45.6)))
+        assertThat(map.getCenter(), equalTo(MapPoint(12.3, 45.6)))
     }
 
     @Test
@@ -324,7 +324,7 @@ class SelectionMapFragmentTest {
         assertThat(map.hasCenter(), equalTo(false))
 
         map.setLocation(MapPoint(1.0, 2.0))
-        assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
+        assertThat(map.getCenter(), equalTo(MapPoint(1.0, 2.0)))
     }
 
     @Test
@@ -337,8 +337,8 @@ class SelectionMapFragmentTest {
         assertThat(map.hasCenter(), equalTo(false))
 
         map.setLocation(MapPoint(1.0, 2.0))
-        assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
-        assertThat(map.zoom, equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
+        assertThat(map.getCenter(), equalTo(MapPoint(1.0, 2.0)))
+        assertThat(map.getZoom(), equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
     }
 
     @Test
@@ -346,14 +346,14 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).doReturn(MutableLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
-        map.zoomLevelSetByUser = 10f
+        map.onZoomLevelChangedByUserListener(10f)
         map.ready()
 
         assertThat(map.hasCenter(), equalTo(false))
 
         map.setLocation(MapPoint(1.0, 2.0))
-        assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
-        assertThat(map.zoom, equalTo(10.0))
+        assertThat(map.getCenter(), equalTo(MapPoint(1.0, 2.0)))
+        assertThat(map.getZoom(), equalTo(10.0))
     }
 
     @Test
@@ -366,10 +366,10 @@ class SelectionMapFragmentTest {
         assertThat(map.hasCenter(), equalTo(false))
 
         map.setLocation(MapPoint(1.0, 2.0))
-        assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
+        assertThat(map.getCenter(), equalTo(MapPoint(1.0, 2.0)))
 
         map.setLocation(MapPoint(3.0, 4.0))
-        assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
+        assertThat(map.getCenter(), equalTo(MapPoint(1.0, 2.0)))
     }
 
     @Test
@@ -399,8 +399,8 @@ class SelectionMapFragmentTest {
         map.setLocation(MapPoint(40.181389, 44.514444))
         onView(withId(R.id.zoom_to_location)).perform(click())
 
-        assertThat(map.center, equalTo(MapPoint(40.181389, 44.514444)))
-        assertThat(map.zoom, equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
+        assertThat(map.getCenter(), equalTo(MapPoint(40.181389, 44.514444)))
+        assertThat(map.getZoom(), equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
     }
 
     @Test
@@ -463,8 +463,8 @@ class SelectionMapFragmentTest {
         map.zoomToPoint(MapPoint(55.0, 66.0), 2.0, false)
 
         map.clickOnFeature(1)
-        assertThat(map.center, equalTo(items[1].toMapPoint()))
-        assertThat(map.zoom, equalTo(2.0))
+        assertThat(map.getCenter(), equalTo(items[1].toMapPoint()))
+        assertThat(map.getZoom(), equalTo(2.0))
     }
 
     @Test
@@ -499,7 +499,7 @@ class SelectionMapFragmentTest {
         map.ready()
 
         map.clickOnFeatureId(map.getFeatureId(listOf((items[1] as MappableSelectItem.MappableSelectPoint).point)))
-        assertThat(map.center, equalTo((items[1] as MappableSelectItem.MappableSelectPoint).point))
+        assertThat(map.getCenter(), equalTo((items[1] as MappableSelectItem.MappableSelectPoint).point))
     }
 
     @Test
@@ -732,8 +732,8 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        assertThat(map.center, equalTo(items[1].toMapPoint()))
-        assertThat(map.zoom, equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
+        assertThat(map.getCenter(), equalTo(items[1].toMapPoint()))
+        assertThat(map.getZoom(), equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
     }
 
     @Test
@@ -748,7 +748,7 @@ class SelectionMapFragmentTest {
         map.ready()
 
         map.setLocation(MapPoint(1.0, 2.0))
-        assertThat(map.center, equalTo(items[1].toMapPoint()))
+        assertThat(map.getCenter(), equalTo(items[1].toMapPoint()))
     }
 
     @Test
