@@ -107,7 +107,7 @@ class MapboxMapFragment :
     private var clientWantsLocationUpdates = false
     private var topStyleLayerId: String? = null
     private val locationCallback = MapboxLocationCallback(this)
-    private var mapFragmentDelegate = MapFragmentDelegate(
+    override val mapFragmentDelegate = MapFragmentDelegate(
         this,
         { MapboxMapConfigurator() },
         { settingsProvider.getUnprotectedSettings() },
@@ -261,14 +261,6 @@ class MapboxMapFragment :
         }
 
         hasCenter = true
-    }
-
-    override fun zoomToCurrentLocation(center: MapPoint?) {
-        zoomToPoint(
-            center,
-            mapFragmentDelegate.zoomLevel?.toDouble() ?: MapFragment.POINT_ZOOM.toDouble(),
-            true
-        )
     }
 
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {

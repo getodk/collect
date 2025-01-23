@@ -235,6 +235,12 @@ public class GoogleMapFragment extends Fragment implements
         super.onDestroy();
     }
 
+    @NonNull
+    @Override
+    public MapFragmentDelegate getMapFragmentDelegate() {
+        return mapFragmentDelegate;
+    }
+
     @Override
     public void onZoomLevelChangedByUserListener(@Nullable Float zoomLevel) {
         mapFragmentDelegate.onZoomLevelChangedByUserListener(zoomLevel);
@@ -264,16 +270,6 @@ public class GoogleMapFragment extends Fragment implements
             return INITIAL_ZOOM;
         }
         return map.getCameraPosition().zoom;
-    }
-
-    @Override
-    public void zoomToCurrentLocation(@Nullable MapPoint center) {
-        Float zoomLevel = mapFragmentDelegate.getZoomLevel();
-        zoomToPoint(
-                center,
-                zoomLevel != null ? zoomLevel : POINT_ZOOM,
-                true
-        );
     }
 
     @Override public void zoomToPoint(@Nullable MapPoint center, boolean animate) {

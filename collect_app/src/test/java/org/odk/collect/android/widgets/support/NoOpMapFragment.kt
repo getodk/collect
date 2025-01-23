@@ -1,8 +1,10 @@
 package org.odk.collect.android.widgets.support
 
 import androidx.fragment.app.Fragment
+import org.mockito.Mockito.mock
 import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapFragment
+import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
@@ -16,6 +18,9 @@ class NoOpMapFragment : Fragment(), MapFragment {
     ) {
     }
 
+    override val mapFragmentDelegate: MapFragmentDelegate
+        get() = mock()
+
     override fun onZoomLevelChangedByUserListener(zoomLevel: Float?) {}
 
     override fun getCenter(): MapPoint {
@@ -27,9 +32,6 @@ class NoOpMapFragment : Fragment(), MapFragment {
     }
 
     override fun setCenter(center: MapPoint?, animate: Boolean) {
-    }
-
-    override fun zoomToCurrentLocation(center: MapPoint?) {
     }
 
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {

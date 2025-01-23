@@ -1,11 +1,14 @@
 package org.odk.collect.geo.support
 
 import androidx.fragment.app.Fragment
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.whenever
 import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
+import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
@@ -39,6 +42,11 @@ class FakeMapFragment : Fragment(), MapFragment {
         this.readyListener = readyListener
     }
 
+    override val mapFragmentDelegate: MapFragmentDelegate
+        get() = mock<MapFragmentDelegate?>().also {
+            whenever(it.zoomLevel).thenReturn(zoomLevelSetByUser)
+        }
+
     fun ready() {
         readyListener?.onReady(this)
     }
@@ -48,7 +56,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     override fun getCenter(): MapPoint {
-        return center ?: DEFAULT_CENTER
+        return center ?: MapFragment.INITIAL_CENTER
     }
 
     override fun getZoom(): Double {
@@ -60,14 +68,10 @@ class FakeMapFragment : Fragment(), MapFragment {
         hasCenter = true
     }
 
-    override fun zoomToCurrentLocation(center: MapPoint?) {
-        zoomToPoint(center, zoomLevelSetByUser?.toDouble() ?: DEFAULT_POINT_ZOOM, true)
-    }
-
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {
         zoomBoundingBox = null
         this.center = center
-        this.zoom = DEFAULT_POINT_ZOOM
+        this.zoom = MapFragment.POINT_ZOOM.toDouble()
         hasCenter = true
     }
 
@@ -262,18 +266,5 @@ class FakeMapFragment : Fragment(), MapFragment {
 
     fun getPolygons(): List<PolygonDescription> {
         return polygons.values.toList()
-    }
-
-    companion object {
-        /**
-         * The value returned if the map has had no center set or has had `null` pass to
-         * [setCenter]
-         */
-        val DEFAULT_CENTER = MapPoint(-1.0, -1.0)
-
-        /**
-         * The value used to zoom when [zoomToPoint] is called without a zoom level
-         */
-        const val DEFAULT_POINT_ZOOM = -1.0
     }
 }

@@ -338,7 +338,7 @@ class SelectionMapFragmentTest {
 
         map.setLocation(MapPoint(1.0, 2.0))
         assertThat(map.getCenter(), equalTo(MapPoint(1.0, 2.0)))
-        assertThat(map.getZoom(), equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
+        assertThat(map.getZoom(), equalTo(MapFragment.POINT_ZOOM.toDouble()))
     }
 
     @Test
@@ -400,7 +400,7 @@ class SelectionMapFragmentTest {
         onView(withId(R.id.zoom_to_location)).perform(click())
 
         assertThat(map.getCenter(), equalTo(MapPoint(40.181389, 44.514444)))
-        assertThat(map.getZoom(), equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
+        assertThat(map.getZoom(), equalTo(MapFragment.POINT_ZOOM.toDouble()))
     }
 
     @Test
@@ -733,7 +733,7 @@ class SelectionMapFragmentTest {
         map.ready()
 
         assertThat(map.getCenter(), equalTo(items[1].toMapPoint()))
-        assertThat(map.getZoom(), equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
+        assertThat(map.getZoom(), equalTo(MapFragment.POINT_ZOOM.toDouble()))
     }
 
     @Test

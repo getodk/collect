@@ -243,6 +243,12 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         return view;
     }
 
+    @NonNull
+    @Override
+    public MapFragmentDelegate getMapFragmentDelegate() {
+        return mapFragmentDelegate;
+    }
+
     @Override
     public void onZoomLevelChangedByUserListener(@Nullable Float zoomLevel) {
         if (zoomLevel != null && zoomLevel < 2) {
@@ -274,16 +280,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public double getZoom() {
         return map.getZoomLevel();
-    }
-
-    @Override
-    public void zoomToCurrentLocation(@Nullable MapPoint center) {
-        Float zoomLevel = mapFragmentDelegate.getZoomLevel();
-        zoomToPoint(
-                center,
-                zoomLevel != null ? zoomLevel : POINT_ZOOM,
-                true
-        );
     }
 
     @Override
