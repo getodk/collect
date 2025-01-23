@@ -180,7 +180,7 @@ public class GoogleMapFragment extends Fragment implements
             googleMap.setOnCameraIdleListener(() -> {
                 scaleView.update(googleMap.getCameraPosition().zoom, googleMap.getCameraPosition().target.latitude);
                 if (isUserZooming) {
-                    onZoomLevelChangedByUserListener(googleMap.getCameraPosition().zoom);
+                    mapFragmentDelegate.onZoomLevelChangedByUserListener(googleMap.getCameraPosition().zoom);
                     isUserZooming = false;
                 }
             });
@@ -239,11 +239,6 @@ public class GoogleMapFragment extends Fragment implements
     @Override
     public MapFragmentDelegate getMapFragmentDelegate() {
         return mapFragmentDelegate;
-    }
-
-    @Override
-    public void onZoomLevelChangedByUserListener(@Nullable Float zoomLevel) {
-        mapFragmentDelegate.onZoomLevelChangedByUserListener(zoomLevel);
     }
 
     @Override public @NonNull MapPoint getCenter() {

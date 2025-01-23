@@ -346,7 +346,7 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).doReturn(MutableLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
-        map.onZoomLevelChangedByUserListener(10f)
+        map.setZoomLevel(10f)
         map.ready()
 
         assertThat(map.hasCenter(), equalTo(false))

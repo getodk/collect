@@ -173,7 +173,7 @@ class MapboxMapFragment :
                     override fun onScaleBegin(detector: StandardScaleGestureDetector) = Unit
 
                     override fun onScaleEnd(detector: StandardScaleGestureDetector) {
-                        onZoomLevelChangedByUserListener(cameraState.zoom.toFloat())
+                        mapFragmentDelegate.onZoomLevelChangedByUserListener(cameraState.zoom.toFloat())
                     }
                 })
             }
@@ -240,10 +240,6 @@ class MapboxMapFragment :
             }
             loadReferenceOverlay()
         }
-    }
-
-    override fun onZoomLevelChangedByUserListener(zoomLevel: Float?) {
-        mapFragmentDelegate.onZoomLevelChangedByUserListener(zoomLevel)
     }
 
     override fun getCenter(): MapPoint {

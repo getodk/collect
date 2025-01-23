@@ -51,10 +51,6 @@ class FakeMapFragment : Fragment(), MapFragment {
         readyListener?.onReady(this)
     }
 
-    override fun onZoomLevelChangedByUserListener(zoomLevel: Float?) {
-        zoomLevelSetByUser = zoomLevel
-    }
-
     override fun getCenter(): MapPoint {
         return center ?: MapFragment.INITIAL_CENTER
     }
@@ -266,5 +262,9 @@ class FakeMapFragment : Fragment(), MapFragment {
 
     fun getPolygons(): List<PolygonDescription> {
         return polygons.values.toList()
+    }
+
+    fun setZoomLevel(zoomLevel: Float?) {
+        zoomLevelSetByUser = zoomLevel
     }
 }

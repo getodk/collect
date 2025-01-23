@@ -29,8 +29,6 @@ interface MapFragment {
 
     fun init(readyListener: ReadyListener?, errorListener: ErrorListener?)
 
-    fun onZoomLevelChangedByUserListener(zoomLevel: Float?)
-
     /** Gets the point currently shown at the center of the map view.  */
     fun getCenter(): MapPoint
 

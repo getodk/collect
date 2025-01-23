@@ -209,7 +209,12 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             @Override
             public boolean onZoom(ZoomEvent event) {
                 if (!isSystemZooming) {
-                    onZoomLevelChangedByUserListener((float) event.getZoomLevel());
+                    float zoomLevel = (float) event.getZoomLevel();
+                    if (zoomLevel < 2) {
+                        mapFragmentDelegate.onZoomLevelChangedByUserListener(2f);
+                    } else {
+                        mapFragmentDelegate.onZoomLevelChangedByUserListener(zoomLevel);
+                    }
                 }
                 return false;
             }
@@ -247,15 +252,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public MapFragmentDelegate getMapFragmentDelegate() {
         return mapFragmentDelegate;
-    }
-
-    @Override
-    public void onZoomLevelChangedByUserListener(@Nullable Float zoomLevel) {
-        if (zoomLevel != null && zoomLevel < 2) {
-            mapFragmentDelegate.onZoomLevelChangedByUserListener(2f);
-        } else {
-            mapFragmentDelegate.onZoomLevelChangedByUserListener(zoomLevel);
-        }
     }
 
     @Override

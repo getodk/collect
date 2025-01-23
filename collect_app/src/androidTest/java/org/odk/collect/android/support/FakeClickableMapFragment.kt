@@ -27,8 +27,6 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
     override val mapFragmentDelegate: MapFragmentDelegate
         get() = mock()
 
-    override fun onZoomLevelChangedByUserListener(zoomLevel: Float?) {}
-
     override fun getCenter(): MapPoint {
         return MapPoint(0.0, 0.0)
     }

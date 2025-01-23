@@ -21,8 +21,6 @@ class NoOpMapFragment : Fragment(), MapFragment {
     override val mapFragmentDelegate: MapFragmentDelegate
         get() = mock()
 
-    override fun onZoomLevelChangedByUserListener(zoomLevel: Float?) {}
-
     override fun getCenter(): MapPoint {
         TODO("Not yet implemented")
     }
