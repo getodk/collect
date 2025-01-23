@@ -111,9 +111,9 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
     fun `When there is no answer hide image view and error message`() {
         val widget = createWidget()
 
-        assertThat(widget.getImageView().visibility, equalTo(View.GONE))
-        assertThat(widget.getImageView().drawable, nullValue())
-        assertThat(widget.getErrorTextView().visibility, equalTo(View.GONE))
+        assertThat(widget.imageView.visibility, equalTo(View.GONE))
+        assertThat(widget.imageView.drawable, nullValue())
+        assertThat(widget.errorTextView.visibility, equalTo(View.GONE))
     }
 
     @Test
@@ -133,9 +133,9 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
 
         val widget = createWidget()
 
-        assertThat(widget.getImageView().visibility, equalTo(View.GONE))
-        assertThat(widget.getImageView().drawable, nullValue())
-        assertThat(widget.getErrorTextView().visibility, equalTo(View.VISIBLE))
+        assertThat(widget.imageView.visibility, equalTo(View.GONE))
+        assertThat(widget.imageView.drawable, nullValue())
+        assertThat(widget.errorTextView.visibility, equalTo(View.VISIBLE))
     }
 
     @Test
@@ -161,7 +161,7 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
             .build()
 
         val widget = createWidget()
-        val imageView = widget.getImageView()
+        val imageView = widget.imageView
 
         assertThat(imageView.visibility, equalTo(View.GONE))
     }
@@ -183,7 +183,7 @@ class ImageWidgetTest : FileWidgetTest<ImageWidget>() {
 
         val widget = createWidget()
 
-        val imageView = widget.getImageView()
+        val imageView = widget.imageView
         assertThat(imageView.visibility, equalTo(View.VISIBLE))
 
         val drawable = imageView.drawable

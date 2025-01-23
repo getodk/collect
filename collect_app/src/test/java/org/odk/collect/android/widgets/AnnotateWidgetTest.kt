@@ -127,9 +127,9 @@ class AnnotateWidgetTest : FileWidgetTest<AnnotateWidget>() {
     fun `When there is no answer hide image view and error message`() {
         val widget = createWidget()
 
-        assertThat(widget.getImageView().visibility, equalTo(View.GONE))
-        assertThat(widget.getImageView().drawable, nullValue())
-        assertThat(widget.getErrorTextView().visibility, equalTo(View.GONE))
+        assertThat(widget.imageView.visibility, equalTo(View.GONE))
+        assertThat(widget.imageView.drawable, nullValue())
+        assertThat(widget.errorTextView.visibility, equalTo(View.GONE))
     }
 
     @Test
@@ -140,8 +140,8 @@ class AnnotateWidgetTest : FileWidgetTest<AnnotateWidget>() {
         questionMediaManager.addAnswerFile(file)
         widget.setData(file)
 
-        assertThat(widget.getImageView().visibility, equalTo(View.GONE))
-        assertThat(widget.getImageView().drawable, nullValue())
+        assertThat(widget.imageView.visibility, equalTo(View.GONE))
+        assertThat(widget.imageView.drawable, nullValue())
         assertThat(ShadowToast.getTextOfLatestToast(), equalTo("Gif files are not supported"))
     }
 
@@ -162,9 +162,9 @@ class AnnotateWidgetTest : FileWidgetTest<AnnotateWidget>() {
 
         val widget = createWidget()
 
-        assertThat(widget.getImageView().visibility, equalTo(View.GONE))
-        assertThat(widget.getImageView().drawable, nullValue())
-        assertThat(widget.getErrorTextView().visibility, equalTo(View.VISIBLE))
+        assertThat(widget.imageView.visibility, equalTo(View.GONE))
+        assertThat(widget.imageView.drawable, nullValue())
+        assertThat(widget.errorTextView.visibility, equalTo(View.VISIBLE))
     }
 
     @Test
@@ -192,7 +192,7 @@ class AnnotateWidgetTest : FileWidgetTest<AnnotateWidget>() {
 
         val widget = createWidget()
 
-        val imageView = widget.getImageView()
+        val imageView = widget.imageView
         assertThat(imageView.visibility, equalTo(View.VISIBLE))
 
         val drawable = imageView.drawable
@@ -219,7 +219,7 @@ class AnnotateWidgetTest : FileWidgetTest<AnnotateWidget>() {
 
         val widget = createWidget()
 
-        val imageView = widget.getImageView()
+        val imageView = widget.imageView
         assertThat(imageView.visibility, equalTo(View.VISIBLE))
 
         val drawable = imageView.drawable

@@ -134,7 +134,7 @@ class AnnotateWidget(
         binding.annotateButton.cancelLongPress()
     }
 
-    override fun setData(newImageObj: Any) {
+    override fun setData(newImageObj: Any?) {
         if (newImageObj is File) {
             val mimeType = FileUtils.getMimeType(newImageObj)
             if ("image/gif" == mimeType) {
