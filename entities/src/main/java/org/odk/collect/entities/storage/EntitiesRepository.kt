@@ -14,7 +14,6 @@ interface EntitiesRepository {
     )
     fun getEntities(list: String): List<Entity.Saved>
     fun getCount(list: String): Int
-    fun clear()
     fun addList(list: String)
     fun delete(id: String)
     fun query(list: String, query: Query): List<Entity.Saved>

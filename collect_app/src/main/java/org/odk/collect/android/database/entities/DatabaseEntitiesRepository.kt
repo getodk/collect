@@ -69,7 +69,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             entities.forEach { entity ->
                 val existing = if (listExists) {
                     query(
-                        "\"$list\"",
+                        quote(list),
                         "${EntitiesTable.COLUMN_ID} = ?",
                         arrayOf(entity.id)
                     ).first { mapCursorRowToEntity(it, 0) }
@@ -96,7 +96,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     }
 
                     update(
-                        "\"$list\"",
+                        quote(list),
                         contentValues,
                         "${EntitiesTable.COLUMN_ID} = ?",
                         arrayOf(entity.id)
@@ -114,7 +114,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     }
 
                     insertOrThrow(
-                        "\"$list\"",
+                        quote(list),
                         null,
                         contentValues
                     )
@@ -180,12 +180,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    override fun clear() {
-        databaseConnection.withConnection {
-            dropAllTablesFromDB(writableDatabase)
-        }
-    }
-
     override fun addList(list: String) {
         if (!listExists(list)) {
             createList(list)
@@ -197,7 +191,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         databaseConnection.withConnection {
             getLists().forEach {
                 writableDatabase.delete(
-                    it,
+                    quote(it),
                     "${EntitiesTable.COLUMN_ID} = ?",
                     arrayOf(id)
                 )
@@ -240,7 +234,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
 
         val propertyExists = databaseConnection.withConnection {
-            readableDatabase.doesColumnExist(list, EntitiesTable.getPropertyColumn(property))
+            readableDatabase.doesColumnExist(quote(list), EntitiesTable.getPropertyColumn(property))
         }
 
         return if (propertyExists) {
@@ -368,7 +362,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     private fun updatePropertyColumns(list: String, entity: Entity) {
         val columnNames = databaseConnection.withConnection {
-            readableDatabase.getColumnNames("\"$list\"")
+            readableDatabase.getColumnNames(quote(list))
         }
 
         val missingColumns = entity.properties
@@ -391,7 +385,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     private fun addPropertiesToContentValues(contentValues: ContentValues, entity: Entity) {
         entity.properties.forEach { (name, value) ->
-            contentValues.put("\"${EntitiesTable.getPropertyColumn(name)}\"", value)
+            contentValues.put(quote(EntitiesTable.getPropertyColumn(name)), value)
         }
     }
 
@@ -441,6 +435,8 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             Entity.State.ONLINE -> 1
         }
     }
+
+    private fun quote(text: String) = "\"$text\""
 
     companion object {
         private const val DATABASE_VERSION = 2

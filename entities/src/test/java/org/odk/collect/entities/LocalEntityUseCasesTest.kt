@@ -527,11 +527,6 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         return wrapped.getCount(list)
     }
 
-    override fun clear() {
-        accesses += 1
-        wrapped.clear()
-    }
-
     override fun addList(list: String) {
         accesses += 1
         wrapped.addList(list)
