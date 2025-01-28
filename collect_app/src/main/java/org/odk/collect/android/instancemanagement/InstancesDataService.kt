@@ -107,7 +107,6 @@ class InstancesDataService(
                 val formMediaDir = File(form.formMediaPath)
                 val formEntryController =
                     CollectFormEntryControllerFactory(
-                        Collect.getInstance(),
                         entitiesRepository,
                         projectDependencyModule.generalSettings
                     ).create(formDef, formMediaDir)
