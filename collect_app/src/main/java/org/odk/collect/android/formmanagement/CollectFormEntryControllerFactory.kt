@@ -3,8 +3,13 @@ package org.odk.collect.android.formmanagement
 import android.os.Handler
 import android.os.Looper
 import org.javarosa.core.model.FormDef
+import org.javarosa.core.model.condition.EvaluationContext
+import org.javarosa.core.model.condition.FilterStrategy
+import org.javarosa.core.model.instance.DataInstance
+import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
+import org.javarosa.xpath.expr.XPathExpression
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.dynamicpreload.ExternalDataManagerImpl
 import org.odk.collect.android.dynamicpreload.handler.ExternalDataHandlerPull
@@ -16,6 +21,7 @@ import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProc
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.shared.settings.Settings
 import java.io.File
+import java.util.function.Supplier
 
 class CollectFormEntryControllerFactory(
     private val entitiesRepository: EntitiesRepository,
@@ -37,18 +43,29 @@ class CollectFormEntryControllerFactory(
             )
             it.addPostProcessor(EntityFormFinalizationProcessor())
 
-            it.addFilterStrategy { sourceInstance, nodeSet, predicate, children, evaluationContext, next ->
-                val startTime = System.currentTimeMillis()
-                val result = next.get()
-
-                val filterTime = System.currentTimeMillis() - startTime
-                Handler(Looper.getMainLooper()).post {
-                    ToastUtils.showShortToast("Filter took ${filterTime / 1000.0}s")
-                }
-
-                result
-            }
+            it.addFilterStrategy(LoggingFilterStrategy())
             it.addFilterStrategy(LocalEntitiesFilterStrategy(entitiesRepository))
         }
+    }
+}
+
+private class LoggingFilterStrategy : FilterStrategy {
+    override fun filter(
+        sourceInstance: DataInstance<*>,
+        nodeSet: TreeReference,
+        predicate: XPathExpression,
+        children: MutableList<TreeReference>,
+        evaluationContext: EvaluationContext,
+        next: Supplier<MutableList<TreeReference>>
+    ): MutableList<TreeReference> {
+        val startTime = System.currentTimeMillis()
+        val result = next.get()
+
+        val filterTime = System.currentTimeMillis() - startTime
+        Handler(Looper.getMainLooper()).post {
+            ToastUtils.showShortToast("Filter took ${filterTime / 1000.0}s")
+        }
+
+        return result
     }
 }
