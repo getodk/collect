@@ -23,6 +23,7 @@ import org.odk.collect.analytics.BlockableFirebaseAnalytics;
 import org.odk.collect.analytics.NoopAnalytics;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.MapboxClassInstanceCreator;
 import org.odk.collect.android.application.initialization.AnalyticsInitializer;
@@ -616,6 +617,6 @@ public class AppDependencyModule {
     public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory(ProjectsDataService projectsDataService, EntitiesRepositoryProvider entitiesRepositoryProvider, SettingsProvider settingsProvider) {
         String projectId = projectsDataService.requireCurrentProject().getUuid();
         EntitiesRepository entitiesRepository = entitiesRepositoryProvider.create(projectId);
-        return new CollectFormEntryControllerFactory(entitiesRepository, settingsProvider.getUnprotectedSettings(projectId));
+        return new CollectFormEntryControllerFactory(Collect.getInstance(), entitiesRepository, settingsProvider.getUnprotectedSettings(projectId));
     }
 }
