@@ -125,6 +125,7 @@ public class GoogleMapFragment extends Fragment implements
     private int mapType;
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
+    private float currentZoomLevel;
     private boolean hasCenter;
     private boolean isUserZooming;
 
@@ -180,9 +181,13 @@ public class GoogleMapFragment extends Fragment implements
             googleMap.setOnCameraIdleListener(() -> {
                 scaleView.update(googleMap.getCameraPosition().zoom, googleMap.getCameraPosition().target.latitude);
                 if (isUserZooming) {
-                    mapFragmentDelegate.onZoomLevelChangedByUserListener(googleMap.getCameraPosition().zoom);
+                    float newZoomLevel = googleMap.getCameraPosition().zoom;
+                    if (newZoomLevel != currentZoomLevel) {
+                        mapFragmentDelegate.onZoomLevelChangedByUserListener(googleMap.getCameraPosition().zoom);
+                    }
                     isUserZooming = false;
                 }
+                currentZoomLevel = googleMap.getCameraPosition().zoom;
             });
             loadReferenceOverlay();
 
