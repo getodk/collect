@@ -19,6 +19,7 @@ import org.odk.collect.entities.javarosa.filter.LocalEntitiesFilterStrategy
 import org.odk.collect.entities.javarosa.filter.PullDataFunctionHandler
 import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor
 import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 import java.io.File
 import java.util.function.Supplier
@@ -43,7 +44,10 @@ class CollectFormEntryControllerFactory(
             )
             it.addPostProcessor(EntityFormFinalizationProcessor())
 
-            it.addFilterStrategy(LoggingFilterStrategy())
+            if (settings.getBoolean(ProjectKeys.KEY_DEBUG_FILTERS)) {
+                it.addFilterStrategy(LoggingFilterStrategy())
+            }
+
             it.addFilterStrategy(LocalEntitiesFilterStrategy(entitiesRepository))
         }
     }
