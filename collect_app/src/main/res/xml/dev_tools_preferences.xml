@@ -9,4 +9,10 @@
         android:key="crash_app"
         app:persistent="false"/>
 
+    <SwitchPreferenceCompat
+        android:key="experimental_debug_filters"
+        android:title="Debug filters"
+        android:summary="Show debug information for filter expression executions during form entry"
+        app:iconSpaceReserved="false" />
+
 </PreferenceScreen>

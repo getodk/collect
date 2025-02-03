@@ -52,6 +52,7 @@ object Defaults {
             hashMap[ProjectKeys.KEY_MAPBOX_MAP_STYLE] = "mapbox://styles/mapbox/streets-v11"
             // experimental_preferences.xml
             hashMap[ProjectKeys.KEY_LOCAL_ENTITIES] = true
+            hashMap[ProjectKeys.KEY_DEBUG_FILTERS] = false
             return hashMap
         }
 

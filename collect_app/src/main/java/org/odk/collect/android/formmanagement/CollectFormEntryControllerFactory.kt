@@ -44,7 +44,10 @@ class CollectFormEntryControllerFactory(
             )
             it.addPostProcessor(EntityFormFinalizationProcessor())
 
-            it.addFilterStrategy(LoggingFilterStrategy())
+            if (settings.getBoolean(ProjectKeys.KEY_DEBUG_FILTERS)) {
+                it.addFilterStrategy(LoggingFilterStrategy())
+            }
+
             if (settings.getBoolean(ProjectKeys.KEY_LOCAL_ENTITIES)) {
                 it.addFilterStrategy(LocalEntitiesFilterStrategy(entitiesRepository))
             }
