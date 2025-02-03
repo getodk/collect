@@ -11,8 +11,8 @@
 
     <SwitchPreferenceCompat
         android:key="experimental_debug_filters"
-        android:title="Debug filters"
-        android:summary="Show debug information for filter expression executions during form entry"
+        android:title="@string/debug_filters"
+        android:summary="@string/show_debug_information_for_filter_expression_executions_during_form_entry"
         app:iconSpaceReserved="false" />
 
 </PreferenceScreen>
