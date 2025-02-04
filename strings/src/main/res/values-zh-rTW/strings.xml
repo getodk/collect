@@ -961,8 +961,6 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <string name="entities_title">實體清單</string>
   <!--Title for setting that controls whether local entity features are enabled or not-->
-  <string name="include_local_entities_setting">啟用本地實體</string>
-  <string name="local_entity_features_summary">後續表格將具有一致的實體列表，並將包括本地創建或更新的實體。</string>
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">查看實體列表</string>
   <!--Label for entity that has been created offline and is not on the server yet-->
