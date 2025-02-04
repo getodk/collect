@@ -19,6 +19,12 @@ import android.os.AsyncTask;
 
 import androidx.core.util.Pair;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
@@ -27,10 +33,15 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.android.wassan.model.User;
 import org.odk.collect.forms.FormSourceException;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.MetaKeys;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -61,6 +72,9 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
     @Inject
     ProjectsDataService projectsDataService;
 
+    @Inject
+    SettingsProvider settingsProvider;
+
     public DownloadFormListTask(ServerFormsDetailsFetcher serverFormsDetailsFetcher) {
         this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
         DaggerUtils.getComponent(Collect.getInstance()).inject(this);
@@ -79,6 +93,8 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
 
         try {
             formList = serverFormsDetailsFetcher.fetchFormDetails();
+            //added by niranjan
+            processAndFilterFormList(formList);
         } catch (FormSourceException e) {
             exception = e;
         } finally {
@@ -88,6 +104,53 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
         }
 
         return new Pair<>(formList, exception);
+    }
+    //add by niranjan
+    private void processAndFilterFormList(List<ServerFormDetails> formList) {
+        Gson gson = new Gson();
+        String jsonUser = settingsProvider.getMetaSettings().getString(MetaKeys.KEY_USER);
+
+        // Directly parse the JSON string into a JsonObject using Gson
+        JsonObject jsonObject = gson.fromJson(jsonUser, JsonObject.class);
+
+        // Extract the "projects" string, and then parse it as a JsonArray
+        String projectsJsonString = jsonObject.getAsJsonPrimitive("projects").getAsString();
+        JsonArray projectsArray = gson.fromJson(projectsJsonString, JsonArray.class);
+
+        String currentProject = settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID);
+        JsonArray assignFormsArray = null;
+
+        // Find the project matching the currentProject ID
+        for (int i = 0; i < projectsArray.size(); i++) {
+            JsonObject project = projectsArray.get(i).getAsJsonObject();
+            String centralProjectId = project.get("central_project_id").getAsString();  // Get as String
+
+            // If the central_project_id matches currentProject, get the assign_forms
+            if (centralProjectId.equals(currentProject)) {
+                String assignFormsString = project.get("assign_forms").getAsString();
+
+                // Parse the assign_forms string to a JsonArray
+                assignFormsArray = gson.fromJson(assignFormsString, JsonArray.class);
+
+                // Exit the loop once the relevant project is found
+                break;
+            }
+        }
+
+        // If the assignFormsArray is valid, filter the formList based on form IDs
+        if (assignFormsArray != null && !assignFormsArray.isEmpty()) {
+            // Convert the JsonArray to a List of form IDs
+            List<String> assignFormIds = new ArrayList<>();
+            for (JsonElement element : assignFormsArray) {
+                // Ensure the element is a valid String
+                if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
+                    assignFormIds.add(element.getAsString());
+                }
+            }
+
+            // Remove forms from formList where formId is not in assignFormIds
+            formList.removeIf(form -> form.getFormId() == null || !assignFormIds.contains(form.getFormId()));
+        }
     }
 
     @Override

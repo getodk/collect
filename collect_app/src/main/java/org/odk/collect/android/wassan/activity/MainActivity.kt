@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.google.gson.JsonArray
@@ -25,6 +26,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
+import org.odk.collect.android.activities.FormDownloadListActivity
 import org.odk.collect.android.application.MapboxClassInstanceCreator
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.DaggerUtils
@@ -92,7 +94,10 @@ class MainActivity : LocalizedActivity(), NavigationView.OnNavigationItemSelecte
         initToolbar()
         initBottomToolbar()
 
-
+        val syncForm: FloatingActionButton = findViewById(R.id.newform)
+        syncForm.setOnClickListener {
+            startActivityForResult(Intent(this, FormDownloadListActivity::class.java),1001)
+        }
     }
 
     private fun initLogin() {
@@ -113,7 +118,7 @@ class MainActivity : LocalizedActivity(), NavigationView.OnNavigationItemSelecte
         val parser = JsonParser()
         val jsonObject: JsonObject = parser.parse(jsonUser).asJsonObject
         val projectsJsonString = jsonObject.getAsJsonPrimitive("projects").asString
-
+        projectsRepository.deleteAll();
         // Parse the JSON string representing projects into a JsonArray
         val projectsArray: JsonArray = parser.parse(projectsJsonString).asJsonArray
         for (projectElement in projectsArray) {

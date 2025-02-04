@@ -193,7 +193,7 @@ class LoginActivity : LocalizedActivity() {
     private fun launchDashboard() {
         finish()
         settingsProvider.getMetaSettings().save(MetaKeys.IS_LOGIN, true)
-        ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
+        ActivityUtils.startActivityAndCloseAllOthers(this, MainActivity::class.java)
     }
 
     private fun showSnackbar(stringSnackbar: String?) {

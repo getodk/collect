@@ -39,9 +39,9 @@ class MainMenuActivity : LocalizedActivity() {
         this Activity as a target to reopen the app without interrupting an ongoing session
          */
         if (!isTaskRoot) {
-            super.onCreate(null)
+            /*super.onCreate(null)
             finish()
-            return
+            return*/
         }
 
         CrashHandler.getInstance(this)?.also {
