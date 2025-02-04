@@ -1,19 +1,16 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinKapt)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -36,7 +33,7 @@ android {
 dependencies {
     implementation(project(":shared"))
 
-    implementation(Dependencies.glide)
-    implementation(Dependencies.caverock_androidsvg)
-    kapt(Dependencies.glide_compiler)
+    implementation(libs.glide)
+    implementation(libs.caverockAndroidsvg)
+    kapt(libs.glideCompiler)
 }

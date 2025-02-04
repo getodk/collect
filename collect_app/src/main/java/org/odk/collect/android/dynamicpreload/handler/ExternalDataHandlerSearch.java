@@ -82,7 +82,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
 
     @Override
     public List<Class[]> getPrototypes() {
-        return new ArrayList<Class[]>();
+        return new ArrayList<>();
     }
 
     @Override
@@ -281,11 +281,11 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
             if (columnIndex > 1) {
                 sb.append(' ');
             }
-            sb.append('(');
-            sb.append(selectColumnMap.get(columnName));
-            sb.append(": ");
-            sb.append(value);
-            sb.append(')');
+            sb.append('(')
+                .append(selectColumnMap.get(columnName))
+                .append(": ")
+                .append(value)
+                .append(')');
         }
         return sb.toString();
     }

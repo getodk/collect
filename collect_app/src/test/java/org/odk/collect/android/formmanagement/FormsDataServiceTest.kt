@@ -187,6 +187,17 @@ class FormsDataServiceTest {
     }
 
     @Test
+    fun `update() called after matchFormsWithServer() does not clear error state`() {
+        val error = FormSourceException.FetchError()
+        whenever(formSource.fetchFormList()).thenThrow(error)
+        formsDataService.matchFormsWithServer(project.uuid)
+
+        assertThat(formsDataService.getServerError(project.uuid).getOrAwaitValue(), equalTo(error))
+        formsDataService.update(project.uuid)
+        assertThat(formsDataService.getServerError(project.uuid).getOrAwaitValue(), equalTo(error))
+    }
+
+    @Test
     fun `matchFormsWithServer() notifies when called with default notify value`() {
         val error = FormSourceException.FetchError()
         whenever(formSource.fetchFormList()).thenThrow(error)

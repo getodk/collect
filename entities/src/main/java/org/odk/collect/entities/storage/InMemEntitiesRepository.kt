@@ -1,5 +1,8 @@
 package org.odk.collect.entities.storage
 
+import org.odk.collect.entities.javarosa.parse.EntitySchema
+import org.odk.collect.shared.Query
+
 class InMemEntitiesRepository : EntitiesRepository {
 
     private val lists = mutableSetOf<String>()
@@ -31,11 +34,6 @@ class InMemEntitiesRepository : EntitiesRepository {
         return getEntities(list).count()
     }
 
-    override fun clear() {
-        entities.clear()
-        lists.clear()
-    }
-
     override fun addList(list: String) {
         lists.add(list)
     }
@@ -43,6 +41,49 @@ class InMemEntitiesRepository : EntitiesRepository {
     override fun delete(id: String) {
         entities.forEach { (_, list) ->
             list.removeIf { it.id == id }
+        }
+    }
+
+    override fun query(list: String, query: Query): List<Entity.Saved> {
+        val entities = getEntities(list)
+
+        return when (query) {
+            is Query.Eq -> {
+                entities.filter {
+                    val fieldName: String? = when (query.column) {
+                        EntitySchema.ID -> it.id
+                        EntitySchema.LABEL -> it.label
+                        EntitySchema.VERSION -> it.version.toString()
+                        else -> it.properties.find { propertyName ->
+                            propertyName.first == query.column
+                        }?.second
+                    }
+                    fieldName == query.value
+                }
+            }
+            is Query.NotEq -> {
+                entities.filter {
+                    val fieldName: String? = when (query.column) {
+                        EntitySchema.ID -> it.id
+                        EntitySchema.LABEL -> it.label
+                        EntitySchema.VERSION -> it.version.toString()
+                        else -> it.properties.find { propertyName ->
+                            propertyName.first == query.column
+                        }?.second
+                    }
+                    fieldName != query.value
+                }
+            }
+            is Query.And -> {
+                val queryAResult = query(list, query.queryA)
+                val queryBResult = query(list, query.queryB)
+                queryAResult.intersect(queryBResult.toSet()).toList()
+            }
+            is Query.Or -> {
+                val queryAResult = query(list, query.queryA)
+                val queryBResult = query(list, query.queryB)
+                queryAResult.union(queryBResult.toSet()).toList()
+            }
         }
     }
 
@@ -121,13 +162,15 @@ class InMemEntitiesRepository : EntitiesRepository {
 
     private fun updateLists(list: String, entity: Entity) {
         lists.add(list)
-        listProperties.getOrPut(list) {
+        val properties = listProperties.getOrPut(list) {
             mutableSetOf()
-        }.addAll(
+        }
+        properties.addAll(
             entity
                 .properties
-                .distinctBy { it.first.lowercase() }
                 .map { it.first }
+                .distinctBy { it.lowercase() }
+                .filterNot { properties.any { property -> property.equals(it, ignoreCase = true) } }
         )
     }
 

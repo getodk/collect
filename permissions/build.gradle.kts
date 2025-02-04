@@ -1,18 +1,15 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -39,25 +36,25 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":strings"))
     implementation(project(":androidshared"))
     implementation(project(":icons"))
-    implementation(Dependencies.androidx_core_ktx)
-    implementation(Dependencies.androidx_fragment_ktx)
-    implementation(Dependencies.android_material)
-    implementation(Dependencies.karumi_dexter)
-    implementation(Dependencies.timber)
+    implementation(libs.androidxCoreKtx)
+    implementation(libs.androidxFragmentKtx)
+    implementation(libs.androidMaterial)
+    implementation(libs.karumiDexter)
+    implementation(libs.timber)
 
     debugImplementation(project(":fragments-test"))
 
     testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))
     testImplementation(project(":strings"))
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.androidx_test_espresso_core)
-    testImplementation(Dependencies.androidx_test_espresso_intents)
-    testImplementation(Dependencies.mockito_kotlin)
-    testImplementation(Dependencies.robolectric)
+    testImplementation(libs.androidxTestExtJunit)
+    testImplementation(libs.androidxTestEspressoCore)
+    testImplementation(libs.androidxTestEspressoIntents)
+    testImplementation(libs.mockitoKotlin)
+    testImplementation(libs.robolectric)
 }

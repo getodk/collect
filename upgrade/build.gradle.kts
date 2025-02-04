@@ -1,19 +1,16 @@
-import dependencies.Dependencies
-import dependencies.Versions
-
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinKapt)
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    compileSdk = Versions.android_compile_sdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.android_min_sdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -41,13 +38,13 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
-    implementation(Dependencies.androidx_core_ktx)
+    implementation(libs.androidxCoreKtx)
     implementation(project(":shared"))
 
     testImplementation(project(":test-shared"))
-    testImplementation(Dependencies.mockito_kotlin)
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.hamcrest)
+    testImplementation(libs.mockitoKotlin)
+    testImplementation(libs.junit)
+    testImplementation(libs.hamcrest)
 }

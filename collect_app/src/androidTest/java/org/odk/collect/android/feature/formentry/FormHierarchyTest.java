@@ -10,12 +10,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.pages.AddNewRepeatDialog;
+import org.odk.collect.android.support.pages.FormEndPage;
+import org.odk.collect.android.support.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.FormHierarchyPage;
+import org.odk.collect.android.support.pages.ViewFormPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.testshared.RecyclerViewMatcher;
-import org.odk.collect.android.support.pages.AddNewRepeatDialog;
-import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.FormHierarchyPage;
 
 public class FormHierarchyTest {
 
@@ -237,5 +239,34 @@ public class FormHierarchyTest {
                 .assertText("n1")
                 .assertTextDoesNotExist("t1")
                 .assertTextDoesNotExist("t2");
+    }
+
+    @Test
+    public void whenViewFormInHierarchyForRepeatGroup_noDeleteButtonAppears() {
+        rule.startAtMainMenu()
+                .copyForm("one-question-repeat.xml")
+                .startBlankForm("One Question Repeat")
+                .swipeToNextQuestionWithRepeatGroup("Person")
+                .clickOnDoNotAdd(new FormEndPage("One Question Repeat"))
+                .clickFinalize()
+
+                .clickSendFinalizedForm(1)
+                .clickOnForm("One Question Repeat")
+                .clickOnGroup("Person")
+                .clickOnGroup("Person > 1")
+                .assertNoId(R.id.menu_delete_child);
+    }
+
+    @Test
+    public void whenViewFormInHierarchy_clickingOnQuestion_doesNothing() {
+        rule.startAtMainMenu()
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .fillOutAndFinalize()
+
+                .clickSendFinalizedForm(1)
+                .clickOnForm("One Question")
+                .clickOnText("what is your age")
+                .assertOnPage(new ViewFormPage("One Question"));
     }
 }

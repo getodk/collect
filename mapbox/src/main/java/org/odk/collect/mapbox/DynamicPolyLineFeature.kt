@@ -93,8 +93,8 @@ internal class DynamicPolyLineFeature(
     fun removeLastPoint() {
         if (pointAnnotations.isNotEmpty()) {
             pointAnnotationManager.delete(pointAnnotations.last())
-            pointAnnotations.removeLast()
-            points.removeLast()
+            pointAnnotations.removeAt(pointAnnotations.lastIndex)
+            points.removeAt(points.lastIndex)
             updateLine()
         }
     }

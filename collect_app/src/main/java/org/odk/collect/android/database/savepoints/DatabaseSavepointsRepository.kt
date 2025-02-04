@@ -8,7 +8,6 @@ import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_DATABASE_VE
 import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_TABLE_NAME
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.FORM_DB_ID
 import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.INSTANCE_DB_ID
-import org.odk.collect.androidshared.utils.PathUtils.getAbsoluteFilePath
 import org.odk.collect.db.sqlite.CursorExt.foldAndClose
 import org.odk.collect.db.sqlite.DatabaseConnection
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.delete
@@ -16,6 +15,7 @@ import org.odk.collect.db.sqlite.SQLiteDatabaseExt.query
 import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.forms.savepoints.SavepointsRepository
 import org.odk.collect.shared.PathUtils
+import org.odk.collect.shared.PathUtils.getAbsoluteFilePath
 import java.io.File
 
 class DatabaseSavepointsRepository(

@@ -67,7 +67,7 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
-    fun `returns matching nodes when entity matches name`() {
+    fun `returns matching nodes in the optimized way when id = value`() {
         entitiesRepository.save("things", Entity.New("thing1", "Thing 1"))
         entitiesRepository.save("things", Entity.New("thing2", "Thing 2"))
 
@@ -97,8 +97,43 @@ class LocalEntitiesFilterStrategyTest {
             controllerSupplier
         )
 
-        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
         assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing 1"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
+    }
+
+    @Test
+    fun `returns matching nodes in the optimized way when id != value`() {
+        entitiesRepository.save("things", Entity.New("thing1", "Thing 1"))
+        entitiesRepository.save("things", Entity.New("thing2", "Thing 2"))
+
+        val scenario = Scenario.init(
+            "Secondary instance form",
+            html(
+                head(
+                    title("Secondary instance form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("question"),
+                                t("calculate")
+                            )
+                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
+                        bind("/data/question").type("string"),
+                        bind("/data/calculate").type("string")
+                            .calculate("instance('things')/root/item[name!='thing1']/label")
+                    )
+                ),
+                body(
+                    input("/data/calculate")
+                )
+            ),
+            controllerSupplier
+        )
+
+        assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing 2"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
     }
 
     @Test
@@ -139,7 +174,7 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
-    fun `returns empty nodeset when no entity matches name`() {
+    fun `returns empty nodeset in the optimized way when no entity matches name`() {
         entitiesRepository.addList("things")
 
         val scenario = Scenario.init(
@@ -168,45 +203,12 @@ class LocalEntitiesFilterStrategyTest {
             controllerSupplier
         )
 
-        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
         assertThat(scenario.answerOf<StringData>("/data/calculate"), equalTo(null))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
     }
 
     @Test
-    fun `works correctly with name != expressions`() {
-        entitiesRepository.save("things", Entity.New("thing", "Thing"))
-
-        val scenario = Scenario.init(
-            "Secondary instance form",
-            html(
-                head(
-                    title("Secondary instance form"),
-                    model(
-                        mainInstance(
-                            t(
-                                "data id=\"create-entity-form\"",
-                                t("question"),
-                                t("calculate")
-                            )
-                        ),
-                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
-                        bind("/data/question").type("string"),
-                        bind("/data/calculate").type("string")
-                            .calculate("instance('things')/root/item[name!='other']/label")
-                    )
-                ),
-                body(
-                    input("/data/calculate")
-                )
-            ),
-            controllerSupplier
-        )
-
-        assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing"))
-    }
-
-    @Test
-    fun `works correctly with non eq name expressions`() {
+    fun `works correctly but not in the optimized way with non eq name expressions`() {
         entitiesRepository.save("things", Entity.New("thing", "Thing"))
 
         val scenario = Scenario.init(
@@ -236,6 +238,7 @@ class LocalEntitiesFilterStrategyTest {
         )
 
         assertThat(scenario.answerOf<StringData>("/data/calculate").value, equalTo("Thing"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(true))
     }
 
     @Test
@@ -311,7 +314,7 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
-    fun `returns matching nodes when entity matches property`() {
+    fun `works correctly in the optimized way with property = expressions`() {
         entitiesRepository.save(
             "things",
             Entity.New(
@@ -359,9 +362,9 @@ class LocalEntitiesFilterStrategyTest {
             controllerSupplier
         )
 
-        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
         val choices = scenario.choicesOf("/data/question").map { it.value }
         assertThat(choices, containsInAnyOrder("thing1", "thing2"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
     }
 
     @Test
@@ -408,15 +411,8 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
-    fun `works correctly with label = expressions`() {
-        entitiesRepository.save(
-            "things",
-            Entity.New(
-                "thing1",
-                "Thing1",
-                properties = listOf("property" to "value")
-            )
-        )
+    fun `works correctly in the optimized way with label = expressions`() {
+        entitiesRepository.save("things", Entity.New("thing1", "Thing1"))
 
         val scenario = Scenario.init(
             "Secondary instance form",
@@ -448,19 +444,12 @@ class LocalEntitiesFilterStrategyTest {
 
         val choices = scenario.choicesOf("/data/question").map { it.value }
         assertThat(choices, containsInAnyOrder("thing1"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
     }
 
     @Test
-    fun `works correctly with version = expressions`() {
-        entitiesRepository.save(
-            "things",
-            Entity.New(
-                "thing1",
-                "Thing1",
-                version = 2,
-                properties = listOf("property" to "value")
-            )
-        )
+    fun `works correctly in the optimized way with version = expressions`() {
+        entitiesRepository.save("things", Entity.New("thing1", "Thing1", version = 2))
 
         val scenario = Scenario.init(
             "Secondary instance form",
@@ -492,6 +481,65 @@ class LocalEntitiesFilterStrategyTest {
 
         val choices = scenario.choicesOf("/data/question").map { it.value }
         assertThat(choices, containsInAnyOrder("thing1"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
+    }
+
+    @Test
+    fun `works correctly in the optimized way with combined eq expressions`() {
+        entitiesRepository.save(
+            "things",
+            Entity.New(
+                "thing1",
+                "Thing1",
+                version = 1,
+                properties = listOf("property" to "value1")
+            ),
+            Entity.New(
+                "thing2",
+                "Thing2",
+                version = 2,
+                properties = listOf("property" to "value2")
+            ),
+            Entity.New(
+                "thing3",
+                "Thing3",
+                version = 2,
+                properties = listOf("property" to "value3")
+            ),
+        )
+
+        val scenario = Scenario.init(
+            "Secondary instance form",
+            html(
+                head(
+                    title("Secondary instance form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("question"),
+                            )
+                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
+                        bind("/data/question").type("string")
+                    )
+                ),
+                body(
+                    select1Dynamic(
+                        "/data/question",
+                        "instance('things')/root/item[label='Thing1' or (__version='2' and property='value3')]",
+                        "name",
+                        "label"
+                    )
+                )
+            ),
+            controllerSupplier
+        )
+
+        val choices = scenario.choicesOf("/data/question").map { it.value }
+        assertThat(choices, containsInAnyOrder("thing1", "thing3"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
+        assertThat(instanceProvider.fullParsePerformed, equalTo(false))
     }
 }
 

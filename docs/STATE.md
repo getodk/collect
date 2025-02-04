@@ -31,7 +31,7 @@ The purpose of this document is to give anyone who reads it a quick overview  of
 * Forms get into the app from two different sources (Open Rosa servers and disk) but the logic for this is disparate and they don't sit behind a common interface
 * Instances are linked to the forms they are instances of through formid and version. However, the same formid and version combination could represent multiple forms in storage
 * `SharedPreferences` is wrapped in app's own `Settings` abstraction
-* The form hierarchy is rendered using `FormHierarchyActivity`, which hasn't been seriously touched (at a code or design) level for a few years
+* The form hierarchy is rendered using `FormHierarchyFragment`, which hasn't been seriously touched (at a code or design) level for a few years
 
 ## Where we're going
 
