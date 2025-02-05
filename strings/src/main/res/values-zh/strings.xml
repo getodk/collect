@@ -946,8 +946,6 @@
   <string name="open_settings">打开设置</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--Title for setting that controls whether local entity features are enabled or not-->
-  <string name="include_local_entities_setting">启用本地实体</string>
-  <string name="local_entity_features_summary">后续表格将具有一致的实体列表，并将包括本地创建或更新的实体。</string>
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">查看实体列表</string>
   <!--Label for entity that has been created offline and is not on the server yet-->

@@ -966,8 +966,6 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <string name="entities_title">Entiteettilistat</string>
   <!--Title for setting that controls whether local entity features are enabled or not-->
-  <string name="include_local_entities_setting">Aktivoi paikalliset entiteetit</string>
-  <string name="local_entity_features_summary">Seurantalomakkeilla tulee olemaan johdonmukaiset entiteettilistat ja tulevat sisällyttämään paikallisesti luodut tai päivitetyt entiteetit.</string>
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">Tarkastele entiteettilistoja</string>
   <!--Label for entity that has been created offline and is not on the server yet-->

@@ -14,12 +14,6 @@
         app:allowDividerBelow="false"
         app:iconSpaceReserved="false">
 
-        <SwitchPreferenceCompat
-            android:key="experimental_local_entities"
-            android:title="@string/include_local_entities_setting"
-            android:summary="@string/local_entity_features_summary"
-            app:iconSpaceReserved="false" />
-
         <Preference
             android:key="entities"
             android:title="@string/entity_browser_button"
