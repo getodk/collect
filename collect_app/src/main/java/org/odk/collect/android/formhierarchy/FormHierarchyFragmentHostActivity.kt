@@ -1,12 +1,10 @@
 package org.odk.collect.android.formhierarchy
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryViewModelFactory
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
-import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment
 import org.odk.collect.android.injection.DaggerUtils
@@ -124,17 +122,15 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
             }
             .build()
 
-        super.onCreate(savedInstanceState)
-
-        val formEntryViewModel =
-            ViewModelProvider(this, viewModelFactory)[FormEntryViewModel::class.java]
-        if (formEntryViewModel.formController == null) {
+        if (formSessionRepository.get(sessionId).value == null) {
+            super.onCreate(null)
             finish()
             return
+        } else {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.hierarchy_host_layout)
+            setSupportActionBar(findViewById(org.odk.collect.androidshared.R.id.toolbar))
         }
-
-        setContentView(R.layout.hierarchy_host_layout)
-        setSupportActionBar(findViewById(org.odk.collect.androidshared.R.id.toolbar))
     }
 
     companion object {
