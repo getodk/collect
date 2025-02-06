@@ -11,7 +11,6 @@ import org.odk.collect.entities.javarosa.filter.LocalEntitiesFilterStrategy
 import org.odk.collect.entities.javarosa.filter.PullDataFunctionHandler
 import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor
 import org.odk.collect.entities.storage.EntitiesRepository
-import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 import java.io.File
 
@@ -29,10 +28,7 @@ class CollectFormEntryControllerFactory(
             val externalDataHandlerPull = ExternalDataHandlerPull(externalDataManager)
             it.addFunctionHandler(PullDataFunctionHandler(entitiesRepository, externalDataHandlerPull))
             it.addPostProcessor(EntityFormFinalizationProcessor())
-
-            if (settings.getBoolean(ProjectKeys.KEY_LOCAL_ENTITIES)) {
-                it.addFilterStrategy(LocalEntitiesFilterStrategy(entitiesRepository))
-            }
+            it.addFilterStrategy(LocalEntitiesFilterStrategy(entitiesRepository))
         }
     }
 }
