@@ -199,7 +199,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         map.setMultiTouchControls(true);
         map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
         map.setMinZoomLevel(2.0);
-        map.setMaxZoomLevel(22.0);
         map.getController().setCenter(toGeoPoint(MapFragment.Companion.getINITIAL_CENTER()));
         map.getController().setZoom((int) INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
@@ -209,12 +208,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             @Override
             public boolean onZoom(ZoomEvent event) {
                 if (!isSystemZooming) {
-                    float zoomLevel = (float) event.getZoomLevel();
-                    if (zoomLevel < 2) {
-                        mapFragmentDelegate.onZoomLevelChangedByUserListener(2f);
-                    } else {
-                        mapFragmentDelegate.onZoomLevelChangedByUserListener(zoomLevel);
-                    }
+                    mapFragmentDelegate.onZoomLevelChangedByUserListener((float) event.getZoomLevel());
                 }
                 return false;
             }
