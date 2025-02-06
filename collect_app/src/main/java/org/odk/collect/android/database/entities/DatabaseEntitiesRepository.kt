@@ -307,15 +307,15 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
      * function, but that's not available in all the supported versions of Android.
      */
     private fun updateRowIdTables() {
-        databaseConnection.withConnection {
+        databaseConnection.resetTransaction {
             getLists().forEach {
-                writableDatabase.execSQL(
+                execSQL(
                     """
                     DROP TABLE IF EXISTS "${getRowIdTableName(it)}";
                     """.trimIndent()
                 )
 
-                writableDatabase.execSQL(
+                execSQL(
                     """
                     CREATE TABLE "${getRowIdTableName(it)}" AS SELECT _id FROM "$it" ORDER BY _id;
                     """.trimIndent()
@@ -338,7 +338,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     private fun createList(list: String) {
-        databaseConnection.transaction {
+        databaseConnection.resetTransaction {
             val contentValues = ContentValues()
             contentValues.put(ListsTable.COLUMN_NAME, list)
             insertOrThrow(
