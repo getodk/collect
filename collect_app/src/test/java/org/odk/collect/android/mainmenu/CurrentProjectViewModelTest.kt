@@ -29,13 +29,12 @@ class CurrentProjectViewModelTest {
         )
     }
 
-    private val currentProjectViewModel by lazy { CurrentProjectViewModel(projectsDataService) }
-
     @Test
     fun `Initial current project should be set`() {
-        assertThat(currentProjectViewModel.hasCurrentProject(), equalTo(true))
+        val viewModel = CurrentProjectViewModel(projectsDataService)
+        assertThat(viewModel.hasCurrentProject(), equalTo(true))
         assertThat(
-            currentProjectViewModel.currentProject.value,
+            viewModel.currentProject.value,
             equalTo(Project.Saved("123", "Project X", "X", "#cccccc"))
         )
     }
@@ -44,16 +43,15 @@ class CurrentProjectViewModelTest {
     fun `setCurrentProject() sets current project`() {
         val project = Project.Saved("456", "Project Y", "Y", "#ffffff")
 
-        currentProjectViewModel.setCurrentProject(project)
+        val viewModel = CurrentProjectViewModel(projectsDataService)
+        viewModel.setCurrentProject(project)
         verify(projectsDataService).setCurrentProject("456")
     }
 
     @Test
     fun `hasCurrentProject returns false when there is no current project`() {
         whenever(projectsDataService.getCurrentProject()).thenReturn(MutableStateFlow(null))
-        val currentProjectViewModel = CurrentProjectViewModel(
-            projectsDataService
-        )
+        val currentProjectViewModel = CurrentProjectViewModel(projectsDataService)
 
         assertThat(currentProjectViewModel.hasCurrentProject(), equalTo(false))
     }
