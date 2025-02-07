@@ -1,34 +1,46 @@
 package org.odk.collect.androidshared.data
 
 import kotlinx.coroutines.flow.StateFlow
+import org.odk.collect.androidshared.data.Updatable.Data
+import org.odk.collect.androidshared.data.Updatable.QualifiedData
 import kotlin.reflect.KProperty
 
-class Data<T>(private val appState: AppState, private val key: String, private val default: T) {
-    fun flow(qualifier: String? = null): StateFlow<T> {
-        return appState.getFlow("$qualifier:$key", default)
+sealed interface Updatable<T> {
+    class QualifiedData<T>(
+        private val appState: AppState,
+        private val key: String,
+        private val default: T
+    ) : Updatable<T> {
+        fun flow(qualifier: String): StateFlow<T> {
+            return appState.getFlow("$qualifier:$key", default)
+        }
+
+        fun set(qualifier: String?, value: T) {
+            appState.setFlow("$qualifier:$key", value)
+        }
     }
 
-    fun set(qualifier: String?, value: T) {
-        appState.setFlow("$qualifier:$key", value)
-    }
+    class Data<T>(private val appState: AppState, private val key: String, private val default: T) :
+        Updatable<T> {
+        fun flow(): StateFlow<T> {
+            return appState.getFlow(key, default)
+        }
 
-    fun set(value: T) {
-        set(null, value)
+        fun set(value: T) {
+            appState.setFlow(key, value)
+        }
     }
 }
 
-class DataUpdater<T>(private val data: Data<T>, private val updater: (String?) -> T) {
-    fun update(qualifier: String? = null) {
-        data.set(qualifier, updater(qualifier))
-    }
-}
+abstract class DataService(
+    private val appState: AppState,
+    private val onUpdate: (() -> Unit)? = null
+) {
 
-abstract class DataService(private val appState: AppState, private val onUpdate: (() -> Unit)? = null) {
-
-    private val dataUpdaters = mutableListOf<DataUpdater<*>>()
+    private val updaters = mutableListOf<Updater<*>>()
 
     fun update(qualifier: String? = null) {
-        dataUpdaters.forEach { it.update(qualifier) }
+        updaters.forEach { it.update(qualifier) }
         onUpdate?.invoke()
     }
 
@@ -38,24 +50,50 @@ abstract class DataService(private val appState: AppState, private val onUpdate:
     }
 
     protected fun <T> data(key: String, default: T, updater: () -> T): DataDelegate<T> {
-        val data = attachData(key, default) { updater() }
-        return DataDelegate(data)
-    }
-
-    protected fun <T> qualifiedData(key: String, default: T, updater: (String) -> T): DataDelegate<T> {
-        val data = attachData(key, default) { updater(it!!) }
-        return DataDelegate(data)
-    }
-
-    private fun <T> attachData(key: String, default: T, updater: (String?) -> T): Data<T> {
         val data = Data(appState, key, default)
-        dataUpdaters.add(DataUpdater(data, updater))
-        return data
+        updaters.add(Updater(data) { updater() })
+        return DataDelegate(data)
+    }
+
+    protected fun <T> qualifiedData(
+        key: String,
+        default: T
+    ): QualifiedDataDelegate<T> {
+        val data = QualifiedData(appState, key, default)
+        return QualifiedDataDelegate(data)
+    }
+
+    protected fun <T> qualifiedData(
+        key: String,
+        default: T,
+        updater: (String) -> T
+    ): QualifiedDataDelegate<T> {
+        val data = QualifiedData(appState, key, default)
+        updaters.add(Updater(data) { it: String? -> updater(it!!) })
+        return QualifiedDataDelegate(data)
+    }
+
+    class QualifiedDataDelegate<T>(private val data: QualifiedData<T>) {
+        operator fun getValue(thisRef: Any?, property: KProperty<*>): QualifiedData<T> {
+            return data
+        }
     }
 
     class DataDelegate<T>(private val data: Data<T>) {
         operator fun getValue(thisRef: Any?, property: KProperty<*>): Data<T> {
             return data
+        }
+    }
+
+    private class Updater<T>(
+        private val updatable: Updatable<T>,
+        private val updater: (String?) -> T
+    ) {
+        fun update(qualifier: String? = null) {
+            when (updatable) {
+                is Data -> updatable.set(updater(qualifier))
+                is QualifiedData -> updatable.set(qualifier, updater(qualifier))
+            }
         }
     }
 }
