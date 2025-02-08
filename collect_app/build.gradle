@@ -269,6 +269,7 @@ dependencies {
     implementation project(':web-page')
     implementation project(':db')
     implementation project(':open-rosa')
+    implementation project(':mobile-device-management')
 
     if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')

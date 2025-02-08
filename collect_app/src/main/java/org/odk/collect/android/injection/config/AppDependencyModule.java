@@ -31,7 +31,6 @@ import org.odk.collect.android.application.initialization.CachedFormsCleaner;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.application.initialization.ExistingSettingsMigrator;
 import org.odk.collect.android.application.initialization.GoogleDriveProjectsDeleter;
-import org.odk.collect.android.mdm.ManagedConfigManager;
 import org.odk.collect.android.application.initialization.MapsInitializer;
 import org.odk.collect.android.application.initialization.SavepointsImporter;
 import org.odk.collect.android.application.initialization.ScheduledWorkUpgrade;
@@ -59,14 +58,14 @@ import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvi
 import org.odk.collect.android.instancemanagement.send.ReadyToSendViewModel;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.mainmenu.MainMenuViewModelFactory;
-import org.odk.collect.android.mdm.ManagedConfigSaver;
 import org.odk.collect.android.notifications.NotificationManagerNotifier;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.Defaults;
 import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
 import org.odk.collect.android.preferences.source.SharedPreferencesSettingsProvider;
-import org.odk.collect.android.projects.ProjectCreator;
+import org.odk.collect.android.projects.SettingsConnectionMatcherImpl;
+import org.odk.collect.android.projects.ProjectCreatorImpl;
 import org.odk.collect.android.projects.ProjectDeleter;
 import org.odk.collect.android.projects.ProjectResetter;
 import org.odk.collect.android.projects.ProjectsDataService;
@@ -115,11 +114,15 @@ import org.odk.collect.metadata.SettingsInstallIDProvider;
 import org.odk.collect.openrosa.http.CollectThenSystemContentTypeMapper;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 import org.odk.collect.openrosa.http.okhttp.OkHttpConnection;
+import org.odk.collect.mobiledevicemanagement.ManagedConfigManager;
+import org.odk.collect.mobiledevicemanagement.ManagedConfigSaver;
 import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.Project;
+import org.odk.collect.projects.ProjectCreator;
 import org.odk.collect.projects.ProjectsRepository;
+import org.odk.collect.projects.SettingsConnectionMatcher;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
 import org.odk.collect.qrcode.QRCodeCreatorImpl;
 import org.odk.collect.qrcode.QRCodeDecoder;
@@ -400,7 +403,7 @@ public class AppDependencyModule {
     @Provides
     public ProjectCreator providesProjectCreator(ProjectsRepository projectsRepository, ProjectsDataService projectsDataService,
                                                  ODKAppSettingsImporter settingsImporter, SettingsProvider settingsProvider) {
-        return new ProjectCreator(projectsRepository, projectsDataService, settingsImporter, settingsProvider);
+        return new ProjectCreatorImpl(projectsRepository, projectsDataService, settingsImporter, settingsProvider);
     }
 
     @Provides
@@ -620,11 +623,17 @@ public class AppDependencyModule {
             ODKAppSettingsImporter settingsImporter,
             Context context
     ) {
+        SettingsConnectionMatcher settingsConnectionMatcher = new SettingsConnectionMatcherImpl(
+                projectsRepository,
+                settingsProvider
+        );
+
         ManagedConfigSaver managedConfigSaver = new ManagedConfigSaver(
                 settingsProvider,
                 projectsRepository,
                 projectCreator,
-                settingsImporter
+                settingsImporter,
+                settingsConnectionMatcher
         );
 
         return new ManagedConfigManager(
