@@ -114,8 +114,8 @@ import org.odk.collect.metadata.SettingsInstallIDProvider;
 import org.odk.collect.openrosa.http.CollectThenSystemContentTypeMapper;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 import org.odk.collect.openrosa.http.okhttp.OkHttpConnection;
-import org.odk.collect.mobiledevicemanagement.ManagedConfigManager;
-import org.odk.collect.mobiledevicemanagement.ManagedConfigSaver;
+import org.odk.collect.mobiledevicemanagement.MDMConfigObserver;
+import org.odk.collect.mobiledevicemanagement.MDMConfigHandler;
 import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
@@ -616,7 +616,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ManagedConfigManager providesManagedConfigManager(
+    public MDMConfigObserver providesManagedConfigManager(
             SettingsProvider settingsProvider,
             ProjectsRepository projectsRepository,
             ProjectCreator projectCreator,
@@ -628,7 +628,7 @@ public class AppDependencyModule {
                 settingsProvider
         );
 
-        ManagedConfigSaver managedConfigSaver = new ManagedConfigSaver(
+        MDMConfigHandler mdmConfigHandler = new MDMConfigHandler(
                 settingsProvider,
                 projectsRepository,
                 projectCreator,
@@ -636,8 +636,8 @@ public class AppDependencyModule {
                 settingsConnectionMatcher
         );
 
-        return new ManagedConfigManager(
-                managedConfigSaver,
+        return new MDMConfigObserver(
+                mdmConfigHandler,
                 (RestrictionsManager) context.getSystemService(Context.RESTRICTIONS_SERVICE),
                 context
         );
