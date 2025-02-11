@@ -940,7 +940,6 @@
   <string name="open_settings">Abrir configurações</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--Title for setting that controls whether local entity features are enabled or not-->
-  <string name="include_local_entities_setting">Habilitar entidades locais</string>
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">Ver listas de entidades</string>
   <!--Label for entity that has been created offline and is not on the server yet-->
@@ -1040,10 +1039,8 @@
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">Desmarque para não aparecer em Rascunhos</string>
   <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-  <string name="new_feature">Nova funcionalidade</string>
-  <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-  <string name="drafts_pills_education_message">A lista de rascunhos agora mostra os erros de validação. A cada vez que você salva um formulário como rascunho o status de validação dele é atualizado. \n\nRascunhos marcados como \"Erro\" não tem dados em questões de preenchimento obrigatório ou contém dados que não são permitidos.</string>
-  <!--Message displayed when the list of questions is empty-->
+    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+    <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">Não há nada para exibir</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">Não há formulários em branco</string>

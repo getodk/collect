@@ -966,8 +966,6 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <string name="entities_title">Objektliste</string>
   <!--Title for setting that controls whether local entity features are enabled or not-->
-  <string name="include_local_entities_setting">Lokale Entitäten aktivieren</string>
-  <string name="local_entity_features_summary">Follow-Up-Formulare werden konsistente Objektlisten haben und lokal erzeugte oder aktualisierte Objekte beinhalten.</string>
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">Objektliste anzeigen</string>
   <!--Label for entity that has been created offline and is not on the server yet-->
@@ -1062,10 +1060,8 @@
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">Abwählen um von Entwürfen zu verbergen</string>
   <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-  <string name="new_feature">Neue Funktion</string>
-  <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-  <string name="drafts_pills_education_message">Die Entwurfsliste zeigt jetzt Validierungsfehler an. Bei jedem Speichern als Entwurf eines Formulars wird dessen Validierungsstatus aktualisiert.\n\nEntwürfe, die mit \"Fehler\" markiert sind, haben entweder fehlende Antworten bei Pflichtfragen oder ungültige Antworten.</string>
-  <!--Message displayed when the list of questions is empty-->
+    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+    <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">Keine Inhalte vorhanden.</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">Keine leeren Formulare</string>

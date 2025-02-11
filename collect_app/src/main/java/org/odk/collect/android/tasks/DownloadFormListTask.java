@@ -82,7 +82,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
 
     @Override
     protected Pair<List<ServerFormDetails>, FormSourceException> doInBackground(Void... values) {
-        formsDataService.update(projectsDataService.getCurrentProject().getUuid());
+        formsDataService.refresh(projectsDataService.requireCurrentProject().getUuid());
 
         if (webCredentialsUtils != null) {
             setTemporaryCredentials();

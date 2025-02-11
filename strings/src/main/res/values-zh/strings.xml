@@ -946,8 +946,6 @@
   <string name="open_settings">打开设置</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--Title for setting that controls whether local entity features are enabled or not-->
-  <string name="include_local_entities_setting">启用本地实体</string>
-  <string name="local_entity_features_summary">后续表格将具有一致的实体列表，并将包括本地创建或更新的实体。</string>
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">查看实体列表</string>
   <!--Label for entity that has been created offline and is not on the server yet-->
@@ -1035,10 +1033,8 @@
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">取消选中即可在草稿中隐藏</string>
   <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-  <string name="new_feature">新功能</string>
-  <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-  <string name="drafts_pills_education_message">草稿列表现在已显示验证错误。每次将表单保存为草稿时，其验证状态都会更新。\n\n标有“错误”的草稿要么缺少必填问题，要么包含不允许的值。</string>
-  <!--Message displayed when the list of questions is empty-->
+    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+    <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">没有可显示的内容</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">無空白表格</string>

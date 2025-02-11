@@ -171,26 +171,6 @@ class EntityFormTest {
     }
 
     @Test
-    fun disablingLocalEntities_stopsThemFromBeingShownInFollowUpForms() {
-        testDependencies.server.addForm("one-question-entity-registration.xml")
-        testDependencies.server.addForm(
-            "one-question-entity-update.xml",
-            listOf(EntityListItem("people.csv"))
-        )
-
-        rule.withMatchExactlyProject(testDependencies.server.url)
-            .startBlankForm("One Question Entity Registration")
-            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
-
-            .disableLocalEntitiesInForms()
-
-            .startBlankForm("One Question Entity Update")
-            .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertTextDoesNotExist("Logan Roy")
-    }
-
-    @Test
     fun fillingEntityRegistrationForm_whenFormUsesOldSpecVersion_doesNotCreateEntityForFollowUpForms() {
         testDependencies.server.addForm("one-question-entity-registration-v2023.1.xml")
         testDependencies.server.addForm(

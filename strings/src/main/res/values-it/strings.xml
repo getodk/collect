@@ -969,8 +969,6 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <string name="entities_title">Lista Entità</string>
   <!--Title for setting that controls whether local entity features are enabled or not-->
-  <string name="include_local_entities_setting">Abilitare le entità locali</string>
-  <string name="local_entity_features_summary">I formulari di follow-up avranno elenchi di entità coerenti e includeranno entità create o aggiornate localmente.</string>
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">Visualizzare le liste di entità</string>
   <!--Label for entity that has been created offline and is not on the server yet-->
@@ -1073,10 +1071,8 @@
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">Deseleziona per nasconderlo dalle bozze</string>
   <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-  <string name="new_feature">Nuova funzionalità</string>
-  <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-  <string name="drafts_pills_education_message">La lista bozza ora mostra gli errori di convalida. Ogni volta che salvi un formulario come bozza, il suo stato di convalida viene aggiornato.\n\nLe bozze contrassegnate con \"Errori\" mancano di domande obbligatorie o contengono valori non consentiti.</string>
-  <!--Message displayed when the list of questions is empty-->
+    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+    <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">Niente disponibile da visualizzare</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">Nessun formulario vuoto</string>

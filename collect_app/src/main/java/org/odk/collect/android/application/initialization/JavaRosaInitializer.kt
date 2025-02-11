@@ -16,7 +16,6 @@ import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.settings.keys.ProjectKeys
 
 class JavaRosaInitializer(
     private val propertyManager: PropertyManager,
@@ -53,8 +52,8 @@ class JavaRosaInitializer(
         XFormUtils.setXFormParserFactory(dynamicPreloadXFormParserFactory)
 
         val localEntitiesExternalInstanceParserFactory = LocalEntitiesExternalInstanceParserFactory(
-            { entitiesRepositoryProvider.create(projectsDataService.getCurrentProject().uuid) },
-            { settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_LOCAL_ENTITIES) }
+            { entitiesRepositoryProvider.create(projectsDataService.requireCurrentProject().uuid) },
+            { true }
         )
 
         XFormUtils.setExternalInstanceParserFactory(localEntitiesExternalInstanceParserFactory)

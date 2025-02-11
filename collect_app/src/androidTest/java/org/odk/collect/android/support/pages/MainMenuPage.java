@@ -12,7 +12,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.StringContains.containsString;
 
-import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.TestScheduler;
@@ -77,21 +76,13 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public EditSavedFormPage clickDrafts() {
-        return clickDrafts(true);
-    }
-
-    public EditSavedFormPage clickDrafts(boolean firstOpen) {
         onView(withId(R.id.review_data)).perform(click());
-        return new EditSavedFormPage(firstOpen).assertOnPage();
+        return new EditSavedFormPage().assertOnPage();
     }
 
     public EditSavedFormPage clickDrafts(int formCount) {
-        return clickDrafts(formCount, true);
-    }
-
-    public EditSavedFormPage clickDrafts(int formCount, boolean firstOpen) {
         assertNumberOfEditableForms(formCount);
-        return clickDrafts(firstOpen);
+        return clickDrafts();
     }
 
     public MainMenuPage assertNumberOfFinalizedForms(int number) {
@@ -290,16 +281,6 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public MainMenuPage refreshForms() {
         return clickFillBlankForm()
                 .clickRefresh()
-                .pressBack(new MainMenuPage());
-    }
-
-    @NotNull
-    public MainMenuPage disableLocalEntitiesInForms() {
-        return openProjectSettingsDialog()
-                .clickSettings()
-                .clickExperimental()
-                .clickOnString(org.odk.collect.strings.R.string.include_local_entities_setting)
-                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
     }
 }
