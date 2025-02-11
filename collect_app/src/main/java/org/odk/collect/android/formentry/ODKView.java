@@ -217,8 +217,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
     private void setupAudioErrors() {
         audioHelper.getError().observe(viewLifecycle, e -> {
-            if (e instanceof PlaybackFailedException) {
-                final PlaybackFailedException playbackFailedException = (PlaybackFailedException) e;
+            if (e instanceof PlaybackFailedException playbackFailedException) {
                 Toast.makeText(
                         getContext(),
                         getContext().getString(playbackFailedException.getExceptionMsg() == 0 ? org.odk.collect.strings.R.string.file_missing : org.odk.collect.strings.R.string.file_invalid, playbackFailedException.getURI()),

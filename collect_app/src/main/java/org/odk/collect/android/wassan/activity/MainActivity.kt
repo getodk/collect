@@ -40,6 +40,7 @@ import org.odk.collect.android.wassan.fragments.AccountFragment
 import org.odk.collect.android.wassan.fragments.CalculatorFragment
 import org.odk.collect.android.wassan.fragments.CommunityFragment
 import org.odk.collect.android.wassan.fragments.DashboardFragment
+import org.odk.collect.android.wassan.fragments.OnFormSelectedListener
 import org.odk.collect.android.wassan.model.User
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
@@ -54,7 +55,8 @@ import org.odk.collect.strings.localization.LocalizedActivity
 import timber.log.Timber
 import javax.inject.Inject
 
-class MainActivity : LocalizedActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : LocalizedActivity(), NavigationView.OnNavigationItemSelectedListener,
+    OnFormSelectedListener {
     @Inject
     lateinit var settingsProvider: SettingsProvider
 
@@ -118,7 +120,7 @@ class MainActivity : LocalizedActivity(), NavigationView.OnNavigationItemSelecte
         val parser = JsonParser()
         val jsonObject: JsonObject = parser.parse(jsonUser).asJsonObject
         val projectsJsonString = jsonObject.getAsJsonPrimitive("projects").asString
-        projectsRepository.deleteAll();
+        projectsRepository.deleteAll()
         // Parse the JSON string representing projects into a JsonArray
         val projectsArray: JsonArray = parser.parse(projectsJsonString).asJsonArray
         for (projectElement in projectsArray) {
@@ -225,8 +227,8 @@ class MainActivity : LocalizedActivity(), NavigationView.OnNavigationItemSelecte
                 position = user.position
             }
 
-            textfullname.setText(fullname)
-            textRole.setText(position)
+            textfullname.text = fullname
+            textRole.text = position
 
             Glide.with(this)
                 .load(user.photo)
@@ -278,7 +280,7 @@ class MainActivity : LocalizedActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    fun onFormSelected(formUri: Uri) {
+    override fun onFormSelected(formUri: Uri) {
         if (Intent.ACTION_PICK == intent.action) {
             // Caller is waiting on a picked form
             setResult(Activity.RESULT_OK, Intent().setData(formUri))
@@ -396,7 +398,7 @@ class MainActivity : LocalizedActivity(), NavigationView.OnNavigationItemSelecte
         (projectsMenuItem?.actionView as ProjectIconView).apply {
             project = currentProjectViewModel.currentProject.value
             setOnClickListener { onOptionsItemSelected(projectsMenuItem) }
-            contentDescription = getString(org.odk.collect.strings.R.string.projects);
+            contentDescription = getString(org.odk.collect.strings.R.string.projects)
         }
         return super.onPrepareOptionsMenu(menu)
     }

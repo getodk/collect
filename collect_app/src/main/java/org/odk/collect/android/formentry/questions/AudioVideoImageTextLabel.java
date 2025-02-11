@@ -188,8 +188,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     private void selectItem() {
         if (textLabel instanceof RadioButton) {
             ((RadioButton) textLabel).setChecked(true);
-        } else if (textLabel instanceof CheckBox) {
-            CheckBox checkbox = (CheckBox) textLabel;
+        } else if (textLabel instanceof CheckBox checkbox) {
             checkbox.setChecked(!checkbox.isChecked());
         }
         if (listener != null) {

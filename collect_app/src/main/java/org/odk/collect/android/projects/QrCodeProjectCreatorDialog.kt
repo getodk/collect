@@ -236,7 +236,7 @@ class QrCodeProjectCreatorDialog :
         super.onDestroy()
     }
 
-    override fun getToolbar(): Toolbar? {
+    override fun getToolbar(): Toolbar {
         return binding.toolbarLayout.toolbar
     }
 

@@ -52,12 +52,10 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
                 fw.close();
                 fw = new FileWriter(file.getAbsolutePath(), true);
             }
-            if (params.length > 0) {
-                for (AuditEvent aev : params) {
-                    String csvLine = toCSVLine(aev, isLocationEnabled, isTrackingChangesEnabled, isTrackChangesReasonEnabled);
-                    fw.write(csvLine + "\n");
-                    Timber.i("Log audit event: %s", csvLine);
-                }
+            for (AuditEvent aev : params) {
+                String csvLine = toCSVLine(aev, isLocationEnabled, isTrackingChangesEnabled, isTrackChangesReasonEnabled);
+                fw.write(csvLine + "\n");
+                Timber.i("Log audit event: %s", csvLine);
             }
         } catch (IOException e) {
             Timber.e(e);

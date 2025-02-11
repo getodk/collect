@@ -90,7 +90,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
     private final String uriMimeType;
     private final String xpath;
     private final String waitingXPath;
-    private FormEntryControllerFactory formEntryControllerFactory;
+    private final FormEntryControllerFactory formEntryControllerFactory;
     private boolean pendingActivityResult;
     private int requestCode;
     private int resultCode;

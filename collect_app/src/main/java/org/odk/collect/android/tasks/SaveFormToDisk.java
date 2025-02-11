@@ -263,8 +263,7 @@ public class SaveFormToDisk {
             XPathExpression expr = XPathParseTool.parseXPath(xpath);
             EvaluationContext context = new EvaluationContext(instance);
             Object result = expr.eval(instance, context);
-            if (result instanceof XPathNodeset) {
-                XPathNodeset nodes = (XPathNodeset) result;
+            if (result instanceof XPathNodeset nodes) {
                 if (nodes.size() == 0) {
                     Timber.i("TreeElement is missing for xpath %s!, probably it's just not relevant", xpath);
                     return null;

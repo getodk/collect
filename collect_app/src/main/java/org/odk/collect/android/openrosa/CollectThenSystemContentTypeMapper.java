@@ -41,8 +41,8 @@ public class CollectThenSystemContentTypeMapper implements OpenRosaHttpInterface
         OGV("ogv",  "video/ogg"),
         WEBM("webm", "video/webm");
 
-        private String extension;
-        private String contentType;
+        private final String extension;
+        private final String contentType;
 
         CollectContentTypeMappings(String extension, String contentType) {
             this.extension = extension;

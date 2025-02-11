@@ -45,6 +45,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class ActivityGeoDataRequesterTest {
@@ -332,7 +333,7 @@ public class ActivityGeoDataRequesterTest {
     @Test
     public void requestGeoPoint_whenWidgetHasAllowMockAccuracy_addsItToIntent() {
         when(prompt.getBindAttributes())
-                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "true")));
+                .thenReturn(List.of(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "true")));
 
         activityGeoDataRequester.requestGeoPoint(prompt, "1.0 2.0 3 4", waitingForDataRegistry);
 
@@ -341,7 +342,7 @@ public class ActivityGeoDataRequesterTest {
         assertTrue(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
 
         when(prompt.getBindAttributes())
-                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "false")));
+                .thenReturn(List.of(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "false")));
 
         activityGeoDataRequester.requestGeoPoint(prompt, "1.0 2.0 3 4", waitingForDataRegistry);
 
@@ -353,7 +354,7 @@ public class ActivityGeoDataRequesterTest {
     @Test
     public void requestGeoShape_whenWidgetHasAllowMockAccuracy_addsItToIntent() {
         when(prompt.getBindAttributes())
-                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "true")));
+                .thenReturn(List.of(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "true")));
 
         activityGeoDataRequester.requestGeoShape(prompt, "blah", waitingForDataRegistry);
 
@@ -362,7 +363,7 @@ public class ActivityGeoDataRequesterTest {
         assertTrue(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
 
         when(prompt.getBindAttributes())
-                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "false")));
+                .thenReturn(List.of(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "false")));
 
         activityGeoDataRequester.requestGeoShape(prompt, "blah", waitingForDataRegistry);
 
@@ -374,7 +375,7 @@ public class ActivityGeoDataRequesterTest {
     @Test
     public void requestGeoTrace_whenWidgetHasAllowMockAccuracy_addsItToIntent() {
         when(prompt.getBindAttributes())
-                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "true")));
+                .thenReturn(List.of(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "true")));
 
         activityGeoDataRequester.requestGeoTrace(prompt, "blah", waitingForDataRegistry);
 
@@ -383,7 +384,7 @@ public class ActivityGeoDataRequesterTest {
         assertTrue(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
 
         when(prompt.getBindAttributes())
-                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "false")));
+                .thenReturn(List.of(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "false")));
 
         activityGeoDataRequester.requestGeoTrace(prompt, "blah", waitingForDataRegistry);
 

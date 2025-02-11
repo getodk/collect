@@ -48,7 +48,7 @@ public class PromptAutoplayerTest {
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
-        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
+        verify(audioHelper).playInOrder(List.of(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class PromptAutoplayerTest {
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
-        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
+        verify(audioHelper).playInOrder(List.of(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
     }
 
     @Test
@@ -156,7 +156,7 @@ public class PromptAutoplayerTest {
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
-        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
+        verify(audioHelper).playInOrder(List.of(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
     }
 
     @Test
@@ -177,7 +177,7 @@ public class PromptAutoplayerTest {
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
-        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
+        verify(audioHelper).playInOrder(List.of(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
     }
 
     @Test
@@ -198,7 +198,7 @@ public class PromptAutoplayerTest {
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
-        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
+        verify(audioHelper).playInOrder(List.of(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
     }
 
     @Test
@@ -219,7 +219,7 @@ public class PromptAutoplayerTest {
                 .build();
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(true));
-        verify(audioHelper).playInOrder(asList(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
+        verify(audioHelper).playInOrder(List.of(new Clip(prompt.getIndex().toString(), REFERENCES.get(0).second)));
     }
 
     @Test // We only support audio autoplaying with the helper right now

@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -436,7 +437,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         @javax.annotation.Nullable
         @Override
         public List<String> getValues(String header) {
-            return asList(headers.get(header.toLowerCase(Locale.ENGLISH)));
+            return Collections.singletonList(headers.get(header.toLowerCase(Locale.ENGLISH)));
         }
     }
 }

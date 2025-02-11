@@ -753,8 +753,7 @@ public class JavaRosaFormController implements FormController {
         FormEntryPrompt[] questions = new FormEntryPrompt[0];
 
         IFormElement element = formEntryController.getModel().getForm().getChild(getFormIndex());
-        if (element instanceof GroupDef) {
-            GroupDef gd = (GroupDef) element;
+        if (element instanceof GroupDef gd) {
             // we only display relevant questions
             List<FormEntryPrompt> questionList = new ArrayList<>();
             for (FormIndex index : getIndicesForGroup(gd)) {

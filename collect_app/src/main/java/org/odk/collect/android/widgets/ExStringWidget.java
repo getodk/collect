@@ -166,8 +166,6 @@ public class ExStringWidget extends QuestionWidget implements WidgetDataReceiver
             // focus on launch button
             binding.launchAppButton.requestFocus();
         } else {
-            if (!getFormEntryPrompt().isReadOnly()) {
-                binding.widgetAnswerText.setFocus(true);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -178,9 +176,7 @@ public class ExStringWidget extends QuestionWidget implements WidgetDataReceiver
              * edittext
              * is focused before the dialog pops up, everything works fine. great.
              */
-            } else {
-                binding.widgetAnswerText.setFocus(false);
-            }
+            binding.widgetAnswerText.setFocus(!getFormEntryPrompt().isReadOnly());
         }
     }
 

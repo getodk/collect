@@ -234,7 +234,7 @@ object LocalFormUseCases {
                 Collect.getInstance()
                     .getLocalizedString(
                         org.odk.collect.strings.R.string.xform_parse_error,
-                        formDefFile!!.name,
+                        formDefFile.name,
                         "title"
                     )
             )
@@ -247,7 +247,7 @@ object LocalFormUseCases {
                 Collect.getInstance()
                     .getLocalizedString(
                         org.odk.collect.strings.R.string.xform_parse_error,
-                        formDefFile!!.name,
+                        formDefFile.name,
                         "id"
                     )
             )
@@ -264,7 +264,7 @@ object LocalFormUseCases {
                 throw IllegalArgumentException(
                     Collect.getInstance().getLocalizedString(
                         org.odk.collect.strings.R.string.xform_parse_error,
-                        formDefFile!!.name,
+                        formDefFile.name,
                         "submission url"
                     )
                 )
@@ -281,7 +281,7 @@ object LocalFormUseCases {
 
         // Note, the path doesn't change here, but it needs to be included so the
         // update will automatically update the .md5 and the cache path.
-        builder.formFilePath(formDefFile!!.absolutePath)
+        builder.formFilePath(formDefFile.absolutePath)
         builder.formMediaPath(
             FileUtils.constructMediaPath(
                 formDefFile.absolutePath

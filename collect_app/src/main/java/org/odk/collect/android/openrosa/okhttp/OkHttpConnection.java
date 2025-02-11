@@ -74,7 +74,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         ResponseBody body = response.body();
 
         if (body == null) {
-            throw new Exception("No entity body returned from: " + uri.toString());
+            throw new Exception("No entity body returned from: " + uri);
         }
 
         if (contentType != null && contentType.length() > 0) {
@@ -83,8 +83,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
             if (type != null && !type.toString().toLowerCase(Locale.ENGLISH).contains(contentType)) {
                 discardEntityBytes(response);
 
-                String error = "ContentType: " + type.toString() + " returned from: "
-                        + uri.toString() + " is not " + contentType
+                String error = "ContentType: " + type + " returned from: "
+                        + uri + " is not " + contentType
                         + ".  This is often caused by a network proxy.  Do you need "
                         + "to login to your network?";
 

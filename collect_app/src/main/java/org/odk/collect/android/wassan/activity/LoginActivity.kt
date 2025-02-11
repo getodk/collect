@@ -31,11 +31,11 @@ import javax.inject.Inject
 class LoginActivity : LocalizedActivity() {
     @Inject
     lateinit var settingsProvider: SettingsProvider
-    lateinit var pd: ProgressDialog;
+    lateinit var pd: ProgressDialog
 
     lateinit var webServerURL: String
-    lateinit var username: EditText;
-    lateinit var password:EditText;
+    lateinit var username: EditText
+    lateinit var password:EditText
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,14 +100,14 @@ class LoginActivity : LocalizedActivity() {
 
                         //getting the user from the response
                         val userJson = obj.getJSONObject("user")
-                        val defaultProjectJson=userJson.getJSONObject("default_project");
+                        val defaultProjectJson=userJson.getJSONObject("default_project")
                         if (defaultProjectJson.length() == 0) {
                             Toast.makeText(applicationContext, "No default project found", Toast.LENGTH_SHORT).show()
                             pd.dismiss()
                             return@Listener
                         }
-                        val serverUrl=defaultProjectJson.getString("server_url")+"/key/"+defaultProjectJson.getString("central_user_token")+"/projects/"+defaultProjectJson.getString("central_project_id");
-                        Timber.tag("Tag").d("user: %s", userJson.toString(4));
+                        val serverUrl=defaultProjectJson.getString("server_url")+"/key/"+defaultProjectJson.getString("central_user_token")+"/projects/"+defaultProjectJson.getString("central_project_id")
+                        Timber.tag("Tag").d("user: %s", userJson.toString(4))
 
                         //creating a new user object
                         val user = User(
@@ -150,11 +150,11 @@ class LoginActivity : LocalizedActivity() {
                             val errors = obj.getJSONObject("errors")
                             if (errors.has("username")) {
                                 username.requestFocus()
-                                username.setError(errors.getString("username"))
+                                username.error = errors.getString("username")
                             }
                             if (errors.has("password")) {
                                 //password.requestFocus();
-                                password.setError(errors.getString("password"))
+                                password.error = errors.getString("password")
                             }
                         }
 

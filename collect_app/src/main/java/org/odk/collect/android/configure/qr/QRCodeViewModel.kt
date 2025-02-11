@@ -81,7 +81,7 @@ class QRCodeViewModel(
         }
     }
 
-    class Factory constructor(
+    class Factory(
         private val qrCodeGenerator: QRCodeGenerator,
         private val appConfigurationGenerator: AppConfigurationGenerator,
         private val settingsProvider: SettingsProvider,

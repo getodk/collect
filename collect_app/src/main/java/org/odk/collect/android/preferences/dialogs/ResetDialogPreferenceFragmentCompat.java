@@ -216,11 +216,7 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
     }
 
     public void adjustResetButtonAccessibility() {
-        if (preferences.isChecked() || instances.isChecked() || forms.isChecked()
-                || layers.isChecked() || cache.isChecked()) {
-            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-        } else {
-            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-        }
+        ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(preferences.isChecked() || instances.isChecked() || forms.isChecked()
+                || layers.isChecked() || cache.isChecked());
     }
 }

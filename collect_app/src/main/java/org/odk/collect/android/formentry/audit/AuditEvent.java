@@ -122,7 +122,7 @@ public class AuditEvent {
     }
 
     private final long start;
-    private AuditEventType auditEventType;
+    private final AuditEventType auditEventType;
     private String latitude;
     private String longitude;
     private String accuracy;
@@ -134,7 +134,7 @@ public class AuditEvent {
     private String newValue = "";
     private long end;
     private boolean endTimeSet;
-    private FormIndex formIndex;
+    private final FormIndex formIndex;
 
     /*
      * Create a new event

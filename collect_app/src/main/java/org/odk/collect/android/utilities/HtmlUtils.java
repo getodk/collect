@@ -22,13 +22,13 @@ import java.util.regex.MatchResult;
 
 public final class HtmlUtils {
 
-    private static ReplaceCallback.Callback createHeader = match -> {
+    private static final ReplaceCallback.Callback createHeader = match -> {
         int level = match.group(1).length();
         return "<h" + level + ">" + match.group(2).replaceAll("#+$", "").trim() + "</h" + level
                 + ">";
     };
 
-    private static ReplaceCallback.Callback createParagraph = match -> {
+    private static final ReplaceCallback.Callback createParagraph = match -> {
         String trimmed = match.group(1).trim();
         if (trimmed.matches("(?i)^<\\/?(h|p|bl)")) {
             return match.group(1);
@@ -36,7 +36,7 @@ public final class HtmlUtils {
         return "<p>" + trimmed + "</p>";
     };
 
-    private static ReplaceCallback.Callback createSpan = new ReplaceCallback.Callback() {
+    private static final ReplaceCallback.Callback createSpan = new ReplaceCallback.Callback() {
         public String matchFound(MatchResult match) {
             String attributes = sanitizeAttributes(match.group(1));
             return "<font" + attributes + ">" + match.group(2).trim() + "</font>";

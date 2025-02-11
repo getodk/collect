@@ -41,7 +41,9 @@ import org.odk.collect.testshared.FakeScheduler;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 @SuppressWarnings("PMD.DoubleBraceInitialization")
@@ -381,20 +383,20 @@ public class FormEntryViewModelTest {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withControlType(CONTROL_SELECT_ONE)
                 .build();
-        formController.setQuestionPrompts(asList(prompt));
+        formController.setQuestionPrompts(Collections.singletonList(prompt));
 
-        int loadCount = Measure.withMeasure(asList("LoadSelectChoices"), () -> {
+        int loadCount = Measure.withMeasure(List.of("LoadSelectChoices"), () -> {
             viewModel.refresh();
             scheduler.runBackground();
         });
         assertThat(loadCount, equalTo(1));
 
-        loadCount = Measure.withMeasure(asList("LoadSelectChoices"), () -> {
+        loadCount = Measure.withMeasure(List.of("LoadSelectChoices"), () -> {
             scheduler.runForeground();
         });
         assertThat(loadCount, equalTo(0));
 
-        loadCount = Measure.withMeasure(asList("LoadSelectChoices"), () -> {
+        loadCount = Measure.withMeasure(List.of("LoadSelectChoices"), () -> {
             try {
                 viewModel.loadSelectChoices(prompt);
             } catch (FileNotFoundException | XPathSyntaxException e) {

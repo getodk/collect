@@ -83,7 +83,7 @@ class ChangeAdminPasswordDialogTest {
     fun `The dialog should be dismissed after clicking on 'CANCEL'`() {
         val scenario = launcherRule.launch(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
-            assertThat(it.dialog!!.isShowing, Matchers.`is`(true))
+            assertThat(it.dialog!!.isShowing, `is`(true))
             (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_NEGATIVE).performClick()
             RobolectricHelpers.runLooper()
             assertThat(it.dialog, `is`(Matchers.nullValue()))

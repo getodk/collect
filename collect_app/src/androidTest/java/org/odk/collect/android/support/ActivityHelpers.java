@@ -38,8 +38,7 @@ public final class ActivityHelpers {
 
             @Override
             public void perform(UiController uiController, View view) {
-                if (view.getContext() instanceof Activity) {
-                    Activity activity = (Activity) view.getContext();
+                if (view.getContext() instanceof Activity activity) {
                     currentActivity[0] = activity;
                 } else if (view.getContext() instanceof ContextThemeWrapper) {
                     Activity activity = (Activity) ((ContextThemeWrapper) view.getContext()).getBaseContext();

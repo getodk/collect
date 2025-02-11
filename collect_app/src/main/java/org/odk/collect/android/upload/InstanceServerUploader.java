@@ -38,6 +38,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,7 +126,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 // Redirect header received
                 if (responseHeaders.containsHeader("Location")) {
                     try {
-                        Uri newURI = Uri.parse(URLDecoder.decode(responseHeaders.getAnyValue("Location"), "utf-8"));
+                        Uri newURI = Uri.parse(URLDecoder.decode(responseHeaders.getAnyValue("Location"), StandardCharsets.UTF_8));
                         // Allow redirects within same host. This could be redirecting to HTTPS.
                         if (submissionUri.getHost().equalsIgnoreCase(newURI.getHost())) {
                             // Re-add params if server didn't respond with params
@@ -141,10 +142,10 @@ public class InstanceServerUploader extends InstanceUploader {
                             // We can't tell if this is a spoof or not.
                             throw new FormUploadException(FAIL
                                     + "Unexpected redirection attempt to a different host: "
-                                    + newURI.toString());
+                                    + newURI);
                         }
                     } catch (Exception e) {
-                        throw new FormUploadException(FAIL + urlString + " " + e.toString());
+                        throw new FormUploadException(FAIL + urlString + " " + e);
                     }
                 }
             } else {
@@ -276,11 +277,7 @@ public class InstanceServerUploader extends InstanceUploader {
         }
 
         // add deviceID to request
-        try {
-            urlString += "?deviceID=" + URLEncoder.encode(deviceId != null ? deviceId : "", "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            Timber.i(e, "Error encoding URL for device id : %s", deviceId);
-        }
+        urlString += "?deviceID=" + URLEncoder.encode(deviceId != null ? deviceId : "", StandardCharsets.UTF_8);
 
         return urlString;
     }

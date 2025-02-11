@@ -13,6 +13,7 @@ import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
 import java.util.Arrays;
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class BadServerTest {
@@ -55,10 +56,10 @@ public class BadServerTest {
     */
     public void whenMediaFileHasMissingPrefix_showsAsUpdated() {
         testDependencies.server.removeMediaFileHashPrefix();
-        testDependencies.server.addForm("One Question", "one_question", "1", "one-question.xml", Arrays.asList("fruits.csv"));
+        testDependencies.server.addForm("One Question", "one_question", "1", "one-question.xml", List.of("fruits.csv"));
 
         rule.withProject(testDependencies.server.getURL())
-                .copyForm("one-question.xml", Arrays.asList("fruits.csv"), testDependencies.server.getHostName())
+                .copyForm("one-question.xml", List.of("fruits.csv"), testDependencies.server.getHostName())
                 .clickGetBlankForm()
                 .assertText(org.odk.collect.strings.R.string.newer_version_of_a_form_info);
     }
@@ -72,10 +73,10 @@ public class BadServerTest {
     */
     public void whenMediaFileHasUnstableHash_butIsIdentical_doesNotShowAsUpdatedAfterRedownload() {
         testDependencies.server.returnRandomMediaFileHash();
-        testDependencies.server.addForm("One Question", "one_question", "1", "one-question.xml", Arrays.asList("fruits.csv"));
+        testDependencies.server.addForm("One Question", "one_question", "1", "one-question.xml", List.of("fruits.csv"));
 
         rule.withProject(testDependencies.server.getURL())
-                .copyForm("one-question.xml", Arrays.asList("fruits.csv"), testDependencies.server.getHostName())
+                .copyForm("one-question.xml", List.of("fruits.csv"), testDependencies.server.getHostName())
                 .clickGetBlankForm()
                 .assertText(org.odk.collect.strings.R.string.newer_version_of_a_form_info)
                 .clickGetSelected()

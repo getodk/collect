@@ -93,7 +93,7 @@ class FormMapViewModel(
             },
             foreground = {
                 mapTitle.value = it.first
-                mappableItems.value = it.second as List<MappableSelectItem>
+                mappableItems.value = it.second
                 itemCount.value = it.third
                 isLoading.value = false
             }

@@ -58,12 +58,12 @@ class InstancesDataService(
         val instancesRepository = projectDependencyModule.instancesRepository
 
         val sendableInstances = instancesRepository.getCountByStatus(
-            Instance.STATUS_COMPLETE,
-            Instance.STATUS_SUBMISSION_FAILED
+            STATUS_COMPLETE,
+            STATUS_SUBMISSION_FAILED
         )
         val sentInstances = instancesRepository.getCountByStatus(
             Instance.STATUS_SUBMITTED,
-            Instance.STATUS_SUBMISSION_FAILED
+            STATUS_SUBMISSION_FAILED
         )
         val editableInstances = instancesRepository.getCountByStatus(
             Instance.STATUS_INCOMPLETE,

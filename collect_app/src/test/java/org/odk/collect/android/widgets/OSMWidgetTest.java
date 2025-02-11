@@ -235,7 +235,7 @@ public class OSMWidgetTest {
 
     private OSMWidget createWidget(FormEntryPrompt prompt) {
         when(prompt.getQuestion()).thenReturn(questionDef);
-        when(questionDef.getOsmTags()).thenReturn(ImmutableList.<OSMTag>of());
+        when(questionDef.getOsmTags()).thenReturn(ImmutableList.of());
 
         return new OSMWidget(widgetActivity, new QuestionDetails(prompt),
                 fakeWaitingForDataRegistry, intentLauncher, formController);

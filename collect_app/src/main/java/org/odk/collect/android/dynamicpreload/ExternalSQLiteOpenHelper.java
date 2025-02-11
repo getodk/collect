@@ -59,9 +59,9 @@ import timber.log.Timber;
 public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final int VERSION = 1;
-    private static final char DELIMITING_CHAR = ",".charAt(0);
-    private static final char QUOTE_CHAR = "\"".charAt(0);
-    private static final char ESCAPE_CHAR = "\0".charAt(0);
+    private static final char DELIMITING_CHAR = ',';
+    private static final char QUOTE_CHAR = '"';
+    private static final char ESCAPE_CHAR = '\u0000';
 
     private File dataSetFile;
     private ExternalDataReader externalDataReader;

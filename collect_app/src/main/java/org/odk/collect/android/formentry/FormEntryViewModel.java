@@ -223,7 +223,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     public void moveBackward(HashMap<FormIndex, IAnswerData> answers) {
-        worker.immediate((Supplier<Boolean>) () -> {
+        worker.immediate(() -> {
             boolean updateSuccess = saveScreenAnswersToFormController(answers, false);
             if (updateSuccess) {
                 try {

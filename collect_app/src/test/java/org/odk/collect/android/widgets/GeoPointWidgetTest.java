@@ -130,7 +130,7 @@ public class GeoPointWidgetTest {
     public void setDataWithInvalidValue_doesNotUpdateWidgetAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         widget.setData("blah");
-        assertEquals(widget.getAnswer(), null);
+        assertNull(widget.getAnswer());
     }
 
     @Test

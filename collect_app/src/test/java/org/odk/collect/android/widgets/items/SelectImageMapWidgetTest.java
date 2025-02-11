@@ -23,6 +23,8 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 
+import java.util.List;
+
 public abstract class SelectImageMapWidgetTest<W extends SelectImageMapWidget, A extends IAnswerData>
         extends SelectWidgetTest<W, A> {
 
@@ -37,7 +39,7 @@ public abstract class SelectImageMapWidgetTest<W extends SelectImageMapWidget, A
     }
 
     private void overrideDependencyModule() throws Exception {
-        ReferenceManager referenceManager = setupFakeReferenceManager(asList(
+        ReferenceManager referenceManager = setupFakeReferenceManager(List.of(
                 new Pair<>("jr://images/body.svg", "body.svg")
         ));
 

@@ -29,13 +29,13 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
     private BackgroundLocationState currentState;
 
     @NonNull
-    private LocationClient locationClient;
+    private final LocationClient locationClient;
 
     @NonNull
-    private LocationListener locationListener;
+    private final LocationListener locationListener;
 
     @NonNull
-    private BackgroundLocationHelper helper;
+    private final BackgroundLocationHelper helper;
 
     public BackgroundLocationManager(LocationClient locationClient, BackgroundLocationHelper helper) {
         currentState = BackgroundLocationState.NO_BACKGROUND_LOCATION_NEEDED;
@@ -290,10 +290,10 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
         COLLECTING_LOCATION(org.odk.collect.strings.R.string.background_location_enabled, true),
         PROVIDERS_DISABLED(-1, false);
 
-        private int messageTextResourceId;
+        private final int messageTextResourceId;
 
         // Indicates whether the message text needs a "⋮" character inserted
-        private boolean isMenuCharacterNeeded;
+        private final boolean isMenuCharacterNeeded;
 
         BackgroundLocationMessage(int messageTextResourceId, boolean isMenuCharacterNeeded) {
             this.messageTextResourceId = messageTextResourceId;

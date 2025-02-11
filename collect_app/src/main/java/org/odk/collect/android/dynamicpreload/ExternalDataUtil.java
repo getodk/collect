@@ -298,7 +298,7 @@ public final class ExternalDataUtil {
     }
 
     public static boolean containsAnyData(String[] row) {
-        if (row == null || row.length == 0) {
+        if (row == null) {
             return false;
         }
         for (String value : row) {

@@ -217,7 +217,7 @@ public class DateTimeWidgetTest {
         widget.setData(answer);
 
         assertEquals(widget.getAnswer().getDisplayText(),
-                new DateTimeData(DateTimeUtils.getSelectedDate((LocalDateTime) answer, LocalDateTime.now()).toDate()).getDisplayText());
+                new DateTimeData(DateTimeUtils.getSelectedDate(answer, LocalDateTime.now()).toDate()).getDisplayText());
     }
 
     @Test
@@ -234,7 +234,7 @@ public class DateTimeWidgetTest {
         widget.setData(answer);
 
         assertEquals(widget.getAnswer().getDisplayText(),
-                new DateTimeData(DateTimeUtils.getSelectedTime(((DateTime) answer).toLocalDateTime(), LocalDateTime.now()).toDate()).getDisplayText());
+                new DateTimeData(DateTimeUtils.getSelectedTime(answer.toLocalDateTime(), LocalDateTime.now()).toDate()).getDisplayText());
     }
 
     @Test

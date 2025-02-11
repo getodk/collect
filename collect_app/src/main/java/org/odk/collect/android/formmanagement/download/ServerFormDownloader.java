@@ -124,7 +124,7 @@ public class ServerFormDownloader implements FormDownloader {
                 final long start = System.currentTimeMillis();
                 Timber.i("Parsing document %s", fileResult.file.getAbsolutePath());
 
-                formMetadata = formMetadataParser.readMetadata(fileResult.file);
+                formMetadata = FormMetadataParser.readMetadata(fileResult.file);
 
                 Timber.i("Parse finished in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
@@ -301,7 +301,7 @@ public class ServerFormDownloader implements FormDownloader {
         File tempMediaFolder = new File(tempMediaPath);
         File[] mediaFiles = tempMediaFolder.listFiles();
 
-        if (mediaFiles != null && mediaFiles.length != 0) {
+        if (mediaFiles != null) {
             for (File mediaFile : mediaFiles) {
                 try {
                     org.apache.commons.io.FileUtils.copyFileToDirectory(mediaFile, formMediaPath);

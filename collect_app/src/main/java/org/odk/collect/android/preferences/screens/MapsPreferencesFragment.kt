@@ -114,7 +114,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment(), Preference.OnP
             settingsProvider.getUnprotectedSettings()
         )
 
-        basemapSourcePref.setIconSpaceReserved(false)
+        basemapSourcePref.isIconSpaceReserved = false
         onBasemapSourceChanged(MapConfiguratorProvider.getConfigurator())
     }
 

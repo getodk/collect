@@ -139,8 +139,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
     @Override
     public void setData(Object object) {
-        if (object instanceof File) {
-            File newAudio = (File) object;
+        if (object instanceof File newAudio) {
             if (newAudio.exists()) {
                 if (binaryName != null) {
                     deleteFile();

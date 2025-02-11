@@ -86,7 +86,7 @@ object StorageUtils {
         val instanceDirPath = getInstancesDirPath(projectName) + instanceFileName.split("\\.".toRegex()).toTypedArray()[0]
         File(instanceDirPath).mkdir()
         FileUtils.copyFileFromAssets(
-            InstrumentationRegistry.getInstrumentation().getContext(),
+            InstrumentationRegistry.getInstrumentation().context,
             "$instanceDirPath/$instanceFileName",
             "instances/$instanceFileName"
         )
@@ -104,8 +104,8 @@ object StorageUtils {
 
     @Throws(IOException::class)
     private fun copyFormMediaFiles(formFilename: String, mediaFilePaths: List<String>, projectName: String) {
-        val mediaPathName = getFormsDirPath(projectName) + formFilename.replace(".xml", "") + org.odk.collect.android.utilities.FileUtils.MEDIA_SUFFIX + "/"
-        org.odk.collect.android.utilities.FileUtils.checkMediaPath(File(mediaPathName))
+        val mediaPathName = getFormsDirPath(projectName) + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/"
+        FileUtils.checkMediaPath(File(mediaPathName))
         for (mediaFilePath in mediaFilePaths) {
             FileUtils.copyFileFromResources(
                 "media/$mediaFilePath",
@@ -155,7 +155,7 @@ object StorageUtils {
 
     @Throws(IOException::class)
     @JvmStatic
-    public fun getAuditLogForFirstInstance(): List<CSVRecord> {
+    fun getAuditLogForFirstInstance(): List<CSVRecord> {
         val instanceDir = File(getInstancesDirPath()).listFiles()[0]
         val auditLog = Arrays.stream(instanceDir.listFiles())
             .filter { file: File -> file.name == "audit.csv" }

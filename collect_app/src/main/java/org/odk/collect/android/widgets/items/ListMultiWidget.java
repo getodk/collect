@@ -115,11 +115,7 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (getFormEntryPrompt().isReadOnly()) {
-                            if (buttonView.isChecked()) {
-                                buttonView.setChecked(false);
-                            } else {
-                                buttonView.setChecked(true);
-                            }
+                            buttonView.setChecked(!buttonView.isChecked());
                         }
 
                         widgetValueChanged();

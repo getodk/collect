@@ -131,7 +131,7 @@ public class MockFormEntryPromptBuilder {
         TreeElement treeElement = TreeElement.constructAttributeElement(namespace, name, value);
         treeElement.setValue(new StringData(value));
 
-        when(prompt.getBindAttributes()).thenReturn(asList(treeElement));
+        when(prompt.getBindAttributes()).thenReturn(List.of(treeElement));
 
         return this;
     }

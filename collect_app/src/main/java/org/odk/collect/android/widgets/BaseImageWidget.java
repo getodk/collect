@@ -97,8 +97,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             deleteFile();
         }
 
-        if (object instanceof File) {
-            File newImage = (File) object;
+        if (object instanceof File newImage) {
             if (newImage.exists()) {
                 questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
                 binaryName = newImage.getName();

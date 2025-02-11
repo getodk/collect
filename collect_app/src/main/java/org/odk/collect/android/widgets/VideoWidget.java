@@ -122,8 +122,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
             deleteFile();
         }
 
-        if (object instanceof File) {
-            File newVideo = (File) object;
+        if (object instanceof File newVideo) {
             if (newVideo.exists()) {
                 questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
                 binaryName = newVideo.getName();

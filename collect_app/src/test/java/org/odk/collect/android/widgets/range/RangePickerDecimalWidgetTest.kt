@@ -62,7 +62,7 @@ class RangePickerDecimalWidgetTest {
         )
         widget.clearAnswer()
 
-        assertThat(widget.answer, Matchers.nullValue())
+        assertThat(widget.answer, nullValue())
         assertThat(
             widget.binding.widgetAnswerText.text,
             equalTo(widget.context.getString(org.odk.collect.strings.R.string.no_value_selected))
@@ -83,7 +83,7 @@ class RangePickerDecimalWidgetTest {
         val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
         widget.setNumberPickerValue(4)
 
-        MatcherAssert.assertThat(widget.answer!!.displayText, Matchers.equalTo("3.5"))
+        assertThat(widget.answer!!.displayText, equalTo("3.5"))
     }
 
     @Test

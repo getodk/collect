@@ -37,7 +37,7 @@ public class ServerFormsSynchronizerTest {
 
     @Test
     public void downloadsNewForms() throws Exception {
-        when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
+        when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(List.of(
                 new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", true, false, null)
         ));
 
@@ -47,7 +47,7 @@ public class ServerFormsSynchronizerTest {
 
     @Test
     public void downloadsUpdatedForms() throws Exception {
-        when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
+        when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(List.of(
                 new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", false, true, null)
         ));
 
@@ -64,7 +64,7 @@ public class ServerFormsSynchronizerTest {
                 .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
-        when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
+        when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(List.of(
                 new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", false, false, null)
         ));
 
@@ -74,7 +74,7 @@ public class ServerFormsSynchronizerTest {
 
     @Test
     public void doesNotDownloadExistingForms() throws Exception {
-        when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
+        when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(List.of(
                 new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", false, false, null)
         ));
 

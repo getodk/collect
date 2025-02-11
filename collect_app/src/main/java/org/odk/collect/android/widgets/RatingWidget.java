@@ -147,8 +147,8 @@ public class RatingWidget extends QuestionWidget {
     }
 
     private int calculateMaximumStarsInOneLine() {
-        return (int) ((ScreenUtils.getScreenWidth(getContext()) - ASSUMED_TOTAL_MARGIN_AROUND_WIDGET)
-                / ViewUtils.pxFromDp(getContext(), STANDARD_WIDTH_OF_STAR));
+        return (ScreenUtils.getScreenWidth(getContext()) - ASSUMED_TOTAL_MARGIN_AROUND_WIDGET)
+                / ViewUtils.pxFromDp(getContext(), STANDARD_WIDTH_OF_STAR);
     }
 
     private int getTotalStars(RangeQuestion rangeQuestion) {

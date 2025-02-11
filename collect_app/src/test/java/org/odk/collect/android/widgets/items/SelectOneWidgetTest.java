@@ -248,7 +248,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
         selectChoice.setTextID("1");
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withSelectChoices(asList(selectChoice))
+                .withSelectChoices(List.of(selectChoice))
                 .build();
 
         SelectOneWidget widget = getWidget();

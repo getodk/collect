@@ -1,6 +1,8 @@
 package org.odk.collect.android.wassan.model
 
-import android.util.Log
+import android.annotation.SuppressLint
+import android.database.Cursor
+import android.database.DatabaseUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -9,17 +11,30 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
-import org.odk.collect.android.application.Collect
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns
+import org.odk.collect.android.database.instances.DatabaseInstancesRepository
 import org.odk.collect.android.formlists.blankformlist.BlankFormListItem
 import org.odk.collect.android.formlists.blankformlist.OnFormItemClickListener
-import org.odk.collect.android.utilities.ContentUriHelper.getIdFromUri
+import org.odk.collect.android.projects.ProjectsDataService
+import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.android.wassan.app.InstanceCountHelper
 import org.odk.collect.android.wassan.app.Utils
+import org.odk.collect.android.wassan.listeners.FormActionListener
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
+import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
+import java.util.Locale
 
-class DasboardFormListAdapter(val listener: OnFormItemClickListener) : RecyclerView.Adapter<DashboardFormListItemViewHolder>() {
 
+class DasboardFormListAdapter(
+    val listener: OnFormItemClickListener,
+    val formActionListener: FormActionListener,
+    private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val projectsDataService: ProjectsDataService
+) : RecyclerView.Adapter<DashboardFormListItemViewHolder>() {
+
+    lateinit var c: Cursor
     private var formItems = emptyList<BlankFormListItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardFormListItemViewHolder {
@@ -58,31 +73,36 @@ class DasboardFormListAdapter(val listener: OnFormItemClickListener) : RecyclerV
         } else {
             View.GONE
         }
-       /* val instancesRepository = InstancesRepositoryProvider(Collect.getInstance()).get()
+        val currentProject = projectsDataService.getCurrentProject()
 
-        val editableInstances = instancesRepository.getCountByStatusAndFormId(
-                formId,
-                Instance.STATUS_INCOMPLETE,
-                Instance.STATUS_INVALID,
-                Instance.STATUS_VALID,
-
+        draftCount.text = getFormattedCount(
+            InstanceCountHelper.getInstanceCount(
+                instancesRepositoryProvider,
+                currentProject.uuid,
+                "${DatabaseInstanceColumns.JR_FORM_ID} = ? AND ${DatabaseInstanceColumns.STATUS} IN (?, ?, ?)",
+                arrayOf(formId, Instance.STATUS_INCOMPLETE, Instance.STATUS_INVALID, Instance.STATUS_VALID)
+            )
         )
-        draftCount.setText(editableInstances.toString())
 
-        val sendableInstances = instancesRepository.getCountByStatusAndFormId(
-                formId,
-                Instance.STATUS_COMPLETE,
-                Instance.STATUS_SUBMISSION_FAILED
+        readyCount.text = getFormattedCount(
+            InstanceCountHelper.getInstanceCount(
+                instancesRepositoryProvider,
+                currentProject.uuid,
+                "${DatabaseInstanceColumns.JR_FORM_ID} = ? AND ${DatabaseInstanceColumns.STATUS} IN (?, ?)",
+                arrayOf(formId, Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)
+            )
         )
-        readyCount.setText(sendableInstances.toString())
-        val sentInstances = instancesRepository.getCountByStatusAndFormId(
-                formId,
-                Instance.STATUS_SUBMITTED,
-                Instance.STATUS_SUBMISSION_FAILED
-        )
-        sentCount.setText(sentInstances.toString())*/
 
-        //cardView.setBackground(Utils.getRandomGradientDrawable())
+        sentCount.text = getFormattedCount(
+            InstanceCountHelper.getInstanceCount(
+                instancesRepositoryProvider,
+                currentProject.uuid,
+                "${DatabaseInstanceColumns.JR_FORM_ID} = ? AND ${DatabaseInstanceColumns.STATUS} = ?",
+                arrayOf(formId, Instance.STATUS_SUBMITTED)
+            )
+        )
+
+        cardView.background = Utils.getRandomGradientDrawable()
 
         mapButton.setOnClickListener {
             if (MultiClickGuard.allowClick(javaClass.name)) {
@@ -92,8 +112,7 @@ class DasboardFormListAdapter(val listener: OnFormItemClickListener) : RecyclerV
 
         draftButton.setOnClickListener {
             if (MultiClickGuard.allowClick(javaClass.name)) {
-
-                //listener.onDraftButtonClick(item.formId)
+                formActionListener.onDraftClick(item.formId)
             }
         }
 
@@ -110,13 +129,47 @@ class DasboardFormListAdapter(val listener: OnFormItemClickListener) : RecyclerV
         }
     }
 
+    private fun getFormattedCount(count: Int): String {
+        return String.format(Locale.getDefault(), "%d", count)
+    }
+
     override fun getItemCount() = formItems.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setData(blankFormItems: List<BlankFormListItem>) {
         this.formItems = blankFormItems.toList()
         notifyDataSetChanged()
     }
+
+
+
+    private fun dbQuery(
+        projectId: String,
+        selection: String,
+        selectionArgs: Array<String>
+    ): Int {
+        val instancesRepository = instancesRepositoryProvider.create(projectId)
+
+        if (instancesRepository is DatabaseInstancesRepository) {
+            val cursor = instancesRepository.rawQuery(
+                arrayOf("COUNT(*)"),  // Select only the count
+                selection,
+                selectionArgs,
+                null, // No sorting
+                null  // No grouping
+            )
+
+            cursor.use {
+                return if (cursor.moveToFirst()) cursor.getInt(0) else 0 // Extract the count
+            }
+        }
+
+        return 0
+    }
+
 }
+
+
 
 
 

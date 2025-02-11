@@ -63,10 +63,9 @@ public class DatePickerDetails implements Serializable {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof DatePickerDetails)) {
+        if (!(obj instanceof DatePickerDetails datePickerDetails)) {
             return false;
         }
-        DatePickerDetails datePickerDetails = (DatePickerDetails) obj;
         return this.datePickerType.equals(datePickerDetails.datePickerType) && this.datePickerMode.equals(datePickerDetails.datePickerMode);
     }
 

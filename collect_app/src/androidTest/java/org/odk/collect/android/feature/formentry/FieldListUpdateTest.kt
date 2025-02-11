@@ -14,6 +14,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.R
 import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.rules.FormEntryActivityTestRule
@@ -219,7 +220,7 @@ class FieldListUpdateTest {
                     ApplicationProvider.getApplicationContext<Context>().resources,
                     R.drawable.notes
                 )
-                val tmpJpg = File(StoragePathProvider().getTmpImageFilePath())
+                val tmpJpg = File(StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.jpg")
                 tmpJpg.createNewFile()
                 val fos = FileOutputStream(tmpJpg)
                 icon.compress(Bitmap.CompressFormat.JPEG, 90, fos)

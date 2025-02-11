@@ -27,7 +27,7 @@ public class FakeFormController extends StubFormController {
     private RuntimeException newRepeatError;
     private JavaRosaException nextStepError;
     private JavaRosaException saveError;
-    private Map<FormIndex, FormEntryPrompt> prompts = new HashMap<>();
+    private final Map<FormIndex, FormEntryPrompt> prompts = new HashMap<>();
     private FailedValidationResult failedConstraint;
     private JavaRosaException validationError;
     private JavaRosaException previousStepError;

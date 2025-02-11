@@ -29,7 +29,7 @@ abstract class EntitiesRepositoryTest {
     @Test
     fun `#getEntities returns empty list when there are not entities`() {
         val repository = buildSubject()
-        assertThat(repository.getEntities("wines").size, equalTo(0))
+        assertThat(query("wines", null).size, equalTo(0))
     }
 
     @Test
@@ -53,11 +53,11 @@ abstract class EntitiesRepositoryTest {
         repository.save("wines", wine)
         repository.save("whiskys", whisky)
 
-        val wines = repository.getEntities("wines")
+        val wines = query("wines", null)
         assertThat(wines.size, equalTo(1))
         assertThat(wines[0], sameEntityAs(wine))
 
-        val whiskys = repository.getEntities("whiskys")
+        val whiskys = query("whiskys", null)
         assertThat(whiskys.size, equalTo(1))
         assertThat(whiskys[0], sameEntityAs(whisky))
     }
@@ -76,7 +76,7 @@ abstract class EntitiesRepositoryTest {
         val updatedWine = wine.copy(label = "Léoville Barton 2009", version = 2)
         repository.save("wines", updatedWine)
 
-        val wines = repository.getEntities("wines")
+        val wines = query("wines", null)
         assertThat(wines, contains(sameEntityAs(updatedWine)))
     }
 
@@ -90,9 +90,9 @@ abstract class EntitiesRepositoryTest {
         val updatedWine = Entity.New(wine.id, "Edradour 10", version = 2)
         repository.save("whisky", updatedWine)
 
-        val wines = repository.getEntities("wines")
+        val wines = query("wines", null)
         assertThat(wines, contains(sameEntityAs(wine)))
-        val whiskys = repository.getEntities("whisky")
+        val whiskys = query("whisky", null)
         assertThat(whiskys, contains(sameEntityAs(updatedWine)))
     }
 
@@ -106,7 +106,7 @@ abstract class EntitiesRepositoryTest {
         val updatedWine = wine.copy(label = "Léoville Barton 2009")
         repository.save("wines", updatedWine)
 
-        val wines = repository.getEntities("wines")
+        val wines = query("wines", null)
         assertThat(wines, contains(sameEntityAs(updatedWine)))
     }
 
@@ -120,7 +120,7 @@ abstract class EntitiesRepositoryTest {
         val updatedWine = wine.copy(state = Entity.State.ONLINE)
         repository.save("wines", updatedWine)
 
-        val wines = repository.getEntities("wines")
+        val wines = query("wines", null)
         assertThat(wines, contains(sameEntityAs(updatedWine)))
     }
 
@@ -134,7 +134,7 @@ abstract class EntitiesRepositoryTest {
         val updatedWine = wine.copy(state = Entity.State.OFFLINE)
         repository.save("wines", updatedWine)
 
-        val wines = repository.getEntities("wines")
+        val wines = query("wines", null)
         assertThat(wines, contains(sameEntityAs(wine)))
     }
 
@@ -158,7 +158,7 @@ abstract class EntitiesRepositoryTest {
         )
         repository.save("wines", updatedWine)
 
-        val wines = repository.getEntities("wines")
+        val wines = query("wines", null)
         assertThat(wines.size, equalTo(1))
         assertThat(wines[0].properties, contains("window" to "2019-2038", "score" to "92"))
     }
@@ -183,7 +183,7 @@ abstract class EntitiesRepositoryTest {
         )
         repository.save("favourite-wines", updatedWine)
 
-        val wines = repository.getEntities("favourite-wines")
+        val wines = query("favourite-wines", null)
         assertThat(wines.size, equalTo(1))
         assertThat(wines[0].properties, contains("window" to "2019-2038", "score" to "92"))
     }
@@ -208,7 +208,7 @@ abstract class EntitiesRepositoryTest {
         )
         repository.save("wines", otherWine)
 
-        val wines = repository.getEntities("wines")
+        val wines = query("wines", null)
         assertThat(wines.size, equalTo(2))
         assertThat(wines[0].properties, contains("window" to "2019-2038", "score" to ""))
         assertThat(wines[1].properties, contains("window" to "", "score" to "92"))
@@ -234,7 +234,7 @@ abstract class EntitiesRepositoryTest {
         )
         repository.save("wines", updatedWine)
 
-        val wines = repository.getEntities("wines")
+        val wines = query("wines", null)
         assertThat(wines.size, equalTo(1))
         assertThat(wines[0].properties, contains("window" to "2019-2042"))
     }
@@ -259,7 +259,7 @@ abstract class EntitiesRepositoryTest {
         )
         repository.save("wines", updatedWine)
 
-        val wines = repository.getEntities("wines")
+        val wines = query("wines", null)
         assertThat(wines.size, equalTo(1))
         assertThat(wines[0].label, equalTo(wine.label))
         assertThat(wines[0].properties, equalTo(updatedWine.properties))
@@ -287,11 +287,11 @@ abstract class EntitiesRepositoryTest {
         )
 
         repository.save("things", entity)
-        val savedEntity = repository.getEntities("things")[0]
+        val savedEntity = query("things", null)[0]
         assertThat(savedEntity, sameEntityAs(entity))
 
         repository.save("things", savedEntity)
-        assertThat(repository.getEntities("things")[0], sameEntityAs(savedEntity))
+        assertThat(query("things", null)[0], sameEntityAs(savedEntity))
     }
 
     @Test
@@ -308,10 +308,10 @@ abstract class EntitiesRepositoryTest {
         val wine = Entity.New("1", "Léoville Barton 2008")
 
         repository.save("favourite-wines", wine)
-        assertThat(repository.getEntities("favourite-wines")[0], sameEntityAs(wine))
+        assertThat(query("favourite-wines", null)[0], sameEntityAs(wine))
 
         repository.save("favourite.wines", wine)
-        assertThat(repository.getEntities("favourite.wines")[0], sameEntityAs(wine))
+        assertThat(query("favourite.wines", null)[0], sameEntityAs(wine))
     }
 
     @Test
@@ -322,7 +322,7 @@ abstract class EntitiesRepositoryTest {
         val wine2 = Entity.New("2", "Chateau Pontet Canet")
         repository.save("wines", wine1, wine2)
 
-        assertThat(repository.getEntities("wines").size, equalTo(2))
+        assertThat(query("wines", null).size, equalTo(2))
     }
 
     @Test
@@ -337,7 +337,7 @@ abstract class EntitiesRepositoryTest {
         val repository = buildSubject()
         repository.save("wines", first, second)
 
-        val entities = repository.getEntities("wines")
+        val entities = query("wines", null)
         assertThat(entities[0].index, equalTo(0))
         assertThat(entities[0].id, equalTo(first.id))
         assertThat(entities[1].index, equalTo(1))
@@ -353,7 +353,7 @@ abstract class EntitiesRepositoryTest {
         repository.save("wines", first)
         repository.save("wines", second)
 
-        val entities = repository.getEntities("wines")
+        val entities = query("wines", null)
         assertThat(entities[0].index, equalTo(0))
         assertThat(entities[1].index, equalTo(1))
     }
@@ -365,12 +365,12 @@ abstract class EntitiesRepositoryTest {
         val first = Entity.New("1", "Léoville Barton 2008")
         val second = Entity.New("2", "Pontet Canet 2014")
         repository.save("wines", first, second)
-        assertThat(repository.getEntities("wines")[0].index, equalTo(0))
+        assertThat(query("wines", null)[0].index, equalTo(0))
 
         val updatedWine = first.copy(label = "Léoville Barton 2009")
         repository.save("wines", updatedWine)
 
-        assertThat(repository.getEntities("wines")[0].index, equalTo(0))
+        assertThat(query("wines", null)[0].index, equalTo(0))
     }
 
     @Test
@@ -379,7 +379,7 @@ abstract class EntitiesRepositoryTest {
 
         repository.addList("wine")
         assertThat(repository.getLists(), containsInAnyOrder("wine"))
-        assertThat(repository.getEntities("wine").size, equalTo(0))
+        assertThat(query("wine", null).size, equalTo(0))
     }
 
     @Test
@@ -389,7 +389,7 @@ abstract class EntitiesRepositoryTest {
         repository.addList("wine")
         repository.addList("wine")
         assertThat(repository.getLists(), containsInAnyOrder("wine"))
-        assertThat(repository.getEntities("wine").size, equalTo(0))
+        assertThat(query("wine", null).size, equalTo(0))
     }
 
     @Test
@@ -403,7 +403,7 @@ abstract class EntitiesRepositoryTest {
         repository.delete("1")
 
         assertThat(
-            repository.getEntities("wines"),
+            query("wines", null),
             containsInAnyOrder(sameEntityAs(canet))
         )
     }
@@ -420,11 +420,11 @@ abstract class EntitiesRepositoryTest {
         repository.delete("1")
 
         assertThat(
-            repository.getEntities("wines.x").isEmpty(),
+            query("wines.x", null).isEmpty(),
             equalTo(true)
         )
         assertThat(
-            repository.getEntities("wines-x").isEmpty(),
+            query("wines-x", null).isEmpty(),
             equalTo(true)
         )
     }
@@ -440,12 +440,12 @@ abstract class EntitiesRepositoryTest {
 
         repository.delete("1")
 
-        var wines = repository.getEntities("wines")
+        var wines = query("wines", null)
         assertThat(wines[0].index, equalTo(0))
         assertThat(wines[1].index, equalTo(1))
 
         repository.save("wines", leoville)
-        wines = repository.getEntities("wines")
+        wines = query("wines", null)
         assertThat(wines[0].index, equalTo(0))
         assertThat(wines[1].index, equalTo(1))
         assertThat(wines[2].index, equalTo(2))
@@ -459,12 +459,12 @@ abstract class EntitiesRepositoryTest {
         val canet = Entity.New("2", "Pontet-Canet 2014")
         repository.save("wines", leoville, canet)
 
-        val wines = repository.getEntities("wines")
+        val wines = query("wines", null)
 
-        val queriedLeoville = repository.getById("wines", "1")
+        val queriedLeoville = repository.query("wines", Query.Eq(EntitiesTable.COLUMN_ID, "1"))
         assertThat(queriedLeoville, equalTo(wines.first { it.id == "1" }))
 
-        val queriedCanet = repository.getById("wines", "2")
+        val queriedCanet = repository.query("wines", Query.Eq(EntitiesTable.COLUMN_ID, "2"))
         assertThat(queriedCanet, equalTo(wines.first { it.id == "2" }))
     }
 
@@ -476,7 +476,7 @@ abstract class EntitiesRepositoryTest {
         val canet = Entity.New("2", "Pontet-Canet 2014")
         repository.save("wines", leoville, canet)
 
-        assertThat(repository.getById("wines", "3"), equalTo(null))
+        assertThat(repository.query("wines", Query.Eq(EntitiesTable.COLUMN_ID, "3")), equalTo(null))
     }
 
     @Test
@@ -488,13 +488,13 @@ abstract class EntitiesRepositoryTest {
         repository.save("wines", leoville)
         repository.save("whisky", ardbeg)
 
-        assertThat(repository.getById("whisky", "1"), equalTo(null))
+        assertThat(repository.query("whisky", Query.Eq(EntitiesTable.COLUMN_ID, "1")), equalTo(null))
     }
 
     @Test
     fun `#getById returns null where there are no entities in the list`() {
         val repository = buildSubject()
-        assertThat(repository.getById("wines", "3"), equalTo(null))
+        assertThat(repository.query("wines", Query.Eq(EntitiesTable.COLUMN_ID, "3")), equalTo(null))
     }
 
     @Test
@@ -506,13 +506,15 @@ abstract class EntitiesRepositoryTest {
         repository.save("favourite-wines", leoville)
         repository.save("other.favourite.wines", canet)
 
-        val favouriteWines = repository.getEntities("favourite-wines")
-        val otherFavouriteWines = repository.getEntities("other.favourite.wines")
+        val favouriteWines = query("favourite-wines", null)
+        val otherFavouriteWines = query("other.favourite.wines", null)
 
-        val queriedLeoville = repository.getById("favourite-wines", "1")
+        val queriedLeoville =
+            repository.query("favourite-wines", Query.Eq(EntitiesTable.COLUMN_ID, "1"))
         assertThat(queriedLeoville, equalTo(favouriteWines.first { it.id == "1" }))
 
-        val queriedCanet = repository.getById("other.favourite.wines", "2")
+        val queriedCanet =
+            repository.query("other.favourite.wines", Query.Eq(EntitiesTable.COLUMN_ID, "2"))
         assertThat(queriedCanet, equalTo(otherFavouriteWines.first { it.id == "2" }))
     }
 
@@ -534,7 +536,7 @@ abstract class EntitiesRepositoryTest {
 
         repository.save("wines", leoville, canet)
 
-        val wines = repository.getEntities("wines")
+        val wines = query("wines", null)
         assertThat(
             repository.getAllByProperty("wines", "vintage", "2014"),
             containsInAnyOrder(wines.first { it.id == "2" })
@@ -652,13 +654,13 @@ abstract class EntitiesRepositoryTest {
         repository.save("favourite-wines", leoville)
         repository.save("favourite.wines", leoville)
 
-        var wines = repository.getEntities("favourite-wines")
+        var wines = query("favourite-wines", null)
         assertThat(
             repository.getAllByProperty("favourite-wines", "vintage", "2008"),
             containsInAnyOrder(wines.first { it.id == "1" })
         )
 
-        wines = repository.getEntities("favourite.wines")
+        wines = query("favourite.wines", null)
         assertThat(
             repository.getAllByProperty("favourite.wines", "vintage", "2008"),
             containsInAnyOrder(wines.first { it.id == "1" })
@@ -717,14 +719,17 @@ abstract class EntitiesRepositoryTest {
         val aultmore = Entity.New("2", "Aultmore 12")
         repository.save("whiskys", springbank, aultmore)
 
-        val aultmoreIndex = repository.getEntities("whiskys").first { it.id == aultmore.id }.index
-        assertThat(repository.getByIndex("whiskys", aultmoreIndex), sameEntityAs(aultmore))
+        val aultmoreIndex = query("whiskys", null).first { it.id == aultmore.id }.index
+        assertThat(repository.query(
+            "whiskys",
+            Query.Eq("i.$ROW_ID", (aultmoreIndex + 1).toString())
+        ), sameEntityAs(aultmore))
     }
 
     @Test
     fun `#getByIndex returns null when the list does not exist`() {
         val repository = buildSubject()
-        assertThat(repository.getByIndex("wine", 0), equalTo(null))
+        assertThat(repository.query("wine", Query.Eq("i.$ROW_ID", (0 + 1).toString())), equalTo(null))
     }
 
     @Test
@@ -732,7 +737,7 @@ abstract class EntitiesRepositoryTest {
         val repository = buildSubject()
         repository.addList("wine")
 
-        assertThat(repository.getByIndex("wine", 0), equalTo(null))
+        assertThat(repository.query("wine", Query.Eq("i.$ROW_ID", (0 + 1).toString())), equalTo(null))
     }
 
     @Test
@@ -745,12 +750,18 @@ abstract class EntitiesRepositoryTest {
         repository.save("other.favourite.wines", canet)
 
         val leovilleIndex =
-            repository.getEntities("favourite-wines").first { it.id == leoville.id }.index
-        assertThat(repository.getByIndex("favourite-wines", leovilleIndex), sameEntityAs(leoville))
+            query("favourite-wines", null).first { it.id == leoville.id }.index
+        assertThat(repository.query(
+            "favourite-wines",
+            Query.Eq("i.$ROW_ID", (leovilleIndex + 1).toString())
+        ), sameEntityAs(leoville))
 
         val canetIndex =
-            repository.getEntities("other.favourite.wines").first { it.id == canet.id }.index
-        assertThat(repository.getByIndex("other.favourite.wines", canetIndex), sameEntityAs(canet))
+            query("other.favourite.wines", null).first { it.id == canet.id }.index
+        assertThat(repository.query(
+            "other.favourite.wines",
+            Query.Eq("i.$ROW_ID", (canetIndex + 1).toString())
+        ), sameEntityAs(canet))
     }
 
     @Test
@@ -772,7 +783,7 @@ abstract class EntitiesRepositoryTest {
         )
 
         repository.save("things", entity)
-        val savedEntities = repository.getEntities("things")
+        val savedEntities = query("things", null)
         assertThat(savedEntities[0].properties.size, equalTo(1))
         assertThat(savedEntities[0].properties[0].first, equalTo("prop"))
     }
@@ -787,12 +798,12 @@ abstract class EntitiesRepositoryTest {
         )
 
         repository.save("things", entity)
-        var savedEntities = repository.getEntities("things")
+        var savedEntities = query("things", null)
         assertThat(savedEntities[0].properties.size, equalTo(1))
         assertThat(savedEntities[0].properties[0].first, equalTo("prop"))
 
         repository.save("things", entity.copy(properties = listOf(Pair("Prop", "value"))))
-        savedEntities = repository.getEntities("things")
+        savedEntities = query("things", null)
         assertThat(savedEntities[0].properties.size, equalTo(1))
         assertThat(savedEntities[0].properties[0].first, equalTo("prop"))
     }

@@ -92,7 +92,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     private Form form;
     private Instance instance;
     private final Cancellable formSessionObserver;
-    private InstancesDataService instancesDataService;
+    private final InstancesDataService instancesDataService;
 
     public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver,
                              MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder,
