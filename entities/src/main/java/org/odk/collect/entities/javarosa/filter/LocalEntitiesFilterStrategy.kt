@@ -1,5 +1,6 @@
 package org.odk.collect.entities.javarosa.filter
 
+import android.database.sqlite.SQLiteException
 import org.javarosa.core.model.CompareToNodeExpression
 import org.javarosa.core.model.condition.EvaluationContext
 import org.javarosa.core.model.condition.FilterStrategy
@@ -41,7 +42,11 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         val query = xPathExpressionToQuery(predicate, sourceInstance, evaluationContext)
 
         return if (query != null) {
-            queryToTreeReferences(query, sourceInstance)
+            try {
+                queryToTreeReferences(query, sourceInstance)
+            } catch (e: SQLiteException) {
+                next.get()
+            }
         } else {
             next.get()
         }
