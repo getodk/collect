@@ -53,7 +53,7 @@ public class SelectMultiWidget extends BaseSelectListWidget {
         boolean noButtonsMode = Appearances.isCompactAppearance(getFormEntryPrompt()) || Appearances.isNoButtonsAppearance(getFormEntryPrompt());
 
         recyclerViewAdapter = new SelectMultipleListAdapter(getSelectedItems(), this, getContext(),
-                items, getFormEntryPrompt(), getReferenceManager(), getAudioHelper(),
+                items, getFormEntryPrompt(), getReferenceManager(), audioPlayer,
                 getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode, mediaUtils);
         return recyclerViewAdapter;
     }

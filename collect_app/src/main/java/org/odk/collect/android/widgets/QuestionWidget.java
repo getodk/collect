@@ -37,7 +37,6 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -51,6 +50,7 @@ import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.interfaces.Widget;
 import org.odk.collect.android.widgets.items.SelectImageMapWidget;
+import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.imageloader.ImageLoader;
@@ -79,7 +79,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     protected final Settings settings;
     private AtomicBoolean expanded;
     protected final ThemeUtils themeUtils;
-    protected AudioHelper audioHelper;
     private WidgetValueChangedListener valueChangedListener;
 
     @Inject
@@ -107,12 +106,13 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     @Inject
     ImageLoader imageLoader;
 
+    protected AudioPlayer audioPlayer;
+
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);
         getComponent(context).inject(this);
         setId(View.generateViewId());
         settings = settingsProvider.getUnprotectedSettings();
-        this.audioHelper = audioHelperFactory.create(context);
 
         themeUtils = new ThemeUtils(context);
 
@@ -199,7 +199,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
                 audioVideoImageTextLabel.setVideo(new File(referenceManager.deriveReference(videoURI).getLocalURI()));
             }
             if (playableAudioURI != null) {
-                audioVideoImageTextLabel.setAudio(playableAudioURI, audioHelper);
+                audioVideoImageTextLabel.setAudio(playableAudioURI, audioPlayer);
             }
         } catch (InvalidReferenceException e) {
             Timber.d(e, "Invalid media reference due to %s ", e.getMessage());
@@ -354,10 +354,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     public AudioVideoImageTextLabel getAudioVideoImageTextLabel() {
         return audioVideoImageTextLabel;
-    }
-
-    public AudioHelper getAudioHelper() {
-        return audioHelper;
     }
 
     public ReferenceManager getReferenceManager() {

@@ -68,7 +68,7 @@ public class SelectOneWidget extends BaseSelectListWidget {
         boolean noButtonsMode = Appearances.isCompactAppearance(getFormEntryPrompt()) || Appearances.isNoButtonsAppearance(getFormEntryPrompt());
 
         recyclerViewAdapter = new SelectOneListAdapter(getSelectedValue(), this, getContext(), items,
-                getFormEntryPrompt(), getReferenceManager(), getAudioHelper(),
+                getFormEntryPrompt(), getReferenceManager(), audioPlayer,
                 getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode, mediaUtils);
         return recyclerViewAdapter;
     }
