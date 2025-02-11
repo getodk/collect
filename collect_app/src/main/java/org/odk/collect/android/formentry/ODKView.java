@@ -131,6 +131,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
+    private final AudioPlayer audioPlayer;
     private final FormController formController;
 
     /**
@@ -157,6 +158,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     ) {
         super(context);
         viewLifecycle = ((ScreenContext) context).getViewLifecycle();
+        this.audioPlayer = audioPlayer;
 
         getComponent(context).inject(this);
         this.audioHelper = audioHelper;
@@ -216,7 +218,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     }
 
     private void setupAudioErrors() {
-        audioHelper.getError().observe(viewLifecycle, e -> {
+        audioPlayer.onPlaybackError(e -> {
             if (e instanceof PlaybackFailedException) {
                 final PlaybackFailedException playbackFailedException = (PlaybackFailedException) e;
                 Toast.makeText(
@@ -224,14 +226,11 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                         getContext().getString(playbackFailedException.getExceptionMsg() == 0 ? org.odk.collect.strings.R.string.file_missing : org.odk.collect.strings.R.string.file_invalid, playbackFailedException.getURI()),
                         Toast.LENGTH_SHORT
                 ).show();
-
-                audioHelper.errorDisplayed();
             }
         });
     }
 
     private void autoplayIfNeeded(boolean advancingPage) {
-
         // see if there is an autoplay option.
         // Only execute it during forward swipes through the form
         if (advancingPage && widgets.size() == 1) {
@@ -247,7 +246,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
     private Boolean autoplayAudio(FormEntryPrompt firstPrompt) {
         PromptAutoplayer promptAutoplayer = new PromptAutoplayer(
-                audioHelper,
+                audioPlayer,
                 ReferenceManager.instance()
         );
 

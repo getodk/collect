@@ -30,6 +30,7 @@ import org.odk.collect.testshared.RobolectricHelpers;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -564,8 +565,18 @@ public class AudioWidgetTest {
         }
 
         @Override
+        public void onPlaybackError(Consumer<Exception> error) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
         public void stop() {
             clip = null;
+        }
+
+        @Override
+        public void playInOrder(List<Clip> clips) {
+            throw new UnsupportedOperationException();
         }
 
         @Nullable
