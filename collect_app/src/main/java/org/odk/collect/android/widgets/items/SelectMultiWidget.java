@@ -40,8 +40,8 @@ import java.util.List;
  */
 @SuppressLint("ViewConstructor")
 public class SelectMultiWidget extends BaseSelectListWidget {
-    public SelectMultiWidget(Context context, QuestionDetails prompt, SelectChoiceLoader selectChoiceLoader) {
-        super(context, prompt, selectChoiceLoader);
+    public SelectMultiWidget(Context context, QuestionDetails prompt, SelectChoiceLoader selectChoiceLoader, Dependencies dependencies) {
+        super(context, prompt, selectChoiceLoader, dependencies);
         SpacesInUnderlyingValuesWarning
                 .forQuestionWidget(this)
                 .renderWarningIfNecessary(items);

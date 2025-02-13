@@ -251,6 +251,6 @@ public class DateTimeWidgetTest {
     }
 
     private DateTimeWidget createWidget(FormEntryPrompt prompt) {
-        return new DateTimeWidget(widgetActivity, new QuestionDetails(prompt), widgetUtils, new FakeWaitingForDataRegistry());
+        return new DateTimeWidget(widgetActivity, new QuestionDetails(prompt), widgetUtils, new FakeWaitingForDataRegistry(), dependencies);
     }
 }

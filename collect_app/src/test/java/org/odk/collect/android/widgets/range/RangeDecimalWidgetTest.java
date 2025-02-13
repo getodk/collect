@@ -215,7 +215,7 @@ public class RangeDecimalWidgetTest {
     }
 
     private RangeDecimalWidget createWidget(FormEntryPrompt prompt) {
-        RangeDecimalWidget widget = new RangeDecimalWidget(widgetTestActivity(), new QuestionDetails(prompt));
+        RangeDecimalWidget widget = new RangeDecimalWidget(widgetTestActivity(), new QuestionDetails(prompt), dependencies);
         widget.slider.layout(0, 0, 100, 10);
         return widget;
     }

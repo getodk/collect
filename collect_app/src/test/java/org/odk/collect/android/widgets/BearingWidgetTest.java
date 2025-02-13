@@ -215,7 +215,7 @@ public class BearingWidgetTest {
     }
 
     private BearingWidget createWidget(FormEntryPrompt prompt) {
-        return new BearingWidget(widgetActivity, new QuestionDetails(prompt), fakeWaitingForDataRegistry, sensorManager);
+        return new BearingWidget(widgetActivity, new QuestionDetails(prompt), fakeWaitingForDataRegistry, sensorManager, dependencies);
     }
 
     private void assertNoIntentLaunchedWhenSensorIsUnavailable(int sensorType) {

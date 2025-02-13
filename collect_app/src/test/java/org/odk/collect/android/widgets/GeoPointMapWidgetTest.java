@@ -209,6 +209,6 @@ public class GeoPointMapWidgetTest {
 
     private GeoPointMapWidget createWidget(FormEntryPrompt prompt) {
         return new GeoPointMapWidget(widgetTestActivity(), new QuestionDetails(prompt),
-                waitingForDataRegistry, geoDataRequester);
+                waitingForDataRegistry, geoDataRequester, dependencies);
     }
 }

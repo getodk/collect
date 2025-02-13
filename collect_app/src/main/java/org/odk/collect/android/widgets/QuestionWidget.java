@@ -108,8 +108,10 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     protected AudioPlayer audioPlayer;
 
-    public QuestionWidget(Context context, QuestionDetails questionDetails) {
+    public QuestionWidget(Context context, Dependencies dependencies, QuestionDetails questionDetails) {
         super(context);
+
+        audioPlayer = dependencies.getAudioPlayer();
         getComponent(context).inject(this);
         setId(View.generateViewId());
         settings = settingsProvider.getUnprotectedSettings();
@@ -405,5 +407,18 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         ((TextView) errorLayout.findViewById(R.id.error_message)).setText(errorMessage);
         errorLayout.setVisibility(VISIBLE);
         setBackground(ContextCompat.getDrawable(getContext(), R.drawable.question_with_error_border));
+    }
+
+    public static class Dependencies {
+
+        private final AudioPlayer audioPlayer;
+
+        public Dependencies(AudioPlayer audioPlayer) {
+            this.audioPlayer = audioPlayer;
+        }
+
+        public AudioPlayer getAudioPlayer() {
+            return audioPlayer;
+        }
     }
 }

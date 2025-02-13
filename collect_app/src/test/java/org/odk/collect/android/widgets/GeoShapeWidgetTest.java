@@ -184,6 +184,6 @@ public class GeoShapeWidgetTest {
 
     private GeoShapeWidget createWidget(FormEntryPrompt prompt) {
         return new GeoShapeWidget(widgetTestActivity(), new QuestionDetails(prompt),
-                waitingForDataRegistry, geoDataRequester);
+                waitingForDataRegistry, geoDataRequester, dependencies);
     }
 }

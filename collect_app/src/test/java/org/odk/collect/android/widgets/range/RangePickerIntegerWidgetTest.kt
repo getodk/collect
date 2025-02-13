@@ -107,6 +107,10 @@ class RangePickerIntegerWidgetTest {
     }
 
     private fun createWidget(prompt: FormEntryPrompt): RangePickerIntegerWidget {
-        return RangePickerIntegerWidget(QuestionWidgetHelpers.widgetTestActivity(), QuestionDetails(prompt))
+        return RangePickerIntegerWidget(
+            QuestionWidgetHelpers.widgetTestActivity(),
+            QuestionDetails(prompt),
+            dependencies
+        )
     }
 }

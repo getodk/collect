@@ -218,7 +218,7 @@ public class RangeIntegerWidgetTest {
     }
 
     private RangeIntegerWidget createWidget(FormEntryPrompt prompt) {
-        RangeIntegerWidget widget = new RangeIntegerWidget(widgetTestActivity(), new QuestionDetails(prompt));
+        RangeIntegerWidget widget = new RangeIntegerWidget(widgetTestActivity(), new QuestionDetails(prompt), dependencies);
         widget.slider.layout(0, 0, 100, 10);
         return widget;
     }

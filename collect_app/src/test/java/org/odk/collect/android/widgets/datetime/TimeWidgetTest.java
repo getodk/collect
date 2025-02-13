@@ -152,6 +152,6 @@ public class TimeWidgetTest {
     }
 
     private TimeWidget createWidget(FormEntryPrompt prompt) {
-        return new TimeWidget(widgetActivity, new QuestionDetails(prompt), widgetUtils, new FakeWaitingForDataRegistry());
+        return new TimeWidget(widgetActivity, new QuestionDetails(prompt), widgetUtils, new FakeWaitingForDataRegistry(), dependencies);
     }
 }

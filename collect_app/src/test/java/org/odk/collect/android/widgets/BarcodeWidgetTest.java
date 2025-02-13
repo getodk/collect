@@ -206,6 +206,6 @@ public class BarcodeWidgetTest {
 
     public BarcodeWidget createWidget(FormEntryPrompt prompt) {
         return new BarcodeWidget(widgetTestActivity, new QuestionDetails(prompt),
-                waitingForDataRegistry, cameraUtils);
+                waitingForDataRegistry, cameraUtils, dependencies);
     }
 }

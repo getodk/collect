@@ -163,6 +163,6 @@ public class DateWidgetTest {
     }
 
     private DateWidget createWidget(FormEntryPrompt prompt) {
-        return new DateWidget(widgetActivity, new QuestionDetails(prompt), widgetUtils, new FakeWaitingForDataRegistry());
+        return new DateWidget(widgetActivity, new QuestionDetails(prompt), widgetUtils, new FakeWaitingForDataRegistry(), dependencies);
     }
 }

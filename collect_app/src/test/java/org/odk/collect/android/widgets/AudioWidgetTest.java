@@ -502,8 +502,8 @@ public class AudioWidgetTest {
                 audioPlayer,
                 recordingRequester,
                 audioFileRequester,
-                recordingRequester
-        );
+                recordingRequester,
+                dependencies);
     }
 
     public AudioWidget createWidget(FormEntryPrompt prompt, boolean readOnlyOverride) {
@@ -514,8 +514,8 @@ public class AudioWidgetTest {
                 audioPlayer,
                 recordingRequester,
                 audioFileRequester,
-                recordingRequester
-        );
+                recordingRequester,
+                dependencies);
     }
 
     @NotNull

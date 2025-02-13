@@ -65,7 +65,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     @NonNull
     @Override
     public SelectOneWidget createWidget() {
-        SelectOneWidget selectOneWidget = new SelectOneWidget(activity, new QuestionDetails(formEntryPrompt), isQuick(), null, new FormEntryPromptSelectChoiceLoader());
+        SelectOneWidget selectOneWidget = new SelectOneWidget(activity, new QuestionDetails(formEntryPrompt), isQuick(), null, new FormEntryPromptSelectChoiceLoader(), dependencies);
         if (isQuick()) {
             selectOneWidget.setListener(listener);
         }

@@ -211,6 +211,6 @@ public class GeoTraceWidgetTest {
 
     private GeoTraceWidget createWidget(FormEntryPrompt prompt) {
         return new GeoTraceWidget(widgetTestActivity(), new QuestionDetails(prompt),
-                waitingForDataRegistry, mapConfigurator, geoDataRequester);
+                waitingForDataRegistry, mapConfigurator, geoDataRequester, dependencies);
     }
 }

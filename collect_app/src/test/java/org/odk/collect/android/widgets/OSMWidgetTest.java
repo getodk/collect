@@ -238,7 +238,7 @@ public class OSMWidgetTest {
         when(questionDef.getOsmTags()).thenReturn(ImmutableList.<OSMTag>of());
 
         return new OSMWidget(widgetActivity, new QuestionDetails(prompt),
-                fakeWaitingForDataRegistry, intentLauncher, formController);
+                fakeWaitingForDataRegistry, intentLauncher, formController, dependencies);
     }
 
     private void assertIntentExtrasEquals(String fileName) {

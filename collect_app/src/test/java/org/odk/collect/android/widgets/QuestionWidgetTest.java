@@ -82,7 +82,7 @@ public class QuestionWidgetTest {
     private static class TestWidget extends QuestionWidget {
 
         TestWidget(Context context, QuestionDetails questionDetails) {
-            super(context, questionDetails);
+            super(context, dependencies, questionDetails);
         }
 
         @Override
