@@ -619,6 +619,43 @@ class LocalEntitiesFilterStrategyTest {
         assertThat(choices, containsInAnyOrder("thing1"))
         assertThat(fallthroughFilterStrategy.fellThrough, equalTo(true))
     }
+
+    @Test
+    fun `works correctly but not in the optimized way with non existing property = expressions`() {
+        entitiesRepository.save("things", Entity.New("thing1", "Thing1"))
+
+        val scenario = Scenario.init(
+            "Secondary instance form",
+            html(
+                head(
+                    title("Secondary instance form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("question"),
+                            )
+                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
+                        bind("/data/question").type("string")
+                    )
+                ),
+                body(
+                    select1Dynamic(
+                        "/data/question",
+                        "instance('things')/root/item[not_existing_property='value']",
+                        "name",
+                        "label"
+                    )
+                )
+            ),
+            controllerSupplier
+        )
+
+        val choices = scenario.choicesOf("/data/question").map { it.value }
+        assertThat(choices.isEmpty(), equalTo(true))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(true))
+    }
 }
 
 private class FallthroughFilterStrategy : FilterStrategy {
