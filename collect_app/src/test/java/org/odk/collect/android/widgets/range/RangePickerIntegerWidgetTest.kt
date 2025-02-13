@@ -14,6 +14,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
+import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies
 import java.math.BigDecimal
 
 @RunWith(AndroidJUnit4::class)
@@ -110,7 +111,7 @@ class RangePickerIntegerWidgetTest {
         return RangePickerIntegerWidget(
             QuestionWidgetHelpers.widgetTestActivity(),
             QuestionDetails(prompt),
-            dependencies
+            widgetDependencies()
         )
     }
 }

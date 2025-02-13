@@ -44,6 +44,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies;
 import static org.odk.collect.testshared.RobolectricHelpers.setupMediaPlayerDataSource;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
@@ -503,7 +504,7 @@ public class AudioWidgetTest {
                 recordingRequester,
                 audioFileRequester,
                 recordingRequester,
-                dependencies);
+                widgetDependencies());
     }
 
     public AudioWidget createWidget(FormEntryPrompt prompt, boolean readOnlyOverride) {
@@ -515,7 +516,7 @@ public class AudioWidgetTest {
                 recordingRequester,
                 audioFileRequester,
                 recordingRequester,
-                dependencies);
+                widgetDependencies());
     }
 
     @NotNull

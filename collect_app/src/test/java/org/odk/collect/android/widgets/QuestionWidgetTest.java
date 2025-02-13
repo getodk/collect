@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies;
 import static java.util.Arrays.asList;
 
 import android.content.Context;
@@ -82,7 +83,7 @@ public class QuestionWidgetTest {
     private static class TestWidget extends QuestionWidget {
 
         TestWidget(Context context, QuestionDetails questionDetails) {
-            super(context, dependencies, questionDetails);
+            super(context, widgetDependencies(), questionDetails);
         }
 
         @Override

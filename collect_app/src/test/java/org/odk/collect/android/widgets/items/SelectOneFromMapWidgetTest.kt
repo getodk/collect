@@ -32,6 +32,7 @@ import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.NoOpMapFragment
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
+import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -95,7 +96,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(promptWithAnswer(null)),
             false,
             mock(),
-            dependencies
+            widgetDependencies()
         )
 
         assertThat(
@@ -120,7 +121,7 @@ class SelectOneFromMapWidgetTest {
 
         val prompt = promptWithAnswer(null)
         val widget =
-            SelectOneFromMapWidget(activity, QuestionDetails(prompt), false, mock(), dependencies)
+            SelectOneFromMapWidget(activity, QuestionDetails(prompt), false, mock(), widgetDependencies())
         whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).doReturn(prompt)
 
         widget.binding.button.performClick()
@@ -144,7 +145,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(promptWithAnswer(null)),
             false,
             mock(),
-            dependencies
+            widgetDependencies()
         )
 
         permissionsProvider.setPermissionGranted(false)
@@ -171,7 +172,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(prompt),
             false,
             mock(),
-            dependencies
+            widgetDependencies()
         )
         assertThat(widget.binding.answer.text, equalTo("A"))
     }
@@ -184,7 +185,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(promptWithAnswer(null)),
             false,
             mock(),
-            dependencies
+            widgetDependencies()
         )
 
         assertThat(
@@ -203,7 +204,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(promptWithAnswer(answer)),
             false,
             mock(),
-            dependencies
+            widgetDependencies()
         )
         assertThat(widget.answer, equalTo(answer))
     }
@@ -218,7 +219,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(promptWithAnswer(answer)),
             false,
             mock(),
-            dependencies
+            widgetDependencies()
         )
         widget.clearAnswer()
         assertThat(widget.answer, equalTo(null))
@@ -234,7 +235,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(promptWithAnswer(answer)),
             false,
             mock(),
-            dependencies
+            widgetDependencies()
         )
 
         val mockValueChangedListener = mockValueChangedListener(widget)
@@ -256,7 +257,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(prompt),
             false,
             mock(),
-            dependencies
+            widgetDependencies()
         )
 
         widget.clearAnswer()
@@ -270,7 +271,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(promptWithAnswer(null)),
             false,
             mock(),
-            dependencies
+            widgetDependencies()
         )
 
         val selectChoice = selectChoice(value = "a", index = 101)
@@ -293,7 +294,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(prompt),
             false,
             mock(),
-            dependencies
+            widgetDependencies()
         )
 
         widget.setData(SelectOneData(choices[1].selection()))
@@ -313,7 +314,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(prompt),
             false,
             mock(),
-            dependencies
+            widgetDependencies()
         )
 
         val mockValueChangedListener = mockValueChangedListener(widget)
@@ -342,7 +343,7 @@ class SelectOneFromMapWidgetTest {
             .build()
 
         val widget =
-            SelectOneFromMapWidget(activity, QuestionDetails(prompt), false, mock(), dependencies)
+            SelectOneFromMapWidget(activity, QuestionDetails(prompt), false, mock(), widgetDependencies())
         widget.setData(SelectOneData(choices[1].selection()))
 
         whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).doReturn(prompt)
@@ -368,7 +369,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(promptWithAnswer(null)),
             true,
             listener,
-            dependencies
+            widgetDependencies()
         )
 
         val selectChoice = selectChoice(value = "a", index = 101)
@@ -385,7 +386,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(promptWithAnswer(null)),
             false,
             listener,
-            dependencies
+            widgetDependencies()
         )
 
         val selectChoice = selectChoice(value = "a", index = 101)
