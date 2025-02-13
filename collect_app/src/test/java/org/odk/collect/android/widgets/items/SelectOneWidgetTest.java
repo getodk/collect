@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
@@ -47,8 +48,10 @@ import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.SoftKeyboardController;
+import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
+import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.Clip;
@@ -224,7 +227,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     }
 
     @Test
-    public void whenChoicesHaveAudio_audioButtonUsesIndexAsClipID() throws Exception {
+    public void whenChoicesHaveAudio_audioButtonUsesIndexAsClipID() {
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withIndex("i am index")
                 .withSelectChoices(asList(
@@ -237,9 +240,14 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
                 ))
                 .build();
 
+        AudioPlayer audioPlayer = mock();
+        dependencies = new QuestionWidget.Dependencies(audioPlayer);
         populateRecyclerView(getWidget());
-        verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 0", REFERENCES.get(0).second)));
-        verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 1", REFERENCES.get(1).second)));
+
+        getChoiceView(getWidget(), 0).findViewById(R.id.audioButton).performClick();
+        verify(audioPlayer).play(eq(new Clip("i am index 0", REFERENCES.get(0).second)));
+        getChoiceView(getWidget(), 1).findViewById(R.id.audioButton).performClick();
+        verify(audioPlayer).play(eq(new Clip("i am index 1", REFERENCES.get(1).second)));
     }
 
     @Test
