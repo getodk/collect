@@ -1,5 +1,16 @@
 package org.odk.collect.android.formentry;
 
+import static android.view.View.VISIBLE;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.support.CollectHelpers.createThemedActivity;
+
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
@@ -23,17 +34,6 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.imageloader.ImageLoader;
 
 import java.io.File;
-
-import static android.view.View.VISIBLE;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.CollectHelpers.createThemedActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class AudioVideoImageTextLabelTest {
@@ -74,7 +74,7 @@ public class AudioVideoImageTextLabelTest {
 
         AudioVideoImageTextLabel label = new AudioVideoImageTextLabel(activity);
         label.setText("blah", false, 16);
-        label.setAudio("file://audio.mp3", audioHelper);
+        label.setAudio("file://audio.mp3", mock());
 
         assertThat(label.getLabelTextView().getVisibility(), equalTo(VISIBLE));
         assertThat(label.getLabelTextView().getText().toString(), equalTo("blah"));
@@ -88,7 +88,7 @@ public class AudioVideoImageTextLabelTest {
 
         AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
         audioVideoImageTextLabel.setText("blah", false, 16);
-        audioVideoImageTextLabel.setAudio("file://audio.mp3", audioHelper);
+        audioVideoImageTextLabel.setAudio("file://audio.mp3", mock());
 
         int originalTextColor = audioVideoImageTextLabel.getLabelTextView().getCurrentTextColor();
 

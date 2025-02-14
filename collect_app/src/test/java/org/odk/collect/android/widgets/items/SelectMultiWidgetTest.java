@@ -37,7 +37,6 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -47,10 +46,11 @@ import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.SoftKeyboardController;
+import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
+import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
-import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.Clip;
 
 import java.util.List;
@@ -63,7 +63,7 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
     @NonNull
     @Override
     public SelectMultiWidget createWidget() {
-        SelectMultiWidget selectMultiWidget = new SelectMultiWidget(activity, new QuestionDetails(formEntryPrompt), new FormEntryPromptSelectChoiceLoader());
+        SelectMultiWidget selectMultiWidget = new SelectMultiWidget(activity, new QuestionDetails(formEntryPrompt), new FormEntryPromptSelectChoiceLoader(), dependencies);
         selectMultiWidget.setFocus(activity);
         return selectMultiWidget;
     }
@@ -157,9 +157,15 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
                 ))
                 .build();
 
+        AudioPlayer audioPlayer = mock();
+        dependencies = new QuestionWidget.Dependencies(audioPlayer);
+
         populateRecyclerView(getWidget());
-        verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 0", REFERENCES.get(0).second)));
-        verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 1", REFERENCES.get(1).second)));
+
+        getChoiceView(getWidget(), 0).findViewById(R.id.audioButton).performClick();
+        verify(audioPlayer).play(eq(new Clip("i am index 0", REFERENCES.get(0).second)));
+        getChoiceView(getWidget(), 1).findViewById(R.id.audioButton).performClick();
+        verify(audioPlayer).play(eq(new Clip("i am index 1", REFERENCES.get(1).second)));
     }
 
     @Test
@@ -253,11 +259,6 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
             @Override
             public ReferenceManager providesReferenceManager() {
                 return referenceManager;
-            }
-
-            @Override
-            public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
-                return context -> audioHelper;
             }
 
             @Override

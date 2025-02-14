@@ -30,6 +30,7 @@ import org.odk.collect.testshared.RobolectricHelpers;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -43,6 +44,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies;
 import static org.odk.collect.testshared.RobolectricHelpers.setupMediaPlayerDataSource;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
@@ -501,8 +503,8 @@ public class AudioWidgetTest {
                 audioPlayer,
                 recordingRequester,
                 audioFileRequester,
-                recordingRequester
-        );
+                recordingRequester,
+                widgetDependencies());
     }
 
     public AudioWidget createWidget(FormEntryPrompt prompt, boolean readOnlyOverride) {
@@ -513,8 +515,8 @@ public class AudioWidgetTest {
                 audioPlayer,
                 recordingRequester,
                 audioFileRequester,
-                recordingRequester
-        );
+                recordingRequester,
+                widgetDependencies());
     }
 
     @NotNull
@@ -564,8 +566,18 @@ public class AudioWidgetTest {
         }
 
         @Override
+        public void onPlaybackError(Consumer<Exception> error) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
         public void stop() {
             clip = null;
+        }
+
+        @Override
+        public void playInOrder(List<Clip> clips) {
+            throw new UnsupportedOperationException();
         }
 
         @Nullable

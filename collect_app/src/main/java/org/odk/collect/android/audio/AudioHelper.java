@@ -15,7 +15,6 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audioclips.Clip;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -75,20 +74,8 @@ public class AudioHelper {
         viewModel.play(clip);
     }
 
-    public void playInOrder(List<Clip> clips) {
-        viewModel.playInOrder(clips);
-    }
-
     public void stop() {
         viewModel.stop();
-    }
-
-    public LiveData<Exception> getError() {
-        return viewModel.getError();
-    }
-
-    public void errorDisplayed() {
-        viewModel.errorDisplayed();
     }
 
     private void registerLifecycleCallbacks(FragmentActivity activity, LifecycleOwner lifecycleOwner) {
