@@ -37,7 +37,6 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -53,7 +52,6 @@ import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
-import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.Clip;
 
 import java.util.List;
@@ -342,11 +340,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
             @Override
             public ReferenceManager providesReferenceManager() {
                 return referenceManager;
-            }
-
-            @Override
-            public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
-                return context -> audioHelper;
             }
 
             @Override

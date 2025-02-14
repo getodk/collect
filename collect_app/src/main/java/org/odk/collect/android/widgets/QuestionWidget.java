@@ -37,7 +37,6 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
@@ -83,9 +82,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     @Inject
     public ReferenceManager referenceManager;
-
-    @Inject
-    public AudioHelperFactory audioHelperFactory;
 
     @Inject
     public ScreenUtils screenUtils;

@@ -36,7 +36,6 @@ import org.odk.collect.android.databinding.AudioVideoImageTextLabelBinding;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.audioclips.Clip;
 import org.odk.collect.imageloader.ImageLoader;
@@ -220,14 +219,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         }
         if (listener != null) {
             listener.onItemClicked();
-        }
-    }
-
-    private ScreenContext getScreenContext() {
-        try {
-            return (ScreenContext) getContext();
-        } catch (ClassCastException e) {
-            throw new RuntimeException(getContext().toString() + " must implement " + ScreenContext.class.getName());
         }
     }
 
