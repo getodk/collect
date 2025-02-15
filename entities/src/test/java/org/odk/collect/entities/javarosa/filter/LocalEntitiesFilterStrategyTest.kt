@@ -541,6 +541,124 @@ class LocalEntitiesFilterStrategyTest {
         assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
         assertThat(instanceProvider.fullParsePerformed, equalTo(false))
     }
+
+    @Test
+    fun `works correctly but not in the optimized way with question = expressions`() {
+        entitiesRepository.save("things", Entity.New("thing1", "Thing1"))
+
+        val scenario = Scenario.init(
+            "Secondary instance form",
+            html(
+                head(
+                    title("Secondary instance form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("ref_question"),
+                                t("question1"),
+                                t("question2"),
+                                t("question3"),
+                            )
+                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
+                        bind("/data/ref_question").type("string"),
+                        bind("/data/question1").type("string"),
+                        bind("/data/question2").type("string"),
+                        bind("/data/question3").type("string")
+                    )
+                ),
+                body(
+                    input("/data/ref_question"),
+                    select1Dynamic(
+                        "/data/question1",
+                        "instance('things')/root/item[/data/ref_question='']",
+                        "name",
+                        "label"
+                    ),
+                    select1Dynamic(
+                        "/data/question2",
+                        "instance('things')/root/item[/data/ref_question=undefined]",
+                        "name",
+                        "label"
+                    ),
+                    select1Dynamic(
+                        "/data/question3",
+                        "instance('things')/root/item[/data/ref_question=null]",
+                        "name",
+                        "label"
+                    )
+                )
+            ),
+            controllerSupplier
+        )
+
+        var choices = scenario.choicesOf("/data/question1").map { it.value }
+        assertThat(choices, containsInAnyOrder("thing1"))
+
+        choices = scenario.choicesOf("/data/question2").map { it.value }
+        assertThat(choices, containsInAnyOrder("thing1"))
+
+        choices = scenario.choicesOf("/data/question3").map { it.value }
+        assertThat(choices, containsInAnyOrder("thing1"))
+
+        scenario.next()
+        scenario.answer("blah")
+
+        choices = scenario.choicesOf("/data/question1").map { it.value }
+        assertThat(choices.isEmpty(), equalTo(true))
+
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(true))
+    }
+
+    @Test
+    fun `works correctly but not in the optimized way with non existing property = expressions`() {
+        entitiesRepository.save("things", Entity.New("thing1", "Thing1"))
+
+        val scenario = Scenario.init(
+            "Secondary instance form",
+            html(
+                head(
+                    title("Secondary instance form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("question1"),
+                                t("question2"),
+                            )
+                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
+                        bind("/data/question1").type("string"),
+                        bind("/data/question2").type("string")
+                    )
+                ),
+                body(
+                    select1Dynamic(
+                        "/data/question1",
+                        "instance('things')/root/item[not_existing_property='']",
+                        "name",
+                        "label"
+                    ),
+                    select1Dynamic(
+                        "/data/question2",
+                        "instance('things')/root/item[not_existing_property='value']",
+                        "name",
+                        "label"
+                    )
+                )
+            ),
+            controllerSupplier
+        )
+
+        var choices = scenario.choicesOf("/data/question1").map { it.value }
+        assertThat(choices, containsInAnyOrder("thing1"))
+
+        choices = scenario.choicesOf("/data/question2").map { it.value }
+        assertThat(choices.isEmpty(), equalTo(true))
+
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(true))
+    }
 }
 
 private class FallthroughFilterStrategy : FilterStrategy {
