@@ -12,13 +12,13 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.7.3'
-        classpath 'com.google.gms:google-services:4.4.2'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.3'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.10"
-        classpath "org.jlleitschuh.gradle:ktlint-gradle:12.1.2"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.8.7"
-        classpath "com.google.android.gms:oss-licenses-plugin:0.10.6"
+        classpath libs.gradle
+        classpath libs.googleServices
+        classpath libs.firebaseCrashlyticsGradle
+        classpath libs.kotlinGradlePlugin
+        classpath libs.ktlintGradle
+        classpath libs.navigationSafeArgsGradlePlugin
+        classpath libs.ossLicensesPlugin
     }
 }
 
