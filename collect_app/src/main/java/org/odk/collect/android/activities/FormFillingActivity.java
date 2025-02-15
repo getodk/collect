@@ -1495,7 +1495,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     public void run() {
                         FormFillingActivity.this.runOnUiThread(() -> {
                             try {
-                                Thread.sleep(500);
+                                sleep(500);
                             } catch (InterruptedException e) {
                                 //This is rare
                                 Timber.e(e);

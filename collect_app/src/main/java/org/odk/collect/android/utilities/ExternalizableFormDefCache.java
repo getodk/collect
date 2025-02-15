@@ -30,7 +30,7 @@ public final class ExternalizableFormDefCache implements FormDefCache {
     @Override
     public void writeCache(FormDef formDef, String formPath) throws IOException {
         final long formSaveStart = System.currentTimeMillis();
-        File cachedFormDefFile = ExternalizableFormDefCache.getCacheFile(new File(formPath));
+        File cachedFormDefFile = getCacheFile(new File(formPath));
         final File tempCacheFile = File.createTempFile("cache", null,
                 new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE)));
         Timber.i("Started saving %s to the cache via temp file %s",

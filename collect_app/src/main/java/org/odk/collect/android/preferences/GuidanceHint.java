@@ -12,7 +12,7 @@ public enum GuidanceHint {
     }
 
     public static GuidanceHint get(String name) {
-        for (GuidanceHint hint : GuidanceHint.values()) {
+        for (GuidanceHint hint : values()) {
             if (hint.name.equals(name)) {
                 return hint;
             }

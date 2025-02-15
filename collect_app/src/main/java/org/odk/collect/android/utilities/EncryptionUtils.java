@@ -228,12 +228,12 @@ public class EncryptionUtils {
             IvParameterSpec baseIv = new IvParameterSpec(ivSeedArray);
             Cipher c;
             try {
-                c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, "BC");
+                c = Cipher.getInstance(SYMMETRIC_ALGORITHM, "BC");
                 isNotBouncyCastle = false;
             } catch (NoSuchProviderException e) {
                 Timber.w(e, "Unable to obtain BouncyCastle provider! Decryption may fail.");
                 isNotBouncyCastle = true;
-                c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM);
+                c = Cipher.getInstance(SYMMETRIC_ALGORITHM);
             }
             c.init(Cipher.ENCRYPT_MODE, symmetricKey, baseIv);
             return c;
@@ -329,7 +329,7 @@ public class EncryptionUtils {
         // For now, prevent encryption if the BouncyCastle implementation is not present.
         // https://code.google.com/p/opendatakit/issues/detail?id=918
         try {
-            Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, ENCRYPTION_PROVIDER);
+            Cipher.getInstance(SYMMETRIC_ALGORITHM, ENCRYPTION_PROVIDER);
         } catch (NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException e) {
             String msg;
             if (e instanceof NoSuchAlgorithmException) {

@@ -230,7 +230,7 @@ public final class Instance {
     }
 
     public boolean canDelete() {
-        return canDeleteBeforeSend || !status.equals(Instance.STATUS_COMPLETE) && !status.equals(Instance.STATUS_SUBMISSION_FAILED);
+        return canDeleteBeforeSend || !status.equals(STATUS_COMPLETE) && !status.equals(STATUS_SUBMISSION_FAILED);
     }
 
     @Override
