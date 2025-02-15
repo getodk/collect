@@ -28,7 +28,6 @@
         <exclude name="MissingOverride" />
         <exclude name="NonExhaustiveSwitch" />
         <exclude name="PositionLiteralsFirstInCaseInsensitiveComparisons" />
-        <exclude name="PositionLiteralsFirstInComparisons" />
         <exclude name="PreserveStackTrace" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
         <exclude name="UnitTestContainsTooManyAsserts" />
