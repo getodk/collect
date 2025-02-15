@@ -12,7 +12,6 @@
     <rule ref="category/java/bestpractices.xml">
         <exclude name="AbstractClassWithoutAbstractMethod" />
         <exclude name="AccessorClassGeneration" />
-        <exclude name="AccessorMethodGeneration" />
         <exclude name="ArrayIsStoredDirectly" />
         <exclude name="AvoidReassigningParameters" />
         <exclude name="AvoidStringBufferField" />
