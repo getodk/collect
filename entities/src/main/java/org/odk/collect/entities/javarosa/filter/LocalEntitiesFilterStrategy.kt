@@ -1,6 +1,5 @@
 package org.odk.collect.entities.javarosa.filter
 
-import android.database.sqlite.SQLiteException
 import org.javarosa.core.model.CompareToNodeExpression
 import org.javarosa.core.model.condition.EvaluationContext
 import org.javarosa.core.model.condition.FilterStrategy
@@ -12,6 +11,7 @@ import org.javarosa.xpath.expr.XPathExpression
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceAdapter
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceProvider
 import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.entities.storage.QueryException
 import org.odk.collect.shared.Query
 import java.util.function.Supplier
 
@@ -44,7 +44,7 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         return if (query != null) {
             try {
                 queryToTreeReferences(query, sourceInstance)
-            } catch (e: SQLiteException) {
+            } catch (e: QueryException) {
                 next.get()
             }
         } else {

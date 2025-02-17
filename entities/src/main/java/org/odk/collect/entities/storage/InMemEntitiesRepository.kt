@@ -1,6 +1,5 @@
 package org.odk.collect.entities.storage
 
-import android.database.sqlite.SQLiteException
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.shared.Query
 
@@ -57,7 +56,7 @@ class InMemEntitiesRepository : EntitiesRepository {
                         EntitySchema.VERSION -> it.version.toString()
                         else -> it.properties.find { propertyName ->
                             propertyName.first == query.column
-                        }?.second ?: throw SQLiteException("No such column: ${query.column}")
+                        }?.second ?: throw QueryException("No such column: ${query.column}")
                     }
                     fieldName == query.value
                 }
@@ -70,7 +69,7 @@ class InMemEntitiesRepository : EntitiesRepository {
                         EntitySchema.VERSION -> it.version.toString()
                         else -> it.properties.find { propertyName ->
                             propertyName.first == query.column
-                        }?.second ?: throw SQLiteException("No such column: ${query.column}")
+                        }?.second ?: throw QueryException("No such column: ${query.column}")
                     }
                     fieldName != query.value
                 }
