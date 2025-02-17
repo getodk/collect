@@ -61,10 +61,6 @@ class InMemEntitiesRepository : EntitiesRepository {
         }
     }
 
-    override fun getById(list: String, id: String): Entity.Saved? {
-        return query(list).firstOrNull { it.id == id }
-    }
-
     override fun getAllByProperty(
         list: String,
         property: String,
