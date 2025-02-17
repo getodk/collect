@@ -204,31 +204,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         })
     }
 
-    override fun getAllByProperty(
-        list: String,
-        property: String,
-        value: String
-    ): List<Entity.Saved> {
-        if (!listExists(list)) {
-            return emptyList()
-        }
-
-        val propertyExists = databaseConnection.withConnection {
-            readableDatabase.doesColumnExist(quote(list), EntitiesTable.getPropertyColumn(property))
-        }
-
-        return if (propertyExists) {
-            queryWithAttachedRowId(
-                list,
-                Query.Eq(EntitiesTable.getPropertyColumn(property), value)
-            )
-        } else if (value == "") {
-            queryWithAttachedRowId(list, null)
-        } else {
-            emptyList()
-        }
-    }
-
     override fun getByIndex(list: String, index: Int): Entity.Saved? {
         if (!listExists(list)) {
             return null
