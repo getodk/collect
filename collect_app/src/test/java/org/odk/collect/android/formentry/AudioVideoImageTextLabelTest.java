@@ -93,6 +93,17 @@ public class AudioVideoImageTextLabelTest {
     }
 
     @Test
+    public void withAudio_pressingStopOnAudioButton_stopsAudio() {
+        AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
+        audioVideoImageTextLabel.setTag("blah");
+        audioVideoImageTextLabel.setAudio("file://audio.mp3", audioPlayer);
+
+        audioPlayer.play(new Clip("blah", "file://audio.mp3"));
+        audioVideoImageTextLabel.findViewById(R.id.audioButton).performClick();
+        assertThat(audioPlayer.getCurrentClip(), equalTo(null));
+    }
+
+    @Test
     public void bothClickingLabelAndImageView_shouldSelectOptionInSelectOneMode() {
         File imageFile = mock(File.class);
         when(imageFile.exists()).thenReturn(true);
