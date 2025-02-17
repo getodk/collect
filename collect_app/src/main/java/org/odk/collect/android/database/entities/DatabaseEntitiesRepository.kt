@@ -156,14 +156,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    override fun getEntities(list: String): List<Entity.Saved> {
-        if (!listExists(list)) {
-            return emptyList()
-        }
-
-        return queryWithAttachedRowId(list, null)
-    }
-
     override fun getCount(list: String): Int {
         if (!listExists(list)) {
             return 0
@@ -203,12 +195,12 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         updateRowIdTables()
     }
 
-    override fun query(list: String, query: Query): List<Entity.Saved> {
+    override fun query(list: String, query: Query?): List<Entity.Saved> {
         if (!listExists(list)) {
             return emptyList()
         }
 
-        return queryWithAttachedRowId(list, query.mapColumns { columnName ->
+        return queryWithAttachedRowId(list, query?.mapColumns { columnName ->
             when (columnName) {
                 EntitySchema.ID -> EntitiesTable.COLUMN_ID
                 EntitySchema.LABEL -> EntitiesTable.COLUMN_LABEL
