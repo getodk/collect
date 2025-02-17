@@ -210,14 +210,6 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         })
     }
 
-    override fun getById(list: String, id: String): Entity.Saved? {
-        if (!listExists(list)) {
-            return null
-        }
-
-        return queryWithAttachedRowId(list, Query.Eq(EntitiesTable.COLUMN_ID, id)).firstOrNull()
-    }
-
     override fun getAllByProperty(
         list: String,
         property: String,
