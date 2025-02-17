@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,22 +14,20 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 
-import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.R;
-import org.odk.collect.android.audio.AudioButton;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.widgets.support.FakeAudioPlayer;
+import org.odk.collect.audioclips.Clip;
 import org.odk.collect.imageloader.ImageLoader;
 
 import java.io.File;
@@ -41,8 +38,7 @@ public class AudioVideoImageTextLabelTest {
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
 
-    @Mock
-    public AudioHelper audioHelper;
+    private FakeAudioPlayer audioPlayer = new FakeAudioPlayer();
 
     private WidgetTestActivity activity;
 
@@ -69,12 +65,9 @@ public class AudioVideoImageTextLabelTest {
 
     @Test
     public void withText_andAudio_showsTextAndAudioButton()  {
-        MutableLiveData<Boolean> isPlaying = new MutableLiveData<>(false);
-        when(audioHelper.setAudio(any(AudioButton.class), any())).thenReturn(isPlaying);
-
         AudioVideoImageTextLabel label = new AudioVideoImageTextLabel(activity);
         label.setText("blah", false, 16);
-        label.setAudio("file://audio.mp3", mock());
+        label.setAudio("file://audio.mp3", audioPlayer);
 
         assertThat(label.getLabelTextView().getVisibility(), equalTo(VISIBLE));
         assertThat(label.getLabelTextView().getText().toString(), equalTo("blah"));
@@ -83,20 +76,18 @@ public class AudioVideoImageTextLabelTest {
 
     @Test
     public void withText_andAudio_playingAudio_highlightsText() {
-        MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
-        when(audioHelper.setAudio(any(AudioButton.class), any())).thenReturn(isPlaying);
-
         AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
+        audioVideoImageTextLabel.setTag("blah");
         audioVideoImageTextLabel.setText("blah", false, 16);
-        audioVideoImageTextLabel.setAudio("file://audio.mp3", mock());
+        audioVideoImageTextLabel.setAudio("file://audio.mp3", audioPlayer);
 
         int originalTextColor = audioVideoImageTextLabel.getLabelTextView().getCurrentTextColor();
 
-        isPlaying.setValue(true);
+        audioPlayer.play(new Clip("blah", "file://audio.mp3"));
         int textColor = audioVideoImageTextLabel.getLabelTextView().getCurrentTextColor();
         assertThat(textColor, not(equalTo(originalTextColor)));
 
-        isPlaying.setValue(false);
+        audioPlayer.stop();
         textColor = audioVideoImageTextLabel.getLabelTextView().getCurrentTextColor();
         assertThat(textColor, equalTo(originalTextColor));
     }
