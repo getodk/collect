@@ -21,7 +21,6 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -41,8 +40,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
-import org.odk.collect.android.audio.AudioButton;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.support.CollectHelpers;
@@ -379,9 +376,6 @@ public class ChoicesRecyclerViewTest {
         when(file.exists()).thenReturn(true);
         view.setImage(file, mock(ImageLoader.class));
         view.setVideo(file);
-        AudioHelper audioHelper = mock(AudioHelper.class);
-        MutableLiveData<Boolean> isPlaying = new MutableLiveData<>(false);
-        when(audioHelper.setAudio(any(AudioButton.class), any())).thenReturn(isPlaying);
         view.setAudio("file://audio.mp3", mock());
 
         assertThat(view.isLongClickable(), is(true));
