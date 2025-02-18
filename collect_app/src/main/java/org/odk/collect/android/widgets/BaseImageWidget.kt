@@ -22,7 +22,6 @@ import org.odk.collect.strings.R
 import timber.log.Timber
 import java.io.File
 
-
 abstract class BaseImageWidget(
     context: Context,
     prompt: QuestionDetails,
