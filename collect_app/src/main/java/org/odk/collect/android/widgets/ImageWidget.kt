@@ -71,22 +71,20 @@ class ImageWidget(
                 R.string.choose_image
             )
         }
-        binding.image.setOnClickListener { v: View? -> imageClickHandler.clickImage("viewImage") }
+        binding.answerView.setOnClickListener { imageClickHandler.clickImage("viewImage") }
 
         if (questionDetails.isReadOnly) {
             binding.captureButton.visibility = GONE
             binding.chooseButton.visibility = GONE
         }
 
-        errorTextView = binding.errorMessage
-        imageView = binding.image
+        answerView = binding.answerView
+        answerView.setup(prompt.answerValue, imageLoader, questionMediaManager, referenceManager, null)
 
         return binding.root
     }
 
     override fun addExtrasToIntent(intent: Intent) = intent
-
-    override fun doesSupportDefaultValues() = false
 
     override fun clearAnswer() {
         super.clearAnswer()

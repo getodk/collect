@@ -48,19 +48,16 @@ class AnnotateWidget(
         imageCaptureHandler = ImageCaptureHandler()
 
         render()
+        updateAnswer()
     }
 
     override fun onCreateAnswerView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         binding = AnnotateWidgetBinding.inflate((context as Activity).layoutInflater)
-        errorTextView = binding.errorMessage
-        imageView = binding.image
-        updateAnswer()
-
         if (formEntryPrompt.appearanceHint != null && formEntryPrompt.appearanceHint.lowercase().contains(Appearances.NEW)) {
             binding.chooseButton.visibility = GONE
         }
 
-        if (binaryName == null || binding.image.visibility == GONE) {
+        if (binaryName == null || binding.answerView.hasError()) {
             binding.annotateButton.isEnabled = false
         }
 
@@ -87,7 +84,7 @@ class AnnotateWidget(
                 "annotateButton"
             )
         }
-        binding.image.setOnClickListener { imageClickHandler.clickImage("viewImage") }
+        binding.answerView.setOnClickListener { imageClickHandler.clickImage("viewImage") }
 
         if (questionDetails.isReadOnly) {
             binding.captureButton.visibility = GONE
@@ -95,13 +92,17 @@ class AnnotateWidget(
             binding.annotateButton.visibility = GONE
         }
 
+        answerView = binding.answerView
+        answerView.setup(prompt.answerValue, imageLoader, questionMediaManager, referenceManager, getDefaultFilePath())
+
         return binding.root
     }
 
     override fun addExtrasToIntent(intent: Intent): Intent {
         var bmp: Bitmap? = null
-        if (binding.image.drawable != null) {
-            bmp = (binding.image.drawable as BitmapDrawable).bitmap
+        val image = binding.answerView.getImageView()
+        if (image.drawable != null) {
+            bmp = (image.drawable as BitmapDrawable).bitmap
         }
 
         val screenOrientation =
@@ -110,8 +111,6 @@ class AnnotateWidget(
         intent.putExtra(DrawActivity.SCREEN_ORIENTATION, screenOrientation)
         return intent
     }
-
-    override fun doesSupportDefaultValues() = true
 
     override fun clearAnswer() {
         super.clearAnswer()

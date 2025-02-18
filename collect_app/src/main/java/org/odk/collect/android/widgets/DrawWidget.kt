@@ -48,21 +48,18 @@ class DrawWidget(
                 "drawButton"
             )
         }
-        binding.image.setOnClickListener { imageClickHandler.clickImage("viewImage") }
+        binding.answerView.setOnClickListener { imageClickHandler.clickImage("viewImage") }
 
         if (questionDetails.isReadOnly) {
             binding.drawButton.visibility = GONE
         }
 
-        errorTextView = binding.errorMessage
-        imageView = binding.image
-
+        answerView = binding.answerView
+        answerView.setup(prompt.answerValue, imageLoader, questionMediaManager, referenceManager, getDefaultFilePath())
         return binding.root
     }
 
     override fun addExtrasToIntent(intent: Intent) = intent
-
-    override fun doesSupportDefaultValues() = true
 
     override fun clearAnswer() {
         super.clearAnswer()

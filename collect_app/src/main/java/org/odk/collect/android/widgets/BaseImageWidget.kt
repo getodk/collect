@@ -5,8 +5,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.IdRes
 import org.javarosa.core.model.data.IAnswerData
@@ -20,20 +18,19 @@ import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.draw.DrawActivity
-import org.odk.collect.imageloader.GlideImageLoader.ImageLoaderCallback
 import org.odk.collect.strings.R
 import timber.log.Timber
 import java.io.File
 
+
 abstract class BaseImageWidget(
     context: Context,
     prompt: QuestionDetails,
-    private val questionMediaManager: QuestionMediaManager,
+    protected val questionMediaManager: QuestionMediaManager,
     private val waitingForDataRegistry: WaitingForDataRegistry,
     protected val tmpImageFilePath: String
 ) : QuestionWidget(context, prompt), FileWidget, WidgetDataReceiver {
-    lateinit var errorTextView: TextView
-    lateinit var imageView: ImageView
+    lateinit var answerView: ImageWidgetAnswer
     protected lateinit var imageClickHandler: ImageClickHandler
     protected lateinit var imageCaptureHandler: ExternalImageCaptureHandler
     protected var binaryName: String?
@@ -48,9 +45,7 @@ abstract class BaseImageWidget(
 
     override fun clearAnswer() {
         deleteFile()
-        imageView.setImageDrawable(null)
-        imageView.visibility = GONE
-        errorTextView.visibility = GONE
+        answerView.setAnswer(null)
         widgetValueChanged()
     }
 
@@ -82,37 +77,16 @@ abstract class BaseImageWidget(
     }
 
     override fun setOnLongClickListener(l: OnLongClickListener?) {
-        imageView.setOnLongClickListener(l)
+        answerView.setOnLongClickListener(l)
     }
 
     override fun cancelLongPress() {
         super.cancelLongPress()
-        imageView.cancelLongPress()
+        answerView.cancelLongPress()
     }
 
     protected fun updateAnswer() {
-        imageView.visibility = GONE
-        errorTextView.visibility = GONE
-
-        if (binaryName != null) {
-            val f = getFile()
-            if (f != null && f.exists()) {
-                imageView.visibility = VISIBLE
-                imageLoader.loadImage(
-                    imageView,
-                    f,
-                    ImageView.ScaleType.FIT_CENTER,
-                    object : ImageLoaderCallback {
-                        override fun onLoadFailed() {
-                            imageView.visibility = GONE
-                            errorTextView.visibility = VISIBLE
-                        }
-
-                        override fun onLoadSucceeded() {
-                        }
-                    })
-            }
-        }
+        answerView.setAnswer(binaryName)
     }
 
     /**
@@ -159,7 +133,7 @@ abstract class BaseImageWidget(
         private fun launchDrawActivity() {
             var i = Intent(context, DrawActivity::class.java)
             i.putExtra(DrawActivity.OPTION, drawOption)
-            val file = getFile()
+            val file = answerView.getFile(binaryName)
             if (file != null && file.exists()) {
                 i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(file))
             }
@@ -232,34 +206,13 @@ abstract class BaseImageWidget(
         }
     }
 
-    private fun getFile(): File? {
-        if (binaryName == null) {
-            return null
+    protected fun getDefaultFilePath(): String? {
+        try {
+            return referenceManager.deriveReference(binaryName).localURI
+        } catch (e: InvalidReferenceException) {
+            Timber.w(e)
         }
 
-        val file = questionMediaManager.getAnswerFile(binaryName)
-        if ((file == null || !file.exists()) && doesSupportDefaultValues()) {
-            val filePath = defaultFilePath
-            return if (filePath != null) {
-                File(filePath)
-            } else {
-                null
-            }
-        }
-
-        return file
+        return null
     }
-
-    private val defaultFilePath: String?
-        get() {
-            try {
-                return referenceManager.deriveReference(binaryName).localURI
-            } catch (e: InvalidReferenceException) {
-                Timber.w(e)
-            }
-
-            return null
-        }
-
-    protected abstract fun doesSupportDefaultValues(): Boolean
 }
