@@ -119,6 +119,7 @@ class FormUriActivity : LocalizedActivity() {
         MaterialAlertDialogBuilder(this)
             .setTitle(string.savepoint_recovery_dialog_title)
             .setMessage(SimpleDateFormat(getString(string.savepoint_recovery_dialog_message), Locale.getDefault()).format(File(savepoint.savepointFilePath).lastModified()))
+            .setCancelable(false)
             .setPositiveButton(string.recover) { _, _ ->
                 val uri = intent.data!!
                 val uriMimeType = contentResolver.getType(uri)!!
@@ -131,7 +132,6 @@ class FormUriActivity : LocalizedActivity() {
             .setNegativeButton(string.do_not_recover) { _, _ ->
                 formUriViewModel.deleteSavepoint(savepoint)
             }
-            .setOnCancelListener { finish() }
             .create()
             .show()
     }
