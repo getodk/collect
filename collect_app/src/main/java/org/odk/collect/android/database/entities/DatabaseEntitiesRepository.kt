@@ -124,7 +124,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             }
         }
 
-        updateRowIdTables()
+        invalidateRowIdTables()
     }
 
     override fun getLists(): Set<String> {
@@ -185,7 +185,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     override fun addList(list: String) {
         if (!listExists(list)) {
             createList(list)
-            updateRowIdTables()
+            invalidateRowIdTables()
         }
     }
 
@@ -200,7 +200,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             }
         }
 
-        updateRowIdTables()
+        invalidateRowIdTables()
     }
 
     override fun query(list: String, query: Query): List<Entity.Saved> {
@@ -260,6 +260,8 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     private fun queryWithAttachedRowId(list: String, query: Query?): List<Entity.Saved> {
+        ensureRowIdTable(list)
+
         try {
             return if (query == null) {
                 databaseConnection.withConnection {
@@ -296,14 +298,8 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    /**
-     * Dropping and recreating this table on every change allows to maintain a sequential
-     * "positions" for each entity that can be used as [Entity.Saved.index]. This method appears
-     * to be faster than using a nested query to generate these at query time (calculating how many
-     * _ids are higher than each entity _id). This might be replaceable with SQLite's `row_number()`
-     * function, but that's not available in all the supported versions of Android.
-     */
-    private fun updateRowIdTables() {
+
+    private fun invalidateRowIdTables() {
         databaseConnection.resetTransaction {
             getLists().forEach {
                 execSQL(
@@ -311,13 +307,27 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                     DROP TABLE IF EXISTS "${getRowIdTableName(it)}";
                     """.trimIndent()
                 )
-
-                execSQL(
-                    """
-                    CREATE TABLE "${getRowIdTableName(it)}" AS SELECT _id FROM "$it" ORDER BY _id;
-                    """.trimIndent()
-                )
             }
+        }
+    }
+
+    /**
+     * This table allows to maintain a sequential "positions" for each entity that can be used as
+     * [Entity.Saved.index]. This method appears to be faster than using a nested query to generate
+     * these at query time (calculating how many _ids are higher than each entity _id). This might
+     * be replaceable with SQLite's `row_number()` function, but that's not available in all the
+     * supported versions of Android.
+     *
+     * For this to work [invalidateRowIdTables] must be called whenever there is a change to a
+     * list table.
+     */
+    private fun ensureRowIdTable(list: String) {
+        databaseConnection.resetTransaction {
+            execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS "${getRowIdTableName(list)}" AS SELECT _id FROM "$list" ORDER BY _id;
+                """.trimIndent()
+            )
         }
     }
 
