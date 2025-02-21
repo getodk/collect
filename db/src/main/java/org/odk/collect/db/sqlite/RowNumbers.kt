@@ -6,7 +6,7 @@ import org.odk.collect.db.sqlite.SQLiteColumns.ROW_NUMBER
 
 object RowNumbers {
     fun SynchronizedDatabaseConnection.rawQueryWithRowNumber(table: String, selection: String? = null, selectionArgs: Array<String>? = null): Cursor {
-        ensureRowIdTable(this, table)
+        this.ensureRowIdTable(table)
 
         val cursor = if (selection != null) {
             this.withConnection {
@@ -49,8 +49,8 @@ object RowNumbers {
         }
     }
 
-    private fun ensureRowIdTable(databaseConnection: SynchronizedDatabaseConnection, table: String) {
-        databaseConnection.resetTransaction {
+    private fun SynchronizedDatabaseConnection.ensureRowIdTable(table: String) {
+        resetTransaction {
             execSQL(
                 """
                 CREATE TABLE IF NOT EXISTS "${getRowIdTableName(table)}" AS SELECT _id FROM "$table" ORDER BY _id;
