@@ -94,7 +94,7 @@ class RowNumbersTest {
     }
 }
 
-class NoopMigrator : DatabaseMigrator {
+private class NoopMigrator : DatabaseMigrator {
     override fun onCreate(db: SQLiteDatabase?) {}
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int) {}
 }
