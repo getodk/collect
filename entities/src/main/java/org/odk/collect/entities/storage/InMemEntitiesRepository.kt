@@ -58,7 +58,11 @@ class InMemEntitiesRepository : EntitiesRepository {
                             propertyName.first == query.column
                         }?.second ?: throw QueryException("No such column: ${query.column}")
                     }
-                    fieldName == query.value
+                    if (fieldName?.toDoubleOrNull() != null && query.value.toDoubleOrNull() != null) {
+                        fieldName.toDoubleOrNull() == query.value.toDoubleOrNull()
+                    } else {
+                        fieldName == query.value
+                    }
                 }
             }
             is Query.NotEq -> {
@@ -71,7 +75,11 @@ class InMemEntitiesRepository : EntitiesRepository {
                             propertyName.first == query.column
                         }?.second ?: throw QueryException("No such column: ${query.column}")
                     }
-                    fieldName != query.value
+                    if (fieldName?.toDoubleOrNull() != null && query.value.toDoubleOrNull() != null) {
+                        fieldName.toDoubleOrNull() != query.value.toDoubleOrNull()
+                    } else {
+                        fieldName != query.value
+                    }
                 }
             }
             is Query.And -> {

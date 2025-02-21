@@ -881,4 +881,38 @@ abstract class EntitiesRepositoryTest {
 
         repository.query("wines", Query.Eq("score", "92"))
     }
+
+    @Test
+    fun `#query returns matching entities with numeric selection arguments`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New(
+            "1",
+            "Léoville Barton 2008",
+            properties = listOf("score" to "5")
+        )
+
+        val canet = Entity.New(
+            "2",
+            "Pontet-Canet 2014",
+            properties = listOf("score" to "6.0")
+        )
+
+        val dows = Entity.New(
+            "3",
+            "Dow's 1983",
+            properties = listOf("score" to "7.5")
+        )
+
+        repository.save("wines", leoville, canet, dows)
+
+        var wines = repository.query("wines", Query.Eq("score", "5.0"))
+        assertThat(wines, containsInAnyOrder(sameEntityAs(leoville)))
+
+        wines = repository.query("wines", Query.Eq("score", "6"))
+        assertThat(wines, containsInAnyOrder(sameEntityAs(canet)))
+
+        wines = repository.query("wines", Query.Eq("score", "7.5"))
+        assertThat(wines, containsInAnyOrder(sameEntityAs(dows)))
+    }
 }
