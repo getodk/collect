@@ -11,6 +11,7 @@ import org.javarosa.xpath.expr.XPathExpression
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceAdapter
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceProvider
 import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.entities.storage.QueryException
 import org.odk.collect.shared.Query
 import java.util.function.Supplier
 
@@ -41,7 +42,11 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         val query = xPathExpressionToQuery(predicate, sourceInstance, evaluationContext)
 
         return if (query != null) {
-            queryToTreeReferences(query, sourceInstance)
+            try {
+                queryToTreeReferences(query, sourceInstance)
+            } catch (e: QueryException) {
+                next.get()
+            }
         } else {
             next.get()
         }

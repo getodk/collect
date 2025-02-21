@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import android.provider.BaseColumns._ID
 import org.odk.collect.db.sqlite.CursorExt.first
 import org.odk.collect.db.sqlite.CursorExt.foldAndClose
@@ -22,6 +23,7 @@ import org.odk.collect.db.sqlite.toSql
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.entities.storage.QueryException
 import org.odk.collect.shared.Query
 import org.odk.collect.shared.mapColumns
 
@@ -258,35 +260,39 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     private fun queryWithAttachedRowId(list: String, query: Query?): List<Entity.Saved> {
-        return if (query == null) {
-            databaseConnection.withConnection {
-                readableDatabase
-                    .rawQuery(
-                        """
-                        SELECT *, i.$ROW_ID
-                        FROM "$list" e, "${getRowIdTableName(list)}" i
-                        WHERE e._id = i._id
-                        ORDER BY i.$ROW_ID
-                        """.trimIndent(),
-                        null
-                    )
+        try {
+            return if (query == null) {
+                databaseConnection.withConnection {
+                    readableDatabase
+                        .rawQuery(
+                            """
+                            SELECT *, i.$ROW_ID
+                            FROM "$list" e, "${getRowIdTableName(list)}" i
+                            WHERE e._id = i._id
+                            ORDER BY i.$ROW_ID
+                            """.trimIndent(),
+                            null
+                        )
+                }
+            } else {
+                databaseConnection.withConnection {
+                    val sqlQuery = query.toSql()
+                    readableDatabase
+                        .rawQuery(
+                            """
+                            SELECT *, i.$ROW_ID
+                            FROM "$list" e, "${getRowIdTableName(list)}" i
+                            WHERE e._id = i._id AND ${sqlQuery.selection}
+                            ORDER BY i.$ROW_ID
+                            """.trimIndent(),
+                            sqlQuery.selectionArgs
+                        )
+                }
+            }.foldAndClose {
+                mapCursorRowToEntity(it, it.getInt(ROW_ID))
             }
-        } else {
-            databaseConnection.withConnection {
-                val sqlQuery = query.toSql()
-                readableDatabase
-                    .rawQuery(
-                        """
-                        SELECT *, i.$ROW_ID
-                        FROM "$list" e, "${getRowIdTableName(list)}" i
-                        WHERE e._id = i._id AND ${sqlQuery.selection}
-                        ORDER BY i.$ROW_ID
-                        """.trimIndent(),
-                        sqlQuery.selectionArgs
-                    )
-            }
-        }.foldAndClose {
-            mapCursorRowToEntity(it, it.getInt(ROW_ID))
+        } catch (e: SQLiteException) {
+            throw QueryException(e.message)
         }
     }
 

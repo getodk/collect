@@ -8,6 +8,7 @@ import org.junit.Test
 import org.odk.collect.android.entities.support.EntitySameAsMatcher.Companion.sameEntityAs
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.entities.storage.QueryException
 import org.odk.collect.shared.Query
 
 abstract class EntitiesRepositoryTest {
@@ -871,5 +872,13 @@ abstract class EntitiesRepositoryTest {
 
         val queriedCanet = repository.query("other.favourite.wines", Query.Eq("label", "Pontet-Canet 2014"))
         assertThat(queriedCanet, containsInAnyOrder(sameEntityAs(canet)))
+    }
+
+    @Test(expected = QueryException::class)
+    fun `#query throws an exception when not existing property is used`() {
+        val repository = buildSubject()
+        repository.save("wines", Entity.New("1", "Léoville Barton 2008",))
+
+        repository.query("wines", Query.Eq("score", "92"))
     }
 }

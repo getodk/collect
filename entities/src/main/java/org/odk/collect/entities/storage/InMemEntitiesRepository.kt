@@ -56,7 +56,7 @@ class InMemEntitiesRepository : EntitiesRepository {
                         EntitySchema.VERSION -> it.version.toString()
                         else -> it.properties.find { propertyName ->
                             propertyName.first == query.column
-                        }?.second
+                        }?.second ?: throw QueryException("No such column: ${query.column}")
                     }
                     fieldName == query.value
                 }
@@ -69,7 +69,7 @@ class InMemEntitiesRepository : EntitiesRepository {
                         EntitySchema.VERSION -> it.version.toString()
                         else -> it.properties.find { propertyName ->
                             propertyName.first == query.column
-                        }?.second
+                        }?.second ?: throw QueryException("No such column: ${query.column}")
                     }
                     fieldName != query.value
                 }
