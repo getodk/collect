@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.benchmark.support.Benchmarker
 import org.odk.collect.android.benchmark.support.benchmark
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
@@ -53,18 +54,18 @@ class EntitiesBenchmarkTest {
             .inputUrl(ENTITIES_FILTER_TEST_PROJECT_URL)
             .addProject()
 
-            // Populate http cache and clear out form/entities
+            // Populate http cache and recreate project
             .clickGetBlankForm()
             .clickGetSelected()
             .clickOK(MainMenuPage())
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
-            .clickOnResetProject()
-            .clickOnString(R.string.reset_blank_forms)
-            .clickOnString(R.string.reset_saved_forms)
-            .clickOnString(R.string.reset_settings_button_reset)
-            .clickOKOnDialog(MainMenuPage())
+            .clickOnDeleteProject()
+            .clickOnTextInDialog(R.string.yes, FirstLaunchPage())
+            .clickManuallyEnterProjectDetails()
+            .inputUrl(ENTITIES_FILTER_TEST_PROJECT_URL)
+            .addProject()
 
             .clickGetBlankForm()
             .benchmark("Downloading form with http cache", 40, benchmarker) {

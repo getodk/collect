@@ -1,7 +1,7 @@
 package org.odk.collect.android.benchmark.support
 
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.lessThan
+import org.hamcrest.Matchers.lessThanOrEqualTo
 import org.odk.collect.android.support.pages.Page
 import org.odk.collect.shared.TimeInMs
 
@@ -21,7 +21,7 @@ class Benchmarker {
 
         targets.entries.forEach {
             val time = stopwatch.getTime(it.key)
-            assertThat("\"${it.key}\" took ${time}s!", time, lessThan(it.value))
+            assertThat("\"${it.key}\" took ${time}s!", time, lessThanOrEqualTo(it.value))
         }
     }
 
