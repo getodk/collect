@@ -43,21 +43,10 @@ class SavedFormListViewModel(
         .map { instances -> instances.filter { instance -> instance.deletedDate == null } }
         .combine(_sortOrder) { instances, order ->
             when (order) {
-                SortOrder.NAME_DESC -> {
-                    instances.sortedByDescending { it.displayName }
-                }
-
-                SortOrder.DATE_DESC -> {
-                    instances.sortedByDescending { it.lastStatusChangeDate }
-                }
-
-                SortOrder.NAME_ASC -> {
-                    instances.sortedBy { it.displayName }
-                }
-
-                SortOrder.DATE_ASC -> {
-                    instances.sortedBy { it.lastStatusChangeDate }
-                }
+                SortOrder.NAME_DESC -> instances.sortedByDescending { it.displayName.lowercase() }
+                SortOrder.DATE_DESC -> instances.sortedByDescending { it.lastStatusChangeDate }
+                SortOrder.NAME_ASC -> instances.sortedBy { it.displayName.lowercase() }
+                SortOrder.DATE_ASC -> instances.sortedBy { it.lastStatusChangeDate }
             }
         }.combine(_filterText) { instances, filter ->
             instances.filter { it.displayName.contains(filter, ignoreCase = true) }
