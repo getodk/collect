@@ -17,7 +17,7 @@ class ProjectDetailsCreatorImpl(private val colors: List<String>, private val de
         val projectIcon = if (icon.isNotBlank()) {
             StringUtils.firstCharacterOrEmoji(icon)
         } else {
-            projectName.first().toUpperCase().toString()
+            projectName.first().uppercaseChar().toString()
         }
 
         val projectColor = if (isProjectColorValid(color)) {

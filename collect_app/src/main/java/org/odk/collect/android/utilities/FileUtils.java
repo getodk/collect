@@ -355,7 +355,7 @@ public final class FileUtils {
                 // silently retry unless this is the last attempt,
                 // in which case we rethrow the exception.
 
-                FileUtils.deleteAndReport(tempFile);
+                deleteAndReport(tempFile);
 
                 if (attemptCount == maxAttemptCount) {
                     throw e;
@@ -387,20 +387,20 @@ public final class FileUtils {
             }
 
             if (listener != null && listener.isCancelled()) {
-                FileUtils.deleteAndReport(tempFile);
+                deleteAndReport(tempFile);
                 throw new InterruptedException();
             }
         }
 
         Timber.d("Completed downloading of %s. It will be moved to the proper path...", tempFile.getAbsolutePath());
 
-        FileUtils.deleteAndReport(destinationFile);
+        deleteAndReport(destinationFile);
 
-        String errorMessage = FileUtils.copyFile(tempFile, destinationFile);
+        String errorMessage = copyFile(tempFile, destinationFile);
 
         if (destinationFile.exists()) {
             Timber.d("Copied %s over %s", tempFile.getAbsolutePath(), destinationFile.getAbsolutePath());
-            FileUtils.deleteAndReport(tempFile);
+            deleteAndReport(tempFile);
         } else {
             String msg = Collect.getInstance().getString(org.odk.collect.strings.R.string.fs_file_copy_error,
                     tempFile.getAbsolutePath(), destinationFile.getAbsolutePath(), errorMessage);

@@ -50,7 +50,7 @@ public class CollectThenSystemContentTypeMapper implements OpenRosaHttpInterface
         }
 
         public static String of(String extension) {
-            for (CollectContentTypeMappings m : CollectContentTypeMappings.values()) {
+            for (CollectContentTypeMappings m : values()) {
                 if (m.extension.equals(extension)) {
                     return m.contentType;
                 }

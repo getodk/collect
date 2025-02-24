@@ -217,7 +217,7 @@ public class Collect extends Application implements
      * @return md5 hash of the form title, a space, the form ID
      */
     public static String getFormIdentifierHash(String formId, String formVersion) {
-        Form form = new FormsRepositoryProvider(Collect.getInstance()).create().getLatestByFormIdAndVersion(formId, formVersion);
+        Form form = new FormsRepositoryProvider(getInstance()).create().getLatestByFormIdAndVersion(formId, formVersion);
 
         String formTitle = form != null ? form.getDisplayName() : "";
 
