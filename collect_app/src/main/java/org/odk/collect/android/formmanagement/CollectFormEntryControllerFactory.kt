@@ -23,6 +23,7 @@ import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 import java.io.File
 import java.util.function.Supplier
+import kotlin.system.measureTimeMillis
 
 class CollectFormEntryControllerFactory(
     private val entitiesRepository: EntitiesRepository,
@@ -62,10 +63,8 @@ private class LoggingFilterStrategy : FilterStrategy {
         evaluationContext: EvaluationContext,
         next: Supplier<MutableList<TreeReference>>
     ): MutableList<TreeReference> {
-        val startTime = System.currentTimeMillis()
-        val result = next.get()
-
-        val filterTime = System.currentTimeMillis() - startTime
+        val result: MutableList<TreeReference>
+        val filterTime = measureTimeMillis { result = next.get() }
         Handler(Looper.getMainLooper()).post {
             ToastUtils.showShortToast("Filter took ${filterTime / 1000.0}s")
         }
