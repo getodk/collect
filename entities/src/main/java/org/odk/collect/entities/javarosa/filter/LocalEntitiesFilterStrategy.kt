@@ -92,12 +92,20 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
 
         return if (candidate != null) {
             val child = candidate.nodeSide.steps[0].name.name
-            val value = candidate.evalContextSide(sourceInstance, evaluationContext).toString()
+            val value = candidate.evalContextSide(sourceInstance, evaluationContext)
 
             if (predicate.isEqual) {
-                Query.Eq(child, value)
+                if (value is Double) {
+                    Query.NumericEq(child, value)
+                } else {
+                    Query.Eq(child, value.toString())
+                }
             } else {
-                Query.NotEq(child, value)
+                if (value is Double) {
+                    Query.NumericNotEq(child, value)
+                } else {
+                    Query.NotEq(child, value.toString())
+                }
             }
         } else {
             null
