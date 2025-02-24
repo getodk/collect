@@ -866,7 +866,7 @@ class FormUriActivityTest {
         launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
         fakeScheduler.flush()
 
-        assertSavepointRecoveryDialog(savepointFile)
+        assertNonCancelableSavepointRecoveryDialog(savepointFile)
     }
 
     @Test
@@ -898,7 +898,7 @@ class FormUriActivityTest {
         launcherRule.launch<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
         fakeScheduler.flush()
 
-        assertSavepointRecoveryDialog(savepointFile)
+        assertNonCancelableSavepointRecoveryDialog(savepointFile)
     }
 
     @Test
@@ -930,7 +930,7 @@ class FormUriActivityTest {
         launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, formV2.dbId))
         fakeScheduler.flush()
 
-        assertSavepointRecoveryDialog(savepointFile)
+        assertNonCancelableSavepointRecoveryDialog(savepointFile)
         onView(withText(org.odk.collect.strings.R.string.recover)).perform(click())
         assertStartBlankFormIntent(project.uuid, formV1.dbId)
     }
@@ -964,7 +964,7 @@ class FormUriActivityTest {
         launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, formV2.dbId))
         fakeScheduler.flush()
 
-        assertSavepointRecoveryDialog(savepointFile)
+        assertNonCancelableSavepointRecoveryDialog(savepointFile)
         onView(withText(org.odk.collect.strings.R.string.do_not_recover)).perform(click())
         fakeScheduler.flush()
         assertStartBlankFormIntent(project.uuid, formV2.dbId)
@@ -992,7 +992,7 @@ class FormUriActivityTest {
         launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
         fakeScheduler.flush()
 
-        assertSavepointRecoveryDialog(savepointFile)
+        assertNonCancelableSavepointRecoveryDialog(savepointFile)
         onView(withText(org.odk.collect.strings.R.string.do_not_recover)).perform(click())
         fakeScheduler.flush()
         assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true))
@@ -1031,7 +1031,7 @@ class FormUriActivityTest {
         launcherRule.launch<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
         fakeScheduler.flush()
 
-        assertSavepointRecoveryDialog(savepointFile)
+        assertNonCancelableSavepointRecoveryDialog(savepointFile)
         onView(withText(org.odk.collect.strings.R.string.do_not_recover)).perform(click())
         fakeScheduler.flush()
         assertThat(savepointsRepository.getAll().isEmpty(), equalTo(true))
@@ -1263,7 +1263,8 @@ class FormUriActivityTest {
         }
     }
 
-    private fun assertSavepointRecoveryDialog(savepointFile: File) {
+    private fun assertNonCancelableSavepointRecoveryDialog(savepointFile: File) {
+        onView(isRoot()).perform(pressBack())
         onView(withText(org.odk.collect.strings.R.string.savepoint_recovery_dialog_title)).inRoot(isDialog()).check(matches(isDisplayed()))
         onView(withText(SimpleDateFormat(context.getString(org.odk.collect.strings.R.string.savepoint_recovery_dialog_message), Locale.getDefault()).format(savepointFile.lastModified()))).inRoot(isDialog()).check(matches(isDisplayed()))
         onView(withText(org.odk.collect.strings.R.string.recover)).inRoot(isDialog()).check(matches(isDisplayed()))
