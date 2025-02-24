@@ -9,8 +9,8 @@ data class SqlQuery(
 
 fun Query.toSql(): SqlQuery {
     return when (this) {
-        is Query.Eq -> SqlQuery("$column = ?", arrayOf(value))
-        is Query.NotEq -> SqlQuery("$column != ?", arrayOf(value))
+        is Query.StringEq -> SqlQuery("$column = ?", arrayOf(value))
+        is Query.StringNotEq -> SqlQuery("$column != ?", arrayOf(value))
         is Query.NumericEq -> SqlQuery("CAST($column AS REAL) = CAST(? AS REAL)", arrayOf(value.toString()))
         is Query.NumericNotEq -> SqlQuery("CAST($column AS REAL) != CAST(? AS REAL)", arrayOf(value.toString()))
         is Query.And -> {

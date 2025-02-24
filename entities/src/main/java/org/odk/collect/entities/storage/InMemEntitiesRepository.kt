@@ -56,8 +56,8 @@ class InMemEntitiesRepository : EntitiesRepository {
         }
 
         return when (query) {
-            is Query.Eq -> entities.filter { it.getFieldValue(query.column) == query.value }
-            is Query.NotEq -> entities.filter { it.getFieldValue(query.column) != query.value }
+            is Query.StringEq -> entities.filter { it.getFieldValue(query.column) == query.value }
+            is Query.StringNotEq -> entities.filter { it.getFieldValue(query.column) != query.value }
             is Query.NumericEq -> entities.filter { it.getFieldValue(query.column).toDoubleOrNull() == query.value }
             is Query.NumericNotEq -> entities.filter { it.getFieldValue(query.column).toDoubleOrNull() != query.value }
             is Query.And -> query(list, query.queryA).intersect(query(list, query.queryB)).toList()

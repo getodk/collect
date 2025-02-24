@@ -818,7 +818,7 @@ abstract class EntitiesRepositoryTest {
 
         repository.save("wines", leoville, canet)
 
-        val wines = repository.query("wines", Query.Eq("name", "2"))
+        val wines = repository.query("wines", Query.StringEq("name", "2"))
         assertThat(wines, containsInAnyOrder(sameEntityAs(canet)))
     }
 
@@ -835,7 +835,7 @@ abstract class EntitiesRepositoryTest {
 
         repository.save("wines", leoville)
 
-        val wines = repository.query("wines", Query.Eq("name", "3"))
+        val wines = repository.query("wines", Query.StringEq("name", "3"))
         assertThat(wines, equalTo(emptyList()))
     }
 
@@ -849,13 +849,13 @@ abstract class EntitiesRepositoryTest {
         repository.save("wines", leoville)
         repository.save("whisky", ardbeg)
 
-        assertThat(repository.query("wines", Query.Eq("label", "Ardbeg 10")), equalTo(emptyList()))
+        assertThat(repository.query("wines", Query.StringEq("label", "Ardbeg 10")), equalTo(emptyList()))
     }
 
     @Test
     fun `#query returns empty list where there are no entities in the list`() {
         val repository = buildSubject()
-        assertThat(repository.query("wines", Query.Eq("label", "Léoville Barton 2008")), equalTo(emptyList()))
+        assertThat(repository.query("wines", Query.StringEq("label", "Léoville Barton 2008")), equalTo(emptyList()))
     }
 
     @Test
@@ -867,10 +867,10 @@ abstract class EntitiesRepositoryTest {
         repository.save("favourite-wines", leoville)
         repository.save("other.favourite.wines", canet)
 
-        val queriedLeoville = repository.query("favourite-wines", Query.Eq("label", "Léoville Barton 2008"))
+        val queriedLeoville = repository.query("favourite-wines", Query.StringEq("label", "Léoville Barton 2008"))
         assertThat(queriedLeoville, containsInAnyOrder(sameEntityAs(leoville)))
 
-        val queriedCanet = repository.query("other.favourite.wines", Query.Eq("label", "Pontet-Canet 2014"))
+        val queriedCanet = repository.query("other.favourite.wines", Query.StringEq("label", "Pontet-Canet 2014"))
         assertThat(queriedCanet, containsInAnyOrder(sameEntityAs(canet)))
     }
 
@@ -879,7 +879,7 @@ abstract class EntitiesRepositoryTest {
         val repository = buildSubject()
         repository.save("wines", Entity.New("1", "Léoville Barton 2008",))
 
-        repository.query("wines", Query.Eq("score", "92"))
+        repository.query("wines", Query.StringEq("score", "92"))
     }
 
     @Test

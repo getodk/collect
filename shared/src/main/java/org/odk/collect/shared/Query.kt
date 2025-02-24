@@ -1,15 +1,15 @@
 package org.odk.collect.shared
 
 import org.odk.collect.shared.Query.And
-import org.odk.collect.shared.Query.Eq
-import org.odk.collect.shared.Query.NotEq
 import org.odk.collect.shared.Query.NumericEq
 import org.odk.collect.shared.Query.NumericNotEq
 import org.odk.collect.shared.Query.Or
+import org.odk.collect.shared.Query.StringEq
+import org.odk.collect.shared.Query.StringNotEq
 
 sealed class Query {
-    class Eq(val column: String, val value: String) : Query()
-    class NotEq(val column: String, val value: String) : Query()
+    class StringEq(val column: String, val value: String) : Query()
+    class StringNotEq(val column: String, val value: String) : Query()
     class NumericEq(val column: String, val value: Double) : Query()
     class NumericNotEq(val column: String, val value: Double) : Query()
     class And(val queryA: Query, val queryB: Query) : Query()
@@ -18,8 +18,8 @@ sealed class Query {
 
 fun Query.mapColumns(columnMapper: (String) -> String): Query {
     return when (this) {
-        is Eq -> Eq(columnMapper(column), value)
-        is NotEq -> NotEq(columnMapper(column), value)
+        is StringEq -> StringEq(columnMapper(column), value)
+        is StringNotEq -> StringNotEq(columnMapper(column), value)
         is NumericEq -> NumericEq(columnMapper(column), value)
         is NumericNotEq -> NumericNotEq(columnMapper(column), value)
         is And -> And(

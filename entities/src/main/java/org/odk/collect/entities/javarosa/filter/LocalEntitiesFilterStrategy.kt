@@ -98,13 +98,13 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
                 if (value is Double) {
                     Query.NumericEq(child, value)
                 } else {
-                    Query.Eq(child, value.toString())
+                    Query.StringEq(child, value.toString())
                 }
             } else {
                 if (value is Double) {
                     Query.NumericNotEq(child, value)
                 } else {
-                    Query.NotEq(child, value.toString())
+                    Query.StringNotEq(child, value.toString())
                 }
             }
         } else {
