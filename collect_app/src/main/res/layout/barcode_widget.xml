@@ -5,24 +5,21 @@
     android:layout_height="match_parent">
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
-        android:id="@+id/draw_button"
+        android:id="@+id/barcode_button"
         style="?widgetButtonIconQuestionWidgetStyle"
+        android:text="@string/get_barcode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/draw_image"
-        android:contentDescription="@string/draw_image"
-        app:icon="@drawable/ic_baseline_draw_white_24"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:icon="@drawable/ic_baseline_barcode_scanner_white_24" />
 
-    <org.odk.collect.android.widgets.ImageWidgetAnswer
+    <org.odk.collect.android.widgets.BarcodeWidgetAnswer
         android:id="@+id/answer_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
-        android:tag="ImageView"
+        app:layout_constraintTop_toBottomOf="@id/barcode_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/draw_button" />
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
