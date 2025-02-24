@@ -47,43 +47,21 @@ class InMemEntitiesRepository : EntitiesRepository {
     override fun query(list: String, query: Query): List<Entity.Saved> {
         val entities = getEntities(list)
 
+        fun Entity.getFieldValue(column: String): String = when (column) {
+            EntitySchema.ID -> id
+            EntitySchema.LABEL -> label!!
+            EntitySchema.VERSION -> version.toString()
+            else -> properties.find { it.first == column }?.second
+                ?: throw QueryException("No such column: $column")
+        }
+
         return when (query) {
-            is Query.Eq -> {
-                entities.filter {
-                    val fieldName: String? = when (query.column) {
-                        EntitySchema.ID -> it.id
-                        EntitySchema.LABEL -> it.label
-                        EntitySchema.VERSION -> it.version.toString()
-                        else -> it.properties.find { propertyName ->
-                            propertyName.first == query.column
-                        }?.second ?: throw QueryException("No such column: ${query.column}")
-                    }
-                    fieldName == query.value
-                }
-            }
-            is Query.NotEq -> {
-                entities.filter {
-                    val fieldName: String? = when (query.column) {
-                        EntitySchema.ID -> it.id
-                        EntitySchema.LABEL -> it.label
-                        EntitySchema.VERSION -> it.version.toString()
-                        else -> it.properties.find { propertyName ->
-                            propertyName.first == query.column
-                        }?.second ?: throw QueryException("No such column: ${query.column}")
-                    }
-                    fieldName != query.value
-                }
-            }
-            is Query.And -> {
-                val queryAResult = query(list, query.queryA)
-                val queryBResult = query(list, query.queryB)
-                queryAResult.intersect(queryBResult.toSet()).toList()
-            }
-            is Query.Or -> {
-                val queryAResult = query(list, query.queryA)
-                val queryBResult = query(list, query.queryB)
-                queryAResult.union(queryBResult.toSet()).toList()
-            }
+            is Query.StringEq -> entities.filter { it.getFieldValue(query.column) == query.value }
+            is Query.StringNotEq -> entities.filter { it.getFieldValue(query.column) != query.value }
+            is Query.NumericEq -> entities.filter { it.getFieldValue(query.column).toDoubleOrNull() == query.value }
+            is Query.NumericNotEq -> entities.filter { it.getFieldValue(query.column).toDoubleOrNull() != query.value }
+            is Query.And -> query(list, query.queryA).intersect(query(list, query.queryB)).toList()
+            is Query.Or -> query(list, query.queryA).union(query(list, query.queryB)).toList()
         }
     }
 
