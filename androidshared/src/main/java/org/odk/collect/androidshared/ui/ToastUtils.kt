@@ -24,26 +24,24 @@ object ToastUtils {
 
     @JvmStatic
     fun showShortToast(message: String) {
-        showToast(application, message)
+        showToast(message)
     }
 
     @JvmStatic
     fun showShortToast(messageResource: Int) {
         showToast(
-            application,
             application.getLocalizedString(messageResource)
         )
     }
 
     @JvmStatic
     fun showLongToast(message: String) {
-        showToast(application, message, Toast.LENGTH_LONG)
+        showToast(message, Toast.LENGTH_LONG)
     }
 
     @JvmStatic
     fun showLongToast(messageResource: Int) {
         showToast(
-            application,
             application.getLocalizedString(messageResource),
             Toast.LENGTH_LONG
         )
@@ -69,7 +67,6 @@ object ToastUtils {
     }
 
     private fun showToast(
-        application: Application,
         message: String,
         duration: Int = Toast.LENGTH_SHORT
     ) {
