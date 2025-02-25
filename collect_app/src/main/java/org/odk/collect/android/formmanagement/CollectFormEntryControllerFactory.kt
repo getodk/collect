@@ -13,6 +13,7 @@ import org.javarosa.xpath.expr.XPathExpression
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.dynamicpreload.ExternalDataManagerImpl
 import org.odk.collect.android.dynamicpreload.handler.ExternalDataHandlerPull
+import org.odk.collect.android.preferences.SettingsExt.getExperimentalOptIn
 import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.entities.javarosa.filter.LocalEntitiesFilterStrategy
@@ -45,7 +46,7 @@ class CollectFormEntryControllerFactory(
             )
             it.addPostProcessor(EntityFormFinalizationProcessor())
 
-            if (settings.getBoolean(ProjectKeys.KEY_DEBUG_FILTERS)) {
+            if (settings.getExperimentalOptIn(ProjectKeys.KEY_DEBUG_FILTERS)) {
                 it.addFilterStrategy(LoggingFilterStrategy())
             }
 
