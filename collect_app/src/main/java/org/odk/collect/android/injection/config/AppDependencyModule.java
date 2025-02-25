@@ -616,7 +616,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public MDMConfigObserver providesManagedConfigManager(
+    public MDMConfigObserver providesMDMConfigObserver(
             SettingsProvider settingsProvider,
             ProjectsRepository projectsRepository,
             ProjectCreator projectCreator,
