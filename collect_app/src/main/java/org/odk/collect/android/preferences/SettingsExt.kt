@@ -8,7 +8,7 @@ object SettingsExt {
     fun Settings.getExperimentalOptIn(key: String): Boolean {
         val versionInformation = VersionInformation { BuildConfig.VERSION_NAME }
 
-        return if (versionInformation.isRelease) {
+        return if (!versionInformation.isRelease) {
             this.getBoolean(key)
         } else {
             false
