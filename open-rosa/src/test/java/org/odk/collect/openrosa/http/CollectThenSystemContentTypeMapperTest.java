@@ -1,4 +1,6 @@
-package org.odk.collect.android.openrosa;
+package org.odk.collect.openrosa.http;
+
+import static org.junit.Assert.assertEquals;
 
 import android.webkit.MimeTypeMap;
 
@@ -6,10 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CollectThenSystemContentTypeMapperTest {
@@ -34,7 +34,7 @@ public class CollectThenSystemContentTypeMapperTest {
 
     @Test
     public void whenExtensionIsNotRecognized_returnsTypeFromAndroid() {
-        when(mimeTypeMap.getMimeTypeFromExtension("mystery")).thenReturn("text/mystery");
+        Mockito.when(mimeTypeMap.getMimeTypeFromExtension("mystery")).thenReturn("text/mystery");
         assertEquals("text/mystery", mapper.map("file.mystery"));
     }
 

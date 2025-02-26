@@ -32,6 +32,7 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
+            isReturnDefaultValues = true
         }
     }
 
@@ -54,4 +55,6 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.hamcrest)
+    testImplementation(libs.okhttp3Mockwebserver)
+    testImplementation(libs.mockitoCore)
 }

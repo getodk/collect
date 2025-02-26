@@ -1,4 +1,4 @@
-package org.odk.collect.android.openrosa;
+package org.odk.collect.openrosa.http;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
@@ -15,9 +15,7 @@ import androidx.annotation.NonNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.odk.collect.android.rules.MockWebServerRule;
-import org.odk.collect.openrosa.http.HttpPostResult;
-import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
+import org.odk.collect.openrosa.http.support.MockWebServerRule;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;

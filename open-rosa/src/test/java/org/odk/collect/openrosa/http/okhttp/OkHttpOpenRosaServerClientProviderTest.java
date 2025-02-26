@@ -1,14 +1,12 @@
-package org.odk.collect.android.openrosa;
+package org.odk.collect.openrosa.http.okhttp;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
-import static org.odk.collect.android.openrosa.support.MockWebServerHelper.buildRequest;
 
 import org.junit.Test;
-import org.odk.collect.openrosa.http.okhttp.OkHttpOpenRosaServerClientProvider;
-import org.odk.collect.openrosa.http.okhttp.OpenRosaServerClient;
-import org.odk.collect.openrosa.http.okhttp.OpenRosaServerClientProvider;
+import org.odk.collect.openrosa.http.HttpCredentials;
+import org.odk.collect.openrosa.http.support.MockWebServerHelper;
 import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
@@ -58,7 +56,7 @@ public class OkHttpOpenRosaServerClientProviderTest extends OpenRosaServerClient
 
         OkHttpOpenRosaServerClientProvider provider = buildSubject(noneExistingFile.getAbsolutePath());
         OpenRosaServerClient client = provider.get("http", "Android", new HttpCredentials("", ""));
-        client.makeRequest(buildRequest(mockWebServer, ""), new Date());
+        client.makeRequest(MockWebServerHelper.buildRequest(mockWebServer, ""), new Date());
 
         assertThat(noneExistingFile.exists(), equalTo(false));
     }
@@ -75,7 +73,7 @@ public class OkHttpOpenRosaServerClientProviderTest extends OpenRosaServerClient
 
         OkHttpOpenRosaServerClientProvider provider = buildSubject(file.getAbsolutePath());
         OpenRosaServerClient client = provider.get("http", "Android", new HttpCredentials("", ""));
-        client.makeRequest(buildRequest(mockWebServer, ""), new Date());
+        client.makeRequest(MockWebServerHelper.buildRequest(mockWebServer, ""), new Date());
 
         assertThat(file.exists(), equalTo(true));
         assertThat(file.isDirectory(), equalTo(false));

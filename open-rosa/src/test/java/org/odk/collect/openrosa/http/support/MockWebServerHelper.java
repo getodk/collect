@@ -1,4 +1,4 @@
-package org.odk.collect.android.openrosa.support;
+package org.odk.collect.openrosa.http.support;
 
 import okhttp3.Request;
 import okhttp3.mockwebserver.MockWebServer;

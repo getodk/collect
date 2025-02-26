@@ -1,14 +1,14 @@
-package org.odk.collect.android.openrosa;
+package org.odk.collect.openrosa.http.okhttp;
 
 import android.webkit.MimeTypeMap;
 
+import org.odk.collect.openrosa.http.CollectThenSystemContentTypeMapper;
+import org.odk.collect.openrosa.http.OpenRosaHeadRequestTest;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
-import org.odk.collect.openrosa.http.okhttp.OkHttpConnection;
-import org.odk.collect.openrosa.http.okhttp.OkHttpOpenRosaServerClientProvider;
 
 import okhttp3.OkHttpClient;
 
-public class OkHttpConnectionGetRequestTest extends OpenRosaGetRequestTest {
+public class OkHttpConnectionHeadRequestTest extends OpenRosaHeadRequestTest {
 
     @Override
     protected OpenRosaHttpInterface buildSubject() {

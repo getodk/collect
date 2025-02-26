@@ -1,11 +1,10 @@
-package org.odk.collect.android.openrosa;
+package org.odk.collect.openrosa.http;
 
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
+import java.util.Locale;
 
 /**
  * This covers types not included in Android's MimeTypeMap
@@ -22,7 +21,7 @@ public class CollectThenSystemContentTypeMapper implements OpenRosaHttpInterface
     @NonNull
     @Override
     public String map(String fileName) {
-        String extension = FileUtils.getFileExtension(fileName);
+        String extension = getFileExtension(fileName);
 
         String collectContentType = CollectContentTypeMappings.of(extension);
         String androidContentType = androidTypeMap.getMimeTypeFromExtension(extension);
@@ -34,6 +33,14 @@ public class CollectThenSystemContentTypeMapper implements OpenRosaHttpInterface
         } else {
             return "application/octet-stream";
         }
+    }
+
+    private static String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex == -1) {
+            return "";
+        }
+        return fileName.substring(dotIndex + 1).toLowerCase(Locale.ROOT);
     }
 
     private enum CollectContentTypeMappings {

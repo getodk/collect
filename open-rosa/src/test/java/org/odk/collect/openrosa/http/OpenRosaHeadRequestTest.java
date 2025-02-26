@@ -1,4 +1,4 @@
-package org.odk.collect.android.openrosa;
+package org.odk.collect.openrosa.http;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.equalTo;
@@ -10,9 +10,7 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.odk.collect.android.rules.MockWebServerRule;
-import org.odk.collect.openrosa.http.HttpHeadResult;
-import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
+import org.odk.collect.openrosa.http.support.MockWebServerRule;
 
 import java.net.URI;
 
@@ -22,7 +20,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 
 public abstract class OpenRosaHeadRequestTest {
 
-    static final String USER_AGENT = "Test Agent";
+    protected static final String USER_AGENT = "Test Agent";
 
     protected abstract OpenRosaHttpInterface buildSubject();
 
