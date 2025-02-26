@@ -225,7 +225,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return null
         }
 
-        return queryWithAttachedRowNumber(list, Query.Eq(EntitiesTable.COLUMN_ID, id)).firstOrNull()
+        return queryWithAttachedRowNumber(list, Query.StringEq(EntitiesTable.COLUMN_ID, id)).firstOrNull()
     }
 
     override fun getAllByProperty(
@@ -244,7 +244,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         return if (propertyExists) {
             queryWithAttachedRowNumber(
                 list,
-                Query.Eq(EntitiesTable.getPropertyColumn(property), value)
+                Query.StringEq(EntitiesTable.getPropertyColumn(property), value)
             )
         } else if (value == "") {
             queryWithAttachedRowNumber(list, null)
@@ -258,7 +258,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             return null
         }
 
-        val query = Query.Eq(ROW_NUMBER, (index + 1).toString())
+        val query = Query.StringEq(ROW_NUMBER, (index + 1).toString())
         return queryWithAttachedRowNumber(list, query).firstOrNull()
     }
 
