@@ -64,7 +64,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.hamcrest)
     testImplementation(libs.okhttp3Mockwebserver)
-    testImplementation(libs.mockitoCore)
+    testImplementation(libs.mockitoKotlin)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidxTestExtJunit)
 }
