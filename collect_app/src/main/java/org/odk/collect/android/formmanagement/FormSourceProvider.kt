@@ -16,7 +16,7 @@ class FormSourceProvider(
 
     override fun create(projectId: String): FormSource {
         val settings = settingsFactory.create(projectId)
-        val serverURL = settings.getString(ProjectKeys.KEY_SERVER_URL)
+        val serverURL = settings.getString(ProjectKeys.KEY_SERVER_URL)!!
 
         return OpenRosaClient(
             serverURL,
