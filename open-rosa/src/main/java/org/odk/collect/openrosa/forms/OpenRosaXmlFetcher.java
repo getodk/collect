@@ -1,11 +1,10 @@
-package org.odk.collect.android.openrosa;
+package org.odk.collect.openrosa.forms;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Document;
-import org.odk.collect.openrosa.forms.DocumentFetchResult;
 import org.odk.collect.openrosa.http.HttpCredentialsInterface;
 import org.odk.collect.openrosa.http.HttpGetResult;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;

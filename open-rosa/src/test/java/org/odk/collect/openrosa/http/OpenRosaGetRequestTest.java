@@ -8,7 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.odk.collect.openrosa.http.support.MockWebServerRule;
+import org.odk.collect.openrosa.support.MockWebServerRule;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;

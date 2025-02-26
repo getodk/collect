@@ -1,4 +1,4 @@
-package org.odk.collect.android.openrosa;
+package org.odk.collect.openrosa.forms;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -12,12 +12,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.openrosa.forms.DocumentFetchResult;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.openrosa.http.HttpGetResult;
 import org.odk.collect.openrosa.http.OpenRosaConstants;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
+import org.odk.collect.openrosa.support.StubWebCredentialsProvider;
 
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
@@ -31,7 +29,7 @@ public class OpenRosaXmlFetcherTest {
     @Before
     public void setup() {
         httpInterface = mock(OpenRosaHttpInterface.class);
-        openRosaXMLFetcher = new OpenRosaXmlFetcher(httpInterface, new WebCredentialsUtils(TestSettingsProvider.getUnprotectedSettings()));
+        openRosaXMLFetcher = new OpenRosaXmlFetcher(httpInterface, new StubWebCredentialsProvider());
     }
 
     @Test

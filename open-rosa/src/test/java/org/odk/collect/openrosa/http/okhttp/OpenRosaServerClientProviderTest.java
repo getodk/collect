@@ -5,14 +5,14 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
-import static org.odk.collect.openrosa.http.support.MockWebServerHelper.buildRequest;
+import static org.odk.collect.openrosa.support.MockWebServerHelper.buildRequest;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.openrosa.http.HttpCredentials;
 import org.odk.collect.openrosa.http.OpenRosaConstants;
-import org.odk.collect.openrosa.http.support.MockWebServerRule;
+import org.odk.collect.openrosa.support.MockWebServerRule;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

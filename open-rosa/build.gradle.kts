@@ -65,4 +65,6 @@ dependencies {
     testImplementation(libs.hamcrest)
     testImplementation(libs.okhttp3Mockwebserver)
     testImplementation(libs.mockitoCore)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidxTestExtJunit)
 }

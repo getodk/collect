@@ -4,8 +4,8 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
-import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.metadata.PropertyManager;
+import org.odk.collect.openrosa.forms.OpenRosaXmlFetcher;
 import org.odk.collect.openrosa.http.HttpCredentials;
 import org.odk.collect.openrosa.http.HttpCredentialsInterface;
 import org.odk.collect.settings.keys.ProjectKeys;

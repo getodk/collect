@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.not;
 
 import org.junit.Test;
 import org.odk.collect.openrosa.http.HttpCredentials;
-import org.odk.collect.openrosa.http.support.MockWebServerHelper;
+import org.odk.collect.openrosa.support.MockWebServerHelper;
 import org.odk.collect.shared.TempFiles;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package org.odk.collect.openrosa.http.support
+package org.odk.collect.openrosa.support
 
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.rules.TestRule
