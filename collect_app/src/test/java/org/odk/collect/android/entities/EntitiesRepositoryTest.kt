@@ -883,7 +883,7 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#query returns matching entities with numeric eq selection arguments`() {
+    fun `#query returns matching entities with numeric eq selection arguments for integer values`() {
         val repository = buildSubject()
 
         val leoville = Entity.New(
@@ -895,26 +895,67 @@ abstract class EntitiesRepositoryTest {
         val dows = Entity.New(
             "3",
             "Dow's 1983",
+            properties = listOf("score" to "7")
+        )
+
+        repository.save("wines", leoville, dows)
+
+        val wines = repository.query("wines", Query.NumericEq("score", 5.0))
+        assertThat(wines, containsInAnyOrder(sameEntityAs(leoville)))
+    }
+
+    @Test
+    fun `#query returns matching entities with numeric eq selection arguments for decimal values`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New(
+            "1",
+            "Léoville Barton 2008",
+            properties = listOf("score" to "5.0")
+        )
+
+        val dows = Entity.New(
+            "3",
+            "Dow's 1983",
             properties = listOf("score" to "7.5")
         )
 
         repository.save("wines", leoville, dows)
 
-        var wines = repository.query("wines", Query.NumericEq("score", 5.0))
+        val wines = repository.query("wines", Query.NumericEq("score", 5.0))
         assertThat(wines, containsInAnyOrder(sameEntityAs(leoville)))
+    }
 
-        wines = repository.query("wines", Query.NumericEq("score", 7.5))
+    @Test
+    fun `#query returns matching entities with numeric not eq selection arguments for integer values`() {
+        val repository = buildSubject()
+
+        val leoville = Entity.New(
+            "1",
+            "Léoville Barton 2008",
+            properties = listOf("score" to "5")
+        )
+
+        val dows = Entity.New(
+            "3",
+            "Dow's 1983",
+            properties = listOf("score" to "7")
+        )
+
+        repository.save("wines", leoville, dows)
+
+        val wines = repository.query("wines", Query.NumericNotEq("score", 5.0))
         assertThat(wines, containsInAnyOrder(sameEntityAs(dows)))
     }
 
     @Test
-    fun `#query returns matching entities with numeric not eq selection arguments`() {
+    fun `#query returns matching entities with numeric not eq selection arguments for decimal values`() {
         val repository = buildSubject()
 
         val leoville = Entity.New(
             "1",
             "Léoville Barton 2008",
-            properties = listOf("score" to "5")
+            properties = listOf("score" to "5.0")
         )
 
         val dows = Entity.New(
@@ -925,10 +966,7 @@ abstract class EntitiesRepositoryTest {
 
         repository.save("wines", leoville, dows)
 
-        var wines = repository.query("wines", Query.NumericNotEq("score", 5.0))
+        val wines = repository.query("wines", Query.NumericNotEq("score", 5.0))
         assertThat(wines, containsInAnyOrder(sameEntityAs(dows)))
-
-        wines = repository.query("wines", Query.NumericNotEq("score", 7.5))
-        assertThat(wines, containsInAnyOrder(sameEntityAs(leoville)))
     }
 }
