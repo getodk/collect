@@ -19,7 +19,7 @@ import java.net.URL;
 import timber.log.Timber;
 
 /**
- * This is only used inside {@link OpenRosaFormSource} and could potentially be absorbed there. Some
+ * This is only used inside {@link OpenRosaClient} and could potentially be absorbed there. Some
  * of the parsing logic here might be better broken out somewhere else however if it can be used
  * in other scenarios.
  */

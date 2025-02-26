@@ -22,7 +22,7 @@ import java.util.concurrent.Callable;
 
 import javax.net.ssl.SSLException;
 
-public class OpenRosaFormSource implements FormSource {
+public class OpenRosaClient implements FormSource {
 
     private final OpenRosaXmlFetcher openRosaXMLFetcher;
     private final OpenRosaResponseParser openRosaResponseParser;
@@ -30,7 +30,7 @@ public class OpenRosaFormSource implements FormSource {
 
     private String serverURL;
 
-    public OpenRosaFormSource(String serverURL, OpenRosaHttpInterface openRosaHttpInterface, OpenRosaXmlFetcher.WebCredentialsProvider webCredentialsProvider, OpenRosaResponseParser openRosaResponseParser) {
+    public OpenRosaClient(String serverURL, OpenRosaHttpInterface openRosaHttpInterface, OpenRosaXmlFetcher.WebCredentialsProvider webCredentialsProvider, OpenRosaResponseParser openRosaResponseParser) {
         this.openRosaResponseParser = openRosaResponseParser;
         this.webCredentialsProvider = webCredentialsProvider;
         this.openRosaXMLFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, this.webCredentialsProvider);
