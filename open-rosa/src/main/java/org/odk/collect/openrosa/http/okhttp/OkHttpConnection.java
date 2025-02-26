@@ -1,17 +1,16 @@
-package org.odk.collect.android.openrosa.okhttp;
+package org.odk.collect.openrosa.http.okhttp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
-import org.odk.collect.android.openrosa.CaseInsensitiveEmptyHeaders;
-import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
-import org.odk.collect.android.openrosa.HttpCredentialsInterface;
-import org.odk.collect.android.openrosa.HttpGetResult;
-import org.odk.collect.android.openrosa.HttpHeadResult;
-import org.odk.collect.android.openrosa.HttpPostResult;
-import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.openrosa.OpenRosaServerClient;
+import org.odk.collect.openrosa.http.CaseInsensitiveEmptyHeaders;
+import org.odk.collect.openrosa.http.CaseInsensitiveHeaders;
+import org.odk.collect.openrosa.http.HttpCredentialsInterface;
+import org.odk.collect.openrosa.http.HttpGetResult;
+import org.odk.collect.openrosa.http.HttpHeadResult;
+import org.odk.collect.openrosa.http.HttpPostResult;
+import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;

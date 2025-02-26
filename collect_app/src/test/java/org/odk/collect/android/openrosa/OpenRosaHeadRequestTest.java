@@ -1,22 +1,24 @@
 package org.odk.collect.android.openrosa;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.odk.collect.android.rules.MockWebServerRule;
-
-import java.net.URI;
-
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
-
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.odk.collect.android.rules.MockWebServerRule;
+import org.odk.collect.openrosa.http.HttpHeadResult;
+import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
+
+import java.net.URI;
+
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 
 public abstract class OpenRosaHeadRequestTest {
 

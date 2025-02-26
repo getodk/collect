@@ -1,6 +1,8 @@
-package org.odk.collect.android.openrosa;
+package org.odk.collect.openrosa.http.okhttp;
 
 import androidx.annotation.NonNull;
+
+import org.odk.collect.openrosa.http.HttpCredentialsInterface;
 
 public interface OpenRosaServerClientProvider {
 

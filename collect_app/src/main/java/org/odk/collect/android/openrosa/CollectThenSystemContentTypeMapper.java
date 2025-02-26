@@ -5,6 +5,7 @@ import android.webkit.MimeTypeMap;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 
 /**
  * This covers types not included in Android's MimeTypeMap

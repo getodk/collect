@@ -1,24 +1,26 @@
 package org.odk.collect.android.openrosa;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.utilities.DocumentFetchResult;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
-
-import java.io.ByteArrayInputStream;
-import java.util.HashMap;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.android.utilities.DocumentFetchResult;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.openrosa.http.HttpGetResult;
+import org.odk.collect.openrosa.http.OpenRosaConstants;
+import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
+
+import java.io.ByteArrayInputStream;
+import java.util.HashMap;
 
 @RunWith(AndroidJUnit4.class)
 public class OpenRosaXmlFetcherTest {

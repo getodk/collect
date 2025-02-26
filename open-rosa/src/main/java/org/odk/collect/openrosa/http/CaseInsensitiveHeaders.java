@@ -1,12 +1,13 @@
-package org.odk.collect.android.openrosa;
+package org.odk.collect.openrosa.http;
+
+import androidx.annotation.Nullable;
 
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Nullable;
-
 public interface CaseInsensitiveHeaders {
-    @Nullable Set<String> getHeaders();
+    @Nullable
+    Set<String> getHeaders();
 
     boolean containsHeader(String header);
 

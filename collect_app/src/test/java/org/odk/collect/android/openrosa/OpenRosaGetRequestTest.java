@@ -1,10 +1,17 @@
 package org.odk.collect.android.openrosa;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.rules.MockWebServerRule;
+import org.odk.collect.openrosa.http.HttpGetResult;
+import org.odk.collect.openrosa.http.OpenRosaConstants;
+import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
@@ -18,10 +25,6 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 
 public abstract class OpenRosaGetRequestTest {
 

@@ -1,11 +1,23 @@
 package org.odk.collect.android.openrosa;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static java.util.Arrays.asList;
+
 import androidx.annotation.NonNull;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.rules.MockWebServerRule;
+import org.odk.collect.openrosa.http.HttpPostResult;
+import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -23,16 +35,6 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
-
-import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isA;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 public abstract class OpenRosaPostRequestTest {
 

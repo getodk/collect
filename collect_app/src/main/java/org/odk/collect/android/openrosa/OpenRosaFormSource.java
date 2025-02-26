@@ -11,6 +11,9 @@ import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.ManifestFile;
 import org.odk.collect.forms.MediaFile;
+import org.odk.collect.openrosa.http.HttpGetResult;
+import org.odk.collect.openrosa.http.OpenRosaConstants;
+import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;

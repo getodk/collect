@@ -1,4 +1,4 @@
-package org.odk.collect.android.openrosa.okhttp;
+package org.odk.collect.openrosa.http.okhttp;
 
 import android.os.Build;
 
@@ -12,10 +12,8 @@ import com.burgstaller.okhttp.digest.CachingAuthenticator;
 import com.burgstaller.okhttp.digest.Credentials;
 import com.burgstaller.okhttp.digest.DigestAuthenticator;
 
-import org.odk.collect.android.openrosa.HttpCredentialsInterface;
-import org.odk.collect.android.openrosa.OpenRosaConstants;
-import org.odk.collect.android.openrosa.OpenRosaServerClient;
-import org.odk.collect.android.openrosa.OpenRosaServerClientProvider;
+import org.odk.collect.openrosa.http.HttpCredentialsInterface;
+import org.odk.collect.openrosa.http.OpenRosaConstants;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

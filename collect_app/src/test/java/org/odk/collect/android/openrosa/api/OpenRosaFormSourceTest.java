@@ -1,22 +1,5 @@
 package org.odk.collect.android.openrosa.api;
 
-import org.junit.Test;
-import org.odk.collect.android.openrosa.HttpGetResult;
-import org.odk.collect.android.openrosa.OpenRosaConstants;
-import org.odk.collect.android.openrosa.OpenRosaFormSource;
-import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.openrosa.OpenRosaResponseParser;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.forms.FormSourceException;
-
-import java.io.ByteArrayInputStream;
-import java.net.SocketTimeoutException;
-import java.net.URI;
-import java.net.UnknownHostException;
-import java.util.HashMap;
-
-import javax.net.ssl.SSLException;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
@@ -25,6 +8,23 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import org.junit.Test;
+import org.odk.collect.android.openrosa.OpenRosaFormSource;
+import org.odk.collect.android.openrosa.OpenRosaResponseParser;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.forms.FormSourceException;
+import org.odk.collect.openrosa.http.HttpGetResult;
+import org.odk.collect.openrosa.http.OpenRosaConstants;
+import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
+
+import java.io.ByteArrayInputStream;
+import java.net.SocketTimeoutException;
+import java.net.URI;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+
+import javax.net.ssl.SSLException;
 
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class OpenRosaFormSourceTest {

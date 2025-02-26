@@ -2,6 +2,8 @@ package org.odk.collect.android.openrosa;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.odk.collect.openrosa.http.CaseInsensitiveEmptyHeaders;
+import org.odk.collect.openrosa.http.CaseInsensitiveHeaders;
 
 public class CaseInsensitiveEmptyHeadersTest {
     private final CaseInsensitiveHeaders headers = new CaseInsensitiveEmptyHeaders();

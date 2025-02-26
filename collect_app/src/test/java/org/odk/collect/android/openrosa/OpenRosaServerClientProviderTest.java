@@ -11,6 +11,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.rules.MockWebServerRule;
+import org.odk.collect.openrosa.http.OpenRosaConstants;
+import org.odk.collect.openrosa.http.okhttp.OpenRosaServerClient;
+import org.odk.collect.openrosa.http.okhttp.OpenRosaServerClientProvider;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

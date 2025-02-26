@@ -1,11 +1,11 @@
-package org.odk.collect.android.openrosa.okhttp;
+package org.odk.collect.openrosa.http.okhttp;
 
-import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
+import androidx.annotation.Nullable;
+
+import org.odk.collect.openrosa.http.CaseInsensitiveHeaders;
 
 import java.util.List;
 import java.util.Set;
-
-import javax.annotation.Nullable;
 
 import okhttp3.Headers;
 

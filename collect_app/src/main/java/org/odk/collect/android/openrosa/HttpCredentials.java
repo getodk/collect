@@ -1,5 +1,7 @@
 package org.odk.collect.android.openrosa;
 
+import org.odk.collect.openrosa.http.HttpCredentialsInterface;
+
 public class HttpCredentials implements HttpCredentialsInterface {
 
     private final String username;

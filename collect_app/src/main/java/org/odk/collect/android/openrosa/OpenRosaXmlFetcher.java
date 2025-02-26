@@ -7,6 +7,8 @@ import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.openrosa.http.HttpGetResult;
+import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;

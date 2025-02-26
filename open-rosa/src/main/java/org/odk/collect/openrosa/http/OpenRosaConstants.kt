@@ -1,4 +1,4 @@
-package org.odk.collect.android.openrosa
+package org.odk.collect.openrosa.http
 
 object OpenRosaConstants {
     // HTTP Header strings

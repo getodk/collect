@@ -6,7 +6,9 @@ import static org.hamcrest.Matchers.not;
 import static org.odk.collect.android.openrosa.support.MockWebServerHelper.buildRequest;
 
 import org.junit.Test;
-import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.openrosa.http.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.openrosa.http.okhttp.OpenRosaServerClient;
+import org.odk.collect.openrosa.http.okhttp.OpenRosaServerClientProvider;
 import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
