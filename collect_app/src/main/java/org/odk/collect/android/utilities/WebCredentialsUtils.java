@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import org.odk.collect.android.openrosa.OpenRosaXmlFetcher;
 import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.openrosa.http.HttpCredentials;
 import org.odk.collect.openrosa.http.HttpCredentialsInterface;
@@ -17,7 +18,7 @@ import java.util.Map;
 import javax.inject.Singleton;
 
 @Singleton
-public class WebCredentialsUtils {
+public class WebCredentialsUtils implements OpenRosaXmlFetcher.WebCredentialsProvider {
 
     private final Settings generalSettings;
 

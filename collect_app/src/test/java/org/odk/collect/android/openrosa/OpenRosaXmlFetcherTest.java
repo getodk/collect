@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.utilities.DocumentFetchResult;
+import org.odk.collect.openrosa.forms.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.openrosa.http.HttpGetResult;
 import org.odk.collect.openrosa.http.OpenRosaConstants;

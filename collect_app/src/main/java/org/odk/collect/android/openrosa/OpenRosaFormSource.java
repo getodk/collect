@@ -4,13 +4,12 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.utilities.DocumentFetchResult;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.FormListItem;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.ManifestFile;
 import org.odk.collect.forms.MediaFile;
+import org.odk.collect.openrosa.forms.DocumentFetchResult;
 import org.odk.collect.openrosa.http.HttpGetResult;
 import org.odk.collect.openrosa.http.OpenRosaConstants;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
@@ -28,14 +27,14 @@ public class OpenRosaFormSource implements FormSource {
 
     private final OpenRosaXmlFetcher openRosaXMLFetcher;
     private final OpenRosaResponseParser openRosaResponseParser;
-    private final WebCredentialsUtils webCredentialsUtils;
+    private final OpenRosaXmlFetcher.WebCredentialsProvider webCredentialsProvider;
 
     private String serverURL;
 
-    public OpenRosaFormSource(String serverURL, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, OpenRosaResponseParser openRosaResponseParser) {
+    public OpenRosaFormSource(String serverURL, OpenRosaHttpInterface openRosaHttpInterface, OpenRosaXmlFetcher.WebCredentialsProvider webCredentialsProvider, OpenRosaResponseParser openRosaResponseParser) {
         this.openRosaResponseParser = openRosaResponseParser;
-        this.webCredentialsUtils = webCredentialsUtils;
-        this.openRosaXMLFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, this.webCredentialsUtils);
+        this.webCredentialsProvider = webCredentialsProvider;
+        this.openRosaXMLFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, this.webCredentialsProvider);
         this.serverURL = serverURL;
     }
 
@@ -122,8 +121,8 @@ public class OpenRosaFormSource implements FormSource {
         this.serverURL = url;
     }
 
-    public void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils) {
-        this.openRosaXMLFetcher.updateWebCredentialsUtils(webCredentialsUtils);
+    public void updateWebCredentialsUtils(OpenRosaXmlFetcher.WebCredentialsProvider webCredentialsProvider) {
+        this.openRosaXMLFetcher.updateWebCredentialsProvider(webCredentialsProvider);
     }
 
     @NotNull
@@ -159,9 +158,5 @@ public class OpenRosaFormSource implements FormSource {
 
     public String getServerURL() {
         return serverURL;
-    }
-
-    public WebCredentialsUtils getWebCredentialsUtils() {
-        return webCredentialsUtils;
     }
 }

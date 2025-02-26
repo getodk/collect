@@ -5,8 +5,8 @@ import androidx.annotation.Nullable;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Document;
-import org.odk.collect.android.utilities.DocumentFetchResult;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.openrosa.forms.DocumentFetchResult;
+import org.odk.collect.openrosa.http.HttpCredentialsInterface;
 import org.odk.collect.openrosa.http.HttpGetResult;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 
@@ -24,14 +24,14 @@ import timber.log.Timber;
  * of the parsing logic here might be better broken out somewhere else however if it can be used
  * in other scenarios.
  */
-class OpenRosaXmlFetcher {
+public class OpenRosaXmlFetcher {
 
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
     private final OpenRosaHttpInterface httpInterface;
-    private WebCredentialsUtils webCredentialsUtils;
+    private WebCredentialsProvider webCredentialsUtils;
 
-    OpenRosaXmlFetcher(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+    OpenRosaXmlFetcher(OpenRosaHttpInterface httpInterface, WebCredentialsProvider webCredentialsUtils) {
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
     }
@@ -92,7 +92,11 @@ class OpenRosaXmlFetcher {
         return httpInterface.executeGetRequest(uri, contentType, webCredentialsUtils.getCredentials(uri));
     }
 
-    public void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils) {
+    public void updateWebCredentialsProvider(WebCredentialsProvider webCredentialsUtils) {
         this.webCredentialsUtils = webCredentialsUtils;
+    }
+
+    public interface WebCredentialsProvider {
+        HttpCredentialsInterface getCredentials(@NonNull URI url);
     }
 }
