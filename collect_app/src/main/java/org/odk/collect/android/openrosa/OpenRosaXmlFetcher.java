@@ -92,10 +92,6 @@ class OpenRosaXmlFetcher {
         return httpInterface.executeGetRequest(uri, contentType, webCredentialsUtils.getCredentials(uri));
     }
 
-    public WebCredentialsUtils getWebCredentialsUtils() {
-        return webCredentialsUtils;
-    }
-
     public void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils) {
         this.webCredentialsUtils = webCredentialsUtils;
     }

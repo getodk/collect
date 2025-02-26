@@ -11,12 +11,12 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.odk.collect.android.openrosa.OpenRosaFormSource;
-import org.odk.collect.android.openrosa.OpenRosaResponseParser;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.openrosa.http.HttpGetResult;
 import org.odk.collect.openrosa.http.OpenRosaConstants;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
+import org.odk.collect.openrosa.parse.OpenRosaResponseParser;
 
 import java.io.ByteArrayInputStream;
 import java.net.SocketTimeoutException;

@@ -1,4 +1,4 @@
-package org.odk.collect.android.openrosa
+package org.odk.collect.openrosa.parse
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

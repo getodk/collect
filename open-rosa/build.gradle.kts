@@ -45,6 +45,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":shared"))
+    implementation(project(":forms"))
 
     implementation(libs.kotlinStdlib)
     implementation(libs.timber)
@@ -52,6 +53,13 @@ dependencies {
     implementation(libs.okHttpDigest)
     implementation(libs.okHttpTls)
     implementation(libs.commonsIo)
+    implementation(libs.slf4jApi)
+    implementation(libs.javarosa) {
+        exclude(group = "commons-io")
+        exclude(group = "joda-time")
+        exclude(group = "org.slf4j")
+        exclude(group = "org.hamcrest", module = "hamcrest-all")
+    }
 
     testImplementation(libs.junit)
     testImplementation(libs.hamcrest)

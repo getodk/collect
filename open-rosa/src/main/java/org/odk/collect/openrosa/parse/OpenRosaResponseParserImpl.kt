@@ -1,4 +1,4 @@
-package org.odk.collect.android.openrosa
+package org.odk.collect.openrosa.parse
 
 import org.javarosa.xform.parse.XFormParser
 import org.kxml2.kdom.Document
@@ -8,7 +8,8 @@ import org.odk.collect.forms.MediaFile
 import org.odk.collect.shared.strings.StringUtils.isBlank
 import java.io.File
 
-class OpenRosaResponseParserImpl : OpenRosaResponseParser {
+class OpenRosaResponseParserImpl :
+    OpenRosaResponseParser {
 
     override fun parseFormList(document: Document): List<FormListItem>? {
         // Attempt OpenRosa 1.0 parsing
@@ -105,7 +106,9 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                     }
                     "hash" -> {
                         hash = XFormParser.getXMLText(child, true)
-                        hash = if (hash != null && (hash.isEmpty() || !hash.startsWith(MD5_STRING_PREFIX))) {
+                        hash = if (hash != null && (hash.isEmpty() || !hash.startsWith(
+                                MD5_STRING_PREFIX
+                            ))) {
                             null
                         } else {
                             hash.substring(MD5_STRING_PREFIX.length)

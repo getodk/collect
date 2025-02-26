@@ -14,6 +14,7 @@ import org.odk.collect.forms.MediaFile;
 import org.odk.collect.openrosa.http.HttpGetResult;
 import org.odk.collect.openrosa.http.OpenRosaConstants;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
+import org.odk.collect.openrosa.parse.OpenRosaResponseParser;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
