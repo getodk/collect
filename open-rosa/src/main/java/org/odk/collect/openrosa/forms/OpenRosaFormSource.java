@@ -154,8 +154,4 @@ public class OpenRosaFormSource implements FormSource {
         downloadListUrl += OpenRosaConstants.FORM_LIST;
         return downloadListUrl;
     }
-
-    public String getServerURL() {
-        return serverURL;
-    }
 }
