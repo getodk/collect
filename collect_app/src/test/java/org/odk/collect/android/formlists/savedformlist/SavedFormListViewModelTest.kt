@@ -110,9 +110,10 @@ class SavedFormListViewModelTest {
 
     @Test
     fun `can sort forms by ascending name`() {
-        val a = InstanceFixtures.instance(displayName = "A")
+        val aa = InstanceFixtures.instance(displayName = "Aa")
+        val ab = InstanceFixtures.instance(displayName = "ab")
         val b = InstanceFixtures.instance(displayName = "B")
-        saveForms("projectId", listOf(b, a),)
+        saveForms("projectId", listOf(b, aa, ab),)
 
         val viewModel =
             SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
@@ -120,15 +121,16 @@ class SavedFormListViewModelTest {
         viewModel.sortOrder = SortOrder.NAME_ASC
         assertThat(
             viewModel.formsToDisplay.getOrAwaitValue(scheduler),
-            contains(a, b)
+            contains(aa, ab, b)
         )
     }
 
     @Test
     fun `can sort forms by descending name`() {
-        val a = InstanceFixtures.instance(displayName = "A")
+        val aa = InstanceFixtures.instance(displayName = "Aa")
+        val ab = InstanceFixtures.instance(displayName = "ab")
         val b = InstanceFixtures.instance(displayName = "B")
-        saveForms("projectId", listOf(a, b),)
+        saveForms("projectId", listOf(b, aa, ab),)
 
         val viewModel =
             SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
@@ -136,7 +138,7 @@ class SavedFormListViewModelTest {
         viewModel.sortOrder = SortOrder.NAME_DESC
         assertThat(
             viewModel.formsToDisplay.getOrAwaitValue(scheduler),
-            contains(b, a)
+            contains(b, ab, aa)
         )
     }
 
