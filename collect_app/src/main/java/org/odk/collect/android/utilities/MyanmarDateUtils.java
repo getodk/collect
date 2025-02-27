@@ -88,7 +88,7 @@ public final class MyanmarDateUtils {
     }
 
     public static int getMonthLength(int myanmarYear, int monthIndex) {
-        MyanmarDate myanmarDate = createMyanmarDate(myanmarYear, monthIndex, getFirstMonthDay(myanmarYear, monthIndex));
+        MyanmarDate myanmarDate = MyanmarDateUtils.createMyanmarDate(myanmarYear, monthIndex, MyanmarDateUtils.getFirstMonthDay(myanmarYear, monthIndex));
         return getMonthLength(myanmarDate);
     }
 

@@ -155,7 +155,7 @@ public class RangeWidgetUtils {
     }
 
     public static void setUpRangePickerWidget(Context context, RangePickerWidgetAnswerBinding binding, FormEntryPrompt prompt) {
-        if (isRangePickerWidgetValid((RangeQuestion) prompt.getQuestion(), binding.widgetButton)) {
+        if (RangeWidgetUtils.isRangePickerWidgetValid((RangeQuestion) prompt.getQuestion(), binding.widgetButton)) {
             if (prompt.getAnswerValue() != null) {
                 BigDecimal actualValue = new BigDecimal(prompt.getAnswerValue().getValue().toString());
                 binding.widgetAnswerText.setText(String.valueOf(actualValue));

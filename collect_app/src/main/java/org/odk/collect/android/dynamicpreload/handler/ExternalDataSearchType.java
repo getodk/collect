@@ -68,7 +68,7 @@ enum ExternalDataSearchType {
         if (keyword == null) {
             return fallback;
         }
-        for (ExternalDataSearchType externalDataSearchType : values()) {
+        for (ExternalDataSearchType externalDataSearchType : ExternalDataSearchType.values()) {
             if (externalDataSearchType.getKeyword().trim().equalsIgnoreCase(keyword.trim())) {
                 return externalDataSearchType;
             }

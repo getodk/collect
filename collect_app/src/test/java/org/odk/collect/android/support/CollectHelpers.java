@@ -72,7 +72,7 @@ public final class CollectHelpers {
 
         application.getState().clear();
 
-        AppDependencyComponent newComponent = overrideAppDependencyModule(dependencies);
+        AppDependencyComponent newComponent = CollectHelpers.overrideAppDependencyModule(dependencies);
         newComponent.applicationInitializer().initialize();
     }
 

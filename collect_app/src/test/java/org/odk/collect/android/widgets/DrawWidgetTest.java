@@ -119,7 +119,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
         currentFile = new File(imagePath);
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(USER_SPECIFIED_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.USER_SPECIFIED_IMAGE_ANSWER)
                 .build();
 
         DrawWidget widget = createWidget();
@@ -134,7 +134,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     public void whenPromptHasDefaultAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DEFAULT_IMAGE_ANSWER, imagePath)
+                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -194,7 +194,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
         String imagePath = file.getAbsolutePath();
 
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DEFAULT_IMAGE_ANSWER, imagePath)
+                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -209,7 +209,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
                 .build();
 
         Intent intent = getIntentLaunchedByClick(R.id.draw_button);
@@ -221,7 +221,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     @Test
     public void whenPromptHasDefaultAnswerThatDoesNotExist_doNotPassUriToDrawActivity() throws Exception {
         ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
-                new Pair<>(DEFAULT_IMAGE_ANSWER, "/something")
+                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, "/something")
         ));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -231,7 +231,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
         });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withAnswerDisplayText(DEFAULT_IMAGE_ANSWER)
+                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
                 .build();
 
         Intent intent = getIntentLaunchedByClick(R.id.draw_button);

@@ -18,6 +18,7 @@ import org.odk.collect.android.widgets.base.SelectWidgetTest;
 import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -75,7 +76,7 @@ public class RankingWidgetTest extends SelectWidgetTest<RankingWidget, MultipleI
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.setValueChangedListener(valueChangedListener);
         widget.setData(
-                asList(
+                Arrays.asList(
                         new SelectChoice("a", "a a"),
                         new SelectChoice("a", "b b")
                 )
