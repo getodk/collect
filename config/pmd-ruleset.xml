@@ -59,7 +59,7 @@
         <exclude name="TooManyStaticImports" />
         <exclude name="UseUnderscoresInNumericLiterals" />
         <exclude name="LinguisticNaming" />
-        <exclude name="UnnecessaryFullyQualifiedName" />
+        <exclude name="UnnecessaryFullyQualifiedName" />    <!-- Decided not to use in #6613 -->
         <exclude name="UnnecessaryCast" />
         <exclude name="UselessParentheses" />               <!-- Decided not to use in #1519 -->
     </rule>
