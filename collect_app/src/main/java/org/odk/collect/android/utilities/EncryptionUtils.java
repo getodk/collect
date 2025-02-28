@@ -53,6 +53,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.crypto.BadPaddingException;
@@ -137,10 +138,7 @@ public class EncryptionUtils {
                 md.update(instanceMetadata.instanceId.getBytes(UTF_8));
                 md.update(key);
                 byte[] messageDigest = md.digest();
-                ivSeedArray = new byte[IV_BYTE_LENGTH];
-                for (int i = 0; i < IV_BYTE_LENGTH; ++i) {
-                    ivSeedArray[i] = messageDigest[i % messageDigest.length];
-                }
+                ivSeedArray = Arrays.copyOf(messageDigest, IV_BYTE_LENGTH);
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
                 Timber.e(e, "Unable to set md5 hash for instanceid and symmetric key.");
                 throw new IllegalArgumentException(e.getMessage());
