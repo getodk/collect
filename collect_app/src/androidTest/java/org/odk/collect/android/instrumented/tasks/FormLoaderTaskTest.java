@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.StorageUtils;

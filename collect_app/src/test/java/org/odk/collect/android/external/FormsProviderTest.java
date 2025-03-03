@@ -29,7 +29,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectHelpers;
