@@ -55,13 +55,13 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
 
     private final Map<Pair<String, HttpCredentialsInterface>, OkHttpOpenRosaServerClient> clients = new HashMap<>();
 
-    public OkHttpOpenRosaServerClientProvider(@NonNull OkHttpClient baseClient) {
-        this(baseClient, null);
-    }
-
     public OkHttpOpenRosaServerClientProvider(@NonNull OkHttpClient baseClient, String cacheDir) {
         this.baseClient = baseClient;
         this.cacheDir = cacheDir;
+    }
+
+    public OkHttpOpenRosaServerClientProvider(String cacheDir) {
+        this(new OkHttpClient(), cacheDir);
     }
 
     @Override

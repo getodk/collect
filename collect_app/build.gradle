@@ -292,8 +292,6 @@ dependencies {
     implementation libs.firebaseAnalytics
     implementation libs.firebaseCrashlytics
 
-    implementation libs.okHttp
-    
     implementation libs.persianJodaTime
     implementation libs.myanmarCalendar
     implementation libs.bikramSambat

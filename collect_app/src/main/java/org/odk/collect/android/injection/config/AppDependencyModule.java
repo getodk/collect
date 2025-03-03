@@ -115,7 +115,6 @@ import org.odk.collect.metadata.SettingsInstallIDProvider;
 import org.odk.collect.openrosa.http.CollectThenSystemContentTypeMapper;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 import org.odk.collect.openrosa.http.okhttp.OkHttpConnection;
-import org.odk.collect.openrosa.http.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
@@ -146,7 +145,6 @@ import dagger.Module;
 import dagger.Provides;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
-import okhttp3.OkHttpClient;
 
 /**
  * Add dependency providers here (annotated with @Provides)
@@ -177,7 +175,7 @@ public class AppDependencyModule {
     public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider, Application application, VersionInformation versionInformation) {
         String cacheDir = application.getCacheDir().getAbsolutePath();
         return new OkHttpConnection(
-                new OkHttpOpenRosaServerClientProvider(new OkHttpClient(), cacheDir),
+                cacheDir,
                 new CollectThenSystemContentTypeMapper(mimeTypeMap),
                 userAgentProvider.getUserAgent()
         );

@@ -45,8 +45,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     private final String userAgent;
 
-    public OkHttpConnection(@NonNull OkHttpOpenRosaServerClientProvider clientFactory, @NonNull FileToContentTypeMapper fileToContentTypeMapper, @NonNull String userAgent) {
-        this.clientFactory = clientFactory;
+    public OkHttpConnection(@Nullable String cacheDir, @NonNull FileToContentTypeMapper fileToContentTypeMapper, @NonNull String userAgent) {
+        this.clientFactory = new OkHttpOpenRosaServerClientProvider(cacheDir);
         this.fileToContentTypeMapper = fileToContentTypeMapper;
         this.userAgent = userAgent;
     }
