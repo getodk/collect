@@ -20,10 +20,6 @@ abstract class BaseArbitraryFileWidget(
 ) : QuestionWidget(context, dependencies, questionDetails), FileWidget, WidgetDataReceiver {
     var answerFile: File? = null
 
-    init {
-        render()
-    }
-
     override fun getAnswer(): IAnswerData? {
         return if (answerFile != null) StringData(answerFile!!.name) else null
     }
