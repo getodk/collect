@@ -293,8 +293,6 @@ dependencies {
     implementation libs.firebaseCrashlytics
 
     implementation libs.okHttp
-    implementation libs.okHttpTls
-    implementation libs.okHttpDigest
     
     implementation libs.persianJodaTime
     implementation libs.myanmarCalendar
@@ -362,8 +360,6 @@ dependencies {
 
     testImplementation libs.androidxTestExtJunit
     testImplementation libs.androidxArchCoreTesting
-    testImplementation libs.okhttp3Mockwebserver
-    testImplementation libs.okHttpTls
 
     testImplementation libs.hamcrest
 
@@ -384,7 +380,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 
-    androidTestImplementation libs.okhttp3Mockwebserver
     androidTestImplementation libs.androidxWorkTesting
     androidTestImplementation libs.uiautomator
 
