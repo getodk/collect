@@ -50,7 +50,6 @@ class BarcodeWidget(
             binding.barcodeButton.text = getContext().getString(R.string.replace_barcode)
         }
         widgetAnswer.setAnswer(answer)
-        widgetAnswer.setTextSize(answerFontSize.toFloat())
         binding.answerViewContainer.addView(widgetAnswer)
         updateAnswerVisibility()
 
