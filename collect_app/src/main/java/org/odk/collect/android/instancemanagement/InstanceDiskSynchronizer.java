@@ -23,7 +23,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.InstanceMetadata;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.storage.StoragePathProvider;

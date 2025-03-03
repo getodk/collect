@@ -27,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 import org.odk.collect.qrcode.mlkit.MlKitBarcodeScannerViewFactory;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.CollectDrawDependencyModule;
 import org.odk.collect.android.injection.config.CollectGeoDependencyModule;
 import org.odk.collect.android.injection.config.CollectGoogleMapsDependencyModule;
