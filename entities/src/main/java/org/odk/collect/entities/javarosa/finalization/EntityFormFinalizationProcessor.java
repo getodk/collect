@@ -11,12 +11,12 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryFinalizationProcessor;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.model.xform.XPathReference;
+import org.odk.collect.entities.javarosa.parse.EntityFormExtra;
 import org.odk.collect.entities.javarosa.spec.EntityAction;
 import org.odk.collect.entities.javarosa.spec.EntityFormParser;
-import org.odk.collect.entities.javarosa.parse.EntityFormExtra;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import kotlin.Pair;
 
@@ -47,16 +47,20 @@ public class EntityFormFinalizationProcessor implements FormEntryFinalizationPro
     }
 
     private FormEntity createEntity(TreeElement entityElement, String dataset, List<Pair<XPathReference, String>> saveTos, FormInstance mainInstance, EntityAction action) {
-        List<Pair<String, String>> fields = saveTos.stream().map(saveTo -> {
+        ArrayList<Pair<String, String>> fields = new ArrayList<>();
+        for (Pair<XPathReference, String> saveTo : saveTos) {
             IDataReference reference = saveTo.getFirst();
-            IAnswerData answerData = mainInstance.resolveReference(reference).getValue();
+            TreeElement element = mainInstance.resolveReference(reference);
 
-            if (answerData != null) {
-                return new Pair<>(saveTo.getSecond(), answerData.uncast().getString());
-            } else {
-                return new Pair<>(saveTo.getSecond(), "");
+            if (element.isRelevant()) {
+                IAnswerData answerData = element.getValue();
+                if (answerData != null) {
+                    fields.add(new Pair<>(saveTo.getSecond(), answerData.uncast().getString()));
+                } else {
+                    fields.add(new Pair<>(saveTo.getSecond(), ""));
+                }
             }
-        }).collect(Collectors.toList());
+        }
 
         String id = EntityFormParser.parseId(entityElement);
         String label = EntityFormParser.parseLabel(entityElement);

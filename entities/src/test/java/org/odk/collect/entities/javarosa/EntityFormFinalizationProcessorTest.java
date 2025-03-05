@@ -8,8 +8,11 @@ import static org.javarosa.test.XFormsElement.head;
 import static org.javarosa.test.XFormsElement.input;
 import static org.javarosa.test.XFormsElement.mainInstance;
 import static org.javarosa.test.XFormsElement.model;
+import static org.javarosa.test.XFormsElement.setvalue;
 import static org.javarosa.test.XFormsElement.t;
 import static org.javarosa.test.XFormsElement.title;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.test.Scenario;
@@ -21,7 +24,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra;
 import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor;
+import org.odk.collect.entities.javarosa.finalization.FormEntity;
 import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory;
+
+import java.util.List;
+
+import kotlin.Pair;
 
 public class EntityFormFinalizationProcessorTest {
 
@@ -60,5 +68,44 @@ public class EntityFormFinalizationProcessorTest {
         FormEntryModel model = scenario.getFormEntryController().getModel();
         processor.processForm(model);
         assertThat(model.getExtras().get(EntitiesExtra.class), equalTo(null));
+    }
+
+    @Test
+    public void whenSaveToIsNotRelevant_itIsNotIncludedInEntity() throws Exception {
+        Scenario scenario = Scenario.init("Create entity form", XFormsElement.html(
+                asList(
+                        new Pair<>("entities", "http://www.opendatakit.org/xforms/entities")
+                ),
+                head(
+                        title("Create entity form"),
+                        model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
+                                mainInstance(
+                                        t("data id=\"create-entity-form\"",
+                                                t("name"),
+                                                t("meta",
+                                                        t("entity dataset=\"people\" create=\"1\" id=\"\"",
+                                                                t("label")
+                                                        )
+                                                )
+                                        )
+                                ),
+                                bind("/data/name").type("string").withAttribute("entities", "saveto", "name").relevant("false()"),
+                                bind("/data/meta/entity/@id").type("string"),
+                                bind("/data/meta/entity/label").type("string").calculate("/data/name"),
+                                setvalue("odk-instance-first-load", "/data/meta/entity/@id", "uuid()")
+                        )
+                ),
+                body(
+                        input("/data/name")
+                )
+        ));
+
+        EntityFormFinalizationProcessor processor = new EntityFormFinalizationProcessor();
+        FormEntryModel model = scenario.getFormEntryController().getModel();
+        processor.processForm(model);
+
+        List<FormEntity> entities = model.getExtras().get(EntitiesExtra.class).getEntities();
+        assertThat(entities.size(), equalTo(1));
+        assertThat(entities.get(0).properties, equalTo(emptyList()));
     }
 }
