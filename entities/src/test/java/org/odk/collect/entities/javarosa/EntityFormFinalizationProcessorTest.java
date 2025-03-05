@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.javarosa.test.BindBuilderXFormsElement.bind;
 import static org.javarosa.test.XFormsElement.body;
+import static org.javarosa.test.XFormsElement.group;
 import static org.javarosa.test.XFormsElement.head;
 import static org.javarosa.test.XFormsElement.input;
 import static org.javarosa.test.XFormsElement.mainInstance;
@@ -48,20 +49,20 @@ public class EntityFormFinalizationProcessorTest {
     @Test
     public void whenFormDoesNotHaveEntityElement_addsNoEntitiesToExtras() throws Exception {
         Scenario scenario = Scenario.init("Normal form", XFormsElement.html(
-            head(
-                title("Normal form"),
-                model(
-                    mainInstance(
-                        t("data id=\"normal\"",
-                            t("name")
+                head(
+                        title("Normal form"),
+                        model(
+                                mainInstance(
+                                        t("data id=\"normal\"",
+                                                t("name")
+                                        )
+                                ),
+                                bind("/data/name").type("string")
                         )
-                    ),
-                    bind("/data/name").type("string")
+                ),
+                body(
+                        input("/data/name")
                 )
-            ),
-            body(
-                input("/data/name")
-            )
         ));
 
         EntityFormFinalizationProcessor processor = new EntityFormFinalizationProcessor();
@@ -97,6 +98,51 @@ public class EntityFormFinalizationProcessorTest {
                 ),
                 body(
                         input("/data/name")
+                )
+        ));
+
+        EntityFormFinalizationProcessor processor = new EntityFormFinalizationProcessor();
+        FormEntryModel model = scenario.getFormEntryController().getModel();
+        processor.processForm(model);
+
+        List<FormEntity> entities = model.getExtras().get(EntitiesExtra.class).getEntities();
+        assertThat(entities.size(), equalTo(1));
+        assertThat(entities.get(0).properties, equalTo(emptyList()));
+    }
+
+    @Test
+    public void whenSaveToIsInNotRelevantGroup_itIsNotIncludedInEntity() throws Exception {
+        Scenario scenario = Scenario.init("Create entity form", XFormsElement.html(
+                asList(
+                        new Pair<>("entities", "http://www.opendatakit.org/xforms/entities")
+                ),
+                head(
+                        title("Create entity form"),
+                        model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
+                                mainInstance(
+                                        t("data id=\"create-entity-form\"",
+                                                t("group",
+                                                        t("name")
+                                                ),
+                                                t("meta",
+                                                        t("entity dataset=\"people\" create=\"1\" id=\"\"",
+                                                                t("label")
+                                                        )
+                                                )
+                                        )
+                                ),
+                                bind("/data/group").relevant("false()"),
+                                bind("/data/group/name").type("string").withAttribute("entities", "saveto", "name"),
+                                bind("/data/meta/entity/@id").type("string"),
+                                bind("/data/meta/entity/label").type("string").calculate("/data/group/name"),
+                                setvalue("odk-instance-first-load", "/data/meta/entity/@id", "uuid()")
+                        )
+                ),
+                body(
+                        group("/data/group",
+                                input("/data/group/name")
+                        )
+
                 )
         ));
 
