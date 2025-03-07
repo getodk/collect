@@ -36,6 +36,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.location.LocationListener;
 
@@ -106,14 +109,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Inject
     SettingsProvider settingsProvider;
 
-    private final MapFragmentDelegate mapFragmentDelegate = new MapFragmentDelegate(
-            this,
-            () -> mapConfigurator,
-            () -> settingsProvider.getUnprotectedSettings(),
-            () -> settingsProvider.getMetaSettings(),
-            this::onConfigChanged
-    );
-
     private MapView map;
     private ReadyListener readyListener;
     private PointListener clickListener;
@@ -130,8 +125,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private WebMapService webMapService;
     private File referenceLayerFile;
     private TilesOverlay referenceOverlay;
-    private boolean hasCenter;
     private boolean isSystemZooming;
+    private ZoomViewModel zoomViewModel;
 
     @Override
     public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
@@ -141,7 +136,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mapFragmentDelegate.onCreate(savedInstanceState);
     }
 
     @Override
@@ -149,12 +143,21 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         super.onAttach(context);
         OsmDroidDependencyComponent component = ((OsmDroidDependencyComponentProvider) context.getApplicationContext()).getOsmDroidDependencyComponent();
         component.inject(this);
+
+        ViewModelProvider.Factory viewModelFactory = new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new ZoomViewModel(settingsProvider.getMetaSettings());
+            }
+        };
+
+        zoomViewModel = new ViewModelProvider(this, viewModelFactory).get(ZoomViewModel.class);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mapFragmentDelegate.onStart();
     }
 
     @Override
@@ -172,13 +175,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public void onStop() {
         super.onStop();
-        mapFragmentDelegate.onStop();
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        mapFragmentDelegate.onSaveInstanceState(outState);
     }
 
     @Override
@@ -208,20 +209,21 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             @Override
             public boolean onZoom(ZoomEvent event) {
                 if (!isSystemZooming) {
-                    mapFragmentDelegate.onZoomLevelChangedByUserListener((float) event.getZoomLevel());
+                    zoomViewModel.onUserMove(getCenter(), event.getZoomLevel());
+
                 }
                 return false;
             }
 
             @Override
             public boolean onScroll(ScrollEvent event) {
+                zoomViewModel.onUserMove(getCenter(), event.getSource().getZoomLevelDouble());
                 return false;
             }
         });
         addAttributionAndMapEventsOverlays();
         loadReferenceOverlay();
         addMapLayoutChangeListener(map);
-
         osmLocationClientWrapper = new OsmLocationClientWrapper(locationClient);
         myLocationOverlay = new MyLocationNewOverlay(osmLocationClientWrapper, map);
         myLocationOverlay.setDrawAccuracyEnabled(true);
@@ -235,17 +237,71 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             // could already be detached, which makes it unsafe to use.  Only
             // call the ReadyListener if this fragment is still attached.
             if (readyListener != null && getActivity() != null) {
-                mapFragmentDelegate.onReady();
                 readyListener.onReady(this);
             }
         }, 100);
+
+        zoomViewModel.getZoom().observe(getViewLifecycleOwner(), new Observer<>() {
+            private boolean hasZoomed;
+
+            @Override
+            public void onChanged(Zoom zoom) {
+                if (zoom.getUser() && hasZoomed) {
+                    // Ignore zooms that ahve already happened
+                } else if (zoom instanceof Zoom.Point) {
+                    systemZoom(((Zoom.Point) zoom).getPoint(), zoom.getLevel());
+                } else if (zoom instanceof Zoom.Box) {
+                    Zoom.Box boxZoom = (Zoom.Box) zoom;
+                    List<MapPoint> points = boxZoom.getBox();
+                    boolean animate = boxZoom.getAnimate();
+                    Double scaleFactor = boxZoom.getLevel();
+
+                    int count = 0;
+                    List<GeoPoint> geoPoints = new ArrayList<>();
+                    MapPoint lastPoint = null;
+                    for (MapPoint point : points) {
+                        lastPoint = point;
+                        geoPoints.add(toGeoPoint(point));
+                        count++;
+                    }
+                    if (count == 1) {
+                        systemZoom(lastPoint, null);
+                    } else if (count > 1) {
+                        // TODO(ping): Find a better solution.
+                        // zoomToBoundingBox sometimes fails to zoom correctly, either
+                        // zooming by the correct amount but leaving the bounding box
+                        // off-center, or centering correctly but not zooming in enough.
+                        // Adding a 100-ms delay avoids the problem most of the time, but
+                        // not always; it's here because the old GeoShapeOsmMapActivity
+                        // did it, not because it's known to be the best solution.
+                        final BoundingBox box = BoundingBox.fromGeoPoints(geoPoints)
+                                .increaseByScale((float) (1 / scaleFactor));
+                        new Handler().postDelayed(() -> {
+                            isSystemZooming = true;
+                            map.zoomToBoundingBox(box, animate);
+                            isSystemZooming = false;
+                        }, 100);
+                    }
+                }
+
+                hasZoomed = true;
+            }
+        });
+
         return view;
+    }
+
+    private void systemZoom(MapPoint point, Double level) {
+        isSystemZooming = true;
+        map.getController().setZoom((int) Math.round(level));
+        map.getController().setCenter(toGeoPoint(point));
+        isSystemZooming = false;
     }
 
     @NonNull
     @Override
     public MapFragmentDelegate getMapFragmentDelegate() {
-        return mapFragmentDelegate;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -256,15 +312,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override
     public void setCenter(@Nullable MapPoint center, boolean animate) {
-        if (center != null) {
-            if (animate) {
-                map.getController().animateTo(toGeoPoint(center));
-            } else {
-                map.getController().setCenter(toGeoPoint(center));
-            }
-        }
-
-        hasCenter = true;
+        zoomViewModel.moveTo(center, animate);
     }
 
     @Override
@@ -274,56 +322,24 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override
     public void zoomToPoint(@Nullable MapPoint center, boolean animate) {
-        zoomToPoint(center, POINT_ZOOM, animate);
+        zoomViewModel.zoomTo(center, null, animate);
     }
 
     @Override
     public void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate) {
-        // We're ignoring the 'animate' flag because OSMDroid doesn't provide
-        // support for simultaneously animating the viewport center and zoom level.
-        if (center != null) {
-            isSystemZooming = true;
-            // setCenter() must be done last; setZoom() does not preserve the center.
-            map.getController().setZoom((int) Math.round(zoom));
-            map.getController().setCenter(toGeoPoint(center));
-            isSystemZooming = false;
-        }
-
-        hasCenter = true;
+        zoomViewModel.zoomTo(center, zoom, animate);
     }
 
     @Override
     public void zoomToBoundingBox(@Nullable Iterable<MapPoint> points, double scaleFactor, boolean animate) {
-        if (points != null) {
-            int count = 0;
-            List<GeoPoint> geoPoints = new ArrayList<>();
-            MapPoint lastPoint = null;
-            for (MapPoint point : points) {
-                lastPoint = point;
-                geoPoints.add(toGeoPoint(point));
-                count++;
-            }
-            if (count == 1) {
-                zoomToPoint(lastPoint, animate);
-            } else if (count > 1) {
-                // TODO(ping): Find a better solution.
-                // zoomToBoundingBox sometimes fails to zoom correctly, either
-                // zooming by the correct amount but leaving the bounding box
-                // off-center, or centering correctly but not zooming in enough.
-                // Adding a 100-ms delay avoids the problem most of the time, but
-                // not always; it's here because the old GeoShapeOsmMapActivity
-                // did it, not because it's known to be the best solution.
-                final BoundingBox box = BoundingBox.fromGeoPoints(geoPoints)
-                        .increaseByScale((float) (1 / scaleFactor));
-                new Handler().postDelayed(() -> {
-                    isSystemZooming = true;
-                    map.zoomToBoundingBox(box, animate);
-                    isSystemZooming = false;
-                }, 100);
-            }
-        }
+        ArrayList<MapPoint> box = new ArrayList<>();
+        points.forEach(box::add);
+        zoomViewModel.zoomTo(box, scaleFactor, animate);
+    }
 
-        hasCenter = true;
+    @Override
+    public void zoomToCurrentLocation(@Nullable MapPoint center) {
+        zoomViewModel.zoomToCurrentLocation(center);
     }
 
     @Override
@@ -446,7 +462,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override
     public boolean hasCenter() {
-        return hasCenter;
+        return zoomViewModel.getZoom().getValue() != null;
     }
 
     @Override
