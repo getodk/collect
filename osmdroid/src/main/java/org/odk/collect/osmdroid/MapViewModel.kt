@@ -1,18 +1,32 @@
 package org.odk.collect.osmdroid
 
+import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.settings.keys.MetaKeys.LAST_KNOWN_ZOOM_LEVEL
 import org.odk.collect.shared.settings.Settings
 
-class ZoomViewModel(private val settings: Settings) : ViewModel() {
+class MapViewModel(
+    private val configurator: MapConfigurator,
+    private val unprotectedSettings: Settings,
+    private val metaSettings: Settings
+) : ViewModel(),
+    Settings.OnSettingChangeListener {
 
     private var userZoomLevel: Double? = null
 
     private val _zoom = MutableLiveData<Zoom?>()
     val zoom: LiveData<Zoom?> = _zoom
+
+    private val _config = MutableLiveData(configurator.buildConfig(unprotectedSettings))
+    val config: LiveData<Bundle> = _config
+
+    init {
+        unprotectedSettings.registerOnSettingChangeListener(this)
+    }
 
     fun zoomTo(point: MapPoint, level: Double?, animate: Boolean) {
         _zoom.value = Zoom.Point(point, level ?: DEFAULT_ZOOM, animate, false)
@@ -23,8 +37,8 @@ class ZoomViewModel(private val settings: Settings) : ViewModel() {
     }
 
     fun zoomToCurrentLocation(location: MapPoint) {
-        val level = if (settings.contains(LAST_KNOWN_ZOOM_LEVEL)) {
-            settings.getFloat(LAST_KNOWN_ZOOM_LEVEL).toDouble()
+        val level = if (metaSettings.contains(LAST_KNOWN_ZOOM_LEVEL)) {
+            metaSettings.getFloat(LAST_KNOWN_ZOOM_LEVEL).toDouble()
         } else {
             DEFAULT_ZOOM
         }
@@ -43,7 +57,15 @@ class ZoomViewModel(private val settings: Settings) : ViewModel() {
 
     override fun onCleared() {
         userZoomLevel?.also {
-            settings.save(LAST_KNOWN_ZOOM_LEVEL, it.toFloat())
+            metaSettings.save(LAST_KNOWN_ZOOM_LEVEL, it.toFloat())
+        }
+
+        unprotectedSettings.unregisterOnSettingChangeListener(this)
+    }
+
+    override fun onSettingChanged(key: String) {
+        if (configurator.prefKeys.contains(key)) {
+            _config.value = configurator.buildConfig(unprotectedSettings)
         }
     }
 

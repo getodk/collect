@@ -126,7 +126,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private File referenceLayerFile;
     private TilesOverlay referenceOverlay;
     private boolean isSystemZooming;
-    private ZoomViewModel zoomViewModel;
+    private MapViewModel mapViewModel;
 
     @Override
     public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
@@ -148,11 +148,15 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new ZoomViewModel(settingsProvider.getMetaSettings());
+                return (T) new MapViewModel(
+                        mapConfigurator,
+                        settingsProvider.getUnprotectedSettings(),
+                        settingsProvider.getMetaSettings()
+                );
             }
         };
 
-        zoomViewModel = new ViewModelProvider(this, viewModelFactory).get(ZoomViewModel.class);
+        mapViewModel = new ViewModelProvider(this, viewModelFactory).get(MapViewModel.class);
     }
 
     @Override
@@ -209,7 +213,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             @Override
             public boolean onZoom(ZoomEvent event) {
                 if (!isSystemZooming) {
-                    zoomViewModel.onUserMove(getCenter(), event.getZoomLevel());
+                    mapViewModel.onUserMove(getCenter(), event.getZoomLevel());
 
                 }
                 return false;
@@ -217,7 +221,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
             @Override
             public boolean onScroll(ScrollEvent event) {
-                zoomViewModel.onUserMove(getCenter(), event.getSource().getZoomLevelDouble());
+                mapViewModel.onUserMove(getCenter(), event.getSource().getZoomLevelDouble());
                 return false;
             }
         });
@@ -241,7 +245,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             }
         }, 100);
 
-        zoomViewModel.getZoom().observe(getViewLifecycleOwner(), new Observer<>() {
+        mapViewModel.getConfig().observe(getViewLifecycleOwner(), this::onConfigChanged);
+        mapViewModel.getZoom().observe(getViewLifecycleOwner(), new Observer<>() {
             private boolean hasZoomed;
 
             @Override
@@ -312,7 +317,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override
     public void setCenter(@Nullable MapPoint center, boolean animate) {
-        zoomViewModel.moveTo(center, animate);
+        mapViewModel.moveTo(center, animate);
     }
 
     @Override
@@ -322,24 +327,24 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override
     public void zoomToPoint(@Nullable MapPoint center, boolean animate) {
-        zoomViewModel.zoomTo(center, null, animate);
+        mapViewModel.zoomTo(center, null, animate);
     }
 
     @Override
     public void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate) {
-        zoomViewModel.zoomTo(center, zoom, animate);
+        mapViewModel.zoomTo(center, zoom, animate);
     }
 
     @Override
     public void zoomToBoundingBox(@Nullable Iterable<MapPoint> points, double scaleFactor, boolean animate) {
         ArrayList<MapPoint> box = new ArrayList<>();
         points.forEach(box::add);
-        zoomViewModel.zoomTo(box, scaleFactor, animate);
+        mapViewModel.zoomTo(box, scaleFactor, animate);
     }
 
     @Override
     public void zoomToCurrentLocation(@Nullable MapPoint center) {
-        zoomViewModel.zoomToCurrentLocation(center);
+        mapViewModel.zoomToCurrentLocation(center);
     }
 
     @Override
@@ -462,7 +467,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override
     public boolean hasCenter() {
-        return zoomViewModel.getZoom().getValue() != null;
+        return mapViewModel.getZoom().getValue() != null;
     }
 
     @Override
