@@ -86,6 +86,7 @@ class Kxml2OpenRosaResponseParserTest {
             .appendLine("<filename>badgers.csv</filename>")
             .appendLine("<hash>blah</hash>")
             .appendLine("<downloadUrl>http://funk.appspot.com/binaryData?blobKey=%3A477e3</downloadUrl>")
+            .appendLine("<integrityUrl>https://some.server/forms/12/integrity</integrityUrl>")
             .appendLine("</mediaFile>")
             .appendLine("</manifest>")
             .toString()
@@ -120,7 +121,7 @@ class Kxml2OpenRosaResponseParserTest {
         val response = StringBuilder()
             .appendLine("<?xml version='1.0' encoding='UTF-8' ?>")
             .appendLine("<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">")
-            .appendLine("<mediaFile>")
+            .appendLine("<mediaFile type=\"entityList\">")
             .appendLine("<filename>badgers.csv</filename>")
             .appendLine("<hash>blah</hash>")
             .appendLine("<downloadUrl>http://funk.appspot.com/binaryData?blobKey=%3A477e3</downloadUrl>")
@@ -152,5 +153,22 @@ class Kxml2OpenRosaResponseParserTest {
         val mediaFiles = Kxml2OpenRosaResponseParser.parseManifest(doc)!!
         assertThat(mediaFiles.size, equalTo(1))
         assertThat(mediaFiles[0].integrityUrl, equalTo(null))
+    }
+
+    @Test
+    fun `parseManifest() returns null if a media file with type entityList is missing integrityUrl`() {
+        val response = StringBuilder()
+            .appendLine("<?xml version='1.0' encoding='UTF-8' ?>")
+            .appendLine("<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">")
+            .appendLine("<mediaFile type=\"entityList\">")
+            .appendLine("<filename>badgers.csv</filename>")
+            .appendLine("<hash>blah</hash>")
+            .appendLine("<downloadUrl>http://funk.appspot.com/binaryData?blobKey=%3A477e3</downloadUrl>")
+            .appendLine("</mediaFile>")
+            .appendLine("</manifest>")
+            .toString()
+
+        val doc = XFormParser.getXMLDocument(response.reader())
+        assertThat(Kxml2OpenRosaResponseParser.parseManifest(doc), equalTo(null))
     }
 }

@@ -223,7 +223,12 @@ object Kxml2OpenRosaResponseParser :
                     return null
                 }
 
-                files.add(MediaFile(filename, hash, downloadUrl, type == "entityList", integrityUrl))
+                val isEntityList = type == "entityList"
+                if (isEntityList && integrityUrl == null) {
+                    return null
+                }
+
+                files.add(MediaFile(filename, hash, downloadUrl, isEntityList, integrityUrl))
             }
         }
         return files
