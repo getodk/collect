@@ -128,6 +128,7 @@ class MainMenuActivityTest {
             }
 
             override fun providesMDMConfigObserver(
+                scheduler: Scheduler,
                 settingsProvider: SettingsProvider,
                 projectsRepository: ProjectsRepository,
                 projectCreator: ProjectCreator,

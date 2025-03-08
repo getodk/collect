@@ -36,6 +36,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.androidtest.RecordedIntentsRule
+import org.odk.collect.async.Scheduler
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.mobiledevicemanagement.MDMConfigObserver
 import org.odk.collect.projects.ProjectCreator
@@ -58,6 +59,7 @@ class FirstLaunchActivityTest {
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesMDMConfigObserver(
+                scheduler: Scheduler,
                 settingsProvider: SettingsProvider,
                 projectsRepository: ProjectsRepository,
                 projectCreator: ProjectCreator,
@@ -111,6 +113,7 @@ class FirstLaunchActivityTest {
             }
 
             override fun providesMDMConfigObserver(
+                scheduler: Scheduler,
                 settingsProvider: SettingsProvider,
                 projectsRepository: ProjectsRepository,
                 projectCreator: ProjectCreator,

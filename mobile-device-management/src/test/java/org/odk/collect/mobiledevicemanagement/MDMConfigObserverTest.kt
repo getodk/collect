@@ -15,10 +15,12 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.odk.collect.testshared.FakeScheduler
 import org.robolectric.Shadows.shadowOf
 
 @RunWith(AndroidJUnit4::class)
 class MDMConfigObserverTest {
+    private lateinit var scheduler: FakeScheduler
     private lateinit var mdmConfigHandler: MDMConfigHandler
     private lateinit var restrictionsManager: RestrictionsManager
     private lateinit var context: Context
@@ -28,13 +30,14 @@ class MDMConfigObserverTest {
 
     @Before
     fun setup() {
+        scheduler = FakeScheduler()
         mdmConfigHandler = mock<MDMConfigHandler>()
         restrictionsManager = mock<RestrictionsManager>()
         context = ApplicationProvider.getApplicationContext()
         lifecycleOwner = mock<LifecycleOwner>()
         managedConfig = Bundle()
 
-        mdmConfigObserver = MDMConfigObserver(mdmConfigHandler, restrictionsManager, context)
+        mdmConfigObserver = MDMConfigObserver(scheduler, mdmConfigHandler, restrictionsManager, context)
 
         whenever(restrictionsManager.applicationRestrictions).thenReturn(managedConfig)
     }
@@ -69,6 +72,7 @@ class MDMConfigObserverTest {
     @Test
     fun `#onResume triggers ManagedConfigSaver#applyConfig`() {
         mdmConfigObserver.onResume(lifecycleOwner)
+        scheduler.runBackground()
 
         verify(mdmConfigHandler, times(1)).applyConfig(managedConfig)
     }
@@ -81,6 +85,7 @@ class MDMConfigObserverTest {
         context.sendBroadcast(intent)
 
         shadowOf(context.mainLooper).idle()
+        scheduler.runBackground()
 
         verify(mdmConfigHandler, times(2)).applyConfig(managedConfig)
     }

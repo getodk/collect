@@ -31,11 +31,13 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.desugar)
 
+    implementation(project(":async"))
     implementation(project(":strings"))
     implementation(project(":settings"))
     implementation(project(":shared"))
     implementation(project(":projects"))
 
+    testImplementation(project(":test-shared"))
     testImplementation(libs.mockitoKotlin)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidxTestExtJunit)

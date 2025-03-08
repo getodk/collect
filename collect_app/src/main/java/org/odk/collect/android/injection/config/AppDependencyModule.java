@@ -617,6 +617,7 @@ public class AppDependencyModule {
 
     @Provides
     public MDMConfigObserver providesMDMConfigObserver(
+            Scheduler scheduler,
             SettingsProvider settingsProvider,
             ProjectsRepository projectsRepository,
             ProjectCreator projectCreator,
@@ -637,6 +638,7 @@ public class AppDependencyModule {
         );
 
         return new MDMConfigObserver(
+                scheduler,
                 mdmConfigHandler,
                 (RestrictionsManager) context.getSystemService(Context.RESTRICTIONS_SERVICE),
                 context

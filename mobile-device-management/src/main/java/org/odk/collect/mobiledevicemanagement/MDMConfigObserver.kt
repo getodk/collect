@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import android.content.RestrictionsManager
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import org.odk.collect.async.Scheduler
 
 /**
  * Manages configuration changes from a mobile device management system.
@@ -14,6 +15,7 @@ import androidx.lifecycle.LifecycleOwner
  * See android.content.APP_RESTRICTIONS in AndroidManifest for supported configuration keys.
  */
 class MDMConfigObserver(
+    private val scheduler: Scheduler,
     private val mdmConfigHandler: MDMConfigHandler,
     private val restrictionsManager: RestrictionsManager,
     private val context: Context
@@ -21,13 +23,17 @@ class MDMConfigObserver(
 
     private val restrictionsReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            mdmConfigHandler.applyConfig(restrictionsManager.applicationRestrictions)
+            scheduler.immediate {
+                mdmConfigHandler.applyConfig(restrictionsManager.applicationRestrictions)
+            }
         }
     }
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
-        mdmConfigHandler.applyConfig(restrictionsManager.applicationRestrictions)
+        scheduler.immediate {
+            mdmConfigHandler.applyConfig(restrictionsManager.applicationRestrictions)
+        }
 
         val restrictionsFilter = IntentFilter(Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED)
         context.registerReceiver(restrictionsReceiver, restrictionsFilter)
