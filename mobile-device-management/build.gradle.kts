@@ -32,6 +32,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":async"))
+    implementation(project(":androidshared"))
     implementation(project(":strings"))
     implementation(project(":settings"))
     implementation(project(":shared"))

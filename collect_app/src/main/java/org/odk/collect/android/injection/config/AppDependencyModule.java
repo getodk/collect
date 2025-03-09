@@ -89,6 +89,8 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.androidshared.bitmap.ImageCompressor;
+import org.odk.collect.androidshared.system.BroadcastReceiverRegister;
+import org.odk.collect.androidshared.system.BroadcastReceiverRegisterImpl;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.androidshared.utils.ScreenUtils;
@@ -616,13 +618,24 @@ public class AppDependencyModule {
     }
 
     @Provides
+    public BroadcastReceiverRegister providesBroadcastReceiverRegister(Context context) {
+        return new BroadcastReceiverRegisterImpl(context);
+    }
+
+    @Provides
+    public RestrictionsManager providesRestrictionsManager(Context context) {
+        return (RestrictionsManager) context.getSystemService(Context.RESTRICTIONS_SERVICE);
+    }
+
+    @Provides
     public MDMConfigObserver providesMDMConfigObserver(
             Scheduler scheduler,
             SettingsProvider settingsProvider,
             ProjectsRepository projectsRepository,
             ProjectCreator projectCreator,
             ODKAppSettingsImporter settingsImporter,
-            Context context
+            BroadcastReceiverRegister broadcastReceiverRegister,
+            RestrictionsManager restrictionsManager
     ) {
         SettingsConnectionMatcher settingsConnectionMatcher = new SettingsConnectionMatcherImpl(
                 projectsRepository,
@@ -640,8 +653,8 @@ public class AppDependencyModule {
         return new MDMConfigObserver(
                 scheduler,
                 mdmConfigHandler,
-                (RestrictionsManager) context.getSystemService(Context.RESTRICTIONS_SERVICE),
-                context
+                broadcastReceiverRegister,
+                restrictionsManager
         );
     }
 }

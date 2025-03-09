@@ -1,7 +1,7 @@
 package org.odk.collect.android.mainmenu
 
 import android.app.Application
-import android.content.Context
+import android.content.RestrictionsManager
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.View
@@ -42,6 +42,7 @@ import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.androidshared.system.BroadcastReceiverRegister
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.async.Scheduler
 import org.odk.collect.crashhandler.CrashHandler
@@ -133,7 +134,8 @@ class MainMenuActivityTest {
                 projectsRepository: ProjectsRepository,
                 projectCreator: ProjectCreator,
                 settingsImporter: ODKAppSettingsImporter,
-                context: Context
+                broadcastReceiverRegister: BroadcastReceiverRegister,
+                restrictionsManager: RestrictionsManager
             ): MDMConfigObserver {
                 return mock<MDMConfigObserver>()
             }

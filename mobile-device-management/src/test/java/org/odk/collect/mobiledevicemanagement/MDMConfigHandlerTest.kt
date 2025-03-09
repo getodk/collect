@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
@@ -16,38 +15,25 @@ import org.odk.collect.mobiledevicemanagement.MDMConfigHandler.Companion.SETTING
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectCreator
-import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.projects.SettingsConnectionMatcher
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.ODKAppSettingsImporter
-import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys.KEY_INSTALL_ID
 
 @RunWith(AndroidJUnit4::class)
 class MDMConfigHandlerTest {
-    private lateinit var settingsProvider: SettingsProvider
-    private lateinit var projectsRepository: ProjectsRepository
-    private lateinit var projectCreator: ProjectCreator
-    private lateinit var settingsImporter: ODKAppSettingsImporter
-    private lateinit var settingsConnectionMatcher: SettingsConnectionMatcher
-    private lateinit var mdmConfigHandler: MDMConfigHandler
-
-    @Before
-    fun setup() {
-        settingsProvider = InMemSettingsProvider()
-        projectsRepository = InMemProjectsRepository()
-        projectCreator = mock<ProjectCreator>()
-        settingsImporter = mock<ODKAppSettingsImporter>()
-        settingsConnectionMatcher = mock<SettingsConnectionMatcher>()
-
-        mdmConfigHandler = MDMConfigHandler(
-            settingsProvider,
-            projectsRepository,
-            projectCreator,
-            settingsImporter,
-            settingsConnectionMatcher
-        )
-    }
+    private val settingsProvider = InMemSettingsProvider()
+    private val projectsRepository = InMemProjectsRepository()
+    private val projectCreator = mock<ProjectCreator>()
+    private val settingsImporter = mock<ODKAppSettingsImporter>()
+    private val settingsConnectionMatcher = mock<SettingsConnectionMatcher>()
+    private val mdmConfigHandler = MDMConfigHandler(
+        settingsProvider,
+        projectsRepository,
+        projectCreator,
+        settingsImporter,
+        settingsConnectionMatcher
+    )
 
     @Test
     fun `deviceId is ignored if it is null`() {

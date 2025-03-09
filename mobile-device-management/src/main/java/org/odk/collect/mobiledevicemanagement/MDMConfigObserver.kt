@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import android.content.RestrictionsManager
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import org.odk.collect.androidshared.system.BroadcastReceiverRegister
 import org.odk.collect.async.Scheduler
 
 /**
@@ -17,8 +18,8 @@ import org.odk.collect.async.Scheduler
 class MDMConfigObserver(
     private val scheduler: Scheduler,
     private val mdmConfigHandler: MDMConfigHandler,
-    private val restrictionsManager: RestrictionsManager,
-    private val context: Context
+    private val broadcastReceiverRegister: BroadcastReceiverRegister,
+    private val restrictionsManager: RestrictionsManager
 ) : DefaultLifecycleObserver {
 
     private val restrictionsReceiver = object : BroadcastReceiver() {
@@ -36,11 +37,11 @@ class MDMConfigObserver(
         }
 
         val restrictionsFilter = IntentFilter(Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED)
-        context.registerReceiver(restrictionsReceiver, restrictionsFilter)
+        broadcastReceiverRegister.registerReceiver(restrictionsReceiver, restrictionsFilter)
     }
 
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
-        context.unregisterReceiver(restrictionsReceiver)
+        broadcastReceiverRegister.unregisterReceiver(restrictionsReceiver)
     }
 }

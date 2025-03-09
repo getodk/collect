@@ -381,6 +381,7 @@ dependencies {
 
     androidTestImplementation libs.androidxWorkTesting
     androidTestImplementation libs.uiautomator
+    androidTestImplementation libs.mockitoKotlin
 
     debugImplementation project(':fragments-test')
     debugImplementation(project(':test-shared',)) {
