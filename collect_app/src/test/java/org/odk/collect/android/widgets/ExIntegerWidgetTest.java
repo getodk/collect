@@ -93,7 +93,7 @@ public class ExIntegerWidgetTest extends GeneralExStringWidgetTest<ExIntegerWidg
 
         WidgetTestActivity widgetTestActivity = QuestionWidgetHelpers.widgetTestActivity();
         ExIntegerWidget widget = new ExIntegerWidget(widgetTestActivity, new QuestionDetails(prompt),
-                new FakeWaitingForDataRegistry(), stringRequester);
+                new FakeWaitingForDataRegistry(), stringRequester, dependencies);
 
         // Check initial value is not shown
         assertThat(widget.binding.widgetAnswerText.getVisibility(), Matchers.equalTo(View.GONE));
