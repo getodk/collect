@@ -18,7 +18,7 @@ import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.android.support.rules.TestRuleChain
-import org.odk.collect.mobiledevicemanagement.MDMConfigHandler.Companion.SETTINGS_JSON_KEY
+import org.odk.collect.mobiledevicemanagement.SETTINGS_JSON_KEY
 
 @RunWith(AndroidJUnit4::class)
 class MobileDeviceManagementTest {
@@ -176,6 +176,43 @@ class MobileDeviceManagementTest {
                 )
             }
             .pressBack(MainMenuPage())
+
+        val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
+        val areDraftsEnabled = component.settingsProvider().getUnprotectedSettings().getBoolean("edit_saved")
+        assertThat(areDraftsEnabled, equalTo(false))
+    }
+
+    @Test
+    fun whenInactiveProjectIsUpdatedViaMDMWW_settingsAreUpdatedAfterSwitchingToThatProject() {
+        rule.startAtFirstLaunch()
+            .clickTryCollect()
+            .openProjectSettingsDialog()
+            .clickAddProject()
+            .switchToManualMode()
+            .inputUrl("http://john.com")
+            .inputUsername("john")
+            .addProject()
+            .openProjectSettingsDialog()
+            .selectProject("Demo project")
+            .also {
+                saveConfig(
+                    """
+                    {
+                        "general": {
+                            "server_url": "http://john.com",
+                            "username": "john"
+                        },
+                        "admin": {
+                            "edit_saved": false,
+                        },
+                        "project": {}
+                    }
+                    """.trimIndent()
+                )
+                triggerBroadcastReceiver()
+            }
+            .openProjectSettingsDialog()
+            .selectProject("john.com")
 
         val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
         val areDraftsEnabled = component.settingsProvider().getUnprotectedSettings().getBoolean("edit_saved")
