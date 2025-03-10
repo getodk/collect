@@ -35,7 +35,20 @@ class MobileDeviceManagementTest {
     fun whenNewProjectIsCreatedViaMDMWhileOnTheLandingScreen_navigateToMainMenu() {
         rule.startAtFirstLaunch()
             .also {
-                saveConfig("{\"general\":{\"server_url\":\"http://john.com\",\"username\":\"john\"},\"admin\":{},\"project\":{\"name\":\"project1\"}}")
+                saveConfig(
+                    """
+                    {
+                        "general": {
+                            "server_url": "http://john.com",
+                            "username": "john"
+                        },
+                        "admin": {},
+                        "project": {
+                            "name": "project1"
+                        }
+                    }
+                    """.trimIndent()
+                )
                 triggerBroadcastReceiver()
             }
             .assertOnPage(MainMenuPage())
@@ -45,7 +58,20 @@ class MobileDeviceManagementTest {
 
     @Test
     fun whenNewProjectIsCreatedViaMDMWhileOutsideTheLandingScreen_navigateToMainMenuNextTimeTheLandingScreenOpens() {
-        saveConfig("{\"general\":{\"server_url\":\"http://john.com\",\"username\":\"john\"},\"admin\":{},\"project\":{\"name\":\"project1\"}}")
+        saveConfig(
+            """
+            {
+                "general": {
+                    "server_url": "http://john.com",
+                    "username": "john"
+                },
+                "admin": {},
+                "project": {
+                    "name": "project1"
+                }
+            }
+            """.trimIndent()
+        )
 
         rule.relaunch(MainMenuPage())
     }
@@ -55,7 +81,20 @@ class MobileDeviceManagementTest {
         rule.startAtFirstLaunch()
             .clickTryCollect()
             .also {
-                saveConfig("{\"general\":{\"server_url\":\"http://john.com\",\"username\":\"john\"},\"admin\":{},\"project\":{\"name\":\"project1\"}}")
+                saveConfig(
+                    """
+                    {
+                        "general": {
+                            "server_url": "http://john.com",
+                            "username": "john"
+                        },
+                        "admin": {},
+                        "project": {
+                            "name": "project1"
+                        }
+                    }
+                    """.trimIndent()
+                )
                 triggerBroadcastReceiver()
             }
             .openProjectSettingsDialog()
@@ -69,7 +108,20 @@ class MobileDeviceManagementTest {
             .clickTryCollect()
             .clickFillBlankForm()
             .also {
-                saveConfig("{\"general\":{\"server_url\":\"http://john.com\",\"username\":\"john\"},\"admin\":{},\"project\":{\"name\":\"project1\"}}")
+                saveConfig(
+                    """
+                    {
+                        "general": {
+                            "server_url": "http://john.com",
+                            "username": "john"
+                        },
+                        "admin": {},
+                        "project": {
+                            "name": "project1"
+                        }
+                    }
+                    """.trimIndent()
+                )
             }
             .pressBack(MainMenuPage())
             .openProjectSettingsDialog()
@@ -82,7 +134,19 @@ class MobileDeviceManagementTest {
         rule.startAtFirstLaunch()
             .clickTryCollect()
             .also {
-                saveConfig("{\"general\":{},\"admin\":{\"edit_saved\":false,\"project\":{\"name\":\"project1\"}}")
+                saveConfig(
+                    """
+                    {
+                        "general": {},
+                        "admin": {
+                            "edit_saved": false,
+                            "project": {
+                                "name": "project1"
+                            }
+                        }
+                    }
+                    """.trimIndent()
+                )
                 triggerBroadcastReceiver()
             }
 
@@ -97,7 +161,19 @@ class MobileDeviceManagementTest {
             .clickTryCollect()
             .clickFillBlankForm()
             .also {
-                saveConfig("{\"general\":{},\"admin\":{\"edit_saved\":false,\"project\":{\"name\":\"project1\"}}")
+                saveConfig(
+                    """
+                    {
+                        "general": {},
+                        "admin": {
+                            "edit_saved": false,
+                            "project": {
+                                "name": "project1"
+                            }
+                        }
+                    }
+                    """.trimIndent()
+                )
             }
             .pressBack(MainMenuPage())
 
