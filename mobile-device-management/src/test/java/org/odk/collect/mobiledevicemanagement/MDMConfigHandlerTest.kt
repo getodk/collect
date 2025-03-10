@@ -10,8 +10,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
-import org.odk.collect.mobiledevicemanagement.MDMConfigHandler.Companion.DEVICE_ID_KEY
-import org.odk.collect.mobiledevicemanagement.MDMConfigHandler.Companion.SETTINGS_JSON_KEY
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectCreator
@@ -27,7 +25,7 @@ class MDMConfigHandlerTest {
     private val projectCreator = mock<ProjectCreator>()
     private val settingsImporter = mock<ODKAppSettingsImporter>()
     private val settingsConnectionMatcher = mock<SettingsConnectionMatcher>()
-    private val mdmConfigHandler = MDMConfigHandler(
+    private val mdmConfigHandler = MDMConfigHandlerImpl(
         settingsProvider,
         projectsRepository,
         projectCreator,

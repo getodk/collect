@@ -113,6 +113,7 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.metadata.InstallIDProvider;
 import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.metadata.SettingsInstallIDProvider;
+import org.odk.collect.mobiledevicemanagement.MDMConfigHandlerImpl;
 import org.odk.collect.openrosa.http.CollectThenSystemContentTypeMapper;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 import org.odk.collect.openrosa.http.okhttp.OkHttpConnection;
@@ -642,7 +643,7 @@ public class AppDependencyModule {
                 settingsProvider
         );
 
-        MDMConfigHandler mdmConfigHandler = new MDMConfigHandler(
+        MDMConfigHandler mdmConfigHandler = new MDMConfigHandlerImpl(
                 settingsProvider,
                 projectsRepository,
                 projectCreator,

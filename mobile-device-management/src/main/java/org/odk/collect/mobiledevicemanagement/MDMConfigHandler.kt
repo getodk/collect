@@ -8,14 +8,21 @@ import org.odk.collect.settings.ODKAppSettingsImporter
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys.KEY_INSTALL_ID
 
-class MDMConfigHandler(
+const val DEVICE_ID_KEY = "device_id"
+const val SETTINGS_JSON_KEY = "settings_json"
+
+interface MDMConfigHandler {
+    fun applyConfig(managedConfig: Bundle)
+}
+
+class MDMConfigHandlerImpl(
     private val settingsProvider: SettingsProvider,
     private val projectsRepository: ProjectsRepository,
     private val projectCreator: ProjectCreator,
     private val settingsImporter: ODKAppSettingsImporter,
     private val settingsConnectionMatcher: SettingsConnectionMatcher
-) {
-    fun applyConfig(managedConfig: Bundle) {
+) : MDMConfigHandler {
+    override fun applyConfig(managedConfig: Bundle) {
         applyDeviceId(managedConfig)
         applySettingsJson(managedConfig)
     }
@@ -38,10 +45,5 @@ class MDMConfigHandler(
                 else -> settingsImporter.fromJSON(settingsJson, projectsRepository.get(matchingProjectUUID)!!)
             }
         }
-    }
-
-    companion object {
-        const val DEVICE_ID_KEY = "device_id"
-        const val SETTINGS_JSON_KEY = "settings_json"
     }
 }

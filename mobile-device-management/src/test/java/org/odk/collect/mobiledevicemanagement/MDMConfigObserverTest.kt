@@ -12,8 +12,6 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.times
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.testshared.FakeBroadcastReceiverRegister
 import org.odk.collect.testshared.FakeScheduler
@@ -21,7 +19,7 @@ import org.odk.collect.testshared.FakeScheduler
 @RunWith(AndroidJUnit4::class)
 class MDMConfigObserverTest {
     private val scheduler = FakeScheduler()
-    private val mdmConfigHandler = mock<MDMConfigHandler>()
+    private val mdmConfigHandler = FakeMDMConfigHandler()
     private val broadcastReceiverRegister = FakeBroadcastReceiverRegister()
     private val managedConfig = Bundle()
     private val restrictionsManager = mock<RestrictionsManager>()
@@ -57,7 +55,7 @@ class MDMConfigObserverTest {
         mdmConfigObserver.onResume(lifecycleOwner)
         scheduler.runBackground()
 
-        verify(mdmConfigHandler, times(1)).applyConfig(managedConfig)
+        assertThat(mdmConfigHandler.applyConfigCounter, equalTo(1))
     }
 
     @Test
@@ -67,6 +65,15 @@ class MDMConfigObserverTest {
         broadcastReceiverRegister.registeredReceivers.first().onReceive(context, Intent(Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED))
         scheduler.runBackground()
 
-        verify(mdmConfigHandler, times(2)).applyConfig(managedConfig)
+        assertThat(mdmConfigHandler.applyConfigCounter, equalTo(2))
+    }
+}
+
+private class FakeMDMConfigHandler : MDMConfigHandler {
+    var applyConfigCounter = 0
+        private set
+
+    override fun applyConfig(managedConfig: Bundle) {
+        applyConfigCounter++
     }
 }
