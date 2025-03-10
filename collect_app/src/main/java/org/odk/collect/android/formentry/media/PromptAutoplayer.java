@@ -1,32 +1,32 @@
 package org.odk.collect.android.formentry.media;
 
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
+import static org.odk.collect.android.utilities.Appearances.NO_BUTTONS;
+import static java.util.Collections.emptyList;
+
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.audioclips.Clip;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Collections.emptyList;
-import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
-import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
-import static org.odk.collect.android.utilities.Appearances.NO_BUTTONS;
 
 public class PromptAutoplayer {
 
     private static final String AUTOPLAY_ATTRIBUTE = "autoplay";
     private static final String AUDIO_OPTION = "audio";
 
-    private final AudioHelper audioHelper;
+    private final AudioPlayer audioPlayer;
     private final ReferenceManager referenceManager;
 
-    public PromptAutoplayer(AudioHelper audioHelper, ReferenceManager referenceManager) {
-        this.audioHelper = audioHelper;
+    public PromptAutoplayer(AudioPlayer audioPlayer, ReferenceManager referenceManager) {
+        this.audioPlayer = audioPlayer;
         this.referenceManager = referenceManager;
     }
 
@@ -49,7 +49,7 @@ public class PromptAutoplayer {
             if (clipsToPlay.isEmpty()) {
                 return false;
             } else {
-                audioHelper.playInOrder(clipsToPlay);
+                audioPlayer.playInOrder(clipsToPlay);
                 return true;
             }
         } else {
