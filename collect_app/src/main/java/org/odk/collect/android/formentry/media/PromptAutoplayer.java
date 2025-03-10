@@ -22,11 +22,11 @@ public class PromptAutoplayer {
     private static final String AUTOPLAY_ATTRIBUTE = "autoplay";
     private static final String AUDIO_OPTION = "audio";
 
-    private final AudioPlayer audioHelper;
+    private final AudioPlayer audioPlayer;
     private final ReferenceManager referenceManager;
 
-    public PromptAutoplayer(AudioPlayer audipPlayer, ReferenceManager referenceManager) {
-        this.audioHelper = audipPlayer;
+    public PromptAutoplayer(AudioPlayer audioPlayer, ReferenceManager referenceManager) {
+        this.audioPlayer = audioPlayer;
         this.referenceManager = referenceManager;
     }
 
@@ -49,7 +49,7 @@ public class PromptAutoplayer {
             if (clipsToPlay.isEmpty()) {
                 return false;
             } else {
-                audioHelper.playInOrder(clipsToPlay);
+                audioPlayer.playInOrder(clipsToPlay);
                 return true;
             }
         } else {
