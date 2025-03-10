@@ -432,6 +432,20 @@ class AudioClipViewModelTest {
     }
 
     @Test
+    fun play_clearsErrorWhenItWorks() {
+        val error = viewModel.getError()
+        val invalid = File.createTempFile("invalid", ".mp3")
+        doThrow(IOException::class.java).`when`(mediaPlayer).setDataSource(invalid.absolutePath)
+        viewModel.play(Clip("clip1", invalid.absolutePath))
+        fakeScheduler.flush()
+        assertThat(error.getOrAwaitValue()!!.value, equalTo(PlaybackFailedException(invalid.absolutePath, 1)))
+
+        viewModel.play(Clip("clip1", "file://audio.mp3"))
+        fakeScheduler.flush()
+        assertThat(error.getOrAwaitValue(), equalTo(null))
+    }
+
+    @Test
     fun isLoading_isTrueWhenLoadingClip() {
         val loading = viewModel.isLoading()
         assertThat(loading.getOrAwaitValue(), equalTo(false))

@@ -90,6 +90,7 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
                 loadNewClip(
                     nextClip.uRI,
                     onLoaded = {
+                        error.value = null
                         startPlayBack(nextClip, playlist)
                     },
                     onLoadFailure = {

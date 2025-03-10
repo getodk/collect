@@ -22,7 +22,7 @@ data class Consumable<T>(val value: T) {
 
 fun <T> LiveData<Consumable<T>>.consume(lifecycleOwner: LifecycleOwner, consumer: (T) -> Unit) {
     observe(lifecycleOwner) { consumable ->
-        if (!consumable.isConsumed()) {
+        if (consumable != null && !consumable.isConsumed()) {
             consumable.consume()
             consumer(consumable.value)
         }
