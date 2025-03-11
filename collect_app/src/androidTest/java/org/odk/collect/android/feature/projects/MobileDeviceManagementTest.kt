@@ -1,18 +1,14 @@
 package org.odk.collect.android.feature.projects
 
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -139,47 +135,51 @@ class MobileDeviceManagementTest {
                     {
                         "general": {},
                         "admin": {
-                            "edit_saved": false,
-                            "project": {
-                                "name": "project1"
-                            }
+                            "edit_saved": false
                         }
                     }
                     """.trimIndent()
                 )
                 triggerBroadcastReceiver()
             }
-
-        val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
-        val areDraftsEnabled = component.settingsProvider().getUnprotectedSettings().getBoolean("edit_saved")
-        assertThat(areDraftsEnabled, equalTo(false))
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickAccessControl()
+            .openMainMenuSettings()
+            .assertDraftsUnchecked()
     }
 
     @Test
     fun whenCurrentProjectIsUpdatedViaMDMWhileOutsideMainMenu_updateApplySettingsNextTimeMainMenuOpens() {
+        testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml")
+
         rule.startAtFirstLaunch()
             .clickTryCollect()
+            .setServer(testDependencies.server.url)
+            .clickGetBlankForm()
+            .clickGetSelected()
+            .clickOKOnDialog(MainMenuPage())
             .clickFillBlankForm()
             .also {
                 saveConfig(
                     """
                     {
-                        "general": {},
+                        "general": {
+                            "server_url": "${testDependencies.server.url}"
+                        },
                         "admin": {
-                            "edit_saved": false,
-                            "project": {
-                                "name": "project1"
-                            }
+                            "jump_to": false
                         }
                     }
                     """.trimIndent()
                 )
             }
-            .pressBack(MainMenuPage())
-
-        val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
-        val areDraftsEnabled = component.settingsProvider().getUnprotectedSettings().getBoolean("edit_saved")
-        assertThat(areDraftsEnabled, equalTo(false))
+            .clickOnForm("One Question")
+            .assertGoToIconExists()
+            .pressBackAndDiscardForm()
+            .clickFillBlankForm()
+            .clickOnForm("One Question")
+            .assertGoToIconDoesNotExist()
     }
 
     @Test
@@ -203,7 +203,7 @@ class MobileDeviceManagementTest {
                             "username": "john"
                         },
                         "admin": {
-                            "edit_saved": false,
+                            "edit_saved": false
                         },
                         "project": {}
                     }
@@ -213,10 +213,11 @@ class MobileDeviceManagementTest {
             }
             .openProjectSettingsDialog()
             .selectProject("john.com")
-
-        val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
-        val areDraftsEnabled = component.settingsProvider().getUnprotectedSettings().getBoolean("edit_saved")
-        assertThat(areDraftsEnabled, equalTo(false))
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickAccessControl()
+            .openMainMenuSettings()
+            .assertDraftsUnchecked()
     }
 
     private fun saveConfig(settings: String) {

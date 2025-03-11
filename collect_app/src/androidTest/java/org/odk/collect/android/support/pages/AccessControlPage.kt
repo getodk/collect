@@ -20,6 +20,11 @@ class AccessControlPage : Page<AccessControlPage>() {
         return this
     }
 
+    fun openMainMenuSettings(): MainMenuSettingsPage {
+        scrollToRecyclerViewItemAndClickText(getTranslatedString(org.odk.collect.strings.R.string.main_menu_settings))
+        return MainMenuSettingsPage()
+    }
+
     fun openUserSettings(): AccessControlPage {
         scrollToRecyclerViewItemAndClickText(getTranslatedString(org.odk.collect.strings.R.string.user_settings))
         return this
