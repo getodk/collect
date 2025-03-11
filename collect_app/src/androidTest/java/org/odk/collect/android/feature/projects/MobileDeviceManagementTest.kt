@@ -31,7 +31,7 @@ class MobileDeviceManagementTest {
     fun whenNewProjectIsCreatedViaMDMWhileOnTheLandingScreen_navigateToMainMenu() {
         rule.startAtFirstLaunch()
             .also {
-                saveConfig(
+                sendBroadcast(
                     """
                     {
                         "general": {
@@ -45,7 +45,6 @@ class MobileDeviceManagementTest {
                     }
                     """.trimIndent()
                 )
-                triggerBroadcastReceiver()
             }
             .assertOnPage(MainMenuPage())
             .openProjectSettingsDialog()
@@ -54,7 +53,7 @@ class MobileDeviceManagementTest {
 
     @Test
     fun whenNewProjectIsCreatedViaMDMWhileOutsideTheLandingScreen_navigateToMainMenuNextTimeTheLandingScreenOpens() {
-        saveConfig(
+        sendBroadcast(
             """
             {
                 "general": {
@@ -77,7 +76,7 @@ class MobileDeviceManagementTest {
         rule.startAtFirstLaunch()
             .clickTryCollect()
             .also {
-                saveConfig(
+                sendBroadcast(
                     """
                     {
                         "general": {
@@ -91,7 +90,6 @@ class MobileDeviceManagementTest {
                     }
                     """.trimIndent()
                 )
-                triggerBroadcastReceiver()
             }
             .openProjectSettingsDialog()
             .assertCurrentProject("Demo project", "demo.getodk.org")
@@ -104,7 +102,7 @@ class MobileDeviceManagementTest {
             .clickTryCollect()
             .clickFillBlankForm()
             .also {
-                saveConfig(
+                sendBroadcast(
                     """
                     {
                         "general": {
@@ -130,7 +128,7 @@ class MobileDeviceManagementTest {
         rule.startAtFirstLaunch()
             .clickTryCollect()
             .also {
-                saveConfig(
+                sendBroadcast(
                     """
                     {
                         "general": {},
@@ -140,7 +138,6 @@ class MobileDeviceManagementTest {
                     }
                     """.trimIndent()
                 )
-                triggerBroadcastReceiver()
             }
             .openProjectSettingsDialog()
             .clickSettings()
@@ -161,7 +158,7 @@ class MobileDeviceManagementTest {
             .clickOKOnDialog(MainMenuPage())
             .clickFillBlankForm()
             .also {
-                saveConfig(
+                sendBroadcast(
                     """
                     {
                         "general": {
@@ -195,7 +192,7 @@ class MobileDeviceManagementTest {
             .openProjectSettingsDialog()
             .selectProject("Demo project")
             .also {
-                saveConfig(
+                sendBroadcast(
                     """
                     {
                         "general": {
@@ -209,7 +206,6 @@ class MobileDeviceManagementTest {
                     }
                     """.trimIndent()
                 )
-                triggerBroadcastReceiver()
             }
             .openProjectSettingsDialog()
             .selectProject("john.com")
@@ -220,14 +216,12 @@ class MobileDeviceManagementTest {
             .assertDraftsUnchecked()
     }
 
-    private fun saveConfig(settings: String) {
+    private fun sendBroadcast(settings: String) {
         val bundle = Bundle().apply {
             putString(SETTINGS_JSON_KEY, settings)
         }
         whenever(testDependencies.restrictionsManager.applicationRestrictions).thenReturn(bundle)
-    }
 
-    private fun triggerBroadcastReceiver() {
         testDependencies.broadcastReceiverRegister.broadcast(
             ApplicationProvider.getApplicationContext(),
             Intent(Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED)
