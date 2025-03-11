@@ -35,11 +35,16 @@ class MDMConfigObserverTest {
 
     @Test
     fun `broadcast receiver is registered in #onResume`() {
-        assertThat(broadcastReceiverRegister.registeredReceivers.isEmpty(), equalTo(true))
-
+        assertThat(
+            broadcastReceiverRegister.registeredReceivers.any { it.first == Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED },
+            equalTo(false)
+        )
         mdmConfigObserver.onResume(lifecycleOwner)
 
-        assertThat(broadcastReceiverRegister.registeredReceivers.isEmpty(), equalTo(false))
+        assertThat(
+            broadcastReceiverRegister.registeredReceivers.any { it.first == Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED },
+            equalTo(true)
+        )
     }
 
     @Test
@@ -47,7 +52,10 @@ class MDMConfigObserverTest {
         mdmConfigObserver.onResume(lifecycleOwner)
         mdmConfigObserver.onPause(lifecycleOwner)
 
-        assertThat(broadcastReceiverRegister.registeredReceivers.isEmpty(), equalTo(true))
+        assertThat(
+            broadcastReceiverRegister.registeredReceivers.any { it.first == Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED },
+            equalTo(false)
+        )
     }
 
     @Test
@@ -62,7 +70,7 @@ class MDMConfigObserverTest {
     fun `broadcast receiver triggers ManagedConfigSaver#applyConfig`() {
         mdmConfigObserver.onResume(lifecycleOwner)
 
-        broadcastReceiverRegister.registeredReceivers.first().onReceive(context, Intent(Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED))
+        broadcastReceiverRegister.broadcast(context, Intent(Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED))
         scheduler.runBackground()
 
         assertThat(mdmConfigHandler.applyConfigCounter, equalTo(2))

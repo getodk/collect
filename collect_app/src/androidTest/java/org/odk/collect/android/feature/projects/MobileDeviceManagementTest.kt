@@ -228,7 +228,7 @@ class MobileDeviceManagementTest {
     }
 
     private fun triggerBroadcastReceiver() {
-        testDependencies.broadcastReceiverRegister.registeredReceivers.first().onReceive(
+        testDependencies.broadcastReceiverRegister.broadcast(
             ApplicationProvider.getApplicationContext(),
             Intent(Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED)
         )
