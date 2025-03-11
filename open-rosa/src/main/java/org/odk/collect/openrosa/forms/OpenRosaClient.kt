@@ -159,6 +159,10 @@ class OpenRosaClient(
             .build()
 
         val result = openRosaXMLFetcher.getXML(uri.toString())
+        if (!result.isOpenRosaResponse) {
+            throw FormSourceException.ParseError(serverUrl)
+        }
+
         val parsedResponse = openRosaResponseParser.parseIntegrityResponse(result.doc)
 
         if (parsedResponse != null) {

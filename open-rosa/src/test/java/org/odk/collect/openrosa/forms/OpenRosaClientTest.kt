@@ -335,6 +335,31 @@ class OpenRosaClientTest {
     }
 
     @Test
+    fun isDeleted_whenNotOpenRosaResponse_throwsParseError() {
+        val client =
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+
+        try {
+            whenever(
+                httpInterface.executeGetRequest(any(), any(), any())
+            ).thenReturn(
+                HttpGetResult(
+                    ByteArrayInputStream("<xml></xml>".toByteArray()),
+                    HashMap(),
+                    "hash",
+                    200
+                )
+            )
+
+            whenever(responseParser.parseIntegrityResponse(any())).thenReturn(emptyList())
+            client.isDeleted("http://blah.com/integrity", listOf("1", "2", "3"))
+            fail("No exception thrown!")
+        } catch (e: FormSourceException.ParseError) {
+            assertThat(e.serverUrl, equalTo("http://blah.com"))
+        }
+    }
+
+    @Test
     fun isDeleted_whenOpenRosaResponse_whenParserFails_throwsParseError() {
         val client =
             OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)

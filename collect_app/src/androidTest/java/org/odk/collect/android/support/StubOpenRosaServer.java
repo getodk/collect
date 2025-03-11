@@ -85,7 +85,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         } else if (uri.getPath().startsWith("/mediaFile")) {
             return new HttpGetResult(getMediaFile(uri), new HashMap<>(), "", 200);
         } else if (uri.getPath().startsWith("/integrityUrl")) {
-            return new HttpGetResult(getIntegrityResponse(uri), new HashMap<>(), "", 200);
+            return new HttpGetResult(getIntegrityResponse(uri), getStandardHeaders(), "", 200);
         } else {
             return new HttpGetResult(null, new HashMap<>(), "", 404);
         }
