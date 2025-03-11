@@ -32,7 +32,7 @@ object Kxml2OpenRosaResponseParser :
             return null
         }
 
-        if (!isXformsListNamespacedElement(xformsElement)) {
+        if (!hasNamespace(xformsElement, NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST)) {
             return null
         }
 
@@ -45,7 +45,10 @@ object Kxml2OpenRosaResponseParser :
             }
 
             val xformElement = xformsElement.getElement(i)
-            if (!isXformsListNamespacedElement(xformElement)) {
+            if (!hasNamespace(
+                    xformElement,
+                    NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST
+                )) {
                 // someone else's extension?
                 continue
             }
@@ -73,7 +76,7 @@ object Kxml2OpenRosaResponseParser :
                 }
 
                 val child = xformElement.getElement(j)
-                if (!isXformsListNamespacedElement(child)) {
+                if (!hasNamespace(child, NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST)) {
                     // someone else's extension?
                     continue
                 }
@@ -149,7 +152,7 @@ object Kxml2OpenRosaResponseParser :
             return null
         }
 
-        if (!isXformsManifestNamespacedElement(manifestElement)) {
+        if (!hasNamespace(manifestElement, NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST)) {
             return null
         }
 
@@ -162,7 +165,7 @@ object Kxml2OpenRosaResponseParser :
             }
 
             val mediaFileElement = manifestElement.getElement(i)
-            if (!isXformsManifestNamespacedElement(mediaFileElement)) {
+            if (!hasNamespace(mediaFileElement, NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST)) {
                 // someone else's extension?
                 continue
             }
@@ -184,7 +187,7 @@ object Kxml2OpenRosaResponseParser :
                     }
 
                     val child = mediaFileElement.getElement(j)
-                    if (!isXformsManifestNamespacedElement(child)) {
+                    if (!hasNamespace(child, NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST)) {
                         // someone else's extension?
                         continue
                     }
@@ -243,14 +246,7 @@ object Kxml2OpenRosaResponseParser :
         }
     }
 
-    private fun isXformsManifestNamespacedElement(e: Element): Boolean {
-        return e.namespace.equals(
-            NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST,
-            ignoreCase = true
-        )
-    }
-
-    private fun isXformsListNamespacedElement(e: Element): Boolean {
-        return e.namespace.equals(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST, ignoreCase = true)
+    private fun hasNamespace(e: Element, namespace: String): Boolean {
+        return e.namespace.equals(namespace, ignoreCase = true)
     }
 }
