@@ -9,13 +9,13 @@ import org.kxml2.kdom.Document
 class Kxml2OpenRosaResponseParserTest {
 
     @Test
-    fun `parseFormList() when document is empty, returns null`() {
+    fun `#parseFormList when document is empty, returns null`() {
         val formList = Kxml2OpenRosaResponseParser.parseFormList(Document())
         assertThat(formList, equalTo(null))
     }
 
     @Test
-    fun `parseFormList() when xform hash is missing prefix, returns null hash for item`() {
+    fun `#parseFormList when xform hash is missing prefix, returns null hash for item`() {
         val response = """
             <?xml version='1.0' encoding='UTF-8' ?>
             <xforms xmlns="http://openrosa.org/xforms/xformsList">
@@ -35,7 +35,7 @@ class Kxml2OpenRosaResponseParserTest {
     }
 
     @Test
-    fun `parseManifest() when media file hash is empty, returns null`() {
+    fun `#parseManifest when media file hash is empty, returns null`() {
         val response = """
             <?xml version='1.0' encoding='UTF-8' ?>
             <manifest xmlns="http://openrosa.org/xforms/xformsManifest">
@@ -53,13 +53,13 @@ class Kxml2OpenRosaResponseParserTest {
     }
 
     @Test
-    fun `parseManifest() when document is empty, returns null`() {
+    fun `#parseManifest when document is empty, returns null`() {
         val formList = Kxml2OpenRosaResponseParser.parseManifest(Document())
         assertThat(formList, equalTo(null))
     }
 
     @Test
-    fun `parseManifest() sanitizes media file names`() {
+    fun `#parseManifest sanitizes media file names`() {
         val response = """
             <?xml version='1.0' encoding='UTF-8' ?>
             <manifest xmlns="http://openrosa.org/xforms/xformsManifest">
@@ -78,7 +78,7 @@ class Kxml2OpenRosaResponseParserTest {
     }
 
     @Test
-    fun `parseManifest() when media file has type entityList returns isEntityList as true`() {
+    fun `#parseManifest when media file has type entityList returns isEntityList as true`() {
         val response = """
             <?xml version='1.0' encoding='UTF-8' ?>
             <manifest xmlns="http://openrosa.org/xforms/xformsManifest">
@@ -98,7 +98,7 @@ class Kxml2OpenRosaResponseParserTest {
     }
 
     @Test
-    fun `parseManifest() when media file does not have type returns isEntityList as false`() {
+    fun `#parseManifest when media file does not have type returns isEntityList as false`() {
         val response = """
             <?xml version='1.0' encoding='UTF-8' ?>
             <manifest xmlns="http://openrosa.org/xforms/xformsManifest">
@@ -117,7 +117,7 @@ class Kxml2OpenRosaResponseParserTest {
     }
 
     @Test
-    fun `parseManifest() includes integrityUrl when there is one`() {
+    fun `#parseManifest includes integrityUrl when there is one`() {
         val response = """
             <?xml version='1.0' encoding='UTF-8' ?>
             <manifest xmlns="http://openrosa.org/xforms/xformsManifest">
@@ -137,7 +137,7 @@ class Kxml2OpenRosaResponseParserTest {
     }
 
     @Test
-    fun `parseManifest() does not include integrityUrl when there isn't one`() {
+    fun `#parseManifest does not include integrityUrl when there isn't one`() {
         val response = """
             <?xml version='1.0' encoding='UTF-8' ?>
             <manifest xmlns="http://openrosa.org/xforms/xformsManifest">
@@ -156,7 +156,7 @@ class Kxml2OpenRosaResponseParserTest {
     }
 
     @Test
-    fun `parseManifest() returns null if a media file with type entityList is missing integrityUrl`() {
+    fun `#parseManifest returns null if a media file with type entityList is missing integrityUrl`() {
         val response = """
             <?xml version='1.0' encoding='UTF-8' ?>
             <manifest xmlns="http://openrosa.org/xforms/xformsManifest">
