@@ -106,7 +106,7 @@ public class ExStringWidgetTest extends GeneralExStringWidgetTest<ExStringWidget
 
         WidgetTestActivity widgetTestActivity = QuestionWidgetHelpers.widgetTestActivity();
         ExStringWidget widget = new ExStringWidget(widgetTestActivity, new QuestionDetails(prompt),
-                new FakeWaitingForDataRegistry(), stringRequester);
+                new FakeWaitingForDataRegistry(), stringRequester, dependencies);
 
         // Check initial value is not shown
         assertThat(widget.binding.widgetAnswerText.getVisibility(), equalTo(View.GONE));

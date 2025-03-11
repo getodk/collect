@@ -120,7 +120,7 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
 
         WidgetTestActivity widgetTestActivity = QuestionWidgetHelpers.widgetTestActivity();
         ExDecimalWidget widget = new ExDecimalWidget(widgetTestActivity, new QuestionDetails(prompt),
-                new FakeWaitingForDataRegistry(), stringRequester);
+                new FakeWaitingForDataRegistry(), stringRequester, dependencies);
 
         // Check initial value is not shown
         assertThat(widget.binding.widgetAnswerText.getVisibility(), Matchers.equalTo(View.GONE));
