@@ -1,9 +1,11 @@
 package org.odk.collect.openrosa.forms
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Assert.fail
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.mock
@@ -24,6 +26,7 @@ import java.net.URI
 import java.net.UnknownHostException
 import javax.net.ssl.SSLException
 
+@RunWith(AndroidJUnit4::class)
 class OpenRosaClientTest {
     private val httpInterface = mock<OpenRosaHttpInterface>()
     private val webCredentialsProvider = StubWebCredentialsProvider()
@@ -327,6 +330,35 @@ class OpenRosaClientTest {
             fail("No exception thrown!")
         } catch (e: FormSourceException.ServerError) {
             assertThat(e.statusCode, equalTo(500))
+            assertThat(e.serverUrl, equalTo("http://blah.com"))
+        }
+    }
+
+    @Test
+    fun isDeleted_whenOpenRosaResponse_whenParserFails_throwsParseError() {
+        val client =
+            OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
+
+        try {
+            whenever(
+                httpInterface.executeGetRequest(any(), any(), any())
+            ).thenReturn(
+                HttpGetResult(
+                    ByteArrayInputStream("<xml></xml>".toByteArray()),
+                    object : HashMap<String?, String?>() {
+                        init {
+                            put(OpenRosaConstants.VERSION_HEADER, "1.0")
+                        }
+                    },
+                    "hash",
+                    200
+                )
+            )
+
+            whenever(responseParser.parseIntegrityResponse(any())).thenReturn(null)
+            client.isDeleted("http://blah.com/integrity", listOf("1", "2", "3"))
+            fail("No exception thrown!")
+        } catch (e: FormSourceException.ParseError) {
             assertThat(e.serverUrl, equalTo("http://blah.com"))
         }
     }

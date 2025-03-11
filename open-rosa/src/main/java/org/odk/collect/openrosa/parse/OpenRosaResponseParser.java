@@ -1,6 +1,5 @@
 package org.odk.collect.openrosa.parse;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.kxml2.kdom.Document;
 import org.odk.collect.forms.FormListItem;
@@ -14,5 +13,5 @@ public interface OpenRosaResponseParser {
     @Nullable List<FormListItem> parseFormList(Document document);
     @Nullable List<MediaFile> parseManifest(Document document);
 
-    @NotNull List<EntityIntegrity> parseIntegrityResponse(Document doc);
+    @Nullable List<EntityIntegrity> parseIntegrityResponse(Document doc);
 }

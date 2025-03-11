@@ -171,4 +171,57 @@ class Kxml2OpenRosaResponseParserTest {
         val doc = XFormParser.getXMLDocument(response.reader())
         assertThat(Kxml2OpenRosaResponseParser.parseManifest(doc), equalTo(null))
     }
+
+    @Test
+    fun `#parseIntegrityResponse returns null when the response structure is incorrect`() {
+        val noData = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <blah>
+                <entities>
+                    <entity id="958e00b2-43f5-4d21-8adb-3d27aaa045f5">
+                        <deleted>true</deleted>
+                    </entity>
+                </entities>
+            </blah>
+        """.trimIndent()
+
+        val noEntities = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <data>
+                <stuff>
+                    <entity id="958e00b2-43f5-4d21-8adb-3d27aaa045f5">
+                        <deleted>true</deleted>
+                    </entity>
+                </stuff>
+            </data>
+        """.trimIndent()
+
+        val noEntity = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <data>
+                <entities>
+                    <thing id="958e00b2-43f5-4d21-8adb-3d27aaa045f5">
+                        <deleted>true</deleted>
+                    </thing>
+                </entities>
+            </data>
+        """.trimIndent()
+
+        val noDeleted = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <data>
+                <entities>
+                    <entity id="958e00b2-43f5-4d21-8adb-3d27aaa045f5">
+                        <blah>true</blah>
+                    </entity>
+                </entities>
+            </data>
+        """.trimIndent()
+
+        listOf(noData, noEntities, noEntity, noDeleted).forEach {
+            val doc = XFormParser.getXMLDocument(it.reader())
+            val response = Kxml2OpenRosaResponseParser.parseIntegrityResponse(doc)
+            assertThat("The following should not be parsed:\n$it\n\n", response, equalTo(null))
+        }
+    }
 }

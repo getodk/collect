@@ -159,7 +159,12 @@ class OpenRosaClient(
             .build()
 
         val result = openRosaXMLFetcher.getXML(uri.toString())
-        return openRosaResponseParser
-            .parseIntegrityResponse(result.doc).map { Pair(it.id, it.deleted) }
+        val parsedResponse = openRosaResponseParser.parseIntegrityResponse(result.doc)
+
+        if (parsedResponse != null) {
+            return parsedResponse.map { Pair(it.id, it.deleted) }
+        } else {
+            throw FormSourceException.ParseError(serverUrl)
+        }
     }
 }
