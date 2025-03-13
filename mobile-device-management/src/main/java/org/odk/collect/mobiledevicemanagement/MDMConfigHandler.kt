@@ -40,9 +40,11 @@ class MDMConfigHandlerImpl(
         if (managedConfig.containsKey(SETTINGS_JSON_KEY) && !managedConfig.getString(SETTINGS_JSON_KEY).isNullOrBlank()) {
             val settingsJson = managedConfig.getString(SETTINGS_JSON_KEY)
 
-            when (val matchingProjectUUID = settingsJson?.let { settingsConnectionMatcher.getProjectWithMatchingConnection(it) }) {
-                null -> projectCreator.createNewProject(settingsJson!!, projectsRepository.getAll().isEmpty())
-                else -> settingsImporter.fromJSON(settingsJson, projectsRepository.get(matchingProjectUUID)!!)
+            if (!settingsJson.isNullOrBlank()) {
+                when (val matchingProjectUUID = settingsJson.let { settingsConnectionMatcher.getProjectWithMatchingConnection(it) }) {
+                    null -> projectCreator.createNewProject(settingsJson, projectsRepository.getAll().isEmpty())
+                    else -> settingsImporter.fromJSON(settingsJson, projectsRepository.get(matchingProjectUUID)!!)
+                }
             }
         }
     }
