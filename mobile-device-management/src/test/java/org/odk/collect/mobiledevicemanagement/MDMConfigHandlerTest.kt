@@ -168,5 +168,7 @@ class MDMConfigHandlerTest {
         mdmConfigHandler.applyConfig(managedConfig)
 
         assertThat(settingsProvider.getMetaSettings().contains("foo"), equalTo(false))
+        verifyNoInteractions(projectCreator)
+        verifyNoInteractions(settingsImporter)
     }
 }
