@@ -19,21 +19,10 @@ object FormMetadataParser {
         val body = doc.getRootElement().getElement(null, "body")
         val title = head.getElement(null, "title").getChild(0).toString()
 
-        lateinit var mainInstanceRoot: Element
-        var submission: Element? = null
-        for (i in 0 until model.childCount) {
-            val child = model.getElement(i) ?: continue
-
-            if (child.name == "instance" && child.attributeCount == 0) {
-                for (j in 0 until child.childCount) {
-                    val mainInstanceChild = child.getElement(j) ?: continue
-                    mainInstanceRoot = mainInstanceChild
-                    break
-                }
-            } else if (child.name == "submission") {
-                submission = child
-            }
-        }
+        val modelElements = getChildren(model)
+        val mainInstance = modelElements.first { it.name == "instance" }
+        val mainInstanceRoot = getChildren(mainInstance).first()
+        val submission = modelElements.firstOrNull { it.name == "submission" }
 
         val id = mainInstanceRoot.getAttributeValue(null, "id")
         val version = mainInstanceRoot.getAttributeValue(null, "version")
@@ -55,6 +44,17 @@ object FormMetadataParser {
             geometryXPath,
             isEntityForm
         )
+    }
+
+    private fun getChildren(element: Element): List<Element> {
+        return 0.until(element.childCount).fold(emptyList()) { list, i ->
+            val child = element.getElement(i)
+            if (child != null) {
+                list + listOf(child)
+            } else {
+                list
+            }
+        }
     }
 
     /**

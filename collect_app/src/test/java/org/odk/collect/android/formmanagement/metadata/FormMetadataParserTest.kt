@@ -6,6 +6,33 @@ import org.junit.Test
 import org.odk.collect.android.formmanagement.metadata.FormMetadataParser.readMetadata
 
 class FormMetadataParserTest {
+
+    @Test
+    fun readMetadata_canParseWithAttributesOnMainInstance() {
+        val metadata = readMetadata(
+            """
+                <?xml version="1.0"?>
+                <h:html xmlns:h="http://www.w3.org/1999/xhtml"
+                        xmlns="http://www.w3.org/2002/xforms"
+                        xmlns:custom="http://example.com/custom">
+                    <h:head>
+                        <h:title>Form</h:title>
+                        <model>
+                            <instance custom:attribute="blah">
+                                <data id="form">
+                                </data>
+                            </instance>
+                        </model>
+                    </h:head>
+                    <h:body>
+                    </h:body>
+                </h:html>
+            """.trimIndent().byteInputStream()
+        )
+
+        assertThat(metadata.id, equalTo("form"))
+    }
+
     @Test
     fun readMetadata_canParseFormsWithComments() {
         readMetadata(
