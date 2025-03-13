@@ -201,8 +201,7 @@ class MobileDeviceManagementTest {
                         },
                         "admin": {
                             "edit_saved": false
-                        },
-                        "project": {}
+                        }
                     }
                     """.trimIndent()
                 )
