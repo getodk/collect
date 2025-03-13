@@ -34,6 +34,31 @@ class FormMetadataParserTest {
     }
 
     @Test
+    fun readMetadata_canParseWithXformsNamespace() {
+        val metadata = readMetadata(
+            """
+                <?xml version="1.0"?>
+                <h:html xmlns:h="http://www.w3.org/1999/xhtml"
+                        xmlns:custom="http://www.w3.org/2002/xforms">
+                    <h:head>
+                        <h:title>Form</h:title>
+                        <custom:model>
+                            <custom:instance>
+                                <custom:data custom:id="form">
+                                </custom:data>
+                            </custom:instance>
+                        </custom:model>
+                    </h:head>
+                    <h:body>
+                    </h:body>
+                </h:html>
+            """.trimIndent().byteInputStream()
+        )
+
+        assertThat(metadata.id, equalTo("form"))
+    }
+
+    @Test
     fun readMetadata_canParseFormsWithComments() {
         readMetadata(
             """
