@@ -96,6 +96,11 @@ public class FormHierarchyFragment extends Fragment {
 
         menuProvider = new FormHiearchyMenuProvider(formEntryViewModel, formHierarchyViewModel, viewOnly, new FormHiearchyMenuProvider.OnClickListener() {
             @Override
+            public void onEditClicked() {
+
+            }
+
+            @Override
             public void onGoUpClicked() {
                 FormController formController = formEntryViewModel.getFormController();
 
@@ -755,6 +760,7 @@ public class FormHierarchyFragment extends Fragment {
             boolean isGroupSizeLocked = shouldShowPicker
                     ? isGroupSizeLocked(formHierarchyViewModel.getRepeatGroupPickerIndex()) : isGroupSizeLocked(screenIndex);
 
+            menu.findItem(R.id.menu_edit).setVisible(viewOnly);
             menu.findItem(R.id.menu_add_repeat).setVisible(shouldShowPicker && !isGroupSizeLocked && !viewOnly);
             menu.findItem(R.id.menu_delete_child).setVisible(isInRepeat && !shouldShowPicker && !isGroupSizeLocked && !viewOnly);
             menu.findItem(R.id.menu_go_up).setVisible(!isAtBeginning);
@@ -762,7 +768,10 @@ public class FormHierarchyFragment extends Fragment {
 
         @Override
         public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-            if (menuItem.getItemId() == R.id.menu_delete_child) {
+            if (menuItem.getItemId() == R.id.menu_edit) {
+                onClickListener.onEditClicked();
+                return true;
+            } else if (menuItem.getItemId() == R.id.menu_delete_child) {
                 onClickListener.onDeleteRepeatClicked();
                 return true;
             } else if (menuItem.getItemId() == R.id.menu_add_repeat) {
@@ -783,6 +792,8 @@ public class FormHierarchyFragment extends Fragment {
         }
 
         interface OnClickListener {
+            void onEditClicked();
+
             void onGoUpClicked();
 
             void onAddRepeatClicked();
