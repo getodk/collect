@@ -8,6 +8,7 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
@@ -193,6 +194,16 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage assertNavigationButtonsAreHidden() {
         onView(withId(R.id.form_forward_button)).check(matches(not(isDisplayed())));
         onView(withId(R.id.form_back_button)).check(matches(not(isDisplayed())));
+        return this;
+    }
+
+    public FormEntryPage assertGoToIconExists() {
+        onView(withId(R.id.menu_goto)).check(matches(isDisplayed()));
+        return this;
+    }
+
+    public FormEntryPage assertGoToIconDoesNotExist() {
+        onView(withId(R.id.menu_goto)).check(doesNotExist());
         return this;
     }
 

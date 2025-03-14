@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.databinding.FirstLaunchLayoutBinding
@@ -21,6 +22,7 @@ import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.async.Scheduler
 import org.odk.collect.material.MaterialProgressDialogFragment
+import org.odk.collect.mobiledevicemanagement.MDMConfigObserver
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -44,6 +46,9 @@ class FirstLaunchActivity : LocalizedActivity() {
     @Inject
     lateinit var scheduler: Scheduler
 
+    @Inject
+    lateinit var mdmConfigObserver: MDMConfigObserver
+
     private val viewModel: FirstLaunchViewModel by viewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -66,6 +71,15 @@ class FirstLaunchActivity : LocalizedActivity() {
             ) {
                 MaterialProgressDialogFragment().also { dialog ->
                     dialog.message = getString(org.odk.collect.strings.R.string.loading)
+                }
+            }
+
+            viewModel.currentProject.observe(this@FirstLaunchActivity) { currentProject ->
+                if (currentProject != null) {
+                    ActivityUtils.startActivityAndCloseAllOthers(
+                        this@FirstLaunchActivity,
+                        MainMenuActivity::class.java
+                    )
                 }
             }
 
@@ -111,6 +125,7 @@ class FirstLaunchActivity : LocalizedActivity() {
                 }
             }
         }
+        lifecycle.addObserver(mdmConfigObserver)
     }
 }
 
@@ -121,6 +136,8 @@ private class FirstLaunchViewModel(
 ) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    val currentProject = projectsDataService.getCurrentProject().asLiveData()
 
     fun tryDemo() {
         Analytics.log(AnalyticsEvents.TRY_DEMO)

@@ -1,6 +1,7 @@
 package org.odk.collect.android.mainmenu
 
 import android.app.Application
+import android.content.RestrictionsManager
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.View
@@ -41,12 +42,17 @@ import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.androidshared.system.BroadcastReceiverRegister
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.async.Scheduler
 import org.odk.collect.crashhandler.CrashHandler
+import org.odk.collect.mobiledevicemanagement.MDMConfigObserver
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project
+import org.odk.collect.projects.ProjectCreator
+import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.ODKAppSettingsImporter
 import org.odk.collect.settings.SettingsProvider
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
@@ -120,6 +126,18 @@ class MainMenuActivityTest {
 
             override fun providesPermissionsProvider(permissionsChecker: PermissionsChecker?): PermissionsProvider {
                 return permissionsProvider
+            }
+
+            override fun providesMDMConfigObserver(
+                scheduler: Scheduler,
+                settingsProvider: SettingsProvider,
+                projectsRepository: ProjectsRepository,
+                projectCreator: ProjectCreator,
+                settingsImporter: ODKAppSettingsImporter,
+                broadcastReceiverRegister: BroadcastReceiverRegister,
+                restrictionsManager: RestrictionsManager
+            ): MDMConfigObserver {
+                return mock<MDMConfigObserver>()
             }
         })
 

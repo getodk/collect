@@ -8,6 +8,7 @@ import static java.util.Collections.singletonList;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.RestrictionsManager;
 import android.webkit.MimeTypeMap;
 
 import androidx.work.WorkManager;
@@ -63,7 +64,8 @@ import org.odk.collect.android.preferences.Defaults;
 import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
 import org.odk.collect.android.preferences.source.SharedPreferencesSettingsProvider;
-import org.odk.collect.android.projects.ProjectCreator;
+import org.odk.collect.android.projects.SettingsConnectionMatcherImpl;
+import org.odk.collect.android.projects.ProjectCreatorImpl;
 import org.odk.collect.android.projects.ProjectDeleter;
 import org.odk.collect.android.projects.ProjectResetter;
 import org.odk.collect.android.projects.ProjectsDataService;
@@ -87,6 +89,8 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.androidshared.bitmap.ImageCompressor;
+import org.odk.collect.androidshared.system.BroadcastReceiverRegister;
+import org.odk.collect.androidshared.system.BroadcastReceiverRegisterImpl;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.androidshared.utils.ScreenUtils;
@@ -109,14 +113,19 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.metadata.InstallIDProvider;
 import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.metadata.SettingsInstallIDProvider;
+import org.odk.collect.mobiledevicemanagement.MDMConfigHandlerImpl;
 import org.odk.collect.openrosa.http.CollectThenSystemContentTypeMapper;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 import org.odk.collect.openrosa.http.okhttp.OkHttpConnection;
+import org.odk.collect.mobiledevicemanagement.MDMConfigObserver;
+import org.odk.collect.mobiledevicemanagement.MDMConfigHandler;
 import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.Project;
+import org.odk.collect.projects.ProjectCreator;
 import org.odk.collect.projects.ProjectsRepository;
+import org.odk.collect.projects.SettingsConnectionMatcher;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
 import org.odk.collect.qrcode.QRCodeCreatorImpl;
 import org.odk.collect.qrcode.QRCodeDecoder;
@@ -397,7 +406,7 @@ public class AppDependencyModule {
     @Provides
     public ProjectCreator providesProjectCreator(ProjectsRepository projectsRepository, ProjectsDataService projectsDataService,
                                                  ODKAppSettingsImporter settingsImporter, SettingsProvider settingsProvider) {
-        return new ProjectCreator(projectsRepository, projectsDataService, settingsImporter, settingsProvider);
+        return new ProjectCreatorImpl(projectsRepository, projectsDataService, settingsImporter, settingsProvider);
     }
 
     @Provides
@@ -607,5 +616,46 @@ public class AppDependencyModule {
         String projectId = projectsDataService.requireCurrentProject().getUuid();
         EntitiesRepository entitiesRepository = entitiesRepositoryProvider.create(projectId);
         return new CollectFormEntryControllerFactory(entitiesRepository, settingsProvider.getUnprotectedSettings(projectId));
+    }
+
+    @Provides
+    public BroadcastReceiverRegister providesBroadcastReceiverRegister(Context context) {
+        return new BroadcastReceiverRegisterImpl(context);
+    }
+
+    @Provides
+    public RestrictionsManager providesRestrictionsManager(Context context) {
+        return (RestrictionsManager) context.getSystemService(Context.RESTRICTIONS_SERVICE);
+    }
+
+    @Provides
+    public MDMConfigObserver providesMDMConfigObserver(
+            Scheduler scheduler,
+            SettingsProvider settingsProvider,
+            ProjectsRepository projectsRepository,
+            ProjectCreator projectCreator,
+            ODKAppSettingsImporter settingsImporter,
+            BroadcastReceiverRegister broadcastReceiverRegister,
+            RestrictionsManager restrictionsManager
+    ) {
+        SettingsConnectionMatcher settingsConnectionMatcher = new SettingsConnectionMatcherImpl(
+                projectsRepository,
+                settingsProvider
+        );
+
+        MDMConfigHandler mdmConfigHandler = new MDMConfigHandlerImpl(
+                settingsProvider,
+                projectsRepository,
+                projectCreator,
+                settingsImporter,
+                settingsConnectionMatcher
+        );
+
+        return new MDMConfigObserver(
+                scheduler,
+                mdmConfigHandler,
+                broadcastReceiverRegister,
+                restrictionsManager
+        );
     }
 }

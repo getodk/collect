@@ -40,9 +40,10 @@ include ':draw'
 include ':lists'
 include ':web-page'
 include ':db'
+include ':open-rosa'
+include ':mobile-device-management'
 
 apply from: 'secrets.gradle'
 if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
     include ':mapbox'
 }
-include ':open-rosa'
