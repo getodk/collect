@@ -35,9 +35,9 @@ class FormDownloadExceptionMapperTest {
     fun formParsingError_returnsFormParsingErrorMessage() {
         val expectedString = context.getString(
             org.odk.collect.strings.R.string.form_parsing_error
-        ) + " " + context.getString(org.odk.collect.strings.R.string.report_to_project_lead)
+        ) + ": blah. " + context.getString(org.odk.collect.strings.R.string.report_to_project_lead)
         assertThat(
-            mapper.getMessage(FormDownloadException.FormParsingError()),
+            mapper.getMessage(FormDownloadException.FormParsingError(RuntimeException("blah"))),
             `is`(expectedString)
         )
     }
