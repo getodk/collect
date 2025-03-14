@@ -17,7 +17,7 @@ class FormDownloadExceptionMapper(private val context: Context) {
             is FormDownloadException.FormParsingError -> {
                 context.getLocalizedString(
                     org.odk.collect.strings.R.string.form_parsing_error
-                ) + " " + context.getLocalizedString(
+                ) + ": ${exception.original.message}. " + context.getLocalizedString(
                     org.odk.collect.strings.R.string.report_to_project_lead
                 )
             }

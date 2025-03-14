@@ -25,7 +25,7 @@ class FormsDownloadResultInterpreterTest {
 
     private var resultWithOneError = mapOf<ServerFormDetails, FormDownloadException?>(
         formDetails1 to null,
-        formDetails2 to FormDownloadException.FormParsingError()
+        formDetails2 to FormDownloadException.FormParsingError(RuntimeException())
     )
 
     @Test
