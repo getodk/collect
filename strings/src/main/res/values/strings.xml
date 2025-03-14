@@ -105,6 +105,8 @@
     <string name="jump_to_end">Go To End</string>
     <!-- Text of button from the form's table of contents to navigate out of a group or a repeat -->
     <string name="jump_to_previous">Go Up</string>
+    <!-- Text of button from the form's table of contents to edit a finalized form -->
+    <string name="edit_finalized_form">Edit finalized form</string>
     <!-- Displayed below group names in a form's table of contents -->
     <string name="group_label">Group</string>
     <!-- Displayed below repeat names in a form's table of contents -->
