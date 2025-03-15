@@ -6,6 +6,7 @@ import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPrevious
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,11 +45,15 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
+import org.odk.collect.android.formmanagement.FormFillingIntentFactory;
+import org.odk.collect.android.instancemanagement.InstanceCloner;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.async.Scheduler;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,13 +73,25 @@ public class FormHierarchyFragment extends Fragment {
      * was accessed. Used to jump the user back to where they were if applicable.
      */
     private FormIndex startIndex;
+    private final Scheduler scheduler;
+    private final InstanceCloner instanceCloner;
+    private final String currentProjectId;
 
-    public FormHierarchyFragment(boolean viewOnly, ViewModelProvider.Factory viewModelFactory, MenuHost menuHost) {
+    public FormHierarchyFragment(
+            boolean viewOnly,
+            ViewModelProvider.Factory viewModelFactory,
+            MenuHost menuHost,
+            Scheduler scheduler,
+            InstanceCloner instanceCloner,
+            String currentProjectId
+    ) {
         super(R.layout.form_hierarchy_layout);
         this.viewOnly = viewOnly;
-
         this.viewModelFactory = viewModelFactory;
         this.menuHost = menuHost;
+        this.scheduler = scheduler;
+        this.instanceCloner = instanceCloner;
+        this.currentProjectId = currentProjectId;
     }
 
     @Override
@@ -82,15 +99,29 @@ public class FormHierarchyFragment extends Fragment {
         super.onAttach(context);
 
         formEntryViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(FormEntryViewModel.class);
-        formHierarchyViewModel = new ViewModelProvider(this, new FormHierarchyViewModel.Factory()).get(FormHierarchyViewModel.class);
+        formHierarchyViewModel = new ViewModelProvider(
+                this,
+                new FormHierarchyViewModel.Factory(scheduler, instanceCloner)
+        ).get(FormHierarchyViewModel.class);
         requireActivity().setTitle(formEntryViewModel.getFormController().getFormTitle());
-
         startIndex = formEntryViewModel.getFormController().getFormIndex();
+
+        MaterialProgressDialogFragment.showOn(this, formHierarchyViewModel.isEditing(), getParentFragmentManager(), () -> {
+            MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
+            dialog.setMessage(getString(org.odk.collect.strings.R.string.preparing_form_edit));
+            return dialog;
+        });
 
         menuProvider = new FormHiearchyMenuProvider(formEntryViewModel, formHierarchyViewModel, viewOnly, new FormHiearchyMenuProvider.OnClickListener() {
             @Override
             public void onEditClicked() {
-
+                formHierarchyViewModel
+                        .editInstance(formEntryViewModel.getFormController())
+                        .observe(getViewLifecycleOwner(), dbId -> {
+                            Intent intent = FormFillingIntentFactory.editInstanceIntent(requireContext(), currentProjectId, dbId.getValue());
+                            startActivity(intent);
+                            requireActivity().getOnBackPressedDispatcher().onBackPressed();
+                        });
             }
 
             @Override

@@ -1389,4 +1389,6 @@
     <string name="view_polygon">View polygon</string>
     <!-- Text to describe a field for setting settings JSON in a mobile device management platform (MDM) -->
     <string name="settings_json">Settings JSON</string>
+    <!-- Text for the dialog that is displayed while the form is being prepared for editing -->
+    <string name="preparing_form_edit">Preparing the form for editing…</string>
 </resources>
