@@ -1,6 +1,7 @@
 package org.odk.collect.android.formhierarchy
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.instance.TreeReference
 
@@ -13,4 +14,10 @@ class FormHierarchyViewModel : ViewModel() {
     var startIndex: FormIndex? = null
 
     fun shouldShowRepeatGroupPicker() = repeatGroupPickerIndex != null
+
+    class Factory : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return FormHierarchyViewModel() as T
+        }
+    }
 }
