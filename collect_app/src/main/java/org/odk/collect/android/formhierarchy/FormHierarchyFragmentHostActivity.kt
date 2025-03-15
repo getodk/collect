@@ -8,6 +8,7 @@ import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.instancemanagement.InstanceCloner
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.ProjectsDataService
@@ -82,6 +83,9 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
     @Inject
     lateinit var changeLockProvider: ChangeLockProvider
 
+    @Inject
+    lateinit var instanceCloner: InstanceCloner
+
     private val sessionId by lazy { intent.getStringExtra(EXTRA_SESSION_ID)!! }
     private val viewModelFactory by lazy {
         FormEntryViewModelFactory(
@@ -115,7 +119,14 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
         val viewOnly = intent.getBooleanExtra(EXTRA_VIEW_ONLY, false)
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(FormHierarchyFragment::class) {
-                FormHierarchyFragment(viewOnly, viewModelFactory, this)
+                FormHierarchyFragment(
+                    viewOnly,
+                    viewModelFactory,
+                    this,
+                    scheduler,
+                    instanceCloner,
+                    projectsDataService.getCurrentProject().value?.uuid
+                )
             }
             .forClass(DeleteRepeatDialogFragment::class) {
                 DeleteRepeatDialogFragment(viewModelFactory)
