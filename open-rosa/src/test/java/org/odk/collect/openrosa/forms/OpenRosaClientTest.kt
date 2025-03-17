@@ -335,7 +335,7 @@ class OpenRosaClientTest {
     }
 
     @Test
-    fun isDeleted_whenNotOpenRosaResponse_throwsParseError() {
+    fun fetchDeletedStates_whenNotOpenRosaResponse_throwsParseError() {
         val client =
             OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
 
@@ -352,7 +352,7 @@ class OpenRosaClientTest {
             )
 
             whenever(responseParser.parseIntegrityResponse(any())).thenReturn(emptyList())
-            client.isDeleted("http://blah.com/integrity", listOf("1", "2", "3"))
+            client.fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
             fail("No exception thrown!")
         } catch (e: FormSourceException.ParseError) {
             assertThat(e.serverUrl, equalTo("http://blah.com"))
@@ -360,7 +360,7 @@ class OpenRosaClientTest {
     }
 
     @Test
-    fun isDeleted_whenOpenRosaResponse_whenParserFails_throwsParseError() {
+    fun fetchDeletedStates_whenOpenRosaResponse_whenParserFails_throwsParseError() {
         val client =
             OpenRosaClient("http://blah.com", httpInterface, webCredentialsProvider, responseParser)
 
@@ -381,7 +381,7 @@ class OpenRosaClientTest {
             )
 
             whenever(responseParser.parseIntegrityResponse(any())).thenReturn(null)
-            client.isDeleted("http://blah.com/integrity", listOf("1", "2", "3"))
+            client.fetchDeletedStates("http://blah.com/integrity", listOf("1", "2", "3"))
             fail("No exception thrown!")
         } catch (e: FormSourceException.ParseError) {
             assertThat(e.serverUrl, equalTo("http://blah.com"))

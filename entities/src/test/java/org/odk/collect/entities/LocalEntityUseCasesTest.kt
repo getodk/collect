@@ -784,7 +784,7 @@ private class FakeEntitySource : EntitySource {
 
     private val deleted = mutableListOf<String>()
 
-    override fun isDeleted(integrityUrl: String, ids: List<String>): List<Pair<String, Boolean>> {
+    override fun fetchDeletedStates(integrityUrl: String, ids: List<String>): List<Pair<String, Boolean>> {
         accesses += 1
 
         if (integrityUrl == this.integrityUrl) {

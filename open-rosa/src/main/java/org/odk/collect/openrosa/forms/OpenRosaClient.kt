@@ -152,7 +152,7 @@ class OpenRosaClient(
         return downloadListUrl
     }
 
-    override fun isDeleted(integrityUrl: String, ids: List<String>): List<Pair<String, Boolean>> {
+    override fun fetchDeletedStates(integrityUrl: String, ids: List<String>): List<Pair<String, Boolean>> {
         val uri = Uri.parse(integrityUrl)
             .buildUpon()
             .appendQueryParameter("id", ids.joinToString(","))

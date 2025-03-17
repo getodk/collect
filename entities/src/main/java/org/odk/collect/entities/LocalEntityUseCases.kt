@@ -141,7 +141,7 @@ object LocalEntityUseCases {
         }
 
         if (integrityUrl != null && missingOffline.isNotEmpty()) {
-            entitySource.isDeleted(integrityUrl, missingOffline.map { it.id }).forEach {
+            entitySource.fetchDeletedStates(integrityUrl, missingOffline.map { it.id }).forEach {
                 if (it.second) {
                     entitiesRepository.delete(list, it.first)
                 }
