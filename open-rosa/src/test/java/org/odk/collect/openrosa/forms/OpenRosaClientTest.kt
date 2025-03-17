@@ -6,10 +6,10 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.any
-import org.mockito.ArgumentMatchers.eq
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
+import org.mockito.kotlin.any
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormSourceException.FetchError
@@ -304,7 +304,7 @@ class OpenRosaClientTest {
 
         try {
             whenever(
-                httpInterface.executeGetRequest(any(), any(), any())
+                httpInterface.executeGetRequest(any(), eq(null), any())
             ).thenReturn(HttpGetResult(null, HashMap(), "hash", 500))
 
             formListApi.fetchForm("http://blah.com/form")
@@ -323,7 +323,7 @@ class OpenRosaClientTest {
 
         try {
             whenever(
-                httpInterface.executeGetRequest(any(), any(), any())
+                httpInterface.executeGetRequest(any(), eq(null), any())
             ).thenReturn(HttpGetResult(null, HashMap(), "hash", 500))
 
             formListApi.fetchMediaFile("http://blah.com/mediaFile")
