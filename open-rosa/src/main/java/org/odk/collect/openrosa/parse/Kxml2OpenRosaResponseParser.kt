@@ -5,11 +5,19 @@ import org.kxml2.kdom.Document
 import org.kxml2.kdom.Element
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.MediaFile
+import org.odk.collect.openrosa.forms.EntityIntegrity
 import org.odk.collect.shared.strings.StringUtils.isBlank
 import java.io.File
 
-class OpenRosaResponseParserImpl :
+object Kxml2OpenRosaResponseParser :
     OpenRosaResponseParser {
+
+    private const val MD5_STRING_PREFIX = "md5:"
+
+    private const val NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
+        "http://openrosa.org/xforms/xformsList"
+    private const val NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
+        "http://openrosa.org/xforms/xformsManifest"
 
     override fun parseFormList(document: Document): List<FormListItem>? {
         // Attempt OpenRosa 1.0 parsing
@@ -23,7 +31,7 @@ class OpenRosaResponseParserImpl :
             return null
         }
 
-        if (!isXformsListNamespacedElement(xformsElement)) {
+        if (!hasNamespace(xformsElement, NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST)) {
             return null
         }
 
@@ -36,7 +44,10 @@ class OpenRosaResponseParserImpl :
             }
 
             val xformElement = xformsElement.getElement(i)
-            if (!isXformsListNamespacedElement(xformElement)) {
+            if (!hasNamespace(
+                    xformElement,
+                    NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST
+                )) {
                 // someone else's extension?
                 continue
             }
@@ -64,7 +75,7 @@ class OpenRosaResponseParserImpl :
                 }
 
                 val child = xformElement.getElement(j)
-                if (!isXformsListNamespacedElement(child)) {
+                if (!hasNamespace(child, NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST)) {
                     // someone else's extension?
                     continue
                 }
@@ -140,7 +151,7 @@ class OpenRosaResponseParserImpl :
             return null
         }
 
-        if (!isXformsManifestNamespacedElement(manifestElement)) {
+        if (!hasNamespace(manifestElement, NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST)) {
             return null
         }
 
@@ -153,7 +164,7 @@ class OpenRosaResponseParserImpl :
             }
 
             val mediaFileElement = manifestElement.getElement(i)
-            if (!isXformsManifestNamespacedElement(mediaFileElement)) {
+            if (!hasNamespace(mediaFileElement, NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST)) {
                 // someone else's extension?
                 continue
             }
@@ -165,6 +176,7 @@ class OpenRosaResponseParserImpl :
                 var filename: String? = null
                 var hash: String? = null
                 var downloadUrl: String? = null
+                var integrityUrl: String? = null
                 // don't process descriptionUrl
                 val childCount = mediaFileElement.childCount
                 for (j in 0 until childCount) {
@@ -174,7 +186,7 @@ class OpenRosaResponseParserImpl :
                     }
 
                     val child = mediaFileElement.getElement(j)
-                    if (!isXformsManifestNamespacedElement(child)) {
+                    if (!hasNamespace(child, NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST)) {
                         // someone else's extension?
                         continue
                     }
@@ -203,6 +215,9 @@ class OpenRosaResponseParserImpl :
                                 downloadUrl = null
                             }
                         }
+                        "integrityUrl" -> {
+                            integrityUrl = XFormParser.getXMLText(child, true)
+                        }
                     }
                 }
 
@@ -210,30 +225,36 @@ class OpenRosaResponseParserImpl :
                     return null
                 }
 
-                files.add(MediaFile(filename, hash, downloadUrl, type == "entityList"))
+                val isEntityList = type == "entityList"
+                if (isEntityList && integrityUrl == null) {
+                    return null
+                }
+
+                files.add(MediaFile(filename, hash, downloadUrl, isEntityList, integrityUrl))
             }
         }
         return files
     }
 
-    companion object {
-
-        private const val MD5_STRING_PREFIX = "md5:"
-
-        private const val NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
-            "http://openrosa.org/xforms/xformsList"
-        private const val NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
-            "http://openrosa.org/xforms/xformsManifest"
-
-        private fun isXformsListNamespacedElement(e: Element): Boolean {
-            return e.namespace.equals(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST, ignoreCase = true)
+    override fun parseIntegrityResponse(doc: Document): List<EntityIntegrity>? {
+        val data = doc.rootElement
+        if (data.name != "data") {
+            return null
         }
 
-        private fun isXformsManifestNamespacedElement(e: Element): Boolean {
-            return e.namespace.equals(
-                NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST,
-                ignoreCase = true
-            )
+        try {
+            val entities = data.getElement(null, "entities")
+            return 0.until(entities.childCount).map {
+                val entity = entities.getElement(null, "entity")
+                val deleted = entity.getElement(null, "deleted").getChild(0) as String
+                EntityIntegrity(entity.getAttributeValue(null, "id"), deleted.toBooleanStrict())
+            }
+        } catch (e: RuntimeException) {
+            return null
         }
+    }
+
+    private fun hasNamespace(e: Element, namespace: String): Boolean {
+        return e.namespace.equals(namespace, ignoreCase = true)
     }
 }
