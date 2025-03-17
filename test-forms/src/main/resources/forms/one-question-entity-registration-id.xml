@@ -1,4 +1,8 @@
 <?xml version="1.0"?>
+<!--
+Like "one-question-entity-resgistration.xml except that the entity ID uses the name field so that
+the it can be used in tests (as opposed to having the standard UUID generated ID).
+ -->
 <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:entities="http://www.opendatakit.org/xforms/entities">
 	<h:head>
 		<h:title>One Question Entity Registration</h:title>
