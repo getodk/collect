@@ -449,11 +449,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
     public static class EntityListItem extends MediaFileItem {
 
-        private int version = 1;
-
-        public EntityListItem(String name, String file) {
-            super(name, file, name);
-        }
+        private int version;
 
         public EntityListItem(String name, String file, int version) {
             super(name, file);
