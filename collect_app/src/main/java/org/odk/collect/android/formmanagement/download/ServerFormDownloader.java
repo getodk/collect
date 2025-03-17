@@ -42,7 +42,7 @@ public class ServerFormDownloader implements FormDownloader {
     private final FormMetadataParser formMetadataParser;
     private final Supplier<Long> clock;
     private final EntitiesRepository entitiesRepository;
-    private EntitySource entitySource;
+    private final EntitySource entitySource;
 
     public ServerFormDownloader(FormSource formSource, FormsRepository formsRepository, File cacheDir, String formsDirPath, FormMetadataParser formMetadataParser, Supplier<Long> clock, EntitiesRepository entitiesRepository, EntitySource entitySource) {
         this.formSource = formSource;
