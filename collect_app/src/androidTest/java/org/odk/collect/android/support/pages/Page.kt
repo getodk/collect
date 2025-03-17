@@ -252,7 +252,12 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnText(text: String): T {
-        Interactions.clickOn(withText(text))
+        Interactions.clickOn(
+            allOf(
+                withText(text),
+                withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
+            )
+        )
         return this as T
     }
 
