@@ -247,7 +247,7 @@ object Kxml2OpenRosaResponseParser :
             return 0.until(entities.childCount).map {
                 val entity = entities.getElement(null, "entity")
                 val deleted = entity.getElement(null, "deleted").getChild(0) as String
-                EntityIntegrity(entity.getAttributeValue(null, "id"), deleted.toBoolean())
+                EntityIntegrity(entity.getAttributeValue(null, "id"), deleted.toBooleanStrict())
             }
         } catch (e: RuntimeException) {
             return null

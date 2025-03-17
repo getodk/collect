@@ -218,7 +218,29 @@ class Kxml2OpenRosaResponseParserTest {
             </data>
         """.trimIndent()
 
-        listOf(noData, noEntities, noEntity, noDeleted).forEach {
+        val emptyDeleted = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <data>
+                <entities>
+                    <entity id="958e00b2-43f5-4d21-8adb-3d27aaa045f5">
+                        <deleted></deleted>
+                    </entity>
+                </entities>
+            </data>
+        """.trimIndent()
+
+        val invalidDeleted = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <data>
+                <entities>
+                    <entity id="958e00b2-43f5-4d21-8adb-3d27aaa045f5">
+                        <deleted>yes</deleted>
+                    </entity>
+                </entities>
+            </data>
+        """.trimIndent()
+
+        listOf(noData, noEntities, noEntity, noDeleted, emptyDeleted, invalidDeleted).forEach {
             val doc = XFormParser.getXMLDocument(it.reader())
             val response = Kxml2OpenRosaResponseParser.parseIntegrityResponse(doc)
             assertThat("The following should not be parsed:\n$it\n\n", response, equalTo(null))
