@@ -8,6 +8,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.StorageUtils.getAuditLogForFirstInstance
+import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.strings.R
@@ -42,6 +43,17 @@ class RequiredQuestionTest {
             .copyForm("required_question_with_custom_error_message.xml")
             .startBlankForm("required_question_with_custom_error_message")
             .swipeToNextQuestionWithConstraintViolation("Custom message")
+    }
+
+    @Test
+    fun errorMessageDisappearsAfterActivityRecreation() {
+        rule.startAtMainMenu()
+            .copyForm("required_question_with_custom_error_message.xml")
+            .startBlankForm("required_question_with_custom_error_message")
+            .swipeToNextQuestionWithConstraintViolation("Custom message")
+            .rotateToLandscape(FormEntryPage("required_question_with_custom_error_message"))
+            .rotateToPortrait(FormEntryPage("required_question_with_custom_error_message"))
+            .assertTextDoesNotExist("Custom message")
     }
 
     @Test
