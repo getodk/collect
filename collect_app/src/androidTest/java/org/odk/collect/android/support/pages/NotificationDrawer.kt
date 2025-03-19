@@ -20,7 +20,7 @@ class NotificationDrawer {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         device.openNotification()
         isOpen = true
-        return NotificationDrawer()
+        return this
     }
 
     fun teardown() {
