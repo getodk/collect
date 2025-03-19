@@ -235,6 +235,7 @@ class EntityFormTest {
 
     @Test
     fun aLocallyCreatedEntity_thatIsDeletedOnTheServer_isNotAvailableToFollowUpForms() {
+        testDependencies.server.includeIntegrityUrl()
         testDependencies.server.addForm("one-question-entity-registration-id.xml")
         testDependencies.server.addForm(
             "one-question-entity-update.xml",

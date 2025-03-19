@@ -3,6 +3,7 @@ package org.odk.collect.openrosa.parse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.xform.parse.XFormParser
+import org.junit.Ignore
 import org.junit.Test
 import org.kxml2.kdom.Document
 
@@ -156,6 +157,7 @@ class Kxml2OpenRosaResponseParserTest {
     }
 
     @Test
+    @Ignore("This would break servers that had implemented type before integrityUrl was added to the spec. https://forum.getodk.org/t/openrosa-spec-proposal-support-offline-entities/48052/2")
     fun `#parseManifest returns null if a media file with type entityList is missing integrityUrl`() {
         val response = """
             <?xml version='1.0' encoding='UTF-8' ?>
