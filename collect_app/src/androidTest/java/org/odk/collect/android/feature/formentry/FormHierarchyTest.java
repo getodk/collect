@@ -269,4 +269,17 @@ public class FormHierarchyTest {
                 .clickOnText("what is your age")
                 .assertOnPage(new ViewFormPage("One Question"));
     }
+
+    @Test
+    public void clickingBackButtonAfterNavigatingInTheHierarchyOfGroups_movesToTheQuestionDisplayedBeforeOpeningTheHierarchy() {
+        rule.startAtMainMenu()
+                .copyForm("two-questions-in-group.xml")
+                .startBlankForm("two-questions-in-group")
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Name")
+                .pressBack(new FormEntryPage("two-questions-in-group"))
+                .assertQuestion("First name")
+                .assertNoQuestion("Last name");
+    }
 }

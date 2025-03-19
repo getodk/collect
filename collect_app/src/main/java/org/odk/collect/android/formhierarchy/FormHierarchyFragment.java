@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -36,6 +37,7 @@ import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.FormHierarchyLayoutBinding;
@@ -62,6 +64,11 @@ public class FormHierarchyFragment extends Fragment {
     private FormHiearchyMenuProvider menuProvider;
     private FormEntryViewModel formEntryViewModel;
     private FormHierarchyViewModel formHierarchyViewModel;
+    /**
+     * The index of the question or the field list the FormController was set to when the hierarchy
+     * was accessed. Used to jump the user back to where they were if applicable.
+     */
+    private FormIndex startIndex;
 
     public FormHierarchyFragment(boolean viewOnly, ViewModelProvider.Factory viewModelFactory, MenuHost menuHost) {
         super(R.layout.form_hierarchy_layout);
@@ -84,6 +91,8 @@ public class FormHierarchyFragment extends Fragment {
             }
         }).get(FormHierarchyViewModel.class);
         requireActivity().setTitle(formEntryViewModel.getFormController().getFormTitle());
+
+        startIndex = formEntryViewModel.getFormController().getFormIndex();
 
         menuProvider = new FormHiearchyMenuProvider(formEntryViewModel, formHierarchyViewModel, viewOnly, new FormHiearchyMenuProvider.OnClickListener() {
             @Override
@@ -128,6 +137,21 @@ public class FormHierarchyFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(
+                getViewLifecycleOwner(),
+                new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        FormController formController = formEntryViewModel.getFormController();
+                        if (formController != null) {
+                            formController.getAuditEventLogger().flush();
+                            navigateToTheLastRelevantIndex(formController);
+                        }
+                        requireActivity().finish();
+                    }
+                }
+        );
+
         formHierarchyViewModel.setStartIndex(formEntryViewModel.getFormController().getFormIndex());
 
         menuHost.addMenuProvider(menuProvider, getViewLifecycleOwner());
@@ -678,6 +702,29 @@ public class FormHierarchyFragment extends Fragment {
         }
 
         refreshView();
+    }
+
+    private void navigateToTheLastRelevantIndex(FormController formController) {
+        FormEntryController fec = new FormEntryController(new FormEntryModel(formController.getFormDef()));
+        formController.jumpToIndex(startIndex);
+
+        // startIndex might no longer exist if it was a part of repeat group that has been removed
+        while (true) {
+            boolean isBeginningOfFormIndex = formController.getFormIndex().isBeginningOfFormIndex();
+            boolean isEndOfFormIndex = formController.getFormIndex().isEndOfFormIndex();
+            boolean isIndexRelevant = isBeginningOfFormIndex
+                    || isEndOfFormIndex
+                    || fec.getModel().isIndexRelevant(formController.getFormIndex());
+            boolean isPromptNewRepeatEvent = formController.getEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT;
+
+            boolean shouldNavigateBack = !isIndexRelevant || isPromptNewRepeatEvent;
+
+            if (shouldNavigateBack) {
+                formController.stepToPreviousEvent();
+            } else {
+                break;
+            }
+        }
     }
 
     private static class FormHiearchyMenuProvider implements MenuProvider {
