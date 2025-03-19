@@ -60,8 +60,7 @@ class NotificationDrawer {
         val actionElement = getExpandedElement(device, appName, actionText) ?: getExpandedElement(device, appName, actionText.uppercase())
         if (actionElement != null) {
             actionElement.click()
-            closeNotificationDrawerIfOpened()
-            isOpen = false
+            ensureClosed()
         } else {
             throw AssertionError("Could not find \"$actionText\"")
         }
@@ -81,8 +80,7 @@ class NotificationDrawer {
     ): D {
         val device = waitForNotification(appName, title)
         device.findObject(By.text(title)).click()
-        closeNotificationDrawerIfOpened()
-        isOpen = false
+        ensureClosed()
 
         return waitFor {
             destination.assertOnPage()
@@ -100,16 +98,17 @@ class NotificationDrawer {
         }
 
         device.wait(Until.gone(By.text("No notifications")), 1000L)
-        closeNotificationDrawerIfOpened()
-        isOpen = false
+        close()
     }
 
     private fun assertNoNotification(appName: String) {
+        open()
+
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.openNotification()
         val result = device.wait(Until.hasObject(By.textStartsWith(appName)), 0L)
         assertThat("Expected no notification for app: $appName", result, equalTo(false))
-        device.pressBack()
+
+        close()
     }
 
     private fun assertExpandedText(
@@ -152,15 +151,26 @@ class NotificationDrawer {
         }
     }
 
+    private fun close() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        if (isOpen) {
+            device.pressBack()
+        }
+
+        ensureClosed()
+    }
+
     /**
      * It appears that sometimes the notification drawer does not close automatically when it should
      * such as after clicking on a notification or its action. This could be due to a bug in Android.
      */
-    private fun closeNotificationDrawerIfOpened() {
+    private fun ensureClosed() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val isManageButtonGone = device.wait(Until.gone(By.text("Manage")), TimeInMs.THREE_SECONDS)
         if (!isManageButtonGone) {
             device.pressBack()
         }
+
+        isOpen = false
     }
 }
