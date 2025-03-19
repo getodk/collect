@@ -54,6 +54,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
      */
     private final List<File> submittedForms = new ArrayList<>();
     private List<String> deletedEntities = new ArrayList<>();
+    private boolean includeIntegrityUrl;
 
     @NonNull
     @Override
@@ -180,6 +181,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         randomHash = true;
     }
 
+    public void includeIntegrityUrl() {
+        includeIntegrityUrl = true;
+    }
+
     public String getURL() {
         return "https://" + HOST;
     }
@@ -298,7 +303,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
                 stringBuilder
                         .append("<downloadUrl>" + getURL() + "/mediaFile/" + formID + "/" + mediaFile.getId() + "</downloadUrl>\n");
 
-                if (mediaFile instanceof EntityListItem) {
+                if (mediaFile instanceof EntityListItem && includeIntegrityUrl) {
                     stringBuilder.append("<integrityUrl>" + getURL() + "/integrityUrl</integrityUrl>\n");
                 }
 
