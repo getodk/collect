@@ -6,6 +6,7 @@ import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import org.odk.collect.android.support.pages.NotificationDrawer
+import org.odk.collect.android.support.pages.NotificationDrawer.Companion.SUPPORTED_SDKS
 
 class NotificationDrawerRule : TestRule {
     private val notificationDrawer = NotificationDrawer()
@@ -30,9 +31,5 @@ class NotificationDrawerRule : TestRule {
 
     fun open(): NotificationDrawer {
         return notificationDrawer.open()
-    }
-
-    companion object {
-        private val SUPPORTED_SDKS = listOf(30, 34)
     }
 }
