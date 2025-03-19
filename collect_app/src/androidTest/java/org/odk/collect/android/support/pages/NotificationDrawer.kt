@@ -12,6 +12,7 @@ import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.odk.collect.shared.TimeInMs
 import org.odk.collect.testshared.WaitFor.waitFor
+import java.util.regex.Pattern
 
 class NotificationDrawer {
     private var isOpen = false
@@ -19,14 +20,22 @@ class NotificationDrawer {
     fun open(): NotificationDrawer {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         device.openNotification()
+
+        assertThat(
+            "Couldn't open notification drawer!",
+            device.wait(Until.hasObject(DRAWER_SEARCH_CONDITION), TimeInMs.ONE_SECOND),
+            equalTo(true)
+        )
         isOpen = true
         return this
     }
 
     fun teardown() {
-        if (isOpen) {
-            clearAll()
+        if (!isOpen) {
+            open()
         }
+
+        clearAll()
     }
 
     @JvmOverloads
@@ -57,7 +66,11 @@ class NotificationDrawer {
     ): D {
         val device = waitForNotification(appName, title)
 
-        val actionElement = getExpandedElement(device, appName, actionText) ?: getExpandedElement(device, appName, actionText.uppercase())
+        val actionElement = getExpandedElement(device, appName, actionText) ?: getExpandedElement(
+            device,
+            appName,
+            actionText.uppercase()
+        )
         if (actionElement != null) {
             actionElement.click()
             ensureClosed()
@@ -140,8 +153,7 @@ class NotificationDrawer {
     private fun waitForNotification(appName: String, title: String): UiDevice {
         return waitFor {
             val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-            val result = device.wait(Until.hasObject(By.text(appName)), 0L) &&
-                device.wait(Until.hasObject(By.text(title)), 0L)
+            val result = device.wait(Until.hasObject(By.text(appName)), 0L) && device.wait(Until.hasObject(By.text(title)), 0L)
             assertThat(
                 "No notification for app: $appName with title $title",
                 result,
@@ -166,11 +178,19 @@ class NotificationDrawer {
      */
     private fun ensureClosed() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        val isManageButtonGone = device.wait(Until.gone(By.text("Manage")), TimeInMs.THREE_SECONDS)
-        if (!isManageButtonGone) {
+        if (!device.wait(Until.gone(DRAWER_SEARCH_CONDITION), TimeInMs.ONE_SECOND * 3)) {
             device.pressBack()
+            assertThat(
+                "Couldn't close notification drawer!",
+                device.wait(Until.gone(DRAWER_SEARCH_CONDITION), TimeInMs.ONE_SECOND),
+                equalTo(true)
+            )
         }
 
-        isOpen = false
+        this.isOpen = false
+    }
+
+    companion object {
+        private val DRAWER_SEARCH_CONDITION = By.text(Pattern.compile("Manage|No notifications"))
     }
 }
