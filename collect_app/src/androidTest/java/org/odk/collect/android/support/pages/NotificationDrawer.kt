@@ -105,13 +105,10 @@ class NotificationDrawer {
         val clearAll = device.findObject(By.text("Clear all"))
         if (clearAll != null) {
             clearAll.click()
+            ensureClosed()
         } else {
-            // "Clear all" doesn't exist because there are notifications to clear - just press back
-            device.pressBack()
+            close()
         }
-
-        device.wait(Until.gone(By.text("No notifications")), 1000L)
-        close()
     }
 
     private fun assertNoNotification(appName: String) {
