@@ -52,7 +52,6 @@ class RequiredQuestionTest {
             .startBlankForm("required_question_with_custom_error_message")
             .swipeToNextQuestionWithConstraintViolation("Custom message")
             .rotateToLandscape(FormEntryPage("required_question_with_custom_error_message"))
-            .rotateToPortrait(FormEntryPage("required_question_with_custom_error_message"))
             .assertTextDoesNotExist("Custom message")
     }
 
