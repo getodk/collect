@@ -12,6 +12,7 @@ import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.odk.collect.shared.TimeInMs
 import org.odk.collect.testshared.WaitFor.waitFor
+import java.util.regex.Pattern
 
 class NotificationDrawer {
     private var isOpen = false
@@ -19,14 +20,22 @@ class NotificationDrawer {
     fun open(): NotificationDrawer {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         device.openNotification()
+
+        assertThat(
+            "Couldn't open notification drawer!",
+            device.wait(Until.hasObject(DRAWER_SEARCH_CONDITION), TimeInMs.ONE_SECOND),
+            equalTo(true)
+        )
         isOpen = true
-        return NotificationDrawer()
+        return this
     }
 
     fun teardown() {
-        if (isOpen) {
-            clearAll()
+        if (!isOpen) {
+            open()
         }
+
+        clearAll()
     }
 
     @JvmOverloads
@@ -57,11 +66,14 @@ class NotificationDrawer {
     ): D {
         val device = waitForNotification(appName, title)
 
-        val actionElement = getExpandedElement(device, appName, actionText) ?: getExpandedElement(device, appName, actionText.uppercase())
+        val actionElement = getExpandedElement(device, appName, actionText) ?: getExpandedElement(
+            device,
+            appName,
+            actionText.uppercase()
+        )
         if (actionElement != null) {
             actionElement.click()
-            closeNotificationDrawerIfOpened()
-            isOpen = false
+            ensureClosed()
         } else {
             throw AssertionError("Could not find \"$actionText\"")
         }
@@ -81,8 +93,7 @@ class NotificationDrawer {
     ): D {
         val device = waitForNotification(appName, title)
         device.findObject(By.text(title)).click()
-        closeNotificationDrawerIfOpened()
-        isOpen = false
+        ensureClosed()
 
         return waitFor {
             destination.assertOnPage()
@@ -94,22 +105,20 @@ class NotificationDrawer {
         val clearAll = device.findObject(By.text("Clear all"))
         if (clearAll != null) {
             clearAll.click()
+            ensureClosed()
         } else {
-            // "Clear all" doesn't exist because there are notifications to clear - just press back
-            device.pressBack()
+            close()
         }
-
-        device.wait(Until.gone(By.text("No notifications")), 1000L)
-        closeNotificationDrawerIfOpened()
-        isOpen = false
     }
 
     private fun assertNoNotification(appName: String) {
+        open()
+
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.openNotification()
         val result = device.wait(Until.hasObject(By.textStartsWith(appName)), 0L)
         assertThat("Expected no notification for app: $appName", result, equalTo(false))
-        device.pressBack()
+
+        close()
     }
 
     private fun assertExpandedText(
@@ -141,8 +150,7 @@ class NotificationDrawer {
     private fun waitForNotification(appName: String, title: String): UiDevice {
         return waitFor {
             val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-            val result = device.wait(Until.hasObject(By.text(appName)), 0L) &&
-                device.wait(Until.hasObject(By.text(title)), 0L)
+            val result = device.wait(Until.hasObject(By.text(appName)), 0L) && device.wait(Until.hasObject(By.text(title)), 0L)
             assertThat(
                 "No notification for app: $appName with title $title",
                 result,
@@ -152,15 +160,36 @@ class NotificationDrawer {
         }
     }
 
+    private fun close() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        if (isOpen) {
+            device.pressBack()
+        }
+
+        ensureClosed()
+    }
+
     /**
      * It appears that sometimes the notification drawer does not close automatically when it should
      * such as after clicking on a notification or its action. This could be due to a bug in Android.
      */
-    private fun closeNotificationDrawerIfOpened() {
+    private fun ensureClosed() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        val isManageButtonGone = device.wait(Until.gone(By.text("Manage")), TimeInMs.THREE_SECONDS)
-        if (!isManageButtonGone) {
+        if (!device.wait(Until.gone(DRAWER_SEARCH_CONDITION), TimeInMs.ONE_SECOND * 3)) {
             device.pressBack()
+            assertThat(
+                "Couldn't close notification drawer!",
+                device.wait(Until.gone(DRAWER_SEARCH_CONDITION), TimeInMs.ONE_SECOND),
+                equalTo(true)
+            )
         }
+
+        this.isOpen = false
+    }
+
+    companion object {
+        val SUPPORTED_SDKS = listOf(30, 34)
+
+        private val DRAWER_SEARCH_CONDITION = By.text(Pattern.compile("Manage|No notifications"))
     }
 }
