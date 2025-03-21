@@ -367,8 +367,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
     }
 
     public String formatLocationStatus(String provider, double accuracyRadius) {
-        return getString(org.odk.collect.strings.R.string.location_accuracy, new DecimalFormat("#.##").format(accuracyRadius))
-                + " " + getString(org.odk.collect.strings.R.string.location_provider, GeoUtils.capitalizeGps(provider));
+        return getString(org.odk.collect.strings.R.string.location_accuracy, new DecimalFormat("#.##").format(accuracyRadius)) + ", " + getString(org.odk.collect.strings.R.string.location_provider, GeoUtils.capitalizeGps(provider));
     }
 
     public void onDragEnd(int draggedFeatureId) {
