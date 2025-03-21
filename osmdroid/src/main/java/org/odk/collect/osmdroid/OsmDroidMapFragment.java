@@ -184,6 +184,9 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         map.setFlingEnabled(false);
         map.getOverlays().add(new ScaleBarOverlay(map));
         map.addMapListener(new MapListener() {
+
+            private boolean initialized;
+
             @Override
             public boolean onZoom(ZoomEvent event) {
                 if (!isSystemZooming) {
@@ -195,7 +198,13 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
             @Override
             public boolean onScroll(ScrollEvent event) {
-                mapViewModel.onUserMove(getCenter(), event.getSource().getZoomLevelDouble());
+                // Ignore initial scroll event that we get when the map loads
+                if (initialized) {
+                    mapViewModel.onUserMove(getCenter(), event.getSource().getZoomLevelDouble());
+                } else {
+                    initialized = true;
+                }
+
                 return false;
             }
         });
