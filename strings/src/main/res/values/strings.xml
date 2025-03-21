@@ -748,7 +748,7 @@
     <string name="form_with_no_hash_error">The server did not provide a hash for this form.</string>
 
     <!-- Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data -->
-    <string name="form_parsing_error">This form cannot be processed.</string>
+    <string name="form_parsing_error">This form cannot be processed:</string>
 
     <!-- Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data -->
     <string name="form_save_disk_error">A disk error occurred on device while downloading this form.</string>
