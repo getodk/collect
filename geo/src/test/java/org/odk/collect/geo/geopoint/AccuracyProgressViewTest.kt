@@ -12,7 +12,7 @@ import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.geo.R
 
 @RunWith(AndroidJUnit4::class)
-class AccuracyStatusViewTest {
+class AccuracyProgressViewTest {
 
     private val context = getApplicationContext<Application>().also {
         // Need a theme where primary and secondary are different for tests
@@ -26,13 +26,13 @@ class AccuracyStatusViewTest {
 
     @Test
     fun `updates current accuracy`() {
-        val view = AccuracyStatusView(context)
+        val view = AccuracyProgressView(context)
         assertThat(
             view.binding.currentAccuracy.text,
             equalTo(context.getString(org.odk.collect.strings.R.string.empty_accuracy))
         )
 
-        view.accuracy = GeoPointAccuracy.Improving(52f)
+        view.accuracy = LocationAccuracy.Improving(52f)
         assertThat(
             view.binding.currentAccuracy.text,
             equalTo(context.getString(org.odk.collect.strings.R.string.accuracy_m, "52"))
@@ -41,7 +41,7 @@ class AccuracyStatusViewTest {
 
     @Test
     fun `updates text and strength based on accuracy`() {
-        val view = AccuracyStatusView(context)
+        val view = AccuracyProgressView(context)
 
         assertThat(
             view.binding.text.text,
@@ -49,26 +49,26 @@ class AccuracyStatusViewTest {
         )
         assertThat(view.binding.strength.progress, equalTo(20))
 
-        view.accuracy = GeoPointAccuracy.Unacceptable(10f)
+        view.accuracy = LocationAccuracy.Unacceptable(10f)
         assertThat(
             view.binding.text.text,
             equalTo(context.getString(org.odk.collect.strings.R.string.unacceptable_accuracy))
         )
         assertThat(view.binding.strength.progress, equalTo(40))
 
-        view.accuracy = GeoPointAccuracy.Poor(10f)
+        view.accuracy = LocationAccuracy.Poor(10f)
         assertThat(view.binding.text.text, equalTo(context.getString(org.odk.collect.strings.R.string.poor_accuracy)))
         assertThat(view.binding.strength.progress, equalTo(60))
 
-        view.accuracy = GeoPointAccuracy.Improving(10f)
+        view.accuracy = LocationAccuracy.Improving(10f)
         assertThat(view.binding.text.text, equalTo(context.getString(org.odk.collect.strings.R.string.improving_accuracy)))
         assertThat(view.binding.strength.progress, equalTo(80))
     }
 
     @Test
     fun `has primary background when accuracy is poor`() {
-        val view = AccuracyStatusView(context)
-        view.accuracy = GeoPointAccuracy.Poor(10f)
+        val view = AccuracyProgressView(context)
+        view.accuracy = LocationAccuracy.Poor(10f)
 
         val backgroundColor = (view.binding.root.background as ColorDrawable).color
         assertThat(backgroundColor, equalTo(colorPrimary))
@@ -88,8 +88,8 @@ class AccuracyStatusViewTest {
 
     @Test
     fun `has error background when accuracy is unacceptable`() {
-        val view = AccuracyStatusView(context)
-        view.accuracy = GeoPointAccuracy.Unacceptable(10f)
+        val view = AccuracyProgressView(context)
+        view.accuracy = LocationAccuracy.Unacceptable(10f)
 
         val backgroundColor = (view.binding.root.background as ColorDrawable).color
         assertThat(backgroundColor, equalTo(colorError))

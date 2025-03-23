@@ -9,17 +9,17 @@ import android.widget.FrameLayout
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.geo.GeoUtils.formatAccuracy
 import org.odk.collect.geo.R
-import org.odk.collect.geo.databinding.AccuracyStatusBinding
+import org.odk.collect.geo.databinding.AccuracyProgressLayoutBinding
 
-internal class AccuracyStatusView(context: Context, attrs: AttributeSet?) :
+internal class AccuracyProgressView(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
 
     constructor(context: Context) : this(context, null)
 
-    var binding = AccuracyStatusBinding.inflate(LayoutInflater.from(context), this, true)
+    var binding = AccuracyProgressLayoutBinding.inflate(LayoutInflater.from(context), this, true)
         private set
 
-    var accuracy: GeoPointAccuracy? = null
+    var accuracy: LocationAccuracy? = null
         set(value) {
             field = value
             if (value != null) {
@@ -27,7 +27,7 @@ internal class AccuracyStatusView(context: Context, attrs: AttributeSet?) :
             }
         }
 
-    private fun render(accuracy: GeoPointAccuracy) {
+    private fun render(accuracy: LocationAccuracy) {
         val (backgroundColor, textColor) = getBackgroundAndTextColor(accuracy)
         binding.root.background = ColorDrawable(backgroundColor)
         binding.title.setTextColor(textColor)
@@ -47,8 +47,8 @@ internal class AccuracyStatusView(context: Context, attrs: AttributeSet?) :
         }
     }
 
-    private fun getBackgroundAndTextColor(accuracy: GeoPointAccuracy): Pair<Int, Int> {
-        return if (accuracy is GeoPointAccuracy.Unacceptable) {
+    private fun getBackgroundAndTextColor(accuracy: LocationAccuracy): Pair<Int, Int> {
+        return if (accuracy is LocationAccuracy.Unacceptable) {
             Pair(
                 getThemeAttributeValue(context, com.google.android.material.R.attr.colorError),
                 getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnError)
@@ -61,11 +61,11 @@ internal class AccuracyStatusView(context: Context, attrs: AttributeSet?) :
         }
     }
 
-    private fun getTextAndStrength(accuracy: GeoPointAccuracy): Pair<Int, Int> {
+    private fun getTextAndStrength(accuracy: LocationAccuracy): Pair<Int, Int> {
         return when (accuracy) {
-            is GeoPointAccuracy.Improving -> Pair(org.odk.collect.strings.R.string.improving_accuracy, 80)
-            is GeoPointAccuracy.Poor -> Pair(org.odk.collect.strings.R.string.poor_accuracy, 60)
-            is GeoPointAccuracy.Unacceptable -> Pair(org.odk.collect.strings.R.string.unacceptable_accuracy, 40)
+            is LocationAccuracy.Improving -> Pair(org.odk.collect.strings.R.string.improving_accuracy, 80)
+            is LocationAccuracy.Poor -> Pair(org.odk.collect.strings.R.string.poor_accuracy, 60)
+            is LocationAccuracy.Unacceptable -> Pair(org.odk.collect.strings.R.string.unacceptable_accuracy, 40)
         }
     }
 }
