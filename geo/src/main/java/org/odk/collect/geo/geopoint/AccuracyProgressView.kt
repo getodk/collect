@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.geo.GeoUtils.formatAccuracy
-import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.AccuracyProgressLayoutBinding
 
 internal class AccuracyProgressView(context: Context, attrs: AttributeSet?) :
@@ -16,8 +15,7 @@ internal class AccuracyProgressView(context: Context, attrs: AttributeSet?) :
 
     constructor(context: Context) : this(context, null)
 
-    var binding = AccuracyProgressLayoutBinding.inflate(LayoutInflater.from(context), this, true)
-        private set
+    val binding = AccuracyProgressLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
     var accuracy: LocationAccuracy? = null
         set(value) {

@@ -28,7 +28,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 
@@ -38,7 +37,6 @@ import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
-import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.R;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentFactory;
@@ -50,8 +48,6 @@ import org.odk.collect.maps.markers.MarkerIconDescription;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
 import org.odk.collect.webpage.ExternalWebPageHelper;
-
-import java.text.DecimalFormat;
 
 import javax.inject.Inject;
 
@@ -103,7 +99,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
 
-    private TextView locationStatus;
+    private AccuracyStatusView locationStatus;
     private TextView locationInfo;
 
     private MapPoint location;
@@ -159,7 +155,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
             return;
         }
 
-        locationStatus = findViewById(R.id.location_status);
+        locationStatus = findViewById(R.id.status_section);
         locationInfo = findViewById(R.id.location_info);
         placeMarkerButton = findViewById(R.id.place_marker);
         zoomButton = findViewById(R.id.zoom);
@@ -358,16 +354,12 @@ public class GeoPointMapActivity extends LocalizedActivity {
                 foundFirstLocation = true;
             }
 
-            locationStatus.setText(formatLocationStatus(map.getLocationProvider(), point.accuracy));
+            locationStatus.setAccuracy(new LocationAccuracy.Improving((float) point.accuracy, map.getLocationProvider()));
         }
     }
 
     public String formatResult(MapPoint point) {
         return String.format("%s %s %s %s", point.latitude, point.longitude, point.altitude, point.accuracy);
-    }
-
-    public String formatLocationStatus(String provider, double accuracyRadius) {
-        return getString(org.odk.collect.strings.R.string.location_accuracy, new DecimalFormat("#.##").format(accuracyRadius)) + ", " + getString(org.odk.collect.strings.R.string.location_provider, GeoUtils.capitalizeGps(provider));
     }
 
     public void onDragEnd(int draggedFeatureId) {
@@ -417,9 +409,5 @@ public class GeoPointMapActivity extends LocalizedActivity {
         }
         captureLocation = true;
         setClear = false;
-    }
-
-    @VisibleForTesting public String getLocationStatus() {
-        return locationStatus.getText().toString();
     }
 }
