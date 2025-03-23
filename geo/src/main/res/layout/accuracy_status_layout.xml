@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?colorSurface"
     android:orientation="vertical"
     android:paddingHorizontal="@dimen/margin_extra_small"
     android:paddingVertical="@dimen/margin_extra_small">
@@ -11,13 +10,13 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_extra_extra_small"
         android:textAppearance="?textAppearanceLabelLarge" />
 
     <TextView
         android:id="@+id/location_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_extra_extra_small"
         android:text="@string/please_wait_long"
         android:textAppearance="?textAppearanceBodyMedium" />
 
