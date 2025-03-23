@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -100,7 +99,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
     private int featureId = -1;  // will be a positive featureId once map is ready
 
     private AccuracyStatusView locationStatus;
-    private TextView locationInfo;
 
     private MapPoint location;
     private ImageButton placeMarkerButton;
@@ -156,7 +154,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
         }
 
         locationStatus = findViewById(R.id.status_section);
-        locationInfo = findViewById(R.id.location_info);
         placeMarkerButton = findViewById(R.id.place_marker);
         zoomButton = findViewById(R.id.zoom);
 
@@ -193,7 +190,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
         state.putBoolean(ZOOM_BUTTON_ENABLED_KEY, zoomButton.isEnabled());
         state.putBoolean(CLEAR_BUTTON_ENABLED_KEY, clearButton.isEnabled());
         state.putInt(LOCATION_STATUS_VISIBILITY_KEY, locationStatus.getVisibility());
-        state.putInt(LOCATION_INFO_VISIBILITY_KEY, locationInfo.getVisibility());
     }
 
     public void returnLocation() {
@@ -250,7 +246,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
                 // locationStatus.setVisibility(View.VISIBLE);
             }
             // placeMarkerButton.setEnabled(true);
-            locationInfo.setVisibility(View.VISIBLE);
             locationStatus.setVisibility(View.VISIBLE);
             pointFromIntent = false;
         });
@@ -260,7 +255,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
             intentDraggable = intent.getBooleanExtra(EXTRA_DRAGGABLE_ONLY, false);
             if (!intentDraggable) {
                 // Not Draggable, set text for Map else leave as placement-map text
-                locationInfo.setText(getString(org.odk.collect.strings.R.string.geopoint_no_draggable_instruction));
+                locationStatus.setTitle(getString(org.odk.collect.strings.R.string.geopoint_no_draggable_instruction));
             }
 
             intentReadOnly = intent.getBooleanExtra(EXTRA_READ_ONLY, false);
@@ -281,7 +276,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
                 captureLocation = true;
                 pointFromIntent = true;
-                locationInfo.setVisibility(View.GONE);
                 locationStatus.setVisibility(View.GONE);
                 zoomButton.setEnabled(true);
                 foundFirstLocation = true;
@@ -330,7 +324,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
         zoomButton.setEnabled(state.getBoolean(ZOOM_BUTTON_ENABLED_KEY, false));
         clearButton.setEnabled(state.getBoolean(CLEAR_BUTTON_ENABLED_KEY, false));
 
-        locationInfo.setVisibility(state.getInt(LOCATION_INFO_VISIBILITY_KEY, View.GONE));
         locationStatus.setVisibility(state.getInt(LOCATION_STATUS_VISIBILITY_KEY, View.GONE));
     }
 

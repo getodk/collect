@@ -13,15 +13,19 @@ import java.text.DecimalFormat
 internal class AccuracyStatusView(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
 
-    private val binding = AccuracyStatusLayoutBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding =
+        AccuracyStatusLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private lateinit var title: String
+    var title: String = ""
+        set(value) {
+            field = value
+            render()
+        }
+
     var accuracy: LocationAccuracy? = null
         set(value) {
             field = value
-            if (value != null) {
-                render(value)
-            }
+            render()
         }
 
     init {
@@ -30,9 +34,12 @@ internal class AccuracyStatusView(context: Context, attrs: AttributeSet?) :
         }
     }
 
-    private fun render(accuracy: LocationAccuracy) {
+    private fun render() {
         binding.title.text = title
-        binding.locationStatus.text = formatLocationStatus(accuracy.provider, accuracy.value)
+
+        accuracy?.let {
+            binding.locationStatus.text = formatLocationStatus(it.provider, it.value)
+        }
     }
 
     private fun formatLocationStatus(provider: String?, accuracyRadius: Float): String {
