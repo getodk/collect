@@ -63,6 +63,7 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
             binding.editText.transformationMethod = PasswordTransformationMethod.getInstance()
             binding.textView.transformationMethod = PasswordTransformationMethod.getInstance()
         }
+        setError(null)
     }
 
     fun updateState(readOnly: Boolean) {
@@ -166,7 +167,9 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
     }
 
     fun setError(error: String?) {
-        binding.textInputLayout.error = error
+        binding.textInputLayout.post {
+            binding.textInputLayout.error = error
+        }
     }
 
     fun setFocus(focus: Boolean) {
