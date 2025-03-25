@@ -1,11 +1,9 @@
-package org.odk.collect.osmdroid
+package org.odk.collect.maps
 
 import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import org.odk.collect.maps.MapConfigurator
-import org.odk.collect.maps.MapPoint
 import org.odk.collect.settings.keys.MetaKeys.LAST_KNOWN_ZOOM_LEVEL
 import org.odk.collect.shared.settings.Settings
 
