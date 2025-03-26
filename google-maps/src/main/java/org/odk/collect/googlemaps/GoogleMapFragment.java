@@ -25,7 +25,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -33,6 +35,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -55,9 +58,11 @@ import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
-import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.MapViewModel;
+import org.odk.collect.maps.MapViewModelMapFragment;
 import org.odk.collect.maps.PolygonDescription;
+import org.odk.collect.maps.Zoom;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maps.markers.MarkerDescription;
@@ -77,8 +82,8 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class GoogleMapFragment extends Fragment implements
-        MapFragment, LocationListener, LocationClient.LocationClientListener,
+public class GoogleMapFragment extends MapViewModelMapFragment implements
+        LocationListener, LocationClient.LocationClientListener,
         GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener,
         GoogleMap.OnPolylineClickListener, GoogleMap.OnPolygonClickListener {
@@ -94,14 +99,6 @@ public class GoogleMapFragment extends Fragment implements
 
     @Inject
     SettingsProvider settingsProvider;
-
-    private final MapFragmentDelegate mapFragmentDelegate = new MapFragmentDelegate(
-            this,
-            this::createConfigurator,
-            () -> settingsProvider.getUnprotectedSettings(),
-            () -> settingsProvider.getMetaSettings(),
-            this::onConfigChanged
-    );
 
     private GoogleMap map;
     private MapScaleView scaleView;
@@ -126,19 +123,12 @@ public class GoogleMapFragment extends Fragment implements
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
     private float currentZoomLevel;
-    private boolean hasCenter;
     private boolean isUserZooming;
 
     @Override
     public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         this.readyListener = readyListener;
         this.errorListener = errorListener;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mapFragmentDelegate.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -179,23 +169,63 @@ public class GoogleMapFragment extends Fragment implements
                 }
             });
             googleMap.setOnCameraIdleListener(() -> {
-                scaleView.update(googleMap.getCameraPosition().zoom, googleMap.getCameraPosition().target.latitude);
+                CameraPosition cameraPosition = googleMap.getCameraPosition();
+                scaleView.update(cameraPosition.zoom, cameraPosition.target.latitude);
                 if (isUserZooming) {
-                    float newZoomLevel = googleMap.getCameraPosition().zoom;
+                    float newZoomLevel = cameraPosition.zoom;
                     if (newZoomLevel != currentZoomLevel) {
-                        mapFragmentDelegate.onZoomLevelChangedByUserListener(googleMap.getCameraPosition().zoom);
+                        getMapViewModel().onUserMove(new MapPoint(cameraPosition.target.latitude, cameraPosition.target.longitude), newZoomLevel);
                     }
                     isUserZooming = false;
                 }
-                currentZoomLevel = googleMap.getCameraPosition().zoom;
+                currentZoomLevel = cameraPosition.zoom;
             });
             loadReferenceOverlay();
+
+            getMapViewModel().getConfig().observe(getViewLifecycleOwner(), this::onConfigChanged);
+            getMapViewModel().getZoom().observe(getViewLifecycleOwner(), new Observer<>() {
+                @Override
+                public void onChanged(Zoom zoom) {
+                    if (zoom.getUser()) {
+                        // Ignore zooms that have already happened
+                    } else if (zoom instanceof Zoom.Point) {
+                        MapPoint point = ((Zoom.Point) zoom).getPoint();
+                        moveOrAnimateCamera(
+                                CameraUpdateFactory.newLatLngZoom(toLatLng(point), (float) zoom.getLevel().doubleValue()), zoom.getAnimate());
+                    } else if (zoom instanceof Zoom.Box) {
+                        List<MapPoint> points = ((Zoom.Box) zoom).getBox();
+                        int count = 0;
+                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                        MapPoint lastPoint = null;
+                        for (MapPoint point : points) {
+                            lastPoint = point;
+                            builder.include(toLatLng(point));
+                            count++;
+                        }
+                        if (count == 1) {
+                            zoomToPoint(lastPoint, zoom.getAnimate());
+                        } else if (count > 1) {
+                            final LatLngBounds bounds = expandBounds(builder.build(), 1 / zoom.getLevel());
+                            new Handler().postDelayed(() -> {
+                                try {
+                                    moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), zoom.getAnimate());
+                                } catch (IllegalArgumentException
+                                         //https://github.com/getodk/collect/issues/5379
+                                         |
+                                         IllegalStateException e) { // https://github.com/getodk/collect/issues/5634
+                                    LatLng boxCenter = bounds.getCenter();
+                                    zoomToPoint(new MapPoint(boxCenter.latitude, boxCenter.longitude), map.getMinZoomLevel(), false);
+                                }
+                            }, 100);
+                        }
+                    }
+                }
+            });
 
             // If the screen is rotated before the map is ready, this fragment
             // could already be detached, which makes it unsafe to use.  Only
             // call the ReadyListener if this fragment is still attached.
             if (readyListener != null && getActivity() != null) {
-                mapFragmentDelegate.onReady();
                 readyListener.onReady(this);
             }
         });
@@ -209,11 +239,6 @@ public class GoogleMapFragment extends Fragment implements
         component.inject(this);
     }
 
-    @Override public void onStart() {
-        super.onStart();
-        mapFragmentDelegate.onStart();
-    }
-
     @Override public void onResume() {
         super.onResume();
         enableLocationUpdates(clientWantsLocationUpdates);
@@ -224,26 +249,9 @@ public class GoogleMapFragment extends Fragment implements
         enableLocationUpdates(false);
     }
 
-    @Override public void onStop() {
-        super.onStop();
-        mapFragmentDelegate.onStop();
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapFragmentDelegate.onSaveInstanceState(outState);
-    }
-
     @Override public void onDestroy() {
         BitmapDescriptorCache.clearCache();
         super.onDestroy();
-    }
-
-    @NonNull
-    @Override
-    public MapFragmentDelegate getMapFragmentDelegate() {
-        return mapFragmentDelegate;
     }
 
     @Override public @NonNull MapPoint getCenter() {
@@ -254,71 +262,11 @@ public class GoogleMapFragment extends Fragment implements
         return new MapPoint(target.latitude, target.longitude);
     }
 
-    @Override public void setCenter(@Nullable MapPoint center, boolean animate) {
-        if (map == null) {  // during Robolectric tests, map will be null
-            return;
-        }
-        if (center != null) {
-            moveOrAnimateCamera(CameraUpdateFactory.newLatLng(toLatLng(center)), animate);
-        }
-
-        hasCenter = true;
-    }
-
     @Override public double getZoom() {
         if (map == null) {  // during Robolectric tests, map will be null
             return INITIAL_ZOOM;
         }
         return map.getCameraPosition().zoom;
-    }
-
-    @Override public void zoomToPoint(@Nullable MapPoint center, boolean animate) {
-        zoomToPoint(center, POINT_ZOOM, animate);
-    }
-
-    @Override public void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate) {
-        if (map == null) {  // during Robolectric tests, map will be null
-            return;
-        }
-        if (center != null) {
-            moveOrAnimateCamera(
-                CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom), animate);
-        }
-        hasCenter = true;
-    }
-
-    @Override public void zoomToBoundingBox(@Nullable Iterable<MapPoint> points, double scaleFactor, boolean animate) {
-        if (map == null) {  // during Robolectric tests, map will be null
-            return;
-        }
-        if (points != null) {
-            int count = 0;
-            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            MapPoint lastPoint = null;
-            for (MapPoint point : points) {
-                lastPoint = point;
-                builder.include(toLatLng(point));
-                count++;
-            }
-            if (count == 1) {
-                zoomToPoint(lastPoint, animate);
-            } else if (count > 1) {
-                final LatLngBounds bounds = expandBounds(builder.build(), 1 / scaleFactor);
-                new Handler().postDelayed(() -> {
-                    try {
-                        moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), animate);
-                    } catch (IllegalArgumentException
-                             //https://github.com/getodk/collect/issues/5379
-                             |
-                             IllegalStateException e) { // https://github.com/getodk/collect/issues/5634
-                        LatLng boxCenter = bounds.getCenter();
-                        zoomToPoint(new MapPoint(boxCenter.latitude, boxCenter.longitude), map.getMinZoomLevel(), false);
-                    }
-                }, 100);
-            }
-        }
-
-        hasCenter = true;
     }
 
     @Override public int addMarker(MarkerDescription markerDescription) {
@@ -423,11 +371,6 @@ public class GoogleMapFragment extends Fragment implements
     @Override
     public void setRetainMockAccuracy(boolean retainMockAccuracy) {
         locationClient.setRetainMockAccuracy(retainMockAccuracy);
-    }
-
-    @Override
-    public boolean hasCenter() {
-        return hasCenter;
     }
 
     @Override public void setGpsLocationEnabled(boolean enable) {
@@ -756,6 +699,18 @@ public class GoogleMapFragment extends Fragment implements
                 new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, org.odk.collect.strings.R.string.hybrid),
                 new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, org.odk.collect.strings.R.string.satellite)
         );
+    }
+
+    @NonNull
+    @Override
+    public MapViewModel getMapViewModel() {
+        return new ViewModelProvider(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new MapViewModel(createConfigurator(), settingsProvider.getUnprotectedSettings(), settingsProvider.getMetaSettings());
+            }
+        }).get(MapViewModel.class);
     }
 
     /**

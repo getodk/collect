@@ -7,19 +7,19 @@ abstract class MapViewModelMapFragment : Fragment(), MapFragment {
 
     abstract fun getMapViewModel(): MapViewModel
 
-    override fun setCenter(center: MapPoint?, animate: Boolean) {
+    final override fun setCenter(center: MapPoint?, animate: Boolean) {
         getMapViewModel().moveTo(center, animate)
     }
 
-    override fun zoomToPoint(center: MapPoint?, animate: Boolean) {
+    final override fun zoomToPoint(center: MapPoint?, animate: Boolean) {
         getMapViewModel().zoomTo(center, null, animate)
     }
 
-    override fun zoomToPoint(center: MapPoint?, zoom: Double, animate: Boolean) {
+    final override fun zoomToPoint(center: MapPoint?, zoom: Double, animate: Boolean) {
         getMapViewModel().zoomTo(center, zoom, animate)
     }
 
-    override fun zoomToBoundingBox(
+    final override fun zoomToBoundingBox(
         points: Iterable<MapPoint>?,
         scaleFactor: Double,
         animate: Boolean
@@ -29,11 +29,14 @@ abstract class MapViewModelMapFragment : Fragment(), MapFragment {
         getMapViewModel().zoomTo(box, scaleFactor, animate)
     }
 
-    override fun zoomToCurrentLocation(center: MapPoint?) {
+    final override fun zoomToCurrentLocation(center: MapPoint?) {
         getMapViewModel().zoomToCurrentLocation(center)
     }
 
-    override fun hasCenter(): Boolean {
+    final override fun hasCenter(): Boolean {
         return getMapViewModel().zoom.getValue() != null
     }
+
+    final override val mapFragmentDelegate: MapFragmentDelegate
+        get() = throw UnsupportedOperationException()
 }
