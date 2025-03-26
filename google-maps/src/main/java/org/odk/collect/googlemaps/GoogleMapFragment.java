@@ -122,7 +122,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     private int mapType;
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
-    private float currentZoomLevel;
     private boolean isUserZooming;
 
     @Override
@@ -173,12 +172,9 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                 scaleView.update(cameraPosition.zoom, cameraPosition.target.latitude);
                 if (isUserZooming) {
                     float newZoomLevel = cameraPosition.zoom;
-                    if (newZoomLevel != currentZoomLevel) {
-                        getMapViewModel().onUserMove(new MapPoint(cameraPosition.target.latitude, cameraPosition.target.longitude), newZoomLevel);
-                    }
+                    getMapViewModel().onUserMove(new MapPoint(cameraPosition.target.latitude, cameraPosition.target.longitude), newZoomLevel);
                     isUserZooming = false;
                 }
-                currentZoomLevel = cameraPosition.zoom;
             });
             loadReferenceOverlay();
 
