@@ -26,15 +26,21 @@ class MapViewModel(
         unprotectedSettings.registerOnSettingChangeListener(this)
     }
 
-    fun zoomTo(point: MapPoint, level: Double?, animate: Boolean) {
-        _zoom.value = Zoom.Point(point, level ?: DEFAULT_ZOOM, animate, false)
+    fun zoomTo(point: MapPoint?, level: Double?, animate: Boolean) {
+        if (point != null) {
+            _zoom.value = Zoom.Point(point, level ?: DEFAULT_ZOOM, animate, false)
+        }
     }
 
     fun zoomTo(boundingBox: List<MapPoint>, level: Double, animate: Boolean) {
         _zoom.value = Zoom.Box(boundingBox, level, animate)
     }
 
-    fun zoomToCurrentLocation(location: MapPoint) {
+    fun zoomToCurrentLocation(location: MapPoint?) {
+        if (location == null) {
+            return
+        }
+
         val level = if (metaSettings.contains(LAST_KNOWN_ZOOM_LEVEL)) {
             metaSettings.getFloat(LAST_KNOWN_ZOOM_LEVEL).toDouble()
         } else {
@@ -44,8 +50,10 @@ class MapViewModel(
         zoomTo(location, level, true)
     }
 
-    fun moveTo(location: MapPoint, animate: Boolean) {
-        _zoom.value = Zoom.Point(location, _zoom.value?.level, animate, false)
+    fun moveTo(location: MapPoint?, animate: Boolean) {
+        if (location != null) {
+            _zoom.value = Zoom.Point(location, _zoom.value?.level, animate, false)
+        }
     }
 
     fun onUserMove(point: MapPoint, level: Double) {

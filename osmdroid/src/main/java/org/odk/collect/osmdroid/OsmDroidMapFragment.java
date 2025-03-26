@@ -35,7 +35,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -50,6 +49,7 @@ import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapViewModel;
+import org.odk.collect.maps.MapViewModelMapFragment;
 import org.odk.collect.maps.PolygonDescription;
 import org.odk.collect.maps.Zoom;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
@@ -93,7 +93,7 @@ import timber.log.Timber;
 /**
  * A MapFragment drawn by OSMDroid.
  */
-public class OsmDroidMapFragment extends Fragment implements MapFragment,
+public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         LocationListener, LocationClient.LocationClientListener {
 
     // Bundle keys understood by applyConfig().
@@ -301,35 +301,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
-    public void setCenter(@Nullable MapPoint center, boolean animate) {
-        mapViewModel.moveTo(center, animate);
-    }
-
-    @Override
     public double getZoom() {
         return map.getZoomLevel();
-    }
-
-    @Override
-    public void zoomToPoint(@Nullable MapPoint center, boolean animate) {
-        mapViewModel.zoomTo(center, null, animate);
-    }
-
-    @Override
-    public void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate) {
-        mapViewModel.zoomTo(center, zoom, animate);
-    }
-
-    @Override
-    public void zoomToBoundingBox(@Nullable Iterable<MapPoint> points, double scaleFactor, boolean animate) {
-        ArrayList<MapPoint> box = new ArrayList<>();
-        points.forEach(box::add);
-        mapViewModel.zoomTo(box, scaleFactor, animate);
-    }
-
-    @Override
-    public void zoomToCurrentLocation(@Nullable MapPoint center) {
-        mapViewModel.zoomToCurrentLocation(center);
     }
 
     @Override
@@ -448,11 +421,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public void setRetainMockAccuracy(boolean retainMockAccuracy) {
         locationClient.setRetainMockAccuracy(retainMockAccuracy);
-    }
-
-    @Override
-    public boolean hasCenter() {
-        return mapViewModel.getZoom().getValue() != null;
     }
 
     @Override
@@ -754,6 +722,12 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             map.setTileSource(webMapService.asOnlineTileSource());
             loadReferenceOverlay();
         }
+    }
+
+    @NonNull
+    @Override
+    public MapViewModel getMapViewModel() {
+        return mapViewModel;
     }
 
     /**
