@@ -25,7 +25,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -63,6 +62,7 @@ import org.odk.collect.maps.MapViewModel;
 import org.odk.collect.maps.MapViewModelMapFragment;
 import org.odk.collect.maps.PolygonDescription;
 import org.odk.collect.maps.Zoom;
+import org.odk.collect.maps.ZoomObserver;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maps.markers.MarkerDescription;
@@ -183,41 +183,40 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             loadReferenceOverlay();
 
             getMapViewModel().getConfig().observe(getViewLifecycleOwner(), this::onConfigChanged);
-            getMapViewModel().getZoom().observe(getViewLifecycleOwner(), new Observer<>() {
+            getMapViewModel().getZoom().observe(getViewLifecycleOwner(), new ZoomObserver() {
                 @Override
-                public void onChanged(Zoom zoom) {
-                    if (zoom.getUser()) {
-                        // Ignore zooms that have already happened
-                    } else if (zoom instanceof Zoom.Point) {
-                        MapPoint point = ((Zoom.Point) zoom).getPoint();
-                        moveOrAnimateCamera(
-                                CameraUpdateFactory.newLatLngZoom(toLatLng(point), (float) zoom.getLevel().doubleValue()), zoom.getAnimate());
-                    } else if (zoom instanceof Zoom.Box) {
-                        List<MapPoint> points = ((Zoom.Box) zoom).getBox();
-                        int count = 0;
-                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                        MapPoint lastPoint = null;
-                        for (MapPoint point : points) {
-                            lastPoint = point;
-                            builder.include(toLatLng(point));
-                            count++;
-                        }
-                        if (count == 1) {
-                            zoomToPoint(lastPoint, zoom.getAnimate());
-                        } else if (count > 1) {
-                            final LatLngBounds bounds = expandBounds(builder.build(), 1 / zoom.getLevel());
-                            new Handler().postDelayed(() -> {
-                                try {
-                                    moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), zoom.getAnimate());
-                                } catch (IllegalArgumentException
-                                         //https://github.com/getodk/collect/issues/5379
-                                         |
-                                         IllegalStateException e) { // https://github.com/getodk/collect/issues/5634
-                                    LatLng boxCenter = bounds.getCenter();
-                                    zoomToPoint(new MapPoint(boxCenter.latitude, boxCenter.longitude), map.getMinZoomLevel(), false);
-                                }
-                            }, 100);
-                        }
+                public void onZoomToPoint(@NonNull Zoom.Point zoom) {
+                    MapPoint point = zoom.getPoint();
+                    moveOrAnimateCamera(
+                            CameraUpdateFactory.newLatLngZoom(toLatLng(point), (float) zoom.getLevel().doubleValue()), zoom.getAnimate());
+                }
+
+                @Override
+                public void onZoomToBox(@NonNull Zoom.Box zoom) {
+                    List<MapPoint> points = zoom.getBox();
+                    int count = 0;
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    MapPoint lastPoint = null;
+                    for (MapPoint point : points) {
+                        lastPoint = point;
+                        builder.include(toLatLng(point));
+                        count++;
+                    }
+                    if (count == 1) {
+                        zoomToPoint(lastPoint, zoom.getAnimate());
+                    } else if (count > 1) {
+                        final LatLngBounds bounds = expandBounds(builder.build(), 1 / zoom.getLevel());
+                        new Handler().postDelayed(() -> {
+                            try {
+                                moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), zoom.getAnimate());
+                            } catch (IllegalArgumentException
+                                     //https://github.com/getodk/collect/issues/5379
+                                     |
+                                     IllegalStateException e) { // https://github.com/getodk/collect/issues/5634
+                                LatLng boxCenter = bounds.getCenter();
+                                zoomToPoint(new MapPoint(boxCenter.latitude, boxCenter.longitude), map.getMinZoomLevel(), false);
+                            }
+                        }, 100);
                     }
                 }
             });

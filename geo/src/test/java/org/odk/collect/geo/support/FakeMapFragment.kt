@@ -42,10 +42,9 @@ class FakeMapFragment : Fragment(), MapFragment {
         this.readyListener = readyListener
     }
 
-    override val mapFragmentDelegate: MapFragmentDelegate
-        get() = mock<MapFragmentDelegate?>().also {
-            whenever(it.zoomLevel).thenReturn(zoomLevelSetByUser)
-        }
+    override fun getMapFragmentDelegate(): MapFragmentDelegate = mock<MapFragmentDelegate?>().also {
+        whenever(it.zoomLevel).thenReturn(zoomLevelSetByUser)
+    }
 
     fun ready() {
         readyListener?.onReady(this)

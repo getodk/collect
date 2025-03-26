@@ -37,6 +37,6 @@ abstract class MapViewModelMapFragment : Fragment(), MapFragment {
         return getMapViewModel().zoom.getValue() != null
     }
 
-    final override val mapFragmentDelegate: MapFragmentDelegate
-        get() = throw UnsupportedOperationException()
+    final override fun getMapFragmentDelegate(): MapFragmentDelegate =
+        throw UnsupportedOperationException()
 }

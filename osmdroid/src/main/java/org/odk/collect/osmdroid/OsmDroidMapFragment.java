@@ -35,7 +35,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -51,6 +50,7 @@ import org.odk.collect.maps.MapViewModel;
 import org.odk.collect.maps.MapViewModelMapFragment;
 import org.odk.collect.maps.PolygonDescription;
 import org.odk.collect.maps.Zoom;
+import org.odk.collect.maps.ZoomObserver;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maps.markers.MarkerDescription;
@@ -230,50 +230,44 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         }, 100);
 
         mapViewModel.getConfig().observe(getViewLifecycleOwner(), this::onConfigChanged);
-        mapViewModel.getZoom().observe(getViewLifecycleOwner(), new Observer<>() {
-            private boolean hasZoomed;
+        mapViewModel.getZoom().observe(getViewLifecycleOwner(), new ZoomObserver() {
+            @Override
+            public void onZoomToPoint(@NonNull Zoom.Point zoom) {
+                systemZoom(zoom.getPoint(), zoom.getLevel());
+            }
 
             @Override
-            public void onChanged(Zoom zoom) {
-                if (zoom.getUser() && hasZoomed) {
-                    // Ignore zooms that ahve already happened
-                } else if (zoom instanceof Zoom.Point) {
-                    systemZoom(((Zoom.Point) zoom).getPoint(), zoom.getLevel());
-                } else if (zoom instanceof Zoom.Box) {
-                    Zoom.Box boxZoom = (Zoom.Box) zoom;
-                    List<MapPoint> points = boxZoom.getBox();
-                    boolean animate = boxZoom.getAnimate();
-                    Double scaleFactor = boxZoom.getLevel();
+            public void onZoomToBox(@NonNull Zoom.Box zoom) {
+                List<MapPoint> points = zoom.getBox();
+                boolean animate = zoom.getAnimate();
+                Double scaleFactor = zoom.getLevel();
 
-                    int count = 0;
-                    List<GeoPoint> geoPoints = new ArrayList<>();
-                    MapPoint lastPoint = null;
-                    for (MapPoint point : points) {
-                        lastPoint = point;
-                        geoPoints.add(toGeoPoint(point));
-                        count++;
-                    }
-                    if (count == 1) {
-                        systemZoom(lastPoint, null);
-                    } else if (count > 1) {
-                        // TODO(ping): Find a better solution.
-                        // zoomToBoundingBox sometimes fails to zoom correctly, either
-                        // zooming by the correct amount but leaving the bounding box
-                        // off-center, or centering correctly but not zooming in enough.
-                        // Adding a 100-ms delay avoids the problem most of the time, but
-                        // not always; it's here because the old GeoShapeOsmMapActivity
-                        // did it, not because it's known to be the best solution.
-                        final BoundingBox box = BoundingBox.fromGeoPoints(geoPoints)
-                                .increaseByScale((float) (1 / scaleFactor));
-                        new Handler().postDelayed(() -> {
-                            isSystemZooming = true;
-                            map.zoomToBoundingBox(box, animate);
-                            isSystemZooming = false;
-                        }, 100);
-                    }
+                int count = 0;
+                List<GeoPoint> geoPoints = new ArrayList<>();
+                MapPoint lastPoint = null;
+                for (MapPoint point : points) {
+                    lastPoint = point;
+                    geoPoints.add(toGeoPoint(point));
+                    count++;
                 }
-
-                hasZoomed = true;
+                if (count == 1) {
+                    systemZoom(lastPoint, null);
+                } else if (count > 1) {
+                    // TODO(ping): Find a better solution.
+                    // zoomToBoundingBox sometimes fails to zoom correctly, either
+                    // zooming by the correct amount but leaving the bounding box
+                    // off-center, or centering correctly but not zooming in enough.
+                    // Adding a 100-ms delay avoids the problem most of the time, but
+                    // not always; it's here because the old GeoShapeOsmMapActivity
+                    // did it, not because it's known to be the best solution.
+                    final BoundingBox box = BoundingBox.fromGeoPoints(geoPoints)
+                            .increaseByScale((float) (1 / scaleFactor));
+                    new Handler().postDelayed(() -> {
+                        isSystemZooming = true;
+                        map.zoomToBoundingBox(box, animate);
+                        isSystemZooming = false;
+                    }, 100);
+                }
             }
         });
 
