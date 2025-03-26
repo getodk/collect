@@ -68,7 +68,7 @@ open class FormEntryActivityTestRule :
     fun editForm(formFilename: String, instanceName: String): FormHierarchyPage {
         intent = createEditFormIntent(formFilename)
         scenario = ActivityScenario.launch(intent)
-        return FormHierarchyPage(instanceName).assertOnPage()
+        return FormHierarchyPage(instanceName).async().assertOnPage()
     }
 
     fun editFormWithSavepoint(formFilename: String): SavepointRecoveryDialogPage {

@@ -21,7 +21,7 @@ class BulkFinalizationConfirmationDialogPage(private val count: Int) : Page<Bulk
     }
 
     fun clickFinalize(): EditSavedFormPage {
-        return this.clickOnTextInDialog(R.string.finalize, EditSavedFormPage())
+        return this.clickOnTextInDialog(R.string.finalize, AsyncPage(EditSavedFormPage()))
     }
 
     fun clickCancel(): EditSavedFormPage {

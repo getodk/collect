@@ -85,7 +85,7 @@ class CollectTestRule @JvmOverloads constructor(
         actions: Consumer<T>
     ): Instrumentation.ActivityResult {
         val scenario = launchForResult<Activity>(intent)
-        destination.assertOnPage()
+        destination.async().assertOnPage()
         actions.accept(destination)
         return scenario.result
     }
