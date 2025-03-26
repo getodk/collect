@@ -46,7 +46,6 @@ import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
-import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapViewModel;
 import org.odk.collect.maps.MapViewModelMapFragment;
@@ -286,12 +285,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         map.getController().setZoom((int) Math.round(level));
         map.getController().setCenter(toGeoPoint(point));
         isSystemZooming = false;
-    }
-
-    @NonNull
-    @Override
-    public MapFragmentDelegate getMapFragmentDelegate() {
-        throw new UnsupportedOperationException();
     }
 
     @Override
