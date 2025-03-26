@@ -25,6 +25,18 @@ public class HtmlUtilsTest {
     }
 
     @Test
+    public void textToHtml_ignoresInvalidStyles() {
+        CharSequence observed = HtmlUtils.textToHtml("<p style=>Text</p>");
+        assertThat(observed.toString(), equalTo("Text"));
+
+        observed = HtmlUtils.textToHtml("<span style=\"color:\">Text</span>");
+        assertThat(observed.toString(), equalTo("Text"));
+
+        observed = HtmlUtils.textToHtml("<span style=\"font-family\">Text</span>");
+        assertThat(observed.toString(), equalTo("Text"));
+    }
+
+    @Test
     public void markDownToHtmlEscapesBackslash() {
         String[][] tests = {
                 {"A\\_B\\_C", "A_B_C"},
