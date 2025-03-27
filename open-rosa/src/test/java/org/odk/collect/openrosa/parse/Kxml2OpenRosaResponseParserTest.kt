@@ -248,4 +248,30 @@ class Kxml2OpenRosaResponseParserTest {
             assertThat("The following should not be parsed:\n$it\n\n", response, equalTo(null))
         }
     }
+
+    @Test
+    fun `#parseIntegrityResponse returns list of deleted entities when the response contains multiple entities`() {
+        val integrityDoc = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <data>
+                <entities>
+                    <entity id="1">
+                        <deleted>true</deleted>
+                    </entity>
+                    <entity id="2">
+                        <deleted>true</deleted>
+                    </entity>
+                </entities>
+            </data>
+        """.trimIndent()
+
+        val doc = XFormParser.getXMLDocument(integrityDoc.reader())
+        val response = Kxml2OpenRosaResponseParser.parseIntegrityResponse(doc)!!
+
+        assertThat(response.size, equalTo(2))
+        assertThat(response[0].id, equalTo("1"))
+        assertThat(response[0].deleted, equalTo(true))
+        assertThat(response[1].id, equalTo("2"))
+        assertThat(response[1].deleted, equalTo(true))
+    }
 }
