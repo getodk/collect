@@ -15,6 +15,7 @@
 package org.odk.collect.geo.geopoly;
 
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
+import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
 
 import android.content.Intent;
@@ -303,6 +304,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         map.setLongPressListener(this::onClick);
         map.setGpsLocationEnabled(true);
         map.setGpsLocationListener(this::onGpsLocation);
+        map.setRetainMockAccuracy(intent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
 
         if (!map.hasCenter()) {
             if (!points.isEmpty()) {
