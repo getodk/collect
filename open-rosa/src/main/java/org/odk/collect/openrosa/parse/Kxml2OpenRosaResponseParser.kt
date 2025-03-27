@@ -240,11 +240,15 @@ object Kxml2OpenRosaResponseParser :
 
         try {
             val entities = data.getElement(null, "entities")
-            return 0.until(entities.childCount).map {
-                val entity = entities.getElement(null, "entity")
-                val deleted = entity.getElement(null, "deleted").getChild(0) as String
-                EntityIntegrity(entity.getAttributeValue(null, "id"), deleted.toBooleanStrict())
-            }
+            val entitiesList = 0.until(entities.childCount)
+                .map { entities.getElement(it) }
+                .filter { it.name == "entity" }
+                .map {
+                    val deleted = it.getElement(null, "deleted").getChild(0) as String
+                    EntityIntegrity(it.getAttributeValue(null, "id"), deleted.toBooleanStrict())
+                }
+
+            return entitiesList.takeIf { it.isNotEmpty() }
         } catch (e: RuntimeException) {
             return null
         }
