@@ -32,13 +32,12 @@ import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
-import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
-import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.android.views.BarcodeViewDecoder;
+import org.odk.collect.androidshared.system.CameraUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -81,12 +80,12 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
             switchFlashlightButton.setVisibility(View.GONE);
         }
 
-        startScanning(savedInstanceState);
+        startScanning();
         return rootView;
     }
 
-    private void startScanning(Bundle savedInstanceState) {
-        capture = codeCaptureManagerFactory.getCaptureManager(requireActivity(), barcodeScannerView, savedInstanceState, getSupportedCodeFormats(), getContext().getString(org.odk.collect.strings.R.string.barcode_scanner_prompt));
+    private void startScanning() {
+        capture = codeCaptureManagerFactory.getCaptureManager(requireActivity(), barcodeScannerView, getSupportedCodeFormats(), getContext().getString(org.odk.collect.strings.R.string.barcode_scanner_prompt));
 
         // Must be called after setting up CaptureManager
         if (frontCameraUsed()) {
@@ -108,12 +107,6 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
         CameraSettings cameraSettings = new CameraSettings();
         cameraSettings.setRequestedCameraId(CameraUtils.getFrontCameraId());
         barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
-    }
-
-    @Override
-    public void onSaveInstanceState(@NotNull Bundle outState) {
-        capture.onSaveInstanceState(outState);
-        super.onSaveInstanceState(outState);
     }
 
     @Override

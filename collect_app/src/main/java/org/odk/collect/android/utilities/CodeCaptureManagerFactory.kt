@@ -2,7 +2,6 @@ package org.odk.collect.android.utilities
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import com.google.zxing.client.android.Intents
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureManager
@@ -13,12 +12,11 @@ object CodeCaptureManagerFactory {
     fun getCaptureManager(
         activity: Activity,
         barcodeView: DecoratedBarcodeView,
-        savedInstanceState: Bundle?,
         supportedFormats: Collection<String>?,
         prompt: String = ""
     ): CaptureManager {
         val captureManager = CaptureManager(activity, barcodeView)
-        captureManager.initializeFromIntent(getIntent(activity, supportedFormats, prompt), savedInstanceState)
+        captureManager.initializeFromIntent(getIntent(activity, supportedFormats, prompt), null)
         captureManager.decode()
         return captureManager
     }

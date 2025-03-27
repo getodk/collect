@@ -162,7 +162,7 @@ class QrCodeProjectCreatorDialog :
                 override fun granted() {
                     // Do not call from a fragment that does not exist anymore https://github.com/getodk/collect/issues/4741
                     if (isAdded) {
-                        startScanning(savedInstanceState)
+                        startScanning()
                     }
                 }
             }
@@ -239,11 +239,10 @@ class QrCodeProjectCreatorDialog :
         return binding.toolbarLayout.toolbar
     }
 
-    private fun startScanning(savedInstanceState: Bundle?) {
+    private fun startScanning() {
         capture = codeCaptureManagerFactory.getCaptureManager(
             requireActivity(),
             binding.barcodeView,
-            savedInstanceState,
             listOf(IntentIntegrator.QR_CODE)
         )
 
