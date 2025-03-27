@@ -51,11 +51,13 @@ public final class HtmlUtils {
 
             for (String style : styles) {
                 String[] stylesAttributes = style.trim().split(":");
-                if (stylesAttributes[0].equals("color")) {
-                    stylesOutput.append(" color=\"" + stylesAttributes[1] + "\"");
-                }
-                if (stylesAttributes[0].equals("font-family")) {
-                    stylesOutput.append(" face=\"" + stylesAttributes[1] + "\"");
+                if (stylesAttributes.length == 2) {
+                    if (stylesAttributes[0].equals("color")) {
+                        stylesOutput.append(" color=\"" + stylesAttributes[1] + "\"");
+                    }
+                    if (stylesAttributes[0].equals("font-family")) {
+                        stylesOutput.append(" face=\"" + stylesAttributes[1] + "\"");
+                    }
                 }
             }
 
