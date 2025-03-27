@@ -25,7 +25,8 @@ import org.odk.collect.maps.markers.MarkerIconDescription
  * even though the geo widgets only use one kind of feature at a time.
  */
 interface MapFragment {
-    val mapFragmentDelegate: MapFragmentDelegate
+
+    fun getMapFragmentDelegate(): MapFragmentDelegate
 
     fun init(readyListener: ReadyListener?, errorListener: ErrorListener?)
 
@@ -52,7 +53,7 @@ interface MapFragment {
     fun zoomToCurrentLocation(center: MapPoint?) {
         zoomToPoint(
             center,
-            mapFragmentDelegate.zoomLevel?.toDouble() ?: POINT_ZOOM.toDouble(),
+            getMapFragmentDelegate().zoomLevel?.toDouble() ?: POINT_ZOOM.toDouble(),
             true
         )
     }

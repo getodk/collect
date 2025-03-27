@@ -24,8 +24,7 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         readyListener?.onReady(this)
     }
 
-    override val mapFragmentDelegate: MapFragmentDelegate
-        get() = mock()
+    override fun getMapFragmentDelegate(): MapFragmentDelegate = mock()
 
     override fun getCenter(): MapPoint {
         return MapPoint(0.0, 0.0)
