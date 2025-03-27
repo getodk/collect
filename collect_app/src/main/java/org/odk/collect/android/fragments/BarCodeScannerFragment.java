@@ -30,7 +30,6 @@ import com.google.zxing.client.android.BeepManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.androidshared.ui.ToastUtils;
 
@@ -47,10 +46,10 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
     private BeepManager beepManager;
 
     @Inject
-    CodeCaptureManagerFactory codeCaptureManagerFactory;
+    BarcodeViewDecoder barcodeViewDecoder;
 
     @Inject
-    BarcodeViewDecoder barcodeViewDecoder;
+    BarcodeScannerViewContainer.Factory barcodeScannerViewFactory;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -64,7 +63,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
 
         View rootView = inflater.inflate(R.layout.fragment_scan, container, false);
         barcodeScannerViewContainer = rootView.findViewById(R.id.barcode_view);
-        barcodeScannerViewContainer.setup(new ZxingBarcodeScannerViewFactory(), requireActivity(), getViewLifecycleOwner(), isQrOnly(), getContext().getString(org.odk.collect.strings.R.string.barcode_scanner_prompt), frontCameraUsed());
+        barcodeScannerViewContainer.setup(barcodeScannerViewFactory, requireActivity(), getViewLifecycleOwner(), isQrOnly(), getContext().getString(org.odk.collect.strings.R.string.barcode_scanner_prompt), frontCameraUsed());
         barcodeScannerViewContainer.getBarcodeScannerView().setTorchListener(this);
 
         switchFlashlightButton = rootView.findViewById(R.id.switch_flashlight);

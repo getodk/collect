@@ -16,10 +16,9 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.databinding.QrCodeProjectCreatorDialogLayoutBinding
-import org.odk.collect.android.fragments.ZxingBarcodeScannerViewFactory
+import org.odk.collect.android.fragments.BarcodeScannerViewContainer
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.MainMenuActivity
-import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
@@ -43,9 +42,6 @@ import javax.inject.Inject
 class QrCodeProjectCreatorDialog :
     MaterialFullScreenDialogFragment(),
     DuplicateProjectConfirmationDialog.DuplicateProjectConfirmationListener {
-
-    @Inject
-    lateinit var codeCaptureManagerFactory: CodeCaptureManagerFactory
 
     @Inject
     lateinit var barcodeViewDecoder: BarcodeViewDecoder
@@ -78,6 +74,9 @@ class QrCodeProjectCreatorDialog :
 
     @Inject
     lateinit var intentLauncher: IntentLauncher
+
+    @Inject
+    lateinit var barcodeScannerViewFactory: BarcodeScannerViewContainer.Factory
 
     private var savedInstanceState: Bundle? = null
 
@@ -147,7 +146,7 @@ class QrCodeProjectCreatorDialog :
         beepManager = BeepManager(requireActivity())
 
         binding.barcodeView.setup(
-            ZxingBarcodeScannerViewFactory(),
+            barcodeScannerViewFactory,
             requireActivity(),
             viewLifecycleOwner,
             true

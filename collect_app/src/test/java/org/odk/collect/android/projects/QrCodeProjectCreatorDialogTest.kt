@@ -1,8 +1,10 @@
 package org.odk.collect.android.projects
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -30,10 +32,11 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.odk.collect.android.R
 import org.odk.collect.android.fakes.FakePermissionsProvider
+import org.odk.collect.android.fragments.BarcodeScannerView
+import org.odk.collect.android.fragments.BarcodeScannerViewContainer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.androidshared.utils.CompressionUtils
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
@@ -45,7 +48,6 @@ import org.robolectric.shadows.ShadowToast
 @RunWith(AndroidJUnit4::class)
 class QrCodeProjectCreatorDialogTest {
 
-    private val codeCaptureManagerFactory: CodeCaptureManagerFactory = mock {}
     private val permissionsProvider = FakePermissionsProvider()
 
     @get:Rule
@@ -56,8 +58,18 @@ class QrCodeProjectCreatorDialogTest {
         permissionsProvider.setPermissionGranted(true)
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesCodeCaptureManagerFactory(): CodeCaptureManagerFactory {
-                return codeCaptureManagerFactory
+            override fun providesBarcodeScannerViewFactory(): BarcodeScannerViewContainer.Factory {
+                return object : BarcodeScannerViewContainer.Factory {
+                    override fun create(
+                        activity: Activity,
+                        lifecycleOwner: LifecycleOwner,
+                        qrOnly: Boolean,
+                        prompt: String,
+                        useFrontCamera: Boolean
+                    ): BarcodeScannerView {
+                        return StubBarcodeScannerView(activity)
+                    }
+                }
             }
 
             override fun providesPermissionsProvider(permissionsChecker: PermissionsChecker?): PermissionsProvider {
@@ -221,4 +233,10 @@ class QrCodeProjectCreatorDialogTest {
         )
         verifyNoInteractions(projectCreator)
     }
+}
+
+private class StubBarcodeScannerView(context: Context) : BarcodeScannerView(context) {
+    override fun decodeContinuous(callback: (String) -> Unit) = Unit
+    override fun setTorchOn(on: Boolean) = Unit
+    override fun setTorchListener(torchListener: TorchListener) = Unit
 }
