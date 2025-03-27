@@ -27,7 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.zxing.client.android.BeepManager;
-import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
@@ -159,5 +158,5 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
 
     protected abstract Collection<String> getSupportedCodeFormats();
 
-    protected abstract void handleScanningResult(BarcodeResult result) throws IOException, DataFormatException;
+    protected abstract void handleScanningResult(String result) throws IOException, DataFormatException;
 }

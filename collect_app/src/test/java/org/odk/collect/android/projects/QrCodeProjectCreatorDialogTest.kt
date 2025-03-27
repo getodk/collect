@@ -16,7 +16,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.material.appbar.MaterialToolbar
-import com.journeyapps.barcodescanner.BarcodeResult
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.`is`
@@ -141,18 +140,14 @@ class QrCodeProjectCreatorDialogTest {
     fun `Successful project creation goes to main menu`() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesBarcodeViewDecoder(): BarcodeViewDecoder {
-                val barcodeResult = mock<BarcodeResult> {
-                    `when`(it.text).thenReturn(
-                        CompressionUtils.compress(
-                            "{\n" +
-                                "  \"general\": {\n" +
-                                "  },\n" +
-                                "  \"admin\": {\n" +
-                                "  }\n" +
-                                "}"
-                        )
-                    )
-                }
+                val barcodeResult = CompressionUtils.compress(
+                    "{\n" +
+                        "  \"general\": {\n" +
+                        "  },\n" +
+                        "  \"admin\": {\n" +
+                        "  }\n" +
+                        "}"
+                )
 
                 return mock {
                     `when`(it.waitForBarcode(any())).thenReturn(MutableLiveData(barcodeResult))
@@ -175,9 +170,7 @@ class QrCodeProjectCreatorDialogTest {
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesBarcodeViewDecoder(): BarcodeViewDecoder {
-                val barcodeResult = mock<BarcodeResult> {
-                    `when`(it.text).thenReturn(CompressionUtils.compress("{*}"))
-                }
+                val barcodeResult = CompressionUtils.compress("{*}")
 
                 return mock {
                     `when`(it.waitForBarcode(any())).thenReturn(MutableLiveData(barcodeResult))
@@ -202,19 +195,15 @@ class QrCodeProjectCreatorDialogTest {
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesBarcodeViewDecoder(): BarcodeViewDecoder {
-                val barcodeResult = mock<BarcodeResult> {
-                    `when`(it.text).thenReturn(
-                        CompressionUtils.compress(
-                            "{\n" +
-                                "  \"general\": {\n" +
-                                "       \"protocol\" : \"google_sheets\"" +
-                                "  },\n" +
-                                "  \"admin\": {\n" +
-                                "  }\n" +
-                                "}"
-                        )
-                    )
-                }
+                val barcodeResult = CompressionUtils.compress(
+                    "{\n" +
+                        "  \"general\": {\n" +
+                        "       \"protocol\" : \"google_sheets\"" +
+                        "  },\n" +
+                        "  \"admin\": {\n" +
+                        "  }\n" +
+                        "}"
+                )
 
                 return mock {
                     `when`(it.waitForBarcode(any())).thenReturn(MutableLiveData(barcodeResult))

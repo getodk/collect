@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import com.google.zxing.client.android.BeepManager
 import com.google.zxing.integration.android.IntentIntegrator
-import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
@@ -248,7 +247,7 @@ class QrCodeProjectCreatorDialog :
 
         barcodeViewDecoder.waitForBarcode(binding.barcodeView).observe(
             viewLifecycleOwner
-        ) { barcodeResult: BarcodeResult ->
+        ) { result: String ->
             try {
                 beepManager.playBeepSoundAndVibrate()
             } catch (e: Exception) {
@@ -256,7 +255,7 @@ class QrCodeProjectCreatorDialog :
             }
 
             val settingsJson = try {
-                CompressionUtils.decompress(barcodeResult.text)
+                CompressionUtils.decompress(result)
             } catch (e: Exception) {
                 showShortToast(
                     getString(org.odk.collect.strings.R.string.invalid_qrcode)

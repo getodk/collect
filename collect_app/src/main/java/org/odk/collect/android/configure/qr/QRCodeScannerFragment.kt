@@ -2,7 +2,6 @@ package org.odk.collect.android.configure.qr
 
 import android.content.Context
 import com.google.zxing.integration.android.IntentIntegrator
-import com.journeyapps.barcodescanner.BarcodeResult
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.analytics.AnalyticsEvents
@@ -37,11 +36,11 @@ class QRCodeScannerFragment : BarCodeScannerFragment() {
     }
 
     @Throws(IOException::class, DataFormatException::class)
-    override fun handleScanningResult(result: BarcodeResult) {
+    override fun handleScanningResult(result: String) {
         val oldProjectName = projectsDataService.requireCurrentProject().name
 
         val settingsImportingResult = settingsImporter.fromJSON(
-            CompressionUtils.decompress(result.text),
+            CompressionUtils.decompress(result),
             projectsDataService.requireCurrentProject()
         )
 
