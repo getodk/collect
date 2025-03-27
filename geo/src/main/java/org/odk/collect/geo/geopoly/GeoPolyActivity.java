@@ -14,7 +14,6 @@
 
 package org.odk.collect.geo.geopoly;
 
-import static org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
 
@@ -41,6 +40,8 @@ import org.odk.collect.geo.Constants;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.R;
+import org.odk.collect.geo.geopoint.AccuracyStatusView;
+import org.odk.collect.geo.geopoint.LocationAccuracy;
 import org.odk.collect.location.Location;
 import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.maps.LineDescription;
@@ -111,7 +112,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     ImageButton backspaceButton;
     ImageButton saveButton;
 
-    private TextView locationStatus;
+    private AccuracyStatusView locationStatus;
     private TextView collectionStatus;
 
     private View settingsView;
@@ -495,17 +496,15 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         int seconds = INTERVAL_OPTIONS[intervalIndex];
         int minutes = seconds / 60;
         int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
-        locationStatus.setText(
-            location == null ? getString(org.odk.collect.strings.R.string.location_status_searching)
-                : !usingThreshold ? getString(org.odk.collect.strings.R.string.location_status_accuracy, location.accuracy)
-                : acceptable ? getString(org.odk.collect.strings.R.string.location_status_acceptable, location.accuracy)
-                : getString(org.odk.collect.strings.R.string.location_status_unacceptable, location.accuracy)
-        );
-        locationStatus.setBackgroundColor(
-                location == null ? getThemeAttributeValue(this, com.google.android.material.R.attr.colorPrimary)
-                        : acceptable ? getThemeAttributeValue(this, com.google.android.material.R.attr.colorPrimary)
-                        : getThemeAttributeValue(this, com.google.android.material.R.attr.colorError)
-        );
+
+        if (location != null) {
+            if (usingThreshold & !acceptable) {
+                locationStatus.setAccuracy(new LocationAccuracy.Unacceptable((float) location.accuracy));
+            } else {
+                locationStatus.setAccuracy(new LocationAccuracy.Improving((float) location.accuracy));
+            }
+        }
+
         collectionStatus.setText(
             !inputActive ? getString(org.odk.collect.strings.R.string.collection_status_paused, numPoints)
                 : !recordingEnabled ? getString(org.odk.collect.strings.R.string.collection_status_placement, numPoints)

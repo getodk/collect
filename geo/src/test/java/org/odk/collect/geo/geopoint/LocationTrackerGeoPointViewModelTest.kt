@@ -122,15 +122,15 @@ class LocationTrackerGeoPointViewModelTest {
 
         whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 6.1f))
         scheduler.runForeground()
-        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(GeoPointAccuracy.Improving(6.1f)))
+        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(LocationAccuracy.Improving(6.1f)))
 
         whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 5.0f + 5.1f))
         scheduler.runForeground()
-        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(GeoPointAccuracy.Poor(5.0f + 5.1f)))
+        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(LocationAccuracy.Poor(5.0f + 5.1f)))
 
         whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 20.1f))
         scheduler.runForeground()
-        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(GeoPointAccuracy.Unacceptable(20.1f)))
+        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(LocationAccuracy.Unacceptable(20.1f)))
     }
 
     @Test
@@ -142,11 +142,11 @@ class LocationTrackerGeoPointViewModelTest {
 
         whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 11f))
         scheduler.runForeground()
-        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(GeoPointAccuracy.Unacceptable(11f)))
+        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(LocationAccuracy.Unacceptable(11f)))
 
         whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 10f))
         scheduler.runForeground()
-        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(GeoPointAccuracy.Improving(10f)))
+        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(LocationAccuracy.Improving(10f)))
     }
 
     @Test
@@ -158,11 +158,11 @@ class LocationTrackerGeoPointViewModelTest {
 
         whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 10f))
         scheduler.runForeground()
-        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(GeoPointAccuracy.Unacceptable(10f)))
+        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(LocationAccuracy.Unacceptable(10f)))
 
         whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 9f))
         scheduler.runForeground()
-        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(GeoPointAccuracy.Improving(9f)))
+        assertThat(currentAccuracy.getOrAwaitValue(), equalTo(LocationAccuracy.Improving(9f)))
     }
 
     @Test

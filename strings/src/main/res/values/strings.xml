@@ -635,7 +635,7 @@
     <string name="collection_status_auto_minutes">Points entered: %1$d (recording every %2$d min)</string>
     <string name="collection_status_auto_seconds_accuracy">Points entered: %1$d (recording every %2$d sec, accuracy %3$d m)</string>
     <string name="collection_status_auto_minutes_accuracy">Points entered: %1$d (recording every %2$d min, accuracy %3$d m)</string>
-    <string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
+    <string name="geopoint_instruction">Long press to place mark or tap add marker button</string>
     <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
     <string name="discard">Discard</string>
     <string name="select_item_count">%s: %d (%d shown on map)</string>
