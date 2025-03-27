@@ -46,9 +46,6 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
     private BeepManager beepManager;
 
     @Inject
-    BarcodeViewDecoder barcodeViewDecoder;
-
-    @Inject
     BarcodeScannerViewContainer.Factory barcodeScannerViewFactory;
 
     @Override
@@ -73,7 +70,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
             switchFlashlightButton.setVisibility(View.GONE);
         }
 
-        barcodeViewDecoder.waitForBarcode(barcodeScannerViewContainer.getBarcodeScannerView()).observe(getViewLifecycleOwner(), barcodeResult -> {
+        BarcodeViewDecoder.waitForBarcode(barcodeScannerViewContainer.getBarcodeScannerView()).observe(getViewLifecycleOwner(), barcodeResult -> {
             beepManager.playBeepSoundAndVibrate();
 
             try {

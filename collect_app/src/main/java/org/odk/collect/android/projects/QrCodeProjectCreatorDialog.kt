@@ -44,9 +44,6 @@ class QrCodeProjectCreatorDialog :
     DuplicateProjectConfirmationDialog.DuplicateProjectConfirmationListener {
 
     @Inject
-    lateinit var barcodeViewDecoder: BarcodeViewDecoder
-
-    @Inject
     lateinit var permissionsProvider: PermissionsProvider
 
     @Inject
@@ -219,7 +216,7 @@ class QrCodeProjectCreatorDialog :
     }
 
     private fun startScanning() {
-        barcodeViewDecoder.waitForBarcode(binding.barcodeView.barcodeScannerView).observe(
+        BarcodeViewDecoder.waitForBarcode(binding.barcodeView.barcodeScannerView).observe(
             viewLifecycleOwner
         ) { result: String ->
             try {

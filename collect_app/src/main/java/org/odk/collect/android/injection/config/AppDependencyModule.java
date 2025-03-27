@@ -88,7 +88,6 @@ import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
-import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.androidshared.bitmap.ImageCompressor;
 import org.odk.collect.androidshared.system.BroadcastReceiverRegister;
 import org.odk.collect.androidshared.system.BroadcastReceiverRegisterImpl;
@@ -321,11 +320,6 @@ public class AppDependencyModule {
                 settingsChangeHandler,
                 deviceUnsupportedSettings
         );
-    }
-
-    @Provides
-    public BarcodeViewDecoder providesBarcodeViewDecoder() {
-        return new BarcodeViewDecoder();
     }
 
     @Provides

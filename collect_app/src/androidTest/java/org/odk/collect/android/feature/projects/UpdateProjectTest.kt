@@ -66,7 +66,7 @@ class UpdateProjectTest {
             .openProjectSettingsDialog()
             .clickAddProject()
 
-        testDependencies.stubBarcodeViewDecoder.scan("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}")
+        testDependencies.fakeBarcodeScannerViewFactory.scan("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}")
 
         MainMenuPage()
             // assert there are two projects displayed

@@ -5,32 +5,19 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
-import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.support.StubBarcodeViewDecoder
+import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
-import org.odk.collect.android.support.rules.ResetStateRule
 import org.odk.collect.android.support.rules.TestRuleChain
-import org.odk.collect.android.views.BarcodeViewDecoder
 
 @RunWith(AndroidJUnit4::class)
 class LaunchScreenTest {
 
     private val rule = CollectTestRule(false)
-
-    private val stubBarcodeViewDecoder = StubBarcodeViewDecoder()
+    private val testDependencies = TestDependencies()
 
     @get:Rule
-    val chain: RuleChain = TestRuleChain.chain()
-        .around(
-            ResetStateRule(object : AppDependencyModule() {
-                override fun providesBarcodeViewDecoder(): BarcodeViewDecoder {
-                    return stubBarcodeViewDecoder
-                }
-            })
-        )
-        .around(rule)
+    val chain: RuleChain = TestRuleChain.chain(testDependencies).around(rule)
 
     @Test
     fun clickingTryCollectAtLaunch_setsAppUpWithDemoProject() {
@@ -61,7 +48,7 @@ class LaunchScreenTest {
         val page = rule.startAtFirstLaunch()
             .clickConfigureWithQrCode()
 
-        stubBarcodeViewDecoder.scan("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}")
+        testDependencies.fakeBarcodeScannerViewFactory.scan("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}")
         page.checkIsToastWithMessageDisplayed(org.odk.collect.strings.R.string.switched_project, "my-server.com")
 
         MainMenuPage()

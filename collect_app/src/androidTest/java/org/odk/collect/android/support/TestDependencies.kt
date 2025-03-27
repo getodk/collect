@@ -8,10 +8,10 @@ import android.webkit.MimeTypeMap
 import androidx.work.WorkManager
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
+import org.odk.collect.android.fragments.BarcodeScannerViewContainer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.version.VersionInformation
-import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.androidshared.system.BroadcastReceiverRegister
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.network.NetworkStateProvider
@@ -28,7 +28,7 @@ open class TestDependencies @JvmOverloads constructor(
 
     val networkStateProvider: FakeNetworkStateProvider = FakeNetworkStateProvider()
     val scheduler: TestScheduler = TestScheduler(networkStateProvider)
-    val stubBarcodeViewDecoder: StubBarcodeViewDecoder = StubBarcodeViewDecoder()
+    val fakeBarcodeScannerViewFactory = FakeBarcodeScannerViewFactory()
     val broadcastReceiverRegister: FakeBroadcastReceiverRegister = FakeBroadcastReceiverRegister()
     val restrictionsManager: RestrictionsManager = mock<RestrictionsManager>().apply {
         whenever(applicationRestrictions).thenReturn(Bundle())
@@ -56,8 +56,8 @@ open class TestDependencies @JvmOverloads constructor(
         return scheduler
     }
 
-    override fun providesBarcodeViewDecoder(): BarcodeViewDecoder {
-        return stubBarcodeViewDecoder
+    override fun providesBarcodeScannerViewFactory(): BarcodeScannerViewContainer.Factory {
+        return fakeBarcodeScannerViewFactory
     }
 
     override fun providesNetworkStateProvider(context: Context): NetworkStateProvider {
