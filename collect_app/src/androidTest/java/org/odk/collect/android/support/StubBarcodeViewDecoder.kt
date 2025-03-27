@@ -2,7 +2,7 @@ package org.odk.collect.android.support
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.journeyapps.barcodescanner.DecoratedBarcodeView
+import org.odk.collect.android.fragments.BarcodeScannerView
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.androidshared.utils.CompressionUtils
 import java.io.IOException
@@ -10,7 +10,7 @@ import java.io.IOException
 class StubBarcodeViewDecoder : BarcodeViewDecoder() {
     var liveData = MutableLiveData<String>()
 
-    override fun waitForBarcode(view: DecoratedBarcodeView): LiveData<String> {
+    override fun waitForBarcode(view: BarcodeScannerView): LiveData<String> {
         return liveData
     }
 

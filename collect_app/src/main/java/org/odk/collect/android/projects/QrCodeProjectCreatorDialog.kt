@@ -11,13 +11,12 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import com.google.zxing.client.android.BeepManager
-import com.google.zxing.integration.android.IntentIntegrator
-import com.journeyapps.barcodescanner.CaptureManager
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.databinding.QrCodeProjectCreatorDialogLayoutBinding
+import org.odk.collect.android.fragments.ZxingBarcodeScannerViewFactory
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory
@@ -67,8 +66,6 @@ class QrCodeProjectCreatorDialog :
     lateinit var settingsProvider: SettingsProvider
 
     lateinit var settingsConnectionMatcher: SettingsConnectionMatcher
-
-    private var capture: CaptureManager? = null
 
     private lateinit var beepManager: BeepManager
     lateinit var binding: QrCodeProjectCreatorDialogLayoutBinding
@@ -149,6 +146,12 @@ class QrCodeProjectCreatorDialog :
         }
         beepManager = BeepManager(requireActivity())
 
+        binding.barcodeView.setup(
+            ZxingBarcodeScannerViewFactory(),
+            requireActivity(),
+            viewLifecycleOwner,
+            true
+        )
         return binding.root
     }
 
@@ -212,40 +215,12 @@ class QrCodeProjectCreatorDialog :
         dismiss()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        capture?.onSaveInstanceState(outState)
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding.barcodeView.pauseAndWait()
-        capture?.onPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.barcodeView.resume()
-        capture?.onResume()
-    }
-
-    override fun onDestroy() {
-        capture?.onDestroy()
-        super.onDestroy()
-    }
-
     override fun getToolbar(): Toolbar? {
         return binding.toolbarLayout.toolbar
     }
 
     private fun startScanning() {
-        capture = codeCaptureManagerFactory.getCaptureManager(
-            requireActivity(),
-            binding.barcodeView,
-            listOf(IntentIntegrator.QR_CODE)
-        )
-
-        barcodeViewDecoder.waitForBarcode(binding.barcodeView).observe(
+        barcodeViewDecoder.waitForBarcode(binding.barcodeView.barcodeScannerView).observe(
             viewLifecycleOwner
         ) { result: String ->
             try {
