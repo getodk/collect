@@ -29,7 +29,7 @@ import com.opencsv.exceptions.CsvValidationException;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.instance.InstanceInitializationFactory;
+import org.javarosa.core.model.FormInitializationMode;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.model.instance.utils.DefaultAnswerResolver;
@@ -400,7 +400,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
     }
 
     private boolean initializeForm(FormDef formDef, FormEntryController fec) throws IOException {
-        final InstanceInitializationFactory instanceInit = new InstanceInitializationFactory();
         boolean usedSavepoint = false;
 
         if (instancePath != null) {
@@ -419,13 +418,13 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
                     Timber.i("Importing data");
                     publishProgress(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.survey_loading_reading_data_message));
                     importData(instanceXml, fec);
-                    formDef.initialize(false, instanceInit);
+                    formDef.initialize(FormInitializationMode.DRAFT_FORM_EDIT);
                 } catch (IOException | RuntimeException e) {
                     // Skip a savepoint file that is corrupted or 0-sized
                     if (usedSavepoint && !(e.getCause() instanceof XPathTypeMismatchException)) {
                         usedSavepoint = false;
                         instancePath = null;
-                        formDef.initialize(true, instanceInit);
+                        formDef.initialize(FormInitializationMode.NEW_FORM);
                         Timber.e(e, "Bad savepoint");
                     } else {
                         // The saved instance is corrupted.
@@ -435,10 +434,10 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
                     }
                 }
             } else {
-                formDef.initialize(true, instanceInit);
+                formDef.initialize(FormInitializationMode.NEW_FORM);
             }
         } else {
-            formDef.initialize(true, instanceInit);
+            formDef.initialize(FormInitializationMode.NEW_FORM);
         }
         return usedSavepoint;
     }
