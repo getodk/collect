@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
 import androidx.camera.core.TorchState
 import androidx.camera.mlkit.vision.MlKitAnalyzer
@@ -19,7 +20,8 @@ import org.odk.collect.android.databinding.MlkitBarcodeScannerLayoutBinding
 private class MlkitBarcodeScannerView(
     context: Context,
     private val lifecycleOwner: LifecycleOwner,
-    private val qrOnly: Boolean
+    private val qrOnly: Boolean,
+    useFrontCamera: Boolean
 ) : BarcodeScannerView(context) {
 
     private val binding =
@@ -27,6 +29,10 @@ private class MlkitBarcodeScannerView(
     private val cameraController = LifecycleCameraController(context)
 
     init {
+        if (useFrontCamera) {
+            cameraController.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+        }
+
         cameraController.bindToLifecycle(lifecycleOwner)
         binding.preview.setController(cameraController)
     }
@@ -82,6 +88,6 @@ class MlkitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
         prompt: String,
         useFrontCamera: Boolean
     ): BarcodeScannerView {
-        return MlkitBarcodeScannerView(activity, lifecycleOwner, qrOnly)
+        return MlkitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera)
     }
 }
