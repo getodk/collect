@@ -17,6 +17,7 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.ZoomSuggestionOptions
 import com.google.mlkit.vision.barcode.common.Barcode
 import org.odk.collect.android.databinding.MlkitBarcodeScannerLayoutBinding
+import java.lang.ref.WeakReference
 import java.util.concurrent.Executor
 
 @SuppressLint("ViewConstructor")
@@ -50,13 +51,25 @@ private class MlKitBarcodeScannerView(
             Barcode.FORMAT_ALL_FORMATS
         }
 
+        val maxZoomRatio =
+            cameraController.cameraInfo?.zoomState?.getValue()?.maxZoomRatio
+
+        /**
+         * If we reference `cameraController` directly from a zoom callback we end up leaking
+         * the Activity somehow.
+         */
+        val weakCameraController = WeakReference(cameraController)
+        val zoomCallback: (Float) -> Boolean = { zoomRatio ->
+            weakCameraController.get()?.setZoomRatio(zoomRatio)
+            true
+        }
+
         val options = BarcodeScannerOptions.Builder()
             .setBarcodeFormats(format)
             .setZoomSuggestionOptions(
-                ZoomSuggestionOptions.Builder { zoomRatio ->
-                    cameraController.setZoomRatio(zoomRatio)
-                    true
-                }.build()
+                ZoomSuggestionOptions.Builder(zoomCallback)
+                    .setMaxSupportedZoomRatio(maxZoomRatio ?: 0f)
+                    .build()
             )
             .build()
 
