@@ -22,7 +22,28 @@ class EditSavedFormTest {
         .around(rule)
 
     @Test
-    fun whenSubmissionSucceeds_instanceNotEditable() {
+    fun finalizedFormIsNotAvailableForEditsInTheListOfDrafts() {
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .copyForm("one-question.xml")
+            .startBlankForm("One Question")
+            .answerQuestion("what is your age", "123")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .assertNumberOfEditableForms(0)
+            .clickDrafts()
+            .assertTextDoesNotExist("One Question")
+
+            // Tests that search doesn't change visibility. Move down to lower testing level.
+            // (possibly when replacing CursorLoader)
+            .clickMenuFilter()
+            .searchInBar("One Question".substring(0, 1))
+            .assertTextDoesNotExist("One Question")
+    }
+
+    @Test
+    fun sentFormIsNotAvailableForEditsInTheListOfDrafts() {
         rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
             .copyForm("one-question.xml")
@@ -49,7 +70,7 @@ class EditSavedFormTest {
     }
 
     @Test
-    fun whenSubmissionFails_instanceNotEditable() {
+    fun failedToSendFormIsNotAvailableForEditsInTheListOfDrafts() {
         testDependencies.server.alwaysReturnError()
 
         rule.startAtMainMenu()
@@ -74,5 +95,69 @@ class EditSavedFormTest {
             .clickMenuFilter()
             .searchInBar("One Question".substring(0, 1))
             .assertTextDoesNotExist("One Question")
+    }
+
+    @Test
+    fun editingAFinalizedForm_createsANewFormAndKeepsTheOriginalOneIntact() {
+        rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .startBlankForm("One Question")
+            .answerQuestion("what is your age", "123")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question")
+            .editForm("One Question")
+            .clickOnQuestion("what is your age")
+            .answerQuestion("what is your age", "456")
+            .pressBackAndSaveAsDraft(SendFinalizedFormPage())
+            .pressBack(MainMenuPage())
+
+            .clickDrafts(1)
+            .clickOnForm("One Question")
+            .assertText("456")
+            .clickGoToEnd()
+            .clickSaveAsDraft()
+
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question")
+            .editForm("One Question")
+            .assertText("123")
+    }
+
+    @Test
+    fun editingASentForm_createsANewFormAndKeepsTheOriginalOneIntact() {
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .copyForm("one-question.xml")
+            .startBlankForm("One Question")
+            .answerQuestion("what is your age", "123")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickSelectAll()
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
+            .pressBack(MainMenuPage())
+
+            .clickViewSentForm(1)
+            .clickOnForm("One Question")
+            .editForm("One Question")
+            .clickOnQuestion("what is your age")
+            .answerQuestion("what is your age", "456")
+            .pressBackAndSaveAsDraft()
+
+            .clickDrafts(1)
+            .clickOnForm("One Question")
+            .assertText("456")
+            .clickGoToEnd()
+            .clickSaveAsDraft()
+
+            .clickViewSentForm(1)
+            .clickOnForm("One Question")
+            .editForm("One Question")
+            .assertText("123")
     }
 }

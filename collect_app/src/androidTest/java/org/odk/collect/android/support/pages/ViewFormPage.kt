@@ -2,6 +2,7 @@ package org.odk.collect.android.support.pages
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollTo
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -23,5 +24,10 @@ class ViewFormPage(private val formName: String) : Page<ViewFormPage>() {
 
         clickOnText(groupLabel)
         return this
+    }
+
+    fun editForm(formName: String): FormHierarchyPage {
+        onView(withId(R.id.menu_edit)).perform(ViewActions.click())
+        return FormHierarchyPage(formName).assertOnPage()
     }
 }
