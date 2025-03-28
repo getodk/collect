@@ -21,7 +21,8 @@ private class MlkitBarcodeScannerView(
     context: Context,
     private val lifecycleOwner: LifecycleOwner,
     private val qrOnly: Boolean,
-    useFrontCamera: Boolean
+    useFrontCamera: Boolean,
+    prompt: String
 ) : BarcodeScannerView(context) {
 
     private val binding =
@@ -35,6 +36,8 @@ private class MlkitBarcodeScannerView(
 
         cameraController.bindToLifecycle(lifecycleOwner)
         binding.preview.setController(cameraController)
+
+        binding.prompt.text = prompt
     }
 
     override fun decodeContinuous(callback: (String) -> Unit) {
@@ -88,6 +91,6 @@ class MlkitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
         prompt: String,
         useFrontCamera: Boolean
     ): BarcodeScannerView {
-        return MlkitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera)
+        return MlkitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt)
     }
 }
