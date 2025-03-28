@@ -29,7 +29,7 @@ class FormFillingIntentFactoryTest {
 
     @Test
     fun `newInstance starts FormUriActivity with instance URI`() {
-        activity.startActivity(FormFillingIntentFactory.newInstanceIntent(activity, InstancesContract.getUri("projectId", 101)))
+        activity.startActivity(FormFillingIntentFactory.newFormIntent(activity, InstancesContract.getUri("projectId", 101)))
 
         intended(hasAction(ACTION_EDIT))
         intended(hasComponent(FormUriActivity::class.java.name))
@@ -39,7 +39,7 @@ class FormFillingIntentFactoryTest {
 
     @Test
     fun `editInstance starts FormUriActivity with instance URI`() {
-        activity.startActivity(FormFillingIntentFactory.editInstanceIntent(activity, "projectId", 101))
+        activity.startActivity(FormFillingIntentFactory.editDraftFormIntent(activity, "projectId", 101))
 
         intended(hasAction(ACTION_EDIT))
         intended(hasComponent(FormUriActivity::class.java.name))

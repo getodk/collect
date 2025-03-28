@@ -70,7 +70,7 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
             finish()
         } else {
             // caller wants to view/edit a form, so launch FormFillingActivity
-            formLauncher.launch(FormFillingIntentFactory.newInstanceIntent(this, formUri))
+            formLauncher.launch(FormFillingIntentFactory.newFormIntent(this, formUri))
         }
     }
 

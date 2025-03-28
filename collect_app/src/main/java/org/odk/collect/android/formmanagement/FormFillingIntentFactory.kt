@@ -10,7 +10,7 @@ import org.odk.collect.android.formentry.FormOpeningMode
 import kotlin.reflect.KClass
 
 object FormFillingIntentFactory {
-    fun newInstanceIntent(
+    fun newFormIntent(
         context: Context,
         uri: Uri?,
         clazz: KClass<out Activity> = FormUriActivity::class
@@ -23,7 +23,7 @@ object FormFillingIntentFactory {
 
     @JvmStatic
     @JvmOverloads
-    fun editInstanceIntent(
+    fun editDraftFormIntent(
         context: Context,
         uri: Uri?,
         clazz: KClass<out Activity> = FormUriActivity::class
@@ -36,7 +36,7 @@ object FormFillingIntentFactory {
 
     @JvmStatic
     @JvmOverloads
-    fun editInstanceIntent(
+    fun editDraftFormIntent(
         context: Context,
         projectId: String,
         instanceId: Long,

@@ -95,7 +95,7 @@ class MainMenuFragment(
                 action = value.action?.let { action ->
                     SnackbarUtils.Action(getString(action)) {
                         formEntryFlowLauncher.launch(
-                            FormFillingIntentFactory.editInstanceIntent(
+                            FormFillingIntentFactory.editDraftFormIntent(
                                 requireContext(),
                                 value.uri
                             )
