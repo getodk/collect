@@ -84,6 +84,8 @@ cameraxLifecycle = { group = "androidx.camera", name = "camera-lifecycle", versi
 cameraxCamera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
 cameraxVideo = { group = "androidx.camera", name = "camera-video", version.ref = "camerax" }
 jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.3" }
+mlkit-barcodescanning = 'com.google.mlkit:barcode-scanning:17.3.0'
+camera-mlkit-vision = { group = "androidx.camera", name = "camera-mlkit-vision", version = "1.4.2" }
 
 # Test dependencies
 junit = { group = "junit", name = "junit", version = "4.13.2" }
