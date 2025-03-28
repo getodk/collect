@@ -1985,7 +1985,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
                 // we've just loaded a saved form, so start in the hierarchy view
                 String formMode = reqIntent.getStringExtra(FormOpeningMode.FORM_MODE_KEY);
-                if (formMode == null || FormOpeningMode.EDIT_SAVED.equalsIgnoreCase(formMode) || FormOpeningMode.EDIT_FINALIZED.equalsIgnoreCase(formMode)) {
+                if (FormOpeningMode.isEditableMode(formMode)) {
                     identityPromptViewModel.formLoaded(formController);
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
