@@ -2,12 +2,13 @@ package org.odk.collect.android.views
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.journeyapps.barcodescanner.BarcodeResult
-import com.journeyapps.barcodescanner.DecoratedBarcodeView
+import org.odk.collect.android.fragments.BarcodeScannerView
 
-open class BarcodeViewDecoder {
-    open fun waitForBarcode(view: DecoratedBarcodeView): LiveData<BarcodeResult> {
-        return MutableLiveData<BarcodeResult>().also {
+object BarcodeViewDecoder {
+
+    @JvmStatic
+    fun waitForBarcode(view: BarcodeScannerView): LiveData<String> {
+        return MutableLiveData<String>().also {
             view.decodeContinuous { result -> it.value = result }
         }
     }

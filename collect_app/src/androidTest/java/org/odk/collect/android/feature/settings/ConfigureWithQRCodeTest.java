@@ -15,17 +15,13 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
-import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.support.StubBarcodeViewDecoder;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.QRCodePage;
 import org.odk.collect.android.support.rules.CollectTestRule;
-import org.odk.collect.android.support.rules.ResetStateRule;
 import org.odk.collect.android.support.rules.RunnableRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
-import org.odk.collect.android.views.BarcodeViewDecoder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,25 +30,16 @@ import java.util.Collection;
 @RunWith(AndroidJUnit4.class)
 public class ConfigureWithQRCodeTest {
 
-    private final TestDependencies testDependencies = new TestDependencies();
+    private final TestDependencies testDependencies = new TestDependencies() {
+        @Override
+        public QRCodeGenerator providesQRCodeGenerator() {
+            return stubQRCodeGenerator;
+        }
+    };
     private final CollectTestRule rule = new CollectTestRule();
     private final StubQRCodeGenerator stubQRCodeGenerator = new StubQRCodeGenerator();
-    private final StubBarcodeViewDecoder stubBarcodeViewDecoder = new StubBarcodeViewDecoder();
-
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain(testDependencies)
-            .around(new ResetStateRule(new AppDependencyModule() {
-
-                @Override
-                public BarcodeViewDecoder providesBarcodeViewDecoder() {
-                    return stubBarcodeViewDecoder;
-                }
-
-                @Override
-                public QRCodeGenerator providesQRCodeGenerator() {
-                    return stubQRCodeGenerator;
-                }
-            }))
             .around(new RunnableRule(stubQRCodeGenerator::setup))
             .around(rule);
 
@@ -70,7 +57,7 @@ public class ConfigureWithQRCodeTest {
                 .clickProjectManagement()
                 .clickConfigureQR();
 
-        stubBarcodeViewDecoder.scan("{\"general\":{ \"server_url\": \"http://gallops.example\" },\"admin\":{}}");
+        testDependencies.getFakeBarcodeScannerViewFactory().scan("{\"general\":{ \"server_url\": \"http://gallops.example\" },\"admin\":{}}");
         qrCodePage
                 .checkIsToastWithMessageDisplayed(org.odk.collect.strings.R.string.successfully_imported_settings)
                 .assertFileWithProjectNameUpdated("Demo project", "gallops.example");

@@ -1,0 +1,132 @@
+package org.odk.collect.android.fragments
+
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.view.LayoutInflater
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
+import androidx.camera.core.TorchState
+import androidx.camera.mlkit.vision.MlKitAnalyzer
+import androidx.camera.view.LifecycleCameraController
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
+import com.google.mlkit.vision.barcode.BarcodeScanner
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.ZoomSuggestionOptions
+import com.google.mlkit.vision.barcode.common.Barcode
+import org.odk.collect.android.databinding.MlkitBarcodeScannerLayoutBinding
+import java.lang.ref.WeakReference
+import java.util.concurrent.Executor
+
+@SuppressLint("ViewConstructor")
+private class MlKitBarcodeScannerView(
+    context: Context,
+    private val lifecycleOwner: LifecycleOwner,
+    private val qrOnly: Boolean,
+    useFrontCamera: Boolean,
+    prompt: String
+) : BarcodeScannerView(context) {
+
+    private val binding =
+        MlkitBarcodeScannerLayoutBinding.inflate(LayoutInflater.from(context), this, true)
+    private val cameraController = LifecycleCameraController(context)
+
+    init {
+        if (useFrontCamera) {
+            cameraController.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+        }
+
+        cameraController.bindToLifecycle(lifecycleOwner)
+        binding.preview.setController(cameraController)
+
+        binding.prompt.text = prompt
+    }
+
+    override fun decodeContinuous(callback: (String) -> Unit) {
+        val format = if (qrOnly) {
+            Barcode.FORMAT_QR_CODE
+        } else {
+            Barcode.FORMAT_ALL_FORMATS
+        }
+
+        val maxZoomRatio =
+            cameraController.cameraInfo?.zoomState?.getValue()?.maxZoomRatio
+
+        /**
+         * If we reference `cameraController` directly from a zoom callback we end up leaking
+         * the Activity somehow.
+         */
+        val weakCameraController = WeakReference(cameraController)
+        val zoomCallback: (Float) -> Boolean = { zoomRatio ->
+            weakCameraController.get()?.setZoomRatio(zoomRatio)
+            true
+        }
+
+        val options = BarcodeScannerOptions.Builder()
+            .setBarcodeFormats(format)
+            .setZoomSuggestionOptions(
+                ZoomSuggestionOptions.Builder(zoomCallback)
+                    .setMaxSupportedZoomRatio(maxZoomRatio ?: 0f)
+                    .build()
+            )
+            .build()
+
+        val barcodeScanner = BarcodeScanning.getClient(options)
+        val executor = ContextCompat.getMainExecutor(context)
+        cameraController.setImageAnalysisAnalyzer(
+            executor,
+            BarcodeAnalyser(barcodeScanner, executor, qrOnly, callback)
+        )
+    }
+
+    override fun setTorchOn(on: Boolean) {
+        cameraController.enableTorch(on)
+    }
+
+    override fun setTorchListener(torchListener: TorchListener) {
+        cameraController.torchState.observe(lifecycleOwner) {
+            if (it == TorchState.ON) {
+                torchListener.onTorchOn()
+            } else if (it == TorchState.OFF) {
+                torchListener.onTorchOff()
+            }
+        }
+    }
+}
+
+private class BarcodeAnalyser(
+    barcodeScanner: BarcodeScanner,
+    executor: Executor,
+    qrOnly: Boolean,
+    callback: (String) -> Unit
+) : MlKitAnalyzer(listOf(barcodeScanner), COORDINATE_SYSTEM_VIEW_REFERENCED, executor, { result ->
+        val barcodes = result.getValue(barcodeScanner)
+        val matchingBarcodes = barcodes?.filter { matchesFormat(it, qrOnly) } ?: emptyList()
+        matchingBarcodes.firstOrNull()?.let {
+            callback(it.rawValue!!)
+        }
+    }) {
+    companion object {
+        fun matchesFormat(barcode: Barcode, qrOnly: Boolean): Boolean {
+            return if (qrOnly) {
+                barcode.format == Barcode.FORMAT_QR_CODE
+            } else {
+                barcode.format != Barcode.FORMAT_UNKNOWN
+            }
+        }
+    }
+}
+
+class MlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
+    override fun create(
+        activity: Activity,
+        lifecycleOwner: LifecycleOwner,
+        qrOnly: Boolean,
+        prompt: String,
+        useFrontCamera: Boolean
+    ): BarcodeScannerView {
+        return MlKitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt)
+    }
+}

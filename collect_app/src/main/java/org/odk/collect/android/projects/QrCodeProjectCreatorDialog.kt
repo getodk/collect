@@ -11,17 +11,14 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import com.google.zxing.client.android.BeepManager
-import com.google.zxing.integration.android.IntentIntegrator
-import com.journeyapps.barcodescanner.BarcodeResult
-import com.journeyapps.barcodescanner.CaptureManager
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.databinding.QrCodeProjectCreatorDialogLayoutBinding
+import org.odk.collect.android.fragments.BarcodeScannerViewContainer
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.MainMenuActivity
-import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
@@ -47,12 +44,6 @@ class QrCodeProjectCreatorDialog :
     DuplicateProjectConfirmationDialog.DuplicateProjectConfirmationListener {
 
     @Inject
-    lateinit var codeCaptureManagerFactory: CodeCaptureManagerFactory
-
-    @Inject
-    lateinit var barcodeViewDecoder: BarcodeViewDecoder
-
-    @Inject
     lateinit var permissionsProvider: PermissionsProvider
 
     @Inject
@@ -69,8 +60,6 @@ class QrCodeProjectCreatorDialog :
 
     lateinit var settingsConnectionMatcher: SettingsConnectionMatcher
 
-    private var capture: CaptureManager? = null
-
     private lateinit var beepManager: BeepManager
     lateinit var binding: QrCodeProjectCreatorDialogLayoutBinding
 
@@ -82,6 +71,9 @@ class QrCodeProjectCreatorDialog :
 
     @Inject
     lateinit var intentLauncher: IntentLauncher
+
+    @Inject
+    lateinit var barcodeScannerViewFactory: BarcodeScannerViewContainer.Factory
 
     private var savedInstanceState: Bundle? = null
 
@@ -150,6 +142,12 @@ class QrCodeProjectCreatorDialog :
         }
         beepManager = BeepManager(requireActivity())
 
+        binding.barcodeView.setup(
+            barcodeScannerViewFactory,
+            requireActivity(),
+            viewLifecycleOwner,
+            true
+        )
         return binding.root
     }
 
@@ -162,7 +160,7 @@ class QrCodeProjectCreatorDialog :
                 override fun granted() {
                     // Do not call from a fragment that does not exist anymore https://github.com/getodk/collect/issues/4741
                     if (isAdded) {
-                        startScanning(savedInstanceState)
+                        startScanning()
                     }
                 }
             }
@@ -213,43 +211,14 @@ class QrCodeProjectCreatorDialog :
         dismiss()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        capture?.onSaveInstanceState(outState)
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding.barcodeView.pauseAndWait()
-        capture?.onPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.barcodeView.resume()
-        capture?.onResume()
-    }
-
-    override fun onDestroy() {
-        capture?.onDestroy()
-        super.onDestroy()
-    }
-
     override fun getToolbar(): Toolbar? {
         return binding.toolbarLayout.toolbar
     }
 
-    private fun startScanning(savedInstanceState: Bundle?) {
-        capture = codeCaptureManagerFactory.getCaptureManager(
-            requireActivity(),
-            binding.barcodeView,
-            savedInstanceState,
-            listOf(IntentIntegrator.QR_CODE)
-        )
-
-        barcodeViewDecoder.waitForBarcode(binding.barcodeView).observe(
+    private fun startScanning() {
+        BarcodeViewDecoder.waitForBarcode(binding.barcodeView.barcodeScannerView).observe(
             viewLifecycleOwner
-        ) { barcodeResult: BarcodeResult ->
+        ) { result: String ->
             try {
                 beepManager.playBeepSoundAndVibrate()
             } catch (e: Exception) {
@@ -257,7 +226,7 @@ class QrCodeProjectCreatorDialog :
             }
 
             val settingsJson = try {
-                CompressionUtils.decompress(barcodeResult.text)
+                CompressionUtils.decompress(result)
             } catch (e: Exception) {
                 showShortToast(
                     getString(org.odk.collect.strings.R.string.invalid_qrcode)

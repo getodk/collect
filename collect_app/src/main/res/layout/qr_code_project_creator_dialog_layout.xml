@@ -39,7 +39,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <org.odk.collect.android.views.DecoratedBarcodeView
+                <org.odk.collect.android.fragments.BarcodeScannerViewContainer
                     android:id="@+id/barcode_view"
                     app:layout_constraintWidth_percent="0.75"
                     app:layout_constraintDimensionRatio="w,1:1"
