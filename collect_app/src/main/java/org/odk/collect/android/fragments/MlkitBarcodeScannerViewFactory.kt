@@ -18,7 +18,8 @@ import org.odk.collect.android.databinding.MlkitBarcodeScannerLayoutBinding
 @SuppressLint("ViewConstructor")
 private class MlkitBarcodeScannerView(
     context: Context,
-    private val lifecycleOwner: LifecycleOwner
+    private val lifecycleOwner: LifecycleOwner,
+    private val qrOnly: Boolean
 ) : BarcodeScannerView(context) {
 
     private val binding =
@@ -31,8 +32,14 @@ private class MlkitBarcodeScannerView(
     }
 
     override fun decodeContinuous(callback: (String) -> Unit) {
+        val format = if (qrOnly) {
+            Barcode.FORMAT_QR_CODE
+        } else {
+            Barcode.FORMAT_ALL_FORMATS
+        }
+
         val options = BarcodeScannerOptions.Builder()
-            .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
+            .setBarcodeFormats(format)
             .build()
         val barcodeScanner = BarcodeScanning.getClient(options)
 
@@ -75,6 +82,6 @@ class MlkitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
         prompt: String,
         useFrontCamera: Boolean
     ): BarcodeScannerView {
-        return MlkitBarcodeScannerView(activity, lifecycleOwner)
+        return MlkitBarcodeScannerView(activity, lifecycleOwner, qrOnly)
     }
 }
