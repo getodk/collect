@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
+import androidx.camera.core.TorchState
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
 import androidx.core.content.ContextCompat
@@ -15,9 +16,13 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import org.odk.collect.android.databinding.MlkitBarcodeScannerLayoutBinding
 
 @SuppressLint("ViewConstructor")
-private class MlkitBarcodeScannerView(context: Context, lifecycleOwner: LifecycleOwner) : BarcodeScannerView(context) {
+private class MlkitBarcodeScannerView(
+    context: Context,
+    private val lifecycleOwner: LifecycleOwner
+) : BarcodeScannerView(context) {
 
-    private val binding = MlkitBarcodeScannerLayoutBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding =
+        MlkitBarcodeScannerLayoutBinding.inflate(LayoutInflater.from(context), this, true)
     private val cameraController = LifecycleCameraController(context)
 
     init {
@@ -48,10 +53,18 @@ private class MlkitBarcodeScannerView(context: Context, lifecycleOwner: Lifecycl
     }
 
     override fun setTorchOn(on: Boolean) {
-        TODO("Not yet implemented")
+        cameraController.enableTorch(on)
     }
 
-    override fun setTorchListener(torchListener: TorchListener) = Unit
+    override fun setTorchListener(torchListener: TorchListener) {
+        cameraController.torchState.observe(lifecycleOwner) {
+            if (it == TorchState.ON) {
+                torchListener.onTorchOn()
+            } else if (it == TorchState.OFF) {
+                torchListener.onTorchOff()
+            }
+        }
+    }
 }
 
 class MlkitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
