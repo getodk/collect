@@ -11,14 +11,16 @@ import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.ZoomSuggestionOptions
 import com.google.mlkit.vision.barcode.common.Barcode
 import org.odk.collect.android.databinding.MlkitBarcodeScannerLayoutBinding
+import java.util.concurrent.Executor
 
 @SuppressLint("ViewConstructor")
-private class MlkitBarcodeScannerView(
+private class MlKitBarcodeScannerView(
     context: Context,
     private val lifecycleOwner: LifecycleOwner,
     private val qrOnly: Boolean,
@@ -62,28 +64,8 @@ private class MlkitBarcodeScannerView(
         val executor = ContextCompat.getMainExecutor(context)
         cameraController.setImageAnalysisAnalyzer(
             executor,
-            MlKitAnalyzer(
-                listOf(barcodeScanner),
-                COORDINATE_SYSTEM_VIEW_REFERENCED,
-                executor
-            ) { result: MlKitAnalyzer.Result ->
-                val value = result.getValue(barcodeScanner)
-                if (value!!.isNotEmpty()) {
-                    val barcode = value.first()
-                    if (matchesFormat(barcode)) {
-                        callback(barcode.rawValue!!)
-                    }
-                }
-            }
+            BarcodeAnalyser(barcodeScanner, executor, qrOnly, callback)
         )
-    }
-
-    private fun matchesFormat(barcode: Barcode): Boolean {
-        return if (qrOnly) {
-            barcode.format == Barcode.FORMAT_QR_CODE
-        } else {
-            barcode.format != Barcode.FORMAT_UNKNOWN
-        }
     }
 
     override fun setTorchOn(on: Boolean) {
@@ -101,7 +83,30 @@ private class MlkitBarcodeScannerView(
     }
 }
 
-class MlkitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
+private class BarcodeAnalyser(
+    barcodeScanner: BarcodeScanner,
+    executor: Executor,
+    qrOnly: Boolean,
+    callback: (String) -> Unit
+) : MlKitAnalyzer(listOf(barcodeScanner), COORDINATE_SYSTEM_VIEW_REFERENCED, executor, { result ->
+        val barcodes = result.getValue(barcodeScanner)
+        val matchingBarcodes = barcodes?.filter { matchesFormat(it, qrOnly) } ?: emptyList()
+        matchingBarcodes.firstOrNull()?.let {
+            callback(it.rawValue!!)
+        }
+    }) {
+    companion object {
+        fun matchesFormat(barcode: Barcode, qrOnly: Boolean): Boolean {
+            return if (qrOnly) {
+                barcode.format == Barcode.FORMAT_QR_CODE
+            } else {
+                barcode.format != Barcode.FORMAT_UNKNOWN
+            }
+        }
+    }
+}
+
+class MlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
     override fun create(
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
@@ -109,6 +114,6 @@ class MlkitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
         prompt: String,
         useFrontCamera: Boolean
     ): BarcodeScannerView {
-        return MlkitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt)
+        return MlKitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt)
     }
 }
