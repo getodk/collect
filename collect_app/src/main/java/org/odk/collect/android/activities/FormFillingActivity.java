@@ -732,7 +732,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             uriMimeType = getContentResolver().getType(uri);
         }
 
-        formLoaderTask = new FormLoaderTask(uri, uriMimeType, startingXPath, waitingXPath, formEntryControllerFactory, scheduler, savepointsRepositoryProvider.create());
+        formLoaderTask = new FormLoaderTask(uri, uriMimeType, startingXPath, waitingXPath, formEntryControllerFactory, scheduler, savepointsRepositoryProvider.create(), FormOpeningMode.EDIT_FINALIZED.equalsIgnoreCase(intent.getStringExtra(FormOpeningMode.FORM_MODE_KEY)));
         formLoaderTask.setFormLoaderListener(this);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute();
@@ -1985,7 +1985,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
                 // we've just loaded a saved form, so start in the hierarchy view
                 String formMode = reqIntent.getStringExtra(FormOpeningMode.FORM_MODE_KEY);
-                if (formMode == null || FormOpeningMode.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                if (formMode == null || FormOpeningMode.EDIT_SAVED.equalsIgnoreCase(formMode) || FormOpeningMode.EDIT_FINALIZED.equalsIgnoreCase(formMode)) {
                     identityPromptViewModel.formLoaded(formController);
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
