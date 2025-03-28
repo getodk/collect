@@ -4,5 +4,6 @@ object FormOpeningMode {
     const val FORM_MODE_KEY = "formMode"
 
     const val EDIT_SAVED = "editSaved"
+    const val EDIT_FINALIZED = "editFinalized"
     const val VIEW_SENT = "viewSent"
 }

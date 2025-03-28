@@ -118,7 +118,7 @@ public class FormHierarchyFragment extends Fragment {
                 formHierarchyViewModel
                         .editInstance(formEntryViewModel.getFormController())
                         .observe(getViewLifecycleOwner(), dbId -> {
-                            Intent intent = FormFillingIntentFactory.editInstanceIntent(requireContext(), currentProjectId, dbId.getValue());
+                            Intent intent = FormFillingIntentFactory.editFinalizedFormIntent(requireContext(), currentProjectId, dbId.getValue());
                             startActivity(intent);
                             requireActivity().getOnBackPressedDispatcher().onBackPressed();
                         });
