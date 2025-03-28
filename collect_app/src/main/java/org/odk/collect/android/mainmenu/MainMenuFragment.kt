@@ -19,13 +19,13 @@ import org.odk.collect.android.activities.FormDownloadListActivity
 import org.odk.collect.android.activities.InstanceChooserList
 import org.odk.collect.android.application.MapboxClassInstanceCreator
 import org.odk.collect.android.databinding.MainMenuBinding
+import org.odk.collect.android.formentry.FormOpeningMode
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.instancemanagement.send.InstanceUploaderListActivity
 import org.odk.collect.android.projects.ProjectIconView
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ActionRegister
-import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.androidshared.data.consume
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -186,8 +186,8 @@ class MainMenuFragment(
             formEntryFlowLauncher.launch(
                 Intent(requireActivity(), InstanceChooserList::class.java).apply {
                     putExtra(
-                        ApplicationConstants.BundleKeys.FORM_MODE,
-                        ApplicationConstants.FormModes.EDIT_SAVED
+                        FormOpeningMode.FORM_MODE_KEY,
+                        FormOpeningMode.EDIT_SAVED
                     )
                 }
             )
@@ -206,8 +206,8 @@ class MainMenuFragment(
             startActivity(
                 Intent(requireActivity(), InstanceChooserList::class.java).apply {
                     putExtra(
-                        ApplicationConstants.BundleKeys.FORM_MODE,
-                        ApplicationConstants.FormModes.VIEW_SENT
+                        FormOpeningMode.FORM_MODE_KEY,
+                        FormOpeningMode.VIEW_SENT
                     )
                 }
             )

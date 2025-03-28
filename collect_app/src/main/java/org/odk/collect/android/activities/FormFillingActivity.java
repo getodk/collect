@@ -102,6 +102,7 @@ import org.odk.collect.android.formentry.FormError;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
+import org.odk.collect.android.formentry.FormOpeningMode;
 import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.PrinterWidgetViewModel;
@@ -146,7 +147,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.ControllableLifecyleOwner;
@@ -411,7 +411,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         }
 
         viewModelFactory = new FormEntryViewModelFactory(this,
-                getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE),
+                getIntent().getStringExtra(FormOpeningMode.FORM_MODE_KEY),
                 sessionId,
                 scheduler,
                 formSessionRepository,
@@ -1984,8 +1984,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 Intent reqIntent = getIntent();
 
                 // we've just loaded a saved form, so start in the hierarchy view
-                String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                String formMode = reqIntent.getStringExtra(FormOpeningMode.FORM_MODE_KEY);
+                if (formMode == null || FormOpeningMode.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                     identityPromptViewModel.formLoaded(formController);
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
@@ -2021,7 +2021,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     });
                 } else {
                     formControllerAvailable(formController, form, instance);
-                    if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
+                    if (FormOpeningMode.VIEW_SENT.equalsIgnoreCase(formMode)) {
                         Intent intent = new Intent(this, FormHierarchyFragmentHostActivity.class);
                         intent.putExtra(FormHierarchyFragmentHostActivity.EXTRA_SESSION_ID, sessionId);
                         intent.putExtra(FormHierarchyFragmentHostActivity.EXTRA_VIEW_ONLY, true);

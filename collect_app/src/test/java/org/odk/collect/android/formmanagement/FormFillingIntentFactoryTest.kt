@@ -14,8 +14,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.external.FormUriActivity
 import org.odk.collect.android.external.InstancesContract
-import org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE
-import org.odk.collect.android.utilities.ApplicationConstants.FormModes.VIEW_SENT
+import org.odk.collect.android.formentry.FormOpeningMode.FORM_MODE_KEY
+import org.odk.collect.android.formentry.FormOpeningMode.VIEW_SENT
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.robolectric.Robolectric
 
@@ -34,7 +34,7 @@ class FormFillingIntentFactoryTest {
         intended(hasAction(ACTION_EDIT))
         intended(hasComponent(FormUriActivity::class.java.name))
         intended(hasData(InstancesContract.getUri("projectId", 101)))
-        intended(not(hasExtra(FORM_MODE, VIEW_SENT)))
+        intended(not(hasExtra(FORM_MODE_KEY, VIEW_SENT)))
     }
 
     @Test
@@ -44,6 +44,6 @@ class FormFillingIntentFactoryTest {
         intended(hasAction(ACTION_EDIT))
         intended(hasComponent(FormUriActivity::class.java.name))
         intended(hasData(InstancesContract.getUri("projectId", 101)))
-        intended(not(hasExtra(FORM_MODE, VIEW_SENT)))
+        intended(not(hasExtra(FORM_MODE_KEY, VIEW_SENT)))
     }
 }

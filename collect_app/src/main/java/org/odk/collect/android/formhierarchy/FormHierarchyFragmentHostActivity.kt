@@ -5,6 +5,7 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryViewModelFactory
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
+import org.odk.collect.android.formentry.FormOpeningMode
 import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment
 import org.odk.collect.android.injection.DaggerUtils
@@ -12,7 +13,6 @@ import org.odk.collect.android.instancemanagement.InstanceCloner
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.ProjectsDataService
-import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -90,7 +90,7 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
     private val viewModelFactory by lazy {
         FormEntryViewModelFactory(
             this,
-            ApplicationConstants.FormModes.EDIT_SAVED,
+            FormOpeningMode.EDIT_SAVED,
             sessionId,
             scheduler,
             formSessionRepository,

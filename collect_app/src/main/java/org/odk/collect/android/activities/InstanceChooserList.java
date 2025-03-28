@@ -37,6 +37,7 @@ import androidx.loader.content.Loader;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
+import org.odk.collect.android.formentry.FormOpeningMode;
 import org.odk.collect.db.sqlite.DatabaseConnection;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
@@ -49,7 +50,6 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.FinalizeAllSnackbarPresenter;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.projects.ProjectsDataService;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
@@ -109,8 +109,8 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
         setContentView(R.layout.form_chooser_list);
         DaggerUtils.getComponent(this).inject(this);
 
-        String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-        if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+        String formMode = getIntent().getStringExtra(FormOpeningMode.FORM_MODE_KEY);
+        if (formMode == null || FormOpeningMode.EDIT_SAVED.equalsIgnoreCase(formMode)) {
             setTitle(getString(org.odk.collect.strings.R.string.review_data));
             editMode = true;
         } else {
@@ -197,12 +197,12 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                     Intent intent = new Intent(this, FormUriActivity.class);
                     intent.setAction(Intent.ACTION_EDIT);
                     intent.setData(instanceUri);
-                    String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-                    if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                    String formMode = parentIntent.getStringExtra(FormOpeningMode.FORM_MODE_KEY);
+                    if (formMode == null || FormOpeningMode.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                        intent.putExtra(FormOpeningMode.FORM_MODE_KEY, FormOpeningMode.EDIT_SAVED);
                         formLauncher.launch(intent);
                     } else {
-                        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                        intent.putExtra(FormOpeningMode.FORM_MODE_KEY, FormOpeningMode.VIEW_SENT);
                         startActivity(intent);
                         finish();
                     }
