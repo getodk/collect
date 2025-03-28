@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.ZoomSuggestionOptions
 import com.google.mlkit.vision.barcode.common.Barcode
 import org.odk.collect.android.databinding.MlkitBarcodeScannerLayoutBinding
 
@@ -49,9 +50,15 @@ private class MlkitBarcodeScannerView(
 
         val options = BarcodeScannerOptions.Builder()
             .setBarcodeFormats(format)
+            .setZoomSuggestionOptions(
+                ZoomSuggestionOptions.Builder { zoomRatio ->
+                    cameraController.setZoomRatio(zoomRatio)
+                    true
+                }.build()
+            )
             .build()
-        val barcodeScanner = BarcodeScanning.getClient(options)
 
+        val barcodeScanner = BarcodeScanning.getClient(options)
         val executor = ContextCompat.getMainExecutor(context)
         cameraController.setImageAnalysisAnalyzer(
             executor,
@@ -62,10 +69,21 @@ private class MlkitBarcodeScannerView(
             ) { result: MlKitAnalyzer.Result ->
                 val value = result.getValue(barcodeScanner)
                 if (value!!.isNotEmpty()) {
-                    callback(value.first().rawValue!!)
+                    val barcode = value.first()
+                    if (matchesFormat(barcode)) {
+                        callback(barcode.rawValue!!)
+                    }
                 }
             }
         )
+    }
+
+    private fun matchesFormat(barcode: Barcode): Boolean {
+        return if (qrOnly) {
+            barcode.format == Barcode.FORMAT_QR_CODE
+        } else {
+            barcode.format != Barcode.FORMAT_UNKNOWN
+        }
     }
 
     override fun setTorchOn(on: Boolean) {
