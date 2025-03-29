@@ -379,7 +379,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
             ToastUtils.showLongToast(org.odk.collect.strings.R.string.encrypted_form);
         } else {
             long instanceId = c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID));
-            Intent intent = FormFillingIntentFactory.editInstanceIntent(this, projectsDataService.requireCurrentProject().getUuid(), instanceId);
+            Intent intent = FormFillingIntentFactory.editDraftFormIntent(this, projectsDataService.requireCurrentProject().getUuid(), instanceId);
             startActivity(intent);
         }
     }

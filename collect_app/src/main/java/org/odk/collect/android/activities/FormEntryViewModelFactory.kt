@@ -11,6 +11,7 @@ import org.odk.collect.android.formentry.BackgroundAudioViewModel
 import org.odk.collect.android.formentry.BackgroundAudioViewModel.RecordAudioActionRegistry
 import org.odk.collect.android.formentry.FormEndViewModel
 import org.odk.collect.android.formentry.FormEntryViewModel
+import org.odk.collect.android.formentry.FormOpeningMode
 import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.formentry.PrinterWidgetViewModel
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel
@@ -22,7 +23,6 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.ProjectsDataService
-import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -98,7 +98,7 @@ class FormEntryViewModelFactory(
 
             BackgroundAudioViewModel::class.java -> {
                 val recordAudioActionRegistry =
-                    if (mode == ApplicationConstants.FormModes.VIEW_SENT) {
+                    if (mode == FormOpeningMode.VIEW_SENT) {
                         object : RecordAudioActionRegistry {
                             override fun register(listener: BiConsumer<TreeReference, String?>) {}
                             override fun unregister() {}

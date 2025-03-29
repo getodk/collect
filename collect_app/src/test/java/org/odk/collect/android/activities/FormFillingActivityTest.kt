@@ -83,7 +83,7 @@ class FormFillingActivityTest {
         val projectId = CollectHelpers.setupDemoProject()
 
         val form = setupForm("forms/two-question.xml")
-        val intent = FormFillingIntentFactory.newInstanceIntent(
+        val intent = FormFillingIntentFactory.newFormIntent(
             application,
             FormsContract.getUri(projectId, form!!.dbId),
             FormFillingActivity::class
@@ -121,7 +121,7 @@ class FormFillingActivityTest {
         val projectId = CollectHelpers.setupDemoProject()
 
         val form = setupForm("forms/two-question.xml")
-        val intent = FormFillingIntentFactory.newInstanceIntent(
+        val intent = FormFillingIntentFactory.newFormIntent(
             application,
             FormsContract.getUri(projectId, form!!.dbId),
             FormFillingActivity::class
@@ -162,7 +162,7 @@ class FormFillingActivityTest {
         val projectId = CollectHelpers.setupDemoProject()
 
         val form = setupForm("forms/two-question.xml")
-        val intent = FormFillingIntentFactory.newInstanceIntent(
+        val intent = FormFillingIntentFactory.newFormIntent(
             application,
             FormsContract.getUri(projectId, form!!.dbId),
             FormFillingActivity::class
@@ -207,7 +207,7 @@ class FormFillingActivityTest {
         val projectId = CollectHelpers.setupDemoProject()
 
         val form = setupForm("forms/two-question-external.xml")
-        val intent = FormFillingIntentFactory.newInstanceIntent(
+        val intent = FormFillingIntentFactory.newFormIntent(
             application,
             FormsContract.getUri(projectId, form!!.dbId),
             FormFillingActivity::class
@@ -249,7 +249,7 @@ class FormFillingActivityTest {
     fun whenFormDoesNotExist_showsFatalError() {
         val projectId = CollectHelpers.setupDemoProject()
 
-        val intent = FormFillingIntentFactory.newInstanceIntent(
+        val intent = FormFillingIntentFactory.newFormIntent(
             application,
             FormsContract.getUri(projectId, 101),
             FormFillingActivity::class

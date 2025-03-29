@@ -2,7 +2,7 @@ package org.odk.collect.android.formentry
 
 import org.apache.commons.io.FileUtils.readFileToByteArray
 import org.javarosa.core.model.FormDef
-import org.javarosa.core.model.instance.InstanceInitializationFactory
+import org.javarosa.core.model.FormInitializationMode
 import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.core.model.instance.utils.DefaultAnswerResolver
 import org.javarosa.core.reference.ReferenceManager
@@ -71,8 +71,7 @@ object FormEntryUseCases {
         formEntryController: FormEntryController,
         instanceFile: File
     ): FormController {
-        val instanceInit = InstanceInitializationFactory()
-        formEntryController.model.form.initialize(true, instanceInit)
+        formEntryController.model.form.initialize(FormInitializationMode.NEW_FORM)
 
         return JavaRosaFormController(
             File(form.formMediaPath),
@@ -87,15 +86,13 @@ object FormEntryUseCases {
         instance: Instance,
         formEntryController: FormEntryController
     ): FormController? {
-        val instanceInit = InstanceInitializationFactory()
-
         val instanceFile = File(instance.instanceFilePath)
         if (!instanceFile.exists()) {
             return null
         }
 
         importInstance(instanceFile, formEntryController)
-        formEntryController.model.form.initialize(false, instanceInit)
+        formEntryController.model.form.initialize(FormInitializationMode.DRAFT_FORM_EDIT)
 
         return JavaRosaFormController(
             File(form.formMediaPath),
