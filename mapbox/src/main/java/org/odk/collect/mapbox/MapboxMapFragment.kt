@@ -106,7 +106,6 @@ class MapboxMapFragment :
     private var referenceLayerFile: File? = null
     private var clientWantsLocationUpdates = false
     private var topStyleLayerId: String? = null
-    private val locationCallback = MapboxLocationCallback(this)
     override val mapFragmentDelegate = MapFragmentDelegate(
         this,
         { MapboxMapConfigurator() },
@@ -460,7 +459,7 @@ class MapboxMapFragment :
     }
 
     override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {
-        locationCallback.setRetainMockAccuracy(retainMockAccuracy)
+        locationClient.setRetainMockAccuracy(retainMockAccuracy)
     }
 
     override fun hasCenter(): Boolean {
