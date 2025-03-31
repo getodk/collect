@@ -92,9 +92,10 @@ public class ExStringWidgetTest extends GeneralExStringWidgetTest<ExStringWidget
     }
 
     @Test
-    public void whenNumberOfRowsSpecifiedEditTextShouldHaveProperNumberOfMinLines() {
+    public void whenNumberOfRowsSpecifiedEditTextShouldHaveProperNumberOfLines() {
         when(questionDef.getAdditionalAttribute(null, "rows")).thenReturn("5");
         assertThat(getWidget().binding.widgetAnswerText.getBinding().editText.getMinLines(), equalTo(5));
+        assertThat(getWidget().binding.widgetAnswerText.getBinding().editText.getMaxLines(), equalTo(Integer.MAX_VALUE));
     }
 
     @Override

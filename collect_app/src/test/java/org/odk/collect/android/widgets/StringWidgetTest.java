@@ -71,8 +71,9 @@ public class StringWidgetTest extends GeneralStringWidgetTest<StringWidget, Stri
     }
 
     @Test
-    public void whenNumberOfRowsSpecifiedEditTextShouldHaveProperNumberOfMinLines() {
+    public void whenNumberOfRowsSpecifiedEditTextShouldHaveProperNumberOfLines() {
         when(questionDef.getAdditionalAttribute(null, "rows")).thenReturn("5");
         assertThat(getWidget().widgetAnswerText.getBinding().editText.getMinLines(), equalTo(5));
+        assertThat(getWidget().widgetAnswerText.getBinding().editText.getMaxLines(), equalTo(Integer.MAX_VALUE));
     }
 }
