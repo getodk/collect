@@ -29,6 +29,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
+import android.view.Gravity;
 import android.view.View;
 
 /**
@@ -89,6 +90,18 @@ public class ExStringWidgetTest extends GeneralExStringWidgetTest<ExStringWidget
 
         assertThat(getSpyWidget().binding.widgetAnswerText.getBinding().editText.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
         assertThat(getSpyWidget().binding.widgetAnswerText.getBinding().textView.getTransformationMethod(), is(instanceOf(PasswordTransformationMethod.class)));
+    }
+
+    @Test
+    public void textFieldShouldUseTopStartGravityNoMatterHowManyRowsItContains() {
+        assertThat(getWidget().binding.widgetAnswerText.getBinding().editText.getGravity(), equalTo(Gravity.TOP | Gravity.START));
+
+        when(questionDef.getAdditionalAttribute(null, "rows")).thenReturn("5");
+        assertThat(getWidget().binding.widgetAnswerText.getBinding().editText.getGravity(), equalTo(Gravity.TOP | Gravity.START));
+
+        when(questionDef.getAdditionalAttribute(null, "rows")).thenReturn(null);
+        when(formEntryPrompt.getAppearanceHint()).thenReturn(Appearances.MULTILINE);
+        assertThat(getWidget().binding.widgetAnswerText.getBinding().editText.getGravity(), equalTo(Gravity.TOP | Gravity.START));
     }
 
     @Test
