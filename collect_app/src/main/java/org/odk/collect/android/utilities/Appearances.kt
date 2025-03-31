@@ -202,4 +202,10 @@ object Appearances {
             !appearance.contains(NUMBERS) &&
             prompt.dataType == Constants.DATATYPE_TEXT
     }
+
+    @JvmStatic
+    fun isMultiline(prompt: FormEntryPrompt): Boolean {
+        val appearance = getSanitizedAppearanceHint(prompt)
+        return appearance.contains(MULTILINE)
+    }
 }

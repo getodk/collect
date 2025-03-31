@@ -33,7 +33,7 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
 
     val binding = WidgetAnswerTextBinding.inflate(LayoutInflater.from(context), this, true)
 
-    fun init(fontSize: Float, readOnly: Boolean, numberOfRows: Int?, isMasked: Boolean, afterTextChanged: Runnable) {
+    fun init(fontSize: Float, readOnly: Boolean, numberOfRows: Int?, isMultiline: Boolean, isMasked: Boolean, afterTextChanged: Runnable) {
         binding.editText.id = generateViewId()
         binding.textView.id = generateViewId()
 
@@ -49,6 +49,10 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
         if (numberOfRows != null && numberOfRows > 0) {
             binding.editText.minLines = numberOfRows
             binding.editText.gravity = Gravity.TOP // to write test starting at the top of the edit area
+        } else if (isMultiline) {
+            binding.editText.minLines = 4
+            binding.editText.maxLines = 4
+            binding.editText.gravity = Gravity.TOP
         }
 
         binding.editText.addTextChangedListener(object : TextWatcher {
