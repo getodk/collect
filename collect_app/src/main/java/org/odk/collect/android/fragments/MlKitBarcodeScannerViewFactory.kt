@@ -17,7 +17,7 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import org.odk.collect.android.databinding.MlkitBarcodeScannerLayoutBinding
 
 @SuppressLint("ViewConstructor")
-private class MlkitBarcodeScannerView(
+private class MlKitBarcodeScannerView(
     context: Context,
     private val lifecycleOwner: LifecycleOwner,
     private val qrOnly: Boolean,
@@ -83,7 +83,7 @@ private class MlkitBarcodeScannerView(
     }
 }
 
-class MlkitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
+class MlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
     override fun create(
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
@@ -91,6 +91,6 @@ class MlkitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
         prompt: String,
         useFrontCamera: Boolean
     ): BarcodeScannerView {
-        return MlkitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt)
+        return MlKitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt)
     }
 }
