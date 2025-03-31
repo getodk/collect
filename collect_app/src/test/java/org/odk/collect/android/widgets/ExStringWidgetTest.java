@@ -98,6 +98,13 @@ public class ExStringWidgetTest extends GeneralExStringWidgetTest<ExStringWidget
         assertThat(getWidget().binding.widgetAnswerText.getBinding().editText.getMaxLines(), equalTo(Integer.MAX_VALUE));
     }
 
+    @Test
+    public void whenMultilineAppearanceUsedEditTextShouldHaveProperNumberOfLines() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn(Appearances.MULTILINE);
+        assertThat(getWidget().binding.widgetAnswerText.getBinding().editText.getMinLines(), equalTo(4));
+        assertThat(getWidget().binding.widgetAnswerText.getBinding().editText.getMaxLines(), equalTo(4));
+    }
+
     @Override
     @Test
     public void whenPromptHasHiddenAnswerAppearance_answerIsNotDisplayed() {

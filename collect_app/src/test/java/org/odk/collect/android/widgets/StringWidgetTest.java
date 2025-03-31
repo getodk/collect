@@ -76,4 +76,11 @@ public class StringWidgetTest extends GeneralStringWidgetTest<StringWidget, Stri
         assertThat(getWidget().widgetAnswerText.getBinding().editText.getMinLines(), equalTo(5));
         assertThat(getWidget().widgetAnswerText.getBinding().editText.getMaxLines(), equalTo(Integer.MAX_VALUE));
     }
+
+    @Test
+    public void whenMultilineAppearanceUsedEditTextShouldHaveProperNumberOfLines() {
+        when(formEntryPrompt.getAppearanceHint()).thenReturn(Appearances.MULTILINE);
+        assertThat(getWidget().widgetAnswerText.getBinding().editText.getMinLines(), equalTo(4));
+        assertThat(getWidget().widgetAnswerText.getBinding().editText.getMaxLines(), equalTo(4));
+    }
 }
