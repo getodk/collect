@@ -142,11 +142,16 @@ public class FormHierarchyFragment extends Fragment {
                 new OnBackPressedCallback(true) {
                     @Override
                     public void handleOnBackPressed() {
-                        FormController formController = formEntryViewModel.getFormController();
-                        if (formController != null) {
-                            formController.getAuditEventLogger().flush();
-                            navigateToTheLastRelevantIndex(formController);
+                        if (viewOnly) {
+                            formEntryViewModel.exit();
+                        } else {
+                            FormController formController = formEntryViewModel.getFormController();
+                            if (formController != null) {
+                                formController.getAuditEventLogger().flush();
+                                navigateToTheLastRelevantIndex(formController);
+                            }
                         }
+
                         requireActivity().finish();
                     }
                 }
