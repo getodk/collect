@@ -1,5 +1,7 @@
 package org.odk.collect.android.activities
 
+import android.app.Activity
+import androidx.lifecycle.LifecycleOwner
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -14,6 +16,7 @@ import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.CoreMatchers.nullValue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,6 +25,8 @@ import org.mockito.Mockito.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
+import org.odk.collect.android.fragments.BarcodeScannerView
+import org.odk.collect.android.fragments.BarcodeScannerViewContainer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
@@ -41,6 +46,29 @@ class FirstLaunchActivityTest {
 
     @get:Rule
     val activityRule = RecordedIntentsRule()
+
+    @Before
+    fun setup() {
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+            override fun providesBarcodeScannerViewFactory(): BarcodeScannerViewContainer.Factory {
+                return object : BarcodeScannerViewContainer.Factory {
+                    override fun create(
+                        activity: Activity,
+                        lifecycleOwner: LifecycleOwner,
+                        qrOnly: Boolean,
+                        prompt: String,
+                        useFrontCamera: Boolean
+                    ): BarcodeScannerView {
+                        return object : BarcodeScannerView(activity) {
+                            override fun decodeContinuous(callback: (String) -> Unit) = Unit
+                            override fun setTorchOn(on: Boolean) = Unit
+                            override fun setTorchListener(torchListener: TorchListener) = Unit
+                        }
+                    }
+                }
+            }
+        })
+    }
 
     @Test
     fun `The QrCodeProjectCreatorDialog should be displayed after clicking on the 'Configure with QR code' button`() {
