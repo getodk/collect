@@ -466,6 +466,18 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         TreeElement savedRoot = XFormParser.restoreDataModel(fileBytes, null).getRoot();
         TreeElement templateRoot = fec.getModel().getForm().getInstance().getRoot().deepCopy(true);
 
+        // add deprecatedID to the templateRoot meta section if the savedRoot contains it
+        TreeElement metaSection = savedRoot.getFirstChild("meta");
+        if (metaSection != null) {
+            TreeElement deprecatedId = metaSection.getFirstChild("deprecatedID");
+            if (deprecatedId != null) {
+                metaSection = templateRoot.getFirstChild("meta");
+                if (metaSection != null) {
+                    metaSection.addChild(new TreeElement("deprecatedID"));
+                }
+            }
+        }
+
         // weak check for matching forms
         if (!savedRoot.getName().equals(templateRoot.getName()) || savedRoot.getMult() != 0) {
             Timber.e(new Error("Saved form instance does not match template form definition"));
