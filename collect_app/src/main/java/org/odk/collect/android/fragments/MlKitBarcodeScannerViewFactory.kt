@@ -2,6 +2,7 @@ package org.odk.collect.android.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.view.LayoutInflater
 import androidx.camera.core.CameraSelector
@@ -11,6 +12,7 @@ import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -93,5 +95,24 @@ class MlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
         useFrontCamera: Boolean
     ): BarcodeScannerView {
         return MlKitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt)
+    }
+
+    companion object {
+        private var ML_KIT_AVAILABLE = false
+
+        @JvmStatic
+        fun init(application: Application) {
+            ModuleInstall.getClient(application)
+                .areModulesAvailable(BarcodeScanning.getClient())
+                .addOnSuccessListener {
+                    if (it.areModulesAvailable()) {
+                        ML_KIT_AVAILABLE = true
+                    }
+                }
+        }
+
+        fun isAvailable(): Boolean {
+            return ML_KIT_AVAILABLE
+        }
     }
 }
