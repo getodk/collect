@@ -1,6 +1,8 @@
 package org.odk.collect.android.projects
 
+import android.app.Activity
 import androidx.core.view.children
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -23,6 +25,8 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.activities.AboutActivity
+import org.odk.collect.android.fragments.BarcodeScannerView
+import org.odk.collect.android.fragments.BarcodeScannerViewContainer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.mainmenu.CurrentProjectViewModel
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
@@ -74,6 +78,24 @@ class ProjectSettingsDialogTest {
                 settingsProvider: SettingsProvider?
             ): ProjectsRepository {
                 return projectsRepository
+            }
+
+            override fun providesBarcodeScannerViewFactory(): BarcodeScannerViewContainer.Factory {
+                return object : BarcodeScannerViewContainer.Factory {
+                    override fun create(
+                        activity: Activity,
+                        lifecycleOwner: LifecycleOwner,
+                        qrOnly: Boolean,
+                        prompt: String,
+                        useFrontCamera: Boolean
+                    ): BarcodeScannerView {
+                        return object : BarcodeScannerView(activity) {
+                            override fun decodeContinuous(callback: (String) -> Unit) = Unit
+                            override fun setTorchOn(on: Boolean) = Unit
+                            override fun setTorchListener(torchListener: TorchListener) = Unit
+                        }
+                    }
+                }
             }
         })
     }
