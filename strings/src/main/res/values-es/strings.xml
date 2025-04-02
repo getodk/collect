@@ -444,7 +444,6 @@
   <string name="delete_layer_confirmation_message">¿Está seguro de que desea eliminar la capa sin conexión %1$s ?</string>
   <string name="record_geopoint">Registrando un punto</string>
   <string name="location_accuracy">Precisión: %1$s m</string>
-  <string name="location_provider">Proveedor de Ubicación: %s</string>
   <string name="provider_disabled_error">¡Los proveedores de ubicación están deshabilitados!</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisión: %4$sm</string>
   <string name="google_play_services_not_available">Este formulario quiere rastrear su ubicación, pero los servicios de Google Play no están disponibles.</string>
@@ -515,10 +514,6 @@
     <item quantity="many">%d metros</item>
     <item quantity="other">%d metros</item>
   </plurals>
-  <string name="location_status_searching">Buscando ubicación, espere …</string>
-  <string name="location_status_accuracy">Precisión de ubicación: %.2f m</string>
-  <string name="location_status_acceptable">Precisión de ubicación: %.2f m (aceptable)</string>
-  <string name="location_status_unacceptable">Precisión de ubicación: %.2f m (inaceptable)</string>
   <string name="collection_status_paused">Puntos ingresados: %d</string>
   <string name="collection_status_placement">Puntos ingresados: %d (toque para ubicar puntos)</string>
   <string name="collection_status_manual">Puntos ingresados: %d (registro manual)</string>

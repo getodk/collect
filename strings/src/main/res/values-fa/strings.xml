@@ -377,7 +377,6 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="record_geopoint">یک نقطه را ثبت کنید</string>
   <string name="location_accuracy">دقت: %1$s متر</string>
-  <string name="location_provider">ارائه دهنده مکان: %s</string>
   <string name="provider_disabled_error">با معذرت، نشان دهنده های مکان غیرفعال هستند!</string>
   <string name="gps_result">عرض جغرافیایی: %1$s\n طول: %2$s\lارتفاع: %3$smg دقت: %4$sm</string>
   <string name="google_play_services_not_available">این فورم می خواهد موقعیت مکانی شما را ردیابی کند اما خدمات Google Play در دسترس نیست.</string>
@@ -439,10 +438,6 @@
   <string name="accuracy_requirement">دقت مورد نیاز:</string>
   <string name="none">هیچ کدام</string>
   <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
-  <string name="location_status_searching">در حال جستجو برای مکان، لطفا صبر کنید…</string>
-  <string name="location_status_accuracy">دقت مکان: %.2f m</string>
-  <string name="location_status_acceptable">دقت مکان: %.2f m (قابل قبول)</string>
-  <string name="location_status_unacceptable">دقت مکان: %.2f m (غیرقابل قبول)</string>
   <string name="collection_status_paused">امتیازهای وارد شده: %d</string>
   <string name="collection_status_placement">نقاط وارد شده: %d (برای قرار دادن نقاط ضربه بزنید)</string>
   <string name="collection_status_manual">امتیازهای وارد شده: %d (ثبت دستی)</string>

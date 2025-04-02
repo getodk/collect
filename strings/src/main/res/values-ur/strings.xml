@@ -409,7 +409,6 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="record_geopoint">پوائنٹ کو ریکارڈ کریں</string>
   <string name="location_accuracy">درستگی: %1$s میٹر</string>
-  <string name="location_provider">لوکیشن مہیا کرنے والا: %s</string>
   <string name="provider_disabled_error">معذرت، لوکیشن فراہم کرنے والے نااہل کئے گئے ہیں</string>
   <string name="gps_result">طول عرض:  %1$s \nطول بلد: %2$s \n اونچائی:  %3$s میٹر\n ایکیوریسی: %4$s میٹر</string>
   <string name="google_play_services_not_available">یہ فارم آپ کی لوکیشن کو ریکارڈ کرنا چاہتا ہے، مگر Google Play Services دستیاب نہیں ہیں۔</string>
@@ -475,10 +474,6 @@
     <item quantity="one"> %d میٹرز</item>
     <item quantity="other"> %d میٹرز</item>
   </plurals>
-  <string name="location_status_searching">لوکیشن منتخب کی جا رہی ہے۔ انتظار کریں۔۔۔</string>
-  <string name="location_status_accuracy">لوکیشن درستگی: %.2f میٹر</string>
-  <string name="location_status_acceptable">لوکیشن درستگی: %.2f میٹر (مناسب)</string>
-  <string name="location_status_unacceptable">لوکیشن درستگی: %.2f میٹر (نامناسب)</string>
   <string name="collection_status_paused">درج شدہ پوائنٹس: %d</string>
   <string name="collection_status_placement">درج شدہ پوائنٹس: %d (کلک کرکے پوائنٹس کو سیٹ کریں)</string>
   <string name="collection_status_manual">درج شدہ پوائنٹس: %d (دستی ریکارڈنگ)</string>

@@ -372,7 +372,6 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="record_geopoint">位置を記録</string>
   <string name="location_accuracy">精度: %1$s m</string>
-  <string name="location_provider">ロケーションプロバイダー: %s</string>
   <string name="provider_disabled_error">申し訳ありません、ロケーション プロバイダーが無効です!</string>
   <string name="gps_result">緯度: %1$s\n経度: %2$s\n高度: %3$sm\n精度: %4$sm</string>
   <string name="google_play_services_not_available">このフォームは位置を追跡しようとしますが、Google Play サービスが利用できません。</string>
@@ -425,10 +424,6 @@
   <plurals name="number_of_meters">
     <item quantity="other">%d メートル</item>
   </plurals>
-  <string name="location_status_searching">位置を検索しています、しばらくお待ちください…</string>
-  <string name="location_status_accuracy">位置精度: %.2f m</string>
-  <string name="location_status_acceptable">位置精度: %.2f m (許容)</string>
-  <string name="location_status_unacceptable">位置精度: %.2f m (許容不可)</string>
   <string name="collection_status_paused">入力された位置: %d</string>
   <string name="collection_status_placement">入力された位置: %d (タップして位置を配置)</string>
   <string name="collection_status_manual">入力された位置: %d (手動記録)</string>
