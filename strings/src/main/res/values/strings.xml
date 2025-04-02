@@ -548,6 +548,7 @@
 
     <string name="record_geopoint">Record a point</string>
     <string name="location_accuracy">Accuracy: %1$s m</string>
+    <string name="location_accuracy_unacceptable">⚠️ Accuracy: %1$s m (unacceptable)</string>
     <string name="location_provider">Location provider: %s</string>
     <string name="provider_disabled_error">Sorry, Location providers are disabled!</string>
     <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
