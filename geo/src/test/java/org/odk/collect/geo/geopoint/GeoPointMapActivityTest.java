@@ -110,7 +110,7 @@ public class GeoPointMapActivityTest {
         mapFragment.setLocationProvider("GPS");
         mapFragment.setLocation(new MapPoint(1, 2, 3, 4f));
 
-        scenario.onActivity(activity -> assertEquals("Accuracy: 4 m, Location provider: GPS", getLocationStatus(activity)));
+        scenario.onActivity(activity -> assertEquals("Accuracy: 4 m", getLocationStatus(activity)));
     }
 
     @Test
