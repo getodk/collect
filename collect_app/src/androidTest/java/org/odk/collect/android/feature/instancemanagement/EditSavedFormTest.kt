@@ -1,6 +1,9 @@
 package org.odk.collect.android.feature.instancemanagement
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
+import org.javarosa.xform.parse.XFormParser
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -159,5 +162,50 @@ class EditSavedFormTest {
             .clickOnForm("One Question")
             .editForm("One Question")
             .assertText("123")
+    }
+
+    @Test
+    fun savingEditedFormMultipleTimes_preservesDeprecatedId() {
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .copyForm("one-question.xml")
+            .startBlankForm("One Question")
+            .answerQuestion("what is your age", "123")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickSelectAll()
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
+            .pressBack(MainMenuPage())
+
+            .clickViewSentForm(1)
+            .clickOnForm("One Question")
+            .editForm("One Question")
+            .clickOnQuestion("what is your age")
+            .answerQuestion("what is your age", "456")
+            .pressBackAndSaveAsDraft()
+
+            .clickDrafts(1)
+            .clickOnForm("One Question")
+            .assertText("456")
+            .clickGoToEnd()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickSelectAll()
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
+
+        val firstFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[0].inputStream().reader()).rootElement
+        val firstFormMetaElement = firstFormRootElement.getElement(null, "meta")
+        val firstFormInstanceID = firstFormMetaElement.getElement(null, "instanceID").getText(0)
+
+        val secondFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[1].inputStream().reader()).rootElement
+        val secondFormMetaElement = secondFormRootElement.getElement(null, "meta")
+        val secondFormDeprecatedID = secondFormMetaElement.getElement(null, "deprecatedID").getText(0)
+
+        assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
     }
 }
