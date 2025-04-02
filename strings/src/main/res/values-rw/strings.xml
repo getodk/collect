@@ -374,7 +374,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="record_geopoint">Irabika amakuru</string>
   <string name="location_accuracy">Birizewe: %1$s m</string>
-  <string name="location_provider">Igitanga aho uri ubu: %s</string>
   <string name="provider_disabled_error">Ihangane, ibituma amakuru y\'ahantu afatwa birafunze</string>
   <string name="gps_result">Ubujy\'ejuru: %1$s \nUmurambararo: %2$s \nUbutumburuke: %3$s m\n Byizewe: %4$s m</string>
   <string name="google_play_services_not_available">Iyi form irashaka kugenzura aho uherereye, ariko Google Play Services ntabwo iboneka</string>
@@ -430,10 +429,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
     <item quantity="one">%d meter</item>
     <item quantity="other">%d meters</item>
   </plurals>
-  <string name="location_status_searching">Mwihangane Iracyashakisha location/icyerekezo</string>
-  <string name="location_status_accuracy">Indangahantu nyayo: %.2f m.</string>
-  <string name="location_status_acceptable">Indangahantu nyayo: %.2f m (yemewe)</string>
-  <string name="location_status_unacceptable">Indangahantu nyayo: %.2f m (itemewe)</string>
   <string name="collection_status_paused">Ikimenyetso ndangahantu kinjiye:%d .</string>
   <string name="collection_status_placement">Ikimenyetso ndangahantu kinjiye: %d (kanda mumwanya w\'ikimenyetso ndangahantu)</string>
   <string name="collection_status_manual">Ikimenyetso ndangahantu kinjiye: %d (mu buryo busanzwe)</string>

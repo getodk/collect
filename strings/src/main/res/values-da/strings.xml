@@ -245,7 +245,6 @@
   <!--Text for option where layer should be available to the current project only-->
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="location_accuracy">Præcision: 1%1$s m</string>
-  <string name="location_provider">Lokalitetsudbyder: 1%s</string>
   <string name="provider_disabled_error">Geolokation er slået fra</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Displayed in the form filling menu when a form has background location enabled-->
@@ -295,10 +294,6 @@
     <item quantity="one">%d meter</item>
     <item quantity="other">%d meter</item>
   </plurals>
-  <string name="location_status_searching">Søger efter lokation, vent venligst…</string>
-  <string name="location_status_accuracy">Lokations nøjagtighed: %.2f m</string>
-  <string name="location_status_acceptable">Lokations nøjagtighed: %.2f m (acceptabel)</string>
-  <string name="location_status_unacceptable">Lokations nøjagtighed: %.2f m (uacceptabel)</string>
   <string name="collection_status_paused">Punkter indtastet: %d</string>
   <string name="collection_status_placement">Punkter indtastet: %d(Tryk for at placere punkter)</string>
   <string name="collection_status_manual">Punkter indtastet: %d(manuel optagelse)</string>

@@ -413,7 +413,6 @@
   <string name="delete_layer_confirmation_message">Вы уверены, что хотите удалить оффлайн слой %1$s?</string>
   <string name="record_geopoint">Зафиксировать точку</string>
   <string name="location_accuracy">Точность: %1$s м</string>
-  <string name="location_provider">Провайдер геолокации: %s</string>
   <string name="provider_disabled_error">Включите функцию определения местоположения на вашем устройстве!</string>
   <string name="gps_result">Широта: %1$s\nДолгота: %2$s\nВысота: %3$sм\nТочность:%4$sм</string>
   <string name="google_play_services_not_available">Эта форма хочет отслеживать ваше местоположение, но сервисы Google Play недоступны.</string>
@@ -469,10 +468,6 @@
   <string name="accuracy_requirement">Требование к точности:</string>
   <string name="none">Нет</string>
   <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
-  <string name="location_status_searching">Поиск местоположения, пожалуйста, подождите…</string>
-  <string name="location_status_accuracy">Точность местоположения: %.2f м</string>
-  <string name="location_status_acceptable">Точность местоположения: %.2f м (приемлемо)</string>
-  <string name="location_status_unacceptable">Точность местоположения: %.2f м (неприемлемо)</string>
   <string name="collection_status_paused">Введено точек: %d</string>
   <string name="collection_status_placement">Введено точек: %d (нажмите для добавления точек)</string>
   <string name="collection_status_manual">Введено точек: %d (ручная запись)</string>
