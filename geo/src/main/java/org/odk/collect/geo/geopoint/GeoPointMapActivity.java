@@ -347,7 +347,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
                 foundFirstLocation = true;
             }
 
-            locationStatus.setAccuracy(new LocationAccuracy.Improving((float) point.accuracy, map.getLocationProvider()));
+            locationStatus.setAccuracy(new LocationAccuracy.Improving((float) point.accuracy));
         }
     }
 
