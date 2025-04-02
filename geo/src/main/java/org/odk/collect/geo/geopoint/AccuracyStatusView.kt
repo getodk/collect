@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.withStyledAttributes
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
-import org.odk.collect.geo.GeoUtils
 import org.odk.collect.geo.databinding.AccuracyStatusLayoutBinding
 import org.odk.collect.strings.R
 import java.text.DecimalFormat
@@ -47,7 +46,7 @@ internal class AccuracyStatusView(context: Context, attrs: AttributeSet?) :
         }
 
         accuracy?.let {
-            binding.locationStatus.text = formatLocationStatus(it.provider, it.value)
+            binding.locationStatus.text = formatLocationStatus(it.value)
 
             if (accuracy is LocationAccuracy.Unacceptable) {
                 setBackgroundColor(
@@ -83,12 +82,10 @@ internal class AccuracyStatusView(context: Context, attrs: AttributeSet?) :
         }
     }
 
-    private fun formatLocationStatus(provider: String?, accuracyRadius: Float): String {
+    private fun formatLocationStatus(accuracyRadius: Float): String {
         return context.getString(
             R.string.location_accuracy,
             DecimalFormat("#.##").format(accuracyRadius)
-        ) + ", " + context.getString(
-            R.string.location_provider, GeoUtils.capitalizeGps(provider)
         )
     }
 }
