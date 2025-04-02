@@ -22,4 +22,16 @@
         app:layout_constraintStart_toStartOf="@id/preview"
         tools:text="Some kind of prompt" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_extra_extra_small"
+        android:textAppearance="?textAppearanceBodyMedium"
+        android:textColor="@color/colorSurface"
+        android:text="Hello, MLKit!"
+        app:layout_constraintTop_toTopOf="@id/preview"
+        app:layout_constraintEnd_toEndOf="@id/preview"
+        app:layout_constraintStart_toStartOf="@id/preview"
+        tools:ignore="HardcodedText" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
