@@ -52,7 +52,7 @@ import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.OpenRosaClientProvider;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.fragments.BarcodeScannerViewContainer;
-import org.odk.collect.android.fragments.MlKitBarcodeScannerViewFactory;
+import org.odk.collect.android.fragments.PlayServicesMlKitBarcodeScannerViewFactory;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.geo.MapFragmentFactoryImpl;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
@@ -651,6 +651,6 @@ public class AppDependencyModule {
 
     @Provides
     public BarcodeScannerViewContainer.Factory providesBarcodeScannerViewFactory() {
-        return new MlKitBarcodeScannerViewFactory();
+        return new PlayServicesMlKitBarcodeScannerViewFactory();
     }
 }

@@ -204,6 +204,10 @@ the specific language governing permissions and limitations under the License.
             android:name="com.google.android.maps"
             android:required="false" />
 
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode" />
+
         <!--
              ******************External API, DO NOT CHANGE BEFORE DISCUSSING***********************
              * The providers and activities below are available for external applications to      *
