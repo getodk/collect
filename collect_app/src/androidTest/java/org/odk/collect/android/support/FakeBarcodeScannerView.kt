@@ -4,9 +4,9 @@ import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import org.odk.collect.android.fragments.BarcodeScannerView
-import org.odk.collect.android.fragments.BarcodeScannerViewContainer
 import org.odk.collect.androidshared.utils.CompressionUtils
+import org.odk.collect.qrcode.BarcodeScannerView
+import org.odk.collect.qrcode.BarcodeScannerViewContainer
 
 class FakeBarcodeScannerView(context: Context) : BarcodeScannerView(context) {
 

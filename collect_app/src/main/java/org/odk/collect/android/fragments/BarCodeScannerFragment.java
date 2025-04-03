@@ -32,6 +32,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.qrcode.BarcodeScannerView;
+import org.odk.collect.qrcode.BarcodeScannerViewContainer;
 
 import java.io.IOException;
 import java.util.zip.DataFormatException;

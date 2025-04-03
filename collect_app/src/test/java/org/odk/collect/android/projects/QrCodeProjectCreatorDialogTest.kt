@@ -30,8 +30,6 @@ import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.kotlin.mock
 import org.odk.collect.android.R
 import org.odk.collect.android.fakes.FakePermissionsProvider
-import org.odk.collect.android.fragments.BarcodeScannerView
-import org.odk.collect.android.fragments.BarcodeScannerViewContainer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.support.CollectHelpers
@@ -40,6 +38,8 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectCreator
+import org.odk.collect.qrcode.BarcodeScannerView
+import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
