@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_extra_extra_small"
         android:textAppearance="?textAppearanceBodyMedium"
-        android:textColor="@color/colorSurface"
+        android:textColor="?colorSurface"
         app:layout_constraintBottom_toBottomOf="@id/preview"
         app:layout_constraintEnd_toEndOf="@id/preview"
         app:layout_constraintStart_toStartOf="@id/preview"
