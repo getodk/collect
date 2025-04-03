@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities
+package org.odk.collect.qrcode
 
 import android.app.Activity
 import android.content.Intent

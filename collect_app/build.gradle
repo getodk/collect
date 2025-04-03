@@ -231,7 +231,6 @@ configurations.all {
 }
 
 dependencies {
-    implementation libs.camera.mlkit.vision
     coreLibraryDesugaring libs.desugar
 
     implementation project(':shared')
@@ -341,8 +340,6 @@ dependencies {
     }
 
     implementation libs.splashscreen
-    implementation libs.mlkit.barcodescanning
-    implementation libs.cameraxView
 
     testImplementation project(':forms-test')
 

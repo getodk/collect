@@ -52,7 +52,7 @@ import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.OpenRosaClientProvider;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.qrcode.BarcodeScannerViewContainer;
-import org.odk.collect.android.fragments.PlayServicesMlKitBarcodeScannerViewFactory;
+import org.odk.collect.qrcode.PlayServicesMlKitBarcodeScannerViewFactory;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.geo.MapFragmentFactoryImpl;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
