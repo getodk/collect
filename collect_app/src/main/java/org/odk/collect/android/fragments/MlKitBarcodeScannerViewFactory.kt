@@ -102,13 +102,17 @@ class MlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
 
         @JvmStatic
         fun init(application: Application) {
-            ModuleInstall.getClient(application)
-                .areModulesAvailable(BarcodeScanning.getClient())
-                .addOnSuccessListener {
-                    if (it.areModulesAvailable()) {
-                        ML_KIT_AVAILABLE = true
+            try {
+                ModuleInstall.getClient(application)
+                    .areModulesAvailable(BarcodeScanning.getClient())
+                    .addOnSuccessListener {
+                        if (it.areModulesAvailable()) {
+                            ML_KIT_AVAILABLE = true
+                        }
                     }
-                }
+            } catch (e: Exception) {
+                // Ignored
+            }
         }
 
         fun isAvailable(): Boolean {
