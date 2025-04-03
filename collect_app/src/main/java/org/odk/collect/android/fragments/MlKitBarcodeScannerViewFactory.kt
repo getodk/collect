@@ -17,6 +17,8 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import org.odk.collect.android.databinding.MlkitBarcodeScannerLayoutBinding
+import org.odk.collect.qrcode.BarcodeScannerView
+import org.odk.collect.qrcode.BarcodeScannerViewContainer
 
 @SuppressLint("ViewConstructor")
 private class MlKitBarcodeScannerView(

@@ -8,7 +8,6 @@ import android.webkit.MimeTypeMap
 import androidx.work.WorkManager
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.fragments.BarcodeScannerViewContainer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.version.VersionInformation
@@ -16,6 +15,7 @@ import org.odk.collect.androidshared.system.BroadcastReceiverRegister
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.network.NetworkStateProvider
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
+import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.testshared.FakeBroadcastReceiverRegister
 import org.odk.collect.utilities.UserAgentProvider
 

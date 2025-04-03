@@ -25,8 +25,6 @@ import org.mockito.Mockito.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
-import org.odk.collect.android.fragments.BarcodeScannerView
-import org.odk.collect.android.fragments.BarcodeScannerViewContainer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
@@ -35,6 +33,8 @@ import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.material.MaterialProgressDialogFragment
+import org.odk.collect.qrcode.BarcodeScannerView
+import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.RobolectricHelpers
 

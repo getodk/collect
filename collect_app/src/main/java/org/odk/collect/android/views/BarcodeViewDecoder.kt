@@ -2,7 +2,7 @@ package org.odk.collect.android.views
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.odk.collect.android.fragments.BarcodeScannerView
+import org.odk.collect.qrcode.BarcodeScannerView
 
 object BarcodeViewDecoder {
 

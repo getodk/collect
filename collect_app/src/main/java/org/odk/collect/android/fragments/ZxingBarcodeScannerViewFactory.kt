@@ -10,6 +10,8 @@ import com.journeyapps.barcodescanner.camera.CameraSettings
 import org.odk.collect.android.databinding.ZxingBarcodeScannerLayoutBinding
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.androidshared.system.CameraUtils
+import org.odk.collect.qrcode.BarcodeScannerView
+import org.odk.collect.qrcode.BarcodeScannerViewContainer
 
 @SuppressLint("ViewConstructor")
 private class ZxingBarcodeScannerView(

@@ -46,6 +46,8 @@ dependencies {
     implementation(project(":androidshared"))
 
     implementation(libs.zxingAndroidEmbedded)
+    implementation(libs.mlkit.barcodescanning)
+    implementation(libs.androidxLifecycleRuntimeKtx)
 
     testImplementation(libs.androidxTestExtJunit)
     testImplementation(libs.hamcrest)

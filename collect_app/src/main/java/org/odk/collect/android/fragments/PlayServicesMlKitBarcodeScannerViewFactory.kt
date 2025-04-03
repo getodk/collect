@@ -2,6 +2,8 @@ package org.odk.collect.android.fragments
 
 import android.app.Activity
 import androidx.lifecycle.LifecycleOwner
+import org.odk.collect.qrcode.BarcodeScannerView
+import org.odk.collect.qrcode.BarcodeScannerViewContainer
 
 class PlayServicesMlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
 
