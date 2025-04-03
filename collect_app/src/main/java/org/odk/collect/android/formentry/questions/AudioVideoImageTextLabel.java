@@ -131,8 +131,10 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
             imageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.CENTER_INSIDE, null);
             binding.imageView.setVisibility(VISIBLE);
+            binding.missingImage.setVisibility(GONE);
             binding.imageView.setOnClickListener(this);
         } else {
+            binding.imageView.setVisibility(GONE);
             binding.missingImage.setVisibility(VISIBLE);
             binding.missingImage.setText(getContext().getString(org.odk.collect.strings.R.string.file_missing, imageFile));
         }
