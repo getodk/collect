@@ -75,6 +75,11 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
         return new FormHierarchyPage(formName).assertOnPage();
     }
 
+    public SavepointRecoveryDialogPage clickOnFormWithSavepoint(String formName) {
+        scrollToAndClickOnForm(formName);
+        return new SavepointRecoveryDialogPage().assertOnPage();
+    }
+
     public AppClosedPage clickOnFormClosingApp(String formName) {
         scrollToAndClickOnForm(formName);
         return new AppClosedPage().assertOnPage();
