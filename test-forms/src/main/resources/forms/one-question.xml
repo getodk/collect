@@ -6,9 +6,13 @@
             <instance>
                 <data id="one_question" orx:version="1">
                     <age/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
                 </data>
             </instance>
             <bind nodeset="age" type="int"/>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
         </model>
     </h:head>
     <h:body>
