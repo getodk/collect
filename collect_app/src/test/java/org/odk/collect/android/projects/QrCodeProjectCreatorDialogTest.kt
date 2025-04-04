@@ -1,11 +1,8 @@
 package org.odk.collect.android.projects
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -33,13 +30,13 @@ import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.androidshared.utils.CompressionUtils
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectCreator
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
+import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
@@ -215,32 +212,5 @@ private class FakeBarcodeScannerView(context: Context) : BarcodeScannerView(cont
 
     fun scan(result: String) {
         callback?.invoke(result)
-    }
-}
-
-private class FakeBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
-
-    private val views = mutableListOf<FakeBarcodeScannerView>()
-
-    override fun create(
-        activity: Activity,
-        lifecycleOwner: LifecycleOwner,
-        qrOnly: Boolean,
-        prompt: String,
-        useFrontCamera: Boolean
-    ): BarcodeScannerView {
-        return FakeBarcodeScannerView(activity).also {
-            views.add(it)
-            lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
-                override fun onDestroy(owner: LifecycleOwner) {
-                    views.remove(it)
-                }
-            })
-        }
-    }
-
-    fun scan(result: String) {
-        val compressedResult = CompressionUtils.compress(result)
-        views.forEach { it.scan(compressedResult) }
     }
 }
