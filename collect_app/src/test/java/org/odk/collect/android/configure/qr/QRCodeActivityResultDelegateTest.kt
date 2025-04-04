@@ -18,7 +18,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.projects.ProjectConfigurationResult
-import org.odk.collect.qrcode.QRCodeDecoder
+import org.odk.collect.qrcode.zxing.QRCodeDecoder
 import org.odk.collect.settings.ODKAppSettingsImporter
 import org.robolectric.Robolectric
 import org.robolectric.Shadows

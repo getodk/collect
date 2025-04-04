@@ -6,7 +6,7 @@
     tools:context="org.odk.collect.android.fragments.BarCodeScannerFragment">
 
 
-    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+    <org.odk.collect.qrcode.BarcodeScannerViewContainer
         android:id="@+id/barcode_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
