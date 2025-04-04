@@ -90,6 +90,7 @@ object Appearances {
     const val RATING = "rating"
     const val MASKED = "masked"
     const val COUNTER = "counter"
+    const val MULTILINE = "multiline"
 
     // Get appearance hint and clean it up so it is lower case, without the search function and never null.
     @JvmStatic
@@ -200,5 +201,11 @@ object Appearances {
         return appearance.contains(MASKED) &&
             !appearance.contains(NUMBERS) &&
             prompt.dataType == Constants.DATATYPE_TEXT
+    }
+
+    @JvmStatic
+    fun isMultiline(prompt: FormEntryPrompt): Boolean {
+        val appearance = getSanitizedAppearanceHint(prompt)
+        return appearance.contains(MULTILINE)
     }
 }

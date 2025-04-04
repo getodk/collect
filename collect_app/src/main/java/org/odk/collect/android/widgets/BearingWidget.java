@@ -65,7 +65,7 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
         } else {
             binding.bearingButton.setOnClickListener(v -> onButtonClick());
         }
-        binding.widgetAnswerText.init(answerFontSize, true, null, false, this::widgetValueChanged);
+        binding.widgetAnswerText.init(answerFontSize, true, null, false, false, this::widgetValueChanged);
         Double answer = StringWidgetUtils.getDoubleAnswerValueFromIAnswerData(questionDetails.getPrompt().getAnswerValue());
         binding.widgetAnswerText.setDecimalType(false, answer);
 
