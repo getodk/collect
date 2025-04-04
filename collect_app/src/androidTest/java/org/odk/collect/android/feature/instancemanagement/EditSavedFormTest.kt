@@ -185,8 +185,9 @@ class EditSavedFormTest {
     }
 
     @Test
-    fun discardingChangesWhenEditingFinalizedForm_createsDraftWithOriginalAnswers() {
+    fun discardingChangesWhenEditingFinalizedForm_createsDraftWithOriginalAnswersAndUpdatesInstanceIdAndDeprecatedId() {
         rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .answerQuestion("what is your age", "123")
@@ -194,16 +195,41 @@ class EditSavedFormTest {
             .clickFinalize()
 
             .clickSendFinalizedForm(1)
+            .clickSelectAll()
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
+            .pressBack(MainMenuPage())
+
+            .clickViewSentForm(1)
             .clickOnForm("One Question")
             .editForm("One Question")
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
-            .pressBackAndDiscardChanges(SendFinalizedFormPage())
-            .pressBack(MainMenuPage())
+            .pressBackAndDiscardChanges(MainMenuPage())
 
             .clickDrafts(1)
             .clickOnForm("One Question")
             .assertText("123")
+            .clickGoToEnd()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickSelectAll()
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
+            .pressBack(MainMenuPage())
+
+        val firstFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[0].inputStream().reader()).rootElement
+        val firstFormMetaElement = firstFormRootElement.getElement(null, "meta")
+        val firstFormInstanceID = firstFormMetaElement.getElement(null, "instanceID").getText(0)
+
+        val secondFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[1].inputStream().reader()).rootElement
+        val secondFormMetaElement = secondFormRootElement.getElement(null, "meta")
+        val secondFormInstanceID = secondFormMetaElement.getElement(null, "instanceID").getText(0)
+        val secondFormDeprecatedID = secondFormMetaElement.getElement(null, "deprecatedID").getText(0)
+
+        assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
+        assertThat(firstFormInstanceID, not(secondFormInstanceID))
     }
 
     @Test
