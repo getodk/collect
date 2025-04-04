@@ -30,7 +30,6 @@ import com.google.zxing.client.android.BeepManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.qrcode.BarcodeScannerView;
 import org.odk.collect.qrcode.BarcodeScannerViewContainer;
@@ -72,7 +71,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
             switchFlashlightButton.setVisibility(View.GONE);
         }
 
-        BarcodeViewDecoder.waitForBarcode(barcodeScannerViewContainer.getBarcodeScannerView()).observe(getViewLifecycleOwner(), barcodeResult -> {
+        barcodeScannerViewContainer.getBarcodeScannerView().waitForBarcode().observe(getViewLifecycleOwner(), barcodeResult -> {
             beepManager.playBeepSoundAndVibrate();
 
             try {

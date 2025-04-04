@@ -5,6 +5,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
 class BarcodeScannerViewContainer(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
@@ -37,9 +39,15 @@ class BarcodeScannerViewContainer(context: Context, attrs: AttributeSet?) :
 }
 
 abstract class BarcodeScannerView(context: Context) : FrameLayout(context) {
-    abstract fun decodeContinuous(callback: (String) -> Unit)
+    protected abstract fun decodeContinuous(callback: (String) -> Unit)
     abstract fun setTorchOn(on: Boolean)
     abstract fun setTorchListener(torchListener: TorchListener)
+
+    fun waitForBarcode(): LiveData<String> {
+        return MutableLiveData<String>().also {
+            this.decodeContinuous { result -> it.value = result }
+        }
+    }
 
     interface TorchListener {
         fun onTorchOn()
