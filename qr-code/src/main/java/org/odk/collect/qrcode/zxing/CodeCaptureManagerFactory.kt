@@ -1,4 +1,4 @@
-package org.odk.collect.qrcode
+package org.odk.collect.qrcode.zxing
 
 import android.app.Activity
 import android.content.Intent
@@ -7,7 +7,7 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureManager
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 
-object CodeCaptureManagerFactory {
+internal object CodeCaptureManagerFactory {
 
     fun getCaptureManager(
         activity: Activity,

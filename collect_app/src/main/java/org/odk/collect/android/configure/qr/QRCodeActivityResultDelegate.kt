@@ -9,7 +9,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.projects.ProjectConfigurationResult
-import org.odk.collect.qrcode.QRCodeDecoder
+import org.odk.collect.qrcode.zxing.QRCodeDecoder
 import org.odk.collect.settings.ODKAppSettingsImporter
 import java.io.FileNotFoundException
 import java.io.InputStream

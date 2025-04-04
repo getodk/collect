@@ -1,4 +1,4 @@
-package org.odk.collect.qrcode
+package org.odk.collect.qrcode.zxing
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -8,6 +8,8 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import org.odk.collect.androidshared.system.CameraUtils
+import org.odk.collect.qrcode.BarcodeScannerView
+import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.databinding.ZxingBarcodeScannerLayoutBinding
 
 @SuppressLint("ViewConstructor")

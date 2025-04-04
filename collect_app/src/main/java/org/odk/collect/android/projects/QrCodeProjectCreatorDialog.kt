@@ -32,7 +32,7 @@ import org.odk.collect.projects.ProjectCreator
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.projects.SettingsConnectionMatcher
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
-import org.odk.collect.qrcode.QRCodeDecoder
+import org.odk.collect.qrcode.zxing.QRCodeDecoder
 import org.odk.collect.settings.ODKAppSettingsImporter
 import org.odk.collect.settings.SettingsProvider
 import timber.log.Timber

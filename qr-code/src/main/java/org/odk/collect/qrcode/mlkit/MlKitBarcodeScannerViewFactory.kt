@@ -1,4 +1,4 @@
-package org.odk.collect.qrcode
+package org.odk.collect.qrcode.mlkit
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -16,6 +16,8 @@ import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
+import org.odk.collect.qrcode.BarcodeScannerView
+import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
 
 @SuppressLint("ViewConstructor")

@@ -12,7 +12,7 @@ import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
 import org.odk.collect.printer.HtmlPrinter
-import org.odk.collect.qrcode.QRCodeCreator
+import org.odk.collect.qrcode.zxing.QRCodeCreator
 import java.io.ByteArrayOutputStream
 
 class PrinterWidgetViewModel(
