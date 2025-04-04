@@ -169,17 +169,18 @@ object FormEntryUseCases {
         )
     }
 
+    @JvmStatic
+    fun saveInstanceToDisk(formController: FormController) {
+        val payload = formController.getSubmissionXml()
+        FileUtils.write(formController.getInstanceFile(), payload!!.payloadBytes)
+    }
+
     private fun getInstanceFromFormController(
         formController: FormController,
         instancesRepository: InstancesRepository
     ): Instance? {
         val instancePath = formController.getInstanceFile()!!.absolutePath
         return instancesRepository.getOneByPath(instancePath)
-    }
-
-    private fun saveInstanceToDisk(formController: FormController) {
-        val payload = formController.getSubmissionXml()
-        FileUtils.write(formController.getInstanceFile(), payload!!.payloadBytes)
     }
 
     private fun createFormDefFromCacheOrXml(xForm: File, formDefCache: FormDefCache): FormDef? {

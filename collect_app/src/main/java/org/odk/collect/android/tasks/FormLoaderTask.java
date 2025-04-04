@@ -45,6 +45,7 @@ import org.odk.collect.android.dynamicpreload.ExternalDataUseCases;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
+import org.odk.collect.android.formentry.FormEntryUseCases;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -280,6 +281,9 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
             }
         }
         data = new FECWrapper(fc, usedSavepoint);
+        if (isFinalizedFormEdit) {
+            FormEntryUseCases.saveInstanceToDisk(fc);
+        }
         return data;
     }
 
