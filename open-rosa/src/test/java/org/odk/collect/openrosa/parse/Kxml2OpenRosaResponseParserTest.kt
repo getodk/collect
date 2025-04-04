@@ -198,17 +198,6 @@ class Kxml2OpenRosaResponseParserTest {
             </data>
         """.trimIndent()
 
-        val noEntity = """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <data>
-                <entities>
-                    <thing id="958e00b2-43f5-4d21-8adb-3d27aaa045f5">
-                        <deleted>true</deleted>
-                    </thing>
-                </entities>
-            </data>
-        """.trimIndent()
-
         val noDeleted = """
             <?xml version="1.0" encoding="UTF-8"?>
             <data>
@@ -242,7 +231,7 @@ class Kxml2OpenRosaResponseParserTest {
             </data>
         """.trimIndent()
 
-        listOf(noData, noEntities, noEntity, noDeleted, emptyDeleted, invalidDeleted).forEach {
+        listOf(noData, noEntities, noDeleted, emptyDeleted, invalidDeleted).forEach {
             val doc = XFormParser.getXMLDocument(it.reader())
             val response = Kxml2OpenRosaResponseParser.parseIntegrityResponse(doc)
             assertThat("The following should not be parsed:\n$it\n\n", response, equalTo(null))
@@ -273,5 +262,22 @@ class Kxml2OpenRosaResponseParserTest {
         assertThat(response[0].deleted, equalTo(true))
         assertThat(response[1].id, equalTo("2"))
         assertThat(response[1].deleted, equalTo(true))
+    }
+
+    @Test
+    fun `#parseIntegrityResponse returns an empty list if the response has no entities`() {
+        val integrityDoc = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <data>
+                <entities>
+
+                </entities>
+            </data>
+        """.trimIndent()
+
+        val doc = XFormParser.getXMLDocument(integrityDoc.reader())
+        val response = Kxml2OpenRosaResponseParser.parseIntegrityResponse(doc)!!
+
+        assertThat(response.isEmpty(), equalTo(true))
     }
 }

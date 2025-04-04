@@ -248,7 +248,7 @@ object Kxml2OpenRosaResponseParser :
                     EntityIntegrity(it.getAttributeValue(null, "id"), deleted.toBooleanStrict())
                 }
 
-            return entitiesList.takeIf { it.isNotEmpty() }
+            return entitiesList
         } catch (e: RuntimeException) {
             return null
         }
