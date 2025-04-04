@@ -34,7 +34,6 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectCreator
-import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
 import org.robolectric.shadows.ShadowToast
@@ -196,21 +195,5 @@ class QrCodeProjectCreatorDialogTest {
             )
         )
         verifyNoInteractions(projectCreator)
-    }
-}
-
-private class FakeBarcodeScannerView(context: Context) : BarcodeScannerView(context) {
-
-    private var callback: ((String) -> Unit)? = null
-
-    override fun decodeContinuous(callback: (String) -> Unit) {
-        this.callback = callback
-    }
-
-    override fun setTorchOn(on: Boolean) = Unit
-    override fun setTorchListener(torchListener: TorchListener) = Unit
-
-    fun scan(result: String) {
-        callback?.invoke(result)
     }
 }
