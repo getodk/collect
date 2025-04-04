@@ -18,7 +18,6 @@ import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.databinding.QrCodeProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.MainMenuActivity
-import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ToastUtils
@@ -216,7 +215,7 @@ class QrCodeProjectCreatorDialog :
     }
 
     private fun startScanning() {
-        BarcodeViewDecoder.waitForBarcode(binding.barcodeView.barcodeScannerView).observe(
+        binding.barcodeView.barcodeScannerView.waitForBarcode().observe(
             viewLifecycleOwner
         ) { result: String ->
             try {
