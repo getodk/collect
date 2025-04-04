@@ -16,6 +16,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.async.network.NetworkStateProvider
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
+import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
 import org.odk.collect.testshared.FakeBroadcastReceiverRegister
 import org.odk.collect.utilities.UserAgentProvider
 

@@ -1,7 +1,5 @@
 package org.odk.collect.android.activities
 
-import android.app.Activity
-import androidx.lifecycle.LifecycleOwner
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -33,9 +31,9 @@ import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.material.MaterialProgressDialogFragment
-import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.strings.localization.getLocalizedString
+import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
@@ -51,21 +49,7 @@ class FirstLaunchActivityTest {
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesBarcodeScannerViewFactory(): BarcodeScannerViewContainer.Factory {
-                return object : BarcodeScannerViewContainer.Factory {
-                    override fun create(
-                        activity: Activity,
-                        lifecycleOwner: LifecycleOwner,
-                        qrOnly: Boolean,
-                        prompt: String,
-                        useFrontCamera: Boolean
-                    ): BarcodeScannerView {
-                        return object : BarcodeScannerView(activity) {
-                            override fun decodeContinuous(callback: (String) -> Unit) = Unit
-                            override fun setTorchOn(on: Boolean) = Unit
-                            override fun setTorchListener(torchListener: TorchListener) = Unit
-                        }
-                    }
-                }
+                return FakeBarcodeScannerViewFactory()
             }
         })
     }

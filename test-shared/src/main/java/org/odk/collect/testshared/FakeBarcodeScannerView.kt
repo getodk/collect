@@ -1,7 +1,8 @@
-package org.odk.collect.android.support
+package org.odk.collect.testshared
 
 import android.app.Activity
 import android.content.Context
+import android.os.Looper
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import org.odk.collect.androidshared.utils.CompressionUtils
@@ -20,8 +21,12 @@ class FakeBarcodeScannerView(context: Context) : BarcodeScannerView(context) {
     override fun setTorchListener(torchListener: TorchListener) = Unit
 
     fun scan(result: String) {
-        post {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
             callback?.invoke(result)
+        } else {
+            post {
+                callback?.invoke(result)
+            }
         }
     }
 }

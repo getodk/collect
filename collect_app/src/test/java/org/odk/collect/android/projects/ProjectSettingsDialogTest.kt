@@ -1,8 +1,6 @@
 package org.odk.collect.android.projects
 
-import android.app.Activity
 import androidx.core.view.children
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -34,10 +32,10 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.strings.UUIDGenerator
+import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
@@ -81,21 +79,7 @@ class ProjectSettingsDialogTest {
             }
 
             override fun providesBarcodeScannerViewFactory(): BarcodeScannerViewContainer.Factory {
-                return object : BarcodeScannerViewContainer.Factory {
-                    override fun create(
-                        activity: Activity,
-                        lifecycleOwner: LifecycleOwner,
-                        qrOnly: Boolean,
-                        prompt: String,
-                        useFrontCamera: Boolean
-                    ): BarcodeScannerView {
-                        return object : BarcodeScannerView(activity) {
-                            override fun decodeContinuous(callback: (String) -> Unit) = Unit
-                            override fun setTorchOn(on: Boolean) = Unit
-                            override fun setTorchListener(torchListener: TorchListener) = Unit
-                        }
-                    }
-                }
+                return FakeBarcodeScannerViewFactory()
             }
         })
     }
