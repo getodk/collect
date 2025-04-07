@@ -106,7 +106,7 @@ public class FormHierarchyFragment extends Fragment {
         requireActivity().setTitle(formEntryViewModel.getFormController().getFormTitle());
         startIndex = formEntryViewModel.getFormController().getFormIndex();
 
-        MaterialProgressDialogFragment.showOn(this, formHierarchyViewModel.isEditing(), getParentFragmentManager(), () -> {
+        MaterialProgressDialogFragment.showOn(this, formHierarchyViewModel.isCloning(), getParentFragmentManager(), () -> {
             MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
             dialog.setMessage(getString(org.odk.collect.strings.R.string.preparing_form_edit));
             return dialog;

@@ -18,7 +18,7 @@ class FormHierarchyViewModel(
     private val instancesDataService: InstancesDataService
 ) : ViewModel() {
     private val trackableWorker = TrackableWorker(scheduler)
-    val isEditing: LiveData<Boolean> = trackableWorker.isWorking
+    val isCloning: LiveData<Boolean> = trackableWorker.isWorking
 
     var contextGroupRef: TreeReference? = null
     var screenIndex: FormIndex? = null
