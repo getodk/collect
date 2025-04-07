@@ -30,6 +30,7 @@ object FormMetadataParser {
         val base64RsaPublicKey = submission?.getAttributeValue(null, "base64RsaPublicKey")
         val autoDelete = submission?.getAttributeValue(null, "auto-delete")
         val autoSend = submission?.getAttributeValue(null, "auto-send")
+        val clientEditable = submission?.getAttributeValue("http://www.opendatakit.org/xforms", "client-editable")
         val geometryXPath = getFirstGeopointXPath(model, mainInstanceRoot, body)
         val isEntityForm = model.getAttributeValue(null, "entities-version") != null
 
@@ -41,6 +42,7 @@ object FormMetadataParser {
             base64RsaPublicKey,
             autoDelete,
             autoSend,
+            clientEditable,
             geometryXPath,
             isEntityForm
         )

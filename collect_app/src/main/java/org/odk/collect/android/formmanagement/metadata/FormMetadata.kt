@@ -8,6 +8,7 @@ data class FormMetadata(
     val base64RsaPublicKey: String?,
     val autoDelete: String?,
     val autoSend: String?,
+    val clientEditable: String?,
     val geometryXPath: String?,
     val isEntityForm: Boolean
 )
