@@ -7,6 +7,7 @@
         android:id="@+id/menu_edit"
         android:icon="@drawable/ic_edit_24"
         android:title="@string/edit_finalized_form"
+        android:contentDescription="@string/edit_finalized_form"
         android:visible="false"
         app:showAsAction="always" />
 

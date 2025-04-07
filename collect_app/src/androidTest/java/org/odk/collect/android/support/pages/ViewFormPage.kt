@@ -2,18 +2,18 @@ package org.odk.collect.android.support.pages
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollTo
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.odk.collect.android.R
+import org.odk.collect.strings.R.string
 
 class ViewFormPage(private val formName: String) : Page<ViewFormPage>() {
 
     override fun assertOnPage(): ViewFormPage {
         assertToolbarTitle(formName)
-        assertText(org.odk.collect.strings.R.string.exit)
+        assertText(string.exit)
         return this
     }
 
@@ -27,7 +27,7 @@ class ViewFormPage(private val formName: String) : Page<ViewFormPage>() {
     }
 
     fun editForm(formName: String): FormHierarchyPage {
-        onView(withId(R.id.menu_edit)).perform(ViewActions.click())
+        clickOnContentDescription(string.edit_finalized_form)
         return FormHierarchyPage(formName).assertOnPage()
     }
 }
