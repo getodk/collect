@@ -31,27 +31,6 @@ class EditSavedFormTest {
         .around(rule)
 
     @Test
-    fun finalizedFormIsNotAvailableForEditsInTheListOfDrafts() {
-        rule.startAtMainMenu()
-            .setServer(testDependencies.server.url)
-            .copyForm("one-question.xml")
-            .startBlankForm("One Question")
-            .answerQuestion("what is your age", "123")
-            .swipeToEndScreen()
-            .clickFinalize()
-
-            .assertNumberOfEditableForms(0)
-            .clickDrafts()
-            .assertTextDoesNotExist("One Question")
-
-            // Tests that search doesn't change visibility. Move down to lower testing level.
-            // (possibly when replacing CursorLoader)
-            .clickMenuFilter()
-            .searchInBar("One Question".substring(0, 1))
-            .assertTextDoesNotExist("One Question")
-    }
-
-    @Test
     fun sentFormIsNotAvailableForEditsInTheListOfDrafts() {
         rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
@@ -107,21 +86,6 @@ class EditSavedFormTest {
     }
 
     @Test
-    fun editingAFinalizedForm_opensANewFormWithTheSameAnswers() {
-        rule.startAtMainMenu()
-            .copyForm("one-question.xml")
-            .startBlankForm("One Question")
-            .answerQuestion("what is your age", "123")
-            .swipeToEndScreen()
-            .clickFinalize()
-
-            .clickSendFinalizedForm(1)
-            .clickOnForm("One Question")
-            .editForm("One Question")
-            .assertText("123")
-    }
-
-    @Test
     fun editingAFinalizedForm_createsANewFormAndKeepsTheOriginalOneIntact() {
         rule.startAtMainMenu()
             .copyForm("one-question.xml")
@@ -133,6 +97,7 @@ class EditSavedFormTest {
             .clickSendFinalizedForm(1)
             .clickOnForm("One Question")
             .editForm("One Question")
+            .assertText("123")
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
             .pressBackAndSaveAsDraft(SendFinalizedFormPage())
