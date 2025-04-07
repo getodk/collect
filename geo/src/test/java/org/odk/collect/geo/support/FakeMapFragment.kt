@@ -1,14 +1,11 @@
 package org.odk.collect.geo.support
 
 import androidx.fragment.app.Fragment
-import org.mockito.Mockito.mock
-import org.mockito.kotlin.whenever
 import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
-import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
@@ -42,10 +39,6 @@ class FakeMapFragment : Fragment(), MapFragment {
         this.readyListener = readyListener
     }
 
-    override fun getMapFragmentDelegate(): MapFragmentDelegate = mock<MapFragmentDelegate?>().also {
-        whenever(it.zoomLevel).thenReturn(zoomLevelSetByUser)
-    }
-
     fun ready() {
         readyListener?.onReady(this)
     }
@@ -61,6 +54,11 @@ class FakeMapFragment : Fragment(), MapFragment {
     override fun setCenter(center: MapPoint?, animate: Boolean) {
         this.center = center
         hasCenter = true
+    }
+
+    override fun zoomToCurrentLocation(center: MapPoint?) {
+        this.center = center
+        this.zoom = (zoomLevelSetByUser ?: MapFragment.POINT_ZOOM).toDouble()
     }
 
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {

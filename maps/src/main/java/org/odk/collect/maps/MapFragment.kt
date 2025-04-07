@@ -26,8 +26,6 @@ import org.odk.collect.maps.markers.MarkerIconDescription
  */
 interface MapFragment {
 
-    fun getMapFragmentDelegate(): MapFragmentDelegate
-
     fun init(readyListener: ReadyListener?, errorListener: ErrorListener?)
 
     /** Gets the point currently shown at the center of the map view.  */
@@ -50,13 +48,7 @@ interface MapFragment {
      * user if available, or to a close-up level deemed appropriate by
      * the implementation, possibly with animation.
      */
-    fun zoomToCurrentLocation(center: MapPoint?) {
-        zoomToPoint(
-            center,
-            getMapFragmentDelegate().zoomLevel?.toDouble() ?: POINT_ZOOM.toDouble(),
-            true
-        )
-    }
+    fun zoomToCurrentLocation(center: MapPoint?)
 
     /**
      * Centers the map view on the given point, zooming in to a close-up level

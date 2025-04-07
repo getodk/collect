@@ -3,10 +3,8 @@ package org.odk.collect.android.support
 import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.Fragment
-import org.mockito.Mockito.mock
 import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapFragment
-import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
@@ -24,8 +22,6 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         readyListener?.onReady(this)
     }
 
-    override fun getMapFragmentDelegate(): MapFragmentDelegate = mock()
-
     override fun getCenter(): MapPoint {
         return MapPoint(0.0, 0.0)
     }
@@ -35,6 +31,9 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
     }
 
     override fun setCenter(center: MapPoint?, animate: Boolean) {}
+    override fun zoomToCurrentLocation(center: MapPoint?) {
+        TODO("Not yet implemented")
+    }
 
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {}
 

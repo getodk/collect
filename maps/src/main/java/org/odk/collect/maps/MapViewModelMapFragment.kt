@@ -36,7 +36,4 @@ abstract class MapViewModelMapFragment : Fragment(), MapFragment {
     final override fun hasCenter(): Boolean {
         return getMapViewModel().zoom.getValue() != null
     }
-
-    final override fun getMapFragmentDelegate(): MapFragmentDelegate =
-        throw UnsupportedOperationException()
 }
