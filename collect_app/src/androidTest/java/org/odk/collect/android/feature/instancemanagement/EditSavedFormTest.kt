@@ -16,6 +16,7 @@ import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
+import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class EditSavedFormTest {
@@ -219,17 +220,12 @@ class EditSavedFormTest {
             .clickOK(SendFinalizedFormPage())
             .pressBack(MainMenuPage())
 
-        val firstFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[0].inputStream().reader()).rootElement
-        val firstFormMetaElement = firstFormRootElement.getElement(null, "meta")
-        val firstFormInstanceID = firstFormMetaElement.getElement(null, "instanceID").getText(0)
+        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
+        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
 
-        val secondFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[1].inputStream().reader()).rootElement
-        val secondFormMetaElement = secondFormRootElement.getElement(null, "meta")
-        val secondFormInstanceID = secondFormMetaElement.getElement(null, "instanceID").getText(0)
-        val secondFormDeprecatedID = secondFormMetaElement.getElement(null, "deprecatedID").getText(0)
-
+        assertThat(firstFormDeprecatedID, equalTo(null))
         assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
-        assertThat(firstFormInstanceID, not(secondFormInstanceID))
+        assertThat(secondFormInstanceID, not(firstFormInstanceID))
     }
 
     @Test
@@ -296,17 +292,15 @@ class EditSavedFormTest {
             .clickOK(SendFinalizedFormPage())
             .pressBack(MainMenuPage())
 
-        val firstEditedFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[1].inputStream().reader()).rootElement
-        val firstEditedFormMetaElement = firstEditedFormRootElement.getElement(null, "meta")
-        val firstEditedFormInstanceID = firstEditedFormMetaElement.getElement(null, "instanceID").getText(0)
+        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
+        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
+        val (thirdFormInstanceID, thirdFormDeprecatedID) = getIds(testDependencies.server.submissions[2])
 
-        val secondEditedFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[2].inputStream().reader()).rootElement
-        val secondEditedFormMetaElement = secondEditedFormRootElement.getElement(null, "meta")
-        val secondEditedFormInstanceID = secondEditedFormMetaElement.getElement(null, "instanceID").getText(0)
-        val secondEditedFormDeprecatedID = secondEditedFormMetaElement.getElement(null, "deprecatedID").getText(0)
-
-        assertThat(firstEditedFormInstanceID, equalTo(secondEditedFormDeprecatedID))
-        assertThat(firstEditedFormInstanceID, not(secondEditedFormInstanceID))
+        assertThat(firstFormDeprecatedID, equalTo(null))
+        assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
+        assertThat(secondFormInstanceID, not(firstFormInstanceID))
+        assertThat(secondFormInstanceID, equalTo(thirdFormDeprecatedID))
+        assertThat(thirdFormInstanceID, not(secondFormInstanceID))
     }
 
     @Test
@@ -343,14 +337,24 @@ class EditSavedFormTest {
             .clickSendSelected()
             .clickOK(SendFinalizedFormPage())
 
-        val firstFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[0].inputStream().reader()).rootElement
-        val firstFormMetaElement = firstFormRootElement.getElement(null, "meta")
-        val firstFormInstanceID = firstFormMetaElement.getElement(null, "instanceID").getText(0)
+        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
+        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
 
-        val secondFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[1].inputStream().reader()).rootElement
-        val secondFormMetaElement = secondFormRootElement.getElement(null, "meta")
-        val secondFormDeprecatedID = secondFormMetaElement.getElement(null, "deprecatedID").getText(0)
-
+        assertThat(firstFormDeprecatedID, equalTo(null))
         assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
+        assertThat(secondFormInstanceID, not(firstFormInstanceID))
+    }
+
+    private fun getIds(file: File): Pair<String, String?> {
+        val formRootElement = XFormParser.getXMLDocument(file.inputStream().reader()).rootElement
+        val formMetaElement = formRootElement.getElement(null, "meta")
+        val instanceID = formMetaElement.getElement(null, "instanceID").getText(0)
+        val deprecatedID = try {
+            formMetaElement.getElement(null, "deprecatedID").getText(0)
+        } catch (e: Exception) {
+            null
+        }
+
+        return Pair(instanceID, deprecatedID)
     }
 }
