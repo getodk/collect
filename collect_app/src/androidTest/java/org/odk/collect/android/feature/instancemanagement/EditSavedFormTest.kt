@@ -88,6 +88,7 @@ class EditSavedFormTest {
     @Test
     fun editingAFinalizedForm_createsANewFormAndKeepsTheOriginalOneIntact() {
         rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .answerQuestion("what is your age", "123")
@@ -97,22 +98,28 @@ class EditSavedFormTest {
             .clickSendFinalizedForm(1)
             .clickOnForm("One Question")
             .editForm("One Question")
-            .assertText("123")
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
-            .pressBackAndSaveAsDraft(SendFinalizedFormPage())
+            .swipeToEndScreen()
+            .clickFinalize(SendFinalizedFormPage())
             .pressBack(MainMenuPage())
 
-            .clickDrafts(1)
-            .clickOnForm("One Question")
-            .assertText("456")
-            .clickGoToEnd()
-            .clickSaveAsDraft()
+            .clickSendFinalizedForm(2)
+            .clickSelectAll()
+            .clickSendSelected()
 
-            .clickSendFinalizedForm(1)
-            .clickOnForm("One Question")
-            .editForm("One Question")
-            .assertText("123")
+        val originalAnswer = getAnswer(testDependencies.server.submissions[0], "age")
+        val updatedAnswer = getAnswer(testDependencies.server.submissions[1], "age")
+
+        assertThat(originalAnswer, equalTo("123"))
+        assertThat(updatedAnswer, equalTo("456"))
+
+        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
+        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
+
+        assertThat(firstFormDeprecatedID, equalTo(null))
+        assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
+        assertThat(secondFormInstanceID, not(firstFormInstanceID))
     }
 
     @Test
@@ -136,18 +143,25 @@ class EditSavedFormTest {
             .editForm("One Question")
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
-            .pressBackAndSaveAsDraft()
+            .swipeToEndScreen()
+            .clickFinalize()
 
-            .clickDrafts(1)
-            .clickOnForm("One Question")
-            .assertText("456")
-            .clickGoToEnd()
-            .clickSaveAsDraft()
+            .clickSendFinalizedForm(1)
+            .clickSelectAll()
+            .clickSendSelected()
 
-            .clickViewSentForm(1)
-            .clickOnForm("One Question")
-            .editForm("One Question")
-            .assertText("123")
+        val originalAnswer = getAnswer(testDependencies.server.submissions[0], "age")
+        val updatedAnswer = getAnswer(testDependencies.server.submissions[1], "age")
+
+        assertThat(originalAnswer, equalTo("123"))
+        assertThat(updatedAnswer, equalTo("456"))
+
+        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
+        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
+
+        assertThat(firstFormDeprecatedID, equalTo(null))
+        assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
+        assertThat(secondFormInstanceID, not(firstFormInstanceID))
     }
 
     @Test
@@ -182,8 +196,6 @@ class EditSavedFormTest {
             .clickSendFinalizedForm(1)
             .clickSelectAll()
             .clickSendSelected()
-            .clickOK(SendFinalizedFormPage())
-            .pressBack(MainMenuPage())
 
         val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
         val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
@@ -196,6 +208,7 @@ class EditSavedFormTest {
     @Test
     fun killingAppWhenEditingFinalizedForm_createsSavepointForFormRecovery() {
         rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .answerQuestion("what is your age", "123")
@@ -207,12 +220,25 @@ class EditSavedFormTest {
             .editForm("One Question")
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
-            .killAndReopenApp(rule, recentAppsRule, MainMenuPage())
+            .killAndReopenApp(rule, recentAppsRule, MainMenuPage(), testDependencies)
 
             .clickDrafts(1)
             .clickOnFormWithSavepoint("One Question")
             .clickRecover(FormHierarchyPage("One Question"))
             .assertText("456")
+            .clickGoToEnd()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(2)
+            .clickSelectAll()
+            .clickSendSelected()
+
+        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
+        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
+
+        assertThat(firstFormDeprecatedID, equalTo(null))
+        assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
+        assertThat(secondFormInstanceID, not(firstFormInstanceID))
     }
 
     @Test
@@ -254,8 +280,6 @@ class EditSavedFormTest {
             .clickSendFinalizedForm(2)
             .clickSelectAll()
             .clickSendSelected()
-            .clickOK(SendFinalizedFormPage())
-            .pressBack(MainMenuPage())
 
         val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
         val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
@@ -300,7 +324,6 @@ class EditSavedFormTest {
             .clickSendFinalizedForm(1)
             .clickSelectAll()
             .clickSendSelected()
-            .clickOK(SendFinalizedFormPage())
 
         val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
         val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
@@ -321,5 +344,11 @@ class EditSavedFormTest {
         }
 
         return Pair(instanceID, deprecatedID)
+    }
+
+    private fun getAnswer(file: File, questionName: String): String? {
+        val formRootElement = XFormParser.getXMLDocument(file.inputStream().reader()).rootElement
+
+        return formRootElement.getElement(null, questionName).getText(0)
     }
 }
