@@ -10,6 +10,7 @@ import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory
 import org.odk.collect.android.instancemanagement.autosend.FormAutoSendMode
 import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetcher
 import org.odk.collect.android.instancemanagement.autosend.getAutoSendMode
+import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.state.DataKeys
@@ -22,6 +23,7 @@ import org.odk.collect.forms.instances.Instance
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.projects.ProjectDependencyFactory
+import org.odk.collect.shared.PathUtils.getRelativeFilePath
 import java.io.File
 
 class InstancesDataService(
@@ -239,6 +241,42 @@ class InstancesDataService(
             instanceSubmitScheduler.scheduleFormAutoSend(projectId)
         } else {
             instanceSubmitScheduler.scheduleAutoSend(projectId)
+        }
+    }
+
+    fun clone(formController: FormController, projectId: String,): Long? {
+        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
+        val instancesRepository = projectDependencyModule.instancesRepository
+
+        val sourceInstanceFile = formController.getInstanceFile() ?: return null
+        val targetInstanceFile = copyInstanceDir(sourceInstanceFile) ?: return null
+        val sourceInstance = instancesRepository.getOneByPath(sourceInstanceFile.absolutePath) ?: return null
+
+        return instancesRepository.save(
+            Instance.Builder(sourceInstance)
+                .dbId(null)
+                .status(Instance.STATUS_VALID)
+                .instanceFilePath(getRelativeFilePath(
+                    projectDependencyModule.instancesDir,
+                    targetInstanceFile.absolutePath)
+                )
+                .build()
+        ).dbId
+    }
+
+    private fun copyInstanceDir(sourceInstanceFile: File): File? {
+        val sourceInstanceDir = sourceInstanceFile.parentFile ?: return null
+        val targetInstanceDir = File(sourceInstanceDir.parent, "${sourceInstanceDir.name}_1")
+
+        if (!sourceInstanceDir.copyRecursively(targetInstanceDir, true)) return null
+
+        val targetInstanceFile = File(targetInstanceDir, sourceInstanceFile.name)
+        val updatedTargetInstanceFile = File(targetInstanceDir, "${sourceInstanceFile.nameWithoutExtension}_1.${sourceInstanceFile.extension}")
+
+        return if (targetInstanceFile.renameTo(updatedTargetInstanceFile)) {
+            updatedTargetInstanceFile
+        } else {
+            null
         }
     }
 }

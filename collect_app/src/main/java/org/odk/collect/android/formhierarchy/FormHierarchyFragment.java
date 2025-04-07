@@ -46,7 +46,7 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory;
-import org.odk.collect.android.instancemanagement.InstanceCloner;
+import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
@@ -74,7 +74,7 @@ public class FormHierarchyFragment extends Fragment {
      */
     private FormIndex startIndex;
     private final Scheduler scheduler;
-    private final InstanceCloner instanceCloner;
+    private final InstancesDataService instancesDataService;
     private final String currentProjectId;
 
     public FormHierarchyFragment(
@@ -82,7 +82,7 @@ public class FormHierarchyFragment extends Fragment {
             ViewModelProvider.Factory viewModelFactory,
             MenuHost menuHost,
             Scheduler scheduler,
-            InstanceCloner instanceCloner,
+            InstancesDataService instancesDataService,
             String currentProjectId
     ) {
         super(R.layout.form_hierarchy_layout);
@@ -90,7 +90,7 @@ public class FormHierarchyFragment extends Fragment {
         this.viewModelFactory = viewModelFactory;
         this.menuHost = menuHost;
         this.scheduler = scheduler;
-        this.instanceCloner = instanceCloner;
+        this.instancesDataService = instancesDataService;
         this.currentProjectId = currentProjectId;
     }
 
@@ -101,7 +101,7 @@ public class FormHierarchyFragment extends Fragment {
         formEntryViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(FormEntryViewModel.class);
         formHierarchyViewModel = new ViewModelProvider(
                 this,
-                new FormHierarchyViewModel.Factory(scheduler, instanceCloner)
+                new FormHierarchyViewModel.Factory(scheduler, currentProjectId, instancesDataService)
         ).get(FormHierarchyViewModel.class);
         requireActivity().setTitle(formEntryViewModel.getFormController().getFormTitle());
         startIndex = formEntryViewModel.getFormController().getFormIndex();
