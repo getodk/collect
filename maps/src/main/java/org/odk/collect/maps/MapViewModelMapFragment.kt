@@ -3,6 +3,10 @@ package org.odk.collect.maps
 import androidx.fragment.app.Fragment
 import java.util.function.Consumer
 
+/**
+ * Convenience abstract class for implementing a [MapFragment] using [MapViewModel] to handle
+ * common behaviour and state.
+ */
 abstract class MapViewModelMapFragment : Fragment(), MapFragment {
 
     abstract fun getMapViewModel(): MapViewModel
