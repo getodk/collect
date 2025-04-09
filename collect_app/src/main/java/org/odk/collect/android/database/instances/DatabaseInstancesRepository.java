@@ -198,6 +198,17 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     @Override
+    public Instance clone(Instance sourceInstance, File targetInstanceFile) {
+        return save(new Instance.Builder(sourceInstance)
+                .dbId(null)
+                .status(Instance.STATUS_VALID)
+                .instanceFilePath(
+                        getRelativeFilePath(instancesPath, targetInstanceFile.getAbsolutePath())
+                )
+                .build());
+    }
+
+    @Override
     public void deleteWithLogging(Long id) {
         ContentValues values = new ContentValues();
         values.putNull(GEOMETRY);

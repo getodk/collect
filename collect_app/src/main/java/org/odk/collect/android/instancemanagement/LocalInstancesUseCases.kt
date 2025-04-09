@@ -1,14 +1,13 @@
 package org.odk.collect.android.instancemanagement
 
 import org.odk.collect.android.utilities.FileUtils
-import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
-import org.odk.collect.shared.PathUtils.getRelativeFilePath
 import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 object LocalInstancesUseCases {
     @JvmOverloads
@@ -32,21 +31,14 @@ object LocalInstancesUseCases {
     fun clone(
         instanceFile: File?,
         instancesDir: String,
-        instancesRepository: InstancesRepository
+        instancesRepository: InstancesRepository,
+        clock: () -> Long = { System.currentTimeMillis() }
     ): Long? {
         val sourceInstanceFile = instanceFile ?: return null
-        val targetInstanceFile = copyInstanceDir(sourceInstanceFile, instancesDir) ?: return null
+        val targetInstanceFile = copyInstanceDir(sourceInstanceFile, instancesDir, clock) ?: return null
         val sourceInstance = instancesRepository.getOneByPath(sourceInstanceFile.absolutePath) ?: return null
 
-        return instancesRepository.save(
-            Instance.Builder(sourceInstance)
-                .dbId(null)
-                .status(Instance.STATUS_VALID)
-                .instanceFilePath(
-                    getRelativeFilePath(instancesDir, targetInstanceFile.absolutePath)
-                )
-                .build()
-        ).dbId
+        return instancesRepository.clone(sourceInstance, targetInstanceFile).dbId
     }
 
     private fun copyInstanceDir(
@@ -89,8 +81,10 @@ object LocalInstancesUseCases {
         instancesDir: String,
         clock: () -> Long = { System.currentTimeMillis() }
     ): File? {
-        val timestamp = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH)
-            .format(Date(clock()))
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH)
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val timestamp = dateFormat.format(Date(clock()))
+
         val instanceDir = instancesDir + File.separator + baseName + "_" + timestamp
 
         if (FileUtils.createFolder(instanceDir)) {

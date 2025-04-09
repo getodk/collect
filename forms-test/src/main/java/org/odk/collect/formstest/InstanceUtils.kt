@@ -2,7 +2,11 @@ package org.odk.collect.formstest
 
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.shared.TempFiles.createTempFile
+import org.odk.collect.shared.strings.RandomString
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 object InstanceUtils {
 
@@ -40,9 +44,14 @@ object InstanceUtils {
 
     @JvmStatic
     fun createInstanceDirAndFile(instancesDir: String): File {
-        val instanceDir = File(instancesDir + File.separator + System.currentTimeMillis() + Math.random())
+        val timestamp = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH)
+            .format(Date((100_000_000_0000L..999_999_999_9999L).random()))
+
+        val instanceDir = File(instancesDir + File.separator + RandomString.randomString(5) + "_" + timestamp)
         instanceDir.mkdir()
 
-        return createTempFile(instanceDir, "intance", ".xml")
+        return createTempFile(instanceDir, instanceDir.name, ".xml").also {
+            it.writeText(RandomString.randomString(10))
+        }
     }
 }

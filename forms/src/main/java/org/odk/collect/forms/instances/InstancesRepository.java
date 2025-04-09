@@ -2,6 +2,7 @@ package org.odk.collect.forms.instances;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -41,6 +42,8 @@ public interface InstancesRepository {
     void deleteAll();
 
     Instance save(Instance instance);
+
+    Instance clone(Instance sourceInstance, File targetInstanceFile);
 
     /**
      * Deletes any sensitive data (the submission file and geometry data) but leaves the Instance
