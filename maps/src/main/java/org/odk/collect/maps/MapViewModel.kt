@@ -1,14 +1,13 @@
 package org.odk.collect.maps
 
-import android.os.Bundle
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.odk.collect.settings.keys.MetaKeys.LAST_KNOWN_ZOOM_LEVEL
 import org.odk.collect.shared.settings.Settings
 
 class MapViewModel(
-    private val configurator: MapConfigurator,
     private val unprotectedSettings: Settings,
     private val metaSettings: Settings
 ) : ViewModel(),
@@ -19,8 +18,7 @@ class MapViewModel(
     private val _zoom = MutableLiveData<Zoom?>()
     val zoom: LiveData<Zoom?> = _zoom
 
-    private val _config = MutableLiveData(configurator.buildConfig(unprotectedSettings))
-    val config: LiveData<Bundle> = _config
+    private val lastSettingsKeyChange = MutableLiveData<String>(null)
 
     init {
         unprotectedSettings.registerOnSettingChangeListener(this)
@@ -61,6 +59,16 @@ class MapViewModel(
         _zoom.value = Zoom.Point(point, level, animate = false, user = true)
     }
 
+    fun getSettings(keys: Collection<String>): LiveData<Settings> {
+        return MediatorLiveData<Settings>().apply {
+            addSource(lastSettingsKeyChange) {
+                if (it == null || keys.contains(it)) {
+                    this.value = unprotectedSettings
+                }
+            }
+        }
+    }
+
     override fun onCleared() {
         userZoomLevel?.also {
             metaSettings.save(LAST_KNOWN_ZOOM_LEVEL, it.toFloat())
@@ -70,9 +78,7 @@ class MapViewModel(
     }
 
     override fun onSettingChanged(key: String) {
-        if (configurator.prefKeys.contains(key)) {
-            _config.value = configurator.buildConfig(unprotectedSettings)
-        }
+        lastSettingsKeyChange.value = key
     }
 
     companion object {

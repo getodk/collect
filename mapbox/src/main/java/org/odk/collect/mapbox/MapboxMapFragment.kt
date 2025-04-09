@@ -117,7 +117,6 @@ class MapboxMapFragment :
         viewModelFactory {
             addInitializer(MapViewModel::class) {
                 MapViewModel(
-                    MapboxMapConfigurator(),
                     settingsProvider.getUnprotectedSettings(),
                     settingsProvider.getMetaSettings()
                 )
@@ -212,7 +211,12 @@ class MapboxMapFragment :
             mapReadyListener!!.onReady(this)
         }
 
-        getMapViewModel().config.observe(viewLifecycleOwner, ::onConfigChanged)
+        val mapConfigurator = MapboxMapConfigurator()
+        getMapViewModel().getSettings(mapConfigurator.prefKeys).observe(viewLifecycleOwner) {
+            val newConfig = mapConfigurator.buildConfig(it)
+            onConfigChanged(newConfig)
+        }
+
         getMapViewModel().zoom.observe(viewLifecycleOwner, object : ZoomObserver() {
             override fun onZoomToPoint(zoom: Zoom.Point) {
                 moveOrAnimateCamera(zoom.point, zoom.animate, zoom.level ?: getZoom())

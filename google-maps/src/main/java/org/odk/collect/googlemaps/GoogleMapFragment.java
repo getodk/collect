@@ -178,7 +178,12 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             });
             loadReferenceOverlay();
 
-            getMapViewModel().getConfig().observe(getViewLifecycleOwner(), this::onConfigChanged);
+            MapConfigurator configurator = createConfigurator();
+            getMapViewModel().getSettings(configurator.getPrefKeys()).observe(getViewLifecycleOwner(), settings -> {
+                Bundle newConfig = configurator.buildConfig(settings);
+                onConfigChanged(newConfig);
+            });
+
             getMapViewModel().getZoom().observe(getViewLifecycleOwner(), new ZoomObserver() {
                 @Override
                 public void onZoomToPoint(@NonNull Zoom.Point zoom) {
@@ -703,7 +708,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new MapViewModel(createConfigurator(), settingsProvider.getUnprotectedSettings(), settingsProvider.getMetaSettings());
+                return (T) new MapViewModel(settingsProvider.getUnprotectedSettings(), settingsProvider.getMetaSettings());
             }
         }).get(MapViewModel.class);
     }

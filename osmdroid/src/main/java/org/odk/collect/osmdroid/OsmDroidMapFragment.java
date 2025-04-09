@@ -145,7 +145,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                 return (T) new MapViewModel(
-                        mapConfigurator,
                         settingsProvider.getUnprotectedSettings(),
                         settingsProvider.getMetaSettings()
                 );
@@ -229,7 +228,11 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             }
         }, 100);
 
-        mapViewModel.getConfig().observe(getViewLifecycleOwner(), this::onConfigChanged);
+        mapViewModel.getSettings(mapConfigurator.getPrefKeys()).observe(getViewLifecycleOwner(), settings -> {
+            Bundle newConfig = mapConfigurator.buildConfig(settings);
+            onConfigChanged(newConfig);
+        });
+
         mapViewModel.getZoom().observe(getViewLifecycleOwner(), new ZoomObserver() {
             @Override
             public void onZoomToPoint(@NonNull Zoom.Point zoom) {
