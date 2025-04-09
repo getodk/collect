@@ -116,7 +116,6 @@ import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
-import org.odk.collect.android.formentry.loading.FormInstanceFileCreator;
 import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
@@ -130,6 +129,7 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
+import org.odk.collect.android.instancemanagement.LocalInstancesUseCases;
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider;
 import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -1941,12 +1941,10 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
 
             if (formController.getInstanceFile() == null) {
-                FormInstanceFileCreator formInstanceFileCreator = new FormInstanceFileCreator(
-                        storagePathProvider,
-                        System::currentTimeMillis
+                File instanceFile = LocalInstancesUseCases.createInstanceFileBasedOnFormPath(
+                        formPath,
+                        storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES)
                 );
-
-                File instanceFile = formInstanceFileCreator.createInstanceFileBasedOnFormPath(formPath);
                 if (instanceFile != null) {
                     formController.setInstanceFile(instanceFile);
                 } else {

@@ -44,7 +44,6 @@ import org.odk.collect.android.databinding.FormHierarchyLayoutBinding;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.ODKView;
-import org.odk.collect.android.formentry.loading.FormInstanceFileCreator;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -77,7 +76,6 @@ public class FormHierarchyFragment extends Fragment {
     private final Scheduler scheduler;
     private final String instancesDir;
     private final InstancesRepository instancesRepository;
-    private final FormInstanceFileCreator formInstanceFileCreator;
     private final String currentProjectId;
 
     public FormHierarchyFragment(
@@ -87,7 +85,6 @@ public class FormHierarchyFragment extends Fragment {
             Scheduler scheduler,
             String instancesDir,
             InstancesRepository instancesRepository,
-            FormInstanceFileCreator formInstanceFileCreator,
             String currentProjectId
     ) {
         super(R.layout.form_hierarchy_layout);
@@ -97,7 +94,6 @@ public class FormHierarchyFragment extends Fragment {
         this.scheduler = scheduler;
         this.instancesDir = instancesDir;
         this.instancesRepository = instancesRepository;
-        this.formInstanceFileCreator = formInstanceFileCreator;
         this.currentProjectId = currentProjectId;
     }
 
@@ -111,8 +107,7 @@ public class FormHierarchyFragment extends Fragment {
                 new FormHierarchyViewModel.Factory(
                         scheduler,
                         instancesDir,
-                        instancesRepository,
-                        formInstanceFileCreator
+                        instancesRepository
                 )
         ).get(FormHierarchyViewModel.class);
         requireActivity().setTitle(formEntryViewModel.getFormController().getFormTitle());
