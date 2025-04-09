@@ -1946,7 +1946,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                         System::currentTimeMillis
                 );
 
-                File instanceFile = formInstanceFileCreator.createInstanceFile(formPath);
+                File instanceFile = formInstanceFileCreator.createInstanceFileBasedOnFormPath(formPath);
                 if (instanceFile != null) {
                     formController.setInstanceFile(instanceFile);
                 } else {

@@ -30,7 +30,7 @@ public class FormInstanceFileCreatorTest {
         when(clock.get()).thenReturn(simpleDateFormat.parse("1990-04-24_00-00-00").getTime());
 
         FormInstanceFileCreator instanceFileCreator = new FormInstanceFileCreator(pathProvider, clock);
-        instanceFileCreator.createInstanceFile("/blah/blah/Cool form name.xml");
+        instanceFileCreator.createInstanceFileBasedOnFormPath("/blah/blah/Cool form name.xml");
 
         File instanceDir = new File(instancesDir + File.separator + "Cool form name_1990-04-24_00-00-00");
         assertThat(instanceDir.exists(), is(true));
@@ -44,7 +44,7 @@ public class FormInstanceFileCreatorTest {
         when(clock.get()).thenReturn(simpleDateFormat.parse("1990-04-24_00-00-00").getTime());
 
         FormInstanceFileCreator instanceFileCreator = new FormInstanceFileCreator(pathProvider, clock);
-        File instanceFile = instanceFileCreator.createInstanceFile("/blah/blah/Cool form name.xml");
+        File instanceFile = instanceFileCreator.createInstanceFileBasedOnFormPath("/blah/blah/Cool form name.xml");
 
         String instanceDir = instancesDir + File.separator + "Cool form name_1990-04-24_00-00-00";
         assertThat(instanceFile.getAbsolutePath(), is(instanceDir + File.separator + "Cool form name_1990-04-24_00-00-00.xml"));
@@ -57,7 +57,7 @@ public class FormInstanceFileCreatorTest {
         when(clock.get()).thenReturn(simpleDateFormat.parse("1990-04-24_00-00-00").getTime());
 
         FormInstanceFileCreator instanceFileCreator = new FormInstanceFileCreator(pathProvider, clock);
-        File instanceFile = instanceFileCreator.createInstanceFile("/blah/blah/Cool form name.xml");
+        File instanceFile = instanceFileCreator.createInstanceFileBasedOnFormPath("/blah/blah/Cool form name.xml");
         assertThat(instanceFile, is(nullValue()));
     }
 }

@@ -7,6 +7,7 @@ import org.odk.collect.android.activities.FormEntryViewModelFactory
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormOpeningMode
 import org.odk.collect.android.formentry.FormSessionRepository
+import org.odk.collect.android.formentry.loading.FormInstanceFileCreator
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstancesDataService
@@ -128,6 +129,7 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
                     scheduler,
                     storagePathProvider.create(projectId).instancesDir,
                     instancesRepositoryProvider.create(projectId),
+                    FormInstanceFileCreator(storagePathProvider) { System.currentTimeMillis() },
                     projectId
                 )
             }
