@@ -115,8 +115,7 @@ class EditSavedFormTest {
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
             .swipeToEndScreen()
-            .clickFinalize(SendFinalizedFormPage())
-            .pressBack(MainMenuPage())
+            .clickFinalize()
 
             .clickSendFinalizedForm(2)
             .clickSelectAll()
@@ -199,7 +198,7 @@ class EditSavedFormTest {
             .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
-            .pressBackAndDiscardChanges(MainMenuPage())
+            .pressBackAndDiscardChanges()
 
             .clickDrafts(1)
             .clickOnForm("One Question Editable")
@@ -269,8 +268,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
-            .pressBackAndSaveAsDraft(SendFinalizedFormPage())
-            .pressBack(MainMenuPage())
+            .pressBackAndSaveAsDraft()
 
             .clickSendFinalizedForm(1)
             .clickSelectAll()
@@ -288,8 +286,7 @@ class EditSavedFormTest {
             .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
             .swipeToEndScreen()
-            .clickFinalize(SendFinalizedFormPage())
-            .pressBack(MainMenuPage())
+            .clickFinalize()
 
             .clickSendFinalizedForm(2)
             .clickSelectAll()
