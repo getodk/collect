@@ -169,15 +169,6 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public Instance clone(Instance sourceInstance, File targetInstanceFile) {
-        return save(new Instance.Builder(sourceInstance)
-                .dbId(null)
-                .status(Instance.STATUS_VALID)
-                .instanceFilePath(targetInstanceFile.getAbsolutePath())
-                .build());
-    }
-
-    @Override
     public void deleteWithLogging(Long id) {
         Instance instance = new Instance.Builder(get(id))
                 .geometry(null)

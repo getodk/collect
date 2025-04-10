@@ -17,7 +17,6 @@ package org.odk.collect.formstest;
 import org.junit.Test;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
-import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
 import java.util.List;
@@ -259,33 +258,6 @@ public abstract class InstancesRepositoryTest {
         instancesRepository.save(instancesRepository.get(originalInstanceDbId));
 
         assertThat(instancesRepository.get(originalInstanceDbId).getLastStatusChangeDate(), is(123L));
-    }
-
-    @Test
-    public void clone_updatesInstanceFilePathAndStatus_andKeepsOtherPropertiesIntact() {
-        InstancesRepository instancesRepository = buildSubject();
-        Instance sourceInstance = instancesRepository.save(
-                InstanceUtils
-                        .buildInstance("formid", "1", getInstancesDir())
-                        .status(Instance.STATUS_SUBMITTED)
-                        .build());
-        File targetInstanceFile = TempFiles.createTempFile(new File(getInstancesDir()), "blah.xml");
-
-        Instance clonedInstance = instancesRepository.clone(sourceInstance, targetInstanceFile);
-
-        assertThat(clonedInstance.getInstanceFilePath(), equalTo(targetInstanceFile.getAbsolutePath()));
-        assertThat(clonedInstance.getStatus(), equalTo(Instance.STATUS_VALID));
-
-        assertThat(sourceInstance.getDisplayName(), equalTo(clonedInstance.getDisplayName()));
-        assertThat(sourceInstance.getSubmissionUri(), equalTo(clonedInstance.getSubmissionUri()));
-        assertThat(sourceInstance.canEditWhenComplete(), equalTo(clonedInstance.canEditWhenComplete()));
-        assertThat(sourceInstance.canDeleteBeforeSend(), equalTo(clonedInstance.canDeleteBeforeSend()));
-        assertThat(sourceInstance.getFormId(), equalTo(clonedInstance.getFormId()));
-        assertThat(sourceInstance.getFormVersion(), equalTo(clonedInstance.getFormVersion()));
-        assertThat(sourceInstance.getLastStatusChangeDate(), equalTo(clonedInstance.getLastStatusChangeDate()));
-        assertThat(sourceInstance.getDeletedDate(), equalTo(clonedInstance.getDeletedDate()));
-        assertThat(sourceInstance.getGeometry(), equalTo(clonedInstance.getGeometry()));
-        assertThat(sourceInstance.getGeometryType(), equalTo(clonedInstance.getGeometryType()));
     }
 
     @Test

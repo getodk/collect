@@ -1,6 +1,7 @@
 package org.odk.collect.android.instancemanagement
 
 import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
 import timber.log.Timber
 import java.io.File
@@ -38,7 +39,13 @@ object LocalInstancesUseCases {
         val targetInstanceFile = copyInstanceDir(sourceInstanceFile, instancesDir, clock) ?: return null
         val sourceInstance = instancesRepository.getOneByPath(sourceInstanceFile.absolutePath) ?: return null
 
-        return instancesRepository.clone(sourceInstance, targetInstanceFile).dbId
+        return instancesRepository.save(
+            Instance.Builder(sourceInstance)
+                .dbId(null)
+                .status(Instance.STATUS_VALID)
+                .instanceFilePath(targetInstanceFile.absolutePath)
+                .build()
+        ).dbId
     }
 
     private fun copyInstanceDir(
