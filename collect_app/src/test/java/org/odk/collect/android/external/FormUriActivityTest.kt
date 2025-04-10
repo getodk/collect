@@ -37,11 +37,11 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.application.initialization.MapsInitializer
+import org.odk.collect.android.formentry.FormOpeningMode
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -1278,7 +1278,7 @@ class FormUriActivityTest {
         } else {
             Intents.intended(hasData(FormsContract.getUri(projectId, dbId)))
         }
-        Intents.intended(not(hasExtraWithKey(ApplicationConstants.BundleKeys.FORM_MODE)))
+        Intents.intended(not(hasExtraWithKey(FormOpeningMode.FORM_MODE_KEY)))
         Intents.intended(hasExtra("KEY_1", "Text"))
     }
 
@@ -1290,12 +1290,12 @@ class FormUriActivityTest {
             Intents.intended(hasData(InstancesContract.getUri(projectId, dbId)))
         }
         if (canBeEdited) {
-            Intents.intended(not(hasExtraWithKey(ApplicationConstants.BundleKeys.FORM_MODE)))
+            Intents.intended(not(hasExtraWithKey(FormOpeningMode.FORM_MODE_KEY)))
         } else {
             Intents.intended(
                 hasExtra(
-                    ApplicationConstants.BundleKeys.FORM_MODE,
-                    ApplicationConstants.FormModes.VIEW_SENT
+                    FormOpeningMode.FORM_MODE_KEY,
+                    FormOpeningMode.VIEW_SENT
                 )
             )
         }

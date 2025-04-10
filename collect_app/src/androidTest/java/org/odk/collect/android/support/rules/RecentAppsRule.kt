@@ -8,6 +8,7 @@ import androidx.test.uiautomator.UiSelector
 import androidx.test.uiautomator.Until
 import org.junit.Assert.assertTrue
 import org.junit.rules.ExternalResource
+import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.DummyActivityLauncher
 import org.odk.collect.shared.TimeInMs
@@ -25,7 +26,7 @@ class RecentAppsRule : ExternalResource() {
         }
     }
 
-    fun leaveAndKillApp() {
+    fun leaveAndKillApp(appDependencyModule: AppDependencyModule? = null) {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         if (Build.VERSION.SDK_INT == 30) {
@@ -33,7 +34,7 @@ class RecentAppsRule : ExternalResource() {
             device.wait(Until.hasObject(By.descContains("Collect")), TimeInMs.ONE_SECOND)
             device.findObject(UiSelector().descriptionContains("Collect"))
                 .swipeUp(10).also {
-                    CollectHelpers.simulateProcessRestart() // the process is not restarted automatically (probably to keep the test running) so we have simulate it
+                    CollectHelpers.simulateProcessRestart(appDependencyModule) // the process is not restarted automatically (probably to keep the test running) so we have simulate it
                 }
         } else if (Build.VERSION.SDK_INT == 34) {
             device.pressHome() // Pressing recent apps does not actually "leave" the app on API 31+ (cause onPause etc). You need to go home or switch apps.
@@ -50,7 +51,7 @@ class RecentAppsRule : ExternalResource() {
             }
 
             device.findObject(UiSelector().text("Clear all")).click()
-            CollectHelpers.simulateProcessRestart() // the process is not restarted automatically (probably to keep the test running) so we have simulate it
+            CollectHelpers.simulateProcessRestart(appDependencyModule) // the process is not restarted automatically (probably to keep the test running) so we have simulate it
         }
     }
 

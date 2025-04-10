@@ -14,8 +14,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.external.FormUriActivity
 import org.odk.collect.android.external.InstancesContract
-import org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE
-import org.odk.collect.android.utilities.ApplicationConstants.FormModes.VIEW_SENT
+import org.odk.collect.android.formentry.FormOpeningMode.FORM_MODE_KEY
+import org.odk.collect.android.formentry.FormOpeningMode.VIEW_SENT
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.robolectric.Robolectric
 
@@ -29,21 +29,21 @@ class FormFillingIntentFactoryTest {
 
     @Test
     fun `newInstance starts FormUriActivity with instance URI`() {
-        activity.startActivity(FormFillingIntentFactory.newInstanceIntent(activity, InstancesContract.getUri("projectId", 101)))
+        activity.startActivity(FormFillingIntentFactory.newFormIntent(activity, InstancesContract.getUri("projectId", 101)))
 
         intended(hasAction(ACTION_EDIT))
         intended(hasComponent(FormUriActivity::class.java.name))
         intended(hasData(InstancesContract.getUri("projectId", 101)))
-        intended(not(hasExtra(FORM_MODE, VIEW_SENT)))
+        intended(not(hasExtra(FORM_MODE_KEY, VIEW_SENT)))
     }
 
     @Test
     fun `editInstance starts FormUriActivity with instance URI`() {
-        activity.startActivity(FormFillingIntentFactory.editInstanceIntent(activity, "projectId", 101))
+        activity.startActivity(FormFillingIntentFactory.editDraftFormIntent(activity, "projectId", 101))
 
         intended(hasAction(ACTION_EDIT))
         intended(hasComponent(FormUriActivity::class.java.name))
         intended(hasData(InstancesContract.getUri("projectId", 101)))
-        intended(not(hasExtra(FORM_MODE, VIEW_SENT)))
+        intended(not(hasExtra(FORM_MODE_KEY, VIEW_SENT)))
     }
 }

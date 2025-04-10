@@ -46,6 +46,7 @@ import org.junit.Assert.fail
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
+import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.ActivityHelpers.getLaunchIntent
 import org.odk.collect.android.support.actions.RotateAction
@@ -534,9 +535,10 @@ abstract class Page<T : Page<T>> {
     fun <D : Page<D>> killAndReopenApp(
         launcherRule: ActivityScenarioLauncherRule,
         recentAppsRule: RecentAppsRule,
-        destination: D
+        destination: D,
+        appDependencyModule: AppDependencyModule? = null
     ): D {
-        recentAppsRule.leaveAndKillApp()
+        recentAppsRule.leaveAndKillApp(appDependencyModule)
 
         // reopen
         launcherRule.launch<Activity>(getLaunchIntent())

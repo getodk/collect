@@ -91,7 +91,7 @@ open class FormEntryActivityTestRule :
         val projectId = DaggerUtils.getComponent(application).currentProjectProvider()
             .requireCurrentProject().uuid
 
-        return FormFillingIntentFactory.newInstanceIntent(
+        return FormFillingIntentFactory.newFormIntent(
             application,
             FormsContract.getUri(projectId, form!!.dbId)
         )
@@ -108,7 +108,7 @@ open class FormEntryActivityTestRule :
         val projectId = DaggerUtils.getComponent(application).currentProjectProvider()
             .requireCurrentProject().uuid
 
-        return FormFillingIntentFactory.editInstanceIntent(
+        return FormFillingIntentFactory.editDraftFormIntent(
             application,
             projectId,
             instance.dbId

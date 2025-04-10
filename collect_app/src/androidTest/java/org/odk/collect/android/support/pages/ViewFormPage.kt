@@ -7,12 +7,13 @@ import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.odk.collect.android.R
+import org.odk.collect.strings.R.string
 
 class ViewFormPage(private val formName: String) : Page<ViewFormPage>() {
 
     override fun assertOnPage(): ViewFormPage {
         assertToolbarTitle(formName)
-        assertText(org.odk.collect.strings.R.string.exit)
+        assertText(string.exit)
         return this
     }
 
@@ -23,5 +24,10 @@ class ViewFormPage(private val formName: String) : Page<ViewFormPage>() {
 
         clickOnText(groupLabel)
         return this
+    }
+
+    fun editForm(formName: String): FormHierarchyPage {
+        clickOnContentDescription(string.edit_finalized_form)
+        return FormHierarchyPage(formName).assertOnPage()
     }
 }

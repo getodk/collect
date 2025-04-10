@@ -3,6 +3,7 @@ package org.odk.collect.formstest
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.shared.TempFiles
+import java.io.File
 
 object InstanceFixtures {
 
@@ -13,10 +14,12 @@ object InstanceFixtures {
         dbId: Long? = null,
         form: Form? = null,
         deletedDate: Long? = null,
-        canDeleteBeforeSend: Boolean = true
+        canDeleteBeforeSend: Boolean = true,
+        instancesDir: File = TempFiles.createTempDir(),
+        formId: String = "formId",
+        formVersion: String = "version"
     ): Instance {
-        val instancesDir = TempFiles.createTempDir()
-        return InstanceUtils.buildInstance("formId", "version", instancesDir.absolutePath)
+        return InstanceUtils.buildInstance(formId, formVersion, instancesDir.absolutePath)
             .status(status)
             .lastStatusChangeDate(lastStatusChangeDate)
             .displayName(displayName)

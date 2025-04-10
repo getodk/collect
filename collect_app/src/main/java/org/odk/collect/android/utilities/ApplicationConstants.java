@@ -25,7 +25,6 @@ public class ApplicationConstants {
     }
 
     public abstract static class BundleKeys {
-        public static final String FORM_MODE = "formMode";
         public static final String SUCCESS_KEY = "SUCCESSFUL";
         public static final String FORM_IDS = "FORM_IDS";
         public static final String MESSAGE = "MESSAGE";
@@ -33,11 +32,6 @@ public class ApplicationConstants {
         public static final String PASSWORD = "PASSWORD";
         public static final String URL = "URL";
         public static final String DELETE_INSTANCE_AFTER_SUBMISSION = "DELETE_INSTANCE_AFTER_SUBMISSION";
-    }
-
-    public abstract static class FormModes {
-        public static final String EDIT_SAVED = "editSaved";
-        public static final String VIEW_SENT = "viewSent";
     }
 
     public abstract static class SortingOrder {

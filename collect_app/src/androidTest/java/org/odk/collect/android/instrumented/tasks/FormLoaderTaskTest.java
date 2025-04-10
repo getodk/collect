@@ -73,7 +73,7 @@ public class FormLoaderTaskTest {
         final Uri formUri = FormsContract.getUri("DEMO", form.getDbId());
 
         // initial load with side effects
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), mock());
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), mock(), false);
         FormLoaderTask.FECWrapper wrapper = formLoaderTask.executeSynchronously();
         Assert.assertNotNull(wrapper);
         Assert.assertNotNull(wrapper.getController());
@@ -84,7 +84,7 @@ public class FormLoaderTaskTest {
         long dbLastModified = dbFile.lastModified();
 
         // subsequent load should succeed despite side effects from import
-        formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), mock());
+        formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), mock(), false);
         wrapper = formLoaderTask.executeSynchronously();
         Assert.assertNotNull(wrapper);
         Assert.assertNotNull(wrapper.getController());

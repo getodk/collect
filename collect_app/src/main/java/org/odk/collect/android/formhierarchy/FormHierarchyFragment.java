@@ -6,6 +6,7 @@ import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPrevious
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +24,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -45,11 +45,15 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
+import org.odk.collect.android.formmanagement.FormFillingIntentFactory;
+import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.async.Scheduler;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,13 +73,25 @@ public class FormHierarchyFragment extends Fragment {
      * was accessed. Used to jump the user back to where they were if applicable.
      */
     private FormIndex startIndex;
+    private final Scheduler scheduler;
+    private final InstancesDataService instancesDataService;
+    private final String currentProjectId;
 
-    public FormHierarchyFragment(boolean viewOnly, ViewModelProvider.Factory viewModelFactory, MenuHost menuHost) {
+    public FormHierarchyFragment(
+            boolean viewOnly,
+            ViewModelProvider.Factory viewModelFactory,
+            MenuHost menuHost,
+            Scheduler scheduler,
+            InstancesDataService instancesDataService,
+            String currentProjectId
+    ) {
         super(R.layout.form_hierarchy_layout);
         this.viewOnly = viewOnly;
-
         this.viewModelFactory = viewModelFactory;
         this.menuHost = menuHost;
+        this.scheduler = scheduler;
+        this.instancesDataService = instancesDataService;
+        this.currentProjectId = currentProjectId;
     }
 
     @Override
@@ -83,18 +99,31 @@ public class FormHierarchyFragment extends Fragment {
         super.onAttach(context);
 
         formEntryViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(FormEntryViewModel.class);
-        formHierarchyViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
-            @NonNull
-            @Override
-            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new FormHierarchyViewModel();
-            }
-        }).get(FormHierarchyViewModel.class);
+        formHierarchyViewModel = new ViewModelProvider(
+                this,
+                new FormHierarchyViewModel.Factory(scheduler)
+        ).get(FormHierarchyViewModel.class);
         requireActivity().setTitle(formEntryViewModel.getFormController().getFormTitle());
-
         startIndex = formEntryViewModel.getFormController().getFormIndex();
 
+        MaterialProgressDialogFragment.showOn(this, formHierarchyViewModel.isCloning(), getParentFragmentManager(), () -> {
+            MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
+            dialog.setMessage(getString(org.odk.collect.strings.R.string.preparing_form_edit));
+            return dialog;
+        });
+
         menuProvider = new FormHiearchyMenuProvider(formEntryViewModel, formHierarchyViewModel, viewOnly, new FormHiearchyMenuProvider.OnClickListener() {
+            @Override
+            public void onEditClicked() {
+                formHierarchyViewModel
+                        .editInstance(formEntryViewModel.getFormController(), instancesDataService, currentProjectId)
+                        .observe(getViewLifecycleOwner(), dbId -> {
+                            Intent intent = FormFillingIntentFactory.editFinalizedFormIntent(requireContext(), currentProjectId, dbId.getValue());
+                            startActivity(intent);
+                            requireActivity().getOnBackPressedDispatcher().onBackPressed();
+                        });
+            }
+
             @Override
             public void onGoUpClicked() {
                 FormController formController = formEntryViewModel.getFormController();
@@ -760,6 +789,7 @@ public class FormHierarchyFragment extends Fragment {
             boolean isGroupSizeLocked = shouldShowPicker
                     ? isGroupSizeLocked(formHierarchyViewModel.getRepeatGroupPickerIndex()) : isGroupSizeLocked(screenIndex);
 
+            menu.findItem(R.id.menu_edit).setVisible(viewOnly);
             menu.findItem(R.id.menu_add_repeat).setVisible(shouldShowPicker && !isGroupSizeLocked && !viewOnly);
             menu.findItem(R.id.menu_delete_child).setVisible(isInRepeat && !shouldShowPicker && !isGroupSizeLocked && !viewOnly);
             menu.findItem(R.id.menu_go_up).setVisible(!isAtBeginning);
@@ -767,7 +797,10 @@ public class FormHierarchyFragment extends Fragment {
 
         @Override
         public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-            if (menuItem.getItemId() == R.id.menu_delete_child) {
+            if (menuItem.getItemId() == R.id.menu_edit) {
+                onClickListener.onEditClicked();
+                return true;
+            } else if (menuItem.getItemId() == R.id.menu_delete_child) {
                 onClickListener.onDeleteRepeatClicked();
                 return true;
             } else if (menuItem.getItemId() == R.id.menu_add_repeat) {
@@ -788,6 +821,8 @@ public class FormHierarchyFragment extends Fragment {
         }
 
         interface OnClickListener {
+            void onEditClicked();
+
             void onGoUpClicked();
 
             void onAddRepeatClicked();
@@ -795,67 +830,4 @@ public class FormHierarchyFragment extends Fragment {
             void onDeleteRepeatClicked();
         }
     }
-
-    private static class FormHierarchyViewModel extends ViewModel {
-        private TreeReference contextGroupRef;
-        private FormIndex screenIndex;
-        private FormIndex repeatGroupPickerIndex;
-        private FormIndex currentIndex;
-        private List<HierarchyItem> elementsToDisplay;
-        private FormIndex startIndex;
-
-        public TreeReference getContextGroupRef() {
-            return contextGroupRef;
-        }
-
-        public void setContextGroupRef(TreeReference contextGroupRef) {
-            this.contextGroupRef = contextGroupRef;
-        }
-
-        public FormIndex getScreenIndex() {
-            return screenIndex;
-        }
-
-        public void setScreenIndex(FormIndex screenIndex) {
-            this.screenIndex = screenIndex;
-        }
-
-        public FormIndex getRepeatGroupPickerIndex() {
-            return repeatGroupPickerIndex;
-        }
-
-        public void setRepeatGroupPickerIndex(FormIndex repeatGroupPickerIndex) {
-            this.repeatGroupPickerIndex = repeatGroupPickerIndex;
-        }
-
-        public FormIndex getCurrentIndex() {
-            return currentIndex;
-        }
-
-        public void setCurrentIndex(FormIndex currentIndex) {
-            this.currentIndex = currentIndex;
-        }
-
-        public List<HierarchyItem> getElementsToDisplay() {
-            return elementsToDisplay;
-        }
-
-        public void setElementsToDisplay(List<HierarchyItem> elementsToDisplay) {
-            this.elementsToDisplay = elementsToDisplay;
-        }
-
-        public FormIndex getStartIndex() {
-            return startIndex;
-        }
-
-        public void setStartIndex(FormIndex startIndex) {
-            this.startIndex = startIndex;
-        }
-
-        public boolean shouldShowRepeatGroupPicker() {
-            return repeatGroupPickerIndex != null;
-        }
-    }
 }
-
-
