@@ -1,6 +1,8 @@
 package org.odk.collect.android.instancemanagement
 
 import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.android.utilities.FormNameUtils
+import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
 import timber.log.Timber
@@ -13,28 +15,40 @@ import java.util.TimeZone
 object LocalInstancesUseCases {
     @JvmOverloads
     @JvmStatic
-    fun createInstanceFileBasedOnFormPath(
-        formDefinitionPath: String,
+    fun createInstanceFile(
+        formName: String,
         instancesDir: String,
         clock: () -> Long = { System.currentTimeMillis() }
     ): File? {
-        val formFileName = File(formDefinitionPath).nameWithoutExtension
+        val sanitizedFormName = FormNameUtils.formatFilenameFromFormName(formName)
 
-        return createInstanceFile(
-            formFileName,
-            instancesDir,
-            clock
-        )
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH)
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val timestamp = dateFormat.format(Date(clock()))
+
+        val instanceDir = instancesDir + File.separator + sanitizedFormName + "_" + timestamp
+
+        if (FileUtils.createFolder(instanceDir)) {
+            return File(instanceDir + File.separator + sanitizedFormName + "_" + timestamp + ".xml")
+        } else {
+            Timber.e(Error("Error creating form instance file"))
+            return null
+        }
     }
 
     fun clone(
         instanceFile: File,
         instancesDir: String,
         instancesRepository: InstancesRepository,
+        formsRepository: FormsRepository,
         clock: () -> Long = { System.currentTimeMillis() }
     ): Long {
-        val targetInstanceFile = copyInstanceDir(instanceFile, instancesDir, clock)!!
         val sourceInstance = instancesRepository.getOneByPath(instanceFile.absolutePath)!!
+        val formName = formsRepository.getAllByFormIdAndVersion(
+            sourceInstance.formId,
+            sourceInstance.formVersion
+        ).first().displayName
+        val targetInstanceFile = copyInstanceDir(instanceFile, instancesDir, formName, clock)
 
         return instancesRepository.save(
             Instance.Builder(sourceInstance)
@@ -48,51 +62,16 @@ object LocalInstancesUseCases {
     private fun copyInstanceDir(
         sourceInstanceFile: File,
         instancesDir: String,
+        formName: String,
         clock: () -> Long = { System.currentTimeMillis() }
     ): File {
         val sourceInstanceDir = sourceInstanceFile.parentFile!!
-        val targetInstanceFile = createInstanceFileBasedOnInstanceName(sourceInstanceFile.nameWithoutExtension, instancesDir, clock)!!
+        val targetInstanceFile = createInstanceFile(formName, instancesDir, clock)!!
         val targetInstanceDir = targetInstanceFile.parentFile!!
 
         sourceInstanceDir.copyRecursively(targetInstanceDir, true)
         File(targetInstanceDir, "${sourceInstanceFile.name}").renameTo(targetInstanceFile)
 
         return targetInstanceFile
-    }
-
-    private fun createInstanceFileBasedOnInstanceName(
-        instanceFileName: String,
-        instancesDir: String,
-        clock: () -> Long = { System.currentTimeMillis() }
-    ): File? {
-        val index = instanceFileName.lastIndexOf('_')
-        val secondToLastIndex = instanceFileName.lastIndexOf('_', index - 1)
-
-        val baseName = if (secondToLastIndex != -1) {
-            instanceFileName.substring(0, secondToLastIndex)
-        } else {
-            instanceFileName
-        }
-
-        return createInstanceFile(baseName, instancesDir, clock)
-    }
-
-    private fun createInstanceFile(
-        baseName: String,
-        instancesDir: String,
-        clock: () -> Long = { System.currentTimeMillis() }
-    ): File? {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH)
-        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
-        val timestamp = dateFormat.format(Date(clock()))
-
-        val instanceDir = instancesDir + File.separator + baseName + "_" + timestamp
-
-        if (FileUtils.createFolder(instanceDir)) {
-            return File(instanceDir + File.separator + baseName + "_" + timestamp + ".xml")
-        } else {
-            Timber.e(Error("Error creating form instance file"))
-            return null
-        }
     }
 }

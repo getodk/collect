@@ -5,6 +5,8 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Test
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.formstest.FormFixtures
+import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.shared.TempFiles
@@ -14,11 +16,11 @@ import kotlin.random.Random
 
 class LocalInstancesUseCasesTest {
     @Test
-    fun `creates directory based on definition path and current time in instances directory`() {
+    fun `#createInstanceFile creates directory based on sanitized form name and current time in instances directory`() {
         val instancesDirPath = TempFiles.createTempDir().absolutePath
 
-        LocalInstancesUseCases.createInstanceFileBasedOnFormPath(
-            "/blah/blah/Cool form name.xml",
+        LocalInstancesUseCases.createInstanceFile(
+            "Cool form  name:",
             instancesDirPath
         ) { 640915200000 }
 
@@ -28,11 +30,11 @@ class LocalInstancesUseCasesTest {
     }
 
     @Test
-    fun `returns instance file in instance directory`() {
+    fun `#createInstanceFile returns instance file in instance directory`() {
         val instancesDirPath = TempFiles.createTempDir().absolutePath
 
-        val instanceFile = LocalInstancesUseCases.createInstanceFileBasedOnFormPath(
-            "/blah/blah/Cool form name.xml",
+        val instanceFile = LocalInstancesUseCases.createInstanceFile(
+            "Cool form name",
             instancesDirPath
         ) { 640915200000 }!!
 
@@ -45,11 +47,17 @@ class LocalInstancesUseCasesTest {
 
     @Test
     fun `#clone makes a proper copy of the instance dir`() {
+        val formsRepository = InMemFormsRepository()
         val instancesRepository = InMemInstancesRepository()
         val instancesDir = TempFiles.createTempDir()
 
+        val form = formsRepository.save(FormFixtures.form())
         val sourceInstance = instancesRepository.save(
-            InstanceFixtures.instance(instancesDir = instancesDir)
+            InstanceFixtures.instance(
+                instancesDir = instancesDir,
+                formId = form.formId,
+                formVersion = form.version!!
+            )
         )
         val sourceInstanceFile = File(sourceInstance.instanceFilePath)
         val sourceInstanceFileMd5Hash = sourceInstanceFile.getMd5Hash()
@@ -69,7 +77,8 @@ class LocalInstancesUseCasesTest {
         val clonedInstanceDbId = LocalInstancesUseCases.clone(
             sourceInstanceFile,
             instancesDir.absolutePath,
-            instancesRepository
+            instancesRepository,
+            formsRepository
         ) { Random.nextLong() }
 
         val clonedInstance = instancesRepository.get(clonedInstanceDbId)!!
@@ -102,13 +111,17 @@ class LocalInstancesUseCasesTest {
 
     @Test
     fun `#clone makes a proper copy of the instance row in the database`() {
+        val formsRepository = InMemFormsRepository()
         val instancesRepository = InMemInstancesRepository()
         val instancesDir = TempFiles.createTempDir()
 
+        val form = formsRepository.save(FormFixtures.form())
         val sourceInstance = instancesRepository.save(
             InstanceFixtures.instance(
                 instancesDir = instancesDir,
-                status = Instance.STATUS_SUBMITTED
+                status = Instance.STATUS_SUBMITTED,
+                formId = form.formId,
+                formVersion = form.version!!
             )
         )
         val sourceInstanceFile = File(sourceInstance.instanceFilePath)
@@ -116,7 +129,8 @@ class LocalInstancesUseCasesTest {
         val clonedInstanceDbId = LocalInstancesUseCases.clone(
             sourceInstanceFile,
             instancesDir.absolutePath,
-            instancesRepository
+            instancesRepository,
+            formsRepository
         ) { Random.nextLong() }
         val clonedInstance = instancesRepository.get(clonedInstanceDbId)!!
 
@@ -129,19 +143,25 @@ class LocalInstancesUseCasesTest {
 
     @Test
     fun `#clone can make a copy of the same instance multiple times`() {
+        val formsRepository = InMemFormsRepository()
         val instancesRepository = InMemInstancesRepository()
         val instancesDir = TempFiles.createTempDir()
 
+        val form = formsRepository.save(FormFixtures.form())
         val sourceInstance = instancesRepository.save(
-            InstanceFixtures.instance(instancesDir = instancesDir)
+            InstanceFixtures.instance(
+                instancesDir = instancesDir,
+                formId = form.formId,
+                formVersion = form.version!!
+            )
         )
         val sourceInstanceFile = File(sourceInstance.instanceFilePath)
-        val sourceInstanceFilePath = sourceInstanceFile.absolutePath
 
         val clonedInstanceDbId1 = LocalInstancesUseCases.clone(
             sourceInstanceFile,
             instancesDir.absolutePath,
-            instancesRepository
+            instancesRepository,
+            formsRepository
         ) { Random.nextLong() }
         val clonedInstance1 = instancesRepository.get(clonedInstanceDbId1)!!
         val clonedInstanceFile1 = File(clonedInstance1.instanceFilePath)
@@ -150,6 +170,7 @@ class LocalInstancesUseCasesTest {
             sourceInstanceFile,
             instancesDir.absolutePath,
             instancesRepository,
+            formsRepository
         ) { Random.nextLong() }
         val clonedInstance2 = instancesRepository.get(clonedInstanceDbId2)!!
         val clonedInstanceFile2 = File(clonedInstance2.instanceFilePath)

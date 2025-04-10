@@ -15,9 +15,11 @@ object InstanceFixtures {
         form: Form? = null,
         deletedDate: Long? = null,
         canDeleteBeforeSend: Boolean = true,
-        instancesDir: File = TempFiles.createTempDir()
+        instancesDir: File = TempFiles.createTempDir(),
+        formId: String = "formId",
+        formVersion: String = "version"
     ): Instance {
-        return InstanceUtils.buildInstance("formId", "version", instancesDir.absolutePath)
+        return InstanceUtils.buildInstance(formId, formVersion, instancesDir.absolutePath)
             .status(status)
             .lastStatusChangeDate(lastStatusChangeDate)
             .displayName(displayName)

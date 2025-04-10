@@ -248,7 +248,8 @@ class InstancesDataService(
         return LocalInstancesUseCases.clone(
             instanceFile,
             projectDependencyModule.instancesDir,
-            projectDependencyModule.instancesRepository
+            projectDependencyModule.instancesRepository,
+            projectDependencyModule.formsRepository
         )
     }
 }

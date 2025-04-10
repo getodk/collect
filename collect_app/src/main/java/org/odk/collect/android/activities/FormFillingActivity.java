@@ -1903,7 +1903,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         final FormController formController = task.getFormController();
         Instance instance = task.getInstance();
         Form form = task.getForm();
-        String formPath = form.getFormFilePath();
 
         if (formController != null) {
             formLoaderTask.setFormLoaderListener(null);
@@ -1941,8 +1940,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
 
             if (formController.getInstanceFile() == null) {
-                File instanceFile = LocalInstancesUseCases.createInstanceFileBasedOnFormPath(
-                        formPath,
+                File instanceFile = LocalInstancesUseCases.createInstanceFile(
+                        form.getDisplayName(),
                         storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES)
                 );
                 if (instanceFile != null) {
