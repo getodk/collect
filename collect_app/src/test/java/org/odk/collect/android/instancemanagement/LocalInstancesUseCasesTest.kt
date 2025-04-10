@@ -53,7 +53,6 @@ class LocalInstancesUseCasesTest {
         )
         val sourceInstanceFile = File(sourceInstance.instanceFilePath)
         val sourceInstanceFileMd5Hash = sourceInstanceFile.getMd5Hash()
-        val sourceInstanceFilePath = sourceInstanceFile.absolutePath
 
         val sourceInstanceDir = File(sourceInstanceFile.parent!!)
 
@@ -61,13 +60,11 @@ class LocalInstancesUseCasesTest {
             it.writeText("foo")
         }
         val sourceMediaFile1Md5Hash = sourceMediaFile1.getMd5Hash()
-        val sourceMediaFile1Path = sourceMediaFile1.absolutePath
 
         val sourceMediaFile2 = TempFiles.createTempFile(sourceInstanceDir, "bar", ".mp4").also {
             it.writeText("bar")
         }
         val sourceMediaFile2Md5Hash = sourceMediaFile2.getMd5Hash()
-        val sourceMediaFile2Path = sourceMediaFile2.absolutePath
 
         val clonedInstanceDbId = LocalInstancesUseCases.clone(
             sourceInstanceFile,
@@ -85,23 +82,22 @@ class LocalInstancesUseCasesTest {
 
         assertThat(sourceFiles.size, equalTo(3))
         assertThat(clonedFiles.size, equalTo(3))
+        assertThat(sourceInstanceDir.absolutePath, not(clonedInstanceDir.absolutePath))
+        assertThat(sourceInstanceFile.name, not(clonedInstanceFile.name))
 
         assertThat(sourceInstanceFile.exists(), equalTo(true))
         assertThat(clonedInstanceFile.exists(), equalTo(true))
         assertThat(sourceInstanceFileMd5Hash, equalTo(clonedInstanceFile.getMd5Hash()))
-        assertThat(sourceInstanceFilePath, not(clonedInstanceFile))
 
         val clonedMediaFile1 = clonedFiles.find { it.name == sourceMediaFile1.name }!!
         assertThat(sourceMediaFile1.exists(), equalTo(true))
         assertThat(clonedMediaFile1.exists(), equalTo(true))
         assertThat(sourceMediaFile1Md5Hash, equalTo(clonedMediaFile1.getMd5Hash()))
-        assertThat(sourceMediaFile1Path, not(clonedMediaFile1))
 
         val clonedMediaFile2 = clonedFiles.find { it.name == sourceMediaFile2.name }!!
         assertThat(sourceMediaFile2.exists(), equalTo(true))
         assertThat(clonedMediaFile2.exists(), equalTo(true))
         assertThat(sourceMediaFile2Md5Hash, equalTo(clonedMediaFile2.getMd5Hash()))
-        assertThat(sourceMediaFile2Path, not(clonedMediaFile2))
     }
 
     @Test
@@ -159,8 +155,8 @@ class LocalInstancesUseCasesTest {
         val clonedInstanceFile2 = File(clonedInstance2.instanceFilePath)
 
         assertThat(instancesRepository.all.size, equalTo(3))
-        assertThat(sourceInstanceFilePath, not(clonedInstanceFile1.absolutePath))
-        assertThat(sourceInstanceFilePath, not(clonedInstanceFile2.absolutePath))
-        assertThat(clonedInstanceFile1.absolutePath, not(clonedInstanceFile2.absolutePath))
+        assertThat(sourceInstanceFile.parent, not(clonedInstanceFile1.parent))
+        assertThat(sourceInstanceFile.parent, not(clonedInstanceFile2.parent))
+        assertThat(clonedInstanceFile1.parent, not(clonedInstanceFile2.parent))
     }
 }
