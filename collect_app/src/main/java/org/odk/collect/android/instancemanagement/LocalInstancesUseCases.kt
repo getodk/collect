@@ -32,9 +32,9 @@ object LocalInstancesUseCases {
         instancesDir: String,
         instancesRepository: InstancesRepository,
         clock: () -> Long = { System.currentTimeMillis() }
-    ): Long? {
-        val targetInstanceFile = copyInstanceDir(instanceFile, instancesDir, clock) ?: return null
-        val sourceInstance = instancesRepository.getOneByPath(instanceFile.absolutePath) ?: return null
+    ): Long {
+        val targetInstanceFile = copyInstanceDir(instanceFile, instancesDir, clock)!!
+        val sourceInstance = instancesRepository.getOneByPath(instanceFile.absolutePath)!!
 
         return instancesRepository.save(
             Instance.Builder(sourceInstance)
@@ -49,18 +49,15 @@ object LocalInstancesUseCases {
         sourceInstanceFile: File,
         instancesDir: String,
         clock: () -> Long = { System.currentTimeMillis() }
-    ): File? {
-        val sourceInstanceDir = sourceInstanceFile.parentFile ?: return null
-        val targetInstanceFile = createInstanceFileBasedOnInstanceName(sourceInstanceFile.nameWithoutExtension, instancesDir, clock) ?: return null
-        val targetInstanceDir = targetInstanceFile.parentFile ?: return null
+    ): File {
+        val sourceInstanceDir = sourceInstanceFile.parentFile!!
+        val targetInstanceFile = createInstanceFileBasedOnInstanceName(sourceInstanceFile.nameWithoutExtension, instancesDir, clock)!!
+        val targetInstanceDir = targetInstanceFile.parentFile!!
 
-        if (!sourceInstanceDir.copyRecursively(targetInstanceDir, true)) return null
+        sourceInstanceDir.copyRecursively(targetInstanceDir, true)
+        File(targetInstanceDir, "${sourceInstanceFile.name}").renameTo(targetInstanceFile)
 
-        return if (File(targetInstanceDir, "${sourceInstanceFile.name}").renameTo(targetInstanceFile)) {
-            targetInstanceFile
-        } else {
-            null
-        }
+        return targetInstanceFile
     }
 
     private fun createInstanceFileBasedOnInstanceName(

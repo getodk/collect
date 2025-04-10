@@ -34,17 +34,10 @@ class FormHierarchyViewModel(scheduler: Scheduler) : ViewModel() {
 
         trackableWorker.immediate(
             background = {
-                val instanceFile = formController.getInstanceFile()
-                if (instanceFile != null) {
-                    instancesDataService.clone(instanceFile, projectId)
-                } else {
-                    null
-                }
+                instancesDataService.clone(formController.getInstanceFile()!!, projectId)
             },
             foreground = { dbId ->
-                if (dbId != null) {
-                    result.value = Consumable(dbId)
-                }
+                result.value = Consumable(dbId)
             }
         )
 
