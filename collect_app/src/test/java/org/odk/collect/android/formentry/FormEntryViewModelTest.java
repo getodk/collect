@@ -15,7 +15,9 @@ import static java.util.Arrays.asList;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.SubmissionProfile;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
@@ -402,5 +404,49 @@ public class FormEntryViewModelTest {
             }
         });
         assertThat(loadCount, equalTo(0));
+    }
+
+    @Test
+    public void isFormEditableAfterFinalization_returnsFalse_whenSubmissionProfileIsMissing() {
+        assertThat(viewModel.isFormEditableAfterFinalization(), equalTo(false));
+    }
+
+    @Test
+    public void isFormEditableAfterFinalization_returnsFalse_whenSubmissionProfileHasNoClientEditableAttribute() {
+        SubmissionProfile submissionProfile = new SubmissionProfile(null, null, null, null, new HashMap<>());
+
+        FormDef formDef = new FormDef();
+        formDef.setDefaultSubmission(submissionProfile);
+        formController.setFormDef(formDef);
+
+        assertThat(viewModel.isFormEditableAfterFinalization(), equalTo(false));
+    }
+
+    @Test
+    public void isFormEditableAfterFinalization_returnsFalse_whenClientEditableAttributeIsNotTrue() {
+        HashMap<String, String> attributeMap = new HashMap<>();
+        attributeMap.put("client-editable", "blah");
+
+        SubmissionProfile submissionProfile = new SubmissionProfile(null, null, null, null, attributeMap);
+
+        FormDef formDef = new FormDef();
+        formDef.setDefaultSubmission(submissionProfile);
+        formController.setFormDef(formDef);
+
+        assertThat(viewModel.isFormEditableAfterFinalization(), equalTo(false));
+    }
+
+    @Test
+    public void isFormEditableAfterFinalization_returnsTrue_whenClientEditableAttributeIsTrue() {
+        HashMap<String, String> attributeMap = new HashMap<>();
+        attributeMap.put("client-editable", "true");
+
+        SubmissionProfile submissionProfile = new SubmissionProfile(null, null, null, null, attributeMap);
+
+        FormDef formDef = new FormDef();
+        formDef.setDefaultSubmission(submissionProfile);
+        formController.setFormDef(formDef);
+
+        assertThat(viewModel.isFormEditableAfterFinalization(), equalTo(true));
     }
 }
