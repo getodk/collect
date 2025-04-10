@@ -241,6 +241,16 @@ class InstancesDataService(
             instanceSubmitScheduler.scheduleAutoSend(projectId)
         }
     }
+
+    fun clone(instanceFile: File?, projectId: String): Long? {
+        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
+
+        return LocalInstancesUseCases.clone(
+            instanceFile,
+            projectDependencyModule.instancesDir,
+            projectDependencyModule.instancesRepository
+        )
+    }
 }
 
 data class FinalizeAllResult(

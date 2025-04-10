@@ -46,13 +46,13 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory;
+import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 
 import java.util.ArrayList;
@@ -74,8 +74,7 @@ public class FormHierarchyFragment extends Fragment {
      */
     private FormIndex startIndex;
     private final Scheduler scheduler;
-    private final String instancesDir;
-    private final InstancesRepository instancesRepository;
+    private final InstancesDataService instancesDataService;
     private final String currentProjectId;
 
     public FormHierarchyFragment(
@@ -83,8 +82,7 @@ public class FormHierarchyFragment extends Fragment {
             ViewModelProvider.Factory viewModelFactory,
             MenuHost menuHost,
             Scheduler scheduler,
-            String instancesDir,
-            InstancesRepository instancesRepository,
+            InstancesDataService instancesDataService,
             String currentProjectId
     ) {
         super(R.layout.form_hierarchy_layout);
@@ -92,8 +90,7 @@ public class FormHierarchyFragment extends Fragment {
         this.viewModelFactory = viewModelFactory;
         this.menuHost = menuHost;
         this.scheduler = scheduler;
-        this.instancesDir = instancesDir;
-        this.instancesRepository = instancesRepository;
+        this.instancesDataService = instancesDataService;
         this.currentProjectId = currentProjectId;
     }
 
@@ -106,8 +103,8 @@ public class FormHierarchyFragment extends Fragment {
                 this,
                 new FormHierarchyViewModel.Factory(
                         scheduler,
-                        instancesDir,
-                        instancesRepository
+                        currentProjectId,
+                        instancesDataService
                 )
         ).get(FormHierarchyViewModel.class);
         requireActivity().setTitle(formEntryViewModel.getFormController().getFormTitle());

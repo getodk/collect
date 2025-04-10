@@ -6,17 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.instance.TreeReference
-import org.odk.collect.android.instancemanagement.LocalInstancesUseCases
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.async.Scheduler
-import org.odk.collect.forms.instances.InstancesRepository
 
 class FormHierarchyViewModel(
     scheduler: Scheduler,
-    private val instancesDir: String,
-    private val instancesRepository: InstancesRepository
+    private val projectId: String,
+    private val instancesDataService: InstancesDataService
 ) : ViewModel() {
     private val trackableWorker = TrackableWorker(scheduler)
     val isCloning: LiveData<Boolean> = trackableWorker.isWorking
@@ -35,11 +34,7 @@ class FormHierarchyViewModel(
 
         trackableWorker.immediate(
             background = {
-                LocalInstancesUseCases.clone(
-                    formController.getInstanceFile(),
-                    instancesDir,
-                    instancesRepository
-                )
+                instancesDataService.clone(formController.getInstanceFile(), projectId)
             },
             foreground = { dbId ->
                 if (dbId != null) {
@@ -53,14 +48,14 @@ class FormHierarchyViewModel(
 
     class Factory(
         private val scheduler: Scheduler,
-        private val instancesDir: String,
-        private val instancesRepository: InstancesRepository
+        private val projectId: String,
+        private val instancesDataService: InstancesDataService
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return FormHierarchyViewModel(
                 scheduler,
-                instancesDir,
-                instancesRepository
+                projectId,
+                instancesDataService
             ) as T
         }
     }
