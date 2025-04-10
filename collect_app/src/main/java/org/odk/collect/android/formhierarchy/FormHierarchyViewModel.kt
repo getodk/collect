@@ -12,11 +12,7 @@ import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.async.Scheduler
 
-class FormHierarchyViewModel(
-    scheduler: Scheduler,
-    private val projectId: String,
-    private val instancesDataService: InstancesDataService
-) : ViewModel() {
+class FormHierarchyViewModel(scheduler: Scheduler) : ViewModel() {
     private val trackableWorker = TrackableWorker(scheduler)
     val isCloning: LiveData<Boolean> = trackableWorker.isWorking
 
@@ -29,12 +25,21 @@ class FormHierarchyViewModel(
 
     fun shouldShowRepeatGroupPicker() = repeatGroupPickerIndex != null
 
-    fun editInstance(formController: FormController): LiveData<Consumable<Long>> {
+    fun editInstance(
+        formController: FormController,
+        instancesDataService: InstancesDataService,
+        projectId: String
+    ): LiveData<Consumable<Long>> {
         val result = MutableLiveData<Consumable<Long>>()
 
         trackableWorker.immediate(
             background = {
-                instancesDataService.clone(formController.getInstanceFile(), projectId)
+                val instanceFile = formController.getInstanceFile()
+                if (instanceFile != null) {
+                    instancesDataService.clone(instanceFile, projectId)
+                } else {
+                    null
+                }
             },
             foreground = { dbId ->
                 if (dbId != null) {
@@ -46,17 +51,9 @@ class FormHierarchyViewModel(
         return result
     }
 
-    class Factory(
-        private val scheduler: Scheduler,
-        private val projectId: String,
-        private val instancesDataService: InstancesDataService
-    ) : ViewModelProvider.Factory {
+    class Factory(private val scheduler: Scheduler) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return FormHierarchyViewModel(
-                scheduler,
-                projectId,
-                instancesDataService
-            ) as T
+            return FormHierarchyViewModel(scheduler) as T
         }
     }
 }

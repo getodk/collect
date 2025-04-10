@@ -6,10 +6,11 @@ import org.hamcrest.Matchers.not
 import org.junit.Test
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
-import org.odk.collect.formstest.InstanceUtils.buildInstance
+import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.File
+import kotlin.random.Random
 
 class LocalInstancesUseCasesTest {
     @Test
@@ -48,7 +49,7 @@ class LocalInstancesUseCasesTest {
         val instancesDir = TempFiles.createTempDir()
 
         val sourceInstance = instancesRepository.save(
-            buildInstance("1", "1", instancesDir.absolutePath).build()
+            InstanceFixtures.instance(instancesDir = instancesDir)
         )
         val sourceInstanceFile = File(sourceInstance.instanceFilePath)
         val sourceInstanceFileMd5Hash = sourceInstanceFile.getMd5Hash()
@@ -72,7 +73,7 @@ class LocalInstancesUseCasesTest {
             sourceInstanceFile,
             instancesDir.absolutePath,
             instancesRepository
-        ) { (100_000_000_0000L..999_999_999_9999L).random() }
+        ) { Random.nextLong() }
 
         val clonedInstance = instancesRepository.get(clonedInstanceDbId)!!
 
@@ -109,9 +110,10 @@ class LocalInstancesUseCasesTest {
         val instancesDir = TempFiles.createTempDir()
 
         val sourceInstance = instancesRepository.save(
-            buildInstance("1", "1", instancesDir.absolutePath)
-                .status(Instance.STATUS_SUBMITTED)
-                .build()
+            InstanceFixtures.instance(
+                instancesDir = instancesDir,
+                status = Instance.STATUS_SUBMITTED
+            )
         )
         val sourceInstanceFile = File(sourceInstance.instanceFilePath)
 
@@ -119,7 +121,7 @@ class LocalInstancesUseCasesTest {
             sourceInstanceFile,
             instancesDir.absolutePath,
             instancesRepository
-        ) { (100_000_000_0000L..999_999_999_9999L).random() }
+        ) { Random.nextLong() }
         val clonedInstance = instancesRepository.get(clonedInstanceDbId)!!
 
         assertThat(instancesRepository.all.size, equalTo(2))
@@ -135,7 +137,7 @@ class LocalInstancesUseCasesTest {
         val instancesDir = TempFiles.createTempDir()
 
         val sourceInstance = instancesRepository.save(
-            buildInstance("1", "1", instancesDir.absolutePath).build()
+            InstanceFixtures.instance(instancesDir = instancesDir)
         )
         val sourceInstanceFile = File(sourceInstance.instanceFilePath)
         val sourceInstanceFilePath = sourceInstanceFile.absolutePath
@@ -144,7 +146,7 @@ class LocalInstancesUseCasesTest {
             sourceInstanceFile,
             instancesDir.absolutePath,
             instancesRepository
-        ) { (100_000_000_0000L..999_999_999_9999L).random() }
+        ) { Random.nextLong() }
         val clonedInstance1 = instancesRepository.get(clonedInstanceDbId1)!!
         val clonedInstanceFile1 = File(clonedInstance1.instanceFilePath)
 
@@ -152,7 +154,7 @@ class LocalInstancesUseCasesTest {
             sourceInstanceFile,
             instancesDir.absolutePath,
             instancesRepository,
-        ) { (100_000_000_0000L..999_999_999_9999L).random() }
+        ) { Random.nextLong() }
         val clonedInstance2 = instancesRepository.get(clonedInstanceDbId2)!!
         val clonedInstanceFile2 = File(clonedInstance2.instanceFilePath)
 

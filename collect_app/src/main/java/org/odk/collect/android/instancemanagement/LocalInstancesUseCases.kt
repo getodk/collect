@@ -18,9 +18,7 @@ object LocalInstancesUseCases {
         instancesDir: String,
         clock: () -> Long = { System.currentTimeMillis() }
     ): File? {
-        val formFileName = formDefinitionPath
-            .substringAfterLast('/')
-            .substringBeforeLast('.')
+        val formFileName = File(formDefinitionPath).nameWithoutExtension
 
         return createInstanceFile(
             formFileName,
@@ -30,14 +28,13 @@ object LocalInstancesUseCases {
     }
 
     fun clone(
-        instanceFile: File?,
+        instanceFile: File,
         instancesDir: String,
         instancesRepository: InstancesRepository,
         clock: () -> Long = { System.currentTimeMillis() }
     ): Long? {
-        val sourceInstanceFile = instanceFile ?: return null
-        val targetInstanceFile = copyInstanceDir(sourceInstanceFile, instancesDir, clock) ?: return null
-        val sourceInstance = instancesRepository.getOneByPath(sourceInstanceFile.absolutePath) ?: return null
+        val targetInstanceFile = copyInstanceDir(instanceFile, instancesDir, clock) ?: return null
+        val sourceInstance = instancesRepository.getOneByPath(instanceFile.absolutePath) ?: return null
 
         return instancesRepository.save(
             Instance.Builder(sourceInstance)

@@ -242,7 +242,7 @@ class InstancesDataService(
         }
     }
 
-    fun clone(instanceFile: File?, projectId: String): Long? {
+    fun clone(instanceFile: File, projectId: String): Long? {
         val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
 
         return LocalInstancesUseCases.clone(

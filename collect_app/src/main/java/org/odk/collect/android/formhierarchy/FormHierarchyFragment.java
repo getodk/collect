@@ -101,11 +101,7 @@ public class FormHierarchyFragment extends Fragment {
         formEntryViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(FormEntryViewModel.class);
         formHierarchyViewModel = new ViewModelProvider(
                 this,
-                new FormHierarchyViewModel.Factory(
-                        scheduler,
-                        currentProjectId,
-                        instancesDataService
-                )
+                new FormHierarchyViewModel.Factory(scheduler)
         ).get(FormHierarchyViewModel.class);
         requireActivity().setTitle(formEntryViewModel.getFormController().getFormTitle());
         startIndex = formEntryViewModel.getFormController().getFormIndex();
@@ -120,7 +116,7 @@ public class FormHierarchyFragment extends Fragment {
             @Override
             public void onEditClicked() {
                 formHierarchyViewModel
-                        .editInstance(formEntryViewModel.getFormController())
+                        .editInstance(formEntryViewModel.getFormController(), instancesDataService, currentProjectId)
                         .observe(getViewLifecycleOwner(), dbId -> {
                             Intent intent = FormFillingIntentFactory.editFinalizedFormIntent(requireContext(), currentProjectId, dbId.getValue());
                             startActivity(intent);
