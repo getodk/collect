@@ -48,6 +48,7 @@ public class StringWidget extends QuestionWidget {
                 QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6),
                 questionDetails.isReadOnly(),
                 StringWidgetUtils.getNumberOfRows(questionDetails.getPrompt()),
+                Appearances.isMultiline(questionDetails.getPrompt()),
                 Appearances.isMasked(questionDetails.getPrompt()),
                 this::widgetValueChanged
         );

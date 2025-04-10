@@ -121,6 +121,7 @@ public class ExStringWidget extends QuestionWidget implements WidgetDataReceiver
                 QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6),
                 true,
                 StringWidgetUtils.getNumberOfRows(questionDetails.getPrompt()),
+                Appearances.isMultiline(prompt),
                 Appearances.isMasked(prompt),
                 this::widgetValueChanged
         );
