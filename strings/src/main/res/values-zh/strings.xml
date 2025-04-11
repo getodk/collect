@@ -429,7 +429,6 @@
   <string name="delete_layer_confirmation_message">您确定要删除 %1$s 离线图层吗？</string>
   <string name="record_geopoint">记录点</string>
   <string name="location_accuracy">精确度: %1$s m</string>
-  <string name="location_provider">位置提供程序: %s</string>
   <string name="provider_disabled_error">位置服务被关闭!</string>
   <string name="gps_result">纬度: %1$s\n经度: %2$s\n高程: %3$sm\n精度: %4$sm</string>
   <string name="google_play_services_not_available">此表单希望跟踪您的位置，但Google Play服务不可用。</string>
@@ -494,10 +493,6 @@
   <plurals name="number_of_meters">
     <item quantity="other">%d 米</item>
   </plurals>
-  <string name="location_status_searching">正在搜索位置，请稍候…</string>
-  <string name="location_status_accuracy">位置精度: %.2f m</string>
-  <string name="location_status_acceptable">位置精度: %.2f m (可接受)</string>
-  <string name="location_status_unacceptable">位置精度: %.2f m (不可接受)</string>
   <string name="collection_status_paused">输入的点数: %d</string>
   <string name="collection_status_placement">输入的点数: %d (点击以放置点)</string>
   <string name="collection_status_manual">输入的点数: %d (手动记录)</string>
