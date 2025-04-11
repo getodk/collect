@@ -178,7 +178,6 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
         this.widgetFactory = new WidgetFactory(
                 context,
-                readOnlyOverride,
                 settingsProvider.getUnprotectedSettings().getBoolean(KEY_EXTERNAL_APP_RECORDING),
                 waitingForDataRegistry,
                 questionMediaManager,
@@ -206,7 +205,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         setGroupText(groups);
 
         for (FormEntryPrompt question : questionPrompts) {
-            addWidgetForQuestion(question);
+            addWidgetForQuestion(question, readOnlyOverride);
         }
 
         setupAudioErrors();
@@ -266,8 +265,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * and adds it to the end of the view. If this widget is not the first one, add a divider above
      * it.
      */
-    private void addWidgetForQuestion(FormEntryPrompt question) {
-        QuestionWidget qw = configureWidgetForQuestion(question);
+    private void addWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
+        QuestionWidget qw = configureWidgetForQuestion(question, readOnlyOverride);
 
         widgets.add(qw);
 
@@ -283,13 +282,13 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * add a divider above it. If the specified {@code index} is beyond the end of the widget list,
      * add it to the end.
      */
-    public void addWidgetForQuestion(FormEntryPrompt question, int index) {
+    public void addWidgetForQuestion(FormEntryPrompt question, int index, boolean readOnlyOverride) {
         if (index > widgets.size() - 1) {
-            addWidgetForQuestion(question);
+            addWidgetForQuestion(question, readOnlyOverride);
             return;
         }
 
-        QuestionWidget qw = configureWidgetForQuestion(question);
+        QuestionWidget qw = configureWidgetForQuestion(question, readOnlyOverride);
 
         widgets.add(index, qw);
 
@@ -306,8 +305,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * <p>
      * Note: if the given question is of an unsupported type, a text widget will be created.
      */
-    private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question) {
-        QuestionWidget qw = widgetFactory.createWidgetFromPrompt(question, permissionsProvider);
+    private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question, boolean readOnlyOverride) {
+        QuestionWidget qw = widgetFactory.createWidgetFromPrompt(question, permissionsProvider, readOnlyOverride);
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 
