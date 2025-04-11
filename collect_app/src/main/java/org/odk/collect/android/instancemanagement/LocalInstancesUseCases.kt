@@ -10,7 +10,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.TimeZone
 
 object LocalInstancesUseCases {
     @JvmOverloads
@@ -22,9 +21,8 @@ object LocalInstancesUseCases {
     ): File? {
         val sanitizedFormName = FormNameUtils.formatFilenameFromFormName(formName)
 
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH)
-        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
-        val timestamp = dateFormat.format(Date(clock()))
+        val timestamp = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH)
+            .format(Date(clock()))
 
         val instanceDir = instancesDir + File.separator + sanitizedFormName + "_" + timestamp
 

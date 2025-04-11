@@ -12,11 +12,15 @@ import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.File
+import java.util.TimeZone
 import kotlin.random.Random
 
 class LocalInstancesUseCasesTest {
     @Test
     fun `#createInstanceFile creates directory based on sanitized form name and current time in instances directory`() {
+        val originalTimeZone = TimeZone.getDefault()
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+
         val instancesDirPath = TempFiles.createTempDir().absolutePath
 
         LocalInstancesUseCases.createInstanceFile(
@@ -27,10 +31,15 @@ class LocalInstancesUseCasesTest {
         val instanceDir = File(instancesDirPath + File.separator + "Cool form name_1990-04-24_00-00-00")
         assertThat(instanceDir.exists(), equalTo(true))
         assertThat(instanceDir.isDirectory, equalTo(true))
+
+        TimeZone.setDefault(originalTimeZone)
     }
 
     @Test
     fun `#createInstanceFile returns instance file in instance directory`() {
+        val originalTimeZone = TimeZone.getDefault()
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+
         val instancesDirPath = TempFiles.createTempDir().absolutePath
 
         val instanceFile = LocalInstancesUseCases.createInstanceFile(
@@ -43,6 +52,8 @@ class LocalInstancesUseCasesTest {
             instanceFile.absolutePath,
             equalTo(instanceDir + File.separator + "Cool form name_1990-04-24_00-00-00.xml")
         )
+
+        TimeZone.setDefault(originalTimeZone)
     }
 
     @Test
