@@ -25,7 +25,9 @@ object LocalEntityUseCases {
             if (id != null) {
                 when (formEntity.action) {
                     EntityAction.CREATE -> {
-                        if (!label.isNullOrBlank()) {
+                        val hasValidLabel = !label.isNullOrBlank()
+                        val listExists = entitiesRepository.getLists().contains(formEntity.dataset)
+                        if (hasValidLabel && listExists) {
                             val entity = Entity.New(
                                 id,
                                 label,
@@ -43,6 +45,7 @@ object LocalEntityUseCases {
                             formEntity.dataset,
                             Query.StringEq(EntitySchema.ID, formEntity.id)
                         ).firstOrNull()
+
                         if (existing != null) {
                             entitiesRepository.save(
                                 formEntity.dataset,

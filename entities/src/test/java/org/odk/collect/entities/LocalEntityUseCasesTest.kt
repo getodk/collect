@@ -44,6 +44,17 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
+    fun `updateLocalEntitiesFromForm save a new entity on create if the doesn't alrady exist`() {
+        val formEntity =
+            FormEntity(EntityAction.CREATE, "things", "id", "label", listOf("property" to "value"))
+        val formEntities = EntitiesExtra(listOf(formEntity))
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+
+        val entities = entitiesRepository.query("things")
+        assertThat(entities.size, equalTo(0))
+    }
+
+    @Test
     fun `updateLocalEntitiesFromForm increments version on update`() {
         entitiesRepository.save(
             "things",
