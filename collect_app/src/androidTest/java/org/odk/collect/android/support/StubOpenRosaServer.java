@@ -476,6 +476,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
             super(name, name, name);
         }
 
+        public EntityListItem(String name, boolean approvalList) {
+            this(name, name, 0, approvalList);
+        }
+
         public int getVersion() {
             return version;
         }
