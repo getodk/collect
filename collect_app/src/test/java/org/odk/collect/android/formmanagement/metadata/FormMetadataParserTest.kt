@@ -145,7 +145,6 @@ class FormMetadataParserTest {
         assertThat(formMetadata.submissionUri, equalTo(null))
         assertThat(formMetadata.autoSend, equalTo(null))
         assertThat(formMetadata.autoDelete, equalTo(null))
-        assertThat(formMetadata.clientEditable, equalTo(null))
         assertThat(formMetadata.base64RsaPublicKey, equalTo(null))
         assertThat(formMetadata.geometryXPath, equalTo(null))
         assertThat(formMetadata.isEntityForm, equalTo(false))
@@ -159,7 +158,6 @@ class FormMetadataParserTest {
                 <h:html xmlns="http://www.w3.org/2002/xforms"
                         xmlns:h="http://www.w3.org/1999/xhtml"
                         xmlns:orx="http://openrosa.org/xforms"
-                        xmlns:odk="http://www.opendatakit.org/xforms"
                         xmlns:entities="http://www.opendatakit.org/xforms/entities">
                     <h:head>
                         <h:title>My Survey</h:title>
@@ -173,7 +171,6 @@ class FormMetadataParserTest {
                                 action="foo" 
                                 orx:auto-send="bar" 
                                 orx:auto-delete="baz" 
-                                odk:client-editable="qux" 
                                 base64RsaPublicKey="quux" 
                             />
                             <bind nodeset="/data/location1" type="geopoint" />
@@ -192,7 +189,6 @@ class FormMetadataParserTest {
         assertThat(formMetadata.submissionUri, equalTo("foo"))
         assertThat(formMetadata.autoSend, equalTo("bar"))
         assertThat(formMetadata.autoDelete, equalTo("baz"))
-        assertThat(formMetadata.clientEditable, equalTo("qux"))
         assertThat(formMetadata.base64RsaPublicKey, equalTo("quux"))
         assertThat(formMetadata.geometryXPath, equalTo("/data/location1"))
         assertThat(formMetadata.isEntityForm, equalTo(true))
@@ -424,32 +420,5 @@ class FormMetadataParserTest {
         )
 
         assertThat(formMetadata.geometryXPath, equalTo("/data/location2"))
-    }
-
-    @Test
-    fun readMetadata_withOptionalMetadata_returnsNullValuesForThoseElementsIfTheyUseWrongNamespaces() {
-        val formMetadata = readMetadata(
-            """
-                <?xml version="1.0"?>
-                <h:html xmlns:h="http://www.w3.org/1999/xhtml"
-                        xmlns="http://www.w3.org/2002/xforms"
-                        xmlns:orx="http://openrosa.org/xforms">
-                    <h:head>
-                        <h:title>Form</h:title>
-                        <model>
-                            <instance>
-                                <data id="form">
-                                </data>
-                            </instance>
-                            <submission orx:client-editable="qux" />
-                        </model>
-                    </h:head>
-                    <h:body>
-                    </h:body>
-                </h:html>
-            """.trimIndent().byteInputStream()
-        )
-
-        assertThat(formMetadata.clientEditable, equalTo(null))
     }
 }
