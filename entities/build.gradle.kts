@@ -68,4 +68,5 @@ dependencies {
     testImplementation(libs.robolectric)
     testImplementation(libs.hamcrest)
     testImplementation(libs.mockitoKotlin)
+    testImplementation(libs.javarosa) // Include with all dependencies
 }
