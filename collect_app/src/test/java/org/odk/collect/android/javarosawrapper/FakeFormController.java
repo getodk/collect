@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FakeFormController extends StubFormController {
+    private FormDef formDef;
     private FormIndex index;
     private final AuditEventLogger auditEventLogger;
     private final LinkedList<Integer> nextEvents = new LinkedList<>();
@@ -48,7 +49,7 @@ public class FakeFormController extends StubFormController {
     @Nullable
     @Override
     public FormDef getFormDef() {
-        return new FormDef();
+        return formDef != null ? formDef : new FormDef();
     }
 
     @Override
@@ -199,5 +200,9 @@ public class FakeFormController extends StubFormController {
 
     public void setQuestionPrompts(List<FormEntryPrompt> prompts) {
         this.currentPrompts = prompts;
+    }
+
+    public void setFormDef(FormDef formDef) {
+        this.formDef = formDef;
     }
 }

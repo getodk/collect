@@ -381,6 +381,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
             long instanceId = c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID));
             Intent intent = FormFillingIntentFactory.editDraftFormIntent(this, projectsDataService.requireCurrentProject().getUuid(), instanceId);
             startActivity(intent);
+            finish();
         }
     }
 

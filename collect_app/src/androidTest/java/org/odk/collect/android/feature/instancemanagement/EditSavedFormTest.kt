@@ -86,9 +86,8 @@ class EditSavedFormTest {
     }
 
     @Test
-    fun editingAFinalizedForm_createsANewFormAndKeepsTheOriginalOneIntact() {
+    fun formsThatDoNotOptInToBeingEditableCannotBeEdited() {
         rule.startAtMainMenu()
-            .setServer(testDependencies.server.url)
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .answerQuestion("what is your age", "123")
@@ -97,12 +96,26 @@ class EditSavedFormTest {
 
             .clickSendFinalizedForm(1)
             .clickOnForm("One Question")
-            .editForm("One Question")
+            .assertNonEditableForm()
+    }
+
+    @Test
+    fun editingAFinalizedForm_createsANewFormAndKeepsTheOriginalOneIntact() {
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .copyForm("one-question-editable.xml")
+            .startBlankForm("One Question Editable")
+            .answerQuestion("what is your age", "123")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question Editable")
+            .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
             .swipeToEndScreen()
-            .clickFinalize(SendFinalizedFormPage())
-            .pressBack(MainMenuPage())
+            .clickFinalize()
 
             .clickSendFinalizedForm(2)
             .clickSelectAll()
@@ -126,8 +139,8 @@ class EditSavedFormTest {
     fun editingASentForm_createsANewFormAndKeepsTheOriginalOneIntact() {
         rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
-            .copyForm("one-question.xml")
-            .startBlankForm("One Question")
+            .copyForm("one-question-editable.xml")
+            .startBlankForm("One Question Editable")
             .answerQuestion("what is your age", "123")
             .swipeToEndScreen()
             .clickFinalize()
@@ -139,8 +152,8 @@ class EditSavedFormTest {
             .pressBack(MainMenuPage())
 
             .clickViewSentForm(1)
-            .clickOnForm("One Question")
-            .editForm("One Question")
+            .clickOnForm("One Question Editable")
+            .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
             .swipeToEndScreen()
@@ -168,8 +181,8 @@ class EditSavedFormTest {
     fun discardingChangesWhenEditingFinalizedForm_createsDraftWithOriginalAnswersAndUpdatesInstanceIdAndDeprecatedId() {
         rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
-            .copyForm("one-question.xml")
-            .startBlankForm("One Question")
+            .copyForm("one-question-editable.xml")
+            .startBlankForm("One Question Editable")
             .answerQuestion("what is your age", "123")
             .swipeToEndScreen()
             .clickFinalize()
@@ -181,14 +194,14 @@ class EditSavedFormTest {
             .pressBack(MainMenuPage())
 
             .clickViewSentForm(1)
-            .clickOnForm("One Question")
-            .editForm("One Question")
+            .clickOnForm("One Question Editable")
+            .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
-            .pressBackAndDiscardChanges(MainMenuPage())
+            .pressBackAndDiscardChanges()
 
             .clickDrafts(1)
-            .clickOnForm("One Question")
+            .clickOnForm("One Question Editable")
             .assertText("123")
             .clickGoToEnd()
             .clickFinalize()
@@ -209,22 +222,22 @@ class EditSavedFormTest {
     fun killingAppWhenEditingFinalizedForm_createsSavepointForFormRecovery() {
         rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
-            .copyForm("one-question.xml")
-            .startBlankForm("One Question")
+            .copyForm("one-question-editable.xml")
+            .startBlankForm("One Question Editable")
             .answerQuestion("what is your age", "123")
             .swipeToEndScreen()
             .clickFinalize()
 
             .clickSendFinalizedForm(1)
-            .clickOnForm("One Question")
-            .editForm("One Question")
+            .clickOnForm("One Question Editable")
+            .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
             .killAndReopenApp(rule, recentAppsRule, MainMenuPage(), testDependencies)
 
             .clickDrafts(1)
-            .clickOnFormWithSavepoint("One Question")
-            .clickRecover(FormHierarchyPage("One Question"))
+            .clickOnFormWithSavepoint("One Question Editable")
+            .clickRecover(FormHierarchyPage("One Question Editable"))
             .assertText("456")
             .clickGoToEnd()
             .clickFinalize()
@@ -245,18 +258,17 @@ class EditSavedFormTest {
     fun editingAnEditedForm_updatesInstanceIdAndDeprecatedId() {
         rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
-            .copyForm("one-question.xml")
-            .startBlankForm("One Question")
+            .copyForm("one-question-editable.xml")
+            .startBlankForm("One Question Editable")
             .answerQuestion("what is your age", "123")
             .swipeToEndScreen()
             .clickFinalize()
 
             .clickSendFinalizedForm(1)
-            .clickOnForm("One Question")
-            .editForm("One Question")
+            .clickOnForm("One Question Editable")
+            .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
-            .pressBackAndSaveAsDraft(SendFinalizedFormPage())
-            .pressBack(MainMenuPage())
+            .pressBackAndSaveAsDraft()
 
             .clickSendFinalizedForm(1)
             .clickSelectAll()
@@ -265,17 +277,16 @@ class EditSavedFormTest {
             .pressBack(MainMenuPage())
 
             .clickDrafts(1)
-            .clickOnForm("One Question")
+            .clickOnForm("One Question Editable")
             .clickGoToEnd()
             .clickFinalize()
 
             .clickSendFinalizedForm(1)
-            .clickOnForm("One Question")
-            .editForm("One Question")
+            .clickOnForm("One Question Editable")
+            .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
             .swipeToEndScreen()
-            .clickFinalize(SendFinalizedFormPage())
-            .pressBack(MainMenuPage())
+            .clickFinalize()
 
             .clickSendFinalizedForm(2)
             .clickSelectAll()
@@ -296,8 +307,8 @@ class EditSavedFormTest {
     fun savingEditedFormMultipleTimes_preservesDeprecatedId() {
         rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
-            .copyForm("one-question.xml")
-            .startBlankForm("One Question")
+            .copyForm("one-question-editable.xml")
+            .startBlankForm("One Question Editable")
             .answerQuestion("what is your age", "123")
             .swipeToEndScreen()
             .clickFinalize()
@@ -309,14 +320,14 @@ class EditSavedFormTest {
             .pressBack(MainMenuPage())
 
             .clickViewSentForm(1)
-            .clickOnForm("One Question")
-            .editForm("One Question")
+            .clickOnForm("One Question Editable")
+            .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
             .pressBackAndSaveAsDraft()
 
             .clickDrafts(1)
-            .clickOnForm("One Question")
+            .clickOnForm("One Question Editable")
             .assertText("456")
             .clickGoToEnd()
             .clickFinalize()
