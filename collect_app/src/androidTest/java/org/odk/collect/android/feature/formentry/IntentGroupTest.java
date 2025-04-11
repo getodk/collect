@@ -23,6 +23,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -46,10 +48,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.widget.EditText;
 
 import androidx.core.content.FileProvider;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.matcher.ViewMatchers;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -59,6 +64,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
+import org.odk.collect.android.widgets.DecimalWidget;
+import org.odk.collect.android.widgets.IntegerWidget;
+import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.androidtest.RecordedIntentsRule;
 
 import java.io.File;
@@ -95,6 +103,10 @@ public class IntentGroupTest {
 
     @Test
     public void externalApp_ShouldPopulateFields() throws IOException {
+        // None of the integer/decimal/text questions have associated fields or text
+        onView(withId(R.id.edit_text)).check(doesNotExist());
+        onView(withId(R.id.text_view)).check(doesNotExist());
+
         assertImageWidgetWithoutAnswer();
         assertAudioWidgetWithoutAnswer();
         assertVideoWidgetWithoutAnswer();
@@ -125,6 +137,10 @@ public class IntentGroupTest {
         resultIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
         onView(withText("This is buttonText")).perform(scrollTo(), click());
+
+        assertIntegerWidgetWithAnswer();
+        assertDecimalWidgetWithAnswer();
+        assertStringWidgetWithAnswer();
 
         assertImageWidgetWithAnswer();
         assertAudioWidgetWithAnswer();
@@ -204,6 +220,32 @@ public class IntentGroupTest {
         onView(withText("This is buttonText")).perform(click());
 
         assertImageWidgetWithoutAnswer();
+    }
+
+    private void assertIntegerWidgetWithAnswer() {
+        onView(withText("Integer external")).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(allOf(
+                isDescendantOfA(isAssignableFrom(IntegerWidget.class)),
+                isAssignableFrom(TextInputEditText.class)
+        )).check(matches(withText("25")));
+    }
+
+    private void assertDecimalWidgetWithAnswer() {
+        onView(withText("Decimal external")).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(allOf(
+                isDescendantOfA(isAssignableFrom(DecimalWidget.class)),
+                isAssignableFrom(TextInputEditText.class)
+        )).check(matches(withText("46.74")));
+    }
+
+    private void assertStringWidgetWithAnswer() {
+        onView(withText("Text external")).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(allOf(
+                isDescendantOfA(allOf(isAssignableFrom(StringWidget.class),
+                        not(isAssignableFrom(IntegerWidget.class)),
+                        not(isAssignableFrom(DecimalWidget.class)))),
+                isAssignableFrom(TextInputEditText.class)
+        )).check(matches(withText("sampleAnswer")));
     }
 
     private void assertImageWidgetWithoutAnswer() {
