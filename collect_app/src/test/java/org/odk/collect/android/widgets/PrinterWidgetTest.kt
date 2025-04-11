@@ -17,7 +17,7 @@ import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.base.QuestionWidgetTest
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
 import org.odk.collect.printer.HtmlPrinter
-import org.odk.collect.qrcode.QRCodeCreator
+import org.odk.collect.qrcode.zxing.QRCodeCreator
 import org.odk.collect.testshared.FakeScheduler
 
 class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {

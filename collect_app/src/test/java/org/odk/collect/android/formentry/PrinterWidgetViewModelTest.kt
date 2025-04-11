@@ -11,7 +11,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.printer.HtmlPrinter
-import org.odk.collect.qrcode.QRCodeCreator
+import org.odk.collect.qrcode.zxing.QRCodeCreator
 import org.odk.collect.testshared.FakeScheduler
 import java.io.File
 
