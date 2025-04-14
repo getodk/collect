@@ -18,13 +18,14 @@ object LocalInstancesUseCases {
     fun createInstanceFile(
         formName: String,
         instancesDir: String,
+        timezone: TimeZone = TimeZone.getDefault(),
         clock: () -> Long = { System.currentTimeMillis() }
     ): File? {
         val sanitizedFormName = FormNameUtils.formatFilenameFromFormName(formName)
 
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH)
-        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
-        val timestamp = dateFormat.format(Date(clock()))
+        val timestamp = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH).also {
+            it.timeZone = timezone
+        }.format(Date(clock()))
 
         val instanceDir = instancesDir + File.separator + sanitizedFormName + "_" + timestamp
 
@@ -66,11 +67,11 @@ object LocalInstancesUseCases {
         clock: () -> Long = { System.currentTimeMillis() }
     ): File {
         val sourceInstanceDir = sourceInstanceFile.parentFile!!
-        val targetInstanceFile = createInstanceFile(formName, instancesDir, clock)!!
+        val targetInstanceFile = createInstanceFile(formName, instancesDir, clock = clock)!!
         val targetInstanceDir = targetInstanceFile.parentFile!!
 
         sourceInstanceDir.copyRecursively(targetInstanceDir, true)
-        File(targetInstanceDir, "${sourceInstanceFile.name}").renameTo(targetInstanceFile)
+        File(targetInstanceDir, sourceInstanceFile.name).renameTo(targetInstanceFile)
 
         return targetInstanceFile
     }

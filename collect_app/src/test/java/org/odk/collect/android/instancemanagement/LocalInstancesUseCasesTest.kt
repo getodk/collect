@@ -12,6 +12,7 @@ import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.File
+import java.util.TimeZone
 import kotlin.random.Random
 
 class LocalInstancesUseCasesTest {
@@ -21,7 +22,8 @@ class LocalInstancesUseCasesTest {
 
         LocalInstancesUseCases.createInstanceFile(
             "Cool form  name:",
-            instancesDirPath
+            instancesDirPath,
+            TimeZone.getTimeZone("UTC")
         ) { 640915200000 }
 
         val instanceDir = File(instancesDirPath + File.separator + "Cool form name_1990-04-24_00-00-00")
@@ -35,7 +37,8 @@ class LocalInstancesUseCasesTest {
 
         val instanceFile = LocalInstancesUseCases.createInstanceFile(
             "Cool form name",
-            instancesDirPath
+            instancesDirPath,
+            TimeZone.getTimeZone("UTC")
         ) { 640915200000 }!!
 
         val instanceDir = instancesDirPath + File.separator + "Cool form name_1990-04-24_00-00-00"

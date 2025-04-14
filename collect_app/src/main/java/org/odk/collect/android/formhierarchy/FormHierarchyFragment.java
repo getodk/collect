@@ -789,7 +789,7 @@ public class FormHierarchyFragment extends Fragment {
             boolean isGroupSizeLocked = shouldShowPicker
                     ? isGroupSizeLocked(formHierarchyViewModel.getRepeatGroupPickerIndex()) : isGroupSizeLocked(screenIndex);
 
-            menu.findItem(R.id.menu_edit).setVisible(viewOnly);
+            menu.findItem(R.id.menu_edit).setVisible(viewOnly && formEntryViewModel.isFormEditableAfterFinalization());
             menu.findItem(R.id.menu_add_repeat).setVisible(shouldShowPicker && !isGroupSizeLocked && !viewOnly);
             menu.findItem(R.id.menu_delete_child).setVisible(isInRepeat && !shouldShowPicker && !isGroupSizeLocked && !viewOnly);
             menu.findItem(R.id.menu_go_up).setVisible(!isAtBeginning);

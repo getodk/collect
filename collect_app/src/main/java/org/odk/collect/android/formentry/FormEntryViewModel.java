@@ -13,6 +13,7 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.SelectChoice;
+import org.javarosa.core.model.SubmissionProfile;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.reference.ReferenceManager;
@@ -413,6 +414,15 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                     .build()
             );
         });
+    }
+
+    public boolean isFormEditableAfterFinalization() {
+        SubmissionProfile submissionProfile = formController.getFormDef().getSubmissionProfile();
+        if (submissionProfile == null) {
+            return false;
+        }
+        String clientEditableAttribute = submissionProfile.getAttribute("client-editable");
+        return Boolean.parseBoolean(clientEditableAttribute);
     }
 
     public interface AnswerListener {
