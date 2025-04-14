@@ -8,6 +8,7 @@ import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.forms.MediaFile
 import org.odk.collect.shared.Query
 import java.io.File
 import java.util.UUID
@@ -67,10 +68,9 @@ object LocalEntityUseCases {
         serverList: File,
         entitiesRepository: EntitiesRepository,
         entitySource: EntitySource,
-        serverListHash: String,
-        integrityUrl: String?
+        mediaFile: MediaFile
     ) {
-        val newListHash = "server:$serverListHash"
+        val newListHash = "server:${mediaFile.hash}"
         val existingListHash = entitiesRepository.getListHash(list)
         if (newListHash == existingListHash) {
             return
@@ -123,7 +123,7 @@ object LocalEntityUseCases {
             missingFromServer.values,
             entitiesRepository,
             entitySource,
-            integrityUrl
+            mediaFile.integrityUrl
         )
         entitiesRepository.save(list, *newAndUpdated.toTypedArray())
         entitiesRepository.updateListHash(list, newListHash)
@@ -175,7 +175,8 @@ private data class ServerEntity(
     val id: String,
     val label: String,
     val version: Int,
-    val properties: Map<String, String>) {
+    val properties: Map<String, String>
+) {
 
     fun updateLocal(local: Entity.Saved): Entity.Saved {
         return local.copy(
