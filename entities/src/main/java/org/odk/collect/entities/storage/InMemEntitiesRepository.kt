@@ -5,13 +5,12 @@ import org.odk.collect.shared.Query
 
 class InMemEntitiesRepository : EntitiesRepository {
 
-    private val lists = mutableSetOf<String>()
+    private val lists = mutableListOf<EntityList>()
     private val listProperties = mutableMapOf<String, MutableSet<String>>()
-    private val listVersions = mutableMapOf<String, String>()
     private val entities = mutableMapOf<String, MutableList<Entity.New>>()
 
     override fun getLists(): Set<String> {
-        return lists
+        return lists.map { it.name }.toSet()
     }
 
     override fun getCount(list: String): Int {
@@ -19,7 +18,7 @@ class InMemEntitiesRepository : EntitiesRepository {
     }
 
     override fun addList(list: String) {
-        lists.add(list)
+        lists.add(EntityList(list))
     }
 
     override fun delete(list: String, id: String) {
@@ -63,16 +62,17 @@ class InMemEntitiesRepository : EntitiesRepository {
         return query(list).firstOrNull { it.index == index }
     }
 
-    override fun updateList(list: String, hash: String) {
-        listVersions[list] = hash
+    override fun updateList(list: String, hash: String, needsApproval: Boolean) {
+        val existing = lists.firstOrNull { it.name == list }
+        if (existing != null) {
+            val update = existing.copy(hash = hash, needsApproval = needsApproval)
+            lists.remove(existing)
+            lists.add(update)
+        }
     }
 
     override fun getList(list: String): EntityList? {
-        return if (lists.contains(list)) {
-            EntityList(list, listVersions[list])
-        } else {
-            null
-        }
+        return lists.firstOrNull { it.name == list }
     }
 
     override fun save(list: String, vararg entities: Entity) {
@@ -117,7 +117,10 @@ class InMemEntitiesRepository : EntitiesRepository {
     }
 
     private fun updateLists(list: String, entity: Entity) {
-        lists.add(list)
+        if (lists.none { it.name == list }) {
+            lists.add(EntityList(list))
+        }
+
         val properties = listProperties.getOrPut(list) {
             mutableSetOf()
         }

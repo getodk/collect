@@ -33,6 +33,7 @@ private object ListsTable {
     const val TABLE_NAME = "lists"
     const val COLUMN_NAME = "name"
     const val COLUMN_HASH = "hash"
+    const val COLUMN_NEEDS_APPROVAL = "needs_approval"
 }
 
 private object EntitiesTable {
@@ -135,9 +136,15 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    override fun updateList(list: String, hash: String) {
+    override fun updateList(list: String, hash: String, needsApproval: Boolean) {
         val contentValues = ContentValues().also {
             it.put(ListsTable.COLUMN_HASH, hash)
+
+            if (needsApproval) {
+                it.put(ListsTable.COLUMN_NEEDS_APPROVAL, 1)
+            } else {
+                it.put(ListsTable.COLUMN_NEEDS_APPROVAL, 0)
+            }
         }
 
         databaseConnection.withConnection {
@@ -155,7 +162,11 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             readableDatabase
                 .query(ListsTable.TABLE_NAME, "${ListsTable.COLUMN_NAME} = ?", arrayOf(list))
                 .first {
-                    EntityList(list, it.getStringOrNull(ListsTable.COLUMN_HASH))
+                    EntityList(
+                        list,
+                        it.getStringOrNull(ListsTable.COLUMN_HASH),
+                        it.getInt(ListsTable.COLUMN_NEEDS_APPROVAL) == 1
+                    )
                 }
         }
     }
@@ -223,7 +234,11 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 databaseConnection.rawQueryWithRowNumber(list)
             } else {
                 val sqlQuery = query.toSql()
-                databaseConnection.rawQueryWithRowNumber(list, sqlQuery.selection, sqlQuery.selectionArgs)
+                databaseConnection.rawQueryWithRowNumber(
+                    list,
+                    sqlQuery.selection,
+                    sqlQuery.selectionArgs
+                )
             }.foldAndClose {
                 mapCursorRowToEntity(it, it.getInt(ROW_NUMBER))
             }
@@ -289,7 +304,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         val missingColumns = entity.properties
             .map { EntitiesTable.getPropertyColumn(it.first) }
             .distinctBy { it.lowercase() }
-            .filterNot { columnName -> columnNames.any { it.equals(columnName, ignoreCase = true) } }
+            .filterNot { columnName ->
+                columnNames.any {
+                    it.equals(
+                        columnName,
+                        ignoreCase = true
+                    )
+                }
+            }
 
         if (missingColumns.isNotEmpty()) {
             databaseConnection.resetTransaction {
@@ -373,7 +395,8 @@ private class EntitiesDatabaseMigrator :
             CREATE TABLE IF NOT EXISTS ${ListsTable.TABLE_NAME} (
                     $_ID integer PRIMARY KEY, 
                     ${ListsTable.COLUMN_NAME} text NOT NULL,
-                    ${ListsTable.COLUMN_HASH} text
+                    ${ListsTable.COLUMN_HASH} text,
+                    ${ListsTable.COLUMN_NEEDS_APPROVAL} integer DEFAULT 0
             );
             """.trimIndent()
         )

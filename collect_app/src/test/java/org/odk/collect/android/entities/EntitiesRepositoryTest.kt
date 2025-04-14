@@ -511,8 +511,8 @@ abstract class EntitiesRepositoryTest {
         val repository = buildSubject()
 
         repository.addList("wine")
-        repository.updateList("wine", "2024")
-        assertThat(repository.getList("wine"), equalTo(EntityList("wine", "2024")))
+        repository.updateList("wine", "2024", true)
+        assertThat(repository.getList("wine"), equalTo(EntityList("wine", "2024", true)))
     }
 
     @Test

@@ -753,9 +753,9 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         return wrapped.getByIndex(list, index)
     }
 
-    override fun updateList(list: String, hash: String) {
+    override fun updateList(list: String, hash: String, needsApproval: Boolean) {
         accesses += 1
-        wrapped.updateList(list, hash)
+        wrapped.updateList(list, hash, false)
     }
 
     override fun getList(list: String): EntityList? {

@@ -10,6 +10,6 @@ interface EntitiesRepository {
     fun delete(list: String, id: String)
     fun query(list: String, query: Query? = null): List<Entity.Saved>
     fun getByIndex(list: String, index: Int): Entity.Saved?
-    fun updateList(list: String, hash: String)
+    fun updateList(list: String, hash: String, needsApproval: Boolean)
     fun getList(list: String): EntityList?
 }
