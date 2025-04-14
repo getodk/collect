@@ -253,6 +253,9 @@ interface FormController {
     @Throws(RepeatsInFieldListException::class)
     fun getQuestionPrompts(): Array<FormEntryPrompt>
 
+    @Throws(RepeatsInFieldListException::class)
+    fun getQuestionPrompts(index: FormIndex): Array<FormEntryPrompt>
+
     fun getQuestionPromptConstraintText(index: FormIndex?): String?
 
     fun getQuestionPromptRequiredText(index: FormIndex?): String?
@@ -268,6 +271,8 @@ interface FormController {
      * Returns an array of FormEntryCaptions for current FormIndex.
      */
     fun getGroupsForCurrentIndex(): Array<FormEntryCaption>?
+
+    fun getGroupsForIndex(formIndex: FormIndex?): Array<FormEntryCaption>?
 
     /**
      * This is used to enable/disable the "Delete Repeat" menu option.
