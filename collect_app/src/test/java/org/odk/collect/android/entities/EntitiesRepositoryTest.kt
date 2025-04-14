@@ -9,6 +9,7 @@ import org.junit.Test
 import org.odk.collect.android.entities.support.EntitySameAsMatcher.Companion.sameEntityAs
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.QueryException
 import org.odk.collect.shared.Query
 
@@ -506,12 +507,26 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#getListVersion returns list version`() {
+    fun `#getList returns list`() {
         val repository = buildSubject()
 
         repository.addList("wine")
-        repository.updateListHash("wine", "2024")
-        assertThat(repository.getListHash("wine"), equalTo("2024"))
+        repository.updateList("wine", "2024")
+        assertThat(repository.getList("wine"), equalTo(EntityList("wine", "2024")))
+    }
+
+    @Test
+    fun `#getList returns list with null hash if list doesn't have hash`() {
+        val repository = buildSubject()
+
+        repository.addList("wine")
+        assertThat(repository.getList("wine"), equalTo(EntityList("wine", null)))
+    }
+
+    @Test
+    fun `#getList returns null if list doesn't exist`() {
+        val repository = buildSubject()
+        assertThat(repository.getList("wine"), equalTo(null))
     }
 
     @Test

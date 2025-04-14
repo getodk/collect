@@ -63,12 +63,16 @@ class InMemEntitiesRepository : EntitiesRepository {
         return query(list).firstOrNull { it.index == index }
     }
 
-    override fun updateListHash(list: String, hash: String) {
+    override fun updateList(list: String, hash: String) {
         listVersions[list] = hash
     }
 
-    override fun getListHash(list: String): String? {
-        return listVersions[list]
+    override fun getList(list: String): EntityList? {
+        return if (lists.contains(list)) {
+            EntityList(list, listVersions[list])
+        } else {
+            null
+        }
     }
 
     override fun save(list: String, vararg entities: Entity) {
