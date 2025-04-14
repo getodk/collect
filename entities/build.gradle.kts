@@ -51,6 +51,7 @@ dependencies {
     implementation(project(":material"))
     implementation(project(":async"))
     implementation(project(":lists"))
+    implementation(project(":forms"))
 
     implementation(libs.kotlinStdlib)
     implementation(libs.javarosa) {
@@ -64,6 +65,7 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.daggerCompiler)
 
+    testImplementation(project(":forms-test"))
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation(libs.hamcrest)
