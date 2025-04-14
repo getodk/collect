@@ -71,7 +71,7 @@ object LocalEntityUseCases {
         mediaFile: MediaFile
     ) {
         val newListHash = "server:${mediaFile.hash}"
-        val existingListHash = entitiesRepository.getListHash(list)
+        val existingListHash = entitiesRepository.getList(list)?.hash
         if (newListHash == existingListHash) {
             return
         }
@@ -126,7 +126,7 @@ object LocalEntityUseCases {
             mediaFile.integrityUrl
         )
         entitiesRepository.save(list, *newAndUpdated.toTypedArray())
-        entitiesRepository.updateListHash(list, newListHash)
+        entitiesRepository.updateList(list, newListHash)
     }
 
     private fun handleMissingEntities(

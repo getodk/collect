@@ -15,6 +15,7 @@ import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.InMemEntitiesRepository
 import org.odk.collect.formstest.FormFixtures
 import org.odk.collect.shared.Query
@@ -652,7 +653,7 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromServer updates the list hash with server prefix`() {
-        val csv = createEntityList()
+        val csv = createEntityList(Entity.New("cathedrals", "Cathedrals"))
         LocalEntityUseCases.updateLocalEntitiesFromServer(
             "songs",
             csv,
@@ -661,7 +662,7 @@ class LocalEntityUseCasesTest {
             FormFixtures.mediaFile(hash = "hash")
         )
 
-        val hash = entitiesRepository.getListHash("songs")
+        val hash = entitiesRepository.getList("songs")?.hash
         assertThat(hash, equalTo("server:hash"))
     }
 
@@ -752,14 +753,14 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         return wrapped.getByIndex(list, index)
     }
 
-    override fun updateListHash(list: String, hash: String) {
+    override fun updateList(list: String, hash: String) {
         accesses += 1
-        wrapped.updateListHash(list, hash)
+        wrapped.updateList(list, hash)
     }
 
-    override fun getListHash(list: String): String? {
+    override fun getList(list: String): EntityList? {
         accesses += 1
-        return wrapped.getListHash(list)
+        return wrapped.getList(list)
     }
 }
 

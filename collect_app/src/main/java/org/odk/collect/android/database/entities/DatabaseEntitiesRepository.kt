@@ -24,6 +24,7 @@ import org.odk.collect.db.sqlite.toSql
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.QueryException
 import org.odk.collect.shared.Query
 import org.odk.collect.shared.mapColumns
@@ -134,7 +135,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    override fun updateListHash(list: String, hash: String) {
+    override fun updateList(list: String, hash: String) {
         val contentValues = ContentValues().also {
             it.put(ListsTable.COLUMN_HASH, hash)
         }
@@ -149,11 +150,13 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    override fun getListHash(list: String): String? {
+    override fun getList(list: String): EntityList? {
         return databaseConnection.withConnection {
             readableDatabase
                 .query(ListsTable.TABLE_NAME, "${ListsTable.COLUMN_NAME} = ?", arrayOf(list))
-                .first { it.getStringOrNull(ListsTable.COLUMN_HASH) }
+                .first {
+                    EntityList(list, it.getStringOrNull(ListsTable.COLUMN_HASH))
+                }
         }
     }
 
