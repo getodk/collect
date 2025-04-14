@@ -11,7 +11,6 @@ import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.strings.Md5.getMd5Hash
-import org.odk.collect.testshared.TimeZoneSetter
 import java.io.File
 import java.util.TimeZone
 import kotlin.random.Random
@@ -19,46 +18,34 @@ import kotlin.random.Random
 class LocalInstancesUseCasesTest {
     @Test
     fun `#createInstanceFile creates directory based on sanitized form name and current time in instances directory`() {
-        val originalTimeZone = TimeZone.getDefault()
-        TimeZoneSetter.setTimezone(TimeZone.getTimeZone("UTC"))
+        val instancesDirPath = TempFiles.createTempDir().absolutePath
 
-        try {
-            val instancesDirPath = TempFiles.createTempDir().absolutePath
+        LocalInstancesUseCases.createInstanceFile(
+            "Cool form  name:",
+            instancesDirPath,
+            TimeZone.getTimeZone("UTC")
+        ) { 640915200000 }
 
-            LocalInstancesUseCases.createInstanceFile(
-                "Cool form  name:",
-                instancesDirPath
-            ) { 640915200000 }
-
-            val instanceDir = File(instancesDirPath + File.separator + "Cool form name_1990-04-24_00-00-00")
-            assertThat(instanceDir.exists(), equalTo(true))
-            assertThat(instanceDir.isDirectory, equalTo(true))
-        } finally {
-            TimeZone.setDefault(originalTimeZone)
-        }
+        val instanceDir = File(instancesDirPath + File.separator + "Cool form name_1990-04-24_00-00-00")
+        assertThat(instanceDir.exists(), equalTo(true))
+        assertThat(instanceDir.isDirectory, equalTo(true))
     }
 
     @Test
     fun `#createInstanceFile returns instance file in instance directory`() {
-        val originalTimeZone = TimeZone.getDefault()
-        TimeZoneSetter.setTimezone(TimeZone.getTimeZone("UTC"))
+        val instancesDirPath = TempFiles.createTempDir().absolutePath
 
-        try {
-            val instancesDirPath = TempFiles.createTempDir().absolutePath
+        val instanceFile = LocalInstancesUseCases.createInstanceFile(
+            "Cool form name",
+            instancesDirPath,
+            TimeZone.getTimeZone("UTC")
+        ) { 640915200000 }!!
 
-            val instanceFile = LocalInstancesUseCases.createInstanceFile(
-                "Cool form name",
-                instancesDirPath
-            ) { 640915200000 }!!
-
-            val instanceDir = instancesDirPath + File.separator + "Cool form name_1990-04-24_00-00-00"
-            assertThat(
-                instanceFile.absolutePath,
-                equalTo(instanceDir + File.separator + "Cool form name_1990-04-24_00-00-00.xml")
-            )
-        } finally {
-            TimeZone.setDefault(originalTimeZone)
-        }
+        val instanceDir = instancesDirPath + File.separator + "Cool form name_1990-04-24_00-00-00"
+        assertThat(
+            instanceFile.absolutePath,
+            equalTo(instanceDir + File.separator + "Cool form name_1990-04-24_00-00-00.xml")
+        )
     }
 
     @Test
