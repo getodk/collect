@@ -27,8 +27,8 @@ object LocalEntityUseCases {
                 when (formEntity.action) {
                     EntityAction.CREATE -> {
                         val hasValidLabel = !label.isNullOrBlank()
-                        val listExists = entitiesRepository.getLists().contains(formEntity.dataset)
-                        if (hasValidLabel && listExists) {
+                        val list = entitiesRepository.getList(formEntity.dataset)
+                        if (hasValidLabel && list != null && !list.needsApproval) {
                             val entity = Entity.New(
                                 id,
                                 label,
@@ -126,7 +126,11 @@ object LocalEntityUseCases {
             mediaFile.integrityUrl
         )
         entitiesRepository.save(list, *newAndUpdated.toTypedArray())
-        entitiesRepository.updateList(list, newListHash)
+        entitiesRepository.updateList(
+            list,
+            newListHash,
+            mediaFile.type == MediaFile.Type.APPROVAL_ENTITY_LIST
+        )
     }
 
     private fun handleMissingEntities(
