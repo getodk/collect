@@ -113,7 +113,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     private final LinearLayout widgetsList;
     private final LinearLayout.LayoutParams layout;
     private final ArrayList<QuestionWidget> widgets;
-    FormEntryCaption intentGroup = null;
+    FormEntryCaption intentGroup;
     int intentGroupStartIndex = -1;
 
     private WidgetValueChangedListener widgetValueChangedListener;
@@ -485,8 +485,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         launchIntentButton.setIconResource(org.odk.collect.icons.R.drawable.ic_baseline_open_in_new_white_24);
 
         LinearLayout.LayoutParams launchButtonLayout = new LinearLayout.LayoutParams(layout);
-        int standard_margin = (int) context.getResources().getDimension(org.odk.collect.androidshared.R.dimen.margin_standard);
-        launchButtonLayout.setMargins(standard_margin, standard_margin, standard_margin, standard_margin);
+        int standardMargin = (int) context.getResources().getDimension(org.odk.collect.androidshared.R.dimen.margin_standard);
+        launchButtonLayout.setMargins(standardMargin, standardMargin, standardMargin, standardMargin);
         launchIntentButton.setLayoutParams(launchButtonLayout);
 
         launchIntentButton.setText(buttonText);

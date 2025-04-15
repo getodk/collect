@@ -253,8 +253,8 @@ class IntentGroupTest {
         onView(withText("Decimal external")).perform(scrollTo())
             .check(matches(isDisplayed()))
         onView(CoreMatchers.allOf(
-                isDescendantOfA(isAssignableFrom(DecimalWidget::class.java)),
-                isAssignableFrom(TextInputEditText::class.java)))
+            isDescendantOfA(isAssignableFrom(DecimalWidget::class.java)),
+            isAssignableFrom(TextInputEditText::class.java)))
             .check(matches(withText("46.74")))
     }
 
@@ -274,17 +274,15 @@ class IntentGroupTest {
 
     private fun assertImageWidgetWithoutAnswer() {
         onView(CoreMatchers.allOf(
-                withTagValue(Matchers.`is`("ImageView")),
-                withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))
-        ).check(doesNotExist())
+            withTagValue(Matchers.`is`("ImageView")),
+            withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+            .check(doesNotExist())
 
         onView(withId(org.odk.collect.android.R.id.capture_button))
-            .check(matches(CoreMatchers.not(isDisplayed()))
-        )
+            .check(matches(CoreMatchers.not(isDisplayed())))
 
         onView(withId(org.odk.collect.android.R.id.choose_button))
-            .check(matches(CoreMatchers.not(isDisplayed()))
-        )
+            .check(matches(CoreMatchers.not(isDisplayed())))
     }
 
     private fun assertAudioWidgetWithoutAnswer() {
@@ -308,22 +306,21 @@ class IntentGroupTest {
 
     private fun assertImageWidgetWithAnswer() {
         onView(CoreMatchers.allOf(
-                withTagValue(Matchers.`is`("ImageView")),
-                withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+            withTagValue(Matchers.`is`("ImageView")),
+            withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
             .check(matches(CoreMatchers.not(doesNotExist())))
 
         onView(withId(org.odk.collect.android.R.id.capture_button))
-            .check(matches(CoreMatchers.not(isDisplayed()))
-        )
+            .check(matches(CoreMatchers.not(isDisplayed())))
 
         onView(withId(org.odk.collect.android.R.id.choose_button))
             .check(matches(CoreMatchers.not(isDisplayed())))
     }
 
     private fun assertAudioWidgetWithAnswer() {
-        onView(withId(org.odk.collect.android.R.id.audio_controller)).perform(
-            scrollTo()
-        ).check(matches(isDisplayed()))
+        onView(withId(org.odk.collect.android.R.id.audio_controller))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
     }
 
     private fun assertVideoWidgetWithAnswer() {
