@@ -6,6 +6,7 @@ import org.javarosa.xform.parse.XFormParser
 import org.junit.Ignore
 import org.junit.Test
 import org.kxml2.kdom.Document
+import org.odk.collect.forms.MediaFile
 
 class Kxml2OpenRosaResponseParserTest {
 
@@ -95,7 +96,7 @@ class Kxml2OpenRosaResponseParserTest {
         val doc = XFormParser.getXMLDocument(response.reader())
         val mediaFiles = Kxml2OpenRosaResponseParser.parseManifest(doc)!!
         assertThat(mediaFiles.size, equalTo(1))
-        assertThat(mediaFiles[0].isEntityList, equalTo(true))
+        assertThat(mediaFiles[0].type, equalTo(MediaFile.Type.ENTITY_LIST))
     }
 
     @Test
@@ -114,7 +115,7 @@ class Kxml2OpenRosaResponseParserTest {
         val doc = XFormParser.getXMLDocument(response.reader())
         val mediaFiles = Kxml2OpenRosaResponseParser.parseManifest(doc)!!
         assertThat(mediaFiles.size, equalTo(1))
-        assertThat(mediaFiles[0].isEntityList, equalTo(false))
+        assertThat(mediaFiles[0].type, equalTo(null))
     }
 
     @Test
