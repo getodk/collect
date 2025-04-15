@@ -9,8 +9,8 @@ class InMemEntitiesRepository : EntitiesRepository {
     private val listProperties = mutableMapOf<String, MutableSet<String>>()
     private val entities = mutableMapOf<String, MutableList<Entity.New>>()
 
-    override fun getLists(): Set<String> {
-        return lists.map { it.name }.toSet()
+    override fun getLists(): List<EntityList> {
+        return lists
     }
 
     override fun getCount(list: String): Int {
@@ -18,7 +18,9 @@ class InMemEntitiesRepository : EntitiesRepository {
     }
 
     override fun addList(list: String) {
-        lists.add(EntityList(list))
+        if (lists.none { it.name == list }) {
+            lists.add(EntityList(list))
+        }
     }
 
     override fun delete(list: String, id: String) {
@@ -117,9 +119,7 @@ class InMemEntitiesRepository : EntitiesRepository {
     }
 
     private fun updateLists(list: String, entity: Entity) {
-        if (lists.none { it.name == list }) {
-            lists.add(EntityList(list))
-        }
+        addList(list)
 
         val properties = listProperties.getOrPut(list) {
             mutableSetOf()

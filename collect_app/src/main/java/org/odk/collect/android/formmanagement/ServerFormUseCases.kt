@@ -136,7 +136,7 @@ object ServerFormUseCases {
                  */
                 val isCsv = mediaFile.filename.endsWith(".csv")
                 val mostLikelyInstanceId = getEntityListFromFileName(mediaFile)
-                if (isCsv && entitiesRepository.getLists().contains(mostLikelyInstanceId)) {
+                if (isCsv && entitiesRepository.getList(mostLikelyInstanceId) != null) {
                     Analytics.setUserProperty("HasEntityListCollision", "true")
                 }
             }

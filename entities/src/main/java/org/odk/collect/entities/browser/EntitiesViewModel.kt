@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import org.odk.collect.async.Scheduler
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.entities.storage.getListNames
 
 class EntitiesViewModel(
     private val scheduler: Scheduler,
@@ -17,7 +18,7 @@ class EntitiesViewModel(
 
     init {
         scheduler.immediate {
-            _lists.postValue(entitiesRepository.getLists().toList())
+            _lists.postValue(entitiesRepository.getListNames().toList())
         }
     }
 
