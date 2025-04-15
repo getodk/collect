@@ -4,7 +4,7 @@ import org.odk.collect.shared.Query
 
 interface EntitiesRepository {
     fun save(list: String, vararg entities: Entity)
-    fun getLists(): Set<String>
+    fun getLists(): List<EntityList>
     fun getCount(list: String): Int
     fun addList(list: String)
     fun delete(list: String, id: String)
@@ -12,4 +12,8 @@ interface EntitiesRepository {
     fun getByIndex(list: String, index: Int): Entity.Saved?
     fun updateList(list: String, hash: String, needsApproval: Boolean)
     fun getList(list: String): EntityList?
+}
+
+fun EntitiesRepository.getListNames(): List<String> {
+    return getLists().map { it.name }
 }

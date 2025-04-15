@@ -724,7 +724,7 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         wrapped.save(list, *entities)
     }
 
-    override fun getLists(): Set<String> {
+    override fun getLists(): List<EntityList> {
         accesses += 1
         return wrapped.getLists()
     }

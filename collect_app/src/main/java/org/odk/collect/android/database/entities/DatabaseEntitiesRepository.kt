@@ -26,6 +26,7 @@ import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.QueryException
+import org.odk.collect.entities.storage.getListNames
 import org.odk.collect.shared.Query
 import org.odk.collect.shared.mapColumns
 
@@ -130,7 +131,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         invalidateRowNumbers()
     }
 
-    override fun getLists(): Set<String> {
+    override fun getLists(): List<EntityList> {
         return databaseConnection.withConnection {
             getListsFromDB(readableDatabase)
         }
@@ -248,7 +249,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     private fun invalidateRowNumbers() {
-        getLists().forEach {
+        getListNames().forEach {
             databaseConnection.invalidateRowNumbers(it)
         }
     }
@@ -409,14 +410,16 @@ private class EntitiesDatabaseMigrator :
 
 private fun dropAllTablesFromDB(db: SQLiteDatabase) {
     getListsFromDB(db).forEach {
-        db.delete(it)
+        db.delete(it.name)
     }
 
     db.delete(ListsTable.TABLE_NAME)
 }
 
-private fun getListsFromDB(db: SQLiteDatabase): Set<String> {
+private fun getListsFromDB(db: SQLiteDatabase): List<EntityList> {
     return db
         .query(ListsTable.TABLE_NAME)
-        .foldAndClose(emptySet()) { set, cursor -> set + cursor.getString(ListsTable.COLUMN_NAME) }
+        .foldAndClose(emptyList()) { list, cursor ->
+            list + EntityList(cursor.getString(ListsTable.COLUMN_NAME))
+        }
 }
