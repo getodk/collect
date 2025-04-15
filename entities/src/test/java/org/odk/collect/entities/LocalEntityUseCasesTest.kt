@@ -46,7 +46,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromForm save a new entity on create if the doesn't alrady exist`() {
+    fun `updateLocalEntitiesFromForm does not save a new entity on create if the list doesn't already exist`() {
         val formEntity =
             FormEntity(EntityAction.CREATE, "things", "id", "label", listOf("property" to "value"))
         val formEntities = EntitiesExtra(listOf(formEntity))
