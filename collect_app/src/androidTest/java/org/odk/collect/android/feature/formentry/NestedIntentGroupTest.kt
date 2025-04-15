@@ -18,6 +18,7 @@ package org.odk.collect.android.feature.formentry
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
+import android.util.Log
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
@@ -33,6 +34,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.util.HumanReadables
 import com.google.android.material.textfield.TextInputEditText
 import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.containsString
@@ -48,6 +50,7 @@ import org.odk.collect.android.widgets.IntegerWidget
 import org.odk.collect.android.widgets.StringWidget
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.strings.R
+import org.odk.collect.testshared.ViewActions
 
 /**
  * Tests extension to https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields
@@ -131,6 +134,25 @@ class NestedIntentGroupTest {
         onView(withText(R.string.launch_app)).check(isCompletelyAbove(withText(containsString("NFIQ"))))
         onView(withText(containsString("NFIQ"))).check(matches(isDisplayed()))
         onView(withText(containsString("Template"))).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun valuesFromApp__triggerRecalculation() {
+        val resultIntent = Intent()
+        resultIntent.putExtra("right_thumb_Registration_NFIQ", "2")
+        resultIntent.putExtra("right_thumb_Registration_template", "foobar")
+
+        intending(not(isInternal())).respondWith(
+            Instrumentation.ActivityResult(
+                Activity.RESULT_OK, resultIntent
+            )
+        )
+
+        onView(withText(R.string.launch_app))
+            .perform(scrollTo(), click())
+
+        onView(allOf(isAssignableFrom(StringWidget::class.java),
+            hasDescendant(withText(containsString("template: 6"))))).check(matches(isDisplayed()))
     }
 
     companion object {

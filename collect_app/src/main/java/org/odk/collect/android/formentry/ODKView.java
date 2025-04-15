@@ -593,22 +593,11 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                     if (treeReference.getNameLast().equals(key)) {
                         switch (prompt.getDataType()) {
                             case Constants.DATATYPE_TEXT:
-                                formController.saveAnswer(prompt.getIndex(),
-                                        ExternalAppsUtils.asStringData(answer));
-                                ((StringWidget) questionWidget).setDisplayValueFromModel();
-                                questionWidget.showAnswerContainer();
-                                break;
                             case Constants.DATATYPE_INTEGER:
-                                formController.saveAnswer(prompt.getIndex(),
-                                        ExternalAppsUtils.asIntegerData(answer));
-                                ((StringWidget) questionWidget).setDisplayValueFromModel();
-                                questionWidget.showAnswerContainer();
-                                break;
                             case Constants.DATATYPE_DECIMAL:
-                                formController.saveAnswer(prompt.getIndex(),
-                                        ExternalAppsUtils.asDecimalData(answer));
-                                ((StringWidget) questionWidget).setDisplayValueFromModel();
+                                ((StringWidget) questionWidget).widgetAnswerText.setAnswer(answer.toString());
                                 questionWidget.showAnswerContainer();
+                                widgetValueChanged(questionWidget);
                                 break;
                             case Constants.DATATYPE_BINARY:
                                 try {
@@ -630,6 +619,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                                             ((WidgetDataReceiver) questionWidget).setData(destFile);
 
                                             questionWidget.showAnswerContainer();
+                                            widgetValueChanged(questionWidget);
                                         }
                                     });
                                 } catch (Exception | Error e) {
@@ -643,7 +633,6 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                         }
                         break;
                     }
-                    widgetValueChanged(questionWidget);
                 }
             }
         }
