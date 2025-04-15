@@ -122,6 +122,8 @@ open class StubFormController : FormController {
 
     override fun getQuestionPrompts(): Array<FormEntryPrompt> = emptyArray()
 
+    override fun getQuestionPrompts(index: FormIndex): Array<FormEntryPrompt> = emptyArray()
+
     override fun getQuestionPromptConstraintText(index: FormIndex?): String? = null
 
     override fun getQuestionPromptRequiredText(index: FormIndex?): String? = null
@@ -131,6 +133,8 @@ open class StubFormController : FormController {
     override fun isGroupRelevant(): Boolean = false
 
     override fun getGroupsForCurrentIndex(): Array<FormEntryCaption>? = null
+
+    override fun getGroupsForIndex(formIndex: FormIndex?): Array<FormEntryCaption>? = null
 
     override fun indexContainsRepeatableGroup(): Boolean = false
 
