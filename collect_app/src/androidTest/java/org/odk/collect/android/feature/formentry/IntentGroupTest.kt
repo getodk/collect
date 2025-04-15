@@ -81,11 +81,8 @@ class IntentGroupTest {
     fun buttonName_ShouldComeFromSpecialFormText() {
         onView(withText(R.string.launch_app))
             .check(doesNotExist())
-        onView(withText("This is buttonText")).check(
-            matches(
-                isDisplayed()
-            )
-        )
+        onView(withText("This is buttonText"))
+            .check(matches(isDisplayed()))
     }
 
     // Verifies that a value given to the label text with form noAppErrorString is used as the toast
@@ -185,36 +182,12 @@ class IntentGroupTest {
         onView(withText("This is buttonText"))
             .perform(scrollTo(), click())
 
-        onView(
-            withIndex(
-                withClassName(StringEndsWith.endsWith("EditText")),
-                0
-            )
-        ).check(
-            matches(
-                withText("")
-            )
-        )
-        onView(
-            withIndex(
-                withClassName(StringEndsWith.endsWith("EditText")),
-                1
-            )
-        ).check(
-            matches(
-                withText("")
-            )
-        )
-        onView(
-            withIndex(
-                withClassName(StringEndsWith.endsWith("EditText")),
-                2
-            )
-        ).check(
-            matches(
-                withText("")
-            )
-        )
+        onView(withIndex(withClassName(StringEndsWith.endsWith("EditText")), 0))
+            .check(matches(withText("")))
+        onView(withIndex(withClassName(StringEndsWith.endsWith("EditText")), 1))
+            .check(matches(withText("")))
+        onView(withIndex(withClassName(StringEndsWith.endsWith("EditText")), 2))
+            .check(matches(withText("")))
 
         assertImageWidgetWithoutAnswer()
         assertAudioWidgetWithoutAnswer()
@@ -268,144 +241,83 @@ class IntentGroupTest {
 
     private fun assertIntegerWidgetWithAnswer() {
         onView(withText("Integer external")).perform(scrollTo())
-            .check(
-                matches(
-                    isDisplayed()
-                )
-            )
+            .check(matches(isDisplayed()))
         onView(
             CoreMatchers.allOf(
-                isDescendantOfA(
-                    isAssignableFrom(
-                        IntegerWidget::class.java
-                    )
-                ),
-                isAssignableFrom(TextInputEditText::class.java)
-            )
-        ).check(matches(withText("25")))
+                isDescendantOfA(isAssignableFrom(IntegerWidget::class.java)),
+                isAssignableFrom(TextInputEditText::class.java)))
+            .check(matches(withText("25")))
     }
 
     private fun assertDecimalWidgetWithAnswer() {
         onView(withText("Decimal external")).perform(scrollTo())
-            .check(
-                matches(
-                    isDisplayed()
-                )
-            )
-        onView(
-            CoreMatchers.allOf(
-                isDescendantOfA(
-                    isAssignableFrom(
-                        DecimalWidget::class.java
-                    )
-                ),
-                isAssignableFrom(TextInputEditText::class.java)
-            )
-        ).check(matches(withText("46.74")))
+            .check(matches(isDisplayed()))
+        onView(CoreMatchers.allOf(
+                isDescendantOfA(isAssignableFrom(DecimalWidget::class.java)),
+                isAssignableFrom(TextInputEditText::class.java)))
+            .check(matches(withText("46.74")))
     }
 
     private fun assertStringWidgetWithAnswer() {
         onView(withText("Text external")).perform(scrollTo())
-            .check(
-                matches(
-                    isDisplayed()
-                )
-            )
+            .check(matches(isDisplayed()))
         onView(
             CoreMatchers.allOf(
                 isDescendantOfA(
                     CoreMatchers.allOf(
-                        isAssignableFrom(
-                            StringWidget::class.java
-                        ),
-                        CoreMatchers.not(
-                            isAssignableFrom(
-                                IntegerWidget::class.java
-                            )
-                        ),
-                        CoreMatchers.not(
-                            isAssignableFrom(
-                                DecimalWidget::class.java
-                            )
-                        )
-                    )
-                ),
-                isAssignableFrom(TextInputEditText::class.java)
-            )
+                        isAssignableFrom(StringWidget::class.java),
+                        CoreMatchers.not(isAssignableFrom(IntegerWidget::class.java)),
+                        CoreMatchers.not(isAssignableFrom(DecimalWidget::class.java)))),
+                isAssignableFrom(TextInputEditText::class.java))
         ).check(matches(withText("sampleAnswer")))
     }
 
     private fun assertImageWidgetWithoutAnswer() {
-        onView(
-            CoreMatchers.allOf(
+        onView(CoreMatchers.allOf(
                 withTagValue(Matchers.`is`("ImageView")),
-                withEffectiveVisibility(
-                    ViewMatchers.Visibility.VISIBLE
-                )
-            )
+                withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))
         ).check(doesNotExist())
-        onView(withId(org.odk.collect.android.R.id.capture_button)).check(
-            matches(
-                CoreMatchers.not(isDisplayed())
-            )
+
+        onView(withId(org.odk.collect.android.R.id.capture_button))
+            .check(matches(CoreMatchers.not(isDisplayed()))
         )
-        onView(withId(org.odk.collect.android.R.id.choose_button)).check(
-            matches(
-                CoreMatchers.not(isDisplayed())
-            )
+
+        onView(withId(org.odk.collect.android.R.id.choose_button))
+            .check(matches(CoreMatchers.not(isDisplayed()))
         )
     }
 
     private fun assertAudioWidgetWithoutAnswer() {
-        onView(withId(org.odk.collect.android.R.id.audio_controller)).check(
-            matches(
-                CoreMatchers.not(isDisplayed())
-            )
-        )
+        onView(withId(org.odk.collect.android.R.id.audio_controller))
+            .check(matches(CoreMatchers.not(isDisplayed())))
     }
 
     private fun assertVideoWidgetWithoutAnswer() {
         onView(withText(Matchers.`is`("Video external")))
-            .perform(scrollTo()).check(
-                matches(
-                    isDisplayed()
-                )
-            )
-        onView(withId(org.odk.collect.android.R.id.play_video_button)).check(
-            matches(
-                CoreMatchers.not(isDisplayed())
-            )
-        )
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+
+        onView(withId(org.odk.collect.android.R.id.play_video_button))
+            .check(matches(CoreMatchers.not(isDisplayed())))
     }
 
     private fun assertFileWidgetWithoutAnswer() {
         onView(withTagValue(Matchers.`is`("ArbitraryFileWidgetAnswer")))
-            .check(
-                matches(
-                    CoreMatchers.not(isDisplayed())
-                )
-            )
+            .check(matches(CoreMatchers.not(isDisplayed())))
     }
 
     private fun assertImageWidgetWithAnswer() {
-        onView(
-            CoreMatchers.allOf(
+        onView(CoreMatchers.allOf(
                 withTagValue(Matchers.`is`("ImageView")),
-                withEffectiveVisibility(
-                    ViewMatchers.Visibility.VISIBLE
-                )
-            )
-        ).check(matches(CoreMatchers.not(doesNotExist())))
-        onView(withId(org.odk.collect.android.R.id.capture_button)).check(
-            matches(
-                CoreMatchers.not(isDisplayed())
-            )
+                withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+            .check(matches(CoreMatchers.not(doesNotExist())))
+
+        onView(withId(org.odk.collect.android.R.id.capture_button))
+            .check(matches(CoreMatchers.not(isDisplayed()))
         )
-        onView(withId(org.odk.collect.android.R.id.choose_button)).check(
-            matches(
-                CoreMatchers.not(isDisplayed())
-            )
-        )
+
+        onView(withId(org.odk.collect.android.R.id.choose_button))
+            .check(matches(CoreMatchers.not(isDisplayed())))
     }
 
     private fun assertAudioWidgetWithAnswer() {
@@ -416,21 +328,16 @@ class IntentGroupTest {
 
     private fun assertVideoWidgetWithAnswer() {
         onView(withId(org.odk.collect.android.R.id.play_video_button))
-            .perform(
-                scrollTo()
-            ).check(matches(isDisplayed()))
-        onView(withId(org.odk.collect.android.R.id.play_video_button)).check(
-            matches(
-                isEnabled()
-            )
-        )
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+        onView(withId(org.odk.collect.android.R.id.play_video_button))
+            .check(matches(isEnabled()))
     }
 
     private fun assertFileWidgetWithAnswer() {
         onView(withTagValue(Matchers.`is`("ArbitraryFileWidgetAnswer")))
-            .perform(
-                scrollTo()
-            ).check(matches(isDisplayed()))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
     }
 
     @Throws(IOException::class)
