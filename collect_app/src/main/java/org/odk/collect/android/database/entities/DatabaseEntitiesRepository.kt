@@ -17,7 +17,6 @@ import org.odk.collect.db.sqlite.DatabaseMigrator
 import org.odk.collect.db.sqlite.RowNumbers.invalidateRowNumbers
 import org.odk.collect.db.sqlite.RowNumbers.rawQueryWithRowNumber
 import org.odk.collect.db.sqlite.SQLiteColumns.ROW_NUMBER
-import org.odk.collect.db.sqlite.SQLiteDatabaseExt.delete
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.getColumnNames
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.query
 import org.odk.collect.db.sqlite.SynchronizedDatabaseConnection
@@ -57,7 +56,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         dbPath,
         "entities.db",
         EntitiesDatabaseMigrator(),
-        DATABASE_VERSION
+        EntitiesDatabaseMigrator.DATABASE_VERSION
     )
 
     override fun save(list: String, vararg entities: Entity) {
@@ -376,39 +375,54 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     private fun quote(text: String) = "\"$text\""
-
-    companion object {
-        private const val DATABASE_VERSION = 2
-    }
 }
 
-private class EntitiesDatabaseMigrator :
-    DatabaseMigrator {
+class EntitiesDatabaseMigrator : DatabaseMigrator {
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(
-            """
-            CREATE TABLE IF NOT EXISTS ${ListsTable.TABLE_NAME} (
-                    $_ID integer PRIMARY KEY, 
-                    ${ListsTable.COLUMN_NAME} text NOT NULL,
-                    ${ListsTable.COLUMN_HASH} text,
-                    ${ListsTable.COLUMN_NEEDS_APPROVAL} integer DEFAULT 0
-            );
-            """.trimIndent()
-        )
+        createDbForVersion(db, DATABASE_VERSION)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int) {
-        dropAllTablesFromDB(db)
+        if (oldVersion == 1) {
+            throw IllegalStateException("Cannot upgrade from this beta version. Please reinstall Collect!")
+        } else if (oldVersion == 2) {
+            db.execSQL(
+                """
+                ALTER TABLE ${ListsTable.TABLE_NAME} ADD ${ListsTable.COLUMN_NEEDS_APPROVAL} integer DEFAULT 0;
+                """.trimIndent()
+            )
+        }
     }
-}
 
-private fun dropAllTablesFromDB(db: SQLiteDatabase) {
-    getListsFromDB(db).forEach {
-        db.delete(it.name)
+    fun createDbForVersion(db: SQLiteDatabase, version: Int) {
+        if (version == 2) {
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS lists (
+                        _id integer PRIMARY KEY,
+                        name text NOT NULL,
+                        hash text
+                );
+                """.trimIndent()
+            )
+        } else if (version == 3) {
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS ${ListsTable.TABLE_NAME} (
+                        $_ID integer PRIMARY KEY,
+                        ${ListsTable.COLUMN_NAME} text NOT NULL,
+                        ${ListsTable.COLUMN_HASH} text,
+                        ${ListsTable.COLUMN_NEEDS_APPROVAL} integer DEFAULT 0
+                );
+                """.trimIndent()
+            )
+        }
     }
 
-    db.delete(ListsTable.TABLE_NAME)
+    companion object {
+        const val DATABASE_VERSION = 3
+    }
 }
 
 private fun getListsFromDB(db: SQLiteDatabase): List<EntityList> {
