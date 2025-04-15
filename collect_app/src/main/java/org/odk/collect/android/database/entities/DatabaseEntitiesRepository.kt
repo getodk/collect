@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteException
 import android.provider.BaseColumns._ID
 import org.odk.collect.db.sqlite.CursorExt.first
 import org.odk.collect.db.sqlite.CursorExt.foldAndClose
+import org.odk.collect.db.sqlite.CursorExt.getBoolean
 import org.odk.collect.db.sqlite.CursorExt.getInt
 import org.odk.collect.db.sqlite.CursorExt.getString
 import org.odk.collect.db.sqlite.CursorExt.getStringOrNull
@@ -162,13 +163,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         return databaseConnection.withConnection {
             readableDatabase
                 .query(ListsTable.TABLE_NAME, "${ListsTable.COLUMN_NAME} = ?", arrayOf(list))
-                .first {
-                    EntityList(
-                        list,
-                        it.getStringOrNull(ListsTable.COLUMN_HASH),
-                        it.getInt(ListsTable.COLUMN_NEEDS_APPROVAL) == 1
-                    )
-                }
+                .first { mapCursorRowToEntityList(it) }
         }
     }
 
@@ -420,6 +415,14 @@ private fun getListsFromDB(db: SQLiteDatabase): List<EntityList> {
     return db
         .query(ListsTable.TABLE_NAME)
         .foldAndClose(emptyList()) { list, cursor ->
-            list + EntityList(cursor.getString(ListsTable.COLUMN_NAME))
+            list + mapCursorRowToEntityList(cursor)
         }
+}
+
+private fun mapCursorRowToEntityList(cursor: Cursor): EntityList {
+    return EntityList(
+        cursor.getString(ListsTable.COLUMN_NAME),
+        cursor.getStringOrNull(ListsTable.COLUMN_HASH),
+        cursor.getBoolean(ListsTable.COLUMN_NEEDS_APPROVAL)
+    )
 }

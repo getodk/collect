@@ -27,10 +27,12 @@ abstract class EntitiesRepositoryTest {
         repository.save("wines", wine)
         repository.save("whiskys", whisky)
 
+        repository.updateList("wines", "blah", true)
+
         assertThat(
             repository.getLists(),
             containsInAnyOrder(
-                EntityList("wines"),
+                EntityList("wines", "blah", true),
                 EntityList("whiskys")
             )
         )
