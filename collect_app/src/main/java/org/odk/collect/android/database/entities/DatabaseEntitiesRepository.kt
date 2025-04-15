@@ -17,6 +17,7 @@ import org.odk.collect.db.sqlite.DatabaseMigrator
 import org.odk.collect.db.sqlite.RowNumbers.invalidateRowNumbers
 import org.odk.collect.db.sqlite.RowNumbers.rawQueryWithRowNumber
 import org.odk.collect.db.sqlite.SQLiteColumns.ROW_NUMBER
+import org.odk.collect.db.sqlite.SQLiteDatabaseExt.addColumn
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.getColumnNames
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.query
 import org.odk.collect.db.sqlite.SynchronizedDatabaseConnection
@@ -399,10 +400,11 @@ class EntitiesDatabaseMigrator : DatabaseMigrator {
         if (oldVersion == 1) {
             throw IllegalStateException("Cannot upgrade from this beta version. Please reinstall Collect!")
         } else if (oldVersion == 2) {
-            db.execSQL(
-                """
-                ALTER TABLE ${ListsTable.TABLE_NAME} ADD ${ListsTable.COLUMN_NEEDS_APPROVAL} integer DEFAULT 0;
-                """.trimIndent()
+            db.addColumn(
+                ListsTable.TABLE_NAME,
+                ListsTable.COLUMN_NEEDS_APPROVAL,
+                "integer",
+                default = "0"
             )
         }
     }
