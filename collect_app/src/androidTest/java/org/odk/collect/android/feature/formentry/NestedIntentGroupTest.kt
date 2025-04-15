@@ -18,7 +18,6 @@ package org.odk.collect.android.feature.formentry
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
-import android.util.Log
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
@@ -34,9 +33,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.espresso.util.HumanReadables
 import com.google.android.material.textfield.TextInputEditText
-import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matchers.allOf
@@ -45,12 +42,9 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.support.rules.BlankFormTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
-import org.odk.collect.android.widgets.DecimalWidget
-import org.odk.collect.android.widgets.IntegerWidget
 import org.odk.collect.android.widgets.StringWidget
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.strings.R
-import org.odk.collect.testshared.ViewActions
 
 /**
  * Tests extension to https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields
