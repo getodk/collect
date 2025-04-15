@@ -19,7 +19,7 @@ internal abstract class GeoPointViewModel : ViewModel() {
     abstract val accuracyThreshold: Float
 
     abstract val acceptedLocation: LiveData<Location?>
-    abstract val currentAccuracy: LiveData<GeoPointAccuracy?>
+    abstract val currentAccuracy: LiveData<LocationAccuracy?>
     abstract val timeElapsed: NonNullLiveData<Long>
     abstract val satellites: NonNullLiveData<Int>
 
@@ -59,9 +59,9 @@ internal class LocationTrackerGeoPointViewModel(
     override val currentAccuracy = trackerLocation.map {
         if (it != null) {
             when {
-                it.accuracy > unacceptableAccuracyThreshold -> GeoPointAccuracy.Unacceptable(it.accuracy)
-                it.accuracy > (accuracyThreshold + 5) -> GeoPointAccuracy.Poor(it.accuracy)
-                else -> GeoPointAccuracy.Improving(it.accuracy)
+                it.accuracy > unacceptableAccuracyThreshold -> LocationAccuracy.Unacceptable(it.accuracy)
+                it.accuracy > (accuracyThreshold + 5) -> LocationAccuracy.Poor(it.accuracy)
+                else -> LocationAccuracy.Improving(it.accuracy)
             }
         } else {
             null

@@ -12,8 +12,10 @@ import static org.mockito.Mockito.mock;
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
@@ -98,7 +100,7 @@ public class GeoPointMapActivityTest {
         ActivityScenario<GeoPointMapActivity> scenario = launcherRule.launchForResult(GeoPointMapActivity.class);
         mapFragment.ready();
 
-        scenario.onActivity(activity -> assertEquals(activity.getString(org.odk.collect.strings.R.string.please_wait_long), activity.getLocationStatus()));
+        scenario.onActivity(activity -> assertEquals(activity.getString(org.odk.collect.strings.R.string.please_wait_long), getLocationStatus(activity)));
     }
 
     @Test
@@ -108,7 +110,7 @@ public class GeoPointMapActivityTest {
         mapFragment.setLocationProvider("GPS");
         mapFragment.setLocation(new MapPoint(1, 2, 3, 4f));
 
-        scenario.onActivity(activity -> assertEquals(activity.formatLocationStatus("gps", 4f), activity.getLocationStatus()));
+        scenario.onActivity(activity -> assertEquals("Accuracy: 4 m", getLocationStatus(activity)));
     }
 
     @Test
@@ -178,5 +180,12 @@ public class GeoPointMapActivityTest {
         onView(withId(R.id.layer_menu)).perform(click());
 
         scenario.recreate();
+    }
+
+    private String getLocationStatus(Activity activity) {
+        return activity
+                .findViewById(R.id.status_section)
+                .<TextView>findViewById(R.id.location_status)
+                .getText().toString();
     }
 }

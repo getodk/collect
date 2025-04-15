@@ -443,7 +443,6 @@
   <string name="delete_layer_confirmation_message">Haluatko varmasti poistaa offline-tason %1$s?</string>
   <string name="record_geopoint">Tallenna piste</string>
   <string name="location_accuracy">Tarkkuus: %1$s m</string>
-  <string name="location_provider">Sijaintilähde: %s</string>
   <string name="provider_disabled_error">Pahoittelut, sijaintitiedot eivät ole käytössä!</string>
   <string name="gps_result">Leveysasteet: %1$s\nPituusasteet: %2$s\nKorkeus: %3$sm\nTarkkuus: %4$sm</string>
   <string name="google_play_services_not_available">Tämä lomake haluaa seurata sijaintiasi mutta Google Play Services ei ole käytettävissä.</string>
@@ -511,10 +510,6 @@
     <item quantity="one">%d metri</item>
     <item quantity="other">%d metriä</item>
   </plurals>
-  <string name="location_status_searching">Etsitään sijaintia, odota hetki…</string>
-  <string name="location_status_accuracy">Sijaintitarkkuus: %.2f m</string>
-  <string name="location_status_acceptable">Sijaintitarkkuus: %.2f m (riittävä)</string>
-  <string name="location_status_unacceptable">Sijaintitarkkuus: %.2f m (riittämätön)</string>
   <string name="collection_status_paused">Syötettyjä pisteitä: %d</string>
   <string name="collection_status_placement">Syötettyjä pisteitä: %d (napsauta sijoittaaksesi pisteitä)</string>
   <string name="collection_status_manual">Syötettyjä pisteitä: %d (manuaalinen tallennus)</string>

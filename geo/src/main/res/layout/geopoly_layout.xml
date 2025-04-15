@@ -5,17 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <org.odk.collect.geo.geopoint.AccuracyStatusView
         android:id="@+id/location_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="start|center_vertical"
-        android:paddingLeft="5dip"
-        android:paddingTop="5dip"
-        android:paddingRight="5dip"
-        android:paddingBottom="5dip"
-        android:text="@string/location_status_searching"
-        android:textColor="?colorOnPrimary"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.fragment.app.FragmentContainerView

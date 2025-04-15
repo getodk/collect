@@ -411,7 +411,6 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="record_geopoint">Posnemi točko</string>
   <string name="location_accuracy">Natančnost je %1$s m</string>
-  <string name="location_provider">Ponudnik lokacije: %s</string>
   <string name="provider_disabled_error">Ponudniki lociranja so onemogočeni!</string>
   <string name="gps_result">Zemljepisna širina: %1$s\nZemljepisna dolžina: %2$s\nNadmorska višina: %3$sm\nNatančnost: %4$sm</string>
   <string name="google_play_services_not_available">Ta obrazec želi uporabiti vašo lokacijo, vendar storitve Google Play niso na voljo.</string>
@@ -485,10 +484,6 @@
     <item quantity="few">%d metrov</item>
     <item quantity="other">%d metrov</item>
   </plurals>
-  <string name="location_status_searching">Pridobivanje lokacije, prosimo počakajte …</string>
-  <string name="location_status_accuracy">Natančnost lokacije: %.2f m</string>
-  <string name="location_status_acceptable">Natančnost lokacije: %.2f m (sprejemljivo)</string>
-  <string name="location_status_unacceptable">Natančnost lokacije: %.2f m (nesprejemljivo)</string>
   <string name="collection_status_paused">Vnesene točke: %d</string>
   <string name="collection_status_placement">Vnesene točke: %d (tapnite za postavitev točk)</string>
   <string name="collection_status_manual">Vnesene točke: %d (ročno beleženje)</string>

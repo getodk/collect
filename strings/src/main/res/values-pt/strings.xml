@@ -417,7 +417,6 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="record_geopoint">Registre um ponto</string>
   <string name="location_accuracy">Precisão: %1$s m</string>
-  <string name="location_provider">Provedor de localização: %s</string>
   <string name="provider_disabled_error">Desculpe, provedor de localização desabilitado!</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrecisão:%4$s m</string>
   <string name="google_play_services_not_available">Este formulário necessita rastrear sua localização, mas o Google Play Services não está disponível.</string>
@@ -488,10 +487,6 @@
     <item quantity="many">%d metros</item>
     <item quantity="other">%d metros</item>
   </plurals>
-  <string name="location_status_searching">Buscando a localização, por favor, aguarde…</string>
-  <string name="location_status_accuracy">Precisão da localização: %.2f m</string>
-  <string name="location_status_acceptable">Precisão da localização: %.2f m (aceitável)</string>
-  <string name="location_status_unacceptable">Precisão da localização: %.2f m (inaceitável)</string>
   <string name="collection_status_paused">Pontos inseridos: %d</string>
   <string name="collection_status_placement">Pontos inseridos: %d (toque na tela para inserir pontos)</string>
   <string name="collection_status_manual">Pontos inseridos: %d (registro manual)</string>
