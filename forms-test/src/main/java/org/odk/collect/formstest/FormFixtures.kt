@@ -1,8 +1,10 @@
 package org.odk.collect.formstest
 
 import org.odk.collect.forms.Form
+import org.odk.collect.forms.MediaFile
 import org.odk.collect.shared.TempFiles
 import java.io.File
+import java.util.UUID
 
 object FormFixtures {
     // If you set the date here, it might be overridden with the current date during saving to the database if dbId is not set too
@@ -34,5 +36,18 @@ object FormFixtures {
             .formMediaPath(mediaFilePath)
             .autoSend(autoSend)
             .build()
+    }
+
+    fun mediaFile(
+        integrityUrl: String? = null,
+        hash: String = UUID.randomUUID().toString()
+    ): MediaFile {
+        return MediaFile(
+            "file",
+            hash,
+            "http://example.com/download",
+            type = null,
+            integrityUrl
+        )
     }
 }

@@ -3,10 +3,10 @@ package org.odk.collect.entities
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.blankOrNullString
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
+import org.hamcrest.text.IsBlankString.blankOrNullString
 import org.junit.Test
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.FormEntity
@@ -15,7 +15,9 @@ import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.InMemEntitiesRepository
+import org.odk.collect.formstest.FormFixtures
 import org.odk.collect.shared.Query
 import org.odk.collect.shared.TempFiles
 import java.io.File
@@ -41,6 +43,17 @@ class LocalEntityUseCasesTest {
         assertThat(entities[0].label, equalTo(formEntity.label))
         assertThat(entities[0].properties, equalTo(formEntity.properties))
         assertThat(entities[0].branchId, not(blankOrNullString()))
+    }
+
+    @Test
+    fun `updateLocalEntitiesFromForm does not save a new entity on create if the list doesn't already exist`() {
+        val formEntity =
+            FormEntity(EntityAction.CREATE, "things", "id", "label", listOf("property" to "value"))
+        val formEntities = EntitiesExtra(listOf(formEntity))
+        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
+
+        val entities = entitiesRepository.query("things")
+        assertThat(entities.size, equalTo(0))
     }
 
     @Test
@@ -219,8 +232,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
         assertThat(songs.size, equalTo(1))
@@ -243,8 +255,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
         assertThat(songs.size, equalTo(1))
@@ -267,8 +278,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
         assertThat(songs.size, equalTo(1))
@@ -291,8 +301,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
         assertThat(songs.size, equalTo(1))
@@ -314,8 +323,7 @@ class LocalEntityUseCasesTest {
             csv1,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         assertThat(entitiesRepository.savedEntities, equalTo(1))
 
@@ -325,8 +333,7 @@ class LocalEntityUseCasesTest {
             csv2,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         assertThat(entitiesRepository.savedEntities, equalTo(2))
     }
@@ -342,8 +349,7 @@ class LocalEntityUseCasesTest {
             csv1,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
 
         val onlineBranched = Entity.New("noah", "Noah", 3)
@@ -354,8 +360,7 @@ class LocalEntityUseCasesTest {
             csv2,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
 
         val songs = entitiesRepository.query("songs")
@@ -385,8 +390,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
         assertThat(songs.size, equalTo(1))
@@ -410,8 +414,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
         assertThat(songs.size, equalTo(1))
@@ -432,8 +435,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
         assertThat(songs.size, equalTo(1))
@@ -454,8 +456,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         assertThat(entitiesRepository.getLists().size, equalTo(0))
     }
@@ -473,8 +474,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         assertThat(entitiesRepository.getLists().size, equalTo(0))
     }
@@ -492,8 +492,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         assertThat(entitiesRepository.getLists().size, equalTo(0))
     }
@@ -507,8 +506,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
         assertThat(songs.size, equalTo(1))
@@ -524,8 +522,7 @@ class LocalEntityUseCasesTest {
             file,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         assertThat(entitiesRepository.getLists().size, equalTo(0))
     }
@@ -540,8 +537,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
         assertThat(songs.size, equalTo(2))
@@ -560,8 +556,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            entitySource.integrityUrl
+            FormFixtures.mediaFile(integrityUrl = entitySource.integrityUrl)
         )
 
         val songs = entitiesRepository.query("songs")
@@ -582,8 +577,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            entitySource.integrityUrl
+            FormFixtures.mediaFile(integrityUrl = entitySource.integrityUrl)
         )
 
         assertThat(entitySource.accesses, equalTo(1))
@@ -597,8 +591,7 @@ class LocalEntityUseCasesTest {
             csv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            entitySource.integrityUrl
+            FormFixtures.mediaFile(integrityUrl = entitySource.integrityUrl)
         )
 
         assertThat(entitySource.accesses, equalTo(0))
@@ -614,8 +607,7 @@ class LocalEntityUseCasesTest {
             firstCsv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
 
         val secondCsv = createEntityList(Entity.New("noah", "Noah"))
@@ -624,8 +616,7 @@ class LocalEntityUseCasesTest {
             secondCsv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
 
         val songs = entitiesRepository.query("songs")
@@ -644,8 +635,7 @@ class LocalEntityUseCasesTest {
             firstCsv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
 
         val secondCsv = createEntityList()
@@ -654,8 +644,7 @@ class LocalEntityUseCasesTest {
             secondCsv,
             entitiesRepository,
             entitySource,
-            UUID.randomUUID().toString(),
-            null
+            FormFixtures.mediaFile()
         )
 
         val songs = entitiesRepository.query("songs")
@@ -664,17 +653,16 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `updateLocalEntitiesFromServer updates the list hash with server prefix`() {
-        val csv = createEntityList()
+        val csv = createEntityList(Entity.New("cathedrals", "Cathedrals"))
         LocalEntityUseCases.updateLocalEntitiesFromServer(
             "songs",
             csv,
             entitiesRepository,
             entitySource,
-            "hash",
-            null
+            FormFixtures.mediaFile(hash = "hash")
         )
 
-        val hash = entitiesRepository.getListHash("songs")
+        val hash = entitiesRepository.getList("songs")?.hash
         assertThat(hash, equalTo("server:hash"))
     }
 
@@ -736,7 +724,7 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         wrapped.save(list, *entities)
     }
 
-    override fun getLists(): Set<String> {
+    override fun getLists(): List<EntityList> {
         accesses += 1
         return wrapped.getLists()
     }
@@ -765,14 +753,14 @@ private class MeasurableEntitiesRepository(private val wrapped: EntitiesReposito
         return wrapped.getByIndex(list, index)
     }
 
-    override fun updateListHash(list: String, hash: String) {
+    override fun updateList(list: String, hash: String, needsApproval: Boolean) {
         accesses += 1
-        wrapped.updateListHash(list, hash)
+        wrapped.updateList(list, hash, false)
     }
 
-    override fun getListHash(list: String): String? {
+    override fun getList(list: String): EntityList? {
         accesses += 1
-        return wrapped.getListHash(list)
+        return wrapped.getList(list)
     }
 }
 

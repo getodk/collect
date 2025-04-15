@@ -28,6 +28,7 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.LAST_DE
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.LAST_DETECTED_FORM_VERSION_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
+import static org.odk.collect.db.sqlite.SQLiteDatabaseExt.addColumn;
 
 import timber.log.Timber;
 
@@ -207,12 +208,12 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToVersion5(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_SEND, "text");
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, AUTO_DELETE, "text");
+        addColumn(db, FORMS_TABLE_NAME, AUTO_SEND, "text");
+        addColumn(db, FORMS_TABLE_NAME, AUTO_DELETE, "text");
     }
 
     private void upgradeToVersion6(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, LAST_DETECTED_FORM_VERSION_HASH, "text");
+        addColumn(db, FORMS_TABLE_NAME, LAST_DETECTED_FORM_VERSION_HASH, "text");
     }
 
     private void upgradeToVersion7(SQLiteDatabase db) {
@@ -224,7 +225,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToVersion8(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");
+        addColumn(db, FORMS_TABLE_NAME, GEOMETRY_XPATH, "text");
     }
 
     private void upgradeToVersion9(SQLiteDatabase db) {
@@ -261,7 +262,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToVersion12(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, LAST_DETECTED_ATTACHMENTS_UPDATE_DATE, "integer");
+        addColumn(db, FORMS_TABLE_NAME, LAST_DETECTED_ATTACHMENTS_UPDATE_DATE, "integer");
     }
 
     private void upgradeToVersion13(SQLiteDatabase db) {
@@ -276,7 +277,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToVersion14(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, USES_ENTITIES, "text");
+        addColumn(db, FORMS_TABLE_NAME, USES_ENTITIES, "text");
     }
 
     private void createFormsTableV4(SQLiteDatabase db, String tableName) {

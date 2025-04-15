@@ -35,4 +35,27 @@ object SQLiteDatabaseExt {
 
         return columnNames.toList()
     }
+
+    @JvmStatic
+    @JvmOverloads
+    fun SQLiteDatabase.addColumn(
+        table: String,
+        column: String,
+        type: String,
+        default: String? = null
+    ) {
+        if (default != null) {
+            this.execSQL(
+                """
+                ALTER TABLE $table ADD $column $type DEFAULT $default;
+                """.trimIndent()
+            )
+        } else {
+            this.execSQL(
+                """
+                ALTER TABLE $table ADD $column $type;
+                """.trimIndent()
+            )
+        }
+    }
 }

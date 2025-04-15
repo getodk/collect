@@ -1,7 +1,5 @@
 package org.odk.collect.db.sqlite;
 
-import static org.odk.collect.db.sqlite.SQLiteDatabaseExt.doesColumnExist;
-
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -30,14 +28,6 @@ public final class SQLiteUtils {
         boolean foundTable = cursor.getCount() == 1;
         cursor.close();
         return foundTable;
-    }
-
-    public static void addColumn(SQLiteDatabase db, String table, String column, String type) {
-        if (!doesColumnExist(db, table, column)) {
-            CustomSQLiteQueryExecutor.begin(db)
-                .alter().table(table).addColumn(column, type)
-                .end();
-        }
     }
 
     public static void renameTable(SQLiteDatabase db, String table, String newTable) {

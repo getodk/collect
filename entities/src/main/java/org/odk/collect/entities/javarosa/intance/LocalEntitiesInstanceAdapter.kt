@@ -5,11 +5,12 @@ import org.javarosa.core.model.instance.TreeElement
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.entities.storage.getListNames
 import org.odk.collect.shared.Query
 
 class LocalEntitiesInstanceAdapter(private val entitiesRepository: EntitiesRepository) {
 
-    private val lists = entitiesRepository.getLists()
+    private val lists = entitiesRepository.getListNames()
 
     fun supportsInstance(instanceId: String): Boolean {
         return lists.contains(instanceId)

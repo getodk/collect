@@ -109,7 +109,7 @@ object ServerFormUseCases {
                 }
             }
 
-            if (mediaFile.isEntityList) {
+            if (mediaFile.type != null) {
                 /**
                  * We wrap and then rethrow exceptions that happen here to make them easier to
                  * track in Crashlytics. This can be removed in the next release once any
@@ -122,8 +122,7 @@ object ServerFormUseCases {
                         tempMediaFile,
                         entitiesRepository,
                         entitySource,
-                        mediaFile.hash,
-                        mediaFile.integrityUrl
+                        mediaFile
                     )
                     entitiesDownloaded = true
                 } catch (t: Throwable) {
@@ -137,7 +136,7 @@ object ServerFormUseCases {
                  */
                 val isCsv = mediaFile.filename.endsWith(".csv")
                 val mostLikelyInstanceId = getEntityListFromFileName(mediaFile)
-                if (isCsv && entitiesRepository.getLists().contains(mostLikelyInstanceId)) {
+                if (isCsv && entitiesRepository.getList(mostLikelyInstanceId) != null) {
                     Analytics.setUserProperty("HasEntityListCollision", "true")
                 }
             }
