@@ -133,7 +133,11 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
 
     override fun getLists(): List<EntityList> {
         return databaseConnection.withConnection {
-            getListsFromDB(readableDatabase)
+            readableDatabase
+                .query(ListsTable.TABLE_NAME)
+                .foldAndClose(emptyList()) { list, cursor ->
+                    list + mapCursorRowToEntityList(cursor)
+                }
         }
     }
 
@@ -327,6 +331,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
+    private fun mapCursorRowToEntityList(cursor: Cursor): EntityList {
+        return EntityList(
+            cursor.getString(ListsTable.COLUMN_NAME),
+            cursor.getStringOrNull(ListsTable.COLUMN_HASH),
+            cursor.getBoolean(ListsTable.COLUMN_NEEDS_APPROVAL)
+        )
+    }
+
     private fun mapCursorRowToEntity(
         cursor: Cursor,
         rowId: Int
@@ -423,20 +435,4 @@ class EntitiesDatabaseMigrator : DatabaseMigrator {
     companion object {
         const val DATABASE_VERSION = 3
     }
-}
-
-private fun getListsFromDB(db: SQLiteDatabase): List<EntityList> {
-    return db
-        .query(ListsTable.TABLE_NAME)
-        .foldAndClose(emptyList()) { list, cursor ->
-            list + mapCursorRowToEntityList(cursor)
-        }
-}
-
-private fun mapCursorRowToEntityList(cursor: Cursor): EntityList {
-    return EntityList(
-        cursor.getString(ListsTable.COLUMN_NAME),
-        cursor.getStringOrNull(ListsTable.COLUMN_HASH),
-        cursor.getBoolean(ListsTable.COLUMN_NEEDS_APPROVAL)
-    )
 }
