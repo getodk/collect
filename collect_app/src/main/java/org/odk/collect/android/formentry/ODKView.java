@@ -24,7 +24,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,7 +39,6 @@ import android.widget.Toast;
 import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.LifecycleOwner;
@@ -116,6 +114,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     private final LinearLayout.LayoutParams layout;
     private final ArrayList<QuestionWidget> widgets;
     FormEntryCaption intentGroup = null;
+    int intentGroupStartIndex = -1;
 
     private WidgetValueChangedListener widgetValueChangedListener;
 
@@ -195,9 +194,10 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         // display which group you are in as well as the question
         setGroupText(groups);
 
-        for (FormEntryPrompt questionPrompt : questionPrompts) {
+        for (int questionIndex = 0; questionIndex < questionPrompts.length; questionIndex++) {
+            FormEntryPrompt questionPrompt = questionPrompts[questionIndex];
             if (groups != null && groups.length > 0) {
-                configureIntentGroup(context, questionPrompt);
+                configureIntentGroup(context, questionPrompt, questionIndex);
             }
             addWidgetForQuestion(questionPrompt);
         }
@@ -260,7 +260,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * question's closest containing group is the intent group. If it is, place the intent launch
      * button.
      */
-    private void configureIntentGroup(ComponentActivity context, FormEntryPrompt questionPrompt) {
+    private void configureIntentGroup(ComponentActivity context, FormEntryPrompt questionPrompt, int questionIndex) {
         if (intentGroup == null) { // there can only be one intent group in a field list so if it's been identified, skip this
             FormEntryCaption[] captions = formController.getGroupsForIndex(questionPrompt.getIndex());
 
@@ -271,8 +271,9 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
                 if (intentString != null && !intentString.isEmpty()) {
                     intentGroup = closestParent;
+                    intentGroupStartIndex = questionIndex;
                     try {
-                        addIntentLaunchButton(context, formController.getQuestionPrompts(closestParent.getIndex()), intentGroup, intentString);
+                        addIntentLaunchButton(context, formController.getQuestionPrompts(closestParent.getIndex()), intentGroup, intentString, -1);
                     } catch (RepeatsInFieldListException e) {
                         // ignore because it would have been handled as part of building the view initially
                     }
@@ -314,11 +315,47 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         widgets.add(index, qw);
 
         int indexAccountingForDividers = index * 2;
+
+        if (intentGroup != null) {
+            if (intentGroupStartIndex == -1) {
+                if (isInIntentGroup(question)) {
+                    // find the first question in the intent group to add the launch button there
+                    for (int i = 0; i < widgets.size(); i++) {
+                        if (isInIntentGroup(widgets.get(i).getFormEntryPrompt())) {
+                            String intentString = intentGroup.getFormElement().getAdditionalAttribute(null, "intent");
+                            try {
+                                addIntentLaunchButton(getContext(), formController.getQuestionPrompts(intentGroup.getIndex()), intentGroup, intentString, i * 2 - 1);
+                            } catch (RepeatsInFieldListException e) {
+                                // ignore because it would have been handled as part of building the view initially
+                            }
+                            intentGroupStartIndex = i;
+                            break;
+                        }
+                    }
+                    indexAccountingForDividers += 1;
+                }
+            } else if (index > intentGroupStartIndex) {
+                indexAccountingForDividers += 1;
+            } else if (index < intentGroupStartIndex) {
+                intentGroupStartIndex += 1;
+            }
+        }
+
         if (index > 0) {
             widgetsList.addView(getDividerView(), indexAccountingForDividers - 1);
         }
 
         widgetsList.addView(qw, indexAccountingForDividers, layout);
+    }
+
+    private boolean isInIntentGroup(FormEntryPrompt question) {
+        FormEntryCaption[] groupsForQuestion = formController.getGroupsForIndex(question.getIndex());
+        if (groupsForQuestion != null) {
+            FormEntryCaption closestParent = groupsForQuestion[groupsForQuestion.length - 1];
+            return closestParent.getIndex().equals(intentGroup.getIndex());
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -330,11 +367,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         boolean forceReadOnly = false;
 
         if (intentGroup != null) {
-            FormEntryCaption[] captions = formController.getGroupsForIndex(question.getIndex());
-            if (captions != null) {
-                FormEntryCaption closestParent = captions[captions.length - 1];
-                forceReadOnly = closestParent.getIndex().equals(intentGroup.getIndex());
-            }
+            forceReadOnly = isInIntentGroup(question);
         }
 
         QuestionWidget qw = widgetFactory.createWidgetFromPrompt(question, permissionsProvider, forceReadOnly);
@@ -440,7 +473,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * of the intent group for the current field list.
      */
     private void addIntentLaunchButton(Context context, FormEntryPrompt[] questionPrompts,
-                                       FormEntryCaption c, String intentString) {
+                                       FormEntryCaption c, String intentString, int viewIndex) {
         String v = c.getSpecialFormQuestionText("buttonText");
         final String buttonText = (v != null) ? v : context.getString(org.odk.collect.strings.R.string.launch_app);
 
@@ -460,7 +493,11 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         launchIntentButton.setTextSize(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.BODY_LARGE));
         launchIntentButton.setVisibility(VISIBLE);
 
-        widgetsList.addView(launchIntentButton);
+        if (viewIndex == -1) {
+            widgetsList.addView(launchIntentButton);
+        } else {
+            widgetsList.addView(launchIntentButton, viewIndex);
+        }
 
         launchIntentButton.setOnClickListener(view -> {
             String intentName = ExternalAppsUtils.extractIntentName(intentString);
@@ -688,11 +725,28 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      */
     public void removeWidgetAt(int index) {
         int indexAccountingForDividers = index * 2;
+        int intentGroupStartIndexWithDividers = intentGroupStartIndex * 2;
 
         // There may be a first TextView to display the group path. See addGroupText(FormEntryCaption[])
         if (widgetsList.getChildCount() > 0 && widgetsList.getChildAt(0) instanceof TextView) {
             indexAccountingForDividers += 1;
+            intentGroupStartIndexWithDividers += 1;
         }
+
+        // There may be an app launch button for an intent group
+        if (intentGroupStartIndexWithDividers != -1) {
+            // There must be at least one field in an intent group and relevance must be applied at
+            // the group level so remove the button if the field immediately after it is removed
+            if (index == intentGroupStartIndex) {
+                widgetsList.removeViewAt(intentGroupStartIndexWithDividers);
+                intentGroupStartIndex = -1;
+            } else if (index > intentGroupStartIndex) {
+                indexAccountingForDividers += 1;
+            } else {
+                intentGroupStartIndex -= 1;
+            }
+        }
+
         widgetsList.removeViewAt(indexAccountingForDividers);
 
         if (index > 0) {

@@ -65,7 +65,7 @@
             <group ref="/data/container/outside" intent="some.app.ACTION()">
                 <label>Outside</label>
                 <input ref="/data/container/outside/note">
-                    <label>Template length:
+                    <label>Length of template:
                         <output value=" /data/container/outside/template_length "/></label>
                 </input>
                 <input ref="/data/container/outside/text">

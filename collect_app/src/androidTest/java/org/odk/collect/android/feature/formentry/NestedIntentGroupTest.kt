@@ -15,11 +15,19 @@
  */
 package org.odk.collect.android.feature.formentry
 
+import android.app.Activity
+import android.app.Instrumentation
+import android.content.Intent
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.PositionAssertions.isCompletelyAbove
 import androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents.intending
+import androidx.test.espresso.intent.matcher.IntentMatchers.isInternal
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -28,6 +36,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.google.android.material.textfield.TextInputEditText
 import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.CoreMatchers.not
+import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -53,29 +63,74 @@ class NestedIntentGroupTest {
         .around(rule)
 
     @Test
-    fun appLaunchButtonIsShown() {
-        onView(withText(R.string.launch_app)).check(isCompletelyAbove(withText(containsString("NFIQ"))))
+    fun appLaunchButton__isShownAtTopOfIntentGroup() {
         onView(withText(R.string.launch_app)).check(isCompletelyBelow(withText(containsString("Skip?"))))
+        onView(withText(R.string.launch_app)).check(isCompletelyAbove(withText(containsString("NFIQ"))))
+    }
+
+    @Test
+    fun launchingApp__populatesValuesInIntentGroup() {
+        val nfiqMatcher = allOf(
+            isAssignableFrom(StringWidget::class.java),
+            hasDescendant(withText(containsString("NFIQ")))
+        )
+
+        val templateMatcher = allOf(
+            isAssignableFrom(StringWidget::class.java),
+            hasDescendant(withText(containsString("Template"))))
+
+        onView(allOf(isDescendantOfA(nfiqMatcher), isAssignableFrom(TextInputEditText::class.java)))
+            .check(matches(not(isDisplayed())))
+        onView(allOf(isDescendantOfA(templateMatcher), isAssignableFrom(TextInputEditText::class.java)))
+            .check(matches(not(isDisplayed())))
+
+        val resultIntent = Intent()
+        resultIntent.putExtra("right_thumb_Registration_NFIQ", "2")
+        resultIntent.putExtra("right_thumb_Registration_template", "foobar")
+
+        intending(not(isInternal())).respondWith(
+            Instrumentation.ActivityResult(
+                Activity.RESULT_OK, resultIntent
+            )
+        )
+
+        onView(withText(R.string.launch_app))
+            .perform(scrollTo(), click())
+
+        onView(allOf(isDescendantOfA(nfiqMatcher), isAssignableFrom(TextInputEditText::class.java)))
+            .check(matches(withText("2")))
+        onView(allOf(isDescendantOfA(templateMatcher), isAssignableFrom(TextInputEditText::class.java)))
+            .check(matches(withText("foobar")))
     }
 
     @Test
     fun onlyTheFirstGroupWithIntentAttr__isTreatedAsIntentGroup() {
-        val secondGroupTextFieldMatcher = CoreMatchers.allOf(
-            isDescendantOfA(withText("Some text")),
-            isDescendantOfA(
-                CoreMatchers.allOf(
-                    isAssignableFrom(StringWidget::class.java),
-                    CoreMatchers.not(isAssignableFrom(IntegerWidget::class.java)),
-                    CoreMatchers.not(isAssignableFrom(DecimalWidget::class.java))
-                )
-            ),
-            isAssignableFrom(TextInputEditText::class.java))
+        onView(withText(R.string.launch_app)).check(matches(isDisplayed()))
 
-        onView(secondGroupTextFieldMatcher).perform(scrollTo())
-            .check(matches(isDisplayed()))
+        val someTextMatcher = allOf(
+            isAssignableFrom(StringWidget::class.java),
+            hasDescendant(withText("Some text"))
+        )
 
-        onView(secondGroupTextFieldMatcher).perform()
-            .check(matches(isEnabled()))
+        onView(allOf(isDescendantOfA(someTextMatcher), isAssignableFrom(TextInputEditText::class.java)))
+            .perform(scrollTo())
+            .check(matches(allOf(isDisplayed(), isEnabled())))
+    }
+
+    @Test
+    fun relevance__showsAndHidesTheIntentGroup() {
+        onView(withText("Yes")).perform(click())
+
+        onView(withText(R.string.launch_app)).check(doesNotExist())
+        onView(withText(containsString("NFIQ"))).check(doesNotExist())
+        onView(withText(containsString("Template"))).check(doesNotExist())
+
+        onView(withText("No")).perform(click())
+
+        onView(withText(R.string.launch_app)).check(isCompletelyBelow(withText(containsString("Skip?"))))
+        onView(withText(R.string.launch_app)).check(isCompletelyAbove(withText(containsString("NFIQ"))))
+        onView(withText(containsString("NFIQ"))).check(matches(isDisplayed()))
+        onView(withText(containsString("Template"))).check(matches(isDisplayed()))
     }
 
     companion object {
