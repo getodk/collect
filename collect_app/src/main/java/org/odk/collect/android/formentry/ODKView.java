@@ -723,7 +723,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         }
 
         // There may be an app launch button for an intent group
-        if (intentGroupStartIndexWithDividers != -1) {
+        if (intentGroupStartIndex != -1) {
             // There must be at least one field in an intent group and relevance must be applied at
             // the group level so remove the button if the field immediately after it is removed
             if (index == intentGroupStartIndex) {
