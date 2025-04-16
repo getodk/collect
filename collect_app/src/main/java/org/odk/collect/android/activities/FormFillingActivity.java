@@ -2360,8 +2360,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         for (int i = 0; i < questionsAfterSave.length; i++) {
             if (!questionsThatHaveNotChanged.contains(questionsAfterSave[i])
                     && !questionsAfterSave[i].getIndex().equals(lastChangedIndex)) {
-                // The values of widgets in intent groups are set by the view so widgetValueChanged
-                // is never called. This means readOnlyOverride can always be set to false.
                 odkView.addWidgetForQuestion(questionsAfterSave[i], i);
             }
         }

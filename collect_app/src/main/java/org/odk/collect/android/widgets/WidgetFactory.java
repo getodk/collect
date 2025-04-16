@@ -80,7 +80,6 @@ public class WidgetFactory {
     private static final String PICKER_APPEARANCE = "picker";
 
     private final Activity activity;
-    private final boolean readOnlyOverride;
     private final boolean useExternalRecorder;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
@@ -96,7 +95,6 @@ public class WidgetFactory {
     private final AdvanceToNextListener advanceToNextListener;
 
     public WidgetFactory(Activity activity,
-                         boolean readOnlyOverride,
                          boolean useExternalRecorder,
                          WaitingForDataRegistry waitingForDataRegistry,
                          QuestionMediaManager questionMediaManager,
@@ -112,7 +110,6 @@ public class WidgetFactory {
                          AdvanceToNextListener advanceToNextListener
     ) {
         this.activity = activity;
-        this.readOnlyOverride = readOnlyOverride;
         this.useExternalRecorder = useExternalRecorder;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
@@ -129,6 +126,10 @@ public class WidgetFactory {
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
+        return createWidgetFromPrompt(prompt, permissionsProvider, false);
+    }
+
+    public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider, boolean readOnlyOverride) {
         String appearance = Appearances.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, readOnlyOverride);
         QuestionWidget.Dependencies dependencies = new QuestionWidget.Dependencies(audioPlayer);
