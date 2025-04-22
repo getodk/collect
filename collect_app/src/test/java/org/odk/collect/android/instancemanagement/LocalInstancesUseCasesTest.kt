@@ -127,21 +127,34 @@ class LocalInstancesUseCasesTest {
                 formVersion = form.version!!
             )
         )
-        val sourceInstanceFile = File(sourceInstance.instanceFilePath)
 
-        val clonedInstanceDbId = LocalInstancesUseCases.clone(
-            sourceInstanceFile,
+        // The first edit
+        val firstClonedInstanceDbId = LocalInstancesUseCases.clone(
+            File(sourceInstance.instanceFilePath),
             instancesDir.absolutePath,
             instancesRepository,
             formsRepository
         ) { Random.nextLong() }
-        val clonedInstance = instancesRepository.get(clonedInstanceDbId)!!
+        val firstClonedInstance = instancesRepository.get(firstClonedInstanceDbId)!!
 
         assertThat(instancesRepository.all.size, equalTo(2))
         assertThat(sourceInstance, equalTo(instancesRepository.get(sourceInstance.dbId)))
-        assertThat(sourceInstance, not(clonedInstance))
-        assertThat(clonedInstance.status, equalTo(Instance.STATUS_VALID))
-        assertThat(sourceInstance.instanceFilePath, not(clonedInstance.instanceFilePath))
+        assertThat(sourceInstance, not(firstClonedInstance))
+        assertThat(firstClonedInstance.status, equalTo(Instance.STATUS_VALID))
+        assertThat(sourceInstance.instanceFilePath, not(firstClonedInstance.instanceFilePath))
+        assertThat(firstClonedInstance.editOf, equalTo(sourceInstance.dbId))
+
+        // The second edit
+        val secondClonedInstanceDbId = LocalInstancesUseCases.clone(
+            File(firstClonedInstance.instanceFilePath),
+            instancesDir.absolutePath,
+            instancesRepository,
+            formsRepository
+        ) { Random.nextLong() }
+        val secondClonedInstance = instancesRepository.get(secondClonedInstanceDbId)!!
+
+        assertThat(instancesRepository.all.size, equalTo(3))
+        assertThat(secondClonedInstance.editOf, equalTo(sourceInstance.dbId))
     }
 
     @Test

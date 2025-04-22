@@ -17,7 +17,8 @@ object InstanceFixtures {
         canDeleteBeforeSend: Boolean = true,
         instancesDir: File = TempFiles.createTempDir(),
         formId: String = "formId",
-        formVersion: String = "version"
+        formVersion: String = "version",
+        editOf: Long? = null
     ): Instance {
         return InstanceUtils.buildInstance(formId, formVersion, instancesDir.absolutePath)
             .status(status)
@@ -31,6 +32,7 @@ object InstanceFixtures {
             }
             .deletedDate(deletedDate)
             .canDeleteBeforeSend(canDeleteBeforeSend)
+            .editOf(editOf)
             .build()
     }
 }
