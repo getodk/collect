@@ -225,7 +225,7 @@ public class InstanceProviderTest {
         Uri uri = addInstanceToDb(firstProjectId, "/blah1", "Instance 1");
 
         try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
-            assertThat(cursor.getColumnCount(), is(13));
+            assertThat(cursor.getColumnCount(), is(14));
         }
     }
 
