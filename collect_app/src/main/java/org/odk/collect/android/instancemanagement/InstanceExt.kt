@@ -28,6 +28,10 @@ fun Instance.isDraft(): Boolean {
     return draftStatuses.contains(status)
 }
 
+fun Instance.isEdit(): Boolean {
+    return editOf != null
+}
+
 fun Instance.showAsEditable(settingsProvider: SettingsProvider): Boolean {
     return isDraft() && settingsProvider.getProtectedSettings()
         .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
