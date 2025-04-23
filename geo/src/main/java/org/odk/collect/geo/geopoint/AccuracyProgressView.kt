@@ -10,10 +10,11 @@ import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.geo.GeoUtils.formatAccuracy
 import org.odk.collect.geo.databinding.AccuracyProgressLayoutBinding
 
-internal class AccuracyProgressView(context: Context, attrs: AttributeSet?) :
-    FrameLayout(context, attrs) {
-
-    constructor(context: Context) : this(context, null)
+internal class AccuracyProgressView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : FrameLayout(context, attrs, defStyle) {
 
     val binding = AccuracyProgressLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
