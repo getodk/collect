@@ -1,5 +1,19 @@
 package org.odk.collect.android.widgets.range;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
+
 import android.view.View;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -17,20 +31,6 @@ import org.odk.collect.testshared.SliderExtKt;
 
 import java.math.BigDecimal;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
-
 @RunWith(AndroidJUnit4.class)
 public class RangeDecimalWidgetTest {
     private static final String NO_TICKS_APPEARANCE = "no-ticks";
@@ -42,7 +42,7 @@ public class RangeDecimalWidgetTest {
         rangeQuestion = mock(RangeQuestion.class);
         when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.valueOf(1.5));
         when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.valueOf(5.5));
-        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.valueOf(0.5));
+        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.valueOf(0.1));
     }
 
     @Test
@@ -213,6 +213,14 @@ public class RangeDecimalWidgetTest {
         SliderExtKt.clickOnMaxValue(widget.slider);
 
         assertThat(widget.currentValue.getText(), equalTo("5.5"));
+    }
+
+    @Test
+    public void changingSliderValueToAnIntermediate_setsTheValueCorrectly() {
+        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+
+        SliderExtKt.clickOnFractionalValue(widget.slider, 0.3f);
+        assertThat(widget.currentValue.getText(), equalTo("2.3"));
     }
 
     private RangeDecimalWidget createWidget(FormEntryPrompt prompt) {
