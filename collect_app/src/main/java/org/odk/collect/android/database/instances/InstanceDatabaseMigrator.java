@@ -237,7 +237,8 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
                 + GEOMETRY + " text, "
                 + GEOMETRY_TYPE + " text, "
                 + EDIT_OF + " integer, "
-                + "FOREIGN KEY(" + EDIT_OF + ") REFERENCES " + INSTANCES_TABLE_NAME + "(" + _ID + ")"
+                + "FOREIGN KEY(" + EDIT_OF + ") REFERENCES " + INSTANCES_TABLE_NAME + "(" + _ID + "), "
+                + "CHECK (" + EDIT_OF + " != " + _ID + ")"
                 + ");"
         );
     }

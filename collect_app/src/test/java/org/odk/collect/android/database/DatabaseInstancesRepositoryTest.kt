@@ -1,10 +1,14 @@
 package org.odk.collect.android.database
 
+import android.database.sqlite.SQLiteConstraintException
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.assertThrows
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.database.instances.DatabaseInstancesRepository
 import org.odk.collect.forms.instances.InstancesRepository
+import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.formstest.InstancesRepositoryTest
 import org.odk.collect.shared.TempFiles.createTempDir
 import java.util.function.Supplier
@@ -33,5 +37,33 @@ class DatabaseInstancesRepositoryTest : InstancesRepositoryTest() {
 
     override fun getInstancesDir(): String {
         return instancesDir.absolutePath
+    }
+
+    @Test
+    fun save_failsWhenEditOfPointsAtItsOwnDbId() {
+        val instancesRepository = buildSubject()
+
+        val originalInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir)
+        val originalInstanceDbId = instancesRepository.save(originalInstance)
+
+        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId.dbId + 1)
+
+        assertThrows(SQLiteConstraintException::class.java) {
+            instancesRepository.save(editedInstance)
+        }
+    }
+
+    @Test
+    fun save_failsWhenEditOfPointsAtNonExistingDbId() {
+        val instancesRepository = buildSubject()
+
+        val originalInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir)
+        val originalInstanceDbId = instancesRepository.save(originalInstance)
+
+        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId.dbId + 100)
+
+        assertThrows(SQLiteConstraintException::class.java) {
+            instancesRepository.save(editedInstance)
+        }
     }
 }
