@@ -547,8 +547,8 @@
     <string name="delete_layer_confirmation_message">Are you sure you want to delete the %1$s offline layer?</string>
 
     <string name="record_geopoint">Record a point</string>
-    <string name="location_accuracy">Accuracy: %1$s m</string>
-    <string name="location_accuracy_unacceptable">⚠️ Accuracy: %1$s m (unacceptable)</string>
+    <string name="location_accuracy">Accuracy: %1$s</string>
+    <string name="location_accuracy_unacceptable">⚠️ Accuracy: %1$s (unacceptable)</string>
     <string name="provider_disabled_error">Sorry, Location providers are disabled!</string>
     <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
     <string name="google_play_services_not_available">This form wants to track your location but Google Play Services are not available.</string>
@@ -581,7 +581,7 @@
     <string name="accuracy_status_title">Getting Location</string>
 
     <!-- The accuracy of a location fix in meters -->
-    <string name="accuracy_m">%1$sm</string>
+    <string name="accuracy_m">%1$s m</string>
 
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
     <string name="west">W %1$s%2$s%3$s</string>

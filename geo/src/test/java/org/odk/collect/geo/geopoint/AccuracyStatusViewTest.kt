@@ -37,13 +37,13 @@ class AccuracyStatusViewTest {
         view.accuracy = LocationAccuracy.Unacceptable(0.0f)
         assertThat(
             view.binding.locationStatus.text,
-            equalTo(application.getString(R.string.location_accuracy_unacceptable, "0"))
+            equalTo(application.getString(R.string.location_accuracy_unacceptable, "0 m"))
         )
 
         view.accuracy = LocationAccuracy.Improving(0.0f)
         assertThat(
             view.binding.locationStatus.text,
-            equalTo(application.getString(R.string.location_accuracy, "0"))
+            equalTo(application.getString(R.string.location_accuracy, "0 m"))
         )
     }
 }

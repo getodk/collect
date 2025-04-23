@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.isGone
+import org.odk.collect.geo.GeoUtils
 import org.odk.collect.geo.databinding.AccuracyStatusLayoutBinding
 import org.odk.collect.strings.R
-import java.text.DecimalFormat
 
 internal class AccuracyStatusView @JvmOverloads constructor(
     context: Context,
@@ -47,13 +47,13 @@ internal class AccuracyStatusView @JvmOverloads constructor(
     }
 
     private fun formatLocationStatus(accuracy: LocationAccuracy): String {
-        val formattedValue = DecimalFormat("#.##").format(accuracy.value)
+        val formattedAccuracy = GeoUtils.formatAccuracy(context, accuracy.value)
         return when (accuracy) {
             is LocationAccuracy.Unacceptable -> {
-                context.getString(R.string.location_accuracy_unacceptable, formattedValue)
+                context.getString(R.string.location_accuracy_unacceptable, formattedAccuracy)
             }
 
-            else -> context.getString(R.string.location_accuracy, formattedValue)
+            else -> context.getString(R.string.location_accuracy, formattedAccuracy)
         }
     }
 }
