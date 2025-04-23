@@ -37,6 +37,10 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
             CAN_EDIT_WHEN_COMPLETE, INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS,
             LAST_STATUS_CHANGE_DATE, DELETED_DATE, GEOMETRY, GEOMETRY_TYPE};
 
+    private static final String[] COLUMN_NAMES_V8 = {_ID, DISPLAY_NAME, SUBMISSION_URI,
+            CAN_EDIT_WHEN_COMPLETE, INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS,
+            LAST_STATUS_CHANGE_DATE, DELETED_DATE, GEOMETRY, GEOMETRY_TYPE, CAN_DELETE_BEFORE_SEND};
+
     public void onCreate(SQLiteDatabase db) {
         createInstancesTableV9(db);
     }
@@ -147,7 +151,11 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToVersion9(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, EDIT_OF, "integer");
+        String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
+        SQLiteUtils.renameTable(db, INSTANCES_TABLE_NAME, temporaryTable);
+        createInstancesTableV9(db);
+        SQLiteUtils.copyRows(db, temporaryTable, COLUMN_NAMES_V8, INSTANCES_TABLE_NAME);
+        SQLiteUtils.dropTable(db, temporaryTable);
     }
 
     private void createInstancesTableV5(SQLiteDatabase db, String name) {
@@ -228,6 +236,9 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
                 + DELETED_DATE + " date, "
                 + GEOMETRY + " text, "
                 + GEOMETRY_TYPE + " text, "
-                + EDIT_OF + " integer);");
+                + EDIT_OF + " integer, "
+                + "FOREIGN KEY(" + EDIT_OF + ") REFERENCES " + INSTANCES_TABLE_NAME + "(" + _ID + ")"
+                + ");"
+        );
     }
 }

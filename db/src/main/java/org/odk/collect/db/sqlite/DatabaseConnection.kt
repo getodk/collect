@@ -151,4 +151,9 @@ private class DatabaseMigratorSQLiteOpenHelper(
             newVersion
         )
     }
+
+    override fun onConfigure(db: SQLiteDatabase?) {
+        super.onConfigure(db)
+        db?.setForeignKeyConstraintsEnabled(true)
+    }
 }
