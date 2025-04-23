@@ -3,9 +3,9 @@ package org.odk.collect.geo.geopoint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.withStyledAttributes
+import androidx.core.view.isGone
 import org.odk.collect.geo.databinding.AccuracyStatusLayoutBinding
 import org.odk.collect.strings.R
 import java.text.DecimalFormat
@@ -39,11 +39,7 @@ internal class AccuracyStatusView @JvmOverloads constructor(
 
     private fun render() {
         binding.title.text = title
-        if (title.isBlank()) {
-            binding.title.visibility = View.GONE
-        } else {
-            binding.title.visibility = View.VISIBLE
-        }
+        binding.title.isGone = title.isBlank()
 
         accuracy?.let {
             binding.locationStatus.text = formatLocationStatus(it)
