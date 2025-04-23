@@ -29,6 +29,7 @@ import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
+import org.odk.collect.geo.GeoUtils
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.strings.localization.getLocalizedString
 
@@ -79,7 +80,7 @@ class GeoPointDialogFragmentTest {
         whenever(viewModel.accuracyThreshold).thenReturn(5.0f)
         launcherRule.launch(GeoPointDialogFragment::class.java)
 
-        onView(withText(application.getLocalizedString(org.odk.collect.strings.R.string.point_will_be_saved, "5m")))
+        onView(withText(application.getLocalizedString(org.odk.collect.strings.R.string.point_will_be_saved, GeoUtils.formatAccuracy(application, 5.0f))))
             .inRoot(isDialog())
             .perform(scrollTo())
             .check(matches(isDisplayed()))
@@ -95,7 +96,7 @@ class GeoPointDialogFragmentTest {
         }
 
         currentAccuracyLiveData.value = LocationAccuracy.Improving(15.65f)
-        onView(withText("15.65m")).inRoot(isDialog())
+        onView(withText(GeoUtils.formatAccuracy(application, 15.65f))).inRoot(isDialog())
             .perform(scrollTo()).check(matches(isDisplayed()))
         scenario.onFragment {
             assertThat(it.binding.accuracyStatus.accuracy, equalTo(LocationAccuracy.Improving(15.65f)))
