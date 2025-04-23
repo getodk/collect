@@ -10,10 +10,11 @@ import org.odk.collect.geo.databinding.AccuracyStatusLayoutBinding
 import org.odk.collect.strings.R
 import java.text.DecimalFormat
 
-internal class AccuracyStatusView(context: Context, attrs: AttributeSet?) :
-    FrameLayout(context, attrs) {
-
-    constructor(context: Context) : this(context, null)
+internal class AccuracyStatusView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : FrameLayout(context, attrs, defStyle) {
 
     val binding =
         AccuracyStatusLayoutBinding.inflate(LayoutInflater.from(context), this, true)
