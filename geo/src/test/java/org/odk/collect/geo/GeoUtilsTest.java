@@ -1,7 +1,6 @@
 package org.odk.collect.geo;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import android.location.Location;
 
@@ -47,17 +46,5 @@ public class GeoUtilsTest {
     public void test_formatLocationResultString() {
         Location location = LocationTestUtils.createLocation("GPS", 1, 2, 3, 4);
         assertEquals(GeoUtils.formatLocationResultString(location), "1.0 2.0 3.0 4.0");
-    }
-
-    @Test
-    public void capitalizesGps() {
-        String input = "gps";
-        assertEquals("GPS", GeoUtils.capitalizeGps(input));
-
-        String locationProvider = "network";
-        assertEquals("network", GeoUtils.capitalizeGps(locationProvider));
-
-        String nullLocationProvider = null;
-        assertNull(GeoUtils.capitalizeGps(nullLocationProvider));
     }
 }
