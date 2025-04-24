@@ -70,7 +70,7 @@ class MapViewModel(
     }
 
     override fun onCleared() {
-        userZoomLevel?.also {
+        userZoomLevel?.let {
             metaSettings.save(LAST_KNOWN_ZOOM_LEVEL, it.toFloat())
         }
 
