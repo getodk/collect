@@ -91,7 +91,7 @@ public final class ExternalizableFormDefCache implements FormDefCache {
             } catch (Exception e) {
                 // New .formdef will be created from XML
                 Timber.w("Deserialization FAILED! Deleting cache file: %s", cachedForm.getAbsolutePath());
-                Timber.w(e);
+                Timber.e(e, "Deserialization FAILED!");
                 cachedForm.delete();
             }
         }
