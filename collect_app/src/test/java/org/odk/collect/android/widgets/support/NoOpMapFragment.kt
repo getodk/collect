@@ -37,7 +37,7 @@ class NoOpMapFragment : Fragment(), MapFragment {
     }
 
     override fun zoomToBoundingBox(
-        points: Iterable<MapPoint>?,
+        points: Iterable<MapPoint>,
         scaleFactor: Double,
         animate: Boolean
     ) {

@@ -70,7 +70,7 @@ interface MapFragment {
      * to occupy at most 80% of the width and 80% of the height of the viewport,
      * ensuring a margin of at least 10% on all sides.
      */
-    fun zoomToBoundingBox(points: Iterable<MapPoint>?, scaleFactor: Double, animate: Boolean)
+    fun zoomToBoundingBox(points: Iterable<MapPoint>, scaleFactor: Double, animate: Boolean)
 
     /**
      * Adds a marker to the map at the given location. If draggable is true,

@@ -1,7 +1,6 @@
 package org.odk.collect.maps
 
 import androidx.fragment.app.Fragment
-import java.util.function.Consumer
 
 /**
  * Convenience abstract class for implementing a [MapFragment] using [MapViewModel] to handle
@@ -24,13 +23,11 @@ abstract class MapViewModelMapFragment : Fragment(), MapFragment {
     }
 
     final override fun zoomToBoundingBox(
-        points: Iterable<MapPoint>?,
+        points: Iterable<MapPoint>,
         scaleFactor: Double,
         animate: Boolean
     ) {
-        val box = ArrayList<MapPoint>()
-        points!!.forEach(Consumer { e: MapPoint -> box.add(e) })
-        getMapViewModel().zoomTo(box, scaleFactor, animate)
+        getMapViewModel().zoomTo(points.toList(), scaleFactor, animate)
     }
 
     final override fun zoomToCurrentLocation(center: MapPoint?) {

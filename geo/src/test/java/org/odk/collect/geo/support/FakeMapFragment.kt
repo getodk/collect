@@ -76,11 +76,11 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     override fun zoomToBoundingBox(
-        points: Iterable<MapPoint>?,
+        points: Iterable<MapPoint>,
         scaleFactor: Double,
         animate: Boolean
     ) {
-        points?.let {
+        points.let {
             center = null
             zoom = 0.0
             zoomBoundingBox = Pair(
