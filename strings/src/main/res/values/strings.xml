@@ -1391,4 +1391,6 @@
     <string name="settings_json">Settings JSON</string>
     <!-- Text for the dialog that is displayed while the form is being prepared for editing -->
     <string name="preparing_form_edit">Preparing the form for editing…</string>
+    <!-- Instance name with a suffix indicating the edit number, if this is an edited instance -->
+    <string name="user_visible_instance_name">%s (Edit %d)</string>
 </resources>

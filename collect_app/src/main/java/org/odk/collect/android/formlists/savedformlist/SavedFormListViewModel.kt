@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import org.odk.collect.android.instancemanagement.InstancesDataService
+import org.odk.collect.android.instancemanagement.userVisibleInstanceName
 import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.async.Scheduler
@@ -43,13 +44,13 @@ class SavedFormListViewModel(
         .map { instances -> instances.filter { instance -> instance.deletedDate == null } }
         .combine(_sortOrder) { instances, order ->
             when (order) {
-                SortOrder.NAME_DESC -> instances.sortedByDescending { it.displayName.lowercase() }
+                SortOrder.NAME_DESC -> instances.sortedByDescending { it.userVisibleInstanceName().lowercase() }
                 SortOrder.DATE_DESC -> instances.sortedByDescending { it.lastStatusChangeDate }
-                SortOrder.NAME_ASC -> instances.sortedBy { it.displayName.lowercase() }
+                SortOrder.NAME_ASC -> instances.sortedBy { it.userVisibleInstanceName().lowercase() }
                 SortOrder.DATE_ASC -> instances.sortedBy { it.lastStatusChangeDate }
             }
         }.combine(_filterText) { instances, filter ->
-            instances.filter { it.displayName.contains(filter, ignoreCase = true) }
+            instances.filter { it.userVisibleInstanceName().contains(filter, ignoreCase = true) }
         }.flowOnBackground(scheduler).asLiveData()
 
     private val worker = TrackableWorker(scheduler)
