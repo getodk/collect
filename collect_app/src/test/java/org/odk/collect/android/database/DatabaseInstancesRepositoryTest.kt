@@ -11,12 +11,14 @@ import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.formstest.InstancesRepositoryTest
 import org.odk.collect.shared.TempFiles.createTempDir
+import java.io.File
 import java.util.function.Supplier
 
 @RunWith(AndroidJUnit4::class)
 class DatabaseInstancesRepositoryTest : InstancesRepositoryTest() {
     private val dbDir = createTempDir()
-    private val instancesDir = createTempDir()
+
+    override val instancesDir: File = createTempDir()
 
     override fun buildSubject(): InstancesRepository {
         return DatabaseInstancesRepository(
@@ -33,10 +35,6 @@ class DatabaseInstancesRepositoryTest : InstancesRepositoryTest() {
             instancesDir.absolutePath,
             clock
         )
-    }
-
-    override fun getInstancesDir(): String {
-        return instancesDir.absolutePath
     }
 
     @Test

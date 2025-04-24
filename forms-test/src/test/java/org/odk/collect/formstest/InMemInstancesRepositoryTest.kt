@@ -1,17 +1,12 @@
 package org.odk.collect.formstest
 
-import org.junit.Before
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.shared.TempFiles.createTempDir
+import java.io.File
 import java.util.function.Supplier
 
 class InMemInstancesRepositoryTest : InstancesRepositoryTest() {
-    private lateinit var tempDirectory: String
-
-    @Before
-    fun setup() {
-        tempDirectory = createTempDir().absolutePath
-    }
+    override val instancesDir: File = createTempDir()
 
     override fun buildSubject(): InstancesRepository {
         return InMemInstancesRepository { System.currentTimeMillis() }
@@ -19,9 +14,5 @@ class InMemInstancesRepositoryTest : InstancesRepositoryTest() {
 
     override fun buildSubject(clock: Supplier<Long>): InstancesRepository {
         return InMemInstancesRepository(clock)
-    }
-
-    override fun getInstancesDir(): String {
-        return tempDirectory
     }
 }
