@@ -14,6 +14,7 @@ import org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_DE
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_NUMBER
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_OF
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE
@@ -74,7 +75,7 @@ class InstanceDatabaseMigratorTest {
         database.insert(DatabaseConstants.INSTANCES_TABLE_NAME, null, contentValues)
         instancesDatabaseMigrator.onUpgrade(database, oldVersion)
         database.rawQuery("SELECT * FROM " + DatabaseConstants.INSTANCES_TABLE_NAME + ";", arrayOf<String>()).use { cursor ->
-            assertThat(cursor.columnCount, equalTo(14))
+            assertThat(cursor.columnCount, equalTo(15))
             assertThat(cursor.count, equalTo(1))
 
             cursor.moveToFirst()
@@ -93,6 +94,7 @@ class InstanceDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_TYPE)), equalTo(contentValues.getAsString(GEOMETRY_TYPE)))
             assertThat(cursor.getString(cursor.getColumnIndex(CAN_DELETE_BEFORE_SEND)), equalTo("true"))
             assertThat(cursor.getString(cursor.getColumnIndex(EDIT_OF)), equalTo(null))
+            assertThat(cursor.getString(cursor.getColumnIndex(EDIT_NUMBER)), equalTo(null))
         }
     }
 
@@ -107,7 +109,7 @@ class InstanceDatabaseMigratorTest {
         database.insert(DatabaseConstants.INSTANCES_TABLE_NAME, null, contentValues)
         instancesDatabaseMigrator.onUpgrade(database, oldVersion)
         database.rawQuery("SELECT * FROM " + DatabaseConstants.INSTANCES_TABLE_NAME + ";", arrayOf<String>()).use { cursor ->
-            assertThat(cursor.columnCount, equalTo(14))
+            assertThat(cursor.columnCount, equalTo(15))
             assertThat(cursor.count, equalTo(1))
 
             cursor.moveToFirst()
@@ -139,7 +141,7 @@ class InstanceDatabaseMigratorTest {
         database.insert(DatabaseConstants.INSTANCES_TABLE_NAME, null, contentValues)
         instancesDatabaseMigrator.onUpgrade(database, oldVersion)
         database.rawQuery("SELECT * FROM " + DatabaseConstants.INSTANCES_TABLE_NAME + ";", arrayOf<String>()).use { cursor ->
-            assertThat(cursor.columnCount, equalTo(14))
+            assertThat(cursor.columnCount, equalTo(15))
             assertThat(cursor.count, equalTo(1))
 
             cursor.moveToFirst()

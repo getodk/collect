@@ -120,6 +120,7 @@ object DatabaseObjectMapper {
             .geometry(values.getAsString(DatabaseInstanceColumns.GEOMETRY))
             .geometryType(values.getAsString(DatabaseInstanceColumns.GEOMETRY_TYPE))
             .editOf(values.getAsLong(DatabaseInstanceColumns.EDIT_OF))
+            .editNumber(values.getAsLong(DatabaseInstanceColumns.EDIT_NUMBER))
             .build()
     }
 
@@ -144,6 +145,7 @@ object DatabaseObjectMapper {
         val canDeleteBeforeSendIndex =
             cursor.getColumnIndex(DatabaseInstanceColumns.CAN_DELETE_BEFORE_SEND)
         val editOfColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.EDIT_OF)
+        val editNumberColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.EDIT_NUMBER)
 
         return Instance.Builder()
             .dbId(dbId)
@@ -180,6 +182,13 @@ object DatabaseObjectMapper {
                     cursor.getLong(editOfColumnIndex)
                 }
             )
+            .editNumber(
+                if (cursor.isNull(editNumberColumnIndex)) {
+                    null
+                } else {
+                    cursor.getLong(editNumberColumnIndex)
+                }
+            )
             .build()
     }
 
@@ -209,6 +218,7 @@ object DatabaseObjectMapper {
             Boolean.toString(instance.canDeleteBeforeSend())
         )
         values.put(DatabaseInstanceColumns.EDIT_OF, instance.editOf)
+        values.put(DatabaseInstanceColumns.EDIT_NUMBER, instance.editNumber)
 
         return values
     }

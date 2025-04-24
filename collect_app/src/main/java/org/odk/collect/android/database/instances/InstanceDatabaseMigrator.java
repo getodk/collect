@@ -6,6 +6,7 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_NUMBER;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_OF;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE;
@@ -148,6 +149,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
 
     private void upgradeToVersion9(SQLiteDatabase db) {
         db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + EDIT_OF + " integer REFERENCES " + INSTANCES_TABLE_NAME + "(" + _ID + ") CHECK (" + EDIT_OF + " != " + _ID + ")");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, EDIT_NUMBER, "integer");
     }
 
     private void createInstancesTableV5(SQLiteDatabase db, String name) {
@@ -228,7 +230,8 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
                 + DELETED_DATE + " date, "
                 + GEOMETRY + " text, "
                 + GEOMETRY_TYPE + " text, "
-                + EDIT_OF + " integer REFERENCES " + INSTANCES_TABLE_NAME + "(" + _ID + ") CHECK (" + EDIT_OF + " != " + _ID + ")"
+                + EDIT_OF + " integer REFERENCES " + INSTANCES_TABLE_NAME + "(" + _ID + ") CHECK (" + EDIT_OF + " != " + _ID + "),"
+                + EDIT_NUMBER + " integer"
                 + ");"
         );
     }

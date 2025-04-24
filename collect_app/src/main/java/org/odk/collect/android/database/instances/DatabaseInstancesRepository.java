@@ -27,6 +27,7 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_NUMBER;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_OF;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE;
@@ -251,7 +252,8 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                     GEOMETRY,
                     GEOMETRY_TYPE,
                     CAN_DELETE_BEFORE_SEND,
-                    EDIT_OF
+                    EDIT_OF,
+                    EDIT_NUMBER
             };
         }
 
