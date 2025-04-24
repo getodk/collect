@@ -63,6 +63,13 @@ object LocalInstancesUseCases {
                         sourceInstance.editOf
                     }
                 )
+                .editNumber(
+                    if (sourceInstance.editNumber == null) {
+                        1
+                    } else {
+                        sourceInstance.editNumber!! + 1
+                    }
+                )
                 .build()
         ).dbId
     }
