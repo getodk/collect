@@ -155,6 +155,12 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        enableLocationUpdates(clientWantsLocationUpdates);
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         enableLocationUpdates(false);
