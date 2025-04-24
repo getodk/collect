@@ -191,7 +191,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             public boolean onZoom(ZoomEvent event) {
                 if (!isSystemZooming) {
                     mapViewModel.onUserMove(getCenter(), event.getZoomLevel());
-
                 }
                 return false;
             }
