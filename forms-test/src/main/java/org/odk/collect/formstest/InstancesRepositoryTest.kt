@@ -4,6 +4,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.notNullValue
+import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -478,5 +479,33 @@ abstract class InstancesRepositoryTest {
 
         instancesRepository.delete(instance.dbId)
         assertThat(instanceDir.exists(), equalTo(false))
+    }
+
+    @Test
+    fun save_failsWhenEditOfPointsAtItsOwnDbId() {
+        val instancesRepository = buildSubject()
+
+        val originalInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir)
+        val originalInstanceDbId = instancesRepository.save(originalInstance)
+
+        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId.dbId + 1)
+
+        assertThrows(InstancesRepository.IntegrityException::class.java) {
+            instancesRepository.save(editedInstance)
+        }
+    }
+
+    @Test
+    fun save_failsWhenEditOfPointsAtNonExistingDbId() {
+        val instancesRepository = buildSubject()
+
+        val originalInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir)
+        val originalInstanceDbId = instancesRepository.save(originalInstance)
+
+        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId.dbId + 100)
+
+        assertThrows(InstancesRepository.IntegrityException::class.java) {
+            instancesRepository.save(editedInstance)
+        }
     }
 }

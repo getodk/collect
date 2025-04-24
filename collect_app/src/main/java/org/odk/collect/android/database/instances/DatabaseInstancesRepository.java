@@ -3,6 +3,7 @@ package org.odk.collect.android.database.instances;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.StrictMode;
@@ -257,12 +258,16 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         return qb.query(readableDatabase, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
-    private long insert(ContentValues values) {
-        return databaseConnection.getWritableDatabase().insertOrThrow(
-                INSTANCES_TABLE_NAME,
-                null,
-                values
-        );
+    private long insert(ContentValues values) throws IntegrityException {
+        try {
+            return databaseConnection.getWritableDatabase().insertOrThrow(
+                    INSTANCES_TABLE_NAME,
+                    null,
+                    values
+            );
+        } catch (SQLiteConstraintException e) {
+            throw new IntegrityException();
+        }
     }
 
     private void update(Long instanceId, ContentValues values) {
