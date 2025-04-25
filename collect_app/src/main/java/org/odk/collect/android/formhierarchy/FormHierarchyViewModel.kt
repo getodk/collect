@@ -6,11 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.instance.TreeReference
+import org.odk.collect.android.instancemanagement.InstanceEditResult
 import org.odk.collect.android.instancemanagement.InstancesDataService
-import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.async.Scheduler
+import java.io.File
 
 class FormHierarchyViewModel(scheduler: Scheduler) : ViewModel() {
     private val trackableWorker = TrackableWorker(scheduler)
@@ -26,18 +27,18 @@ class FormHierarchyViewModel(scheduler: Scheduler) : ViewModel() {
     fun shouldShowRepeatGroupPicker() = repeatGroupPickerIndex != null
 
     fun editInstance(
-        formController: FormController,
+        instanceFile: File,
         instancesDataService: InstancesDataService,
         projectId: String
-    ): LiveData<Consumable<Long>> {
-        val result = MutableLiveData<Consumable<Long>>()
+    ): LiveData<Consumable<InstanceEditResult>> {
+        val result = MutableLiveData<Consumable<InstanceEditResult>>()
 
         trackableWorker.immediate(
             background = {
-                instancesDataService.clone(formController.getInstanceFile()!!, projectId)
+                instancesDataService.editInstance(instanceFile, projectId)
             },
-            foreground = { dbId ->
-                result.value = Consumable(dbId)
+            foreground = { instanceEditResult ->
+                result.value = Consumable(instanceEditResult)
             }
         )
 

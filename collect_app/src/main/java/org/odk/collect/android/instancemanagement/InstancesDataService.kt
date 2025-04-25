@@ -242,10 +242,10 @@ class InstancesDataService(
         }
     }
 
-    fun clone(instanceFile: File, projectId: String): Long {
+    fun editInstance(instanceFile: File, projectId: String): InstanceEditResult {
         val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
 
-        return LocalInstancesUseCases.clone(
+        return LocalInstancesUseCases.editInstance(
             instanceFile,
             projectDependencyModule.instancesDir,
             projectDependencyModule.instancesRepository,

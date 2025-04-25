@@ -37,14 +37,50 @@ object LocalInstancesUseCases {
         }
     }
 
-    fun clone(
+    fun editInstance(
         instanceFile: File,
         instancesDir: String,
         instancesRepository: InstancesRepository,
         formsRepository: FormsRepository,
         clock: () -> Long = { System.currentTimeMillis() }
-    ): Long {
+    ): InstanceEditResult {
         val sourceInstance = instancesRepository.getOneByPath(instanceFile.absolutePath)!!
+
+        val latestEditInstance = findLatestEditIfExists(sourceInstance, instancesRepository)
+        if (latestEditInstance != null) {
+            return InstanceEditResult.EditBlockedByNewerExistingEdit(latestEditInstance)
+        }
+
+        val targetInstance = cloneInstance(sourceInstance, instanceFile, instancesDir, instancesRepository, formsRepository, clock)
+
+        return InstanceEditResult.EditCompleted(targetInstance)
+    }
+
+    private fun findLatestEditIfExists(
+        instance: Instance,
+        instancesRepository: InstancesRepository
+    ): Instance? {
+        val editGroupId = if (instance.isEdit()) {
+            instance.editOf
+        } else {
+            instance.dbId
+        }
+
+        return instancesRepository
+            .all
+            .filter { it.editOf == editGroupId }
+            .maxByOrNull { it.editNumber!! }
+            ?.takeIf { it.dbId != instance.dbId }
+    }
+
+    private fun cloneInstance(
+        sourceInstance: Instance,
+        instanceFile: File,
+        instancesDir: String,
+        instancesRepository: InstancesRepository,
+        formsRepository: FormsRepository,
+        clock: () -> Long = { System.currentTimeMillis() }
+    ): Instance {
         val formName = formsRepository.getAllByFormIdAndVersion(
             sourceInstance.formId,
             sourceInstance.formVersion
@@ -71,7 +107,7 @@ object LocalInstancesUseCases {
                     }
                 )
                 .build()
-        ).dbId
+        )
     }
 
     private fun copyInstanceDir(
@@ -89,4 +125,9 @@ object LocalInstancesUseCases {
 
         return targetInstanceFile
     }
+}
+
+sealed class InstanceEditResult(val instance: Instance) {
+    data class EditCompleted(val resultInstance: Instance) : InstanceEditResult(resultInstance)
+    data class EditBlockedByNewerExistingEdit(val resultInstance: Instance) : InstanceEditResult(resultInstance)
 }

@@ -1393,4 +1393,16 @@
     <string name="preparing_form_edit">Preparing the form for editing…</string>
     <!-- Instance name with a suffix indicating the edit number, if this is an edited instance -->
     <string name="user_visible_instance_name">%s (Edit %d)</string>
+    <!-- Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists -->
+    <string name="newer_draft_edit_found_dialog_title">Continue editing draft?</string>
+    <!-- Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists -->
+    <string name="newer_draft_edit_found_dialog_message">\'A draft edit was saved on\' EEE, MMM dd, yyyy \'at\' HH:mm\'\n\nDo you want to resume this edit?\'</string>
+    <!-- Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists -->
+    <string name="newer_draft_edit_found_dialog_positive_button">Resume editing</string>
+    <!-- Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists -->
+    <string name="newer_finalized_edit_found_dialog_title">Edit latest version?</string>
+    <!-- Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists -->
+    <string name="newer_finalized_edit_found_dialog_message">\'This submission was previously edited.\n\nWould you like to edit the latest version finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm\'?\'</string>
+    <!-- Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists -->
+    <string name="newer_finalized_edit_found_dialog_positive_button">Edit latest form</string>
 </resources>

@@ -46,6 +46,8 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory;
+import org.odk.collect.android.instancemanagement.InstanceEditResult;
+import org.odk.collect.android.instancemanagement.InstanceExtKt;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
@@ -53,10 +55,14 @@ import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -115,13 +121,7 @@ public class FormHierarchyFragment extends Fragment {
         menuProvider = new FormHiearchyMenuProvider(formEntryViewModel, formHierarchyViewModel, viewOnly, new FormHiearchyMenuProvider.OnClickListener() {
             @Override
             public void onEditClicked() {
-                formHierarchyViewModel
-                        .editInstance(formEntryViewModel.getFormController(), instancesDataService, currentProjectId)
-                        .observe(getViewLifecycleOwner(), dbId -> {
-                            Intent intent = FormFillingIntentFactory.editFinalizedFormIntent(requireContext(), currentProjectId, dbId.getValue());
-                            startActivity(intent);
-                            requireActivity().getOnBackPressedDispatcher().onBackPressed();
-                        });
+                editInstance(formEntryViewModel.getFormController().getAbsoluteInstancePath());
             }
 
             @Override
@@ -162,6 +162,71 @@ public class FormHierarchyFragment extends Fragment {
                 DialogFragmentUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getChildFragmentManager());
             }
         });
+    }
+
+    private void editInstance(String instanceFilePath) {
+        formHierarchyViewModel
+                .editInstance(new File(instanceFilePath), instancesDataService, currentProjectId)
+                .observe(getViewLifecycleOwner(), instanceEditResult -> {
+                    if (!instanceEditResult.isConsumed()) {
+                        instanceEditResult.consume();
+                        handleInstanceEditResult(instanceEditResult.getValue());
+                    }
+                });
+    }
+
+    private void handleInstanceEditResult(InstanceEditResult result) {
+        Instance instance = result.getInstance();
+
+        if (result instanceof InstanceEditResult.EditCompleted) {
+            openEditedInstance(instance.getDbId());
+        } else if (result instanceof InstanceEditResult.EditBlockedByNewerExistingEdit) {
+            if (InstanceExtKt.isDraft(instance)) {
+                showOpenDraftEditDialog(instance);
+            } else {
+                showOpenFinalizedEditDialog(instance);
+            }
+        }
+    }
+
+    private void openEditedInstance(long dbId) {
+        Intent intent = FormFillingIntentFactory.editFinalizedFormIntent(requireContext(), currentProjectId, dbId);
+        startActivity(intent);
+        requireActivity().getOnBackPressedDispatcher().onBackPressed();
+    }
+
+    private void showOpenDraftEditDialog(Instance instance) {
+        String dialogMessage = new SimpleDateFormat(
+                getString(org.odk.collect.strings.R.string.newer_draft_edit_found_dialog_message),
+                Locale.getDefault()
+        ).format(instance.getLastStatusChangeDate());
+
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(org.odk.collect.strings.R.string.newer_draft_edit_found_dialog_title)
+                .setMessage(dialogMessage)
+                .setPositiveButton(org.odk.collect.strings.R.string.newer_draft_edit_found_dialog_positive_button, (dialog, which) -> {
+                    Intent intent = FormFillingIntentFactory.editDraftFormIntent(requireContext(), currentProjectId, instance.getDbId());
+                    startActivity(intent);
+                    requireActivity().getOnBackPressedDispatcher().onBackPressed();
+                })
+                .setNegativeButton(org.odk.collect.strings.R.string.cancel, (dialog, which) -> {})
+                .setCancelable(false)
+                .show();
+    }
+
+    private void showOpenFinalizedEditDialog(Instance instance) {
+        String dialogMessage = new SimpleDateFormat(
+                getString(org.odk.collect.strings.R.string.newer_finalized_edit_found_dialog_message),
+                Locale.getDefault()
+        ).format(instance.getLastStatusChangeDate());
+
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(org.odk.collect.strings.R.string.newer_finalized_edit_found_dialog_title)
+                .setMessage(dialogMessage)
+                .setPositiveButton(org.odk.collect.strings.R.string.newer_finalized_edit_found_dialog_positive_button, (dialog, which) -> editInstance(instance.getInstanceFilePath()))
+                .setNegativeButton(org.odk.collect.strings.R.string.cancel, (dialog, which) -> {})
+                .setCancelable(false)
+                .show();
     }
 
     @Override
