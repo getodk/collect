@@ -41,10 +41,10 @@ fun Instance.showAsEditable(settingsProvider: SettingsProvider): Boolean {
 fun Instance.userVisibleInstanceName(
     resources: Resources = Collect.getInstance().resources
 ): String {
-    return if (editOf == null) {
-        displayName
-    } else {
+    return if (isEdit()) {
         resources.getString(R.string.user_visible_instance_name, displayName, editNumber)
+    } else {
+        displayName
     }
 }
 
