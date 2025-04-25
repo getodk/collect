@@ -444,7 +444,6 @@
   <string name="delete_layer_confirmation_message">Voulez-vous vraiment supprimer la couche hors ligne %1$s?</string>
   <string name="record_geopoint">Enregistrer un point</string>
   <string name="location_accuracy">Précision: %1$s m</string>
-  <string name="location_provider">Fournisseur de la localisation: 1%s</string>
   <string name="provider_disabled_error">Désolé, le fournisseur de localisation est désactivé.</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrécision: %4$sm</string>
   <string name="google_play_services_not_available">Ce formulaire souhaite suivre votre localisation, mais les Services de Google Play ne sont pas disponible</string>
@@ -515,10 +514,6 @@
     <item quantity="many">%d mètres</item>
     <item quantity="other">%d mètres</item>
   </plurals>
-  <string name="location_status_searching">Recherche de la localisation, veuillez patienter…</string>
-  <string name="location_status_accuracy">Précision de la localisation: %.2f m</string>
-  <string name="location_status_acceptable">Précision de la localisation: %.2f m (acceptable)</string>
-  <string name="location_status_unacceptable">Précision de la localisation: %.2f m (inacceptable)</string>
   <string name="collection_status_paused">Points entrés: %d</string>
   <string name="collection_status_placement">Points entrés: %d (appuyez pour placer des points)</string>
   <string name="collection_status_manual">Points entrés: %d (enregistrement manuel)</string>

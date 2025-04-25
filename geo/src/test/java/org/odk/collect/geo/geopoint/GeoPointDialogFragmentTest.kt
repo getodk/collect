@@ -29,6 +29,7 @@ import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
+import org.odk.collect.geo.GeoUtils
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.strings.localization.getLocalizedString
 
@@ -37,7 +38,7 @@ class GeoPointDialogFragmentTest {
 
     private val application = getApplicationContext<RobolectricApplication>()
 
-    private val currentAccuracyLiveData: MutableLiveData<GeoPointAccuracy?> = MutableLiveData(null)
+    private val currentAccuracyLiveData: MutableLiveData<LocationAccuracy?> = MutableLiveData(null)
     private val timeElapsedLiveData: MutableNonNullLiveData<Long> = MutableNonNullLiveData(0)
     private val satellitesLiveData = MutableNonNullLiveData(0)
     private val viewModel = mock<GeoPointViewModel> {
@@ -70,7 +71,7 @@ class GeoPointDialogFragmentTest {
         launcherRule.launch(GeoPointDialogFragment::class.java)
         onView(withText(org.odk.collect.strings.R.string.save)).inRoot(isDialog()).check(matches(not(isEnabled())))
 
-        currentAccuracyLiveData.value = GeoPointAccuracy.Improving(5.0f)
+        currentAccuracyLiveData.value = LocationAccuracy.Improving(5.0f)
         onView(withText(org.odk.collect.strings.R.string.save)).inRoot(isDialog()).check(matches(isEnabled()))
     }
 
@@ -79,7 +80,7 @@ class GeoPointDialogFragmentTest {
         whenever(viewModel.accuracyThreshold).thenReturn(5.0f)
         launcherRule.launch(GeoPointDialogFragment::class.java)
 
-        onView(withText(application.getLocalizedString(org.odk.collect.strings.R.string.point_will_be_saved, "5m")))
+        onView(withText(application.getLocalizedString(org.odk.collect.strings.R.string.point_will_be_saved, GeoUtils.formatAccuracy(application, 5.0f))))
             .inRoot(isDialog())
             .perform(scrollTo())
             .check(matches(isDisplayed()))
@@ -89,16 +90,16 @@ class GeoPointDialogFragmentTest {
     fun `shows and updates current accuracy`() {
         val scenario = launcherRule.launch(GeoPointDialogFragment::class.java)
 
-        currentAccuracyLiveData.value = GeoPointAccuracy.Improving(50.2f)
+        currentAccuracyLiveData.value = LocationAccuracy.Improving(50.2f)
         scenario.onFragment {
-            assertThat(it.binding.accuracyStatus.accuracy, equalTo(GeoPointAccuracy.Improving(50.2f)))
+            assertThat(it.binding.accuracyStatus.accuracy, equalTo(LocationAccuracy.Improving(50.2f)))
         }
 
-        currentAccuracyLiveData.value = GeoPointAccuracy.Improving(15.65f)
-        onView(withText("15.65m")).inRoot(isDialog())
+        currentAccuracyLiveData.value = LocationAccuracy.Improving(15.65f)
+        onView(withText(GeoUtils.formatAccuracy(application, 15.65f))).inRoot(isDialog())
             .perform(scrollTo()).check(matches(isDisplayed()))
         scenario.onFragment {
-            assertThat(it.binding.accuracyStatus.accuracy, equalTo(GeoPointAccuracy.Improving(15.65f)))
+            assertThat(it.binding.accuracyStatus.accuracy, equalTo(LocationAccuracy.Improving(15.65f)))
         }
     }
 
@@ -163,7 +164,7 @@ class GeoPointDialogFragmentTest {
     @Test
     fun `clicking save calls forceLocation() on view model`() {
         launcherRule.launch(GeoPointDialogFragment::class.java)
-        currentAccuracyLiveData.value = GeoPointAccuracy.Improving(5.0f)
+        currentAccuracyLiveData.value = LocationAccuracy.Improving(5.0f)
 
         onView(withText(org.odk.collect.strings.R.string.save)).inRoot(isDialog()).perform(click())
         verify(viewModel).forceLocation()

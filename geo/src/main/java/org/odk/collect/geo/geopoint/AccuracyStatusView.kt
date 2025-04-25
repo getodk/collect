@@ -1,71 +1,59 @@
 package org.odk.collect.geo.geopoint
 
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
-import org.odk.collect.geo.GeoUtils.formatAccuracy
-import org.odk.collect.geo.R
-import org.odk.collect.geo.databinding.AccuracyStatusBinding
+import androidx.core.content.withStyledAttributes
+import androidx.core.view.isGone
+import org.odk.collect.geo.GeoUtils
+import org.odk.collect.geo.databinding.AccuracyStatusLayoutBinding
+import org.odk.collect.strings.R
 
-internal class AccuracyStatusView(context: Context, attrs: AttributeSet?) :
-    FrameLayout(context, attrs) {
+internal class AccuracyStatusView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : FrameLayout(context, attrs, defStyle) {
 
-    constructor(context: Context) : this(context, null)
+    val binding =
+        AccuracyStatusLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
-    var binding = AccuracyStatusBinding.inflate(LayoutInflater.from(context), this, true)
-        private set
-
-    var accuracy: GeoPointAccuracy? = null
+    var title: String = ""
         set(value) {
             field = value
-            if (value != null) {
-                render(value)
-            }
+            render()
         }
 
-    private fun render(accuracy: GeoPointAccuracy) {
-        val (backgroundColor, textColor) = getBackgroundAndTextColor(accuracy)
-        binding.root.background = ColorDrawable(backgroundColor)
-        binding.title.setTextColor(textColor)
-        binding.text.setTextColor(textColor)
-        binding.currentAccuracy.setTextColor(textColor)
-        binding.strength.setIndicatorColor(textColor)
+    var accuracy: LocationAccuracy? = null
+        set(value) {
+            field = value
+            render()
+        }
 
-        binding.currentAccuracy.text = formatAccuracy(context, accuracy.value)
-
-        val (text, strength) = getTextAndStrength(accuracy)
-        binding.text.setText(text)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            binding.strength.setProgress(strength, true)
-        } else {
-            binding.strength.progress = strength
+    init {
+        context.withStyledAttributes(attrs, org.odk.collect.geo.R.styleable.AccuracyStatusView) {
+            title = getString(org.odk.collect.geo.R.styleable.AccuracyStatusView_title) ?: ""
         }
     }
 
-    private fun getBackgroundAndTextColor(accuracy: GeoPointAccuracy): Pair<Int, Int> {
-        return if (accuracy is GeoPointAccuracy.Unacceptable) {
-            Pair(
-                getThemeAttributeValue(context, com.google.android.material.R.attr.colorError),
-                getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnError)
-            )
-        } else {
-            Pair(
-                getThemeAttributeValue(context, com.google.android.material.R.attr.colorPrimary),
-                getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnPrimary)
-            )
+    private fun render() {
+        binding.title.text = title
+        binding.title.isGone = title.isBlank()
+
+        accuracy?.let {
+            binding.locationStatus.text = formatLocationStatus(it)
         }
     }
 
-    private fun getTextAndStrength(accuracy: GeoPointAccuracy): Pair<Int, Int> {
+    private fun formatLocationStatus(accuracy: LocationAccuracy): String {
+        val formattedAccuracy = GeoUtils.formatAccuracy(context, accuracy.value)
         return when (accuracy) {
-            is GeoPointAccuracy.Improving -> Pair(org.odk.collect.strings.R.string.improving_accuracy, 80)
-            is GeoPointAccuracy.Poor -> Pair(org.odk.collect.strings.R.string.poor_accuracy, 60)
-            is GeoPointAccuracy.Unacceptable -> Pair(org.odk.collect.strings.R.string.unacceptable_accuracy, 40)
+            is LocationAccuracy.Unacceptable -> {
+                context.getString(R.string.location_accuracy_unacceptable, formattedAccuracy)
+            }
+
+            else -> context.getString(R.string.location_accuracy, formattedAccuracy)
         }
     }
 }

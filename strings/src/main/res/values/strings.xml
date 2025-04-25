@@ -549,8 +549,8 @@
     <string name="delete_layer_confirmation_message">Are you sure you want to delete the %1$s offline layer?</string>
 
     <string name="record_geopoint">Record a point</string>
-    <string name="location_accuracy">Accuracy: %1$s m</string>
-    <string name="location_provider">Location provider: %s</string>
+    <string name="location_accuracy">Accuracy: %1$s</string>
+    <string name="location_accuracy_unacceptable">⚠️ Accuracy: %1$s (unacceptable)</string>
     <string name="provider_disabled_error">Sorry, Location providers are disabled!</string>
     <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
     <string name="google_play_services_not_available">This form wants to track your location but Google Play Services are not available.</string>
@@ -583,7 +583,7 @@
     <string name="accuracy_status_title">Getting Location</string>
 
     <!-- The accuracy of a location fix in meters -->
-    <string name="accuracy_m">%1$sm</string>
+    <string name="accuracy_m">%1$s m</string>
 
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
     <string name="west">W %1$s%2$s%3$s</string>
@@ -626,10 +626,6 @@
         <item quantity="one">%d meter</item>
         <item quantity="other">%d meters</item>
     </plurals>
-    <string name="location_status_searching">Searching for location, please wait&#8230;</string>
-    <string name="location_status_accuracy">Location accuracy: %.2f m</string>
-    <string name="location_status_acceptable">Location accuracy: %.2f m (acceptable)</string>
-    <string name="location_status_unacceptable">Location accuracy: %.2f m (unacceptable)</string>
     <string name="collection_status_paused">Points entered: %d</string>
     <string name="collection_status_placement">Points entered: %d (tap to place points)</string>
     <string name="collection_status_manual">Points entered: %d (manual recording)</string>
@@ -637,7 +633,7 @@
     <string name="collection_status_auto_minutes">Points entered: %1$d (recording every %2$d min)</string>
     <string name="collection_status_auto_seconds_accuracy">Points entered: %1$d (recording every %2$d sec, accuracy %3$d m)</string>
     <string name="collection_status_auto_minutes_accuracy">Points entered: %1$d (recording every %2$d min, accuracy %3$d m)</string>
-    <string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
+    <string name="geopoint_instruction">Long press to place mark or tap add marker button</string>
     <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
     <string name="discard">Discard</string>
     <string name="select_item_count">%s: %d (%d shown on map)</string>
