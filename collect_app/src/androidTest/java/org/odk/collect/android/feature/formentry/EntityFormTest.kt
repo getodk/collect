@@ -274,7 +274,9 @@ class EntityFormTest {
             .clickOnForm("One Question Entity Registration Editable")
             .editForm("One Question Entity Registration Editable")
             .clickOnQuestion("Name")
-            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Kendall Roy"))
+            .answerQuestion("Name", "Kendall Roy")
+            .swipeToEndScreen("One Question Entity Registration Editable (Edit 1)")
+            .clickFinalize()
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
@@ -301,7 +303,9 @@ class EntityFormTest {
             .clickOnForm("One Question Entity Update Editable")
             .editForm("One Question Entity Update Editable")
             .clickOnQuestion("Name")
-            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Romulus Roy"))
+            .answerQuestion("Name", "Romulus Roy")
+            .swipeToEndScreen("One Question Entity Update Editable (Edit 1)")
+            .clickFinalize()
 
             .startBlankForm("One Question Entity Update Editable")
             .assertText("Roman Roy")

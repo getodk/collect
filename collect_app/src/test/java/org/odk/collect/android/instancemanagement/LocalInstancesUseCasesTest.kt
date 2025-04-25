@@ -143,6 +143,7 @@ class LocalInstancesUseCasesTest {
         assertThat(firstClonedInstance.status, equalTo(Instance.STATUS_VALID))
         assertThat(sourceInstance.instanceFilePath, not(firstClonedInstance.instanceFilePath))
         assertThat(firstClonedInstance.editOf, equalTo(sourceInstance.dbId))
+        assertThat(firstClonedInstance.editNumber, equalTo(1))
 
         // The second edit
         val secondClonedInstanceDbId = LocalInstancesUseCases.clone(
@@ -155,6 +156,7 @@ class LocalInstancesUseCasesTest {
 
         assertThat(instancesRepository.all.size, equalTo(3))
         assertThat(secondClonedInstance.editOf, equalTo(sourceInstance.dbId))
+        assertThat(secondClonedInstance.editNumber, equalTo(2))
     }
 
     @Test

@@ -114,7 +114,7 @@ class EditSavedFormTest {
             .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
-            .swipeToEndScreen()
+            .swipeToEndScreen("One Question Editable (Edit 1)")
             .clickFinalize()
 
             .clickSendFinalizedForm(2)
@@ -156,7 +156,7 @@ class EditSavedFormTest {
             .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
             .answerQuestion("what is your age", "456")
-            .swipeToEndScreen()
+            .swipeToEndScreen("One Question Editable (Edit 1)")
             .clickFinalize()
 
             .clickSendFinalizedForm(1)
@@ -201,9 +201,9 @@ class EditSavedFormTest {
             .pressBackAndDiscardChanges()
 
             .clickDrafts(1)
-            .clickOnForm("One Question Editable")
+            .clickOnForm("One Question Editable", "One Question Editable (Edit 1)")
             .assertText("123")
-            .clickGoToEnd()
+            .clickGoToEnd("One Question Editable (Edit 1)")
             .clickFinalize()
 
             .clickSendFinalizedForm(1)
@@ -236,10 +236,10 @@ class EditSavedFormTest {
             .killAndReopenApp(rule, recentAppsRule, MainMenuPage(), testDependencies)
 
             .clickDrafts(1)
-            .clickOnFormWithSavepoint("One Question Editable")
+            .clickOnFormWithSavepoint("One Question Editable (Edit 1)")
             .clickRecover(FormHierarchyPage("One Question Editable"))
             .assertText("456")
-            .clickGoToEnd()
+            .clickGoToEnd("One Question Editable (Edit 1)")
             .clickFinalize()
 
             .clickSendFinalizedForm(2)
@@ -277,15 +277,15 @@ class EditSavedFormTest {
             .pressBack(MainMenuPage())
 
             .clickDrafts(1)
-            .clickOnForm("One Question Editable")
-            .clickGoToEnd()
+            .clickOnForm("One Question Editable", "One Question Editable (Edit 1)")
+            .clickGoToEnd("One Question Editable (Edit 1)")
             .clickFinalize()
 
             .clickSendFinalizedForm(1)
-            .clickOnForm("One Question Editable")
+            .clickOnForm("One Question Editable", "One Question Editable (Edit 1)")
             .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
-            .swipeToEndScreen()
+            .swipeToEndScreen("One Question Editable (Edit 2)")
             .clickFinalize()
 
             .clickSendFinalizedForm(2)
@@ -327,9 +327,9 @@ class EditSavedFormTest {
             .pressBackAndSaveAsDraft()
 
             .clickDrafts(1)
-            .clickOnForm("One Question Editable")
+            .clickOnForm("One Question Editable", "One Question Editable (Edit 1)")
             .assertText("456")
-            .clickGoToEnd()
+            .clickGoToEnd("One Question Editable (Edit 1)")
             .clickFinalize()
 
             .clickSendFinalizedForm(1)
