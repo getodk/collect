@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
@@ -200,6 +201,7 @@ public class Collect extends Application implements
         defaultSysLanguage = newConfig.locale.getLanguage();
     }
 
+    @Nullable
     public AppDependencyComponent getComponent() {
         return applicationComponent;
     }

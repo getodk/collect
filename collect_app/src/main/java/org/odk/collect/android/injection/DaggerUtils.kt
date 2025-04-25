@@ -21,6 +21,11 @@ object DaggerUtils {
 
     @JvmStatic
     fun getComponent(context: Context): AppDependencyComponent {
-        return (context.applicationContext as Collect).component
+        val component = (context.applicationContext as Collect).component
+        if (component != null) {
+            return component
+        } else {
+            throw IllegalStateException("Collect.applicationComponent is null!")
+        }
     }
 }
