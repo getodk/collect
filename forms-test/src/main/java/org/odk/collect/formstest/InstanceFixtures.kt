@@ -10,7 +10,7 @@ object InstanceFixtures {
     fun instance(
         status: String = Instance.STATUS_INCOMPLETE,
         lastStatusChangeDate: Long = 0,
-        displayName: String? = null,
+        displayName: String = "Form",
         dbId: Long? = null,
         form: Form? = null,
         deletedDate: Long? = null,
