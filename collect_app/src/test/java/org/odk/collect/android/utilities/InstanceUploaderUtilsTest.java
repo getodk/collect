@@ -1,5 +1,6 @@
 package org.odk.collect.android.utilities;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
@@ -23,7 +24,11 @@ public class InstanceUploaderUtilsTest {
 
     @Test
     public void getUploadResultMessageTest() {
-        assertThat(InstanceUploaderUtils.getUploadResultMessage(getTestInstancesRepository(), null, getTestUploadResult()),
+        assertThat(InstanceUploaderUtils.getUploadResultMessage(
+                getTestInstancesRepository(),
+                        ApplicationProvider.getApplicationContext(),
+                        getTestUploadResult()
+                ),
                 is(getExpectedResultMsg()));
     }
 
