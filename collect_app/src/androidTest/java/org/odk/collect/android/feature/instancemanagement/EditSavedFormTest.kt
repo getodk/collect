@@ -344,6 +344,104 @@ class EditSavedFormTest {
         assertThat(secondFormInstanceID, not(firstFormInstanceID))
     }
 
+    @Test
+    fun editingFinalizedForm_whenNewerDraftEditExists_promptsToOpenNewerEditInstead() {
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .copyForm("one-question-editable.xml")
+            .startBlankForm("One Question Editable")
+            .answerQuestion("what is your age", "123")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question Editable")
+            .editForm("One Question Editable")
+            .clickOnQuestion("what is your age")
+            .answerQuestion("what is your age", "456")
+            .pressBackAndSaveAsDraft()
+
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question Editable")
+            .editFormWithError()
+            .acceptEditingNewerDraftEdit("One Question Editable")
+            .assertText("456")
+    }
+
+    @Test
+    fun editingFinalizedForm_whenNewerDraftEditExists_andPromptIsDeclined_staysInCurrentForm() {
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .copyForm("one-question-editable.xml")
+            .startBlankForm("One Question Editable")
+            .answerQuestion("what is your age", "123")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question Editable")
+            .editForm("One Question Editable")
+            .clickOnQuestion("what is your age")
+            .answerQuestion("what is your age", "456")
+            .pressBackAndSaveAsDraft()
+
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question Editable")
+            .editFormWithError()
+            .discardEditingNewerEdit()
+            .assertText("123")
+    }
+
+    @Test
+    fun editingFinalizedForm_whenNewerFinalizedEditExists_promptsToOpenNewerEditInstead() {
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .copyForm("one-question-editable.xml")
+            .startBlankForm("One Question Editable")
+            .answerQuestion("what is your age", "123")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question Editable")
+            .editForm("One Question Editable")
+            .clickOnQuestion("what is your age")
+            .answerQuestion("what is your age", "456")
+            .swipeToEndScreen("One Question Editable (Edit 1)")
+            .clickFinalize()
+
+            .clickSendFinalizedForm(2)
+            .clickOnForm("One Question Editable")
+            .editFormWithError()
+            .acceptEditingNewerFinalizedEdit("One Question Editable")
+            .assertText("456")
+    }
+
+    @Test
+    fun editingFinalizedForm_whenNewerFinalizedEditExists_andPromptIsDeclined_staysInCurrentForm() {
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .copyForm("one-question-editable.xml")
+            .startBlankForm("One Question Editable")
+            .answerQuestion("what is your age", "123")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question Editable")
+            .editForm("One Question Editable")
+            .clickOnQuestion("what is your age")
+            .answerQuestion("what is your age", "456")
+            .swipeToEndScreen("One Question Editable (Edit 1)")
+            .clickFinalize()
+
+            .clickSendFinalizedForm(2)
+            .clickOnForm("One Question Editable")
+            .editFormWithError()
+            .discardEditingNewerEdit()
+            .assertText("123")
+    }
+
     private fun getIds(file: File): Pair<String, String?> {
         val formRootElement = XFormParser.getXMLDocument(file.inputStream().reader()).rootElement
         val formMetaElement = formRootElement.getElement(null, "meta")
