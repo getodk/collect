@@ -24,10 +24,6 @@ public final class DaggerUtils {
 
     private DaggerUtils() {}
 
-    public static AppDependencyComponent getComponent(Activity activity) {
-        return ((Collect) activity.getApplication()).getComponent();
-    }
-
     public static AppDependencyComponent getComponent(Context context) {
         return ((Collect) context.getApplicationContext()).getComponent();
     }
