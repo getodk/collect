@@ -11,20 +11,16 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+package org.odk.collect.android.injection
 
-package org.odk.collect.android.injection;
+import android.content.Context
+import org.odk.collect.android.application.Collect
+import org.odk.collect.android.injection.config.AppDependencyComponent
 
-import android.app.Activity;
-import android.content.Context;
+object DaggerUtils {
 
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
-
-public final class DaggerUtils {
-
-    private DaggerUtils() {}
-
-    public static AppDependencyComponent getComponent(Context context) {
-        return ((Collect) context.getApplicationContext()).getComponent();
+    @JvmStatic
+    fun getComponent(context: Context): AppDependencyComponent {
+        return (context.applicationContext as Collect).component
     }
 }
