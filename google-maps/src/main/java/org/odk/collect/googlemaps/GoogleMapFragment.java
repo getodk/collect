@@ -122,7 +122,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     private int mapType;
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
-    private boolean isUserZooming;
 
     @Override
     public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
@@ -162,20 +161,27 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                     toLatLng(MapFragment.Companion.getINITIAL_CENTER()), INITIAL_ZOOM));
             googleMap.setOnCameraMoveListener(() -> scaleView.update(googleMap.getCameraPosition().zoom, googleMap.getCameraPosition().target.latitude));
-            googleMap.setOnCameraMoveStartedListener(reason -> {
-                if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
-                    isUserZooming = true;
+            CameraListener cameraListener = new CameraListener(googleMap) {
+                @Override
+                void onCameraMoveFinished(boolean isUser, boolean isZoom) {
+                    CameraPosition cameraPosition = googleMap.getCameraPosition();
+                    LatLng target = cameraPosition.target;
+                    scaleView.update(cameraPosition.zoom, target.latitude);
+                    if (isUser) {
+                        float newZoomLevel = cameraPosition.zoom;
+                        MapPoint center = new MapPoint(target.latitude, target.longitude);
+                        if (isZoom) {
+                            getMapViewModel().onUserZoom(center, newZoomLevel);
+                        } else {
+                            getMapViewModel().onUserMove(center, newZoomLevel);
+                        }
+                    }
                 }
-            });
-            googleMap.setOnCameraIdleListener(() -> {
-                CameraPosition cameraPosition = googleMap.getCameraPosition();
-                scaleView.update(cameraPosition.zoom, cameraPosition.target.latitude);
-                if (isUserZooming) {
-                    float newZoomLevel = cameraPosition.zoom;
-                    getMapViewModel().onUserMove(new MapPoint(cameraPosition.target.latitude, cameraPosition.target.longitude), newZoomLevel);
-                    isUserZooming = false;
-                }
-            });
+            };
+            googleMap.setOnCameraMoveStartedListener(cameraListener);
+            googleMap.setOnCameraIdleListener(cameraListener);
+
+
             loadReferenceOverlay();
 
             MapConfigurator configurator = createConfigurator();
@@ -990,6 +996,30 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                 polygon.remove();
                 polygon = null;
             }
+        }
+    }
+
+    private abstract static class CameraListener implements GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraIdleListener {
+
+        private final GoogleMap map;
+        private boolean isGesture;
+        private float startingZoom;
+
+        CameraListener(GoogleMap map) {
+            this.map = map;
+        }
+
+        abstract void onCameraMoveFinished(boolean isUser, boolean isZoom);
+
+        @Override
+        public void onCameraMoveStarted(int reason) {
+            isGesture = reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE;
+            startingZoom = map.getCameraPosition().zoom;
+        }
+
+        @Override
+        public void onCameraIdle() {
+            onCameraMoveFinished(isGesture, map.getCameraPosition().zoom != startingZoom);
         }
     }
 }
