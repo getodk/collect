@@ -54,8 +54,12 @@ class MapViewModel(
         }
     }
 
-    fun onUserMove(point: MapPoint, level: Double) {
+    fun onUserZoom(point: MapPoint, level: Double) {
         userZoomLevel = level
+        _zoom.value = Zoom.Point(point, level, animate = false, user = true)
+    }
+
+    fun onUserMove(point: MapPoint, level: Double) {
         _zoom.value = Zoom.Point(point, level, animate = false, user = true)
     }
 

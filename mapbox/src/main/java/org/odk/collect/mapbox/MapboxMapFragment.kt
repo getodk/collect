@@ -180,7 +180,7 @@ class MapboxMapFragment :
 
                     override fun onScaleEnd(detector: StandardScaleGestureDetector) {
                         val center = MapPoint(cameraState.center.latitude(), cameraState.center.longitude())
-                        getMapViewModel().onUserMove(center, cameraState.zoom)
+                        getMapViewModel().onUserZoom(center, cameraState.zoom)
                     }
                 })
                 addOnMoveListener(object : OnMoveListener {
