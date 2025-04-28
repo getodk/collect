@@ -54,11 +54,13 @@ class FormEndView(
             if (shouldFormBeSentAutomatically) {
                 if (isFormEditableAfterFinalization) {
                     setWarning(
+                        icon = R.drawable.ic_edit_24,
                         title = org.odk.collect.strings.R.string.form_editing_enabled_after_sending,
                         hint = org.odk.collect.strings.R.string.form_editing_enabled_after_sending_hint
                     )
                 } else {
                     setWarning(
+                        icon = R.drawable.ic_edit_off_24,
                         title = org.odk.collect.strings.R.string.form_editing_disabled_after_sending,
                         hint = org.odk.collect.strings.R.string.form_editing_disabled_hint
                     )
@@ -66,11 +68,13 @@ class FormEndView(
             } else {
                 if (isFormEditableAfterFinalization) {
                     setWarning(
+                        icon = R.drawable.ic_edit_24,
                         title = org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing,
                         hint = org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing_hint
                     )
                 } else {
                     setWarning(
+                        icon = R.drawable.ic_edit_off_24,
                         title = org.odk.collect.strings.R.string.form_editing_disabled_after_finalizing,
                         hint = org.odk.collect.strings.R.string.form_editing_disabled_hint
                     )
@@ -80,11 +84,13 @@ class FormEndView(
             if (shouldFormBeSentAutomatically) {
                 if (isFormEditableAfterFinalization) {
                     setWarning(
+                        icon = R.drawable.ic_edit_24,
                         title = org.odk.collect.strings.R.string.form_editing_enabled_after_sending,
                         hint = org.odk.collect.strings.R.string.form_editing_enabled_after_sending_hint
                     )
                 } else {
                     setWarning(
+                        icon = R.drawable.ic_edit_off_24,
                         title = org.odk.collect.strings.R.string.form_editing_disabled_after_sending,
                         hint = null
                     )
@@ -92,11 +98,13 @@ class FormEndView(
             } else {
                 if (isFormEditableAfterFinalization) {
                     setWarning(
+                        icon = R.drawable.ic_edit_24,
                         title = org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing,
                         hint = org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing_hint
                     )
                 } else {
                     setWarning(
+                        icon = R.drawable.ic_edit_off_24,
                         title = org.odk.collect.strings.R.string.form_editing_disabled_after_finalizing,
                         hint = null
                     )
@@ -107,7 +115,8 @@ class FormEndView(
         }
     }
 
-    private fun setWarning(title: Int, hint: Int?) {
+    private fun setWarning(icon: Int, title: Int, hint: Int?) {
+        binding.formEditsIcon.setImageResource(icon)
         binding.formEditsWarningTitle.setText(title)
         binding.formEditsWarningMessage.apply {
             text = SpannableStringBuilder().apply {

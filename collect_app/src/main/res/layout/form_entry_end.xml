@@ -56,10 +56,10 @@ the specific language governing permissions and limitations under the License.
                 android:paddingVertical="@dimen/margin_large">
 
                 <ImageView
-                    android:id="@+id/instance_name_info_icon"
+                    android:id="@+id/form_edits_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_outline_info_24"
+                    android:src="@drawable/ic_edit_24"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="?colorPrimary" />
@@ -72,8 +72,8 @@ the specific language governing permissions and limitations under the License.
                     android:textAppearance="?textAppearanceTitleMedium"
                     android:textColor="?colorOnSurface"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/instance_name_info_icon"
-                    app:layout_constraintTop_toTopOf="@id/instance_name_info_icon"
+                    app:layout_constraintStart_toEndOf="@id/form_edits_icon"
+                    app:layout_constraintTop_toTopOf="@id/form_edits_icon"
                     tools:text="@string/form_editing_disabled_after_finalizing" />
 
                 <com.google.android.material.textview.MaterialTextView

@@ -1,8 +1,11 @@
 package org.odk.collect.android.formentry
 
 import android.app.Application
+import android.graphics.drawable.VectorDrawable
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.drawable.toBitmap
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.material.card.MaterialCardView
@@ -118,13 +121,17 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when 'Save as draft' and 'Send' buttons are visible display the warning with an appropriate message for forms that can be edited after finalization`() {
+    fun `when 'Save as draft' and 'Send' buttons are visible display correct info for forms that can be edited after finalization`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
         whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
 
         val view = FormEndView(context, "blah", true, formEndViewModel, listener)
 
+        assertThat(
+            (view.findViewById<ImageView>(R.id.form_edits_icon).drawable as VectorDrawable).toBitmap().sameAs((context.getDrawable(R.drawable.ic_edit_24) as VectorDrawable).toBitmap()),
+            equalTo(true)
+        )
         assertThat(
             view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
             equalTo(View.VISIBLE)
@@ -146,13 +153,17 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when 'Save as draft' and 'Send' buttons are visible display the warning with an appropriate message for forms that can not be edited after finalization`() {
+    fun `when 'Save as draft' and 'Send' buttons are visible display correct info for forms that can not be edited after finalization`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
         whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
 
         val view = FormEndView(context, "blah", false, formEndViewModel, listener)
 
+        assertThat(
+            (view.findViewById<ImageView>(R.id.form_edits_icon).drawable as VectorDrawable).toBitmap().sameAs((context.getDrawable(R.drawable.ic_edit_off_24) as VectorDrawable).toBitmap()),
+            equalTo(true)
+        )
         assertThat(
             view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
             equalTo(View.VISIBLE)
@@ -174,13 +185,17 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when 'Save as draft' and 'Finalize' buttons are visible display the warning with an appropriate message for forms that can be edited after finalization`() {
+    fun `when 'Save as draft' and 'Finalize' buttons are visible correct info for forms that can be edited after finalization`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
         whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(false)
 
         val view = FormEndView(context, "blah", true, formEndViewModel, listener)
 
+        assertThat(
+            (view.findViewById<ImageView>(R.id.form_edits_icon).drawable as VectorDrawable).toBitmap().sameAs((context.getDrawable(R.drawable.ic_edit_24) as VectorDrawable).toBitmap()),
+            equalTo(true)
+        )
         assertThat(
             view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
             equalTo(View.VISIBLE)
@@ -202,13 +217,17 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when 'Save as draft' and 'Finalize' buttons are visible display the warning with an appropriate message for forms that can not be edited after finalization`() {
+    fun `when 'Save as draft' and 'Finalize' buttons are visible correct info for forms that can not be edited after finalization`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
         whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(false)
 
         val view = FormEndView(context, "blah", false, formEndViewModel, listener)
 
+        assertThat(
+            (view.findViewById<ImageView>(R.id.form_edits_icon).drawable as VectorDrawable).toBitmap().sameAs((context.getDrawable(R.drawable.ic_edit_off_24) as VectorDrawable).toBitmap()),
+            equalTo(true)
+        )
         assertThat(
             view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
             equalTo(View.VISIBLE)
@@ -230,13 +249,17 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when only 'Send' button is visible display the warning with an appropriate message for forms that can be edited after sending`() {
+    fun `when only 'Send' button is visible display correct info for forms that can be edited after sending`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(false)
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
         whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
 
         val view = FormEndView(context, "blah", true, formEndViewModel, listener)
 
+        assertThat(
+            (view.findViewById<ImageView>(R.id.form_edits_icon).drawable as VectorDrawable).toBitmap().sameAs((context.getDrawable(R.drawable.ic_edit_24) as VectorDrawable).toBitmap()),
+            equalTo(true)
+        )
         assertThat(
             view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
             equalTo(View.VISIBLE)
@@ -258,13 +281,17 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when only 'Send' button is visible display the warning with an appropriate message for forms that can not be edited after sending`() {
+    fun `when only 'Send' button is visible display correct info for forms that can not be edited after sending`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(false)
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
         whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
 
         val view = FormEndView(context, "blah", false, formEndViewModel, listener)
 
+        assertThat(
+            (view.findViewById<ImageView>(R.id.form_edits_icon).drawable as VectorDrawable).toBitmap().sameAs((context.getDrawable(R.drawable.ic_edit_off_24) as VectorDrawable).toBitmap()),
+            equalTo(true)
+        )
         assertThat(
             view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
             equalTo(View.VISIBLE)
@@ -288,13 +315,17 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when only 'Finalize' button is visible display the warning with an appropriate message for forms that can be edited after finalization`() {
+    fun `when only 'Finalize' button is visible display correct info for forms that can be edited after finalization`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(false)
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
         whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(false)
 
         val view = FormEndView(context, "blah", true, formEndViewModel, listener)
 
+        assertThat(
+            (view.findViewById<ImageView>(R.id.form_edits_icon).drawable as VectorDrawable).toBitmap().sameAs((context.getDrawable(R.drawable.ic_edit_24) as VectorDrawable).toBitmap()),
+            equalTo(true)
+        )
         assertThat(
             view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
             equalTo(View.VISIBLE)
@@ -316,13 +347,17 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when only 'Finalize' button is visible display the warning with an appropriate message for forms that can not be edited after finalization`() {
+    fun `when only 'Finalize' button is visible display correct info for forms that can not be edited after finalization`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(false)
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
         whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(false)
 
         val view = FormEndView(context, "blah", false, formEndViewModel, listener)
 
+        assertThat(
+            (view.findViewById<ImageView>(R.id.form_edits_icon).drawable as VectorDrawable).toBitmap().sameAs((context.getDrawable(R.drawable.ic_edit_off_24) as VectorDrawable).toBitmap()),
+            equalTo(true)
+        )
         assertThat(
             view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
             equalTo(View.VISIBLE)
@@ -346,7 +381,7 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when only 'Save as draft' button is visible do not display the warning for forms that can be edited after finalization`() {
+    fun `when only 'Save as draft' button is visible do not display the info banner for forms that can be edited after finalization`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(false)
 
@@ -359,7 +394,7 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when only 'Save as draft' button is visible do not display the warning for forms that can not be edited after finalization`() {
+    fun `when only 'Save as draft' button is visible do not display the info banner for forms that can not be edited after finalization`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(false)
 
