@@ -242,11 +242,11 @@ class InstancesDataService(
         }
     }
 
-    fun editInstance(instanceFile: File, projectId: String): InstanceEditResult {
+    fun editInstance(instanceFilePath: String, projectId: String): InstanceEditResult {
         val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
 
         return LocalInstancesUseCases.editInstance(
-            instanceFile,
+            instanceFilePath,
             projectDependencyModule.instancesDir,
             projectDependencyModule.instancesRepository,
             projectDependencyModule.formsRepository

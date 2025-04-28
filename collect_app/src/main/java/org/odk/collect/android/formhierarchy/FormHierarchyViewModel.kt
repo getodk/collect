@@ -11,11 +11,13 @@ import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.async.Scheduler
-import java.io.File
 
 class FormHierarchyViewModel(scheduler: Scheduler) : ViewModel() {
     private val trackableWorker = TrackableWorker(scheduler)
-    val isCloning: LiveData<Boolean> = trackableWorker.isWorking
+    val isEditingInstance: LiveData<Boolean> = trackableWorker.isWorking
+
+    private val _instanceEditResult = MutableLiveData<Consumable<InstanceEditResult>>()
+    val instanceEditResult: LiveData<Consumable<InstanceEditResult>> = _instanceEditResult
 
     var contextGroupRef: TreeReference? = null
     var screenIndex: FormIndex? = null
@@ -27,22 +29,18 @@ class FormHierarchyViewModel(scheduler: Scheduler) : ViewModel() {
     fun shouldShowRepeatGroupPicker() = repeatGroupPickerIndex != null
 
     fun editInstance(
-        instanceFile: File,
+        instanceFilePath: String,
         instancesDataService: InstancesDataService,
         projectId: String
-    ): LiveData<Consumable<InstanceEditResult>> {
-        val result = MutableLiveData<Consumable<InstanceEditResult>>()
-
+    ) {
         trackableWorker.immediate(
             background = {
-                instancesDataService.editInstance(instanceFile, projectId)
+                instancesDataService.editInstance(instanceFilePath, projectId)
             },
             foreground = { instanceEditResult ->
-                result.value = Consumable(instanceEditResult)
+                _instanceEditResult.value = Consumable(instanceEditResult)
             }
         )
-
-        return result
     }
 
     class Factory(private val scheduler: Scheduler) : ViewModelProvider.Factory {

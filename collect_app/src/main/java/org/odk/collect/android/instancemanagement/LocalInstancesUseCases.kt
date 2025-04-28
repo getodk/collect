@@ -38,20 +38,20 @@ object LocalInstancesUseCases {
     }
 
     fun editInstance(
-        instanceFile: File,
+        instanceFilePath: String,
         instancesDir: String,
         instancesRepository: InstancesRepository,
         formsRepository: FormsRepository,
         clock: () -> Long = { System.currentTimeMillis() }
     ): InstanceEditResult {
-        val sourceInstance = instancesRepository.getOneByPath(instanceFile.absolutePath)!!
+        val sourceInstance = instancesRepository.getOneByPath(instanceFilePath)!!
 
         val latestEditInstance = findLatestEditIfExists(sourceInstance, instancesRepository)
         if (latestEditInstance != null) {
             return InstanceEditResult.EditBlockedByNewerExistingEdit(latestEditInstance)
         }
 
-        val targetInstance = cloneInstance(sourceInstance, instanceFile, instancesDir, instancesRepository, formsRepository, clock)
+        val targetInstance = cloneInstance(sourceInstance, instanceFilePath, instancesDir, instancesRepository, formsRepository, clock)
 
         return InstanceEditResult.EditCompleted(targetInstance)
     }
@@ -75,7 +75,7 @@ object LocalInstancesUseCases {
 
     private fun cloneInstance(
         sourceInstance: Instance,
-        instanceFile: File,
+        instanceFilePath: String,
         instancesDir: String,
         instancesRepository: InstancesRepository,
         formsRepository: FormsRepository,
@@ -85,7 +85,7 @@ object LocalInstancesUseCases {
             sourceInstance.formId,
             sourceInstance.formVersion
         ).first().displayName
-        val targetInstanceFile = copyInstanceDir(instanceFile, instancesDir, formName, clock)
+        val targetInstanceFile = copyInstanceDir(File(instanceFilePath), instancesDir, formName, clock)
 
         return instancesRepository.save(
             Instance.Builder(sourceInstance)

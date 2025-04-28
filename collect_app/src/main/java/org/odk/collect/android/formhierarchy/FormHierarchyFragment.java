@@ -58,7 +58,6 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +111,13 @@ public class FormHierarchyFragment extends Fragment {
         requireActivity().setTitle(formEntryViewModel.getFormController().getFormTitle());
         startIndex = formEntryViewModel.getFormController().getFormIndex();
 
-        MaterialProgressDialogFragment.showOn(this, formHierarchyViewModel.isCloning(), getParentFragmentManager(), () -> {
+        formHierarchyViewModel.getInstanceEditResult().observe(this, instanceEditResult -> {
+            if (!instanceEditResult.isConsumed()) {
+                instanceEditResult.consume();
+                handleInstanceEditResult(instanceEditResult.getValue());
+            }
+        });
+        MaterialProgressDialogFragment.showOn(this, formHierarchyViewModel.isEditingInstance(), getParentFragmentManager(), () -> {
             MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
             dialog.setMessage(getString(org.odk.collect.strings.R.string.preparing_form_edit));
             return dialog;
@@ -121,7 +126,11 @@ public class FormHierarchyFragment extends Fragment {
         menuProvider = new FormHiearchyMenuProvider(formEntryViewModel, formHierarchyViewModel, viewOnly, new FormHiearchyMenuProvider.OnClickListener() {
             @Override
             public void onEditClicked() {
-                editInstance(formEntryViewModel.getFormController().getAbsoluteInstancePath());
+                formHierarchyViewModel.editInstance(
+                        formEntryViewModel.getFormController().getAbsoluteInstancePath(),
+                        instancesDataService,
+                        currentProjectId
+                );
             }
 
             @Override
@@ -162,17 +171,6 @@ public class FormHierarchyFragment extends Fragment {
                 DialogFragmentUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getChildFragmentManager());
             }
         });
-    }
-
-    private void editInstance(String instanceFilePath) {
-        formHierarchyViewModel
-                .editInstance(new File(instanceFilePath), instancesDataService, currentProjectId)
-                .observe(getViewLifecycleOwner(), instanceEditResult -> {
-                    if (!instanceEditResult.isConsumed()) {
-                        instanceEditResult.consume();
-                        handleInstanceEditResult(instanceEditResult.getValue());
-                    }
-                });
     }
 
     private void handleInstanceEditResult(InstanceEditResult result) {
@@ -223,7 +221,13 @@ public class FormHierarchyFragment extends Fragment {
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(org.odk.collect.strings.R.string.newer_finalized_edit_found_dialog_title)
                 .setMessage(dialogMessage)
-                .setPositiveButton(org.odk.collect.strings.R.string.newer_finalized_edit_found_dialog_positive_button, (dialog, which) -> editInstance(instance.getInstanceFilePath()))
+                .setPositiveButton(org.odk.collect.strings.R.string.newer_finalized_edit_found_dialog_positive_button, (dialog, which) -> {
+                    formHierarchyViewModel.editInstance(
+                            instance.getInstanceFilePath(),
+                            instancesDataService,
+                            currentProjectId
+                    );
+                })
                 .setNegativeButton(org.odk.collect.strings.R.string.cancel, (dialog, which) -> {})
                 .setCancelable(false)
                 .show();

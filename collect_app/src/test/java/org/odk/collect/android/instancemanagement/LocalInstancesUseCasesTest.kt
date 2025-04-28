@@ -78,7 +78,7 @@ class LocalInstancesUseCasesTest {
         val sourceMediaFile2Md5Hash = sourceMediaFile2.getMd5Hash()
 
         val editedInstance = LocalInstancesUseCases.editInstance(
-            sourceInstanceFile,
+            sourceInstanceFile.absolutePath,
             instancesDir.absolutePath,
             instancesRepository,
             formsRepository
@@ -128,7 +128,7 @@ class LocalInstancesUseCasesTest {
 
         // The first edit
         val firstEditedInstance = LocalInstancesUseCases.editInstance(
-            File(sourceInstance.instanceFilePath),
+            sourceInstance.instanceFilePath,
             instancesDir.absolutePath,
             instancesRepository,
             formsRepository
@@ -144,7 +144,7 @@ class LocalInstancesUseCasesTest {
 
         // The second edit
         val secondEditedInstance = LocalInstancesUseCases.editInstance(
-            File(firstEditedInstance.instanceFilePath),
+            firstEditedInstance.instanceFilePath,
             instancesDir.absolutePath,
             instancesRepository,
             formsRepository
@@ -191,7 +191,7 @@ class LocalInstancesUseCasesTest {
         )
 
         var editResult = LocalInstancesUseCases.editInstance(
-            sourceInstanceFile,
+            sourceInstanceFile.absolutePath,
             instancesDir.absolutePath,
             instancesRepository,
             formsRepository
@@ -199,7 +199,7 @@ class LocalInstancesUseCasesTest {
         assertThat(editResult.instance.dbId, equalTo(editedInstance2.dbId))
 
         editResult = LocalInstancesUseCases.editInstance(
-            editedInstance1File,
+            editedInstance1File.absolutePath,
             instancesDir.absolutePath,
             instancesRepository,
             formsRepository
