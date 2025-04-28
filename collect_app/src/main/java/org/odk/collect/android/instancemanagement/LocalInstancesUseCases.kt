@@ -92,20 +92,8 @@ object LocalInstancesUseCases {
                 .dbId(null)
                 .status(Instance.STATUS_VALID)
                 .instanceFilePath(targetInstanceFile.absolutePath)
-                .editOf(
-                    if (sourceInstance.editOf == null) {
-                        sourceInstance.dbId
-                    } else {
-                        sourceInstance.editOf
-                    }
-                )
-                .editNumber(
-                    if (sourceInstance.editNumber == null) {
-                        1
-                    } else {
-                        sourceInstance.editNumber!! + 1
-                    }
-                )
+                .editOf(sourceInstance.editOf ?: sourceInstance.dbId)
+                .editNumber((sourceInstance.editNumber ?: 0) + 1)
                 .build()
         )
     }
