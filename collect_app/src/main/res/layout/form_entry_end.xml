@@ -74,7 +74,7 @@ the specific language governing permissions and limitations under the License.
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/instance_name_info_icon"
                     app:layout_constraintTop_toTopOf="@id/instance_name_info_icon"
-                    tools:text="@string/form_edits_warning_title" />
+                    tools:text="@string/form_editing_disabled_after_finalizing" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/form_edits_warning_message"
@@ -86,7 +86,7 @@ the specific language governing permissions and limitations under the License.
                     app:layout_constraintStart_toStartOf="@id/form_edits_warning_title"
                     app:layout_constraintEnd_toEndOf="@id/form_edits_warning_title"
                     app:layout_constraintTop_toBottomOf="@id/form_edits_warning_title"
-                    tools:text="@string/form_edits_warning_message" />
+                    tools:text="@string/form_editing_disabled_hint" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 

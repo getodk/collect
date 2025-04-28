@@ -28,7 +28,7 @@ class FormEndViewTest {
 
     @Test
     fun `form title is displayed correctly`() {
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
         assertThat(
             view.findViewById<TextView>(R.id.description).text,
             equalTo(
@@ -43,7 +43,7 @@ class FormEndViewTest {
     @Test
     fun `when saving drafts is enabled in settings should 'Save as draft' button be visible`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
         assertThat(
             view.findViewById<MultiClickSafeMaterialButton>(R.id.save_as_draft).visibility,
             equalTo(View.VISIBLE)
@@ -53,7 +53,7 @@ class FormEndViewTest {
     @Test
     fun `when saving drafts is disabled in settings should 'Save as draft' button be hidden`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(false)
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
         assertThat(
             view.findViewById<MultiClickSafeMaterialButton>(R.id.save_as_draft).visibility,
             equalTo(View.GONE)
@@ -63,7 +63,7 @@ class FormEndViewTest {
     @Test
     fun `when 'Save as draft' button is clicked then onSaveClicked is called with false value`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
         view.findViewById<MultiClickSafeMaterialButton>(R.id.save_as_draft).performClick()
         verify(listener).onSaveClicked(false)
     }
@@ -71,7 +71,7 @@ class FormEndViewTest {
     @Test
     fun `when finalizing forms is enabled in settings should 'Finalize' button be visible`() {
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
         assertThat(
             view.findViewById<MultiClickSafeMaterialButton>(R.id.finalize).visibility,
             equalTo(View.VISIBLE)
@@ -81,14 +81,14 @@ class FormEndViewTest {
     @Test
     fun `when finalizing forms is disabled in settings should 'Finalize' button be hidden`() {
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(false)
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
         assertThat(view.findViewById<MultiClickSafeMaterialButton>(R.id.finalize).visibility, equalTo(View.GONE))
     }
 
     @Test
     fun `when 'Finalize' button is clicked then onSaveClicked is called with true value`() {
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
         view.findViewById<MultiClickSafeMaterialButton>(R.id.finalize).performClick()
         verify(listener).onSaveClicked(true)
     }
@@ -96,7 +96,7 @@ class FormEndViewTest {
     @Test
     fun `when form should not be sent automatically then 'Finalize' button should be displayed`() {
         whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(false)
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
         assertThat(
             view.findViewById<MultiClickSafeMaterialButton>(R.id.finalize).text,
             equalTo(context.getString(org.odk.collect.strings.R.string.finalize))
@@ -106,7 +106,7 @@ class FormEndViewTest {
     @Test
     fun `when form should be sent automatically then 'Send' button should be displayed`() {
         whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
         assertThat(
             view.findViewById<MultiClickSafeMaterialButton>(R.id.finalize).text,
             equalTo(
@@ -118,22 +118,12 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when only 'Save as draft' button is visible do not display the warning`() {
+    fun `when 'Save as draft' and 'Send' buttons are visible display the warning with an appropriate message for forms that can be edited after finalization`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
-
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
-
-        assertThat(
-            view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
-            equalTo(View.GONE)
-        )
-    }
-
-    @Test
-    fun `when only 'Finalize' button is visible display the warning with an appropriate message`() {
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
+        whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
 
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
+        val view = FormEndView(context, "blah", true, formEndViewModel, listener)
 
         assertThat(
             view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
@@ -143,7 +133,147 @@ class FormEndViewTest {
             view.findViewById<MaterialTextView>(R.id.form_edits_warning_title).text,
             equalTo(
                 context.getString(
-                    org.odk.collect.strings.R.string.form_edits_warning_title
+                    org.odk.collect.strings.R.string.form_editing_enabled_after_sending
+                )
+            )
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
+            equalTo(
+                "${context.getString(org.odk.collect.strings.R.string.form_editing_enabled_after_sending_hint)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
+            )
+        )
+    }
+
+    @Test
+    fun `when 'Save as draft' and 'Send' buttons are visible display the warning with an appropriate message for forms that can not be edited after finalization`() {
+        whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
+        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
+        whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
+
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
+
+        assertThat(
+            view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
+            equalTo(View.VISIBLE)
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_title).text,
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.form_editing_disabled_after_sending
+                )
+            )
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
+            equalTo(
+                "${context.getString(org.odk.collect.strings.R.string.form_editing_disabled_hint)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
+            )
+        )
+    }
+
+    @Test
+    fun `when 'Save as draft' and 'Finalize' buttons are visible display the warning with an appropriate message for forms that can be edited after finalization`() {
+        whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
+        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
+        whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(false)
+
+        val view = FormEndView(context, "blah", true, formEndViewModel, listener)
+
+        assertThat(
+            view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
+            equalTo(View.VISIBLE)
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_title).text,
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing
+                )
+            )
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
+            equalTo(
+                "${context.getString(org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing_hint)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
+            )
+        )
+    }
+
+    @Test
+    fun `when 'Save as draft' and 'Finalize' buttons are visible display the warning with an appropriate message for forms that can not be edited after finalization`() {
+        whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
+        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
+        whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(false)
+
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
+
+        assertThat(
+            view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
+            equalTo(View.VISIBLE)
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_title).text,
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.form_editing_disabled_after_finalizing
+                )
+            )
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
+            equalTo(
+                "${context.getString(org.odk.collect.strings.R.string.form_editing_disabled_hint)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
+            )
+        )
+    }
+
+    @Test
+    fun `when only 'Send' button is visible display the warning with an appropriate message for forms that can be edited after sending`() {
+        whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(false)
+        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
+        whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
+
+        val view = FormEndView(context, "blah", true, formEndViewModel, listener)
+
+        assertThat(
+            view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
+            equalTo(View.VISIBLE)
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_title).text,
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.form_editing_enabled_after_sending
+                )
+            )
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
+            equalTo(
+                "${context.getString(org.odk.collect.strings.R.string.form_editing_enabled_after_sending_hint)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
+            )
+        )
+    }
+
+    @Test
+    fun `when only 'Send' button is visible display the warning with an appropriate message for forms that can not be edited after sending`() {
+        whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(false)
+        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
+        whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
+
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
+
+        assertThat(
+            view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
+            equalTo(View.VISIBLE)
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_title).text,
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.form_editing_disabled_after_sending
                 )
             )
         )
@@ -158,11 +288,69 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when only 'Send' button is visible do not display the warning`() {
+    fun `when only 'Finalize' button is visible display the warning with an appropriate message for forms that can be edited after finalization`() {
+        whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(false)
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
-        whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
+        whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(false)
 
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
+        val view = FormEndView(context, "blah", true, formEndViewModel, listener)
+
+        assertThat(
+            view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
+            equalTo(View.VISIBLE)
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_title).text,
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing
+                )
+            )
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
+            equalTo(
+                "${context.getString(org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing_hint)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
+            )
+        )
+    }
+
+    @Test
+    fun `when only 'Finalize' button is visible display the warning with an appropriate message for forms that can not be edited after finalization`() {
+        whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(false)
+        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
+        whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(false)
+
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
+
+        assertThat(
+            view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
+            equalTo(View.VISIBLE)
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_title).text,
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.form_editing_disabled_after_finalizing
+                )
+            )
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.form_edits_warning_learn_more
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `when only 'Save as draft' button is visible do not display the warning for forms that can be edited after finalization`() {
+        whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
+        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(false)
+
+        val view = FormEndView(context, "blah", true, formEndViewModel, listener)
 
         assertThat(
             view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
@@ -171,57 +359,15 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when 'Save as draft' and 'Finalize' buttons are visible display the warning with an appropriate message`() {
+    fun `when only 'Save as draft' button is visible do not display the warning for forms that can not be edited after finalization`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
-        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
+        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(false)
 
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
+        val view = FormEndView(context, "blah", false, formEndViewModel, listener)
 
         assertThat(
             view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
-            equalTo(View.VISIBLE)
-        )
-        assertThat(
-            view.findViewById<MaterialTextView>(R.id.form_edits_warning_title).text,
-            equalTo(
-                context.getString(
-                    org.odk.collect.strings.R.string.form_edits_warning_title
-                )
-            )
-        )
-        assertThat(
-            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
-            equalTo(
-                "${context.getString(org.odk.collect.strings.R.string.form_edits_warning_message)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
-            )
-        )
-    }
-
-    @Test
-    fun `when 'Save as draft' and 'Send' buttons are visible display the warning with an appropriate message`() {
-        whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
-        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
-        whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
-
-        val view = FormEndView(context, "blah", formEndViewModel, listener)
-
-        assertThat(
-            view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility,
-            equalTo(View.VISIBLE)
-        )
-        assertThat(
-            view.findViewById<MaterialTextView>(R.id.form_edits_warning_title).text,
-            equalTo(
-                context.getString(
-                    org.odk.collect.strings.R.string.form_edits_warning_title_auto_send_enabled
-                )
-            )
-        )
-        assertThat(
-            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
-            equalTo(
-                "${context.getString(org.odk.collect.strings.R.string.form_edits_warning_message)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
-            )
+            equalTo(View.GONE)
         )
     }
 }

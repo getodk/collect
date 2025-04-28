@@ -1212,6 +1212,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         return new FormEndView(
                 this,
                 userVisibleInstanceName != null ? userVisibleInstanceName : saveName,
+                formEntryViewModel.isFormEditableAfterFinalization(),
                 formEndViewModel,
                 markAsFinalized -> saveForm(true, markAsFinalized, saveName, false)
         );

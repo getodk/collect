@@ -113,9 +113,6 @@
   <string name="too_complex_form">Dieses Formular ist zu komplex für dieses Gerät. Versuche Ausdrücke zu vereinfachen oder bitte im Forum um Hilfe.</string>
   <string name="survey_internal_error">Interner Fehler: Sprung zur Eingabe fehlgeschlagen.</string>
   <string name="save_enter_data_description">Sie sind am Ende von \"%s\" angelangt.</string>
-  <string name="form_edits_warning_title">Abgeschlossene Formulare sind nicht bearbeitbar.</string>
-  <string name="form_edits_warning_title_auto_send_enabled">Übermittelte Formulare sind nicht bearbeitbar.</string>
-  <string name="form_edits_warning_message">Wenn Sie Änderungen an Ihrem Formular vornehmen müssen, \"Als Entwurf speichern\", bis Sie bereit sind, es zu senden.</string>
   <string name="form_edits_warning_learn_more">Mehr erfahren</string>
   <string name="save_as_draft">Als Entwurf speichern</string>
   <string name="finalize">Abschließen</string>

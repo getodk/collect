@@ -23,6 +23,7 @@ import org.odk.collect.webpage.WebViewActivity
 class FormEndView(
     context: Context,
     formTitle: String,
+    isFormEditableAfterFinalization: Boolean,
     formEndViewModel: FormEndViewModel,
     private val listener: Listener
 ) : SwipeHandler.View(context) {
@@ -49,29 +50,75 @@ class FormEndView(
             binding.finalize.text = context.getString(org.odk.collect.strings.R.string.send)
         }
 
-        if (!binding.saveAsDraft.isVisible && !shouldFormBeSentAutomatically) {
-            binding.formEditsWarningTitle.setText(org.odk.collect.strings.R.string.form_edits_warning_title)
-            binding.formEditsWarningMessage.apply {
-                text = getLearnMoreLink()
-                movementMethod = LinkMovementMethod.getInstance()
-                highlightColor = Color.TRANSPARENT
-            }
-        } else if (binding.saveAsDraft.isVisible && binding.finalize.isVisible) {
+        if (binding.saveAsDraft.isVisible && binding.finalize.isVisible) {
             if (shouldFormBeSentAutomatically) {
-                binding.formEditsWarningTitle.setText(org.odk.collect.strings.R.string.form_edits_warning_title_auto_send_enabled)
+                if (isFormEditableAfterFinalization) {
+                    setWarning(
+                        title = org.odk.collect.strings.R.string.form_editing_enabled_after_sending,
+                        hint = org.odk.collect.strings.R.string.form_editing_enabled_after_sending_hint
+                    )
+                } else {
+                    setWarning(
+                        title = org.odk.collect.strings.R.string.form_editing_disabled_after_sending,
+                        hint = org.odk.collect.strings.R.string.form_editing_disabled_hint
+                    )
+                }
             } else {
-                binding.formEditsWarningTitle.setText(org.odk.collect.strings.R.string.form_edits_warning_title)
+                if (isFormEditableAfterFinalization) {
+                    setWarning(
+                        title = org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing,
+                        hint = org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing_hint
+                    )
+                } else {
+                    setWarning(
+                        title = org.odk.collect.strings.R.string.form_editing_disabled_after_finalizing,
+                        hint = org.odk.collect.strings.R.string.form_editing_disabled_hint
+                    )
+                }
             }
-            binding.formEditsWarningMessage.apply {
-                text = SpannableStringBuilder()
-                    .append(context.getLocalizedString(org.odk.collect.strings.R.string.form_edits_warning_message))
-                    .append(" ")
-                    .append(getLearnMoreLink())
-                movementMethod = LinkMovementMethod.getInstance()
-                highlightColor = Color.TRANSPARENT
+        } else if (binding.finalize.isVisible) {
+            if (shouldFormBeSentAutomatically) {
+                if (isFormEditableAfterFinalization) {
+                    setWarning(
+                        title = org.odk.collect.strings.R.string.form_editing_enabled_after_sending,
+                        hint = org.odk.collect.strings.R.string.form_editing_enabled_after_sending_hint
+                    )
+                } else {
+                    setWarning(
+                        title = org.odk.collect.strings.R.string.form_editing_disabled_after_sending,
+                        hint = null
+                    )
+                }
+            } else {
+                if (isFormEditableAfterFinalization) {
+                    setWarning(
+                        title = org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing,
+                        hint = org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing_hint
+                    )
+                } else {
+                    setWarning(
+                        title = org.odk.collect.strings.R.string.form_editing_disabled_after_finalizing,
+                        hint = null
+                    )
+                }
             }
         } else {
             binding.formEditsWarning.visibility = View.GONE
+        }
+    }
+
+    private fun setWarning(title: Int, hint: Int?) {
+        binding.formEditsWarningTitle.setText(title)
+        binding.formEditsWarningMessage.apply {
+            text = SpannableStringBuilder().apply {
+                if (hint != null) {
+                    append(context.getLocalizedString(hint))
+                    append(" ")
+                }
+                append(getLearnMoreLink())
+            }
+            movementMethod = LinkMovementMethod.getInstance()
+            highlightColor = Color.TRANSPARENT
         }
     }
 
