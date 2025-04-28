@@ -23,6 +23,33 @@ public class InstanceUploaderUtilsTest {
     private static final int NUMBER_OF_INSTANCES_TO_SEND = 1000;
 
     @Test
+    public void getUploadResultMessageContainsEditNumbers() {
+        InMemInstancesRepository instancesRepository = new InMemInstancesRepository();
+        Instance originalInstance = new Instance.Builder()
+                .dbId(1L)
+                .displayName("InstanceTest")
+                .formId("instanceTest")
+                .status(Instance.STATUS_COMPLETE)
+                .build();
+
+        Instance editedInstance = new Instance.Builder(originalInstance)
+                .dbId(originalInstance.getDbId() + 1)
+                .editOf(originalInstance.getDbId())
+                .editNumber(1L)
+                .build();
+
+        instancesRepository.save(originalInstance);
+        instancesRepository.save(editedInstance);
+
+        String uploadResult = InstanceUploaderUtils.getUploadResultMessage(
+                instancesRepository,
+                ApplicationProvider.getApplicationContext(),
+                getTestUploadResult()
+        );
+        assertThat(uploadResult, is("InstanceTest - Success\n\nInstanceTest (Edit 1) - Success"));
+    }
+
+    @Test
     public void getUploadResultMessageTest() {
         assertThat(InstanceUploaderUtils.getUploadResultMessage(
                 getTestInstancesRepository(),
