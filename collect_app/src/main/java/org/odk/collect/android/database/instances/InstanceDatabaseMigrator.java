@@ -149,7 +149,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
 
     private void upgradeToVersion9(SQLiteDatabase db) {
         db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + EDIT_OF + " integer REFERENCES " + INSTANCES_TABLE_NAME + "(" + _ID + ") CHECK (" + EDIT_OF + " != " + _ID + ")");
-        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, EDIT_NUMBER, "integer");
+        db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + EDIT_NUMBER + " integer CHECK ((" + EDIT_OF + " IS NULL AND " + EDIT_NUMBER + " IS NULL) OR + (" + EDIT_OF + " IS NOT NULL AND + " + EDIT_NUMBER + " IS NOT NULL))");
     }
 
     private void createInstancesTableV5(SQLiteDatabase db, String name) {
@@ -231,7 +231,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
                 + GEOMETRY + " text, "
                 + GEOMETRY_TYPE + " text, "
                 + EDIT_OF + " integer REFERENCES " + INSTANCES_TABLE_NAME + "(" + _ID + ") CHECK (" + EDIT_OF + " != " + _ID + "),"
-                + EDIT_NUMBER + " integer"
+                + EDIT_NUMBER + " integer CHECK ((" + EDIT_OF + " IS NULL AND " + EDIT_NUMBER + " IS NULL) OR + (" + EDIT_OF + " IS NOT NULL AND + " + EDIT_NUMBER + " IS NOT NULL))"
                 + ");"
         );
     }

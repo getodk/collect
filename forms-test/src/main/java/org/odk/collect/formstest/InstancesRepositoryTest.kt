@@ -488,7 +488,7 @@ abstract class InstancesRepositoryTest {
         val originalInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir)
         val originalInstanceDbId = instancesRepository.save(originalInstance)
 
-        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId.dbId + 1)
+        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId.dbId + 1, editNumber = 1)
 
         assertThrows(InstancesRepository.IntegrityException::class.java) {
             instancesRepository.save(editedInstance)
@@ -502,7 +502,35 @@ abstract class InstancesRepositoryTest {
         val originalInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir)
         val originalInstanceDbId = instancesRepository.save(originalInstance)
 
-        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId.dbId + 100)
+        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId.dbId + 100, editNumber = 1)
+
+        assertThrows(InstancesRepository.IntegrityException::class.java) {
+            instancesRepository.save(editedInstance)
+        }
+    }
+
+    @Test
+    fun save_failsWhenEditOfIsNullButEditNumberIsNotNull() {
+        val instancesRepository = buildSubject()
+
+        val originalInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir)
+        instancesRepository.save(originalInstance)
+
+        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editNumber = 1)
+
+        assertThrows(InstancesRepository.IntegrityException::class.java) {
+            instancesRepository.save(editedInstance)
+        }
+    }
+
+    @Test
+    fun save_failsWhenEditOfIsNotNullButEditNumberIsNull() {
+        val instancesRepository = buildSubject()
+
+        val originalInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir)
+        val originalInstanceDbId = instancesRepository.save(originalInstance)
+
+        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId.dbId + 1)
 
         assertThrows(InstancesRepository.IntegrityException::class.java) {
             instancesRepository.save(editedInstance)

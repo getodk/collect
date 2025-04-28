@@ -198,6 +198,9 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     private void saveInstance(Instance instance) {
+        if (instance.getEditOf() == null ^ instance.getEditNumber() == null) {
+            throw new IntegrityException();
+        }
         if (instance.getDbId().equals(instance.getEditOf())) {
             throw new IntegrityException();
         }
