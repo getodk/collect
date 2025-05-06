@@ -12,32 +12,39 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.support.ContentProviderUtils
-import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
 @RunWith(AndroidJUnit4::class)
 class AndroidShortcutsTest {
 
-    private var rule = CollectTestRule()
+    private val rule = CollectTestRule()
+    private val testDependencies = TestDependencies()
 
     @get:Rule
-    var testRuleChain: RuleChain = TestRuleChain.chain()
+    var ruleChain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(rule)
 
     @Test
-    fun showsFormsForCurrentProject() {
-        rule.startAtMainMenu()
-            .copyForm("one-question.xml")
-            .clickFillBlankForm() // Load form
-            .pressBack(MainMenuPage())
-            .addAndSwitchToProject("https://example.com")
-            .copyForm("two-question.xml", "example.com")
-            .clickFillBlankForm() // Load form
+    fun showsFormsForCurrentProject_andUpdatesListWhenNewFormsAreDownloaded() {
+        testDependencies.server.addForm(
+            "One Question",
+            "one_question",
+            "1",
+            "one-question.xml"
+        )
 
-        rule.launchShortcuts()
-            .assertText("Two Question")
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .enableMatchExactly()
+
+        val shortcutsPage = rule.launchShortcuts()
             .assertTextDoesNotExist("One Question")
+
+        testDependencies.scheduler.runDeferredTasks()
+
+        shortcutsPage.assertText("One Question")
     }
 
     @Test
