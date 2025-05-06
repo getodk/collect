@@ -23,7 +23,7 @@ import org.odk.collect.settings.keys.ProjectKeys
 class FormMetadataPreferencesFragmentTest {
     private val installIDProvider = mock<InstallIDProvider>()
     private val settingsProvider =
-        ApplicationProvider.getApplicationContext<Collect>().component.settingsProvider()
+        ApplicationProvider.getApplicationContext<Collect>().component!!.settingsProvider()
 
     @get:Rule
     var launcherRule = FragmentScenarioLauncherRule()
