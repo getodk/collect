@@ -18,13 +18,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.formlists.blankformlist.BlankFormListItem
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.androidshared.livedata.LiveDataUtils
 import org.odk.collect.settings.SettingsProvider
 import javax.inject.Inject
 
@@ -40,17 +40,20 @@ class AndroidShortcutsActivity : AppCompatActivity() {
 
     private val viewModel: BlankFormListViewModel by viewModels { viewModelFactory }
 
+    private var dialog: AlertDialog? = null
+
     public override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
         DaggerUtils.getComponent(this).inject(this)
 
-        LiveDataUtils.observeUntilNotNull(viewModel.formsToDisplay) { forms ->
+        viewModel.formsToDisplay.observe(this) { forms ->
             showFormListDialog(forms)
         }
     }
 
     private fun showFormListDialog(blankFormListItems: List<BlankFormListItem>) {
-        MaterialAlertDialogBuilder(this)
+        dialog?.dismiss()
+        dialog = MaterialAlertDialogBuilder(this)
             .setTitle(org.odk.collect.strings.R.string.select_odk_shortcut)
             .setItems(
                 blankFormListItems
@@ -66,7 +69,9 @@ class AndroidShortcutsActivity : AppCompatActivity() {
                 finish()
             }
             .create()
-            .show()
+            .also {
+                it.show()
+            }
     }
 
     private fun getShortcutIntent(forms: List<BlankFormListItem>, item: Int): Intent {
