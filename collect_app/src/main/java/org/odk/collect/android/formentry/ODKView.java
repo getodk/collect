@@ -62,6 +62,7 @@ import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileUtils;
@@ -131,6 +132,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     IntentLauncher intentLauncher;
 
     private final WidgetFactory widgetFactory;
+    @NonNull
+    private List<ImmutableDisplayableQuestion> questions = new ArrayList<>();
     private final LifecycleOwner viewLifecycle;
     private final AudioPlayer audioPlayer;
     private final FormController formController;
@@ -158,6 +161,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
             LifecycleOwner viewLifecycle
     ) {
         super(context);
+        updateQuestions(questionPrompts);
+
         this.viewLifecycle = viewLifecycle;
         this.audioPlayer = audioPlayer;
 
@@ -304,7 +309,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * add a divider above it. If the specified {@code index} is beyond the end of the widget list,
      * add it to the end.
      */
-    public void addWidgetForQuestion(FormEntryPrompt question, int index) {
+    private void addWidgetForQuestion(FormEntryPrompt question, int index) {
         if (index > widgets.size() - 1) {
             addWidgetForQuestion(question);
             return;
@@ -712,7 +717,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     /**
      * Removes the widget and corresponding divider at a particular index.
      */
-    public void removeWidgetAt(int index) {
+    private void removeWidgetAt(int index) {
         int indexAccountingForDividers = index * 2;
         int intentGroupStartIndexWithDividers = intentGroupStartIndex * 2;
 
@@ -752,6 +757,57 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     public void widgetValueChanged(QuestionWidget changedWidget) {
         if (widgetValueChangedListener != null) {
             widgetValueChangedListener.widgetValueChanged(changedWidget);
+        }
+    }
+
+    public void onUpdated(FormIndex lastChangedIndex, FormEntryPrompt[] questionsAfterSave) {
+        Map<FormIndex, FormEntryPrompt> questionsAfterSaveByIndex = new HashMap<>();
+        for (FormEntryPrompt question : questionsAfterSave) {
+            questionsAfterSaveByIndex.put(question.getIndex(), question);
+        }
+
+        // Identify widgets to remove or rebuild (by removing and re-adding). We'd like to do the
+        // identification and removal in the same pass but removal has to be done in a loop that
+        // starts from the end and itemset-based select choices will only be correctly recomputed
+        // if accessed from beginning to end because the call on sameAs is what calls
+        // populateDynamicChoices. See https://github.com/getodk/javarosa/issues/436
+        List<FormEntryPrompt> questionsThatHaveNotChanged = new ArrayList<>();
+        List<FormIndex> formIndexesToRemove = new ArrayList<>();
+        for (ImmutableDisplayableQuestion questionBeforeSave : questions) {
+            FormEntryPrompt questionAtSameFormIndex = questionsAfterSaveByIndex.get(questionBeforeSave.getFormIndex());
+
+            // Always rebuild questions that use database-driven external data features since they
+            // bypass SelectChoices stored in ImmutableDisplayableQuestion
+            if (questionBeforeSave.sameAs(questionAtSameFormIndex)
+                    && !formController.usesDatabaseExternalDataFeature(questionBeforeSave.getFormIndex())) {
+                questionsThatHaveNotChanged.add(questionAtSameFormIndex);
+            } else if (!lastChangedIndex.equals(questionBeforeSave.getFormIndex())) {
+                formIndexesToRemove.add(questionBeforeSave.getFormIndex());
+            }
+        }
+
+        for (int i = questions.size() - 1; i >= 0; i--) {
+            ImmutableDisplayableQuestion questionBeforeSave = questions.get(i);
+
+            if (formIndexesToRemove.contains(questionBeforeSave.getFormIndex())) {
+                removeWidgetAt(i);
+            }
+        }
+
+        for (int i = 0; i < questionsAfterSave.length; i++) {
+            if (!questionsThatHaveNotChanged.contains(questionsAfterSave[i])
+                    && !questionsAfterSave[i].getIndex().equals(lastChangedIndex)) {
+                addWidgetForQuestion(questionsAfterSave[i], i);
+            }
+        }
+
+        updateQuestions(questionsAfterSave);
+    }
+
+    private void updateQuestions(FormEntryPrompt[] prompts) {
+        questions.clear();
+        for (FormEntryPrompt questionAfterSave : prompts) {
+            this.questions.add(new ImmutableDisplayableQuestion(questionAfterSave));
         }
     }
 }
