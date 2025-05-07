@@ -140,7 +140,6 @@ import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.savepoints.SavepointListener;
 import org.odk.collect.android.savepoints.SavepointTask;
@@ -196,11 +195,8 @@ import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -984,28 +980,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             if (!set) {
                 Timber.e(new Error("Attempting to return data to a widget or set of widgets not looking for data"));
             }
-        }
-    }
-
-    // The method saves questions one by one in order to support calculations in field-list groups
-    private void saveAnswersForFieldList(FormEntryPrompt[] mutableQuestionsBeforeSave, List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave) {
-        FormController formController = getFormController();
-        ODKView currentView = getCurrentViewIfODKView();
-        if (formController == null || currentView == null) {
-            return;
-        }
-
-        int index = 0;
-        for (Map.Entry<FormIndex, IAnswerData> answer : currentView.getAnswers().entrySet()) {
-            // Questions with calculates will have their answers updated as the questions they depend on are saved
-            if (!isQuestionRecalculated(mutableQuestionsBeforeSave[index], immutableQuestionsBeforeSave.get(index))) {
-                try {
-                    formController.saveOneScreenAnswer(answer.getKey(), answer.getValue(), false);
-                } catch (JavaRosaException e) {
-                    Timber.e(e);
-                }
-            }
-            index++;
         }
     }
 
@@ -2318,22 +2292,13 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
      * The widget corresponding to the {@param lastChangedIndex} is never changed.
      */
     private void updateFieldListQuestions(FormIndex lastChangedIndex) throws RepeatsInFieldListException {
-        // Save the user-visible state for all questions in this field-list
-        FormEntryPrompt[] questionsBeforeSave = getFormController().getQuestionPrompts();
-        List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave = new ArrayList<>();
-        for (FormEntryPrompt questionBeforeSave : questionsBeforeSave) {
-            immutableQuestionsBeforeSave.add(new ImmutableDisplayableQuestion(questionBeforeSave));
+        ODKView odkView = getCurrentViewIfODKView();
+        if (odkView == null) {
+            return;
         }
 
-        saveAnswersForFieldList(questionsBeforeSave, immutableQuestionsBeforeSave);
-
-        FormEntryPrompt[] questionsAfterSave = getFormController().getQuestionPrompts();
+        FormEntryPrompt[] questionsAfterSave = formEntryViewModel.saveFieldList(odkView.getAnswers());
         odkView.onUpdated(lastChangedIndex, questionsAfterSave);
-    }
-
-    // If an answer has changed after saving one of previous answers that means it has been recalculated automatically
-    private boolean isQuestionRecalculated(FormEntryPrompt mutableQuestionBeforeSave, ImmutableDisplayableQuestion immutableQuestionBeforeSave) {
-        return !Objects.equals(mutableQuestionBeforeSave.getAnswerText(), immutableQuestionBeforeSave.getAnswerText());
     }
 
     private HashMap<FormIndex, IAnswerData> getAnswers() {
