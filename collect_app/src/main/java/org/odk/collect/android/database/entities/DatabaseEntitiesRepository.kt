@@ -145,12 +145,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     override fun updateList(list: String, hash: String, needsApproval: Boolean) {
         val contentValues = ContentValues().also {
             it.put(ListsTable.COLUMN_HASH, hash)
-
-            if (needsApproval) {
-                it.put(ListsTable.COLUMN_NEEDS_APPROVAL, 1)
-            } else {
-                it.put(ListsTable.COLUMN_NEEDS_APPROVAL, 0)
-            }
+            it.put(ListsTable.COLUMN_NEEDS_APPROVAL, if (needsApproval) 1 else 0)
         }
 
         databaseConnection.withConnection {
