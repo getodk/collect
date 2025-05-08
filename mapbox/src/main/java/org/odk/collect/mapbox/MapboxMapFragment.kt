@@ -8,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.startup.AppInitializer
 import com.google.android.gms.location.LocationListener
+import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.android.gestures.StandardScaleGestureDetector
 import com.mapbox.geojson.Point
 import com.mapbox.maps.EdgeInsets
@@ -42,9 +44,11 @@ import com.mapbox.maps.plugin.annotation.generated.createPolylineAnnotationManag
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.OnMapLongClickListener
+import com.mapbox.maps.plugin.gestures.OnMoveListener
 import com.mapbox.maps.plugin.gestures.OnScaleListener
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapLongClickListener
+import com.mapbox.maps.plugin.gestures.addOnMoveListener
 import com.mapbox.maps.plugin.gestures.addOnScaleListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import kotlinx.coroutines.delay
@@ -58,9 +62,12 @@ import org.odk.collect.maps.MapFragment.ErrorListener
 import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
-import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.MapViewModel
+import org.odk.collect.maps.MapViewModelMapFragment
 import org.odk.collect.maps.PolygonDescription
+import org.odk.collect.maps.Zoom
+import org.odk.collect.maps.ZoomObserver
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLayerFile
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
@@ -74,8 +81,7 @@ import java.io.File
 import java.io.IOException
 
 class MapboxMapFragment :
-    Fragment(),
-    MapFragment,
+    MapViewModelMapFragment(),
     OnMapClickListener,
     OnMapLongClickListener,
     LocationListener,
@@ -107,15 +113,16 @@ class MapboxMapFragment :
     private var clientWantsLocationUpdates = false
     private var topStyleLayerId: String? = null
     private val locationCallback = MapboxLocationCallback(this)
-    override val mapFragmentDelegate = MapFragmentDelegate(
-        this,
-        { MapboxMapConfigurator() },
-        { settingsProvider.getUnprotectedSettings() },
-        { settingsProvider.getMetaSettings() },
-        this::onConfigChanged
-    )
-
-    private var hasCenter = false
+    private val _mapViewModel by viewModels<MapViewModel> {
+        viewModelFactory {
+            addInitializer(MapViewModel::class) {
+                MapViewModel(
+                    settingsProvider.getUnprotectedSettings(),
+                    settingsProvider.getMetaSettings()
+                )
+            }
+        }
+    }
 
     private val settingsProvider: SettingsProvider by lazy {
         (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider().provide(SettingsProvider::class.java)
@@ -146,7 +153,6 @@ class MapboxMapFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppInitializer.getInstance(requireContext()).initializeComponent(MapboxMapsInitializer::class.java)
-        mapFragmentDelegate.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -173,7 +179,17 @@ class MapboxMapFragment :
                     override fun onScaleBegin(detector: StandardScaleGestureDetector) = Unit
 
                     override fun onScaleEnd(detector: StandardScaleGestureDetector) {
-                        mapFragmentDelegate.onZoomLevelChangedByUserListener(cameraState.zoom.toFloat())
+                        val center = MapPoint(cameraState.center.latitude(), cameraState.center.longitude())
+                        getMapViewModel().onUserZoom(center, cameraState.zoom)
+                    }
+                })
+                addOnMoveListener(object : OnMoveListener {
+                    override fun onMove(detector: MoveGestureDetector): Boolean = false
+                    override fun onMoveBegin(detector: MoveGestureDetector) = Unit
+
+                    override fun onMoveEnd(detector: MoveGestureDetector) {
+                        val center = MapPoint(cameraState.center.latitude(), cameraState.center.longitude())
+                        getMapViewModel().onUserMove(center, cameraState.zoom)
                     }
                 })
             }
@@ -192,16 +208,46 @@ class MapboxMapFragment :
         // If the screen is rotated before the map is ready, this fragment could already be detached,
         // which makes it unsafe to use. Only call the ReadyListener if this fragment is still attached.
         if (mapReadyListener != null && activity != null) {
-            mapFragmentDelegate.onReady()
             mapReadyListener!!.onReady(this)
         }
 
-        return mapView
-    }
+        val mapConfigurator = MapboxMapConfigurator()
+        getMapViewModel().getSettings(mapConfigurator.prefKeys).observe(viewLifecycleOwner) {
+            val newConfig = mapConfigurator.buildConfig(it)
+            onConfigChanged(newConfig)
+        }
 
-    override fun onStart() {
-        super.onStart()
-        mapFragmentDelegate.onStart()
+        getMapViewModel().zoom.observe(viewLifecycleOwner, object : ZoomObserver() {
+            override fun onZoomToPoint(zoom: Zoom.Point) {
+                moveOrAnimateCamera(zoom.point, zoom.animate, zoom.level ?: getZoom())
+            }
+
+            override fun onZoomToBox(zoom: Zoom.Box) {
+                val points = zoom.box.map {
+                    Point.fromLngLat(it.longitude, it.latitude, it.altitude)
+                }
+
+                val screenWidth = ScreenUtils.getScreenWidth(context)
+                val screenHeight = ScreenUtils.getScreenHeight(context)
+
+                lifecycleScope.launch {
+                    delay(100L)
+                    mapboxMap.setCamera(
+                        mapboxMap.cameraForCoordinates(
+                            points,
+                            EdgeInsets(
+                                screenHeight / 5.0,
+                                screenWidth / 5.0,
+                                screenHeight / 5.0,
+                                screenWidth / 5.0
+                            )
+                        )
+                    )
+                }
+            }
+        })
+
+        return mapView
     }
 
     override fun onResume() {
@@ -212,16 +258,6 @@ class MapboxMapFragment :
     override fun onPause() {
         super.onPause()
         enableLocationUpdates(false)
-    }
-
-    override fun onStop() {
-        mapFragmentDelegate.onStop()
-        super.onStop()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        mapFragmentDelegate.onSaveInstanceState(outState)
     }
 
     override fun onDestroy() {
@@ -251,56 +287,8 @@ class MapboxMapFragment :
         return mapboxMap.cameraState.zoom
     }
 
-    override fun setCenter(center: MapPoint?, animate: Boolean) {
-        center?.let {
-            moveOrAnimateCamera(it, animate)
-        }
-
-        hasCenter = true
-    }
-
-    override fun zoomToPoint(center: MapPoint?, animate: Boolean) {
-        zoomToPoint(center, MapFragment.POINT_ZOOM.toDouble(), animate)
-    }
-
-    override fun zoomToPoint(center: MapPoint?, zoom: Double, animate: Boolean) {
-        center?.let {
-            moveOrAnimateCamera(it, animate, zoom)
-        }
-
-        hasCenter = true
-    }
-
-    override fun zoomToBoundingBox(
-        mapPoints: Iterable<MapPoint>?,
-        scaleFactor: Double,
-        animate: Boolean
-    ) {
-        mapPoints?.let {
-            val points = mapPoints.map {
-                Point.fromLngLat(it.longitude, it.latitude, it.altitude)
-            }
-
-            val screenWidth = ScreenUtils.getScreenWidth(context)
-            val screenHeight = ScreenUtils.getScreenHeight(context)
-
-            lifecycleScope.launch {
-                delay(100L)
-                mapboxMap.setCamera(
-                    mapboxMap.cameraForCoordinates(
-                        points,
-                        EdgeInsets(
-                            screenHeight / 5.0,
-                            screenWidth / 5.0,
-                            screenHeight / 5.0,
-                            screenWidth / 5.0
-                        )
-                    )
-                )
-            }
-        }
-
-        hasCenter = true
+    override fun getMapViewModel(): MapViewModel {
+        return _mapViewModel
     }
 
     override fun addMarker(markerDescription: MarkerDescription): Int {
@@ -463,10 +451,6 @@ class MapboxMapFragment :
         locationCallback.setRetainMockAccuracy(retainMockAccuracy)
     }
 
-    override fun hasCenter(): Boolean {
-        return hasCenter
-    }
-
     override fun onMapClick(point: Point): Boolean {
         clickListener?.onPoint(MapPoint(point.latitude(), point.longitude()))
 
@@ -527,7 +511,7 @@ class MapboxMapFragment :
         }
     }
 
-    private fun moveOrAnimateCamera(point: MapPoint, animate: Boolean, zoom: Double = getZoom()) {
+    private fun moveOrAnimateCamera(point: MapPoint, animate: Boolean, zoom: Double? = getZoom()) {
         mapboxMap.flyTo(
             cameraOptions {
                 center(Point.fromLngLat(point.longitude, point.latitude, point.altitude))

@@ -25,7 +25,6 @@ import org.odk.collect.maps.markers.MarkerIconDescription
  * even though the geo widgets only use one kind of feature at a time.
  */
 interface MapFragment {
-    val mapFragmentDelegate: MapFragmentDelegate
 
     fun init(readyListener: ReadyListener?, errorListener: ErrorListener?)
 
@@ -49,13 +48,7 @@ interface MapFragment {
      * user if available, or to a close-up level deemed appropriate by
      * the implementation, possibly with animation.
      */
-    fun zoomToCurrentLocation(center: MapPoint?) {
-        zoomToPoint(
-            center,
-            mapFragmentDelegate.zoomLevel?.toDouble() ?: POINT_ZOOM.toDouble(),
-            true
-        )
-    }
+    fun zoomToCurrentLocation(center: MapPoint?)
 
     /**
      * Centers the map view on the given point, zooming in to a close-up level
@@ -77,7 +70,7 @@ interface MapFragment {
      * to occupy at most 80% of the width and 80% of the height of the viewport,
      * ensuring a margin of at least 10% on all sides.
      */
-    fun zoomToBoundingBox(points: Iterable<MapPoint>?, scaleFactor: Double, animate: Boolean)
+    fun zoomToBoundingBox(points: Iterable<MapPoint>, scaleFactor: Double, animate: Boolean)
 
     /**
      * Adds a marker to the map at the given location. If draggable is true,

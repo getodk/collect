@@ -1,14 +1,11 @@
 package org.odk.collect.geo.support
 
 import androidx.fragment.app.Fragment
-import org.mockito.Mockito.mock
-import org.mockito.kotlin.whenever
 import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
-import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
@@ -42,11 +39,6 @@ class FakeMapFragment : Fragment(), MapFragment {
         this.readyListener = readyListener
     }
 
-    override val mapFragmentDelegate: MapFragmentDelegate
-        get() = mock<MapFragmentDelegate?>().also {
-            whenever(it.zoomLevel).thenReturn(zoomLevelSetByUser)
-        }
-
     fun ready() {
         readyListener?.onReady(this)
     }
@@ -64,6 +56,11 @@ class FakeMapFragment : Fragment(), MapFragment {
         hasCenter = true
     }
 
+    override fun zoomToCurrentLocation(center: MapPoint?) {
+        this.center = center
+        this.zoom = (zoomLevelSetByUser ?: MapFragment.POINT_ZOOM).toDouble()
+    }
+
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {
         zoomBoundingBox = null
         this.center = center
@@ -79,11 +76,11 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     override fun zoomToBoundingBox(
-        points: Iterable<MapPoint>?,
+        points: Iterable<MapPoint>,
         scaleFactor: Double,
         animate: Boolean
     ) {
-        points?.let {
+        points.let {
             center = null
             zoom = 0.0
             zoomBoundingBox = Pair(
