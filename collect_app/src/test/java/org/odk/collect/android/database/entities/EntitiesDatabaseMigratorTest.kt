@@ -21,14 +21,14 @@ class EntitiesDatabaseMigratorTest {
     @Test(expected = IllegalStateException::class)
     fun `#onUpdate from version 1`() {
         val db = SQLiteDatabase.create(null)
-        val migrator = EntitiesDatabaseMigrator()
+        val migrator = EntitiesDatabaseMigrator(DATABASE_VERSION)
         migrator.onUpgrade(db, 1)
     }
 
     @Test
     fun `#onUpgrade from version 2`() {
         val db = SQLiteDatabase.create(null)
-        val migrator = EntitiesDatabaseMigrator()
+        val migrator = EntitiesDatabaseMigrator(DATABASE_VERSION)
         migrator.createDbForVersion(db, 2)
 
         val listContentValues = ContentValues().also {
@@ -43,5 +43,9 @@ class EntitiesDatabaseMigratorTest {
         assertThat(lists[0]["name"], equalTo("blah"))
         assertThat(lists[0]["hash"], equalTo("somehash"))
         assertThat(lists[0]["needs_approval"], equalTo("0"))
+    }
+
+    companion object {
+        const val DATABASE_VERSION = 3
     }
 }
