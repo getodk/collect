@@ -8,6 +8,9 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.qrcode.zxing.QRCodeCreator
+import org.odk.collect.qrcode.zxing.QRCodeCreatorImpl
+import org.odk.collect.qrcode.zxing.QRCodeDecoderImpl
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream

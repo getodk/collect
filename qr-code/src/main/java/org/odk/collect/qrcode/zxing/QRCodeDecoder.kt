@@ -1,4 +1,4 @@
-package org.odk.collect.qrcode
+package org.odk.collect.qrcode.zxing
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

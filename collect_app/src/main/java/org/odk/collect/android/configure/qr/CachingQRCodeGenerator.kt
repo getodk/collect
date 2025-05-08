@@ -6,8 +6,8 @@ import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.androidshared.bitmap.ImageFileUtils
-import org.odk.collect.qrcode.QRCodeCreator
-import org.odk.collect.qrcode.QRCodeDecoder
+import org.odk.collect.qrcode.zxing.QRCodeCreator
+import org.odk.collect.qrcode.zxing.QRCodeDecoder
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
