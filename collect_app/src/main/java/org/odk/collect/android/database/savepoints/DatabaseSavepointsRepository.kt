@@ -28,7 +28,7 @@ class DatabaseSavepointsRepository(
         context,
         dbPath,
         SAVEPOINTS_DATABASE_NAME,
-        SavepointsDatabaseMigrator(),
+        SavepointsDatabaseMigrator(SAVEPOINTS_DATABASE_VERSION),
         SAVEPOINTS_DATABASE_VERSION,
         true
     )
