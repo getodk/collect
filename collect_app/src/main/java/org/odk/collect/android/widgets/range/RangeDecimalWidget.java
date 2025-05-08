@@ -34,6 +34,7 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @SuppressLint("ViewConstructor")
 public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChangeListener {
@@ -92,7 +93,13 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     private void setUpActualValueLabel(BigDecimal actualValue) {
         if (actualValue != null) {
-            currentValue.setText(String.valueOf(actualValue.doubleValue()));
+            double doubleValue;
+            if (slider.getStepSize() < 1) {
+                doubleValue = actualValue.setScale(3, RoundingMode.HALF_UP).doubleValue();
+            } else {
+                doubleValue = actualValue.doubleValue();
+            }
+            currentValue.setText(String.valueOf(doubleValue));
         } else {
             currentValue.setText("");
             slider.reset();
