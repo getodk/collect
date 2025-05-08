@@ -13,7 +13,7 @@ import org.odk.collect.db.sqlite.CursorExt.getInt
 import org.odk.collect.db.sqlite.CursorExt.getString
 import org.odk.collect.db.sqlite.CursorExt.getStringOrNull
 import org.odk.collect.db.sqlite.CursorExt.rowToMap
-import org.odk.collect.db.sqlite.DatabaseMigrator
+import org.odk.collect.db.sqlite.MigrationListDatabaseMigrator
 import org.odk.collect.db.sqlite.RowNumbers.invalidateRowNumbers
 import org.odk.collect.db.sqlite.RowNumbers.rawQueryWithRowNumber
 import org.odk.collect.db.sqlite.SQLiteColumns.ROW_NUMBER
@@ -385,23 +385,21 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     private fun quote(text: String) = "\"$text\""
 }
 
-class EntitiesDatabaseMigrator : DatabaseMigrator {
-
+class EntitiesDatabaseMigrator : MigrationListDatabaseMigrator(
+    {
+        throw IllegalStateException("Cannot upgrade from this beta version. Please reinstall Collect!")
+    },
+    {
+        it.addColumn(
+            ListsTable.TABLE_NAME,
+            ListsTable.COLUMN_NEEDS_APPROVAL,
+            "integer",
+            default = "0"
+        )
+    }
+) {
     override fun onCreate(db: SQLiteDatabase) {
         createDbForVersion(db, DATABASE_VERSION)
-    }
-
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int) {
-        if (oldVersion == 1) {
-            throw IllegalStateException("Cannot upgrade from this beta version. Please reinstall Collect!")
-        } else if (oldVersion == 2) {
-            db.addColumn(
-                ListsTable.TABLE_NAME,
-                ListsTable.COLUMN_NEEDS_APPROVAL,
-                "integer",
-                default = "0"
-            )
-        }
     }
 
     fun createDbForVersion(db: SQLiteDatabase, version: Int) {
