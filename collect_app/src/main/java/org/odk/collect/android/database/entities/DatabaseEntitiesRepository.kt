@@ -8,15 +8,16 @@ import android.database.sqlite.SQLiteException
 import android.provider.BaseColumns._ID
 import org.odk.collect.db.sqlite.CursorExt.first
 import org.odk.collect.db.sqlite.CursorExt.foldAndClose
+import org.odk.collect.db.sqlite.CursorExt.getBoolean
 import org.odk.collect.db.sqlite.CursorExt.getInt
 import org.odk.collect.db.sqlite.CursorExt.getString
 import org.odk.collect.db.sqlite.CursorExt.getStringOrNull
 import org.odk.collect.db.sqlite.CursorExt.rowToMap
-import org.odk.collect.db.sqlite.DatabaseMigrator
+import org.odk.collect.db.sqlite.MigrationListDatabaseMigrator
 import org.odk.collect.db.sqlite.RowNumbers.invalidateRowNumbers
 import org.odk.collect.db.sqlite.RowNumbers.rawQueryWithRowNumber
 import org.odk.collect.db.sqlite.SQLiteColumns.ROW_NUMBER
-import org.odk.collect.db.sqlite.SQLiteDatabaseExt.delete
+import org.odk.collect.db.sqlite.SQLiteDatabaseExt.addColumn
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.getColumnNames
 import org.odk.collect.db.sqlite.SQLiteDatabaseExt.query
 import org.odk.collect.db.sqlite.SynchronizedDatabaseConnection
@@ -24,7 +25,9 @@ import org.odk.collect.db.sqlite.toSql
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.QueryException
+import org.odk.collect.entities.storage.getListNames
 import org.odk.collect.shared.Query
 import org.odk.collect.shared.mapColumns
 
@@ -32,6 +35,7 @@ private object ListsTable {
     const val TABLE_NAME = "lists"
     const val COLUMN_NAME = "name"
     const val COLUMN_HASH = "hash"
+    const val COLUMN_NEEDS_APPROVAL = "needs_approval"
 }
 
 private object EntitiesTable {
@@ -52,7 +56,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         context,
         dbPath,
         "entities.db",
-        EntitiesDatabaseMigrator(),
+        EntitiesDatabaseMigrator(DATABASE_VERSION),
         DATABASE_VERSION
     )
 
@@ -128,15 +132,20 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         invalidateRowNumbers()
     }
 
-    override fun getLists(): Set<String> {
+    override fun getLists(): List<EntityList> {
         return databaseConnection.withConnection {
-            getListsFromDB(readableDatabase)
+            readableDatabase
+                .query(ListsTable.TABLE_NAME)
+                .foldAndClose(emptyList()) { list, cursor ->
+                    list + mapCursorRowToEntityList(cursor)
+                }
         }
     }
 
-    override fun updateListHash(list: String, hash: String) {
+    override fun updateList(list: String, hash: String, needsApproval: Boolean) {
         val contentValues = ContentValues().also {
             it.put(ListsTable.COLUMN_HASH, hash)
+            it.put(ListsTable.COLUMN_NEEDS_APPROVAL, if (needsApproval) 1 else 0)
         }
 
         databaseConnection.withConnection {
@@ -149,11 +158,11 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         }
     }
 
-    override fun getListHash(list: String): String? {
+    override fun getList(list: String): EntityList? {
         return databaseConnection.withConnection {
             readableDatabase
                 .query(ListsTable.TABLE_NAME, "${ListsTable.COLUMN_NAME} = ?", arrayOf(list))
-                .first { it.getStringOrNull(ListsTable.COLUMN_HASH) }
+                .first { mapCursorRowToEntityList(it) }
         }
     }
 
@@ -220,7 +229,11 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
                 databaseConnection.rawQueryWithRowNumber(list)
             } else {
                 val sqlQuery = query.toSql()
-                databaseConnection.rawQueryWithRowNumber(list, sqlQuery.selection, sqlQuery.selectionArgs)
+                databaseConnection.rawQueryWithRowNumber(
+                    list,
+                    sqlQuery.selection,
+                    sqlQuery.selectionArgs
+                )
             }.foldAndClose {
                 mapCursorRowToEntity(it, it.getInt(ROW_NUMBER))
             }
@@ -230,7 +243,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     private fun invalidateRowNumbers() {
-        getLists().forEach {
+        getListNames().forEach {
             databaseConnection.invalidateRowNumbers(it)
         }
     }
@@ -286,7 +299,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         val missingColumns = entity.properties
             .map { EntitiesTable.getPropertyColumn(it.first) }
             .distinctBy { it.lowercase() }
-            .filterNot { columnName -> columnNames.any { it.equals(columnName, ignoreCase = true) } }
+            .filterNot { columnName ->
+                columnNames.any {
+                    it.equals(
+                        columnName,
+                        ignoreCase = true
+                    )
+                }
+            }
 
         if (missingColumns.isNotEmpty()) {
             databaseConnection.resetTransaction {
@@ -305,6 +325,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         entity.properties.forEach { (name, value) ->
             contentValues.put(quote(EntitiesTable.getPropertyColumn(name)), value)
         }
+    }
+
+    private fun mapCursorRowToEntityList(cursor: Cursor): EntityList {
+        return EntityList(
+            cursor.getString(ListsTable.COLUMN_NAME),
+            cursor.getStringOrNull(ListsTable.COLUMN_HASH),
+            cursor.getBoolean(ListsTable.COLUMN_NEEDS_APPROVAL)
+        )
     }
 
     private fun mapCursorRowToEntity(
@@ -357,40 +385,46 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     private fun quote(text: String) = "\"$text\""
 
     companion object {
-        private const val DATABASE_VERSION = 2
+        const val DATABASE_VERSION = 3
     }
 }
 
-private class EntitiesDatabaseMigrator :
-    DatabaseMigrator {
-
-    override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(
-            """
-            CREATE TABLE IF NOT EXISTS ${ListsTable.TABLE_NAME} (
-                    $_ID integer PRIMARY KEY, 
-                    ${ListsTable.COLUMN_NAME} text NOT NULL,
-                    ${ListsTable.COLUMN_HASH} text
-            );
-            """.trimIndent()
+class EntitiesDatabaseMigrator(databaseVersion: Int) : MigrationListDatabaseMigrator(
+    databaseVersion,
+    {
+        throw IllegalStateException("Cannot upgrade from this beta version. Please reinstall Collect!")
+    },
+    {
+        it.addColumn(
+            ListsTable.TABLE_NAME,
+            ListsTable.COLUMN_NEEDS_APPROVAL,
+            "integer",
+            default = "0"
         )
     }
-
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int) {
-        dropAllTablesFromDB(db)
+) {
+    override fun createDbForVersion(db: SQLiteDatabase, version: Int) {
+        if (version == 2) {
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS lists (
+                        _id integer PRIMARY KEY,
+                        name text NOT NULL,
+                        hash text
+                );
+                """.trimIndent()
+            )
+        } else if (version == 3) {
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS ${ListsTable.TABLE_NAME} (
+                        $_ID integer PRIMARY KEY,
+                        ${ListsTable.COLUMN_NAME} text NOT NULL,
+                        ${ListsTable.COLUMN_HASH} text,
+                        ${ListsTable.COLUMN_NEEDS_APPROVAL} integer DEFAULT 0
+                );
+                """.trimIndent()
+            )
+        }
     }
-}
-
-private fun dropAllTablesFromDB(db: SQLiteDatabase) {
-    getListsFromDB(db).forEach {
-        db.delete(it)
-    }
-
-    db.delete(ListsTable.TABLE_NAME)
-}
-
-private fun getListsFromDB(db: SQLiteDatabase): Set<String> {
-    return db
-        .query(ListsTable.TABLE_NAME)
-        .foldAndClose(emptySet()) { set, cursor -> set + cursor.getString(ListsTable.COLUMN_NAME) }
 }

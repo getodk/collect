@@ -281,9 +281,14 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
                     mediaFileHash = Md5.getMd5Hash(getResourceAsStream("media/" + mediaFile.getFile()));
                 }
 
-                if (mediaFile instanceof EntityListItem) {
-                    stringBuilder
-                            .append("<mediaFile type=\"entityList\">");
+                if (mediaFile instanceof EntityListItem entityListItem) {
+                    if (entityListItem.isApprovalList()) {
+                        stringBuilder
+                                .append("<mediaFile type=\"approvalEntityList\">");
+                    } else {
+                        stringBuilder
+                                .append("<mediaFile type=\"entityList\">");
+                    }
                 } else {
                     stringBuilder
                             .append("<mediaFile>");
@@ -455,14 +460,24 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     public static class EntityListItem extends MediaFileItem {
 
         private int version;
+        private boolean approvalList;
 
         public EntityListItem(String name, String file, int version) {
+            this(name, file, version, false);
+        }
+
+        public EntityListItem(String name, String file, int version, boolean approvalList) {
             super(name, file);
             this.version = version;
+            this.approvalList = approvalList;
         }
 
         public EntityListItem(String name) {
             super(name, name, name);
+        }
+
+        public EntityListItem(String name, boolean approvalList) {
+            this(name, name, 0, approvalList);
         }
 
         public int getVersion() {
@@ -471,6 +486,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
         public void incrementVersion() {
             this.version++;
+        }
+
+        public boolean isApprovalList() {
+            return approvalList;
         }
     }
 
