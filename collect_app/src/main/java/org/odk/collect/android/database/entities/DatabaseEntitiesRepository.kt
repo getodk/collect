@@ -56,8 +56,8 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         context,
         dbPath,
         "entities.db",
-        EntitiesDatabaseMigrator(),
-        EntitiesDatabaseMigrator.DATABASE_VERSION
+        EntitiesDatabaseMigrator(DATABASE_VERSION),
+        DATABASE_VERSION
     )
 
     override fun save(list: String, vararg entities: Entity) {
@@ -383,9 +383,14 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     private fun quote(text: String) = "\"$text\""
+
+    companion object {
+        const val DATABASE_VERSION = 3
+    }
 }
 
-class EntitiesDatabaseMigrator : MigrationListDatabaseMigrator(
+class EntitiesDatabaseMigrator(databaseVersion: Int) : MigrationListDatabaseMigrator(
+    databaseVersion,
     {
         throw IllegalStateException("Cannot upgrade from this beta version. Please reinstall Collect!")
     },
@@ -398,11 +403,7 @@ class EntitiesDatabaseMigrator : MigrationListDatabaseMigrator(
         )
     }
 ) {
-    override fun onCreate(db: SQLiteDatabase) {
-        createDbForVersion(db, DATABASE_VERSION)
-    }
-
-    fun createDbForVersion(db: SQLiteDatabase, version: Int) {
+    override fun createDbForVersion(db: SQLiteDatabase, version: Int) {
         if (version == 2) {
             db.execSQL(
                 """
@@ -425,9 +426,5 @@ class EntitiesDatabaseMigrator : MigrationListDatabaseMigrator(
                 """.trimIndent()
             )
         }
-    }
-
-    companion object {
-        const val DATABASE_VERSION = 3
     }
 }
