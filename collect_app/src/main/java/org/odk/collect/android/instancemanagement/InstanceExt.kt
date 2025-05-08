@@ -2,6 +2,7 @@ package org.odk.collect.android.instancemanagement
 
 import android.content.Context
 import android.content.res.Resources
+import org.odk.collect.android.application.Collect
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
@@ -28,9 +29,23 @@ fun Instance.isDraft(): Boolean {
     return draftStatuses.contains(status)
 }
 
+fun Instance.isEdit(): Boolean {
+    return editOf != null
+}
+
 fun Instance.showAsEditable(settingsProvider: SettingsProvider): Boolean {
     return isDraft() && settingsProvider.getProtectedSettings()
         .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
+}
+
+fun Instance.userVisibleInstanceName(
+    resources: Resources = Collect.getInstance().resources
+): String {
+    return if (isEdit()) {
+        resources.getString(R.string.user_visible_instance_name, displayName, editNumber)
+    } else {
+        displayName
+    }
 }
 
 private fun getStatusDescription(resources: Resources, state: String?, date: Date): String {

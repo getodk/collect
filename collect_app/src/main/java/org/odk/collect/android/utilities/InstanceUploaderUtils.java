@@ -17,8 +17,10 @@
 package org.odk.collect.android.utilities;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.instancemanagement.InstanceExtKt;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 
@@ -50,7 +52,7 @@ public final class InstanceUploaderUtils {
 
         while (it.hasNext()) {
             Instance instance = instancesRepository.get(Long.valueOf(it.next()));
-            message.append(getUploadResultMessageForInstances(instance, result));
+            message.append(getUploadResultMessageForInstances(instance, context.getResources(), result));
         }
 
         if (message.length() == 0) {
@@ -60,10 +62,10 @@ public final class InstanceUploaderUtils {
         return message.toString().trim();
     }
 
-    private static String getUploadResultMessageForInstances(Instance instance, Map<String, String> resultMessagesByInstanceId) {
+    private static String getUploadResultMessageForInstances(Instance instance, Resources resources, Map<String, String> resultMessagesByInstanceId) {
         StringBuilder uploadResultMessage = new StringBuilder();
         if (instance != null) {
-            String name = instance.getDisplayName();
+            String name = InstanceExtKt.userVisibleInstanceName(instance, resources);
             String text = localizeDefaultAggregateSuccessfulText(resultMessagesByInstanceId.get(instance.getDbId().toString()));
             uploadResultMessage
                     .append(name)

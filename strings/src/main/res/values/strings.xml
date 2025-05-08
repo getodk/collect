@@ -145,9 +145,13 @@
     <string name="survey_internal_error">Internal error: step to prompt failed.</string>
 
     <string name="save_enter_data_description">You are at the end of %s.</string>
-    <string name="form_edits_warning_title">Finalized forms are not editable.</string>
-    <string name="form_edits_warning_title_auto_send_enabled">Sent forms are not editable.</string>
-    <string name="form_edits_warning_message">If you need to make edits to your form, \"Save as draft\" until you\'re ready to send.</string>
+    <string name="form_editing_disabled_after_finalizing">Edits can not be made after finalizing.</string>
+    <string name="form_editing_disabled_after_sending">Edits can not be made after sending.</string>
+    <string name="form_editing_enabled_after_finalizing">Edits can be made after finalizing.</string>
+    <string name="form_editing_enabled_after_sending">Edits can be made after sending.</string>
+    <string name="form_editing_disabled_hint">If you need to make edits to your form, \"Save as draft\" until you\'re ready to send.</string>
+    <string name="form_editing_enabled_after_finalizing_hint">To make changes after finalizing your form, go to \"Ready to send\" and tap the edit icon.</string>
+    <string name="form_editing_enabled_after_sending_hint">To make changes after sending your form, go to \"Sent\" and tap the edit icon.</string>
     <string name="form_edits_warning_learn_more">Learn more</string>
     <string name="save_as_draft">Save as draft</string>
     <string name="finalize">Finalize</string>
@@ -1387,4 +1391,18 @@
     <string name="settings_json">Settings JSON</string>
     <!-- Text for the dialog that is displayed while the form is being prepared for editing -->
     <string name="preparing_form_edit">Preparing the form for editing…</string>
+    <!-- Instance name with a suffix indicating the edit number, if this is an edited instance -->
+    <string name="user_visible_instance_name">%s (Edit %d)</string>
+    <!-- Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists -->
+    <string name="newer_draft_edit_found_dialog_title">Continue editing draft?</string>
+    <!-- Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists -->
+    <string name="newer_draft_edit_found_dialog_message">\'A draft edit was saved on\' EEE, MMM dd, yyyy \'at\' HH:mm\'\n\nDo you want to resume this edit?\'</string>
+    <!-- Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists -->
+    <string name="newer_draft_edit_found_dialog_positive_button">Resume editing</string>
+    <!-- Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists -->
+    <string name="newer_finalized_edit_found_dialog_title">Edit latest version?</string>
+    <!-- Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists -->
+    <string name="newer_finalized_edit_found_dialog_message">\'This submission was previously edited.\n\nWould you like to edit the latest version finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm\'?\'</string>
+    <!-- Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists -->
+    <string name="newer_finalized_edit_found_dialog_positive_button">Edit latest form</string>
 </resources>

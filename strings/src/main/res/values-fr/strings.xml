@@ -113,9 +113,6 @@
   <string name="too_complex_form">Ce formulaire est trop complexe pour cet appareil. Essayez de simplifier les expressions ou demandez de l\'aide sur le forum.</string>
   <string name="survey_internal_error">Erreur interne : un ou plusieurs champs de saisie peuvent avoir été ignorés.</string>
   <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
-  <string name="form_edits_warning_title">Les formulaires finalisés ne peuvent pas être modifiés.</string>
-  <string name="form_edits_warning_title_auto_send_enabled">Les formulaires envoyés ne peuvent pas être modifiés.</string>
-  <string name="form_edits_warning_message">Si vous devrez modifier ce formulaire prochainement, choisissez \"Enregistrer comme ébauche\" jusqu\'à ce que vous soyez prêt à l\'envoyer.</string>
   <string name="form_edits_warning_learn_more">En savoir plus</string>
   <string name="save_as_draft">Enregistrer comme ébauche</string>
   <string name="finalize">Finaliser</string>

@@ -60,6 +60,11 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
                 .assertOnPage(new FormEndPage(formName));
     }
 
+    public FormEndPage clickGoToEnd(String instanceName) {
+        return clickOnString(org.odk.collect.strings.R.string.jump_to_end)
+                .assertOnPage(new FormEndPage(instanceName));
+    }
+
     public FormEntryPage addGroup() {
         onView(withId(R.id.menu_add_repeat)).perform(click());
         return new FormEntryPage(formName).assertOnPage();

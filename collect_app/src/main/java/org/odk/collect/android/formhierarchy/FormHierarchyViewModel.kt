@@ -6,15 +6,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.instance.TreeReference
+import org.odk.collect.android.instancemanagement.InstanceEditResult
 import org.odk.collect.android.instancemanagement.InstancesDataService
-import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.async.Scheduler
 
 class FormHierarchyViewModel(scheduler: Scheduler) : ViewModel() {
     private val trackableWorker = TrackableWorker(scheduler)
-    val isCloning: LiveData<Boolean> = trackableWorker.isWorking
+    val isEditingInstance: LiveData<Boolean> = trackableWorker.isWorking
+
+    private val _instanceEditResult = MutableLiveData<Consumable<InstanceEditResult>>()
+    val instanceEditResult: LiveData<Consumable<InstanceEditResult>> = _instanceEditResult
 
     var contextGroupRef: TreeReference? = null
     var screenIndex: FormIndex? = null
@@ -26,22 +29,18 @@ class FormHierarchyViewModel(scheduler: Scheduler) : ViewModel() {
     fun shouldShowRepeatGroupPicker() = repeatGroupPickerIndex != null
 
     fun editInstance(
-        formController: FormController,
+        instanceFilePath: String,
         instancesDataService: InstancesDataService,
         projectId: String
-    ): LiveData<Consumable<Long>> {
-        val result = MutableLiveData<Consumable<Long>>()
-
+    ) {
         trackableWorker.immediate(
             background = {
-                instancesDataService.clone(formController.getInstanceFile()!!, projectId)
+                instancesDataService.editInstance(instanceFilePath, projectId)
             },
-            foreground = { dbId ->
-                result.value = Consumable(dbId)
+            foreground = { instanceEditResult ->
+                _instanceEditResult.value = Consumable(instanceEditResult)
             }
         )
-
-        return result
     }
 
     class Factory(private val scheduler: Scheduler) : ViewModelProvider.Factory {

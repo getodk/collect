@@ -47,4 +47,6 @@ public interface InstancesRepository {
      * record in place.
      */
     void deleteWithLogging(Long id);
+
+    class IntegrityException extends RuntimeException {}
 }

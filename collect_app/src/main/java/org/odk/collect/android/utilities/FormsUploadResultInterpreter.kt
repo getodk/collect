@@ -2,6 +2,7 @@ package org.odk.collect.android.utilities
 
 import android.content.Context
 import org.odk.collect.android.R
+import org.odk.collect.android.instancemanagement.userVisibleInstanceName
 import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.errors.ErrorItem
 import org.odk.collect.forms.instances.Instance
@@ -12,7 +13,7 @@ object FormsUploadResultInterpreter {
         it.value != null
     }.map {
         ErrorItem(
-            it.key.displayName,
+            it.key.userVisibleInstanceName(context.resources),
             context.getLocalizedString(org.odk.collect.strings.R.string.form_details, it.key.formId ?: "", it.key.formVersion ?: ""),
             it.value?.message ?: ""
         )

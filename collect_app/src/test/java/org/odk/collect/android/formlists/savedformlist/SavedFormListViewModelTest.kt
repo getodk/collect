@@ -226,6 +226,45 @@ class SavedFormListViewModelTest {
         assertThat(result.getOrAwaitValue(scheduler)!!.value, equalTo(1))
     }
 
+    @Test
+    fun `filtering takes into account edit numbers`() {
+        val originalInstance = InstanceFixtures.instance(displayName = "My form")
+        val editedInstance = InstanceFixtures.instance(displayName = "My form", editOf = 1, editNumber = 1)
+        saveForms("projectId", listOf(originalInstance, editedInstance))
+
+        val viewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
+
+        viewModel.filterText = "Edit 1"
+        assertThat(
+            viewModel.formsToDisplay.getOrAwaitValue(scheduler),
+            contains(editedInstance)
+        )
+    }
+
+    @Test
+    fun `sorting takes into account edit numbers`() {
+        val instance1 = InstanceFixtures.instance(displayName = "My form", editOf = 1, editNumber = 1)
+        val instance2 = InstanceFixtures.instance(displayName = "My form", editOf = 1, editNumber = 2)
+        val instance3 = InstanceFixtures.instance(displayName = "My form", editOf = 1, editNumber = 3)
+        saveForms("projectId", listOf(instance1, instance2, instance3),)
+
+        val viewModel =
+            SavedFormListViewModel(scheduler, settings, instancesDataService, "projectId")
+
+        viewModel.sortOrder = SortOrder.NAME_DESC
+        assertThat(
+            viewModel.formsToDisplay.getOrAwaitValue(scheduler),
+            contains(instance3, instance2, instance1)
+        )
+
+        viewModel.sortOrder = SortOrder.NAME_ASC
+        assertThat(
+            viewModel.formsToDisplay.getOrAwaitValue(scheduler),
+            contains(instance1, instance2, instance3)
+        )
+    }
+
     private fun saveForms(projectId: String, instances: List<Instance>) {
         whenever(instancesDataService.getInstances(projectId)).doReturn(MutableStateFlow(instances))
     }

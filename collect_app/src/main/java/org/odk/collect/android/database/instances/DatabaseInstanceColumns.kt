@@ -17,4 +17,6 @@ object DatabaseInstanceColumns : BaseColumns {
     const val GEOMETRY = "geometry"
     const val GEOMETRY_TYPE = "geometryType"
     const val CAN_DELETE_BEFORE_SEND = "canDeleteBeforeSend"
+    const val EDIT_OF = "editOf"
+    const val EDIT_NUMBER = "editNumber"
 }

@@ -25,6 +25,7 @@ object InstanceListItemView {
 
         val imageView = view.findViewById<ImageView>(R.id.image)
         setImageFromStatus(imageView, instance)
+        view.findViewById<TextView>(R.id.form_title).text = instance.userVisibleInstanceName(context.resources)
         setUpSubtext(view, instance, context)
 
         val pill = view.findViewById<ErrorsPill>(R.id.chip)

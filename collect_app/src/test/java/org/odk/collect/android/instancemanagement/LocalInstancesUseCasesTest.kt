@@ -49,7 +49,7 @@ class LocalInstancesUseCasesTest {
     }
 
     @Test
-    fun `#clone makes a proper copy of the instance dir`() {
+    fun `#editInstance makes a proper copy of the instance dir`() {
         val formsRepository = InMemFormsRepository()
         val instancesRepository = InMemInstancesRepository()
         val instancesDir = TempFiles.createTempDir()
@@ -77,43 +77,41 @@ class LocalInstancesUseCasesTest {
         }
         val sourceMediaFile2Md5Hash = sourceMediaFile2.getMd5Hash()
 
-        val clonedInstanceDbId = LocalInstancesUseCases.clone(
-            sourceInstanceFile,
+        val editedInstance = LocalInstancesUseCases.editInstance(
+            sourceInstanceFile.absolutePath,
             instancesDir.absolutePath,
             instancesRepository,
             formsRepository
-        ) { Random.nextLong() }
+        ) { Random.nextLong() }.instance
 
-        val clonedInstance = instancesRepository.get(clonedInstanceDbId)!!
-
-        val clonedInstanceFile = File(clonedInstance.instanceFilePath)
-        val clonedInstanceDir = File(clonedInstanceFile.parent!!)
+        val editedInstanceFile = File(editedInstance.instanceFilePath)
+        val editedInstanceDir = File(editedInstanceFile.parent!!)
 
         val sourceFiles = sourceInstanceDir.listFiles()!!
-        val clonedFiles = clonedInstanceDir.listFiles()!!
+        val editedFiles = editedInstanceDir.listFiles()!!
 
         assertThat(sourceFiles.size, equalTo(3))
-        assertThat(clonedFiles.size, equalTo(3))
-        assertThat(sourceInstanceDir.absolutePath, not(clonedInstanceDir.absolutePath))
-        assertThat(sourceInstanceFile.name, not(clonedInstanceFile.name))
+        assertThat(editedFiles.size, equalTo(3))
+        assertThat(sourceInstanceDir.absolutePath, not(editedInstanceDir.absolutePath))
+        assertThat(sourceInstanceFile.name, not(editedInstanceFile.name))
 
         assertThat(sourceInstanceFile.exists(), equalTo(true))
-        assertThat(clonedInstanceFile.exists(), equalTo(true))
-        assertThat(sourceInstanceFileMd5Hash, equalTo(clonedInstanceFile.getMd5Hash()))
+        assertThat(editedInstanceFile.exists(), equalTo(true))
+        assertThat(sourceInstanceFileMd5Hash, equalTo(editedInstanceFile.getMd5Hash()))
 
-        val clonedMediaFile1 = clonedFiles.find { it.name == sourceMediaFile1.name }!!
+        val editedMediaFile1 = editedFiles.find { it.name == sourceMediaFile1.name }!!
         assertThat(sourceMediaFile1.exists(), equalTo(true))
-        assertThat(clonedMediaFile1.exists(), equalTo(true))
-        assertThat(sourceMediaFile1Md5Hash, equalTo(clonedMediaFile1.getMd5Hash()))
+        assertThat(editedMediaFile1.exists(), equalTo(true))
+        assertThat(sourceMediaFile1Md5Hash, equalTo(editedMediaFile1.getMd5Hash()))
 
-        val clonedMediaFile2 = clonedFiles.find { it.name == sourceMediaFile2.name }!!
+        val editedMediaFile2 = editedFiles.find { it.name == sourceMediaFile2.name }!!
         assertThat(sourceMediaFile2.exists(), equalTo(true))
-        assertThat(clonedMediaFile2.exists(), equalTo(true))
-        assertThat(sourceMediaFile2Md5Hash, equalTo(clonedMediaFile2.getMd5Hash()))
+        assertThat(editedMediaFile2.exists(), equalTo(true))
+        assertThat(sourceMediaFile2Md5Hash, equalTo(editedMediaFile2.getMd5Hash()))
     }
 
     @Test
-    fun `#clone makes a proper copy of the instance row in the database`() {
+    fun `#editInstance makes a proper copy of the instance row in the database`() {
         val formsRepository = InMemFormsRepository()
         val instancesRepository = InMemInstancesRepository()
         val instancesDir = TempFiles.createTempDir()
@@ -127,25 +125,38 @@ class LocalInstancesUseCasesTest {
                 formVersion = form.version!!
             )
         )
-        val sourceInstanceFile = File(sourceInstance.instanceFilePath)
 
-        val clonedInstanceDbId = LocalInstancesUseCases.clone(
-            sourceInstanceFile,
+        // The first edit
+        val firstEditedInstance = LocalInstancesUseCases.editInstance(
+            sourceInstance.instanceFilePath,
             instancesDir.absolutePath,
             instancesRepository,
             formsRepository
-        ) { Random.nextLong() }
-        val clonedInstance = instancesRepository.get(clonedInstanceDbId)!!
+        ) { Random.nextLong() }.instance
 
         assertThat(instancesRepository.all.size, equalTo(2))
         assertThat(sourceInstance, equalTo(instancesRepository.get(sourceInstance.dbId)))
-        assertThat(sourceInstance, not(clonedInstance))
-        assertThat(clonedInstance.status, equalTo(Instance.STATUS_VALID))
-        assertThat(sourceInstance.instanceFilePath, not(clonedInstance.instanceFilePath))
+        assertThat(sourceInstance, not(firstEditedInstance))
+        assertThat(firstEditedInstance.status, equalTo(Instance.STATUS_VALID))
+        assertThat(sourceInstance.instanceFilePath, not(firstEditedInstance.instanceFilePath))
+        assertThat(firstEditedInstance.editOf, equalTo(sourceInstance.dbId))
+        assertThat(firstEditedInstance.editNumber, equalTo(1))
+
+        // The second edit
+        val secondEditedInstance = LocalInstancesUseCases.editInstance(
+            firstEditedInstance.instanceFilePath,
+            instancesDir.absolutePath,
+            instancesRepository,
+            formsRepository
+        ) { Random.nextLong() }.instance
+
+        assertThat(instancesRepository.all.size, equalTo(3))
+        assertThat(secondEditedInstance.editOf, equalTo(sourceInstance.dbId))
+        assertThat(secondEditedInstance.editNumber, equalTo(2))
     }
 
     @Test
-    fun `#clone can make a copy of the same instance multiple times`() {
+    fun `#editInstance returns the newest edit instance when user attempts to edit an outdated one`() {
         val formsRepository = InMemFormsRepository()
         val instancesRepository = InMemInstancesRepository()
         val instancesDir = TempFiles.createTempDir()
@@ -159,28 +170,40 @@ class LocalInstancesUseCasesTest {
             )
         )
         val sourceInstanceFile = File(sourceInstance.instanceFilePath)
+        val editedInstance1 = instancesRepository.save(
+            InstanceFixtures.instance(
+                instancesDir = instancesDir,
+                formId = form.formId,
+                formVersion = form.version!!,
+                editOf = sourceInstance.dbId,
+                editNumber = 1
+            )
+        )
+        val editedInstance1File = File(editedInstance1.instanceFilePath)
+        val editedInstance2 = instancesRepository.save(
+            InstanceFixtures.instance(
+                instancesDir = instancesDir,
+                formId = form.formId,
+                formVersion = form.version!!,
+                editOf = sourceInstance.dbId,
+                editNumber = 2
+            )
+        )
 
-        val clonedInstanceDbId1 = LocalInstancesUseCases.clone(
-            sourceInstanceFile,
+        var editResult = LocalInstancesUseCases.editInstance(
+            sourceInstanceFile.absolutePath,
             instancesDir.absolutePath,
             instancesRepository,
             formsRepository
         ) { Random.nextLong() }
-        val clonedInstance1 = instancesRepository.get(clonedInstanceDbId1)!!
-        val clonedInstanceFile1 = File(clonedInstance1.instanceFilePath)
+        assertThat(editResult.instance.dbId, equalTo(editedInstance2.dbId))
 
-        val clonedInstanceDbId2 = LocalInstancesUseCases.clone(
-            sourceInstanceFile,
+        editResult = LocalInstancesUseCases.editInstance(
+            editedInstance1File.absolutePath,
             instancesDir.absolutePath,
             instancesRepository,
             formsRepository
         ) { Random.nextLong() }
-        val clonedInstance2 = instancesRepository.get(clonedInstanceDbId2)!!
-        val clonedInstanceFile2 = File(clonedInstance2.instanceFilePath)
-
-        assertThat(instancesRepository.all.size, equalTo(3))
-        assertThat(sourceInstanceFile.parent, not(clonedInstanceFile1.parent))
-        assertThat(sourceInstanceFile.parent, not(clonedInstanceFile2.parent))
-        assertThat(clonedInstanceFile1.parent, not(clonedInstanceFile2.parent))
+        assertThat(editResult.instance.dbId, equalTo(editedInstance2.dbId))
     }
 }

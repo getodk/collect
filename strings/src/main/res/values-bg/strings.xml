@@ -113,9 +113,6 @@
   <string name="too_complex_form">Този формуляр е прекалено сложен за това устройство. Опитайте да го опростите или потърсете помощ във форума.</string>
   <string name="survey_internal_error">Вътрешна грешка: преминавенето към подсказката е неуспешно.</string>
   <string name="save_enter_data_description">Вие сте в края на %s</string>
-  <string name="form_edits_warning_title">Финализираните формуляри не могат да се редактират.</string>
-  <string name="form_edits_warning_title_auto_send_enabled">Изпратените формуляри не могат да се редактират.</string>
-  <string name="form_edits_warning_message">Ако се налага да правите промени във формуляра, използвайте \"Запази като чернова\" докато сте готови да го изпратите.</string>
   <string name="form_edits_warning_learn_more">Научи повече</string>
   <string name="save_as_draft">Запази като чернова</string>
   <string name="finalize">Финализирай</string>
