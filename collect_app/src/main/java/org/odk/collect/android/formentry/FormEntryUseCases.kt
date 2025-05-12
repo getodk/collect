@@ -3,9 +3,12 @@ package org.odk.collect.android.formentry
 import org.apache.commons.io.FileUtils.readFileToByteArray
 import org.javarosa.core.model.FormDef
 import org.javarosa.core.model.FormInitializationMode
+import org.javarosa.core.model.data.StringData
+import org.javarosa.core.model.instance.TreeElement
 import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.core.model.instance.utils.DefaultAnswerResolver
 import org.javarosa.core.reference.ReferenceManager
+import org.javarosa.core.util.PropertyUtils
 import org.javarosa.form.api.FormEntryController
 import org.javarosa.xform.parse.XFormParser
 import org.javarosa.xform.util.XFormUtils
@@ -152,6 +155,9 @@ object FormEntryUseCases {
         instancesRepository: InstancesRepository,
         entitiesRepository: EntitiesRepository,
     ): Instance? {
+        if (instance.isEdit()) {
+            addDeprecatedId(formController)
+        }
         formController.finalizeForm()
 
         val formEntities = formController.getEntities()
@@ -239,6 +245,23 @@ object FormEntryUseCases {
                     formEntryController.model.language,
                     formEntryController.model.form.localizer
                 )
+        }
+    }
+
+    private fun addDeprecatedId(formController: FormController) {
+        val mainInstance = formController.getFormDef()!!.mainInstance
+        val metaSection = mainInstance.root.getFirstChild("meta")
+        if (metaSection != null) {
+            val instanceId = metaSection.getFirstChild("instanceID")
+            if (instanceId != null) {
+                var deprecatedId = metaSection.getFirstChild("deprecatedID")
+                if (deprecatedId == null) {
+                    deprecatedId = TreeElement("deprecatedID")
+                    metaSection.addChild(deprecatedId)
+                }
+                deprecatedId.setAnswer(instanceId.value)
+                instanceId.setAnswer(StringData("uuid:" + PropertyUtils.genUUID()))
+            }
         }
     }
 }

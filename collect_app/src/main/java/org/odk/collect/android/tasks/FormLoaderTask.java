@@ -426,7 +426,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
                     Timber.i("Importing data");
                     publishProgress(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.survey_loading_reading_data_message));
                     importData(instanceXml, fec);
-                    formDef.initialize(isFinalizedFormEdit ? FormInitializationMode.FINALIZED_FORM_EDIT : FormInitializationMode.DRAFT_FORM_EDIT);
+                    formDef.initialize(FormInitializationMode.DRAFT_FORM_EDIT);
                 } catch (IOException | RuntimeException e) {
                     // Skip a savepoint file that is corrupted or 0-sized
                     if (usedSavepoint && !(e.getCause() instanceof XPathTypeMismatchException)) {
