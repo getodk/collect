@@ -188,12 +188,6 @@ class EditSavedFormTest {
             .clickFinalize()
 
             .clickSendFinalizedForm(1)
-            .clickSelectAll()
-            .clickSendSelected()
-            .clickOK(SendFinalizedFormPage())
-            .pressBack(MainMenuPage())
-
-            .clickViewSentForm(1)
             .clickOnForm("One Question Editable")
             .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
@@ -206,7 +200,7 @@ class EditSavedFormTest {
             .clickGoToEnd("One Question Editable (Edit 1)")
             .clickFinalize()
 
-            .clickSendFinalizedForm(1)
+            .clickSendFinalizedForm(2)
             .clickSelectAll()
             .clickSendSelected()
 
@@ -270,25 +264,19 @@ class EditSavedFormTest {
             .clickOnQuestion("what is your age")
             .pressBackAndSaveAsDraft()
 
-            .clickSendFinalizedForm(1)
-            .clickSelectAll()
-            .clickSendSelected()
-            .clickOK(SendFinalizedFormPage())
-            .pressBack(MainMenuPage())
-
             .clickDrafts(1)
             .clickOnForm("One Question Editable", "One Question Editable (Edit 1)")
             .clickGoToEnd("One Question Editable (Edit 1)")
             .clickFinalize()
 
-            .clickSendFinalizedForm(1)
+            .clickSendFinalizedForm(2)
             .clickOnForm("One Question Editable", "One Question Editable (Edit 1)")
             .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
             .swipeToEndScreen("One Question Editable (Edit 2)")
             .clickFinalize()
 
-            .clickSendFinalizedForm(2)
+            .clickSendFinalizedForm(3)
             .clickSelectAll()
             .clickSendSelected()
 
@@ -314,12 +302,6 @@ class EditSavedFormTest {
             .clickFinalize()
 
             .clickSendFinalizedForm(1)
-            .clickSelectAll()
-            .clickSendSelected()
-            .clickOK(SendFinalizedFormPage())
-            .pressBack(MainMenuPage())
-
-            .clickViewSentForm(1)
             .clickOnForm("One Question Editable")
             .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
@@ -332,7 +314,7 @@ class EditSavedFormTest {
             .clickGoToEnd("One Question Editable (Edit 1)")
             .clickFinalize()
 
-            .clickSendFinalizedForm(1)
+            .clickSendFinalizedForm(2)
             .clickSelectAll()
             .clickSendSelected()
 
