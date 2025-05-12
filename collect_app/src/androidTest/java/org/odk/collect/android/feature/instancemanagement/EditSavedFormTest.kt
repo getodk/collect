@@ -292,41 +292,6 @@ class EditSavedFormTest {
     }
 
     @Test
-    fun savingEditedFormMultipleTimes_preservesDeprecatedId() {
-        rule.startAtMainMenu()
-            .setServer(testDependencies.server.url)
-            .copyForm("one-question-editable.xml")
-            .startBlankForm("One Question Editable")
-            .answerQuestion("what is your age", "123")
-            .swipeToEndScreen()
-            .clickFinalize()
-
-            .clickSendFinalizedForm(1)
-            .clickOnForm("One Question Editable")
-            .editForm("One Question Editable")
-            .clickOnQuestion("what is your age")
-            .answerQuestion("what is your age", "456")
-            .pressBackAndSaveAsDraft()
-
-            .clickDrafts(1)
-            .clickOnForm("One Question Editable", "One Question Editable (Edit 1)")
-            .assertText("456")
-            .clickGoToEnd("One Question Editable (Edit 1)")
-            .clickFinalize()
-
-            .clickSendFinalizedForm(2)
-            .clickSelectAll()
-            .clickSendSelected()
-
-        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
-        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
-
-        assertThat(firstFormDeprecatedID, equalTo(null))
-        assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
-        assertThat(secondFormInstanceID, not(firstFormInstanceID))
-    }
-
-    @Test
     fun editingFinalizedForm_whenNewerDraftEditExists_promptsToOpenNewerEditInstead() {
         rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
@@ -422,6 +387,47 @@ class EditSavedFormTest {
             .editFormWithError()
             .discardEditingNewerEdit()
             .assertText("123")
+    }
+
+    @Test
+    fun finalizingFinalizedEditInFormEntry_savesFormWithCorrectInstanceIdAndDeprecatedId() {
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .copyForm("one-question-editable.xml")
+            .startBlankForm("One Question Editable")
+            .answerQuestion("what is your age", "123")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question Editable")
+            .editForm("One Question Editable")
+            .clickOnQuestion("what is your age")
+            .answerQuestion("what is your age", "456")
+            .swipeToEndScreen("One Question Editable (Edit 1)")
+            .clickSaveAsDraft()
+
+            .clickDrafts(1)
+            .clickOnForm("One Question Editable", "One Question Editable (Edit 1)")
+            .clickGoToEnd("One Question Editable (Edit 1)")
+            .clickFinalize()
+
+            .clickSendFinalizedForm(2)
+            .clickSelectAll()
+            .clickSendSelected()
+
+        val originalAnswer = getAnswer(testDependencies.server.submissions[0], "age")
+        val updatedAnswer = getAnswer(testDependencies.server.submissions[1], "age")
+
+        assertThat(originalAnswer, equalTo("123"))
+        assertThat(updatedAnswer, equalTo("456"))
+
+        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
+        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
+
+        assertThat(firstFormDeprecatedID, equalTo(null))
+        assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
+        assertThat(secondFormInstanceID, not(firstFormInstanceID))
     }
 
     @Test
