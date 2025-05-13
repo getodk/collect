@@ -33,6 +33,26 @@ class ViewFormPage(private val formName: String) : Page<ViewFormPage>() {
         return FormHierarchyPage(formName).assertOnPage()
     }
 
+    fun editFormWithError(): ViewFormPage {
+        clickOnContentDescription(string.edit_finalized_form)
+        return this
+    }
+
+    fun acceptEditingNewerDraftEdit(formName: String): FormHierarchyPage {
+        clickOnTextInDialog(string.newer_draft_edit_found_dialog_positive_button)
+        return FormHierarchyPage(formName).assertOnPage()
+    }
+
+    fun acceptEditingNewerFinalizedEdit(formName: String): FormHierarchyPage {
+        clickOnTextInDialog(string.newer_finalized_edit_found_dialog_positive_button)
+        return FormHierarchyPage(formName).assertOnPage()
+    }
+
+    fun discardEditingNewerEdit(): ViewFormPage {
+        clickOnTextInDialog(string.cancel)
+        return this
+    }
+
     fun assertNonEditableForm(): ViewFormPage {
         onView(withContentDescription(string.edit_finalized_form)).check(doesNotExist())
         return this

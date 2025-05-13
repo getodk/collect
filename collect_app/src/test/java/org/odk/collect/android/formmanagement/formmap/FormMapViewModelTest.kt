@@ -9,6 +9,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
+import org.odk.collect.android.instancemanagement.userVisibleInstanceName
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormUtils
@@ -147,7 +148,7 @@ class FormMapViewModelTest {
         val viewModel = createAndLoadViewModel(form)
         val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            instance.displayName,
+            instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
             smallIcon = R.drawable.ic_room_form_state_incomplete_24dp,
             largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
@@ -186,7 +187,7 @@ class FormMapViewModelTest {
         val viewModel = createAndLoadViewModel(form)
         val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            instance.displayName,
+            instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
             smallIcon = R.drawable.ic_room_form_state_incomplete_24dp,
             largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
@@ -225,7 +226,7 @@ class FormMapViewModelTest {
         val viewModel = createAndLoadViewModel(form)
         val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            instance.displayName,
+            instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
             smallIcon = R.drawable.ic_room_form_state_complete_24dp,
             largeIcon = R.drawable.ic_room_form_state_complete_48dp,
@@ -265,7 +266,7 @@ class FormMapViewModelTest {
         val viewModel = createAndLoadViewModel(form)
         val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            instance.displayName,
+            instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
             smallIcon = R.drawable.ic_room_form_state_complete_24dp,
             largeIcon = R.drawable.ic_room_form_state_complete_48dp,
@@ -303,7 +304,7 @@ class FormMapViewModelTest {
         val viewModel = createAndLoadViewModel(form)
         val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            instance.displayName,
+            instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
             smallIcon = R.drawable.ic_room_form_state_incomplete_24dp,
             largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
@@ -341,7 +342,7 @@ class FormMapViewModelTest {
         val viewModel = createAndLoadViewModel(form)
         val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            instance.displayName,
+            instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
             smallIcon = R.drawable.ic_room_form_state_submitted_24dp,
             largeIcon = R.drawable.ic_room_form_state_submitted_48dp,
@@ -379,7 +380,7 @@ class FormMapViewModelTest {
         val viewModel = createAndLoadViewModel(form)
         val expectedItem = MappableSelectItem.MappableSelectPoint(
             instance.dbId,
-            instance.displayName,
+            instance.userVisibleInstanceName(),
             point = MapPoint(2.0, 1.0),
             smallIcon = R.drawable.ic_room_form_state_submission_failed_24dp,
             largeIcon = R.drawable.ic_room_form_state_submission_failed_48dp,
@@ -475,6 +476,74 @@ class FormMapViewModelTest {
         scheduler.runBackground()
         scheduler.runForeground()
         assertThat(viewModel.isLoading().value, equalTo(false))
+    }
+
+    @Test
+    fun `edited finalized instances display name with edit number`() {
+        val form = formsRepository.save(
+            FormUtils.buildForm("id", "version", TempFiles.createTempDir().absolutePath)
+                .build()
+        )
+        val originalInstance = instancesRepository.save(
+            InstanceUtils.buildInstance(
+                form.formId,
+                form.version,
+                TempFiles.createTempDir().absolutePath
+            )
+                .geometry("{ \"coordinates\": [1.0, 2.0] }")
+                .geometryType("Point")
+                .status(Instance.STATUS_COMPLETE)
+                .build()
+        )
+        val editedInstance = instancesRepository.save(
+            Instance
+                .Builder(originalInstance)
+                .dbId(originalInstance.dbId + 1)
+                .editOf(originalInstance.dbId)
+                .editNumber(1)
+                .build()
+        )
+        val deletedEditedInstance = instancesRepository.save(
+            Instance
+                .Builder(originalInstance)
+                .dbId(originalInstance.dbId + 2)
+                .deletedDate(123L)
+                .editOf(originalInstance.dbId)
+                .editNumber(1)
+                .build()
+        )
+        val nonEditableEditedInstance = instancesRepository.save(
+            Instance
+                .Builder(originalInstance)
+                .dbId(originalInstance.dbId + 3)
+                .canEditWhenComplete(false)
+                .editOf(originalInstance.dbId)
+                .editNumber(1)
+                .build()
+        )
+
+        val viewModel = createAndLoadViewModel(form)
+        val items = viewModel.getMappableItems().value
+
+        assertThat(
+            items!![0].name,
+            equalTo(originalInstance.displayName)
+        )
+
+        assertThat(
+            items[1].name,
+            equalTo(editedInstance.userVisibleInstanceName())
+        )
+
+        assertThat(
+            items[2].name,
+            equalTo(deletedEditedInstance.userVisibleInstanceName())
+        )
+
+        assertThat(
+            items[3].name,
+            equalTo(nonEditableEditedInstance.userVisibleInstanceName())
+        )
     }
 
     private fun createAndLoadViewModel(form: Form): FormMapViewModel {

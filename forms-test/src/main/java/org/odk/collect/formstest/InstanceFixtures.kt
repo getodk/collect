@@ -10,14 +10,16 @@ object InstanceFixtures {
     fun instance(
         status: String = Instance.STATUS_INCOMPLETE,
         lastStatusChangeDate: Long = 0,
-        displayName: String? = null,
+        displayName: String = "Form",
         dbId: Long? = null,
         form: Form? = null,
         deletedDate: Long? = null,
         canDeleteBeforeSend: Boolean = true,
         instancesDir: File = TempFiles.createTempDir(),
         formId: String = "formId",
-        formVersion: String = "version"
+        formVersion: String = "version",
+        editOf: Long? = null,
+        editNumber: Long? = null
     ): Instance {
         return InstanceUtils.buildInstance(formId, formVersion, instancesDir.absolutePath)
             .status(status)
@@ -31,6 +33,8 @@ object InstanceFixtures {
             }
             .deletedDate(deletedDate)
             .canDeleteBeforeSend(canDeleteBeforeSend)
+            .editOf(editOf)
+            .editNumber(editNumber)
             .build()
     }
 }

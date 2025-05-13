@@ -26,6 +26,11 @@ public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
         return new ViewFormPage(formLabel).assertOnPage();
     }
 
+    public ViewFormPage clickOnForm(String formName, String instanceName) {
+        clickOnText(instanceName);
+        return new ViewFormPage(formName).assertOnPage();
+    }
+
     public OkDialog clickSendSelected() {
         clickOnText(getTranslatedString(org.odk.collect.strings.R.string.send_selected_data));
         return new OkDialog();

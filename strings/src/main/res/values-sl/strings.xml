@@ -113,9 +113,6 @@
   <string name="too_complex_form">Obrazec je preveč kompleksen za vašo napravo. Poskusite poenostaviti vprašanja ali vprašati za pomoč na forumu.</string>
   <string name="survey_internal_error">Interna napaka: prehod ni uspel.</string>
   <string name="save_enter_data_description">Ste pri koncu %s.</string>
-  <string name="form_edits_warning_title">Zaključeni obrazci niso na voljo za urejanje.</string>
-  <string name="form_edits_warning_title_auto_send_enabled">Poslani obrazi niso na voljo za urejanje.</string>
-  <string name="form_edits_warning_message">Če želite spreminjati shranjene odgovore, shranite kot osnutek dokler niste pripravljeni za oddajo.</string>
   <string name="form_edits_warning_learn_more">Preberi več</string>
   <string name="save_as_draft">Shrani kot osnutek</string>
   <string name="finalize">Zaključi</string>

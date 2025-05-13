@@ -10,6 +10,7 @@ import org.javarosa.form.api.FormEntryController
 import org.javarosa.xform.parse.XFormParser
 import org.javarosa.xform.util.XFormUtils
 import org.odk.collect.android.dynamicpreload.ExternalAnswerResolver
+import org.odk.collect.android.instancemanagement.isEdit
 import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController
@@ -152,11 +153,14 @@ object FormEntryUseCases {
         entitiesRepository: EntitiesRepository,
     ): Instance? {
         formController.finalizeForm()
+
         val formEntities = formController.getEntities()
-        LocalEntityUseCases.updateLocalEntitiesFromForm(
-            formEntities,
-            entitiesRepository
-        )
+        if (!instance.isEdit()) {
+            LocalEntityUseCases.updateLocalEntitiesFromForm(
+                formEntities,
+                entitiesRepository
+            )
+        }
 
         val instanceName = formController.getSubmissionMetadata()?.instanceName
         return instancesRepository.save(

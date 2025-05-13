@@ -113,9 +113,6 @@
   <string name="too_complex_form">Tämä lomake on liian monimutkainen tälle laitteelle. Yritä lausekkeiden yksinkertaistamista tai pyydä apua verkon keskusteluryhmästä.</string>
   <string name="survey_internal_error">Sisäinen virhe: siirtyminen kehotteeseen epäonnistui.</string>
   <string name="save_enter_data_description">Olet lomakkeen %s lopussa.</string>
-  <string name="form_edits_warning_title">Viimeistellyt lomakkeet eivät ole muokattavia.</string>
-  <string name="form_edits_warning_title_auto_send_enabled">Lähetetyt lomakkeet eivät ole muokattavia.</string>
-  <string name="form_edits_warning_message">Jos sinun tarvitsee tehdä muutoksia lomakkeeseesi, \"Tallenna luonnoksena\" kunnes olet valmis lähettämään.</string>
   <string name="form_edits_warning_learn_more">Lisätietoja</string>
   <string name="save_as_draft">Tallenna luonnoksena</string>
   <string name="finalize">Viimeistele</string>

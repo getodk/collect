@@ -3,6 +3,7 @@ package org.odk.collect.android.database.instances;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.StrictMode;
@@ -26,6 +27,8 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_NUMBER;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_OF;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.INSTANCE_FILE_PATH;
@@ -248,19 +251,25 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                     DELETED_DATE,
                     GEOMETRY,
                     GEOMETRY_TYPE,
-                    CAN_DELETE_BEFORE_SEND
+                    CAN_DELETE_BEFORE_SEND,
+                    EDIT_OF,
+                    EDIT_NUMBER
             };
         }
 
         return qb.query(readableDatabase, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
-    private long insert(ContentValues values) {
-        return databaseConnection.getWritableDatabase().insertOrThrow(
-                INSTANCES_TABLE_NAME,
-                null,
-                values
-        );
+    private long insert(ContentValues values) throws IntegrityException {
+        try {
+            return databaseConnection.getWritableDatabase().insertOrThrow(
+                    INSTANCES_TABLE_NAME,
+                    null,
+                    values
+            );
+        } catch (SQLiteConstraintException e) {
+            throw new IntegrityException();
+        }
     }
 
     private void update(Long instanceId, ContentValues values) {

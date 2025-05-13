@@ -37,27 +37,65 @@ object LocalInstancesUseCases {
         }
     }
 
-    fun clone(
-        instanceFile: File,
+    fun editInstance(
+        instanceFilePath: String,
         instancesDir: String,
         instancesRepository: InstancesRepository,
         formsRepository: FormsRepository,
         clock: () -> Long = { System.currentTimeMillis() }
-    ): Long {
-        val sourceInstance = instancesRepository.getOneByPath(instanceFile.absolutePath)!!
+    ): InstanceEditResult {
+        val sourceInstance = instancesRepository.getOneByPath(instanceFilePath)!!
+
+        val latestEditInstance = findLatestEditIfExists(sourceInstance, instancesRepository)
+        if (latestEditInstance != null) {
+            return InstanceEditResult.EditBlockedByNewerExistingEdit(latestEditInstance)
+        }
+
+        val targetInstance = cloneInstance(sourceInstance, instanceFilePath, instancesDir, instancesRepository, formsRepository, clock)
+
+        return InstanceEditResult.EditCompleted(targetInstance)
+    }
+
+    private fun findLatestEditIfExists(
+        instance: Instance,
+        instancesRepository: InstancesRepository
+    ): Instance? {
+        val editGroupId = if (instance.isEdit()) {
+            instance.editOf
+        } else {
+            instance.dbId
+        }
+
+        return instancesRepository
+            .all
+            .filter { it.editOf == editGroupId }
+            .maxByOrNull { it.editNumber!! }
+            ?.takeIf { it.dbId != instance.dbId }
+    }
+
+    private fun cloneInstance(
+        sourceInstance: Instance,
+        instanceFilePath: String,
+        instancesDir: String,
+        instancesRepository: InstancesRepository,
+        formsRepository: FormsRepository,
+        clock: () -> Long = { System.currentTimeMillis() }
+    ): Instance {
         val formName = formsRepository.getAllByFormIdAndVersion(
             sourceInstance.formId,
             sourceInstance.formVersion
         ).first().displayName
-        val targetInstanceFile = copyInstanceDir(instanceFile, instancesDir, formName, clock)
+        val targetInstanceFile = copyInstanceDir(File(instanceFilePath), instancesDir, formName, clock)
 
         return instancesRepository.save(
             Instance.Builder(sourceInstance)
                 .dbId(null)
                 .status(Instance.STATUS_VALID)
                 .instanceFilePath(targetInstanceFile.absolutePath)
+                .editOf(sourceInstance.editOf ?: sourceInstance.dbId)
+                .editNumber((sourceInstance.editNumber ?: 0) + 1)
                 .build()
-        ).dbId
+        )
     }
 
     private fun copyInstanceDir(
@@ -75,4 +113,9 @@ object LocalInstancesUseCases {
 
         return targetInstanceFile
     }
+}
+
+sealed class InstanceEditResult(val instance: Instance) {
+    data class EditCompleted(val resultInstance: Instance) : InstanceEditResult(resultInstance)
+    data class EditBlockedByNewerExistingEdit(val resultInstance: Instance) : InstanceEditResult(resultInstance)
 }

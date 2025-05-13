@@ -258,4 +258,57 @@ class EntityFormTest {
             .assertText("Roman Roy")
             .assertTextDoesNotExist("Logan Roy")
     }
+
+    @Test
+    fun editingEntityRegistrationForm_doesNotCreateEntityForFollowUpForms() {
+        testDependencies.server.addForm("one-question-entity-registration-editable.xml")
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
+            .startBlankForm("One Question Entity Registration Editable")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question Entity Registration Editable")
+            .editForm("One Question Entity Registration Editable")
+            .clickOnQuestion("Name")
+            .answerQuestion("Name", "Kendall Roy")
+            .swipeToEndScreen("One Question Entity Registration Editable (Edit 1)")
+            .clickFinalize()
+
+            .startBlankForm("One Question Entity Update")
+            .assertQuestion("Select person")
+            .assertText("Roman Roy")
+            .assertText("Logan Roy")
+            .assertTextDoesNotExist("Kendall Roy")
+    }
+
+    @Test
+    fun editingEntityUpdateForm_doesNotUpdateEntityForFollowUpForms() {
+        testDependencies.server.addForm(
+            "one-question-entity-update-editable.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withMatchExactlyProject(testDependencies.server.url)
+            .startBlankForm("One Question Entity Update Editable")
+            .assertQuestion("Select person")
+            .clickOnText("Roman Roy")
+            .swipeToNextQuestion("Name")
+            .swipeToEndScreen()
+            .clickFinalize()
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question Entity Update Editable")
+            .editForm("One Question Entity Update Editable")
+            .clickOnQuestion("Name")
+            .answerQuestion("Name", "Romulus Roy")
+            .swipeToEndScreen("One Question Entity Update Editable (Edit 1)")
+            .clickFinalize()
+
+            .startBlankForm("One Question Entity Update Editable")
+            .assertText("Roman Roy")
+            .assertTextDoesNotExist("Romulus Roy")
+    }
 }
