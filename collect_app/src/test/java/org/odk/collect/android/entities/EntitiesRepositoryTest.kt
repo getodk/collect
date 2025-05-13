@@ -9,7 +9,9 @@ import org.junit.Test
 import org.odk.collect.android.entities.support.EntitySameAsMatcher.Companion.sameEntityAs
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.QueryException
+import org.odk.collect.entities.storage.getListNames
 import org.odk.collect.shared.Query
 
 abstract class EntitiesRepositoryTest {
@@ -25,7 +27,15 @@ abstract class EntitiesRepositoryTest {
         repository.save("wines", wine)
         repository.save("whiskys", whisky)
 
-        assertThat(repository.getLists(), containsInAnyOrder("wines", "whiskys"))
+        repository.updateList("wines", "blah", true)
+
+        assertThat(
+            repository.getLists(),
+            containsInAnyOrder(
+                EntityList("wines", "blah", true),
+                EntityList("whiskys")
+            )
+        )
     }
 
     @Test
@@ -237,10 +247,10 @@ abstract class EntitiesRepositoryTest {
 
         repository.addList("wines")
         repository.addList("blah")
-        assertThat(repository.getLists(), containsInAnyOrder("wines", "blah"))
+        assertThat(repository.getListNames(), containsInAnyOrder("wines", "blah"))
 
         repository.save("wines", Entity.New("blah", "Blah"))
-        assertThat(repository.getLists(), containsInAnyOrder("wines", "blah"))
+        assertThat(repository.getListNames(), containsInAnyOrder("wines", "blah"))
     }
 
     @Test
@@ -264,7 +274,7 @@ abstract class EntitiesRepositoryTest {
     fun `#save does not create a list when no entities are provided`() {
         val repository = buildSubject()
         repository.save("blah")
-        assertThat(repository.getLists(), equalTo(emptySet()))
+        assertThat(repository.getLists(), equalTo(emptyList()))
     }
 
     @Test
@@ -344,7 +354,7 @@ abstract class EntitiesRepositoryTest {
         val repository = buildSubject()
 
         repository.addList("wine")
-        assertThat(repository.getLists(), containsInAnyOrder("wine"))
+        assertThat(repository.getListNames(), containsInAnyOrder("wine"))
         assertThat(repository.query("wine").size, equalTo(0))
     }
 
@@ -354,7 +364,7 @@ abstract class EntitiesRepositoryTest {
 
         repository.addList("wine")
         repository.addList("wine")
-        assertThat(repository.getLists(), containsInAnyOrder("wine"))
+        assertThat(repository.getListNames(), containsInAnyOrder("wine"))
         assertThat(repository.query("wine").size, equalTo(0))
     }
 
@@ -506,12 +516,26 @@ abstract class EntitiesRepositoryTest {
     }
 
     @Test
-    fun `#getListVersion returns list version`() {
+    fun `#getList returns list`() {
         val repository = buildSubject()
 
         repository.addList("wine")
-        repository.updateListHash("wine", "2024")
-        assertThat(repository.getListHash("wine"), equalTo("2024"))
+        repository.updateList("wine", "2024", true)
+        assertThat(repository.getList("wine"), equalTo(EntityList("wine", "2024", true)))
+    }
+
+    @Test
+    fun `#getList returns list with null hash if list doesn't have hash`() {
+        val repository = buildSubject()
+
+        repository.addList("wine")
+        assertThat(repository.getList("wine"), equalTo(EntityList("wine", null)))
+    }
+
+    @Test
+    fun `#getList returns null if list doesn't exist`() {
+        val repository = buildSubject()
+        assertThat(repository.getList("wine"), equalTo(null))
     }
 
     @Test
@@ -595,18 +619,24 @@ abstract class EntitiesRepositoryTest {
         val repository = buildSubject()
 
         val leoville = Entity.New("1", "Léoville Barton 2008")
-        val ardbeg = Entity.New("2", "Ardbeg 10",)
+        val ardbeg = Entity.New("2", "Ardbeg 10")
 
         repository.save("wines", leoville)
         repository.save("whisky", ardbeg)
 
-        assertThat(repository.query("wines", Query.StringEq("label", "Ardbeg 10")), equalTo(emptyList()))
+        assertThat(
+            repository.query("wines", Query.StringEq("label", "Ardbeg 10")),
+            equalTo(emptyList())
+        )
     }
 
     @Test
     fun `#query returns empty list where there are no entities in the list`() {
         val repository = buildSubject()
-        assertThat(repository.query("wines", Query.StringEq("label", "Léoville Barton 2008")), equalTo(emptyList()))
+        assertThat(
+            repository.query("wines", Query.StringEq("label", "Léoville Barton 2008")),
+            equalTo(emptyList())
+        )
     }
 
     @Test
@@ -618,17 +648,19 @@ abstract class EntitiesRepositoryTest {
         repository.save("favourite-wines", leoville)
         repository.save("other.favourite.wines", canet)
 
-        val queriedLeoville = repository.query("favourite-wines", Query.StringEq("label", "Léoville Barton 2008"))
+        val queriedLeoville =
+            repository.query("favourite-wines", Query.StringEq("label", "Léoville Barton 2008"))
         assertThat(queriedLeoville, containsInAnyOrder(sameEntityAs(leoville)))
 
-        val queriedCanet = repository.query("other.favourite.wines", Query.StringEq("label", "Pontet-Canet 2014"))
+        val queriedCanet =
+            repository.query("other.favourite.wines", Query.StringEq("label", "Pontet-Canet 2014"))
         assertThat(queriedCanet, containsInAnyOrder(sameEntityAs(canet)))
     }
 
     @Test(expected = QueryException::class)
     fun `#query throws an exception when not existing property is used`() {
         val repository = buildSubject()
-        repository.save("wines", Entity.New("1", "Léoville Barton 2008",))
+        repository.save("wines", Entity.New("1", "Léoville Barton 2008"))
 
         repository.query("wines", Query.StringEq("score", "92"))
     }

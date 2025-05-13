@@ -15,9 +15,11 @@ import static org.javarosa.test.XFormsElement.title;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
+import org.javarosa.core.model.data.DateData;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.test.Scenario;
 import org.javarosa.test.XFormsElement;
+import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.parse.XFormParserFactory;
 import org.javarosa.xform.util.XFormUtils;
 import org.junit.After;
@@ -28,6 +30,8 @@ import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProc
 import org.odk.collect.entities.javarosa.finalization.FormEntity;
 import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory;
 
+import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 
 import kotlin.Pair;
@@ -108,6 +112,49 @@ public class EntityFormFinalizationProcessorTest {
         List<FormEntity> entities = model.getExtras().get(EntitiesExtra.class).getEntities();
         assertThat(entities.size(), equalTo(1));
         assertThat(entities.get(0).properties, equalTo(emptyList()));
+    }
+
+    @Test
+    public void createsEntityWithValuesTreatedAsOpaqueStrings() throws IOException, XFormParser.ParseException {
+        Scenario scenario = Scenario.init("Create entity form", XFormsElement.html(
+                asList(
+                        new Pair<>("entities", "http://www.opendatakit.org/xforms/entities")
+                ),
+                head(
+                        title("Create entity form"),
+                        model(asList(new Pair<>("entities:entities-version", "2024.1.0")),
+                                mainInstance(
+                                        t("data id=\"create-entity-form\"",
+                                                t("birthday"),
+                                                t("meta",
+                                                        t("entity dataset=\"people\" create=\"1\" id=\"\"",
+                                                                t("label")
+                                                        )
+                                                )
+                                        )
+                                ),
+                                bind("/data/birthday").type("date").withAttribute("entities", "saveto", "birthday"),
+                                bind("/data/meta/entity/@id").type("string"),
+                                bind("/data/meta/entity/label").type("string").calculate("/data/birthday"),
+                                setvalue("odk-instance-first-load", "/data/meta/entity/@id", "uuid()")
+                        )
+                ),
+                body(
+                        input("/data/birthday")
+                )
+        ));
+
+        EntityFormFinalizationProcessor processor = new EntityFormFinalizationProcessor();
+        FormEntryModel model = scenario.getFormEntryController().getModel();
+
+        scenario.next();
+        scenario.getFormEntryController().answerQuestion(new DateData(Date.valueOf("2024-11-15")), true);
+
+        processor.processForm(model);
+
+        List<FormEntity> entities = model.getExtras().get(EntitiesExtra.class).getEntities();
+        assertThat(entities.size(), equalTo(1));
+        assertThat(entities.get(0).properties.get(0), equalTo(new Pair<>("birthday", "2024-11-15")));
     }
 
     @Test

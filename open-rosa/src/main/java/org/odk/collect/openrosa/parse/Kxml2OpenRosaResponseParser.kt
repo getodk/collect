@@ -5,6 +5,7 @@ import org.kxml2.kdom.Document
 import org.kxml2.kdom.Element
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.MediaFile
+import org.odk.collect.forms.MediaFile.Type
 import org.odk.collect.openrosa.forms.EntityIntegrity
 import org.odk.collect.shared.strings.StringUtils.isBlank
 import java.io.File
@@ -225,8 +226,13 @@ object Kxml2OpenRosaResponseParser :
                     return null
                 }
 
-                val isEntityList = type == "entityList"
-                files.add(MediaFile(filename, hash, downloadUrl, isEntityList, integrityUrl))
+                val mediaFileType = when (type) {
+                    "entityList" -> Type.ENTITY_LIST
+                    "approvalEntityList" -> Type.APPROVAL_ENTITY_LIST
+                    else -> null
+                }
+
+                files.add(MediaFile(filename, hash, downloadUrl, mediaFileType, integrityUrl))
             }
         }
         return files

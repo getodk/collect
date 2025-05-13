@@ -720,7 +720,7 @@ public class ServerFormDownloaderTest {
                 true,
                 false,
                 new ManifestFile("", List.of(
-                        new MediaFile("file1", "hash-1", "http://file1", true)
+                        new MediaFile("file1", "hash-1", "http://file1", MediaFile.Type.ENTITY_LIST)
                 )));
 
         FormSource formSource = mock(FormSource.class);
@@ -748,7 +748,7 @@ public class ServerFormDownloaderTest {
                 true,
                 false,
                 new ManifestFile("", List.of(
-                        new MediaFile("file1", "hash-1", "http://file1", true)
+                        new MediaFile("file1", "hash-1", "http://file1", MediaFile.Type.ENTITY_LIST)
                 )));
 
         FormSource formSource = mock(FormSource.class);
@@ -858,7 +858,7 @@ public class ServerFormDownloaderTest {
                 false,
                 false,
                 new ManifestFile("", List.of(
-                        new MediaFile("file1", Md5.getMd5Hash(new ByteArrayInputStream("contents".getBytes())), "http://file1", true)
+                        new MediaFile("file1", Md5.getMd5Hash(new ByteArrayInputStream("contents".getBytes())), "http://file1", MediaFile.Type.ENTITY_LIST)
                 )));
 
         when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));

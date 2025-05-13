@@ -16,6 +16,7 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_URI;
+import static org.odk.collect.db.sqlite.SQLiteDatabaseExt.addColumn;
 import static org.odk.collect.db.sqlite.SQLiteDatabaseExt.doesColumnExist;
 
 import android.database.sqlite.SQLiteDatabase;
@@ -70,7 +71,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
 
     private void upgradeToVersion2(SQLiteDatabase db) {
         if (!doesColumnExist(db, INSTANCES_TABLE_NAME, CAN_EDIT_WHEN_COMPLETE)) {
-            SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, CAN_EDIT_WHEN_COMPLETE, "text");
+            addColumn(db, INSTANCES_TABLE_NAME, CAN_EDIT_WHEN_COMPLETE, "text");
 
             db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
                     + CAN_EDIT_WHEN_COMPLETE + " = '" + true
@@ -81,11 +82,11 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToVersion3(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, JR_VERSION, "text");
+        addColumn(db, INSTANCES_TABLE_NAME, JR_VERSION, "text");
     }
 
     private void upgradeToVersion4(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, DELETED_DATE, "date");
+        addColumn(db, INSTANCES_TABLE_NAME, DELETED_DATE, "date");
     }
 
     /**
@@ -130,8 +131,8 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToVersion6(SQLiteDatabase db, String name) {
-        SQLiteUtils.addColumn(db, name, GEOMETRY, "text");
-        SQLiteUtils.addColumn(db, name, GEOMETRY_TYPE, "text");
+        addColumn(db, name, GEOMETRY, "text");
+        addColumn(db, name, GEOMETRY_TYPE, "text");
     }
 
     private void upgradeToVersion7(SQLiteDatabase db) {
@@ -143,7 +144,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToVersion8(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, CAN_DELETE_BEFORE_SEND, "text");
+        addColumn(db, INSTANCES_TABLE_NAME, CAN_DELETE_BEFORE_SEND, "text");
         db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " + CAN_DELETE_BEFORE_SEND + " = 'true';");
     }
 

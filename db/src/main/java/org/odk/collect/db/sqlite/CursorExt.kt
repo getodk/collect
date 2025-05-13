@@ -3,6 +3,7 @@ package org.odk.collect.db.sqlite
 import android.database.Cursor
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
+import org.odk.collect.db.sqlite.CursorExt.getInt
 
 object CursorExt {
     fun <T> Cursor.foldAndClose(initial: T, operation: (T, Cursor) -> T): T {
@@ -64,6 +65,14 @@ object CursorExt {
     fun Cursor.getIntOrNull(column: String): Int? {
         val columnIndex = this.getColumnIndex(column)
         return this.getIntOrNull(columnIndex)
+    }
+
+    /**
+     * Translates Integer column to Boolean as described [here](https://sqlite.org/datatype3.html).
+     */
+    fun Cursor.getBoolean(column: String): Boolean {
+        val columnIndex = this.getColumnIndex(column)
+        return this.getInt(columnIndex) == 1
     }
 
     /**

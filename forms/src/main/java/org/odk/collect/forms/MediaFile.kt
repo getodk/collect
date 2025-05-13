@@ -21,6 +21,12 @@ data class MediaFile @JvmOverloads constructor(
     val filename: String,
     val hash: String,
     val downloadUrl: String,
-    val isEntityList: Boolean = false,
+    val type: Type? = null,
     val integrityUrl: String? = null
-) : Serializable
+) : Serializable {
+
+    enum class Type {
+        ENTITY_LIST,
+        APPROVAL_ENTITY_LIST
+    }
+}

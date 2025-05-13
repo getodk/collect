@@ -8,6 +8,7 @@ import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
+import org.odk.collect.forms.MediaFile
 import org.odk.collect.shared.Query
 import java.io.File
 import java.util.UUID
@@ -25,7 +26,9 @@ object LocalEntityUseCases {
             if (id != null) {
                 when (formEntity.action) {
                     EntityAction.CREATE -> {
-                        if (!label.isNullOrBlank()) {
+                        val hasValidLabel = !label.isNullOrBlank()
+                        val list = entitiesRepository.getList(formEntity.dataset)
+                        if (hasValidLabel && list != null && !list.needsApproval) {
                             val entity = Entity.New(
                                 id,
                                 label,
@@ -43,6 +46,7 @@ object LocalEntityUseCases {
                             formEntity.dataset,
                             Query.StringEq(EntitySchema.ID, formEntity.id)
                         ).firstOrNull()
+
                         if (existing != null) {
                             entitiesRepository.save(
                                 formEntity.dataset,
@@ -64,11 +68,10 @@ object LocalEntityUseCases {
         serverList: File,
         entitiesRepository: EntitiesRepository,
         entitySource: EntitySource,
-        serverListHash: String,
-        integrityUrl: String?
+        mediaFile: MediaFile
     ) {
-        val newListHash = "server:$serverListHash"
-        val existingListHash = entitiesRepository.getListHash(list)
+        val newListHash = "server:${mediaFile.hash}"
+        val existingListHash = entitiesRepository.getList(list)?.hash
         if (newListHash == existingListHash) {
             return
         }
@@ -120,10 +123,14 @@ object LocalEntityUseCases {
             missingFromServer.values,
             entitiesRepository,
             entitySource,
-            integrityUrl
+            mediaFile.integrityUrl
         )
         entitiesRepository.save(list, *newAndUpdated.toTypedArray())
-        entitiesRepository.updateListHash(list, newListHash)
+        entitiesRepository.updateList(
+            list,
+            newListHash,
+            mediaFile.type == MediaFile.Type.APPROVAL_ENTITY_LIST
+        )
     }
 
     private fun handleMissingEntities(
@@ -172,7 +179,8 @@ private data class ServerEntity(
     val id: String,
     val label: String,
     val version: Int,
-    val properties: Map<String, String>) {
+    val properties: Map<String, String>
+) {
 
     fun updateLocal(local: Entity.Saved): Entity.Saved {
         return local.copy(
