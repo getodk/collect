@@ -33,6 +33,10 @@ fun Instance.isEdit(): Boolean {
     return editOf != null
 }
 
+fun Instance.isDeletable(): Boolean {
+    return canDeleteBeforeSend() || status != Instance.STATUS_COMPLETE && status != Instance.STATUS_SUBMISSION_FAILED
+}
+
 fun Instance.showAsEditable(settingsProvider: SettingsProvider): Boolean {
     return isDraft() && settingsProvider.getProtectedSettings()
         .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)

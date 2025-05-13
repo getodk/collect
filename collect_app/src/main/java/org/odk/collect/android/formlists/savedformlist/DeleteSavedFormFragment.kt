@@ -15,6 +15,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
+import org.odk.collect.android.instancemanagement.isDeletable
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils.SnackbarPresenterObserver
@@ -36,7 +37,7 @@ class DeleteSavedFormFragment(
     private val multiSelectViewModel: MultiSelectViewModel<Instance> by viewModels {
         MultiSelectViewModel.Factory(
             savedFormListViewModel.formsToDisplay.map {
-                it.filter { instance -> instance.canDelete() }
+                it.filter { instance -> instance.isDeletable() }
                     .map { instance ->
                         SelectItem(
                             instance.dbId.toString(),
