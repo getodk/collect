@@ -27,6 +27,7 @@ import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.strings.R.string
+import org.odk.collect.testshared.Assertions
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.ViewActions.clickOnItemWith
 import org.odk.collect.testshared.ViewMatchers.recyclerView
@@ -112,5 +113,37 @@ class DeleteSavedFormFragmentTest {
 
         isDeleting.value = false
         onView(withText(string.delete_file)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun `displays only the latest edit when all edits are unsent`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteSavedFormFragment::class.java)
+        formsToDisplay.value = listOf(
+            InstanceFixtures.instance(dbId = 1, displayName = "Form"),
+            InstanceFixtures.instance(dbId = 2, displayName = "Form", editOf = 1, editNumber = 1),
+            InstanceFixtures.instance(dbId = 3, displayName = "Form", editOf = 1, editNumber = 2),
+            InstanceFixtures.instance(dbId = 4, displayName = "Form", editOf = 1, editNumber = 3)
+        )
+
+        Assertions.assertTextNotDisplayed(withText("Form"))
+        Assertions.assertTextNotDisplayed(withText("Form (Edit 1)"))
+        Assertions.assertTextNotDisplayed(withText("Form (Edit 2)"))
+        Assertions.assertText(withText("Form (Edit 3)"))
+    }
+
+    @Test
+    fun `displays latest edit and submitted edits when not all are unsent`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteSavedFormFragment::class.java)
+        formsToDisplay.value = listOf(
+            InstanceFixtures.instance(dbId = 1, displayName = "Form"),
+            InstanceFixtures.instance(dbId = 2, displayName = "Form", editOf = 1, editNumber = 1),
+            InstanceFixtures.instance(dbId = 3, displayName = "Form", editOf = 1, editNumber = 2, status = Instance.STATUS_SUBMITTED),
+            InstanceFixtures.instance(dbId = 4, displayName = "Form", editOf = 1, editNumber = 3)
+        )
+
+        Assertions.assertTextNotDisplayed(withText("Form"))
+        Assertions.assertTextNotDisplayed(withText("Form (Edit 1)"))
+        Assertions.assertText(withText("Form (Edit 2)"))
+        Assertions.assertText(withText("Form (Edit 3)"))
     }
 }
