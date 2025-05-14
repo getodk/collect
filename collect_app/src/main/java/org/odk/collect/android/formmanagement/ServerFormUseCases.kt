@@ -91,7 +91,7 @@ object ServerFormUseCases {
             if (mediaFile.type != null) {
                 val entityListName = getEntityListFromFileName(mediaFile)
                 val entityList = entitiesRepository.getList(entityListName)
-                if (entityList == null || mediaFile.hash != entityList.hash?.substringAfter(":")) {
+                if (entityList == null || mediaFile.hash != entityList.hash) {
                     val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
                     FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
                     newAttachmentsDownloaded = true

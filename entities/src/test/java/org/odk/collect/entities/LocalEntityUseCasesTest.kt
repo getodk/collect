@@ -652,7 +652,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer updates the list hash with server prefix`() {
+    fun `updateLocalEntitiesFromServer updates the list hash`() {
         val csv = createEntityList(Entity.New("cathedrals", "Cathedrals"))
         LocalEntityUseCases.updateLocalEntitiesFromServer(
             "songs",
@@ -663,7 +663,7 @@ class LocalEntityUseCasesTest {
         )
 
         val hash = entitiesRepository.getList("songs")?.hash
-        assertThat(hash, equalTo("server:hash"))
+        assertThat(hash, equalTo("hash"))
     }
 
     private fun createEntityList(vararg entities: Entity): File {
