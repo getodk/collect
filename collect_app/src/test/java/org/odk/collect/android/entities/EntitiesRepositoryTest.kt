@@ -818,4 +818,11 @@ abstract class EntitiesRepositoryTest {
         repository.save("wines", leoville)
         assertThat(repository.query("wines", Query.StringEq("score", "92")).size, equalTo(0))
     }
+
+    @Test
+    fun `#updateList creates list if doesn't exist`() {
+        val repository = buildSubject()
+        repository.updateList("blah", "abcd", false)
+        assertThat(repository.getLists().size, equalTo(1))
+    }
 }

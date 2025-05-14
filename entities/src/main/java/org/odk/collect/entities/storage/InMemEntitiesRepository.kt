@@ -70,6 +70,8 @@ class InMemEntitiesRepository : EntitiesRepository {
             val update = existing.copy(hash = hash, needsApproval = needsApproval)
             lists.remove(existing)
             lists.add(update)
+        } else {
+            lists.add(EntityList(list, hash, needsApproval))
         }
     }
 
