@@ -113,10 +113,12 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
         DaggerUtils.getComponent(this).inject(this)
 
         val viewOnly = intent.getBooleanExtra(EXTRA_VIEW_ONLY, false)
+        val shouldShowNewEditMessage = intent.getBooleanExtra(SHOW_NEW_EDIT_MESSAGE, false)
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(FormHierarchyFragment::class) {
                 FormHierarchyFragment(
                     viewOnly,
+                    shouldShowNewEditMessage,
                     viewModelFactory,
                     this,
                     scheduler,
@@ -143,5 +145,6 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
     companion object {
         const val EXTRA_SESSION_ID = "session_id"
         const val EXTRA_VIEW_ONLY = "view_only"
+        const val SHOW_NEW_EDIT_MESSAGE = "show_new_edit_message"
     }
 }

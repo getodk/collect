@@ -25,6 +25,8 @@ class FormHierarchyViewModel(scheduler: Scheduler) : ViewModel() {
     var currentIndex: FormIndex? = null
     var elementsToDisplay: List<HierarchyItem>? = null
     var startIndex: FormIndex? = null
+    var newEditMessageAlreadyShown: Boolean = false
+        private set
 
     fun shouldShowRepeatGroupPicker() = repeatGroupPickerIndex != null
 
@@ -41,6 +43,10 @@ class FormHierarchyViewModel(scheduler: Scheduler) : ViewModel() {
                 _instanceEditResult.value = Consumable(instanceEditResult)
             }
         )
+    }
+
+    fun newEditMessageAlreadyShown() {
+        newEditMessageAlreadyShown = true
     }
 
     class Factory(private val scheduler: Scheduler) : ViewModelProvider.Factory {

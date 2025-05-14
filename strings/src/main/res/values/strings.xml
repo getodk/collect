@@ -1405,4 +1405,6 @@
     <string name="newer_finalized_edit_found_dialog_message">\'This submission was previously edited.\n\nWould you like to edit the latest version finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm\'?\'</string>
     <!-- Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists -->
     <string name="newer_finalized_edit_found_dialog_positive_button">Edit latest form</string>
+    <!-- Text for the snackbar shown when editing of a finalized form begins -->
+    <string name="finalized_form_edit_started">You are now editing this form. Tap on a question to start editing.</string>
 </resources>

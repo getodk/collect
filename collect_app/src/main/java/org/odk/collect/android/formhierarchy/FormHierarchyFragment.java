@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment.REQUEST_DELETE_REPEAT;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -54,6 +55,7 @@ import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
@@ -81,9 +83,11 @@ public class FormHierarchyFragment extends Fragment {
     private final Scheduler scheduler;
     private final InstancesDataService instancesDataService;
     private final String currentProjectId;
+    private final boolean shouldShowNewEditMessage;
 
     public FormHierarchyFragment(
             boolean viewOnly,
+            boolean shouldShowNewEditMessage,
             ViewModelProvider.Factory viewModelFactory,
             MenuHost menuHost,
             Scheduler scheduler,
@@ -97,6 +101,7 @@ public class FormHierarchyFragment extends Fragment {
         this.scheduler = scheduler;
         this.instancesDataService = instancesDataService;
         this.currentProjectId = currentProjectId;
+        this.shouldShowNewEditMessage = shouldShowNewEditMessage;
     }
 
     @Override
@@ -293,6 +298,19 @@ public class FormHierarchyFragment extends Fragment {
         }
 
         getChildFragmentManager().setFragmentResultListener(REQUEST_DELETE_REPEAT, getViewLifecycleOwner(), (requestKey, result) -> onRepeatDeleted());
+
+        if (shouldShowNewEditMessage && !formHierarchyViewModel.getNewEditMessageAlreadyShown()) {
+            formHierarchyViewModel.newEditMessageAlreadyShown();
+
+            Activity activity = requireActivity();
+            SnackbarUtils.showLongSnackbar(
+                    activity.findViewById(R.id.parent_container),
+                    activity.getString(org.odk.collect.strings.R.string.finalized_form_edit_started),
+                    null,
+                    null,
+                    true
+            );
+        }
     }
 
     public void refreshView() {
