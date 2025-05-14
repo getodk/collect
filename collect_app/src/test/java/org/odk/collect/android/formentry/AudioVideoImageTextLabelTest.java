@@ -1,5 +1,6 @@
 package org.odk.collect.android.formentry;
 
+import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -212,6 +213,17 @@ public class AudioVideoImageTextLabelTest {
 
         assertThat(audioVideoImageTextLabel.getMissingImage().getVisibility(), is(VISIBLE));
         assertThat(audioVideoImageTextLabel.getMissingImage().getText().toString(), is("File: file:/image.png is missing."));
+    }
+
+    @Test
+    public void whenImageFileDoesNotExist_ImageViewIsGone() {
+        File imageFile = new File("file://image.png");
+
+        AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
+        audioVideoImageTextLabel.getImageView().setVisibility(VISIBLE);
+        audioVideoImageTextLabel.setImage(imageFile, mock(ImageLoader.class));
+
+        assertThat(audioVideoImageTextLabel.getImageView().getVisibility(), is(GONE));
     }
 
     @Test
