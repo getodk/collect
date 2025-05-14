@@ -88,28 +88,11 @@ object ServerFormUseCases {
 
             val tempMediaFile = File(tempMediaDir, mediaFile.filename)
 
-            val existingFile = searchForExistingMediaFile(formsRepository, formToDownload, mediaFile)
-            existingFile.also {
-                if (it != null) {
-                    if (it.getMd5Hash().contentEquals(mediaFile.hash)) {
-                        FileUtils.copyFile(it, tempMediaFile)
-                    } else {
-                        val existingFileHash = it.getMd5Hash()
-                        val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
-                        FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
-
-                        if (!tempMediaFile.getMd5Hash().contentEquals(existingFileHash)) {
-                            newAttachmentsDownloaded = true
-                        }
-                    }
-                } else {
-                    val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
-                    FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
-                    newAttachmentsDownloaded = true
-                }
-            }
-
             if (mediaFile.type != null) {
+                val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
+                FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
+                newAttachmentsDownloaded = true
+
                 /**
                  * We wrap and then rethrow exceptions that happen here to make them easier to
                  * track in Crashlytics. This can be removed in the next release once any
@@ -129,20 +112,53 @@ object ServerFormUseCases {
                     throw EntityListUpdateException(t)
                 }
             } else {
-                /**
-                 * Track CSVs that have names that clash with entity lists in the project. If
-                 * these CSVs are being used as part of a `select_one_from_file` question, the
-                 * instance ID will be the file name with the extension removed.
-                 */
-                val isCsv = mediaFile.filename.endsWith(".csv")
-                val mostLikelyInstanceId = getEntityListFromFileName(mediaFile)
-                if (isCsv && entitiesRepository.getList(mostLikelyInstanceId) != null) {
-                    Analytics.setUserProperty("HasEntityListCollision", "true")
+                val existingFile = searchForExistingMediaFile(formsRepository, formToDownload, mediaFile)
+                existingFile.also {
+                    if (it != null) {
+                        if (it.getMd5Hash().contentEquals(mediaFile.hash)) {
+                            FileUtils.copyFile(it, tempMediaFile)
+                        } else {
+                            val existingFileHash = it.getMd5Hash()
+                            val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
+                            FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
+
+                            if (!tempMediaFile.getMd5Hash().contentEquals(existingFileHash)) {
+                                newAttachmentsDownloaded = true
+                            }
+                        }
+                    } else {
+                        val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
+                        FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
+                        newAttachmentsDownloaded = true
+                    }
                 }
+
+                logEntityListClashes(mediaFile, entitiesRepository)
             }
         }
 
         return MediaFilesDownloadResult(newAttachmentsDownloaded, entitiesDownloaded)
+    }
+
+    /**
+     * Track CSVs that have names that clash with entity lists in the project. If
+     * these CSVs are being used as part of a `select_one_from_file` question, the
+     * instance ID will be the file name with the extension removed.
+     */
+    /**
+     * Track CSVs that have names that clash with entity lists in the project. If
+     * these CSVs are being used as part of a `select_one_from_file` question, the
+     * instance ID will be the file name with the extension removed.
+     */
+    private fun logEntityListClashes(
+        mediaFile: MediaFile,
+        entitiesRepository: EntitiesRepository
+    ) {
+        val isCsv = mediaFile.filename.endsWith(".csv")
+        val mostLikelyInstanceId = getEntityListFromFileName(mediaFile)
+        if (isCsv && entitiesRepository.getList(mostLikelyInstanceId) != null) {
+            Analytics.setUserProperty("HasEntityListCollision", "true")
+        }
     }
 
     private fun getEntityListFromFileName(mediaFile: MediaFile) =
