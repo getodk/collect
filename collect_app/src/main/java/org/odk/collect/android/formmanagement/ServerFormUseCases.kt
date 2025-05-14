@@ -89,27 +89,30 @@ object ServerFormUseCases {
             val tempMediaFile = File(tempMediaDir, mediaFile.filename)
 
             if (mediaFile.type != null) {
-                val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
-                FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
-                newAttachmentsDownloaded = true
+                val entityListName = getEntityListFromFileName(mediaFile)
+                val entityList = entitiesRepository.getList(entityListName)
+                if (entityList == null || mediaFile.hash != entityList.hash?.substringAfter(":")) {
+                    val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
+                    FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
+                    newAttachmentsDownloaded = true
 
-                /**
-                 * We wrap and then rethrow exceptions that happen here to make them easier to
-                 * track in Crashlytics. This can be removed in the next release once any
-                 * unexpected exceptions "in the wild" are identified.
-                 */
-                try {
-                    val entityListName = getEntityListFromFileName(mediaFile)
-                    LocalEntityUseCases.updateLocalEntitiesFromServer(
-                        entityListName,
-                        tempMediaFile,
-                        entitiesRepository,
-                        entitySource,
-                        mediaFile
-                    )
-                    entitiesDownloaded = true
-                } catch (t: Throwable) {
-                    throw EntityListUpdateException(t)
+                    /**
+                     * We wrap and then rethrow exceptions that happen here to make them easier to
+                     * track in Crashlytics. This can be removed in the next release once any
+                     * unexpected exceptions "in the wild" are identified.
+                     */
+                    try {
+                        LocalEntityUseCases.updateLocalEntitiesFromServer(
+                            entityListName,
+                            tempMediaFile,
+                            entitiesRepository,
+                            entitySource,
+                            mediaFile
+                        )
+                        entitiesDownloaded = true
+                    } catch (t: Throwable) {
+                        throw EntityListUpdateException(t)
+                    }
                 }
             } else {
                 val existingFile = searchForExistingMediaFile(formsRepository, formToDownload, mediaFile)
