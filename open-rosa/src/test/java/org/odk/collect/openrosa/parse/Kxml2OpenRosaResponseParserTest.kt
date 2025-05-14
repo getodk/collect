@@ -80,7 +80,7 @@ class Kxml2OpenRosaResponseParserTest {
     }
 
     @Test
-    fun `#parseManifest when media file has type entityList returns isEntityList as true`() {
+    fun `#parseManifest when media file has type entityList returns it with entity list type`() {
         val response = """
             <?xml version='1.0' encoding='UTF-8' ?>
             <manifest xmlns="http://openrosa.org/xforms/xformsManifest">
@@ -100,7 +100,26 @@ class Kxml2OpenRosaResponseParserTest {
     }
 
     @Test
-    fun `#parseManifest when media file does not have type returns isEntityList as false`() {
+    fun `#parseManifest when media file does not have type returns it with null type`() {
+        val response = """
+            <?xml version='1.0' encoding='UTF-8' ?>
+            <manifest xmlns="http://openrosa.org/xforms/xformsManifest">
+                <mediaFile type="blah">
+                    <filename>badgers.csv</filename>
+                    <hash>blah</hash>
+                    <downloadUrl>http://funk.appspot.com/binaryData?blobKey=%3A477e3</downloadUrl>
+                </mediaFile>
+            </manifest>
+        """.trimIndent()
+
+        val doc = XFormParser.getXMLDocument(response.reader())
+        val mediaFiles = Kxml2OpenRosaResponseParser.parseManifest(doc)!!
+        assertThat(mediaFiles.size, equalTo(1))
+        assertThat(mediaFiles[0].type, equalTo(null))
+    }
+
+    @Test
+    fun `#parseManifest when media file has an unrecognized type returns it with null type`() {
         val response = """
             <?xml version='1.0' encoding='UTF-8' ?>
             <manifest xmlns="http://openrosa.org/xforms/xformsManifest">
