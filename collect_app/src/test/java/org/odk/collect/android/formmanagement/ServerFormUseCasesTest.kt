@@ -27,7 +27,7 @@ import java.io.File
 class ServerFormUseCasesTest {
 
     @Test
-    fun `downloadUpdates returns completed downloads when cancelled`() {
+    fun `#downloadUpdates returns completed downloads when cancelled`() {
         val formDownloader = mock<FormDownloader>()
 
         val serverForms = listOf(
@@ -59,7 +59,7 @@ class ServerFormUseCasesTest {
     }
 
     @Test
-    fun `copySavedFileFromPreviousFormVersionIfExists does not copy any file if there is no matching last-saved file`() {
+    fun `#copySavedFileFromPreviousFormVersionIfExists does not copy any file if there is no matching last-saved file`() {
         val destinationMediaDirPath = TempFiles.createTempDir().absolutePath
         ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(InMemFormsRepository(), "1", destinationMediaDirPath)
 
@@ -68,7 +68,7 @@ class ServerFormUseCasesTest {
     }
 
     @Test
-    fun `copySavedFileFromPreviousFormVersionIfExists copies the newest matching last-saved file for given formId`() {
+    fun `#copySavedFileFromPreviousFormVersionIfExists copies the newest matching last-saved file for given formId`() {
         val tempDir1 = TempFiles.createTempDir()
         val file1 = TempFiles.createTempFile(tempDir1, "last-saved", ".xml")
         org.apache.commons.io.FileUtils.writeByteArrayToFile(file1, "file1".toByteArray())
@@ -139,7 +139,7 @@ class ServerFormUseCasesTest {
     }
 
     @Test
-    fun `downloadMediaFiles returns false when there is an existing copy of a media file and an older one`() {
+    fun `#downloadMediaFiles returns false when there is an existing copy of a media file and an older one`() {
         var date: Long = 0
         // Save forms
         val formsRepository = InMemFormsRepository {
@@ -184,7 +184,7 @@ class ServerFormUseCasesTest {
     }
 
     @Test
-    fun `downloadMediaFiles returns false when there is an existing copy of a media file and an older one and media file list hash doesn't match existing copy`() {
+    fun `#downloadMediaFiles returns false when there is an existing copy of a media file and an older one and media file list hash doesn't match existing copy`() {
         // Save forms
         var date: Long = 0
         val formsRepository = InMemFormsRepository {
