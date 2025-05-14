@@ -92,8 +92,7 @@ object ServerFormUseCases {
                 val entityListName = getEntityListFromFileName(mediaFile)
                 val entityList = entitiesRepository.getList(entityListName)
                 if (entityList == null || mediaFile.hash != entityList.hash) {
-                    val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
-                    FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
+                    downloadMediaFile(formSource, mediaFile, tempMediaFile, tempDir, stateListener)
                     newAttachmentsDownloaded = true
 
                     /**
@@ -122,16 +121,26 @@ object ServerFormUseCases {
                             FileUtils.copyFile(it, tempMediaFile)
                         } else {
                             val existingFileHash = it.getMd5Hash()
-                            val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
-                            FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
+                            downloadMediaFile(
+                                formSource,
+                                mediaFile,
+                                tempMediaFile,
+                                tempDir,
+                                stateListener
+                            )
 
                             if (!tempMediaFile.getMd5Hash().contentEquals(existingFileHash)) {
                                 newAttachmentsDownloaded = true
                             }
                         }
                     } else {
-                        val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
-                        FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
+                        downloadMediaFile(
+                            formSource,
+                            mediaFile,
+                            tempMediaFile,
+                            tempDir,
+                            stateListener
+                        )
                         newAttachmentsDownloaded = true
                     }
                 }
@@ -141,6 +150,17 @@ object ServerFormUseCases {
         }
 
         return MediaFilesDownloadResult(newAttachmentsDownloaded, entitiesDownloaded)
+    }
+
+    private fun downloadMediaFile(
+        formSource: FormSource,
+        mediaFile: MediaFile,
+        tempMediaFile: File,
+        tempDir: File,
+        stateListener: OngoingWorkListener
+    ) {
+        val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
+        FileUtils.interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
     }
 
     /**
