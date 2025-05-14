@@ -31,6 +31,7 @@ public final class Instance {
     public static final String STATUS_INCOMPLETE = "incomplete";
     public static final String STATUS_INVALID = "invalid";
     public static final String STATUS_VALID = "valid";
+    public static final String STATUS_NEW_EDIT = "newEdit";
     public static final String STATUS_COMPLETE = "complete";
     public static final String STATUS_SUBMITTED = "submitted";
     public static final String STATUS_SUBMISSION_FAILED = "submissionFailed";

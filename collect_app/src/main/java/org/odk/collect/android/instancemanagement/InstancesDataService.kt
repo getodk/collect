@@ -40,7 +40,8 @@ class InstancesDataService(
         instancesRepository.getCountByStatus(
             Instance.STATUS_INCOMPLETE,
             Instance.STATUS_INVALID,
-            Instance.STATUS_VALID
+            Instance.STATUS_VALID,
+            Instance.STATUS_NEW_EDIT
         )
     }
 
@@ -88,7 +89,8 @@ class InstancesDataService(
         val instances = instancesRepository.getAllByStatus(
             Instance.STATUS_INCOMPLETE,
             Instance.STATUS_INVALID,
-            Instance.STATUS_VALID
+            Instance.STATUS_VALID,
+            Instance.STATUS_NEW_EDIT
         )
 
         val result = instances.fold(FinalizeAllResult(0, 0, false)) { result, instance ->

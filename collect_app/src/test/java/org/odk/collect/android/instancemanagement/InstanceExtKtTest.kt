@@ -38,6 +38,12 @@ class InstanceExtKtTest {
             R.string.saved_on_date_at_time
         )
 
+        val newEdit = InstanceFixtures.instance(status = Instance.STATUS_NEW_EDIT)
+        assertDateFormat(
+            newEdit.getStatusDescription(resources),
+            R.string.saved_on_date_at_time
+        )
+
         val complete = InstanceFixtures.instance(status = Instance.STATUS_COMPLETE)
         assertDateFormat(
             complete.getStatusDescription(resources),
@@ -63,6 +69,7 @@ class InstanceExtKtTest {
             Instance.STATUS_INCOMPLETE,
             Instance.STATUS_INVALID,
             Instance.STATUS_VALID,
+            Instance.STATUS_NEW_EDIT,
             Instance.STATUS_COMPLETE,
             Instance.STATUS_SUBMISSION_FAILED,
             Instance.STATUS_SUBMITTED
@@ -83,6 +90,7 @@ class InstanceExtKtTest {
             Instance.STATUS_INCOMPLETE,
             Instance.STATUS_INVALID,
             Instance.STATUS_VALID,
+            Instance.STATUS_NEW_EDIT,
             Instance.STATUS_SUBMITTED
         ).forEach { status ->
             val instance = Instance

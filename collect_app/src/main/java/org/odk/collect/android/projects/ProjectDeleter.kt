@@ -35,6 +35,7 @@ class ProjectDeleter(
             Instance.STATUS_INCOMPLETE,
             Instance.STATUS_INVALID,
             Instance.STATUS_VALID,
+            Instance.STATUS_NEW_EDIT,
             Instance.STATUS_COMPLETE,
             Instance.STATUS_SUBMISSION_FAILED
         ).isNotEmpty()
