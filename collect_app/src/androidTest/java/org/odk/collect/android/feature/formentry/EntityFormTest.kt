@@ -1,8 +1,6 @@
 package org.odk.collect.android.feature.formentry
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -335,21 +333,5 @@ class EntityFormTest {
             .startBlankForm("One Question Entity Update")
             .assertText("Romulus Roy")
             .assertTextDoesNotExist("Roman Roy")
-    }
-
-    @Test
-    fun whenTwoFormsShareTheSameEntityList_itIsOnlyDownloadedOnce() {
-        testDependencies.server.addForm(
-            "one-question-entity-update.xml",
-            listOf(EntityListItem("people.csv"))
-        )
-
-        testDependencies.server.addForm(
-            "one-question-entity-follow-up.xml",
-            listOf(EntityListItem("people.csv"))
-        )
-
-        rule.withMatchExactlyProject(testDependencies.server.url)
-        assertThat(testDependencies.server.accesses, equalTo(6))
     }
 }

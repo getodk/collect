@@ -6,8 +6,11 @@ import org.junit.Test
 import org.mockito.Mockito.any
 import org.mockito.Mockito.doAnswer
 import org.mockito.invocation.InvocationOnMock
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import org.mockito.stubbing.Answer
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.FormDownloader
@@ -61,7 +64,11 @@ class ServerFormUseCasesTest {
     @Test
     fun `#copySavedFileFromPreviousFormVersionIfExists does not copy any file if there is no matching last-saved file`() {
         val destinationMediaDirPath = TempFiles.createTempDir().absolutePath
-        ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(InMemFormsRepository(), "1", destinationMediaDirPath)
+        ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(
+            InMemFormsRepository(),
+            "1",
+            destinationMediaDirPath
+        )
 
         val resultFile = File(destinationMediaDirPath, FileUtils.LAST_SAVED_FILENAME)
         assertThat(resultFile.exists(), equalTo(false))
@@ -132,7 +139,11 @@ class ServerFormUseCasesTest {
         }
 
         val destinationMediaDirPath = TempFiles.createTempDir().absolutePath
-        ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(formsRepository, "1", destinationMediaDirPath)
+        ServerFormUseCases.copySavedFileFromPreviousFormVersionIfExists(
+            formsRepository,
+            "1",
+            destinationMediaDirPath
+        )
 
         val resultFile = File(destinationMediaDirPath, FileUtils.LAST_SAVED_FILENAME)
         assertThat(resultFile.readText(), equalTo("file2"))
@@ -225,5 +236,47 @@ class ServerFormUseCasesTest {
         )
 
         assertThat(result, equalTo(MediaFilesDownloadResult(false, false)))
+    }
+
+    @Test
+    fun `#downloadMediaFiles does not download an entity list when it has already been downloaded`() {
+        val formsRepository = InMemFormsRepository()
+        val entitiesRepository = InMemEntitiesRepository()
+
+        val mediaFile = MediaFile("file", "hash", "downloadUrl", type = MediaFile.Type.ENTITY_LIST)
+        val manifestFile = ManifestFile(null, listOf(mediaFile))
+        val serverFormDetails =
+            ServerFormDetails(null, null, "formId", "1", null, false, true, manifestFile)
+        val formSource = mock<FormSource> {
+            on { fetchMediaFile(mediaFile.downloadUrl) } doAnswer {
+                "name,label,__version".toByteArray().inputStream()
+            }
+        }
+
+        ServerFormUseCases.downloadMediaFiles(
+            serverFormDetails,
+            formSource,
+            formsRepository,
+            File(TempFiles.createTempDir(), "temp").absolutePath,
+            TempFiles.createTempDir(),
+            entitiesRepository,
+            mock(),
+            mock()
+        )
+
+        verify(formSource, times(1)).fetchMediaFile(mediaFile.downloadUrl)
+
+        ServerFormUseCases.downloadMediaFiles(
+            serverFormDetails,
+            formSource,
+            formsRepository,
+            File(TempFiles.createTempDir(), "temp").absolutePath,
+            TempFiles.createTempDir(),
+            entitiesRepository,
+            mock(),
+            mock()
+        )
+
+        verify(formSource, times(1)).fetchMediaFile(mediaFile.downloadUrl)
     }
 }
