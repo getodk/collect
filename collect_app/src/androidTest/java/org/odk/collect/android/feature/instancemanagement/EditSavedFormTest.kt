@@ -178,12 +178,11 @@ class EditSavedFormTest {
     }
 
     @Test
-    fun discardingChangesWhenEditingFinalizedForm_createsDraftWithOriginalAnswersAndUpdatesInstanceIdAndDeprecatedId() {
+    fun editingAFinalizedForm_createsANewFormThatCanBeDiscarded() {
         rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
             .copyForm("one-question-editable.xml")
             .startBlankForm("One Question Editable")
-            .answerQuestion("what is your age", "123")
             .swipeToEndScreen()
             .clickFinalize()
 
@@ -191,25 +190,8 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editForm("One Question Editable")
             .clickOnQuestion("what is your age")
-            .answerQuestion("what is your age", "456")
-            .pressBackAndDiscardChanges()
-
-            .clickDrafts(1)
-            .clickOnForm("One Question Editable", "One Question Editable (Edit 1)")
-            .assertText("123")
-            .clickGoToEnd("One Question Editable (Edit 1)")
-            .clickFinalize()
-
-            .clickSendFinalizedForm(2)
-            .clickSelectAll()
-            .clickSendSelected()
-
-        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
-        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
-
-        assertThat(firstFormDeprecatedID, equalTo(null))
-        assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
-        assertThat(secondFormInstanceID, not(firstFormInstanceID))
+            .pressBackAndDiscardForm()
+            .clickDrafts(0)
     }
 
     @Test

@@ -509,6 +509,33 @@ public class FormSaveViewModelTest {
         assertThat(viewModel.getLastSavedTime(), equalTo(formSaver.instance.getLastStatusChangeDate()));
     }
 
+    @Test
+    public void canBeFullyDiscarded_whenNewInstance_returnsTrue() {
+        assertThat(viewModel.canBeFullyDiscarded(), equalTo(true));
+    }
+
+    @Test
+    public void canBeFullyDiscarded_whenSavedInstance_returnsFalse() {
+        Instance instance = new Instance.Builder()
+                .lastStatusChangeDate(123L)
+                .status(Instance.STATUS_VALID)
+                .build();
+
+        formSession.setValue(new FormSession(formController, form, instance));
+        assertThat(viewModel.canBeFullyDiscarded(), equalTo(false));
+    }
+
+    @Test
+    public void canBeFullyDiscarded_whenNewlyEditedInstance_returnsTrue() {
+        Instance instance = new Instance.Builder()
+                .lastStatusChangeDate(123L)
+                .status(Instance.STATUS_NEW_EDIT)
+                .build();
+
+        formSession.setValue(new FormSession(formController, form, instance));
+        assertThat(viewModel.canBeFullyDiscarded(), equalTo(true));
+    }
+
     private void whenReasonRequiredToSave() {
         when(formController.isEditing()).thenReturn(true);
         when(logger.isChangeReasonRequired()).thenReturn(true);
