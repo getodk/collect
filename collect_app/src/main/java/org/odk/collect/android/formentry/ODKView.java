@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
@@ -39,7 +40,6 @@ import android.widget.Toast;
 import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.LifecycleOwner;
 
@@ -55,9 +55,9 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
 import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
@@ -482,26 +482,16 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         String v = c.getSpecialFormQuestionText("buttonText");
         final String buttonText = (v != null) ? v : context.getString(org.odk.collect.strings.R.string.launch_app);
 
-        TypedValue tv = new TypedValue();
-        context.getTheme().resolveAttribute(R.attr.widgetButtonIconQuestionWidgetStyle, tv, true);
-        ContextThemeWrapper themedContext = new ContextThemeWrapper(context, tv.resourceId);
-        MultiClickSafeMaterialButton launchIntentButton = new MultiClickSafeMaterialButton(themedContext, null, org.odk.collect.material.R.attr.materialButtonIconStyle);
-
-        launchIntentButton.setIconResource(org.odk.collect.icons.R.drawable.ic_baseline_open_in_new_white_24);
-
-        LinearLayout.LayoutParams launchButtonLayout = new LinearLayout.LayoutParams(layout);
-        int standardMargin = (int) context.getResources().getDimension(org.odk.collect.androidshared.R.dimen.margin_standard);
-        launchButtonLayout.setMargins(standardMargin, standardMargin, standardMargin, standardMargin);
-        launchIntentButton.setLayoutParams(launchButtonLayout);
+        View buttonLayout = LayoutInflater.from(context).inflate(R.layout.launch_intent_button_layout, widgetsList, false);
+        MultiClickSafeMaterialButton launchIntentButton = buttonLayout.findViewById(R.id.launch_intent);
 
         launchIntentButton.setText(buttonText);
         launchIntentButton.setTextSize(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.BODY_LARGE));
-        launchIntentButton.setVisibility(VISIBLE);
 
         if (viewIndex == -1) {
-            widgetsList.addView(launchIntentButton);
+            widgetsList.addView(buttonLayout);
         } else {
-            widgetsList.addView(launchIntentButton, viewIndex);
+            widgetsList.addView(buttonLayout, viewIndex);
         }
 
         launchIntentButton.setOnClickListener(view -> {
