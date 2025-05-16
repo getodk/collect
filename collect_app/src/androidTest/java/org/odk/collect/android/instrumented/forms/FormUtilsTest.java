@@ -60,7 +60,7 @@ public class FormUtilsTest {
         final Uri formUri = FormsContract.getUri("DEMO", form.getDbId());
 
         // Load the form in order to populate the ReferenceManager
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), mock(), false);
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), mock());
         formLoaderTask.executeSynchronously();
 
         final File formXml = new File(formPath);

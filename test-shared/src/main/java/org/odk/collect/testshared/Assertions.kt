@@ -27,6 +27,16 @@ object Assertions {
         onView.check(matches(not(doesNotExist())))
     }
 
+    fun assertTextNotDisplayed(view: Matcher<View>, root: Matcher<Root>? = null) {
+        val onView = if (root != null) {
+            onView(allOf(view, withEffectiveVisibility(VISIBLE))).inRoot(root)
+        } else {
+            onView(allOf(view, withEffectiveVisibility(VISIBLE)))
+        }
+
+        onView.check(doesNotExist())
+    }
+
     fun assertIntents(vararg intentMatchers: Matcher<Intent>) {
         val intents = Intents.getIntents()
         assertThat(intentMatchers.size, equalTo(intents.size))

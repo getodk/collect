@@ -733,7 +733,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             uriMimeType = getContentResolver().getType(uri);
         }
 
-        formLoaderTask = new FormLoaderTask(uri, uriMimeType, startingXPath, waitingXPath, formEntryControllerFactory, scheduler, savepointsRepositoryProvider.create(), FormOpeningMode.EDIT_FINALIZED.equalsIgnoreCase(intent.getStringExtra(FormOpeningMode.FORM_MODE_KEY)));
+        formLoaderTask = new FormLoaderTask(uri, uriMimeType, startingXPath, waitingXPath, formEntryControllerFactory, scheduler, savepointsRepositoryProvider.create());
         formLoaderTask.setFormLoaderListener(this);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute();
@@ -2016,6 +2016,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                                 formControllerAvailable(formController, form, instance);
                                 Intent intent = new Intent(this, FormHierarchyFragmentHostActivity.class);
                                 intent.putExtra(FormHierarchyFragmentHostActivity.EXTRA_SESSION_ID, sessionId);
+                                intent.putExtra(FormHierarchyFragmentHostActivity.SHOW_NEW_EDIT_MESSAGE, formEntryViewModel.shouldShowNewEditMessage());
                                 startActivityForResult(intent, RequestCodes.HIERARCHY_ACTIVITY);
                             }
                         }

@@ -90,7 +90,7 @@ object LocalInstancesUseCases {
         return instancesRepository.save(
             Instance.Builder(sourceInstance)
                 .dbId(null)
-                .status(Instance.STATUS_VALID)
+                .status(Instance.STATUS_NEW_EDIT)
                 .instanceFilePath(targetInstanceFile.absolutePath)
                 .editOf(sourceInstance.editOf ?: sourceInstance.dbId)
                 .editNumber((sourceInstance.editNumber ?: 0) + 1)

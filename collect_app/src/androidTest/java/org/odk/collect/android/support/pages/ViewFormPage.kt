@@ -30,6 +30,7 @@ class ViewFormPage(private val formName: String) : Page<ViewFormPage>() {
 
     fun editForm(formName: String): FormHierarchyPage {
         clickOnContentDescription(string.edit_finalized_form)
+        checkIsSnackbarWithMessageDisplayed(string.finalized_form_edit_started)
         return FormHierarchyPage(formName).assertOnPage()
     }
 
@@ -45,6 +46,7 @@ class ViewFormPage(private val formName: String) : Page<ViewFormPage>() {
 
     fun acceptEditingNewerFinalizedEdit(formName: String): FormHierarchyPage {
         clickOnTextInDialog(string.newer_finalized_edit_found_dialog_positive_button)
+        checkIsSnackbarWithMessageDisplayed(string.finalized_form_edit_started)
         return FormHierarchyPage(formName).assertOnPage()
     }
 

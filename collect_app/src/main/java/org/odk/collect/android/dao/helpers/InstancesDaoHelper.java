@@ -61,15 +61,4 @@ public final class InstancesDaoHelper {
 
         return complete;
     }
-
-    // TODO: replace with method in {@link org.odk.collect.android.instances.InstancesRepository}
-    // that returns an {@link Instance} object from a path.
-    public static boolean isInstanceAvailable(String path) {
-        if (path != null) {
-            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).create().getOneByPath(path);
-            return instance != null;
-        } else {
-            return false;
-        }
-    }
 }

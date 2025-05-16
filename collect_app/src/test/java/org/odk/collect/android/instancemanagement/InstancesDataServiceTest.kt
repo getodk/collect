@@ -17,6 +17,7 @@ import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.instances.Instance.STATUS_COMPLETE
 import org.odk.collect.forms.instances.Instance.STATUS_INCOMPLETE
 import org.odk.collect.forms.instances.Instance.STATUS_INVALID
+import org.odk.collect.forms.instances.Instance.STATUS_NEW_EDIT
 import org.odk.collect.forms.instances.Instance.STATUS_SUBMISSION_FAILED
 import org.odk.collect.forms.instances.Instance.STATUS_SUBMITTED
 import org.odk.collect.forms.instances.Instance.STATUS_VALID
@@ -148,6 +149,13 @@ class InstancesDataServiceTest {
                 form = form,
                 canDeleteBeforeSend = false,
                 status = STATUS_VALID
+            )
+        )
+        instancesRepository.save(
+            InstanceFixtures.instance(
+                form = form,
+                canDeleteBeforeSend = false,
+                status = STATUS_NEW_EDIT
             )
         )
         instancesRepository.save(

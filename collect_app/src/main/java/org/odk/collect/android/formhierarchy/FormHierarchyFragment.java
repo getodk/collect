@@ -188,7 +188,7 @@ public class FormHierarchyFragment extends Fragment {
     }
 
     private void openEditedInstance(long dbId) {
-        Intent intent = FormFillingIntentFactory.editFinalizedFormIntent(requireContext(), currentProjectId, dbId);
+        Intent intent = FormFillingIntentFactory.editDraftFormIntent(requireContext(), currentProjectId, dbId);
         startActivity(intent);
         requireActivity().getOnBackPressedDispatcher().onBackPressed();
     }

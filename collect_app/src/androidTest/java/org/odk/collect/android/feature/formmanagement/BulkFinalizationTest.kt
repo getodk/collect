@@ -3,10 +3,12 @@ package org.odk.collect.android.feature.formmanagement
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.support.SubmissionParser
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.AccessControlPage
 import org.odk.collect.android.support.pages.EditSavedFormPage
@@ -246,5 +248,37 @@ class BulkFinalizationTest {
             .fillOutAndSave(QuestionAndAnswer("what is your age", "1892"))
             .clickDrafts()
             .assertNoOptionsMenu()
+    }
+
+    @Test
+    fun finalizingFinalizedEditViaBulkFinalize_savesFormWithCorrectInstanceIdAndDeprecatedId() {
+        rule.withProject(testDependencies.server.url)
+            .copyForm("one-question-editable.xml", testDependencies.server.hostName)
+            .startBlankForm("One Question Editable")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question Editable")
+            .editForm("One Question Editable")
+            .clickOnQuestion("what is your age")
+            .swipeToEndScreen("One Question Editable (Edit 1)")
+            .clickSaveAsDraft()
+
+            .clickDrafts(1)
+            .clickFinalizeAll(1)
+            .clickFinalize()
+            .pressBack(MainMenuPage())
+
+            .clickSendFinalizedForm(2)
+            .clickSelectAll()
+            .clickSendSelected()
+
+        val (firstFormInstanceID, firstFormDeprecatedID) = SubmissionParser.getMetaIds(testDependencies.server.submissions[0])
+        val (secondFormInstanceID, secondFormDeprecatedID) = SubmissionParser.getMetaIds(testDependencies.server.submissions[1])
+
+        assertThat(firstFormDeprecatedID, equalTo(null))
+        assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
+        assertThat(secondFormInstanceID, not(firstFormInstanceID))
     }
 }
