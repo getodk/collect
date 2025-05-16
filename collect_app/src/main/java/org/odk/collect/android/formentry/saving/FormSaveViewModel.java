@@ -170,7 +170,10 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                 if (canBeFullyDiscarded()) {
                     if (instance != null) {
                         scheduler.immediate(() -> {
-                            instancesRepository.delete(instance.getDbId());
+                            instancesDataService.deleteInstances(
+                                    projectsDataService.getCurrentProject().getValue().getUuid(),
+                                    new long[] {instance.getDbId()}
+                            );
                             return null;
                         }, result -> {
                         });
