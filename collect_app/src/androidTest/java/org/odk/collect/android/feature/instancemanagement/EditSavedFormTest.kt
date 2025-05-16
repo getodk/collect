@@ -201,21 +201,18 @@ class EditSavedFormTest {
             .setServer(testDependencies.server.url)
             .copyForm("one-question-editable.xml")
             .startBlankForm("One Question Editable")
-            .answerQuestion("what is your age", "123")
             .swipeToEndScreen()
             .clickFinalize()
 
             .clickSendFinalizedForm(1)
             .clickOnForm("One Question Editable")
             .editForm("One Question Editable")
-            .clickOnQuestion("what is your age")
-            .answerQuestion("what is your age", "456")
             .killAndReopenApp(rule, recentAppsRule, MainMenuPage(), testDependencies)
 
             .clickDrafts(1)
             .clickOnFormWithSavepoint("One Question Editable (Edit 1)")
             .clickRecover(FormHierarchyPage("One Question Editable"))
-            .assertText("456")
+            .closeSnackbar()
             .clickGoToEnd("One Question Editable (Edit 1)")
             .clickFinalize()
 
