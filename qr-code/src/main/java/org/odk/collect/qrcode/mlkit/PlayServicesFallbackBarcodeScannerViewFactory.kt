@@ -6,7 +6,7 @@ import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.zxing.ZxingBarcodeScannerViewFactory
 
-class PlayServicesMlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
+class PlayServicesFallbackBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
 
     private val mlKitBarcodeScannerViewFactory = MlKitBarcodeScannerViewFactory()
     private val zxingBarcodeScannerViewFactory = ZxingBarcodeScannerViewFactory()
