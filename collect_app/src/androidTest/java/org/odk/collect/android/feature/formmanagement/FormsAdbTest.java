@@ -50,7 +50,7 @@ public class FormsAdbTest {
         StorageUtils.copyFormToDemoProject("one-question.xml");
 
         rule.startAtMainMenu()
-                .setServer(testDependencies.server.getURL())
+                .setServer(testDependencies.server.getUrl())
                 .clickGetBlankForm()
                 .assertText(org.odk.collect.strings.R.string.newer_version_of_a_form_info)
 
