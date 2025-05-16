@@ -8,6 +8,7 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_NUMBER;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_OF;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.FINALIZATION_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.INSTANCE_FILE_PATH;
@@ -151,6 +152,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
     private void upgradeToVersion9(SQLiteDatabase db) {
         db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + EDIT_OF + " integer REFERENCES " + INSTANCES_TABLE_NAME + "(" + _ID + ") CHECK (" + EDIT_OF + " != " + _ID + ")");
         db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + EDIT_NUMBER + " integer CHECK ((" + EDIT_OF + " IS NULL AND " + EDIT_NUMBER + " IS NULL) OR + (" + EDIT_OF + " IS NOT NULL AND + " + EDIT_NUMBER + " IS NOT NULL))");
+        db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + FINALIZATION_DATE + " date");
     }
 
     private void createInstancesTableV5(SQLiteDatabase db, String name) {
@@ -228,6 +230,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
                 + JR_VERSION + " text, "
                 + STATUS + " text not null, "
                 + LAST_STATUS_CHANGE_DATE + " date not null, "
+                + FINALIZATION_DATE + " date, "
                 + DELETED_DATE + " date, "
                 + GEOMETRY + " text, "
                 + GEOMETRY_TYPE + " text, "

@@ -46,6 +46,7 @@ public final class Instance {
     private final String formVersion;
     private final String status;
     private final Long lastStatusChangeDate;
+    private final Long finalizationDate;
     private final Long deletedDate;
     private final String geometryType;
     private final String geometry;
@@ -64,6 +65,7 @@ public final class Instance {
         formVersion = builder.formVersion;
         status = builder.status;
         lastStatusChangeDate = builder.lastStatusChangeDate;
+        finalizationDate = builder.finalizationDate;
         deletedDate = builder.deletedDate;
         geometryType = builder.geometryType;
         geometry = builder.geometry;
@@ -83,6 +85,7 @@ public final class Instance {
         private String formVersion;
         private String status;
         private Long lastStatusChangeDate;
+        private Long finalizationDate;
         private Long deletedDate;
         private String geometryType;
         private String geometry;
@@ -106,6 +109,7 @@ public final class Instance {
             formVersion = instance.formVersion;
             status = instance.status;
             lastStatusChangeDate = instance.lastStatusChangeDate;
+            finalizationDate = instance.finalizationDate;
             deletedDate = instance.deletedDate;
             geometryType = instance.geometryType;
             geometry = instance.geometry;
@@ -151,6 +155,11 @@ public final class Instance {
 
         public Builder lastStatusChangeDate(Long lastStatusChangeDate) {
             this.lastStatusChangeDate = lastStatusChangeDate;
+            return this;
+        }
+
+        public Builder finalizationDate(Long finalizationDate) {
+            this.finalizationDate = finalizationDate;
             return this;
         }
 
@@ -227,6 +236,10 @@ public final class Instance {
         return lastStatusChangeDate;
     }
 
+    public Long getFinalizationDate() {
+        return finalizationDate;
+    }
+
     @Nullable
     public Long getDeletedDate() {
         return deletedDate;
@@ -270,11 +283,11 @@ public final class Instance {
         }
 
         Instance instance = (Instance) o;
-        return canEditWhenComplete == instance.canEditWhenComplete && Objects.equals(displayName, instance.displayName) && Objects.equals(submissionUri, instance.submissionUri) && Objects.equals(instanceFilePath, instance.instanceFilePath) && Objects.equals(formId, instance.formId) && Objects.equals(formVersion, instance.formVersion) && Objects.equals(status, instance.status) && Objects.equals(lastStatusChangeDate, instance.lastStatusChangeDate) && Objects.equals(deletedDate, instance.deletedDate) && Objects.equals(geometryType, instance.geometryType) && Objects.equals(geometry, instance.geometry) && Objects.equals(editOf, instance.editOf) && Objects.equals(editNumber, instance.editNumber) && Objects.equals(dbId, instance.dbId);
+        return canEditWhenComplete == instance.canEditWhenComplete && Objects.equals(displayName, instance.displayName) && Objects.equals(submissionUri, instance.submissionUri) && Objects.equals(instanceFilePath, instance.instanceFilePath) && Objects.equals(formId, instance.formId) && Objects.equals(formVersion, instance.formVersion) && Objects.equals(status, instance.status) && Objects.equals(lastStatusChangeDate, instance.lastStatusChangeDate) && Objects.equals(finalizationDate, instance.finalizationDate) && Objects.equals(deletedDate, instance.deletedDate) && Objects.equals(geometryType, instance.geometryType) && Objects.equals(geometry, instance.geometry) && Objects.equals(editOf, instance.editOf) && Objects.equals(editNumber, instance.editNumber) && Objects.equals(dbId, instance.dbId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(displayName, submissionUri, canEditWhenComplete, instanceFilePath, formId, formVersion, status, lastStatusChangeDate, deletedDate, geometryType, geometry, editOf, editNumber, dbId);
+        return Objects.hash(displayName, submissionUri, canEditWhenComplete, instanceFilePath, formId, formVersion, status, lastStatusChangeDate, finalizationDate, deletedDate, geometryType, geometry, editOf, editNumber, dbId);
     }
 }

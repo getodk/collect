@@ -29,6 +29,7 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_NUMBER;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_OF;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.FINALIZATION_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.INSTANCE_FILE_PATH;
@@ -248,6 +249,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                     JR_VERSION,
                     STATUS,
                     LAST_STATUS_CHANGE_DATE,
+                    FINALIZATION_DATE,
                     DELETED_DATE,
                     GEOMETRY,
                     GEOMETRY_TYPE,

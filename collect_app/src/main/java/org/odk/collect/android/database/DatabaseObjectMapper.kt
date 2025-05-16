@@ -116,6 +116,7 @@ object DatabaseObjectMapper {
             .formVersion(values.getAsString(DatabaseInstanceColumns.JR_VERSION))
             .status(values.getAsString(DatabaseInstanceColumns.STATUS))
             .lastStatusChangeDate(values.getAsLong(DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE))
+            .finalizationDate(values.getAsLong(DatabaseInstanceColumns.FINALIZATION_DATE))
             .deletedDate(values.getAsLong(DatabaseInstanceColumns.DELETED_DATE))
             .geometry(values.getAsString(DatabaseInstanceColumns.GEOMETRY))
             .geometryType(values.getAsString(DatabaseInstanceColumns.GEOMETRY_TYPE))
@@ -138,6 +139,8 @@ object DatabaseObjectMapper {
         val statusColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.STATUS)
         val lastStatusChangeDateColumnIndex =
             cursor.getColumnIndex(DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE)
+        val finalizationDateColumnIndex =
+            cursor.getColumnIndex(DatabaseInstanceColumns.FINALIZATION_DATE)
         val deletedDateColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.DELETED_DATE)
         val geometryTypeColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.GEOMETRY_TYPE)
         val geometryColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.GEOMETRY)
@@ -162,6 +165,15 @@ object DatabaseObjectMapper {
             .formVersion(cursor.getString(jrVersionColumnIndex))
             .status(cursor.getString(statusColumnIndex))
             .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
+            .finalizationDate(
+                if (cursor.isNull(finalizationDateColumnIndex)) {
+                    null
+                } else {
+                    cursor.getLong(
+                        finalizationDateColumnIndex
+                    )
+                }
+            )
             .deletedDate(
                 if (cursor.isNull(deletedDateColumnIndex)) {
                     null
@@ -210,6 +222,7 @@ object DatabaseObjectMapper {
         values.put(DatabaseInstanceColumns.JR_VERSION, instance.formVersion)
         values.put(DatabaseInstanceColumns.STATUS, instance.status)
         values.put(DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE, instance.lastStatusChangeDate)
+        values.put(DatabaseInstanceColumns.FINALIZATION_DATE, instance.finalizationDate)
         values.put(DatabaseInstanceColumns.DELETED_DATE, instance.deletedDate)
         values.put(DatabaseInstanceColumns.GEOMETRY, instance.geometry)
         values.put(DatabaseInstanceColumns.GEOMETRY_TYPE, instance.geometryType)
