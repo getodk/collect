@@ -149,11 +149,19 @@ public final class InMemInstancesRepository implements InstancesRepository {
                     .build();
         }
 
+        Long currentTime = clock.get();
+
+        if (instance.getStatus().equals(Instance.STATUS_COMPLETE) && instance.getFinalizationDate() == null) {
+            instance = new Instance.Builder(instance)
+                    .finalizationDate(currentTime)
+                    .build();
+        }
+
         Long id = instance.getDbId();
         if (id == null) {
             if (instance.getLastStatusChangeDate() == null) {
                 instance = new Instance.Builder(instance)
-                        .lastStatusChangeDate(clock.get())
+                        .lastStatusChangeDate(currentTime)
                         .build();
             }
 
@@ -166,7 +174,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
         } else {
             if (instance.getDeletedDate() == null) {
                 instance = new Instance.Builder(instance)
-                        .lastStatusChangeDate(clock.get())
+                        .lastStatusChangeDate(currentTime)
                         .build();
             }
 

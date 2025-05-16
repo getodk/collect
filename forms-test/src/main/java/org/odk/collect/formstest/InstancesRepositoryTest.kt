@@ -334,6 +334,73 @@ abstract class InstancesRepositoryTest {
     }
 
     @Test
+    fun save_whenStatusIsFinalized_populatesFinalizationDate() {
+        val clock = mock<Supplier<Long>>()
+        whenever(clock.get()).thenReturn(123L)
+
+        val instancesRepository = buildSubject(clock)
+
+        val instance = instancesRepository.save(
+            buildInstance("formid", "1", instancesDir.absolutePath)
+                .status(Instance.STATUS_COMPLETE)
+                .build()
+        )
+        assertThat(
+            instancesRepository[instance.dbId]!!.finalizationDate,
+            equalTo(123L)
+        )
+    }
+
+    @Test
+    fun save_whenStatusIsFinalizedAndFinalizationDateIsAlreadyPopulated_doesNotUpdateFinalizationDate() {
+        val clock = mock<Supplier<Long>>()
+        whenever(clock.get()).thenReturn(123L)
+
+        val instancesRepository = buildSubject(clock)
+
+        val instance = instancesRepository.save(
+            buildInstance("formid", "1", instancesDir.absolutePath)
+                .status(Instance.STATUS_COMPLETE)
+                .build()
+        )
+        whenever(clock.get()).thenReturn(456L)
+        instancesRepository.save(instance)
+        assertThat(
+            instancesRepository[instance.dbId]!!.finalizationDate,
+            equalTo(123L)
+        )
+    }
+
+    @Test
+    fun save_whenStatusIsNotFinalized_doesNotPopulateFinalizationDate() {
+        val clock = mock<Supplier<Long>>()
+        whenever(clock.get()).thenReturn(123L)
+
+        val instancesRepository = buildSubject(clock)
+
+        val nonFinalizedStatuses = listOf(
+            Instance.STATUS_VALID,
+            Instance.STATUS_INVALID,
+            Instance.STATUS_NEW_EDIT,
+            Instance.STATUS_SUBMISSION_FAILED,
+            Instance.STATUS_SUBMITTED
+        )
+
+        for (status in nonFinalizedStatuses) {
+            val instance = instancesRepository.save(
+                buildInstance("formid", "1", instancesDir.absolutePath)
+                    .status(status)
+                    .build()
+            )
+
+            assertThat(
+                instancesRepository[instance.dbId]!!.finalizationDate,
+                equalTo(null)
+            )
+        }
+    }
+
+    @Test
     fun save_whenStatusIsNull_usesIncomplete() {
         val instancesRepository = buildSubject()
 

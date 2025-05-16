@@ -180,10 +180,18 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                     .build();
         }
 
+        Long currentTime = clock.get();
+
+        if (instance.getStatus().equals(Instance.STATUS_COMPLETE) && instance.getFinalizationDate() == null) {
+            instance = new Instance.Builder(instance)
+                    .finalizationDate(currentTime)
+                    .build();
+        }
+
         if (instance.getDbId() == null) {
             if (instance.getLastStatusChangeDate() == null) {
                 instance = new Instance.Builder(instance)
-                        .lastStatusChangeDate(clock.get())
+                        .lastStatusChangeDate(currentTime)
                         .build();
             }
 
@@ -192,7 +200,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         } else {
             if (instance.getDeletedDate() == null) {
                 instance = new Instance.Builder(instance)
-                        .lastStatusChangeDate(clock.get())
+                        .lastStatusChangeDate(currentTime)
                         .build();
             }
 
