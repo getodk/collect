@@ -18,6 +18,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidshared.ui.SnackbarUtils.showLongSnackbar
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
@@ -113,12 +114,10 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
         DaggerUtils.getComponent(this).inject(this)
 
         val viewOnly = intent.getBooleanExtra(EXTRA_VIEW_ONLY, false)
-        val shouldShowNewEditMessage = intent.getBooleanExtra(SHOW_NEW_EDIT_MESSAGE, false)
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(FormHierarchyFragment::class) {
                 FormHierarchyFragment(
                     viewOnly,
-                    shouldShowNewEditMessage,
                     viewModelFactory,
                     this,
                     scheduler,
@@ -139,6 +138,17 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.hierarchy_host_layout)
             setSupportActionBar(findViewById(org.odk.collect.androidshared.R.id.toolbar))
+        }
+
+        val shouldShowNewEditMessage = intent.getBooleanExtra(SHOW_NEW_EDIT_MESSAGE, false)
+        if (shouldShowNewEditMessage) {
+            showLongSnackbar(
+                findViewById(R.id.fragment_container),
+                getString(org.odk.collect.strings.R.string.finalized_form_edit_started),
+                null,
+                null,
+                true
+            )
         }
     }
 
