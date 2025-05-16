@@ -516,7 +516,7 @@ public class JavaRosaFormController implements FormController {
                         case FormEntryController.EVENT_GROUP:
                         case FormEntryController.EVENT_REPEAT:
                             try {
-                                if (indexIsInFieldList() && getQuestionPrompts().length != 0) {
+                                if (indexIsInFieldList() && FormControllerExt.getQuestionPrompts(this).length != 0) {
                                     break group_skip;
                                 }
                             } catch (RepeatsInFieldListException e) {
@@ -747,10 +747,6 @@ public class JavaRosaFormController implements FormController {
         formEntryController.setLanguage(language);
     }
 
-    public FormEntryPrompt[] getQuestionPrompts() throws RepeatsInFieldListException {
-        return getQuestionPrompts(getFormIndex());
-    }
-
     public FormEntryPrompt[] getQuestionPrompts(FormIndex index) throws RepeatsInFieldListException {
         // For questions, there is only one.
         // For groups, there could be many, but we set that below
@@ -879,10 +875,6 @@ public class JavaRosaFormController implements FormController {
             }
         }
         return null;
-    }
-
-    public FormEntryCaption[] getGroupsForCurrentIndex() {
-        return getGroupsForIndex(getFormIndex());
     }
 
     public FormEntryCaption[] getGroupsForIndex(FormIndex index) {

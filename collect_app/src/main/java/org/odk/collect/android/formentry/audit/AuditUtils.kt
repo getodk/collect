@@ -2,6 +2,7 @@ package org.odk.collect.android.formentry.audit
 
 import org.javarosa.form.api.FormEntryController
 import org.odk.collect.android.javarosawrapper.FormController
+import org.odk.collect.android.javarosawrapper.FormControllerExt.getQuestionPrompts
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException
 
 object AuditUtils {
