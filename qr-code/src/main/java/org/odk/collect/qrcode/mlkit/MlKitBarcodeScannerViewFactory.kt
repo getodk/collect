@@ -20,6 +20,41 @@ import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
 
+class MlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
+    override fun create(
+        activity: Activity,
+        lifecycleOwner: LifecycleOwner,
+        qrOnly: Boolean,
+        prompt: String,
+        useFrontCamera: Boolean
+    ): BarcodeScannerView {
+        return MlKitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt)
+    }
+
+    companion object {
+        private var ML_KIT_AVAILABLE = false
+
+        @JvmStatic
+        fun init(application: Application) {
+            try {
+                ModuleInstall.getClient(application)
+                    .areModulesAvailable(BarcodeScanning.getClient())
+                    .addOnSuccessListener {
+                        if (it.areModulesAvailable()) {
+                            ML_KIT_AVAILABLE = true
+                        }
+                    }
+            } catch (e: Exception) {
+                // Ignored
+            }
+        }
+
+        fun isAvailable(): Boolean {
+            return ML_KIT_AVAILABLE
+        }
+    }
+}
+
 @SuppressLint("ViewConstructor")
 private class MlKitBarcodeScannerView(
     context: Context,
@@ -84,41 +119,6 @@ private class MlKitBarcodeScannerView(
             } else if (it == TorchState.OFF) {
                 torchListener.onTorchOff()
             }
-        }
-    }
-}
-
-class MlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
-    override fun create(
-        activity: Activity,
-        lifecycleOwner: LifecycleOwner,
-        qrOnly: Boolean,
-        prompt: String,
-        useFrontCamera: Boolean
-    ): BarcodeScannerView {
-        return MlKitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt)
-    }
-
-    companion object {
-        private var ML_KIT_AVAILABLE = false
-
-        @JvmStatic
-        fun init(application: Application) {
-            try {
-                ModuleInstall.getClient(application)
-                    .areModulesAvailable(BarcodeScanning.getClient())
-                    .addOnSuccessListener {
-                        if (it.areModulesAvailable()) {
-                            ML_KIT_AVAILABLE = true
-                        }
-                    }
-            } catch (e: Exception) {
-                // Ignored
-            }
-        }
-
-        fun isAvailable(): Boolean {
-            return ML_KIT_AVAILABLE
         }
     }
 }

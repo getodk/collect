@@ -12,6 +12,18 @@ import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.databinding.ZxingBarcodeScannerLayoutBinding
 
+class ZxingBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
+    override fun create(
+        activity: Activity,
+        lifecycleOwner: LifecycleOwner,
+        qrOnly: Boolean,
+        prompt: String,
+        useFrontCamera: Boolean
+    ): BarcodeScannerView {
+        return ZxingBarcodeScannerView(activity, lifecycleOwner, qrOnly, prompt, useFrontCamera)
+    }
+}
+
 @SuppressLint("ViewConstructor")
 private class ZxingBarcodeScannerView(
     private val activity: Activity,
@@ -83,17 +95,5 @@ private class ZxingBarcodeScannerView(
                 torchListener.onTorchOff()
             }
         })
-    }
-}
-
-class ZxingBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
-    override fun create(
-        activity: Activity,
-        lifecycleOwner: LifecycleOwner,
-        qrOnly: Boolean,
-        prompt: String,
-        useFrontCamera: Boolean
-    ): BarcodeScannerView {
-        return ZxingBarcodeScannerView(activity, lifecycleOwner, qrOnly, prompt, useFrontCamera)
     }
 }
