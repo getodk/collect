@@ -9,6 +9,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.support.SubmissionParser
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -127,8 +128,8 @@ class EditSavedFormTest {
         assertThat(originalAnswer, equalTo("123"))
         assertThat(updatedAnswer, equalTo("456"))
 
-        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
-        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
+        val (firstFormInstanceID, firstFormDeprecatedID) = SubmissionParser.getMetaIds(testDependencies.server.submissions[0])
+        val (secondFormInstanceID, secondFormDeprecatedID) = SubmissionParser.getMetaIds(testDependencies.server.submissions[1])
 
         assertThat(firstFormDeprecatedID, equalTo(null))
         assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
@@ -169,8 +170,8 @@ class EditSavedFormTest {
         assertThat(originalAnswer, equalTo("123"))
         assertThat(updatedAnswer, equalTo("456"))
 
-        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
-        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
+        val (firstFormInstanceID, firstFormDeprecatedID) = SubmissionParser.getMetaIds(testDependencies.server.submissions[0])
+        val (secondFormInstanceID, secondFormDeprecatedID) = SubmissionParser.getMetaIds(testDependencies.server.submissions[1])
 
         assertThat(firstFormDeprecatedID, equalTo(null))
         assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
@@ -222,8 +223,8 @@ class EditSavedFormTest {
             .clickSelectAll()
             .clickSendSelected()
 
-        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
-        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
+        val (firstFormInstanceID, firstFormDeprecatedID) = SubmissionParser.getMetaIds(testDependencies.server.submissions[0])
+        val (secondFormInstanceID, secondFormDeprecatedID) = SubmissionParser.getMetaIds(testDependencies.server.submissions[1])
 
         assertThat(firstFormDeprecatedID, equalTo(null))
         assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
@@ -262,9 +263,9 @@ class EditSavedFormTest {
             .clickSelectAll()
             .clickSendSelected()
 
-        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
-        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
-        val (thirdFormInstanceID, thirdFormDeprecatedID) = getIds(testDependencies.server.submissions[2])
+        val (firstFormInstanceID, firstFormDeprecatedID) = SubmissionParser.getMetaIds(testDependencies.server.submissions[0])
+        val (secondFormInstanceID, secondFormDeprecatedID) = SubmissionParser.getMetaIds(testDependencies.server.submissions[1])
+        val (thirdFormInstanceID, thirdFormDeprecatedID) = SubmissionParser.getMetaIds(testDependencies.server.submissions[2])
 
         assertThat(firstFormDeprecatedID, equalTo(null))
         assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
@@ -404,49 +405,8 @@ class EditSavedFormTest {
         assertThat(originalAnswer, equalTo("123"))
         assertThat(updatedAnswer, equalTo("456"))
 
-        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
-        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
-
-        assertThat(firstFormDeprecatedID, equalTo(null))
-        assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
-        assertThat(secondFormInstanceID, not(firstFormInstanceID))
-    }
-
-    @Test
-    fun finalizingFinalizedEditViaBulkFinalize_savesFormWithCorrectInstanceIdAndDeprecatedId() {
-        rule.startAtMainMenu()
-            .setServer(testDependencies.server.url)
-            .copyForm("one-question-editable.xml")
-            .startBlankForm("One Question Editable")
-            .answerQuestion("what is your age", "123")
-            .swipeToEndScreen()
-            .clickFinalize()
-
-            .clickSendFinalizedForm(1)
-            .clickOnForm("One Question Editable")
-            .editForm("One Question Editable")
-            .clickOnQuestion("what is your age")
-            .answerQuestion("what is your age", "456")
-            .swipeToEndScreen("One Question Editable (Edit 1)")
-            .clickSaveAsDraft()
-
-            .clickDrafts(1)
-            .clickFinalizeAll(1)
-            .clickFinalize()
-            .pressBack(MainMenuPage())
-
-            .clickSendFinalizedForm(2)
-            .clickSelectAll()
-            .clickSendSelected()
-
-        val originalAnswer = getAnswer(testDependencies.server.submissions[0], "age")
-        val updatedAnswer = getAnswer(testDependencies.server.submissions[1], "age")
-
-        assertThat(originalAnswer, equalTo("123"))
-        assertThat(updatedAnswer, equalTo("456"))
-
-        val (firstFormInstanceID, firstFormDeprecatedID) = getIds(testDependencies.server.submissions[0])
-        val (secondFormInstanceID, secondFormDeprecatedID) = getIds(testDependencies.server.submissions[1])
+        val (firstFormInstanceID, firstFormDeprecatedID) = SubmissionParser.getMetaIds(testDependencies.server.submissions[0])
+        val (secondFormInstanceID, secondFormDeprecatedID) = SubmissionParser.getMetaIds(testDependencies.server.submissions[1])
 
         assertThat(firstFormDeprecatedID, equalTo(null))
         assertThat(firstFormInstanceID, equalTo(secondFormDeprecatedID))
@@ -473,19 +433,6 @@ class EditSavedFormTest {
             .clickOnQuestion("what is your age")
             .clickGoToArrow()
             .checkIsSnackbarWithMessageNotDisplayed(org.odk.collect.strings.R.string.finalized_form_edit_started)
-    }
-
-    private fun getIds(file: File): Pair<String, String?> {
-        val formRootElement = XFormParser.getXMLDocument(file.inputStream().reader()).rootElement
-        val formMetaElement = formRootElement.getElement(null, "meta")
-        val instanceID = formMetaElement.getElement(null, "instanceID").getText(0)
-        val deprecatedID = try {
-            formMetaElement.getElement(null, "deprecatedID").getText(0)
-        } catch (e: Exception) {
-            null
-        }
-
-        return Pair(instanceID, deprecatedID)
     }
 
     private fun getAnswer(file: File, questionName: String): String? {
