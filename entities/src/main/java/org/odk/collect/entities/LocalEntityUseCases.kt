@@ -70,9 +70,8 @@ object LocalEntityUseCases {
         entitySource: EntitySource,
         mediaFile: MediaFile
     ) {
-        val newListHash = "server:${mediaFile.hash}"
         val existingListHash = entitiesRepository.getList(list)?.hash
-        if (newListHash == existingListHash) {
+        if (mediaFile.hash == existingListHash) {
             return
         }
 
@@ -128,7 +127,7 @@ object LocalEntityUseCases {
         entitiesRepository.save(list, *newAndUpdated.toTypedArray())
         entitiesRepository.updateList(
             list,
-            newListHash,
+            mediaFile.hash,
             mediaFile.type == MediaFile.Type.APPROVAL_ENTITY_LIST
         )
     }

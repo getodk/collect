@@ -55,10 +55,13 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     private final List<File> submittedForms = new ArrayList<>();
     private List<String> deletedEntities = new ArrayList<>();
     private boolean includeIntegrityUrl;
+    private int accesses;
 
     @NonNull
     @Override
     public HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
+        accesses += 1;
+
         if (alwaysReturnError) {
             return new HttpGetResult(null, new HashMap<>(), "", 500);
         }
@@ -95,6 +98,8 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
+        accesses += 1;
+
         if (alwaysReturnError) {
             return new HttpHeadResult(500, new CaseInsensitiveEmptyHeaders());
         }
@@ -116,6 +121,8 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpPostResult uploadSubmissionAndFiles(@NonNull File submissionFile, @NonNull List<File> fileList, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials, @NonNull long contentLength) throws Exception {
+        accesses += 1;
+
         if (alwaysReturnError) {
             return new HttpPostResult("", 500, "");
         }
@@ -195,6 +202,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
     public List<File> getSubmissions() {
         return submittedForms;
+    }
+
+    public int getAccesses() {
+        return accesses;
     }
 
     private boolean credentialsIncorrect(HttpCredentialsInterface credentials) {
