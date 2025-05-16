@@ -213,11 +213,6 @@ abstract class Page<T : Page<T>> {
         return checkIsSnackbarWithMessageDisplayed(getTranslatedString(message, *formatArgs))
     }
 
-    fun checkIsSnackbarWithMessageNotDisplayed(message: Int): T {
-        onView(withText(message)).check(doesNotExist())
-        return this as T
-    }
-
     fun checkIsSnackbarWithMessageDisplayed(message: String): T {
         onView(withText(message)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
         return this as T

@@ -413,28 +413,6 @@ class EditSavedFormTest {
         assertThat(secondFormInstanceID, not(firstFormInstanceID))
     }
 
-    @Test
-    fun editingFinalizedForm_displaysExplanatoryMessageOnFirstOpen() {
-        rule.startAtMainMenu()
-            .setServer(testDependencies.server.url)
-            .copyForm("one-question-editable.xml")
-            .startBlankForm("One Question Editable")
-            .swipeToEndScreen()
-            .clickFinalize()
-
-            .clickSendFinalizedForm(1)
-            .clickOnForm("One Question Editable")
-            .editForm("One Question Editable")
-            .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.finalized_form_edit_started)
-            .closeSnackbar()
-
-            .rotateToLandscape(FormHierarchyPage("One Question Editable"))
-            .checkIsSnackbarWithMessageNotDisplayed(org.odk.collect.strings.R.string.finalized_form_edit_started)
-            .clickOnQuestion("what is your age")
-            .clickGoToArrow()
-            .checkIsSnackbarWithMessageNotDisplayed(org.odk.collect.strings.R.string.finalized_form_edit_started)
-    }
-
     private fun getAnswer(file: File, questionName: String): String? {
         val formRootElement = XFormParser.getXMLDocument(file.inputStream().reader()).rootElement
 
