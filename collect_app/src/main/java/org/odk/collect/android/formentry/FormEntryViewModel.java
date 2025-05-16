@@ -1,5 +1,6 @@
 package org.odk.collect.android.formentry;
 
+import static org.odk.collect.android.javarosawrapper.FormControllerExt.getQuestionPrompts;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 import static org.odk.collect.androidshared.livedata.LiveDataUtils.observe;
 
@@ -445,7 +446,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     // The method saves questions one by one in order to support calculations in field-list groups
     public FormEntryPrompt[] saveFieldList(HashMap<FormIndex, IAnswerData> answers) throws RepeatsInFieldListException {
-        FormEntryPrompt[] questionsBeforeSave = formController.getQuestionPrompts();
+        FormEntryPrompt[] questionsBeforeSave = getQuestionPrompts(getFormController());
         List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave = new ArrayList<>();
         for (FormEntryPrompt questionBeforeSave : questionsBeforeSave) {
             immutableQuestionsBeforeSave.add(new ImmutableDisplayableQuestion(questionBeforeSave));
@@ -465,7 +466,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             index++;
         }
 
-        return formController.getQuestionPrompts();
+        return getQuestionPrompts(formController);
     }
 
     private boolean isQuestionRecalculated(FormEntryPrompt mutableQuestionBeforeSave, ImmutableDisplayableQuestion immutableQuestionBeforeSave) {

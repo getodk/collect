@@ -56,7 +56,7 @@ interface FormController {
     /**
      * @return current FormIndex.
      */
-    fun getFormIndex(): FormIndex?
+    fun getFormIndex(): FormIndex
 
     /**
      * @return the currently selected language.
@@ -251,9 +251,6 @@ interface FormController {
      *                          elements that are not questions or regular (non-repeat) groups.
      */
     @Throws(RepeatsInFieldListException::class)
-    fun getQuestionPrompts(): Array<FormEntryPrompt>
-
-    @Throws(RepeatsInFieldListException::class)
     fun getQuestionPrompts(index: FormIndex): Array<FormEntryPrompt>
 
     fun getQuestionPromptConstraintText(index: FormIndex?): String?
@@ -267,12 +264,7 @@ interface FormController {
      */
     fun isGroupRelevant(): Boolean
 
-    /**
-     * Returns an array of FormEntryCaptions for current FormIndex.
-     */
-    fun getGroupsForCurrentIndex(): Array<FormEntryCaption>?
-
-    fun getGroupsForIndex(formIndex: FormIndex?): Array<FormEntryCaption>?
+    fun getGroupsForIndex(formIndex: FormIndex?): Array<FormEntryCaption>
 
     /**
      * This is used to enable/disable the "Delete Repeat" menu option.

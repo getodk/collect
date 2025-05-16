@@ -21,6 +21,8 @@ import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
 import static org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment.REQUEST_DELETE_REPEAT;
+import static org.odk.collect.android.javarosawrapper.FormControllerExt.getGroupsForCurrentIndex;
+import static org.odk.collect.android.javarosawrapper.FormControllerExt.getQuestionPrompts;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
@@ -1079,9 +1081,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             case FormEntryController.EVENT_REPEAT:
                 // should only be a group here if the event_group is a field-list
                 try {
-                    FormEntryCaption[] groups = formController
-                            .getGroupsForCurrentIndex();
-                    FormEntryPrompt[] prompts = formController.getQuestionPrompts();
+                    FormEntryCaption[] groups = getGroupsForCurrentIndex(formController);
+                    FormEntryPrompt[] prompts = getQuestionPrompts(formController);
 
                     odkView = createODKView(advancingPage, prompts, groups);
                     odkView.setWidgetValueChangedListener(this);
@@ -1395,7 +1396,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 || formController.getEvent() == FormEntryController.EVENT_REPEAT) {
 
             try {
-                FormEntryPrompt[] prompts = getFormController().getQuestionPrompts();
+                FormEntryPrompt[] prompts = getQuestionPrompts(getFormController());
                 for (FormEntryPrompt p : prompts) {
                     List<TreeElement> attrs = p.getBindAttributes();
                     for (int i = 0; i < attrs.size(); i++) {
