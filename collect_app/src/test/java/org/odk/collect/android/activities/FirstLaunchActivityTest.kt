@@ -14,6 +14,7 @@ import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.CoreMatchers.nullValue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,7 +31,9 @@ import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.material.MaterialProgressDialogFragment
+import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.strings.localization.getLocalizedString
+import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
@@ -41,6 +44,15 @@ class FirstLaunchActivityTest {
 
     @get:Rule
     val activityRule = RecordedIntentsRule()
+
+    @Before
+    fun setup() {
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+            override fun providesBarcodeScannerViewFactory(): BarcodeScannerViewContainer.Factory {
+                return FakeBarcodeScannerViewFactory()
+            }
+        })
+    }
 
     @Test
     fun `The QrCodeProjectCreatorDialog should be displayed after clicking on the 'Configure with QR code' button`() {

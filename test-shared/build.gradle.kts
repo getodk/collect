@@ -38,6 +38,7 @@ dependencies {
     implementation(project(":androidshared"))
     implementation(project(":androidtest"))
     implementation(project(":service-test"))
+    implementation(project(":qr-code"))
     implementation(libs.androidxRecyclerview)
     implementation(libs.kotlinStdlib)
     implementation(libs.androidxCoreKtx)

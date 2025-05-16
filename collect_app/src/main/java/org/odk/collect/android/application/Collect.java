@@ -25,6 +25,7 @@ import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
+import org.odk.collect.qrcode.mlkit.MlKitBarcodeScannerViewFactory;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.CollectDrawDependencyModule;
@@ -149,6 +150,7 @@ public class Collect extends Application implements
                     applicationComponent.applicationInitializer().initialize();
                     fixGoogleBug154855417();
                     CollectStrictMode.enable();
+                    MlKitBarcodeScannerViewFactory.init(this);
                 }
         );
     }

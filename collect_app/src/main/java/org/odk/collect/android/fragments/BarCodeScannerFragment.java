@@ -27,38 +27,27 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.zxing.client.android.BeepManager;
-import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.CaptureManager;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.camera.CameraSettings;
 
-import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.androidshared.system.CameraUtils;
-import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.android.views.BarcodeViewDecoder;
+import org.odk.collect.qrcode.BarcodeScannerView;
+import org.odk.collect.qrcode.BarcodeScannerViewContainer;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.zip.DataFormatException;
 
 import javax.inject.Inject;
 
-public abstract class BarCodeScannerFragment extends Fragment implements DecoratedBarcodeView.TorchListener {
+public abstract class BarCodeScannerFragment extends Fragment implements BarcodeScannerView.TorchListener {
 
-    private CaptureManager capture;
-    private DecoratedBarcodeView barcodeScannerView;
+    private BarcodeScannerViewContainer barcodeScannerViewContainer;
 
     private Button switchFlashlightButton;
     private BeepManager beepManager;
 
     @Inject
-    CodeCaptureManagerFactory codeCaptureManagerFactory;
-
-    @Inject
-    BarcodeViewDecoder barcodeViewDecoder;
+    BarcodeScannerViewContainer.Factory barcodeScannerViewFactory;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -71,8 +60,9 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
         beepManager = new BeepManager(getActivity());
 
         View rootView = inflater.inflate(R.layout.fragment_scan, container, false);
-        barcodeScannerView = rootView.findViewById(R.id.barcode_view);
-        barcodeScannerView.setTorchListener(this);
+        barcodeScannerViewContainer = rootView.findViewById(R.id.barcode_view);
+        barcodeScannerViewContainer.setup(barcodeScannerViewFactory, requireActivity(), getViewLifecycleOwner(), isQrOnly(), getContext().getString(org.odk.collect.strings.R.string.barcode_scanner_prompt), frontCameraUsed());
+        barcodeScannerViewContainer.getBarcodeScannerView().setTorchListener(this);
 
         switchFlashlightButton = rootView.findViewById(R.id.switch_flashlight);
         switchFlashlightButton.setOnClickListener(v -> switchFlashlight());
@@ -81,59 +71,17 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
             switchFlashlightButton.setVisibility(View.GONE);
         }
 
-        startScanning(savedInstanceState);
-        return rootView;
-    }
-
-    private void startScanning(Bundle savedInstanceState) {
-        capture = codeCaptureManagerFactory.getCaptureManager(requireActivity(), barcodeScannerView, savedInstanceState, getSupportedCodeFormats(), getContext().getString(org.odk.collect.strings.R.string.barcode_scanner_prompt));
-
-        // Must be called after setting up CaptureManager
-        if (frontCameraUsed()) {
-            switchToFrontCamera();
-        }
-
-        barcodeViewDecoder.waitForBarcode(barcodeScannerView).observe(getViewLifecycleOwner(), barcodeResult -> {
+        barcodeScannerViewContainer.getBarcodeScannerView().waitForBarcode().observe(getViewLifecycleOwner(), result -> {
             beepManager.playBeepSoundAndVibrate();
 
             try {
-                handleScanningResult(barcodeResult);
+                handleScanningResult(result);
             } catch (IOException | DataFormatException | IllegalArgumentException e) {
                 ToastUtils.showShortToast(getString(org.odk.collect.strings.R.string.invalid_qrcode));
             }
         });
-    }
 
-    private void switchToFrontCamera() {
-        CameraSettings cameraSettings = new CameraSettings();
-        cameraSettings.setRequestedCameraId(CameraUtils.getFrontCameraId());
-        barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
-    }
-
-    @Override
-    public void onSaveInstanceState(@NotNull Bundle outState) {
-        capture.onSaveInstanceState(outState);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        barcodeScannerView.pauseAndWait();
-        capture.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        barcodeScannerView.resume();
-        capture.onResume();
-    }
-
-    @Override
-    public void onDestroy() {
-        capture.onDestroy();
-        super.onDestroy();
+        return rootView;
     }
 
     private boolean hasFlash() {
@@ -148,9 +96,9 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
 
     private void switchFlashlight() {
         if (getString(org.odk.collect.strings.R.string.turn_on_flashlight).equals(switchFlashlightButton.getText())) {
-            barcodeScannerView.setTorchOn();
+            barcodeScannerViewContainer.getBarcodeScannerView().setTorchOn(true);
         } else {
-            barcodeScannerView.setTorchOff();
+            barcodeScannerViewContainer.getBarcodeScannerView().setTorchOn(false);
         }
     }
 
@@ -164,7 +112,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
         switchFlashlightButton.setText(org.odk.collect.strings.R.string.turn_on_flashlight);
     }
 
-    protected abstract Collection<String> getSupportedCodeFormats();
+    protected abstract boolean isQrOnly();
 
-    protected abstract void handleScanningResult(BarcodeResult result) throws IOException, DataFormatException;
+    protected abstract void handleScanningResult(String result) throws IOException, DataFormatException;
 }

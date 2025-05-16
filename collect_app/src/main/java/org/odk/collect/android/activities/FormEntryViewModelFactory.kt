@@ -34,7 +34,7 @@ import org.odk.collect.location.LocationClient
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.printer.HtmlPrinter
-import org.odk.collect.qrcode.QRCodeCreator
+import org.odk.collect.qrcode.zxing.QRCodeCreator
 import org.odk.collect.settings.SettingsProvider
 import java.util.function.BiConsumer
 

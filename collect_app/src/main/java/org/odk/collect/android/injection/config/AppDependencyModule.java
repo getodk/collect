@@ -48,9 +48,11 @@ import org.odk.collect.android.formentry.AppStateFormSessionRepository;
 import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel;
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory;
-import org.odk.collect.android.formmanagement.OpenRosaClientProvider;
 import org.odk.collect.android.formmanagement.FormsDataService;
+import org.odk.collect.android.formmanagement.OpenRosaClientProvider;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.qrcode.BarcodeScannerViewContainer;
+import org.odk.collect.qrcode.mlkit.PlayServicesFallbackBarcodeScannerViewFactory;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.geo.MapFragmentFactoryImpl;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
@@ -64,18 +66,17 @@ import org.odk.collect.android.preferences.Defaults;
 import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
 import org.odk.collect.android.preferences.source.SharedPreferencesSettingsProvider;
-import org.odk.collect.android.projects.SettingsConnectionMatcherImpl;
 import org.odk.collect.android.projects.ProjectCreatorImpl;
 import org.odk.collect.android.projects.ProjectDeleter;
 import org.odk.collect.android.projects.ProjectResetter;
 import org.odk.collect.android.projects.ProjectsDataService;
+import org.odk.collect.android.projects.SettingsConnectionMatcherImpl;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.ChangeLockProvider;
-import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileProvider;
@@ -87,7 +88,6 @@ import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
-import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.androidshared.bitmap.ImageCompressor;
 import org.odk.collect.androidshared.system.BroadcastReceiverRegister;
 import org.odk.collect.androidshared.system.BroadcastReceiverRegisterImpl;
@@ -113,12 +113,12 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.metadata.InstallIDProvider;
 import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.metadata.SettingsInstallIDProvider;
+import org.odk.collect.mobiledevicemanagement.MDMConfigHandler;
 import org.odk.collect.mobiledevicemanagement.MDMConfigHandlerImpl;
+import org.odk.collect.mobiledevicemanagement.MDMConfigObserver;
 import org.odk.collect.openrosa.http.CollectThenSystemContentTypeMapper;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 import org.odk.collect.openrosa.http.okhttp.OkHttpConnection;
-import org.odk.collect.mobiledevicemanagement.MDMConfigObserver;
-import org.odk.collect.mobiledevicemanagement.MDMConfigHandler;
 import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
@@ -127,9 +127,9 @@ import org.odk.collect.projects.ProjectCreator;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SettingsConnectionMatcher;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
-import org.odk.collect.qrcode.QRCodeCreatorImpl;
-import org.odk.collect.qrcode.QRCodeDecoder;
-import org.odk.collect.qrcode.QRCodeDecoderImpl;
+import org.odk.collect.qrcode.zxing.QRCodeCreatorImpl;
+import org.odk.collect.qrcode.zxing.QRCodeDecoder;
+import org.odk.collect.qrcode.zxing.QRCodeDecoderImpl;
 import org.odk.collect.settings.ODKAppSettingsImporter;
 import org.odk.collect.settings.ODKAppSettingsMigrator;
 import org.odk.collect.settings.SettingsProvider;
@@ -323,11 +323,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public BarcodeViewDecoder providesBarcodeViewDecoder() {
-        return new BarcodeViewDecoder();
-    }
-
-    @Provides
     public QRCodeDecoder providesQRCodeDecoder() {
         return new QRCodeDecoderImpl();
     }
@@ -500,11 +495,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public CodeCaptureManagerFactory providesCodeCaptureManagerFactory() {
-        return CodeCaptureManagerFactory.INSTANCE;
-    }
-
-    @Provides
     public ExistingProjectMigrator providesExistingProjectMigrator(Context context, StoragePathProvider storagePathProvider, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, ProjectsDataService projectsDataService) {
         return new ExistingProjectMigrator(context, storagePathProvider, projectsRepository, settingsProvider, projectsDataService, new ProjectDetailsCreatorImpl(asList(context.getResources().getStringArray(R.array.project_colors)), Defaults.getUnprotected()));
     }
@@ -657,5 +647,10 @@ public class AppDependencyModule {
                 broadcastReceiverRegister,
                 restrictionsManager
         );
+    }
+
+    @Provides
+    public BarcodeScannerViewContainer.Factory providesBarcodeScannerViewFactory() {
+        return new PlayServicesFallbackBarcodeScannerViewFactory();
     }
 }

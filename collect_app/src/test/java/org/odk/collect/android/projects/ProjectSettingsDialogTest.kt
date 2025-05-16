@@ -32,8 +32,10 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.strings.UUIDGenerator
+import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
@@ -74,6 +76,10 @@ class ProjectSettingsDialogTest {
                 settingsProvider: SettingsProvider?
             ): ProjectsRepository {
                 return projectsRepository
+            }
+
+            override fun providesBarcodeScannerViewFactory(): BarcodeScannerViewContainer.Factory {
+                return FakeBarcodeScannerViewFactory()
             }
         })
     }
