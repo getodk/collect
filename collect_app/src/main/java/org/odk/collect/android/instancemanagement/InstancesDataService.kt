@@ -188,10 +188,14 @@ class InstancesDataService(
 
         return projectDependencyModule.instancesLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
-                instancesRepository.all.forEach {
-                    if (it.isDeletable()) {
-                        instancesRepository.delete(it.dbId)
-                    }
+                val grouped = instancesRepository.all.groupBy { it.editOf ?: it.dbId }
+                grouped.values.forEach { group ->
+                    group.sortedByDescending { it.editNumber }
+                        .forEach {
+                            if (it.isDeletable()) {
+                                instancesRepository.delete(it.dbId)
+                            }
+                        }
                 }
                 update(projectId)
                 true
