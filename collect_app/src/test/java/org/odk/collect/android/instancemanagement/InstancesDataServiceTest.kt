@@ -183,6 +183,43 @@ class InstancesDataServiceTest {
     }
 
     @Test
+    fun `#reset can delete forms with edits`() {
+        val formsRepository = projectDependencyModule.formsRepository
+        val form = formsRepository.save(FormFixtures.form())
+
+        val instancesRepository = projectDependencyModule.instancesRepository
+        val originalInstance = instancesRepository.save(
+            InstanceFixtures.instance(
+                form = form,
+                status = STATUS_COMPLETE,
+                lastStatusChangeDate = 1
+            )
+        )
+        instancesRepository.save(
+            InstanceFixtures.instance(
+                form = form,
+                status = STATUS_COMPLETE,
+                lastStatusChangeDate = 2,
+                editOf = originalInstance.dbId,
+                editNumber = 1
+            )
+        )
+        instancesRepository.save(
+            InstanceFixtures.instance(
+                form = form,
+                status = STATUS_VALID,
+                lastStatusChangeDate = 3,
+                editOf = originalInstance.dbId,
+                editNumber = 2
+            )
+        )
+
+        instancesDataService.reset(projectDependencyModule.projectId)
+        val remainingInstances = instancesRepository.all
+        assertThat(remainingInstances.size, equalTo(0))
+    }
+
+    @Test
     fun `#update updates instances and counts`() {
         val instancesRepository = projectDependencyModule.instancesRepository
         instancesRepository.save(InstanceFixtures.instance(status = STATUS_COMPLETE))

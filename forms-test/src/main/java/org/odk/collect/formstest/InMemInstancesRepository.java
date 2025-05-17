@@ -120,6 +120,13 @@ public final class InMemInstancesRepository implements InstancesRepository {
     @Override
     public void delete(Long id) {
         Instance instance = get(id);
+
+        boolean hasEdits = instances.stream()
+                .anyMatch(it -> instance.getDbId().equals(it.getEditOf()));
+        if (hasEdits) {
+            throw new IntegrityException();
+        }
+
         deleteInstanceFiles(instance);
 
         instances.remove(instance);
