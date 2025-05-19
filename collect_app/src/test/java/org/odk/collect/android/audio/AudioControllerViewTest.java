@@ -117,4 +117,9 @@ public class AudioControllerViewTest {
         shadowOf(seekBar).getOnSeekBarChangeListener().onStopTrackingTouch(seekBar);
         assertThat(activity.isSwipingAllowed(), equalTo(true));
     }
+
+    @Test
+    public void whenNoListenerSet_clickingRemove_doesNotExplode() {
+        view.binding.remove.performClick();
+    }
 }
