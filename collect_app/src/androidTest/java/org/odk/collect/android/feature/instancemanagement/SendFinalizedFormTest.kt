@@ -140,7 +140,9 @@ class SendFinalizedFormTest {
     }
 
     @Test
-    fun formsAreSentInOldestFirstOrder() {
+    fun formsAreSentInOldestFirstOrderBasedOnFinalizationTime() {
+        testDependencies.server.alwaysReturnError()
+
         rule.withProject(testDependencies.server.url)
             .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")
@@ -149,7 +151,12 @@ class SendFinalizedFormTest {
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "124"))
 
             .clickSendFinalizedForm(2)
-            .sortByDateNewestFirst()
+            .sortByDateOldestFirst()
+            .selectForm(0)
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
+            .also { testDependencies.server.neverReturnError() }
+
             .clickSelectAll()
             .clickSendSelected()
             .clickOK(SendFinalizedFormPage())

@@ -13,6 +13,7 @@ import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.pages.ViewSentFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.NotificationDrawerRule
@@ -211,7 +212,9 @@ class AutoSendTest {
     }
 
     @Test
-    fun whenFormHasAutoSend_formsAreSentInOldestFirstOrder() {
+    fun whenFormHasAutoSend_formsAreSentInOldestFirstOrderBasedOnFinalizationTime() {
+        testDependencies.server.alwaysReturnError()
+
         rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
             .copyForm("one-question-autosend.xml")
@@ -226,7 +229,15 @@ class AutoSendTest {
             .swipeToEndScreen()
             .clickSend()
 
-        testDependencies.scheduler.runDeferredTasks()
+            .clickSendFinalizedForm(2)
+            .sortByDateOldestFirst()
+            .selectForm(0)
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
+            .also {
+                testDependencies.server.neverReturnError()
+                testDependencies.scheduler.runDeferredTasks()
+            }
 
         val firstFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[0].inputStream().reader()).rootElement
         val secondFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[1].inputStream().reader()).rootElement
