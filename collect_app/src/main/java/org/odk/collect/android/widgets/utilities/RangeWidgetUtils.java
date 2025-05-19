@@ -15,8 +15,8 @@ import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
 import org.odk.collect.android.databinding.RangeWidgetHorizontalBinding;
 import org.odk.collect.android.databinding.RangeWidgetVerticalBinding;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.android.views.TrackingTouchSlider;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 import java.math.BigDecimal;
 
@@ -167,17 +167,16 @@ public class RangeWidgetUtils {
         }
     }
 
-    public static BigDecimal getActualValue(FormEntryPrompt prompt, float value) {
+    public static Float getActualValue(FormEntryPrompt prompt, float value) {
         RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
-        BigDecimal rangeStart = rangeQuestion.getRangeStart();
-        BigDecimal rangeEnd = rangeQuestion.getRangeEnd();
-        BigDecimal actualValue = BigDecimal.valueOf(value);
+        Float rangeStart = rangeQuestion.getRangeStart().floatValue();
+        Float rangeEnd = rangeQuestion.getRangeEnd().floatValue();
 
         if (rangeEnd.compareTo(rangeStart) < 0) {
-            actualValue = rangeEnd.add(rangeStart).subtract(actualValue);
+            value = rangeEnd + rangeStart - value;
         }
 
-        return actualValue;
+        return value;
     }
 
     public static void showNumberPickerDialog(FragmentActivity activity, String[] displayedValuesForNumberPicker, int id, int progress) {
