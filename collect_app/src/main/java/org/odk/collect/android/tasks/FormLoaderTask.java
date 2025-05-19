@@ -23,6 +23,7 @@ import android.database.SQLException;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -234,7 +235,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         }
 
         // create FormEntryController from formdef
-        final FormEntryController fec = formEntryControllerFactory.create(formDef, formMediaDir);
+        final FormEntryController fec = formEntryControllerFactory.create(formDef, formMediaDir, instance);
 
         boolean usedSavepoint = false;
 
@@ -615,6 +616,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
     }
 
     public interface FormEntryControllerFactory {
-        FormEntryController create(@NonNull FormDef formDef, @NonNull File formMediaDir);
+        FormEntryController create(@NonNull FormDef formDef, @NonNull File formMediaDir, @Nullable Instance instance);
     }
 }

@@ -13,6 +13,7 @@ import org.javarosa.xpath.expr.XPathExpression
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.dynamicpreload.ExternalDataManagerImpl
 import org.odk.collect.android.dynamicpreload.handler.ExternalDataHandlerPull
+import org.odk.collect.android.formmanagement.finalization.EditedFormFinalizationProcessor
 import org.odk.collect.android.preferences.SettingsExt.getExperimentalOptIn
 import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory
 import org.odk.collect.androidshared.ui.ToastUtils
@@ -20,6 +21,7 @@ import org.odk.collect.entities.javarosa.filter.LocalEntitiesFilterStrategy
 import org.odk.collect.entities.javarosa.filter.PullDataFunctionHandler
 import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor
 import org.odk.collect.entities.storage.EntitiesRepository
+import org.odk.collect.forms.instances.Instance
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 import java.io.File
@@ -31,7 +33,7 @@ class CollectFormEntryControllerFactory(
     private val settings: Settings
 ) :
     FormEntryControllerFactory {
-    override fun create(formDef: FormDef, formMediaDir: File): FormEntryController {
+    override fun create(formDef: FormDef, formMediaDir: File, instance: Instance?): FormEntryController {
         val externalDataManager = ExternalDataManagerImpl(formMediaDir).also {
             Collect.getInstance().externalDataManager = it
         }
@@ -45,6 +47,7 @@ class CollectFormEntryControllerFactory(
                 )
             )
             it.addPostProcessor(EntityFormFinalizationProcessor())
+            it.addPostProcessor(EditedFormFinalizationProcessor(instance))
 
             if (settings.getExperimentalOptIn(ProjectKeys.KEY_DEBUG_FILTERS)) {
                 it.addFilterStrategy(LoggingFilterStrategy())

@@ -26,6 +26,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class FormUtilsTest {
 
     private final FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory = new FormLoaderTask.FormEntryControllerFactory() {
         @Override
-        public FormEntryController create(FormDef formDef, File formMediaDir) {
+        public FormEntryController create(FormDef formDef, File formMediaDir, Instance instance) {
             return new FormEntryController(new FormEntryModel(formDef));
         }
     };
