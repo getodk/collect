@@ -18,91 +18,14 @@ package org.odk.collect.android.widgets.range;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.view.View;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.material.slider.Slider;
-
-import org.javarosa.core.model.data.DecimalData;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.views.TrackingTouchSlider;
-import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 @SuppressLint("ViewConstructor")
-public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChangeListener {
-    TrackingTouchSlider slider;
-    TextView currentValue;
-
-    public RangeDecimalWidget(Context context, QuestionDetails prompt, Dependencies dependencies) {
-        super(context, dependencies, prompt);
-        render();
-    }
-
-    @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
-        RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(context, prompt);
-        slider = layoutElements.getSlider();
-        currentValue = layoutElements.getCurrentValue();
-
-        setUpActualValueLabel(RangeWidgetUtils.setUpSlider(prompt, slider, false));
-
-        if (slider.isEnabled()) {
-            slider.setListener(this);
-        }
-        return layoutElements.getAnswerView();
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        String stringAnswer = currentValue.getText().toString();
-        return stringAnswer.isEmpty() ? null : new DecimalData(Double.parseDouble(stringAnswer));
-    }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-    }
-
-    @Override
-    public boolean shouldSuppressFlingGesture() {
-        return slider.isTrackingTouch();
-    }
-
-    @Override
-    public void clearAnswer() {
-        setUpActualValueLabel(null);
-        widgetValueChanged();
-    }
-
-    @SuppressLint("RestrictedApi")
-    @Override
-    public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-        if (fromUser) {
-            BigDecimal actualValue = RangeWidgetUtils.getActualValue(getFormEntryPrompt(), value);
-            setUpActualValueLabel(actualValue);
-            widgetValueChanged();
-        }
-    }
-
-    private void setUpActualValueLabel(BigDecimal actualValue) {
-        if (actualValue != null) {
-            double doubleValue;
-            if (slider.getStepSize() < 1) {
-                doubleValue = actualValue.setScale(3, RoundingMode.HALF_UP).doubleValue();
-            } else {
-                doubleValue = actualValue.doubleValue();
-            }
-            currentValue.setText(String.valueOf(doubleValue));
-        } else {
-            currentValue.setText("");
-            slider.reset();
-        }
+public class RangeDecimalWidget extends RangeBaseWidget {
+    public RangeDecimalWidget(Context context,
+                              QuestionDetails prompt,
+                              Dependencies dependencies) {
+        super(context, prompt, dependencies, false);
     }
 }
