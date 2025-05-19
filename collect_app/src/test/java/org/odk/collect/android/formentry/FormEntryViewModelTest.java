@@ -36,6 +36,7 @@ import org.odk.collect.android.javarosawrapper.FakeFormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.ChangeLocks;
 import org.odk.collect.androidshared.data.Consumable;
+import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.formstest.InMemFormsRepository;
 import org.odk.collect.shared.locks.BooleanChangeLock;
@@ -54,6 +55,7 @@ public class FormEntryViewModelTest {
     private FormIndex startingIndex;
     private AuditEventLogger auditEventLogger;
     private FakeScheduler scheduler;
+    private Form form = mock();
     private final FormSessionRepository formSessionRepository = new InMemFormSessionRepository();
     private final FormsRepository formsRepository = new InMemFormsRepository();
     private final ChangeLocks changeLocks = new ChangeLocks(new BooleanChangeLock(), new BooleanChangeLock());
@@ -69,7 +71,7 @@ public class FormEntryViewModelTest {
 
         scheduler = new FakeScheduler();
 
-        formSessionRepository.set("blah", formController, mock());
+        formSessionRepository.set("blah", formController, form);
         viewModel = new FormEntryViewModel(() -> 0L, scheduler, formSessionRepository, "blah", formsRepository, changeLocks);
     }
 
@@ -448,5 +450,18 @@ public class FormEntryViewModelTest {
         formController.setFormDef(formDef);
 
         assertThat(viewModel.isFormEditableAfterFinalization(), equalTo(true));
+    }
+
+    @Test
+    public void exit_releasesFormsLockOnlyIfFormHasEntities() {
+        changeLocks.getFormsLock().lock();
+
+        when(form.usesEntities()).thenReturn(false);
+        viewModel.exit();
+        assertThat(changeLocks.getFormsLock().tryLock(), equalTo(false));
+
+        when(form.usesEntities()).thenReturn(true);
+        viewModel.exit();
+        assertThat(changeLocks.getFormsLock().tryLock(), equalTo(true));
     }
 }
