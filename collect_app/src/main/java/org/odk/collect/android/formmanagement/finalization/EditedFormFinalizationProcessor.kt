@@ -20,18 +20,12 @@ class EditedFormFinalizationProcessor(
 
     private fun addDeprecatedId(formDef: FormDef) {
         val mainInstance = formDef.mainInstance
-        val metaSection = mainInstance.root.getFirstChild("meta")
-        if (metaSection != null) {
-            val instanceId = metaSection.getFirstChild("instanceID")
-            if (instanceId != null) {
-                var deprecatedId = metaSection.getFirstChild("deprecatedID")
-                if (deprecatedId == null) {
-                    deprecatedId = TreeElement("deprecatedID")
-                    metaSection.addChild(deprecatedId)
-                }
-                deprecatedId.setAnswer(instanceId.value)
-                instanceId.setAnswer(StringData("uuid:" + PropertyUtils.genUUID()))
-            }
-        }
+        val metaSection = mainInstance.root.getFirstChild("meta")!!
+        val instanceId = metaSection.getFirstChild("instanceID")!!
+        val deprecatedId = TreeElement("deprecatedID")
+
+        metaSection.addChild(deprecatedId)
+        deprecatedId.setAnswer(instanceId.value)
+        instanceId.setAnswer(StringData("uuid:" + PropertyUtils.genUUID()))
     }
 }
