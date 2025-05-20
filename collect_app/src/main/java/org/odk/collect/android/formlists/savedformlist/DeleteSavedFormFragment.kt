@@ -49,10 +49,10 @@ class DeleteSavedFormFragment(
                             true
                         } else {
                             val originalId = instance.editOf ?: instance.dbId
-                            val newerUnsentEdits = unsentEditsById[originalId].orEmpty().filter { edit ->
+
+                            unsentEditsById[originalId].orEmpty().none { edit ->
                                 edit.editNumber!! > (instance.editNumber ?: 0)
                             }
-                            newerUnsentEdits.isEmpty()
                         }
                     }
                     .map { instance ->
