@@ -21,9 +21,6 @@ import android.content.Intent
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
-import androidx.test.espresso.assertion.PositionAssertions.isCompletelyAbove
-import androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.isInternal
@@ -117,18 +114,16 @@ class NestedIntentGroupTest {
 
     @Test
     fun relevance_showsAndHidesTheIntentGroup() {
-        onView(withText("Yes")).perform(click())
+        rule.startInFormEntry()
+            .clickOnText("Yes")
+            .assertTextDoesNotExist(R.string.launch_app)
+            .assertTextsDoNotExist("* NFIQ Score")
+            .assertTextsDoNotExist("Template")
 
-        onView(withText(R.string.launch_app)).check(doesNotExist())
-        onView(withText(containsString("NFIQ"))).check(doesNotExist())
-        onView(withText(containsString("Template"))).check(doesNotExist())
-
-        onView(withText("No")).perform(click())
-
-        onView(withText(R.string.launch_app)).check(isCompletelyBelow(withText(containsString("Skip?"))))
-        onView(withText(R.string.launch_app)).check(isCompletelyAbove(withText(containsString("NFIQ"))))
-        onView(withText(containsString("NFIQ"))).check(matches(isDisplayed()))
-        onView(withText(containsString("Template"))).check(matches(isDisplayed()))
+            .clickOnText("No")
+            .assertTextBelow(R.string.launch_app, "Skip?")
+            .assertTextBelow("* NFIQ Score", R.string.launch_app)
+            .assertQuestion("Template", true)
     }
 
     @Test
