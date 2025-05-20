@@ -88,10 +88,11 @@ object ServerFormUseCases {
 
             val tempMediaFile = File(tempMediaDir, mediaFile.filename)
 
-            if (mediaFile.type != null) {
+            val isEntityList = mediaFile.type != null
+            if (isEntityList) {
                 val entityListName = getEntityListFromFileName(mediaFile)
-                val entityList = entitiesRepository.getList(entityListName)
-                if (entityList == null || mediaFile.hash != entityList.hash) {
+                val localEntityList = entitiesRepository.getList(entityListName)
+                if (localEntityList == null || mediaFile.hash != localEntityList.hash) {
                     downloadMediaFile(formSource, mediaFile, tempMediaFile, tempDir, stateListener)
                     newAttachmentsDownloaded = true
 
