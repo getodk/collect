@@ -28,11 +28,7 @@ import java.util.Locale
 @Config(shadows = [ShadowAndroidXAlertDialog::class])
 class QuitFormDialogTest {
 
-    private val formSaveViewModel = mock<FormSaveViewModel> {
-        on { canBeFullyDiscarded() } doReturn true
-        on { lastSavedTime } doReturn null
-    }
-
+    private val formSaveViewModel = mock<FormSaveViewModel>()
     private val formEntryViewModel = mock<FormEntryViewModel>()
     private val settingsProvider = InMemSettingsProvider()
 
@@ -83,6 +79,8 @@ class QuitFormDialogTest {
     @Test
     fun whenSaveAsDraftIsEnabled_andFormCanBeFullyDiscarded_showsSaveExplanation() {
         settingsProvider.getProtectedSettings().save(KEY_SAVE_MID, true)
+        whenever(formSaveViewModel.canBeFullyDiscarded()).doReturn(true)
+        whenever(formSaveViewModel.lastSavedTime).doReturn(null)
 
         val activity = Robolectric.buildActivity(Activity::class.java).get()
         val dialog = showDialog(activity)
@@ -119,6 +117,8 @@ class QuitFormDialogTest {
     @Test
     fun whenSaveAsDraftIsEnabled_showsOutlinedKeepEditing_andHidesFilledKeepEditing() {
         settingsProvider.getProtectedSettings().save(KEY_SAVE_MID, true)
+        whenever(formSaveViewModel.canBeFullyDiscarded()).doReturn(true)
+        whenever(formSaveViewModel.lastSavedTime).doReturn(null)
 
         val activity = Robolectric.buildActivity(Activity::class.java).get()
         val dialog = showDialog(activity)
@@ -138,6 +138,8 @@ class QuitFormDialogTest {
     @Test
     fun whenSaveAsDraftIsDisabled_andFormCanBeFullyDiscarded_showsWarningTitleAndMessage_andHidesButton() {
         settingsProvider.getProtectedSettings().save(KEY_SAVE_MID, false)
+        whenever(formSaveViewModel.canBeFullyDiscarded()).doReturn(true)
+        whenever(formSaveViewModel.lastSavedTime).doReturn(null)
 
         val activity = Robolectric.buildActivity(Activity::class.java).get()
         val dialog = showDialog(activity)
@@ -191,6 +193,8 @@ class QuitFormDialogTest {
     @Test
     fun whenSaveAsDraftIsDisabled_hidesOutlinedKeepEditing_andShowsFilledKeepEditing() {
         settingsProvider.getProtectedSettings().save(KEY_SAVE_MID, false)
+        whenever(formSaveViewModel.canBeFullyDiscarded()).doReturn(true)
+        whenever(formSaveViewModel.lastSavedTime).doReturn(null)
 
         val activity = Robolectric.buildActivity(Activity::class.java).get()
         val dialog = showDialog(activity)
