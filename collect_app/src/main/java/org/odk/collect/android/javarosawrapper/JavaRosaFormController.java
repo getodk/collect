@@ -747,7 +747,8 @@ public class JavaRosaFormController implements FormController {
         formEntryController.setLanguage(language);
     }
 
-    public FormEntryPrompt[] getQuestionPrompts(FormIndex index) throws RepeatsInFieldListException {
+    @NonNull
+    public FormEntryPrompt[] getQuestionPrompts(@NonNull FormIndex index) throws RepeatsInFieldListException {
         // For questions, there is only one.
         // For groups, there could be many, but we set that below
         FormEntryPrompt[] questions = new FormEntryPrompt[0];
@@ -757,16 +758,16 @@ public class JavaRosaFormController implements FormController {
             GroupDef gd = (GroupDef) element;
             // we only display relevant questions
             List<FormEntryPrompt> questionList = new ArrayList<>();
-            for (FormIndex i : getIndicesForGroup(gd)) {
-                if (getEvent(i) != FormEntryController.EVENT_QUESTION) {
+            for (FormIndex indexInGroup : getIndicesForGroup(gd)) {
+                if (getEvent(indexInGroup) != FormEntryController.EVENT_QUESTION) {
                     throw new RepeatsInFieldListException("Repeats in 'field-list' groups " +
                             "are not supported. Please update the form design to remove the " +
-                            "following repeat from a field list: " + i.getReference().toString(false));
+                            "following repeat from a field list: " + indexInGroup.getReference().toString(false));
                 }
 
                 // we only display relevant questions
-                if (formEntryController.getModel().isIndexRelevant(i)) {
-                    questionList.add(getQuestionPrompt(i));
+                if (formEntryController.getModel().isIndexRelevant(indexInGroup)) {
+                    questionList.add(getQuestionPrompt(indexInGroup));
                 }
                 questions = new FormEntryPrompt[questionList.size()];
                 questionList.toArray(questions);
