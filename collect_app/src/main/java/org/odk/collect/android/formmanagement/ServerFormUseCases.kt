@@ -168,11 +168,6 @@ object ServerFormUseCases {
      * these CSVs are being used as part of a `select_one_from_file` question, the
      * instance ID will be the file name with the extension removed.
      */
-    /**
-     * Track CSVs that have names that clash with entity lists in the project. If
-     * these CSVs are being used as part of a `select_one_from_file` question, the
-     * instance ID will be the file name with the extension removed.
-     */
     private fun logEntityListClashes(
         mediaFile: MediaFile,
         entitiesRepository: EntitiesRepository
