@@ -44,11 +44,16 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
     val submissions: List<File>
         get() = submittedForms
 
+    var accesses = 0
+        private set
+
     override fun executeGetRequest(
         uri: URI,
         contentType: String?,
         credentials: HttpCredentialsInterface
     ): HttpGetResult {
+        accesses += 1
+
         if (alwaysReturnError) {
             return HttpGetResult(null, HashMap(), "", 500)
         }
@@ -91,6 +96,8 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
         uri: URI,
         credentials: HttpCredentialsInterface
     ): HttpHeadResult {
+        accesses += 1
+
         if (alwaysReturnError) {
             return HttpHeadResult(500, CaseInsensitiveEmptyHeaders())
         }
@@ -116,6 +123,8 @@ class StubOpenRosaServer : OpenRosaHttpInterface {
         credentials: HttpCredentialsInterface,
         contentLength: Long
     ): HttpPostResult {
+        accesses += 1
+
         if (alwaysReturnError) {
             return HttpPostResult("", 500, "")
         }
