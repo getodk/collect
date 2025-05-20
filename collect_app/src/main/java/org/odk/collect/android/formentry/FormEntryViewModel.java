@@ -39,6 +39,7 @@ import org.odk.collect.async.Cancellable;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.Instance;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -61,6 +62,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private final FormSessionRepository formSessionRepository;
     private final String sessionId;
     private Form form;
+    private Instance instance;
 
     @Nullable
     private FormController formController;
@@ -78,6 +80,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private final Map<FormIndex, List<SelectChoice>> choices = new HashMap<>();
 
     private final TrackableWorker worker;
+    private boolean newEditMessageAlreadyShown;
 
     @SuppressWarnings("WeakerAccess")
     public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository, String sessionId, FormsRepository formsRepository, ChangeLocks changeLocks) {
@@ -89,6 +92,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         formSessionObserver = observe(formSessionRepository.get(this.sessionId), formSession -> {
             this.formController = formSession.getFormController();
             this.form = formSession.getForm();
+            this.instance = formSession.getInstance();
 
             boolean hasBackgroundRecording = formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
             this.hasBackgroundRecording.setValue(hasBackgroundRecording);
@@ -423,6 +427,16 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         }
         String clientEditableAttribute = submissionProfile.getAttribute("client-editable");
         return Boolean.parseBoolean(clientEditableAttribute);
+    }
+
+    public boolean shouldShowNewEditMessage() {
+        boolean shouldShowNewEditMessage =  instance != null &&
+                instance.getStatus().equals(Instance.STATUS_NEW_EDIT) &&
+                !newEditMessageAlreadyShown;
+
+        newEditMessageAlreadyShown = true;
+
+        return shouldShowNewEditMessage;
     }
 
     public interface AnswerListener {

@@ -68,7 +68,7 @@ public class DeleteBlankFormTest {
         testDependencies.server.addForm("One Question", "one_question", "1", "one-question.xml");
 
         rule.startAtMainMenu()
-                .setServer(testDependencies.server.getURL())
+                .setServer(testDependencies.server.getUrl())
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertMessage("All downloads succeeded!")

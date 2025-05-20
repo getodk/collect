@@ -137,7 +137,7 @@ class LocalInstancesUseCasesTest {
         assertThat(instancesRepository.all.size, equalTo(2))
         assertThat(sourceInstance, equalTo(instancesRepository.get(sourceInstance.dbId)))
         assertThat(sourceInstance, not(firstEditedInstance))
-        assertThat(firstEditedInstance.status, equalTo(Instance.STATUS_VALID))
+        assertThat(firstEditedInstance.status, equalTo(Instance.STATUS_NEW_EDIT))
         assertThat(sourceInstance.instanceFilePath, not(firstEditedInstance.instanceFilePath))
         assertThat(firstEditedInstance.editOf, equalTo(sourceInstance.dbId))
         assertThat(firstEditedInstance.editNumber, equalTo(1))

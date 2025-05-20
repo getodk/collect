@@ -27,7 +27,7 @@ public class GetBlankFormsTest {
         testDependencies.server.setCredentials("Draymond", "Green");
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml");
 
-        rule.withProject(testDependencies.server.getURL())
+        rule.withProject(testDependencies.server.getUrl())
                 .clickGetBlankFormWithAuthenticationError()
                 .fillUsername("Draymond")
                 .fillPassword("Green")
@@ -39,7 +39,7 @@ public class GetBlankFormsTest {
     public void whenThereIsAnErrorFetchingFormList_showsError() {
         testDependencies.server.alwaysReturnError();
 
-        rule.withProject(testDependencies.server.getURL())
+        rule.withProject(testDependencies.server.getUrl())
                 .clickGetBlankFormWithError()
                 .assertText(org.odk.collect.strings.R.string.load_remote_form_error)
                 .clickOK(new GetBlankFormPage());
@@ -50,7 +50,7 @@ public class GetBlankFormsTest {
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml");
         testDependencies.server.errorOnFetchingForms();
 
-        rule.withProject(testDependencies.server.getURL())
+        rule.withProject(testDependencies.server.getUrl())
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertMessage("1 of 1 downloads failed!")

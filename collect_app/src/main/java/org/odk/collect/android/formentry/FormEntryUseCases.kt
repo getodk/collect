@@ -174,7 +174,7 @@ object FormEntryUseCases {
     }
 
     @JvmStatic
-    fun saveInstanceToDisk(formController: FormController) {
+    private fun saveInstanceToDisk(formController: FormController) {
         val payload = formController.getSubmissionXml()
         FileUtils.write(formController.getInstanceFile(), payload!!.payloadBytes)
     }

@@ -42,7 +42,7 @@ object QuitFormDialog {
     ): AlertDialog {
         val saveAsDraft = settingsProvider.getProtectedSettings()
             .getBoolean(ProtectedProjectKeys.KEY_SAVE_MID)
-        val lastSavedTime = formSaveViewModel.lastSavedTime
+        val canBeFullyDiscarded = formSaveViewModel.canBeFullyDiscarded()
 
         val binding = QuitFormDialogLayoutBinding.inflate(activity.layoutInflater)
         val dialog = MaterialAlertDialogBuilder(activity)
@@ -57,24 +57,24 @@ object QuitFormDialog {
             .create()
 
         binding.saveExplanation.text = if (!saveAsDraft) {
-            if (lastSavedTime != null) {
-                val string = activity.getString(org.odk.collect.strings.R.string.discard_changes_warning)
-                SimpleDateFormat(string, Locale.getDefault()).format(lastSavedTime)
-            } else {
+            if (canBeFullyDiscarded) {
                 activity.getString(org.odk.collect.strings.R.string.discard_form_warning)
+            } else {
+                val string = activity.getString(org.odk.collect.strings.R.string.discard_changes_warning)
+                SimpleDateFormat(string, Locale.getDefault()).format(formSaveViewModel.lastSavedTime)
             }
-        } else if (lastSavedTime != null) {
-            val string = activity.getString(org.odk.collect.strings.R.string.save_explanation_with_last_saved)
-            SimpleDateFormat(string, Locale.getDefault()).format(lastSavedTime)
-        } else {
+        } else if (canBeFullyDiscarded) {
             activity.getString(org.odk.collect.strings.R.string.save_explanation)
+        } else {
+            val string = activity.getString(org.odk.collect.strings.R.string.save_explanation_with_last_saved)
+            SimpleDateFormat(string, Locale.getDefault()).format(formSaveViewModel.lastSavedTime)
         }
 
         binding.discardChanges.setText(
-            if (lastSavedTime != null) {
-                org.odk.collect.strings.R.string.discard_changes
-            } else {
+            if (canBeFullyDiscarded) {
                 org.odk.collect.strings.R.string.do_not_save
+            } else {
+                org.odk.collect.strings.R.string.discard_changes
             }
         )
 

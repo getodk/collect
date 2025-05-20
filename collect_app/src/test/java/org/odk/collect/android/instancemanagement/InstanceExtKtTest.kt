@@ -38,6 +38,12 @@ class InstanceExtKtTest {
             R.string.saved_on_date_at_time
         )
 
+        val newEdit = InstanceFixtures.instance(status = Instance.STATUS_NEW_EDIT)
+        assertDateFormat(
+            newEdit.getStatusDescription(resources),
+            R.string.saved_on_date_at_time
+        )
+
         val complete = InstanceFixtures.instance(status = Instance.STATUS_COMPLETE)
         assertDateFormat(
             complete.getStatusDescription(resources),
@@ -55,6 +61,62 @@ class InstanceExtKtTest {
             submissionFailed.getStatusDescription(resources),
             R.string.sending_failed_on_date_at_time
         )
+    }
+
+    @Test
+    fun `isDeletable returns true if canDeleteBeforeSend is true no matter what the status is`() {
+        listOf(
+            Instance.STATUS_INCOMPLETE,
+            Instance.STATUS_INVALID,
+            Instance.STATUS_VALID,
+            Instance.STATUS_NEW_EDIT,
+            Instance.STATUS_COMPLETE,
+            Instance.STATUS_SUBMISSION_FAILED,
+            Instance.STATUS_SUBMITTED
+        ).forEach { status ->
+            val instance = Instance
+                .Builder()
+                .status(status)
+                .canDeleteBeforeSend(true)
+                .build()
+
+            assertThat(instance.isDeletable(), equalTo(true))
+        }
+    }
+
+    @Test
+    fun `isDeletable returns true if canDeleteBeforeSend is false but form is not finalized or finalized but sent`() {
+        listOf(
+            Instance.STATUS_INCOMPLETE,
+            Instance.STATUS_INVALID,
+            Instance.STATUS_VALID,
+            Instance.STATUS_NEW_EDIT,
+            Instance.STATUS_SUBMITTED
+        ).forEach { status ->
+            val instance = Instance
+                .Builder()
+                .status(status)
+                .canDeleteBeforeSend(false)
+                .build()
+
+            assertThat(instance.isDeletable(), equalTo(true))
+        }
+    }
+
+    @Test
+    fun `isDeletable returns false if canDeleteBeforeSend is false but form is finalized`() {
+        listOf(
+            Instance.STATUS_COMPLETE,
+            Instance.STATUS_SUBMISSION_FAILED
+        ).forEach { status ->
+            val instance = Instance
+                .Builder()
+                .status(status)
+                .canDeleteBeforeSend(false)
+                .build()
+
+            assertThat(instance.isDeletable(), equalTo(false))
+        }
     }
 
     private fun assertDateFormat(description: String, stringId: Int) {

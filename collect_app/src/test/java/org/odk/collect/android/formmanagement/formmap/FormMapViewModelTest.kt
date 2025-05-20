@@ -166,6 +166,45 @@ class FormMapViewModelTest {
     }
 
     @Test
+    fun `new edits with geometry have proper icons, actions and no info`() {
+        val form = formsRepository.save(
+            FormUtils.buildForm("id", "version", TempFiles.createTempDir().absolutePath)
+                .build()
+        )
+        val instance = instancesRepository.save(
+            InstanceUtils.buildInstance(
+                form.formId,
+                form.version,
+                TempFiles.createTempDir().absolutePath
+            )
+                .geometry("{ \"coordinates\": [1.0, 2.0] }")
+                .geometryType("Point")
+                .canEditWhenComplete(true)
+                .status(Instance.STATUS_NEW_EDIT)
+                .build()
+        )
+
+        val viewModel = createAndLoadViewModel(form)
+        val expectedItem = MappableSelectItem.MappableSelectPoint(
+            instance.dbId,
+            instance.userVisibleInstanceName(),
+            point = MapPoint(2.0, 1.0),
+            smallIcon = R.drawable.ic_room_form_state_incomplete_24dp,
+            largeIcon = R.drawable.ic_room_form_state_incomplete_48dp,
+            action = IconifiedText(
+                R.drawable.ic_edit,
+                application.getString(org.odk.collect.strings.R.string.edit_data)
+            ),
+            info = formatDate(
+                org.odk.collect.strings.R.string.saved_on_date_at_time,
+                instance.lastStatusChangeDate
+            ),
+            status = Status.NO_ERRORS
+        )
+        assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
+    }
+
+    @Test
     fun `invalid drafts with geometry have proper icons, actions, status and no info`() {
         val form = formsRepository.save(
             FormUtils.buildForm("id", "version", TempFiles.createTempDir().absolutePath)

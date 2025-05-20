@@ -23,6 +23,7 @@ import android.database.SQLException;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -45,7 +46,6 @@ import org.odk.collect.android.dynamicpreload.ExternalDataUseCases;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
-import org.odk.collect.android.formentry.FormEntryUseCases;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -102,7 +102,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
     private Instance instance;
     private Savepoint savepoint;
     private final SavepointsRepository savepointsRepository;
-    private final boolean isFinalizedFormEdit;
 
     @Override
     protected void onPreExecute() {
@@ -147,7 +146,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
 
     public FormLoaderTask(Uri uri, String uriMimeType, String xpath, String waitingXPath,
                           FormEntryControllerFactory formEntryControllerFactory, Scheduler scheduler,
-                          SavepointsRepository savepointsRepository, boolean isFinalizedFormEdit) {
+                          SavepointsRepository savepointsRepository) {
         super(scheduler);
         this.uri = uri;
         this.uriMimeType = uriMimeType;
@@ -155,7 +154,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         this.waitingXPath = waitingXPath;
         this.formEntryControllerFactory = formEntryControllerFactory;
         this.savepointsRepository = savepointsRepository;
-        this.isFinalizedFormEdit = isFinalizedFormEdit;
     }
 
     /**
@@ -237,7 +235,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         }
 
         // create FormEntryController from formdef
-        final FormEntryController fec = formEntryControllerFactory.create(formDef, formMediaDir);
+        final FormEntryController fec = formEntryControllerFactory.create(formDef, formMediaDir, instance);
 
         boolean usedSavepoint = false;
 
@@ -281,9 +279,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
             }
         }
         data = new FECWrapper(fc, usedSavepoint);
-        if (isFinalizedFormEdit) {
-            FormEntryUseCases.saveInstanceToDisk(fc);
-        }
         return data;
     }
 
@@ -426,7 +421,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
                     Timber.i("Importing data");
                     publishProgress(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.survey_loading_reading_data_message));
                     importData(instanceXml, fec);
-                    formDef.initialize(isFinalizedFormEdit ? FormInitializationMode.FINALIZED_FORM_EDIT : FormInitializationMode.DRAFT_FORM_EDIT);
+                    formDef.initialize(FormInitializationMode.DRAFT_FORM_EDIT);
                 } catch (IOException | RuntimeException e) {
                     // Skip a savepoint file that is corrupted or 0-sized
                     if (usedSavepoint && !(e.getCause() instanceof XPathTypeMismatchException)) {
@@ -469,18 +464,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         // get the root of the saved and template instances
         TreeElement savedRoot = XFormParser.restoreDataModel(fileBytes, null).getRoot();
         TreeElement templateRoot = fec.getModel().getForm().getInstance().getRoot().deepCopy(true);
-
-        // add deprecatedID to the templateRoot meta section if the savedRoot contains it
-        TreeElement metaSection = savedRoot.getFirstChild("meta");
-        if (metaSection != null) {
-            TreeElement deprecatedId = metaSection.getFirstChild("deprecatedID");
-            if (deprecatedId != null) {
-                metaSection = templateRoot.getFirstChild("meta");
-                if (metaSection != null) {
-                    metaSection.addChild(new TreeElement("deprecatedID"));
-                }
-            }
-        }
 
         // weak check for matching forms
         if (!savedRoot.getName().equals(templateRoot.getName()) || savedRoot.getMult() != 0) {
@@ -633,6 +616,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
     }
 
     public interface FormEntryControllerFactory {
-        FormEntryController create(@NonNull FormDef formDef, @NonNull File formMediaDir);
+        FormEntryController create(@NonNull FormDef formDef, @NonNull File formMediaDir, @Nullable Instance instance);
     }
 }

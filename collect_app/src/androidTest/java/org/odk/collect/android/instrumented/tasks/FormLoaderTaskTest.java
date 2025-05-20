@@ -26,6 +26,7 @@ import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.projects.Project;
 
 import java.io.File;
@@ -44,7 +45,7 @@ public class FormLoaderTaskTest {
 
     private final FormEntryControllerFactory formEntryControllerFactory = new FormEntryControllerFactory() {
         @Override
-        public FormEntryController create(FormDef formDef, File formMediaDir) {
+        public FormEntryController create(FormDef formDef, File formMediaDir, Instance instance) {
             return new FormEntryController(new FormEntryModel(formDef));
         }
     };
@@ -73,7 +74,7 @@ public class FormLoaderTaskTest {
         final Uri formUri = FormsContract.getUri("DEMO", form.getDbId());
 
         // initial load with side effects
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), mock(), false);
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), mock());
         FormLoaderTask.FECWrapper wrapper = formLoaderTask.executeSynchronously();
         Assert.assertNotNull(wrapper);
         Assert.assertNotNull(wrapper.getController());
@@ -84,7 +85,7 @@ public class FormLoaderTaskTest {
         long dbLastModified = dbFile.lastModified();
 
         // subsequent load should succeed despite side effects from import
-        formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), mock(), false);
+        formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock(), mock());
         wrapper = formLoaderTask.executeSynchronously();
         Assert.assertNotNull(wrapper);
         Assert.assertNotNull(wrapper.getController());

@@ -32,7 +32,7 @@ object InstanceListItemView {
         if (pill != null) {
             when (instance.status) {
                 Instance.STATUS_INVALID, Instance.STATUS_INCOMPLETE -> pill.errors = true
-                Instance.STATUS_VALID -> pill.errors = false
+                Instance.STATUS_VALID, Instance.STATUS_NEW_EDIT -> pill.errors = false
                 else -> pill.visibility = View.GONE
             }
         }

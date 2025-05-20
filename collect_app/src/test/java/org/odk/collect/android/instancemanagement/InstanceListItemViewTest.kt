@@ -49,6 +49,17 @@ class InstanceListItemViewTest {
     }
 
     @Test
+    fun `show a no-error chip if the status is STATUS_NEW_EDIT`() {
+        val binding = FormChooserListItemBinding.inflate(layoutInflater)
+        val instance = InstanceFixtures.instance(status = Instance.STATUS_NEW_EDIT)
+
+        InstanceListItemView.setInstance(binding.root, instance, false)
+
+        assertThat(binding.chip.visibility, equalTo(View.VISIBLE))
+        assertThat(binding.chip.errors, equalTo(false))
+    }
+
+    @Test
     fun `show an error chip if the status is STATUS_INCOMPLETE`() {
         val binding = FormChooserListItemBinding.inflate(layoutInflater)
         val instance = InstanceFixtures.instance(status = Instance.STATUS_INCOMPLETE)

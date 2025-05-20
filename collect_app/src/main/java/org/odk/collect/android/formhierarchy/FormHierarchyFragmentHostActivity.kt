@@ -18,6 +18,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidshared.ui.SnackbarUtils.showLongSnackbar
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
@@ -138,10 +139,22 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
             setContentView(R.layout.hierarchy_host_layout)
             setSupportActionBar(findViewById(org.odk.collect.androidshared.R.id.toolbar))
         }
+
+        val shouldShowNewEditMessage = intent.getBooleanExtra(SHOW_NEW_EDIT_MESSAGE, false)
+        if (shouldShowNewEditMessage) {
+            showLongSnackbar(
+                findViewById(R.id.fragment_container),
+                getString(org.odk.collect.strings.R.string.finalized_form_edit_started),
+                null,
+                null,
+                true
+            )
+        }
     }
 
     companion object {
         const val EXTRA_SESSION_ID = "session_id"
         const val EXTRA_VIEW_ONLY = "view_only"
+        const val SHOW_NEW_EDIT_MESSAGE = "show_new_edit_message"
     }
 }

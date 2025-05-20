@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModel;
 import org.apache.commons.io.IOUtils;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 import org.odk.collect.android.formentry.FormSession;
 import org.odk.collect.android.formentry.audit.AuditEvent;
@@ -168,8 +167,17 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                 removeSavepoint(form.getDbId(), instance != null ? instance.getDbId() : null);
                 SaveFormToDisk.removeIndexFile(formController.getInstanceFile().getName());
 
-                // if it's not already saved, erase everything
-                if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
+                if (canBeFullyDiscarded()) {
+                    if (instance != null) {
+                        scheduler.immediate(() -> {
+                            instancesDataService.deleteInstances(
+                                    projectsDataService.getCurrentProject().getValue().getUuid(),
+                                    new long[] {instance.getDbId()}
+                            );
+                            return null;
+                        }, result -> {
+                        });
+                    }
                     String instanceFolder = formController.getInstanceFile().getParent();
                     FileUtils.purgeMediaPath(instanceFolder);
                 }
@@ -422,6 +430,10 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
 
     public void answerFileErrorDisplayed() {
         answerFileError.setValue(null);
+    }
+
+    public boolean canBeFullyDiscarded() {
+        return instance == null || instance.getStatus().equals(Instance.STATUS_NEW_EDIT);
     }
 
     public Long getLastSavedTime() {
