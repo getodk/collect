@@ -153,6 +153,10 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
         db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + EDIT_OF + " integer REFERENCES " + INSTANCES_TABLE_NAME + "(" + _ID + ") CHECK (" + EDIT_OF + " != " + _ID + ")");
         db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + EDIT_NUMBER + " integer CHECK ((" + EDIT_OF + " IS NULL AND " + EDIT_NUMBER + " IS NULL) OR + (" + EDIT_OF + " IS NOT NULL AND + " + EDIT_NUMBER + " IS NOT NULL))");
         db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + FINALIZATION_DATE + " date");
+        db.execSQL(
+                "UPDATE " + INSTANCES_TABLE_NAME + " SET " + FINALIZATION_DATE + " = " + LAST_STATUS_CHANGE_DATE + " WHERE " + STATUS + " IN (?, ?, ?);",
+                new Object[] {Instance.STATUS_COMPLETE, Instance.STATUS_SUBMITTED, Instance.STATUS_SUBMISSION_FAILED}
+        );
     }
 
     private void createInstancesTableV5(SQLiteDatabase db, String name) {

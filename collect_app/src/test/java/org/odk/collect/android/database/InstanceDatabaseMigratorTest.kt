@@ -14,9 +14,6 @@ import org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_DE
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME
-import org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_NUMBER
-import org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_OF
-import org.odk.collect.android.database.instances.DatabaseInstanceColumns.FINALIZATION_DATE
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.INSTANCE_FILE_PATH
@@ -26,6 +23,7 @@ import org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_S
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_URI
 import org.odk.collect.android.database.instances.InstanceDatabaseMigrator
+import org.odk.collect.forms.instances.Instance
 
 @RunWith(AndroidJUnit4::class)
 class InstanceDatabaseMigratorTest {
@@ -66,6 +64,76 @@ class InstanceDatabaseMigratorTest {
     }
 
     @Test
+    fun onUpgrade_fromVersion8_setsFinalizationDateToLastStatusChangedDate_forFinalizedStatuses() {
+        val finalizedStatuses = listOf(
+            Instance.STATUS_COMPLETE,
+            Instance.STATUS_SUBMITTED,
+            Instance.STATUS_SUBMISSION_FAILED
+        )
+
+        val oldVersion = 8
+
+        for (status in finalizedStatuses) {
+            database.version = oldVersion
+            instancesDatabaseMigrator.createInstancesTableV8(database)
+
+            val contentValues = ContentValues().apply {
+                put(DISPLAY_NAME, "DisplayName")
+                put(INSTANCE_FILE_PATH, "InstanceFilePath")
+                put(JR_FORM_ID, "JrFormId")
+                put(STATUS, status)
+                put(LAST_STATUS_CHANGE_DATE, 10)
+            }
+
+            database.insert(DatabaseConstants.INSTANCES_TABLE_NAME, null, contentValues)
+            instancesDatabaseMigrator.onUpgrade(database, oldVersion)
+
+            database.rawQuery("SELECT * FROM ${DatabaseConstants.INSTANCES_TABLE_NAME};", null).use { cursor ->
+                cursor.moveToFirst()
+                val instance = DatabaseObjectMapper.getInstanceFromCurrentCursorPosition(cursor, "")!!
+                assertThat(instance.finalizationDate, equalTo(10))
+            }
+
+            database.execSQL("DROP TABLE IF EXISTS ${DatabaseConstants.INSTANCES_TABLE_NAME}")
+        }
+    }
+
+    @Test
+    fun onUpgrade_fromVersion8_keepsFinalizationDateEmpty_forNotFinalizedStatuses() {
+        val finalizedStatuses = listOf(
+            Instance.STATUS_VALID,
+            Instance.STATUS_INVALID,
+            Instance.STATUS_NEW_EDIT
+        )
+
+        val oldVersion = 8
+
+        for (status in finalizedStatuses) {
+            database.version = oldVersion
+            instancesDatabaseMigrator.createInstancesTableV8(database)
+
+            val contentValues = ContentValues().apply {
+                put(DISPLAY_NAME, "DisplayName")
+                put(INSTANCE_FILE_PATH, "InstanceFilePath")
+                put(JR_FORM_ID, "JrFormId")
+                put(STATUS, status)
+                put(LAST_STATUS_CHANGE_DATE, 10)
+            }
+
+            database.insert(DatabaseConstants.INSTANCES_TABLE_NAME, null, contentValues)
+            instancesDatabaseMigrator.onUpgrade(database, oldVersion)
+
+            database.rawQuery("SELECT * FROM ${DatabaseConstants.INSTANCES_TABLE_NAME};", null).use { cursor ->
+                cursor.moveToFirst()
+                val instance = DatabaseObjectMapper.getInstanceFromCurrentCursorPosition(cursor, "")!!
+                assertThat(instance.finalizationDate, equalTo(null))
+            }
+
+            database.execSQL("DROP TABLE IF EXISTS ${DatabaseConstants.INSTANCES_TABLE_NAME}")
+        }
+    }
+
+    @Test
     fun onUpgrade_fromVersion8() {
         val oldVersion = 8
         database.version = oldVersion
@@ -81,22 +149,24 @@ class InstanceDatabaseMigratorTest {
 
             cursor.moveToFirst()
 
-            assertThat(cursor.getInt(cursor.getColumnIndex(_ID)), equalTo(1))
-            assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), equalTo(contentValues.getAsString(DISPLAY_NAME)))
-            assertThat(cursor.getString(cursor.getColumnIndex(SUBMISSION_URI)), equalTo(contentValues.getAsString(SUBMISSION_URI)))
-            assertThat(cursor.getString(cursor.getColumnIndex(CAN_EDIT_WHEN_COMPLETE)), equalTo(contentValues.getAsString(CAN_EDIT_WHEN_COMPLETE)))
-            assertThat(cursor.getString(cursor.getColumnIndex(INSTANCE_FILE_PATH)), equalTo(contentValues.getAsString(INSTANCE_FILE_PATH)))
-            assertThat(cursor.getString(cursor.getColumnIndex(JR_FORM_ID)), equalTo(contentValues.getAsString(JR_FORM_ID)))
-            assertThat(cursor.getString(cursor.getColumnIndex(JR_VERSION)), equalTo(contentValues.getAsString(JR_VERSION)))
-            assertThat(cursor.getString(cursor.getColumnIndex(STATUS)), equalTo(contentValues.getAsString(STATUS)))
-            assertThat(cursor.getInt(cursor.getColumnIndex(LAST_STATUS_CHANGE_DATE)), equalTo(contentValues.getAsInteger(LAST_STATUS_CHANGE_DATE)))
-            assertThat(cursor.getInt(cursor.getColumnIndex(DELETED_DATE)), equalTo(contentValues.getAsInteger(DELETED_DATE)))
-            assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY)), equalTo(contentValues.getAsString(GEOMETRY)))
-            assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_TYPE)), equalTo(contentValues.getAsString(GEOMETRY_TYPE)))
-            assertThat(cursor.getString(cursor.getColumnIndex(CAN_DELETE_BEFORE_SEND)), equalTo("true"))
-            assertThat(cursor.getString(cursor.getColumnIndex(EDIT_OF)), equalTo(null))
-            assertThat(cursor.getString(cursor.getColumnIndex(EDIT_NUMBER)), equalTo(null))
-            assertThat(cursor.getInt(cursor.getColumnIndex(FINALIZATION_DATE)), equalTo(null))
+            val instance = DatabaseObjectMapper.getInstanceFromCurrentCursorPosition(cursor, "")!!
+
+            assertThat(instance.dbId, equalTo(1))
+            assertThat(instance.displayName, equalTo(contentValues.getAsString(DISPLAY_NAME)))
+            assertThat(instance.submissionUri, equalTo(contentValues.getAsString(SUBMISSION_URI)))
+            assertThat(instance.canEditWhenComplete(), equalTo(contentValues.getAsString(CAN_EDIT_WHEN_COMPLETE).toBoolean()))
+            assertThat(instance.instanceFilePath, equalTo(contentValues.getAsString(INSTANCE_FILE_PATH)))
+            assertThat(instance.formId, equalTo(contentValues.getAsString(JR_FORM_ID)))
+            assertThat(instance.formVersion, equalTo(contentValues.getAsString(JR_VERSION)))
+            assertThat(instance.status, equalTo(contentValues.getAsString(STATUS)))
+            assertThat(instance.lastStatusChangeDate, equalTo(contentValues.getAsLong(LAST_STATUS_CHANGE_DATE)))
+            assertThat(instance.deletedDate, equalTo(contentValues.getAsLong(DELETED_DATE)))
+            assertThat(instance.geometry, equalTo(contentValues.getAsString(GEOMETRY)))
+            assertThat(instance.geometryType, equalTo(contentValues.getAsString(GEOMETRY_TYPE)))
+            assertThat(instance.canDeleteBeforeSend(), equalTo(true))
+            assertThat(instance.editOf, equalTo(null))
+            assertThat(instance.editNumber, equalTo(null))
+            assertThat(instance.finalizationDate, equalTo(null))
         }
     }
 
