@@ -60,13 +60,13 @@ class NestedIntentGroupTest {
         .around(rule)
 
     @Test
-    fun appLaunchButton__isShownAtTopOfIntentGroup() {
+    fun appLaunchButton_isShownAtTopOfIntentGroup() {
         onView(withText(R.string.launch_app)).check(isCompletelyBelow(withText(containsString("Skip?"))))
         onView(withText(R.string.launch_app)).check(isCompletelyAbove(withText(containsString("NFIQ"))))
     }
 
     @Test
-    fun launchingApp__populatesValuesInIntentGroup() {
+    fun launchingApp_populatesValuesInIntentGroup() {
         val nfiqMatcher = allOf(
             isAssignableFrom(StringWidget::class.java),
             hasDescendant(withText(containsString("NFIQ")))
@@ -101,7 +101,7 @@ class NestedIntentGroupTest {
     }
 
     @Test
-    fun onlyTheFirstGroupWithIntentAttr__isTreatedAsIntentGroup() {
+    fun onlyTheFirstGroupWithIntentAttr_isTreatedAsIntentGroup() {
         onView(withText(R.string.launch_app)).check(matches(isDisplayed()))
 
         val someTextMatcher = allOf(
@@ -115,7 +115,7 @@ class NestedIntentGroupTest {
     }
 
     @Test
-    fun relevance__showsAndHidesTheIntentGroup() {
+    fun relevance_showsAndHidesTheIntentGroup() {
         onView(withText("Yes")).perform(click())
 
         onView(withText(R.string.launch_app)).check(doesNotExist())
@@ -131,7 +131,7 @@ class NestedIntentGroupTest {
     }
 
     @Test
-    fun valuesFromApp__triggerRecalculation() {
+    fun valuesFromApp_triggerRecalculation() {
         val resultIntent = Intent()
         resultIntent.putExtra("right_thumb_Registration_NFIQ", "2")
         resultIntent.putExtra("right_thumb_Registration_template", "foobar")
