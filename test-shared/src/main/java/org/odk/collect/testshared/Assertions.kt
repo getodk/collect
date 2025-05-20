@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Root
+import androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
@@ -17,7 +18,7 @@ import org.hamcrest.Matchers.equalTo
 
 object Assertions {
 
-    fun assertText(view: Matcher<View>, root: Matcher<Root>? = null) {
+    fun assertVisible(view: Matcher<View>, root: Matcher<Root>? = null) {
         val onView = if (root != null) {
             onView(allOf(view, withEffectiveVisibility(VISIBLE))).inRoot(root)
         } else {
@@ -44,5 +45,9 @@ object Assertions {
         intentMatchers.forEachIndexed { index, matcher ->
             assertThat(intents[index], matcher)
         }
+    }
+
+    fun assertBelow(below: Matcher<View>, above: Matcher<View>) {
+        onView(below).check(isCompletelyBelow(above))
     }
 }

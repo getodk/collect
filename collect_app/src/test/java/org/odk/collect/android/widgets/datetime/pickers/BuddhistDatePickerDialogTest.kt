@@ -41,213 +41,213 @@ class BuddhistDatePickerDialogTest {
     @Test
     fun `The dialog shows correct date`() {
         launchFragment(2010, 5, 12, DatePickerMode.SPINNERS)
-        Assertions.assertText(withText("12 พฤษภาคม 2553 (May 12, 2010)"), isDialog())
+        Assertions.assertVisible(withText("12 พฤษภาคม 2553 (May 12, 2010)"), isDialog())
 
         updateDate(6, 0, 2447)
-        Assertions.assertText(withText("6 มกราคม 2447 (Jan 06, 1904)"), isDialog())
+        Assertions.assertVisible(withText("6 มกราคม 2447 (Jan 06, 1904)"), isDialog())
 
         updateDate(13, 1, 2459)
-        Assertions.assertText(withText("13 กุมภาพันธ์ 2459 (Feb 13, 1916)"), isDialog())
+        Assertions.assertVisible(withText("13 กุมภาพันธ์ 2459 (Feb 13, 1916)"), isDialog())
 
         updateDate(21, 2, 2467)
-        Assertions.assertText(withText("21 มีนาคม 2467 (Mar 21, 1924)"), isDialog())
+        Assertions.assertVisible(withText("21 มีนาคม 2467 (Mar 21, 1924)"), isDialog())
 
         updateDate(10, 3, 2479)
-        Assertions.assertText(withText("10 เมษายน 2479 (Apr 10, 1936)"), isDialog())
+        Assertions.assertVisible(withText("10 เมษายน 2479 (Apr 10, 1936)"), isDialog())
 
         updateDate(18, 4, 2487)
-        Assertions.assertText(withText("18 พฤษภาคม 2487 (May 18, 1944)"), isDialog())
+        Assertions.assertVisible(withText("18 พฤษภาคม 2487 (May 18, 1944)"), isDialog())
 
         updateDate(27, 5, 2499)
-        Assertions.assertText(withText("27 มิถุนายน 2499 (Jun 27, 1956)"), isDialog())
+        Assertions.assertVisible(withText("27 มิถุนายน 2499 (Jun 27, 1956)"), isDialog())
 
         updateDate(8, 6, 2507)
-        Assertions.assertText(withText("8 กรกฎาคม 2507 (Jul 08, 1964)"), isDialog())
+        Assertions.assertVisible(withText("8 กรกฎาคม 2507 (Jul 08, 1964)"), isDialog())
 
         updateDate(15, 7, 2519)
-        Assertions.assertText(withText("15 สิงหาคม 2519 (Aug 15, 1976)"), isDialog())
+        Assertions.assertVisible(withText("15 สิงหาคม 2519 (Aug 15, 1976)"), isDialog())
 
         updateDate(23, 8, 2527)
-        Assertions.assertText(withText("23 กันยายน 2527 (Sep 23, 1984)"), isDialog())
+        Assertions.assertVisible(withText("23 กันยายน 2527 (Sep 23, 1984)"), isDialog())
 
         updateDate(30, 9, 2539)
-        Assertions.assertText(withText("30 ตุลาคม 2539 (Oct 30, 1996)"), isDialog())
+        Assertions.assertVisible(withText("30 ตุลาคม 2539 (Oct 30, 1996)"), isDialog())
 
         updateDate(5, 10, 2547)
-        Assertions.assertText(withText("5 พฤศจิกายน 2547 (Nov 05, 2004)"), isDialog())
+        Assertions.assertVisible(withText("5 พฤศจิกายน 2547 (Nov 05, 2004)"), isDialog())
 
         updateDate(12, 11, 2559)
-        Assertions.assertText(withText("12 ธันวาคม 2559 (Dec 12, 2016)"), isDialog())
+        Assertions.assertVisible(withText("12 ธันวาคม 2559 (Dec 12, 2016)"), isDialog())
 
         updateDate(7, 0, 2567)
-        Assertions.assertText(withText("7 มกราคม 2567 (Jan 07, 2024)"), isDialog())
+        Assertions.assertVisible(withText("7 มกราคม 2567 (Jan 07, 2024)"), isDialog())
 
         updateDate(14, 1, 2579)
-        Assertions.assertText(withText("14 กุมภาพันธ์ 2579 (Feb 14, 2036)"), isDialog())
+        Assertions.assertVisible(withText("14 กุมภาพันธ์ 2579 (Feb 14, 2036)"), isDialog())
 
         updateDate(22, 2, 2587)
-        Assertions.assertText(withText("22 มีนาคม 2587 (Mar 22, 2044)"), isDialog())
+        Assertions.assertVisible(withText("22 มีนาคม 2587 (Mar 22, 2044)"), isDialog())
 
         updateDate(11, 3, 2599)
-        Assertions.assertText(withText("11 เมษายน 2599 (Apr 11, 2056)"), isDialog())
+        Assertions.assertVisible(withText("11 เมษายน 2599 (Apr 11, 2056)"), isDialog())
 
         updateDate(19, 4, 2607)
-        Assertions.assertText(withText("19 พฤษภาคม 2607 (May 19, 2064)"), isDialog())
+        Assertions.assertVisible(withText("19 พฤษภาคม 2607 (May 19, 2064)"), isDialog())
 
         updateDate(26, 5, 2619)
-        Assertions.assertText(withText("26 มิถุนายน 2619 (Jun 26, 2076)"), isDialog())
+        Assertions.assertVisible(withText("26 มิถุนายน 2619 (Jun 26, 2076)"), isDialog())
 
         updateDate(9, 6, 2627)
-        Assertions.assertText(withText("9 กรกฎาคม 2627 (Jul 09, 2084)"), isDialog())
+        Assertions.assertVisible(withText("9 กรกฎาคม 2627 (Jul 09, 2084)"), isDialog())
 
         updateDate(16, 7, 2639)
-        Assertions.assertText(withText("16 สิงหาคม 2639 (Aug 16, 2096)"), isDialog())
+        Assertions.assertVisible(withText("16 สิงหาคม 2639 (Aug 16, 2096)"), isDialog())
     }
 
     @Test
     fun `The dialog shows correct date for 'year' mode`() {
         launchFragment(2010, 5, 12, DatePickerMode.YEAR)
-        Assertions.assertText(withText("2553 (2010)"), isDialog())
+        Assertions.assertVisible(withText("2553 (2010)"), isDialog())
 
         updateDate(year = 2447)
-        Assertions.assertText(withText("2447 (1904)"), isDialog())
+        Assertions.assertVisible(withText("2447 (1904)"), isDialog())
 
         updateDate(year = 2453)
-        Assertions.assertText(withText("2453 (1910)"), isDialog())
+        Assertions.assertVisible(withText("2453 (1910)"), isDialog())
 
         updateDate(year = 2461)
-        Assertions.assertText(withText("2461 (1918)"), isDialog())
+        Assertions.assertVisible(withText("2461 (1918)"), isDialog())
 
         updateDate(year = 2468)
-        Assertions.assertText(withText("2468 (1925)"), isDialog())
+        Assertions.assertVisible(withText("2468 (1925)"), isDialog())
 
         updateDate(year = 2474)
-        Assertions.assertText(withText("2474 (1931)"), isDialog())
+        Assertions.assertVisible(withText("2474 (1931)"), isDialog())
 
         updateDate(year = 2483)
-        Assertions.assertText(withText("2483 (1940)"), isDialog())
+        Assertions.assertVisible(withText("2483 (1940)"), isDialog())
 
         updateDate(year = 2501)
-        Assertions.assertText(withText("2501 (1958)"), isDialog())
+        Assertions.assertVisible(withText("2501 (1958)"), isDialog())
 
         updateDate(year = 2509)
-        Assertions.assertText(withText("2509 (1966)"), isDialog())
+        Assertions.assertVisible(withText("2509 (1966)"), isDialog())
 
         updateDate(year = 2517)
-        Assertions.assertText(withText("2517 (1974)"), isDialog())
+        Assertions.assertVisible(withText("2517 (1974)"), isDialog())
 
         updateDate(year = 2525)
-        Assertions.assertText(withText("2525 (1982)"), isDialog())
+        Assertions.assertVisible(withText("2525 (1982)"), isDialog())
 
         updateDate(year = 2542)
-        Assertions.assertText(withText("2542 (1999)"), isDialog())
+        Assertions.assertVisible(withText("2542 (1999)"), isDialog())
 
         updateDate(year = 2551)
-        Assertions.assertText(withText("2551 (2008)"), isDialog())
+        Assertions.assertVisible(withText("2551 (2008)"), isDialog())
 
         updateDate(year = 2559)
-        Assertions.assertText(withText("2559 (2016)"), isDialog())
+        Assertions.assertVisible(withText("2559 (2016)"), isDialog())
 
         updateDate(year = 2567)
-        Assertions.assertText(withText("2567 (2024)"), isDialog())
+        Assertions.assertVisible(withText("2567 (2024)"), isDialog())
 
         updateDate(year = 2575)
-        Assertions.assertText(withText("2575 (2032)"), isDialog())
+        Assertions.assertVisible(withText("2575 (2032)"), isDialog())
 
         updateDate(year = 2583)
-        Assertions.assertText(withText("2583 (2040)"), isDialog())
+        Assertions.assertVisible(withText("2583 (2040)"), isDialog())
 
         updateDate(year = 2599)
-        Assertions.assertText(withText("2599 (2056)"), isDialog())
+        Assertions.assertVisible(withText("2599 (2056)"), isDialog())
 
         updateDate(year = 2608)
-        Assertions.assertText(withText("2608 (2065)"), isDialog())
+        Assertions.assertVisible(withText("2608 (2065)"), isDialog())
 
         updateDate(year = 2616)
-        Assertions.assertText(withText("2616 (2073)"), isDialog())
+        Assertions.assertVisible(withText("2616 (2073)"), isDialog())
 
         updateDate(year = 2624)
-        Assertions.assertText(withText("2624 (2081)"), isDialog())
+        Assertions.assertVisible(withText("2624 (2081)"), isDialog())
 
         updateDate(year = 2632)
-        Assertions.assertText(withText("2632 (2089)"), isDialog())
+        Assertions.assertVisible(withText("2632 (2089)"), isDialog())
 
         updateDate(year = 2638)
-        Assertions.assertText(withText("2638 (2095)"), isDialog())
+        Assertions.assertVisible(withText("2638 (2095)"), isDialog())
     }
 
     @Test
     fun `The dialog shows correct date for 'month-year' mode`() {
         launchFragment(2010, 5, 12, DatePickerMode.MONTH_YEAR)
-        Assertions.assertText(withText("พฤษภาคม 2553 (May 2010)"), isDialog())
+        Assertions.assertVisible(withText("พฤษภาคม 2553 (May 2010)"), isDialog())
 
         updateDate(month = 0, year = 2448)
-        Assertions.assertText(withText("มกราคม 2448 (Jan 1905)"), isDialog())
+        Assertions.assertVisible(withText("มกราคม 2448 (Jan 1905)"), isDialog())
 
         updateDate(month = 1, year = 2454)
-        Assertions.assertText(withText("กุมภาพันธ์ 2454 (Feb 1911)"), isDialog())
+        Assertions.assertVisible(withText("กุมภาพันธ์ 2454 (Feb 1911)"), isDialog())
 
         updateDate(month = 2, year = 2464)
-        Assertions.assertText(withText("มีนาคม 2464 (Mar 1921)"), isDialog())
+        Assertions.assertVisible(withText("มีนาคม 2464 (Mar 1921)"), isDialog())
 
         updateDate(month = 3, year = 2473)
-        Assertions.assertText(withText("เมษายน 2473 (Apr 1930)"), isDialog())
+        Assertions.assertVisible(withText("เมษายน 2473 (Apr 1930)"), isDialog())
 
         updateDate(month = 4, year = 2486)
-        Assertions.assertText(withText("พฤษภาคม 2486 (May 1943)"), isDialog())
+        Assertions.assertVisible(withText("พฤษภาคม 2486 (May 1943)"), isDialog())
 
         updateDate(month = 5, year = 2495)
-        Assertions.assertText(withText("มิถุนายน 2495 (Jun 1952)"), isDialog())
+        Assertions.assertVisible(withText("มิถุนายน 2495 (Jun 1952)"), isDialog())
 
         updateDate(month = 6, year = 2508)
-        Assertions.assertText(withText("กรกฎาคม 2508 (Jul 1965)"), isDialog())
+        Assertions.assertVisible(withText("กรกฎาคม 2508 (Jul 1965)"), isDialog())
 
         updateDate(month = 7, year = 2519)
-        Assertions.assertText(withText("สิงหาคม 2519 (Aug 1976)"), isDialog())
+        Assertions.assertVisible(withText("สิงหาคม 2519 (Aug 1976)"), isDialog())
 
         updateDate(month = 8, year = 2527)
-        Assertions.assertText(withText("กันยายน 2527 (Sep 1984)"), isDialog())
+        Assertions.assertVisible(withText("กันยายน 2527 (Sep 1984)"), isDialog())
 
         updateDate(month = 9, year = 2538)
-        Assertions.assertText(withText("ตุลาคม 2538 (Oct 1995)"), isDialog())
+        Assertions.assertVisible(withText("ตุลาคม 2538 (Oct 1995)"), isDialog())
 
         updateDate(month = 10, year = 2549)
-        Assertions.assertText(withText("พฤศจิกายน 2549 (Nov 2006)"), isDialog())
+        Assertions.assertVisible(withText("พฤศจิกายน 2549 (Nov 2006)"), isDialog())
 
         updateDate(month = 11, year = 2560)
-        Assertions.assertText(withText("ธันวาคม 2560 (Dec 2017)"), isDialog())
+        Assertions.assertVisible(withText("ธันวาคม 2560 (Dec 2017)"), isDialog())
 
         updateDate(month = 0, year = 2571)
-        Assertions.assertText(withText("มกราคม 2571 (Jan 2028)"), isDialog())
+        Assertions.assertVisible(withText("มกราคม 2571 (Jan 2028)"), isDialog())
 
         updateDate(month = 1, year = 2582)
-        Assertions.assertText(withText("กุมภาพันธ์ 2582 (Feb 2039)"), isDialog())
+        Assertions.assertVisible(withText("กุมภาพันธ์ 2582 (Feb 2039)"), isDialog())
 
         updateDate(month = 2, year = 2592)
-        Assertions.assertText(withText("มีนาคม 2592 (Mar 2049)"), isDialog())
+        Assertions.assertVisible(withText("มีนาคม 2592 (Mar 2049)"), isDialog())
 
         updateDate(month = 2, year = 2595)
-        Assertions.assertText(withText("มีนาคม 2595 (Mar 2052)"), isDialog())
+        Assertions.assertVisible(withText("มีนาคม 2595 (Mar 2052)"), isDialog())
 
         updateDate(month = 3, year = 2604)
-        Assertions.assertText(withText("เมษายน 2604 (Apr 2061)"), isDialog())
+        Assertions.assertVisible(withText("เมษายน 2604 (Apr 2061)"), isDialog())
 
         updateDate(month = 4, year = 2615)
-        Assertions.assertText(withText("พฤษภาคม 2615 (May 2072)"), isDialog())
+        Assertions.assertVisible(withText("พฤษภาคม 2615 (May 2072)"), isDialog())
 
         updateDate(month = 5, year = 2626)
-        Assertions.assertText(withText("มิถุนายน 2626 (Jun 2083)"), isDialog())
+        Assertions.assertVisible(withText("มิถุนายน 2626 (Jun 2083)"), isDialog())
 
         updateDate(month = 6, year = 2637)
-        Assertions.assertText(withText("กรกฎาคม 2637 (Jul 2094)"), isDialog())
+        Assertions.assertVisible(withText("กรกฎาคม 2637 (Jul 2094)"), isDialog())
     }
 
     @Test
     fun `recreating maintains the date`() {
         val scenario = launchFragment(2010, 5, 12)
-        Assertions.assertText(withText("12 พฤษภาคม 2553 (May 12, 2010)"), isDialog())
+        Assertions.assertVisible(withText("12 พฤษภาคม 2553 (May 12, 2010)"), isDialog())
         scenario.recreate()
-        Assertions.assertText(withText("12 พฤษภาคม 2553 (May 12, 2010)"), isDialog())
+        Assertions.assertVisible(withText("12 พฤษภาคม 2553 (May 12, 2010)"), isDialog())
     }
 
     @Test

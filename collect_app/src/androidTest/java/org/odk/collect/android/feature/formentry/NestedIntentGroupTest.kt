@@ -61,8 +61,9 @@ class NestedIntentGroupTest {
 
     @Test
     fun appLaunchButton_isShownAtTopOfIntentGroup() {
-        onView(withText(R.string.launch_app)).check(isCompletelyBelow(withText(containsString("Skip?"))))
-        onView(withText(R.string.launch_app)).check(isCompletelyAbove(withText(containsString("NFIQ"))))
+        rule.startInFormEntry()
+            .assertTextBelow(R.string.launch_app, "Skip?")
+            .assertTextBelow("* NFIQ Score", R.string.launch_app)
     }
 
     @Test
