@@ -241,7 +241,10 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         mapViewModel.getZoom().observe(getViewLifecycleOwner(), new ZoomObserver() {
             @Override
             public void onZoomToPoint(@NonNull Zoom.Point zoom) {
-                systemZoom(zoom.getPoint(), zoom.getLevel());
+                isSystemZooming = true;
+                map.getController().setZoom((int) Math.round(zoom.getLevel()));
+                map.getController().setCenter(toGeoPoint(zoom.getPoint()));
+                isSystemZooming = false;
             }
 
             @Override
@@ -259,7 +262,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
                     count++;
                 }
                 if (count == 1) {
-                    systemZoom(lastPoint, zoom.getLevel());
+                    zoomToPoint(lastPoint, zoom.getAnimate());
                 } else if (count > 1) {
                     // TODO(ping): Find a better solution.
                     // zoomToBoundingBox sometimes fails to zoom correctly, either
@@ -280,13 +283,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         });
 
         return view;
-    }
-
-    private void systemZoom(MapPoint point, Double level) {
-        isSystemZooming = true;
-        map.getController().setZoom((int) Math.round(level));
-        map.getController().setCenter(toGeoPoint(point));
-        isSystemZooming = false;
     }
 
     @Override
