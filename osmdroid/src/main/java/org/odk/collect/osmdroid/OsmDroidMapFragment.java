@@ -259,7 +259,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
                     count++;
                 }
                 if (count == 1) {
-                    systemZoom(lastPoint, null);
+                    systemZoom(lastPoint, zoom.getLevel());
                 } else if (count > 1) {
                     // TODO(ping): Find a better solution.
                     // zoomToBoundingBox sometimes fails to zoom correctly, either
