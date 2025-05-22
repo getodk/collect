@@ -39,7 +39,9 @@ class MapViewModel(
             return
         }
 
-        val level = if (metaSettings.contains(LAST_KNOWN_ZOOM_LEVEL)) {
+        val level = if (userZoomLevel != null) {
+            userZoomLevel
+        } else if (metaSettings.contains(LAST_KNOWN_ZOOM_LEVEL)) {
             metaSettings.getFloat(LAST_KNOWN_ZOOM_LEVEL).toDouble()
         } else {
             DEFAULT_ZOOM
