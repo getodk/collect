@@ -21,6 +21,7 @@ import android.content.Intent
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.isInternal
@@ -39,6 +40,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.support.rules.BlankFormTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
+import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.StringWidget
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.strings.R
@@ -66,18 +68,13 @@ class NestedIntentGroupTest {
     @Test
     fun launchingApp_populatesValuesInIntentGroup() {
         val nfiqMatcher = allOf(
-            isAssignableFrom(StringWidget::class.java),
+            isAssignableFrom(QuestionWidget::class.java),
             hasDescendant(withText(containsString("NFIQ")))
         )
 
         val templateMatcher = allOf(
-            isAssignableFrom(StringWidget::class.java),
+            isAssignableFrom(QuestionWidget::class.java),
             hasDescendant(withText(containsString("Template"))))
-
-        onView(allOf(isDescendantOfA(nfiqMatcher), isAssignableFrom(TextInputEditText::class.java)))
-            .check(matches(not(isDisplayed())))
-        onView(allOf(isDescendantOfA(templateMatcher), isAssignableFrom(TextInputEditText::class.java)))
-            .check(matches(not(isDisplayed())))
 
         val resultIntent = Intent()
         resultIntent.putExtra("right_thumb_Registration_NFIQ", "2")
@@ -92,10 +89,10 @@ class NestedIntentGroupTest {
         onView(withText(R.string.launch_app))
             .perform(scrollTo(), click())
 
-        onView(allOf(isDescendantOfA(nfiqMatcher), isAssignableFrom(TextInputEditText::class.java)))
-            .check(matches(withText("2")))
-        onView(allOf(isDescendantOfA(templateMatcher), isAssignableFrom(TextInputEditText::class.java)))
-            .check(matches(withText("foobar")))
+        onView(allOf(isDescendantOfA(nfiqMatcher), withText("2"), isDisplayed()))
+            .check(matches(not(doesNotExist())))
+        onView(allOf(isDescendantOfA(templateMatcher), withText("foobar"), isDisplayed()))
+            .check(matches(not(doesNotExist())))
     }
 
     @Test
