@@ -125,10 +125,10 @@ class DeleteSavedFormFragmentTest {
             InstanceFixtures.instance(dbId = 4, displayName = "Form", editOf = 1, editNumber = 3)
         )
 
-        Assertions.assertTextNotDisplayed(withText("Form"))
-        Assertions.assertTextNotDisplayed(withText("Form (Edit 1)"))
-        Assertions.assertTextNotDisplayed(withText("Form (Edit 2)"))
-        Assertions.assertText(withText("Form (Edit 3)"))
+        Assertions.assertNotVisible(withText("Form"))
+        Assertions.assertNotVisible(withText("Form (Edit 1)"))
+        Assertions.assertNotVisible(withText("Form (Edit 2)"))
+        Assertions.assertVisible(withText("Form (Edit 3)"))
     }
 
     @Test
@@ -141,9 +141,9 @@ class DeleteSavedFormFragmentTest {
             InstanceFixtures.instance(dbId = 4, displayName = "Form", editOf = 1, editNumber = 3)
         )
 
-        Assertions.assertTextNotDisplayed(withText("Form"))
-        Assertions.assertTextNotDisplayed(withText("Form (Edit 1)"))
-        Assertions.assertText(withText("Form (Edit 2)"))
-        Assertions.assertText(withText("Form (Edit 3)"))
+        Assertions.assertNotVisible(withText("Form"))
+        Assertions.assertNotVisible(withText("Form (Edit 1)"))
+        Assertions.assertVisible(withText("Form (Edit 2)"))
+        Assertions.assertVisible(withText("Form (Edit 3)"))
     }
 }

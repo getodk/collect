@@ -28,7 +28,7 @@ object Assertions {
         onView.check(matches(not(doesNotExist())))
     }
 
-    fun assertTextNotDisplayed(view: Matcher<View>, root: Matcher<Root>? = null) {
+    fun assertNotVisible(view: Matcher<View>, root: Matcher<Root>? = null) {
         val onView = if (root != null) {
             onView(allOf(view, withEffectiveVisibility(VISIBLE))).inRoot(root)
         } else {
