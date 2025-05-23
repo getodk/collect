@@ -47,7 +47,7 @@ open class StubFormController : FormController {
 
     override fun getEvent(index: FormIndex?): Int = -1
 
-    override fun getFormIndex(): FormIndex? = null
+    override fun getFormIndex(): FormIndex = FormIndex.createBeginningOfFormIndex()
 
     override fun getLanguage(): String? = null
 
@@ -120,7 +120,7 @@ open class StubFormController : FormController {
 
     override fun getQuestionPrompt(index: FormIndex?): FormEntryPrompt? = null
 
-    override fun getQuestionPrompts(): Array<FormEntryPrompt> = emptyArray()
+    override fun getQuestionPrompts(index: FormIndex): Array<FormEntryPrompt> = emptyArray()
 
     override fun getQuestionPromptConstraintText(index: FormIndex?): String? = null
 
@@ -130,7 +130,7 @@ open class StubFormController : FormController {
 
     override fun isGroupRelevant(): Boolean = false
 
-    override fun getGroupsForCurrentIndex(): Array<FormEntryCaption>? = null
+    override fun getGroupsForIndex(formIndex: FormIndex?): Array<FormEntryCaption> = emptyArray()
 
     override fun indexContainsRepeatableGroup(): Boolean = false
 

@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>nested-intent-group</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="person_registration" version="20250411164720">
+                    <container>
+                        <skip/>
+                        <Right_Thumb>
+                            <right_thumb_Registration_NFIQ/>
+                            <right_thumb_Registration_template/>
+                        </Right_Thumb>
+                        <outside>
+                            <template_length/>
+                            <note/>
+                            <text/>
+                        </outside>
+                    </container>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <instance id="yes_no">
+                <root>
+                    <item>
+                        <name>yes</name>
+                        <label>Yes</label>
+                    </item>
+                    <item>
+                        <name>no</name>
+                        <label>No</label>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/data/container/skip" type="string"/>
+            <bind nodeset="/data/container/Right_Thumb" relevant=" /data/container/skip  != 'yes'"/>
+            <bind constraint=".&lt;=3" jr:constraintMsg="Please rescan until NFIQ is 1,2 or 3" nodeset="/data/container/Right_Thumb/right_thumb_Registration_NFIQ" required="true()" type="int"/>
+            <bind nodeset="/data/container/Right_Thumb/right_thumb_Registration_template" required="true()" type="string"/>
+            <bind calculate="string-length( /data/container/Right_Thumb/right_thumb_Registration_template )" nodeset="/data/container/outside/template_length" type="string"/>
+            <bind nodeset="/data/container/outside/note" readonly="true()" type="string"/>
+            <bind nodeset="/data/container/outside/text" type="string"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <group appearance="field-list" ref="/data/container">
+            <select1 ref="/data/container/skip">
+                <label>Skip?</label>
+                <itemset nodeset="instance('yes_no')/root/item">
+                    <value ref="name"/>
+                    <label ref="label"/>
+                </itemset>
+            </select1>
+            <group intent="uk.ac.lshtm.keppel.android.SCAN( uk.ac.lshtm.keppel.android.return_nfiq=&quot;right_thumb_Registration_NFIQ&quot;, uk.ac.lshtm.keppel.android.return_iso_template=&quot;right_thumb_Registration_template&quot;,  uk.ac.lshtm.keppel.android.fast='true' )" ref="/data/container/Right_Thumb">
+                <label>Scan the Right Thumb</label>
+                <input ref="/data/container/Right_Thumb/right_thumb_Registration_NFIQ">
+                    <label>NFIQ Score</label>
+                </input>
+                <input appearance="masked" ref="/data/container/Right_Thumb/right_thumb_Registration_template">
+                    <label>Template</label>
+                </input>
+            </group>
+            <group ref="/data/container/outside" intent="some.app.ACTION()">
+                <label>Outside</label>
+                <input ref="/data/container/outside/note">
+                    <label>Length of template: <output value=" /data/container/outside/template_length "/></label>
+                </input>
+                <input ref="/data/container/outside/text">
+                    <label>Some text</label>
+                </input>
+            </group>
+        </group>
+    </h:body>
+</h:html>

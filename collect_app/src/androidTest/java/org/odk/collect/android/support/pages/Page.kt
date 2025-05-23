@@ -132,7 +132,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertText(text: String): T {
-        Assertions.assertText(withText(text))
+        Assertions.assertVisible(withText(text))
         return this as T
     }
 
@@ -588,6 +588,21 @@ abstract class Page<T : Page<T>> {
 
     fun async(): AsyncPage<T> {
         return AsyncPage(this as T)
+    }
+
+    fun assertTextBelow(below: String, above: String): T {
+        Assertions.assertBelow(withText(below), withText(above))
+        return this as T
+    }
+
+    fun assertTextBelow(below: Int, above: String): T {
+        Assertions.assertBelow(withText(getTranslatedString(below)), withText(above))
+        return this as T
+    }
+
+    fun assertTextBelow(below: String, above: Int): T {
+        Assertions.assertBelow(withText(below), withText(getTranslatedString(above)))
+        return this as T
     }
 
     companion object {

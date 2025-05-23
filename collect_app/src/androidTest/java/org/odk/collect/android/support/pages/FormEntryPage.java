@@ -7,7 +7,6 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
-import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
@@ -342,7 +341,17 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage assertAnswer(String questionText, String answer) {
-        onView(getQuestionFieldMatcher(questionText)).check(matches(withText(answer)));
+        return assertAnswer(questionText, answer, false);
+    }
+
+    public FormEntryPage assertAnswer(String questionText, String answer, Boolean readOnly) {
+        if (readOnly) {
+            onView(allOf(isDescendantOfA(isQuestionView(questionText)), isDisplayed(), withText(answer)))
+                    .check(matches(not(doesNotExist())));
+        } else {
+            onView(getQuestionFieldMatcher(questionText)).check(matches(withText(answer)));
+        }
+
         return this;
     }
 
@@ -465,11 +474,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage setRating(float value) {
         onView(allOf(withId(R.id.rating_bar1), isDisplayed())).perform(ViewActions.setRating(value));
-        return this;
-    }
-
-    public FormEntryPage assertQuestionsOrder(String questionAbove, String questionBelow) {
-        onView(withText(questionBelow)).check(isCompletelyBelow(withText(questionAbove)));
         return this;
     }
 

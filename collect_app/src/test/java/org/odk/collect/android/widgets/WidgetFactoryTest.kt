@@ -32,7 +32,6 @@ class WidgetFactoryTest {
     private var widgetFactory = WidgetFactory(
         activity,
         false,
-        false,
         null,
         null,
         null,

@@ -21,6 +21,8 @@ import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
 import static org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment.REQUEST_DELETE_REPEAT;
+import static org.odk.collect.android.javarosawrapper.FormControllerExt.getGroupsForCurrentIndex;
+import static org.odk.collect.android.javarosawrapper.FormControllerExt.getQuestionPrompts;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
@@ -140,7 +142,6 @@ import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.savepoints.SavepointListener;
 import org.odk.collect.android.savepoints.SavepointTask;
@@ -196,11 +197,8 @@ import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -987,28 +985,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         }
     }
 
-    // The method saves questions one by one in order to support calculations in field-list groups
-    private void saveAnswersForFieldList(FormEntryPrompt[] mutableQuestionsBeforeSave, List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave) {
-        FormController formController = getFormController();
-        ODKView currentView = getCurrentViewIfODKView();
-        if (formController == null || currentView == null) {
-            return;
-        }
-
-        int index = 0;
-        for (Map.Entry<FormIndex, IAnswerData> answer : currentView.getAnswers().entrySet()) {
-            // Questions with calculates will have their answers updated as the questions they depend on are saved
-            if (!isQuestionRecalculated(mutableQuestionsBeforeSave[index], immutableQuestionsBeforeSave.get(index))) {
-                try {
-                    formController.saveOneScreenAnswer(answer.getKey(), answer.getValue(), false);
-                } catch (JavaRosaException e) {
-                    Timber.e(e);
-                }
-            }
-            index++;
-        }
-    }
-
     /**
      * Clears the answer on the screen.
      */
@@ -1105,9 +1081,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             case FormEntryController.EVENT_REPEAT:
                 // should only be a group here if the event_group is a field-list
                 try {
-                    FormEntryCaption[] groups = formController
-                            .getGroupsForCurrentIndex();
-                    FormEntryPrompt[] prompts = formController.getQuestionPrompts();
+                    FormEntryCaption[] groups = getGroupsForCurrentIndex(formController);
+                    FormEntryPrompt[] prompts = getQuestionPrompts(formController);
 
                     odkView = createODKView(advancingPage, prompts, groups);
                     odkView.setWidgetValueChangedListener(this);
@@ -1421,7 +1396,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 || formController.getEvent() == FormEntryController.EVENT_REPEAT) {
 
             try {
-                FormEntryPrompt[] prompts = getFormController().getQuestionPrompts();
+                FormEntryPrompt[] prompts = getQuestionPrompts(getFormController());
                 for (FormEntryPrompt p : prompts) {
                     List<TreeElement> attrs = p.getBindAttributes();
                     for (int i = 0; i < attrs.size(); i++) {
@@ -2318,63 +2293,13 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
      * The widget corresponding to the {@param lastChangedIndex} is never changed.
      */
     private void updateFieldListQuestions(FormIndex lastChangedIndex) throws RepeatsInFieldListException {
-        // Save the user-visible state for all questions in this field-list
-        FormEntryPrompt[] questionsBeforeSave = getFormController().getQuestionPrompts();
-        List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave = new ArrayList<>();
-        for (FormEntryPrompt questionBeforeSave : questionsBeforeSave) {
-            immutableQuestionsBeforeSave.add(new ImmutableDisplayableQuestion(questionBeforeSave));
+        ODKView odkView = getCurrentViewIfODKView();
+        if (odkView == null) {
+            return;
         }
 
-        saveAnswersForFieldList(questionsBeforeSave, immutableQuestionsBeforeSave);
-
-        FormEntryPrompt[] questionsAfterSave = getFormController().getQuestionPrompts();
-
-        Map<FormIndex, FormEntryPrompt> questionsAfterSaveByIndex = new HashMap<>();
-        for (FormEntryPrompt question : questionsAfterSave) {
-            questionsAfterSaveByIndex.put(question.getIndex(), question);
-        }
-
-        // Identify widgets to remove or rebuild (by removing and re-adding). We'd like to do the
-        // identification and removal in the same pass but removal has to be done in a loop that
-        // starts from the end and itemset-based select choices will only be correctly recomputed
-        // if accessed from beginning to end because the call on sameAs is what calls
-        // populateDynamicChoices. See https://github.com/getodk/javarosa/issues/436
-        List<FormEntryPrompt> questionsThatHaveNotChanged = new ArrayList<>();
-        List<FormIndex> formIndexesToRemove = new ArrayList<>();
-        for (ImmutableDisplayableQuestion questionBeforeSave : immutableQuestionsBeforeSave) {
-            FormEntryPrompt questionAtSameFormIndex = questionsAfterSaveByIndex.get(questionBeforeSave.getFormIndex());
-
-            // Always rebuild questions that use database-driven external data features since they
-            // bypass SelectChoices stored in ImmutableDisplayableQuestion
-            if (questionBeforeSave.sameAs(questionAtSameFormIndex)
-                    && !getFormController().usesDatabaseExternalDataFeature(questionBeforeSave.getFormIndex())) {
-                questionsThatHaveNotChanged.add(questionAtSameFormIndex);
-            } else if (!lastChangedIndex.equals(questionBeforeSave.getFormIndex())) {
-                formIndexesToRemove.add(questionBeforeSave.getFormIndex());
-            }
-        }
-
-        for (int i = immutableQuestionsBeforeSave.size() - 1; i >= 0; i--) {
-            ImmutableDisplayableQuestion questionBeforeSave = immutableQuestionsBeforeSave.get(i);
-
-            if (formIndexesToRemove.contains(questionBeforeSave.getFormIndex())) {
-                odkView.removeWidgetAt(i);
-            }
-        }
-
-        for (int i = 0; i < questionsAfterSave.length; i++) {
-            if (!questionsThatHaveNotChanged.contains(questionsAfterSave[i])
-                    && !questionsAfterSave[i].getIndex().equals(lastChangedIndex)) {
-                // The values of widgets in intent groups are set by the view so widgetValueChanged
-                // is never called. This means readOnlyOverride can always be set to false.
-                odkView.addWidgetForQuestion(questionsAfterSave[i], i);
-            }
-        }
-    }
-
-    // If an answer has changed after saving one of previous answers that means it has been recalculated automatically
-    private boolean isQuestionRecalculated(FormEntryPrompt mutableQuestionBeforeSave, ImmutableDisplayableQuestion immutableQuestionBeforeSave) {
-        return !Objects.equals(mutableQuestionBeforeSave.getAnswerText(), immutableQuestionBeforeSave.getAnswerText());
+        FormEntryPrompt[] questionsAfterSave = formEntryViewModel.saveFieldList(odkView.getAnswers());
+        odkView.onUpdated(lastChangedIndex, questionsAfterSave);
     }
 
     private HashMap<FormIndex, IAnswerData> getAnswers() {

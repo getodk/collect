@@ -516,7 +516,7 @@ public class JavaRosaFormController implements FormController {
                         case FormEntryController.EVENT_GROUP:
                         case FormEntryController.EVENT_REPEAT:
                             try {
-                                if (indexIsInFieldList() && getQuestionPrompts().length != 0) {
+                                if (indexIsInFieldList() && FormControllerExt.getQuestionPrompts(this).length != 0) {
                                     break group_skip;
                                 }
                             } catch (RepeatsInFieldListException e) {
@@ -747,26 +747,27 @@ public class JavaRosaFormController implements FormController {
         formEntryController.setLanguage(language);
     }
 
-    public FormEntryPrompt[] getQuestionPrompts() throws RepeatsInFieldListException {
+    @NonNull
+    public FormEntryPrompt[] getQuestionPrompts(@NonNull FormIndex index) throws RepeatsInFieldListException {
         // For questions, there is only one.
         // For groups, there could be many, but we set that below
         FormEntryPrompt[] questions = new FormEntryPrompt[0];
 
-        IFormElement element = formEntryController.getModel().getForm().getChild(getFormIndex());
+        IFormElement element = formEntryController.getModel().getForm().getChild(index);
         if (element instanceof GroupDef) {
             GroupDef gd = (GroupDef) element;
             // we only display relevant questions
             List<FormEntryPrompt> questionList = new ArrayList<>();
-            for (FormIndex index : getIndicesForGroup(gd)) {
-                if (getEvent(index) != FormEntryController.EVENT_QUESTION) {
+            for (FormIndex indexInGroup : getIndicesForGroup(gd)) {
+                if (getEvent(indexInGroup) != FormEntryController.EVENT_QUESTION) {
                     throw new RepeatsInFieldListException("Repeats in 'field-list' groups " +
                             "are not supported. Please update the form design to remove the " +
-                            "following repeat from a field list: " + index.getReference().toString(false));
+                            "following repeat from a field list: " + indexInGroup.getReference().toString(false));
                 }
 
                 // we only display relevant questions
-                if (formEntryController.getModel().isIndexRelevant(index)) {
-                    questionList.add(getQuestionPrompt(index));
+                if (formEntryController.getModel().isIndexRelevant(indexInGroup)) {
+                    questionList.add(getQuestionPrompt(indexInGroup));
                 }
                 questions = new FormEntryPrompt[questionList.size()];
                 questionList.toArray(questions);
@@ -877,25 +878,27 @@ public class JavaRosaFormController implements FormController {
         return null;
     }
 
-    public FormEntryCaption[] getGroupsForCurrentIndex() {
+    public FormEntryCaption[] getGroupsForIndex(FormIndex index) {
+        int eventAtIndex = getEvent(index);
+
         // return an empty array if you ask for something impossible
-        if (!(getEvent() == FormEntryController.EVENT_QUESTION
-                || getEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT
-                || getEvent() == FormEntryController.EVENT_GROUP
-                || getEvent() == FormEntryController.EVENT_REPEAT)) {
+        if (index == null || !(eventAtIndex == FormEntryController.EVENT_QUESTION
+                || eventAtIndex == FormEntryController.EVENT_PROMPT_NEW_REPEAT
+                || eventAtIndex == FormEntryController.EVENT_GROUP
+                || eventAtIndex == FormEntryController.EVENT_REPEAT)) {
             return new FormEntryCaption[0];
         }
 
         // the first caption is the question, so we skip it if it's an EVENT_QUESTION
         // otherwise, the first caption is a group so we start at index 0
         int lastquestion = 1;
-        if (getEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT
-                || getEvent() == FormEntryController.EVENT_GROUP
-                || getEvent() == FormEntryController.EVENT_REPEAT) {
+        if (eventAtIndex == FormEntryController.EVENT_PROMPT_NEW_REPEAT
+                || eventAtIndex == FormEntryController.EVENT_GROUP
+                || eventAtIndex == FormEntryController.EVENT_REPEAT) {
             lastquestion = 0;
         }
 
-        FormEntryCaption[] v = getCaptionHierarchy();
+        FormEntryCaption[] v = getCaptionHierarchy(index);
         FormEntryCaption[] groups = new FormEntryCaption[v.length - lastquestion];
         System.arraycopy(v, 0, groups, 0, v.length - lastquestion);
         return groups;

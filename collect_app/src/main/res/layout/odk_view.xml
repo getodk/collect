@@ -14,7 +14,6 @@ limitations under the License.
 -->
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/odk_view_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -35,15 +34,6 @@ limitations under the License.
             style="@style/TextAppearance.Collect.Subtitle1.MediumEmphasis"
             tools:text="Group text"
             tools:visibility="visible" />
-
-        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
-            android:id="@+id/launchIntentButton"
-            style="?widgetButtonIconQuestionWidgetStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_margin="@dimen/margin_standard"
-            app:icon="@drawable/ic_baseline_open_in_new_white_24" />
 
         <LinearLayout
             android:id="@+id/widgets"

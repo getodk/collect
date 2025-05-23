@@ -148,12 +148,6 @@ public class FakeFormController extends StubFormController {
         return FormEntryController.EVENT_END_OF_FORM;
     }
 
-    @NonNull
-    @Override
-    public FormEntryPrompt[] getQuestionPrompts() {
-        return currentPrompts.toArray(new FormEntryPrompt[] {});
-    }
-
     public void addNextEvents(List<Integer> events) {
         nextEvents.addAll(events);
     }

@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
@@ -54,12 +55,14 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
 import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileUtils;
@@ -111,6 +114,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     private final LinearLayout widgetsList;
     private final LinearLayout.LayoutParams layout;
     private final ArrayList<QuestionWidget> widgets;
+    FormEntryCaption intentGroup;
+    int intentGroupStartIndex = -1;
 
     private WidgetValueChangedListener widgetValueChangedListener;
 
@@ -127,6 +132,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     IntentLauncher intentLauncher;
 
     private final WidgetFactory widgetFactory;
+    @NonNull
+    private List<ImmutableDisplayableQuestion> questions = new ArrayList<>();
     private final LifecycleOwner viewLifecycle;
     private final AudioPlayer audioPlayer;
     private final FormController formController;
@@ -154,31 +161,18 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
             LifecycleOwner viewLifecycle
     ) {
         super(context);
+        updateQuestions(questionPrompts);
+
         this.viewLifecycle = viewLifecycle;
         this.audioPlayer = audioPlayer;
 
         getComponent(context).inject(this);
         inflate(getContext(), R.layout.odk_view, this); // keep in an xml file to enable the vertical scrollbar
 
-        // when the grouped fields are populated by an external app, this will get true.
-        boolean readOnlyOverride = false;
-
-        // handle intent groups that are intended to receive multiple values from an external app
-        if (groups != null && groups.length > 0) {
-            // get the group we are showing -- it will be the last of the groups in the groups list
-            final FormEntryCaption c = groups[groups.length - 1];
-            final String intentString = c.getFormElement().getAdditionalAttribute(null, "intent");
-            if (intentString != null && intentString.length() != 0) {
-                readOnlyOverride = true;
-                addIntentLaunchButton(context, questionPrompts, c, intentString);
-            }
-        }
-
         formController = formEntryViewModel.getFormController();
 
         this.widgetFactory = new WidgetFactory(
                 context,
-                readOnlyOverride,
                 settingsProvider.getUnprotectedSettings().getBoolean(KEY_EXTERNAL_APP_RECORDING),
                 waitingForDataRegistry,
                 questionMediaManager,
@@ -205,8 +199,12 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         // display which group you are in as well as the question
         setGroupText(groups);
 
-        for (FormEntryPrompt question : questionPrompts) {
-            addWidgetForQuestion(question);
+        for (int questionIndex = 0; questionIndex < questionPrompts.length; questionIndex++) {
+            FormEntryPrompt questionPrompt = questionPrompts[questionIndex];
+            if (groups != null && groups.length > 0) {
+                configureIntentGroup(context, questionPrompt, questionIndex);
+            }
+            addWidgetForQuestion(questionPrompt);
         }
 
         setupAudioErrors();
@@ -262,6 +260,34 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     }
 
     /**
+     * Called while iterating over questions for this screen and before displaying the current
+     * question. If the intent group hasn't been identified yet, check to see if the current
+     * question's closest containing group is the intent group. If it is, place the intent launch
+     * button.
+     */
+    private void configureIntentGroup(ComponentActivity context, FormEntryPrompt questionPrompt, int questionIndex) {
+        if (intentGroup == null) { // there can only be one intent group in a field list so if it's been identified, skip this
+            FormEntryCaption[] captions = formController.getGroupsForIndex(questionPrompt.getIndex());
+
+            if (captions != null) {
+                FormEntryCaption closestParent = captions[captions.length - 1];
+
+                String intentString = closestParent.getFormElement().getAdditionalAttribute(null, "intent");
+
+                if (intentString != null && !intentString.isEmpty()) {
+                    intentGroup = closestParent;
+                    intentGroupStartIndex = questionIndex;
+                    try {
+                        addIntentLaunchButton(context, formController.getQuestionPrompts(closestParent.getIndex()), intentGroup, intentString, -1);
+                    } catch (RepeatsInFieldListException e) {
+                        // ignore because it would have been handled as part of building the view initially
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Creates a {@link QuestionWidget} for the given {@link FormEntryPrompt}, sets its listeners,
      * and adds it to the end of the view. If this widget is not the first one, add a divider above
      * it.
@@ -283,7 +309,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * add a divider above it. If the specified {@code index} is beyond the end of the widget list,
      * add it to the end.
      */
-    public void addWidgetForQuestion(FormEntryPrompt question, int index) {
+    private void addWidgetForQuestion(FormEntryPrompt question, int index) {
         if (index > widgets.size() - 1) {
             addWidgetForQuestion(question);
             return;
@@ -294,11 +320,47 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         widgets.add(index, qw);
 
         int indexAccountingForDividers = index * 2;
+
+        if (intentGroup != null) {
+            if (intentGroupStartIndex == -1) {
+                if (isInIntentGroup(question)) {
+                    // find the first question in the intent group to add the launch button there
+                    for (int i = 0; i < widgets.size(); i++) {
+                        if (isInIntentGroup(widgets.get(i).getFormEntryPrompt())) {
+                            String intentString = intentGroup.getFormElement().getAdditionalAttribute(null, "intent");
+                            try {
+                                addIntentLaunchButton(getContext(), formController.getQuestionPrompts(intentGroup.getIndex()), intentGroup, intentString, i * 2 - 1);
+                            } catch (RepeatsInFieldListException e) {
+                                // ignore because it would have been handled as part of building the view initially
+                            }
+                            intentGroupStartIndex = i;
+                            break;
+                        }
+                    }
+                    indexAccountingForDividers += 1;
+                }
+            } else if (index > intentGroupStartIndex) {
+                indexAccountingForDividers += 1;
+            } else if (index < intentGroupStartIndex) {
+                intentGroupStartIndex += 1;
+            }
+        }
+
         if (index > 0) {
             widgetsList.addView(getDividerView(), indexAccountingForDividers - 1);
         }
 
         widgetsList.addView(qw, indexAccountingForDividers, layout);
+    }
+
+    private boolean isInIntentGroup(FormEntryPrompt question) {
+        FormEntryCaption[] groupsForQuestion = formController.getGroupsForIndex(question.getIndex());
+        if (groupsForQuestion != null) {
+            FormEntryCaption closestParent = groupsForQuestion[groupsForQuestion.length - 1];
+            return closestParent.getIndex().equals(intentGroup.getIndex());
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -307,7 +369,13 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * Note: if the given question is of an unsupported type, a text widget will be created.
      */
     private QuestionWidget configureWidgetForQuestion(FormEntryPrompt question) {
-        QuestionWidget qw = widgetFactory.createWidgetFromPrompt(question, permissionsProvider);
+        boolean forceReadOnly = false;
+
+        if (intentGroup != null) {
+            forceReadOnly = isInIntentGroup(question);
+        }
+
+        QuestionWidget qw = widgetFactory.createWidgetFromPrompt(question, permissionsProvider, forceReadOnly);
         qw.setOnLongClickListener(this);
         qw.setValueChangedListener(this);
 
@@ -406,23 +474,26 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     }
 
     /**
-     * Adds a button to launch an intent if the group displayed by this view is an intent group.
-     * An intent group launches an intent and receives multiple values from the launched app.
+     * Adds a button to launch an intent at the end of the widgets list. Should be called at the start
+     * of the intent group for the current field list.
      */
     private void addIntentLaunchButton(Context context, FormEntryPrompt[] questionPrompts,
-                                       FormEntryCaption c, String intentString) {
-        final String buttonText;
-        final String errorString;
+                                       FormEntryCaption c, String intentString, int viewIndex) {
         String v = c.getSpecialFormQuestionText("buttonText");
-        buttonText = (v != null) ? v : context.getString(org.odk.collect.strings.R.string.launch_app);
-        v = c.getSpecialFormQuestionText("noAppErrorString");
-        errorString = (v != null) ? v : context.getString(org.odk.collect.strings.R.string.no_app);
+        final String buttonText = (v != null) ? v : context.getString(org.odk.collect.strings.R.string.launch_app);
 
-        // set button formatting
-        MultiClickSafeMaterialButton launchIntentButton = findViewById(R.id.launchIntentButton);
+        View buttonLayout = LayoutInflater.from(context).inflate(R.layout.launch_intent_button_layout, widgetsList, false);
+        MultiClickSafeMaterialButton launchIntentButton = buttonLayout.findViewById(R.id.launch_intent);
+
         launchIntentButton.setText(buttonText);
         launchIntentButton.setTextSize(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.BODY_LARGE));
-        launchIntentButton.setVisibility(VISIBLE);
+
+        if (viewIndex == -1) {
+            widgetsList.addView(buttonLayout);
+        } else {
+            widgetsList.addView(buttonLayout, viewIndex);
+        }
+
         launchIntentButton.setOnClickListener(view -> {
             String intentName = ExternalAppsUtils.extractIntentName(intentString);
             Map<String, String> parameters = ExternalAppsUtils.extractParameters(intentString);
@@ -470,6 +541,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
             } catch (ActivityNotFoundException e) {
                 Timber.d(e, "ActivityNotFoundExcept");
 
+                String formErrorText = c.getSpecialFormQuestionText("noAppErrorString");
+                final String errorString = (formErrorText != null) ? formErrorText : context.getString(org.odk.collect.strings.R.string.no_app);
                 ToastUtils.showShortToast(errorString);
             }
         });
@@ -500,8 +573,6 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * Saves answers for the widgets in this view. Called when the widgets are in an intent group.
      */
     public void setDataForFields(Bundle bundle) throws JavaRosaException {
-
-
         if (bundle != null) {
             Set<String> keys = bundle.keySet();
             for (String key : keys) {
@@ -517,22 +588,11 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                     if (treeReference.getNameLast().equals(key)) {
                         switch (prompt.getDataType()) {
                             case Constants.DATATYPE_TEXT:
-                                formController.saveAnswer(prompt.getIndex(),
-                                        ExternalAppsUtils.asStringData(answer));
-                                ((StringWidget) questionWidget).setDisplayValueFromModel();
-                                questionWidget.showAnswerContainer();
-                                break;
                             case Constants.DATATYPE_INTEGER:
-                                formController.saveAnswer(prompt.getIndex(),
-                                        ExternalAppsUtils.asIntegerData(answer));
-                                ((StringWidget) questionWidget).setDisplayValueFromModel();
-                                questionWidget.showAnswerContainer();
-                                break;
                             case Constants.DATATYPE_DECIMAL:
-                                formController.saveAnswer(prompt.getIndex(),
-                                        ExternalAppsUtils.asDecimalData(answer));
-                                ((StringWidget) questionWidget).setDisplayValueFromModel();
+                                ((StringWidget) questionWidget).widgetAnswerText.setAnswer(answer.toString());
                                 questionWidget.showAnswerContainer();
+                                widgetValueChanged(questionWidget);
                                 break;
                             case Constants.DATATYPE_BINARY:
                                 try {
@@ -554,6 +614,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                                             ((WidgetDataReceiver) questionWidget).setData(destFile);
 
                                             questionWidget.showAnswerContainer();
+                                            widgetValueChanged(questionWidget);
                                         }
                                     });
                                 } catch (Exception | Error e) {
@@ -646,13 +707,30 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     /**
      * Removes the widget and corresponding divider at a particular index.
      */
-    public void removeWidgetAt(int index) {
+    private void removeWidgetAt(int index) {
         int indexAccountingForDividers = index * 2;
+        int intentGroupStartIndexWithDividers = intentGroupStartIndex * 2;
 
         // There may be a first TextView to display the group path. See addGroupText(FormEntryCaption[])
         if (widgetsList.getChildCount() > 0 && widgetsList.getChildAt(0) instanceof TextView) {
             indexAccountingForDividers += 1;
+            intentGroupStartIndexWithDividers += 1;
         }
+
+        // There may be an app launch button for an intent group
+        if (intentGroupStartIndex != -1) {
+            // There must be at least one field in an intent group and relevance must be applied at
+            // the group level so remove the button if the field immediately after it is removed
+            if (index == intentGroupStartIndex) {
+                widgetsList.removeViewAt(intentGroupStartIndexWithDividers);
+                intentGroupStartIndex = -1;
+            } else if (index > intentGroupStartIndex) {
+                indexAccountingForDividers += 1;
+            } else {
+                intentGroupStartIndex -= 1;
+            }
+        }
+
         widgetsList.removeViewAt(indexAccountingForDividers);
 
         if (index > 0) {
@@ -669,6 +747,57 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     public void widgetValueChanged(QuestionWidget changedWidget) {
         if (widgetValueChangedListener != null) {
             widgetValueChangedListener.widgetValueChanged(changedWidget);
+        }
+    }
+
+    public void onUpdated(FormIndex lastChangedIndex, FormEntryPrompt[] questionsAfterSave) {
+        Map<FormIndex, FormEntryPrompt> questionsAfterSaveByIndex = new HashMap<>();
+        for (FormEntryPrompt question : questionsAfterSave) {
+            questionsAfterSaveByIndex.put(question.getIndex(), question);
+        }
+
+        // Identify widgets to remove or rebuild (by removing and re-adding). We'd like to do the
+        // identification and removal in the same pass but removal has to be done in a loop that
+        // starts from the end and itemset-based select choices will only be correctly recomputed
+        // if accessed from beginning to end because the call on sameAs is what calls
+        // populateDynamicChoices. See https://github.com/getodk/javarosa/issues/436
+        List<FormEntryPrompt> questionsThatHaveNotChanged = new ArrayList<>();
+        List<FormIndex> formIndexesToRemove = new ArrayList<>();
+        for (ImmutableDisplayableQuestion questionBeforeSave : questions) {
+            FormEntryPrompt questionAtSameFormIndex = questionsAfterSaveByIndex.get(questionBeforeSave.getFormIndex());
+
+            // Always rebuild questions that use database-driven external data features since they
+            // bypass SelectChoices stored in ImmutableDisplayableQuestion
+            if (questionBeforeSave.sameAs(questionAtSameFormIndex)
+                    && !formController.usesDatabaseExternalDataFeature(questionBeforeSave.getFormIndex())) {
+                questionsThatHaveNotChanged.add(questionAtSameFormIndex);
+            } else if (!lastChangedIndex.equals(questionBeforeSave.getFormIndex())) {
+                formIndexesToRemove.add(questionBeforeSave.getFormIndex());
+            }
+        }
+
+        for (int i = questions.size() - 1; i >= 0; i--) {
+            ImmutableDisplayableQuestion questionBeforeSave = questions.get(i);
+
+            if (formIndexesToRemove.contains(questionBeforeSave.getFormIndex())) {
+                removeWidgetAt(i);
+            }
+        }
+
+        for (int i = 0; i < questionsAfterSave.length; i++) {
+            if (!questionsThatHaveNotChanged.contains(questionsAfterSave[i])
+                    && !questionsAfterSave[i].getIndex().equals(lastChangedIndex)) {
+                addWidgetForQuestion(questionsAfterSave[i], i);
+            }
+        }
+
+        updateQuestions(questionsAfterSave);
+    }
+
+    private void updateQuestions(FormEntryPrompt[] prompts) {
+        questions.clear();
+        for (FormEntryPrompt questionAfterSave : prompts) {
+            this.questions.add(new ImmutableDisplayableQuestion(questionAfterSave));
         }
     }
 }

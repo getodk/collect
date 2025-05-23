@@ -1,5 +1,6 @@
 package org.odk.collect.android.formentry;
 
+import static org.odk.collect.android.javarosawrapper.FormControllerExt.getQuestionPrompts;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 import static org.odk.collect.androidshared.livedata.LiveDataUtils.observe;
 
@@ -29,6 +30,7 @@ import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.javarosawrapper.ValidationResult;
+import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.utilities.ChangeLocks;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.androidshared.async.TrackableWorker;
@@ -42,12 +44,15 @@ import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import kotlin.Pair;
+import timber.log.Timber;
 
 public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader {
 
@@ -439,6 +444,35 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         newEditMessageAlreadyShown = true;
 
         return shouldShowNewEditMessage;
+    }
+
+    // The method saves questions one by one in order to support calculations in field-list groups
+    public FormEntryPrompt[] saveFieldList(HashMap<FormIndex, IAnswerData> answers) throws RepeatsInFieldListException {
+        FormEntryPrompt[] questionsBeforeSave = getQuestionPrompts(getFormController());
+        List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave = new ArrayList<>();
+        for (FormEntryPrompt questionBeforeSave : questionsBeforeSave) {
+            immutableQuestionsBeforeSave.add(new ImmutableDisplayableQuestion(questionBeforeSave));
+        }
+
+        int index = 0;
+        for (Map.Entry<FormIndex, IAnswerData> answer : answers.entrySet()) {
+            // Questions with calculates will have their answers updated as the questions they depend on are saved
+            if (!isQuestionRecalculated(questionsBeforeSave[index], immutableQuestionsBeforeSave.get(index))) {
+                try {
+                    formController.saveOneScreenAnswer(answer.getKey(), answer.getValue(), false);
+                } catch (JavaRosaException e) {
+                    Timber.e(e);
+                }
+            }
+
+            index++;
+        }
+
+        return getQuestionPrompts(formController);
+    }
+
+    private boolean isQuestionRecalculated(FormEntryPrompt mutableQuestionBeforeSave, ImmutableDisplayableQuestion immutableQuestionBeforeSave) {
+        return !Objects.equals(mutableQuestionBeforeSave.getAnswerText(), immutableQuestionBeforeSave.getAnswerText());
     }
 
     public interface AnswerListener {
