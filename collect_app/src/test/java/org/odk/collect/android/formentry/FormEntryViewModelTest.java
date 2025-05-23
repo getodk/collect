@@ -55,7 +55,7 @@ public class FormEntryViewModelTest {
     private FormIndex startingIndex;
     private AuditEventLogger auditEventLogger;
     private FakeScheduler scheduler;
-    private Form form = mock();
+    private final Form form = new Form.Builder().build();
     private final FormSessionRepository formSessionRepository = new InMemFormSessionRepository();
     private final FormsRepository formsRepository = new InMemFormsRepository();
     private final ChangeLocks changeLocks = new ChangeLocks(new BooleanChangeLock(), new BooleanChangeLock());
@@ -456,11 +456,32 @@ public class FormEntryViewModelTest {
     public void exit_releasesFormsLockOnlyIfFormHasEntities() {
         changeLocks.getFormsLock().lock();
 
-        when(form.usesEntities()).thenReturn(false);
         viewModel.exit();
         assertThat(changeLocks.getFormsLock().tryLock(), equalTo(false));
 
-        when(form.usesEntities()).thenReturn(true);
+        Form formWithEntities = new Form.Builder(form).usesEntities(true).build();
+        formSessionRepository.set("blah", formController, formWithEntities);
+        viewModel = new FormEntryViewModel(() -> 0L, scheduler, formSessionRepository, "blah", formsRepository, changeLocks);
+
+        viewModel.exit();
+        assertThat(changeLocks.getFormsLock().tryLock(), equalTo(true));
+    }
+
+    @Test
+    public void exit_doesNotReleaseFormsLockIfFormDoesNotHasEntities() {
+        changeLocks.getFormsLock().lock();
+
+        viewModel.exit();
+        assertThat(changeLocks.getFormsLock().tryLock(), equalTo(false));
+    }
+
+    @Test
+    public void exit_releasesFormsLockIfFormHasEntities() {
+        changeLocks.getFormsLock().lock();
+
+        Form formWithEntities = new Form.Builder(form).usesEntities(true).build();
+        formSessionRepository.set("blah", formController, formWithEntities);
+
         viewModel.exit();
         assertThat(changeLocks.getFormsLock().tryLock(), equalTo(true));
     }
