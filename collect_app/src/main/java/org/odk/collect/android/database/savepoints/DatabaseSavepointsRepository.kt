@@ -3,6 +3,7 @@ package org.odk.collect.android.database.savepoints
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import androidx.core.database.getLongOrNull
 import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_DATABASE_NAME
 import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_DATABASE_VERSION
 import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_TABLE_NAME
@@ -120,7 +121,7 @@ class DatabaseSavepointsRepository(
 
         return Savepoint(
             cursor.getLong(formDbIdColumnIndex),
-            if (cursor.isNull(instanceDbIdColumnIndex)) null else cursor.getLong(instanceDbIdColumnIndex),
+            cursor.getLongOrNull(instanceDbIdColumnIndex),
             getAbsoluteFilePath(
                 cachePath,
                 cursor.getString(savepointFilePathColumnIndex)

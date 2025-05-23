@@ -3,6 +3,7 @@ package org.odk.collect.android.database
 import android.content.ContentValues
 import android.database.Cursor
 import android.provider.BaseColumns
+import androidx.core.database.getLongOrNull
 import org.odk.collect.android.database.forms.DatabaseFormColumns
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import org.odk.collect.androidshared.utils.PathUtils.getAbsoluteFilePath
@@ -99,7 +100,7 @@ object DatabaseObjectMapper {
             .autoDelete(cursor.getString(autoDeleteColumnIndex))
             .geometryXpath(cursor.getString(geometryXpathColumnIndex))
             .deleted(!cursor.isNull(deletedDateColumnIndex))
-            .lastDetectedAttachmentsUpdateDate(if (cursor.isNull(lastDetectedAttachmentsUpdateDateColumnIndex)) null else cursor.getLong(lastDetectedAttachmentsUpdateDateColumnIndex))
+            .lastDetectedAttachmentsUpdateDate(cursor.getLongOrNull(lastDetectedAttachmentsUpdateDateColumnIndex))
             .usesEntities(Boolean.valueOf(cursor.getString(usesEntitiesColumnIndex)))
             .build()
     }
@@ -165,42 +166,14 @@ object DatabaseObjectMapper {
             .formVersion(cursor.getString(jrVersionColumnIndex))
             .status(cursor.getString(statusColumnIndex))
             .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
-            .finalizationDate(
-                if (cursor.isNull(finalizationDateColumnIndex)) {
-                    null
-                } else {
-                    cursor.getLong(
-                        finalizationDateColumnIndex
-                    )
-                }
-            )
-            .deletedDate(
-                if (cursor.isNull(deletedDateColumnIndex)) {
-                    null
-                } else {
-                    cursor.getLong(
-                        deletedDateColumnIndex
-                    )
-                }
-            )
+            .finalizationDate(cursor.getLongOrNull(finalizationDateColumnIndex))
+            .deletedDate(cursor.getLongOrNull(deletedDateColumnIndex))
             .geometryType(cursor.getString(geometryTypeColumnIndex))
             .geometry(cursor.getString(geometryColumnIndex))
             .dbId(cursor.getLong(databaseIdIndex))
             .canDeleteBeforeSend(Boolean.valueOf(cursor.getString(canDeleteBeforeSendIndex)))
-            .editOf(
-                if (cursor.isNull(editOfColumnIndex)) {
-                    null
-                } else {
-                    cursor.getLong(editOfColumnIndex)
-                }
-            )
-            .editNumber(
-                if (cursor.isNull(editNumberColumnIndex)) {
-                    null
-                } else {
-                    cursor.getLong(editNumberColumnIndex)
-                }
-            )
+            .editOf(cursor.getLongOrNull(editOfColumnIndex))
+            .editNumber(cursor.getLongOrNull(editNumberColumnIndex))
             .build()
     }
 
