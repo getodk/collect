@@ -65,7 +65,11 @@ public class AudioControllerView extends FrameLayout {
         seekBar.setOnSeekBarChangeListener(swipeListener);
 
         binding.play.setOnClickListener(view -> playClicked());
-        binding.remove.setOnClickListener(view -> listener.onRemoveClicked());
+        binding.remove.setOnClickListener(view -> {
+            if (listener != null) {
+                listener.onRemoveClicked();
+            }
+        });
     }
 
     private void playClicked() {
