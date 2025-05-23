@@ -13,6 +13,7 @@ import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.pages.ViewSentFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.NotificationDrawerRule
@@ -211,7 +212,26 @@ class AutoSendTest {
     }
 
     @Test
-    fun whenFormHasAutoSend_formsAreSentInOldestFirstOrder() {
+    fun whenFormHasAutoSend_formsAreSentInOldestFirstOrderBasedOnFinalizationTime() {
+        /**
+         * Historically, the only timestamp we tracked for instances was the "last status changed" date.
+         * However, this timestamp is updated any time the instance status changes—not only when a form
+         * is finalized, but also, for example, when a submission attempt fails.
+         *
+         * This could lead to incorrect ordering when sending finalized forms. For instance, if forms A and B
+         * were finalized in that order, and submission of form A failed, its "last status changed" timestamp
+         * would be updated. As a result, when attempting to send both forms later, form B could be sent first,
+         * even though form A was finalized earlier.
+         *
+         * To ensure that forms are always sent in the order they were finalized, we introduced a new timestamp
+         * to track the finalization time specifically.
+         *
+         * This test reproduces the scenario described above to verify that the new finalization timestamp is used
+         * for ordering. It deliberately updates the "last status changed" date of the older instance
+         * to confirm that it does not affect the sending order.
+         */
+        testDependencies.server.alwaysReturnError()
+
         rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
             .copyForm("one-question-autosend.xml")
@@ -226,7 +246,15 @@ class AutoSendTest {
             .swipeToEndScreen()
             .clickSend()
 
-        testDependencies.scheduler.runDeferredTasks()
+            .clickSendFinalizedForm(2)
+            .sortByDateOldestFirst()
+            .selectForm(0)
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
+            .also {
+                testDependencies.server.neverReturnError()
+                testDependencies.scheduler.runDeferredTasks()
+            }
 
         val firstFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[0].inputStream().reader()).rootElement
         val secondFormRootElement = XFormParser.getXMLDocument(testDependencies.server.submissions[1].inputStream().reader()).rootElement

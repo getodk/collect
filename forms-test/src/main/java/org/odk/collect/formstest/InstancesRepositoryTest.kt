@@ -334,6 +334,73 @@ abstract class InstancesRepositoryTest {
     }
 
     @Test
+    fun save_whenStatusIsFinalized_populatesFinalizationDate() {
+        val clock = mock<Supplier<Long>>()
+        whenever(clock.get()).thenReturn(123L)
+
+        val instancesRepository = buildSubject(clock)
+
+        val instance = instancesRepository.save(
+            buildInstance("formid", "1", instancesDir.absolutePath)
+                .status(Instance.STATUS_COMPLETE)
+                .build()
+        )
+        assertThat(
+            instancesRepository[instance.dbId]!!.finalizationDate,
+            equalTo(123L)
+        )
+    }
+
+    @Test
+    fun save_whenStatusIsFinalizedAndFinalizationDateIsAlreadyPopulated_doesNotUpdateFinalizationDate() {
+        val clock = mock<Supplier<Long>>()
+        whenever(clock.get()).thenReturn(123L)
+
+        val instancesRepository = buildSubject(clock)
+
+        val instance = instancesRepository.save(
+            buildInstance("formid", "1", instancesDir.absolutePath)
+                .status(Instance.STATUS_COMPLETE)
+                .build()
+        )
+        whenever(clock.get()).thenReturn(456L)
+        instancesRepository.save(instance)
+        assertThat(
+            instancesRepository[instance.dbId]!!.finalizationDate,
+            equalTo(123L)
+        )
+    }
+
+    @Test
+    fun save_whenStatusIsNotFinalized_doesNotPopulateFinalizationDate() {
+        val clock = mock<Supplier<Long>>()
+        whenever(clock.get()).thenReturn(123L)
+
+        val instancesRepository = buildSubject(clock)
+
+        val nonFinalizedStatuses = listOf(
+            Instance.STATUS_VALID,
+            Instance.STATUS_INVALID,
+            Instance.STATUS_NEW_EDIT,
+            Instance.STATUS_SUBMISSION_FAILED,
+            Instance.STATUS_SUBMITTED
+        )
+
+        for (status in nonFinalizedStatuses) {
+            val instance = instancesRepository.save(
+                buildInstance("formid", "1", instancesDir.absolutePath)
+                    .status(status)
+                    .build()
+            )
+
+            assertThat(
+                instancesRepository[instance.dbId]!!.finalizationDate,
+                equalTo(null)
+            )
+        }
+    }
+
+    @Test
     fun save_whenStatusIsNull_usesIncomplete() {
         val instancesRepository = buildSubject()
 
@@ -482,13 +549,28 @@ abstract class InstancesRepositoryTest {
     }
 
     @Test
+    fun delete_failsWhenDeletingInstanceWithEdits() {
+        val instancesRepository = buildSubject()
+
+        val originalInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir)
+        val originalInstanceDbId = instancesRepository.save(originalInstance).dbId
+
+        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId, editNumber = 1)
+        instancesRepository.save(editedInstance)
+
+        assertThrows(InstancesRepository.IntegrityException::class.java) {
+            instancesRepository.delete(originalInstanceDbId)
+        }
+    }
+
+    @Test
     fun save_failsWhenEditOfPointsAtItsOwnDbId() {
         val instancesRepository = buildSubject()
 
         val originalInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir)
-        val originalInstanceDbId = instancesRepository.save(originalInstance)
+        val originalInstanceDbId = instancesRepository.save(originalInstance).dbId
 
-        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId.dbId + 1, editNumber = 1)
+        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId + 1, editNumber = 1)
 
         assertThrows(InstancesRepository.IntegrityException::class.java) {
             instancesRepository.save(editedInstance)
@@ -500,9 +582,9 @@ abstract class InstancesRepositoryTest {
         val instancesRepository = buildSubject()
 
         val originalInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir)
-        val originalInstanceDbId = instancesRepository.save(originalInstance)
+        val originalInstanceDbId = instancesRepository.save(originalInstance).dbId
 
-        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId.dbId + 100, editNumber = 1)
+        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId + 100, editNumber = 1)
 
         assertThrows(InstancesRepository.IntegrityException::class.java) {
             instancesRepository.save(editedInstance)
@@ -528,9 +610,9 @@ abstract class InstancesRepositoryTest {
         val instancesRepository = buildSubject()
 
         val originalInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir)
-        val originalInstanceDbId = instancesRepository.save(originalInstance)
+        val originalInstanceDbId = instancesRepository.save(originalInstance).dbId
 
-        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId.dbId + 1)
+        val editedInstance = InstanceFixtures.instance(displayName = "Form1", instancesDir = instancesDir, editOf = originalInstanceDbId)
 
         assertThrows(InstancesRepository.IntegrityException::class.java) {
             instancesRepository.save(editedInstance)

@@ -8,6 +8,7 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_NUMBER;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_OF;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.FINALIZATION_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.INSTANCE_FILE_PATH;
@@ -40,7 +41,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
             LAST_STATUS_CHANGE_DATE, DELETED_DATE, GEOMETRY, GEOMETRY_TYPE};
 
     public void onCreate(SQLiteDatabase db) {
-        createInstancesTableV9(db);
+        createInstancesTableV10(db);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -64,8 +65,10 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
             case 8:
                 upgradeToVersion9(db);
             case 9:
+                upgradeToVersion10(db);
+            case 10:
                 // Remember to bump the database version number in {@link org.odk.collect.android.database.DatabaseConstants}
-                // upgradeToVersion10(db);
+                // upgradeToVersion11(db);
         }
     }
 
@@ -153,6 +156,14 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
         db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + EDIT_NUMBER + " integer CHECK ((" + EDIT_OF + " IS NULL AND " + EDIT_NUMBER + " IS NULL) OR + (" + EDIT_OF + " IS NOT NULL AND + " + EDIT_NUMBER + " IS NOT NULL))");
     }
 
+    private void upgradeToVersion10(SQLiteDatabase db) {
+        db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + FINALIZATION_DATE + " date");
+        db.execSQL(
+                "UPDATE " + INSTANCES_TABLE_NAME + " SET " + FINALIZATION_DATE + " = " + LAST_STATUS_CHANGE_DATE + " WHERE " + STATUS + " IN (?, ?, ?);",
+                new Object[] {Instance.STATUS_COMPLETE, Instance.STATUS_SUBMITTED, Instance.STATUS_SUBMISSION_FAILED}
+        );
+    }
+
     private void createInstancesTableV5(SQLiteDatabase db, String name) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + name + " ("
                 + _ID + " integer primary key, "
@@ -228,6 +239,28 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
                 + JR_VERSION + " text, "
                 + STATUS + " text not null, "
                 + LAST_STATUS_CHANGE_DATE + " date not null, "
+                + DELETED_DATE + " date, "
+                + GEOMETRY + " text, "
+                + GEOMETRY_TYPE + " text, "
+                + EDIT_OF + " integer REFERENCES " + INSTANCES_TABLE_NAME + "(" + _ID + ") CHECK (" + EDIT_OF + " != " + _ID + "),"
+                + EDIT_NUMBER + " integer CHECK ((" + EDIT_OF + " IS NULL AND " + EDIT_NUMBER + " IS NULL) OR + (" + EDIT_OF + " IS NOT NULL AND + " + EDIT_NUMBER + " IS NOT NULL))"
+                + ");"
+        );
+    }
+
+    public void createInstancesTableV10(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + INSTANCES_TABLE_NAME + " ("
+                + _ID + " integer primary key autoincrement, "
+                + DISPLAY_NAME + " text not null, "
+                + SUBMISSION_URI + " text, "
+                + CAN_EDIT_WHEN_COMPLETE + " text, "
+                + CAN_DELETE_BEFORE_SEND + " text, "
+                + INSTANCE_FILE_PATH + " text not null, "
+                + JR_FORM_ID + " text not null, "
+                + JR_VERSION + " text, "
+                + STATUS + " text not null, "
+                + LAST_STATUS_CHANGE_DATE + " date not null, "
+                + FINALIZATION_DATE + " date, "
                 + DELETED_DATE + " date, "
                 + GEOMETRY + " text, "
                 + GEOMETRY_TYPE + " text, "

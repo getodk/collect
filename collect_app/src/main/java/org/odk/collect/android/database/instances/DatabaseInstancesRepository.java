@@ -29,6 +29,7 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_NUMBER;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.EDIT_OF;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.FINALIZATION_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.INSTANCE_FILE_PATH;
@@ -145,29 +146,37 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public void delete(Long id) {
-        Instance instance = get(id);
+        try {
+            Instance instance = get(id);
 
-        databaseConnection.getWritableDatabase().delete(
-                INSTANCES_TABLE_NAME,
-                _ID + "=?",
-                new String[]{String.valueOf(id)}
-        );
+            databaseConnection.getWritableDatabase().delete(
+                    INSTANCES_TABLE_NAME,
+                    _ID + "=?",
+                    new String[]{String.valueOf(id)}
+            );
 
-        deleteInstanceFiles(instance);
+            deleteInstanceFiles(instance);
+        } catch (SQLiteConstraintException e) {
+            throw new IntegrityException();
+        }
     }
 
     @Override
     public void deleteAll() {
-        List<Instance> instances = getAll();
+        try {
+            List<Instance> instances = getAll();
 
-        databaseConnection.getWritableDatabase().delete(
-                INSTANCES_TABLE_NAME,
-                null,
-                null
-        );
+            databaseConnection.getWritableDatabase().delete(
+                    INSTANCES_TABLE_NAME,
+                    null,
+                    null
+            );
 
-        for (Instance instance : instances) {
-            deleteInstanceFiles(instance);
+            for (Instance instance : instances) {
+                deleteInstanceFiles(instance);
+            }
+        } catch (SQLiteConstraintException e) {
+            throw new IntegrityException();
         }
     }
 
@@ -179,10 +188,18 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                     .build();
         }
 
+        Long currentTime = clock.get();
+
+        if (instance.getStatus().equals(Instance.STATUS_COMPLETE) && instance.getFinalizationDate() == null) {
+            instance = new Instance.Builder(instance)
+                    .finalizationDate(currentTime)
+                    .build();
+        }
+
         if (instance.getDbId() == null) {
             if (instance.getLastStatusChangeDate() == null) {
                 instance = new Instance.Builder(instance)
-                        .lastStatusChangeDate(clock.get())
+                        .lastStatusChangeDate(currentTime)
                         .build();
             }
 
@@ -191,7 +208,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         } else {
             if (instance.getDeletedDate() == null) {
                 instance = new Instance.Builder(instance)
-                        .lastStatusChangeDate(clock.get())
+                        .lastStatusChangeDate(currentTime)
                         .build();
             }
 
@@ -248,6 +265,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                     JR_VERSION,
                     STATUS,
                     LAST_STATUS_CHANGE_DATE,
+                    FINALIZATION_DATE,
                     DELETED_DATE,
                     GEOMETRY,
                     GEOMETRY_TYPE,
