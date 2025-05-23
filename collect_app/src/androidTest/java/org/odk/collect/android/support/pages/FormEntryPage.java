@@ -341,7 +341,17 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage assertAnswer(String questionText, String answer) {
-        onView(getQuestionFieldMatcher(questionText)).check(matches(withText(answer)));
+        return assertAnswer(questionText, answer, false);
+    }
+
+    public FormEntryPage assertAnswer(String questionText, String answer, Boolean readOnly) {
+        if (readOnly) {
+            onView(allOf(isDescendantOfA(isQuestionView(questionText)), isDisplayed(), withText(answer)))
+                    .check(matches(not(doesNotExist())));
+        } else {
+            onView(getQuestionFieldMatcher(questionText)).check(matches(withText(answer)));
+        }
+
         return this;
     }
 
