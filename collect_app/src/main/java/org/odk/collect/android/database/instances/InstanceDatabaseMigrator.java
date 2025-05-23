@@ -41,7 +41,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
             LAST_STATUS_CHANGE_DATE, DELETED_DATE, GEOMETRY, GEOMETRY_TYPE};
 
     public void onCreate(SQLiteDatabase db) {
-        createInstancesTableV9(db);
+        createInstancesTableV10(db);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -65,8 +65,10 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
             case 8:
                 upgradeToVersion9(db);
             case 9:
+                upgradeToVersion10(db);
+            case 10:
                 // Remember to bump the database version number in {@link org.odk.collect.android.database.DatabaseConstants}
-                // upgradeToVersion10(db);
+                // upgradeToVersion11(db);
         }
     }
 
@@ -152,6 +154,9 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
     private void upgradeToVersion9(SQLiteDatabase db) {
         db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + EDIT_OF + " integer REFERENCES " + INSTANCES_TABLE_NAME + "(" + _ID + ") CHECK (" + EDIT_OF + " != " + _ID + ")");
         db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + EDIT_NUMBER + " integer CHECK ((" + EDIT_OF + " IS NULL AND " + EDIT_NUMBER + " IS NULL) OR + (" + EDIT_OF + " IS NOT NULL AND + " + EDIT_NUMBER + " IS NOT NULL))");
+    }
+
+    private void upgradeToVersion10(SQLiteDatabase db) {
         db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " + FINALIZATION_DATE + " date");
         db.execSQL(
                 "UPDATE " + INSTANCES_TABLE_NAME + " SET " + FINALIZATION_DATE + " = " + LAST_STATUS_CHANGE_DATE + " WHERE " + STATUS + " IN (?, ?, ?);",
@@ -223,6 +228,27 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
     }
 
     public void createInstancesTableV9(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + INSTANCES_TABLE_NAME + " ("
+                + _ID + " integer primary key autoincrement, "
+                + DISPLAY_NAME + " text not null, "
+                + SUBMISSION_URI + " text, "
+                + CAN_EDIT_WHEN_COMPLETE + " text, "
+                + CAN_DELETE_BEFORE_SEND + " text, "
+                + INSTANCE_FILE_PATH + " text not null, "
+                + JR_FORM_ID + " text not null, "
+                + JR_VERSION + " text, "
+                + STATUS + " text not null, "
+                + LAST_STATUS_CHANGE_DATE + " date not null, "
+                + DELETED_DATE + " date, "
+                + GEOMETRY + " text, "
+                + GEOMETRY_TYPE + " text, "
+                + EDIT_OF + " integer REFERENCES " + INSTANCES_TABLE_NAME + "(" + _ID + ") CHECK (" + EDIT_OF + " != " + _ID + "),"
+                + EDIT_NUMBER + " integer CHECK ((" + EDIT_OF + " IS NULL AND " + EDIT_NUMBER + " IS NULL) OR + (" + EDIT_OF + " IS NOT NULL AND + " + EDIT_NUMBER + " IS NOT NULL))"
+                + ");"
+        );
+    }
+
+    public void createInstancesTableV10(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + INSTANCES_TABLE_NAME + " ("
                 + _ID + " integer primary key autoincrement, "
                 + DISPLAY_NAME + " text not null, "
