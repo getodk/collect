@@ -295,7 +295,7 @@ dependencies {
 
     implementation libs.persianJodaTime
     implementation libs.myanmarCalendar
-    implementation files('libs/bikram-sambat-1.1.0.jar')
+    implementation files('libs/bikram-sambat-1.8.0.jar')
     implementation libs.commonsIo
     implementation (libs.opencsv) {
         exclude group: 'commons-logging'
