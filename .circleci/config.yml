@@ -23,7 +23,7 @@ jobs:
       - checkout
       - run:
           name: Generate combined build.gradle file for cache key
-          command: cat build.gradle */build.gradle */build.gradle.kts .circleci/gradle-compile.properties .circleci/config.yml gradle/libs.versions.toml > deps.txt
+          command: cat build.gradle */build.gradle */build.gradle.kts .circleci/config.yml gradle/libs.versions.toml > deps.txt
       - restore_cache:
           keys:
             - compile-deps-{{ checksum "deps.txt" }}
@@ -93,7 +93,7 @@ jobs:
 
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle-large.properties ~/.gradle/gradle.properties
 
       - run:
           name: Run code quality checks
@@ -203,7 +203,7 @@ jobs:
 
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle-large.properties ~/.gradle/gradle.properties
 
       - run:
           name: Assemble connected test build
