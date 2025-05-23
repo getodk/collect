@@ -23,7 +23,7 @@ jobs:
       - checkout
       - run:
           name: Generate combined build.gradle file for cache key
-          command: cat build.gradle */build.gradle */build.gradle.kts .circleci/gradle.properties .circleci/config.yml gradle/libs.versions.toml > deps.txt
+          command: cat build.gradle */build.gradle */build.gradle.kts .circleci/config.yml gradle/libs.versions.toml > deps.txt
       - restore_cache:
           keys:
             - compile-deps-{{ checksum "deps.txt" }}
@@ -33,7 +33,7 @@ jobs:
             - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle-compile.properties ~/.gradle/gradle.properties
 
       - run:
           name: Download Robolectric deps
@@ -93,11 +93,15 @@ jobs:
 
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle-large.properties ~/.gradle/gradle.properties
 
       - run:
           name: Run code quality checks
-          command: ./gradlew pmd ktlintCheck checkstyle lintDebug
+          command: ./gradlew pmd ktlintCheck checkstyle
+
+      - run:
+          name: Run Android lint
+          command: ./gradlew lintDebug
 
   test_modules:
     <<: *android_config
@@ -203,7 +207,7 @@ jobs:
 
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle-large.properties ~/.gradle/gradle.properties
 
       - run:
           name: Assemble connected test build
