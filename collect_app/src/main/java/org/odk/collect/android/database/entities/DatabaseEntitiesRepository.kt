@@ -143,25 +143,23 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     }
 
     override fun updateList(list: String, hash: String, needsApproval: Boolean) {
+        if (!listExists(list)) {
+            createList(list)
+        }
+
         val contentValues = ContentValues().also {
             it.put(ListsTable.COLUMN_NAME, list)
             it.put(ListsTable.COLUMN_HASH, hash)
             it.put(ListsTable.COLUMN_NEEDS_APPROVAL, if (needsApproval) 1 else 0)
         }
 
-        if (listExists(list)) {
-            databaseConnection.withConnection {
-                writableDatabase.update(
-                    ListsTable.TABLE_NAME,
-                    contentValues,
-                    "${ListsTable.COLUMN_NAME} = ?",
-                    arrayOf(list)
-                )
-            }
-        } else {
-            databaseConnection.withConnection {
-                writableDatabase.insert(ListsTable.TABLE_NAME, null, contentValues)
-            }
+        databaseConnection.withConnection {
+            writableDatabase.update(
+                ListsTable.TABLE_NAME,
+                contentValues,
+                "${ListsTable.COLUMN_NAME} = ?",
+                arrayOf(list)
+            )
         }
     }
 
