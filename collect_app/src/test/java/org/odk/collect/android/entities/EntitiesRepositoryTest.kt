@@ -824,5 +824,6 @@ abstract class EntitiesRepositoryTest {
         val repository = buildSubject()
         repository.updateList("blah", "abcd", false)
         assertThat(repository.getLists().size, equalTo(1))
+        assertThat(repository.query("blah").size, equalTo(0))
     }
 }
