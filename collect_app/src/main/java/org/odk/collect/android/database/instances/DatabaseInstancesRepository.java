@@ -146,29 +146,37 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public void delete(Long id) {
-        Instance instance = get(id);
+        try {
+            Instance instance = get(id);
 
-        databaseConnection.getWritableDatabase().delete(
-                INSTANCES_TABLE_NAME,
-                _ID + "=?",
-                new String[]{String.valueOf(id)}
-        );
+            databaseConnection.getWritableDatabase().delete(
+                    INSTANCES_TABLE_NAME,
+                    _ID + "=?",
+                    new String[]{String.valueOf(id)}
+            );
 
-        deleteInstanceFiles(instance);
+            deleteInstanceFiles(instance);
+        } catch (SQLiteConstraintException e) {
+            throw new IntegrityException();
+        }
     }
 
     @Override
     public void deleteAll() {
-        List<Instance> instances = getAll();
+        try {
+            List<Instance> instances = getAll();
 
-        databaseConnection.getWritableDatabase().delete(
-                INSTANCES_TABLE_NAME,
-                null,
-                null
-        );
+            databaseConnection.getWritableDatabase().delete(
+                    INSTANCES_TABLE_NAME,
+                    null,
+                    null
+            );
 
-        for (Instance instance : instances) {
-            deleteInstanceFiles(instance);
+            for (Instance instance : instances) {
+                deleteInstanceFiles(instance);
+            }
+        } catch (SQLiteConstraintException e) {
+            throw new IntegrityException();
         }
     }
 
