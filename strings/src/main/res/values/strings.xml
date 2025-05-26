@@ -556,7 +556,7 @@
     <string name="location_accuracy">Accuracy: %1$s</string>
     <string name="location_accuracy_unacceptable">⚠️ Accuracy: %1$s (unacceptable)</string>
     <string name="provider_disabled_error">Sorry, Location providers are disabled!</string>
-    <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
+    <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$s m\nAccuracy: %4$s m</string>
     <string name="google_play_services_not_available">This form wants to track your location but Google Play Services are not available.</string>
     <string name="location_providers_disabled_dialog_message">This form wants to track your location but location providers are disabled. Please enable in Android settings.</string>
     <!-- Action to go to Android settings. Displayed when location providers are disabled. -->
