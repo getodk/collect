@@ -40,6 +40,7 @@ class BarcodeScannerViewContainer(context: Context, attrs: AttributeSet?) :
 
 abstract class BarcodeScannerView(context: Context) : FrameLayout(context) {
     protected abstract fun decodeContinuous(callback: (String) -> Unit)
+    abstract fun finish()
     abstract fun setTorchOn(on: Boolean)
     abstract fun setTorchListener(torchListener: TorchListener)
 

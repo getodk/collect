@@ -17,6 +17,8 @@ class FakeBarcodeScannerView(context: Context) : BarcodeScannerView(context) {
         this.callback = callback
     }
 
+    override fun finish() {}
+
     override fun setTorchOn(on: Boolean) = Unit
     override fun setTorchListener(torchListener: TorchListener) = Unit
 

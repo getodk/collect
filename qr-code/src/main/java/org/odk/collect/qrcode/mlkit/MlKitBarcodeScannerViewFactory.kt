@@ -102,10 +102,13 @@ private class MlKitBarcodeScannerView(
                 val value = result.getValue(barcodeScanner)
                 if (value!!.isNotEmpty()) {
                     callback(value.first().rawValue!!)
-                    cameraController.unbind()
                 }
             }
         )
+    }
+
+    override fun finish() {
+        cameraController.unbind()
     }
 
     override fun setTorchOn(on: Boolean) {
