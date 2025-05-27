@@ -54,6 +54,7 @@ import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
@@ -866,6 +867,10 @@ public class FormHierarchyFragment extends Fragment {
 
         @Override
         public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+            if (!MultiClickGuard.allowClick("formEntryScreen")) {
+                return false;
+            }
+
             if (menuItem.getItemId() == R.id.menu_edit) {
                 onClickListener.onEditClicked();
                 return true;
