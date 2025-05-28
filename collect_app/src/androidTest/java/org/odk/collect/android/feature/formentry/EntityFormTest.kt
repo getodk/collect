@@ -1,6 +1,13 @@
 package org.odk.collect.android.feature.formentry
 
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.hasSibling
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.containsString
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -152,6 +159,71 @@ class EntityFormTest {
             .startBlankForm("One Question Entity Update")
             .assertText("Ro-Ro Roy")
             .assertTextDoesNotExist("Roman Roy")
+    }
+
+    @Test
+    fun entityListFormsAllShowAsUpdatedTogether() {
+        testDependencies.server.apply {
+            addForm(
+                "one-question-entity-update.xml",
+                listOf(EntityListItem("people.csv", "people.csv", 1))
+            )
+
+            addForm(
+                "one-question-entity-follow-up.xml",
+                listOf(EntityListItem("people.csv", "people.csv", 1))
+            )
+        }
+
+        val mainMenuPage = rule.withMatchExactlyProject(testDependencies.server.url)
+
+        testDependencies.server.apply {
+            removeForm("One Question Entity Update")
+            removeForm("One Question Entity Follow Up")
+
+            addForm(
+                "one-question-entity-update.xml",
+                listOf(EntityListItem("people.csv", "people.csv", 2))
+            )
+
+            addForm(
+                "one-question-entity-follow-up.xml",
+                listOf(EntityListItem("people.csv", "people.csv", 2))
+            )
+        }
+
+        mainMenuPage.clickFillBlankForm()
+            .also {
+                onView(
+                    allOf(
+                        hasSibling(withText("One Question Entity Update")),
+                        withText(containsString("Added on"))
+                    )
+                ).check(matches(isDisplayed()))
+
+                onView(
+                    allOf(
+                        hasSibling(withText("One Question Entity Follow Up")),
+                        withText(containsString("Added on"))
+                    )
+                ).check(matches(isDisplayed()))
+            }
+            .clickRefresh()
+            .also {
+                onView(
+                    allOf(
+                        hasSibling(withText("One Question Entity Update")),
+                        withText(containsString("Updated on"))
+                    )
+                ).check(matches(isDisplayed()))
+
+                onView(
+                    allOf(
+                        hasSibling(withText("One Question Entity Follow Up")),
+                        withText(containsString("Updated on"))
+                    )
+                ).check(matches(isDisplayed()))
+            }
     }
 
     @Test
