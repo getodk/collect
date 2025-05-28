@@ -9,6 +9,7 @@ import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE
+import androidx.test.espresso.matcher.ViewMatchers.hasSibling
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
@@ -49,5 +50,9 @@ object Assertions {
 
     fun assertBelow(below: Matcher<View>, above: Matcher<View>) {
         onView(below).check(isCompletelyBelow(above))
+    }
+
+    fun assertSiblings(one: Matcher<View>, two: Matcher<View>) {
+        assertVisible(allOf(one, hasSibling(two)))
     }
 }
