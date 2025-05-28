@@ -1,8 +1,8 @@
 package org.odk.collect.android.feature.formentry
 
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -14,7 +14,6 @@ import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.strings.R
-import org.odk.collect.testshared.Assertions.assertVisible
 
 @RunWith(AndroidJUnit4::class)
 class EntityFormTest {
@@ -189,27 +188,14 @@ class EntityFormTest {
         }
 
         mainMenuPage.clickFillBlankForm()
-            .also {
-                assertVisible(
-                    withText("One Question Entity Update"),
-                    sibling = withText(containsString("Added on"))
-                )
-                assertVisible(
-                    withText("One Question Entity Follow Up"),
-                    sibling = withText(containsString("Added on"))
-                )
-            }
+            .assertTextBesides(equalTo("One Question Entity Update"), containsString("Added on"))
+            .assertTextBesides(equalTo("One Question Entity Follow Up"), containsString("Added on"))
             .clickRefresh()
-            .also {
-                assertVisible(
-                    withText("One Question Entity Update"),
-                    sibling = withText(containsString("Updated on"))
-                )
-                assertVisible(
-                    withText("One Question Entity Follow Up"),
-                    sibling = withText(containsString("Updated on"))
-                )
-            }
+            .assertTextBesides(equalTo("One Question Entity Update"), containsString("Updated on"))
+            .assertTextBesides(
+                equalTo("One Question Entity Follow Up"),
+                containsString("Updated on")
+            )
     }
 
     @Test
