@@ -14,7 +14,7 @@ import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.strings.R
-import org.odk.collect.testshared.Assertions
+import org.odk.collect.testshared.Assertions.assertVisible
 
 @RunWith(AndroidJUnit4::class)
 class EntityFormTest {
@@ -190,13 +190,25 @@ class EntityFormTest {
 
         mainMenuPage.clickFillBlankForm()
             .also {
-                Assertions.assertSiblings(withText("One Question Entity Update"), withText(containsString("Added on")))
-                Assertions.assertSiblings(withText("One Question Entity Follow Up"), withText(containsString("Added on")))
+                assertVisible(
+                    withText("One Question Entity Update"),
+                    sibling = withText(containsString("Added on"))
+                )
+                assertVisible(
+                    withText("One Question Entity Follow Up"),
+                    sibling = withText(containsString("Added on"))
+                )
             }
             .clickRefresh()
             .also {
-                Assertions.assertSiblings(withText("One Question Entity Update"), withText(containsString("Updated on")))
-                Assertions.assertSiblings(withText("One Question Entity Follow Up"), withText(containsString("Updated on")))
+                assertVisible(
+                    withText("One Question Entity Update"),
+                    sibling = withText(containsString("Updated on"))
+                )
+                assertVisible(
+                    withText("One Question Entity Follow Up"),
+                    sibling = withText(containsString("Updated on"))
+                )
             }
     }
 

@@ -19,11 +19,23 @@ import org.hamcrest.Matchers.equalTo
 
 object Assertions {
 
-    fun assertVisible(view: Matcher<View>, root: Matcher<Root>? = null) {
-        val onView = if (root != null) {
-            onView(allOf(view, withEffectiveVisibility(VISIBLE))).inRoot(root)
+    fun assertVisible(
+        view: Matcher<View>,
+        root: Matcher<Root>? = null,
+        sibling: Matcher<View>? = null
+    ) {
+        val baseMatcher = allOf(view, withEffectiveVisibility(VISIBLE))
+
+        val withSibling = if (sibling != null) {
+            allOf(baseMatcher, hasSibling(sibling))
         } else {
-            onView(allOf(view, withEffectiveVisibility(VISIBLE)))
+            baseMatcher
+        }
+
+        val onView = if (root != null) {
+            onView(withSibling).inRoot(root)
+        } else {
+            onView(withSibling)
         }
 
         onView.check(matches(not(doesNotExist())))
@@ -50,9 +62,5 @@ object Assertions {
 
     fun assertBelow(below: Matcher<View>, above: Matcher<View>) {
         onView(below).check(isCompletelyBelow(above))
-    }
-
-    fun assertSiblings(one: Matcher<View>, two: Matcher<View>) {
-        assertVisible(allOf(one, hasSibling(two)))
     }
 }
