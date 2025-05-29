@@ -239,14 +239,16 @@ class ServerFormUseCasesTest {
     }
 
     @Test
-    fun `#downloadMediaFiles does not download an entity list when it has already been downloaded`() {
+    fun `#downloadMediaFiles does not download an entity list when it has already been downloaded for a different form`() {
         val formsRepository = InMemFormsRepository()
         val entitiesRepository = InMemEntitiesRepository()
 
         val mediaFile = MediaFile("file", "hash", "downloadUrl", type = MediaFile.Type.ENTITY_LIST)
         val manifestFile = ManifestFile(null, listOf(mediaFile))
-        val serverFormDetails =
-            ServerFormDetails(null, null, "formId", "1", null, false, true, manifestFile)
+        val form1 =
+            ServerFormDetails(null, null, "1", "1", null, true, false, manifestFile)
+        val form2 =
+            ServerFormDetails(null, null, "2", "1", null, true, false, manifestFile)
         val formSource = mock<FormSource> {
             on { fetchMediaFile(mediaFile.downloadUrl) } doAnswer {
                 "name,label,__version".toByteArray().inputStream()
@@ -254,7 +256,7 @@ class ServerFormUseCasesTest {
         }
 
         ServerFormUseCases.downloadMediaFiles(
-            serverFormDetails,
+            form1,
             formSource,
             formsRepository,
             File(TempFiles.createTempDir(), "temp").absolutePath,
@@ -267,7 +269,7 @@ class ServerFormUseCasesTest {
         verify(formSource, times(1)).fetchMediaFile(mediaFile.downloadUrl)
 
         ServerFormUseCases.downloadMediaFiles(
-            serverFormDetails,
+            form2,
             formSource,
             formsRepository,
             File(TempFiles.createTempDir(), "temp").absolutePath,

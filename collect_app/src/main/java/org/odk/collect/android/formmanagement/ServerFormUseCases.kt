@@ -96,8 +96,11 @@ object ServerFormUseCases {
             if (isEntityList) {
                 val entityListName = getEntityListFromFileName(mediaFile)
                 val localEntityList = entitiesRepository.getList(entityListName)
-                newAttachmentsDownloaded = true
+
+                entitiesDownloaded = true
+
                 if (localEntityList == null || mediaFile.hash != localEntityList.hash) {
+                    newAttachmentsDownloaded = true
                     downloadMediaFile(formSource, mediaFile, tempMediaFile, tempDir, stateListener)
 
                     /**
@@ -113,9 +116,20 @@ object ServerFormUseCases {
                             entitySource,
                             mediaFile
                         )
-                        entitiesDownloaded = true
                     } catch (t: Throwable) {
                         throw EntityListUpdateException(t)
+                    }
+                } else {
+                    val existingForm = formsRepository.getAllByFormIdAndVersion(formToDownload.formId, formToDownload.formVersion).getOrNull(0)
+                    if (existingForm != null) {
+                        val entityListLastUpdated = localEntityList.lastUpdated
+                        val formAttachmentsLastUpdated = existingForm.lastDetectedAttachmentsUpdateDate
+
+                        if (entityListLastUpdated != null && formAttachmentsLastUpdated != null && entityListLastUpdated > formAttachmentsLastUpdated) {
+                            newAttachmentsDownloaded = true
+                        } else if (entityListLastUpdated != null && formAttachmentsLastUpdated == null && entityListLastUpdated > existingForm.date) {
+                            newAttachmentsDownloaded = true
+                        }
                     }
                 }
             } else {
