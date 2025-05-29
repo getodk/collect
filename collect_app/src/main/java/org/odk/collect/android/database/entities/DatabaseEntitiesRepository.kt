@@ -6,10 +6,12 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.provider.BaseColumns._ID
+import androidx.core.database.getLongOrNull
 import org.odk.collect.db.sqlite.CursorExt.first
 import org.odk.collect.db.sqlite.CursorExt.foldAndClose
 import org.odk.collect.db.sqlite.CursorExt.getBoolean
 import org.odk.collect.db.sqlite.CursorExt.getInt
+import org.odk.collect.db.sqlite.CursorExt.getLongOrNull
 import org.odk.collect.db.sqlite.CursorExt.getString
 import org.odk.collect.db.sqlite.CursorExt.getStringOrNull
 import org.odk.collect.db.sqlite.CursorExt.rowToMap
@@ -36,6 +38,7 @@ private object ListsTable {
     const val COLUMN_NAME = "name"
     const val COLUMN_HASH = "hash"
     const val COLUMN_NEEDS_APPROVAL = "needs_approval"
+    const val COLUMN_LAST_UPDATED = "last_updated"
 }
 
 private object EntitiesTable {
@@ -50,7 +53,8 @@ private object EntitiesTable {
     fun getPropertyColumn(property: String) = "$COLUMN_PROPERTY_PREFIX$property"
 }
 
-class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRepository {
+class DatabaseEntitiesRepository(context: Context, dbPath: String, private val clock: () -> Long) :
+    EntitiesRepository {
 
     private val databaseConnection = SynchronizedDatabaseConnection(
         context,
@@ -151,6 +155,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
             it.put(ListsTable.COLUMN_NAME, list)
             it.put(ListsTable.COLUMN_HASH, hash)
             it.put(ListsTable.COLUMN_NEEDS_APPROVAL, if (needsApproval) 1 else 0)
+            it.put(ListsTable.COLUMN_LAST_UPDATED, clock())
         }
 
         databaseConnection.withConnection {
@@ -336,7 +341,8 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
         return EntityList(
             cursor.getString(ListsTable.COLUMN_NAME),
             cursor.getStringOrNull(ListsTable.COLUMN_HASH),
-            cursor.getBoolean(ListsTable.COLUMN_NEEDS_APPROVAL)
+            cursor.getBoolean(ListsTable.COLUMN_NEEDS_APPROVAL),
+            cursor.getLongOrNull(ListsTable.COLUMN_LAST_UPDATED)
         )
     }
 
@@ -390,7 +396,7 @@ class DatabaseEntitiesRepository(context: Context, dbPath: String) : EntitiesRep
     private fun quote(text: String) = "\"$text\""
 
     companion object {
-        const val DATABASE_VERSION = 3
+        const val DATABASE_VERSION = 4
     }
 }
 
@@ -427,6 +433,18 @@ class EntitiesDatabaseMigrator(databaseVersion: Int) : MigrationListDatabaseMigr
                         ${ListsTable.COLUMN_NAME} text NOT NULL,
                         ${ListsTable.COLUMN_HASH} text,
                         ${ListsTable.COLUMN_NEEDS_APPROVAL} integer DEFAULT 0
+                );
+                """.trimIndent()
+            )
+        } else if (version == 4) {
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS ${ListsTable.TABLE_NAME} (
+                        $_ID integer PRIMARY KEY,
+                        ${ListsTable.COLUMN_NAME} text NOT NULL,
+                        ${ListsTable.COLUMN_HASH} text,
+                        ${ListsTable.COLUMN_NEEDS_APPROVAL} integer DEFAULT 0,
+                        ${ListsTable.COLUMN_LAST_UPDATED} date
                 );
                 """.trimIndent()
             )

@@ -5,7 +5,7 @@ import org.odk.collect.entities.storage.InMemEntitiesRepository
 
 class InMemEntitiesRepositoryTest : EntitiesRepositoryTest() {
 
-    override fun buildSubject(): EntitiesRepository {
-        return InMemEntitiesRepository()
+    override fun buildSubject(clock: () -> Long): EntitiesRepository {
+        return InMemEntitiesRepository(clock)
     }
 }

@@ -3,7 +3,7 @@ package org.odk.collect.entities.storage
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.shared.Query
 
-class InMemEntitiesRepository : EntitiesRepository {
+class InMemEntitiesRepository(private val clock: () -> Long = { 0 }) : EntitiesRepository {
 
     private val lists = mutableListOf<EntityList>()
     private val listProperties = mutableMapOf<String, MutableSet<String>>()
@@ -67,11 +67,12 @@ class InMemEntitiesRepository : EntitiesRepository {
     override fun updateList(list: String, hash: String, needsApproval: Boolean) {
         val existing = lists.firstOrNull { it.name == list }
         if (existing != null) {
-            val update = existing.copy(hash = hash, needsApproval = needsApproval)
+            val update =
+                existing.copy(hash = hash, needsApproval = needsApproval, lastUpdated = clock())
             lists.remove(existing)
             lists.add(update)
         } else {
-            lists.add(EntityList(list, hash, needsApproval))
+            lists.add(EntityList(list, hash, needsApproval, clock()))
         }
     }
 

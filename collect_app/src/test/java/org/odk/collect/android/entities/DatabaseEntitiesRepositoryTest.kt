@@ -13,10 +13,11 @@ import org.odk.collect.shared.TempFiles
 
 @RunWith(AndroidJUnit4::class)
 class DatabaseEntitiesRepositoryTest : EntitiesRepositoryTest() {
-    override fun buildSubject(): EntitiesRepository {
+    override fun buildSubject(clock: () -> Long): EntitiesRepository {
         return DatabaseEntitiesRepository(
             ApplicationProvider.getApplicationContext(),
-            TempFiles.createTempDir().absolutePath
+            TempFiles.createTempDir().absolutePath,
+            clock
         )
     }
 
