@@ -123,12 +123,17 @@ object ServerFormUseCases {
                     val existingForm = formsRepository.getAllByFormIdAndVersion(formToDownload.formId, formToDownload.formVersion).getOrNull(0)
                     if (existingForm != null) {
                         val entityListLastUpdated = localEntityList.lastUpdated
-                        val formAttachmentsLastUpdated = existingForm.lastDetectedAttachmentsUpdateDate
+                        if (entityListLastUpdated != null) {
+                            val formAttachmentsLastUpdated =
+                                existingForm.lastDetectedAttachmentsUpdateDate
 
-                        if (entityListLastUpdated != null && formAttachmentsLastUpdated != null && entityListLastUpdated > formAttachmentsLastUpdated) {
-                            newAttachmentsDownloaded = true
-                        } else if (entityListLastUpdated != null && formAttachmentsLastUpdated == null && entityListLastUpdated > existingForm.date) {
-                            newAttachmentsDownloaded = true
+                            if (formAttachmentsLastUpdated != null &&
+                                entityListLastUpdated > formAttachmentsLastUpdated) {
+                                newAttachmentsDownloaded = true
+                            } else if (formAttachmentsLastUpdated == null &&
+                                entityListLastUpdated > existingForm.date) {
+                                newAttachmentsDownloaded = true
+                            }
                         }
                     }
                 }
