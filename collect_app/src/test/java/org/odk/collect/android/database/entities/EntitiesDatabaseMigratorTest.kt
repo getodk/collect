@@ -42,7 +42,32 @@ class EntitiesDatabaseMigratorTest {
         assertThat(lists.size, equalTo(1))
         assertThat(lists[0]["name"], equalTo("blah"))
         assertThat(lists[0]["hash"], equalTo("somehash"))
+
         assertThat(lists[0]["needs_approval"], equalTo("0"))
+    }
+
+    @Test
+    fun `#onUpgrade from version 3`() {
+        val db = SQLiteDatabase.create(null)
+        val migrator = EntitiesDatabaseMigrator(DATABASE_VERSION)
+        migrator.createDbForVersion(db, 3)
+
+        val listContentValues = ContentValues().also {
+            it.put("name", "blah")
+            it.put("hash", "somehash")
+            it.put("needs_approval", 0)
+        }
+        db.insert("lists", null, listContentValues)
+
+        migrator.onUpgrade(db, 3)
+        val lists = db.query("lists").foldAndClose { it.rowToMap() }
+        assertThat(lists.size, equalTo(1))
+        assertThat(lists[0]["name"], equalTo("blah"))
+        assertThat(lists[0]["hash"], equalTo("somehash"))
+        assertThat(lists[0]["needs_approval"], equalTo("0"))
+
+        assertThat(lists[0].containsKey("last_updated"), equalTo(true))
+        assertThat(lists[0]["last_updated"], equalTo(null))
     }
 
     companion object {

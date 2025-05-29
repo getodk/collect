@@ -412,6 +412,13 @@ class EntitiesDatabaseMigrator(databaseVersion: Int) : MigrationListDatabaseMigr
             "integer",
             default = "0"
         )
+    },
+    {
+        it.addColumn(
+            ListsTable.TABLE_NAME,
+            ListsTable.COLUMN_LAST_UPDATED,
+            "date"
+        )
     }
 ) {
     override fun createDbForVersion(db: SQLiteDatabase, version: Int) {
