@@ -2,4 +2,5 @@
 <resources>
     <string name="main_menu_screen" translatable="false">mainMenuScreen</string>
     <string name="form_end_screen" translatable="false">formEndScreen</string>
+    <string name="form_entry_screen" translatable="false">formEntryScreen</string>
 </resources>

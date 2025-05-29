@@ -54,6 +54,7 @@ import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
@@ -123,7 +124,7 @@ public class FormHierarchyFragment extends Fragment {
             return dialog;
         });
 
-        menuProvider = new FormHiearchyMenuProvider(formEntryViewModel, formHierarchyViewModel, viewOnly, new FormHiearchyMenuProvider.OnClickListener() {
+        menuProvider = new FormHiearchyMenuProvider(formEntryViewModel, formHierarchyViewModel, viewOnly, context.getString(R.string.form_entry_screen), new FormHiearchyMenuProvider.OnClickListener() {
             @Override
             public void onEditClicked() {
                 formHierarchyViewModel.editInstance(
@@ -836,12 +837,14 @@ public class FormHierarchyFragment extends Fragment {
         private final FormHierarchyViewModel formHierarchyViewModel;
         private final boolean viewOnly;
         private final OnClickListener onClickListener;
+        private final String screenName;
 
-        FormHiearchyMenuProvider(FormEntryViewModel formEntryViewModel, FormHierarchyViewModel formHierarchyViewModel, boolean viewOnly, OnClickListener goUpClicked) {
+        FormHiearchyMenuProvider(FormEntryViewModel formEntryViewModel, FormHierarchyViewModel formHierarchyViewModel, boolean viewOnly, String screenName, OnClickListener goUpClicked) {
             this.formEntryViewModel = formEntryViewModel;
             this.formHierarchyViewModel = formHierarchyViewModel;
             this.viewOnly = viewOnly;
             this.onClickListener = goUpClicked;
+            this.screenName = screenName;
         }
 
         @Override
@@ -866,6 +869,10 @@ public class FormHierarchyFragment extends Fragment {
 
         @Override
         public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+            if (!MultiClickGuard.allowClick(screenName)) {
+                return false;
+            }
+
             if (menuItem.getItemId() == R.id.menu_edit) {
                 onClickListener.onEditClicked();
                 return true;
