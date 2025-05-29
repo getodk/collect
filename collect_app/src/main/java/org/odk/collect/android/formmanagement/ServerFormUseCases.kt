@@ -52,7 +52,11 @@ object ServerFormUseCases {
     }
 
     @JvmStatic
-    fun copySavedFileFromPreviousFormVersionIfExists(formsRepository: FormsRepository, formId: String, mediaDirPath: String) {
+    fun copySavedFileFromPreviousFormVersionIfExists(
+        formsRepository: FormsRepository,
+        formId: String,
+        mediaDirPath: String
+    ) {
         val lastSavedFile: File? = formsRepository
             .getAllByFormId(formId)
             .maxByOrNull { form -> form.date }
@@ -92,9 +96,9 @@ object ServerFormUseCases {
             if (isEntityList) {
                 val entityListName = getEntityListFromFileName(mediaFile)
                 val localEntityList = entitiesRepository.getList(entityListName)
+                newAttachmentsDownloaded = true
                 if (localEntityList == null || mediaFile.hash != localEntityList.hash) {
                     downloadMediaFile(formSource, mediaFile, tempMediaFile, tempDir, stateListener)
-                    newAttachmentsDownloaded = true
 
                     /**
                      * We wrap and then rethrow exceptions that happen here to make them easier to
@@ -115,7 +119,8 @@ object ServerFormUseCases {
                     }
                 }
             } else {
-                val existingFile = searchForExistingMediaFile(formsRepository, formToDownload, mediaFile)
+                val existingFile =
+                    searchForExistingMediaFile(formsRepository, formToDownload, mediaFile)
                 existingFile.also {
                     if (it != null) {
                         if (it.getMd5Hash().contentEquals(mediaFile.hash)) {
