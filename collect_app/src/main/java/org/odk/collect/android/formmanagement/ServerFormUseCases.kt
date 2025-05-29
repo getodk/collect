@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.FormDownloader
+import org.odk.collect.android.instancemanagement.autosend.getLastUpdated
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.async.OngoingWorkListener
 import org.odk.collect.entities.LocalEntityUseCases
@@ -124,14 +125,7 @@ object ServerFormUseCases {
                     if (existingForm != null) {
                         val entityListLastUpdated = localEntityList.lastUpdated
                         if (entityListLastUpdated != null) {
-                            val formAttachmentsLastUpdated =
-                                existingForm.lastDetectedAttachmentsUpdateDate
-
-                            if (formAttachmentsLastUpdated != null &&
-                                entityListLastUpdated > formAttachmentsLastUpdated) {
-                                newAttachmentsDownloaded = true
-                            } else if (formAttachmentsLastUpdated == null &&
-                                entityListLastUpdated > existingForm.date) {
+                            if (entityListLastUpdated > existingForm.getLastUpdated()) {
                                 newAttachmentsDownloaded = true
                             }
                         }
