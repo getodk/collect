@@ -84,6 +84,12 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
         return rootView;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        barcodeScannerViewContainer.getBarcodeScannerView().finish();
+    }
+
     private boolean hasFlash() {
         return getActivity().getApplicationContext().getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);

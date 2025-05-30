@@ -81,6 +81,8 @@ private class ZxingBarcodeScannerView(
         }
     }
 
+    override fun finish() {}
+
     override fun setTorchOn(on: Boolean) {
         if (on) {
             binding.barcodeView.setTorchOn()

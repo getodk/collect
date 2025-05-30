@@ -150,6 +150,11 @@ class QrCodeProjectCreatorDialog :
         return binding.root
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.barcodeView.barcodeScannerView.finish()
+    }
+
     override fun onStart() {
         super.onStart()
 
