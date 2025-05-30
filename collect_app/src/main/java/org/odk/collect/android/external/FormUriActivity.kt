@@ -327,18 +327,16 @@ private class FormUriViewModel(
             return null
         }
 
-        val usesEntities = if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
-            val form = formsRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
-            form.usesEntities()
+        val form = if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
+            formsRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
         } else {
             val instance = instancesRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
-            val form = formsRepositoryProvider.create().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
-            form.usesEntities()
+            formsRepositoryProvider.create().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
         }
 
-        if (usesEntities) {
+        if (form.usesEntities()) {
             val formsLock = changeLockProvider.create(projectId).formsLock
-            val isLocAcquired = formsLock.tryLock()
+            val isLocAcquired = formsLock.tryLock(form.formFilePath)
 
             return if (isLocAcquired) {
                 null

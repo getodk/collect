@@ -3,7 +3,7 @@ package org.odk.collect.shared.locks
 import java.util.function.Function
 
 class ThreadSafeBooleanChangeLock : ChangeLock {
-    private var locked = false
+    private var currentOwnerId: String? = null
 
     override fun <T> withLock(function: Function<Boolean, T>): T {
         val acquired = tryLock()
@@ -17,30 +17,32 @@ class ThreadSafeBooleanChangeLock : ChangeLock {
         }
     }
 
-    override fun tryLock(): Boolean {
+    override fun tryLock(ownerId: String): Boolean {
         return synchronized(this) {
-            if (locked) {
+            if (currentOwnerId != null) {
                 false
             } else {
-                locked = true
+                currentOwnerId = ownerId
                 true
             }
         }
     }
 
-    override fun lock() {
+    override fun lock(ownerId: String) {
         synchronized(this) {
-            if (locked) {
+            if (currentOwnerId != null) {
                 throw IllegalStateException()
             } else {
-                locked = true
+                currentOwnerId = ownerId
             }
         }
     }
 
-    override fun unlock() {
+    override fun unlock(ownerId: String) {
         synchronized(this) {
-            locked = false
+            if (currentOwnerId == ownerId) {
+                currentOwnerId = null
+            }
         }
     }
 }

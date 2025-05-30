@@ -10,9 +10,9 @@ interface ChangeLock {
      */
     fun <T> withLock(function: Function<Boolean, T>): T
 
-    fun tryLock(): Boolean
+    fun tryLock(ownerId: String = "ownerId"): Boolean
 
-    fun lock()
+    fun lock(ownerId: String = "ownerId")
 
-    fun unlock()
+    fun unlock(ownerId: String = "ownerId")
 }

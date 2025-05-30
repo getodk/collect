@@ -8,7 +8,7 @@ abstract class ChangeLockTest {
     abstract fun buildSubject(): ChangeLock
 
     @Test
-    fun `tryLock acquires the lock if it is not acquired`() {
+    fun `tryLock acquires the lock if it is not acquired for default lock id`() {
         val changeLock = buildSubject()
 
         val acquired = changeLock.tryLock()
@@ -17,7 +17,16 @@ abstract class ChangeLockTest {
     }
 
     @Test
-    fun `tryLock does not acquire the lock if it is already acquired`() {
+    fun `tryLock acquires the lock if it is not acquired for custom lock id`() {
+        val changeLock = buildSubject()
+
+        val acquired = changeLock.tryLock("foo")
+
+        assertThat(acquired, equalTo(true))
+    }
+
+    @Test
+    fun `tryLock does not acquire the lock if it is already acquired for default lock id`() {
         val changeLock = buildSubject()
 
         changeLock.tryLock()
@@ -27,7 +36,17 @@ abstract class ChangeLockTest {
     }
 
     @Test
-    fun `lock acquires the lock if it is not acquired`() {
+    fun `tryLock does not acquire the lock if it is already acquired for custom lock id`() {
+        val changeLock = buildSubject()
+
+        changeLock.tryLock("foo")
+        val acquired = changeLock.tryLock("foo")
+
+        assertThat(acquired, equalTo(false))
+    }
+
+    @Test
+    fun `lock acquires the lock if it is not acquired for default lock id`() {
         val changeLock = buildSubject()
 
         changeLock.lock()
@@ -36,16 +55,34 @@ abstract class ChangeLockTest {
         assertThat(acquired, equalTo(false))
     }
 
+    @Test
+    fun `lock acquires the lock if it is not acquired for custom lock id`() {
+        val changeLock = buildSubject()
+
+        changeLock.lock("foo")
+        val acquired = changeLock.tryLock("foo")
+
+        assertThat(acquired, equalTo(false))
+    }
+
     @Test(expected = IllegalStateException::class)
-    fun `lock throws an exception if the lock is already acquired`() {
+    fun `lock throws an exception if the lock is already acquired for default lock id`() {
         val changeLock = buildSubject()
 
         changeLock.lock()
         changeLock.lock()
     }
 
+    @Test(expected = IllegalStateException::class)
+    fun `lock throws an exception if the lock is already acquired for custom lock id`() {
+        val changeLock = buildSubject()
+
+        changeLock.lock("foo")
+        changeLock.lock("foo")
+    }
+
     @Test
-    fun `unlock releases the lock`() {
+    fun `unlock releases the lock for default lock ids`() {
         val changeLock = buildSubject()
 
         changeLock.tryLock()
@@ -53,6 +90,28 @@ abstract class ChangeLockTest {
         val acquired = changeLock.tryLock()
 
         assertThat(acquired, equalTo(true))
+    }
+
+    @Test
+    fun `unlock releases the lock for matching custom lock ids`() {
+        val changeLock = buildSubject()
+
+        changeLock.tryLock("foo")
+        changeLock.unlock("foo")
+        val acquired = changeLock.tryLock("foo")
+
+        assertThat(acquired, equalTo(true))
+    }
+
+    @Test
+    fun `unlock does not release the lock for not matching custom lock ids`() {
+        val changeLock = buildSubject()
+
+        changeLock.tryLock("foo")
+        changeLock.unlock("bar")
+        val acquired = changeLock.tryLock("foo")
+
+        assertThat(acquired, equalTo(false))
     }
 
     @Test

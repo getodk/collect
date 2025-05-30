@@ -373,8 +373,8 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     public void exit() {
         formSessionRepository.clear(sessionId);
         ReferenceManager.instance().reset();
-        if (form != null && form.usesEntities()) {
-            changeLocks.getFormsLock().unlock();
+        if (form != null) {
+            changeLocks.getFormsLock().unlock(form.getFormFilePath());
         }
     }
 
