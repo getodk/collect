@@ -15,7 +15,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.preference.PreferenceDialogFragmentCompat;
 
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
@@ -101,6 +103,8 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
     }
 
     private void resetSelected() {
+        Analytics.log(AnalyticsEvents.RESET_PROJECT);
+
         final List<Integer> resetActions = new ArrayList<>();
 
         if (preferences.isChecked()) {
