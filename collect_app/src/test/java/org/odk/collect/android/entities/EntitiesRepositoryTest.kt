@@ -17,9 +17,7 @@ import org.odk.collect.shared.Query
 abstract class EntitiesRepositoryTest {
 
     abstract fun buildSubject(clock: () -> Long): EntitiesRepository
-    fun buildSubject(): EntitiesRepository {
-        return buildSubject { 0 }
-    }
+    fun buildSubject(): EntitiesRepository = buildSubject { 0 }
 
     @Test
     fun `#getLists returns lists for saved entities`() {

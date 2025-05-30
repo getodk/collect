@@ -121,13 +121,15 @@ object ServerFormUseCases {
                         throw EntityListUpdateException(t)
                     }
                 } else {
-                    val existingForm = formsRepository.getAllByFormIdAndVersion(formToDownload.formId, formToDownload.formVersion).getOrNull(0)
+                    val existingForm = formsRepository.getAllByFormIdAndVersion(
+                        formToDownload.formId,
+                        formToDownload.formVersion
+                    ).getOrNull(0)
+
                     if (existingForm != null) {
                         val entityListLastUpdated = localEntityList.lastUpdated
-                        if (entityListLastUpdated != null) {
-                            if (entityListLastUpdated > existingForm.getLastUpdated()) {
-                                newAttachmentsDownloaded = true
-                            }
+                        if (entityListLastUpdated != null && entityListLastUpdated > existingForm.getLastUpdated()) {
+                            newAttachmentsDownloaded = true
                         }
                     }
                 }
