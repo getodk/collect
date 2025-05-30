@@ -6,13 +6,13 @@ class BooleanChangeLock : ChangeLock {
     private var currentOwnerId: String? = null
 
     override fun <T> withLock(function: Function<Boolean, T>): T {
-        val acquired = tryLock()
+        val acquired = tryLock(DEFAULT_LOCK_OWNER_ID)
 
         return try {
             function.apply(acquired)
         } finally {
             if (acquired) {
-                unlock()
+                unlock(DEFAULT_LOCK_OWNER_ID)
             }
         }
     }

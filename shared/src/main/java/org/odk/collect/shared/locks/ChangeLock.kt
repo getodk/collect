@@ -2,6 +2,8 @@ package org.odk.collect.shared.locks
 
 import java.util.function.Function
 
+const val DEFAULT_LOCK_OWNER_ID = "ownerId"
+
 interface ChangeLock {
     /**
      * @param function some work to be executed after attempting to acquire the lock. The function
@@ -10,9 +12,9 @@ interface ChangeLock {
      */
     fun <T> withLock(function: Function<Boolean, T>): T
 
-    fun tryLock(ownerId: String = "ownerId"): Boolean
+    fun tryLock(ownerId: String): Boolean
 
-    fun lock(ownerId: String = "ownerId")
+    fun lock(ownerId: String)
 
-    fun unlock(ownerId: String = "ownerId")
+    fun unlock(ownerId: String)
 }
