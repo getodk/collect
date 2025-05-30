@@ -10,7 +10,17 @@ interface ChangeLock {
      * will be passed `true` if the lock was acquired and `false` if not. The
      * function return value will be returned from the call to this method.
      */
-    fun <T> withLock(function: Function<Boolean, T>): T
+    fun <T> withLock(function: Function<Boolean, T>): T {
+        val acquired = tryLock(DEFAULT_LOCK_OWNER_ID)
+
+        return try {
+            function.apply(acquired)
+        } finally {
+            if (acquired) {
+                unlock(DEFAULT_LOCK_OWNER_ID)
+            }
+        }
+    }
 
     fun tryLock(ownerId: String): Boolean
 
