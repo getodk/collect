@@ -2,8 +2,10 @@ package org.odk.collect.db.sqlite
 
 import android.database.Cursor
 import androidx.core.database.getIntOrNull
+import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
 import org.odk.collect.db.sqlite.CursorExt.getInt
+import org.odk.collect.db.sqlite.CursorExt.getLong
 
 object CursorExt {
     fun <T> Cursor.foldAndClose(initial: T, operation: (T, Cursor) -> T): T {
@@ -55,6 +57,11 @@ object CursorExt {
     fun Cursor.getLong(column: String): Long {
         val columnIndex = this.getColumnIndex(column)
         return this.getLong(columnIndex)
+    }
+
+    fun Cursor.getLongOrNull(column: String): Long? {
+        val columnIndex = this.getColumnIndex(column)
+        return this.getLongOrNull(columnIndex)
     }
 
     fun Cursor.getInt(column: String): Int {

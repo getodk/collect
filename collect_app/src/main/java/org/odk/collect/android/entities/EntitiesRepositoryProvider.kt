@@ -13,6 +13,10 @@ class EntitiesRepositoryProvider(
     ProjectDependencyFactory<EntitiesRepository> {
 
     override fun create(projectId: String): EntitiesRepository {
-        return DatabaseEntitiesRepository(context, storagePathFactory.create(projectId).metaDir)
+        return DatabaseEntitiesRepository(
+            context,
+            storagePathFactory.create(projectId).metaDir,
+            System::currentTimeMillis
+        )
     }
 }

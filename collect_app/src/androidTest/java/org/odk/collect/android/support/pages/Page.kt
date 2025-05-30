@@ -605,6 +605,11 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
+    fun assertTextBesides(one: Matcher<String>, two: Matcher<String>): T {
+        Assertions.assertVisible(withText(one), sibling = withText(two))
+        return this as T
+    }
+
     companion object {
         private fun rotateToLandscape(): ViewAction {
             return RotateAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)

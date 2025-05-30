@@ -16,11 +16,12 @@ import org.odk.collect.shared.Query
 
 abstract class EntitiesRepositoryTest {
 
-    abstract fun buildSubject(): EntitiesRepository
+    abstract fun buildSubject(clock: () -> Long): EntitiesRepository
+    fun buildSubject(): EntitiesRepository = buildSubject { 0 }
 
     @Test
     fun `#getLists returns lists for saved entities`() {
-        val repository = buildSubject()
+        val repository = buildSubject { 123L }
 
         val wine = Entity.New("1", "Léoville Barton 2008")
         val whisky = Entity.New("2", "Lagavulin 16")
@@ -32,7 +33,7 @@ abstract class EntitiesRepositoryTest {
         assertThat(
             repository.getLists(),
             containsInAnyOrder(
-                EntityList("wines", "blah", true),
+                EntityList("wines", "blah", true, 123L),
                 EntityList("whiskys")
             )
         )
@@ -521,7 +522,7 @@ abstract class EntitiesRepositoryTest {
 
         repository.addList("wine")
         repository.updateList("wine", "2024", true)
-        assertThat(repository.getList("wine"), equalTo(EntityList("wine", "2024", true)))
+        assertThat(repository.getList("wine"), equalTo(EntityList("wine", "2024", true, 0L)))
     }
 
     @Test

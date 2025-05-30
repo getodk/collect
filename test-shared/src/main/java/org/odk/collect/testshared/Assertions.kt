@@ -9,6 +9,7 @@ import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE
+import androidx.test.espresso.matcher.ViewMatchers.hasSibling
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
@@ -18,11 +19,23 @@ import org.hamcrest.Matchers.equalTo
 
 object Assertions {
 
-    fun assertVisible(view: Matcher<View>, root: Matcher<Root>? = null) {
-        val onView = if (root != null) {
-            onView(allOf(view, withEffectiveVisibility(VISIBLE))).inRoot(root)
+    fun assertVisible(
+        view: Matcher<View>,
+        root: Matcher<Root>? = null,
+        sibling: Matcher<View>? = null
+    ) {
+        val baseMatcher = allOf(view, withEffectiveVisibility(VISIBLE))
+
+        val withSibling = if (sibling != null) {
+            allOf(baseMatcher, hasSibling(sibling))
         } else {
-            onView(allOf(view, withEffectiveVisibility(VISIBLE)))
+            baseMatcher
+        }
+
+        val onView = if (root != null) {
+            onView(withSibling).inRoot(root)
+        } else {
+            onView(withSibling)
         }
 
         onView.check(matches(not(doesNotExist())))

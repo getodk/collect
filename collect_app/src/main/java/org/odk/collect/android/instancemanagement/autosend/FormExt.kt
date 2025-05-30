@@ -20,6 +20,10 @@ fun Form.getAutoSendMode(): FormAutoSendMode {
     }
 }
 
+fun Form.getLastUpdated(): Long {
+    return lastDetectedAttachmentsUpdateDate ?: date
+}
+
 enum class FormAutoSendMode {
     OPT_OUT,
     FORCED,

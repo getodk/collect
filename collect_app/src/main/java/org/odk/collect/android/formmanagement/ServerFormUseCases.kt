@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.FormDownloader
+import org.odk.collect.android.instancemanagement.autosend.getLastUpdated
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.async.OngoingWorkListener
 import org.odk.collect.entities.LocalEntityUseCases
@@ -52,7 +53,11 @@ object ServerFormUseCases {
     }
 
     @JvmStatic
-    fun copySavedFileFromPreviousFormVersionIfExists(formsRepository: FormsRepository, formId: String, mediaDirPath: String) {
+    fun copySavedFileFromPreviousFormVersionIfExists(
+        formsRepository: FormsRepository,
+        formId: String,
+        mediaDirPath: String
+    ) {
         val lastSavedFile: File? = formsRepository
             .getAllByFormId(formId)
             .maxByOrNull { form -> form.date }
@@ -92,9 +97,12 @@ object ServerFormUseCases {
             if (isEntityList) {
                 val entityListName = getEntityListFromFileName(mediaFile)
                 val localEntityList = entitiesRepository.getList(entityListName)
+
+                entitiesDownloaded = true
+
                 if (localEntityList == null || mediaFile.hash != localEntityList.hash) {
-                    downloadMediaFile(formSource, mediaFile, tempMediaFile, tempDir, stateListener)
                     newAttachmentsDownloaded = true
+                    downloadMediaFile(formSource, mediaFile, tempMediaFile, tempDir, stateListener)
 
                     /**
                      * We wrap and then rethrow exceptions that happen here to make them easier to
@@ -109,13 +117,25 @@ object ServerFormUseCases {
                             entitySource,
                             mediaFile
                         )
-                        entitiesDownloaded = true
                     } catch (t: Throwable) {
                         throw EntityListUpdateException(t)
                     }
+                } else {
+                    val existingForm = formsRepository.getAllByFormIdAndVersion(
+                        formToDownload.formId,
+                        formToDownload.formVersion
+                    ).getOrNull(0)
+
+                    if (existingForm != null) {
+                        val entityListLastUpdated = localEntityList.lastUpdated
+                        if (entityListLastUpdated != null && entityListLastUpdated > existingForm.getLastUpdated()) {
+                            newAttachmentsDownloaded = true
+                        }
+                    }
                 }
             } else {
-                val existingFile = searchForExistingMediaFile(formsRepository, formToDownload, mediaFile)
+                val existingFile =
+                    searchForExistingMediaFile(formsRepository, formToDownload, mediaFile)
                 existingFile.also {
                     if (it != null) {
                         if (it.getMd5Hash().contentEquals(mediaFile.hash)) {

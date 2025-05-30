@@ -1,6 +1,8 @@
 package org.odk.collect.android.feature.formentry
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -152,6 +154,48 @@ class EntityFormTest {
             .startBlankForm("One Question Entity Update")
             .assertText("Ro-Ro Roy")
             .assertTextDoesNotExist("Roman Roy")
+    }
+
+    @Test
+    fun entityListFormsAllShowAsUpdatedTogether() {
+        testDependencies.server.apply {
+            addForm(
+                "one-question-entity-update.xml",
+                listOf(EntityListItem("people.csv", "people.csv", 1))
+            )
+
+            addForm(
+                "one-question-entity-follow-up.xml",
+                listOf(EntityListItem("people.csv", "people.csv", 1))
+            )
+        }
+
+        val mainMenuPage = rule.withMatchExactlyProject(testDependencies.server.url)
+
+        testDependencies.server.apply {
+            removeForm("One Question Entity Update")
+            removeForm("One Question Entity Follow Up")
+
+            addForm(
+                "one-question-entity-update.xml",
+                listOf(EntityListItem("people.csv", "people.csv", 2))
+            )
+
+            addForm(
+                "one-question-entity-follow-up.xml",
+                listOf(EntityListItem("people.csv", "people.csv", 2))
+            )
+        }
+
+        mainMenuPage.clickFillBlankForm()
+            .assertTextBesides(equalTo("One Question Entity Update"), containsString("Added on"))
+            .assertTextBesides(equalTo("One Question Entity Follow Up"), containsString("Added on"))
+            .clickRefresh()
+            .assertTextBesides(equalTo("One Question Entity Update"), containsString("Updated on"))
+            .assertTextBesides(
+                equalTo("One Question Entity Follow Up"),
+                containsString("Updated on")
+            )
     }
 
     @Test
