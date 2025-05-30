@@ -1,46 +1,24 @@
 package org.odk.collect.shared.locks
 
-import java.util.function.Function
-
 class ThreadSafeBooleanChangeLock : ChangeLock {
-    private var locked = false
+    private var currentToken: Any? = null
 
-    override fun <T> withLock(function: Function<Boolean, T>): T {
-        val acquired = tryLock()
-
-        return try {
-            function.apply(acquired)
-        } finally {
-            if (acquired) {
-                unlock()
-            }
-        }
-    }
-
-    override fun tryLock(): Boolean {
+    override fun tryLock(token: Any): Boolean {
         return synchronized(this) {
-            if (locked) {
+            if (currentToken != null) {
                 false
             } else {
-                locked = true
+                currentToken = token
                 true
             }
         }
     }
 
-    override fun lock() {
+    override fun unlock(token: Any) {
         synchronized(this) {
-            if (locked) {
-                throw IllegalStateException()
-            } else {
-                locked = true
+            if (currentToken == token) {
+                currentToken = null
             }
-        }
-    }
-
-    override fun unlock() {
-        synchronized(this) {
-            locked = false
         }
     }
 }

@@ -168,7 +168,7 @@ class ProjectDeleterTest {
     @Test
     fun `If there are running background jobs that use blank forms the project should not be deleted`() {
         val formChangeLock = BooleanChangeLock().apply {
-            lock()
+            lock("blah")
         }
         whenever(changeLockProvider.getFormLock(any())).thenReturn(formChangeLock)
 
@@ -181,7 +181,7 @@ class ProjectDeleterTest {
     @Test
     fun `If there are running background jobs that use saved forms the project should not be deleted`() {
         val changeLock = BooleanChangeLock().apply {
-            lock()
+            lock("blah")
         }
         whenever(changeLockProvider.getInstanceLock(any())).thenReturn(changeLock)
 

@@ -72,7 +72,7 @@ class InstancesDataServiceTest {
 
     @Test
     fun `instances should not be deleted if the instances database is locked`() {
-        projectDependencyModule.instancesLock.lock()
+        (projectDependencyModule.instancesLock as BooleanChangeLock).lock("blah")
         val result = instancesDataService.deleteInstances(projectId, longArrayOf(1))
         assertThat(result, equalTo(false))
     }
