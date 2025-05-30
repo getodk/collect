@@ -2,8 +2,6 @@ package org.odk.collect.shared.locks
 
 import java.util.function.Function
 
-const val DEFAULT_LOCK_OWNER_ID = "ownerId"
-
 interface ChangeLock {
     /**
      * @param function some work to be executed after attempting to acquire the lock. The function
@@ -11,20 +9,24 @@ interface ChangeLock {
      * function return value will be returned from the call to this method.
      */
     fun <T> withLock(function: Function<Boolean, T>): T {
-        val acquired = tryLock(DEFAULT_LOCK_OWNER_ID)
+        val acquired = tryLock(defaultToken)
 
         return try {
             function.apply(acquired)
         } finally {
             if (acquired) {
-                unlock(DEFAULT_LOCK_OWNER_ID)
+                unlock(defaultToken)
             }
         }
     }
 
-    fun tryLock(ownerId: String): Boolean
+    fun tryLock(token: Any): Boolean
 
-    fun lock(ownerId: String)
+    fun lock(token: Any)
 
-    fun unlock(ownerId: String)
+    fun unlock(token: Any)
+
+    companion object {
+        val defaultToken = Any()
+    }
 }

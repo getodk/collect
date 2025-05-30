@@ -1,33 +1,33 @@
 package org.odk.collect.shared.locks
 
 class ThreadSafeBooleanChangeLock : ChangeLock {
-    private var currentOwnerId: String? = null
+    private var currentToken: Any? = null
 
-    override fun tryLock(ownerId: String): Boolean {
+    override fun tryLock(token: Any): Boolean {
         return synchronized(this) {
-            if (currentOwnerId != null) {
+            if (currentToken != null) {
                 false
             } else {
-                currentOwnerId = ownerId
+                currentToken = token
                 true
             }
         }
     }
 
-    override fun lock(ownerId: String) {
+    override fun lock(token: Any) {
         synchronized(this) {
-            if (currentOwnerId != null) {
+            if (currentToken != null) {
                 throw IllegalStateException()
             } else {
-                currentOwnerId = ownerId
+                currentToken = token
             }
         }
     }
 
-    override fun unlock(ownerId: String) {
+    override fun unlock(token: Any) {
         synchronized(this) {
-            if (currentOwnerId == ownerId) {
-                currentOwnerId = null
+            if (currentToken == token) {
+                currentToken = null
             }
         }
     }

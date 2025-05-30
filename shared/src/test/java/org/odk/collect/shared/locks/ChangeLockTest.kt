@@ -8,16 +8,7 @@ abstract class ChangeLockTest {
     abstract fun buildSubject(): ChangeLock
 
     @Test
-    fun `tryLock acquires the lock if it is not acquired for default lock id`() {
-        val changeLock = buildSubject()
-
-        val acquired = changeLock.tryLock()
-
-        assertThat(acquired, equalTo(true))
-    }
-
-    @Test
-    fun `tryLock acquires the lock if it is not acquired for custom lock id`() {
+    fun `tryLock acquires the lock if it is not acquired`() {
         val changeLock = buildSubject()
 
         val acquired = changeLock.tryLock("foo")
@@ -26,17 +17,7 @@ abstract class ChangeLockTest {
     }
 
     @Test
-    fun `tryLock does not acquire the lock if it is already acquired for default lock id`() {
-        val changeLock = buildSubject()
-
-        changeLock.tryLock()
-        val acquired = changeLock.tryLock()
-
-        assertThat(acquired, equalTo(false))
-    }
-
-    @Test
-    fun `tryLock does not acquire the lock if it is already acquired for custom lock id`() {
+    fun `tryLock does not acquire the lock if it is already acquired`() {
         val changeLock = buildSubject()
 
         changeLock.tryLock("foo")
@@ -46,17 +27,7 @@ abstract class ChangeLockTest {
     }
 
     @Test
-    fun `lock acquires the lock if it is not acquired for default lock id`() {
-        val changeLock = buildSubject()
-
-        changeLock.lock()
-        val acquired = changeLock.tryLock()
-
-        assertThat(acquired, equalTo(false))
-    }
-
-    @Test
-    fun `lock acquires the lock if it is not acquired for custom lock id`() {
+    fun `lock acquires the lock if it is not acquired`() {
         val changeLock = buildSubject()
 
         changeLock.lock("foo")
@@ -66,15 +37,7 @@ abstract class ChangeLockTest {
     }
 
     @Test(expected = IllegalStateException::class)
-    fun `lock throws an exception if the lock is already acquired for default lock id`() {
-        val changeLock = buildSubject()
-
-        changeLock.lock()
-        changeLock.lock()
-    }
-
-    @Test(expected = IllegalStateException::class)
-    fun `lock throws an exception if the lock is already acquired for custom lock id`() {
+    fun `lock throws an exception if the lock is already acquired`() {
         val changeLock = buildSubject()
 
         changeLock.lock("foo")
@@ -82,18 +45,7 @@ abstract class ChangeLockTest {
     }
 
     @Test
-    fun `unlock releases the lock for default lock ids`() {
-        val changeLock = buildSubject()
-
-        changeLock.tryLock()
-        changeLock.unlock()
-        val acquired = changeLock.tryLock()
-
-        assertThat(acquired, equalTo(true))
-    }
-
-    @Test
-    fun `unlock releases the lock for matching custom lock ids`() {
+    fun `unlock releases the lock for matching tokens`() {
         val changeLock = buildSubject()
 
         changeLock.tryLock("foo")
@@ -104,7 +56,7 @@ abstract class ChangeLockTest {
     }
 
     @Test
-    fun `unlock does not release the lock for not matching custom lock ids`() {
+    fun `unlock does not release the lock for not matching tokens`() {
         val changeLock = buildSubject()
 
         changeLock.tryLock("foo")
@@ -127,7 +79,7 @@ abstract class ChangeLockTest {
     fun `withLock does not acquire the lock if it is already acquired`() {
         val changeLock = buildSubject()
 
-        changeLock.tryLock()
+        changeLock.tryLock("foo")
         changeLock.withLock { acquired ->
             assertThat(acquired, equalTo(false))
         }
@@ -139,7 +91,7 @@ abstract class ChangeLockTest {
 
         changeLock.withLock {}
 
-        val acquired = changeLock.tryLock()
+        val acquired = changeLock.tryLock("foo")
 
         assertThat(acquired, equalTo(true))
     }
@@ -148,10 +100,10 @@ abstract class ChangeLockTest {
     fun `withLock does not release the lock it it was not able to acquire it`() {
         val changeLock = buildSubject()
 
-        changeLock.tryLock()
+        changeLock.tryLock("foo")
         changeLock.withLock {}
 
-        val acquired = changeLock.tryLock()
+        val acquired = changeLock.tryLock("foo")
 
         assertThat(acquired, equalTo(false))
     }
