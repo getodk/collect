@@ -81,6 +81,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private final Cancellable formSessionObserver;
     private final FormsRepository formsRepository;
     private final ChangeLocks changeLocks;
+    private final String screenName;
 
     private final Map<FormIndex, List<SelectChoice>> choices = new HashMap<>();
 
@@ -88,7 +89,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private boolean newEditMessageAlreadyShown;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository, String sessionId, FormsRepository formsRepository, ChangeLocks changeLocks) {
+    public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository, String sessionId, FormsRepository formsRepository, ChangeLocks changeLocks, String screenName) {
         this.clock = clock;
         this.formSessionRepository = formSessionRepository;
         worker = new TrackableWorker(scheduler);
@@ -104,6 +105,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         });
         this.formsRepository = formsRepository;
         this.changeLocks = changeLocks;
+        this.screenName = screenName;
     }
 
     public String getSessionId() {
@@ -374,7 +376,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         formSessionRepository.clear(sessionId);
         ReferenceManager.instance().reset();
         if (form != null) {
-            changeLocks.getFormsLock().unlock(form.getFormFilePath());
+            changeLocks.getFormsLock().unlock(screenName);
         }
     }
 

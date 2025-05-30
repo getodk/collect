@@ -72,7 +72,7 @@ public class FormEntryViewModelTest {
         scheduler = new FakeScheduler();
 
         formSessionRepository.set("blah", formController, form);
-        viewModel = new FormEntryViewModel(() -> 0L, scheduler, formSessionRepository, "blah", formsRepository, changeLocks);
+        viewModel = new FormEntryViewModel(() -> 0L, scheduler, formSessionRepository, "blah", formsRepository, changeLocks, "formEntryScreen");
     }
 
     @Test
@@ -454,9 +454,9 @@ public class FormEntryViewModelTest {
 
     @Test
     public void exit_releasesFormsLock() {
-        changeLocks.getFormsLock().lock(form.getFormFilePath());
+        changeLocks.getFormsLock().lock("formEntryScreen");
 
         viewModel.exit();
-        assertThat(changeLocks.getFormsLock().tryLock(form.getFormFilePath()), equalTo(true));
+        assertThat(changeLocks.getFormsLock().tryLock("formEntryScreen"), equalTo(true));
     }
 }

@@ -1203,7 +1203,7 @@ class FormUriActivityTest {
         launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
         fakeScheduler.flush()
 
-        assertThat(changeLock.tryLock(), equalTo(true))
+        assertThat(changeLock.tryLock("formEntryScreen"), equalTo(true))
     }
 
     private fun getBlankFormIntent(projectId: String?, dbId: Long) =

@@ -336,7 +336,7 @@ private class FormUriViewModel(
 
         if (form.usesEntities()) {
             val formsLock = changeLockProvider.create(projectId).formsLock
-            val isLocAcquired = formsLock.tryLock(form.formFilePath)
+            val isLocAcquired = formsLock.tryLock(resources.getString(R.string.form_entry_screen))
 
             return if (isLocAcquired) {
                 null

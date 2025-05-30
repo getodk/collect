@@ -106,7 +106,8 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
             QRCodeCreatorImpl(),
             HtmlPrinter(),
             instancesDataService,
-            changeLockProvider
+            changeLockProvider,
+            getString(R.string.form_entry_screen)
         )
     }
 

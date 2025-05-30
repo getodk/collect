@@ -59,7 +59,8 @@ class FormEntryViewModelFactory(
     private val qrCodeCreator: QRCodeCreator,
     private val htmlPrinter: HtmlPrinter,
     private val instancesDataService: InstancesDataService,
-    private val changeLockProvider: ChangeLockProvider
+    private val changeLockProvider: ChangeLockProvider,
+    private val screenName: String
 ) : AbstractSavedStateViewModelFactory(owner, null) {
 
     override fun <T : ViewModel> create(
@@ -76,7 +77,8 @@ class FormEntryViewModelFactory(
                 formSessionRepository,
                 sessionId,
                 formsRepositoryProvider.create(projectId),
-                changeLockProvider.create(projectId)
+                changeLockProvider.create(projectId),
+                screenName
             )
 
             FormSaveViewModel::class.java -> {
