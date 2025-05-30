@@ -454,7 +454,7 @@ public class FormEntryViewModelTest {
 
     @Test
     public void exit_releasesFormsLock() {
-        changeLocks.getFormsLock().lock("formEntryScreen");
+        ((BooleanChangeLock) changeLocks.getFormsLock()).lock("formEntryScreen");
 
         viewModel.exit();
         assertThat(changeLocks.getFormsLock().tryLock("formEntryScreen"), equalTo(true));

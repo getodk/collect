@@ -14,16 +14,6 @@ class ThreadSafeBooleanChangeLock : ChangeLock {
         }
     }
 
-    override fun lock(token: Any) {
-        synchronized(this) {
-            if (currentToken != null) {
-                throw IllegalStateException()
-            } else {
-                currentToken = token
-            }
-        }
-    }
-
     override fun unlock(token: Any) {
         synchronized(this) {
             if (currentToken == token) {

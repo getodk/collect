@@ -22,8 +22,6 @@ interface ChangeLock {
 
     fun tryLock(token: Any): Boolean
 
-    fun lock(token: Any)
-
     fun unlock(token: Any)
 
     companion object {

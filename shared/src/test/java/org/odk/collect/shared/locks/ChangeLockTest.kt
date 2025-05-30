@@ -27,24 +27,6 @@ abstract class ChangeLockTest {
     }
 
     @Test
-    fun `lock acquires the lock if it is not acquired`() {
-        val changeLock = buildSubject()
-
-        changeLock.lock("foo")
-        val acquired = changeLock.tryLock("foo")
-
-        assertThat(acquired, equalTo(false))
-    }
-
-    @Test(expected = IllegalStateException::class)
-    fun `lock throws an exception if the lock is already acquired`() {
-        val changeLock = buildSubject()
-
-        changeLock.lock("foo")
-        changeLock.lock("foo")
-    }
-
-    @Test
     fun `unlock releases the lock for matching tokens`() {
         val changeLock = buildSubject()
 

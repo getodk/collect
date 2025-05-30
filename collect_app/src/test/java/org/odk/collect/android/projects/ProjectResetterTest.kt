@@ -203,7 +203,7 @@ class ProjectResetterTest {
         setupTestInstancesDatabase(currentProjectId)
         setupTestSavepointsDatabase(currentProjectId)
 
-        changeLockProvider.create(currentProjectId).instancesLock.lock("blah")
+        (changeLockProvider.create(currentProjectId).instancesLock as BooleanChangeLock).lock("blah")
         val failedResetActions = projectResetter.reset(listOf(ProjectResetter.ResetAction.RESET_INSTANCES))
         assertEquals(1, failedResetActions.size)
 

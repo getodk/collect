@@ -12,17 +12,17 @@ class BooleanChangeLock : ChangeLock {
         }
     }
 
-    override fun lock(token: Any) {
+    override fun unlock(token: Any) {
+        if (currentToken == token) {
+            currentToken = null
+        }
+    }
+
+    fun lock(token: Any) {
         if (currentToken != null) {
             throw IllegalStateException()
         } else {
             currentToken = token
-        }
-    }
-
-    override fun unlock(token: Any) {
-        if (currentToken == token) {
-            currentToken = null
         }
     }
 }
