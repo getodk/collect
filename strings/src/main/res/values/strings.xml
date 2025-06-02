@@ -143,18 +143,28 @@
     <string name="too_complex_form">This form is too complex for this device. Try simplifying expressions or ask for help on the forum.</string>
 
     <string name="survey_internal_error">Internal error: step to prompt failed.</string>
-
+    <!-- Title of the end of form screen -->
     <string name="save_enter_data_description">You are at the end of %s.</string>
+    <!-- Text shown in an information box on the end of form screen when auto-send is off or the device is offline -->
     <string name="form_editing_disabled_after_finalizing">Edits can not be made after finalizing.</string>
+    <!-- Text shown in an information box on the end of form screen when auto-send is on and the device is online -->
     <string name="form_editing_disabled_after_sending">Edits can not be made after sending.</string>
+    <!-- Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send -->
     <string name="form_editing_enabled_after_finalizing">Edits can be made after finalizing.</string>
+    <!-- Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send -->
     <string name="form_editing_enabled_after_sending">Edits can be made after sending.</string>
+    <!-- Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send -->
     <string name="form_editing_disabled_hint">If you need to make edits to your form, \"Save as draft\" until you\'re ready to send.</string>
+    <!-- Details shown in an information box on the end of form screen when the form allows edits after finalization -->
     <string name="form_editing_enabled_after_finalizing_hint">To make changes after finalizing your form, go to \"Ready to send\" and tap the edit icon.</string>
+    <!-- Details shown in an information box on the end of form screen when the form allows edits after sending -->
     <string name="form_editing_enabled_after_sending_hint">To make changes after sending your form, go to \"Sent\" and tap the edit icon.</string>
     <string name="form_edits_warning_learn_more">Learn more</string>
+    <!-- Button text for saving as draft -->
     <string name="save_as_draft">Save as draft</string>
+    <!-- Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline -->
     <string name="finalize">Finalize</string>
+    <!-- Button text for sending a submission. -->
     <string name="send">Send</string>
 
     <string name="data_saved_error">Sorry, form save failed!</string>
@@ -170,9 +180,11 @@
     <string name="keep_editing">Keep editing</string>
     <string name="quit_form_title">Save form?</string>
     <string name="save_explanation">You can save this form and access it from your drafts at any time.</string>
+    <!-- Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
     <string name="save_explanation_with_last_saved">\'This form was last saved on\' EEE, MMM dd, yyyy \'at\' HH:mm\'. Save as draft to keep changes.\'</string>
     <string name="quit_form_continue_title">Continue editing?</string>
     <string name="discard_form_warning">If you discard form, you will lose any changes you have made so far.</string>
+    <!-- Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
     <string name="discard_changes_warning">\'This form was last saved on\' EEE, MMM dd, yyyy \'at\' HH:mm\'. If you discard changes, you will lose any changes you have made since then.\'</string>
 
     <string name="saving_form">Saving Form</string>
@@ -1395,13 +1407,13 @@
     <string name="user_visible_instance_name">%s (Edit %d)</string>
     <!-- Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists -->
     <string name="newer_draft_edit_found_dialog_title">Continue editing draft?</string>
-    <!-- Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists -->
+    <!-- Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
     <string name="newer_draft_edit_found_dialog_message">\'A draft edit was saved on\' EEE, MMM dd, yyyy \'at\' HH:mm\'\n\nDo you want to resume this edit?\'</string>
     <!-- Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists -->
     <string name="newer_draft_edit_found_dialog_positive_button">Resume editing</string>
     <!-- Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists -->
     <string name="newer_finalized_edit_found_dialog_title">Edit latest version?</string>
-    <!-- Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists -->
+    <!-- Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html -->
     <string name="newer_finalized_edit_found_dialog_message">\'This submission was previously edited.\n\nWould you like to edit the latest version finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm\'?\'</string>
     <!-- Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists -->
     <string name="newer_finalized_edit_found_dialog_positive_button">Edit latest form</string>
