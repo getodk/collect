@@ -219,7 +219,7 @@ class MapboxMapFragment :
 
         getMapViewModel().zoom.observe(viewLifecycleOwner, object : ZoomObserver() {
             override fun onZoomToPoint(zoom: Zoom.Point) {
-                moveOrAnimateCamera(zoom.point, zoom.animate, zoom.level ?: getZoom())
+                moveOrAnimateCamera(zoom.point, zoom.animate, zoom.level)
             }
 
             override fun onZoomToBox(zoom: Zoom.Box) {

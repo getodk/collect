@@ -195,7 +195,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                 public void onZoomToPoint(@NonNull Zoom.Point zoom) {
                     MapPoint point = zoom.getPoint();
                     moveOrAnimateCamera(
-                            CameraUpdateFactory.newLatLngZoom(toLatLng(point), (float) zoom.getLevel().doubleValue()), zoom.getAnimate());
+                            CameraUpdateFactory.newLatLngZoom(toLatLng(point), (float) zoom.getLevel()), zoom.getAnimate());
                 }
 
                 @Override

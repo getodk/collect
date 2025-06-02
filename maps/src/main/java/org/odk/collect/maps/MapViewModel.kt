@@ -39,7 +39,9 @@ class MapViewModel(
             return
         }
 
-        val level = if (metaSettings.contains(LAST_KNOWN_ZOOM_LEVEL)) {
+        val level = if (userZoomLevel != null) {
+            userZoomLevel
+        } else if (metaSettings.contains(LAST_KNOWN_ZOOM_LEVEL)) {
             metaSettings.getFloat(LAST_KNOWN_ZOOM_LEVEL).toDouble()
         } else {
             DEFAULT_ZOOM
@@ -50,7 +52,7 @@ class MapViewModel(
 
     fun moveTo(location: MapPoint?, animate: Boolean) {
         if (location != null) {
-            _zoom.value = Zoom.Point(location, _zoom.value?.level, animate, false)
+            _zoom.value = Zoom.Point(location, _zoom.value?.level ?: DEFAULT_ZOOM, animate, false)
         }
     }
 
@@ -92,20 +94,20 @@ class MapViewModel(
 
 sealed class Zoom {
 
-    abstract val level: Double?
+    abstract val level: Double
     abstract val animate: Boolean
     abstract val user: Boolean
 
     data class Point(
         val point: MapPoint,
-        override val level: Double?,
+        override val level: Double,
         override val animate: Boolean,
         override val user: Boolean
     ) : Zoom()
 
     data class Box(
         val box: List<MapPoint>,
-        override val level: Double?,
+        override val level: Double,
         override val animate: Boolean
     ) : Zoom() {
         override val user = false
