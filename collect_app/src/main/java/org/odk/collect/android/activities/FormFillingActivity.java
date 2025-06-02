@@ -429,8 +429,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 new QRCodeCreatorImpl(),
                 new HtmlPrinter(),
                 instancesDataService,
-                changeLockProvider,
-                getString(R.string.form_entry_screen)
+                changeLockProvider
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()

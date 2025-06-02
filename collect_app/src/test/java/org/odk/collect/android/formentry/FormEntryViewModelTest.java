@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.external.FormUriActivityKt.FORM_ENTRY_TOKEN;
 import static org.odk.collect.androidtest.LiveDataTestUtilsKt.getOrAwaitValue;
 import static java.util.Arrays.asList;
 
@@ -72,7 +73,7 @@ public class FormEntryViewModelTest {
         scheduler = new FakeScheduler();
 
         formSessionRepository.set("blah", formController, form);
-        viewModel = new FormEntryViewModel(() -> 0L, scheduler, formSessionRepository, "blah", formsRepository, changeLocks, "formEntryScreen");
+        viewModel = new FormEntryViewModel(() -> 0L, scheduler, formSessionRepository, "blah", formsRepository, changeLocks);
     }
 
     @Test
@@ -454,9 +455,9 @@ public class FormEntryViewModelTest {
 
     @Test
     public void exit_releasesFormsLock() {
-        ((BooleanChangeLock) changeLocks.getFormsLock()).lock("formEntryScreen");
+        ((BooleanChangeLock) changeLocks.getFormsLock()).lock(FORM_ENTRY_TOKEN);
 
         viewModel.exit();
-        assertThat(changeLocks.getFormsLock().tryLock("formEntryScreen"), equalTo(true));
+        assertThat(changeLocks.getFormsLock().tryLock(FORM_ENTRY_TOKEN), equalTo(true));
     }
 }

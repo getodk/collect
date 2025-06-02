@@ -9,13 +9,13 @@ interface ChangeLock {
      * function return value will be returned from the call to this method.
      */
     fun <T> withLock(function: Function<Boolean, T>): T {
-        val acquired = tryLock(defaultToken)
+        val acquired = tryLock(DEFAULT_TOKEN)
 
         return try {
             function.apply(acquired)
         } finally {
             if (acquired) {
-                unlock(defaultToken)
+                unlock(DEFAULT_TOKEN)
             }
         }
     }
@@ -25,6 +25,6 @@ interface ChangeLock {
     fun unlock(token: Any)
 
     companion object {
-        val defaultToken = Any()
+        const val DEFAULT_TOKEN = "default_token"
     }
 }

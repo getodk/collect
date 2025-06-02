@@ -39,6 +39,8 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
 
+const val FORM_ENTRY_TOKEN = "form_entry_token"
+
 /**
  * This class serves as a firewall for starting form filling. It should be used to do that
  * rather than [FormFillingActivity] directly as it ensures that the required data is valid.
@@ -336,7 +338,7 @@ private class FormUriViewModel(
 
         if (form.usesEntities()) {
             val formsLock = changeLockProvider.create(projectId).formsLock
-            val isLocAcquired = formsLock.tryLock(resources.getString(R.string.form_entry_screen))
+            val isLocAcquired = formsLock.tryLock(FORM_ENTRY_TOKEN)
 
             return if (isLocAcquired) {
                 null
