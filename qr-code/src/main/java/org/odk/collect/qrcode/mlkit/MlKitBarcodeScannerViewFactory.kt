@@ -102,7 +102,6 @@ private class MlKitBarcodeScannerView(
                 val value = result.getValue(barcodeScanner)
                 if (value!!.isNotEmpty()) {
                     callback(value.first().rawValue!!)
-                    cameraController.unbind()
                 }
             }
         )

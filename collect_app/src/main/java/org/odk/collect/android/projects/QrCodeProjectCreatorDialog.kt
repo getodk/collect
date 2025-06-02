@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
 import com.google.zxing.client.android.BeepManager
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
@@ -215,7 +216,7 @@ class QrCodeProjectCreatorDialog :
     }
 
     private fun startScanning() {
-        binding.barcodeView.barcodeScannerView.waitForBarcode().observe(
+        binding.barcodeView.barcodeScannerView.waitForBarcode(lifecycleScope).observe(
             viewLifecycleOwner
         ) { result: String ->
             try {
