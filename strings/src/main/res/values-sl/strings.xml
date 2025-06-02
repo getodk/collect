@@ -84,6 +84,7 @@
   <string name="jump_to_end">Pojdi na konec</string>
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">Pojdi gor</string>
+  <!--Text of button from the form's table of contents to edit a finalized form-->
   <!--Displayed below group names in a form's table of contents-->
   <string name="group_label">Skupina</string>
   <!--Displayed below repeat names in a form's table of contents-->
@@ -113,6 +114,7 @@
   <string name="too_complex_form">Obrazec je preveč kompleksen za vašo napravo. Poskusite poenostaviti vprašanja ali vprašati za pomoč na forumu.</string>
   <string name="survey_internal_error">Interna napaka: prehod ni uspel.</string>
   <string name="save_enter_data_description">Ste pri koncu %s.</string>
+  <string name="form_editing_disabled_hint">Če želite spreminjati shranjene odgovore, shranite kot osnutek dokler niste pripravljeni za oddajo.</string>
   <string name="form_edits_warning_learn_more">Preberi več</string>
   <string name="save_as_draft">Shrani kot osnutek</string>
   <string name="finalize">Zaključi</string>
@@ -407,9 +409,7 @@
   <!--Text for option where layer should be available to the current project only-->
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="record_geopoint">Posnemi točko</string>
-  <string name="location_accuracy">Natančnost je %1$s m</string>
   <string name="provider_disabled_error">Ponudniki lociranja so onemogočeni!</string>
-  <string name="gps_result">Zemljepisna širina: %1$s\nZemljepisna dolžina: %2$s\nNadmorska višina: %3$sm\nNatančnost: %4$sm</string>
   <string name="google_play_services_not_available">Ta obrazec želi uporabiti vašo lokacijo, vendar storitve Google Play niso na voljo.</string>
   <string name="location_providers_disabled_dialog_message">Ta obrazec želi uporabiti vašo lokacijo, vendar so ponudniki lokacije onemogočeni. Prosimo, omogočite jih v nastavitvah Androida.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -434,7 +434,6 @@
   <string name="improving_accuracy">Izboljšujem natančnost. Počakajte, prosim.</string>
   <string name="accuracy_status_title">Pridobivam lokacijo</string>
   <!--The accuracy of a location fix in meters-->
-  <string name="accuracy_m">%1$sm</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">Z %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -488,7 +487,6 @@
   <string name="collection_status_auto_minutes">Vnesene točke: %1$d (snemanje vsakih %2$d min)</string>
   <string name="collection_status_auto_seconds_accuracy">Vnesene točke: %1$d (snemanje vsakih %2$d sekund, natančnost %3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">Vnesene točke: %1$d (snemanje vsakih %2$d min, natančnost %3$d m)</string>
-  <string name="geopoint_instruction">Dolgi pritisk za postavitev oznake ali tapnite gumb za dodajanje oznake.</string>
   <string name="geopoint_no_draggable_instruction">Pritisni gumb za označevanje.</string>
   <string name="discard">Zavrzi</string>
   <string name="select_item_count">%s: %d (%d prikazano na zemljevidu)</string>
@@ -565,7 +563,6 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">Strežnik ni zagotovil hasha za ta obrazec.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
-  <string name="form_parsing_error">Ta obrazec ne more biti sprocesiran.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">Pri prenosu tega obrazca je prišlo do napake na napravi.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -598,7 +595,6 @@
   <!--Title of a settings section-->
   <string name="client">Uporabniški vmesnik</string>
   <!--Subtext of a settings section-->
-  <string name="user_interface_settings_subtext">Jezik aplikacije, tema, velikost pisave</string>
   <!--Title of a settings section-->
   <string name="maps">Zemljevidi</string>
   <!--Subtext of a settings section-->
@@ -951,6 +947,7 @@
   <string name="crash_app">Prisilno zaustavi aplikacijo</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Neujeta napaka zaustavila aplikacijo</string>
+  <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
   <string name="permission_dialog_title">O dovoljenjih</string>
   <string name="permission_dialog_text">Če želite dovoliti dostop ODK Collect do spodaj navedenih funkcij, izberite \"dovoli\", če jih želite uporabljati.</string>
   <string name="notifications">Obvestila</string>
@@ -1035,9 +1032,7 @@
   <string name="draft_no_errors">Brez napak</string>
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">Odkljukajte, da ne prikazujete v osnutkih</string>
-  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message displayed when the list of questions is empty-->
+  <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">Ničesar ni na voljo za prikaz</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">Brez praznih obrazcev</string>
@@ -1068,7 +1063,7 @@
     # Savepoint recovery dialog
     ##############################################-->
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
-  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the button that accepts the recovery of the work-->
   <!--Text for the button that declines the recovery of the work-->
   <string name="do_not_recover">Zavrzi</string>
@@ -1082,4 +1077,14 @@
   <!--Text for the button that displays a map for getting a new polygon-->
   <!--Text for the button that displays a map for viewing or changing an already existing polygon-->
   <!--Text for the button that displays a map for viewing an already existing polygon-->
+  <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

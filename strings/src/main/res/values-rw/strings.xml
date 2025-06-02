@@ -72,6 +72,7 @@
   <string name="jump_to_end">Jya ahahera </string>
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">Jya hejuru </string>
+  <!--Text of button from the form's table of contents to edit a finalized form-->
   <!--Displayed below group names in a form's table of contents-->
   <string name="group_label">Itsinda </string>
   <!--Displayed below repeat names in a form's table of contents-->
@@ -373,9 +374,7 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <!--Text for option where layer should be available to the current project only-->
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="record_geopoint">Irabika amakuru</string>
-  <string name="location_accuracy">Birizewe: %1$s m</string>
   <string name="provider_disabled_error">Ihangane, ibituma amakuru y\'ahantu afatwa birafunze</string>
-  <string name="gps_result">Ubujy\'ejuru: %1$s \nUmurambararo: %2$s \nUbutumburuke: %3$s m\n Byizewe: %4$s m</string>
   <string name="google_play_services_not_available">Iyi form irashaka kugenzura aho uherereye, ariko Google Play Services ntabwo iboneka</string>
   <string name="location_providers_disabled_dialog_message">Iyi nyandiko shingiro irashaka kugenzura aho uherereye, ariko banyirigikorwa baho ntabwo bemejwe. Usabwa kwemeza igenamiterere ya Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -436,7 +435,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="collection_status_auto_minutes">Ikimenyetso ndangahantu kinjiye: %1$d (andika buri munota ibi %2$d)</string>
   <string name="collection_status_auto_seconds_accuracy">Ikimenyetso ndangahantu kinjiye: %1$d (andika buri segonda %2$d, kundengo ya %3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">Ikimenyetso ndangahantu kinjiye: %1$d (andika buri munota %2$d, kundengo ya %3$d m)</string>
-  <string name="geopoint_instruction">Kanda umare umwanya kugirango ushyiremo mark cg ukore kuri buto ya marker</string>
   <string name="geopoint_no_draggable_instruction">Kanda hano wemeze.</string>
   <string name="discard">Kuraho cg Jugunya.</string>
   <!--Name of an action button-->
@@ -524,7 +522,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <!--Title of a settings section-->
   <string name="client">Aho umuntu akorera </string>
   <!--Subtext of a settings section-->
-  <string name="user_interface_settings_subtext">Ururimi rwa application, Intego ,ingano y\'inyandiko</string>
   <!--Title of a settings section-->
   <string name="maps">Ikarita</string>
   <!--Subtext of a settings section-->
@@ -830,6 +827,7 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
   <!--##############################################
     # Form saved Snackbar
     ##############################################-->
@@ -847,8 +845,6 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <!--Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature.-->
   <!--Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature.-->
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
-  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-  <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
   <!--Message displayed when the list of questions is empty-->
   <!--Message displayed when the list of blank forms is empty-->
   <!--Subtext displayed when the list of blank forms is empty-->
@@ -866,7 +862,7 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
     # Savepoint recovery dialog
     ##############################################-->
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
-  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the button that accepts the recovery of the work-->
   <!--Text for the button that declines the recovery of the work-->
   <string name="do_not_recover">Kuraho cg Jugunya.</string>
@@ -880,4 +876,14 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <!--Text for the button that displays a map for getting a new polygon-->
   <!--Text for the button that displays a map for viewing or changing an already existing polygon-->
   <!--Text for the button that displays a map for viewing an already existing polygon-->
+  <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

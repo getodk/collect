@@ -84,6 +84,7 @@
   <string name="jump_to_end">رفتن به انتها</string>
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">بالا برو</string>
+  <!--Text of button from the form's table of contents to edit a finalized form-->
   <!--Displayed below group names in a form's table of contents-->
   <string name="group_label">گروه</string>
   <!--Displayed below repeat names in a form's table of contents-->
@@ -376,9 +377,7 @@
   <!--Text for option where layer should be available to the current project only-->
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="record_geopoint">یک نقطه را ثبت کنید</string>
-  <string name="location_accuracy">دقت: %1$s متر</string>
   <string name="provider_disabled_error">با معذرت، نشان دهنده های مکان غیرفعال هستند!</string>
-  <string name="gps_result">عرض جغرافیایی: %1$s\n طول: %2$s\lارتفاع: %3$smg دقت: %4$sm</string>
   <string name="google_play_services_not_available">این فورم می خواهد موقعیت مکانی شما را ردیابی کند اما خدمات Google Play در دسترس نیست.</string>
   <string name="location_providers_disabled_dialog_message">این فورم می خواهد موقعیت مکانی شما را ردیابی کند اما ارائه دهندگان موقعیت مکانی غیرفعال هستند. لطفا در تنظیمات اندروید فعال کنید.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -401,7 +400,6 @@
   <string name="improving_accuracy">بهبود دقت لطفا منتظر باشید</string>
   <string name="accuracy_status_title">دریافت موقعیت مکانی</string>
   <!--The accuracy of a location fix in meters-->
-  <string name="accuracy_m">%1$s متر</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -445,7 +443,6 @@
   <string name="collection_status_auto_minutes">امتیازهای وارد شده: %1$d (ثبت هر %2$d دقیقه)</string>
   <string name="collection_status_auto_seconds_accuracy">امتیازهای وارد شده: %1$d (ثبت هر %2$d ثانیه، دقت %3$d متر)</string>
   <string name="collection_status_auto_minutes_accuracy">امتیازهای وارد شده: %1$d (ثبت هر %2$d ثانیه، دقت %3$d متر)</string>
-  <string name="geopoint_instruction">برای قرار دادن علامت طولانتر فشار دهید یا روی دکمه افزودن نشانگر انگیشت بکشید</string>
   <string name="geopoint_no_draggable_instruction">روی دکمه افزودن نشانگر انگشیتان را بکشید</string>
   <string name="discard">دور انداختن</string>
   <string name="select_item_count">%s: %d (%d روی نقشه نشان داده شده است)</string>
@@ -522,7 +519,6 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">سرور برای این فورم hash ارائه نکرده است.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
-  <string name="form_parsing_error">این فورم قابل پردازش نیست.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">هنگام بارکردن این فورم، خطای دیسک در دستگاه روخ داد.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -555,7 +551,6 @@
   <!--Title of a settings section-->
   <string name="client">رابط کاربری</string>
   <!--Subtext of a settings section-->
-  <string name="user_interface_settings_subtext">زبان برنامه، theme ، اندازه فونت</string>
   <!--Title of a settings section-->
   <string name="maps">نقشه ها</string>
   <!--Subtext of a settings section-->
@@ -905,6 +900,7 @@
   <string name="crash_app">از کار افتاد app</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">اجبار یک استثناء کشف نشده که باعث از کار افتادن برنامه می شود</string>
+  <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
   <string name="permission_dialog_title">درباره محدودیت ها</string>
   <string name="permission_dialog_text">از شما خواسته می شود که به ODK Collect اجازه دسترسی به ویژگی های زیر را بدهید، اگر می خواهید از آنها استفاده کنید، \"اجازه\" را انتخاب کنید.</string>
   <string name="notifications">اعلان ها</string>
@@ -972,9 +968,7 @@
   <string name="draft_no_errors">بدون خطا</string>
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">برای پنهان شدن از پیش نویس ها، علامت را بردارید.</string>
-  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message displayed when the list of questions is empty-->
+  <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">چیزی برای نمایش در دسترس نیست</string>
   <!--Message displayed when the list of blank forms is empty-->
   <!--Subtext displayed when the list of blank forms is empty-->
@@ -998,7 +992,7 @@
     # Savepoint recovery dialog
     ##############################################-->
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
-  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the button that accepts the recovery of the work-->
   <!--Text for the button that declines the recovery of the work-->
   <string name="do_not_recover">دور انداختن</string>
@@ -1012,4 +1006,14 @@
   <!--Text for the button that displays a map for getting a new polygon-->
   <!--Text for the button that displays a map for viewing or changing an already existing polygon-->
   <!--Text for the button that displays a map for viewing an already existing polygon-->
+  <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

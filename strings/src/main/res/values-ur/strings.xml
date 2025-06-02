@@ -84,6 +84,7 @@
   <string name="jump_to_end">اختتام پر جائیں</string>
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">اوپر جائیں</string>
+  <!--Text of button from the form's table of contents to edit a finalized form-->
   <!--Displayed below group names in a form's table of contents-->
   <string name="group_label">گروپ</string>
   <!--Displayed below repeat names in a form's table of contents-->
@@ -113,6 +114,7 @@
   <string name="too_complex_form">یہ فارم اس فون کے لئے بہت پیچیدہ ہے۔ اس کو سادہ کرنے کی کوشش کریں، یا پھر فورم پہ مدد حاصل کریں۔</string>
   <string name="survey_internal_error">اندرونی خرابی: فوری طور پر سیٹ اپ ناکام ہوگیا</string>
   <string name="save_enter_data_description">آپ ‎%s‏ کے آخر پر ہیں۔</string>
+  <string name="form_editing_disabled_hint">اگر آپ فارم میں تبدیلی کرنا چاہتے ہیں تو فارم کو \"ڈرافٹ میں محفوط\" رکھے، جب تک فارم جمع کرانے کے لئے تیار نہیں۔</string>
   <string name="form_edits_warning_learn_more">مزید جانیں</string>
   <string name="save_as_draft">ڈرافٹ میں محفوظ کریں</string>
   <string name="finalize">فائنل کریں</string>
@@ -405,9 +407,7 @@
   <!--Text for option where layer should be available to the current project only-->
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="record_geopoint">پوائنٹ کو ریکارڈ کریں</string>
-  <string name="location_accuracy">درستگی: %1$s میٹر</string>
   <string name="provider_disabled_error">معذرت، لوکیشن فراہم کرنے والے نااہل کئے گئے ہیں</string>
-  <string name="gps_result">طول عرض:  %1$s \nطول بلد: %2$s \n اونچائی:  %3$s میٹر\n ایکیوریسی: %4$s میٹر</string>
   <string name="google_play_services_not_available">یہ فارم آپ کی لوکیشن کو ریکارڈ کرنا چاہتا ہے، مگر Google Play Services دستیاب نہیں ہیں۔</string>
   <string name="location_providers_disabled_dialog_message">یہ فارم آپ کی لوکیشن حاصل کرنا چاہتا ہے، لیکن لوکیشن سیٹنگ بند ہے۔ براہ مہربانی اس کو اینڈرائڈ سیٹنگز سے کھولیں۔</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -430,7 +430,6 @@
   <string name="improving_accuracy">درستگی کو زیادہ کیا جا رہا ہے۔ انتظار کریں۔</string>
   <string name="accuracy_status_title">لوکیشن حاصل کی جا رہی ہے۔</string>
   <!--The accuracy of a location fix in meters-->
-  <string name="accuracy_m">%1$s میٹر</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">ڈبلیو%1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -478,7 +477,6 @@
   <string name="collection_status_auto_minutes">درج شدہ پوائنٹس: %1$d (ہر %2$d منٹ بعد ریکارڈنگ)</string>
   <string name="collection_status_auto_seconds_accuracy">درج شدہ پوائنٹس: %1$d (ہر %2$d سیکنڈز بعد ریکارڈنگ، درستگی %3$d میٹر)</string>
   <string name="collection_status_auto_minutes_accuracy">درج شدہ پوائنٹس: %1$d (ہر %2$d منٹ بعد ریکارڈنگ، درستگی %3$d میٹر)</string>
-  <string name="geopoint_instruction">پلیس مارک کرنے کے لیے طویل دبائیں یا ایڈ مارکر بٹن ٹیپ کریں</string>
   <string name="geopoint_no_draggable_instruction"> مارکر بٹن پر کلک کریں.</string>
   <string name="discard">ختم کر دینا</string>
   <string name="select_item_count">%s: %d (%d میپ پہ موجود)</string>
@@ -555,7 +553,6 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">سرور نے اس فارم کا hash مہیا نہیں کیا۔</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
-  <string name="form_parsing_error">اس فارم پر کام نہیں ہو سکتا۔</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">اس فارم کو ڈاون لوڈ کرتے وقت فون کی ڈسک کا مسئلہ آ رہا ہے۔</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -588,7 +585,6 @@
   <!--Title of a settings section-->
   <string name="client">یوزر انٹرفیس</string>
   <!--Subtext of a settings section-->
-  <string name="user_interface_settings_subtext">ایپ کی زبان، تھیم، الفاظ کا سائز</string>
   <!--Title of a settings section-->
   <string name="maps">نقشہ جات</string>
   <!--Subtext of a settings section-->
@@ -957,6 +953,7 @@ Constraint processing</string>
   <string name="crash_app">Crash app</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Force an uncaught exception causing the app to crash</string>
+  <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
   <string name="permission_dialog_title">اجازت کی تفصیل</string>
   <string name="permission_dialog_text">آپ سے پوچھا جائے گا کہ ODK Collect نیچے دی گئی چیزوں کو استعمال کر سکتا ہے۔ اگر آپ مطمئن ہیں تو Allow کا بٹن دبایئں۔</string>
   <string name="notifications">نوٹس</string>
@@ -1025,9 +1022,7 @@ Constraint processing</string>
   <string name="draft_no_errors">کوئی غلطی نہیں ہے</string>
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">ڈرافٹس میں سے چھپانے کے لئے uncheck کریں</string>
-  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message displayed when the list of questions is empty-->
+  <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">یہاں دکھانے کو کچھ نہیں ہے</string>
   <!--Message displayed when the list of blank forms is empty-->
   <!--Subtext displayed when the list of blank forms is empty-->
@@ -1051,7 +1046,7 @@ Constraint processing</string>
     # Savepoint recovery dialog
     ##############################################-->
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
-  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the button that accepts the recovery of the work-->
   <!--Text for the button that declines the recovery of the work-->
   <string name="do_not_recover">ختم کر دینا</string>
@@ -1065,4 +1060,14 @@ Constraint processing</string>
   <!--Text for the button that displays a map for getting a new polygon-->
   <!--Text for the button that displays a map for viewing or changing an already existing polygon-->
   <!--Text for the button that displays a map for viewing an already existing polygon-->
+  <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

@@ -84,6 +84,8 @@
   <string name="jump_to_end">Ir al Final</string>
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">Subir</string>
+  <!--Text of button from the form's table of contents to edit a finalized form-->
+  <string name="edit_finalized_form">Editar formulario completado</string>
   <!--Displayed below group names in a form's table of contents-->
   <string name="group_label">Grupo</string>
   <!--Displayed below repeat names in a form's table of contents-->
@@ -93,6 +95,7 @@
   <string name="add_repeat_question">Agregar \"%s\"?</string>
   <string name="add_repeat">Agregar</string>
   <string name="add_another_menu">Agregar otro</string>
+  <string name="add_another_question">Agregar otro</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">Editar entrada</string>
   <string name="clearanswer_confirm">¿Borrar la respuesta a \"%s\"?</string>
@@ -113,6 +116,8 @@
   <string name="too_complex_form">Este formulario es muy complejo para este dispositivo. Intente simplificar las expresiones o busque ayuda en el Foro.</string>
   <string name="survey_internal_error">Error interno: Ha fallado la entrada de datos.</string>
   <string name="save_enter_data_description">Esta al final de \"%s\".</string>
+  <string name="form_editing_disabled_after_finalizing">No es posible editar una vez completado</string>
+  <string name="form_editing_disabled_hint">Si necesita hacer cambios, \"Guardar como borrador\" hasta que esté listo para enviar.</string>
   <string name="form_edits_warning_learn_more">Aprende más</string>
   <string name="save_as_draft">Guardar como borrador</string>
   <string name="finalize">Finalizar</string>
@@ -409,7 +414,7 @@
   <!--Label for the offline layer setting-->
   <string name="layer_data_file">Capa</string>
   <!--Title for the screen that allows the user to select a offline layer for maps-->
-  <string name="offline_layer_dialog_title">Seleccione capa sin conexión</string>
+  <string name="offline_layer_dialog_title">Seleccione capa sin conección</string>
   <!--Description of how to add offline layers to the project-->
   <string name="offline_layer_dialog_description">Seleccione la capa sin conexión para usar en todos los mapas de este proyecto. Puede agregar opciones a la lista seleccionando un archivo MBTiles de su dispositivo y también eliminar capas existentes de la lista.</string>
   <!--Text of button user can press to get help when setting up Offline Layers-->
@@ -440,9 +445,7 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">¿Está seguro de que desea eliminar la capa sin conexión %1$s ?</string>
   <string name="record_geopoint">Registrando un punto</string>
-  <string name="location_accuracy">Precisión: %1$s m</string>
   <string name="provider_disabled_error">¡Los proveedores de ubicación están deshabilitados!</string>
-  <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisión: %4$sm</string>
   <string name="google_play_services_not_available">Este formulario quiere rastrear su ubicación, pero los servicios de Google Play no están disponibles.</string>
   <string name="location_providers_disabled_dialog_message">Este formulario quiere rastrear su ubicación pero los proveedores de ubicación están deshabilitados Por favor, habilite en la configuración de Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -467,7 +470,6 @@
   <string name="improving_accuracy">Mejorando precisión. Espere por favor.</string>
   <string name="accuracy_status_title">Obteniendo ubicación</string>
   <!--The accuracy of a location fix in meters-->
-  <string name="accuracy_m">%1$sm</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -518,7 +520,6 @@
   <string name="collection_status_auto_minutes">Puntos ingresados: %1$d (registrando cada %2$d min)</string>
   <string name="collection_status_auto_seconds_accuracy">Puntos ingresados: %1$d (registrando cada %2$d seg, precisión %3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">Puntos ingresados: %1$d (registrando cada %2$d min, precisión %3$d m)</string>
-  <string name="geopoint_instruction">Pulsar prolongadamente para colocar la marca o tocar el botón marcador.</string>
   <string name="geopoint_no_draggable_instruction">Tap botón de agregar marker</string>
   <string name="discard">Descartar</string>
   <string name="select_item_count">%s: %d (%d mostrar en el mapa)</string>
@@ -595,7 +596,6 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">El servidor no proporcionó un hash para este formulario.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
-  <string name="form_parsing_error">Este formulario no se puede procesar.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">Se produjo un error de disco en el dispositivo al descargar este formulario.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -628,7 +628,6 @@
   <!--Title of a settings section-->
   <string name="client">Interfaz de usuario</string>
   <!--Subtext of a settings section-->
-  <string name="user_interface_settings_subtext">Idioma, tema, tamaño de fuente</string>
   <!--Title of a settings section-->
   <string name="maps">Mapas</string>
   <!--Subtext of a settings section-->
@@ -987,6 +986,7 @@
   <string name="crash_app">Aplicación bloqueada</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Se forzó una excepción no detectada que hace que la aplicación se bloquee</string>
+  <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
   <string name="permission_dialog_title">Acerca de los permisos</string>
   <string name="permission_dialog_text">Se le pedirá que permita el acceso de ODK Collect a las siguientes funciones, seleccione \"permitir\" si desea usarlas.</string>
   <string name="notifications">Notificaciones</string>
@@ -1063,9 +1063,7 @@
   <string name="draft_no_errors">Sin errores</string>
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">Desmarque para ocultarse de los borradores</string>
-  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message displayed when the list of questions is empty-->
+  <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">No hay nada disponible para mostrar.</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">No hay formularios en blanco</string>
@@ -1097,7 +1095,7 @@
     ##############################################-->
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">¿Recuperar tu trabajo?</string>
-  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="savepoint_recovery_dialog_message">\'Recolección cerrada inesperadamente el \'EEE, MMM dd, yyyy \'a las\' HH:mm\' y  se guardó su trabajo. \n\n¿Quiere recuperarlo o descartarlo?\'</string>
   <!--Text for the button that accepts the recovery of the work-->
   <string name="recover">Recuperar</string>
@@ -1123,4 +1121,14 @@
   <string name="view_or_change_polygon">Ver o cambiar polígono</string>
   <!--Text for the button that displays a map for viewing an already existing polygon-->
   <string name="view_polygon">Ver polígono</string>
+  <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>
