@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.external.FormUriActivityKt.FORM_ENTRY_TOKEN;
 import static org.odk.collect.androidtest.LiveDataTestUtilsKt.getOrAwaitValue;
 import static java.util.Arrays.asList;
 
@@ -55,7 +56,7 @@ public class FormEntryViewModelTest {
     private FormIndex startingIndex;
     private AuditEventLogger auditEventLogger;
     private FakeScheduler scheduler;
-    private final Form form = new Form.Builder().build();
+    private final Form form = new Form.Builder().formFilePath("blah").build();
     private final FormSessionRepository formSessionRepository = new InMemFormSessionRepository();
     private final FormsRepository formsRepository = new InMemFormsRepository();
     private final ChangeLocks changeLocks = new ChangeLocks(new BooleanChangeLock(), new BooleanChangeLock());
@@ -453,36 +454,10 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void exit_releasesFormsLockOnlyIfFormHasEntities() {
-        changeLocks.getFormsLock().lock();
+    public void exit_releasesFormsLock() {
+        ((BooleanChangeLock) changeLocks.getFormsLock()).lock(FORM_ENTRY_TOKEN);
 
         viewModel.exit();
-        assertThat(changeLocks.getFormsLock().tryLock(), equalTo(false));
-
-        Form formWithEntities = new Form.Builder(form).usesEntities(true).build();
-        formSessionRepository.set("blah", formController, formWithEntities);
-        viewModel = new FormEntryViewModel(() -> 0L, scheduler, formSessionRepository, "blah", formsRepository, changeLocks);
-
-        viewModel.exit();
-        assertThat(changeLocks.getFormsLock().tryLock(), equalTo(true));
-    }
-
-    @Test
-    public void exit_doesNotReleaseFormsLockIfFormDoesNotHasEntities() {
-        changeLocks.getFormsLock().lock();
-
-        viewModel.exit();
-        assertThat(changeLocks.getFormsLock().tryLock(), equalTo(false));
-    }
-
-    @Test
-    public void exit_releasesFormsLockIfFormHasEntities() {
-        changeLocks.getFormsLock().lock();
-
-        Form formWithEntities = new Form.Builder(form).usesEntities(true).build();
-        formSessionRepository.set("blah", formController, formWithEntities);
-
-        viewModel.exit();
-        assertThat(changeLocks.getFormsLock().tryLock(), equalTo(true));
+        assertThat(changeLocks.getFormsLock().tryLock(FORM_ENTRY_TOKEN), equalTo(true));
     }
 }

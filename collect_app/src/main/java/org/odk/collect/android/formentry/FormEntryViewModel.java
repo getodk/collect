@@ -1,5 +1,6 @@
 package org.odk.collect.android.formentry;
 
+import static org.odk.collect.android.external.FormUriActivityKt.FORM_ENTRY_TOKEN;
 import static org.odk.collect.android.javarosawrapper.FormControllerExt.getQuestionPrompts;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 import static org.odk.collect.androidshared.livedata.LiveDataUtils.observe;
@@ -373,8 +374,8 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     public void exit() {
         formSessionRepository.clear(sessionId);
         ReferenceManager.instance().reset();
-        if (form != null && form.usesEntities()) {
-            changeLocks.getFormsLock().unlock();
+        if (form != null) {
+            changeLocks.getFormsLock().unlock(FORM_ENTRY_TOKEN);
         }
     }
 

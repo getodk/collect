@@ -1053,7 +1053,7 @@ class FormUriActivityTest {
             ).build()
         )
 
-        changeLock.lock()
+        changeLock.lock("blah")
         launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
         fakeScheduler.flush()
 
@@ -1075,7 +1075,7 @@ class FormUriActivityTest {
             ).build()
         )
 
-        changeLock.lock()
+        changeLock.lock("blah")
         val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
         fakeScheduler.flush()
 
@@ -1104,7 +1104,7 @@ class FormUriActivityTest {
                 .build()
         )
 
-        changeLock.lock()
+        changeLock.lock("blah")
         launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
         fakeScheduler.flush()
 
@@ -1135,7 +1135,7 @@ class FormUriActivityTest {
                 .build()
         )
 
-        changeLock.lock()
+        changeLock.lock("blah")
         val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
         fakeScheduler.flush()
 
@@ -1169,7 +1169,7 @@ class FormUriActivityTest {
                 .build()
         )
 
-        changeLock.lock()
+        changeLock.lock("blah")
         launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
         fakeScheduler.flush()
 
@@ -1203,7 +1203,7 @@ class FormUriActivityTest {
         launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
         fakeScheduler.flush()
 
-        assertThat(changeLock.tryLock(), equalTo(true))
+        assertThat(changeLock.tryLock("formEntryScreen"), equalTo(true))
     }
 
     private fun getBlankFormIntent(projectId: String?, dbId: Long) =

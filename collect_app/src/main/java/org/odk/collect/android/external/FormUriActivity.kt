@@ -39,6 +39,8 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
 
+const val FORM_ENTRY_TOKEN = "form_entry_token"
+
 /**
  * This class serves as a firewall for starting form filling. It should be used to do that
  * rather than [FormFillingActivity] directly as it ensures that the required data is valid.
@@ -327,18 +329,16 @@ private class FormUriViewModel(
             return null
         }
 
-        val usesEntities = if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
-            val form = formsRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
-            form.usesEntities()
+        val form = if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
+            formsRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
         } else {
             val instance = instancesRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
-            val form = formsRepositoryProvider.create().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
-            form.usesEntities()
+            formsRepositoryProvider.create().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
         }
 
-        if (usesEntities) {
+        if (form.usesEntities()) {
             val formsLock = changeLockProvider.create(projectId).formsLock
-            val isLocAcquired = formsLock.tryLock()
+            val isLocAcquired = formsLock.tryLock(FORM_ENTRY_TOKEN)
 
             return if (isLocAcquired) {
                 null
