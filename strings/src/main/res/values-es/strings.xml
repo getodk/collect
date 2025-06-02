@@ -414,7 +414,7 @@
   <!--Label for the offline layer setting-->
   <string name="layer_data_file">Capa</string>
   <!--Title for the screen that allows the user to select a offline layer for maps-->
-  <string name="offline_layer_dialog_title">Seleccione capa sin conección</string>
+  <string name="offline_layer_dialog_title">Seleccione capa sin conexión</string>
   <!--Description of how to add offline layers to the project-->
   <string name="offline_layer_dialog_description">Seleccione la capa sin conexión para usar en todos los mapas de este proyecto. Puede agregar opciones a la lista seleccionando un archivo MBTiles de su dispositivo y también eliminar capas existentes de la lista.</string>
   <!--Text of button user can press to get help when setting up Offline Layers-->

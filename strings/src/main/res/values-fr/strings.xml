@@ -277,7 +277,7 @@
   <string name="ext_import_csv_missing_error">Les données externes pour %1$s n\'ont pas été importées. Vous avez peux-être oublié d\'inclure le fichier %2$s.csv avec votre formulaire ?</string>
   <string name="ext_search_generic_error">Erreur de syntaxe dans la fonction search(): %s</string>
   <string name="ext_assign_value_error">Impossible d\'attribuer la valeur à \'%s\'.</string>
-  <string name="parser_exception">Exception XPathParser: \\"%s\\"</string>
+  <string name="parser_exception">Exception XPathParser: \"%s\"</string>
   <string name="get_bearing">Enregistrer la Position</string>
   <string name="replace_bearing">Remplacer la Position</string>
   <string name="getting_bearing">Chargement de la Position</string>
