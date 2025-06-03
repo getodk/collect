@@ -146,9 +146,9 @@
     <!-- Title of the end of form screen -->
     <string name="save_enter_data_description">You are at the end of %s.</string>
     <!-- Text shown in an information box on the end of form screen when auto-send is off or the device is offline -->
-    <string name="form_editing_disabled_after_finalizing">Edits can not be made after finalizing.</string>
+    <string name="form_editing_disabled_after_finalizing">Edits can\'t be made after finalizing.</string>
     <!-- Text shown in an information box on the end of form screen when auto-send is on and the device is online -->
-    <string name="form_editing_disabled_after_sending">Edits can not be made after sending.</string>
+    <string name="form_editing_disabled_after_sending">Edits can\'t be made after sending.</string>
     <!-- Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send -->
     <string name="form_editing_enabled_after_finalizing">Edits can be made after finalizing.</string>
     <!-- Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send -->
@@ -156,9 +156,9 @@
     <!-- Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send -->
     <string name="form_editing_disabled_hint">If you need to make edits to your form, \"Save as draft\" until you\'re ready to send.</string>
     <!-- Details shown in an information box on the end of form screen when the form allows edits after finalization -->
-    <string name="form_editing_enabled_after_finalizing_hint">To make changes after finalizing your form, go to \"Ready to send\" and tap the edit icon.</string>
+    <string name="form_editing_enabled_after_finalizing_hint">To make changes after finalizing your form, go to \"Ready to send\", open the form, and tap the edit icon.</string>
     <!-- Details shown in an information box on the end of form screen when the form allows edits after sending -->
-    <string name="form_editing_enabled_after_sending_hint">To make changes after sending your form, go to \"Sent\" and tap the edit icon.</string>
+    <string name="form_editing_enabled_after_sending_hint">To make changes after sending your form, go to \"Sent\", open the form, and tap the edit icon.</string>
     <string name="form_edits_warning_learn_more">Learn more</string>
     <!-- Button text for saving as draft -->
     <string name="save_as_draft">Save as draft</string>
