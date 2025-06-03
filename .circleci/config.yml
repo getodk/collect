@@ -4,6 +4,12 @@
 version: 2
 
 references:
+  android_config_small: &android_config_small
+    working_directory: ~/work
+    docker:
+      - image: cimg/android:2025.02
+    resource_class: small
+
   android_config: &android_config
     working_directory: ~/work
     docker:
@@ -300,31 +306,10 @@ jobs:
           no_output_timeout: 25m
 
   test_instrumented:
-    <<: *android_config
+    <<: *android_config_small
     steps:
       - attach_workspace:
           at: ~/work
-      - restore_cache:
-          keys:
-            - intrumented-deps-{{ checksum "deps.txt" }}
-            - intrumented-deps
-            - compile-deps-
-      - restore_cache:
-          keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-
-      - run:
-          name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
-
-      - run:
-          name: Assemble test build
-          command: ./gradlew assembleDebug assembleDebugAndroidTest
-
-      - save_cache:
-          paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: intrumented-deps-{{ checksum "deps.txt" }}
 
       - run:
           name: Authorize gcloud
@@ -393,9 +378,12 @@ workflows:
                 - master
     jobs:
       - compile
-      - test_instrumented:
+      - build_instrumented:
           requires:
             - compile
+      - test_instrumented:
+          requires:
+            - build_instrumented
 
   release:
     jobs:
