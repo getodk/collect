@@ -100,8 +100,10 @@ private class MlKitBarcodeScannerView(
                 executor
             ) { result: MlKitAnalyzer.Result ->
                 val value = result.getValue(barcodeScanner)
-                if (value!!.isNotEmpty()) {
-                    callback(value.first().rawValue!!)
+                val rawValue = value?.firstOrNull()?.rawValue
+
+                if (!rawValue.isNullOrEmpty()) {
+                    callback(rawValue)
                 }
             }
         )
