@@ -224,6 +224,11 @@ jobs:
             - ~/.gradle/caches/modules-2/files-2.1
           key: intrumented-deps-{{ checksum "deps.txt" }}
 
+      - persist_to_workspace:
+          root: ~/work
+          paths:
+            - .
+
   build_release:
     <<: *android_config
     steps:
