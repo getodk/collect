@@ -84,6 +84,8 @@
   <string name="jump_to_end">Loppuun</string>
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">Ylös</string>
+  <!--Text of button from the form's table of contents to edit a finalized form-->
+  <string name="edit_finalized_form">Muokkaa viimeisteltyä lomaketta</string>
   <!--Displayed below group names in a form's table of contents-->
   <string name="group_label">Ryhmä</string>
   <!--Displayed below repeat names in a form's table of contents-->
@@ -93,6 +95,7 @@
   <string name="add_repeat_question">Lisätäänkö \"%s\"?</string>
   <string name="add_repeat">Lisätään</string>
   <string name="add_another_menu">Lisää toinen</string>
+  <string name="add_another_question">Lisää vielä yksi?</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">Kehotteen muokkaus</string>
   <string name="clearanswer_confirm">Poistetaanko vastaus kysymykseen \"%s\"?</string>
@@ -113,6 +116,13 @@
   <string name="too_complex_form">Tämä lomake on liian monimutkainen tälle laitteelle. Yritä lausekkeiden yksinkertaistamista tai pyydä apua verkon keskusteluryhmästä.</string>
   <string name="survey_internal_error">Sisäinen virhe: siirtyminen kehotteeseen epäonnistui.</string>
   <string name="save_enter_data_description">Olet lomakkeen %s lopussa.</string>
+  <string name="form_editing_disabled_after_finalizing">Muokkauksia ei voi tehdä viimeistelyn jälkeen.</string>
+  <string name="form_editing_disabled_after_sending">Muokkauksia ei voi tehdä lähettämisen jälkeen.</string>
+  <string name="form_editing_enabled_after_finalizing">Muokkauksia voi tehdä viimeistelyn jälkeen.</string>
+  <string name="form_editing_enabled_after_sending">Muokkauksia ei voi tehdä lähettämisen jälkeen.</string>
+  <string name="form_editing_disabled_hint">Jos sinun tarvitsee tehdä muutoksia lomakkeeseesi, \"Tallenna luonnoksena\" kunnes olet valmis lähettämään.</string>
+  <string name="form_editing_enabled_after_finalizing_hint">Tehdäksesi muutoksia kun olet viimeistellyt lomakkeesi, mene kohtaan \"Valmis lähetettäväksi\" ja täppää muokkauskuvaketta.</string>
+  <string name="form_editing_enabled_after_sending_hint">Tehdäksesi muutoksia kun olet lähettänyt lomakkeesi, mene kohtaan \"Lähetetty\" ja täppää muokkauskuvaketta.</string>
   <string name="form_edits_warning_learn_more">Lisätietoja</string>
   <string name="save_as_draft">Tallenna luonnoksena</string>
   <string name="finalize">Viimeistele</string>
@@ -439,9 +449,10 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Haluatko varmasti poistaa offline-tason %1$s?</string>
   <string name="record_geopoint">Tallenna piste</string>
-  <string name="location_accuracy">Tarkkuus: %1$s m</string>
+  <string name="location_accuracy">Tarkkuus: %1$s</string>
+  <string name="location_accuracy_unacceptable">⚠️ Tarkkuus: %1$s (ei hyväksyttävä)</string>
   <string name="provider_disabled_error">Pahoittelut, sijaintitiedot eivät ole käytössä!</string>
-  <string name="gps_result">Leveysasteet: %1$s\nPituusasteet: %2$s\nKorkeus: %3$sm\nTarkkuus: %4$sm</string>
+  <string name="gps_result">Leveysasteet: %1$s\nPituusasteet: %2$s\nKorkeus: %3$s m\nTarkkuus: %4$s m</string>
   <string name="google_play_services_not_available">Tämä lomake haluaa seurata sijaintiasi mutta Google Play Services ei ole käytettävissä.</string>
   <string name="location_providers_disabled_dialog_message">Tämä lomake haluaa seurata sijaintiasi mutta sijaintipalvelut (location providers) eivät ole käytettävissä. Ole hyvä ja aktivoi ne Androidin asetuksissa.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -466,7 +477,7 @@
   <string name="improving_accuracy">Parannetaan tarkkuutta, ole hyvä ja odota.</string>
   <string name="accuracy_status_title">Sijainnin hakeminen</string>
   <!--The accuracy of a location fix in meters-->
-  <string name="accuracy_m">%1$sm</string>
+  <string name="accuracy_m">%1$s m</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -514,7 +525,7 @@
   <string name="collection_status_auto_minutes">Tallennettuja pisteitä: %1$d (tallennus joka %2$d min)</string>
   <string name="collection_status_auto_seconds_accuracy">Tallennettuja pisteitä: %1$d (tallennus joka %2$d s, tarkkuus %3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">Tallennettuja pisteitä: %1$d (tallennus joka %2$d min, tarkkuus %3$d m)</string>
-  <string name="geopoint_instruction">Paina pitkään asettaaksesi merkin tai näpäytä merkkinäppäintä.</string>
+  <string name="geopoint_instruction">Paina pitkään asettaaksesi merkin tai näpäytä merkkinäppäintä</string>
   <string name="geopoint_no_draggable_instruction">Paina lisää merkki -näppäintä.</string>
   <string name="discard">Hylkää</string>
   <string name="select_item_count">%s: %d (%d näytetty kartalla)</string>
@@ -591,7 +602,7 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">Palvelin ei antanut tiivistettä tälle lomakkeelle.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
-  <string name="form_parsing_error">Lomaketta ei voitu prosessoida.</string>
+  <string name="form_parsing_error">Tätä lomaketta ei voida käsitellä:</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">Levyvirhe laitteella ladatessa tätä lomaketta.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -624,7 +635,7 @@
   <!--Title of a settings section-->
   <string name="client">Käyttöliittymä</string>
   <!--Subtext of a settings section-->
-  <string name="user_interface_settings_subtext">Sovelluksen kieli, teema, kirjasinkoko</string>
+  <string name="user_interface_settings_subtext">Sovelluksen kieli, kirjasinkoko, navigointi</string>
   <!--Title of a settings section-->
   <string name="maps">Kartat</string>
   <!--Subtext of a settings section-->
@@ -983,6 +994,9 @@
   <string name="crash_app">Kaada sovellus</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Pakota havaitsematon poikkeus, joka aiheuttaa sovelluksen kaatumisen</string>
+  <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <string name="debug_filters">Vianetsinnän suodattimet</string>
+  <string name="debug_filters_summary">Näytä suodatinlausekesuorittamisen vianetsintätietoa lomaketta täyttäessä</string>
   <string name="permission_dialog_title">Tietoa luvista</string>
   <string name="permission_dialog_text">Sinulta tullaan pyytämään lupaa ODK Collectille pääsy toimintoihin alla, valitse \"Salli\" jos haluat käyttää niitä.</string>
   <string name="notifications">Ilmoitukset</string>
@@ -1051,9 +1065,7 @@
   <string name="draft_no_errors">Ei virheitä</string>
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">Poista rasti piilottaaksesi Luonnos-näkymästä</string>
-  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message displayed when the list of questions is empty-->
+  <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">Ei näytettävää</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">Ei tyhjiä lomakkeita</string>
@@ -1085,7 +1097,7 @@
     ##############################################-->
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">Haluatko palauttaa työsi?</string>
-  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="savepoint_recovery_dialog_message">\'Collect sulkeutui odottamattomasti\' EEE dd.MM.yyyy \'kello\' HH:mm\' ja tallensi työsi.\n\nHaluatko palauttaa työsi?\'</string>
   <!--Text for the button that accepts the recovery of the work-->
   <string name="recover">Palauta</string>
@@ -1111,4 +1123,24 @@
   <string name="view_or_change_polygon">Tarkastele tai muuta monikulmiota</string>
   <!--Text for the button that displays a map for viewing an already existing polygon-->
   <string name="view_polygon">Tarkastele monikulmiota</string>
+  <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <string name="settings_json">JSON-asetukset</string>
+  <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <string name="preparing_form_edit">Lomaketta valmistellaan muokkausta varten…</string>
+  <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <string name="user_visible_instance_name">%s (Muokkaus %d)</string>
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_title">Jatketaanko luonnoksen muokkausta?</string>
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_message">\'Luonnos tallennettu\' EEE dd MMM yyyy \'klo\' HH:mm\'\n\nHaluatko jatkaa luonnoksen muokkaamista?\'</string>
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_positive_button">Jatka muokkausta</string>
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_title">Muokataanko viimeistä versiota?</string>
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_message">\'Tätä lähetystä on aikaisemmin muokattu.\n\nHaluatko muokata viimeistä versiota, joka on viimeistelty\' EEE dd MMM yyyy \'klo\' HH:mm\'?\'</string>
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_positive_button">Muokkaa viimeistä lomaketta</string>
+  <!--Text for the snackbar shown when editing of a finalized form begins-->
+  <string name="finalized_form_edit_started">Olet nyt muokkaamassa tätä lomaketta. Täppää kysymystä aloittaaksesi muokkauksen.</string>
 </resources>

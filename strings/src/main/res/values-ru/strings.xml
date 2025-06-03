@@ -84,6 +84,7 @@
   <string name="jump_to_end">В конец</string>
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">Назад</string>
+  <!--Text of button from the form's table of contents to edit a finalized form-->
   <!--Displayed below group names in a form's table of contents-->
   <string name="group_label">Группа</string>
   <!--Displayed below repeat names in a form's table of contents-->
@@ -113,6 +114,7 @@
   <string name="too_complex_form">Эта форма слишком сложна для этого устройства. Попробуйте упростить структуру или обратитесь за помощью на форум.</string>
   <string name="survey_internal_error">Внутренняя ошибка: step to prompt failed.</string>
   <string name="save_enter_data_description">Вы в конце опросника \"%s\"</string>
+  <string name="form_editing_disabled_hint">Если вам необходимо внести изменения в форму, сохраните ее как черновик, пока не будете готовы к отправке</string>
   <string name="form_edits_warning_learn_more">Узнать больше</string>
   <string name="save_as_draft">Сохранить как черновик</string>
   <string name="finalize">Завершить</string>
@@ -409,9 +411,7 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Вы уверены, что хотите удалить оффлайн слой %1$s?</string>
   <string name="record_geopoint">Зафиксировать точку</string>
-  <string name="location_accuracy">Точность: %1$s м</string>
   <string name="provider_disabled_error">Включите функцию определения местоположения на вашем устройстве!</string>
-  <string name="gps_result">Широта: %1$s\nДолгота: %2$s\nВысота: %3$sм\nТочность:%4$sм</string>
   <string name="google_play_services_not_available">Эта форма хочет отслеживать ваше местоположение, но сервисы Google Play недоступны.</string>
   <string name="location_providers_disabled_dialog_message">Эта форма хочет отслеживать ваше местоположение, но определение местоположения отключено. Включите в настройках Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -436,7 +436,6 @@
   <string name="improving_accuracy">Повышение точности. Пожалуйста, подождите.</string>
   <string name="accuracy_status_title">Получение местоположения</string>
   <!--The accuracy of a location fix in meters-->
-  <string name="accuracy_m">%1$sм </string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">З %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -472,7 +471,6 @@
   <string name="collection_status_auto_minutes">Введено точек: %1$d (запись каждые %2$d минуты)</string>
   <string name="collection_status_auto_seconds_accuracy">Введено точек: %1$d (запись каждые %2$d сек, точность %3$d м)</string>
   <string name="collection_status_auto_minutes_accuracy">Введено точек: %1$d (запись каждые %2$d мин, точность %3$d м)</string>
-  <string name="geopoint_instruction">Используйте продолжительное нажатие, чтобы расставлять отметки или нажмите кнопку \"добавить отметку\".</string>
   <string name="geopoint_no_draggable_instruction">Нажмите кнопку \"добавить отметку\".</string>
   <string name="discard">Отменить</string>
   <string name="select_item_count">%s: %d (%d показано на карте)</string>
@@ -549,7 +547,6 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">Сервер не предоставил хеш для этой формы.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
-  <string name="form_parsing_error">Эта форма не может быть обработана.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">При загрузке этой формы на устройстве произошла ошибка диска.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -582,7 +579,6 @@
   <!--Title of a settings section-->
   <string name="client">Интерфейс</string>
   <!--Subtext of a settings section-->
-  <string name="user_interface_settings_subtext">Язык приложения, тема, размер шрифта</string>
   <!--Title of a settings section-->
   <string name="maps">Карты</string>
   <!--Subtext of a settings section-->
@@ -933,6 +929,7 @@
   <string name="crash_app">Сбой приложения</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Вызвать исключение, вызывающее сбой приложения</string>
+  <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
   <string name="permission_dialog_title">О доступе</string>
   <string name="notifications">Уведомления</string>
   <string name="required_for_notifications">Требуется для отображения обновлений при загрузке, обновлении и отправке форм.</string>
@@ -966,9 +963,7 @@
   <string name="draft_no_errors">Нет ошибок</string>
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">Снимите галочку, чтобы скрыть из черновиков</string>
-  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message displayed when the list of questions is empty-->
+  <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">Ничего недоступно для отображения</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">Нет пустых форм</string>
@@ -1000,7 +995,7 @@
     ##############################################-->
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">Восстановить работу?</string>
-  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the button that accepts the recovery of the work-->
   <string name="recover">Восстановить</string>
   <!--Text for the button that declines the recovery of the work-->
@@ -1025,4 +1020,14 @@
   <string name="view_or_change_polygon">Посмотреть или изменить полигон</string>
   <!--Text for the button that displays a map for viewing an already existing polygon-->
   <string name="view_polygon">Посмотреть полигон</string>
+  <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

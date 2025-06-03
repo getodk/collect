@@ -84,6 +84,7 @@
   <string name="jump_to_end">Přejít na konec</string>
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">Přejít nahoru</string>
+  <!--Text of button from the form's table of contents to edit a finalized form-->
   <!--Displayed below group names in a form's table of contents-->
   <string name="group_label">Skupina</string>
   <!--Displayed below repeat names in a form's table of contents-->
@@ -93,6 +94,7 @@
   <string name="add_repeat_question">Přidat \"%s\"?</string>
   <string name="add_repeat">Přidat</string>
   <string name="add_another_menu">Přidat další</string>
+  <string name="add_another_question">Přidat další?</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">Editovat otázku</string>
   <string name="clearanswer_confirm">Odstranit odpověď na \"%s\"?</string>
@@ -113,6 +115,7 @@
   <string name="too_complex_form">Tento formulář je pro toto zařízení příliš složitý. Zkuste zjednodušit výrazy nebo požádat o pomoc na fóru.</string>
   <string name="survey_internal_error">Vnitřní chyba: přechod k otázce selhal.</string>
   <string name="save_enter_data_description">Jste na konci %s.</string>
+  <string name="form_editing_disabled_hint">Pokud potřebujete formulář upravit, uložte jej jako návrh, dokud nebudete připraveni k odeslání.</string>
   <string name="form_edits_warning_learn_more">Více informací</string>
   <string name="save_as_draft">Uložit jako návrh</string>
   <string name="finalize">Dokončit</string>
@@ -146,6 +149,7 @@
   <string name="invalid_rsa_public_key">Neplatný veřejný klíč RSA.</string>
   <string name="encryption_error_message">%s Formulář nebyl uložen jako dokončený.</string>
   <!--Displayed when an attempt is made to start form filling, but the form is broken-->
+  <string name="form_cannot_be_used">Formulář nelze použít</string>
   <!--Text displayed when audio recording fails to start-->
   <string name="start_recording_failed">Záznam se nepodařilo spustit.</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
@@ -329,17 +333,29 @@
   <string name="persian_month_11">Bahman</string>
   <string name="persian_month_12">Esfand</string>
   <!--1st month in the Buddhist calendar-->
+  <string name="buddhist_month_1">มกราคม</string>
   <!--2nd month in the Buddhist calendar-->
+  <string name="buddhist_month_2">กุมภาพันธ์</string>
   <!--3rd month in the Buddhist calendar-->
+  <string name="buddhist_month_3">มีนาคม</string>
   <!--4th month in the Buddhist calendar-->
+  <string name="buddhist_month_4">เมษายน</string>
   <!--5th month in the Buddhist calendar-->
+  <string name="buddhist_month_5">พฤษภาคม</string>
   <!--6th month in the Buddhist calendar-->
+  <string name="buddhist_month_6">มิถุนายน</string>
   <!--7th month in the Buddhist calendar-->
+  <string name="buddhist_month_7">กรกฎาคม</string>
   <!--8th month in the Buddhist calendar-->
+  <string name="buddhist_month_8">สิงหาคม</string>
   <!--9th month in the Buddhist calendar-->
+  <string name="buddhist_month_9">กันยายน</string>
   <!--10th month in the Buddhist calendar-->
+  <string name="buddhist_month_10">ตุลาคม</string>
   <!--11th month in the Buddhist calendar-->
+  <string name="buddhist_month_11">พฤศจิกายน</string>
   <!--12th month in the Buddhist calendar-->
+  <string name="buddhist_month_12">ธันวาคม</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
@@ -428,9 +444,7 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Opravdu chcete odstranit %1$s vrstvu offline?</string>
   <string name="record_geopoint">Zaznamenat bod</string>
-  <string name="location_accuracy">Přesnost: %1$s m</string>
   <string name="provider_disabled_error">Nástroje pro získání polohy jsou zakázané!</string>
-  <string name="gps_result">Zeměpisná šířka:%1$s \n Zeměpisná délka: %2$s \n Výška: %3$s m \n Přesnost %4$sm</string>
   <string name="google_play_services_not_available">Tento formulář chce sledovat vaši polohu, ale služby Google Play nejsou k dispozici.</string>
   <string name="location_providers_disabled_dialog_message">Tento formulář chce sledovat vaši polohu, ale poskytovatelé polohy jsou zakázáni. Zvolte prosím nastavení v systému Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -455,7 +469,6 @@
   <string name="improving_accuracy">Zlepšení přesnosti. Počkejte prosím.</string>
   <string name="accuracy_status_title">Zjištění polohy</string>
   <!--The accuracy of a location fix in meters-->
-  <string name="accuracy_m">%1$sm</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">Západně %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -509,7 +522,6 @@
   <string name="collection_status_auto_minutes">Zadané body: %1$d (záznam každých %2$d min)</string>
   <string name="collection_status_auto_seconds_accuracy">Zadané body: %1$d (záznam každé %2$d sec, přesnost %3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">Zadané body: %1$d (záznam každé %2$d min, přesnost %3$d m)</string>
-  <string name="geopoint_instruction">Dlouhým stisknutím označit značku nebo klepnutím na tlačítko přidat značku.</string>
   <string name="geopoint_no_draggable_instruction">Klepnutím na tlačítko přidat značku.</string>
   <string name="discard">Vyřadit</string>
   <string name="select_item_count">%s: %d (%d zobrazeno na mapě)</string>
@@ -586,7 +598,6 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">Server neposkytl hash pro tento formulář.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
-  <string name="form_parsing_error">Tento formulář nelze zpracovat.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">Při stahování tohoto formuláře došlo na zařízení k chybě disku.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -619,7 +630,7 @@
   <!--Title of a settings section-->
   <string name="client">Uživatelské rozhraní</string>
   <!--Subtext of a settings section-->
-  <string name="user_interface_settings_subtext">Jazyk aplikace, téma, velikost písma</string>
+  <string name="user_interface_settings_subtext">Jazyk aplikace, velikost písma, navigace</string>
   <!--Title of a settings section-->
   <string name="maps">Mapy</string>
   <!--Subtext of a settings section-->
@@ -759,6 +770,7 @@
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">Odemčené nastavení</string>
   <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
+  <string name="setting_not_available_during_form_entry">Nastavení není při zadávání formuláře k dispozici</string>
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -780,6 +792,7 @@
   <string name="select_all">Vybrat vše</string>
   <string name="clear_all">Vymazat vše</string>
   <string name="reset_settings">Všechna nastavení (interní nastavení, uložená nastavení)</string>
+  <string name="reset_saved_forms">Uložené formuláře (složka instance, databáze instancí)</string>
   <string name="reset_blank_forms">Prázdné formuláře (složka formulářů, databáze formulářů, databáze položek)</string>
   <string name="reset_layers">Mapové vrstvy (složka layers)</string>
   <string name="reset_cache">Mezipaměť načítání formulářů (složka .cache)</string>
@@ -943,6 +956,7 @@
   <!--Error shown when a user tries to open a form but there is more than one form with the same form ID-->
   <string name="survey_multiple_forms_error">Stáhli jste dva různé formuláře se shodným ID a verzí. Možná jste nahráli stejný dotazník dvakrát nebo na jiné servery. Každopádně, jeden byste měli smazat.</string>
   <!--Error shown when a user tries to open a form when forms update is being applied in the background-->
+  <string name="cannot_open_form_because_of_forms_update">Tento formulář nelze nyní otevřít, protože probíhá aktualizace formulářů. Zkuste to prosím brzy znovu.</string>
   <!--##############################################
     # Permissions
     ##############################################-->
@@ -955,6 +969,7 @@
   <!--Label for entity that has been created offline and is not on the server yet-->
   <string name="offline">Offline</string>
   <!--Error message displayed when a user opens a form with an unrecognized entity version-->
+  <string name="unrecognized_entity_version">Tento formulář není v této verzi ODK Collect podporován. Upgradujte prosím aplikaci Collect. Pokud máte tento problém i nadále, nahlaste ho osobě, která vás požádala o sběr dat. \n\nVerze specifikace formulářových entit: %s</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
@@ -974,6 +989,7 @@
   <string name="crash_app">Aplikace Crash</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Vynucení nezachycené výjimky, která způsobí pád aplikace</string>
+  <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
   <string name="permission_dialog_title">O oprávněních</string>
   <string name="permission_dialog_text">Budete požádáni o povolení přístupu ODK Collect k níže uvedeným funkcím, pokud je chcete používat, vyberte možnost \"povolit\".</string>
   <string name="notifications">Oznámení</string>
@@ -1007,16 +1023,16 @@
   <!--Message shown after bulk finalization when finalizing all drafts has succeeded-->
   <!--Message shown after bulk finalization when no drafts finalized successfully-->
   <!--Message shown after bulk finalization when some drafts finalize successfully and others fail-->
+  <string name="bulk_finalize_partial_success">%d návrhy byly dokončeny. %d návrhy obsahují chyby, které je třeba před dokončením odstranit.</string>
   <!--Message shown when some drafts finalize successfully but others need to be finalized manually-->
+  <string name="bulk_finalize_unsupported">%d  dokončené návrhy. Zbývající návrhy je třeba dokončit ručně.</string>
   <!--Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature.-->
   <string name="draft_errors">Chyby</string>
   <!--Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature.-->
   <string name="draft_no_errors">Žádné chyby</string>
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">Zrušte zaškrtnutím, aby se skrylo z konceptů</string>
-  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message displayed when the list of questions is empty-->
+  <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">Nic není  k zobrazení</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">Žádné prázdné formuláře</string>
@@ -1048,7 +1064,7 @@
     ##############################################-->
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">Obnovit svou práci?</string>
-  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="savepoint_recovery_dialog_message">\'Sběr se neočekávaně ukončil dne \'EEE, MMM dd, yyyy \'at\' HH:mm\' a uložil vaši práci.\n\nChcete ji obnovit nebo zahodit?\'</string>
   <!--Text for the button that accepts the recovery of the work-->
   <string name="recover">Obnovit</string>
@@ -1074,4 +1090,14 @@
   <string name="view_or_change_polygon">Zobrazit nebo změnit polygon</string>
   <!--Text for the button that displays a map for viewing an already existing polygon-->
   <string name="view_polygon">Zobrazit polygon</string>
+  <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

@@ -43,5 +43,7 @@ private val formats = setOf(
     R.string.sending_failed_on_date_at_time,
     R.string.deleted_on_date_at_time,
     R.string.modified_on_date_at_time,
-    R.string.savepoint_recovery_dialog_message
+    R.string.savepoint_recovery_dialog_message,
+    R.string.newer_draft_edit_found_dialog_message,
+    R.string.newer_finalized_edit_found_dialog_message
 )

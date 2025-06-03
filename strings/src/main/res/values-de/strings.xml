@@ -84,6 +84,8 @@
   <string name="jump_to_end">Zum Ende</string>
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">Zurück</string>
+  <!--Text of button from the form's table of contents to edit a finalized form-->
+  <string name="edit_finalized_form">Abgeschlossenes Formular bearbeiten</string>
   <!--Displayed below group names in a form's table of contents-->
   <string name="group_label">Gruppe</string>
   <!--Displayed below repeat names in a form's table of contents-->
@@ -93,6 +95,7 @@
   <string name="add_repeat_question">\"%s\" hinzufügen?</string>
   <string name="add_repeat">Hinzufügen</string>
   <string name="add_another_menu">Weitere hinzufügen</string>
+  <string name="add_another_question">Weitere hinzufügen?</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">Eingabe ändern</string>
   <string name="clearanswer_confirm">Antwort zu \"%s\" entfernen?</string>
@@ -113,6 +116,13 @@
   <string name="too_complex_form">Dieses Formular ist zu komplex für dieses Gerät. Versuche Ausdrücke zu vereinfachen oder bitte im Forum um Hilfe.</string>
   <string name="survey_internal_error">Interner Fehler: Sprung zur Eingabe fehlgeschlagen.</string>
   <string name="save_enter_data_description">Sie sind am Ende von \"%s\" angelangt.</string>
+  <string name="form_editing_disabled_after_finalizing">Änderungen sind nach dem Abschließen nicht möglich.</string>
+  <string name="form_editing_disabled_after_sending">Änderungen sind nach dem Senden nicht möglich.</string>
+  <string name="form_editing_enabled_after_finalizing">Änderungen sind nach dem Abschließen möglich.</string>
+  <string name="form_editing_enabled_after_sending">Änderungen sind nach dem Senden möglich.</string>
+  <string name="form_editing_disabled_hint">Wenn Sie Änderungen an Ihrem Formular vornehmen müssen, \"Als Entwurf speichern\", bis Sie bereit sind, es zu senden.</string>
+  <string name="form_editing_enabled_after_finalizing_hint">Um Änderung nach dem Abschließen des Formulars durchzuführen, auf \"Bereit zum Senden\" gehen und das Bearbeiten-Icon betätigen.</string>
+  <string name="form_editing_enabled_after_sending_hint">Um Änderung nach dem Senden des Formulars durchzuführen, auf \"Gesendet\" gehen und das Bearbeiten-Icon betätigen.</string>
   <string name="form_edits_warning_learn_more">Mehr erfahren</string>
   <string name="save_as_draft">Als Entwurf speichern</string>
   <string name="finalize">Abschließen</string>
@@ -439,7 +449,8 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Möchten sie wirklich die %1$s Offline-Ebene löschen?</string>
   <string name="record_geopoint">Punkt erfassen</string>
-  <string name="location_accuracy">Genauigkeit: %1$s m</string>
+  <string name="location_accuracy">Genauigkeit: %1$s</string>
+  <string name="location_accuracy_unacceptable">⚠️ Genauigkeit: %1$s (inakzeptabel)</string>
   <string name="provider_disabled_error">Standortdienste sind nicht aktiviert!</string>
   <string name="gps_result">Breite (Lat.): %1$s\nLänge (Long.): %2$s\nHöhe (Alt.): %3$sm\nGenauigkeit: %4$sm</string>
   <string name="google_play_services_not_available">Dieses Formular möchte Ihren Standort aufzeichnen, aber die Google Play-Dienste sind nicht verfügbar.</string>
@@ -466,7 +477,7 @@
   <string name="improving_accuracy">Verbessere Genauigkeit. Bitte warten.</string>
   <string name="accuracy_status_title">Ermittle Standort</string>
   <!--The accuracy of a location fix in meters-->
-  <string name="accuracy_m">%1$sm</string>
+  <string name="accuracy_m">%1$s m</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -514,7 +525,7 @@
   <string name="collection_status_auto_minutes">erfasste Punkte: %1$d (automatische Erfassung alle %2$d min)</string>
   <string name="collection_status_auto_seconds_accuracy">erfasste Punkte: %1$d (automatische Erfassung alle%2$d s, Genauigkeit %3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">erfasste Punkte: %1$d (automatische Erfassung alle %2$d min, Genauigkeit %3$d m)</string>
-  <string name="geopoint_instruction">Lange Drücken um eine Markierung zu platzieren oder Button Markierung hinzufügen antippen.</string>
+  <string name="geopoint_instruction">Lange drücken um Markierung zu platzieren oder Button Markierung hinzufügen antippen.</string>
   <string name="geopoint_no_draggable_instruction">Button Markierung hinzufügen antippen.</string>
   <string name="discard">Verwerfen</string>
   <string name="select_item_count">%s: %d (%d auf der Karte angezeigt)</string>
@@ -591,7 +602,7 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">Der Server hat keinen Hash für dieses Formular zur Verfügung gestellt.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
-  <string name="form_parsing_error">Das Formular kann nicht verarbeitet werden.</string>
+  <string name="form_parsing_error">Dieses Formular kann nicht verarbeitet werden:</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">Während des Speicherns des Formulars ist ein Laufwerksfehler aufgetreten.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -624,7 +635,7 @@
   <!--Title of a settings section-->
   <string name="client">Bedienung</string>
   <!--Subtext of a settings section-->
-  <string name="user_interface_settings_subtext">App-Sprache, Theme, Schriftgröße</string>
+  <string name="user_interface_settings_subtext">App-Sprache, Schriftgröße, Navigation</string>
   <!--Title of a settings section-->
   <string name="maps">Karten</string>
   <!--Subtext of a settings section-->
@@ -983,6 +994,9 @@
   <string name="crash_app">App abstürzen lassen</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Unbehandelte Ausnahme erzwingen um die App abstürzen zu lassen</string>
+  <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <string name="debug_filters">Debug-Filter</string>
+  <string name="debug_filters_summary">Debuginformationen für Filterausdruck-Ausführungen während des Ausfüllens des Formulars anzeigen </string>
   <string name="permission_dialog_title">Über Berechtigungen</string>
   <string name="permission_dialog_text">Du wirst aufgefordert, ODK Collect den Zugriff auf die unten aufgeführten Funktionen zu erlauben. Wähle \"Zulassen\", wenn du sie nutzen möchten.</string>
   <string name="notifications">Benachrichtigungen</string>
@@ -1051,9 +1065,7 @@
   <string name="draft_no_errors">Keine Fehler</string>
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">Abwählen um von Entwürfen zu verbergen</string>
-  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message displayed when the list of questions is empty-->
+  <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">Keine Inhalte vorhanden.</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">Keine leeren Formulare</string>
@@ -1085,7 +1097,7 @@
     ##############################################-->
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">Ihre Arbeit Wiederherstellen?</string>
-  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="savepoint_recovery_dialog_message">\'Collect wurde am \'EEE, MMM dd, yyyy \'um\' HH:mm\' unerwartet beendet und hat ihre Arbeit gespeichert.\n\nWollen Sie die gespeicherte Arbeit wiederherstellen oder verwerfen?\'</string>
   <!--Text for the button that accepts the recovery of the work-->
   <string name="recover">Wiederherstellen</string>
@@ -1111,4 +1123,24 @@
   <string name="view_or_change_polygon">Polygon anzeigen oder ändern</string>
   <!--Text for the button that displays a map for viewing an already existing polygon-->
   <string name="view_polygon">Polygon anzeigen</string>
+  <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <string name="settings_json">Einstellungen-JSON</string>
+  <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <string name="preparing_form_edit">Formular für die Bearbeitung vorbereiten…</string>
+  <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <string name="user_visible_instance_name">%s (Änderung %d)</string>
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_title">Bearbeiten des Entwurfs fortsetzen?</string>
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_message">\'Ein bearbeiteter Entwurf wurde gespeichert am\' EEE, MMM dd, yyyy \'um\' HH:mm\'\n\nDiese Bearbeitung fortsetzen?\'</string>
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_positive_button">Bearbeiten fortsetzen</string>
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_title">Aktuellste Version bearbeiten?</string>
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_message">\'Diese Einsendung wurde zuvor bearbeitet.\n\nDie aktuellste Version abgeschlossen am\' EEE, MMM dd, yyyy \'um\' HH:mm\' bearbeiten?\'</string>
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_positive_button">Aktuellstes Formular bearbeiten</string>
+  <!--Text for the snackbar shown when editing of a finalized form begins-->
+  <string name="finalized_form_edit_started">Sie bearbeiten jetzt dieses Formular. Tippen sie auf eine Frage um die Bearbeitung zu starten.</string>
 </resources>

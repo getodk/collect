@@ -84,6 +84,8 @@
   <string name="jump_to_end">Vai alla fine</string>
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">Vai al livello superiore</string>
+  <!--Text of button from the form's table of contents to edit a finalized form-->
+  <string name="edit_finalized_form">Modifica Modulo completato</string>
   <!--Displayed below group names in a form's table of contents-->
   <string name="group_label">Gruppo</string>
   <!--Displayed below repeat names in a form's table of contents-->
@@ -93,6 +95,7 @@
   <string name="add_repeat_question">Aggingere \"%s\"?</string>
   <string name="add_repeat">Aggiungere</string>
   <string name="add_another_menu">Aggiungi un altro</string>
+  <string name="add_another_question">Aggiungi un altro?</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">Modifica Prompt</string>
   <string name="clearanswer_confirm">Rimuovere la risposta a \"%s\"?</string>
@@ -113,6 +116,7 @@
   <string name="too_complex_form">Questo modulo è troppo complesso per questo dispositivo. Prova a semplificare le espressioni o chiedi aiuto sul forum. </string>
   <string name="survey_internal_error">Errore interno: invio suggerimento fallito.</string>
   <string name="save_enter_data_description">Ti trovi alla fine di \"%s\".</string>
+  <string name="form_editing_disabled_hint">Se devi apportare modifiche al modulo, \"Salva come bozza\" finché non sei pronto per l\'invio.</string>
   <string name="form_edits_warning_learn_more">Saperne di più</string>
   <string name="save_as_draft">Salva come bozza</string>
   <string name="finalize">Finalizzare</string>
@@ -440,9 +444,9 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Sei sicuro di voler eliminare il %1$s livello non in linea?</string>
   <string name="record_geopoint">Memorizza un punto</string>
-  <string name="location_accuracy">Precisione: %1$s m</string>
+  <string name="location_accuracy">Precisione: %1$s </string>
+  <string name="location_accuracy_unacceptable">⚠️ Precisione: %1$s (inaccettabile)</string>
   <string name="provider_disabled_error">Attenzione, i Sistemi di Posizionamento sono disabilitati!</string>
-  <string name="gps_result">Latitudine: %1$s\nLongitudine: %2$s\nAltitudine: %3$sm\nPrecisione: %4$sm</string>
   <string name="google_play_services_not_available">Questo formulario vuole monitorare la tua posizione ma Google Play Services non è disponibile.</string>
   <string name="location_providers_disabled_dialog_message">Questo formulario vuole monitorare la tua posizione ma i fornitori di servizi di localizzazione sono disabilitati. Si prega di abilitare nelle impostazioni di Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -467,7 +471,7 @@
   <string name="improving_accuracy">Migliorando la precisione. Attendere prego.</string>
   <string name="accuracy_status_title">Ottenendo la posizione.</string>
   <!--The accuracy of a location fix in meters-->
-  <string name="accuracy_m">%1$sm</string>
+  <string name="accuracy_m">%1$s m</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -518,7 +522,6 @@
   <string name="collection_status_auto_minutes">Punti inseriti: %1$d (salva ogni %2$d min)</string>
   <string name="collection_status_auto_seconds_accuracy">Punti inseriti: %1$d (salva ogni %2$d sec, precisione %3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">Punti inseriti: %1$d (salva ogni %2$d min, precisione %3$d m)</string>
-  <string name="geopoint_instruction">Premi a lungo per posizionare il segno altrimenti tocca su Aggiungi Posizione.</string>
   <string name="geopoint_no_draggable_instruction">Tocca Aggiungi Posizione.</string>
   <string name="discard">Annulla</string>
   <string name="select_item_count">%s: %d (%d mostrato sulla mappa)</string>
@@ -595,7 +598,6 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">Il server non ha fornito un hash per questo modulo.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
-  <string name="form_parsing_error">Questo formulario non può essere elaborato.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">Si è verificato un errore del disco sul dispositivo durante il download di questo modulo.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -628,7 +630,7 @@
   <!--Title of a settings section-->
   <string name="client">Interfaccia utente</string>
   <!--Subtext of a settings section-->
-  <string name="user_interface_settings_subtext">Lingua dell\'app, tema, dimensione del carattere</string>
+  <string name="user_interface_settings_subtext">Lingua dell\'app, dimensione del carattere, navigazione</string>
   <!--Title of a settings section-->
   <string name="maps">Mappe</string>
   <!--Subtext of a settings section-->
@@ -986,6 +988,8 @@
   <string name="crash_app">Arresto anomalo dell\'app</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Forza un\'eccezione non rilevata che causa l\'arresto anomalo dell\'app</string>
+  <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <string name="debug_filters">filtri Debug </string>
   <string name="permission_dialog_title">In merito ai permessi</string>
   <string name="permission_dialog_text">Ti verrà chiesto di consentire a ODK Collect di accedere alle funzionalità seguenti, seleziona \"consenti\" se desideri utilizzarle.</string>
   <string name="notifications">Notifiche</string>
@@ -1062,9 +1066,7 @@
   <string name="draft_no_errors">Nessun errore</string>
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">Deseleziona per nasconderlo dalle bozze</string>
-  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message displayed when the list of questions is empty-->
+  <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">Niente disponibile da visualizzare</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">Nessun formulario vuoto</string>
@@ -1096,7 +1098,7 @@
     ##############################################-->
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">Recuperare il tuo lavoro?</string>
-  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="savepoint_recovery_dialog_message">\'Collect si è chiuso inaspettatamente il \'EEE, MMM dd, yyyy \'alle\' HH:mm\' ed ha salvato il tuo lavoro.\n\nVolete recuperarlo o scartarlo?\'</string>
   <!--Text for the button that accepts the recovery of the work-->
   <string name="recover">Recupera</string>
@@ -1122,4 +1124,19 @@
   <string name="view_or_change_polygon">Vedi o Cambia il poligono</string>
   <!--Text for the button that displays a map for viewing an already existing polygon-->
   <string name="view_polygon">Visualizza poligono</string>
+  <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <string name="settings_json">Impostazioni JSON</string>
+  <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <string name="user_visible_instance_name">%s (Modifica%d)</string>
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_title">Continua a modificare la bozza?</string>
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_positive_button">Ricomincia a modificare</string>
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_positive_button">Modifica ultimo Modulo</string>
+  <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

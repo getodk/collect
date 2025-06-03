@@ -84,6 +84,7 @@
   <string name="jump_to_end">结束</string>
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">返回</string>
+  <!--Text of button from the form's table of contents to edit a finalized form-->
   <!--Displayed below group names in a form's table of contents-->
   <string name="group_label">组</string>
   <!--Displayed below repeat names in a form's table of contents-->
@@ -93,6 +94,7 @@
   <string name="add_repeat_question">添加 \"%s\"?</string>
   <string name="add_repeat">添加</string>
   <string name="add_another_menu">添加另一个</string>
+  <string name="add_another_question">再增加一個？</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">修改提示</string>
   <string name="clearanswer_confirm">删除针对\"%s\"的回答?</string>
@@ -113,6 +115,7 @@
   <string name="too_complex_form">此表单对于此设备太复杂。尝试简化表达或在论坛上寻求帮助。</string>
   <string name="survey_internal_error">内部错误：提示步骤失败。</string>
   <string name="save_enter_data_description">您已在 %s 的末尾.</string>
+  <string name="form_editing_disabled_hint">如果您需要对表格进行编辑，请“另存为草稿”，直到您准备好发送为止。</string>
   <string name="form_edits_warning_learn_more">了解更多</string>
   <string name="save_as_draft">保存为草稿</string>
   <string name="finalize">最终确定</string>
@@ -146,6 +149,7 @@
   <string name="invalid_rsa_public_key">RSA公钥无效。</string>
   <string name="encryption_error_message">%s 表单尚未保存为完成状态。</string>
   <!--Displayed when an attempt is made to start form filling, but the form is broken-->
+  <string name="form_cannot_be_used">表格無法使用</string>
   <!--Text displayed when audio recording fails to start-->
   <string name="start_recording_failed">无法开始录制。</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
@@ -329,17 +333,29 @@
   <string name="persian_month_11">Bahman</string>
   <string name="persian_month_12">Esfand</string>
   <!--1st month in the Buddhist calendar-->
+  <string name="buddhist_month_1">一月</string>
   <!--2nd month in the Buddhist calendar-->
+  <string name="buddhist_month_2">二月</string>
   <!--3rd month in the Buddhist calendar-->
+  <string name="buddhist_month_3">三月</string>
   <!--4th month in the Buddhist calendar-->
+  <string name="buddhist_month_4">四月</string>
   <!--5th month in the Buddhist calendar-->
+  <string name="buddhist_month_5">五月</string>
   <!--6th month in the Buddhist calendar-->
+  <string name="buddhist_month_6">六月</string>
   <!--7th month in the Buddhist calendar-->
+  <string name="buddhist_month_7">七月</string>
   <!--8th month in the Buddhist calendar-->
+  <string name="buddhist_month_8">八月</string>
   <!--9th month in the Buddhist calendar-->
+  <string name="buddhist_month_9">九月</string>
   <!--10th month in the Buddhist calendar-->
+  <string name="buddhist_month_10">十月</string>
   <!--11th month in the Buddhist calendar-->
+  <string name="buddhist_month_11">十一月</string>
   <!--12th month in the Buddhist calendar-->
+  <string name="buddhist_month_12">十二月</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
@@ -425,9 +441,7 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">您确定要删除 %1$s 离线图层吗？</string>
   <string name="record_geopoint">记录点</string>
-  <string name="location_accuracy">精确度: %1$s m</string>
   <string name="provider_disabled_error">位置服务被关闭!</string>
-  <string name="gps_result">纬度: %1$s\n经度: %2$s\n高程: %3$sm\n精度: %4$sm</string>
   <string name="google_play_services_not_available">此表单希望跟踪您的位置，但Google Play服务不可用。</string>
   <string name="location_providers_disabled_dialog_message">此表单希望跟踪您的位置，但位置提供程序被禁用。请在Android设置中启用。</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -452,7 +466,6 @@
   <string name="improving_accuracy">提高准确性，请稍候。</string>
   <string name="accuracy_status_title">正在获取位置</string>
   <!--The accuracy of a location fix in meters-->
-  <string name="accuracy_m">%1$sm</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -497,7 +510,6 @@
   <string name="collection_status_auto_minutes">输入的点数: %1$d (每隔 %2$d 分钟记录)</string>
   <string name="collection_status_auto_seconds_accuracy">输入的点数: %1$d (每隔 %2$d 秒记录, 精度%3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">输入的点数: %1$d (每隔 %2$d 分钟记录, 精度 %3$d m)</string>
-  <string name="geopoint_instruction">长按放置标记或点击添加标记按钮。</string>
   <string name="geopoint_no_draggable_instruction">点击添加标记按钮。</string>
   <string name="discard">丢弃</string>
   <string name="select_item_count">%s: %d (%d 在图上)</string>
@@ -574,7 +586,6 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">服务器未为此表单提供哈希。</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
-  <string name="form_parsing_error">无法处理此表单。</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">下载此表单时，设备上出现磁盘错误。</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -607,7 +618,7 @@
   <!--Title of a settings section-->
   <string name="client">用户界面</string>
   <!--Subtext of a settings section-->
-  <string name="user_interface_settings_subtext">应用程序语言、主题、字体大小</string>
+  <string name="user_interface_settings_subtext">應用程式語言、字體大小、導航</string>
   <!--Title of a settings section-->
   <string name="maps">地图</string>
   <!--Subtext of a settings section-->
@@ -747,6 +758,7 @@
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">设置已解锁</string>
   <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
+  <string name="setting_not_available_during_form_entry">表單輸入期間設定不可用</string>
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -932,17 +944,20 @@
   <!--Error shown when a user tries to open a form but there is more than one form with the same form ID-->
   <string name="survey_multiple_forms_error">您下载了两个具有相同表单ID和版本的不同表单。也许它们是在不同的时间或不同的服务器上传的相同表单。无论如何，您都应该删除一个。</string>
   <!--Error shown when a user tries to open a form when forms update is being applied in the background-->
+  <string name="cannot_open_form_because_of_forms_update">該表單現在無法打開，因為表單正在更新。請稍後重試。</string>
   <!--##############################################
     # Permissions
     ##############################################-->
   <string name="open_settings">打开设置</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <string name="entities_title">實體列表</string>
   <!--Title for setting that controls whether local entity features are enabled or not-->
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">查看实体列表</string>
   <!--Label for entity that has been created offline and is not on the server yet-->
   <string name="offline">离线</string>
   <!--Error message displayed when a user opens a form with an unrecognized entity version-->
+  <string name="unrecognized_entity_version">此版本的 ODK Collect 不支援此形式。請升級收集。如果您仍然遇到此問題，請將其報告給要求您收集資料的人員。\n\n表單實體規格版本： %s</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
@@ -964,6 +979,7 @@
   <string name="crash_app">崩溃应用程序</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">强制执行导致应用程序崩溃的未捕获异常</string>
+  <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
   <string name="permission_dialog_title">关于权限</string>
   <string name="permission_dialog_text">您将被要求允许 ODK Collect 访问以下功能，如果您想使用它们，请选择“允许”。</string>
   <string name="notifications">提醒事项</string>
@@ -1024,9 +1040,7 @@
   <string name="draft_no_errors">无错误</string>
   <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
   <string name="uncheck_to_hide_from_drafts">取消选中即可在草稿中隐藏</string>
-  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
-    <!--Message displayed when the list of questions is empty-->
+  <!--Message displayed when the list of questions is empty-->
   <string name="empty_list_of_questions">没有可显示的内容</string>
   <!--Message displayed when the list of blank forms is empty-->
   <string name="empty_list_of_blank_forms_title">無空白表格</string>
@@ -1058,7 +1072,7 @@
     ##############################################-->
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">恢复您的作业？</string>
-  <!--Message displayed in a dialog before starting a form if there is a work to recover-->
+  <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="savepoint_recovery_dialog_message">\'Collect 于 \'EEE, MMM dd, yyyy HH:mm\' 意外关闭并保存了您的工作。\n\n您想恢复还是放弃它？\'</string>
   <!--Text for the button that accepts the recovery of the work-->
   <string name="recover">恢复</string>
@@ -1084,4 +1098,14 @@
   <string name="view_or_change_polygon">检视或变更多边形</string>
   <!--Text for the button that displays a map for viewing an already existing polygon-->
   <string name="view_polygon">检视多边形</string>
+  <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>
