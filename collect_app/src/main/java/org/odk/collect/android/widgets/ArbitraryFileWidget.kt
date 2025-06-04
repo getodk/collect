@@ -34,7 +34,7 @@ class ArbitraryFileWidget(
         render()
     }
 
-    override fun onCreateAnswerView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
+    override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         binding = ArbitraryFileWidgetBinding.inflate((context as Activity).layoutInflater)
         setupAnswerFile(prompt.answerText)
 
