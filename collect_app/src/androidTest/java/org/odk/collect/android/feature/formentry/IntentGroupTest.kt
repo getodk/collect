@@ -242,10 +242,9 @@ class IntentGroupTest {
     private fun assertIntegerWidgetWithAnswer() {
         onView(withText("Integer external")).perform(scrollTo())
             .check(matches(isDisplayed()))
-        onView(
-            CoreMatchers.allOf(
-                isDescendantOfA(isAssignableFrom(IntegerWidget::class.java)),
-                isAssignableFrom(TextInputEditText::class.java)))
+        onView(CoreMatchers.allOf(
+            isDescendantOfA(isAssignableFrom(IntegerWidget::class.java)),
+            isAssignableFrom(TextInputEditText::class.java)))
             .check(matches(withText("25")))
     }
 
@@ -263,11 +262,10 @@ class IntentGroupTest {
             .check(matches(isDisplayed()))
         onView(
             CoreMatchers.allOf(
-                isDescendantOfA(
-                    CoreMatchers.allOf(
-                        isAssignableFrom(StringWidget::class.java),
-                        CoreMatchers.not(isAssignableFrom(IntegerWidget::class.java)),
-                        CoreMatchers.not(isAssignableFrom(DecimalWidget::class.java)))),
+                isDescendantOfA(CoreMatchers.allOf(
+                    isAssignableFrom(StringWidget::class.java),
+                    CoreMatchers.not(isAssignableFrom(IntegerWidget::class.java)),
+                    CoreMatchers.not(isAssignableFrom(DecimalWidget::class.java)))),
                 isAssignableFrom(TextInputEditText::class.java))
         ).check(matches(withText("sampleAnswer")))
     }
