@@ -20,9 +20,7 @@ class ViewFormPage(private val formName: String) : Page<ViewFormPage>() {
     }
 
     fun clickOnGroup(groupLabel: String): ViewFormPage {
-        onView(withId(R.id.list)).perform(scrollTo<RecyclerView.ViewHolder>(
-            hasDescendant(withText(groupLabel)))
-        )
+        onView(withId(R.id.list)).perform(scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(groupLabel))))
 
         clickOnText(groupLabel)
         return this
