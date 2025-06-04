@@ -34,7 +34,7 @@ class ExArbitraryFileWidget(
         render()
     }
 
-    override fun onCreateAnswerView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
+    override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         binding = ExArbitraryFileWidgetBinding.inflate((context as Activity).layoutInflater)
         setupAnswerFile(prompt.answerText)
 
