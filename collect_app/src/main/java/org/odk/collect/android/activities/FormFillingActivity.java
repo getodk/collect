@@ -217,7 +217,6 @@ import timber.log.Timber;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  * option)
  */
-@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class FormFillingActivity extends LocalizedActivity implements AnimationListener,
         FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
         SavepointListener, NumberPickerDialog.NumberPickerListener,
