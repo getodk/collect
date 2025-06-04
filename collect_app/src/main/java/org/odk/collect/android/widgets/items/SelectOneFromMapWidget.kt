@@ -38,7 +38,7 @@ class SelectOneFromMapWidget(
     lateinit var binding: SelectOneFromMapWidgetAnswerBinding
     private var answer: SelectOneData? = null
 
-    override fun onCreateAnswerView(
+    override fun onCreateWidgetView(
         context: Context,
         prompt: FormEntryPrompt,
         answerFontSize: Int

@@ -36,7 +36,7 @@ class BarcodeWidget(
         render()
     }
 
-    override fun onCreateAnswerView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
+    override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         binding = BarcodeWidgetBinding.inflate((context as Activity).layoutInflater)
 
         if (prompt.isReadOnly) {

@@ -50,7 +50,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = GeopointQuestionBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);

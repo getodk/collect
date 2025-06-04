@@ -51,7 +51,7 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = TimeWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
         if (prompt.isReadOnly()) {

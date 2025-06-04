@@ -71,7 +71,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, WidgetDat
     }
 
     @Override
-    protected View onCreateAnswerView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
         binding = VideoWidgetBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.recordVideoButton.setOnClickListener(v -> getPermissionsProvider().requestCameraPermission((Activity) getContext(), this::captureVideo));

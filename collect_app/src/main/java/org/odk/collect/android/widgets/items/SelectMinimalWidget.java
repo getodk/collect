@@ -31,7 +31,7 @@ public abstract class SelectMinimalWidget extends QuestionWidget implements Widg
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = SelectMinimalWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         binding.answer.setTextSize(QuestionFontSizeUtils.getQuestionFontSize());
         if (prompt.isReadOnly()) {
