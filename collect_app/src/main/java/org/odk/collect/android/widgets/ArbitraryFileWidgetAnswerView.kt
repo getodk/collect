@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import org.odk.collect.android.databinding.ArbitraryFileWidgetAnswerBinding
 
-class ArbitraryFileWidgetAnswer(context: Context) : WidgetAnswer(context) {
+class ArbitraryFileWidgetAnswerView(context: Context) : WidgetAnswerView(context) {
     private val binding = ArbitraryFileWidgetAnswerBinding.inflate(LayoutInflater.from(context), this, true)
 
     override fun setAnswer(answer: String?) {

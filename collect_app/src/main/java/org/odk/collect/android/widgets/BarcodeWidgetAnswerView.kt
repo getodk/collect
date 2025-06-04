@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import org.odk.collect.android.databinding.BarcodeWidgetAnswerBinding
 
-class BarcodeWidgetAnswer(context: Context) : WidgetAnswer(context) {
+class BarcodeWidgetAnswerView(context: Context) : WidgetAnswerView(context) {
     private val binding = BarcodeWidgetAnswerBinding.inflate(LayoutInflater.from(context), this, true)
 
     override fun setAnswer(answer: String?) {
