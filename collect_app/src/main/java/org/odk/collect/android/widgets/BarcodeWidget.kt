@@ -25,7 +25,7 @@ import org.odk.collect.strings.R
 class BarcodeWidget(
     context: Context,
     questionDetails: QuestionDetails,
-    private val widgetAnswer: WidgetAnswer,
+    private val widgetAnswerView: WidgetAnswerView,
     private val waitingForDataRegistry: WaitingForDataRegistry,
     private val cameraUtils: CameraUtils,
     dependencies: Dependencies
@@ -49,27 +49,27 @@ class BarcodeWidget(
         if (!answer.isNullOrEmpty()) {
             binding.barcodeButton.text = getContext().getString(R.string.replace_barcode)
         }
-        widgetAnswer.setAnswer(answer)
-        binding.answerViewContainer.addView(widgetAnswer)
+        widgetAnswerView.setAnswer(answer)
+        binding.answerViewContainer.addView(widgetAnswerView)
         updateAnswerVisibility()
 
         return binding.root
     }
 
     override fun clearAnswer() {
-        widgetAnswer.setAnswer(null)
+        widgetAnswerView.setAnswer(null)
         binding.barcodeButton.text = context.getString(R.string.get_barcode)
         updateAnswerVisibility()
         widgetValueChanged()
     }
 
     override fun getAnswer(): IAnswerData? {
-        val answer = widgetAnswer.getAnswer()
+        val answer = widgetAnswerView.getAnswer()
         return if (answer.isEmpty()) null else StringData(answer)
     }
 
     override fun setData(answer: Any) {
-        widgetAnswer.setAnswer(answer as String)
+        widgetAnswerView.setAnswer(answer as String)
         binding.barcodeButton.text = context.getString(R.string.replace_barcode)
         updateAnswerVisibility()
         widgetValueChanged()
@@ -88,7 +88,7 @@ class BarcodeWidget(
 
     private fun updateAnswerVisibility() {
         val isAnswerHidden = hasAppearance(formEntryPrompt, Appearances.HIDDEN_ANSWER)
-        binding.answerViewContainer.visibility = if (isAnswerHidden || widgetAnswer.getAnswer().isBlank()) GONE else VISIBLE
+        binding.answerViewContainer.visibility = if (isAnswerHidden || widgetAnswerView.getAnswer().isBlank()) GONE else VISIBLE
     }
 
     private fun onButtonClick() {
