@@ -19,6 +19,7 @@
         android:id="@+id/answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:tag="ArbitraryFileWidgetAnswer"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/icon"
         tools:text="file.pdf" />
