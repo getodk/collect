@@ -15,6 +15,7 @@
         <exclude name="AvoidReassigningParameters" />
         <exclude name="AvoidStringBufferField" />
         <exclude name="ForLoopCanBeForeach" />
+        <exclude name="ImplicitFunctionalInterface" />
         <exclude name="JUnit4TestShouldUseBeforeAnnotation" />
         <exclude name="JUnit4TestShouldUseTestAnnotation" />
         <exclude name="JUnitAssertionsShouldIncludeMessage" />
