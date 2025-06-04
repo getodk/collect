@@ -42,7 +42,6 @@ public class OpenRosaXmlFetcher {
      * @return DocumentFetchResult - an object that contains the results of the "get" operation
      */
 
-    @SuppressWarnings("PMD.AvoidRethrowingException")
     public DocumentFetchResult getXML(String urlString) throws Exception {
 
         // parse response
