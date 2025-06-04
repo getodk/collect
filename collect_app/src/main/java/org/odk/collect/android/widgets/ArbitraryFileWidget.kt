@@ -17,7 +17,7 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry
 class ArbitraryFileWidget(
     context: Context,
     questionDetails: QuestionDetails,
-    private val widgetAnswer: WidgetAnswer,
+    private val widgetAnswerView: WidgetAnswerView,
     questionMediaManager: QuestionMediaManager,
     waitingForDataRegistry: WaitingForDataRegistry,
     dependencies: Dependencies
@@ -48,12 +48,12 @@ class ArbitraryFileWidget(
             )
         }
         if (answerFile != null) {
-            widgetAnswer.setAnswer(answerFile!!.name)
+            widgetAnswerView.setAnswer(answerFile!!.name)
             binding.answerViewContainer.visibility = VISIBLE
         } else {
             binding.answerViewContainer.visibility = GONE
         }
-        binding.answerViewContainer.addView(widgetAnswer)
+        binding.answerViewContainer.addView(widgetAnswerView)
 
         return binding.root
     }
@@ -79,7 +79,7 @@ class ArbitraryFileWidget(
     }
 
     override fun showAnswerText() {
-        widgetAnswer.setAnswer(answerFile!!.name)
+        widgetAnswerView.setAnswer(answerFile!!.name)
         binding.answerViewContainer.visibility = VISIBLE
     }
 
