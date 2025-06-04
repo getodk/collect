@@ -2,10 +2,10 @@ package org.odk.collect.android.widgets
 
 import android.content.Context
 import android.view.LayoutInflater
-import org.odk.collect.android.databinding.BarcodeWidgetAnswerBinding
+import org.odk.collect.android.databinding.BarcodeWidgetAnswerViewBinding
 
 class BarcodeWidgetAnswerView(context: Context) : WidgetAnswerView(context) {
-    private val binding = BarcodeWidgetAnswerBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding = BarcodeWidgetAnswerViewBinding.inflate(LayoutInflater.from(context), this, true)
 
     override fun setAnswer(answer: String?) {
         binding.answer.text = stripInvalidCharacters(answer)
