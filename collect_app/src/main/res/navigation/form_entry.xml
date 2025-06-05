@@ -7,6 +7,9 @@
     <fragment
         android:id="@+id/hierarchy"
         android:name="org.odk.collect.android.formhierarchy.FormHierarchyFragment">
+        <argument
+            android:name="new_edit"
+            app:argType="boolean" />
     </fragment>
 
 </navigation>
