@@ -43,26 +43,30 @@ class BarcodeScannerViewContainer(context: Context, attrs: AttributeSet?) :
 }
 
 abstract class BarcodeScannerView(context: Context) : FrameLayout(context) {
+    private var isResultBeingProcessed = false
+
     protected abstract fun decodeContinuous(callback: (String) -> Unit)
     abstract fun setTorchOn(on: Boolean)
     abstract fun setTorchListener(torchListener: TorchListener)
 
-    fun waitForBarcode(scope: CoroutineScope): LiveData<String> {
+    fun waitForBarcode(): LiveData<String> {
         val liveData = MutableLiveData<String>()
-        var acceptResult = true
 
         this.decodeContinuous { result ->
-            if (acceptResult) {
-                acceptResult = false
+            if (!isResultBeingProcessed) {
+                isResultBeingProcessed = true
                 liveData.value = result
-                scope.launch {
-                    delay(1.seconds)
-                    acceptResult = true
-                }
             }
         }
 
         return liveData
+    }
+
+    fun continueScanning(scope: CoroutineScope) {
+        scope.launch {
+            delay(1.seconds)
+            isResultBeingProcessed = false
+        }
     }
 
     interface TorchListener {

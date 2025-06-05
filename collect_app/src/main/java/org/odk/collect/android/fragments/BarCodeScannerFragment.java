@@ -72,12 +72,13 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
             switchFlashlightButton.setVisibility(View.GONE);
         }
 
-        barcodeScannerViewContainer.getBarcodeScannerView().waitForBarcode(LifecycleOwnerKt.getLifecycleScope(getViewLifecycleOwner())).observe(getViewLifecycleOwner(), result -> {
+        barcodeScannerViewContainer.getBarcodeScannerView().waitForBarcode().observe(getViewLifecycleOwner(), result -> {
             beepManager.playBeepSoundAndVibrate();
 
             try {
                 handleScanningResult(result);
             } catch (IOException | DataFormatException | IllegalArgumentException e) {
+                barcodeScannerViewContainer.getBarcodeScannerView().continueScanning(LifecycleOwnerKt.getLifecycleScope(getViewLifecycleOwner()));
                 ToastUtils.showShortToast(getString(org.odk.collect.strings.R.string.invalid_qrcode));
             }
         });

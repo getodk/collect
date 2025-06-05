@@ -216,7 +216,7 @@ class QrCodeProjectCreatorDialog :
     }
 
     private fun startScanning() {
-        binding.barcodeView.barcodeScannerView.waitForBarcode(lifecycleScope).observe(
+        binding.barcodeView.barcodeScannerView.waitForBarcode().observe(
             viewLifecycleOwner
         ) { result: String ->
             try {
@@ -228,6 +228,7 @@ class QrCodeProjectCreatorDialog :
             val settingsJson = try {
                 CompressionUtils.decompress(result)
             } catch (e: Exception) {
+                binding.barcodeView.barcodeScannerView.continueScanning(lifecycleScope)
                 showShortToast(
                     getString(org.odk.collect.strings.R.string.invalid_qrcode)
                 )
