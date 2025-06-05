@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.lifecycleScope
 import com.google.zxing.client.android.BeepManager
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
@@ -228,7 +227,7 @@ class QrCodeProjectCreatorDialog :
             val settingsJson = try {
                 CompressionUtils.decompress(result)
             } catch (e: Exception) {
-                binding.barcodeView.barcodeScannerView.continueScanning(lifecycleScope)
+                binding.barcodeView.barcodeScannerView.continueScanning()
                 showShortToast(
                     getString(org.odk.collect.strings.R.string.invalid_qrcode)
                 )

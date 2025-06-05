@@ -25,7 +25,6 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwnerKt;
 
 import com.google.zxing.client.android.BeepManager;
 
@@ -78,7 +77,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
             try {
                 handleScanningResult(result);
             } catch (IOException | DataFormatException | IllegalArgumentException e) {
-                barcodeScannerViewContainer.getBarcodeScannerView().continueScanning(LifecycleOwnerKt.getLifecycleScope(getViewLifecycleOwner()));
+                barcodeScannerViewContainer.getBarcodeScannerView().continueScanning();
                 ToastUtils.showShortToast(getString(org.odk.collect.strings.R.string.invalid_qrcode));
             }
         });

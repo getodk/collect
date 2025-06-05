@@ -2,15 +2,13 @@ package org.odk.collect.qrcode
 
 import android.app.Activity
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
 
 class BarcodeScannerViewContainer(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
@@ -62,11 +60,10 @@ abstract class BarcodeScannerView(context: Context) : FrameLayout(context) {
         return liveData
     }
 
-    fun continueScanning(scope: CoroutineScope) {
-        scope.launch {
-            delay(1.seconds)
+    fun continueScanning() {
+        Handler(Looper.getMainLooper()).postDelayed({
             isResultBeingProcessed = false
-        }
+        }, 1000)
     }
 
     interface TorchListener {
