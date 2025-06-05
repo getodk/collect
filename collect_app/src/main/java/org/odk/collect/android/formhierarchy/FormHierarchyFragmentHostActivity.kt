@@ -1,6 +1,7 @@
 package org.odk.collect.android.formhierarchy
 
 import android.os.Bundle
+import androidx.navigation.fragment.NavHostFragment
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryViewModelFactory
@@ -137,13 +138,19 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
         } else {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.hierarchy_host_layout)
+
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+            navController.setGraph(R.navigation.form_entry)
+
             setSupportActionBar(findViewById(org.odk.collect.androidshared.R.id.toolbar))
         }
 
         val shouldShowNewEditMessage = intent.getBooleanExtra(SHOW_NEW_EDIT_MESSAGE, false)
         if (shouldShowNewEditMessage) {
             showLongSnackbar(
-                findViewById(R.id.fragment_container),
+                findViewById(R.id.nav_host_fragment),
                 getString(org.odk.collect.strings.R.string.finalized_form_edit_started),
                 null,
                 null,

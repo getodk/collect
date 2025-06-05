@@ -340,6 +340,7 @@ dependencies {
     }
 
     implementation libs.splashscreen
+    implementation libs.androidxNavigationFragmentKtx
 
     testImplementation project(':forms-test')
 
