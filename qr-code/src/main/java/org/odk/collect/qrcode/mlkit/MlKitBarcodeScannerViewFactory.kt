@@ -99,11 +99,11 @@ private class MlKitBarcodeScannerView(
                 COORDINATE_SYSTEM_VIEW_REFERENCED,
                 executor
             ) { result: MlKitAnalyzer.Result ->
-                val value = result.getValue(barcodeScanner)
-                val rawValue = value?.firstOrNull()?.rawValue
+                val value = result.getValue(barcodeScanner)?.firstOrNull()
+                val content = value?.rawValue ?: value?.displayValue
 
-                if (!rawValue.isNullOrEmpty()) {
-                    callback(rawValue)
+                if (!content.isNullOrEmpty()) {
+                    callback(content)
                 }
             }
         )
