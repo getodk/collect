@@ -29,10 +29,9 @@ class MDMConfigHandlerImpl(
 
     private fun applyDeviceId(managedConfig: Bundle) {
         if (managedConfig.containsKey(DEVICE_ID_KEY) && !managedConfig.getString(DEVICE_ID_KEY).isNullOrBlank()) {
-            settingsProvider.getMetaSettings().save(
-                KEY_INSTALL_ID, managedConfig.getString(
-                    DEVICE_ID_KEY
-                ))
+            settingsProvider.getMetaSettings().save(KEY_INSTALL_ID, managedConfig.getString(
+                DEVICE_ID_KEY
+            ))
         }
     }
 
