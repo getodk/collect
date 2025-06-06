@@ -77,6 +77,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
             try {
                 handleScanningResult(result);
             } catch (IOException | DataFormatException | IllegalArgumentException e) {
+                barcodeScannerViewContainer.getBarcodeScannerView().continueScanning();
                 ToastUtils.showShortToast(getString(org.odk.collect.strings.R.string.invalid_qrcode));
             }
         });

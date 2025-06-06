@@ -227,6 +227,7 @@ class QrCodeProjectCreatorDialog :
             val settingsJson = try {
                 CompressionUtils.decompress(result)
             } catch (e: Exception) {
+                binding.barcodeView.barcodeScannerView.continueScanning()
                 showShortToast(
                     getString(org.odk.collect.strings.R.string.invalid_qrcode)
                 )
