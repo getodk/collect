@@ -271,7 +271,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private TextView backButton;
 
     private ODKView odkView;
-    private final ControllableLifecyleOwner odkViewLifecycle = new ControllableLifecyleOwner();
+    private ControllableLifecyleOwner odkViewLifecycle;
 
     private String startingXPath;
     private String waitingXPath;
@@ -1129,6 +1129,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     @NotNull
     private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups) {
+        odkViewLifecycle = new ControllableLifecyleOwner();
         odkViewLifecycle.start();
 
         ViewModelAudioPlayer viewModelAudioPlayer = new ViewModelAudioPlayer(
@@ -1140,7 +1141,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     }
 
     private void releaseOdkView() {
-        odkViewLifecycle.destroy();
+        if (odkViewLifecycle != null) {
+            odkViewLifecycle.destroy();
+        }
 
         if (odkView != null) {
             odkView = null;
