@@ -13,7 +13,7 @@ class FakeBarcodeScannerView(context: Context) : BarcodeScannerView(context) {
 
     private var callback: ((String) -> Unit)? = null
 
-    override fun decodeContinuous(callback: (String) -> Unit) {
+    override fun scan(callback: (String) -> Unit) {
         this.callback = callback
     }
 

@@ -72,7 +72,7 @@ private class MlKitBarcodeScannerView(
         binding.prompt.text = prompt
     }
 
-    override fun decodeContinuous(callback: (String) -> Unit) {
+    override fun scan(callback: (String) -> Unit) {
         if (useFrontCamera) {
             cameraController.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
         }
@@ -104,6 +104,7 @@ private class MlKitBarcodeScannerView(
 
                 if (!rawValue.isNullOrEmpty()) {
                     callback(rawValue)
+                    cameraController.unbind()
                 }
             }
         )

@@ -2,8 +2,6 @@ package org.odk.collect.qrcode
 
 import android.app.Activity
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleOwner
@@ -41,29 +39,20 @@ class BarcodeScannerViewContainer(context: Context, attrs: AttributeSet?) :
 }
 
 abstract class BarcodeScannerView(context: Context) : FrameLayout(context) {
-    private var isResultBeingProcessed = false
+    private val latestBarcode = MutableLiveData<String>()
 
-    protected abstract fun decodeContinuous(callback: (String) -> Unit)
+    protected abstract fun scan(callback: (String) -> Unit)
     abstract fun setTorchOn(on: Boolean)
     abstract fun setTorchListener(torchListener: TorchListener)
 
-    fun waitForBarcode(): LiveData<String> {
-        val liveData = MutableLiveData<String>()
-
-        this.decodeContinuous { result ->
-            if (!isResultBeingProcessed) {
-                isResultBeingProcessed = true
-                liveData.value = result
-            }
-        }
-
-        return liveData
+    fun latestBarcode(): LiveData<String> {
+        return latestBarcode
     }
 
-    fun continueScanning() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            isResultBeingProcessed = false
-        }, 1000)
+    fun start() {
+        this.scan { result ->
+            latestBarcode.value = result
+        }
     }
 
     interface TorchListener {

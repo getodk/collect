@@ -115,7 +115,8 @@ class QrCodeProjectCreatorDialog :
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
 
-        settingsConnectionMatcher = SettingsConnectionMatcherImpl(projectsRepository, settingsProvider)
+        settingsConnectionMatcher =
+            SettingsConnectionMatcherImpl(projectsRepository, settingsProvider)
     }
 
     override fun onCreateView(
@@ -147,6 +148,27 @@ class QrCodeProjectCreatorDialog :
             viewLifecycleOwner,
             true
         )
+
+        binding.barcodeView.barcodeScannerView.latestBarcode().observe(
+            viewLifecycleOwner
+        ) { result: String ->
+            try {
+                beepManager.playBeepSoundAndVibrate()
+            } catch (e: Exception) {
+                // ignore because beeping isn't essential and this can crash the whole app
+            }
+
+            val settingsJson = try {
+                CompressionUtils.decompress(result)
+            } catch (e: Exception) {
+                showShortToast(
+                    getString(org.odk.collect.strings.R.string.invalid_qrcode)
+                )
+                ""
+            }
+            createProjectOrError(settingsJson)
+        }
+
         return binding.root
     }
 
@@ -159,7 +181,7 @@ class QrCodeProjectCreatorDialog :
                 override fun granted() {
                     // Do not call from a fragment that does not exist anymore https://github.com/getodk/collect/issues/4741
                     if (isAdded) {
-                        startScanning()
+                        binding.barcodeView.barcodeScannerView.start()
                     }
                 }
             }
@@ -212,29 +234,6 @@ class QrCodeProjectCreatorDialog :
 
     override fun getToolbar(): Toolbar? {
         return binding.toolbarLayout.toolbar
-    }
-
-    private fun startScanning() {
-        binding.barcodeView.barcodeScannerView.waitForBarcode().observe(
-            viewLifecycleOwner
-        ) { result: String ->
-            try {
-                beepManager.playBeepSoundAndVibrate()
-            } catch (e: Exception) {
-                // ignore because beeping isn't essential and this can crash the whole app
-            }
-
-            val settingsJson = try {
-                CompressionUtils.decompress(result)
-            } catch (e: Exception) {
-                binding.barcodeView.barcodeScannerView.continueScanning()
-                showShortToast(
-                    getString(org.odk.collect.strings.R.string.invalid_qrcode)
-                )
-                ""
-            }
-            createProjectOrError(settingsJson)
-        }
     }
 
     private fun createProjectOrError(settingsJson: String) {

@@ -40,7 +40,7 @@ private class ZxingBarcodeScannerView(
     private val binding =
         ZxingBarcodeScannerLayoutBinding.inflate(LayoutInflater.from(activity), this, true)
 
-    override fun decodeContinuous(callback: (String) -> Unit) {
+    override fun scan(callback: (String) -> Unit) {
         val supportedFormats = if (qrOnly) {
             listOf(IntentIntegrator.QR_CODE)
         } else {
@@ -76,8 +76,9 @@ private class ZxingBarcodeScannerView(
             binding.barcodeView.barcodeView.cameraSettings = cameraSettings
         }
 
-        binding.barcodeView.decodeContinuous {
+        binding.barcodeView.decodeSingle {
             callback(it.text)
+            captureManager.onDestroy()
         }
     }
 
