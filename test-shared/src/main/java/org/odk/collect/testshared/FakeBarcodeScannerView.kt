@@ -25,6 +25,8 @@ class FakeBarcodeScannerView(context: Context) : BarcodeScannerView(context) {
     override fun setTorchListener(torchListener: TorchListener) = Unit
 
     fun scan(result: String) {
+        isScanning = false
+
         if (Looper.myLooper() == Looper.getMainLooper()) {
             callback?.invoke(result)
         } else {
@@ -32,8 +34,6 @@ class FakeBarcodeScannerView(context: Context) : BarcodeScannerView(context) {
                 callback?.invoke(result)
             }
         }
-
-        isScanning = false
     }
 }
 
@@ -41,7 +41,10 @@ class FakeBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
 
     private val views = mutableListOf<FakeBarcodeScannerView>()
 
-    val isScanning = views.any { it.isScanning }
+    val isScanning: Boolean
+        get() {
+            return views.any { it.isScanning }
+        }
 
     override fun create(
         activity: Activity,

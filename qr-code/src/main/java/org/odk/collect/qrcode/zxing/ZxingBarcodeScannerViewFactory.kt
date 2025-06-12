@@ -77,8 +77,8 @@ private class ZxingBarcodeScannerView(
         }
 
         binding.barcodeView.decodeSingle {
-            callback(it.text)
             captureManager.onDestroy()
+            callback(it.text)
         }
     }
 

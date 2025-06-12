@@ -195,5 +195,6 @@ class QrCodeProjectCreatorDialogTest {
             )
         )
         verifyNoInteractions(projectCreator)
+        assertThat(barcodeScannerViewFactory.isScanning, equalTo(true))
     }
 }

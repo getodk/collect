@@ -274,11 +274,15 @@ class QrCodeProjectCreatorDialog :
                 )
             )
 
-            ProjectConfigurationResult.GD_PROJECT -> ToastUtils.showLongToast(
-                getString(
-                    org.odk.collect.strings.R.string.settings_with_gd_protocol
+            ProjectConfigurationResult.GD_PROJECT -> {
+                ToastUtils.showLongToast(
+                    getString(
+                        org.odk.collect.strings.R.string.settings_with_gd_protocol
+                    )
                 )
-            )
+
+                binding.barcodeView.barcodeScannerView.start()
+            }
         }
     }
 
