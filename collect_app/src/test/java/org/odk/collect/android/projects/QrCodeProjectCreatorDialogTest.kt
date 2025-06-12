@@ -179,6 +179,9 @@ class QrCodeProjectCreatorDialogTest {
             )
         )
         verifyNoInteractions(projectCreator)
+
+        scheduler.runForeground()
+        assertThat(barcodeScannerViewFactory.isScanning, equalTo(true))
     }
 
     @Test

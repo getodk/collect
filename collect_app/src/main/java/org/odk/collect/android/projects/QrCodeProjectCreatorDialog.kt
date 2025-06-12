@@ -272,11 +272,15 @@ class QrCodeProjectCreatorDialog :
                 )
             }
 
-            ProjectConfigurationResult.INVALID_SETTINGS -> ToastUtils.showLongToast(
-                getString(
-                    org.odk.collect.strings.R.string.invalid_qrcode
+            ProjectConfigurationResult.INVALID_SETTINGS -> {
+                ToastUtils.showLongToast(
+                    getString(
+                        org.odk.collect.strings.R.string.invalid_qrcode
+                    )
                 )
-            )
+
+                restartScanning()
+            }
 
             ProjectConfigurationResult.GD_PROJECT -> {
                 ToastUtils.showLongToast(
@@ -285,10 +289,14 @@ class QrCodeProjectCreatorDialog :
                     )
                 )
 
-                scheduler.immediate(foreground = true, delay = 2000L) {
-                    binding.barcodeView.barcodeScannerView.start()
-                }
+                restartScanning()
             }
+        }
+    }
+
+    private fun restartScanning() {
+        scheduler.immediate(foreground = true, delay = 2000L) {
+            binding.barcodeView.barcodeScannerView.start()
         }
     }
 
