@@ -14,6 +14,7 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.work.WorkManager
 import com.google.android.material.appbar.MaterialToolbar
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -30,12 +31,14 @@ import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectCreator
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
+import org.odk.collect.testshared.FakeScheduler
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
@@ -43,6 +46,7 @@ class QrCodeProjectCreatorDialogTest {
 
     private val permissionsProvider = FakePermissionsProvider()
     private val barcodeScannerViewFactory = FakeBarcodeScannerViewFactory()
+    private val scheduler = FakeScheduler()
 
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule()
@@ -58,6 +62,10 @@ class QrCodeProjectCreatorDialogTest {
 
             override fun providesPermissionsProvider(permissionsChecker: PermissionsChecker?): PermissionsProvider {
                 return permissionsProvider
+            }
+
+            override fun providesScheduler(workManager: WorkManager?): Scheduler {
+                return scheduler
             }
         })
     }
@@ -195,6 +203,8 @@ class QrCodeProjectCreatorDialogTest {
             )
         )
         verifyNoInteractions(projectCreator)
+
+        scheduler.runForeground()
         assertThat(barcodeScannerViewFactory.isScanning, equalTo(true))
     }
 }

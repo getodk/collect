@@ -24,6 +24,7 @@ import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
 import org.odk.collect.androidshared.ui.enableIconsVisibility
 import org.odk.collect.androidshared.utils.CompressionUtils
+import org.odk.collect.async.Scheduler
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
@@ -73,6 +74,9 @@ class QrCodeProjectCreatorDialog :
 
     @Inject
     lateinit var barcodeScannerViewFactory: BarcodeScannerViewContainer.Factory
+
+    @Inject
+    lateinit var scheduler: Scheduler
 
     private var savedInstanceState: Bundle? = null
 
@@ -281,7 +285,9 @@ class QrCodeProjectCreatorDialog :
                     )
                 )
 
-                binding.barcodeView.barcodeScannerView.start()
+                scheduler.immediate(foreground = true, delay = 2000L) {
+                    binding.barcodeView.barcodeScannerView.start()
+                }
             }
         }
     }
