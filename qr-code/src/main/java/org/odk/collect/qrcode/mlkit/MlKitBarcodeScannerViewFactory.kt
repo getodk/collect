@@ -100,11 +100,18 @@ private class MlKitBarcodeScannerView(
                 executor
             ) { result: MlKitAnalyzer.Result ->
                 val value = result.getValue(barcodeScanner)
-                val rawValue = value?.firstOrNull()?.rawValue
+                val barcode = value?.firstOrNull()
 
-                if (!rawValue.isNullOrEmpty()) {
-                    cameraController.unbind()
-                    callback(rawValue)
+                if (barcode != null) {
+                    val bytes = barcode.rawBytes
+                    val utf8Contents = barcode.rawValue
+                    if (!utf8Contents.isNullOrEmpty()) {
+                        cameraController.unbind()
+                        callback(utf8Contents)
+                    } else if (bytes != null && barcode.format == Barcode.FORMAT_PDF417) {
+                        cameraController.unbind()
+                        callback(String(bytes, Charsets.ISO_8859_1))
+                    }
                 }
             }
         )
