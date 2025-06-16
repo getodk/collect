@@ -71,7 +71,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
             switchFlashlightButton.setVisibility(View.GONE);
         }
 
-        barcodeScannerViewContainer.getBarcodeScannerView().latestBarcode().observe(getViewLifecycleOwner(), result -> {
+        barcodeScannerViewContainer.getBarcodeScannerView().getLatestBarcode().observe(getViewLifecycleOwner(), result -> {
             beepManager.playBeepSoundAndVibrate();
 
             try {

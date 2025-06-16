@@ -39,19 +39,17 @@ class BarcodeScannerViewContainer(context: Context, attrs: AttributeSet?) :
 }
 
 abstract class BarcodeScannerView(context: Context) : FrameLayout(context) {
-    private val latestBarcode = MutableLiveData<String>()
+
+    private val _latestBarcode = MutableLiveData<String>()
+    val latestBarcode: LiveData<String> = _latestBarcode
 
     protected abstract fun scan(callback: (String) -> Unit)
     abstract fun setTorchOn(on: Boolean)
     abstract fun setTorchListener(torchListener: TorchListener)
 
-    fun latestBarcode(): LiveData<String> {
-        return latestBarcode
-    }
-
     fun start() {
         this.scan { result ->
-            latestBarcode.value = result
+            _latestBarcode.value = result
         }
     }
 

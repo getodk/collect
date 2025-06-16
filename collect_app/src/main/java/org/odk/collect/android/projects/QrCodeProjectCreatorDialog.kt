@@ -153,7 +153,7 @@ class QrCodeProjectCreatorDialog :
             true
         )
 
-        binding.barcodeView.barcodeScannerView.latestBarcode().observe(
+        binding.barcodeView.barcodeScannerView.latestBarcode.observe(
             viewLifecycleOwner
         ) { result: String ->
             try {
