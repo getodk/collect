@@ -42,9 +42,7 @@ class FakeBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
     private val views = mutableListOf<FakeBarcodeScannerView>()
 
     val isScanning: Boolean
-        get() {
-            return views.any { it.isScanning }
-        }
+        get() = views.any { it.isScanning }
 
     override fun create(
         activity: Activity,
