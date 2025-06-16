@@ -166,7 +166,7 @@ class QrCodeProjectCreatorDialogTest {
     }
 
     @Test
-    fun `When QR code is invalid a toast should be displayed`() {
+    fun `When QR code is invalid a toast should be displayed and scanning continues`() {
         val projectCreator = mock<ProjectCreator>()
         launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
 
@@ -185,7 +185,7 @@ class QrCodeProjectCreatorDialogTest {
     }
 
     @Test
-    fun `When QR code contains GD protocol a toast should be displayed`() {
+    fun `When QR code contains GD protocol a toast should be displayed and scanning continues`() {
         val projectCreator = mock<ProjectCreator>()
         launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
 
