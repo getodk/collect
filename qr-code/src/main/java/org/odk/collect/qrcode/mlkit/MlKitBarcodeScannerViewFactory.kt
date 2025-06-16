@@ -103,14 +103,10 @@ private class MlKitBarcodeScannerView(
                 val barcode = value?.firstOrNull()
 
                 if (barcode != null) {
-                    val bytes = barcode.rawBytes
-                    val utf8Contents = barcode.rawValue
-                    if (!utf8Contents.isNullOrEmpty()) {
+                    val contents = processBarcode(barcode)
+                    if (!contents.isNullOrEmpty()) {
                         cameraController.unbind()
-                        callback(utf8Contents)
-                    } else if (bytes != null && barcode.format == Barcode.FORMAT_PDF417) {
-                        cameraController.unbind()
-                        callback(String(bytes, Charsets.ISO_8859_1))
+                        callback(contents)
                     }
                 }
             }
@@ -128,6 +124,19 @@ private class MlKitBarcodeScannerView(
             } else if (it == TorchState.OFF) {
                 torchListener.onTorchOff()
             }
+        }
+    }
+
+    private fun processBarcode(barcode: Barcode): String? {
+        val bytes = barcode.rawBytes
+        val utf8Contents = barcode.rawValue
+
+        return if (!utf8Contents.isNullOrEmpty()) {
+            utf8Contents
+        } else if (bytes != null && barcode.format == Barcode.FORMAT_PDF417) {
+            String(bytes, Charsets.ISO_8859_1)
+        } else {
+            null
         }
     }
 }
