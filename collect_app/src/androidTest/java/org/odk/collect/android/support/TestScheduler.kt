@@ -42,9 +42,9 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         }
     }
 
-    override fun immediate(foreground: Boolean, runnable: Runnable) {
+    override fun immediate(foreground: Boolean, delay: Long?, runnable: Runnable) {
         increment()
-        wrappedScheduler.immediate(foreground) {
+        wrappedScheduler.immediate(foreground, delay) {
             runnable.run()
             decrement()
         }

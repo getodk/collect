@@ -39,13 +39,17 @@ class BarcodeScannerViewContainer(context: Context, attrs: AttributeSet?) :
 }
 
 abstract class BarcodeScannerView(context: Context) : FrameLayout(context) {
-    protected abstract fun decodeContinuous(callback: (String) -> Unit)
+
+    private val _latestBarcode = MutableLiveData<String>()
+    val latestBarcode: LiveData<String> = _latestBarcode
+
+    protected abstract fun scan(callback: (String) -> Unit)
     abstract fun setTorchOn(on: Boolean)
     abstract fun setTorchListener(torchListener: TorchListener)
 
-    fun waitForBarcode(): LiveData<String> {
-        return MutableLiveData<String>().also {
-            this.decodeContinuous { result -> it.value = result }
+    fun start() {
+        this.scan { result ->
+            _latestBarcode.value = result
         }
     }
 

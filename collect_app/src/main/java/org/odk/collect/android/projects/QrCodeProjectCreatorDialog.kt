@@ -24,6 +24,7 @@ import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
 import org.odk.collect.androidshared.ui.enableIconsVisibility
 import org.odk.collect.androidshared.utils.CompressionUtils
+import org.odk.collect.async.Scheduler
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
@@ -74,6 +75,9 @@ class QrCodeProjectCreatorDialog :
     @Inject
     lateinit var barcodeScannerViewFactory: BarcodeScannerViewContainer.Factory
 
+    @Inject
+    lateinit var scheduler: Scheduler
+
     private var savedInstanceState: Bundle? = null
 
     private val imageQrCodeImportResultLauncher =
@@ -115,7 +119,8 @@ class QrCodeProjectCreatorDialog :
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
 
-        settingsConnectionMatcher = SettingsConnectionMatcherImpl(projectsRepository, settingsProvider)
+        settingsConnectionMatcher =
+            SettingsConnectionMatcherImpl(projectsRepository, settingsProvider)
     }
 
     override fun onCreateView(
@@ -147,6 +152,27 @@ class QrCodeProjectCreatorDialog :
             viewLifecycleOwner,
             true
         )
+
+        binding.barcodeView.barcodeScannerView.latestBarcode.observe(
+            viewLifecycleOwner
+        ) { result: String ->
+            try {
+                beepManager.playBeepSoundAndVibrate()
+            } catch (e: Exception) {
+                // ignore because beeping isn't essential and this can crash the whole app
+            }
+
+            val settingsJson = try {
+                CompressionUtils.decompress(result)
+            } catch (e: Exception) {
+                showShortToast(
+                    getString(org.odk.collect.strings.R.string.invalid_qrcode)
+                )
+                ""
+            }
+            createProjectOrError(settingsJson)
+        }
+
         return binding.root
     }
 
@@ -159,7 +185,7 @@ class QrCodeProjectCreatorDialog :
                 override fun granted() {
                     // Do not call from a fragment that does not exist anymore https://github.com/getodk/collect/issues/4741
                     if (isAdded) {
-                        startScanning()
+                        binding.barcodeView.barcodeScannerView.start()
                     }
                 }
             }
@@ -214,28 +240,6 @@ class QrCodeProjectCreatorDialog :
         return binding.toolbarLayout.toolbar
     }
 
-    private fun startScanning() {
-        binding.barcodeView.barcodeScannerView.waitForBarcode().observe(
-            viewLifecycleOwner
-        ) { result: String ->
-            try {
-                beepManager.playBeepSoundAndVibrate()
-            } catch (e: Exception) {
-                // ignore because beeping isn't essential and this can crash the whole app
-            }
-
-            val settingsJson = try {
-                CompressionUtils.decompress(result)
-            } catch (e: Exception) {
-                showShortToast(
-                    getString(org.odk.collect.strings.R.string.invalid_qrcode)
-                )
-                ""
-            }
-            createProjectOrError(settingsJson)
-        }
-    }
-
     private fun createProjectOrError(settingsJson: String) {
         settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson)?.let { uuid ->
             val confirmationArgs = Bundle()
@@ -268,17 +272,31 @@ class QrCodeProjectCreatorDialog :
                 )
             }
 
-            ProjectConfigurationResult.INVALID_SETTINGS -> ToastUtils.showLongToast(
-                getString(
-                    org.odk.collect.strings.R.string.invalid_qrcode
+            ProjectConfigurationResult.INVALID_SETTINGS -> {
+                ToastUtils.showLongToast(
+                    getString(
+                        org.odk.collect.strings.R.string.invalid_qrcode
+                    )
                 )
-            )
 
-            ProjectConfigurationResult.GD_PROJECT -> ToastUtils.showLongToast(
-                getString(
-                    org.odk.collect.strings.R.string.settings_with_gd_protocol
+                restartScanning()
+            }
+
+            ProjectConfigurationResult.GD_PROJECT -> {
+                ToastUtils.showLongToast(
+                    getString(
+                        org.odk.collect.strings.R.string.settings_with_gd_protocol
+                    )
                 )
-            )
+
+                restartScanning()
+            }
+        }
+    }
+
+    private fun restartScanning() {
+        scheduler.immediate(foreground = true, delay = 2000L) {
+            binding.barcodeView.barcodeScannerView.start()
         }
     }
 

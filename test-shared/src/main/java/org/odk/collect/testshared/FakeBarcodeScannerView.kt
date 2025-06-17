@@ -11,9 +11,13 @@ import org.odk.collect.qrcode.BarcodeScannerViewContainer
 
 class FakeBarcodeScannerView(context: Context) : BarcodeScannerView(context) {
 
+    var isScanning = false
+        private set
+
     private var callback: ((String) -> Unit)? = null
 
-    override fun decodeContinuous(callback: (String) -> Unit) {
+    override fun scan(callback: (String) -> Unit) {
+        isScanning = true
         this.callback = callback
     }
 
@@ -21,6 +25,8 @@ class FakeBarcodeScannerView(context: Context) : BarcodeScannerView(context) {
     override fun setTorchListener(torchListener: TorchListener) = Unit
 
     fun scan(result: String) {
+        isScanning = false
+
         if (Looper.myLooper() == Looper.getMainLooper()) {
             callback?.invoke(result)
         } else {
@@ -34,6 +40,9 @@ class FakeBarcodeScannerView(context: Context) : BarcodeScannerView(context) {
 class FakeBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
 
     private val views = mutableListOf<FakeBarcodeScannerView>()
+
+    val isScanning: Boolean
+        get() = views.any { it.isScanning }
 
     override fun create(
         activity: Activity,
@@ -54,6 +63,10 @@ class FakeBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
 
     fun scan(result: String) {
         val compressedResult = CompressionUtils.compress(result)
-        views.forEach { it.scan(compressedResult) }
+        views.forEach {
+            if (it.isScanning) {
+                it.scan(compressedResult)
+            }
+        }
     }
 }

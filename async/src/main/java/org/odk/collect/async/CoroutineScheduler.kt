@@ -20,7 +20,7 @@ open class CoroutineScheduler(private val foregroundContext: CoroutineContext, p
         }
     }
 
-    override fun immediate(foreground: Boolean, runnable: Runnable) {
+    override fun immediate(foreground: Boolean, delay: Long?, runnable: Runnable) {
         val context = if (!foreground) {
             backgroundContext
         } else {
@@ -28,6 +28,10 @@ open class CoroutineScheduler(private val foregroundContext: CoroutineContext, p
         }
 
         CoroutineScope(context).launch {
+            if (delay != null) {
+                delay(delay)
+            }
+
             runnable.run()
         }
     }
