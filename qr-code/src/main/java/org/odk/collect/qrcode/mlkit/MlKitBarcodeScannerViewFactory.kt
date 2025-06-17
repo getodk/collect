@@ -100,11 +100,14 @@ private class MlKitBarcodeScannerView(
                 executor
             ) { result: MlKitAnalyzer.Result ->
                 val value = result.getValue(barcodeScanner)
-                val rawValue = value?.firstOrNull()?.rawValue
+                val barcode = value?.firstOrNull()
 
-                if (!rawValue.isNullOrEmpty()) {
-                    cameraController.unbind()
-                    callback(rawValue)
+                if (barcode != null) {
+                    val contents = processBarcode(barcode)
+                    if (!contents.isNullOrEmpty()) {
+                        cameraController.unbind()
+                        callback(contents)
+                    }
                 }
             }
         )
@@ -121,6 +124,23 @@ private class MlKitBarcodeScannerView(
             } else if (it == TorchState.OFF) {
                 torchListener.onTorchOff()
             }
+        }
+    }
+
+    private fun processBarcode(barcode: Barcode): String? {
+        val bytes = barcode.rawBytes
+        val utf8Contents = barcode.rawValue
+
+        return if (!utf8Contents.isNullOrEmpty()) {
+            utf8Contents
+        } else if (bytes != null && barcode.format == Barcode.FORMAT_PDF417) {
+            /**
+             * Allow falling back to Latin encoding for PDF417 barcodes. This provides parity
+             * with the Zxing implementation.
+             */
+            String(bytes, Charsets.ISO_8859_1)
+        } else {
+            null
         }
     }
 }
