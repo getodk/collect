@@ -111,6 +111,7 @@ private class MlKitBarcodeScannerView(
                 }
             }
         )
+        cameraController.setLinearZoom(0f)
     }
 
     override fun setTorchOn(on: Boolean) {
