@@ -134,6 +134,10 @@ private class MlKitBarcodeScannerView(
         return if (!utf8Contents.isNullOrEmpty()) {
             utf8Contents
         } else if (bytes != null && barcode.format == Barcode.FORMAT_PDF417) {
+            /**
+             * Allow falling back to Latin encoding for PDF417 barcodes. This provides parity
+             * with the Zxing implementation.
+             */
             String(bytes, Charsets.ISO_8859_1)
         } else {
             null
