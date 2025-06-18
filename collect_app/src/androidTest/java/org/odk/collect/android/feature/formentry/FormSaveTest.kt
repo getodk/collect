@@ -3,13 +3,12 @@ package org.odk.collect.android.feature.formentry
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
-import org.odk.collect.android.R
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
-class FormSavedSnackbarTest {
+class FormSaveTest {
     private val rule = CollectTestRule()
     private val testDependencies = TestDependencies()
 
