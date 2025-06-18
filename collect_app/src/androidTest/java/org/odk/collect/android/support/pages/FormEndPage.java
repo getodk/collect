@@ -7,6 +7,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import android.os.Build;
+
 import org.odk.collect.android.R;
 
 public class FormEndPage extends Page<FormEndPage> {
@@ -31,6 +33,12 @@ public class FormEndPage extends Page<FormEndPage> {
         return clickSaveAsDraft(new MainMenuPage());
     }
 
+    public FormEndPage clickSaveAsDraftWithError(String errorMsg) {
+        clickOnString(org.odk.collect.strings.R.string.save_as_draft);
+        checkIsToastWithMessageDisplayed(errorMsg);
+        return this;
+    }
+
     public <D extends Page<D>> D clickFinalize(D destination) {
         return clickOnString(org.odk.collect.strings.R.string.finalize, destination);
     }
@@ -38,6 +46,12 @@ public class FormEndPage extends Page<FormEndPage> {
     public MainMenuPage clickFinalize() {
         clickFinalize(new MainMenuPage());
         return new MainMenuPage();
+    }
+
+    public FormEndPage clickFinalizeWithError(String errorMsg) {
+        clickOnString(org.odk.collect.strings.R.string.finalize);
+        checkIsToastWithMessageDisplayed(errorMsg);
+        return this;
     }
 
     public MainMenuPage clickSend() {

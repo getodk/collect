@@ -24,7 +24,6 @@ import static org.odk.collect.android.support.matchers.CustomMatchers.isQuestion
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -251,16 +250,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage clickSaveWithError(int errorMsg) {
+    public FormEntryPage clickSaveWithError(String errorMsg) {
         onView(withId(R.id.menu_save)).perform(click());
-
-        if (Build.VERSION.SDK_INT < 30) {
-            checkIsToastWithMessageDisplayed(errorMsg);
-        } else {
-            assertText(errorMsg);
-            clickOKOnDialog();
-        }
-
+        checkIsToastWithMessageDisplayed(errorMsg);
         return this;
     }
 
