@@ -262,6 +262,17 @@ class EntityFormTest {
     }
 
     @Test
+    fun closingBrokenEntityForm_releasesTheLockAndLetsOtherEntityFormsToBeStarted() {
+        rule.startAtFirstLaunch()
+            .clickTryCollect()
+            .copyForm("one-question-entity-registration-broken.xml")
+            .copyForm("one-question-entity-registration.xml")
+            .startBlankFormWithError("One Question Entity Registration Broken", true)
+            .clickOKOnDialog(MainMenuPage())
+            .startBlankForm("One Question Entity Registration")
+    }
+
+    @Test
     fun aLocallyCreatedEntity_thatIsDeletedOnTheServer_isNotAvailableToFollowUpForms() {
         testDependencies.server.includeIntegrityUrl()
         testDependencies.server.addForm("one-question-entity-registration-id.xml")
