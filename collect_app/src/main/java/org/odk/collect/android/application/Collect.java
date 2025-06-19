@@ -86,7 +86,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Locale;
 
-@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class Collect extends Application implements
         LocalizedApplication,
         AudioRecorderDependencyComponentProvider,
