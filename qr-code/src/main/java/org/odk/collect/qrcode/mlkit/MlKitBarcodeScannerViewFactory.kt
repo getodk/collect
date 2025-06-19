@@ -11,6 +11,7 @@ import androidx.camera.core.TorchState
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
@@ -70,6 +71,16 @@ private class MlKitBarcodeScannerView(
 
     init {
         binding.prompt.text = prompt
+
+        lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onResume(owner: LifecycleOwner) {
+                binding.scannerOverlay.startAnimations()
+            }
+
+            override fun onPause(owner: LifecycleOwner) {
+                binding.scannerOverlay.stopAnimations()
+            }
+        })
     }
 
     override fun scan(callback: (String) -> Unit) {
