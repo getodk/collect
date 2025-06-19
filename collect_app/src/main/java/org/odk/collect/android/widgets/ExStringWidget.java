@@ -104,7 +104,7 @@ public class ExStringWidget extends QuestionWidget implements WidgetDataReceiver
     }
 
     @Override
-    protected View onCreateAnswerView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
         binding = ExStringQuestionTypeBinding.inflate(LayoutInflater.from(context));
         binding.launchAppButton.setText(getButtonText());
         binding.launchAppButton.setOnClickListener(v -> {
