@@ -10,6 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <org.odk.collect.qrcode.ScannerOverlay
+        android:id="@+id/scanner_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/prompt"
         android:layout_width="wrap_content"
