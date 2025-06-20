@@ -37,6 +37,7 @@ import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectCreator
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
 import org.odk.collect.testshared.FakeScheduler
 import org.robolectric.shadows.ShadowToast
@@ -56,7 +57,7 @@ class QrCodeProjectCreatorDialogTest {
         permissionsProvider.setPermissionGranted(true)
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesBarcodeScannerViewFactory(): BarcodeScannerViewContainer.Factory {
+            override fun providesBarcodeScannerViewFactory(settingsProvider: SettingsProvider): BarcodeScannerViewContainer.Factory {
                 return barcodeScannerViewFactory
             }
 

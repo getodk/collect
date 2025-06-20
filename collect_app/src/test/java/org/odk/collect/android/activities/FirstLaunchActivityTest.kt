@@ -32,6 +32,7 @@ import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
 import org.odk.collect.testshared.RobolectricHelpers
@@ -48,7 +49,7 @@ class FirstLaunchActivityTest {
     @Before
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesBarcodeScannerViewFactory(): BarcodeScannerViewContainer.Factory {
+            override fun providesBarcodeScannerViewFactory(settingsProvider: SettingsProvider): BarcodeScannerViewContainer.Factory {
                 return FakeBarcodeScannerViewFactory()
             }
         })
