@@ -10,8 +10,8 @@
 
     <SwitchPreference
         android:key="mlkit_scanning"
-        android:title="Use MLKit for barcode scanning"
-        android:summary="MLKit is always used for scanning project QR codes"
+        android:title="@string/use_mlkit_for_barcode_scanning"
+        android:summary="@string/mlkit_is_always_used_for_scanning_project_qr_codes"
         app:iconSpaceReserved="false" />
 
     <PreferenceCategory
