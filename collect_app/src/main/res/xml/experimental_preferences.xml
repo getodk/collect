@@ -8,6 +8,12 @@
         android:title="@string/dev_tools"
         app:persistent="false" />
 
+    <SwitchPreference
+        android:key="mlkit_scanning"
+        android:title="Use MLKit for barcode scanning"
+        android:summary="MLKit is always used for scanning project QR codes"
+        app:iconSpaceReserved="false" />
+
     <PreferenceCategory
         android:title="@string/entities_title"
         app:allowDividerAbove="false"
