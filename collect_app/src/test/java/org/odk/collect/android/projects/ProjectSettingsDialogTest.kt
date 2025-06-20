@@ -78,7 +78,7 @@ class ProjectSettingsDialogTest {
                 return projectsRepository
             }
 
-            override fun providesBarcodeScannerViewFactory(): BarcodeScannerViewContainer.Factory {
+            override fun providesBarcodeScannerViewFactory(settingsProvider: SettingsProvider): BarcodeScannerViewContainer.Factory {
                 return FakeBarcodeScannerViewFactory()
             }
         })

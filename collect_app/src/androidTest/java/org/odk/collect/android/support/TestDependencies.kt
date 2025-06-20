@@ -16,6 +16,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.async.network.NetworkStateProvider
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
 import org.odk.collect.testshared.FakeBroadcastReceiverRegister
 import org.odk.collect.utilities.UserAgentProvider
@@ -57,7 +58,7 @@ open class TestDependencies @JvmOverloads constructor(
         return scheduler
     }
 
-    override fun providesBarcodeScannerViewFactory(): BarcodeScannerViewContainer.Factory {
+    override fun providesBarcodeScannerViewFactory(settingsProvider: SettingsProvider): BarcodeScannerViewContainer.Factory {
         return fakeBarcodeScannerViewFactory
     }
 
