@@ -251,7 +251,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             public void onZoomToBox(@NonNull Zoom.Box zoom) {
                 List<MapPoint> points = zoom.getBox();
                 boolean animate = zoom.getAnimate();
-                Double scaleFactor = zoom.getLevel();
+                Double scaleFactor = zoom.getScaleFactor();
 
                 int count = 0;
                 List<GeoPoint> geoPoints = new ArrayList<>();

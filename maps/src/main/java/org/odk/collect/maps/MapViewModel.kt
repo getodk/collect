@@ -30,8 +30,8 @@ class MapViewModel(
         }
     }
 
-    fun zoomTo(boundingBox: List<MapPoint>, level: Double, animate: Boolean) {
-        _zoom.value = Zoom.Box(boundingBox, level, animate)
+    fun zoomTo(boundingBox: List<MapPoint>, scaleFactor: Double, animate: Boolean) {
+        _zoom.value = Zoom.Box(boundingBox, scaleFactor, _zoom.value?.level ?: DEFAULT_ZOOM, animate)
     }
 
     fun zoomToCurrentLocation(location: MapPoint?) {
@@ -107,6 +107,7 @@ sealed class Zoom {
 
     data class Box(
         val box: List<MapPoint>,
+        val scaleFactor: Double,
         override val level: Double,
         override val animate: Boolean
     ) : Zoom() {

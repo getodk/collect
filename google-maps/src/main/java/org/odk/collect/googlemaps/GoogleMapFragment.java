@@ -212,7 +212,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                     if (count == 1) {
                         zoomToPoint(lastPoint, zoom.getAnimate());
                     } else if (count > 1) {
-                        final LatLngBounds bounds = expandBounds(builder.build(), 1 / zoom.getLevel());
+                        final LatLngBounds bounds = expandBounds(builder.build(), 1 / zoom.getScaleFactor());
                         new Handler().postDelayed(() -> {
                             try {
                                 moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), zoom.getAnimate());
