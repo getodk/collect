@@ -7,8 +7,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.os.Build;
-
 import org.odk.collect.android.R;
 
 public class FormEndPage extends Page<FormEndPage> {
