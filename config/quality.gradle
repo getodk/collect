@@ -4,7 +4,7 @@ def configDir = "${project.rootDir}/config"
 
 apply plugin: 'checkstyle'
 
-checkstyle.toolVersion = '10.21.2'
+checkstyle.toolVersion = '10.26.1'
 
 tasks.register("checkstyle", Checkstyle) {
     configFile file("$configDir/checkstyle.xml")
