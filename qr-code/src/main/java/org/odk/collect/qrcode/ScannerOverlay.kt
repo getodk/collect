@@ -22,8 +22,8 @@ class ScannerOverlay(context: Context, attrs: AttributeSet?) :
         it.alpha = 75
     }
 
-    private val laserAnim = ValueAnimator.ofFloat(0f, 100f).also { animator ->
-        animator.setDuration(1000)
+    private val laserAnim = ValueAnimator.ofFloat(0f, 255f).also { animator ->
+        animator.setDuration(320)
         animator.repeatCount = ValueAnimator.INFINITE
         animator.repeatMode = ValueAnimator.REVERSE
     }
