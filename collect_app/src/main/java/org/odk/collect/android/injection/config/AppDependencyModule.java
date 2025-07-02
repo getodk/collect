@@ -157,7 +157,6 @@ import kotlin.jvm.functions.Function0;
  * for objects you need to inject
  */
 @Module
-@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class AppDependencyModule {
 
     @Provides

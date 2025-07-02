@@ -32,6 +32,13 @@ android {
             isIncludeAndroidResources = true
         }
     }
+
+    packaging {
+        resources {
+            // Pick first occurrence of any files that cause conflicts
+            pickFirst("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
+        }
+    }
 }
 
 dependencies {
