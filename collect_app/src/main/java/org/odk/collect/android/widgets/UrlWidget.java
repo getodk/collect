@@ -42,7 +42,7 @@ public class UrlWidget extends QuestionWidget {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = UrlWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         binding.urlButton.setOnClickListener(v -> onButtonClick());
 
