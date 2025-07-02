@@ -41,6 +41,7 @@ import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
+import org.odk.collect.android.configure.qr.SettingsBarcodeScannerViewFactory;
 import org.odk.collect.android.database.itemsets.DatabaseFastExternalItemsetsRepository;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.InstancesContract;
@@ -51,8 +52,6 @@ import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory;
 import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.OpenRosaClientProvider;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.qrcode.BarcodeScannerViewContainer;
-import org.odk.collect.qrcode.mlkit.PlayServicesFallbackBarcodeScannerViewFactory;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.geo.MapFragmentFactoryImpl;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
@@ -127,6 +126,7 @@ import org.odk.collect.projects.ProjectCreator;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SettingsConnectionMatcher;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
+import org.odk.collect.qrcode.BarcodeScannerViewContainer;
 import org.odk.collect.qrcode.zxing.QRCodeCreatorImpl;
 import org.odk.collect.qrcode.zxing.QRCodeDecoder;
 import org.odk.collect.qrcode.zxing.QRCodeDecoderImpl;
@@ -650,7 +650,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public BarcodeScannerViewContainer.Factory providesBarcodeScannerViewFactory() {
-        return new PlayServicesFallbackBarcodeScannerViewFactory();
+    public BarcodeScannerViewContainer.Factory providesBarcodeScannerViewFactory(SettingsProvider settingsProvider) {
+        return new SettingsBarcodeScannerViewFactory(settingsProvider.getUnprotectedSettings());
     }
 }
