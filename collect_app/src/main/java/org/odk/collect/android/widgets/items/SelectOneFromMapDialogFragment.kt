@@ -165,8 +165,8 @@ internal class SelectChoicesMapData(
                                     properties,
                                     selectChoice.index == selectedIndex,
                                     point = points[0],
-                                    smallIcon = if (markerSymbol == null) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small else org.odk.collect.icons.R.drawable.ic_map_marker_small,
-                                    largeIcon = if (markerSymbol == null) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big else org.odk.collect.icons.R.drawable.ic_map_marker_big,
+                                    smallIcon = if (markerSymbol.isNullOrBlank()) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small else org.odk.collect.icons.R.drawable.ic_map_marker_small,
+                                    largeIcon = if (markerSymbol.isNullOrBlank()) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big else org.odk.collect.icons.R.drawable.ic_map_marker_big,
                                     color = markerColor,
                                     symbol = markerSymbol,
                                     action = IconifiedText(
