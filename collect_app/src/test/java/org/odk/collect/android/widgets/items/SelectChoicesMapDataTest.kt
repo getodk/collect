@@ -304,7 +304,7 @@ class SelectChoicesMapDataTest {
     }
 
     @Test
-    fun `uses marker with cutout if marker-symbol is defined`() {
+    fun `uses marker without cutout if marker-symbol is defined`() {
         val choices = listOf(
             selectChoice(
                 value = "a",
@@ -330,7 +330,7 @@ class SelectChoicesMapDataTest {
     }
 
     @Test
-    fun `uses marker without cutout if marker-symbol is not defined or blank`() {
+    fun `uses marker with cutout if marker-symbol is not defined or blank`() {
         val choices = listOf(
             selectChoice(
                 value = "a",
