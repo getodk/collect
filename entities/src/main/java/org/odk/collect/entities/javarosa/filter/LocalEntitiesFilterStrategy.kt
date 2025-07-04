@@ -1,15 +1,13 @@
 package org.odk.collect.entities.javarosa.filter
 
-import org.javarosa.core.model.CompareToNodeExpression
 import org.javarosa.core.model.condition.EvaluationContext
 import org.javarosa.core.model.condition.FilterStrategy
 import org.javarosa.core.model.instance.DataInstance
 import org.javarosa.core.model.instance.TreeReference
-import org.javarosa.xpath.expr.XPathBoolExpr
-import org.javarosa.xpath.expr.XPathEqExpr
 import org.javarosa.xpath.expr.XPathExpression
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceAdapter
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceProvider
+import org.odk.collect.entities.javarosa.parse.XPathExpressionExt.parseToQuery
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.QueryException
 import org.odk.collect.shared.Query
@@ -39,8 +37,7 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
             return next.get()
         }
 
-        val query = xPathExpressionToQuery(predicate, sourceInstance, evaluationContext)
-
+        val query = predicate.parseToQuery(sourceInstance, evaluationContext)
         return if (query != null) {
             try {
                 queryToTreeReferences(query, sourceInstance)
@@ -52,72 +49,10 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         }
     }
 
-    private fun xPathExpressionToQuery(
-        predicate: XPathExpression,
-        sourceInstance: DataInstance<*>,
-        evaluationContext: EvaluationContext,
-    ): Query? {
-        return when (predicate) {
-            is XPathBoolExpr -> xPathBoolExprToQuery(predicate, sourceInstance, evaluationContext)
-            is XPathEqExpr -> xPathEqExprToQuery(predicate, sourceInstance, evaluationContext)
-            else -> null
-        }
-    }
-
-    private fun xPathBoolExprToQuery(
-        predicate: XPathBoolExpr,
-        sourceInstance: DataInstance<*>,
-        evaluationContext: EvaluationContext,
-    ): Query? {
-        val queryA = xPathExpressionToQuery(predicate.a, sourceInstance, evaluationContext)
-        val queryB = xPathExpressionToQuery(predicate.b, sourceInstance, evaluationContext)
-
-        return if (queryA != null && queryB != null) {
-            if (predicate.op == XPathBoolExpr.AND) {
-                Query.And(queryA, queryB)
-            } else {
-                Query.Or(queryA, queryB)
-            }
-        } else {
-            null
-        }
-    }
-
-    private fun xPathEqExprToQuery(
-        predicate: XPathEqExpr,
-        sourceInstance: DataInstance<*>,
-        evaluationContext: EvaluationContext,
-    ): Query? {
-        val candidate = CompareToNodeExpression.parse(predicate)
-
-        return if (candidate != null) {
-            val child = if (candidate.nodeSide.steps.size == 1) {
-                candidate.nodeSide.steps[0].name.name
-            } else {
-                candidate.nodeSide.steps[1].name.name
-            }
-
-            val value = candidate.evalContextSide(sourceInstance, evaluationContext)
-
-            if (predicate.isEqual) {
-                if (value is Double) {
-                    Query.NumericEq(child, value)
-                } else {
-                    Query.StringEq(child, value.toString())
-                }
-            } else {
-                if (value is Double) {
-                    Query.NumericNotEq(child, value)
-                } else {
-                    Query.StringNotEq(child, value.toString())
-                }
-            }
-        } else {
-            null
-        }
-    }
-
-    private fun queryToTreeReferences(query: Query, sourceInstance: DataInstance<*>): List<TreeReference> {
+    private fun queryToTreeReferences(
+        query: Query,
+        sourceInstance: DataInstance<*>
+    ): List<TreeReference> {
         val results = instanceAdapter.query(sourceInstance.instanceId, query)
         sourceInstance.replacePartialElements(results)
         return results.map {
