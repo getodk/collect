@@ -7,6 +7,9 @@ import org.javarosa.xpath.expr.XPathBoolExpr
 import org.javarosa.xpath.expr.XPathEqExpr
 import org.javarosa.xpath.expr.XPathExpression
 import org.javarosa.xpath.expr.XPathStep
+import org.javarosa.xpath.expr.XPathStep.AXIS_CHILD
+import org.javarosa.xpath.expr.XPathStep.AXIS_SELF
+import org.javarosa.xpath.expr.XPathStep.TEST_TYPE_NODE
 import org.odk.collect.shared.Query
 
 object XPathExpressionExt {
@@ -59,10 +62,11 @@ object XPathExpressionExt {
         val candidate = CompareToNodeExpression.parse(predicate)
 
         return if (candidate != null) {
-            val child = if (candidate.nodeSide.steps.size == 1) {
-                candidate.nodeSide.steps[0].name.name
-            } else if (candidate.nodeSide.steps.size == 2 && candidate.nodeSide.steps[0] == XPathStep.ABBR_SELF()) {
-                candidate.nodeSide.steps[1].name.name
+            val steps = candidate.nodeSide.steps
+            val child = if (steps.size == 1) {
+                steps[0].name.name
+            } else if (isNodeRelativeExpression(steps)) {
+                steps[1].name.name
             } else {
                 return null
             }
@@ -85,5 +89,11 @@ object XPathExpressionExt {
         } else {
             null
         }
+    }
+
+    private fun isNodeRelativeExpression(steps: Array<XPathStep>): Boolean {
+        val dotSlash = XPathStep(AXIS_SELF, TEST_TYPE_NODE)
+        val nodeFunc = XPathStep(AXIS_CHILD, TEST_TYPE_NODE)
+        return steps.size == 2 && steps[0] == dotSlash || steps[0] == nodeFunc
     }
 }
