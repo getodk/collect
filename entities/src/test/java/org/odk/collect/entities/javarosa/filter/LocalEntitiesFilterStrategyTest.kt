@@ -501,6 +501,43 @@ class LocalEntitiesFilterStrategyTest {
     }
 
     @Test
+    fun `works correctly in the optimized way with node()`() {
+        entitiesRepository.save("things", Entity.New("thing1", "Thing1"))
+
+        val scenario = Scenario.init(
+            "Secondary instance form",
+            html(
+                head(
+                    title("Secondary instance form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("question"),
+                            )
+                        ),
+                        t("instance id=\"things\" src=\"jr://file-csv/things.csv\""),
+                        bind("/data/question").type("string")
+                    )
+                ),
+                body(
+                    select1Dynamic(
+                        "/data/question",
+                        "instance('things')/root/item[./label='Thing1']",
+                        "name",
+                        "label"
+                    )
+                )
+            ),
+            controllerSupplier
+        )
+
+        val choices = scenario.choicesOf("/data/question").map { it.value }
+        assertThat(choices, containsInAnyOrder("thing1"))
+        assertThat(fallthroughFilterStrategy.fellThrough, equalTo(false))
+    }
+
+    @Test
     fun `works correctly in the optimized way with version = expressions`() {
         entitiesRepository.save("things", Entity.New("thing1", "Thing1", version = 2))
 

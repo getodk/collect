@@ -91,7 +91,12 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
         val candidate = CompareToNodeExpression.parse(predicate)
 
         return if (candidate != null) {
-            val child = candidate.nodeSide.steps[0].name.name
+            val child = if (candidate.nodeSide.steps.size == 1) {
+                candidate.nodeSide.steps[0].name.name
+            } else {
+                candidate.nodeSide.steps[1].name.name
+            }
+
             val value = candidate.evalContextSide(sourceInstance, evaluationContext)
 
             if (predicate.isEqual) {
