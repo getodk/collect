@@ -92,8 +92,10 @@ object XPathExpressionExt {
     }
 
     private fun isNodeRelativeExpression(steps: Array<XPathStep>): Boolean {
-        val dotSlash = XPathStep(AXIS_SELF, TEST_TYPE_NODE)
-        val nodeFunc = XPathStep(AXIS_CHILD, TEST_TYPE_NODE)
-        return steps.size == 2 && steps[0] == dotSlash || steps[0] == nodeFunc
+        return if (steps.size == 2 && steps[0].test == TEST_TYPE_NODE) {
+            return steps[0].axis == AXIS_SELF || steps[0].axis == AXIS_CHILD
+        } else {
+            false
+        }
     }
 }
