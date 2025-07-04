@@ -7,7 +7,7 @@ import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.xpath.expr.XPathExpression
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceAdapter
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesInstanceProvider
-import org.odk.collect.entities.javarosa.parse.XPathExpressionExt.parseToQuery
+import org.odk.collect.entities.javarosa.parse.XPathExpressionExt.toQuery
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.QueryException
 import org.odk.collect.shared.Query
@@ -37,7 +37,7 @@ class LocalEntitiesFilterStrategy(entitiesRepository: EntitiesRepository) :
             return next.get()
         }
 
-        val query = predicate.parseToQuery(sourceInstance, evaluationContext)
+        val query = predicate.toQuery(sourceInstance, evaluationContext)
         return if (query != null) {
             try {
                 queryToTreeReferences(query, sourceInstance)

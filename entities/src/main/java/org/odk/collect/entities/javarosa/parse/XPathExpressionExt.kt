@@ -6,6 +6,7 @@ import org.javarosa.core.model.instance.DataInstance
 import org.javarosa.xpath.expr.XPathBoolExpr
 import org.javarosa.xpath.expr.XPathEqExpr
 import org.javarosa.xpath.expr.XPathExpression
+import org.javarosa.xpath.expr.XPathStep
 import org.odk.collect.shared.Query
 
 object XPathExpressionExt {
@@ -20,7 +21,7 @@ object XPathExpressionExt {
      * `and`, `or`, `=` and `!=` are all supported. If an expression cannot be converted to a
      * `Query`, `null` will be returned.
      */
-    fun XPathExpression.parseToQuery(
+    fun XPathExpression.toQuery(
         sourceInstance: DataInstance<*>,
         evaluationContext: EvaluationContext
     ): Query? {
@@ -36,8 +37,8 @@ object XPathExpressionExt {
         sourceInstance: DataInstance<*>,
         evaluationContext: EvaluationContext
     ): Query? {
-        val queryA = predicate.a.parseToQuery(sourceInstance, evaluationContext)
-        val queryB = predicate.b.parseToQuery(sourceInstance, evaluationContext)
+        val queryA = predicate.a.toQuery(sourceInstance, evaluationContext)
+        val queryB = predicate.b.toQuery(sourceInstance, evaluationContext)
 
         return if (queryA != null && queryB != null) {
             if (predicate.op == XPathBoolExpr.AND) {
@@ -60,8 +61,10 @@ object XPathExpressionExt {
         return if (candidate != null) {
             val child = if (candidate.nodeSide.steps.size == 1) {
                 candidate.nodeSide.steps[0].name.name
-            } else {
+            } else if (candidate.nodeSide.steps.size == 2 && candidate.nodeSide.steps[0] == XPathStep.ABBR_SELF()) {
                 candidate.nodeSide.steps[1].name.name
+            } else {
+                return null
             }
 
             val value = candidate.evalContextSide(sourceInstance, evaluationContext)
