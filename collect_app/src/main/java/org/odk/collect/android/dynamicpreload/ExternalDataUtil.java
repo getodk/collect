@@ -170,44 +170,39 @@ public final class ExternalDataUtil {
             ArrayList<SelectChoice> returnedChoices = new ArrayList<>();
             for (SelectChoice selectChoice : selectChoices) {
                 String value = selectChoice.getValue();
-                if (isAnInteger(value)) {
-                    // treat this as a static choice
-                    returnedChoices.add(selectChoice);
+                String displayColumns = formEntryPrompt.getSelectChoiceText(selectChoice);
+                String imageColumn = formEntryPrompt.getSpecialFormSelectChoiceText(
+                        selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
+                if (imageColumn != null && imageColumn.startsWith(JR_IMAGES_PREFIX)) {
+                    imageColumn = imageColumn.substring(JR_IMAGES_PREFIX.length());
+                }
+                //                    if (displayColumns == null || displayColumns.trim().length() == 0) {
+                //                        throw new InvalidSyntaxException("The label column in the choices sheet
+                // appears to be empty (or has been calculated as empty).");
+                //                    }
+
+                ExternalDataManager externalDataManager =
+                        Collect.getInstance().getExternalDataManager();
+                FormInstance formInstance = formController.getFormDef().getInstance();
+                EvaluationContext baseEvaluationContext = new EvaluationContext(formInstance);
+                EvaluationContext evaluationContext = new EvaluationContext(
+                        baseEvaluationContext, formEntryPrompt.getIndex().getReference());
+                // we can only add only the appropriate by querying the xPathFuncExpr.id.name
+                evaluationContext.addFunctionHandler(
+                        new ExternalDataHandlerSearch(externalDataManager, displayColumns,
+                                value, imageColumn));
+
+                Object eval = xpathfuncexpr.eval(formInstance, evaluationContext);
+                if (eval.getClass().isAssignableFrom(ArrayList.class)) {
+                    @SuppressWarnings("unchecked")
+                    List<SelectChoice> dynamicChoices = (ArrayList<SelectChoice>) eval;
+                    for (SelectChoice dynamicChoice : dynamicChoices) {
+                        returnedChoices.add(dynamicChoice);
+                    }
                 } else {
-                    String displayColumns = formEntryPrompt.getSelectChoiceText(selectChoice);
-                    String imageColumn = formEntryPrompt.getSpecialFormSelectChoiceText(
-                            selectChoice, FormEntryCaption.TEXT_FORM_IMAGE);
-                    if (imageColumn != null && imageColumn.startsWith(JR_IMAGES_PREFIX)) {
-                        imageColumn = imageColumn.substring(JR_IMAGES_PREFIX.length());
-                    }
-                    //                    if (displayColumns == null || displayColumns.trim().length() == 0) {
-                    //                        throw new InvalidSyntaxException("The label column in the choices sheet
-                    // appears to be empty (or has been calculated as empty).");
-                    //                    }
-
-                    ExternalDataManager externalDataManager =
-                            Collect.getInstance().getExternalDataManager();
-                    FormInstance formInstance = formController.getFormDef().getInstance();
-                    EvaluationContext baseEvaluationContext = new EvaluationContext(formInstance);
-                    EvaluationContext evaluationContext = new EvaluationContext(
-                            baseEvaluationContext, formEntryPrompt.getIndex().getReference());
-                    // we can only add only the appropriate by querying the xPathFuncExpr.id.name
-                    evaluationContext.addFunctionHandler(
-                            new ExternalDataHandlerSearch(externalDataManager, displayColumns,
-                                    value, imageColumn));
-
-                    Object eval = xpathfuncexpr.eval(formInstance, evaluationContext);
-                    if (eval.getClass().isAssignableFrom(ArrayList.class)) {
-                        @SuppressWarnings("unchecked")
-                        List<SelectChoice> dynamicChoices = (ArrayList<SelectChoice>) eval;
-                        for (SelectChoice dynamicChoice : dynamicChoices) {
-                            returnedChoices.add(dynamicChoice);
-                        }
-                    } else {
-                        throw new ExternalDataException(
-                                getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.ext_search_return_error,
-                                        eval.getClass().getName()));
-                    }
+                    throw new ExternalDataException(
+                            getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.ext_search_return_error,
+                                    eval.getClass().getName()));
                 }
             }
             return returnedChoices;
