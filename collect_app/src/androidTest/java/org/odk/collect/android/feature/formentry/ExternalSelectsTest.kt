@@ -56,4 +56,16 @@ class ExternalSelectsTest {
             .assertText("File: $formsDirPath/search_and_select-media/nombre.csv is missing.")
             .assertText("File: $formsDirPath/search_and_select-media/nombre2.csv is missing.")
     }
+
+    @Test
+    fun missingFileMessage_shouldBeDisplayedIfExternalFileWithChoicesUsedBySearchFunctionIsMissingEvenIfMatchingInternalDatasetExist() {
+        val formsDirPath = StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
+
+        rule.startAtMainMenu()
+            .copyForm("search_external.xml")
+            .startBlankForm("search_external")
+            .assertText("File: $formsDirPath/search_external-media/numbers.csv is missing.")
+            .swipeToNextQuestion("Choose a letter")
+            .assertText("File: $formsDirPath/search_external-media/letters.csv is missing.")
+    }
 }
