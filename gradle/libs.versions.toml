@@ -15,7 +15,7 @@ espresso = "3.6.1"
 [libraries]
 firebaseCrashlyticsGradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version = "3.0.3" }
 googleServices = { group = "com.google.gms", name = "google-services", version = "4.4.2" }
-gradle = { group = "com.android.tools.build", name = "gradle", version = "8.7.3" }
+gradle = { group = "com.android.tools.build", name = "gradle", version = "8.10.1" }
 kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "2.1.10" }
 navigationSafeArgsGradlePlugin = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version = "2.8.7" }
 ktlintGradle = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version = "12.1.2" }
