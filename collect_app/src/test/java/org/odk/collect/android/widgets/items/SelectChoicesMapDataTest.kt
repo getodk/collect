@@ -304,7 +304,7 @@ class SelectChoicesMapDataTest {
     }
 
     @Test
-    fun `uses different icon if marker-symbol is defined`() {
+    fun `uses marker without cutout if marker-symbol is defined`() {
         val choices = listOf(
             selectChoice(
                 value = "a",
@@ -327,6 +327,44 @@ class SelectChoicesMapDataTest {
         val item = data.getMappableItems().getOrAwaitValue()!![0] as MappableSelectItem.MappableSelectPoint
         assertThat(item.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_small))
         assertThat(item.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_big))
+    }
+
+    @Test
+    fun `uses marker with cutout if marker-symbol is not defined or blank`() {
+        val choices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(
+                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0")
+                    )
+                )
+            ),
+            selectChoice(
+                value = "b",
+                item = treeElement(
+                    children = listOf(
+                        treeElement(SelectChoicesMapData.GEOMETRY, "0 170.00 0 0"),
+                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, " ")
+                    )
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .build()
+
+        val data = loadDataForPrompt(prompt)
+
+        val firstItem = data.getMappableItems().getOrAwaitValue()!![0] as MappableSelectItem.MappableSelectPoint
+        assertThat(firstItem.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small))
+        assertThat(firstItem.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big))
+
+        val secondItem = data.getMappableItems().getOrAwaitValue()!![1] as MappableSelectItem.MappableSelectPoint
+        assertThat(secondItem.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small))
+        assertThat(secondItem.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big))
     }
 
     private fun loadDataForPrompt(prompt: FormEntryPrompt): SelectChoicesMapData {
