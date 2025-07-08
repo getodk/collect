@@ -136,6 +136,12 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
+    fun asyncAssertText(text: String): T {
+        return waitFor {
+            assertText(text)
+        }
+    }
+
     @JvmOverloads
     fun assertTextThatContainsExists(text: String, index: Int = 0): T {
         onView(
