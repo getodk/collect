@@ -3,16 +3,17 @@ package org.odk.collect.android.feature.formentry
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
-import org.odk.collect.android.R
+import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
-class FormSavedSnackbarTest {
+class FormSaveTest {
     private val rule = CollectTestRule()
+    private val testDependencies = TestDependencies()
 
     @get:Rule
-    val copyFormChain: RuleChain = TestRuleChain.chain().around(rule)
+    val copyFormChain: RuleChain = TestRuleChain.chain(testDependencies).around(rule)
 
     @Test
     fun whenBlankFormSavedAsDraft_displaySnackbarWithEditAction() {
@@ -61,5 +62,19 @@ class FormSavedSnackbarTest {
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_saved_as_draft)
             .rotateToLandscape(MainMenuPage())
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_saved_as_draft)
+    }
+
+    @Test
+    fun whenFormDeletedDuringFilling_displayErrorOnAttemptToSave() {
+        rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .setServer(testDependencies.server.url)
+            .enableMatchExactly()
+            .startBlankForm("One Question")
+            .also { testDependencies.scheduler.runDeferredTasks() }
+            .clickSaveWithError("Sorry, form save failed! Form can't be found.")
+            .swipeToEndScreen()
+            .clickSaveAsDraftWithError("Sorry, form save failed! Form can't be found.")
+            .clickFinalizeWithError("Sorry, form save failed! Form can't be found.")
     }
 }

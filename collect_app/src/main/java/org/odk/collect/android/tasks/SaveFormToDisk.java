@@ -63,6 +63,7 @@ import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.shared.files.FileExt;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -112,37 +113,29 @@ public class SaveFormToDisk {
 
         progressListener.onProgressUpdate(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.survey_saving_validating_message));
 
-        ValidationResult validationResult;
         try {
-            validationResult = formController.validateAnswers(shouldFinalize);
+            ValidationResult validationResult = formController.validateAnswers(shouldFinalize);
             if (shouldFinalize && validationResult instanceof FailedValidationResult) {
                 // validation failed, pass specific failure
                 saveToDiskResult.setSaveResult(((FailedValidationResult) validationResult).getStatus(), shouldFinalize);
                 return saveToDiskResult;
             }
-        } catch (Exception e) {
-            Timber.e(e);
-            saveToDiskResult.setSaveErrorMessage(e.getMessage());
-            saveToDiskResult.setSaveResult(SAVE_ERROR, shouldFinalize);
-            return saveToDiskResult;
-        }
 
-        if (shouldFinalize) {
-            Instance instance = updateInstanceDatabase(true, true, validationResult);
-            FormEntryUseCases.finalizeFormController(instance, formController, instancesRepository, entitiesRepository);
-        }
+            if (shouldFinalize) {
+                Instance instance = updateInstanceDatabase(true, true, validationResult);
+                FormEntryUseCases.finalizeFormController(instance, formController, instancesRepository, entitiesRepository);
+            }
 
-        // close all open databases of external data.
-        Collect.getInstance().getExternalDataManager().close();
+            // close all open databases of external data.
+            Collect.getInstance().getExternalDataManager().close();
 
-        // if there is a meta/instanceName field, be sure we are using the latest value
-        // just in case the validate somehow triggered an update.
-        String updatedSaveName = formController.getSubmissionMetadata().instanceName;
-        if (updatedSaveName != null) {
-            instanceName = updatedSaveName;
-        }
+            // if there is a meta/instanceName field, be sure we are using the latest value
+            // just in case the validate somehow triggered an update.
+            String updatedSaveName = formController.getSubmissionMetadata().instanceName;
+            if (updatedSaveName != null) {
+                instanceName = updatedSaveName;
+            }
 
-        try {
             Instance instance = exportData(shouldFinalize, progressListener, validationResult);
 
             if (formController.getInstanceFile() != null) {
@@ -154,6 +147,9 @@ public class SaveFormToDisk {
         } catch (EncryptionException e) {
             saveToDiskResult.setSaveErrorMessage(e.getMessage());
             saveToDiskResult.setSaveResult(ENCRYPTION_ERROR, shouldFinalize);
+        } catch (FileNotFoundException e) {
+            saveToDiskResult.setSaveErrorMessage("Form can't be found.");
+            saveToDiskResult.setSaveResult(SAVE_ERROR, shouldFinalize);
         } catch (Exception e) {
             Timber.e(e);
 
@@ -175,7 +171,7 @@ public class SaveFormToDisk {
      * Post-condition: the uri field is set to the URI of the instance database row that matches
      * the instance currently managed by the {@link FormController}.
      */
-    private Instance updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted, ValidationResult validationResult) {
+    private Instance updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted, ValidationResult validationResult) throws FileNotFoundException {
         FormInstance formInstance = formController.getFormDef().getInstance();
 
         String instancePath = formController.getInstanceFile().getAbsolutePath();
@@ -220,6 +216,9 @@ public class SaveFormToDisk {
         } else {
             Timber.i("No instance found, creating");
             Form form = new FormsRepositoryProvider(Collect.getInstance()).create().get(ContentUriHelper.getIdFromUri(uri));
+            if (form == null) {
+                throw new FileNotFoundException();
+            }
 
             // add missing fields into values
             instanceBuilder.instanceFilePath(instancePath);
