@@ -44,7 +44,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
-@SuppressWarnings("PMD.DoubleBraceInitialization")
 public class ServerFormDownloaderTest {
 
     private final FakeClock clock = new FakeClock(123L);

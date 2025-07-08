@@ -9,7 +9,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.List;
 
-@SuppressWarnings("PMD.MissingStaticMethodInNonInstantiatableClass")
 public class RankingViewModel extends ViewModel {
 
     private final List<SelectChoice> items;

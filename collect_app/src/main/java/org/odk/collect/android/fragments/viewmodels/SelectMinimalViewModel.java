@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 
-@SuppressWarnings("PMD.MissingStaticMethodInNonInstantiatableClass")
 public class SelectMinimalViewModel extends ViewModel {
     private final AbstractSelectListAdapter selectListAdapter;
     private final boolean isFlex;

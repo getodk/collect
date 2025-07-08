@@ -69,9 +69,7 @@ class PrinterWidgetViewModelTest {
             context,
             "<html>\n" +
                 " <head></head>\n" +
-                " <body>\n" +
-                "  blah\n" +
-                " </body>\n" +
+                " <body>blah</body>\n" +
                 "</html>"
         )
     }
