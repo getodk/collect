@@ -44,7 +44,7 @@ class AndroidShortcutsTest {
 
         testDependencies.scheduler.runDeferredTasks()
 
-        shortcutsPage.assertText("One Question")
+        shortcutsPage.asyncAssertText("One Question")
     }
 
     @Test
