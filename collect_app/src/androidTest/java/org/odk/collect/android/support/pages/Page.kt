@@ -455,10 +455,6 @@ abstract class Page<T : Page<T>> {
         Thread.sleep(250) // https://github.com/android/android-test/issues/444
     }
 
-    protected fun waitForText(text: String) {
-        waitFor { assertText(text) }
-    }
-
     protected fun assertToolbarTitle(title: String?) {
         onView(
             allOf(
