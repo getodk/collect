@@ -2,7 +2,6 @@ package org.odk.collect.testshared
 
 import junit.framework.AssertionFailedError
 import org.odk.collect.shared.TimeInMs
-import java.sql.Time
 import java.util.concurrent.Callable
 
 object WaitFor {
@@ -28,11 +27,6 @@ object WaitFor {
         }
 
         throw failure!!
-    }
-
-    @JvmStatic
-    fun wait250ms() {
-        Thread.sleep(250)
     }
 
     @JvmStatic

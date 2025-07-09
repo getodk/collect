@@ -88,7 +88,7 @@ internal class ProjectSettingsDialogPage : Page<ProjectSettingsDialogPage>() {
     }
 
     fun selectProject(projectName: String): MainMenuPage {
-        WaitFor.wait250ms() // https://github.com/android/android-test/issues/444
+        waitForDialogToSettle()
         onView(
             allOf(
                 hasDescendant(withText(projectName)),
