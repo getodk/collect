@@ -26,7 +26,6 @@ import org.odk.collect.forms.MediaFile
 import org.odk.collect.openrosa.forms.OpenRosaClient
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import timber.log.Timber
-import java.io.File
 
 /**
  * Open to allow mocking (used in existing Java tests)
@@ -108,27 +107,16 @@ open class ServerFormsDetailsFetcher(
         existingForm: Form,
         newMediaFiles: List<MediaFile>
     ): Boolean {
-        val localMediaFiles = FormUtils.getMediaFiles(existingForm)
+        val localMediaHashes = FormUtils.getMediaFiles(existingForm)
+            .map { it.getMd5Hash() }
+            .toSet()
+
         return newMediaFiles.any {
-            !isMediaFileAlreadyDownloaded(localMediaFiles, it)
+            !it.filename.endsWith(".zip") && it.hash !in localMediaHashes
         }
     }
 
     private fun getFormByHash(hash: String): Form? {
         return formsRepository.getOneByMd5Hash(hash)
-    }
-
-    private fun isMediaFileAlreadyDownloaded(
-        localMediaFiles: List<File>,
-        newMediaFile: MediaFile
-    ): Boolean {
-        // TODO Zip files are ignored we should find a way to take them into account too
-        if (newMediaFile.filename.endsWith(".zip")) {
-            return true
-        }
-
-        return localMediaFiles.any {
-            newMediaFile.hash == it.getMd5Hash()
-        }
     }
 }
