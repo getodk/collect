@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<h:html
+    xmlns="http://www.w3.org/2002/xforms"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:odk="http://www.opendatakit.org/xforms">
+    <h:head>
+        <h:title>Search with last-saved</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="search-with-last-saved">
+                    <fruit/>
+                    <group>
+                        <fruit2/>
+                        <details/>
+                    </group>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <instance id="__last-saved" src="jr://instance/last-saved"/>
+            <bind nodeset="/data/fruit" type="string"/>
+            <setvalue ref="/data/fruit" value=" instance('__last-saved')/data/fruit " event="odk-instance-first-load"/>
+            <bind nodeset="/data/group/fruit2" type="string"/>
+            <setvalue ref="/data/group/fruit2" value=" instance('__last-saved')/data/group/fruit2 " event="odk-instance-first-load"/>
+            <bind nodeset="/data/group/details" type="string"/>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 ref="/data/fruit" appearance="search('fruits')">
+            <label>Select fruit 1</label>
+            <item>
+                <label>name</label>
+                <value>name_key</value>
+            </item>
+        </select1>
+        <group appearance="field-list" ref="/data/group">
+            <select1 ref="/data/group/fruit2" appearance="search('fruits')">
+                <label>Select fruit 2</label>
+                <item>
+                    <label>name</label>
+                    <value>name_key</value>
+                </item>
+            </select1>
+            <input ref="/data/group/details">
+                <label>Fruit details</label>
+            </input>
+        </group>
+    </h:body>
+</h:html>
