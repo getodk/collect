@@ -60,7 +60,7 @@ open class ServerFormsDetailsFetcher(
                     if (existingForm == null || existingForm.isDeleted) {
                         true
                     } else if (manifestFile != null) {
-                        hasUpdatedMediaFiles(manifestFile, existingForm)
+                        areNewerMediaFilesAvailable(existingForm, manifestFile.mediaFiles)
                     } else {
                         false
                     }
@@ -82,18 +82,6 @@ open class ServerFormsDetailsFetcher(
         }
     }
 
-    private fun hasUpdatedMediaFiles(
-        manifestFile: ManifestFile,
-        existingForm: Form
-    ): Boolean {
-        val newMediaFiles = manifestFile.mediaFiles
-        return if (newMediaFiles.isNotEmpty()) {
-            areNewerMediaFilesAvailable(existingForm, newMediaFiles)
-        } else {
-            false
-        }
-    }
-
     private fun getManifestFile(formSource: FormSource, manifestUrl: String): ManifestFile? {
         return try {
             formSource.fetchManifest(manifestUrl)
@@ -107,6 +95,10 @@ open class ServerFormsDetailsFetcher(
         existingForm: Form,
         newMediaFiles: List<MediaFile>
     ): Boolean {
+        if (newMediaFiles.isEmpty()) {
+            return false
+        }
+
         val localMediaHashes = FormUtils.getMediaFiles(existingForm)
             .map { it.getMd5Hash() }
             .toSet()
