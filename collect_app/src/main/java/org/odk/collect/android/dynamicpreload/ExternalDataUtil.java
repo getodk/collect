@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -210,6 +212,7 @@ public final class ExternalDataUtil {
                     }
                 }
             }
+            updateQuestionAnswer(formEntryPrompt, returnedChoices);
             return returnedChoices;
         } catch (Exception e) {
             String fileName = String.valueOf(xpathfuncexpr.args[0].eval(null, null));
@@ -226,6 +229,23 @@ public final class ExternalDataUtil {
 
             throw new ExternalDataException(e.getMessage(), e);
         }
+    }
+
+    private static void updateQuestionAnswer(FormEntryPrompt formEntryPrompt, List<SelectChoice> returnedChoices) {
+        IAnswerData value = formEntryPrompt.getAnswerValue();
+        if (value == null) {
+            return;
+        }
+
+        Selection selection = (Selection) value.getValue();
+        if (selection.index != -1) {
+            return;
+        }
+
+        returnedChoices.stream()
+                .filter(choice -> selection.getValue().equals(choice.getValue()))
+                .findFirst()
+                .ifPresent(selection::attachChoice);
     }
 
     /**
