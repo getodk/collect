@@ -71,9 +71,10 @@ class ExternalSelectsTest {
 
             // Start a new form to verify that answers from the previous form are retained
             .startBlankForm("Search with last-saved")
+            .swipeToNextQuestion("Select fruit 2")
             .clickGoToArrow()
             .assertHierarchyItem(0, "Select fruit 1", "Mango")
-            .assertHierarchyItem(1, "Select fruit 2", "oranges")
+            .assertHierarchyItem(1, "Select fruit 2", "Oranges")
 
             // Change an answer in a field-list and verify no errors occur
             .clickOnQuestion("Select fruit 2")
