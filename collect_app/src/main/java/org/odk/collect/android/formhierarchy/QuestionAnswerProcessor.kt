@@ -25,12 +25,7 @@ object QuestionAnswerProcessor {
             return ""
         }
 
-        val answerText = try {
-            fep.answerText
-        } catch (e: Exception) {
-            fep.answerValue?.displayText
-        }
-        if (!answerText.isNullOrBlank() &&
+        if (!fep.answerText.isNullOrBlank() &&
             Appearances.isMasked(fep) &&
             fep.controlType == Constants.CONTROL_INPUT &&
             fep.dataType == Constants.DATATYPE_TEXT
@@ -77,7 +72,7 @@ object QuestionAnswerProcessor {
 
         if (data != null && appearance != null && appearance.contains(Appearances.THOUSANDS_SEP)) {
             return try {
-                val answerAsDecimal = BigDecimal(answerText)
+                val answerAsDecimal = BigDecimal(fep.answerText)
 
                 val df = DecimalFormat()
                 df.groupingSize = 3
@@ -106,6 +101,6 @@ object QuestionAnswerProcessor {
             }
             return ItemsetDao(ItemsetDbAdapter()).getItemLabel(fep.answerValue!!.displayText, formController.getMediaFolder()!!.absolutePath, language)
         }
-        return answerText ?: ""
+        return fep.answerText ?: ""
     }
 }
