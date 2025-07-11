@@ -79,7 +79,7 @@ android {
         applicationId('org.odk.collect.android')
         minSdk libs.versions.minSdk.get().toInteger()
         targetSdkVersion libs.versions.targetSdk.get().toInteger()
-        versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
+        versionCode project.hasProperty('versionCode') ? project.getProperties()['versionCode'].toInteger() : 5112
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
         vectorDrawables.useSupportLibrary = true
