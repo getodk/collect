@@ -141,4 +141,44 @@ class PullDataFunctionHandlerTest {
 
         assertThat(scenario.answerOf<StringData>("/data/calculate"), equalTo(null))
     }
+
+    @Test
+    fun `returns empty string when uses not existing property with no value`() {
+        val entitiesRepository = InMemEntitiesRepository()
+        entitiesRepository.save(
+            "things",
+            Entity.New("one", "One")
+        )
+
+        val scenario = Scenario.init(
+            "Pull data form",
+            html(
+                head(
+                    title("Pull data form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"pull-data-form\"",
+                                t("question"),
+                                t("calculate")
+                            )
+                        ),
+                        bind("/data/question").type("string"),
+                        bind("/data/calculate").type("string")
+                            .calculate("pulldata('things', 'label', 'property', '')")
+                    )
+                ),
+                body(
+                    input("/data/question"),
+                    input("/data/calculate")
+                )
+            )
+        ) { formDef ->
+            FormEntryController(FormEntryModel(formDef)).also {
+                it.addFunctionHandler(PullDataFunctionHandler(entitiesRepository))
+            }
+        }
+
+        assertThat(scenario.answerOf<StringData>("/data/calculate"), equalTo(null))
+    }
 }
