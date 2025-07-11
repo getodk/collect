@@ -8,12 +8,12 @@ import org.odk.collect.shared.Query.StringEq
 import org.odk.collect.shared.Query.StringNotEq
 
 sealed class Query {
-    class StringEq(val column: String, val value: String) : Query()
-    class StringNotEq(val column: String, val value: String) : Query()
-    class NumericEq(val column: String, val value: Double) : Query()
-    class NumericNotEq(val column: String, val value: Double) : Query()
-    class And(val queryA: Query, val queryB: Query) : Query()
-    class Or(val queryA: Query, val queryB: Query) : Query()
+    data class StringEq(val column: String, val value: String) : Query()
+    data class StringNotEq(val column: String, val value: String) : Query()
+    data class NumericEq(val column: String, val value: Double) : Query()
+    data class NumericNotEq(val column: String, val value: Double) : Query()
+    data class And(val queryA: Query, val queryB: Query) : Query()
+    data class Or(val queryA: Query, val queryB: Query) : Query()
 }
 
 fun Query.mapColumns(columnMapper: (String) -> String): Query {
