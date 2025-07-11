@@ -16,7 +16,7 @@ object XPathExpressionExt {
 
     /**
      * Converts an XPath expression to a [Query]. For example:
-     * - `label = 'blah'` will be converted to `Query.StringEq("label", "foo")`
+     * - `label = 'blah'` will be converted to `Query.StringEq("label", "blah")`
      * - `label` = /some/string/ref will be converted to `Query.StringEq("label", "blah")`
      * (where `/some/string/ref` evaluates to `"blah"` within the context of the passed
      * `DataInstance` and `EvaluationContext`)
