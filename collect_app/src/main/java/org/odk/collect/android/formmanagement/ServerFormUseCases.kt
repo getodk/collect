@@ -137,10 +137,11 @@ object ServerFormUseCases {
             } else {
                 val existingFile = searchForExistingMediaFile(allFormVersionsSorted, mediaFile)
                 if (existingFile != null) {
-                    if (existingFile.getMd5Hash().contentEquals(mediaFile.hash)) {
+                    val existingFileHash = existingFile.getMd5Hash()
+
+                    if (existingFileHash.contentEquals(mediaFile.hash)) {
                         FileUtils.copyFile(existingFile, tempMediaFile)
                     } else {
-                        val existingFileHash = existingFile.getMd5Hash()
                         downloadMediaFile(
                             formSource,
                             mediaFile,
