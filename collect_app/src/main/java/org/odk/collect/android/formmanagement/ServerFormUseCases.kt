@@ -136,25 +136,11 @@ object ServerFormUseCases {
                 }
             } else {
                 val existingFile = searchForExistingMediaFile(allFormVersionsSorted, mediaFile)
-                existingFile.also {
-                    if (it != null) {
-                        if (it.getMd5Hash().contentEquals(mediaFile.hash)) {
-                            FileUtils.copyFile(it, tempMediaFile)
-                        } else {
-                            val existingFileHash = it.getMd5Hash()
-                            downloadMediaFile(
-                                formSource,
-                                mediaFile,
-                                tempMediaFile,
-                                tempDir,
-                                stateListener
-                            )
-
-                            if (!tempMediaFile.getMd5Hash().contentEquals(existingFileHash)) {
-                                newAttachmentsDownloaded = true
-                            }
-                        }
+                if (existingFile != null) {
+                    if (existingFile.getMd5Hash().contentEquals(mediaFile.hash)) {
+                        FileUtils.copyFile(existingFile, tempMediaFile)
                     } else {
+                        val existingFileHash = existingFile.getMd5Hash()
                         downloadMediaFile(
                             formSource,
                             mediaFile,
@@ -162,8 +148,20 @@ object ServerFormUseCases {
                             tempDir,
                             stateListener
                         )
-                        newAttachmentsDownloaded = true
+
+                        if (!tempMediaFile.getMd5Hash().contentEquals(existingFileHash)) {
+                            newAttachmentsDownloaded = true
+                        }
                     }
+                } else {
+                    downloadMediaFile(
+                        formSource,
+                        mediaFile,
+                        tempMediaFile,
+                        tempDir,
+                        stateListener
+                    )
+                    newAttachmentsDownloaded = true
                 }
 
                 logEntityListClashes(mediaFile, entitiesRepository)
