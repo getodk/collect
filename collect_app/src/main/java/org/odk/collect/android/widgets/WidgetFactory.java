@@ -68,6 +68,7 @@ import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.webpage.CustomTabsWebPageService;
 
 /**
@@ -93,6 +94,7 @@ public class WidgetFactory {
     private final StringRequester stringRequester;
     private final FormController formController;
     private final AdvanceToNextListener advanceToNextListener;
+    private final SettingsProvider settingsProvider;
 
     public WidgetFactory(Activity activity,
                          boolean useExternalRecorder,
@@ -107,7 +109,8 @@ public class WidgetFactory {
                          FileRequester fileRequester,
                          StringRequester stringRequester,
                          FormController formController,
-                         AdvanceToNextListener advanceToNextListener
+                         AdvanceToNextListener advanceToNextListener,
+                         SettingsProvider settingsProvider
     ) {
         this.activity = activity;
         this.useExternalRecorder = useExternalRecorder;
@@ -123,6 +126,7 @@ public class WidgetFactory {
         this.stringRequester = stringRequester;
         this.formController = formController;
         this.advanceToNextListener = advanceToNextListener;
+        this.settingsProvider = settingsProvider;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -184,7 +188,7 @@ public class WidgetFactory {
                                 MapConfiguratorProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_BARCODE:
-                        questionWidget = new BarcodeWidget(activity, questionDetails, new BarcodeWidgetAnswerView(activity), waitingForDataRegistry, new CameraUtils(), dependencies);
+                        questionWidget = new BarcodeWidget(activity, questionDetails, new BarcodeWidgetAnswerView(activity, settingsProvider), waitingForDataRegistry, new CameraUtils(), dependencies);
                         break;
                     case Constants.DATATYPE_TEXT:
                         String query = prompt.getQuestion().getAdditionalAttribute(null, "query");
@@ -209,9 +213,9 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_FILE_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExArbitraryFileWidget(activity, questionDetails, new ArbitraryFileWidgetAnswerView(activity), questionMediaManager, waitingForDataRegistry, fileRequester, dependencies);
+                    questionWidget = new ExArbitraryFileWidget(activity, questionDetails, new ArbitraryFileWidgetAnswerView(activity, settingsProvider), questionMediaManager, waitingForDataRegistry, fileRequester, dependencies);
                 } else {
-                    questionWidget = new ArbitraryFileWidget(activity, questionDetails, new ArbitraryFileWidgetAnswerView(activity), questionMediaManager, waitingForDataRegistry, dependencies);
+                    questionWidget = new ArbitraryFileWidget(activity, questionDetails, new ArbitraryFileWidgetAnswerView(activity, settingsProvider), questionMediaManager, waitingForDataRegistry, dependencies);
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:

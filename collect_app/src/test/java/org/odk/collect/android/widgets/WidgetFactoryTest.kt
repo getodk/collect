@@ -43,7 +43,8 @@ class WidgetFactoryTest {
         null,
         null,
         null,
-        mock()
+        mock(),
+        null
     )
 
     @Test
