@@ -88,7 +88,7 @@ class BarcodeWidgetTest {
 
         assertThat(
             barcodeWidgetAnswer.getAnswer(),
-            equalTo("")
+            equalTo(null)
         )
         assertThat(
             widget.binding.barcodeButton.text.toString(),

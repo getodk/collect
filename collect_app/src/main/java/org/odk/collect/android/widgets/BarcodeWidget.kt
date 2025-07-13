@@ -65,7 +65,7 @@ class BarcodeWidget(
 
     override fun getAnswer(): IAnswerData? {
         val answer = widgetAnswerView.getAnswer()
-        return if (answer.isEmpty()) null else StringData(answer)
+        return if (answer.isNullOrEmpty()) null else StringData(answer)
     }
 
     override fun setData(answer: Any) {
@@ -88,7 +88,7 @@ class BarcodeWidget(
 
     private fun updateAnswerVisibility() {
         val isAnswerHidden = hasAppearance(formEntryPrompt, Appearances.HIDDEN_ANSWER)
-        binding.answerViewContainer.visibility = if (isAnswerHidden || widgetAnswerView.getAnswer().isBlank()) GONE else VISIBLE
+        binding.answerViewContainer.visibility = if (isAnswerHidden || widgetAnswerView.getAnswer().isNullOrEmpty()) GONE else VISIBLE
     }
 
     private fun onButtonClick() {
