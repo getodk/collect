@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="@id/answer"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <org.odk.collect.android.widgets.WidgetAnswerTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
