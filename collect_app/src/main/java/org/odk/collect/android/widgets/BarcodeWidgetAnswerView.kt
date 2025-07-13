@@ -12,17 +12,19 @@ class BarcodeWidgetAnswerView(
     private val settingsProvider: SettingsProvider
 ) : WidgetAnswerView(context) {
     private val binding = BarcodeWidgetAnswerViewBinding.inflate(LayoutInflater.from(context), this, true)
+    private var answer: String? = null
 
     init {
         setFontSize()
     }
 
     override fun setAnswer(answer: String?) {
-        binding.answer.text = stripInvalidCharacters(answer)
+        this.answer = stripInvalidCharacters(answer)
+        binding.answer.text = this.answer
     }
 
-    override fun getAnswer(): String {
-        return binding.answer.text.toString()
+    override fun getAnswer(): String? {
+        return answer
     }
 
     override fun setFontSize() {
