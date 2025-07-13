@@ -74,7 +74,6 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.android.widgets.WidgetAnswerTextView;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.network.NetworkStateProvider;
@@ -262,8 +261,6 @@ public interface AppDependencyComponent {
     void inject(DownloadFormListTask downloadFormListTask);
 
     void inject(FormHierarchyFragmentHostActivity formHierarchyFragmentHostActivity);
-
-    void inject(WidgetAnswerTextView widgetAnswerText);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 
