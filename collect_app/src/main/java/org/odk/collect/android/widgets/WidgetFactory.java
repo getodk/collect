@@ -60,6 +60,7 @@ import org.odk.collect.android.widgets.utilities.AudioRecorderRecordingStatusHan
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.StringRequester;
@@ -137,6 +138,7 @@ public class WidgetFactory {
         String appearance = Appearances.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, readOnlyOverride);
         QuestionWidget.Dependencies dependencies = new QuestionWidget.Dependencies(audioPlayer);
+        Integer answerFontSize = QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.HEADLINE_6);
 
         final QuestionWidget questionWidget;
         switch (prompt.getControlType()) {
@@ -188,7 +190,7 @@ public class WidgetFactory {
                                 MapConfiguratorProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_BARCODE:
-                        questionWidget = new BarcodeWidget(activity, questionDetails, new BarcodeWidgetAnswerView(activity, settingsProvider), waitingForDataRegistry, new CameraUtils(), dependencies);
+                        questionWidget = new BarcodeWidget(activity, questionDetails, new BarcodeWidgetAnswerView(activity, answerFontSize), waitingForDataRegistry, new CameraUtils(), dependencies);
                         break;
                     case Constants.DATATYPE_TEXT:
                         String query = prompt.getQuestion().getAdditionalAttribute(null, "query");
@@ -213,9 +215,9 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_FILE_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExArbitraryFileWidget(activity, questionDetails, new ArbitraryFileWidgetAnswerView(activity, settingsProvider), questionMediaManager, waitingForDataRegistry, fileRequester, dependencies);
+                    questionWidget = new ExArbitraryFileWidget(activity, questionDetails, new ArbitraryFileWidgetAnswerView(activity, answerFontSize), questionMediaManager, waitingForDataRegistry, fileRequester, dependencies);
                 } else {
-                    questionWidget = new ArbitraryFileWidget(activity, questionDetails, new ArbitraryFileWidgetAnswerView(activity, settingsProvider), questionMediaManager, waitingForDataRegistry, dependencies);
+                    questionWidget = new ArbitraryFileWidget(activity, questionDetails, new ArbitraryFileWidgetAnswerView(activity, answerFontSize), questionMediaManager, waitingForDataRegistry, dependencies);
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
