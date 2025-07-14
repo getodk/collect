@@ -28,7 +28,7 @@ class ArbitraryFileWidgetTest : FileWidgetTest<ArbitraryFileWidget?>() {
     private val mediaUtils = mock<MediaUtils>().also {
         whenever(it.isAudioFile(any())).thenReturn(true)
     }
-    private val widgetAnswer = ArbitraryFileWidgetAnswerView(QuestionWidgetHelpers.widgetTestActivity(), mock())
+    private val widgetAnswer = ArbitraryFileWidgetAnswerView(QuestionWidgetHelpers.widgetTestActivity(), 5)
 
     @Before
     fun setup() {
