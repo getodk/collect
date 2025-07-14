@@ -33,7 +33,7 @@ class BarcodeWidgetTest {
         setPermissionGranted(true)
     }
     private val widgetTestActivity = QuestionWidgetHelpers.widgetTestActivity()
-    private val barcodeWidgetAnswer = BarcodeWidgetAnswerView(widgetTestActivity, mock())
+    private val barcodeWidgetAnswer = BarcodeWidgetAnswerView(widgetTestActivity, 5)
     private val shadowActivity = Shadows.shadowOf(widgetTestActivity)
     private val cameraUtils = mock<CameraUtils>()
     private val listener = mock<OnLongClickListener>()
