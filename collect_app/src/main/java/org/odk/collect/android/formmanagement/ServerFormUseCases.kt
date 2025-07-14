@@ -88,6 +88,7 @@ object ServerFormUseCases {
 
         val tempMediaDir = File(tempMediaPath).also { it.mkdir() }
 
+        val allFormVersionsSorted = formsRepository.getAllByFormId(formToDownload.formId).sortedByDescending { it.date }
         formToDownload.manifest!!.mediaFiles.forEachIndexed { i, mediaFile ->
             stateListener.progressUpdate(i + 1)
 
@@ -134,26 +135,12 @@ object ServerFormUseCases {
                     }
                 }
             } else {
-                val existingFile =
-                    searchForExistingMediaFile(formsRepository, formToDownload, mediaFile)
-                existingFile.also {
-                    if (it != null) {
-                        if (it.getMd5Hash().contentEquals(mediaFile.hash)) {
-                            FileUtils.copyFile(it, tempMediaFile)
-                        } else {
-                            val existingFileHash = it.getMd5Hash()
-                            downloadMediaFile(
-                                formSource,
-                                mediaFile,
-                                tempMediaFile,
-                                tempDir,
-                                stateListener
-                            )
+                val existingFile = searchForExistingMediaFile(allFormVersionsSorted, mediaFile)
+                if (existingFile != null) {
+                    val existingFileHash = existingFile.getMd5Hash()
 
-                            if (!tempMediaFile.getMd5Hash().contentEquals(existingFileHash)) {
-                                newAttachmentsDownloaded = true
-                            }
-                        }
+                    if (existingFileHash.contentEquals(mediaFile.hash)) {
+                        FileUtils.copyFile(existingFile, tempMediaFile)
                     } else {
                         downloadMediaFile(
                             formSource,
@@ -162,8 +149,20 @@ object ServerFormUseCases {
                             tempDir,
                             stateListener
                         )
-                        newAttachmentsDownloaded = true
+
+                        if (!tempMediaFile.getMd5Hash().contentEquals(existingFileHash)) {
+                            newAttachmentsDownloaded = true
+                        }
                     }
+                } else {
+                    downloadMediaFile(
+                        formSource,
+                        mediaFile,
+                        tempMediaFile,
+                        tempDir,
+                        stateListener
+                    )
+                    newAttachmentsDownloaded = true
                 }
 
                 logEntityListClashes(mediaFile, entitiesRepository)
@@ -204,14 +203,10 @@ object ServerFormUseCases {
         mediaFile.filename.substringBefore(".csv")
 
     private fun searchForExistingMediaFile(
-        formsRepository: FormsRepository,
-        formToDownload: ServerFormDetails,
+        allFormVersionsSorted: List<Form>,
         mediaFile: MediaFile
     ): File? {
-        val allFormVersions = formsRepository.getAllByFormId(formToDownload.formId)
-        return allFormVersions.sortedByDescending {
-            it.date
-        }.map { form: Form ->
+        return allFormVersionsSorted.map { form: Form ->
             File(form.formMediaPath, mediaFile.filename)
         }.firstOrNull { file: File ->
             file.exists()
