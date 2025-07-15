@@ -21,6 +21,7 @@ import org.odk.collect.android.test.BuildConfig.COLLECT_BENCHMARKS_TEST_PROJECT_
  * be set to a project that contains a form with 1k media files.
  *
  * Devices that currently pass:
+ * - Fairphone 3
  * - Pixel 3
  */
 @RunWith(AndroidJUnit4::class)
@@ -50,7 +51,7 @@ class FormsUpdateBenchmarkTest {
             .clickOKOnDialog(MainMenuPage())
             .benchmark(
                 "Fetching form list with 1k media files when there are no updates",
-                5,
+                7,
                 benchmarker
             ) {
                 it
@@ -59,7 +60,7 @@ class FormsUpdateBenchmarkTest {
             }
             .benchmark(
                 "Redownloading a form with 1k media files when there are no updates",
-                20,
+                25,
                 benchmarker
             ) {
                 it
