@@ -46,9 +46,11 @@ class FormsUpdateBenchmarkTest {
             .inputUrl(COLLECT_BENCHMARKS_TEST_PROJECT_URL)
             .addProject()
 
+            // Download all forms
             .clickGetBlankForm()
             .clickGetSelected()
             .clickOKOnDialog(MainMenuPage())
+
             .benchmark(
                 "Fetching form list with 1k media files when there are no updates",
                 7,
@@ -58,6 +60,7 @@ class FormsUpdateBenchmarkTest {
                     .clickGetBlankForm()
                     .clickSelectAll()
             }
+
             .benchmark(
                 "Redownloading a form with 1k media files when there are no updates",
                 25,
