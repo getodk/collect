@@ -63,7 +63,7 @@ class FormsUpdateBenchmarkTest {
 
             .benchmark(
                 "Redownloading a form with 1k media files when there are no updates",
-                25,
+                5,
                 benchmarker
             ) {
                 it
