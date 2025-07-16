@@ -15,6 +15,7 @@
  */
 package org.odk.collect.android.formmanagement
 
+import org.odk.collect.android.application.FeatureFlags
 import org.odk.collect.android.utilities.FormUtils
 import org.odk.collect.android.utilities.WebCredentialsUtils
 import org.odk.collect.forms.Form
@@ -85,7 +86,7 @@ open class ServerFormsDetailsFetcher(
                 !thisFormAlreadyDownloaded,
                 isNewerFormVersionAvailable || areNewerMediaFilesAvailable,
                 manifestFile,
-                !isNewerFormVersionAvailable && areNewerMediaFilesAvailable
+                FeatureFlags.FASTER_FORM_UPDATES && (!isNewerFormVersionAvailable && areNewerMediaFilesAvailable)
             )
         }
     }
