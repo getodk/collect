@@ -27,7 +27,7 @@ class FormsUpdateBenchmarkTest {
 
     /**
      * Benchmarks the performance of updating forms. [THOUSAND_MEDIA_FILE_PROJECT_URL] should
-     * be set to a project that contains a form with 1k media files.
+     * be set to a project that contains the "1000-media-files" benchmark form.
      *
      * Devices that currently pass:
      * - Fairphone 3
@@ -77,7 +77,7 @@ class FormsUpdateBenchmarkTest {
 
     /**
      * Benchmarks the performance of updating forms. [THOUSAND_MEDIA_FILE_PROJECT_URL] should
-     * be set to a project that contains a form with 1k media files.
+     * be set to a project that contains the "1000-media-files-entity-list" form.
      *
      * Devices that currently pass:
      * - Fairphone 3
