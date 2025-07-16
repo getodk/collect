@@ -88,7 +88,10 @@ object ServerFormUseCases {
 
         val tempMediaDir = File(tempMediaPath).also { it.mkdir() }
 
+        val existingForm = formsRepository.getAllByFormIdAndVersion(formToDownload.formId, formToDownload.formVersion).firstOrNull()
         val allFormVersionsSorted = formsRepository.getAllByFormId(formToDownload.formId).sortedByDescending { it.date }
+        val currentOrLastFormVersion = existingForm ?: allFormVersionsSorted.firstOrNull()
+
         formToDownload.manifest!!.mediaFiles.forEachIndexed { i, mediaFile ->
             stateListener.progressUpdate(i + 1)
 
@@ -135,7 +138,7 @@ object ServerFormUseCases {
                     }
                 }
             } else {
-                val existingFile = searchForExistingMediaFile(allFormVersionsSorted, mediaFile)
+                val existingFile = searchForExistingMediaFile(currentOrLastFormVersion, mediaFile)
                 if (existingFile != null) {
                     val existingFileHash = existingFile.getMd5Hash()
 
@@ -203,13 +206,18 @@ object ServerFormUseCases {
         mediaFile.filename.substringBefore(".csv")
 
     private fun searchForExistingMediaFile(
-        allFormVersionsSorted: List<Form>,
+        currentOrLastFormVersion: Form?,
         mediaFile: MediaFile
     ): File? {
-        return allFormVersionsSorted.map { form: Form ->
-            File(form.formMediaPath, mediaFile.filename)
-        }.firstOrNull { file: File ->
-            file.exists()
+        if (currentOrLastFormVersion != null) {
+            val candidate = File(currentOrLastFormVersion.formMediaPath, mediaFile.filename)
+            return if (candidate.exists()) {
+                candidate
+            } else {
+                null
+            }
+        } else {
+            return null
         }
     }
 }
