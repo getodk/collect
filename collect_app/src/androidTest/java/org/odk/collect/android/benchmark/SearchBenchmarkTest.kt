@@ -15,7 +15,6 @@ import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.android.test.BuildConfig.ENTITIES_FILTER_SEARCH_PROJECT_URL
-import org.odk.collect.android.test.BuildConfig.ENTITIES_FILTER_SEARCH_TEST_PROJECT_URL
 
 /**
  * Benchmarks the performance of search() forms. [ENTITIES_FILTER_SEARCH_PROJECT_URL] should be
@@ -38,7 +37,7 @@ class SearchBenchmarkTest {
     @Test
     fun run() {
         assertThat(
-            "Need to set ENTITIES_FILTER_SEARCH_TEST_PROJECT_URL before running!",
+            "Need to set ENTITIES_FILTER_SEARCH_PROJECT_URL before running!",
             ENTITIES_FILTER_SEARCH_PROJECT_URL,
             not(blankOrNullString())
         )
