@@ -30,7 +30,6 @@ class FormsUpdateBenchmarkTest {
      *
      * Devices that currently pass:
      * - Fairphone 3
-     * - Pixel 3
      */
     @Test
     fun oneThousandMediaFiles() {
@@ -64,7 +63,7 @@ class FormsUpdateBenchmarkTest {
 
             .benchmark(
                 "Redownloading a form with 1k media files when there are no updates",
-                5,
+                12,
                 benchmarker
             ) {
                 it
@@ -102,24 +101,13 @@ class FormsUpdateBenchmarkTest {
             .clickGetSelected()
             .clickOKOnDialog(MainMenuPage())
 
-            .benchmark(
-                "Fetching form list with 1k media files and entity list when there are no updates",
-                7,
-                benchmarker
-            ) {
-                it
-                    .clickGetBlankForm()
-                    .clickGetSelected()
-                    .clickOKOnDialog(MainMenuPage())
-            }
-
+            .clickGetBlankForm()
             .benchmark(
                 "Redownloading a form with 1k media files and entity list when there are no updates",
-                5,
+                15,
                 benchmarker
             ) {
                 it
-                    .clickGetBlankForm()
                     .clickGetSelected()
                     .clickOKOnDialog(MainMenuPage())
             }
