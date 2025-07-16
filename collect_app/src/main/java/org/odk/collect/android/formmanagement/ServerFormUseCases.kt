@@ -1,5 +1,6 @@
 package org.odk.collect.android.formmanagement
 
+import org.apache.commons.io.FileUtils.copyFileToDirectory
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.FormDownloader
@@ -143,7 +144,7 @@ object ServerFormUseCases {
                     val existingFileHash = existingFile.getMd5Hash()
 
                     if (existingFileHash.contentEquals(mediaFile.hash)) {
-                        FileUtils.copyFile(existingFile, tempMediaFile)
+                        copyFileToDirectory(existingFile, tempMediaDir)
                     } else {
                         downloadMediaFile(
                             formSource,
