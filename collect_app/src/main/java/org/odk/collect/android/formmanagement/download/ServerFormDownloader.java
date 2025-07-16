@@ -75,23 +75,33 @@ public class ServerFormDownloader implements FormDownloader {
 
         File tempDir = new File(cacheDir, "download-" + UUID.randomUUID().toString());
         tempDir.mkdirs();
+        String tempMediaPath = new File(tempDir, "media").getAbsolutePath();
 
-        try {
-            OngoingWorkListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
-            processOneForm(form, stateListener, tempDir, formsDirPath, formMetadataParser);
-        } catch (FormSourceException e) {
-            throw new FormDownloadException.FormSourceError(e);
-        } finally {
-            FileExt.deleteDirectory(tempDir);
-            for (Form formToDelete : preExistingFormsWithSameIdAndVersion) {
-                formsRepository.delete(formToDelete.getDbId());
+        OngoingWorkListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
+
+        if (formOnDevice != null && form.getMediaOnlyUpdate()) {
+            try {
+                MediaFilesDownloadResult mediaFilesDownloadResult = ServerFormUseCases.downloadMediaFiles(form, formSource, formsRepository, tempMediaPath, tempDir, entitiesRepository, entitySource, stateListener);
+                installEverything(tempMediaPath, new FileResult(new File(formOnDevice.getFormFilePath()), false), null, formsDirPath, mediaFilesDownloadResult);
+            } catch (FormSourceException | IOException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            try {
+                processOneForm(form, stateListener, tempDir, formsDirPath, formMetadataParser, tempMediaPath);
+            } catch (FormSourceException e) {
+                throw new FormDownloadException.FormSourceError(e);
+            } finally {
+                FileExt.deleteDirectory(tempDir);
+                for (Form formToDelete : preExistingFormsWithSameIdAndVersion) {
+                    formsRepository.delete(formToDelete.getDbId());
+                }
             }
         }
     }
 
-    private void processOneForm(ServerFormDetails fd, OngoingWorkListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws FormDownloadException, FormSourceException {
+    private void processOneForm(ServerFormDetails fd, OngoingWorkListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser, String tempMediaPath) throws FormDownloadException, FormSourceException {
         // use a temporary media path until everything is ok.
-        String tempMediaPath = new File(tempDir, "media").getAbsolutePath();
         FileResult fileResult = null;
         MediaFilesDownloadResult mediaFilesDownloadResult;
 

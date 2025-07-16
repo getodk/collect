@@ -144,7 +144,9 @@ object ServerFormUseCases {
                     val existingFileHash = existingFile.getMd5Hash()
 
                     if (existingFileHash.contentEquals(mediaFile.hash)) {
-                        copyFileToDirectory(existingFile, tempMediaDir)
+                        if (!formToDownload.mediaOnlyUpdate) {
+                            copyFileToDirectory(existingFile, tempMediaDir)
+                        }
                     } else {
                         downloadMediaFile(
                             formSource,
