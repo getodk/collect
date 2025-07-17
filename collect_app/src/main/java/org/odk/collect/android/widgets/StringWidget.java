@@ -57,7 +57,7 @@ public class StringWidget extends QuestionWidget {
     }
 
     @Override
-    protected View onCreateAnswerView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
         setDisplayValueFromModel();
         return widgetAnswerText;
     }
