@@ -76,7 +76,7 @@ class FormsUpdateBenchmarkTest {
     }
 
     /**
-     * Benchmarks the performance of updating forms. [THOUSAND_MEDIA_FILE_PROJECT_URL] should
+     * Benchmarks the performance of updating forms. [THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL] should
      * be set to a project that contains the "1000-media-files-entity-list" form.
      *
      * Devices that currently pass:
