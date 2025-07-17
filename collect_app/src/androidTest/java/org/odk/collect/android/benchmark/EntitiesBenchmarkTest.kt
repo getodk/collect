@@ -17,12 +17,13 @@ import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
-import org.odk.collect.android.test.BuildConfig.ENTITIES_FILTER_TEST_PROJECT_URL
+import org.odk.collect.android.test.BuildConfig.ENTITIES_FILTER_PROJECT_URL
 import org.odk.collect.strings.R
 
 /**
- * Benchmarks the performance of entity follow up forms. [ENTITIES_FILTER_TEST_PROJECT_URL] should
- * be set to a project that contains the "100k Entities Filter" form.
+ * Benchmarks the performance of entity follow up forms. [ENTITIES_FILTER_PROJECT_URL] should
+ * be set to a project that contains the "100k Entities Filter" benchmark form and the
+ * "entities_100k" entity list.
  *
  * Devices that currently pass:
  * - Fairphone 3
@@ -41,8 +42,8 @@ class EntitiesBenchmarkTest {
     @Test
     fun run() {
         assertThat(
-            "Need to set ENTITIES_FILTER_TEST_PROJECT_URL before running!",
-            ENTITIES_FILTER_TEST_PROJECT_URL,
+            "Need to set ENTITIES_FILTER_PROJECT_URL before running!",
+            ENTITIES_FILTER_PROJECT_URL,
             not(blankOrNullString())
         )
         clearAndroidCache()
@@ -51,7 +52,7 @@ class EntitiesBenchmarkTest {
 
         rule.startAtFirstLaunch()
             .clickManuallyEnterProjectDetails()
-            .inputUrl(ENTITIES_FILTER_TEST_PROJECT_URL)
+            .inputUrl(ENTITIES_FILTER_PROJECT_URL)
             .addProject()
 
             // Populate http cache and recreate project
@@ -64,7 +65,7 @@ class EntitiesBenchmarkTest {
             .clickOnDeleteProject()
             .clickOnTextInDialog(R.string.yes, FirstLaunchPage())
             .clickManuallyEnterProjectDetails()
-            .inputUrl(ENTITIES_FILTER_TEST_PROJECT_URL)
+            .inputUrl(ENTITIES_FILTER_PROJECT_URL)
             .addProject()
 
             .clickGetBlankForm()
