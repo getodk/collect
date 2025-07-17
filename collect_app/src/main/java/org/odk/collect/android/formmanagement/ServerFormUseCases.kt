@@ -212,15 +212,15 @@ object ServerFormUseCases {
         currentOrLastFormVersion: Form?,
         mediaFile: MediaFile
     ): File? {
-        if (currentOrLastFormVersion != null) {
+        return if (currentOrLastFormVersion != null) {
             val candidate = File(currentOrLastFormVersion.formMediaPath, mediaFile.filename)
-            return if (candidate.exists()) {
+            if (candidate.exists()) {
                 candidate
             } else {
                 null
             }
         } else {
-            return null
+            null
         }
     }
 }
