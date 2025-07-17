@@ -75,12 +75,10 @@ public class ServerFormDownloader implements FormDownloader {
 
         File tempDir = new File(cacheDir, "download-" + UUID.randomUUID().toString());
         tempDir.mkdirs();
-        String tempMediaPath = new File(tempDir, "media").getAbsolutePath();
-
-        OngoingWorkListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
 
         try {
-            processOneForm(form, stateListener, tempDir, formsDirPath, formMetadataParser, tempMediaPath);
+            OngoingWorkListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
+            processOneForm(form, stateListener, tempDir, formsDirPath, formMetadataParser);
         } catch (FormSourceException e) {
             throw new FormDownloadException.FormSourceError(e);
         } finally {
@@ -91,8 +89,9 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private void processOneForm(ServerFormDetails fd, OngoingWorkListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser, String tempMediaPath) throws FormDownloadException, FormSourceException {
+    private void processOneForm(ServerFormDetails fd, OngoingWorkListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws FormDownloadException, FormSourceException {
         // use a temporary media path until everything is ok.
+        String tempMediaPath = new File(tempDir, "media").getAbsolutePath();
         FileResult fileResult = null;
         MediaFilesDownloadResult mediaFilesDownloadResult;
 
