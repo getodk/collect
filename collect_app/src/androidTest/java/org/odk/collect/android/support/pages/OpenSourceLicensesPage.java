@@ -4,7 +4,7 @@ class OpenSourceLicensesPage extends Page<OpenSourceLicensesPage> {
 
     @Override
     public OpenSourceLicensesPage assertOnPage() {
-        waitForText("Open Source Licenses");
+        asyncAssertText("Open Source Licenses");
         checkIfWebViewActivityIsDisplayed();
         return this;
     }

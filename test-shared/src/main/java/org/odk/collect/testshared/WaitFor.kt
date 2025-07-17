@@ -1,17 +1,18 @@
 package org.odk.collect.testshared
 
 import junit.framework.AssertionFailedError
+import org.odk.collect.shared.TimeInMs
 import java.util.concurrent.Callable
 
 object WaitFor {
 
     @JvmStatic
     fun <T> waitFor(callable: Callable<T>): T {
-        var counter = 0
         var failure: Throwable? = null
+        val startTime = System.currentTimeMillis()
 
-        // Try 20 times/for 5 seconds
-        while (counter < 20) {
+        // Try for 5 seconds
+        while ((System.currentTimeMillis() - startTime) < (5 * TimeInMs.ONE_SECOND)) {
             failure = try {
                 return callable.call()
             } catch (throwable: Exception) {
@@ -22,20 +23,10 @@ object WaitFor {
                 throwable
             }
 
-            wait250ms()
-            counter++
+            Thread.sleep(10)
         }
 
         throw failure!!
-    }
-
-    @JvmStatic
-    fun wait250ms() {
-        try {
-            Thread.sleep(250)
-        } catch (ignored: InterruptedException) {
-            // ignored
-        }
     }
 
     @JvmStatic
@@ -48,7 +39,7 @@ object WaitFor {
                 return
             } catch (e: Throwable) {
                 failure = e
-                wait250ms()
+                Thread.sleep(250)
             }
         }
 
