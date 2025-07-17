@@ -15,6 +15,7 @@
  */
 package org.odk.collect.android.formmanagement
 
+import org.odk.collect.android.application.FeatureFlags
 import org.odk.collect.android.utilities.FormUtils
 import org.odk.collect.android.utilities.WebCredentialsUtils
 import org.odk.collect.forms.Form
@@ -52,21 +53,28 @@ open class ServerFormsDetailsFetcher(
 
             val forms = formsRepository.getAllNotDeletedByFormId(listItem.formID)
             val thisFormAlreadyDownloaded = forms.isNotEmpty()
+
+            val formHash = listItem.hash
+            val existingForm = if (formHash != null) {
+                getFormByHash(formHash)
+            } else {
+                null
+            }
+
             val isNewerFormVersionAvailable = listItem.hash.let {
                 if (it == null) {
                     false
                 } else if (thisFormAlreadyDownloaded) {
-                    val existingForm = getFormByHash(it)
-                    if (existingForm == null || existingForm.isDeleted) {
-                        true
-                    } else if (manifestFile != null) {
-                        areNewerMediaFilesAvailable(existingForm, manifestFile.mediaFiles)
-                    } else {
-                        false
-                    }
+                    existingForm == null || existingForm.isDeleted
                 } else {
                     false
                 }
+            }
+
+            val areNewerMediaFilesAvailable = if (existingForm != null && manifestFile != null) {
+                areNewerMediaFilesAvailable(existingForm, manifestFile.mediaFiles)
+            } else {
+                false
             }
 
             ServerFormDetails(
@@ -76,8 +84,9 @@ open class ServerFormsDetailsFetcher(
                 listItem.version,
                 listItem.hash,
                 !thisFormAlreadyDownloaded,
-                isNewerFormVersionAvailable,
-                manifestFile
+                isNewerFormVersionAvailable || areNewerMediaFilesAvailable,
+                manifestFile,
+                FeatureFlags.FASTER_FORM_UPDATES && (!isNewerFormVersionAvailable && areNewerMediaFilesAvailable)
             )
         }
     }
