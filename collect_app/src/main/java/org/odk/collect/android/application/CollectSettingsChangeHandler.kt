@@ -31,8 +31,10 @@ class CollectSettingsChangeHandler(
         }
     }
 
-    override fun onSettingsChanged(projectId: String) {
+    override fun onSettingsChanged(projectId: String, formUpdateSettingsChanged: Boolean) {
         propertyManager.reload()
-        formUpdateScheduler.scheduleUpdates(projectId)
+        if (formUpdateSettingsChanged) {
+            formUpdateScheduler.scheduleUpdates(projectId)
+        }
     }
 }
