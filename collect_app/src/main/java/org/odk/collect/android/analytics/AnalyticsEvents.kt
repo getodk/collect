@@ -105,4 +105,14 @@ object AnalyticsEvents {
      * Tracks how often projects are reset
      */
     const val RESET_PROJECT = "ResetProject"
+
+    /**
+     * Tracks how often finalized forms are edited
+     */
+    const val EDIT_FINALIZED_FORM = "EditFinalizedForm"
+
+    /**
+     * Tracks how often sent forms are edited
+     */
+    const val EDIT_SENT_FORM = "EditSentForm"
 }
