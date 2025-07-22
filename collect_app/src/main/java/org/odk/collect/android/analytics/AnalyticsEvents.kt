@@ -112,7 +112,7 @@ object AnalyticsEvents {
     const val EDIT_FINALIZED_FORM = "EditFinalizedForm"
 
     /**
-     * Tracks how often sent forms are edited
+     * Tracks how often finalized or sent forms are edited
      */
-    const val EDIT_SENT_FORM = "EditSentForm"
+    const val EDIT_FINALIZED_OR_SENT_FORM = "EditFinalizedOrSentForm"
 }

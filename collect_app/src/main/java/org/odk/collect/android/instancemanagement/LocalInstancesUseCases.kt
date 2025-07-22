@@ -53,10 +53,9 @@ object LocalInstancesUseCases {
             return InstanceEditResult.EditBlockedByNewerExistingEdit(latestEditInstance)
         }
 
+        Analytics.log(AnalyticsEvents.EDIT_FINALIZED_OR_SENT_FORM)
         if (sourceInstance.status == Instance.STATUS_COMPLETE) {
             Analytics.log(AnalyticsEvents.EDIT_FINALIZED_FORM)
-        } else {
-            Analytics.log(AnalyticsEvents.EDIT_SENT_FORM)
         }
 
         val targetInstance = cloneInstance(sourceInstance, instanceFilePath, instancesDir, instancesRepository, formsRepository, clock)
