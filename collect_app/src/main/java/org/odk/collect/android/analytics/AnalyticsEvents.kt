@@ -75,10 +75,6 @@ object AnalyticsEvents {
 
     const val FORMS_PROVIDER_QUERY = "FormsProviderQuery"
 
-    const val FORMS_PROVIDER_INSERT = "FormsProviderInsert"
-
-    const val FORMS_PROVIDER_UPDATE = "FormsProviderUpdate"
-
     const val FORMS_PROVIDER_DELETE = "FormsProviderDelete"
 
     const val INSTANCE_PROVIDER_QUERY = "InstanceProviderQuery"
