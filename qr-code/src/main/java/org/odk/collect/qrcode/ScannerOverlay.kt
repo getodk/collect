@@ -8,7 +8,6 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
-import kotlin.math.max
 import kotlin.math.roundToInt
 
 class ScannerOverlay(context: Context, attrs: AttributeSet?) :
@@ -23,7 +22,7 @@ class ScannerOverlay(context: Context, attrs: AttributeSet?) :
         it.alpha = 75
     }
 
-    private val viewFinderRect = Rect()
+    var viewFinderRect = Rect()
 
     private val laserAnim = ValueAnimator.ofFloat(0f, 255f).also { animator ->
         animator.duration = 320
@@ -32,15 +31,6 @@ class ScannerOverlay(context: Context, attrs: AttributeSet?) :
     }
 
     override fun onDraw(canvas: Canvas) {
-        val verticalBorder = max((height - SQUARE_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
-        val horizontalBorder = max((width - SQUARE_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
-        viewFinderRect.set(
-            verticalBorder,
-            horizontalBorder,
-            this.width - horizontalBorder,
-            this.height - verticalBorder
-        )
-
         drawBorder(canvas)
         drawLaser(canvas)
     }

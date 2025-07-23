@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.graphics.Rect
 import android.view.LayoutInflater
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
@@ -19,7 +20,10 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
+import org.odk.collect.qrcode.ScannerOverlay.Companion.MIN_BORDER_SIZE
+import org.odk.collect.qrcode.ScannerOverlay.Companion.SQUARE_SIZE
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
+import kotlin.math.max
 
 class MlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
     override fun create(
@@ -68,6 +72,8 @@ private class MlKitBarcodeScannerView(
     private val binding =
         MlkitBarcodeScannerLayoutBinding.inflate(LayoutInflater.from(context), this, true)
     private val cameraController = LifecycleCameraController(context)
+
+    private val viewFinderRect = Rect()
 
     init {
         binding.prompt.text = prompt
@@ -136,6 +142,26 @@ private class MlKitBarcodeScannerView(
                 torchListener.onTorchOff()
             }
         }
+    }
+
+    override fun onLayout(
+        changed: Boolean,
+        left: Int,
+        top: Int,
+        right: Int,
+        bottom: Int
+    ) {
+        val verticalBorder = max((height - SQUARE_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
+        val horizontalBorder = max((width - SQUARE_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
+        viewFinderRect.set(
+            horizontalBorder,
+            verticalBorder,
+            this.width - horizontalBorder,
+            this.height - verticalBorder
+        )
+
+        binding.scannerOverlay.viewFinderRect = viewFinderRect
+        super.onLayout(changed, left, top, right, bottom)
     }
 
     private fun processBarcode(barcode: Barcode): String? {
