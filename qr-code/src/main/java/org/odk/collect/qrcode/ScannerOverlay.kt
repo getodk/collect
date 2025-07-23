@@ -37,37 +37,43 @@ class ScannerOverlay(context: Context, attrs: AttributeSet?) :
     }
 
     private fun drawBorder(canvas: Canvas, horizontalSize: Float, verticalSize: Float) {
+        // Calculate view finder rect based border sizes
+        val leftEdge = horizontalSize
+        val topEdge = verticalSize
+        val rightEdge = width.toFloat() - horizontalSize
+        val bottomEdge = height.toFloat() - verticalSize
+
         // Top
         canvas.drawRect(
             0f,
             0f,
             width.toFloat(),
-            verticalSize,
+            topEdge,
             borderPaint
         )
 
         // Left
         canvas.drawRect(
             0f,
-            verticalSize,
-            horizontalSize,
-            height.toFloat() - verticalSize,
+            topEdge,
+            leftEdge,
+            bottomEdge,
             borderPaint
         )
 
         // Right
         canvas.drawRect(
-            width.toFloat() - horizontalSize,
-            verticalSize,
+            rightEdge,
+            topEdge,
             width.toFloat(),
-            height.toFloat() - verticalSize,
+            bottomEdge,
             borderPaint
         )
 
         // Bottom
         canvas.drawRect(
             0f,
-            height.toFloat() - verticalSize,
+            bottomEdge,
             width.toFloat(),
             height.toFloat(),
             borderPaint
