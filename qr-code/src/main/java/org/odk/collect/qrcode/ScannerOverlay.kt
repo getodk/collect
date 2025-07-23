@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
 import kotlin.math.max
@@ -22,67 +23,69 @@ class ScannerOverlay(context: Context, attrs: AttributeSet?) :
         it.alpha = 75
     }
 
+    private val viewFinderRect = Rect()
+
     private val laserAnim = ValueAnimator.ofFloat(0f, 255f).also { animator ->
-        animator.setDuration(320)
+        animator.duration = 320
         animator.repeatCount = ValueAnimator.INFINITE
         animator.repeatMode = ValueAnimator.REVERSE
     }
 
     override fun onDraw(canvas: Canvas) {
-        val verticalBorder = max((height - SQUARE_SIZE) / 2f, MIN_BORDER_SIZE)
-        val horizontalBorder = max((width - SQUARE_SIZE) / 2f, MIN_BORDER_SIZE)
+        val verticalBorder = max((height - SQUARE_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
+        val horizontalBorder = max((width - SQUARE_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
+        viewFinderRect.set(
+            verticalBorder,
+            horizontalBorder,
+            this.width - horizontalBorder,
+            this.height - verticalBorder
+        )
 
-        drawBorder(canvas, horizontalBorder, verticalBorder)
-        drawLaser(canvas, horizontalBorder)
+        drawBorder(canvas)
+        drawLaser(canvas)
     }
 
-    private fun drawBorder(canvas: Canvas, horizontalSize: Float, verticalSize: Float) {
-        // Calculate view finder rect based border sizes
-        val leftEdge = horizontalSize
-        val topEdge = verticalSize
-        val rightEdge = width.toFloat() - horizontalSize
-        val bottomEdge = height.toFloat() - verticalSize
-
+    private fun drawBorder(canvas: Canvas) {
         // Top
         canvas.drawRect(
             0f,
             0f,
             width.toFloat(),
-            topEdge,
+            viewFinderRect.top.toFloat(),
             borderPaint
         )
 
         // Left
         canvas.drawRect(
             0f,
-            topEdge,
-            leftEdge,
-            bottomEdge,
+            viewFinderRect.top.toFloat(),
+            viewFinderRect.left.toFloat(),
+            viewFinderRect.bottom.toFloat(),
             borderPaint
         )
 
         // Right
         canvas.drawRect(
-            rightEdge,
-            topEdge,
+            viewFinderRect.right.toFloat(),
+            viewFinderRect.top.toFloat(),
             width.toFloat(),
-            bottomEdge,
+            viewFinderRect.bottom.toFloat(),
             borderPaint
         )
 
         // Bottom
         canvas.drawRect(
             0f,
-            bottomEdge,
+            viewFinderRect.bottom.toFloat(),
             width.toFloat(),
             height.toFloat(),
             borderPaint
         )
     }
 
-    private fun drawLaser(canvas: Canvas, horizontalBorder: Float) {
+    private fun drawLaser(canvas: Canvas) {
         val verticalMid = height / 2
-        val horizontalMargin = horizontalBorder + 8f
+        val horizontalMargin = viewFinderRect.left + 8f
 
         canvas.drawRect(
             0f + horizontalMargin,
