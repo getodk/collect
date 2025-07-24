@@ -18,6 +18,8 @@ import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
+import org.odk.collect.qrcode.BarcodeCandidate
+import org.odk.collect.qrcode.BarcodeFilter
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
@@ -107,6 +109,7 @@ private class MlKitBarcodeScannerView(
         val barcodeScanner = BarcodeScanning.getClient(options)
 
         val executor = ContextCompat.getMainExecutor(context)
+        val barcodeFilter = BarcodeFilter(viewFinderRect)
         cameraController.setImageAnalysisAnalyzer(
             executor,
             MlKitAnalyzer(
@@ -115,9 +118,9 @@ private class MlKitBarcodeScannerView(
                 executor
             ) { result: MlKitAnalyzer.Result ->
                 val value = result.getValue(barcodeScanner)
-                val barcode = value?.firstOrNull()
-
-                if (barcode != null && viewFinderRect.contains(barcode.boundingBox!!)) {
+                val barcodeCandidates = value?.map { it.toCandidate() } ?: emptyList()
+                val barcode = barcodeFilter.filter(barcodeCandidates)
+                if (barcode != null) {
                     val contents = processBarcode(barcode)
                     if (!contents.isNullOrEmpty()) {
                         cameraController.unbind()
@@ -162,9 +165,9 @@ private class MlKitBarcodeScannerView(
         super.onLayout(changed, left, top, right, bottom)
     }
 
-    private fun processBarcode(barcode: Barcode): String? {
-        val bytes = barcode.rawBytes
-        val utf8Contents = barcode.rawValue
+    private fun processBarcode(barcode: BarcodeCandidate): String? {
+        val bytes = barcode.bytes
+        val utf8Contents = barcode.utfContents
 
         return if (!utf8Contents.isNullOrEmpty()) {
             utf8Contents
@@ -182,5 +185,9 @@ private class MlKitBarcodeScannerView(
     companion object {
         const val VIEW_FINDER_SIZE = 820f
         const val MIN_BORDER_SIZE = 80f
+
+        private fun Barcode.toCandidate(): BarcodeCandidate {
+            return BarcodeCandidate(this.rawBytes, this.rawValue, this.boundingBox, this.format)
+        }
     }
 }
