@@ -37,17 +37,17 @@ class BarcodeCandidate(
     val bytes: ByteArray?,
     val utfContents: String?,
     val boundingBox: Rect?,
-    val format: Int
+    val format: BarcodeFormat
 )
 
 sealed class DetectedBarcode {
 
     abstract val bytes: ByteArray
-    abstract val format: Int
+    abstract val format: BarcodeFormat
 
     data class Utf8(
         val contents: String,
-        override val format: Int,
+        override val format: BarcodeFormat,
         override val bytes: ByteArray
     ) : DetectedBarcode() {
         /**
@@ -59,23 +59,23 @@ sealed class DetectedBarcode {
 
             other as Utf8
 
-            if (format != other.format) return false
             if (contents != other.contents) return false
+            if (format != other.format) return false
             if (!bytes.contentEquals(other.bytes)) return false
 
             return true
         }
 
         override fun hashCode(): Int {
-            var result = format
-            result = 31 * result + contents.hashCode()
+            var result = contents.hashCode()
+            result = 31 * result + format.hashCode()
             result = 31 * result + bytes.contentHashCode()
             return result
         }
     }
 
     data class Bytes(
-        override val format: Int,
+        override val format: BarcodeFormat,
         override val bytes: ByteArray
     ) : DetectedBarcode() {
         /**
@@ -94,9 +94,14 @@ sealed class DetectedBarcode {
         }
 
         override fun hashCode(): Int {
-            var result = format
+            var result = format.hashCode()
             result = 31 * result + bytes.contentHashCode()
             return result
         }
     }
+}
+
+enum class BarcodeFormat {
+    PDF417,
+    OTHER
 }

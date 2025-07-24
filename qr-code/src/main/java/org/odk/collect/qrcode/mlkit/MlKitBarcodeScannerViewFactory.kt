@@ -20,6 +20,7 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import org.odk.collect.qrcode.BarcodeCandidate
 import org.odk.collect.qrcode.BarcodeFilter
+import org.odk.collect.qrcode.BarcodeFormat
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.DetectedBarcode
@@ -173,7 +174,7 @@ private class MlKitBarcodeScannerView(
             }
 
             is DetectedBarcode.Bytes -> {
-                if (barcode.format == Barcode.FORMAT_PDF417) {
+                if (barcode.format == BarcodeFormat.PDF417) {
                     /**
                      * Allow falling back to Latin encoding for PDF417 barcodes. This provides parity
                      * with the Zxing implementation.
@@ -191,7 +192,12 @@ private class MlKitBarcodeScannerView(
         const val MIN_BORDER_SIZE = 80f
 
         private fun Barcode.toCandidate(): BarcodeCandidate {
-            return BarcodeCandidate(this.rawBytes, this.rawValue, this.boundingBox, this.format)
+            val format = when (this.format) {
+                Barcode.FORMAT_PDF417 -> BarcodeFormat.PDF417
+                else -> BarcodeFormat.OTHER
+            }
+
+            return BarcodeCandidate(this.rawBytes, this.rawValue, this.boundingBox, format)
         }
     }
 }
