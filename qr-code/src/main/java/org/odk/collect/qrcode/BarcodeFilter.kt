@@ -50,6 +50,9 @@ sealed class DetectedBarcode {
         override val format: Int,
         override val bytes: ByteArray
     ) : DetectedBarcode() {
+        /**
+         * Requires custom [equals] due to [ByteArray] field
+         */
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (javaClass != other?.javaClass) return false
@@ -75,6 +78,9 @@ sealed class DetectedBarcode {
         override val format: Int,
         override val bytes: ByteArray
     ) : DetectedBarcode() {
+        /**
+         * Requires custom [equals] due to [ByteArray] field
+         */
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (javaClass != other?.javaClass) return false
