@@ -20,8 +20,6 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
-import org.odk.collect.qrcode.ScannerOverlay.Companion.MIN_BORDER_SIZE
-import org.odk.collect.qrcode.ScannerOverlay.Companion.SQUARE_SIZE
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
 import kotlin.math.max
 
@@ -151,8 +149,8 @@ private class MlKitBarcodeScannerView(
         right: Int,
         bottom: Int
     ) {
-        val verticalBorder = max((height - SQUARE_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
-        val horizontalBorder = max((width - SQUARE_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
+        val verticalBorder = max((height - VIEW_FINDER_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
+        val horizontalBorder = max((width - VIEW_FINDER_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
         viewFinderRect.set(
             horizontalBorder,
             verticalBorder,
@@ -179,5 +177,10 @@ private class MlKitBarcodeScannerView(
         } else {
             null
         }
+    }
+
+    companion object {
+        const val VIEW_FINDER_SIZE = 820f
+        const val MIN_BORDER_SIZE = 80f
     }
 }

@@ -10,7 +10,7 @@ import android.util.AttributeSet
 import android.view.View
 import kotlin.math.roundToInt
 
-class ScannerOverlay(context: Context, attrs: AttributeSet?) :
+internal class ScannerOverlay(context: Context, attrs: AttributeSet?) :
     View(context, attrs) {
 
     private val laserPaint = Paint().also {
@@ -98,10 +98,5 @@ class ScannerOverlay(context: Context, attrs: AttributeSet?) :
     fun stopAnimations() {
         laserAnim.cancel()
         laserAnim.removeAllUpdateListeners()
-    }
-
-    companion object {
-        const val SQUARE_SIZE = 820f
-        const val MIN_BORDER_SIZE = 80f
     }
 }
