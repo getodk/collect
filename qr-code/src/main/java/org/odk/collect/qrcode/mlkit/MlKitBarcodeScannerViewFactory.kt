@@ -119,7 +119,7 @@ private class MlKitBarcodeScannerView(
                 val value = result.getValue(barcodeScanner)
                 val barcode = value?.firstOrNull()
 
-                if (barcode != null) {
+                if (barcode != null && viewFinderRect.contains(barcode.boundingBox!!)) {
                     val contents = processBarcode(barcode)
                     if (!contents.isNullOrEmpty()) {
                         cameraController.unbind()
