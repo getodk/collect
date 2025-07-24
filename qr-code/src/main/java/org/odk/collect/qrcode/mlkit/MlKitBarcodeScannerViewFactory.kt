@@ -109,7 +109,7 @@ private class MlKitBarcodeScannerView(
         val barcodeScanner = BarcodeScanning.getClient(options)
 
         val executor = ContextCompat.getMainExecutor(context)
-        val barcodeFilter = BarcodeFilter(viewFinderRect)
+        val barcodeFilter = BarcodeFilter(viewFinderRect, 10)
         cameraController.setImageAnalysisAnalyzer(
             executor,
             MlKitAnalyzer(
