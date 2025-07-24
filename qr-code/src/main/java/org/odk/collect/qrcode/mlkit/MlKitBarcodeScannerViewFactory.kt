@@ -22,6 +22,7 @@ import org.odk.collect.qrcode.BarcodeCandidate
 import org.odk.collect.qrcode.BarcodeFilter
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
+import org.odk.collect.qrcode.DetectedBarcode
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
 import kotlin.math.max
 
@@ -165,20 +166,23 @@ private class MlKitBarcodeScannerView(
         super.onLayout(changed, left, top, right, bottom)
     }
 
-    private fun processBarcode(barcode: BarcodeCandidate): String? {
-        val bytes = barcode.bytes
-        val utf8Contents = barcode.utfContents
+    private fun processBarcode(barcode: DetectedBarcode): String? {
+        return when (barcode) {
+            is DetectedBarcode.Utf8 -> {
+                barcode.contents
+            }
 
-        return if (!utf8Contents.isNullOrEmpty()) {
-            utf8Contents
-        } else if (bytes != null && barcode.format == Barcode.FORMAT_PDF417) {
-            /**
-             * Allow falling back to Latin encoding for PDF417 barcodes. This provides parity
-             * with the Zxing implementation.
-             */
-            String(bytes, Charsets.ISO_8859_1)
-        } else {
-            null
+            is DetectedBarcode.Bytes -> {
+                if (barcode.format == Barcode.FORMAT_PDF417) {
+                    /**
+                     * Allow falling back to Latin encoding for PDF417 barcodes. This provides parity
+                     * with the Zxing implementation.
+                     */
+                    String(barcode.bytes, Charsets.ISO_8859_1)
+                } else {
+                    null
+                }
+            }
         }
     }
 

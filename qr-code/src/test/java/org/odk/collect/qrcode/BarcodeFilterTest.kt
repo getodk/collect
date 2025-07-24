@@ -37,4 +37,41 @@ class BarcodeFilterTest {
             equalTo(true)
         )
     }
+
+    @Test
+    fun `returns UTF8 barcode when candidate has UTF8 contents`() {
+        val barcodeFilter = BarcodeFilter(Rect(0, 0, 100, 100))
+        val candidate = BarcodeCandidate(byteArrayOf(0), "blah", Rect(50, 50, 50, 50), 0)
+        assertThat(
+            barcodeFilter.filter(listOf(candidate)),
+            equalTo(DetectedBarcode.Utf8("blah", 0, byteArrayOf(0)))
+        )
+    }
+
+    @Test
+    fun `returns Bytes barcode when candidate has no UTF8 contents`() {
+        val barcodeFilter = BarcodeFilter(Rect(0, 0, 100, 100))
+        val candidate = BarcodeCandidate(byteArrayOf(0), null, Rect(50, 50, 50, 50), 0)
+        assertThat(
+            barcodeFilter.filter(listOf(candidate)),
+            equalTo(DetectedBarcode.Bytes(0, byteArrayOf(0)))
+        )
+    }
+
+    @Test
+    fun `returns Bytes barcode when candidate has empty UTF8 contents`() {
+        val barcodeFilter = BarcodeFilter(Rect(0, 0, 100, 100))
+        val candidate = BarcodeCandidate(byteArrayOf(0), "", Rect(50, 50, 50, 50), 0)
+        assertThat(
+            barcodeFilter.filter(listOf(candidate)),
+            equalTo(DetectedBarcode.Bytes(0, byteArrayOf(0)))
+        )
+    }
+
+    @Test
+    fun `returns null when candidate has no bytes`() {
+        val barcodeFilter = BarcodeFilter(Rect(0, 0, 100, 100))
+        val candidate = BarcodeCandidate(null, null, Rect(50, 50, 50, 50), 0)
+        assertThat(barcodeFilter.filter(listOf(candidate)), equalTo(null))
+    }
 }

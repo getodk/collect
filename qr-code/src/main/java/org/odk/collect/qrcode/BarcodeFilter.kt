@@ -2,12 +2,12 @@ package org.odk.collect.qrcode
 
 import android.graphics.Rect
 
-class BarcodeFilter(private val bounds: Rect, private val threshold: Int) {
+class BarcodeFilter(private val bounds: Rect, private val threshold: Int = 1) {
 
     private var potential: BarcodeCandidate? = null
     private var potentialOccurrences = 0
 
-    fun filter(barcodeCandidates: List<BarcodeCandidate>): BarcodeCandidate? {
+    fun filter(barcodeCandidates: List<BarcodeCandidate>): DetectedBarcode? {
         val candidate = barcodeCandidates.firstOrNull()
         return if (candidate != null && candidate.boundingBox != null && bounds.contains(candidate.boundingBox)) {
             if (!candidate.bytes.contentEquals(potential?.bytes)) {
@@ -17,7 +17,13 @@ class BarcodeFilter(private val bounds: Rect, private val threshold: Int) {
 
             potentialOccurrences++
             if (potentialOccurrences == threshold) {
-                potential
+                if (candidate.bytes == null) {
+                    null
+                } else if (candidate.utfContents.isNullOrEmpty()) {
+                    DetectedBarcode.Bytes(candidate.format, candidate.bytes)
+                } else {
+                    DetectedBarcode.Utf8(candidate.utfContents, candidate.format, candidate.bytes)
+                }
             } else {
                 null
             }
@@ -33,3 +39,58 @@ class BarcodeCandidate(
     val boundingBox: Rect?,
     val format: Int
 )
+
+sealed class DetectedBarcode {
+
+    abstract val bytes: ByteArray
+    abstract val format: Int
+
+    data class Utf8(
+        val contents: String,
+        override val format: Int,
+        override val bytes: ByteArray
+    ) : DetectedBarcode() {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Utf8
+
+            if (format != other.format) return false
+            if (contents != other.contents) return false
+            if (!bytes.contentEquals(other.bytes)) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = format
+            result = 31 * result + contents.hashCode()
+            result = 31 * result + bytes.contentHashCode()
+            return result
+        }
+    }
+
+    data class Bytes(
+        override val format: Int,
+        override val bytes: ByteArray
+    ) : DetectedBarcode() {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Bytes
+
+            if (format != other.format) return false
+            if (!bytes.contentEquals(other.bytes)) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = format
+            result = 31 * result + bytes.contentHashCode()
+            return result
+        }
+    }
+}
