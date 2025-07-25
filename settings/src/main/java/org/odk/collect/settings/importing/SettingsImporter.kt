@@ -14,8 +14,8 @@ internal class SettingsImporter(
     private val settingsProvider: SettingsProvider,
     private val settingsMigrator: SettingsMigrator,
     private val settingsValidator: SettingsValidator,
-    private val generalDefaults: Map<String, Any>,
-    private val adminDefaults: Map<String, Any>,
+    private val unprotectedDefaults: Map<String, Any>,
+    private val protectedDefaults: Map<String, Any>,
     private val settingsChangedHandler: SettingsChangeHandler,
     private val projectsRepository: ProjectsRepository,
     private val projectDetailsCreator: ProjectDetailsCreator
@@ -26,18 +26,18 @@ internal class SettingsImporter(
             return ProjectConfigurationResult.INVALID_SETTINGS
         }
 
-        val generalSettings = settingsProvider.getUnprotectedSettings(project.uuid)
-        val adminSettings = settingsProvider.getProtectedSettings(project.uuid)
+        val unprotectedSettings = settingsProvider.getUnprotectedSettings(project.uuid)
+        val protectedSettings = settingsProvider.getProtectedSettings(project.uuid)
 
-        val oldUnprotectedSettings = generalSettings.getAll().toMap().let {
-            it.ifEmpty { generalDefaults }
+        val oldUnprotectedSettings = unprotectedSettings.getAll().toMap().let {
+            it.ifEmpty { unprotectedDefaults }
         }
-        val oldProtectedSettings = adminSettings.getAll().toMap().let {
-            it.ifEmpty { adminDefaults }
+        val oldProtectedSettings = protectedSettings.getAll().toMap().let {
+            it.ifEmpty { protectedDefaults }
         }
 
-        generalSettings.clear()
-        adminSettings.clear()
+        unprotectedSettings.clear()
+        protectedSettings.clear()
 
         val jsonObject = JSONObject(json)
 
@@ -46,10 +46,10 @@ internal class SettingsImporter(
         }
 
         // Import unprotected settings
-        importToPrefs(jsonObject, AppConfigurationKeys.GENERAL, generalSettings, deviceUnsupportedSettings)
+        importToPrefs(jsonObject, AppConfigurationKeys.GENERAL, unprotectedSettings, deviceUnsupportedSettings)
 
         // Import protected settings
-        importToPrefs(jsonObject, AppConfigurationKeys.ADMIN, adminSettings, deviceUnsupportedSettings)
+        importToPrefs(jsonObject, AppConfigurationKeys.ADMIN, protectedSettings, deviceUnsupportedSettings)
 
         // Import project details
         val projectDetails = if (jsonObject.has(AppConfigurationKeys.PROJECT)) {
@@ -58,7 +58,7 @@ internal class SettingsImporter(
             JSONObject()
         }
 
-        val connectionIdentifier = generalSettings.getString(ProjectKeys.KEY_SERVER_URL) ?: ""
+        val connectionIdentifier = unprotectedSettings.getString(ProjectKeys.KEY_SERVER_URL) ?: ""
 
         importProjectDetails(
             project,
@@ -66,13 +66,13 @@ internal class SettingsImporter(
             connectionIdentifier
         )
 
-        settingsMigrator.migrate(generalSettings, adminSettings)
+        settingsMigrator.migrate(unprotectedSettings, protectedSettings)
 
-        loadDefaults(generalSettings, generalDefaults)
-        loadDefaults(adminSettings, adminDefaults)
+        loadDefaults(unprotectedSettings, unprotectedDefaults)
+        loadDefaults(protectedSettings, protectedDefaults)
 
-        val newUnprotectedSettings = generalSettings.getAll()
-        val newProtectedSettings = adminSettings.getAll()
+        val newUnprotectedSettings = unprotectedSettings.getAll()
+        val newProtectedSettings = protectedSettings.getAll()
 
         val changedUnprotectedKeys = oldUnprotectedSettings.keys.filter { key ->
             newUnprotectedSettings[key] != oldUnprotectedSettings[key]
@@ -87,9 +87,9 @@ internal class SettingsImporter(
     }
 
     private fun isGDProject(jsonObject: JSONObject): Boolean {
-        val generalSettings = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
-        return generalSettings.has(ProjectKeys.KEY_PROTOCOL) &&
-            generalSettings.get(ProjectKeys.KEY_PROTOCOL) == ProjectKeys.PROTOCOL_GOOGLE_SHEETS
+        val unprotectedSettings = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
+        return unprotectedSettings.has(ProjectKeys.KEY_PROTOCOL) &&
+            unprotectedSettings.get(ProjectKeys.KEY_PROTOCOL) == ProjectKeys.PROTOCOL_GOOGLE_SHEETS
     }
 
     private fun importToPrefs(
@@ -165,7 +165,7 @@ interface SettingsChangeHandler {
 }
 
 internal fun interface SettingsMigrator {
-    fun migrate(generalSettings: Settings, adminSettings: Settings)
+    fun migrate(unprotectedSettings: Settings, protectedSettings: Settings)
 }
 
 interface ProjectDetailsCreator {
