@@ -27,10 +27,14 @@ internal class SettingsImporter(
         }
 
         val generalSettings = settingsProvider.getUnprotectedSettings(project.uuid)
-        val oldFormUpdateMode = generalSettings.getString(ProjectKeys.KEY_FORM_UPDATE_MODE)
-        val oldPeriodicFormUpdatesCheck = generalSettings.getString(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)
-
         val adminSettings = settingsProvider.getProtectedSettings(project.uuid)
+
+        val oldUnprotectedSettings = generalSettings.getAll().toMap().let {
+            it.ifEmpty { generalDefaults }
+        }
+        val oldProtectedSettings = adminSettings.getAll().toMap().let {
+            it.ifEmpty { adminDefaults }
+        }
 
         generalSettings.clear()
         adminSettings.clear()
@@ -43,8 +47,6 @@ internal class SettingsImporter(
 
         // Import unprotected settings
         importToPrefs(jsonObject, AppConfigurationKeys.GENERAL, generalSettings, deviceUnsupportedSettings)
-        val newFormUpdateMode = generalSettings.getString(ProjectKeys.KEY_FORM_UPDATE_MODE)
-        val newPeriodicFormUpdatesCheck = generalSettings.getString(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)
 
         // Import protected settings
         importToPrefs(jsonObject, AppConfigurationKeys.ADMIN, adminSettings, deviceUnsupportedSettings)
@@ -69,8 +71,17 @@ internal class SettingsImporter(
         loadDefaults(generalSettings, generalDefaults)
         loadDefaults(adminSettings, adminDefaults)
 
-        val formUpdateSettingsChanged = oldFormUpdateMode != newFormUpdateMode || oldPeriodicFormUpdatesCheck != newPeriodicFormUpdatesCheck
-        settingsChangedHandler.onSettingsChanged(project.uuid, formUpdateSettingsChanged)
+        val newUnprotectedSettings = generalSettings.getAll()
+        val newProtectedSettings = adminSettings.getAll()
+
+        val changedUnprotectedKeys = oldUnprotectedSettings.keys.filter { key ->
+            newUnprotectedSettings[key] != oldUnprotectedSettings[key]
+        }
+        val changedProtectedKeys = oldProtectedSettings.keys.filter { key ->
+            newProtectedSettings[key] != oldProtectedSettings[key]
+        }
+
+        settingsChangedHandler.onSettingsChanged(project.uuid, changedUnprotectedKeys, changedProtectedKeys)
 
         return ProjectConfigurationResult.SUCCESS
     }
@@ -150,7 +161,7 @@ internal interface SettingsValidator {
 interface SettingsChangeHandler {
     fun onSettingChanged(projectId: String, newValue: Any?, changedKey: String)
 
-    fun onSettingsChanged(projectId: String, formUpdateSettingsChanged: Boolean)
+    fun onSettingsChanged(projectId: String, changedUnprotectedKeys: List<String>, changedProtectedKeys: List<String>)
 }
 
 internal fun interface SettingsMigrator {
