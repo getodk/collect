@@ -27,6 +27,9 @@ internal class SettingsImporter(
         }
 
         val generalSettings = settingsProvider.getUnprotectedSettings(project.uuid)
+        val oldFormUpdateMode = generalSettings.getString(ProjectKeys.KEY_FORM_UPDATE_MODE)
+        val oldPeriodicFormUpdatesCheck = generalSettings.getString(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)
+
         val adminSettings = settingsProvider.getProtectedSettings(project.uuid)
 
         generalSettings.clear()
@@ -40,6 +43,8 @@ internal class SettingsImporter(
 
         // Import unprotected settings
         importToPrefs(jsonObject, AppConfigurationKeys.GENERAL, generalSettings, deviceUnsupportedSettings)
+        val newFormUpdateMode = generalSettings.getString(ProjectKeys.KEY_FORM_UPDATE_MODE)
+        val newPeriodicFormUpdatesCheck = generalSettings.getString(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)
 
         // Import protected settings
         importToPrefs(jsonObject, AppConfigurationKeys.ADMIN, adminSettings, deviceUnsupportedSettings)
@@ -64,7 +69,8 @@ internal class SettingsImporter(
         loadDefaults(generalSettings, generalDefaults)
         loadDefaults(adminSettings, adminDefaults)
 
-        settingsChangedHandler.onSettingsChanged(project.uuid)
+        val formUpdateSettingsChanged = oldFormUpdateMode != newFormUpdateMode || oldPeriodicFormUpdatesCheck != newPeriodicFormUpdatesCheck
+        settingsChangedHandler.onSettingsChanged(project.uuid, formUpdateSettingsChanged)
 
         return ProjectConfigurationResult.SUCCESS
     }
@@ -144,7 +150,7 @@ internal interface SettingsValidator {
 interface SettingsChangeHandler {
     fun onSettingChanged(projectId: String, newValue: Any?, changedKey: String)
 
-    fun onSettingsChanged(projectId: String)
+    fun onSettingsChanged(projectId: String, formUpdateSettingsChanged: Boolean)
 }
 
 internal fun interface SettingsMigrator {

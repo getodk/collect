@@ -1,5 +1,6 @@
 package org.odk.collect.android.formmanagement
 
+import org.apache.commons.io.FileUtils.copyFileToDirectory
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.FormDownloader
@@ -88,6 +89,10 @@ object ServerFormUseCases {
 
         val tempMediaDir = File(tempMediaPath).also { it.mkdir() }
 
+        val existingForm = formsRepository.getAllByFormIdAndVersion(formToDownload.formId, formToDownload.formVersion).firstOrNull()
+        val allFormVersionsSorted = formsRepository.getAllByFormId(formToDownload.formId).sortedByDescending { it.date }
+        val currentOrLastFormVersion = existingForm ?: allFormVersionsSorted.firstOrNull()
+
         formToDownload.manifest!!.mediaFiles.forEachIndexed { i, mediaFile ->
             stateListener.progressUpdate(i + 1)
 
@@ -134,25 +139,13 @@ object ServerFormUseCases {
                     }
                 }
             } else {
-                val existingFile =
-                    searchForExistingMediaFile(formsRepository, formToDownload, mediaFile)
-                existingFile.also {
-                    if (it != null) {
-                        if (it.getMd5Hash().contentEquals(mediaFile.hash)) {
-                            FileUtils.copyFile(it, tempMediaFile)
-                        } else {
-                            val existingFileHash = it.getMd5Hash()
-                            downloadMediaFile(
-                                formSource,
-                                mediaFile,
-                                tempMediaFile,
-                                tempDir,
-                                stateListener
-                            )
+                val existingFile = searchForExistingMediaFile(currentOrLastFormVersion, mediaFile)
+                if (existingFile != null) {
+                    val existingFileHash = existingFile.getMd5Hash()
 
-                            if (!tempMediaFile.getMd5Hash().contentEquals(existingFileHash)) {
-                                newAttachmentsDownloaded = true
-                            }
+                    if (existingFileHash.contentEquals(mediaFile.hash)) {
+                        if (!formToDownload.mediaOnlyUpdate) {
+                            copyFileToDirectory(existingFile, tempMediaDir)
                         }
                     } else {
                         downloadMediaFile(
@@ -162,8 +155,20 @@ object ServerFormUseCases {
                             tempDir,
                             stateListener
                         )
-                        newAttachmentsDownloaded = true
+
+                        if (!tempMediaFile.getMd5Hash().contentEquals(existingFileHash)) {
+                            newAttachmentsDownloaded = true
+                        }
                     }
+                } else {
+                    downloadMediaFile(
+                        formSource,
+                        mediaFile,
+                        tempMediaFile,
+                        tempDir,
+                        stateListener
+                    )
+                    newAttachmentsDownloaded = true
                 }
 
                 logEntityListClashes(mediaFile, entitiesRepository)
@@ -204,17 +209,18 @@ object ServerFormUseCases {
         mediaFile.filename.substringBefore(".csv")
 
     private fun searchForExistingMediaFile(
-        formsRepository: FormsRepository,
-        formToDownload: ServerFormDetails,
+        currentOrLastFormVersion: Form?,
         mediaFile: MediaFile
     ): File? {
-        val allFormVersions = formsRepository.getAllByFormId(formToDownload.formId)
-        return allFormVersions.sortedByDescending {
-            it.date
-        }.map { form: Form ->
-            File(form.formMediaPath, mediaFile.filename)
-        }.firstOrNull { file: File ->
-            file.exists()
+        return if (currentOrLastFormVersion != null) {
+            val candidate = File(currentOrLastFormVersion.formMediaPath, mediaFile.filename)
+            if (candidate.exists()) {
+                candidate
+            } else {
+                null
+            }
+        } else {
+            null
         }
     }
 }

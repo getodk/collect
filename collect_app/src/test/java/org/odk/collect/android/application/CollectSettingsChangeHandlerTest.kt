@@ -58,13 +58,19 @@ class CollectSettingsChangeHandlerTest {
 
     @Test
     fun `updates PropertyManager when multiple settings are changed`() {
-        handler.onSettingsChanged("projectId")
+        handler.onSettingsChanged("projectId", false)
         verify(propertyManager).reload()
     }
 
     @Test
-    fun `schedule updates when multiple settings are changes`() {
-        handler.onSettingsChanged("projectId")
+    fun `schedules updates when multiple settings change and include form update-related ones`() {
+        handler.onSettingsChanged("projectId", true)
         verify(formUpdateScheduler).scheduleUpdates("projectId")
+    }
+
+    @Test
+    fun `does not schedule updates when multiple settings change but none relate to form updates`() {
+        handler.onSettingsChanged("projectId", false)
+        verifyNoInteractions(formUpdateScheduler)
     }
 }

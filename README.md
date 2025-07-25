@@ -260,6 +260,7 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 - run `./gradlew releaseCheck`. If successful, a signed release will be at `collect_app/build/outputs/apk` (with an old version name)
 - verify a basic "happy path": scan a QR code to configure a new project, get a blank form, fill it, open the form map (confirms that the Google Maps key is correct), send form
 - run `./benchmark.sh` with a real device connected to verify performance
+  - To run benchmarks a project will need to be set up in Central with the benchmark forms and app users. The forms and entities needed for that are available [here](https://drive.google.com/drive/folders/1dPLvDY0LhVX-5qTUEs6EDoraDnLpUS0g?usp=drive_link).
 - verify new APK can be installed as update to previous version and that above "happy path" works in that case also
 - create and publish scheduled forum post with release description
 - write Play Store release notes, include link to forum post
