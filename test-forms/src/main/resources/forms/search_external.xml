@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<h:html
+    xmlns="http://www.w3.org/2002/xforms"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:odk="http://www.opendatakit.org/xforms">
+    <h:head>
+        <h:title>search_external</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="search_external">
+                    <number/>
+                    <letter/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/number" type="string"/>
+            <bind nodeset="/data/letter" type="string"/>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select ref="/data/number" appearance="search('numbers')">
+            <label>Choose a number</label>
+            <item>
+                <label>1</label>
+                <value>1</value>
+            </item>
+            <item>
+                <label>2</label>
+                <value>2</value>
+            </item>
+            <item>
+                <label>3</label>
+                <value>3</value>
+            </item>
+        </select>
+        <select ref="/data/letter" appearance="search('letters')">
+            <label>Choose a letter</label>
+            <item>
+                <label>A</label>
+                <value>a</value>
+            </item>
+            <item>
+                <label>B</label>
+                <value>b</value>
+            </item>
+            <item>
+                <label>C</label>
+                <value>c</value>
+            </item>
+        </select>
+    </h:body>
+</h:html>
