@@ -114,4 +114,5 @@ kotlinAndroid = { id = "kotlin-android" }
 kotlinKapt = { id = "kotlin-kapt" }
 kotlinParcelize = { id = "kotlin-parcelize" }
 safeargsKotlin = { id = "androidx.navigation.safeargs.kotlin" }
+safeargs = { id = "androidx.navigation.safeargs" }
 ossLicenses = { id = "com.google.android.gms.oss-licenses-plugin" }

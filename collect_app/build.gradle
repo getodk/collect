@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kotlinParcelize)
     alias(libs.plugins.ossLicenses)
+    alias(libs.plugins.safeargs)
 }
 apply from: '../config/quality.gradle'
 
@@ -340,6 +341,7 @@ dependencies {
     }
 
     implementation libs.splashscreen
+    implementation libs.androidxNavigationFragmentKtx
 
     testImplementation project(':forms-test')
 
