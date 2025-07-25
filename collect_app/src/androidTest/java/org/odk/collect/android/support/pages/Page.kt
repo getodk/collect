@@ -61,7 +61,6 @@ import org.odk.collect.testshared.Assertions
 import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.WaitFor.tryAgainOnFail
-import org.odk.collect.testshared.WaitFor.wait250ms
 import org.odk.collect.testshared.WaitFor.waitFor
 import timber.log.Timber
 import java.io.File
@@ -134,6 +133,12 @@ abstract class Page<T : Page<T>> {
     fun assertText(text: String): T {
         Assertions.assertVisible(withText(text))
         return this as T
+    }
+
+    fun asyncAssertText(text: String): T {
+        return waitFor {
+            assertText(text)
+        }
     }
 
     @JvmOverloads
@@ -446,12 +451,8 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    private fun waitForDialogToSettle() {
-        wait250ms() // https://github.com/android/android-test/issues/444
-    }
-
-    protected fun waitForText(text: String) {
-        waitFor { assertText(text) }
+    protected fun waitForDialogToSettle() {
+        Thread.sleep(250) // https://github.com/android/android-test/issues/444
     }
 
     protected fun assertToolbarTitle(title: String?) {

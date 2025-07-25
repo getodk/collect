@@ -135,9 +135,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage swipeToNextRepeat(String repeatLabel, int repeatNumber) {
-        waitForText(repeatLabel + " > " + (repeatNumber - 1));
+        asyncAssertText(repeatLabel + " > " + (repeatNumber - 1));
         flingLeft();
-        waitForText(repeatLabel + " > " + repeatNumber);
+        asyncAssertText(repeatLabel + " > " + repeatNumber);
         return this;
     }
 
@@ -358,9 +358,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage assertQuestion(String text, boolean isRequired) {
         if (isRequired) {
-            waitForText("* " + text);
+            asyncAssertText("* " + text);
         } else {
-            waitForText(text);
+            asyncAssertText(text);
         }
 
         return this;

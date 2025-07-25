@@ -10,7 +10,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.allOf
-import org.odk.collect.testshared.WaitFor
 
 internal class ProjectSettingsDialogPage : Page<ProjectSettingsDialogPage>() {
 
@@ -88,7 +87,7 @@ internal class ProjectSettingsDialogPage : Page<ProjectSettingsDialogPage>() {
     }
 
     fun selectProject(projectName: String): MainMenuPage {
-        WaitFor.wait250ms() // https://github.com/android/android-test/issues/444
+        waitForDialogToSettle()
         onView(
             allOf(
                 hasDescendant(withText(projectName)),
