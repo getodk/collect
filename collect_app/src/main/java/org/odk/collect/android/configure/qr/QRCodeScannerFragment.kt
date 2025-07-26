@@ -62,15 +62,21 @@ class QRCodeScannerFragment : BarCodeScannerFragment() {
                 )
             }
 
-            ProjectConfigurationResult.INVALID_SETTINGS -> showLongToast(
-                getString(
-                    org.odk.collect.strings.R.string.invalid_qrcode
+            ProjectConfigurationResult.INVALID_SETTINGS -> {
+                showLongToast(
+                    getString(
+                        org.odk.collect.strings.R.string.invalid_qrcode
+                    )
                 )
-            )
+                restartScanning()
+            }
 
-            ProjectConfigurationResult.GD_PROJECT -> showLongToast(
-                getString(org.odk.collect.strings.R.string.settings_with_gd_protocol)
-            )
+            ProjectConfigurationResult.GD_PROJECT -> {
+                showLongToast(
+                    getString(org.odk.collect.strings.R.string.settings_with_gd_protocol)
+                )
+                restartScanning()
+            }
         }
     }
 

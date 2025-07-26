@@ -31,6 +31,7 @@ import com.google.zxing.client.android.BeepManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.qrcode.BarcodeScannerView;
 import org.odk.collect.qrcode.BarcodeScannerViewContainer;
 
@@ -48,6 +49,9 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
 
     @Inject
     BarcodeScannerViewContainer.Factory barcodeScannerViewFactory;
+
+    @Inject
+    Scheduler scheduler;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -78,6 +82,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
                 handleScanningResult(result);
             } catch (IOException | DataFormatException | IllegalArgumentException e) {
                 ToastUtils.showShortToast(getString(org.odk.collect.strings.R.string.invalid_qrcode));
+                restartScanning();
             }
         });
 
@@ -112,6 +117,10 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
     @Override
     public void onTorchOff() {
         switchFlashlightButton.setText(org.odk.collect.strings.R.string.turn_on_flashlight);
+    }
+
+    protected void restartScanning() {
+        scheduler.immediate(true, 2000L, () -> barcodeScannerViewContainer.getBarcodeScannerView().start());
     }
 
     protected abstract boolean isQrOnly();
