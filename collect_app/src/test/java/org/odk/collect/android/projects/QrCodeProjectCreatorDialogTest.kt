@@ -1,6 +1,7 @@
 package org.odk.collect.android.projects
 
 import android.Manifest
+import android.app.Application
 import android.content.Context
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ApplicationProvider
@@ -28,6 +29,7 @@ import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.kotlin.mock
 import org.odk.collect.android.R
 import org.odk.collect.android.fakes.FakePermissionsProvider
+import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.support.CollectHelpers
@@ -164,6 +166,43 @@ class QrCodeProjectCreatorDialogTest {
             Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
             Intents.release()
         }
+    }
+
+    @Test
+    fun `When a duplicate project is detected resume scanning after dismissing the dialog`() {
+        val scenario = launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
+
+        val projectJson =
+            """
+            {
+                "general": {
+                    "server_url": "http://john.com",
+                    "username": "john"
+                },
+                "admin": {}
+            }
+            """.trimIndent()
+
+        DaggerUtils
+            .getComponent(ApplicationProvider.getApplicationContext<Application>())
+            .projectCreator()
+            .createNewProject(projectJson, false)
+
+        barcodeScannerViewFactory.scan(projectJson)
+
+        scenario.onFragment {
+            assertThat(
+                it.childFragmentManager.findFragmentByTag(
+                    DuplicateProjectConfirmationDialog::class.java.name
+                ),
+                `is`(notNullValue())
+            )
+        }
+
+        onView(isRoot()).perform(pressBack())
+
+        scheduler.runForeground()
+        assertThat(barcodeScannerViewFactory.isScanning, equalTo(true))
     }
 
     @Test

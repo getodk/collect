@@ -85,6 +85,7 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.projects.ProjectCreator;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.ODKAppSettingsImporter;
 import org.odk.collect.settings.SettingsProvider;
@@ -272,6 +273,8 @@ public interface AppDependencyComponent {
     ODKAppSettingsImporter settingsImporter();
 
     ProjectsRepository projectsRepository();
+
+    ProjectCreator projectCreator();
 
     ProjectsDataService currentProjectProvider();
 
