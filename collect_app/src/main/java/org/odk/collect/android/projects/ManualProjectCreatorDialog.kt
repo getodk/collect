@@ -148,4 +148,6 @@ class ManualProjectCreatorDialog :
             )
         )
     }
+
+    override fun cancel() {}
 }
