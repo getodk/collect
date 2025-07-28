@@ -175,8 +175,6 @@ public class FormHierarchyFragment extends Fragment {
         });
     }
 
-
-
     private void handleInstanceEditResult(InstanceEditResult result) {
         Instance instance = result.getInstance();
 
