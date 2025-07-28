@@ -160,13 +160,10 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
         positionUpdatesCancellable = scheduler.repeat(
             {
                 val currentlyPlaying = currentlyPlaying.value
-                if (currentlyPlaying != null) {
+                val currentPosition = mediaPlayer.getPosition()
+                if (currentlyPlaying != null && currentPosition != null) {
                     val position = getPositionForClip(currentlyPlaying.clip.clipID)
-
-                    val currentPosition = mediaPlayer.getPosition()
-                    if (currentPosition != null) {
-                        position.postValue(currentPosition)
-                    }
+                    position.postValue(currentPosition)
                 }
             },
             1000 / 12
