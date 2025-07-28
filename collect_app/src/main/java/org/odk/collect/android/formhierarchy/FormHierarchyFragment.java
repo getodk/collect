@@ -3,6 +3,7 @@ package org.odk.collect.android.formhierarchy;
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment.REQUEST_DELETE_REPEAT;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
+import static org.odk.collect.androidshared.ui.SnackbarUtils.showLongSnackbar;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -294,6 +295,17 @@ public class FormHierarchyFragment extends Fragment {
         }
 
         getChildFragmentManager().setFragmentResultListener(REQUEST_DELETE_REPEAT, getViewLifecycleOwner(), (requestKey, result) -> onRepeatDeleted());
+
+        boolean newEdit = FormHierarchyFragmentArgs.fromBundle(getArguments()).getNewEdit();
+        if (newEdit) {
+            showLongSnackbar(
+                    view,
+                    getString(org.odk.collect.strings.R.string.finalized_form_edit_started),
+                    null,
+                    null,
+                    true
+            );
+        }
     }
 
     public void refreshView() {

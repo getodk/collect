@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/form_entry"
+    app:startDestination="@id/hierarchy">
+
+    <fragment
+        android:id="@+id/hierarchy"
+        android:name="org.odk.collect.android.formhierarchy.FormHierarchyFragment">
+        <argument
+            android:name="new_edit"
+            app:argType="boolean" />
+    </fragment>
+
+</navigation>

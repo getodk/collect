@@ -1,6 +1,7 @@
 package org.odk.collect.android.formhierarchy
 
 import android.os.Bundle
+import androidx.navigation.fragment.NavHostFragment
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryViewModelFactory
@@ -18,7 +19,6 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
-import org.odk.collect.androidshared.ui.SnackbarUtils.showLongSnackbar
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
@@ -137,18 +137,20 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity() {
         } else {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.hierarchy_host_layout)
-            setSupportActionBar(findViewById(org.odk.collect.androidshared.R.id.toolbar))
-        }
 
-        val shouldShowNewEditMessage = intent.getBooleanExtra(SHOW_NEW_EDIT_MESSAGE, false)
-        if (shouldShowNewEditMessage) {
-            showLongSnackbar(
-                findViewById(R.id.fragment_container),
-                getString(org.odk.collect.strings.R.string.finalized_form_edit_started),
-                null,
-                null,
-                true
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+
+            val shouldShowNewEditMessage = intent.getBooleanExtra(SHOW_NEW_EDIT_MESSAGE, false)
+            navController.setGraph(
+                R.navigation.form_entry,
+                FormHierarchyFragmentArgs.Builder(shouldShowNewEditMessage)
+                    .build()
+                    .toBundle()
             )
+
+            setSupportActionBar(findViewById(org.odk.collect.androidshared.R.id.toolbar))
         }
     }
 
