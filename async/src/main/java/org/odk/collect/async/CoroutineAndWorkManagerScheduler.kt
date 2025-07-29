@@ -25,6 +25,20 @@ class CoroutineAndWorkManagerScheduler(
         workManager
     ) // Needed for Java construction
 
+    override fun immediate(tag: String, spec: TaskSpec, inputData: Map<String, String>) {
+        val workManagerInputData = Data.Builder()
+            .putString(TaskSpecWorker.DATA_TASK_SPEC_CLASS, spec.javaClass.name)
+            .putBoolean(TaskSpecWorker.FOREGROUND, true)
+            .putAll(inputData)
+            .build()
+
+        val workRequest = OneTimeWorkRequest.Builder(TaskSpecWorker::class.java)
+            .addTag(tag)
+            .setInputData(workManagerInputData)
+            .build()
+        workManager.beginUniqueWork(tag, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
+    }
+
     override fun networkDeferred(
         tag: String,
         spec: TaskSpec,

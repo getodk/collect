@@ -1,6 +1,8 @@
 package org.odk.collect.testshared
 
+import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.flow.Flow
@@ -41,6 +43,11 @@ class FakeScheduler : Scheduler {
         } else {
             foregroundTasks.push(runnable)
         }
+    }
+
+    override fun immediate(tag: String, spec: TaskSpec, inputData: Map<String, String>) {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        backgroundTasks.push(spec.getTask(context, inputData, true)::get)
     }
 
     override fun networkDeferred(

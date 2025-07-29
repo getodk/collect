@@ -50,6 +50,15 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         }
     }
 
+    override fun immediate(tag: String, spec: TaskSpec, inputData: Map<String, String>) {
+        increment()
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        wrappedScheduler.immediate {
+            spec.getTask(context, inputData, true).get()
+            decrement()
+        }
+    }
+
     override fun networkDeferred(
         tag: String,
         spec: TaskSpec,

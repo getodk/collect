@@ -28,6 +28,15 @@ interface Scheduler {
     fun immediate(foreground: Boolean = false, delay: Long? = null, runnable: Runnable)
 
     /**
+     * Run a task immediately.
+     *
+     * @param tag used to identify this task in future. If there is a previously scheduled task
+     * with the same tag then that task will be cancelled and this will replace it
+     * @param spec defines the task to be run
+     */
+    fun immediate(tag: String, spec: TaskSpec, inputData: Map<String, String>)
+
+    /**
      * Schedule a task to run in the background even if the app isn't running. The task
      * will only be run when the network is available.
      *

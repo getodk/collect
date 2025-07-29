@@ -10,6 +10,8 @@ import androidx.lifecycle.map
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec
+import org.odk.collect.android.backgroundwork.TaskData
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.flowOnBackground
@@ -74,15 +76,13 @@ class BlankFormListViewModel(
     }
 
     fun syncWithServer(): LiveData<Boolean> {
-        val result = MutableLiveData<Boolean>()
         scheduler.immediate(
-            {
-                formsDataService.matchFormsWithServer(projectId)
-            },
-            { value: Boolean ->
-                result.value = value
-            }
+            "sync",
+            SyncFormsTaskSpec(),
+            mapOf(TaskData.DATA_PROJECT_ID to projectId)
         )
+
+        val result = MutableLiveData<Boolean>()
         return result
     }
 
