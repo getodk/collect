@@ -1,6 +1,13 @@
 package org.odk.collect.async
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.content.Context.NOTIFICATION_SERVICE
+import android.os.Build
+import androidx.core.app.NotificationCompat
+import androidx.work.ForegroundInfo
+import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import org.odk.collect.analytics.Analytics
@@ -18,6 +25,12 @@ class TaskSpecWorker(
         if (cellularOnly && connectivityProvider.currentNetwork != Scheduler.NetworkType.CELLULAR) {
             Analytics.setUserProperty("SawMeteredNonCellular", "true")
             return Result.retry()
+        }
+
+        val foreground = inputData.getBoolean(FOREGROUND, false)
+        if (foreground) {
+            setupNotificationChannel()
+            setForegroundAsync(getForegroundInfo(applicationContext))
         }
 
         val specClass = inputData.getString(DATA_TASK_SPEC_CLASS)!!
@@ -43,11 +56,39 @@ class TaskSpecWorker(
         }
     }
 
+    private fun getForegroundInfo(context: Context): ForegroundInfo {
+        val intent = WorkManager.getInstance(context).createCancelPendingIntent(id)
+
+        val notification = NotificationCompat.Builder(applicationContext, "taskSpecWorker")
+            .setSmallIcon(org.odk.collect.icons.R.drawable.ic_notification_small)
+            .setContentTitle("Task Spec Worker")
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setContentIntent(intent)
+            .build()
+
+        return ForegroundInfo(1, notification)
+    }
+
+    private fun setupNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                "taskSpecWorker",
+                "TaskSpecWorker",
+                NotificationManager.IMPORTANCE_LOW
+            )
+
+            (applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
+                .createNotificationChannel(notificationChannel)
+        }
+    }
+
     private fun isLastUniqueExecution(spec: TaskSpec) =
         spec.maxRetries?.let { runAttemptCount >= it } ?: true
 
     companion object {
         const val DATA_TASK_SPEC_CLASS = "taskSpecClass"
         const val DATA_CELLULAR_ONLY = "cellularOnly"
+
+        const val FOREGROUND = "foreground"
     }
 }
