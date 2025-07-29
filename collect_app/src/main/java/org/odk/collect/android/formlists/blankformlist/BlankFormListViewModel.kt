@@ -77,7 +77,7 @@ class BlankFormListViewModel(
 
     fun syncWithServer(): LiveData<Boolean> {
         scheduler.immediate(
-            "sync",
+            "match_exactly_foreground:$projectId",
             SyncFormsTaskSpec(),
             mapOf(TaskData.DATA_PROJECT_ID to projectId)
         )
