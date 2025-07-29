@@ -29,9 +29,19 @@ class TaskSpecWorker(
 
         val foreground = inputData.getBoolean(FOREGROUND, false)
         if (foreground) {
-            setupNotificationChannel()
+            val notificationChannel = inputData.getString(FOREGROUND_NOTIFICATION_CHANNEL)!!
+            val notificationChannelName =
+                inputData.getString(FOREGROUND_NOTIFICATION_CHANNEL_NAME)!!
+            setupNotificationChannel(notificationChannel, notificationChannelName)
+
+            val notificationTitle = inputData.getString(FOREGROUND_NOTIFICATION_TITLE)!!
             setForegroundAsync(
-                getForegroundInfo(applicationContext, inputData.getInt(FOREGROUND_TYPE, -1))
+                getForegroundInfo(
+                    applicationContext,
+                    inputData.getInt(FOREGROUND_TYPE, -1),
+                    notificationChannel,
+                    notificationTitle
+                )
             )
         }
 
@@ -58,12 +68,17 @@ class TaskSpecWorker(
         }
     }
 
-    private fun getForegroundInfo(context: Context, foregroundType: Int): ForegroundInfo {
+    private fun getForegroundInfo(
+        context: Context,
+        foregroundType: Int,
+        notificationChannel: String,
+        notificationTitle: String
+    ): ForegroundInfo {
         val intent = WorkManager.getInstance(context).createCancelPendingIntent(id)
 
-        val notification = NotificationCompat.Builder(applicationContext, "taskSpecWorker")
+        val notification = NotificationCompat.Builder(applicationContext, notificationChannel)
             .setSmallIcon(org.odk.collect.icons.R.drawable.ic_notification_small)
-            .setContentTitle("Task Spec Worker")
+            .setContentTitle(notificationTitle)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setContentIntent(intent)
             .build()
@@ -71,11 +86,14 @@ class TaskSpecWorker(
         return ForegroundInfo(1, notification, foregroundType)
     }
 
-    private fun setupNotificationChannel() {
+    private fun setupNotificationChannel(
+        notificationChannel: String,
+        notificationChannelName: String
+    ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
-                "taskSpecWorker",
-                "TaskSpecWorker",
+                notificationChannel,
+                notificationChannelName,
                 NotificationManager.IMPORTANCE_LOW
             )
 
@@ -93,5 +111,8 @@ class TaskSpecWorker(
 
         const val FOREGROUND = "foreground"
         const val FOREGROUND_TYPE = "foreground_type"
+        const val FOREGROUND_NOTIFICATION_CHANNEL = "notification_channel"
+        const val FOREGROUND_NOTIFICATION_CHANNEL_NAME = "notification_channel_name"
+        const val FOREGROUND_NOTIFICATION_TITLE = "notification_title"
     }
 }

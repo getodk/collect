@@ -26,11 +26,22 @@ class CoroutineAndWorkManagerScheduler(
         workManager
     ) // Needed for Java construction
 
-    override fun immediate(tag: String, spec: TaskSpec, inputData: Map<String, String>) {
+    override fun immediate(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        notificationInfo: NotificationInfo
+    ) {
         val workManagerInputData = Data.Builder()
             .putString(TaskSpecWorker.DATA_TASK_SPEC_CLASS, spec.javaClass.name)
             .putBoolean(TaskSpecWorker.FOREGROUND, true)
             .putInt(TaskSpecWorker.FOREGROUND_TYPE, FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+            .putString(TaskSpecWorker.FOREGROUND_NOTIFICATION_CHANNEL, notificationInfo.channel)
+            .putString(
+                TaskSpecWorker.FOREGROUND_NOTIFICATION_CHANNEL_NAME,
+                notificationInfo.channelName
+            )
+            .putString(TaskSpecWorker.FOREGROUND_NOTIFICATION_TITLE, notificationInfo.title)
             .putAll(inputData)
             .build()
 

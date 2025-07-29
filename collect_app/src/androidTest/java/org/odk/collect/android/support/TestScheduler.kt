@@ -9,6 +9,7 @@ import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.flow.Flow
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler
+import org.odk.collect.async.NotificationInfo
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.network.NetworkStateProvider
@@ -50,7 +51,12 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         }
     }
 
-    override fun immediate(tag: String, spec: TaskSpec, inputData: Map<String, String>) {
+    override fun immediate(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        notificationInfo: NotificationInfo
+    ) {
         increment()
         val context = ApplicationProvider.getApplicationContext<Context>()
         wrappedScheduler.immediate {

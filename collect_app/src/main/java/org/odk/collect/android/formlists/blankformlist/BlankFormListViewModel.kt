@@ -14,6 +14,7 @@ import org.odk.collect.android.application.FeatureFlags
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec
 import org.odk.collect.android.backgroundwork.TaskData
 import org.odk.collect.android.formmanagement.FormsDataService
+import org.odk.collect.async.NotificationInfo
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.flowOnBackground
 import org.odk.collect.forms.Form
@@ -83,7 +84,12 @@ class BlankFormListViewModel(
             scheduler.immediate(
                 "match_exactly_foreground:$projectId",
                 SyncFormsTaskSpec(),
-                mapOf(TaskData.DATA_PROJECT_ID to projectId)
+                mapOf(TaskData.DATA_PROJECT_ID to projectId),
+                NotificationInfo(
+                    "form_updates",
+                    "Form updates",
+                    "Syncing forms with the server..."
+                )
             )
         } else {
             scheduler.immediate(

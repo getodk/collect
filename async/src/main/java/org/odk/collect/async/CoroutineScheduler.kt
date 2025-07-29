@@ -73,7 +73,12 @@ open class CoroutineScheduler(private val foregroundContext: CoroutineContext, p
         throw UnsupportedOperationException()
     }
 
-    override fun immediate(tag: String, spec: TaskSpec, inputData: Map<String, String>) {
+    override fun immediate(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        notificationInfo: NotificationInfo
+    ) {
         throw UnsupportedOperationException()
     }
 }
