@@ -30,7 +30,9 @@ class TaskSpecWorker(
         val foreground = inputData.getBoolean(FOREGROUND, false)
         if (foreground) {
             setupNotificationChannel()
-            setForegroundAsync(getForegroundInfo(applicationContext))
+            setForegroundAsync(
+                getForegroundInfo(applicationContext, inputData.getInt(FOREGROUND_TYPE, -1))
+            )
         }
 
         val specClass = inputData.getString(DATA_TASK_SPEC_CLASS)!!
@@ -56,7 +58,7 @@ class TaskSpecWorker(
         }
     }
 
-    private fun getForegroundInfo(context: Context): ForegroundInfo {
+    private fun getForegroundInfo(context: Context, foregroundType: Int): ForegroundInfo {
         val intent = WorkManager.getInstance(context).createCancelPendingIntent(id)
 
         val notification = NotificationCompat.Builder(applicationContext, "taskSpecWorker")
@@ -66,7 +68,7 @@ class TaskSpecWorker(
             .setContentIntent(intent)
             .build()
 
-        return ForegroundInfo(1, notification)
+        return ForegroundInfo(1, notification, foregroundType)
     }
 
     private fun setupNotificationChannel() {
@@ -90,5 +92,6 @@ class TaskSpecWorker(
         const val DATA_CELLULAR_ONLY = "cellularOnly"
 
         const val FOREGROUND = "foreground"
+        const val FOREGROUND_TYPE = "foreground_type"
     }
 }

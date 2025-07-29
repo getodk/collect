@@ -1,5 +1,6 @@
 package org.odk.collect.async
 
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -29,6 +30,7 @@ class CoroutineAndWorkManagerScheduler(
         val workManagerInputData = Data.Builder()
             .putString(TaskSpecWorker.DATA_TASK_SPEC_CLASS, spec.javaClass.name)
             .putBoolean(TaskSpecWorker.FOREGROUND, true)
+            .putInt(TaskSpecWorker.FOREGROUND_TYPE, FOREGROUND_SERVICE_TYPE_DATA_SYNC)
             .putAll(inputData)
             .build()
 
