@@ -1,11 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:oat="http://schema.getodk.org/odkAndroidTools">
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
+  <string name="enter_data">สร้างแบบสำรวจใหม่</string>
   <!--Text for an action button on the main screen.-->
+  <string name="review_data">แบบสำรวจฉบับร่าง</string>
   <!--Text for an action button on the main screen.-->
+  <string name="send_data">แบบฟอร์มพร้อมส่ง</string>
   <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">แบบสำรวจที่ส่งแล้ว</string>
   <!--Text for an action button on the main screen.-->
+  <string name="get_forms">ดาวน์โหลดแบบสำรวจ</string>
   <!--Text for an action button on the main screen.-->
+  <string name="manage_files">แบบฟอร์มที่ถูกลบ</string>
   <string name="version_number">เวอร์ชั่น: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'เพิ่มเมื่อ\' EEE, MMM dd, yyyy \'เวลา\' HH:mm</string>
@@ -23,7 +29,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="modified_on_date_at_time">\'แก้ไขเมื่อ\' EEE, MMM dd, yyy \'เวลา\' HH:mm</string>
   <string name="encrypted_form">แบบสำรวจเข้ารหัส</string>
-  <string name="deleted_form">แบบสำรวจที่ถูกลบ</string>
+  <string name="deleted_form">แบบฟอร์มที่ถูกลบ</string>
   <string name="sort_the_list">จัดเรียงรายการ</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <!--Displayed in search boxes for form lists or question types that involve search-->
@@ -45,6 +51,7 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">ข้ามไปที่</string>
   <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">บันทึกเป็นฉบับร่าง</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">ไปที่จุดเริ่มต้น</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -69,14 +76,33 @@
   <string name="delete_repeat_no">ยกเลิก</string>
   <string name="invalid_answer_error">ขออภัย คำตอบไม่ถูกต้อง</string>
   <string name="required_answer_error">ขออภัย โปรดตอบคำถามนี้</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">ท่านอยู่ที่จุดสิ้นสุดของ %s.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
+  <string name="form_editing_disabled_hint">หากท่านต้องการแก้ไขแบบสำรวจ ให้ \"บันทึกเป็นฉบับร่าง\" จนกว่าท่านจะพร้อมส่ง</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <!--Button text for saving as draft-->
+  <string name="save_as_draft">บันทึกเป็นฉบับร่าง</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
+  <!--Button text for sending a submission.-->
+  <string name="send">ส่งแบบสำรวจ</string>
   <string name="data_saved_error">ขออภัย ไม่สามารถบันทึกแบบสำรวจได้</string>
   <string name="data_saved_ok">บันทึกแบบสำรวจเรียบร้อยแล้ว</string>
   <string name="save_point_error">มีข้อผิดพลาดในการบันทึกจุดย้อนคืน : %s</string>
   <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">ออกจาก %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">ละทิ้งแบบสำรวจ</string>
   <string name="keep_changes">บันทึกการเปลี่ยนแปลง</string>
+  <string name="keep_editing">แก้ไขต่อไป</string>
+  <string name="quit_form_title">บันทึกแบบสำรวจ?</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saving_form">กำลังบันทึกแบบสำรวจ</string>
   <string name="survey_saving_validating_message">กำลังตรวจความถูกต้องของคำตอบ</string>
   <string name="survey_saving_collecting_message">กำลังรวบรวมข้อมูล</string>
@@ -311,15 +337,18 @@
     # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
+  <string name="server_settings_title">เซิร์ฟเวอร์</string>
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <string name="client">ส่วนต่อประสานกับผู้ใช้</string>
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="maps">แผนที่</string>
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <string name="form_management_preferences">จัดการแบบสำรวจ</string>
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
@@ -329,6 +358,7 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <string name="access_control_section_title">การควบคุมการเข้าถึง</string>
   <!--Subtext of a settings section-->
   <string name="server_preferences">ตั้งค่าเซิร์ฟเวอร์</string>
   <!--Label for server type setting-->
@@ -369,10 +399,11 @@
   <!--Frequency for requesting blank form updates from the server-->
   <!--Frequency for requesting blank form updates from the server-->
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="form_submission_category">การส่งแบบสำรวจ</string>
   <string name="autosend_selector_title">ส่งอัตโนมัติ</string>
   <string name="autosend">ส่งอัตโนมัติ</string>
   <string name="delete_after_send">ลบหลังจากส่งแล้ว</string>
-  <string name="delete_after_send_summary">ลบฟอร์มที่ตรวจสอบแล้วและไฟล์ภาพและเสียงหลังจากส่งไปที่เซิร์ฟเวอร์แล้ว</string>
+  <string name="delete_after_send_summary">ลบแบบสำรวจที่ตรวจสอบแล้วและไฟล์ภาพและเสียงหลังจากส่งไปที่เซิร์ฟเวอร์แล้ว</string>
   <string name="constraint_behavior">ลักษณะการประมวลผลแบบมีเงื่อนไข</string>
   <string name="constraint_behavior_on_swipe">ตรวจสอบเมื่อปัดเลื่อนไปข้างหน้า</string>
   <string name="constraint_behavior_on_finalize">เลื่อนการตรวจสอบไปจนกว่าการสำรวจสิ้นสุด</string>
@@ -410,8 +441,8 @@
   <string name="select_all">เลือกทั้งหมด</string>
   <string name="clear_all">ลบทั้งหมด</string>
   <string name="reset_settings">ค่าการติดตั้งทั้งหมด(การตั้งค่าภายใน, ค่าที่บันทึกไว้)</string>
-  <string name="reset_saved_forms">แบบสำรวจที่บันทึกไว้(แฟ้มInstances, ฐานข้อมูลinstance)</string>
-  <string name="reset_blank_forms">แบบสำรวจเปล่า(แฟ้มแบบสำรวจ, ฐานข้อมูลแบบสำรวจ, ฐานข้อมูลitemsets)</string>
+  <string name="reset_saved_forms">แบบสำรวจที่บันทึกไว้ (แฟ้มInstances, ฐานข้อมูลinstance)</string>
+  <string name="reset_blank_forms">แบบสำรวจเปล่า (แฟ้มแบบสำรวจ, ฐานข้อมูลแบบสำรวจ, ฐานข้อมูลitemsets)</string>
   <string name="reset_layers">ชั้นข้อมูลแผนที่ (แฟ้มชั้นข้อมูล)</string>
   <string name="reset_settings_dialog_title">เลือกสิ่งที่ต้องตั้งค่าใหม่</string>
   <string name="reset_settings_button_reset">ตั้งค่าใหม่</string>
@@ -422,8 +453,13 @@
   <string name="reset_saved_forms_result">แบบสำรวจที่บันทึกไว้ :: %s</string>
   <string name="reset_blank_forms_result">แบบสำรวจเปล่า :: %s</string>
   <string name="reset_layers_result">ชั้นข้อมูลแผนที่ :: %s</string>
+  <string name="main_menu_settings">ตั้งค่าเมนูหลัก</string>
+  <string name="user_settings">ตั้งค่าผู้ใช้</string>
+  <string name="form_entry_setting">ตั้งค่าการป้อนข้อมูลแบบสำรวจ</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">บันทึกเป็นฉบับร่าง</string>
+  <string name="save_mid_summary">บันทึกเป็นฉบับร่าง</string>
   <!--##############################################
      # ABOUT
      ##############################################-->
@@ -453,6 +489,7 @@
   <!--##############################################
      # Projects
      ##############################################-->
+  <string name="settings">การตั้งค่า</string>
   <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
   <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
   <!--Button text for adding a duplicate project-->
@@ -505,14 +542,17 @@
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <!--Option provided in the Experimental settings to opt in/out of the newer ML Kit based barcode scanner-->
   <!--##############################################
     # Form saved Snackbar
     ##############################################-->
+  <string name="form_saved_as_draft">แบบสำรวจของท่านถูกบันทึกเป็นฉบับร่าง</string>
   <!--##############################################
     # Forms ready to send banner
     ##############################################-->
   <!--Message showed on main menu to inform users that the ability to edit finalized forms is going away-->
   <!--Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend-->
+  <string name="finalize_all_drafts">จบแบบสำรวจฉบับร่างทั้งหมด</string>
   <!--Dialog title that asks if the user wants to finalize all drafts-->
   <!--Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel-->
   <!--Message shown after bulk finalization when finalizing all drafts has succeeded-->
@@ -544,6 +584,7 @@
   <!--Text for the button that declines the recovery of the work-->
   <string name="do_not_recover">ยกเลิก</string>
   <!--Text for the button that initiates getting user location-->
+  <string name="get_point">ค่าตำแหน่ง/พิกัด</string>
   <!--Text for the button that displays a map for viewing or changing an already existing location-->
   <!--Text for the button that displays a map for viewing an already existing location-->
   <!--Text for the button that initiates getting user location when one is already present-->
@@ -557,10 +598,10 @@
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>
