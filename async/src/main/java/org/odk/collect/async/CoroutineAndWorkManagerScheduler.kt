@@ -1,5 +1,6 @@
 package org.odk.collect.async
 
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -24,6 +25,32 @@ class CoroutineAndWorkManagerScheduler(
         Dispatchers.IO,
         workManager
     ) // Needed for Java construction
+
+    override fun immediate(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        notificationInfo: NotificationInfo
+    ) {
+        val workManagerInputData = Data.Builder()
+            .putString(TaskSpecWorker.DATA_TASK_SPEC_CLASS, spec.javaClass.name)
+            .putBoolean(TaskSpecWorker.FOREGROUND, true)
+            .putInt(TaskSpecWorker.FOREGROUND_TYPE, FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+            .putString(TaskSpecWorker.FOREGROUND_NOTIFICATION_CHANNEL, notificationInfo.channel)
+            .putString(
+                TaskSpecWorker.FOREGROUND_NOTIFICATION_CHANNEL_NAME,
+                notificationInfo.channelName
+            )
+            .putString(TaskSpecWorker.FOREGROUND_NOTIFICATION_TITLE, notificationInfo.title)
+            .putAll(inputData)
+            .build()
+
+        val workRequest = OneTimeWorkRequest.Builder(TaskSpecWorker::class.java)
+            .addTag(tag)
+            .setInputData(workManagerInputData)
+            .build()
+        workManager.beginUniqueWork(tag, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
+    }
 
     override fun networkDeferred(
         tag: String,
@@ -82,6 +109,7 @@ class CoroutineAndWorkManagerScheduler(
             .addTag(tag)
             .setInputData(workManagerInputData)
             .setConstraints(constraints)
+            .setInitialDelay(repeatPeriod, TimeUnit.MILLISECONDS)
 
         spec.backoffPolicy?.let { backoffPolicy ->
             spec.backoffDelay?.let { backoffDelay ->

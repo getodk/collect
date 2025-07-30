@@ -1,12 +1,15 @@
 package org.odk.collect.testshared
 
+import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.async.Cancellable
+import org.odk.collect.async.NotificationInfo
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
 import java.util.LinkedList
@@ -41,6 +44,16 @@ class FakeScheduler : Scheduler {
         } else {
             foregroundTasks.push(runnable)
         }
+    }
+
+    override fun immediate(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        notificationInfo: NotificationInfo
+    ) {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        backgroundTasks.push(spec.getTask(context, inputData, true)::get)
     }
 
     override fun networkDeferred(

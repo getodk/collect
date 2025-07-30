@@ -28,6 +28,22 @@ interface Scheduler {
     fun immediate(foreground: Boolean = false, delay: Long? = null, runnable: Runnable)
 
     /**
+     * Run a task immediately.
+     *
+     * @param tag used to identify this task in future. If there is a previously scheduled task
+     * with the same tag then that task will be cancelled and this will replace it
+     * @param spec defines the task to be run
+     * @param notificationInfo the information needed to display a notification about this work
+     * to the user
+     */
+    fun immediate(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        notificationInfo: NotificationInfo
+    )
+
+    /**
      * Schedule a task to run in the background even if the app isn't running. The task
      * will only be run when the network is available.
      *
@@ -41,12 +57,12 @@ interface Scheduler {
 
     /**
      * Schedule a task to run in the background repeatedly even if the app isn't running. The task
-     * will only be run when the network is available.
+     * will only be run when the network is available
      *
      * @param tag used to identify this task in future. Previously scheduled tasks using the same
      * tag will be replaced
      * @param spec defines the task to be run
-     * @param repeatPeriod the period between each run of the task
+     * @param repeatPeriod the period between each run of the task and the delay before the first run
      * @param inputData a map of input data that can be accessed by the task
      */
     fun networkDeferredRepeat(
@@ -89,3 +105,5 @@ interface Scheduler {
 fun <T> Flow<T>.flowOnBackground(scheduler: Scheduler): Flow<T> {
     return scheduler.flowOnBackground(this)
 }
+
+data class NotificationInfo(val channel: String, val channelName: String, val title: String)
