@@ -9,7 +9,6 @@ import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
@@ -259,24 +258,7 @@ class SettingsImporterTest {
     }
 
     @Test
-    fun afterSettingsImportedAndMigrated_runsSettingsChangeHandler() {
-        importer = SettingsImporter(
-            settingsProvider,
-            { _: Settings?, _: Settings? -> },
-            settingsValidator,
-            generalDefaults,
-            adminDefaults,
-            settingsChangeHandler,
-            projectsRepository,
-            projectDetailsCreator
-        )
-        assertThat(importer.fromJSON(emptySettings(), currentProject, JSONObject()), `is`(ProjectConfigurationResult.SUCCESS))
-        verify(settingsChangeHandler).onSettingsChanged("1", false)
-        verifyNoMoreInteractions(settingsChangeHandler)
-    }
-
-    @Test
-    fun afterSettingsImportedAndMigrated_runsSettingsChangeIfFormUpdateSettingsChanged() {
+    fun afterSettingsImportedAndMigrated_runsSettingsChangeHandlerWithUpdatedKeys() {
         importer = SettingsImporter(
             settingsProvider,
             { _: Settings?, _: Settings? -> },
@@ -288,43 +270,29 @@ class SettingsImporterTest {
             projectDetailsCreator
         )
 
-        // First import
         var generalJson = JSONObject()
-            .put(ProjectKeys.KEY_FORM_UPDATE_MODE, "foo")
-            .put(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, "bar")
+            .put("key1", "default")
+            .put("key2", true)
+        var adminJson = JSONObject()
+            .put("key2", 5)
         var settings = JSONObject()
             .put(AppConfigurationKeys.GENERAL, generalJson)
-            .put(AppConfigurationKeys.ADMIN, JSONObject())
+            .put(AppConfigurationKeys.ADMIN, adminJson)
 
         assertThat(importer.fromJSON(settings.toString(), currentProject, JSONObject()), `is`(ProjectConfigurationResult.SUCCESS))
-        verify(settingsChangeHandler).onSettingsChanged("1", true)
+        verify(settingsChangeHandler).onSettingsChanged("1", emptyList(), emptyList())
 
-        // Second import - the same settings
-        assertThat(importer.fromJSON(settings.toString(), currentProject, JSONObject()), `is`(ProjectConfigurationResult.SUCCESS))
-        verify(settingsChangeHandler).onSettingsChanged("1", false)
-
-        // Third import - ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK updated
         generalJson = JSONObject()
-            .put(ProjectKeys.KEY_FORM_UPDATE_MODE, "bar")
-            .put(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, "bar")
+            .put("key1", "foo")
+            .put("key2", true)
+        adminJson = JSONObject()
+            .put("key2", 10)
         settings = JSONObject()
             .put(AppConfigurationKeys.GENERAL, generalJson)
-            .put(AppConfigurationKeys.ADMIN, JSONObject())
+            .put(AppConfigurationKeys.ADMIN, adminJson)
 
         assertThat(importer.fromJSON(settings.toString(), currentProject, JSONObject()), `is`(ProjectConfigurationResult.SUCCESS))
-        verify(settingsChangeHandler, times(2)).onSettingsChanged("1", true)
-
-        // Fourth import - ProjectKeys.KEY_FORM_UPDATE_MODE updated
-        generalJson = JSONObject()
-            .put(ProjectKeys.KEY_FORM_UPDATE_MODE, "bar")
-            .put(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, "foo")
-        settings = JSONObject()
-            .put(AppConfigurationKeys.GENERAL, generalJson)
-            .put(AppConfigurationKeys.ADMIN, JSONObject())
-
-        assertThat(importer.fromJSON(settings.toString(), currentProject, JSONObject()), `is`(ProjectConfigurationResult.SUCCESS))
-        verify(settingsChangeHandler, times(3)).onSettingsChanged("1", true)
-
+        verify(settingsChangeHandler).onSettingsChanged("1", listOf("key1"), listOf("key2"))
         verifyNoMoreInteractions(settingsChangeHandler)
     }
 
