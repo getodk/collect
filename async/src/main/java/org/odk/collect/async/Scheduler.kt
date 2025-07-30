@@ -57,12 +57,12 @@ interface Scheduler {
 
     /**
      * Schedule a task to run in the background repeatedly even if the app isn't running. The task
-     * will only be run when the network is available.
+     * will only be run when the network is available
      *
      * @param tag used to identify this task in future. Previously scheduled tasks using the same
      * tag will be replaced
      * @param spec defines the task to be run
-     * @param repeatPeriod the period between each run of the task
+     * @param repeatPeriod the period between each run of the task and the delay before the first run
      * @param inputData a map of input data that can be accessed by the task
      */
     fun networkDeferredRepeat(

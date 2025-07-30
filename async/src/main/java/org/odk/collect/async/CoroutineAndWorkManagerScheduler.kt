@@ -109,6 +109,7 @@ class CoroutineAndWorkManagerScheduler(
             .addTag(tag)
             .setInputData(workManagerInputData)
             .setConstraints(constraints)
+            .setInitialDelay(repeatPeriod, TimeUnit.MILLISECONDS)
 
         spec.backoffPolicy?.let { backoffPolicy ->
             spec.backoffDelay?.let { backoffDelay ->
