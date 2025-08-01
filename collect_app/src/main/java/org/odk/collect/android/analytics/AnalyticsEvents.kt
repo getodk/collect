@@ -75,10 +75,6 @@ object AnalyticsEvents {
 
     const val FORMS_PROVIDER_QUERY = "FormsProviderQuery"
 
-    const val FORMS_PROVIDER_INSERT = "FormsProviderInsert"
-
-    const val FORMS_PROVIDER_UPDATE = "FormsProviderUpdate"
-
     const val FORMS_PROVIDER_DELETE = "FormsProviderDelete"
 
     const val INSTANCE_PROVIDER_QUERY = "InstanceProviderQuery"
@@ -109,4 +105,9 @@ object AnalyticsEvents {
      * Tracks how often projects are reset
      */
     const val RESET_PROJECT = "ResetProject"
+
+    /**
+     * Tracks how often finalized or sent forms are edited
+     */
+    const val EDIT_FINALIZED_OR_SENT_FORM = "EditFinalizedOrSentForm"
 }
