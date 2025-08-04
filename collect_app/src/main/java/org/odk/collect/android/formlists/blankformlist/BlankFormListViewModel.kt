@@ -88,7 +88,7 @@ class BlankFormListViewModel(
                 NotificationInfo(
                     SYNC_NOTIFICATION_CHANNEL_NAME,
                     SYNC_NOTIFICATION_CHANNEL,
-                    "Syncing forms"
+                    org.odk.collect.strings.R.string.form_update_notification_title
                 )
             )
         } else {

@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.os.Build
+import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.work.ForegroundInfo
 import androidx.work.WorkManager
@@ -34,7 +35,7 @@ class TaskSpecWorker(
                 inputData.getString(FOREGROUND_NOTIFICATION_CHANNEL_NAME)!!
             setupNotificationChannel(notificationChannel, notificationChannelName)
 
-            val notificationTitle = inputData.getString(FOREGROUND_NOTIFICATION_TITLE)!!
+            val notificationTitle = inputData.getInt(FOREGROUND_NOTIFICATION_TITLE, -1)
             setForegroundAsync(
                 getForegroundInfo(
                     applicationContext,
@@ -72,13 +73,13 @@ class TaskSpecWorker(
         context: Context,
         foregroundType: Int,
         notificationChannel: String,
-        notificationTitle: String
+        @StringRes notificationTitle: Int
     ): ForegroundInfo {
         val intent = WorkManager.getInstance(context).createCancelPendingIntent(id)
 
         val notification = NotificationCompat.Builder(applicationContext, notificationChannel)
             .setSmallIcon(org.odk.collect.icons.R.drawable.ic_notification_small)
-            .setContentTitle(notificationTitle)
+            .setContentTitle(context.getString(notificationTitle))
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setContentIntent(intent)
             .build()

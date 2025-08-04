@@ -1,5 +1,6 @@
 package org.odk.collect.async
 
+import androidx.annotation.StringRes
 import kotlinx.coroutines.flow.Flow
 import java.util.function.Consumer
 import java.util.function.Supplier
@@ -106,4 +107,4 @@ fun <T> Flow<T>.flowOnBackground(scheduler: Scheduler): Flow<T> {
     return scheduler.flowOnBackground(this)
 }
 
-data class NotificationInfo(val channel: String, val channelName: String, val title: String)
+data class NotificationInfo(val channel: String, val channelName: String, @StringRes val title: Int)

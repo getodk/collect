@@ -41,7 +41,7 @@ class CoroutineAndWorkManagerScheduler(
                 TaskSpecWorker.FOREGROUND_NOTIFICATION_CHANNEL_NAME,
                 notificationInfo.channelName
             )
-            .putString(TaskSpecWorker.FOREGROUND_NOTIFICATION_TITLE, notificationInfo.title)
+            .putInt(TaskSpecWorker.FOREGROUND_NOTIFICATION_TITLE, notificationInfo.title)
             .putAll(inputData)
             .build()
 
