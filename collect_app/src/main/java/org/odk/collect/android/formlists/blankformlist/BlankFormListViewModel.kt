@@ -88,7 +88,7 @@ class BlankFormListViewModel(
                 NotificationInfo(
                     "form_updates",
                     "Form updates",
-                    "Syncing forms with the server..."
+                    "Syncing forms"
                 )
             )
         } else {
