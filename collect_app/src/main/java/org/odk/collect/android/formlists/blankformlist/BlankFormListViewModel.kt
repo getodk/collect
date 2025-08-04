@@ -82,12 +82,12 @@ class BlankFormListViewModel(
 
         if (FeatureFlags.FOREGROUND_SERVICE_UPDATES) {
             scheduler.immediate(
-                "match_exactly_foreground:$projectId",
+                getSyncTag(projectId),
                 SyncFormsTaskSpec(),
                 mapOf(TaskData.DATA_PROJECT_ID to projectId),
                 NotificationInfo(
-                    "form_updates",
-                    "Form updates",
+                    SYNC_NOTIFICATION_CHANNEL_NAME,
+                    SYNC_NOTIFICATION_CHANNEL,
                     "Syncing forms"
                 )
             )
@@ -204,5 +204,14 @@ class BlankFormListViewModel(
         DATE_DESC,
         DATE_ASC,
         LAST_SAVED
+    }
+
+    companion object {
+        private val SYNC_NOTIFICATION_CHANNEL = "form_updates"
+        private val SYNC_NOTIFICATION_CHANNEL_NAME = "Form updates"
+
+        private fun getSyncTag(projectId: String): String {
+            return "match_exactly_foreground:$projectId"
+        }
     }
 }
