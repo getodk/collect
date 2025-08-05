@@ -16,7 +16,7 @@ package org.odk.collect.android.formmanagement
 import org.odk.collect.forms.ManifestFile
 import java.io.Serializable
 
-data class ServerFormDetails(
+data class ServerFormDetails @JvmOverloads constructor(
     val formName: String?,
     val downloadUrl: String?,
     val formId: String?,
@@ -24,10 +24,11 @@ data class ServerFormDetails(
     val hash: String?,
     val isNotOnDevice: Boolean,
     val isUpdated: Boolean,
-    val manifest: ManifestFile?
+    val manifest: ManifestFile?,
+    val mediaOnlyUpdate: Boolean = false
 ) : Serializable {
 
     companion object {
-        private const val serialVersionUID = 1L
+        private const val serialVersionUID = 2L
     }
 }

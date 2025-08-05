@@ -31,8 +31,14 @@ class CollectSettingsChangeHandler(
         }
     }
 
-    override fun onSettingsChanged(projectId: String) {
+    override fun onSettingsChanged(
+        projectId: String,
+        changedUnprotectedKeys: List<String>,
+        changedProtectedKeys: List<String>
+    ) {
         propertyManager.reload()
-        formUpdateScheduler.scheduleUpdates(projectId)
+        if (changedUnprotectedKeys.contains(ProjectKeys.KEY_FORM_UPDATE_MODE) || changedUnprotectedKeys.contains(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)) {
+            formUpdateScheduler.scheduleUpdates(projectId)
+        }
     }
 }

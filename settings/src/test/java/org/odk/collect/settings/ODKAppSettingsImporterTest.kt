@@ -78,7 +78,7 @@ class ODKAppSettingsImporterTest {
 
     @Test
     fun `rejects JSON when exception is thrown during importing`() {
-        whenever(settingsChangeHandler.onSettingsChanged(any())).thenThrow(RuntimeException::class.java)
+        whenever(settingsChangeHandler.onSettingsChanged(any(), any(), any())).thenThrow(RuntimeException::class.java)
 
         val result = settingsImporter.fromJSON(
             "{\n" +

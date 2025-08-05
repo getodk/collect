@@ -258,7 +258,7 @@ class SettingsImporterTest {
     }
 
     @Test
-    fun afterSettingsImportedAndMigrated_runsSettingsChangeHandler() {
+    fun afterSettingsImportedAndMigrated_runsSettingsChangeHandlerWithUpdatedKeys() {
         importer = SettingsImporter(
             settingsProvider,
             { _: Settings?, _: Settings? -> },
@@ -269,8 +269,30 @@ class SettingsImporterTest {
             projectsRepository,
             projectDetailsCreator
         )
-        assertThat(importer.fromJSON(emptySettings(), currentProject, JSONObject()), `is`(ProjectConfigurationResult.SUCCESS))
-        verify(settingsChangeHandler).onSettingsChanged("1")
+
+        var generalJson = JSONObject()
+            .put("key1", "default")
+            .put("key2", true)
+        var adminJson = JSONObject()
+            .put("key2", 5)
+        var settings = JSONObject()
+            .put(AppConfigurationKeys.GENERAL, generalJson)
+            .put(AppConfigurationKeys.ADMIN, adminJson)
+
+        assertThat(importer.fromJSON(settings.toString(), currentProject, JSONObject()), `is`(ProjectConfigurationResult.SUCCESS))
+        verify(settingsChangeHandler).onSettingsChanged("1", emptyList(), emptyList())
+
+        generalJson = JSONObject()
+            .put("key1", "foo")
+            .put("key2", true)
+        adminJson = JSONObject()
+            .put("key2", 10)
+        settings = JSONObject()
+            .put(AppConfigurationKeys.GENERAL, generalJson)
+            .put(AppConfigurationKeys.ADMIN, adminJson)
+
+        assertThat(importer.fromJSON(settings.toString(), currentProject, JSONObject()), `is`(ProjectConfigurationResult.SUCCESS))
+        verify(settingsChangeHandler).onSettingsChanged("1", listOf("key1"), listOf("key2"))
         verifyNoMoreInteractions(settingsChangeHandler)
     }
 
