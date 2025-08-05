@@ -110,4 +110,9 @@ object AnalyticsEvents {
      * Tracks how often finalized or sent forms are edited
      */
     const val EDIT_FINALIZED_OR_SENT_FORM = "EditFinalizedOrSentForm"
+
+    /**
+     * Tracks how often shortcuts for forms are added
+     */
+    const val ADD_SHORTCUT = "AddShortcut"
 }
