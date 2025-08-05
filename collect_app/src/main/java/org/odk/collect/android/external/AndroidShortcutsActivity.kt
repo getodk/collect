@@ -15,17 +15,22 @@ package org.odk.collect.android.external
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.formlists.blankformlist.BlankFormListItem
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.settings.SettingsProvider
+import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -79,12 +84,26 @@ class AndroidShortcutsActivity : AppCompatActivity() {
             data = forms[item].contentUri
         }
 
-        return Intent().apply {
-            putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent)
-            putExtra(Intent.EXTRA_SHORTCUT_NAME, forms[item].formName)
-            val iconResource: Parcelable =
-                Intent.ShortcutIconResource.fromContext(this@AndroidShortcutsActivity, R.drawable.notes)
-            putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource)
+        return if (Build.VERSION.SDK_INT >= 36) {
+            ShortcutManagerCompat.createShortcutResultIntent(
+                this,
+                ShortcutInfoCompat.Builder(this, UUID.randomUUID().toString())
+                    .setIntent(shortcutIntent)
+                    .setShortLabel(forms[item].formName)
+                    .setIcon(IconCompat.createWithResource(this, R.drawable.notes))
+                    .build()
+            )
+        } else {
+            Intent().apply {
+                putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent)
+                putExtra(Intent.EXTRA_SHORTCUT_NAME, forms[item].formName)
+                val iconResource: Parcelable =
+                    Intent.ShortcutIconResource.fromContext(
+                        this@AndroidShortcutsActivity,
+                        R.drawable.notes
+                    )
+                putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource)
+            }
         }
     }
 }
