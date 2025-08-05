@@ -1,5 +1,7 @@
 package org.odk.collect.android.feature.formentry
 
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -82,5 +84,26 @@ class EncryptedFormTest {
             .clickFinalize()
             .checkIsToastWithMessageDisplayed("This form does not specify an instanceID. You must specify one to enable encryption. Form has not been saved as finalized.")
             .startBlankForm("encrypted-no-instanceID")
+    }
+
+    @Test
+    fun unicodeInEncryptedSubmissionsShouldBePreserved() {
+        rule.startAtMainMenu()
+            .copyForm("one-question-encrypted-unicode.xml")
+            .setServer(testDependencies.server.url)
+
+            .startBlankForm("One Question Encrypted Unicode")
+            .assertQuestion("what is your age")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickSelectAll()
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
+
+        val submission = testDependencies.server.submissions[0]
+        assertThat(submission.readText().contains("one_questión_encrypted_unicode"), equalTo(true))
+        assertThat(submission.readText().contains("versión 4"), equalTo(true))
     }
 }
