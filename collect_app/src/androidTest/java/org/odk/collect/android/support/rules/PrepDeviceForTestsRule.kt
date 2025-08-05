@@ -14,20 +14,25 @@ class PrepDeviceForTestsRule : TestRule {
     override fun apply(base: Statement, description: Description): Statement {
         return object : Statement() {
             override fun evaluate() {
-                disableAnimations()
-                increaseLongPressTimeout()
+                setAnimationScale(0)
+                setLongPressTimeout(3000)
 
-                base.evaluate()
+                try {
+                    base.evaluate()
+                } finally {
+                    setAnimationScale(1)
+                    setLongPressTimeout(500)
+                }
             }
         }
     }
 
-    private fun increaseLongPressTimeout() {
-        executeShellCommand("settings put secure long_press_timeout 3000")
+    private fun setLongPressTimeout(timeout: Int) {
+        executeShellCommand("settings put secure long_press_timeout $timeout")
     }
 
-    private fun disableAnimations() {
-        ANIMATIONS.forEach { executeShellCommand("settings put global $it 0") }
+    private fun setAnimationScale(scale: Int) {
+        ANIMATIONS.forEach { executeShellCommand("settings put global $it $scale") }
     }
 
     private fun executeShellCommand(command: String) {
