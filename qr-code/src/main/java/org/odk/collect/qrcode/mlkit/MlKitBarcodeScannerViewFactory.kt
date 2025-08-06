@@ -17,8 +17,12 @@ import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
+import org.odk.collect.qrcode.BarcodeCandidate
+import org.odk.collect.qrcode.BarcodeFilter
+import org.odk.collect.qrcode.BarcodeFormat
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
+import org.odk.collect.qrcode.DetectedBarcode
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
 
 class MlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
@@ -103,6 +107,7 @@ private class MlKitBarcodeScannerView(
         val barcodeScanner = BarcodeScanning.getClient(options)
 
         val executor = ContextCompat.getMainExecutor(context)
+        val barcodeFilter = BarcodeFilter(binding.scannerOverlay.viewFinderRect, 10)
         cameraController.setImageAnalysisAnalyzer(
             executor,
             MlKitAnalyzer(
@@ -111,8 +116,8 @@ private class MlKitBarcodeScannerView(
                 executor
             ) { result: MlKitAnalyzer.Result ->
                 val value = result.getValue(barcodeScanner)
-                val barcode = value?.firstOrNull()
-
+                val barcodeCandidates = value?.map { it.toCandidate() } ?: emptyList()
+                val barcode = barcodeFilter.filter(barcodeCandidates)
                 if (barcode != null) {
                     val contents = processBarcode(barcode)
                     if (!contents.isNullOrEmpty()) {
@@ -138,20 +143,35 @@ private class MlKitBarcodeScannerView(
         }
     }
 
-    private fun processBarcode(barcode: Barcode): String? {
-        val bytes = barcode.rawBytes
-        val utf8Contents = barcode.rawValue
+    private fun processBarcode(barcode: DetectedBarcode): String? {
+        return when (barcode) {
+            is DetectedBarcode.Utf8 -> {
+                barcode.contents
+            }
 
-        return if (!utf8Contents.isNullOrEmpty()) {
-            utf8Contents
-        } else if (bytes != null && barcode.format == Barcode.FORMAT_PDF417) {
-            /**
-             * Allow falling back to Latin encoding for PDF417 barcodes. This provides parity
-             * with the Zxing implementation.
-             */
-            String(bytes, Charsets.ISO_8859_1)
-        } else {
-            null
+            is DetectedBarcode.Bytes -> {
+                if (barcode.format == BarcodeFormat.PDF417) {
+                    /**
+                     * Allow falling back to Latin encoding for PDF417 barcodes. This provides parity
+                     * with the Zxing implementation.
+                     */
+                    String(barcode.bytes, Charsets.ISO_8859_1)
+                } else {
+                    null
+                }
+            }
+        }
+    }
+
+    companion object {
+
+        private fun Barcode.toCandidate(): BarcodeCandidate {
+            val format = when (this.format) {
+                Barcode.FORMAT_PDF417 -> BarcodeFormat.PDF417
+                else -> BarcodeFormat.OTHER
+            }
+
+            return BarcodeCandidate(this.rawBytes, this.rawValue, this.boundingBox, format)
         }
     }
 }

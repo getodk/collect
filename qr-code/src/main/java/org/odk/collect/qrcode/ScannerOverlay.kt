@@ -5,12 +5,15 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
 import kotlin.math.max
 import kotlin.math.roundToInt
 
-class ScannerOverlay(context: Context, attrs: AttributeSet?) :
+internal class ScannerOverlay(context: Context, attrs: AttributeSet?) :
     View(context, attrs) {
 
     private val laserPaint = Paint().also {
@@ -22,61 +25,55 @@ class ScannerOverlay(context: Context, attrs: AttributeSet?) :
         it.alpha = 75
     }
 
+    private val viewFinderPaint = Paint().apply {
+        xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+    }
+
+    var viewFinderRect = Rect()
+        private set
+
+    init {
+        // Provides better performance for using `PorterDuff.Mode.CLEAR`
+        setLayerType(LAYER_TYPE_HARDWARE, null)
+    }
+
     private val laserAnim = ValueAnimator.ofFloat(0f, 255f).also { animator ->
-        animator.setDuration(320)
+        animator.duration = 320
         animator.repeatCount = ValueAnimator.INFINITE
         animator.repeatMode = ValueAnimator.REVERSE
     }
 
     override fun onDraw(canvas: Canvas) {
-        val verticalBorder = max((height - SQUARE_SIZE) / 2f, MIN_BORDER_SIZE)
-        val horizontalBorder = max((width - SQUARE_SIZE) / 2f, MIN_BORDER_SIZE)
-
-        drawBorder(canvas, horizontalBorder, verticalBorder)
-        drawLaser(canvas, horizontalBorder)
+        drawBorder(canvas)
+        drawLaser(canvas)
     }
 
-    private fun drawBorder(canvas: Canvas, horizontalSize: Float, verticalSize: Float) {
-        // Top
-        canvas.drawRect(
-            0f,
-            0f,
-            width.toFloat(),
-            verticalSize,
-            borderPaint
+    private fun drawBorder(canvas: Canvas) {
+        val verticalBorder = max((height - VIEW_FINDER_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
+        val horizontalBorder = max((width - VIEW_FINDER_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
+        viewFinderRect.set(
+            horizontalBorder,
+            verticalBorder,
+            this.width - horizontalBorder,
+            this.height - verticalBorder
         )
 
-        // Left
-        canvas.drawRect(
-            0f,
-            verticalSize,
-            horizontalSize,
-            height.toFloat() - verticalSize,
-            borderPaint
-        )
+        // Draw full screen semi-transparent overlay
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), borderPaint)
 
-        // Right
+        // Clear the center
         canvas.drawRect(
-            width.toFloat() - horizontalSize,
-            verticalSize,
-            width.toFloat(),
-            height.toFloat() - verticalSize,
-            borderPaint
-        )
-
-        // Bottom
-        canvas.drawRect(
-            0f,
-            height.toFloat() - verticalSize,
-            width.toFloat(),
-            height.toFloat(),
-            borderPaint
+            viewFinderRect.left.toFloat(),
+            viewFinderRect.top.toFloat(),
+            viewFinderRect.right.toFloat(),
+            viewFinderRect.bottom.toFloat(),
+            viewFinderPaint
         )
     }
 
-    private fun drawLaser(canvas: Canvas, horizontalBorder: Float) {
+    private fun drawLaser(canvas: Canvas) {
         val verticalMid = height / 2
-        val horizontalMargin = horizontalBorder + 8f
+        val horizontalMargin = viewFinderRect.left + 8f
 
         canvas.drawRect(
             0f + horizontalMargin,
@@ -102,7 +99,7 @@ class ScannerOverlay(context: Context, attrs: AttributeSet?) :
     }
 
     companion object {
-        const val SQUARE_SIZE = 820f
+        const val VIEW_FINDER_SIZE = 820f
         const val MIN_BORDER_SIZE = 80f
     }
 }
