@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import android.os.Build
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
@@ -39,7 +40,6 @@ class TaskSpecWorker(
             setForegroundAsync(
                 getForegroundInfo(
                     applicationContext,
-                    inputData.getInt(FOREGROUND_TYPE, -1),
                     notificationChannel,
                     notificationTitle
                 )
@@ -71,7 +71,6 @@ class TaskSpecWorker(
 
     private fun getForegroundInfo(
         context: Context,
-        foregroundType: Int,
         notificationChannel: String,
         @StringRes notificationTitle: Int
     ): ForegroundInfo {
@@ -84,7 +83,11 @@ class TaskSpecWorker(
             .setContentIntent(intent)
             .build()
 
-        return ForegroundInfo(1, notification, foregroundType)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ForegroundInfo(1, notification, FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        } else {
+            ForegroundInfo(1, notification)
+        }
     }
 
     private fun setupNotificationChannel(
@@ -111,7 +114,6 @@ class TaskSpecWorker(
         const val DATA_CELLULAR_ONLY = "cellularOnly"
 
         const val FOREGROUND = "foreground"
-        const val FOREGROUND_TYPE = "foreground_type"
         const val FOREGROUND_NOTIFICATION_CHANNEL = "notification_channel"
         const val FOREGROUND_NOTIFICATION_CHANNEL_NAME = "notification_channel_name"
         const val FOREGROUND_NOTIFICATION_TITLE = "notification_title"
