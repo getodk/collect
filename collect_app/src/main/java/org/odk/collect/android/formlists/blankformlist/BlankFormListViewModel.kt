@@ -10,7 +10,11 @@ import androidx.lifecycle.map
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import org.odk.collect.android.application.FeatureFlags
+import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec
+import org.odk.collect.android.backgroundwork.TaskData
 import org.odk.collect.android.formmanagement.FormsDataService
+import org.odk.collect.async.NotificationInfo
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.flowOnBackground
 import org.odk.collect.forms.Form
@@ -75,14 +79,30 @@ class BlankFormListViewModel(
 
     fun syncWithServer(): LiveData<Boolean> {
         val result = MutableLiveData<Boolean>()
-        scheduler.immediate(
-            {
-                formsDataService.matchFormsWithServer(projectId)
-            },
-            { value: Boolean ->
-                result.value = value
-            }
-        )
+
+        if (FeatureFlags.FOREGROUND_SERVICE_UPDATES) {
+            scheduler.immediate(
+                getSyncTag(projectId),
+                SyncFormsTaskSpec(),
+                mapOf(TaskData.DATA_PROJECT_ID to projectId),
+                NotificationInfo(
+                    SYNC_NOTIFICATION_ID,
+                    SYNC_NOTIFICATION_CHANNEL_NAME,
+                    SYNC_NOTIFICATION_CHANNEL,
+                    org.odk.collect.strings.R.string.form_update_notification_title
+                )
+            )
+        } else {
+            scheduler.immediate(
+                {
+                    formsDataService.matchFormsWithServer(projectId)
+                },
+                { value: Boolean ->
+                    result.value = value
+                }
+            )
+        }
+
         return result
     }
 
@@ -185,5 +205,16 @@ class BlankFormListViewModel(
         DATE_DESC,
         DATE_ASC,
         LAST_SAVED
+    }
+
+    companion object {
+        private const val SYNC_NOTIFICATION_CHANNEL = "form_updates"
+        private const val SYNC_NOTIFICATION_CHANNEL_NAME = "Form updates"
+
+        private const val SYNC_NOTIFICATION_ID = 1
+
+        private fun getSyncTag(projectId: String): String {
+            return "match_exactly_foreground:$projectId"
+        }
     }
 }

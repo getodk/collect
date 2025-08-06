@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assume.assumeFalse
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,6 +17,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.odk.collect.android.application.FeatureFlags
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.Form
@@ -58,6 +60,8 @@ class BlankFormListViewModelTest {
 
     @Test
     fun `syncWithServer when task finishes sets result to true`() {
+        assumeFalse(FeatureFlags.FOREGROUND_SERVICE_UPDATES)
+
         createViewModel()
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
         doReturn(true).whenever(formsDataService).matchFormsWithServer(projectId)
@@ -68,6 +72,8 @@ class BlankFormListViewModelTest {
 
     @Test
     fun `syncWithServer when there is an error sets result to false`() {
+        assumeFalse(FeatureFlags.FOREGROUND_SERVICE_UPDATES)
+
         createViewModel()
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
         doReturn(false).whenever(formsDataService).matchFormsWithServer(projectId)
