@@ -5,6 +5,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
@@ -22,7 +24,16 @@ internal class ScannerOverlay(context: Context, attrs: AttributeSet?) :
         it.alpha = 75
     }
 
+    private val viewFinderPaint = Paint().apply {
+        xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+    }
+
     var viewFinderRect = Rect()
+
+    init {
+        // Provides better performance for using `PorterDuff.Mode.CLEAR`
+        setLayerType(LAYER_TYPE_HARDWARE, null)
+    }
 
     private val laserAnim = ValueAnimator.ofFloat(0f, 255f).also { animator ->
         animator.duration = 320
@@ -36,40 +47,16 @@ internal class ScannerOverlay(context: Context, attrs: AttributeSet?) :
     }
 
     private fun drawBorder(canvas: Canvas) {
-        // Top
-        canvas.drawRect(
-            0f,
-            0f,
-            width.toFloat(),
-            viewFinderRect.top.toFloat(),
-            borderPaint
-        )
+        // Draw full screen semi-transparent overlay
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), borderPaint)
 
-        // Left
+        // Clear the center
         canvas.drawRect(
-            0f,
-            viewFinderRect.top.toFloat(),
             viewFinderRect.left.toFloat(),
-            viewFinderRect.bottom.toFloat(),
-            borderPaint
-        )
-
-        // Right
-        canvas.drawRect(
-            viewFinderRect.right.toFloat(),
             viewFinderRect.top.toFloat(),
-            width.toFloat(),
+            viewFinderRect.right.toFloat(),
             viewFinderRect.bottom.toFloat(),
-            borderPaint
-        )
-
-        // Bottom
-        canvas.drawRect(
-            0f,
-            viewFinderRect.bottom.toFloat(),
-            width.toFloat(),
-            height.toFloat(),
-            borderPaint
+            viewFinderPaint
         )
     }
 
