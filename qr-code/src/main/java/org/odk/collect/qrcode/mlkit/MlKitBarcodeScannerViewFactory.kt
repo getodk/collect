@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.graphics.Rect
 import android.view.LayoutInflater
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
@@ -25,7 +24,6 @@ import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.DetectedBarcode
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
-import kotlin.math.max
 
 class MlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
     override fun create(
@@ -75,8 +73,6 @@ private class MlKitBarcodeScannerView(
         MlkitBarcodeScannerLayoutBinding.inflate(LayoutInflater.from(context), this, true)
     private val cameraController = LifecycleCameraController(context)
 
-    private val viewFinderRect = Rect()
-
     init {
         binding.prompt.text = prompt
 
@@ -111,7 +107,7 @@ private class MlKitBarcodeScannerView(
         val barcodeScanner = BarcodeScanning.getClient(options)
 
         val executor = ContextCompat.getMainExecutor(context)
-        val barcodeFilter = BarcodeFilter(viewFinderRect, 10)
+        val barcodeFilter = BarcodeFilter(binding.scannerOverlay.viewFinderRect, 10)
         cameraController.setImageAnalysisAnalyzer(
             executor,
             MlKitAnalyzer(
@@ -147,26 +143,6 @@ private class MlKitBarcodeScannerView(
         }
     }
 
-    override fun onLayout(
-        changed: Boolean,
-        left: Int,
-        top: Int,
-        right: Int,
-        bottom: Int
-    ) {
-        val verticalBorder = max((height - VIEW_FINDER_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
-        val horizontalBorder = max((width - VIEW_FINDER_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
-        viewFinderRect.set(
-            horizontalBorder,
-            verticalBorder,
-            this.width - horizontalBorder,
-            this.height - verticalBorder
-        )
-
-        binding.scannerOverlay.viewFinderRect = viewFinderRect
-        super.onLayout(changed, left, top, right, bottom)
-    }
-
     private fun processBarcode(barcode: DetectedBarcode): String? {
         return when (barcode) {
             is DetectedBarcode.Utf8 -> {
@@ -188,8 +164,6 @@ private class MlKitBarcodeScannerView(
     }
 
     companion object {
-        const val VIEW_FINDER_SIZE = 820f
-        const val MIN_BORDER_SIZE = 80f
 
         private fun Barcode.toCandidate(): BarcodeCandidate {
             val format = when (this.format) {
