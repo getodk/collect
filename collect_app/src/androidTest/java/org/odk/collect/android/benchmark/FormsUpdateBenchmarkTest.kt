@@ -8,7 +8,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.application.FeatureFlags
 import org.odk.collect.android.benchmark.support.Benchmarker
 import org.odk.collect.android.benchmark.support.benchmark
 import org.odk.collect.android.support.TestDependencies
@@ -105,7 +104,7 @@ class FormsUpdateBenchmarkTest {
             .clickGetBlankForm()
             .benchmark(
                 "Redownloading a form with 1k media files and entity list when there are no updates",
-                if (FeatureFlags.FASTER_FORM_UPDATES) 5 else 15,
+                15,
                 benchmarker
             ) {
                 it
