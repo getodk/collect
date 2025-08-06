@@ -41,7 +41,8 @@ class TaskSpecWorker(
                 getForegroundInfo(
                     applicationContext,
                     notificationChannel,
-                    notificationTitle
+                    notificationTitle,
+                    inputData.getInt(FOREGROUND_NOTIFICATION_ID, -1)
                 )
             )
         }
@@ -72,7 +73,8 @@ class TaskSpecWorker(
     private fun getForegroundInfo(
         context: Context,
         notificationChannel: String,
-        @StringRes notificationTitle: Int
+        @StringRes notificationTitle: Int,
+        notificationId: Int
     ): ForegroundInfo {
         val intent = WorkManager.getInstance(context).createCancelPendingIntent(id)
 
@@ -84,9 +86,9 @@ class TaskSpecWorker(
             .build()
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ForegroundInfo(1, notification, FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+            ForegroundInfo(notificationId, notification, FOREGROUND_SERVICE_TYPE_DATA_SYNC)
         } else {
-            ForegroundInfo(1, notification)
+            ForegroundInfo(notificationId, notification)
         }
     }
 
@@ -117,5 +119,6 @@ class TaskSpecWorker(
         const val FOREGROUND_NOTIFICATION_CHANNEL = "notification_channel"
         const val FOREGROUND_NOTIFICATION_CHANNEL_NAME = "notification_channel_name"
         const val FOREGROUND_NOTIFICATION_TITLE = "notification_title"
+        const val FOREGROUND_NOTIFICATION_ID = "notification_id"
     }
 }

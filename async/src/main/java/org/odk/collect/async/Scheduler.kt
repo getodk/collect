@@ -54,7 +54,12 @@ interface Scheduler {
      * @param inputData a map of input data that can be accessed by the task
      * @param networkConstraint the specific kind of network required
      */
-    fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>, networkConstraint: NetworkType? = null)
+    fun networkDeferred(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        networkConstraint: NetworkType? = null
+    )
 
     /**
      * Schedule a task to run in the background repeatedly even if the app isn't running. The task
@@ -107,4 +112,9 @@ fun <T> Flow<T>.flowOnBackground(scheduler: Scheduler): Flow<T> {
     return scheduler.flowOnBackground(this)
 }
 
-data class NotificationInfo(val channel: String, val channelName: String, @StringRes val title: Int)
+data class NotificationInfo(
+    val id: Int,
+    val channel: String,
+    val channelName: String,
+    @StringRes val title: Int
+)

@@ -86,6 +86,7 @@ class BlankFormListViewModel(
                 SyncFormsTaskSpec(),
                 mapOf(TaskData.DATA_PROJECT_ID to projectId),
                 NotificationInfo(
+                    SYNC_NOTIFICATION_ID,
                     SYNC_NOTIFICATION_CHANNEL_NAME,
                     SYNC_NOTIFICATION_CHANNEL,
                     org.odk.collect.strings.R.string.form_update_notification_title
@@ -207,8 +208,10 @@ class BlankFormListViewModel(
     }
 
     companion object {
-        private val SYNC_NOTIFICATION_CHANNEL = "form_updates"
-        private val SYNC_NOTIFICATION_CHANNEL_NAME = "Form updates"
+        private const val SYNC_NOTIFICATION_CHANNEL = "form_updates"
+        private const val SYNC_NOTIFICATION_CHANNEL_NAME = "Form updates"
+
+        private const val SYNC_NOTIFICATION_ID = 1
 
         private fun getSyncTag(projectId: String): String {
             return "match_exactly_foreground:$projectId"
