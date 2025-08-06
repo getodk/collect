@@ -9,7 +9,7 @@ class BarcodeFilter(private val bounds: Rect, private val threshold: Int = 1) {
 
     fun filter(barcodeCandidates: List<BarcodeCandidate>): DetectedBarcode? {
         val candidate = barcodeCandidates.firstOrNull()
-        return if (candidate != null && candidate.boundingBox != null && bounds.contains(candidate.boundingBox)) {
+        return if (candidate?.boundingBox != null && bounds.contains(candidate.boundingBox)) {
             if (!candidate.bytes.contentEquals(potential?.bytes)) {
                 potential = candidate
                 potentialOccurrences = 0
