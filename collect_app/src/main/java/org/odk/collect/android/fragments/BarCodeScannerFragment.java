@@ -72,7 +72,11 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
         }
 
         barcodeScannerViewContainer.getBarcodeScannerView().getLatestBarcode().observe(getViewLifecycleOwner(), result -> {
-            beepManager.playBeepSoundAndVibrate();
+            try {
+                beepManager.playBeepSoundAndVibrate();
+            } catch (Exception ignored) {
+                // ignored
+            }
             handleScanningResult(result);
         });
 
