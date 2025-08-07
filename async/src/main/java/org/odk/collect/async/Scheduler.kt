@@ -1,5 +1,6 @@
 package org.odk.collect.async
 
+import androidx.annotation.StringRes
 import kotlinx.coroutines.flow.Flow
 import java.util.function.Consumer
 import java.util.function.Supplier
@@ -28,6 +29,22 @@ interface Scheduler {
     fun immediate(foreground: Boolean = false, delay: Long? = null, runnable: Runnable)
 
     /**
+     * Run a task immediately.
+     *
+     * @param tag used to identify this task in future. If there is a previously scheduled task
+     * with the same tag then that task will be cancelled and this will replace it
+     * @param spec defines the task to be run
+     * @param notificationInfo the information needed to display a notification about this work
+     * to the user
+     */
+    fun immediate(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        notificationInfo: NotificationInfo
+    )
+
+    /**
      * Schedule a task to run in the background even if the app isn't running. The task
      * will only be run when the network is available.
      *
@@ -37,7 +54,12 @@ interface Scheduler {
      * @param inputData a map of input data that can be accessed by the task
      * @param networkConstraint the specific kind of network required
      */
-    fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>, networkConstraint: NetworkType? = null)
+    fun networkDeferred(
+        tag: String,
+        spec: TaskSpec,
+        inputData: Map<String, String>,
+        networkConstraint: NetworkType? = null
+    )
 
     /**
      * Schedule a task to run in the background repeatedly even if the app isn't running. The task
@@ -89,3 +111,10 @@ interface Scheduler {
 fun <T> Flow<T>.flowOnBackground(scheduler: Scheduler): Flow<T> {
     return scheduler.flowOnBackground(this)
 }
+
+data class NotificationInfo(
+    val id: Int,
+    val channel: String,
+    val channelName: String,
+    @StringRes val title: Int
+)
