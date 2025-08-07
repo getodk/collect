@@ -37,6 +37,7 @@ dependencies {
     implementation(project(":settings"))
     implementation(project(":shared"))
     implementation(project(":projects"))
+    implementation(project(":analytics"))
 
     testImplementation(project(":test-shared"))
     testImplementation(libs.mockitoKotlin)
