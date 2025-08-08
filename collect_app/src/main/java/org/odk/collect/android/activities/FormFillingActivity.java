@@ -169,7 +169,6 @@ import org.odk.collect.android.widgets.range.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
-import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.PlayServicesChecker;
@@ -180,6 +179,8 @@ import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
+import org.odk.collect.audioclips.AudioPlayer;
+import org.odk.collect.audioclips.AudioPlayerFactory;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.forms.Form;
@@ -358,6 +359,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     @Inject
     public ChangeLockProvider changeLockProvider;
+
+    @Inject
+    public AudioPlayerFactory audioPlayerFactory;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -1131,13 +1135,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups) {
         odkViewLifecycle = new ControllableLifecyleOwner();
         odkViewLifecycle.start();
+        AudioPlayer audioPlayer = audioPlayerFactory.create(audioClipViewModel, odkViewLifecycle);
 
-        ViewModelAudioPlayer viewModelAudioPlayer = new ViewModelAudioPlayer(
-                audioClipViewModel,
-                odkViewLifecycle
-        );
-
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, printerWidgetViewModel, internalRecordingRequester, externalAppRecordingRequester, odkViewLifecycle);
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, audioPlayer, audioRecorder, formEntryViewModel, printerWidgetViewModel, internalRecordingRequester, externalAppRecordingRequester, odkViewLifecycle);
     }
 
     private void releaseOdkView() {

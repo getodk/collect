@@ -11,7 +11,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
-import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.audioclips.Clip;
 
 import java.util.ArrayList;

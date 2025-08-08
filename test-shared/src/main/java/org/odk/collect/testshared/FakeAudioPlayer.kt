@@ -1,6 +1,9 @@
-package org.odk.collect.android.widgets.support
+package org.odk.collect.testshared
 
-import org.odk.collect.android.widgets.utilities.AudioPlayer
+import androidx.lifecycle.LifecycleOwner
+import org.odk.collect.audioclips.AudioClipViewModel
+import org.odk.collect.audioclips.AudioPlayer
+import org.odk.collect.audioclips.AudioPlayerFactory
 import org.odk.collect.audioclips.Clip
 import java.util.function.Consumer
 
@@ -9,6 +12,8 @@ class FakeAudioPlayer : AudioPlayer {
     private val positionChangedListeners: MutableMap<String, Consumer<Int>> = HashMap()
     private val positions: MutableMap<String, Int> = HashMap()
 
+    var playInOrderCount: Int = 0
+        private set
     var isPaused: Boolean = false
         private set
     var currentClip: Clip? = null
@@ -39,7 +44,6 @@ class FakeAudioPlayer : AudioPlayer {
     }
 
     override fun onPlaybackError(error: Consumer<Exception>) {
-        throw UnsupportedOperationException()
     }
 
     override fun stop() {
@@ -51,10 +55,24 @@ class FakeAudioPlayer : AudioPlayer {
     }
 
     override fun playInOrder(clips: List<Clip>) {
-        throw UnsupportedOperationException()
+        playInOrderCount++
     }
 
     fun getPosition(clipId: String): Int? {
         return positions[clipId]
+    }
+}
+
+class FakeAudioPlayerFactory : AudioPlayerFactory {
+    lateinit var audioPlayer: FakeAudioPlayer
+        private set
+
+    override fun create(
+        viewModel: AudioClipViewModel,
+        lifecycleOwner: LifecycleOwner
+    ): AudioPlayer {
+        return FakeAudioPlayer().also {
+            audioPlayer = it
+        }
     }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.odk.collect.androidshared.data.ConsumableKt;
 import org.odk.collect.audioclips.AudioClipViewModel;
+import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.audioclips.Clip;
 
 import java.util.List;

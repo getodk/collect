@@ -31,7 +31,7 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioFileRequester;
-import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingStatusHandler;
 import org.odk.collect.audioclips.Clip;
