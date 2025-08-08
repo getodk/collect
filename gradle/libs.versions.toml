@@ -11,6 +11,7 @@ dagger = "2.56.2"
 glide = "4.16.0"
 camerax = "1.4.2"
 espresso = "3.6.1"
+kotlin = "2.2.0"
 
 [libraries]
 firebaseCrashlyticsGradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version = "3.0.4" }
@@ -116,3 +117,4 @@ kotlinParcelize = { id = "kotlin-parcelize" }
 safeargsKotlin = { id = "androidx.navigation.safeargs.kotlin" }
 safeargs = { id = "androidx.navigation.safeargs" }
 ossLicenses = { id = "com.google.android.gms.oss-licenses-plugin" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

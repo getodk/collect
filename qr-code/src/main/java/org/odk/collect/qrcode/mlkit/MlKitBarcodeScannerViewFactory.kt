@@ -10,6 +10,11 @@ import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
 import androidx.camera.core.TorchState
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -75,7 +80,24 @@ private class MlKitBarcodeScannerView(
     private val cameraController = LifecycleCameraController(context)
 
     init {
-        binding.prompt.text = prompt
+        binding.composeView.setContent {
+            MaterialTheme {
+                ConstraintLayout {
+                    val (promptRef) = createRefs()
+
+                    Text(
+                        text = prompt,
+                        color = MaterialTheme.colorScheme.surface,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.constrainAs(promptRef) {
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            bottom.linkTo(parent.bottom, margin = 4.dp)
+                        }
+                    )
+                }
+            }
+        }
 
         lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onResume(owner: LifecycleOwner) {
