@@ -1,6 +1,7 @@
 package org.odk.collect.mobiledevicemanagement
 
 import android.os.Bundle
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.projects.ProjectCreator
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.projects.SettingsConnectionMatcher
@@ -23,6 +24,7 @@ class MDMConfigHandlerImpl(
     private val settingsConnectionMatcher: SettingsConnectionMatcher
 ) : MDMConfigHandler {
     override fun applyConfig(managedConfig: Bundle) {
+        Analytics.setUserProperty("SawMDMConfig", "true")
         applyDeviceId(managedConfig)
         applySettingsJson(managedConfig)
     }
