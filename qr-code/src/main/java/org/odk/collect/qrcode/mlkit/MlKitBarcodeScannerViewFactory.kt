@@ -10,9 +10,14 @@ import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
 import androidx.camera.core.TorchState
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -81,7 +86,7 @@ private class MlKitBarcodeScannerView(
 
     init {
         binding.composeView.setContent {
-            MaterialTheme {
+            CollectTheme {
                 ConstraintLayout {
                     val (promptRef) = createRefs()
 
@@ -197,4 +202,18 @@ private class MlKitBarcodeScannerView(
             return BarcodeCandidate(this.rawBytes, this.rawValue, this.boundingBox, format)
         }
     }
+}
+
+@Composable
+fun CollectTheme(
+    content: @Composable() () -> Unit
+) {
+    val lightColors = lightColorScheme(surface = Color(0xFFFFFFFF))
+    val darkColors = darkColorScheme(surface = Color(0xFF001117))
+    val colorScheme = if (isSystemInDarkTheme()) darkColors else lightColors
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        content = content
+    )
 }
