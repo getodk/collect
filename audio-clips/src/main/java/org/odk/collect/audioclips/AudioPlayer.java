@@ -1,6 +1,4 @@
-package org.odk.collect.android.widgets.utilities;
-
-import org.odk.collect.audioclips.Clip;
+package org.odk.collect.audioclips;
 
 import java.util.List;
 import java.util.function.Consumer;

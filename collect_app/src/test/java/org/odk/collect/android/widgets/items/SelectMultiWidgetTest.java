@@ -44,7 +44,7 @@ import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
-import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.audioclips.Clip;
 
