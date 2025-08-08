@@ -25,6 +25,6 @@ class AudioAutoplayTest {
             .copyForm("one-question-autoplay.xml", listOf("sampleAudio.wav"))
             .startBlankForm("One Question Autoplay")
 
-        assertThat(testDependencies.audioPlayerFactory.audioPlayer.playInOrderCount, equalTo(1))
+        assertThat(testDependencies.audioPlayerFactory.audioPlayer.playedClips, equalTo(1))
     }
 }

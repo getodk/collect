@@ -12,7 +12,7 @@ class FakeAudioPlayer : AudioPlayer {
     private val positionChangedListeners: MutableMap<String, Consumer<Int>> = HashMap()
     private val positions: MutableMap<String, Int> = HashMap()
 
-    var playInOrderCount: Int = 0
+    var playedClips: Int = 0
         private set
     var isPaused: Boolean = false
         private set
@@ -21,6 +21,7 @@ class FakeAudioPlayer : AudioPlayer {
 
     override fun play(clip: Clip) {
         this.currentClip = clip
+        playedClips++
         isPaused = false
         playingChangedListeners[clip.clipID]!!.accept(true)
     }
@@ -55,7 +56,7 @@ class FakeAudioPlayer : AudioPlayer {
     }
 
     override fun playInOrder(clips: List<Clip>) {
-        playInOrderCount++
+        playedClips += clips.size
     }
 
     fun getPosition(clipId: String): Int? {
