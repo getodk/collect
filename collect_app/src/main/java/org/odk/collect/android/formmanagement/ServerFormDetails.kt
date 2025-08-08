@@ -24,11 +24,10 @@ data class ServerFormDetails @JvmOverloads constructor(
     val hash: String?,
     val isNotOnDevice: Boolean,
     val isUpdated: Boolean,
-    val manifest: ManifestFile?,
-    val mediaOnlyUpdate: Boolean = false
+    val manifest: ManifestFile?
 ) : Serializable {
 
     companion object {
-        private const val serialVersionUID = 2L
+        private const val serialVersionUID = 3L
     }
 }
