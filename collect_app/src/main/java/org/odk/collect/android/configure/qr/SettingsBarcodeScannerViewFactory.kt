@@ -13,7 +13,9 @@ import org.odk.collect.shared.settings.Settings
 class SettingsBarcodeScannerViewFactory(
     private val settings: Settings
 ) : BarcodeScannerViewContainer.Factory {
-    private val playServicesFallbackFactory = PlayServicesFallbackBarcodeScannerViewFactory()
+    private val playServicesFallbackFactory = PlayServicesFallbackBarcodeScannerViewFactory(
+        settings.getInt(ProjectKeys.KEY_MLKIT_SCAN_THRESHOLD)
+    )
     private val zxingFactory = ZxingBarcodeScannerViewFactory()
 
     override fun create(

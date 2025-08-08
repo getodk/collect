@@ -25,7 +25,7 @@ import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.DetectedBarcode
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
 
-class MlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
+class MlKitBarcodeScannerViewFactory(private val scanThreshold: Int) : BarcodeScannerViewContainer.Factory {
     override fun create(
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
@@ -33,7 +33,7 @@ class MlKitBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
         prompt: String,
         useFrontCamera: Boolean
     ): BarcodeScannerView {
-        return MlKitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt)
+        return MlKitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt, scanThreshold)
     }
 
     companion object {
@@ -66,7 +66,8 @@ private class MlKitBarcodeScannerView(
     private val lifecycleOwner: LifecycleOwner,
     private val qrOnly: Boolean,
     private val useFrontCamera: Boolean,
-    prompt: String
+    prompt: String,
+    private val scanThreshold: Int
 ) : BarcodeScannerView(context) {
 
     private val binding =
@@ -107,7 +108,7 @@ private class MlKitBarcodeScannerView(
         val barcodeScanner = BarcodeScanning.getClient(options)
 
         val executor = ContextCompat.getMainExecutor(context)
-        val barcodeFilter = BarcodeFilter(binding.scannerOverlay.viewFinderRect, 10)
+        val barcodeFilter = BarcodeFilter(binding.scannerOverlay.viewFinderRect, scanThreshold)
         cameraController.setImageAnalysisAnalyzer(
             executor,
             MlKitAnalyzer(

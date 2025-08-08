@@ -6,9 +6,9 @@ import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.zxing.ZxingBarcodeScannerViewFactory
 
-class PlayServicesFallbackBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
+class PlayServicesFallbackBarcodeScannerViewFactory(mlkitScanThreshold: Int) : BarcodeScannerViewContainer.Factory {
 
-    private val mlKitBarcodeScannerViewFactory = MlKitBarcodeScannerViewFactory()
+    private val mlKitBarcodeScannerViewFactory = MlKitBarcodeScannerViewFactory(mlkitScanThreshold)
     private val zxingBarcodeScannerViewFactory = ZxingBarcodeScannerViewFactory()
 
     override fun create(
