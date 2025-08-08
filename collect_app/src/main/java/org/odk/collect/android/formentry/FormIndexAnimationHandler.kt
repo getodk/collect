@@ -16,14 +16,14 @@ class FormIndexAnimationHandler(private val listener: Listener) {
 
     fun handle(index: FormIndex) {
         if (lastIndex == null) {
-            listener.onScreenRefresh()
+            listener.onScreenRefresh(true)
         } else {
             if (index > lastIndex) {
                 listener.onScreenChange(Direction.FORWARDS)
             } else if (index < lastIndex) {
                 listener.onScreenChange(Direction.BACKWARDS)
             } else {
-                listener.onScreenRefresh()
+                listener.onScreenRefresh(false)
             }
         }
 
@@ -40,6 +40,6 @@ class FormIndexAnimationHandler(private val listener: Listener) {
 
     interface Listener {
         fun onScreenChange(direction: Direction?)
-        fun onScreenRefresh()
+        fun onScreenRefresh(isFormStart: Boolean)
     }
 }
