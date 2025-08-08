@@ -54,6 +54,7 @@ object Defaults {
             // experimental_preferences.xml
             hashMap[ProjectKeys.KEY_DEBUG_FILTERS] = BuildConfig.BUILD_TYPE == "selfSignedRelease"
             hashMap[ProjectKeys.KEY_MLKIT_SCANNING] = true
+            hashMap[ProjectKeys.KEY_MLKIT_SCAN_THRESHOLD] = 10
             return hashMap
         }
 

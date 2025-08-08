@@ -1,6 +1,7 @@
 package org.odk.collect.settings.keys
 
 object ProjectKeys {
+
     // server_preferences.xml
     const val KEY_PROTOCOL = "protocol"
 
@@ -53,6 +54,7 @@ object ProjectKeys {
     // experimental_preferences.xml
     const val KEY_DEBUG_FILTERS = "experimental_debug_filters"
     const val KEY_MLKIT_SCANNING = "mlkit_scanning"
+    const val KEY_MLKIT_SCAN_THRESHOLD = "mlkit_scan_threshold"
 
     // values
     const val PROTOCOL_SERVER = "odk_default"
