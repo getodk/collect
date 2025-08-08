@@ -310,4 +310,8 @@ class QrCodeProjectCreatorDialog :
             )
         )
     }
+
+    override fun cancel() {
+        binding.barcodeView.barcodeScannerView.start()
+    }
 }

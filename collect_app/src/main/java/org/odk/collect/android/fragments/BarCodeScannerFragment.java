@@ -30,12 +30,9 @@ import com.google.zxing.client.android.BeepManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.qrcode.BarcodeScannerView;
 import org.odk.collect.qrcode.BarcodeScannerViewContainer;
-
-import java.io.IOException;
-import java.util.zip.DataFormatException;
 
 import javax.inject.Inject;
 
@@ -48,6 +45,9 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
 
     @Inject
     BarcodeScannerViewContainer.Factory barcodeScannerViewFactory;
+
+    @Inject
+    Scheduler scheduler;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -72,13 +72,12 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
         }
 
         barcodeScannerViewContainer.getBarcodeScannerView().getLatestBarcode().observe(getViewLifecycleOwner(), result -> {
-            beepManager.playBeepSoundAndVibrate();
-
             try {
-                handleScanningResult(result);
-            } catch (IOException | DataFormatException | IllegalArgumentException e) {
-                ToastUtils.showShortToast(getString(org.odk.collect.strings.R.string.invalid_qrcode));
+                beepManager.playBeepSoundAndVibrate();
+            } catch (Exception ignored) {
+                // ignored
             }
+            handleScanningResult(result);
         });
 
         barcodeScannerViewContainer.getBarcodeScannerView().start();
@@ -114,7 +113,11 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
         switchFlashlightButton.setText(org.odk.collect.strings.R.string.turn_on_flashlight);
     }
 
+    protected void restartScanning() {
+        scheduler.immediate(true, 2000L, () -> barcodeScannerViewContainer.getBarcodeScannerView().start());
+    }
+
     protected abstract boolean isQrOnly();
 
-    protected abstract void handleScanningResult(String result) throws IOException, DataFormatException;
+    protected abstract void handleScanningResult(String result);
 }

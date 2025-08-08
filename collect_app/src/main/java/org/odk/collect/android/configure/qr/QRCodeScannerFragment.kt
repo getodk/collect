@@ -10,12 +10,12 @@ import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
+import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
 import org.odk.collect.androidshared.utils.CompressionUtils
 import org.odk.collect.projects.ProjectConfigurationResult
 import org.odk.collect.settings.ODKAppSettingsImporter
+import org.odk.collect.strings.R
 import java.io.File
-import java.io.IOException
-import java.util.zip.DataFormatException
 import javax.inject.Inject
 
 class QRCodeScannerFragment : BarCodeScannerFragment() {
@@ -34,43 +34,53 @@ class QRCodeScannerFragment : BarCodeScannerFragment() {
         DaggerUtils.getComponent(context).inject(this)
     }
 
-    @Throws(IOException::class, DataFormatException::class)
     override fun handleScanningResult(result: String) {
         val oldProjectName = projectsDataService.requireCurrentProject().name
 
-        val settingsImportingResult = settingsImporter.fromJSON(
-            CompressionUtils.decompress(result),
-            projectsDataService.requireCurrentProject()
-        )
+        try {
+            val settingsImportingResult = settingsImporter.fromJSON(
+                CompressionUtils.decompress(result),
+                projectsDataService.requireCurrentProject()
+            )
 
-        when (settingsImportingResult) {
-            ProjectConfigurationResult.SUCCESS -> {
-                Analytics.log(AnalyticsEvents.RECONFIGURE_PROJECT)
+            when (settingsImportingResult) {
+                ProjectConfigurationResult.SUCCESS -> {
+                    Analytics.log(AnalyticsEvents.RECONFIGURE_PROJECT)
 
-                val newProjectName = projectsDataService.requireCurrentProject().name
-                if (newProjectName != oldProjectName) {
-                    File(storagePathProvider.getProjectRootDirPath() + File.separator + oldProjectName).delete()
-                    File(storagePathProvider.getProjectRootDirPath() + File.separator + newProjectName).createNewFile()
+                    val newProjectName = projectsDataService.requireCurrentProject().name
+                    if (newProjectName != oldProjectName) {
+                        File(storagePathProvider.getProjectRootDirPath() + File.separator + oldProjectName).delete()
+                        File(storagePathProvider.getProjectRootDirPath() + File.separator + newProjectName).createNewFile()
+                    }
+
+                    showLongToast(
+                        getString(R.string.successfully_imported_settings)
+                    )
+                    ActivityUtils.startActivityAndCloseAllOthers(
+                        requireActivity(),
+                        MainMenuActivity::class.java
+                    )
                 }
 
-                showLongToast(
-                    getString(org.odk.collect.strings.R.string.successfully_imported_settings)
-                )
-                ActivityUtils.startActivityAndCloseAllOthers(
-                    requireActivity(),
-                    MainMenuActivity::class.java
-                )
+                ProjectConfigurationResult.INVALID_SETTINGS -> {
+                    showLongToast(
+                        getString(
+                            R.string.invalid_qrcode
+                        )
+                    )
+                    restartScanning()
+                }
+
+                ProjectConfigurationResult.GD_PROJECT -> {
+                    showLongToast(
+                        getString(R.string.settings_with_gd_protocol)
+                    )
+                    restartScanning()
+                }
             }
-
-            ProjectConfigurationResult.INVALID_SETTINGS -> showLongToast(
-                getString(
-                    org.odk.collect.strings.R.string.invalid_qrcode
-                )
-            )
-
-            ProjectConfigurationResult.GD_PROJECT -> showLongToast(
-                getString(org.odk.collect.strings.R.string.settings_with_gd_protocol)
-            )
+        } catch (e: Exception) {
+            showShortToast(getString(R.string.invalid_qrcode))
+            restartScanning()
         }
     }
 
