@@ -57,7 +57,7 @@ public class ImageWidget extends BaseImageWidget {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = ImageWidgetBinding.inflate(((Activity) context).getLayoutInflater());
 
         String appearance = prompt.getAppearanceHint();
