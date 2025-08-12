@@ -44,6 +44,7 @@ import org.odk.collect.android.instancemanagement.send.InstanceUploaderListActiv
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
+import org.odk.collect.android.preferences.dialogs.DeleteProjectDialog;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.screens.BasePreferencesFragment;
@@ -54,7 +55,6 @@ import org.odk.collect.android.preferences.screens.FormMetadataPreferencesFragme
 import org.odk.collect.android.preferences.screens.IdentityPreferencesFragment;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ProjectDisplayPreferencesFragment;
-import org.odk.collect.android.preferences.screens.ProjectManagementPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
@@ -143,8 +143,6 @@ public interface AppDependencyComponent {
     void inject(ServerPreferencesFragment serverPreferencesFragment);
 
     void inject(ProjectDisplayPreferencesFragment projectDisplayPreferencesFragment);
-
-    void inject(ProjectManagementPreferencesFragment projectManagementPreferencesFragment);
 
     void inject(AuthDialogUtility authDialogUtility);
 
@@ -261,6 +259,8 @@ public interface AppDependencyComponent {
     void inject(DownloadFormListTask downloadFormListTask);
 
     void inject(FormHierarchyFragmentHostActivity formHierarchyFragmentHostActivity);
+
+    void inject(DeleteProjectDialog deleteProjectDialog);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 
