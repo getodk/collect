@@ -101,6 +101,7 @@ class DeleteProjectDialog : DialogFragment() {
         }
 
         viewModel.deleteProjectResult.observe(this) { result ->
+            dismiss()
             when (result) {
                 is DeleteProjectResult.UnsentInstances -> {
                     MaterialAlertDialogBuilder(requireActivity())
@@ -139,7 +140,6 @@ class DeleteProjectDialog : DialogFragment() {
                     // not possible here
                 }
             }
-            dismiss()
         }
 
         return MaterialAlertDialogBuilder(requireContext())
