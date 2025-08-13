@@ -3,8 +3,8 @@ package org.odk.collect.android.preferences.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.view.View
 import androidx.core.text.HtmlCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -25,6 +25,7 @@ import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.instances.Instance
@@ -70,20 +71,22 @@ class DeleteProjectDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DeleteProjectDialogLayoutBinding.inflate(layoutInflater).apply {
             cancelButton.setOnClickListener { dismiss() }
-            deleteButton.setOnClickListener {
-                viewModel.deleteProject()
-                dismiss()
-            }
+            deleteButton.setOnClickListener { viewModel.deleteProject() }
 
             confirmationFieldInput.doAfterTextChanged { text ->
                 deleteButton.isEnabled = "delete".equals(text.toString().trim(), true)
             }
         }
 
+        viewModel.isWorking.observe(this) { isWorking ->
+            binding.progressBar.isVisible = isWorking
+            binding.title.isVisible = !isWorking
+            binding.message.isVisible = !isWorking
+            binding.confirmationField.isVisible = !isWorking
+            binding.deleteButton.isClickable = !isWorking
+        }
+
         viewModel.projectData.observe(this) { projectData ->
-            binding.progress.visibility = View.GONE
-            binding.title.visibility = View.VISIBLE
-            binding.message.visibility = View.VISIBLE
             binding.title.text = getString(
                 org.odk.collect.strings.R.string.delete_project_dialog_title,
                 projectData.projectName
@@ -136,6 +139,7 @@ class DeleteProjectDialog : DialogFragment() {
                     // not possible here
                 }
             }
+            dismiss()
         }
 
         return MaterialAlertDialogBuilder(requireContext())
@@ -148,8 +152,11 @@ class DeleteProjectDialog : DialogFragment() {
         private val projectsDataService: ProjectsDataService,
         private val formsRepositoryProvider: FormsRepositoryProvider,
         private val instancesRepositoryProvider: InstancesRepositoryProvider,
-        private val scheduler: Scheduler
+        scheduler: Scheduler
     ) : ViewModel() {
+        private val trackableWorker = TrackableWorker(scheduler)
+
+        val isWorking = trackableWorker.isWorking
 
         private val _projectData = MutableLiveData<ProjectData>()
         val projectData: LiveData<ProjectData> = _projectData
@@ -158,7 +165,7 @@ class DeleteProjectDialog : DialogFragment() {
         val deleteProjectResult: LiveData<DeleteProjectResult> = _deleteProjectResult
 
         init {
-            scheduler.immediate {
+            trackableWorker.immediate {
                 val project = projectsDataService.getCurrentProject().value!!
                 val numberOfForms = formsRepositoryProvider.create(project.uuid).all.size
                 val instancesRepository = instancesRepositoryProvider.create(project.uuid)
@@ -184,7 +191,7 @@ class DeleteProjectDialog : DialogFragment() {
 
         fun deleteProject() {
             Analytics.log(AnalyticsEvents.DELETE_PROJECT)
-            scheduler.immediate {
+            trackableWorker.immediate {
                 val result = projectDeleter.deleteProject()
                 _deleteProjectResult.postValue(result)
             }

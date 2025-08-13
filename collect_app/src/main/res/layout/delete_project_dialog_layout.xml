@@ -8,7 +8,7 @@
     android:paddingBottom="@dimen/margin_standard">
 
     <ProgressBar
-        android:id="@+id/progress"
+        android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
@@ -22,11 +22,9 @@
         android:layout_height="wrap_content"
         android:text="@string/delete_project_dialog_title"
         android:textAppearance="?textAppearanceHeadlineSmall"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progress"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar"
         app:layout_goneMarginTop="@dimen/margin_standard"
-        tools:visibility="visible"
         tools:text="Delete X project"/>
 
     <com.google.android.material.textview.MaterialTextView
@@ -35,18 +33,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
         android:textAppearance="?textAppearanceBodyMedium"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
-        tools:visibility="visible"
         tools:text="@string/delete_project_dialog_message"/>
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrierTopViews"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="progress,message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/confirmation_field"
@@ -56,7 +45,7 @@
         android:layout_marginTop="@dimen/margin_standard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barrierTopViews">
+        app:layout_constraintTop_toBottomOf="@id/message">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/confirmation_field_input"
@@ -65,6 +54,13 @@
             android:inputType="text"
             android:lines="1" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrierTopViews"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="progress_bar, confirmation_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/cancel_button"
@@ -75,7 +71,7 @@
         android:text="@string/cancel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/confirmation_field" />
+        app:layout_constraintTop_toBottomOf="@id/barrierTopViews" />
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/delete_button"
