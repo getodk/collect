@@ -13,13 +13,11 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.benchmark.support.Benchmarker
 import org.odk.collect.android.benchmark.support.benchmark
 import org.odk.collect.android.support.TestDependencies
-import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.android.test.BuildConfig.ENTITIES_FILTER_PROJECT_URL
 import org.odk.collect.android.test.BuildConfig.THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL
-import org.odk.collect.strings.R
 
 @RunWith(AndroidJUnit4::class)
 class EntitiesBenchmarkTest {
@@ -62,8 +60,7 @@ class EntitiesBenchmarkTest {
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
-            .clickOnDeleteProject()
-            .clickOnTextInDialog(R.string.yes, FirstLaunchPage())
+            .deleteLastProject()
             .clickManuallyEnterProjectDetails()
             .inputUrl(ENTITIES_FILTER_PROJECT_URL)
             .addProject()
