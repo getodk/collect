@@ -217,7 +217,7 @@ jobs:
 
       - run:
           name: Assemble connected test build
-          command: ./gradlew assembleDebugAndroidTest
+          command: ./gradlew assembleDebug assembleDebugAndroidTest
 
       - save_cache:
           paths:
