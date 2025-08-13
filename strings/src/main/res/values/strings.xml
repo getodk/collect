@@ -1131,6 +1131,14 @@
     <string name="using_project">Using %s</string>
     <!-- Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog -->
     <string name="switch_to_project">Switch to %s</string>
+    <string name="delete_project_dialog_title">Delete %s</string>
+    <string name="delete_project_dialog_message">By deleting this project, you will be permanently delete the following:&lt;br/&gt;&lt;br/&gt;
+        • %1$d Form definitions&lt;br/&gt;
+        • %2$d Sent forms&lt;br/&gt;
+        • %3$d Unsent forms&lt;br/&gt;&lt;br/&gt;
+        Type &lt;b&gt;Delete&lt;/b&gt; to confirm this action.
+    </string>
+    <string name="delete_project_confirm_button_text">Delete project</string>
     <string name="delete_project_confirm_message">All blank forms, submissions and settings will be permanently deleted.</string>
     <string name="delete_project_yes">Yes</string>
     <string name="delete_project_no">No</string>
