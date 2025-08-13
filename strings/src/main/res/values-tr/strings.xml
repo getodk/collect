@@ -401,8 +401,6 @@
   <!--Toast text shown when the current project is changed-->
   <!--Description for screen readers of which project is in use. This is part of the project selection dialog-->
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
-  <string name="delete_project_yes">Evet</string>
-  <string name="delete_project_no">Hayır</string>
   <string name="or">YA DA</string>
   <string name="hex_color">Hex renk kodu</string>
   <string name="invalid_hex_code">Hatalı hex kodu</string>

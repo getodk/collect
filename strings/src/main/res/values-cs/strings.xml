@@ -908,9 +908,6 @@
   <string name="using_project">S pomocí %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Přepnout na %s</string>
-  <string name="delete_project_confirm_message">Všechny prázdné formuláře, podání a nastavení budou trvale odstraněny.</string>
-  <string name="delete_project_yes">Ano</string>
-  <string name="delete_project_no">Ne</string>
   <string name="cannot_delete_project_title">Projekt nelze smazat</string>
   <string name="cannot_delete_project_message_one">Máte neodeslaná podání. Chcete-li projekt odstranit, musíte nejprve odeslat nebo odstranit tato podání.</string>
   <string name="cannot_delete_project_message_two">Probíhají úlohy na pozadí. Zkuste to prosím později.</string>

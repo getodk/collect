@@ -871,9 +871,6 @@
   <string name="using_project">Uporablja se %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Preklopi na %s</string>
-  <string name="delete_project_confirm_message">Vsi prazni in poslani zaključeni obrazci ter nastavitve bodo trajno izbrisane.</string>
-  <string name="delete_project_yes">Da</string>
-  <string name="delete_project_no">Ne</string>
   <string name="cannot_delete_project_title">Projekt se ne da izbrisati</string>
   <string name="cannot_delete_project_message_one">Imate nesposlane zaključene obrazce. Za izbris projekta morate najprej poslati ali izbrisati te obrazce.</string>
   <string name="cannot_delete_project_message_two">Procesiram naloge v ozadju. Prosimo, poskusite znova kasneje.</string>

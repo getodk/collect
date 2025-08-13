@@ -896,9 +896,6 @@
   <string name="using_project">使用 %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">切换到 %s</string>
-  <string name="delete_project_confirm_message">所有空白表单、提交和设置将被永久删除。</string>
-  <string name="delete_project_yes">是</string>
-  <string name="delete_project_no">否</string>
   <string name="cannot_delete_project_title">无法删除项目</string>
   <string name="cannot_delete_project_message_one">您有未发送的提交。若要删除项目，必须首先发送或删除这些提交。</string>
   <string name="cannot_delete_project_message_two">后台作业正在运行。请稍后再试。</string>

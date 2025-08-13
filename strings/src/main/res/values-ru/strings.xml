@@ -851,9 +851,6 @@
   <string name="using_project">Используется %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Переключить на %s</string>
-  <string name="delete_project_confirm_message">Все пустые формы, материалы и настройки будут удалены навсегда.</string>
-  <string name="delete_project_yes">Да</string>
-  <string name="delete_project_no">Нет</string>
   <string name="cannot_delete_project_title">Невозможно удалить проект</string>
   <string name="cannot_delete_project_message_one">У вас есть неотправленные материалы. Чтобы удалить проект, вы должны сначала отправить или удалить эти материалы.</string>
   <string name="cannot_delete_project_message_two">Выполняются фоновые задания. Пожалуйста, повторите попытку позже.</string>

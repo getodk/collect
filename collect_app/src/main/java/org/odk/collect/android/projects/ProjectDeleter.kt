@@ -81,13 +81,13 @@ class ProjectDeleter(
 }
 
 sealed class DeleteProjectResult {
-    object UnsentInstances : DeleteProjectResult()
+    data object UnsentInstances : DeleteProjectResult()
 
-    object RunningBackgroundJobs : DeleteProjectResult()
+    data object RunningBackgroundJobs : DeleteProjectResult()
 
-    object DeletedSuccessfullyLastProject : DeleteProjectResult()
+    data object DeletedSuccessfullyLastProject : DeleteProjectResult()
 
-    object DeletedSuccessfullyInactiveProject : DeleteProjectResult()
+    data object DeletedSuccessfullyInactiveProject : DeleteProjectResult()
 
     data class DeletedSuccessfullyCurrentProject(val newCurrentProject: Project.Saved) : DeleteProjectResult()
 }
