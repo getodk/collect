@@ -148,7 +148,7 @@ class DeleteProjectDialog : DialogFragment() {
         private val projectsDataService: ProjectsDataService,
         private val formsRepositoryProvider: FormsRepositoryProvider,
         private val instancesRepositoryProvider: InstancesRepositoryProvider,
-        scheduler: Scheduler
+        private val scheduler: Scheduler
     ) : ViewModel() {
 
         private val _projectData = MutableLiveData<ProjectData>()
@@ -158,31 +158,36 @@ class DeleteProjectDialog : DialogFragment() {
         val deleteProjectResult: LiveData<DeleteProjectResult> = _deleteProjectResult
 
         init {
-            scheduler.immediate(
-                background = {
-                    val project = projectsDataService.getCurrentProject().value!!
-                    val numberOfForms = formsRepositoryProvider.create(project.uuid).all.size
-                    val instancesRepository = instancesRepositoryProvider.create(project.uuid)
-                    val numberOfSentForms = instancesRepository.getCountByStatus(Instance.STATUS_SUBMITTED)
-                    val numberOfUnsentForms = instancesRepository.getCountByStatus(
-                        Instance.STATUS_INCOMPLETE,
-                        Instance.STATUS_INVALID,
-                        Instance.STATUS_VALID,
-                        Instance.STATUS_COMPLETE,
-                        Instance.STATUS_NEW_EDIT,
-                        Instance.STATUS_SUBMISSION_FAILED,
+            scheduler.immediate {
+                val project = projectsDataService.getCurrentProject().value!!
+                val numberOfForms = formsRepositoryProvider.create(project.uuid).all.size
+                val instancesRepository = instancesRepositoryProvider.create(project.uuid)
+                val numberOfSentForms = instancesRepository.getCountByStatus(Instance.STATUS_SUBMITTED)
+                val numberOfUnsentForms = instancesRepository.getCountByStatus(
+                    Instance.STATUS_INCOMPLETE,
+                    Instance.STATUS_INVALID,
+                    Instance.STATUS_VALID,
+                    Instance.STATUS_COMPLETE,
+                    Instance.STATUS_NEW_EDIT,
+                    Instance.STATUS_SUBMISSION_FAILED,
+                )
+                _projectData.postValue(
+                    ProjectData(
+                        project.name,
+                        numberOfForms,
+                        numberOfSentForms,
+                        numberOfUnsentForms
                     )
-                    ProjectData(project.name, numberOfForms, numberOfSentForms, numberOfUnsentForms)
-                },
-                foreground = { result ->
-                    _projectData.postValue(result)
-                }
-            )
+                )
+            }
         }
 
         fun deleteProject() {
             Analytics.log(AnalyticsEvents.DELETE_PROJECT)
-            _deleteProjectResult.value = projectDeleter.deleteProject()
+            scheduler.immediate {
+                val result = projectDeleter.deleteProject()
+                _deleteProjectResult.postValue(result)
+            }
         }
 
         data class ProjectData(
