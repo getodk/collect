@@ -888,9 +888,6 @@
   <string name="using_project">Usando %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Alternar para %s</string>
-  <string name="delete_project_confirm_message">Todos os formulários em branco, respostas e configurações serão excluídas de forma permanente.</string>
-  <string name="delete_project_yes">Sim</string>
-  <string name="delete_project_no">Não</string>
   <string name="cannot_delete_project_title">O projeto não pode ser excluído.</string>
   <string name="cannot_delete_project_message_one">Você tem formulários não enviados. Para excluir o projeto, você precisa primeiro enviar ou excluir estes formulários.</string>
   <string name="cannot_delete_project_message_two">Existem tarefas em execução. Por favor, tente novamente mais tarde.</string>
