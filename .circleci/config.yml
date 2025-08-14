@@ -217,7 +217,7 @@ jobs:
 
       - run:
           name: Assemble connected test build
-          command: ./gradlew assembleDebugAndroidTest
+          command: ./gradlew assembleDebug assembleDebugAndroidTest
 
       - save_cache:
           paths:
@@ -301,8 +301,8 @@ jobs:
             if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
               echo "y" | gcloud beta firebase test android run \
               --type instrumentation \
-              --app collect_app/build/outputs/apk/debug/*.apk \
-              --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
+              --app collect_app/build/outputs/apk/debug/ODK-Collect-debug.apk \
+              --test collect_app/build/outputs/apk/androidTest/debug/ODK-Collect-debug-androidTest.apk \
               --device model=MediumPhone.arm,version=34,locale=en,orientation=portrait \
               --results-bucket opendatakit-collect-test-results \
               --directories-to-pull /sdcard --timeout 20m \
@@ -331,8 +331,8 @@ jobs:
               echo "y" | gcloud beta firebase test android run \
               --type instrumentation \
               --num-uniform-shards=25 \
-              --app collect_app/build/outputs/apk/debug/*.apk \
-              --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
+              --app collect_app/build/outputs/apk/debug/ODK-Collect-debug.apk \
+              --test collect_app/build/outputs/apk/androidTest/debug/ODK-Collect-debug-androidTest.apk \
               --device model=MediumPhone.arm,version=34,locale=en,orientation=portrait \
               --results-bucket opendatakit-collect-test-results \
               --directories-to-pull /sdcard --timeout 20m \
