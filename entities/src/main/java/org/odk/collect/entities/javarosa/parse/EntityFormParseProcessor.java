@@ -4,6 +4,7 @@ import org.javarosa.core.model.DataBinding;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.model.xform.XPathReference;
 import org.javarosa.xform.parse.XFormParser;
+import org.odk.collect.entities.BuildConfig;
 import org.odk.collect.entities.javarosa.spec.EntityFormParser;
 import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException;
 
@@ -35,6 +36,10 @@ public class EntityFormParseProcessor implements XFormParser.BindAttributeProces
     @Override
     public void processModelAttribute(String name, String value) throws XFormParser.ParseException {
         version = value;
+
+        if (BuildConfig.DEBUG && value.startsWith("v2025.1")) {
+            return;
+        }
 
         if (Stream.of(SUPPORTED_VERSIONS).noneMatch(value::startsWith)) {
             throw new UnrecognizedEntityVersionException(version);
