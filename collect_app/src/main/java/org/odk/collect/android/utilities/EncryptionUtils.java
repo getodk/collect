@@ -39,7 +39,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -545,27 +544,22 @@ public class EncryptionUtils {
         e.addChild(idx, Node.ELEMENT, c);
 
         FileOutputStream fout = null;
-        OutputStreamWriter writer = null;
         try {
             fout = new FileOutputStream(submissionXml);
-            writer = new OutputStreamWriter(fout, UTF_8);
 
             KXmlSerializer serializer = new KXmlSerializer();
-            serializer.setOutput(writer);
+            serializer.setOutput(fout, UTF_8);
             // setting the response content type emits the xml header.
             // just write the body here...
             d.writeChildren(serializer);
             serializer.flush();
-            writer.flush();
             fout.getChannel().force(true);
-            writer.close();
         } catch (Exception ex) {
             String msg = "Error writing submission.xml for encrypted submission: "
                     + submissionXml.getParentFile().getName();
             Timber.e(ex, "%s due to : %s ", msg, ex.getMessage());
             throw new EncryptionException(msg, ex);
         } finally {
-            IOUtils.closeQuietly(writer);
             IOUtils.closeQuietly(fout);
         }
     }
