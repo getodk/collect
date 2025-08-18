@@ -42,20 +42,12 @@ class EntityFormParseProcessor : BindAttributeProcessor, FormDefProcessor, Model
         }
     }
 
-    override fun getBindAttributes(): MutableSet<Pair<String?, String?>?> {
-        val attributes = HashSet<Pair<String?, String?>?>()
-        attributes.add(Pair<String?, String?>(ENTITIES_NAMESPACE, "saveto"))
-
-        return attributes
+    override fun getBindAttributes(): Set<Pair<String, String>> {
+        return setOf(Pair(ENTITIES_NAMESPACE, "saveto"))
     }
 
-    override fun processBindAttribute(name: String?, value: String?, binding: DataBinding) {
-        saveTos.add(
-            Pair<XPathReference?, String?>(
-                binding.getReference() as XPathReference?,
-                value
-            )
-        )
+    override fun processBindAttribute(name: String, value: String, binding: DataBinding) {
+        saveTos.add(Pair(binding.reference as XPathReference, value))
     }
 
     @Throws(XFormParser.ParseException::class)
