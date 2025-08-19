@@ -14,31 +14,23 @@ import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException
 import java.util.stream.Stream
 
 class EntityFormParseProcessor : BindAttributeProcessor, FormDefProcessor, ModelAttributeProcessor {
-    private val saveTos: MutableList<Pair<XPathReference?, String?>?> =
-        ArrayList<Pair<XPathReference?, String?>?>()
+    private val saveTos = mutableListOf<Pair<XPathReference, String>>()
     private var version: String? = null
 
-    override fun getModelAttributes(): MutableSet<Pair<String?, String?>?> {
-        val attributes = HashSet<Pair<String?, String?>?>()
-        attributes.add(Pair<String?, String?>(ENTITIES_NAMESPACE, "entities-version"))
-
-        return attributes
+    override fun getModelAttributes(): Set<Pair<String, String>> {
+        return setOf(Pair(ENTITIES_NAMESPACE, "entities-version"))
     }
 
     @Throws(XFormParser.ParseException::class)
-    override fun processModelAttribute(name: String?, value: String) {
+    override fun processModelAttribute(name: String, value: String) {
         version = value
 
         if (BuildConfig.DEBUG && value.startsWith("v2025.1")) {
             return
         }
 
-        if (Stream.of<String?>(*SUPPORTED_VERSIONS).noneMatch { prefix: String? ->
-                value.startsWith(
-                    prefix!!
-                )
-            }) {
-            throw UnrecognizedEntityVersionException(version!!)
+        if (SUPPORTED_VERSIONS.none { value.startsWith(it) }) {
+            throw UnrecognizedEntityVersionException(value)
         }
     }
 
@@ -68,11 +60,11 @@ class EntityFormParseProcessor : BindAttributeProcessor, FormDefProcessor, Model
 
     companion object {
         private const val ENTITIES_NAMESPACE = "http://www.opendatakit.org/xforms/entities"
-        private val SUPPORTED_VERSIONS = arrayOf<String?>("2022.1", "2023.1", "2024.1")
-        private val LOCAL_ENTITY_VERSIONS = arrayOf<String?>("2024.1")
+        private val SUPPORTED_VERSIONS = arrayOf("2022.1", "2023.1", "2024.1")
+        private val LOCAL_ENTITY_VERSIONS = arrayOf("2024.1")
 
         private fun isEntityForm(formDef: FormDef): Boolean {
-            return EntityFormParser.getEntityElement(formDef.getMainInstance()) != null
+            return EntityFormParser.getEntityElement(formDef.mainInstance) != null
         }
     }
 }
