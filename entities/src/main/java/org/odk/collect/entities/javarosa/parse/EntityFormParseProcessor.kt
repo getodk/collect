@@ -11,7 +11,6 @@ import org.javarosa.xform.parse.XFormParser.ModelAttributeProcessor
 import org.odk.collect.entities.BuildConfig
 import org.odk.collect.entities.javarosa.spec.EntityFormParser
 import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException
-import java.util.stream.Stream
 
 class EntityFormParseProcessor : BindAttributeProcessor, FormDefProcessor, ModelAttributeProcessor {
     private val saveTos = mutableListOf<Pair<XPathReference, String>>()
@@ -45,15 +44,13 @@ class EntityFormParseProcessor : BindAttributeProcessor, FormDefProcessor, Model
     @Throws(XFormParser.ParseException::class)
     override fun processFormDef(formDef: FormDef) {
         if (isEntityForm(formDef)) {
-            if (version == null) {
-                throw MissingModelAttributeException(ENTITIES_NAMESPACE, "entities-version")
-            } else if (Stream.of<String?>(*LOCAL_ENTITY_VERSIONS).anyMatch { prefix: String? ->
-                    version!!.startsWith(
-                        prefix!!
-                    )
-                }) {
-                val entityFormExtra = EntityFormExtra(saveTos)
-                formDef.getExtras().put(entityFormExtra)
+            version.let {
+                if (it == null) {
+                    throw MissingModelAttributeException(ENTITIES_NAMESPACE, "entities-version")
+                } else if (LOCAL_ENTITY_VERSIONS.any { prefix -> it.startsWith(prefix) }) {
+                    val entityFormExtra = EntityFormExtra(saveTos)
+                    formDef.extras.put(entityFormExtra)
+                }
             }
         }
     }
