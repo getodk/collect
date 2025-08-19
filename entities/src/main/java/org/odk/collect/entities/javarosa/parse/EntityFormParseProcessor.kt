@@ -9,6 +9,10 @@ import org.javarosa.xform.parse.XFormParser.FormDefProcessor
 import org.javarosa.xform.parse.XFormParser.MissingModelAttributeException
 import org.javarosa.xform.parse.XFormParser.ModelAttributeProcessor
 import org.odk.collect.entities.BuildConfig
+import org.odk.collect.entities.javarosa.parse.EntityFormParseProcessor.Companion.VERSIONS.V2022_1
+import org.odk.collect.entities.javarosa.parse.EntityFormParseProcessor.Companion.VERSIONS.V2023_1
+import org.odk.collect.entities.javarosa.parse.EntityFormParseProcessor.Companion.VERSIONS.V2024_1
+import org.odk.collect.entities.javarosa.parse.EntityFormParseProcessor.Companion.VERSIONS.V2025_1
 import org.odk.collect.entities.javarosa.spec.EntityFormParser
 import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException
 
@@ -24,7 +28,7 @@ class EntityFormParseProcessor : BindAttributeProcessor, FormDefProcessor, Model
     override fun processModelAttribute(name: String, value: String) {
         version = value
 
-        if (BuildConfig.DEBUG && value.startsWith("v2025.1")) {
+        if (BuildConfig.DEBUG && value.startsWith(V2025_1)) {
             return
         }
 
@@ -56,9 +60,17 @@ class EntityFormParseProcessor : BindAttributeProcessor, FormDefProcessor, Model
     }
 
     companion object {
+
+        private object VERSIONS {
+            const val V2022_1 = "2022.1"
+            const val V2023_1 = "2023.1"
+            const val V2024_1 = "2024.1"
+            const val V2025_1 = "2025.1"
+        }
+
         private const val ENTITIES_NAMESPACE = "http://www.opendatakit.org/xforms/entities"
-        private val SUPPORTED_VERSIONS = arrayOf("2022.1", "2023.1", "2024.1")
-        private val LOCAL_ENTITY_VERSIONS = arrayOf("2024.1")
+        private val SUPPORTED_VERSIONS = arrayOf(V2022_1, V2023_1, V2024_1)
+        private val LOCAL_ENTITY_VERSIONS = arrayOf(V2024_1)
 
         private fun isEntityForm(formDef: FormDef): Boolean {
             return EntityFormParser.getEntityElement(formDef.mainInstance) != null
