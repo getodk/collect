@@ -14,14 +14,6 @@
         android:title="@string/use_mlkit_for_barcode_scanning"
         app:iconSpaceReserved="false" />
 
-    <SeekBarPreference
-        android:key="mlkit_scan_threshold"
-        android:max="20"
-        android:title="@string/mlkit_scan_threshold"
-        app:iconSpaceReserved="false"
-        app:min="1"
-        app:showSeekBarValue="true" />
-
     <PreferenceCategory
         android:title="@string/entities_title"
         app:allowDividerAbove="false"

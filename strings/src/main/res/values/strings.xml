@@ -1252,9 +1252,6 @@
     <string name="use_mlkit_for_barcode_scanning">Use ML Kit for barcode scanning</string>
     <string name="mlkit_is_always_used_for_scanning_project_qr_codes">ML Kit is always used for scanning project QR codes</string>
 
-    <!-- Experimental setting that allows the number of repeated scans required for ML Kit to process a barcode to be tweaked -->
-    <string name="mlkit_scan_threshold">ML Kit scan threshold</string>
-
     <string name="permission_dialog_title">About permissions</string>
     <string name="permission_dialog_text">You will be asked to allow ODK Collect access to the features below, select “allow” if you want to use them.</string>
     <string name="notifications">Notifications</string>
