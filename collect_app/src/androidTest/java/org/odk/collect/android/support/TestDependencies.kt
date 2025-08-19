@@ -77,7 +77,7 @@ open class TestDependencies @JvmOverloads constructor(
         return restrictionsManager
     }
 
-    override fun providesAudioPlayerFactory(): AudioPlayerFactory {
+    override fun providesAudioPlayerFactory(scheduler: Scheduler): AudioPlayerFactory {
         return audioPlayerFactory
     }
 }

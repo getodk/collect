@@ -1,7 +1,12 @@
 package org.odk.collect.android.widgets.utilities
 
+import android.media.MediaPlayer
+import androidx.activity.ComponentActivity
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.androidshared.data.consume
+import org.odk.collect.async.Scheduler
 import org.odk.collect.audioclips.AudioClipViewModel
 import org.odk.collect.audioclips.AudioPlayer
 import org.odk.collect.audioclips.AudioPlayerFactory
@@ -12,6 +17,10 @@ class ViewModelAudioPlayer(
     private val viewModel: AudioClipViewModel,
     private val lifecycleOwner: LifecycleOwner
 ) : AudioPlayer {
+    override fun isLoading(): LiveData<Boolean> {
+        return viewModel.isLoading()
+    }
+
     override fun play(clip: Clip) {
         viewModel.play(clip)
     }
@@ -51,11 +60,13 @@ class ViewModelAudioPlayer(
     }
 }
 
-class ViewModelAudioPlayerFactory : AudioPlayerFactory {
+class ViewModelAudioPlayerFactory(private val scheduler: Scheduler) : AudioPlayerFactory {
     override fun create(
-        viewModel: AudioClipViewModel,
+        activity: ComponentActivity,
         lifecycleOwner: LifecycleOwner
     ): AudioPlayer {
+        val factory = AudioClipViewModel.Factory(::MediaPlayer, scheduler)
+        val viewModel = ViewModelProvider(activity, factory)[AudioClipViewModel::class.java]
         return ViewModelAudioPlayer(viewModel, lifecycleOwner)
     }
 }

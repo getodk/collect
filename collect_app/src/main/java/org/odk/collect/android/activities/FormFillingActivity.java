@@ -39,7 +39,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -178,7 +177,6 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.audioclips.AudioPlayerFactory;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -284,7 +282,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private InternalRecordingRequester internalRecordingRequester;
     private ExternalAppRecordingRequester externalAppRecordingRequester;
     private FormEntryViewModelFactory viewModelFactory;
-    private AudioClipViewModel audioClipViewModel;
 
     @Override
     public void allowSwiping(boolean doSwipe) {
@@ -635,12 +632,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     }
                 });
             }
-        });
-
-        AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(MediaPlayer::new, scheduler);
-        audioClipViewModel = new ViewModelProvider(this, factory).get(AudioClipViewModel.class);
-        audioClipViewModel.isLoading().observe(this, (isLoading) -> {
-            findViewById(R.id.loading_screen).setVisibility(isLoading ? View.VISIBLE : View.GONE);
         });
     }
 
@@ -1135,7 +1126,10 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups) {
         odkViewLifecycle = new ControllableLifecyleOwner();
         odkViewLifecycle.start();
-        AudioPlayer audioPlayer = audioPlayerFactory.create(audioClipViewModel, odkViewLifecycle);
+        AudioPlayer audioPlayer = audioPlayerFactory.create(this, odkViewLifecycle);
+        audioPlayer.isLoading().observe(this, (isLoading) -> {
+            findViewById(R.id.loading_screen).setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        });
 
         return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, audioPlayer, audioRecorder, formEntryViewModel, printerWidgetViewModel, internalRecordingRequester, externalAppRecordingRequester, odkViewLifecycle);
     }

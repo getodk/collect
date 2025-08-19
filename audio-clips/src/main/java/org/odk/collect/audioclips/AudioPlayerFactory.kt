@@ -1,10 +1,11 @@
 package org.odk.collect.audioclips
 
+import androidx.activity.ComponentActivity
 import androidx.lifecycle.LifecycleOwner
 
 interface AudioPlayerFactory {
     fun create(
-        viewModel: AudioClipViewModel,
+        activity: ComponentActivity,
         lifecycleOwner: LifecycleOwner
     ): AudioPlayer
 }

@@ -1,7 +1,9 @@
 package org.odk.collect.testshared
 
+import androidx.activity.ComponentActivity
 import androidx.lifecycle.LifecycleOwner
-import org.odk.collect.audioclips.AudioClipViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import org.odk.collect.audioclips.AudioPlayer
 import org.odk.collect.audioclips.AudioPlayerFactory
 import org.odk.collect.audioclips.Clip
@@ -18,6 +20,10 @@ class FakeAudioPlayer : AudioPlayer {
         private set
     var currentClip: Clip? = null
         private set
+
+    override fun isLoading(): LiveData<Boolean> {
+        return MutableLiveData(false)
+    }
 
     override fun play(clip: Clip) {
         this.currentClip = clip
@@ -69,7 +75,7 @@ class FakeAudioPlayerFactory : AudioPlayerFactory {
         private set
 
     override fun create(
-        viewModel: AudioClipViewModel,
+        activity: ComponentActivity,
         lifecycleOwner: LifecycleOwner
     ): AudioPlayer {
         return FakeAudioPlayer().also {

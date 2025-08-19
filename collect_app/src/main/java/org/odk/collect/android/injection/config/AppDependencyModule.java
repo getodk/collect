@@ -656,7 +656,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AudioPlayerFactory providesAudioPlayerFactory() {
-        return new ViewModelAudioPlayerFactory();
+    public AudioPlayerFactory providesAudioPlayerFactory(Scheduler scheduler) {
+        return new ViewModelAudioPlayerFactory(scheduler);
     }
 }
