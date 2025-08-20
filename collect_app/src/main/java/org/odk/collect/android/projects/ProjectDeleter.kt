@@ -3,10 +3,7 @@ package org.odk.collect.android.projects
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.utilities.ChangeLockProvider
-import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.db.sqlite.DatabaseConnection
-import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -17,39 +14,11 @@ class ProjectDeleter(
     private val projectsDataService: ProjectsDataService,
     private val formUpdateScheduler: FormUpdateScheduler,
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
-    private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val storagePathProvider: StoragePathProvider,
-    private val changeLockProvider: ChangeLockProvider,
     private val settingsProvider: SettingsProvider
 ) {
     fun deleteProject(projectId: String = projectsDataService.requireCurrentProject().uuid): DeleteProjectResult {
-        return when {
-            unsentInstancesDetected(projectId) -> DeleteProjectResult.UnsentInstances
-            runningBackgroundJobsDetected(projectId) -> DeleteProjectResult.RunningBackgroundJobs
-            else -> performProjectDeletion(projectId)
-        }
-    }
-
-    private fun unsentInstancesDetected(projectId: String): Boolean {
-        return instancesRepositoryProvider.create(projectId).getAllByStatus(
-            Instance.STATUS_INCOMPLETE,
-            Instance.STATUS_INVALID,
-            Instance.STATUS_VALID,
-            Instance.STATUS_NEW_EDIT,
-            Instance.STATUS_COMPLETE,
-            Instance.STATUS_SUBMISSION_FAILED
-        ).isNotEmpty()
-    }
-
-    private fun runningBackgroundJobsDetected(projectId: String): Boolean {
-        val acquiredFormLock = changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
-            acquiredLock
-        }
-        val acquiredInstanceLock = changeLockProvider.getInstanceLock(projectId).withLock { acquiredLock ->
-            acquiredLock
-        }
-
-        return !acquiredFormLock || !acquiredInstanceLock
+        return performProjectDeletion(projectId)
     }
 
     private fun performProjectDeletion(projectId: String): DeleteProjectResult {
@@ -81,10 +50,6 @@ class ProjectDeleter(
 }
 
 sealed class DeleteProjectResult {
-    data object UnsentInstances : DeleteProjectResult()
-
-    data object RunningBackgroundJobs : DeleteProjectResult()
-
     data object DeletedSuccessfullyLastProject : DeleteProjectResult()
 
     data object DeletedSuccessfullyInactiveProject : DeleteProjectResult()

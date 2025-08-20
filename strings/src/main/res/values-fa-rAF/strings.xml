@@ -825,9 +825,6 @@
   <string name="using_project">با استفاده از %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">به %s تغییر دهید</string>
-  <string name="cannot_delete_project_title">پروژه قابل حذف نیست</string>
-  <string name="cannot_delete_project_message_one">شما موارد ارسالی ارسال نشده دارید. برای حذف پروژه، ابتدا باید آن موارد ارسالی را ارسال یا حذف کنید.</string>
-  <string name="cannot_delete_project_message_two">کارهای پس زمینه در حال اجرا هستند. لطفاً بعداً دوباره امتحان کنید.</string>
   <string name="or">یا</string>
   <string name="hex_color">رنگ Hex</string>
   <string name="invalid_hex_code">hex code نادرست است</string>

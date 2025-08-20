@@ -851,9 +851,6 @@
   <string name="using_project">Используется %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Переключить на %s</string>
-  <string name="cannot_delete_project_title">Невозможно удалить проект</string>
-  <string name="cannot_delete_project_message_one">У вас есть неотправленные материалы. Чтобы удалить проект, вы должны сначала отправить или удалить эти материалы.</string>
-  <string name="cannot_delete_project_message_two">Выполняются фоновые задания. Пожалуйста, повторите попытку позже.</string>
   <string name="or">ИЛИ</string>
   <string name="hex_color">HEX цвет</string>
   <string name="invalid_hex_code">Неверный HEX код</string>

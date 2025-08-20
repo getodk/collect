@@ -917,9 +917,6 @@
   <string name="using_project">Projet %s en utilisation</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Changer à %s</string>
-  <string name="cannot_delete_project_title">Le projet ne peut être supprimé</string>
-  <string name="cannot_delete_project_message_one">Vous avez des données non envoyées. Pour supprimer le projet, vous devez préalablement envoyer ou supprimer ces données.</string>
-  <string name="cannot_delete_project_message_two">Des tâches d\'arrière-plan sont en cours d\'exécution. Merci de réessayer plus tard.</string>
   <string name="or">OU</string>
   <string name="hex_color">Couleur hex</string>
   <string name="invalid_hex_code">Code de couleur hex n\'est pas valide</string>

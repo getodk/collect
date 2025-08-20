@@ -904,9 +904,6 @@
   <string name="using_project">Usando %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Cambiar a %s</string>
-  <string name="cannot_delete_project_title">El proyecto no se puede eliminar</string>
-  <string name="cannot_delete_project_message_one">Tiene envíos sin enviar. Para eliminar el proyecto, primero debe enviar o eliminar esos envíos.</string>
-  <string name="cannot_delete_project_message_two">Se están ejecutando trabajos en segundo plano. Por favor, inténtelo de nuevo más tarde.</string>
   <string name="or">O</string>
   <string name="hex_color">Color en Hex</string>
   <string name="invalid_hex_code">Código hexadecimal no válido</string>

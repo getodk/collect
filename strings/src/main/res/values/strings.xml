@@ -1139,9 +1139,6 @@
         Type &lt;b&gt;Delete&lt;/b&gt; to confirm this action.
     </string>
     <string name="delete_project_confirm_button_text">Delete project</string>
-    <string name="cannot_delete_project_title">Project can\'t be deleted</string>
-    <string name="cannot_delete_project_message_one">You have unsent submissions. To delete the project, you must first send or delete those submissions.</string>
-    <string name="cannot_delete_project_message_two">Background jobs are running. Please try again later.</string>
     <string name="or">OR</string>
     <string name="hex_color">Hex color</string>
     <string name="invalid_hex_code">Invalid hex code</string>

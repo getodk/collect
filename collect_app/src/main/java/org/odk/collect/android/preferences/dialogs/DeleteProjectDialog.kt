@@ -103,20 +103,6 @@ class DeleteProjectDialog : DialogFragment() {
         viewModel.deleteProjectResult.observe(this) { result ->
             dismiss()
             when (result) {
-                is DeleteProjectResult.UnsentInstances -> {
-                    MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(org.odk.collect.strings.R.string.cannot_delete_project_title)
-                        .setMessage(org.odk.collect.strings.R.string.cannot_delete_project_message_one)
-                        .setPositiveButton(org.odk.collect.strings.R.string.ok, null)
-                        .show()
-                }
-                is DeleteProjectResult.RunningBackgroundJobs -> {
-                    MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(org.odk.collect.strings.R.string.cannot_delete_project_title)
-                        .setMessage(org.odk.collect.strings.R.string.cannot_delete_project_message_two)
-                        .setPositiveButton(org.odk.collect.strings.R.string.ok, null)
-                        .show()
-                }
                 is DeleteProjectResult.DeletedSuccessfullyCurrentProject -> {
                     val newCurrentProject = result.newCurrentProject
                     ActivityUtils.startActivityAndCloseAllOthers(
