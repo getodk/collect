@@ -1,19 +1,23 @@
 package org.odk.collect.android.application
 
+import android.content.Context
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import org.odk.collect.android.R
 import org.odk.collect.qrcode.mlkit.ComposeThemeProvider
 
 @Composable
 fun CollectTheme(
+    context: Context,
     content: @Composable() () -> Unit
 ) {
-    val lightColors = lightColorScheme(surface = Color(0xFFFFFFFF))
-    val darkColors = darkColorScheme(surface = Color(0xFF001117))
+    val resources = context.resources
+    val lightColors = lightColorScheme(surface = Color(resources.getColor(R.color.colorSurfaceLight)))
+    val darkColors = darkColorScheme(surface = Color(resources.getColor(R.color.colorSurfaceDark)))
     val colorScheme = if (isSystemInDarkTheme()) darkColors else lightColors
 
     MaterialTheme(
@@ -25,6 +29,6 @@ fun CollectTheme(
 interface CollectComposeThemeProvider : ComposeThemeProvider {
     @Composable
     override fun Theme(content: @Composable (() -> Unit)) {
-        CollectTheme { content() }
+        CollectTheme(this as Context) { content() }
     }
 }
