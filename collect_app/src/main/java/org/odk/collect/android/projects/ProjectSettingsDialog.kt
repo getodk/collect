@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.fragment.app.DialogFragment
@@ -48,7 +47,7 @@ class ProjectSettingsDialog(private val viewModelFactory: ViewModelProvider.Fact
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = ProjectSettingsDialogLayoutBinding.inflate(LayoutInflater.from(context))
+        binding = ProjectSettingsDialogLayoutBinding.inflate(layoutInflater)
 
         currentProjectViewModel.currentProject.observe(this) {
             if (it != null) {
@@ -88,6 +87,8 @@ class ProjectSettingsDialog(private val viewModelFactory: ViewModelProvider.Fact
     }
 
     private fun inflateListOfInActiveProjects(context: Context, currentProject: Project.Saved) {
+        binding.projectList.removeAllViews()
+
         if (projectsRepository.getAll().none { it.uuid != currentProject.uuid }) {
             binding.topDivider.visibility = INVISIBLE
         } else {
