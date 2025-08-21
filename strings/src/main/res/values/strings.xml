@@ -1135,7 +1135,8 @@
     <string name="delete_project_dialog_message">By deleting this project, you will be permanently delete the following:&lt;br/&gt;&lt;br/&gt;
         • %1$d Form definitions&lt;br/&gt;
         • %2$d Sent forms&lt;br/&gt;
-        • %3$d Unsent forms&lt;br/&gt;&lt;br/&gt;
+        • %3$d Unsent forms ⚠️ &lt;br/&gt;
+        • %4$d Draft forms&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
         Type &lt;b&gt;Delete&lt;/b&gt; to confirm this action.
     </string>
     <string name="delete_project_confirm_button_text">Delete project</string>

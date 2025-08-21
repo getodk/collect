@@ -95,7 +95,8 @@ class DeleteProjectDialog : DialogFragment() {
                 org.odk.collect.strings.R.string.delete_project_dialog_message,
                 projectData.numberOfForms,
                 projectData.numberOfSentForms,
-                projectData.numberOfUnsentForms
+                projectData.numberOfUnsentForms,
+                projectData.numberOfDraftForms
             )
             binding.message.text = HtmlCompat.fromHtml(message, HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
@@ -164,12 +165,19 @@ class DeleteProjectDialog : DialogFragment() {
                     Instance.STATUS_NEW_EDIT,
                     Instance.STATUS_SUBMISSION_FAILED,
                 )
+                val numberOfDraftForms = instancesRepository.getCountByStatus(
+                    Instance.STATUS_INCOMPLETE,
+                    Instance.STATUS_INVALID,
+                    Instance.STATUS_VALID,
+                    Instance.STATUS_NEW_EDIT,
+                )
                 _projectData.postValue(
                     ProjectData(
                         project.name,
                         numberOfForms,
                         numberOfSentForms,
-                        numberOfUnsentForms
+                        numberOfUnsentForms,
+                        numberOfDraftForms
                     )
                 )
             }
@@ -187,7 +195,8 @@ class DeleteProjectDialog : DialogFragment() {
             val projectName: String,
             val numberOfForms: Int,
             val numberOfSentForms: Int,
-            val numberOfUnsentForms: Int
+            val numberOfUnsentForms: Int,
+            val numberOfDraftForms: Int
         )
     }
 }
