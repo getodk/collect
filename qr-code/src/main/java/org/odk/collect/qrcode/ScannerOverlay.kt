@@ -1,89 +1,31 @@
 package org.odk.collect.qrcode
 
-import android.animation.ValueAnimator
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
-import android.util.AttributeSet
-import android.view.View
-import kotlin.math.roundToInt
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
 
-internal class ScannerOverlay(context: Context, attrs: AttributeSet?) :
-    View(context, attrs) {
-
-    private val laserPaint = Paint().also {
-        it.color = Color.RED
-    }
-
-    private val borderPaint = Paint().also {
-        it.color = Color.BLACK
-        it.alpha = 75
-    }
-
-    private val viewFinderPaint = Paint().apply {
-        xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
-    }
-
-    var viewFinderRect = Rect()
-
-    init {
-        // Provides better performance for using `PorterDuff.Mode.CLEAR`
-        setLayerType(LAYER_TYPE_HARDWARE, null)
-    }
-
-    private val laserAnim = ValueAnimator.ofFloat(0f, 255f).also { animator ->
-        animator.duration = 320
-        animator.repeatCount = ValueAnimator.INFINITE
-        animator.repeatMode = ValueAnimator.REVERSE
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        drawBorder(canvas)
-        drawLaser(canvas)
-    }
-
-    private fun drawBorder(canvas: Canvas) {
-        // Draw full screen semi-transparent overlay
-        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), borderPaint)
-
-        // Clear the center
-        canvas.drawRect(
-            viewFinderRect.left.toFloat(),
-            viewFinderRect.top.toFloat(),
-            viewFinderRect.right.toFloat(),
-            viewFinderRect.bottom.toFloat(),
-            viewFinderPaint
+@Composable
+fun ScannerOverlay(viewFinderRect: Rect) {
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        drawRect(
+            color = Color(0x4B000000),
+            size = size
         )
-    }
 
-    private fun drawLaser(canvas: Canvas) {
-        val verticalMid = height / 2
-        val horizontalMargin = viewFinderRect.left + 8f
-
-        canvas.drawRect(
-            0f + horizontalMargin,
-            verticalMid.toFloat() - 2,
-            width.toFloat() - horizontalMargin,
-            verticalMid.toFloat() + 2,
-            laserPaint
+        drawRect(
+            color = Color(0x00000000),
+            topLeft = Offset(viewFinderRect.left.toFloat(), viewFinderRect.top.toFloat()),
+            size = Size(
+                (viewFinderRect.right - viewFinderRect.left).toFloat(),
+                (viewFinderRect.bottom - viewFinderRect.top).toFloat()
+            ),
+            blendMode = BlendMode.Clear
         )
-    }
-
-    fun startAnimations() {
-        laserAnim.addUpdateListener {
-            laserPaint.alpha = (it.animatedValue as Float).roundToInt()
-            invalidate()
-        }
-
-        laserAnim.start()
-    }
-
-    fun stopAnimations() {
-        laserAnim.cancel()
-        laserAnim.removeAllUpdateListeners()
     }
 }

@@ -63,4 +63,5 @@ dependencies {
     implementation(composeBom)
     implementation("androidx.compose.material3:material3")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation("androidx.compose.runtime:runtime-livedata:1.9.0")
 }

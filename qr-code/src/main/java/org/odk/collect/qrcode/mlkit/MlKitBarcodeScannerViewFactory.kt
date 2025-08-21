@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
@@ -31,6 +30,7 @@ import org.odk.collect.qrcode.BarcodeFormat
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.DetectedBarcode
+import org.odk.collect.qrcode.ScannerOverlay
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
 import org.odk.collect.qrcode.mlkit.ComposeThemeProvider.Companion.setContextThemedContent
 import kotlin.math.max
@@ -90,6 +90,8 @@ private class MlKitBarcodeScannerView(
             ConstraintLayout {
                 val (promptRef) = createRefs()
 
+                ScannerOverlay(viewFinderRect)
+
                 Text(
                     text = prompt,
                     color = MaterialTheme.colorScheme.surface,
@@ -102,16 +104,6 @@ private class MlKitBarcodeScannerView(
                 )
             }
         }
-
-        lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onResume(owner: LifecycleOwner) {
-                binding.scannerOverlay.startAnimations()
-            }
-
-            override fun onPause(owner: LifecycleOwner) {
-                binding.scannerOverlay.stopAnimations()
-            }
-        })
     }
 
     override fun onLayout(
@@ -130,7 +122,6 @@ private class MlKitBarcodeScannerView(
             this.height - verticalBorder
         )
 
-        binding.scannerOverlay.viewFinderRect = viewFinderRect
         super.onLayout(changed, left, top, right, bottom)
     }
 
