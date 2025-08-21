@@ -10,14 +10,11 @@ import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
 import androidx.camera.core.TorchState
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -34,6 +31,7 @@ import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.DetectedBarcode
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
+import org.odk.collect.qrcode.mlkit.ComposeThemeProvider.Companion.setContextThemedContent
 
 class MlKitBarcodeScannerViewFactory(private val scanThreshold: Int) : BarcodeScannerViewContainer.Factory {
     override fun create(
@@ -85,22 +83,20 @@ private class MlKitBarcodeScannerView(
     private val cameraController = LifecycleCameraController(context)
 
     init {
-        binding.composeView.setContent {
-            CollectTheme {
-                ConstraintLayout {
-                    val (promptRef) = createRefs()
+        binding.composeView.setContextThemedContent {
+            ConstraintLayout {
+                val (promptRef) = createRefs()
 
-                    Text(
-                        text = prompt,
-                        color = MaterialTheme.colorScheme.surface,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.constrainAs(promptRef) {
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            bottom.linkTo(parent.bottom, margin = 4.dp)
-                        }
-                    )
-                }
+                Text(
+                    text = prompt,
+                    color = MaterialTheme.colorScheme.surface,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.constrainAs(promptRef) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom, margin = 4.dp)
+                    }
+                )
             }
         }
 
@@ -204,16 +200,17 @@ private class MlKitBarcodeScannerView(
     }
 }
 
-@Composable
-fun CollectTheme(
-    content: @Composable() () -> Unit
-) {
-    val lightColors = lightColorScheme(surface = Color(0xFFFFFFFF))
-    val darkColors = darkColorScheme(surface = Color(0xFF001117))
-    val colorScheme = if (isSystemInDarkTheme()) darkColors else lightColors
+interface ComposeThemeProvider {
+    @Composable
+    fun Theme(content: @Composable() () -> Unit)
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        content = content
-    )
+    companion object {
+        fun ComposeView.setContextThemedContent(content: @Composable() () -> Unit) {
+            setContent {
+                (context as ComposeThemeProvider).Theme {
+                    content()
+                }
+            }
+        }
+    }
 }
