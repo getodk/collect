@@ -56,4 +56,16 @@ class ExternalSelectsTest {
             .assertText("File: $formsDirPath/search_and_select-media/nombre.csv is missing.")
             .assertText("File: $formsDirPath/search_and_select-media/nombre2.csv is missing.")
     }
+
+    @Test // https://github.com/getodk/collect/issues/6792
+    fun missingFileMessage_shouldBeDisplayedIfExternalFileWithChoicesUsedBySearchFunctionIsMissing_evenIfMatchingInternalDatasetExists() {
+        val formsDirPath = StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
+
+        rule.startAtMainMenu()
+            .copyForm("search_external.xml")
+            .startBlankForm("search_external")
+            .assertText("File: $formsDirPath/search_external-media/numbers.csv is missing.")
+            .swipeToNextQuestion("Choose a letter")
+            .assertText("File: $formsDirPath/search_external-media/letters.csv is missing.")
+    }
 }
