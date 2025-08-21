@@ -10,7 +10,6 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
-import kotlin.math.max
 import kotlin.math.roundToInt
 
 internal class ScannerOverlay(context: Context, attrs: AttributeSet?) :
@@ -30,7 +29,6 @@ internal class ScannerOverlay(context: Context, attrs: AttributeSet?) :
     }
 
     var viewFinderRect = Rect()
-        private set
 
     init {
         // Provides better performance for using `PorterDuff.Mode.CLEAR`
@@ -49,15 +47,6 @@ internal class ScannerOverlay(context: Context, attrs: AttributeSet?) :
     }
 
     private fun drawBorder(canvas: Canvas) {
-        val verticalBorder = max((height - VIEW_FINDER_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
-        val horizontalBorder = max((width - VIEW_FINDER_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
-        viewFinderRect.set(
-            horizontalBorder,
-            verticalBorder,
-            this.width - horizontalBorder,
-            this.height - verticalBorder
-        )
-
         // Draw full screen semi-transparent overlay
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), borderPaint)
 
@@ -96,10 +85,5 @@ internal class ScannerOverlay(context: Context, attrs: AttributeSet?) :
     fun stopAnimations() {
         laserAnim.cancel()
         laserAnim.removeAllUpdateListeners()
-    }
-
-    companion object {
-        const val VIEW_FINDER_SIZE = 820f
-        const val MIN_BORDER_SIZE = 80f
     }
 }
