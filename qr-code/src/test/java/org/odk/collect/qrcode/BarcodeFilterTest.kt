@@ -4,8 +4,7 @@ import android.graphics.Rect
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.not
-import org.hamcrest.Matchers.nullValue
+import org.hamcrest.Matchers.isA
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -18,8 +17,8 @@ class BarcodeFilterTest {
 
         val candidate =
             BarcodeCandidate(byteArrayOf(0), "blah", Rect(50, 50, 50, 50), BarcodeFormat.OTHER)
-        assertThat(barcodeFilter.filter(listOf(candidate)), equalTo(null))
-        assertThat(barcodeFilter.filter(listOf(candidate)), not(nullValue()))
+        assertThat(barcodeFilter.filter(listOf(candidate)), equalTo(DetectedState.None))
+        assertThat(barcodeFilter.filter(listOf(candidate)), isA(DetectedState.Full::class.java))
     }
 
     @Test
@@ -28,17 +27,16 @@ class BarcodeFilterTest {
 
         val candidate =
             BarcodeCandidate(byteArrayOf(0), "blah", Rect(50, 50, 50, 50), BarcodeFormat.OTHER)
-        assertThat(barcodeFilter.filter(listOf(candidate)), equalTo(null))
+        assertThat(barcodeFilter.filter(listOf(candidate)), equalTo(DetectedState.None))
 
         val other =
             BarcodeCandidate(byteArrayOf(1), "blah", Rect(50, 50, 50, 50), BarcodeFormat.OTHER)
-        assertThat(barcodeFilter.filter(listOf(other)), equalTo(null))
+        assertThat(barcodeFilter.filter(listOf(other)), equalTo(DetectedState.None))
 
-        assertThat(barcodeFilter.filter(listOf(candidate)), equalTo(null))
-        assertThat(
-            barcodeFilter.filter(listOf(candidate))!!.bytes.contentEquals(candidate.bytes),
-            equalTo(true)
-        )
+        assertThat(barcodeFilter.filter(listOf(candidate)), equalTo(DetectedState.None))
+
+        val barcode = (barcodeFilter.filter(listOf(candidate)) as DetectedState.Full).barcode
+        assertThat(barcode.bytes.contentEquals(candidate.bytes), equalTo(true))
     }
 
     @Test
@@ -47,15 +45,14 @@ class BarcodeFilterTest {
 
         val candidate =
             BarcodeCandidate(byteArrayOf(0), "blah", Rect(50, 50, 50, 50), BarcodeFormat.OTHER)
-        assertThat(barcodeFilter.filter(listOf(candidate)), equalTo(null))
+        assertThat(barcodeFilter.filter(listOf(candidate)), equalTo(DetectedState.None))
 
-        assertThat(barcodeFilter.filter(emptyList()), equalTo(null))
+        assertThat(barcodeFilter.filter(emptyList()), equalTo(DetectedState.None))
 
-        assertThat(barcodeFilter.filter(listOf(candidate)), equalTo(null))
-        assertThat(
-            barcodeFilter.filter(listOf(candidate))!!.bytes.contentEquals(candidate.bytes),
-            equalTo(true)
-        )
+        assertThat(barcodeFilter.filter(listOf(candidate)), equalTo(DetectedState.None))
+
+        val barcode = (barcodeFilter.filter(listOf(candidate)) as DetectedState.Full).barcode
+        assertThat(barcode.bytes.contentEquals(candidate.bytes), equalTo(true))
     }
 
     @Test
@@ -65,7 +62,11 @@ class BarcodeFilterTest {
             BarcodeCandidate(byteArrayOf(0), "blah", Rect(50, 50, 50, 50), BarcodeFormat.OTHER)
         assertThat(
             barcodeFilter.filter(listOf(candidate)),
-            equalTo(DetectedBarcode.Utf8("blah", BarcodeFormat.OTHER, byteArrayOf(0)))
+            equalTo(
+                DetectedState.Full(
+                    DetectedBarcode.Utf8("blah", BarcodeFormat.OTHER, byteArrayOf(0))
+                )
+            )
         )
     }
 
@@ -76,7 +77,7 @@ class BarcodeFilterTest {
             BarcodeCandidate(byteArrayOf(0), null, Rect(50, 50, 50, 50), BarcodeFormat.OTHER)
         assertThat(
             barcodeFilter.filter(listOf(candidate)),
-            equalTo(DetectedBarcode.Bytes(BarcodeFormat.OTHER, byteArrayOf(0)))
+            equalTo(DetectedState.Full(DetectedBarcode.Bytes(BarcodeFormat.OTHER, byteArrayOf(0))))
         )
     }
 
@@ -87,14 +88,14 @@ class BarcodeFilterTest {
             BarcodeCandidate(byteArrayOf(0), "", Rect(50, 50, 50, 50), BarcodeFormat.OTHER)
         assertThat(
             barcodeFilter.filter(listOf(candidate)),
-            equalTo(DetectedBarcode.Bytes(BarcodeFormat.OTHER, byteArrayOf(0)))
+            equalTo(DetectedState.Full(DetectedBarcode.Bytes(BarcodeFormat.OTHER, byteArrayOf(0))))
         )
     }
 
     @Test
-    fun `returns null when candidate has no bytes`() {
+    fun `returns None when candidate has no bytes`() {
         val barcodeFilter = BarcodeFilter(Rect(0, 0, 100, 100))
         val candidate = BarcodeCandidate(null, null, Rect(50, 50, 50, 50), BarcodeFormat.OTHER)
-        assertThat(barcodeFilter.filter(listOf(candidate)), equalTo(null))
+        assertThat(barcodeFilter.filter(listOf(candidate)), equalTo(DetectedState.None))
     }
 }

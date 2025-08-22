@@ -90,7 +90,7 @@ private class MlKitBarcodeScannerView(
     private val cameraController = LifecycleCameraController(context)
     private val viewFinderRect = Rect()
 
-    private val currentDetectedState = mutableStateOf(DetectedState.NONE)
+    private val currentDetectedState = mutableStateOf<DetectedState>(DetectedState.None)
 
     init {
         binding.composeView.setContextThemedContent {
@@ -163,24 +163,17 @@ private class MlKitBarcodeScannerView(
             ) { result: MlKitAnalyzer.Result ->
                 val value = result.getValue(barcodeScanner)
                 val barcodeCandidates = value?.map { it.toCandidate() } ?: emptyList()
+                val detectedState = barcodeFilter.filter(barcodeCandidates)
+                currentDetectedState.value = detectedState
 
-                if (barcodeCandidates.isNotEmpty()) {
-                    currentDetectedState.value = DetectedState.POTENTIAL
-
-                    val barcode = barcodeFilter.filter(barcodeCandidates)
-                    if (barcode != null) {
-                        val contents = processBarcode(barcode)
-                        if (!contents.isNullOrEmpty()) {
-                            cameraController.unbind()
-                            currentDetectedState.value = DetectedState.FULL
-
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                callback(contents)
-                            }, 2000L)
-                        }
+                if (detectedState is DetectedState.Full) {
+                    val contents = processBarcode(detectedState.barcode)
+                    if (!contents.isNullOrEmpty()) {
+                        cameraController.unbind()
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            callback(contents)
+                        }, 2000L)
                     }
-                } else {
-                    currentDetectedState.value = DetectedState.NONE
                 }
             }
         )

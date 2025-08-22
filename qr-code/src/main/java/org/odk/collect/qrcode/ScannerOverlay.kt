@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 
 @Composable
-fun ScannerOverlay(viewFinderRect: Rect, detectedState: DetectedState = DetectedState.NONE) {
+fun ScannerOverlay(viewFinderRect: Rect, detectedState: DetectedState = DetectedState.None) {
     Canvas(modifier = Modifier.fillMaxSize()) {
         drawRect(
             color = Color(0x4B000000),
@@ -31,8 +31,8 @@ fun ScannerOverlay(viewFinderRect: Rect, detectedState: DetectedState = Detected
             cornerRadius = CornerRadius(5f, 5f)
         )
 
-        if (detectedState != DetectedState.NONE) {
-            val borderColor = if (detectedState == DetectedState.POTENTIAL) {
+        if (detectedState != DetectedState.None) {
+            val borderColor = if (detectedState == DetectedState.Potential) {
                 Color.Yellow
             } else {
                 Color.Green
@@ -50,10 +50,4 @@ fun ScannerOverlay(viewFinderRect: Rect, detectedState: DetectedState = Detected
             )
         }
     }
-}
-
-enum class DetectedState {
-    NONE,
-    POTENTIAL,
-    FULL
 }
