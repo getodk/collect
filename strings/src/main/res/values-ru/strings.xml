@@ -251,7 +251,7 @@
   <string name="edit_value">Изменить значение</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Значение не выбрано</string>
-  <string name="selected">Выбрано:</string>
+  <string name="selected_title">Выбрано:</string>
   <string name="trigger">OK. Продолжайте.</string>
   <string name="ext_file_no_data_error">Файл не содержит данных!</string>
   <string name="ext_conflicting_columns_error">Столбцы %s совпадают!</string>

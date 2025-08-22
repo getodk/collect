@@ -253,7 +253,7 @@
   <string name="edit_value">Ubah nilai</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Tidak ada nilai terpilih</string>
-  <string name="selected">Terpilih:</string>
+  <string name="selected_title">Terpilih:</string>
   <string name="trigger">OK. Lanjut.</string>
   <string name="ext_file_no_data_error">Berkas tidak memiliki data</string>
   <string name="ext_conflicting_columns_error">Semua kolom %s telah sesuai</string>

@@ -218,7 +218,7 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="edit_value">Hindura ibyo wanditse </string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Ntakintu wahisemo </string>
-  <string name="selected">Ibyatoranijwe</string>
+  <string name="selected_title">Ibyatoranijwe</string>
   <string name="trigger">Ok. Ngaho komeza</string>
   <string name="ext_file_no_data_error">Dokima nta makuru arimo</string>
   <string name="ext_conflicting_columns_error">Amakuru agaragara mu buryo buhagaze arahura neza 1%s</string>

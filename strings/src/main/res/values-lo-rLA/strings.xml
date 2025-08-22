@@ -133,7 +133,7 @@
   <string name="select_answer">ເລືອກຄຳຕອບ</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">ໄດ້ເລືອກແລ້ວ:</string>
+  <string name="selected_title">ໄດ້ເລືອກແລ້ວ:</string>
   <string name="trigger">ຕົກລົງ. ກະລຸນາດຳເນີນຕໍ່</string>
   <string name="ext_file_no_data_error">​ບໍ່​ມີ​ຂໍ້​ມູນ​ໃນ​ເອ​ກະ​ສານ!</string>
   <string name="ext_conflicting_columns_error">ຈຳ​ນວນ %s ຖັນ​ທີ່​ກົງ​ກັນ!</string>

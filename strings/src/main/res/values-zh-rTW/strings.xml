@@ -251,7 +251,7 @@
   <string name="edit_value">編輯數值</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">沒有選定的數值</string>
-  <string name="selected">選定: </string>
+  <string name="selected_title">選定: </string>
   <string name="trigger">好的，請繼續。</string>
   <string name="ext_file_no_data_error">此文件不包含資料！</string>
   <string name="ext_conflicting_columns_error">列 %s 相符!</string>

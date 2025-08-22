@@ -209,7 +209,7 @@
   <string name="edit_value">Wijzig waarde</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Geen waarde geselecteerd</string>
-  <string name="selected">Gekozen:</string>
+  <string name="selected_title">Gekozen:</string>
   <string name="trigger">OK. Ga door.</string>
   <string name="ext_file_no_data_error">Het bestand is leeg!</string>
   <string name="ext_conflicting_columns_error">Kolommen %s komen overeen!</string>

@@ -196,7 +196,7 @@
   <string name="edit_value">Edytuj wartość</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Nie wybrano wartości</string>
-  <string name="selected">Wybrany:</string>
+  <string name="selected_title">Wybrany:</string>
   <string name="trigger">OK. Kontynuuj, proszę.</string>
   <string name="ext_file_no_data_error">Plik nie zawiera danych!</string>
   <string name="ext_conflicting_columns_error">Kolumny %s pasują1</string>

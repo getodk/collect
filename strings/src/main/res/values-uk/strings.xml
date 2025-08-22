@@ -191,7 +191,7 @@
   <string name="edit_value">Редагувати значення</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Значення не обране</string>
-  <string name="selected">Обрано:</string>
+  <string name="selected_title">Обрано:</string>
   <string name="trigger">Добре. Будь ласка, продовжуйте.</string>
   <string name="ext_file_no_data_error">Файл не містить даних!</string>
   <string name="ext_conflicting_columns_error">Стовбці %s співпадають!</string>

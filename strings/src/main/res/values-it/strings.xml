@@ -253,7 +253,7 @@
   <string name="edit_value">Modifica valore</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Nessun valore selezionato</string>
-  <string name="selected">Selezionato:</string>
+  <string name="selected_title">Selezionato:</string>
   <string name="trigger">OK. Perpiacere continua.</string>
   <string name="ext_file_no_data_error">Attenzione il file non contiene dati!</string>
   <string name="ext_conflicting_columns_error">Le colonne %s corrispondono!</string>

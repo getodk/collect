@@ -122,7 +122,7 @@
   <string name="select_answer">উত্তর নির্বাচন করুন।</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">নির্বাচিত</string>
+  <string name="selected_title">নির্বাচিত</string>
   <string name="trigger">ঠিক আছে। দয়া করে সামনের দিকে যান।</string>
   <string name="direction">অভিমুখ: %s</string>
   <!--1st month in the Buddhist calendar-->
