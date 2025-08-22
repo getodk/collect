@@ -5,6 +5,8 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.graphics.Rect
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
@@ -14,6 +16,8 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
@@ -30,6 +34,7 @@ import org.odk.collect.qrcode.BarcodeFormat
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.DetectedBarcode
+import org.odk.collect.qrcode.DetectedState
 import org.odk.collect.qrcode.ScannerOverlay
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
 import org.odk.collect.qrcode.mlkit.ComposeThemeProvider.Companion.setContextThemedContent
@@ -85,12 +90,15 @@ private class MlKitBarcodeScannerView(
     private val cameraController = LifecycleCameraController(context)
     private val viewFinderRect = Rect()
 
+    private val currentDetectedState = mutableStateOf(DetectedState.NONE)
+
     init {
         binding.composeView.setContextThemedContent {
             ConstraintLayout {
                 val (promptRef) = createRefs()
 
-                ScannerOverlay(viewFinderRect)
+                var detectedState = remember { currentDetectedState }
+                ScannerOverlay(viewFinderRect, detectedState.value)
 
                 Text(
                     text = prompt,
@@ -155,13 +163,24 @@ private class MlKitBarcodeScannerView(
             ) { result: MlKitAnalyzer.Result ->
                 val value = result.getValue(barcodeScanner)
                 val barcodeCandidates = value?.map { it.toCandidate() } ?: emptyList()
-                val barcode = barcodeFilter.filter(barcodeCandidates)
-                if (barcode != null) {
-                    val contents = processBarcode(barcode)
-                    if (!contents.isNullOrEmpty()) {
-                        cameraController.unbind()
-                        callback(contents)
+
+                if (barcodeCandidates.isNotEmpty()) {
+                    currentDetectedState.value = DetectedState.POTENTIAL
+
+                    val barcode = barcodeFilter.filter(barcodeCandidates)
+                    if (barcode != null) {
+                        val contents = processBarcode(barcode)
+                        if (!contents.isNullOrEmpty()) {
+                            cameraController.unbind()
+                            currentDetectedState.value = DetectedState.FULL
+
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                callback(contents)
+                            }, 2000L)
+                        }
                     }
+                } else {
+                    currentDetectedState.value = DetectedState.NONE
                 }
             }
         )
