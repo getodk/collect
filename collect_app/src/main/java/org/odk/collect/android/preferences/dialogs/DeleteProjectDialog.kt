@@ -96,6 +96,7 @@ class DeleteProjectDialog : DialogFragment() {
                 projectData.numberOfForms,
                 projectData.numberOfSentForms,
                 projectData.numberOfUnsentForms,
+                if (projectData.numberOfUnsentForms > 0) "⚠\uFE0F" else "",
                 projectData.numberOfDraftForms
             )
             binding.message.text = HtmlCompat.fromHtml(message, HtmlCompat.FROM_HTML_MODE_LEGACY)
