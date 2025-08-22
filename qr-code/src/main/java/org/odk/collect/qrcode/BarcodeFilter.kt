@@ -28,6 +28,8 @@ class BarcodeFilter(private val bounds: Rect, private val threshold: Int = 1) {
                 null
             }
         } else {
+            potential = null
+            potentialOccurrences = 0
             null
         }
     }
