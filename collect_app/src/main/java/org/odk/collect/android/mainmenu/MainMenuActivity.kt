@@ -8,6 +8,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.CrashHandlerActivity
 import org.odk.collect.android.activities.FirstLaunchActivity
+import org.odk.collect.android.application.CollectComposeThemeProvider
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ThemeUtils
@@ -19,7 +20,7 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class MainMenuActivity : LocalizedActivity() {
+class MainMenuActivity : LocalizedActivity(), CollectComposeThemeProvider {
 
     @Inject
     lateinit var viewModelFactory: MainMenuViewModelFactory
