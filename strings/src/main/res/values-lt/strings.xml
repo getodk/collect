@@ -120,7 +120,7 @@
   <string name="select_answer">Pažymėkite atsakymą</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">Parinkta:</string>
+  <string name="selected_title">Parinkta:</string>
   <string name="trigger">Gerai. Prašome tęsti.</string>
   <!--1st month in the Buddhist calendar-->
   <!--2nd month in the Buddhist calendar-->

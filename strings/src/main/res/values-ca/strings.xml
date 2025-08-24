@@ -147,7 +147,7 @@
   <string name="select_answer">Seleccionar resposta:</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">Seleccionat:</string>
+  <string name="selected_title">Seleccionat:</string>
   <string name="trigger">D\'acord. Si us plau, continuar.</string>
   <string name="ext_file_no_data_error">L\'arxiu no conté dades!</string>
   <string name="ext_conflicting_columns_error">Columnes %s coincideixen!</string>

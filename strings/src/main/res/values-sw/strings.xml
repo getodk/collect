@@ -224,7 +224,7 @@
   <string name="edit_value">Hariri thamani</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Hakuna thamani iliyochaguliwa</string>
-  <string name="selected">Chaguliwa:</string>
+  <string name="selected_title">Chaguliwa:</string>
   <string name="trigger">Sawa. tafadhali endelea.</string>
   <string name="ext_file_no_data_error">Faili halina taarifa!</string>
   <string name="ext_conflicting_columns_error">Safu%simemechi!</string>

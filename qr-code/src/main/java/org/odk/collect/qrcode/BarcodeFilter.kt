@@ -7,7 +7,7 @@ class BarcodeFilter(private val bounds: Rect, private val threshold: Int = 1) {
     private var potential: BarcodeCandidate? = null
     private var potentialOccurrences = 0
 
-    fun filter(barcodeCandidates: List<BarcodeCandidate>): DetectedBarcode? {
+    fun filter(barcodeCandidates: List<BarcodeCandidate>): DetectedState {
         val candidate = barcodeCandidates.firstOrNull()
         return if (candidate?.boundingBox != null && bounds.contains(candidate.boundingBox)) {
             if (!candidate.bytes.contentEquals(potential?.bytes)) {
@@ -18,17 +18,25 @@ class BarcodeFilter(private val bounds: Rect, private val threshold: Int = 1) {
             potentialOccurrences++
             if (potentialOccurrences == threshold) {
                 if (candidate.bytes == null) {
-                    null
+                    DetectedState.None
                 } else if (candidate.utfContents.isNullOrEmpty()) {
-                    DetectedBarcode.Bytes(candidate.format, candidate.bytes)
+                    DetectedState.Full(DetectedBarcode.Bytes(candidate.format, candidate.bytes))
                 } else {
-                    DetectedBarcode.Utf8(candidate.utfContents, candidate.format, candidate.bytes)
+                    DetectedState.Full(
+                        DetectedBarcode.Utf8(
+                            candidate.utfContents,
+                            candidate.format,
+                            candidate.bytes
+                        )
+                    )
                 }
             } else {
-                null
+                DetectedState.None
             }
         } else {
-            null
+            potential = null
+            potentialOccurrences = 0
+            DetectedState.None
         }
     }
 }

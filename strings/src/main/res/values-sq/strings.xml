@@ -179,7 +179,7 @@
   <string name="edit_value">Ndrysho vlerën</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Nuk keni përzgjedhur vlerën</string>
-  <string name="selected">Përzgjedhur:</string>
+  <string name="selected_title">Përzgjedhur:</string>
   <string name="trigger">OK. Lutemi, vazhdoni.</string>
   <string name="ext_file_no_data_error">Ky file nuk ka të dhëna!</string>
   <string name="ext_conflicting_columns_error">Kolonat %s përputhen!</string>

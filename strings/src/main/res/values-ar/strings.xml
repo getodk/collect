@@ -242,7 +242,7 @@
   <string name="edit_value">عدل القيمة</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">لم يتم اختيار قيمة</string>
-  <string name="selected">مختارة:</string>
+  <string name="selected_title">مختارة:</string>
   <string name="trigger">حسنًا. الرجاء المواصلة.</string>
   <string name="ext_file_no_data_error">لا يحتوي الملف على بيانات!</string>
   <string name="ext_conflicting_columns_error">اعمدة  %s متوافقة ! </string>

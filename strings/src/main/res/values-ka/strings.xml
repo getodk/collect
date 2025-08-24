@@ -176,7 +176,7 @@
   <string name="select_answer">აირჩიე პასუხი</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">არჩეული: </string>
+  <string name="selected_title">არჩეული: </string>
   <string name="trigger">კარგი. გთხოვთ, გააგრძელოთ.</string>
   <string name="ext_file_no_data_error">ეს ფაილი მონაცემებს არ შეიცავს!</string>
   <string name="ext_import_completed_message">მონაცემების წაკითხვა დასრულდა!</string>

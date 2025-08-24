@@ -131,7 +131,7 @@
   <string name="select_answer">Khetha impendulo</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">Okukhethiwe:</string>
+  <string name="selected_title">Okukhethiwe:</string>
   <string name="trigger">Kulungile. Ucelwa ukuba uqhubeke.</string>
   <string name="ext_file_no_data_error">Lomqulu awunalwazi</string>
   <string name="ext_import_finalizing_message">Kuqedelwa ulwazi obeluvele lukhona…</string>

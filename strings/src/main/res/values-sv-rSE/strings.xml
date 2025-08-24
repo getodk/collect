@@ -189,7 +189,7 @@
   <string name="edit_value">Redigera värde</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Inget värde valt</string>
-  <string name="selected">Valda:</string>
+  <string name="selected_title">Valda:</string>
   <string name="trigger">OK. Vänligen fortsätt.</string>
   <string name="ext_file_no_data_error">Filen innehåller ingen data!</string>
   <string name="ext_conflicting_columns_error">Kolumnerna %s överensstämmer!</string>

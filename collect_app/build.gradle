@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinParcelize)
     alias(libs.plugins.ossLicenses)
     alias(libs.plugins.safeargs)
+    alias(libs.plugins.composeCompiler)
 }
 apply from: '../config/quality.gradle'
 
@@ -76,6 +77,7 @@ android {
     buildFeatures {
         viewBinding true
         buildConfig true
+        compose true
     }
 
     defaultConfig {
@@ -346,6 +348,11 @@ dependencies {
 
     implementation libs.splashscreen
     implementation libs.androidxNavigationFragmentKtx
+
+    var composeBom = platform(libs.androidxComposeBom)
+    implementation(composeBom)
+    implementation(libs.androidXComposeMaterial)
+    implementation(libs.androidXConstraintLayoutCompose)
 
     testImplementation project(':forms-test')
 

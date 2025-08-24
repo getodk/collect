@@ -140,7 +140,7 @@
   <string name="select_answer">መልሱን ይምረጡ</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">ተመርጧል:</string>
+  <string name="selected_title">ተመርጧል:</string>
   <string name="trigger">እሺ:: እባክዎ ይቀጥሉ::</string>
   <string name="ext_file_no_data_error">ፋይሉ ምንም ውሂብ አልያዘም!</string>
   <string name="ext_conflicting_columns_error">አምዶች 1 %s ይመሳሰላሉ!</string>

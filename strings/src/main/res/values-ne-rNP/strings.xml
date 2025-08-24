@@ -153,7 +153,7 @@
   <string name="select_answer">उत्तर छान्नुहोस्</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">छानिएका:</string>
+  <string name="selected_title">छानिएका:</string>
   <string name="trigger">हुन्छ | कृपया जारी राख्नुहोस् |</string>
   <string name="ext_file_no_data_error">फाइलमा कुनै तथ्यांक छैन!</string>
   <string name="ext_conflicting_columns_error">%s महलहरु मिले |</string>

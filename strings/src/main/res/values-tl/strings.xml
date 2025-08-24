@@ -121,7 +121,7 @@
   <string name="select_answer">Pumili ng Sagot</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">Pinili: </string>
+  <string name="selected_title">Pinili: </string>
   <string name="trigger">Sige. Magpatuloy.</string>
   <!--1st month in the Buddhist calendar-->
   <!--2nd month in the Buddhist calendar-->

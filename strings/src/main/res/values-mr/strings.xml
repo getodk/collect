@@ -158,7 +158,7 @@
   <string name="select_answer">उत्तर निवडा</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">निवडलेले:</string>
+  <string name="selected_title">निवडलेले:</string>
   <string name="trigger">ठीक आहे. कृपया चालू ठेवा.</string>
   <string name="ext_file_no_data_error">फाइलमध्ये कोणताही डेटा नाही!</string>
   <string name="ext_conflicting_columns_error">स्तंभ%s जुळत आहे!</string>

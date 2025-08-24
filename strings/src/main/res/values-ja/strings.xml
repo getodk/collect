@@ -216,7 +216,7 @@
   <string name="edit_value">値を編集</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">値が選択されていません</string>
-  <string name="selected">選択済: </string>
+  <string name="selected_title">選択済: </string>
   <string name="trigger">OK、続けます。</string>
   <string name="ext_file_no_data_error">ファイルにデータが含まれていません!</string>
   <string name="ext_conflicting_columns_error">列 %s が一致しました!</string>

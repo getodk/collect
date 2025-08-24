@@ -254,7 +254,7 @@
   <string name="edit_value">Editar valor</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Ningún valor seleccionado</string>
-  <string name="selected">Seleccionada:</string>
+  <string name="selected_title">Seleccionada:</string>
   <string name="trigger">OK. Por favor continúe.</string>
   <string name="ext_file_no_data_error">¡El archivo no contiene datos!</string>
   <string name="ext_conflicting_columns_error">¡Columnas %s coinciden!</string>

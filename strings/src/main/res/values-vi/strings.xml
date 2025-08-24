@@ -124,7 +124,7 @@
   <string name="select_answer">Chọn câu trả lời</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">Chọn: </string>
+  <string name="selected_title">Chọn: </string>
   <string name="trigger">OK. Hãy tiếp tục.</string>
   <!--1st month in the Buddhist calendar-->
   <!--2nd month in the Buddhist calendar-->

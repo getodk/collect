@@ -155,7 +155,7 @@
   <string name="select_answer">Vælg svarmulighed</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">Valgt:</string>
+  <string name="selected_title">Valgt:</string>
   <string name="trigger">Fortsæt</string>
   <string name="ext_file_no_data_error">Filen indeholder intet data.</string>
   <string name="ext_conflicting_columns_error">Kolonner 1%s stemmer overens</string>

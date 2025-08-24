@@ -259,7 +259,7 @@
   <string name="edit_value">Muokkaa arvoa</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Ei valittua arvoa</string>
-  <string name="selected">Valittu:</string>
+  <string name="selected_title">Valittu:</string>
   <string name="trigger">OK. Ole hyvä ja jatka.</string>
   <string name="ext_file_no_data_error">Tiedostossa ei ole tietoja!</string>
   <string name="ext_conflicting_columns_error">Sarakkeet %s täsmäävät!</string>

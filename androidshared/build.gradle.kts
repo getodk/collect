@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kotlinKapt)
+    alias(libs.plugins.composeCompiler)
 }
 
 apply(from = "../config/quality.gradle")
@@ -11,6 +12,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
     defaultConfig {
@@ -54,6 +56,10 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.androidxExinterface)
     implementation(libs.playServicesLocation)
+
+    val composeBom = platform(libs.androidxComposeBom)
+    implementation(composeBom)
+    implementation(libs.androidXComposeMaterial)
 
     testImplementation(project(":test-shared"))
     testImplementation(project(":androidtest"))

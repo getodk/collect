@@ -151,7 +151,7 @@
   <string name="select_answer">Vali vastus</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">Valitud:</string>
+  <string name="selected_title">Valitud:</string>
   <string name="trigger">Ok. Palun jätkake.</string>
   <string name="ext_file_no_data_error">Fail on tühi!</string>
   <string name="ext_conflicting_columns_error">%s tulbad sobivad!</string>

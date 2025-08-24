@@ -38,7 +38,7 @@ The purpose of this document is to give anyone who reads it a quick overview  of
 
 * General effort to increase test coverage and quality while working on anything and enforcing tests for new code in PR review
 * Moving responsibilities out of `FormFillingActivity` into other components (like Fragments, ViewModels, use cases etc)
-* Writing all new code in Kotlin
+* Writing all new code in Kotlin, and writing new UI using Jetpack Compose
 * Writing new code using a [multi-module approach](CODE-GUIDELINES.md#gradle-sub-modules) (feature modules, mini frameworks etc) and breaking old code out into modules when opportunities come up
 * Trying to remove technical debt flagged with `@Deprecated`
 * Replacing async work such as `AsyncTask` with `Flow` (converted to `LiveData` in UI code) + `Scheduler` abstraction

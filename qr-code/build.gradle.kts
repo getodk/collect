@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.composeCompiler)
 }
 
 apply(from = "../config/quality.gradle")
@@ -37,6 +38,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 }
 
@@ -52,6 +54,11 @@ dependencies {
     implementation(libs.cameraxView)
     implementation(libs.mlkit.barcodescanning)
     implementation(libs.camera.mlkit.vision)
+
+    val composeBom = platform(libs.androidxComposeBom)
+    implementation(composeBom)
+    implementation(libs.androidXComposeMaterial)
+    implementation(libs.androidXConstraintLayoutCompose)
 
     testImplementation(libs.androidxTestExtJunit)
     testImplementation(libs.hamcrest)

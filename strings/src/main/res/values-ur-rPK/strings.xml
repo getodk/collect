@@ -125,7 +125,7 @@
   <string name="select_answer">جواب کا انتخاب کریں</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">منتخب شدہ</string>
+  <string name="selected_title">منتخب شدہ</string>
   <string name="trigger">ٹھیک ہے، مہربانی کرکے جاری رکھیں</string>
   <string name="ext_file_no_data_error">اس فائل میں کوئ ڈیٹا موجود نھیں ہے</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->

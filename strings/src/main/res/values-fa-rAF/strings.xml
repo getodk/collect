@@ -245,7 +245,7 @@
   <string name="edit_value">ویرایش مقدار</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">هیچ مقدار را انتخاب نگردیده است</string>
-  <string name="selected">انتخاب شد:</string>
+  <string name="selected_title">انتخاب شد:</string>
   <string name="trigger">درست است، لطفاً ادامه بدهید.</string>
   <string name="ext_file_no_data_error">فایل حاوی هیچ data نیست!</string>
   <string name="ext_conflicting_columns_error">ستون ها %s  برای مطابقت</string>

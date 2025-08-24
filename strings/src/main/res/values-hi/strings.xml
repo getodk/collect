@@ -164,7 +164,7 @@
   <string name="select_answer">जवाब चुनें</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">चयनित: </string>
+  <string name="selected_title">चयनित: </string>
   <string name="trigger">ओके। कृपया जारी रखें।</string>
   <string name="ext_file_no_data_error">फाइल में कोई डेटा नहीं!</string>
   <string name="ext_conflicting_columns_error">कॉलम %sमैच!</string>

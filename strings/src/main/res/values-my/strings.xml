@@ -142,7 +142,7 @@
   <string name="select_answer">အေျဖေရြးခ်ယ္ရန္</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">ေရြးခ်ယ္ၿပီး:</string>
+  <string name="selected_title">ေရြးခ်ယ္ၿပီး:</string>
   <string name="trigger">ဆက္လက္လုပ္ေဆာင္ရန္</string>
   <!--1st month in the Buddhist calendar-->
   <!--2nd month in the Buddhist calendar-->

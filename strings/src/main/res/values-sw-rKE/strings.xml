@@ -138,7 +138,7 @@
   <string name="select_answer">Chagua jibu</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">Iliyochaguliwa</string>
+  <string name="selected_title">Iliyochaguliwa</string>
   <string name="trigger">Sawa. Tafadhali Endelea.</string>
   <string name="ext_file_no_data_error">Faili haina ujumbe</string>
   <string name="ext_conflicting_columns_error">Safuwima %s zinalingana!</string>
