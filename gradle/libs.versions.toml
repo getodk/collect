@@ -39,6 +39,9 @@ androidxPreferenceKtx = { group = "androidx.preference", name = "preference-ktx"
 androidxFragmentKtx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidxFragment" }
 androidMaterial = { group = "com.google.android.material", name = "material", version = "1.12.0" }
 androidFlexbox = { group = "com.google.android.flexbox", name = "flexbox", version = "3.0.0" }
+androidxComposeBom = { group = "androidx.compose", name = "compose-bom", version = "2025.08.00" }
+androidXComposeMaterial = { group = "androidx.compose.material3", name = "material3" }
+androidXConstraintLayoutCompose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.1.1" }
 playServicesMaps = { group = "com.google.android.gms", name = "play-services-maps", version = "19.2.0" }
 playServicesLocation = { group = "com.google.android.gms", name = "play-services-location", version = "21.3.0" }
 playServicesOssLicenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version = "17.1.0" }

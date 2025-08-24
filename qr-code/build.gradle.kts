@@ -55,13 +55,12 @@ dependencies {
     implementation(libs.mlkit.barcodescanning)
     implementation(libs.camera.mlkit.vision)
 
+    val composeBom = platform(libs.androidxComposeBom)
+    implementation(composeBom)
+    implementation(libs.androidXComposeMaterial)
+    implementation(libs.androidXConstraintLayoutCompose)
+
     testImplementation(libs.androidxTestExtJunit)
     testImplementation(libs.hamcrest)
     testImplementation(libs.robolectric)
-
-    val composeBom = platform("androidx.compose:compose-bom:2025.05.00")
-    implementation(composeBom)
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation("androidx.compose.runtime:runtime-livedata:1.9.0")
 }
