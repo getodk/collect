@@ -10,6 +10,9 @@ import androidx.compose.ui.graphics.Color
 import org.odk.collect.android.R
 import org.odk.collect.qrcode.mlkit.ComposeThemeProvider
 
+/**
+ * Changes to this theme should also be made in `theme.xml`
+ */
 @Composable
 fun CollectTheme(
     context: Context,
