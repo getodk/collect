@@ -15,11 +15,9 @@ import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -28,6 +26,7 @@ import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
+import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.qrcode.BarcodeCandidate
 import org.odk.collect.qrcode.BarcodeFilter
 import org.odk.collect.qrcode.BarcodeFormat
@@ -37,7 +36,6 @@ import org.odk.collect.qrcode.DetectedBarcode
 import org.odk.collect.qrcode.DetectedState
 import org.odk.collect.qrcode.ScannerOverlay
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
-import org.odk.collect.qrcode.mlkit.ComposeThemeProvider.Companion.setContextThemedContent
 import kotlin.math.max
 
 class MlKitBarcodeScannerViewFactory(private val scanThreshold: Int) : BarcodeScannerViewContainer.Factory {
@@ -225,21 +223,6 @@ private class MlKitBarcodeScannerView(
             }
 
             return BarcodeCandidate(this.rawBytes, this.rawValue, this.boundingBox, format)
-        }
-    }
-}
-
-interface ComposeThemeProvider {
-    @Composable
-    fun Theme(content: @Composable() () -> Unit)
-
-    companion object {
-        fun ComposeView.setContextThemedContent(content: @Composable() () -> Unit) {
-            setContent {
-                (context as ComposeThemeProvider).Theme {
-                    content()
-                }
-            }
         }
     }
 }
