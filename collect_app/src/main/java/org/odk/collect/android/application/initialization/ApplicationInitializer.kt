@@ -11,6 +11,7 @@ import org.odk.collect.android.application.initialization.upgrade.UpgradeInitial
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.androidshared.ui.ToastUtils
+import org.odk.collect.async.Scheduler
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -27,7 +28,8 @@ class ApplicationInitializer(
     private val projectsRepository: ProjectsRepository,
     private val settingsProvider: SettingsProvider,
     private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
-    private val projectsDataService: ProjectsDataService
+    private val projectsDataService: ProjectsDataService,
+    private val scheduler: Scheduler
 ) {
     fun initialize() {
         initializeLocale()
@@ -42,7 +44,8 @@ class ApplicationInitializer(
             analytics,
             projectsRepository,
             settingsProvider,
-            context
+            context,
+            scheduler
         ).initialize()
         mapsInitializer.initialize()
         JavaRosaInitializer(propertyManager, projectsDataService, entitiesRepositoryProvider, settingsProvider).initialize()

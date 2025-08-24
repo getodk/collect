@@ -3,6 +3,7 @@ package org.odk.collect.android.application.initialization
 import android.content.Context
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.preferences.Defaults
+import org.odk.collect.async.Scheduler
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -13,23 +14,26 @@ class UserPropertiesInitializer(
     private val analytics: Analytics,
     private val projectsRepository: ProjectsRepository,
     private val settingsProvider: SettingsProvider,
-    private val context: Context
+    private val context: Context,
+    private val scheduler: Scheduler
 ) {
 
     fun initialize() {
-        val projects = projectsRepository.getAll()
+        scheduler.immediate {
+            val projects = projectsRepository.getAll()
 
-        analytics.setUserProperty("ProjectsCount", projects.size.toString())
+            analytics.setUserProperty("ProjectsCount", projects.size.toString())
 
-        analytics.setUserProperty(
-            "UsingLegacyFormUpdate",
-            projects.any { isNotUsingMatchExactly(it, context) }.toString()
-        )
+            analytics.setUserProperty(
+                "UsingLegacyFormUpdate",
+                projects.any { isNotUsingMatchExactly(it, context) }.toString()
+            )
 
-        analytics.setUserProperty(
-            "UsingNonDefaultTheme",
-            projects.any { isNotUsingDefaultTheme(it) }.toString()
-        )
+            analytics.setUserProperty(
+                "UsingNonDefaultTheme",
+                projects.any { isNotUsingDefaultTheme(it) }.toString()
+            )
+        }
     }
 
     private fun isNotUsingMatchExactly(project: Project.Saved, context: Context): Boolean {
