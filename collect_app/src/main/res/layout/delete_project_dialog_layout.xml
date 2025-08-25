@@ -1,89 +1,94 @@
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingHorizontal="@dimen/margin_standard"
-    android:paddingBottom="@dimen/margin_standard">
+    android:layout_height="match_parent">
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_standard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:paddingHorizontal="@dimen/margin_standard"
+        android:paddingBottom="@dimen/margin_standard">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/delete_project_dialog_title"
-        android:textAppearance="?textAppearanceHeadlineSmall"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progress_bar"
-        app:layout_goneMarginTop="@dimen/margin_standard"
-        tools:text="Delete X project"/>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:textAppearance="?textAppearanceBodyMedium"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        tools:text="@string/delete_project_dialog_message"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/confirmation_field"
-        style="?textInputFilledStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_standard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/message">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/confirmation_field_input"
-            android:layout_width="match_parent"
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:lines="1" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="@dimen/margin_standard"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrierTopViews"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="progress_bar, confirmation_field"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete_project_dialog_title"
+            android:textAppearance="?textAppearanceHeadlineSmall"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progress_bar"
+            app:layout_goneMarginTop="@dimen/margin_standard"
+            tools:text="Delete X project"/>
 
-    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
-        android:id="@+id/cancel_button"
-        style="?materialButtonOutlinedStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_extra_large"
-        android:text="@string/cancel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barrierTopViews" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:textAppearance="?textAppearanceBodyMedium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            tools:text="@string/delete_project_dialog_message"/>
 
-    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
-        android:id="@+id/delete_button"
-        style="?errorButtonIconStyle"
-        android:enabled="false"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_extra_small"
-        android:text="@string/delete_project_confirm_button_text"
-        app:icon="@drawable/ic_delete"
-        app:iconGravity="textStart"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cancel_button" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirmation_field"
+            style="?textInputFilledStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_standard"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/message">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/confirmation_field_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:lines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrierTopViews"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="progress_bar, confirmation_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
+            android:id="@+id/cancel_button"
+            style="?materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_extra_large"
+            android:text="@string/cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrierTopViews" />
+
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
+            android:id="@+id/delete_button"
+            style="?errorButtonIconStyle"
+            android:enabled="false"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            android:text="@string/delete_project_confirm_button_text"
+            app:icon="@drawable/ic_delete"
+            app:iconGravity="textStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cancel_button" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
