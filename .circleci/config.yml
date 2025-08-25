@@ -250,7 +250,9 @@ jobs:
           name: Set up secrets.properties for Maps frameworks
           command:
             if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
-              echo "GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY" > secrets.properties
+              echo "GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY" >> secrets.properties
+              echo "MAPBOX_ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN" >> secrets.properties
+              echo "MAPBOX_DOWNLOADS_TOKEN=MAPBOX_DOWNLOADS_TOKEN" >> secrets.properties
             fi
 
       - run:
