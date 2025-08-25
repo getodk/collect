@@ -17,7 +17,7 @@ class ProjectDeleter(
     private val storagePathProvider: StoragePathProvider,
     private val settingsProvider: SettingsProvider
 ) {
-    fun deleteProject(projectId: String = projectsDataService.requireCurrentProject().uuid): DeleteProjectResult {
+    fun deleteProject(projectId: String): DeleteProjectResult {
         return performProjectDeletion(projectId)
     }
 

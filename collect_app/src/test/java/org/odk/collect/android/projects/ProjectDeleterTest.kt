@@ -125,16 +125,4 @@ class ProjectDeleterTest {
 
         assertThat(projectDir.exists(), equalTo(false))
     }
-
-    @Test
-    fun `If there is no project id passed to ProjectDeleter#deleteProject() then delete the current project`() {
-        val project2 = Project.Saved("2", "2", "2", "#cccccc")
-        projectsRepository.save(project2)
-        projectsDataService.setCurrentProject(project2.uuid)
-        whenever(storagePathProvider.getProjectRootDirPath(project2.uuid)).thenReturn("")
-
-        val result = deleter.deleteProject()
-
-        assertThat(result, instanceOf(DeleteProjectResult.DeletedSuccessfullyCurrentProject::class.java))
-    }
 }

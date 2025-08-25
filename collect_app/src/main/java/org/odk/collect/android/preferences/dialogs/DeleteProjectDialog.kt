@@ -152,9 +152,10 @@ class DeleteProjectDialog : DialogFragment() {
         private val _deleteProjectResult = MutableLiveData<DeleteProjectResult>()
         val deleteProjectResult: LiveData<DeleteProjectResult> = _deleteProjectResult
 
+        private val project = projectsDataService.getCurrentProject().value!!
+
         init {
             trackableWorker.immediate {
-                val project = projectsDataService.getCurrentProject().value!!
                 val numberOfForms = formsRepositoryProvider.create(project.uuid).all.size
                 val instancesRepository = instancesRepositoryProvider.create(project.uuid)
                 val numberOfSentForms = instancesRepository.getCountByStatus(Instance.STATUS_SUBMITTED)
@@ -187,7 +188,7 @@ class DeleteProjectDialog : DialogFragment() {
         fun deleteProject() {
             Analytics.log(AnalyticsEvents.DELETE_PROJECT)
             trackableWorker.immediate {
-                val result = projectDeleter.deleteProject()
+                val result = projectDeleter.deleteProject(project.uuid)
                 _deleteProjectResult.postValue(result)
             }
         }

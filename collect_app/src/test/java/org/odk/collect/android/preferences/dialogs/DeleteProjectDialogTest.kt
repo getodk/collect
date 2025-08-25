@@ -25,12 +25,14 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
@@ -47,6 +49,7 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.TempFiles
+import org.odk.collect.strings.R.string
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.FakeScheduler
 
@@ -62,38 +65,40 @@ class DeleteProjectDialogTest {
     private val instancesRepository = InMemInstancesRepository()
     private val scheduler = FakeScheduler()
 
+    private lateinit var projectId: String
+
     @Before
     fun setup() {
-        val projectId = CollectHelpers.setupDemoProject()
+        projectId = CollectHelpers.setupDemoProject()
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesProjectDeleter(
-                projectsRepository: ProjectsRepository?,
-                projectsDataService: ProjectsDataService?,
-                formUpdateScheduler: FormUpdateScheduler?,
-                instanceSubmitScheduler: InstanceSubmitScheduler?,
-                storagePathProvider: StoragePathProvider?,
-                settingsProvider: SettingsProvider?
+                projectsRepository: ProjectsRepository,
+                projectsDataService: ProjectsDataService,
+                formUpdateScheduler: FormUpdateScheduler,
+                instanceSubmitScheduler: InstanceSubmitScheduler,
+                storagePathProvider: StoragePathProvider,
+                settingsProvider: SettingsProvider
             ): ProjectDeleter {
                 return projectDeleter
             }
 
-            override fun providesFormsRepositoryProvider(application: Application?): FormsRepositoryProvider {
+            override fun providesFormsRepositoryProvider(application: Application): FormsRepositoryProvider {
                 return mock<FormsRepositoryProvider>().apply {
                     whenever(create(projectId)).thenReturn(formsRepository)
                 }
             }
 
             override fun providesInstancesRepositoryProvider(
-                context: Context?,
-                storagePathProvider: StoragePathProvider?
+                context: Context,
+                storagePathProvider: StoragePathProvider
             ): InstancesRepositoryProvider {
                 return mock<InstancesRepositoryProvider>().apply {
                     whenever(create(projectId)).thenReturn(instancesRepository)
                 }
             }
 
-            override fun providesScheduler(workManager: WorkManager?): Scheduler {
+            override fun providesScheduler(workManager: WorkManager): Scheduler {
                 return scheduler
             }
         })
@@ -115,7 +120,7 @@ class DeleteProjectDialogTest {
         val scenario = launcherRule.launch(DeleteProjectDialog::class.java)
         scenario.onFragment {
             assertThat(it.dialog!!.isShowing, equalTo(true))
-            onView(withText(org.odk.collect.strings.R.string.cancel)).inRoot(isDialog()).perform(click())
+            onView(withText(string.cancel)).inRoot(isDialog()).perform(click())
             assertThat(it.dialog, equalTo(null))
             verifyNoInteractions(projectDeleter)
         }
@@ -124,14 +129,27 @@ class DeleteProjectDialogTest {
     @Test
     fun `The Delete Project button becomes enabled after typing Delete`() {
         launcherRule.launch(DeleteProjectDialog::class.java)
-        scheduler.runBackground()
-        scheduler.runForeground()
+        scheduler.flush()
 
-        onView(withText(org.odk.collect.strings.R.string.delete_project_confirm_button_text)).inRoot(isDialog()).check(matches(not(isEnabled())))
-        onView(withId(R.id.confirmation_field_input)).perform(replaceText("Blah"))
-        onView(withText(org.odk.collect.strings.R.string.delete_project_confirm_button_text)).inRoot(isDialog()).check(matches(not(isEnabled())))
-        onView(withId(R.id.confirmation_field_input)).perform(replaceText("Delete"))
-        onView(withText(org.odk.collect.strings.R.string.delete_project_confirm_button_text)).inRoot(isDialog()).check(matches(isEnabled()))
+        onView(withText(string.delete_project_confirm_button_text)).inRoot(isDialog()).check(matches(not(isEnabled())))
+        onView(withId(R.id.confirmation_field_input)).inRoot(isDialog()).perform(replaceText("Blah"))
+        onView(withText(string.delete_project_confirm_button_text)).inRoot(isDialog()).check(matches(not(isEnabled())))
+        onView(withId(R.id.confirmation_field_input)).inRoot(isDialog()).perform(replaceText("Delete"))
+        onView(withText(string.delete_project_confirm_button_text)).inRoot(isDialog()).check(matches(isEnabled()))
+    }
+
+    @Test
+    fun `The ProjectDeleter is called after clicking the Delete button`() {
+        whenever(projectDeleter.deleteProject(projectId)).thenReturn(DeleteProjectResult.DeletedSuccessfullyLastProject)
+
+        launcherRule.launch(DeleteProjectDialog::class.java)
+        scheduler.flush()
+
+        onView(withId(R.id.confirmation_field_input)).inRoot(isDialog()).perform(replaceText("Delete"))
+        onView(withText(string.delete_project_confirm_button_text)).inRoot(isDialog()).perform(click())
+        scheduler.flush()
+
+        verify(projectDeleter).deleteProject(projectId)
     }
 
     @Test
@@ -141,13 +159,12 @@ class DeleteProjectDialogTest {
         )
 
         val message = HtmlCompat.fromHtml(
-            context.getLocalizedString(org.odk.collect.strings.R.string.delete_project_dialog_message, 1, 0, 0, "", 0),
+            context.getLocalizedString(string.delete_project_dialog_message, 1, 0, 0, "", 0),
             HtmlCompat.FROM_HTML_MODE_LEGACY
         ).toString()
 
         launcherRule.launch(DeleteProjectDialog::class.java)
-        scheduler.runBackground()
-        scheduler.runForeground()
+        scheduler.flush()
         onView(withText(message)).inRoot(isDialog()).check(matches(isDisplayed()))
     }
 
@@ -158,13 +175,12 @@ class DeleteProjectDialogTest {
         )
 
         val message = HtmlCompat.fromHtml(
-            context.getLocalizedString(org.odk.collect.strings.R.string.delete_project_dialog_message, 0, 1, 0, "", 0),
+            context.getLocalizedString(string.delete_project_dialog_message, 0, 1, 0, "", 0),
             HtmlCompat.FROM_HTML_MODE_LEGACY
         ).toString()
 
         launcherRule.launch(DeleteProjectDialog::class.java)
-        scheduler.runBackground()
-        scheduler.runForeground()
+        scheduler.flush()
         onView(withText(message)).inRoot(isDialog()).check(matches(isDisplayed()))
     }
 
@@ -187,13 +203,12 @@ class DeleteProjectDialogTest {
         )
 
         val message = HtmlCompat.fromHtml(
-            context.getLocalizedString(org.odk.collect.strings.R.string.delete_project_dialog_message, 0, 0, 5, "⚠\uFE0F", 3),
+            context.getLocalizedString(string.delete_project_dialog_message, 0, 0, 5, "⚠\uFE0F", 3),
             HtmlCompat.FROM_HTML_MODE_LEGACY
         ).toString()
 
         launcherRule.launch(DeleteProjectDialog::class.java)
-        scheduler.runBackground()
-        scheduler.runForeground()
+        scheduler.flush()
         onView(withText(message)).inRoot(isDialog()).check(matches(isDisplayed()))
     }
 }
