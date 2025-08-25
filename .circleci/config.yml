@@ -247,6 +247,13 @@ jobs:
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
+          name: Set up secrets.properties for Maps frameworks
+          command:
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
+              echo "GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY" > secrets.properties
+            fi
+
+      - run:
           name: Assemble self signed release build
           command: ./gradlew assembleSelfSignedRelease
 
