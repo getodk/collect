@@ -1127,7 +1127,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         odkViewLifecycle = new ControllableLifecyleOwner();
         odkViewLifecycle.start();
         AudioPlayer audioPlayer = audioPlayerFactory.create(this, odkViewLifecycle);
-        audioPlayer.isLoading().observe(this, (isLoading) -> {
+        audioPlayer.isLoading().observe(odkViewLifecycle, (isLoading) -> {
             findViewById(R.id.loading_screen).setVisibility(isLoading ? View.VISIBLE : View.GONE);
         });
 
