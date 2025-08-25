@@ -765,11 +765,6 @@ Impamvu: %3$s</string>
   <string name="using_project">Gukoresha %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Imukira kuri %s</string>
-  <string name="delete_project_confirm_message">Inyandiko shingiro zose, zoherejwe n\'igenamitere sizasibwa burundu.</string>
-  <string name="delete_project_yes">Yego</string>
-  <string name="delete_project_no">Oya</string>
-  <string name="cannot_delete_project_title">Umushinga ntiwasibwa.</string>
-  <string name="cannot_delete_project_message_one">Ntabwo hoherejwe. Mugusiba umushinga, usabwa kohereza cg ugasiba ibyoherejwe byose.</string>
   <string name="or">Cyangwa </string>
   <string name="hex_color">Amabara ya Hex</string>
   <string name="invalid_hex_code">hex code ntiyemewe</string>

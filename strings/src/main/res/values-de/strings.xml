@@ -913,12 +913,6 @@
   <string name="using_project">Verwende %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Wechseln zu %s</string>
-  <string name="delete_project_confirm_message">Alle Blanko-Formulare, Übermittlung und Einstellungen werden dauerhaft gelöscht. </string>
-  <string name="delete_project_yes">Ja</string>
-  <string name="delete_project_no">Nein</string>
-  <string name="cannot_delete_project_title">Projekt kann nicht gelöscht werden</string>
-  <string name="cannot_delete_project_message_one">Sie haben ungesendete Übermittlungen. Um dieses Projekt zu löschen, müssen Sie zuerst diese Übermittlungen abschicken oder löschen. </string>
-  <string name="cannot_delete_project_message_two">Hintergrundprozesse laufen. Bitte versuchen Sie es später nochmal. </string>
   <string name="or">ODER</string>
   <string name="hex_color">Hex-Farbe</string>
   <string name="invalid_hex_code">Ungültiger Hex-Code</string>

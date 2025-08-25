@@ -11,6 +11,7 @@
     <!--  These attributes are extensions to Material 3  -->
     <declare-styleable name="Material3Custom">
         <attr name="textAppearanceLabelExtraLarge" format="reference" />
+        <attr name="errorButtonIconStyle" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="MaterialPill">

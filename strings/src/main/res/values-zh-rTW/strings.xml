@@ -893,12 +893,6 @@
   <string name="using_project">使用 %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">切換到 %s</string>
-  <string name="delete_project_confirm_message">所有空白表單、提交內容和設置將被永久刪除。</string>
-  <string name="delete_project_yes">是</string>
-  <string name="delete_project_no">否</string>
-  <string name="cannot_delete_project_title">無法刪除項目</string>
-  <string name="cannot_delete_project_message_one">您有未傳送的提交內容，若要刪除項目，必須先傳送或刪除這些提交內容。</string>
-  <string name="cannot_delete_project_message_two">後台作業正在運行。請稍後再試。</string>
   <string name="or">或</string>
   <string name="hex_color">十六進位顏色</string>
   <string name="invalid_hex_code">無效的十六進位代碼</string>
