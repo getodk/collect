@@ -49,7 +49,7 @@ import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.interfaces.Widget;
 import org.odk.collect.android.widgets.items.SelectImageMapWidget;
-import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.imageloader.ImageLoader;

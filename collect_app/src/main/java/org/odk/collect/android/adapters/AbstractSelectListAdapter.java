@@ -47,7 +47,7 @@ import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.audioclips.Clip;
 import org.odk.collect.imageloader.GlideImageLoader;

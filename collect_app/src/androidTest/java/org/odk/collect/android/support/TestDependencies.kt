@@ -14,9 +14,11 @@ import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.system.BroadcastReceiverRegister
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.network.NetworkStateProvider
+import org.odk.collect.audioclips.AudioPlayerFactory
 import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.testshared.FakeAudioPlayerFactory
 import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
 import org.odk.collect.testshared.FakeBroadcastReceiverRegister
 import org.odk.collect.utilities.UserAgentProvider
@@ -35,6 +37,7 @@ open class TestDependencies @JvmOverloads constructor(
     val restrictionsManager: RestrictionsManager = mock<RestrictionsManager>().apply {
         whenever(applicationRestrictions).thenReturn(Bundle())
     }
+    val audioPlayerFactory = FakeAudioPlayerFactory()
 
     override fun provideHttpInterface(
         mimeTypeMap: MimeTypeMap,
@@ -72,5 +75,9 @@ open class TestDependencies @JvmOverloads constructor(
 
     override fun providesRestrictionsManager(context: Context): RestrictionsManager {
         return restrictionsManager
+    }
+
+    override fun providesAudioPlayerFactory(scheduler: Scheduler): AudioPlayerFactory {
+        return audioPlayerFactory
     }
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>One Question Autoplay</h:title>
+        <model>
+            <itext>
+                <translation lang="default" default="true()">
+                    <text id="/data/age:label">
+                        <value>what is your age</value>
+                        <value form="audio">jr://audio/sampleAudio.wav</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <data id="one_question_autoplay" orx:version="1">
+                    <age/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="age" type="int"/>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/age" autoplay="audio">
+            <label ref="jr:itext('/data/age:label')"/>
+        </input>
+    </h:body>
+</h:html>
