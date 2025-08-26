@@ -23,7 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.audioclips.Clip;
 
 import java.util.List;

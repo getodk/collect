@@ -87,6 +87,7 @@ import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
+import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayerFactory;
 import org.odk.collect.androidshared.bitmap.ImageCompressor;
 import org.odk.collect.androidshared.system.BroadcastReceiverRegister;
 import org.odk.collect.androidshared.system.BroadcastReceiverRegisterImpl;
@@ -97,6 +98,7 @@ import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.network.ConnectivityProvider;
 import org.odk.collect.async.network.NetworkStateProvider;
+import org.odk.collect.audioclips.AudioPlayerFactory;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.entities.storage.EntitiesRepository;
@@ -651,5 +653,10 @@ public class AppDependencyModule {
     @Provides
     public BarcodeScannerViewContainer.Factory providesBarcodeScannerViewFactory(SettingsProvider settingsProvider) {
         return new SettingsBarcodeScannerViewFactory(settingsProvider.getUnprotectedSettings());
+    }
+
+    @Provides
+    public AudioPlayerFactory providesAudioPlayerFactory(Scheduler scheduler) {
+        return new ViewModelAudioPlayerFactory(scheduler);
     }
 }

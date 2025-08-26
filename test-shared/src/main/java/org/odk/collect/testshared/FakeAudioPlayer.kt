@@ -1,6 +1,11 @@
-package org.odk.collect.android.widgets.support
+package org.odk.collect.testshared
 
-import org.odk.collect.android.widgets.utilities.AudioPlayer
+import androidx.activity.ComponentActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import org.odk.collect.audioclips.AudioPlayer
+import org.odk.collect.audioclips.AudioPlayerFactory
 import org.odk.collect.audioclips.Clip
 import java.util.function.Consumer
 
@@ -9,13 +14,20 @@ class FakeAudioPlayer : AudioPlayer {
     private val positionChangedListeners: MutableMap<String, Consumer<Int>> = HashMap()
     private val positions: MutableMap<String, Int> = HashMap()
 
+    var playedClips: Int = 0
+        private set
     var isPaused: Boolean = false
         private set
     var currentClip: Clip? = null
         private set
 
+    override fun isLoading(): LiveData<Boolean> {
+        return MutableLiveData(false)
+    }
+
     override fun play(clip: Clip) {
         this.currentClip = clip
+        playedClips++
         isPaused = false
         playingChangedListeners[clip.clipID]!!.accept(true)
     }
@@ -39,7 +51,6 @@ class FakeAudioPlayer : AudioPlayer {
     }
 
     override fun onPlaybackError(error: Consumer<Exception>) {
-        throw UnsupportedOperationException()
     }
 
     override fun stop() {
@@ -51,10 +62,24 @@ class FakeAudioPlayer : AudioPlayer {
     }
 
     override fun playInOrder(clips: List<Clip>) {
-        throw UnsupportedOperationException()
+        playedClips += clips.size
     }
 
     fun getPosition(clipId: String): Int? {
         return positions[clipId]
+    }
+}
+
+class FakeAudioPlayerFactory : AudioPlayerFactory {
+    lateinit var audioPlayer: FakeAudioPlayer
+        private set
+
+    override fun create(
+        activity: ComponentActivity,
+        lifecycleOwner: LifecycleOwner
+    ): AudioPlayer {
+        return FakeAudioPlayer().also {
+            audioPlayer = it
+        }
     }
 }

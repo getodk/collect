@@ -37,7 +37,7 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.widgets.support.FakeAudioPlayer;
+import org.odk.collect.testshared.FakeAudioPlayer;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.utilities.AudioFileRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;

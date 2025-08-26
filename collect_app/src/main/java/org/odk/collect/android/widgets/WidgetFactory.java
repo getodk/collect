@@ -55,7 +55,7 @@ import org.odk.collect.android.widgets.range.RangeIntegerWidget;
 import org.odk.collect.android.widgets.range.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.range.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
-import org.odk.collect.android.widgets.utilities.AudioPlayer;
+import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.AudioRecorderRecordingStatusHandler;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.utilities.FileRequester;
