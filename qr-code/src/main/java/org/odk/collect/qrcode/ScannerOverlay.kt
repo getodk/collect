@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun ScannerOverlay(viewFinderRect: Rect, detectedState: DetectedState = DetectedState.None) {
@@ -54,7 +54,7 @@ fun ScannerOverlay(viewFinderRect: Rect, detectedState: DetectedState = Detected
                 color = borderColor,
                 topLeft = viewFinderOffset,
                 size = viewFinderSize,
-                style = Stroke(width = Dp(4f).toPx()),
+                style = Stroke(width = 4.dp.toPx()),
                 cornerRadius = cornerRadius
             )
         }
