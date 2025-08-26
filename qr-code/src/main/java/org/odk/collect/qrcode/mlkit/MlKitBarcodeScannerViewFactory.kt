@@ -95,7 +95,7 @@ private class MlKitBarcodeScannerView(
             ConstraintLayout {
                 val (promptRef) = createRefs()
 
-                var detectedState = remember { currentDetectedState }
+                val detectedState = remember { currentDetectedState }
                 ScannerOverlay(viewFinderRect, detectedState.value)
 
                 Text(
