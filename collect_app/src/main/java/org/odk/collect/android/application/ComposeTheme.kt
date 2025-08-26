@@ -16,7 +16,7 @@ import org.odk.collect.androidshared.ui.ComposeThemeProvider
 @Composable
 fun CollectTheme(
     context: Context,
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
     val resources = context.resources
     val lightColors = lightColorScheme(surface = Color(resources.getColor(R.color.colorSurfaceLight)))
@@ -31,7 +31,7 @@ fun CollectTheme(
 
 interface CollectComposeThemeProvider : ComposeThemeProvider {
     @Composable
-    override fun Theme(content: @Composable (() -> Unit)) {
+    override fun Theme(content: @Composable () -> Unit) {
         CollectTheme(this as Context) { content() }
     }
 }
