@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.formmanagement.download.ServerFormDownloader
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
@@ -32,6 +33,11 @@ class FormsDataService(
         projectDependencies.formsRepository.all
     }
 
+    private val formsCount by qualifiedData(DataKeys.FORMS_COUNT, 0) { projectId ->
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
+        projectDependencies.formsRepository.all.size
+    }
+
     private val syncing by qualifiedData(DataKeys.SYNC_STATUS_SYNCING, false)
     private val serverError by qualifiedData<FormSourceException?>(DataKeys.SYNC_STATUS_ERROR, null)
     private val diskError by qualifiedData<String?>(DataKeys.DISK_ERROR, null)
@@ -39,6 +45,8 @@ class FormsDataService(
     fun getForms(projectId: String): Flow<List<Form>> {
         return forms.flow(projectId)
     }
+
+    fun getFormsCount(projectId: String): StateFlow<Int> = formsCount.flow(projectId)
 
     fun isSyncing(projectId: String): LiveData<Boolean> {
         return syncing.flow(projectId).asLiveData()

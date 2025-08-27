@@ -38,14 +38,12 @@ import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.android.utilities.FormsRepositoryProvider
-import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
+import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.formstest.FormUtils
-import org.odk.collect.formstest.InMemFormsRepository
-import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceUtils
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.projects.ProjectsRepository
@@ -60,15 +58,15 @@ class DeleteProjectDialogTest {
     private val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Context>() as Application)
     private val projectDataService = component.currentProjectProvider()
     private val projectDeleter = mock<ProjectDeleter>()
-    private val formsRepository = InMemFormsRepository()
-    private val formsRepositoryProvider = mock<FormsRepositoryProvider>()
-    private val instancesRepository = InMemInstancesRepository()
-    private val instancesRepositoryProvider = mock<InstancesRepositoryProvider>()
+    private val formsDataService = component.formsDataService()
+    private val instancesDataService = component.instancesDataService()
     private val scheduler = FakeScheduler()
 
     private val context = ApplicationProvider.getApplicationContext<Application>()
 
     private lateinit var projectId: String
+    private lateinit var formsRepository: FormsRepository
+    private lateinit var instancesRepository: InstancesRepository
 
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule(
@@ -77,8 +75,8 @@ class DeleteProjectDialogTest {
                 DeleteProjectDialog(
                     projectDeleter,
                     projectDataService,
-                    formsRepositoryProvider,
-                    instancesRepositoryProvider,
+                    formsDataService,
+                    instancesDataService,
                     scheduler
                 )
             }.build()
@@ -87,8 +85,8 @@ class DeleteProjectDialogTest {
     @Before
     fun setup() {
         projectId = CollectHelpers.setupDemoProject()
-        whenever(formsRepositoryProvider.create(projectId)).thenReturn(formsRepository)
-        whenever(instancesRepositoryProvider.create(projectId)).thenReturn(instancesRepository)
+        formsRepository = component.formsRepositoryProvider().create(projectId)
+        instancesRepository = component.instancesRepositoryProvider().create(projectId)
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesProjectDeleter(
@@ -100,21 +98,6 @@ class DeleteProjectDialogTest {
                 settingsProvider: SettingsProvider
             ): ProjectDeleter {
                 return projectDeleter
-            }
-
-            override fun providesFormsRepositoryProvider(application: Application): FormsRepositoryProvider {
-                return mock<FormsRepositoryProvider>().apply {
-                    whenever(create(projectId)).thenReturn(formsRepository)
-                }
-            }
-
-            override fun providesInstancesRepositoryProvider(
-                context: Context,
-                storagePathProvider: StoragePathProvider
-            ): InstancesRepositoryProvider {
-                return mock<InstancesRepositoryProvider>().apply {
-                    whenever(create(projectId)).thenReturn(instancesRepository)
-                }
             }
 
             override fun providesScheduler(workManager: WorkManager): Scheduler {

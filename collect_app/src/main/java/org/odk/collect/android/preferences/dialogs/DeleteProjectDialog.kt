@@ -17,22 +17,21 @@ import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.FirstLaunchActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.databinding.DeleteProjectDialogLayoutBinding
+import org.odk.collect.android.formmanagement.FormsDataService
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.android.projects.ProjectsDataService
-import org.odk.collect.android.utilities.FormsRepositoryProvider
-import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.async.Scheduler
-import org.odk.collect.forms.instances.Instance
 
 class DeleteProjectDialog(
     private val projectDeleter: ProjectDeleter,
     private val projectsDataService: ProjectsDataService,
-    private val formsRepositoryProvider: FormsRepositoryProvider,
-    private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val formsDataService: FormsDataService,
+    private val instancesDataService: InstancesDataService,
     private val scheduler: Scheduler
 ) : DialogFragment() {
     lateinit var binding: DeleteProjectDialogLayoutBinding
@@ -41,10 +40,10 @@ class DeleteProjectDialog(
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return DeleteProjectViewModel(
-                    projectDeleter,
                     projectsDataService,
-                    formsRepositoryProvider,
-                    instancesRepositoryProvider,
+                    projectDeleter,
+                    formsDataService,
+                    instancesDataService,
                     scheduler
                 ) as T
             }
@@ -119,10 +118,10 @@ class DeleteProjectDialog(
     }
 
     class DeleteProjectViewModel(
+        projectsDataService: ProjectsDataService,
         private val projectDeleter: ProjectDeleter,
-        private val projectsDataService: ProjectsDataService,
-        private val formsRepositoryProvider: FormsRepositoryProvider,
-        private val instancesRepositoryProvider: InstancesRepositoryProvider,
+        private val formsDataService: FormsDataService,
+        private val instancesDataService: InstancesDataService,
         scheduler: Scheduler
     ) : ViewModel() {
         private val trackableWorker = TrackableWorker(scheduler)
@@ -139,23 +138,13 @@ class DeleteProjectDialog(
 
         init {
             trackableWorker.immediate {
-                val numberOfForms = formsRepositoryProvider.create(project.uuid).all.size
-                val instancesRepository = instancesRepositoryProvider.create(project.uuid)
-                val numberOfSentForms = instancesRepository.getCountByStatus(Instance.STATUS_SUBMITTED)
-                val numberOfUnsentForms = instancesRepository.getCountByStatus(
-                    Instance.STATUS_INCOMPLETE,
-                    Instance.STATUS_INVALID,
-                    Instance.STATUS_VALID,
-                    Instance.STATUS_COMPLETE,
-                    Instance.STATUS_NEW_EDIT,
-                    Instance.STATUS_SUBMISSION_FAILED,
-                )
-                val numberOfDraftForms = instancesRepository.getCountByStatus(
-                    Instance.STATUS_INCOMPLETE,
-                    Instance.STATUS_INVALID,
-                    Instance.STATUS_VALID,
-                    Instance.STATUS_NEW_EDIT,
-                )
+                formsDataService.update(project.uuid)
+                instancesDataService.update(project.uuid)
+
+                val numberOfForms = formsDataService.getFormsCount(project.uuid).value
+                val numberOfSentForms = instancesDataService.getSuccessfullySentCount(project.uuid).value
+                val numberOfUnsentForms = instancesDataService.getUnsentCount(project.uuid).value
+                val numberOfDraftForms = instancesDataService.getEditableCount(project.uuid).value
                 _projectData.postValue(
                     ProjectData(
                         project.name,

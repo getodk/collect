@@ -18,15 +18,15 @@ package org.odk.collect.android.preferences.screens
 import android.os.Bundle
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
+import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MovingBackwardsDialogListener
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.ResetSettingsResultDialogListener
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.preferences.dialogs.DeleteProjectDialog
 import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.android.projects.ProjectsDataService
-import org.odk.collect.android.utilities.FormsRepositoryProvider
-import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.metadata.PropertyManager
@@ -50,10 +50,10 @@ class ProjectPreferencesActivity :
     lateinit var projectsDataService: ProjectsDataService
 
     @Inject
-    lateinit var formsRepositoryProvider: FormsRepositoryProvider
+    lateinit var formsDataService: FormsDataService
 
     @Inject
-    lateinit var instancesRepositoryProvider: InstancesRepositoryProvider
+    lateinit var instancesDataService: InstancesDataService
 
     @Inject
     lateinit var scheduler: Scheduler
@@ -67,8 +67,8 @@ class ProjectPreferencesActivity :
                 DeleteProjectDialog(
                     projectDeleter,
                     projectsDataService,
-                    formsRepositoryProvider,
-                    instancesRepositoryProvider,
+                    formsDataService,
+                    instancesDataService,
                     scheduler
                 )
             }

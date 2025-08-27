@@ -40,6 +40,7 @@ import org.odk.collect.android.formmanagement.OpenRosaClientProvider
 import org.odk.collect.android.fragments.BarCodeScannerFragment
 import org.odk.collect.android.fragments.dialogs.FormsDownloadResultDialog
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.send.InstanceUploaderActivity
 import org.odk.collect.android.instancemanagement.send.InstanceUploaderListActivity
 import org.odk.collect.android.mainmenu.MainMenuActivity
@@ -292,6 +293,8 @@ interface AppDependencyComponent {
     fun entitiesRepositoryProvider(): EntitiesRepositoryProvider
 
     fun formsDataService(): FormsDataService
+
+    fun instancesDataService(): InstancesDataService
 
     fun projectDependencyModuleFactory(): ProjectDependencyModuleFactory
 
