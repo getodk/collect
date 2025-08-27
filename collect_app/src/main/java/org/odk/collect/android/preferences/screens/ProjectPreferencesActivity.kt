@@ -22,7 +22,13 @@ import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MovingBac
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.ResetSettingsResultDialogListener
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.MainMenuActivity
+import org.odk.collect.android.preferences.dialogs.DeleteProjectDialog
+import org.odk.collect.android.projects.ProjectDeleter
+import org.odk.collect.android.projects.ProjectsDataService
+import org.odk.collect.android.utilities.FormsRepositoryProvider
+import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.async.Scheduler
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
@@ -37,10 +43,34 @@ class ProjectPreferencesActivity :
     @Inject
     lateinit var propertyManager: PropertyManager
 
+    @Inject
+    lateinit var projectDeleter: ProjectDeleter
+
+    @Inject
+    lateinit var projectsDataService: ProjectsDataService
+
+    @Inject
+    lateinit var formsRepositoryProvider: FormsRepositoryProvider
+
+    @Inject
+    lateinit var instancesRepositoryProvider: InstancesRepositoryProvider
+
+    @Inject
+    lateinit var scheduler: Scheduler
+
     override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(ProjectPreferencesFragment::class.java) {
                 ProjectPreferencesFragment(intent.getBooleanExtra(EXTRA_IN_FORM_ENTRY, false))
+            }
+            .forClass(DeleteProjectDialog::class) {
+                DeleteProjectDialog(
+                    projectDeleter,
+                    projectsDataService,
+                    formsRepositoryProvider,
+                    instancesRepositoryProvider,
+                    scheduler
+                )
             }
             .build()
 

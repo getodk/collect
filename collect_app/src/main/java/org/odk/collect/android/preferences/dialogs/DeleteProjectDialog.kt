@@ -1,7 +1,6 @@
 package org.odk.collect.android.preferences.dialogs
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
@@ -18,7 +17,6 @@ import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.FirstLaunchActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.databinding.DeleteProjectDialogLayoutBinding
-import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
@@ -29,24 +27,14 @@ import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.instances.Instance
-import javax.inject.Inject
 
-class DeleteProjectDialog : DialogFragment() {
-    @Inject
-    lateinit var projectDeleter: ProjectDeleter
-
-    @Inject
-    lateinit var projectsDataService: ProjectsDataService
-
-    @Inject
-    lateinit var formsRepositoryProvider: FormsRepositoryProvider
-
-    @Inject
-    lateinit var instancesRepositoryProvider: InstancesRepositoryProvider
-
-    @Inject
-    lateinit var scheduler: Scheduler
-
+class DeleteProjectDialog(
+    private val projectDeleter: ProjectDeleter,
+    private val projectsDataService: ProjectsDataService,
+    private val formsRepositoryProvider: FormsRepositoryProvider,
+    private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val scheduler: Scheduler
+) : DialogFragment() {
     lateinit var binding: DeleteProjectDialogLayoutBinding
 
     private val viewModel: DeleteProjectViewModel by viewModels {
@@ -61,11 +49,6 @@ class DeleteProjectDialog : DialogFragment() {
                 ) as T
             }
         }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        DaggerUtils.getComponent(context).inject(this)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

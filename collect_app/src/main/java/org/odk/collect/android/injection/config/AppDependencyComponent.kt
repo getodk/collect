@@ -45,7 +45,6 @@ import org.odk.collect.android.instancemanagement.send.InstanceUploaderListActiv
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog
-import org.odk.collect.android.preferences.dialogs.DeleteProjectDialog
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
 import org.odk.collect.android.preferences.screens.BasePreferencesFragment
@@ -247,8 +246,6 @@ interface AppDependencyComponent {
     fun inject(downloadFormListTask: DownloadFormListTask)
 
     fun inject(formHierarchyFragmentHostActivity: FormHierarchyFragmentHostActivity)
-
-    fun inject(deleteProjectDialog: DeleteProjectDialog)
 
     fun referenceManager(): ReferenceManager
 
