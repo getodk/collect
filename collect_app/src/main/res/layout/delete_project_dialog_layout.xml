@@ -79,7 +79,8 @@
 
         <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
             android:id="@+id/delete_button"
-            style="?errorButtonIconStyle"
+            style="?materialButtonIconStyle"
+            android:backgroundTint="@color/color_error_button_icon"
             android:enabled="false"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

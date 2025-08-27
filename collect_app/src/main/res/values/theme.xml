@@ -102,8 +102,6 @@
         <item name="materialAlertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
         <item name="bottomSheetDialogTheme">@style/Theme.Collect.BottomSheet</item>
 
-        <item name="errorButtonIconStyle">@style/Widget.Collect.ErrorButton.Icon</item>
-
         <!-- Custom style for buttons used in question widgets -->
         <item name="widgetButtonIconQuestionWidgetStyle">@style/Widget.Collect.Button.Icon.QuestionWidget</item>
 
@@ -170,9 +168,5 @@
 
     <style name="Theme.Collect.BottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
         <item name="materialButtonStyle">@style/Widget.Collect.Button</item>
-    </style>
-
-    <style name="Widget.Collect.ErrorButton.Icon" parent="Widget.Collect.Button.Icon">
-        <item name="backgroundTint">@color/color_error_button_icon</item>
     </style>
 </resources>
