@@ -60,6 +60,9 @@ dependencies {
     implementation(libs.androidXComposeMaterial)
     implementation(libs.androidXConstraintLayoutCompose)
 
+    implementation(libs.androidXComposePreview)
+    debugImplementation(libs.androidXComposeTooling)
+
     testImplementation(libs.androidxTestExtJunit)
     testImplementation(libs.hamcrest)
     testImplementation(libs.robolectric)
