@@ -13,12 +13,8 @@ import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
 import androidx.camera.core.TorchState
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -96,18 +92,7 @@ private class MlKitBarcodeScannerView(
                 val (promptRef) = createRefs()
 
                 val detectedState = remember { currentDetectedState }
-                ScannerOverlay(viewFinderRect, detectedState.value)
-
-                Text(
-                    text = prompt,
-                    color = MaterialTheme.colorScheme.surface,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.constrainAs(promptRef) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom, margin = 4.dp)
-                    }
-                )
+                ScannerOverlay(viewFinderRect, detectedState.value, prompt)
             }
         }
     }

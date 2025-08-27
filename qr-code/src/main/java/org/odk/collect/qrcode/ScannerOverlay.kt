@@ -3,6 +3,9 @@ package org.odk.collect.qrcode
 import android.graphics.Rect
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,32 +14,50 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ScannerOverlay(viewFinderRect: Rect, detectedState: DetectedState = DetectedState.None) {
-    val smallShapeCornerSize = MaterialTheme.shapes.small.topStart
+fun ScannerOverlay(
+    viewFinderRect: Rect,
+    detectedState: DetectedState = DetectedState.None,
+    prompt: String = ""
+) {
     val density = LocalDensity.current
+    val textMeasurer = rememberTextMeasurer()
+    val smallShapeCornerSize = MaterialTheme.shapes.small.topStart
+    val bodyMediumTextStyle = MaterialTheme.typography.bodyMedium
+    val tickIcon = rememberVectorPainter(Icons.Default.Check)
+    val crossIcon = rememberVectorPainter(Icons.Default.Close)
+    val standardMargin = dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        drawRect(
-            color = Color(0x4B000000),
-            size = size
-        )
-
         val viewFinderOffset = Offset(viewFinderRect.left.toFloat(), viewFinderRect.top.toFloat())
         val viewFinderSize = Size(
             (viewFinderRect.right - viewFinderRect.left).toFloat(),
             (viewFinderRect.bottom - viewFinderRect.top).toFloat()
         )
 
+        drawRect(
+            color = Color(0x4B000000),
+            size = size
+        )
+
         val cornerSizePx = smallShapeCornerSize.toPx(viewFinderSize, density)
         val cornerRadius = CornerRadius(cornerSizePx, cornerSizePx)
-
         drawRoundRect(
             color = Color(0x00000000),
             topLeft = viewFinderOffset,
@@ -46,48 +67,150 @@ fun ScannerOverlay(viewFinderRect: Rect, detectedState: DetectedState = Detected
         )
 
         if (detectedState != DetectedState.None) {
-            val borderColor = if (detectedState == DetectedState.Potential) {
-                Color.Yellow
-            } else {
-                Color.Green
-            }
+            drawOutline(
+                detectedState,
+                viewFinderOffset,
+                viewFinderSize,
+                cornerRadius,
+                tickIcon,
+                crossIcon
+            )
+        }
 
-            drawRoundRect(
-                color = borderColor,
-                topLeft = viewFinderOffset,
-                size = viewFinderSize,
-                style = Stroke(width = 4.dp.toPx()),
-                cornerRadius = cornerRadius
+        if (prompt.isNotEmpty() && detectedState !is DetectedState.Full) {
+            drawPrompt(
+                prompt,
+                textMeasurer,
+                bodyMediumTextStyle,
+                viewFinderOffset,
+                viewFinderSize,
+                standardMargin
             )
         }
     }
 }
 
+private fun DrawScope.drawOutline(
+    detectedState: DetectedState,
+    viewFinderOffset: Offset,
+    viewFinderSize: Size,
+    cornerRadius: CornerRadius,
+    tickIcon: Painter,
+    crossIcon: Painter
+) {
+    val darkColor = if (detectedState == DetectedState.Potential) {
+        Color(0xFFFFC107)
+    } else {
+        Color(0xFF9CCC65)
+    }
+
+    val lightColor = if (detectedState == DetectedState.Potential) {
+        Color(0xFFFAEDC4)
+    } else {
+        Color(0xFFCAF1D8)
+    }
+
+    drawRoundRect(
+        color = darkColor,
+        topLeft = viewFinderOffset,
+        size = viewFinderSize,
+        style = Stroke(width = 4.dp.toPx()),
+        cornerRadius = cornerRadius
+    )
+
+    val circleCenter = Offset(viewFinderOffset.x + viewFinderSize.width, viewFinderOffset.y)
+    val circleRadius = 18.dp.toPx()
+    drawCircle(
+        lightColor,
+        center = circleCenter,
+        radius = circleRadius
+    )
+
+    val icon = if (detectedState == DetectedState.Potential) {
+        crossIcon
+    } else {
+        tickIcon
+    }
+
+    val iconSize = Size(24.dp.toPx(), 24.dp.toPx())
+    translate(
+        left = circleCenter.x - (iconSize.width / 2),
+        top = circleCenter.y - (iconSize.height / 2)
+    ) {
+        icon.apply {
+            draw(iconSize, colorFilter = ColorFilter.tint(darkColor))
+        }
+    }
+}
+
+private fun DrawScope.drawPrompt(
+    prompt: String,
+    textMeasurer: TextMeasurer,
+    bodyMediumTextStyle: TextStyle,
+    viewFinderOffset: Offset,
+    viewFinderSize: Size,
+    standardMargin: Dp
+) {
+    val textLayoutResult = textMeasurer.measure(
+        prompt,
+        bodyMediumTextStyle
+    )
+
+    val horizontalMiddleOfViewFinder = viewFinderOffset.x + (viewFinderSize.width / 2)
+    val textTopLeft = Offset(
+        horizontalMiddleOfViewFinder - (textLayoutResult.size.width / 2),
+        viewFinderOffset.y + viewFinderSize.height + standardMargin.toPx()
+    )
+
+    drawText(
+        textLayoutResult,
+        color = Color.White,
+        topLeft = textTopLeft
+    )
+}
+
 @Preview(widthDp = 400, heightDp = 400)
 @Composable
-private fun Preview() {
-    ScannerOverlay(calculateViewFinderRect(400.dp, 400.dp))
+private fun PreviewNone() {
+    MaterialTheme {
+        ScannerOverlay(calculateViewFinderRect(400.dp, 400.dp))
+    }
+}
+
+@Preview(widthDp = 400, heightDp = 400)
+@Composable
+private fun PreviewPrompt() {
+    MaterialTheme {
+        ScannerOverlay(calculateViewFinderRect(400.dp, 400.dp), prompt = "I am prompt!")
+    }
 }
 
 @Preview(widthDp = 400, heightDp = 400)
 @Composable
 private fun PreviewPotential() {
-    ScannerOverlay(calculateViewFinderRect(400.dp, 400.dp), detectedState = DetectedState.Potential)
+    MaterialTheme {
+        ScannerOverlay(
+            calculateViewFinderRect(400.dp, 400.dp),
+            detectedState = DetectedState.Potential
+        )
+    }
 }
 
 @Preview(widthDp = 400, heightDp = 400)
 @Composable
 private fun PreviewFull() {
-    ScannerOverlay(
-        calculateViewFinderRect(400.dp, 400.dp),
-        detectedState = DetectedState.Full(
-            DetectedBarcode.Utf8(
-                "",
-                BarcodeFormat.OTHER,
-                byteArrayOf()
+    MaterialTheme {
+        ScannerOverlay(
+            calculateViewFinderRect(400.dp, 400.dp),
+            detectedState = DetectedState.Full(
+                DetectedBarcode.Utf8(
+                    "",
+                    BarcodeFormat.OTHER,
+                    byteArrayOf()
+                )
             )
         )
-    )
+    }
 }
 
 @Composable
