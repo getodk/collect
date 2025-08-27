@@ -250,7 +250,7 @@
   <string name="edit_value">Uredi vrednost</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Ni izbrana nobena vrednost.</string>
-  <string name="selected">Izbrano:</string>
+  <string name="selected_title">Izbrano:</string>
   <string name="trigger">OK. Nadaljuj</string>
   <string name="ext_file_no_data_error">Datoteka ne vsebuje podatkov!</string>
   <string name="ext_conflicting_columns_error">Stolpci %s se ujemajo!</string>

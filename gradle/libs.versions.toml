@@ -11,12 +11,13 @@ dagger = "2.56.2"
 glide = "4.16.0"
 camerax = "1.4.2"
 espresso = "3.6.1"
+kotlin = "2.2.0"
 
 [libraries]
 firebaseCrashlyticsGradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version = "3.0.4" }
 googleServices = { group = "com.google.gms", name = "google-services", version = "4.4.3" }
 gradle = { group = "com.android.tools.build", name = "gradle", version = "8.11.0" }
-kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "2.2.0" }
+kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 navigationSafeArgsGradlePlugin = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 ktlintGradle = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version = "12.3.0" }
 ossLicensesPlugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version = "0.10.6" }
@@ -39,6 +40,9 @@ androidxPreferenceKtx = { group = "androidx.preference", name = "preference-ktx"
 androidxFragmentKtx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidxFragment" }
 androidMaterial = { group = "com.google.android.material", name = "material", version = "1.12.0" }
 androidFlexbox = { group = "com.google.android.flexbox", name = "flexbox", version = "3.0.0" }
+androidxComposeBom = { group = "androidx.compose", name = "compose-bom", version = "2025.08.00" }
+androidXComposeMaterial = { group = "androidx.compose.material3", name = "material3" }
+androidXConstraintLayoutCompose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.1.1" }
 playServicesMaps = { group = "com.google.android.gms", name = "play-services-maps", version = "19.2.0" }
 playServicesLocation = { group = "com.google.android.gms", name = "play-services-location", version = "21.3.0" }
 playServicesOssLicenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version = "17.1.0" }
@@ -67,7 +71,7 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "gl
 glideCompiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
 caverockAndroidsvg = { group = "com.caverock", name = "androidsvg-aar", version = "1.4" }
 mp4parserMuxer = { group = "org.mp4parser", name = "muxer", version = "1.9.41" } # Check if https://github.com/getodk/collect/issues/5323 no longer takes place before upgrading
-kotlinStdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version = "2.2.0" }
+kotlinStdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 gson = { group = "com.google.code.gson", name = "gson", version = "2.13.1" }
 firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics-ktx", version = "22.5.0" }
 firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version = "19.4.4" }
@@ -117,3 +121,4 @@ kotlinParcelize = { id = "kotlin-parcelize" }
 safeargsKotlin = { id = "androidx.navigation.safeargs.kotlin" }
 safeargs = { id = "androidx.navigation.safeargs" }
 ossLicenses = { id = "com.google.android.gms.oss-licenses-plugin" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

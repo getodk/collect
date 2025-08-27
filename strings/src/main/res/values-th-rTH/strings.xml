@@ -172,7 +172,7 @@
   <string name="select_answer">เลือกคำตอบ</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <!--Displayed in form questions for which the user needs to select a value-->
-  <string name="selected">Selected: </string>
+  <string name="selected_title">Selected: </string>
   <string name="trigger">ตกลง โปรดดำเนินการต่อ</string>
   <string name="ext_file_no_data_error">ไม่มีข้อมูลในไฟล์</string>
   <string name="ext_conflicting_columns_error">คอลัมน์ %s ตรงกัน</string>

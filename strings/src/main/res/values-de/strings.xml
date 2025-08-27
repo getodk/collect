@@ -259,7 +259,7 @@
   <string name="edit_value">Wert bearbeiten</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">Kein Wert ausgewählt</string>
-  <string name="selected">Ausgewählt: </string>
+  <string name="selected_title">Ausgewählt: </string>
   <string name="trigger">OK. Bitte fortfahren.</string>
   <string name="ext_file_no_data_error">Die Datei enthält keine Daten!</string>
   <string name="ext_conflicting_columns_error">Spalten %s stimmen überein!</string>

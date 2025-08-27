@@ -2,6 +2,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Changes to this theme should also be made in ComposeTheme.kt-->
     <style name="Theme.Collect" parent="Theme.Material3.DayNight.NoActionBar">
 
         <!-- Original AppCompat attributes. -->

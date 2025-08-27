@@ -196,7 +196,7 @@
   <string name="edit_value">విలువ మార్చండి</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">విలువ ఎంచుకోలేదు</string>
-  <string name="selected">ఎంచుకోబడింది:</string>
+  <string name="selected_title">ఎంచుకోబడింది:</string>
   <string name="trigger">ఓకే. దయచేసి కొనసాగించండి.</string>
   <string name="ext_file_no_data_error">ఫైల్‌లో డేటా లేదు!</string>
   <string name="ext_conflicting_columns_error">నిలువు వరుసలు %s మ్యాచ్!</string>

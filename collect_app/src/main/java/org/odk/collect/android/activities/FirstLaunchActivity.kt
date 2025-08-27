@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
+import org.odk.collect.android.application.CollectComposeThemeProvider
 import org.odk.collect.android.databinding.FirstLaunchLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.MainMenuActivity
@@ -29,7 +30,7 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class FirstLaunchActivity : LocalizedActivity() {
+class FirstLaunchActivity : LocalizedActivity(), CollectComposeThemeProvider {
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository

@@ -257,7 +257,7 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
         if (!selections.isEmpty()) {
             stringBuilder
                     .append("<b>")
-                    .append(getContext().getString(org.odk.collect.strings.R.string.selected))
+                    .append(getContext().getString(org.odk.collect.strings.R.string.selected_title))
                     .append("</b> ");
             for (Selection selection : selections) {
                 String answer = getFormEntryPrompt().getSelectChoiceText(selection.choice);

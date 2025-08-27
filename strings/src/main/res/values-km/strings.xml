@@ -214,7 +214,7 @@
   <string name="edit_value">កែប្រែ​តម្លៃ</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">គ្មាន​តម្លៃត្រូវបានរើស</string>
-  <string name="selected">បានជ្រើសរើសៈ</string>
+  <string name="selected_title">បានជ្រើសរើសៈ</string>
   <string name="trigger">យល់ព្រម. សូមបន្ត.</string>
   <string name="ext_file_no_data_error">ឯកសារពុំមានទិន្នន័យ!</string>
   <string name="ext_conflicting_columns_error">ជួរឈរ %s ដូចគ្នា!</string>

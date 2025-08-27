@@ -248,7 +248,7 @@
   <string name="edit_value">ایڈٹ ویلیو </string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">کوئی ویلیو منتخب نہیں کی گئی </string>
-  <string name="selected">منتخب شدہ</string>
+  <string name="selected_title">منتخب شدہ</string>
   <string name="trigger">ٹھیک ہے،  برا ئے مہربانی جاری رکھیں</string>
   <string name="ext_file_no_data_error">اس فائل میں کوئی ڈیٹا نہیں ہے </string>
   <string name="ext_conflicting_columns_error">کالم%sمیچ!</string>

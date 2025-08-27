@@ -126,7 +126,7 @@
   <string name="edit_value">മൂല്യത്തിൽ മാറ്റം വരുത്തുക</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="no_value_selected">മൂല്യം ഒന്നും തന്നെ തിരഞ്ഞെടുത്തട്ടില്ല</string>
-  <string name="selected">തിരഞ്ഞെടുക്കപ്പെട്ടത്:</string>
+  <string name="selected_title">തിരഞ്ഞെടുക്കപ്പെട്ടത്:</string>
   <string name="trigger">ശരി. ദയവു ചെയ്തു തുടരുക</string>
   <string name="ext_file_no_data_error">ഈ ഫയലിൽ വിവരങ്ങൾ ഒന്നും തന്നെയില്ല!</string>
   <string name="select_date">തിയതി തിരഞ്ഞെടുക്കുക</string>
