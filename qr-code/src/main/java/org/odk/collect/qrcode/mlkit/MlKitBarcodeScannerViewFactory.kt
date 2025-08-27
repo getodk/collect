@@ -31,10 +31,11 @@ import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.DetectedBarcode
 import org.odk.collect.qrcode.DetectedState
 import org.odk.collect.qrcode.ScannerOverlay
+import org.odk.collect.qrcode.calculateViewFinder
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
-import kotlin.math.max
 
-class MlKitBarcodeScannerViewFactory(private val scanThreshold: Int) : BarcodeScannerViewContainer.Factory {
+class MlKitBarcodeScannerViewFactory(private val scanThreshold: Int) :
+    BarcodeScannerViewContainer.Factory {
     override fun create(
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
@@ -42,7 +43,14 @@ class MlKitBarcodeScannerViewFactory(private val scanThreshold: Int) : BarcodeSc
         prompt: String,
         useFrontCamera: Boolean
     ): BarcodeScannerView {
-        return MlKitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt, scanThreshold)
+        return MlKitBarcodeScannerView(
+            activity,
+            lifecycleOwner,
+            qrOnly,
+            useFrontCamera,
+            prompt,
+            scanThreshold
+        )
     }
 
     companion object {
@@ -104,13 +112,16 @@ private class MlKitBarcodeScannerView(
         right: Int,
         bottom: Int
     ) {
-        val verticalBorder = max((height - VIEW_FINDER_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
-        val horizontalBorder = max((width - VIEW_FINDER_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
+        val (viewFinderOffset, viewFinderSize) = calculateViewFinder(
+            this.width.toFloat(),
+            this.height.toFloat()
+        )
+
         viewFinderRect.set(
-            horizontalBorder,
-            verticalBorder,
-            this.width - horizontalBorder,
-            this.height - verticalBorder
+            viewFinderOffset.x.toInt(),
+            viewFinderOffset.y.toInt(),
+            (viewFinderOffset.x + viewFinderSize.width).toInt(),
+            (viewFinderOffset.y + viewFinderSize.height).toInt()
         )
 
         super.onLayout(changed, left, top, right, bottom)

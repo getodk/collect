@@ -44,12 +44,7 @@ fun ScannerOverlay(
     val standardMargin = dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        val viewFinderWidth = min(MAX_VIEWFINDER_WIDTH, size.width / 100 * 75)
-        val viewFinderSize = Size(viewFinderWidth, viewFinderWidth)
-        val viewFinderOffset = Offset(
-            (size.width - viewFinderSize.width) / 2,
-            (size.height - viewFinderSize.height) / 2
-        )
+        val (viewFinderOffset, viewFinderSize) = calculateViewFinder(size.width, size.height)
 
         drawRect(
             color = Color(0x4B000000),
@@ -167,6 +162,17 @@ private fun DrawScope.drawPrompt(
         color = Color.White,
         topLeft = textTopLeft
     )
+}
+
+fun calculateViewFinder(width: Float, height: Float): Pair<Offset, Size> {
+    val viewFinderWidth = min(MAX_VIEWFINDER_WIDTH, width / 100 * 75)
+    val viewFinderSize = Size(viewFinderWidth, viewFinderWidth)
+    val viewFinderOffset = Offset(
+        (width - viewFinderSize.width) / 2,
+        (height - viewFinderSize.height) / 2
+    )
+
+    return Pair(viewFinderOffset, viewFinderSize)
 }
 
 private const val MAX_VIEWFINDER_WIDTH = 820f
