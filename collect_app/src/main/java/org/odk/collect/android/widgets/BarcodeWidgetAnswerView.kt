@@ -17,7 +17,7 @@ class BarcodeWidgetAnswerView(
     }
 
     override fun setAnswer(answer: String?) {
-        this.answer = stripInvalidCharacters(answer)
+        this.answer = answer
         binding.answer.text = this.answer
     }
 
@@ -27,10 +27,5 @@ class BarcodeWidgetAnswerView(
 
     override fun setFontSize() {
         binding.answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize.toFloat())
-    }
-
-    // Remove control characters, invisible characters and unused code points.
-    private fun stripInvalidCharacters(data: String?): String? {
-        return data?.replace("\\p{C}".toRegex(), "")
     }
 }
