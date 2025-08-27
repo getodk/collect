@@ -31,7 +31,7 @@ class BarcodeFilter(private val bounds: Rect, private val threshold: Int = 1) {
                     )
                 }
             } else {
-                DetectedState.None
+                DetectedState.Potential
             }
         } else {
             potential = null
