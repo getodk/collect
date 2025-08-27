@@ -19,13 +19,18 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.databinding.SelectMinimalDialogLayoutBinding;
 import org.odk.collect.android.fragments.viewmodels.SelectMinimalViewModel;
-import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
-import org.odk.collect.audioclips.AudioClipViewModel;
+import org.odk.collect.audioclips.AudioPlayer;
+import org.odk.collect.audioclips.AudioPlayerFactory;
 import org.odk.collect.material.MaterialFullScreenDialogFragment;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
+
+    @Inject
+    public AudioPlayerFactory audioPlayerFactory;
 
     private SelectMinimalDialogLayoutBinding binding;
 
@@ -137,7 +142,8 @@ public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragme
 
     private void initRecyclerView() {
         viewModel.getSelectListAdapter().setContext(getActivity());
-        viewModel.getSelectListAdapter().setAudioPlayer(new ViewModelAudioPlayer(new ViewModelProvider(requireActivity()).get(AudioClipViewModel.class), getViewLifecycleOwner()));
+        AudioPlayer audioPlayer = audioPlayerFactory.create(requireActivity(), getViewLifecycleOwner());
+        viewModel.getSelectListAdapter().setAudioPlayer(audioPlayer);
         binding.choicesRecyclerView.initRecyclerView(viewModel.getSelectListAdapter(), viewModel.isFlex());
     }
 
