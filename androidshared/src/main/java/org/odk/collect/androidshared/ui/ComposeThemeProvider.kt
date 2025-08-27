@@ -26,7 +26,7 @@ import androidx.compose.ui.platform.ComposeView
  */
 interface ComposeThemeProvider {
     @Composable
-    fun Theme(content: @Composable() () -> Unit)
+    fun Theme(content: @Composable () -> Unit)
 
     companion object {
         fun ComposeView.setContextThemedContent(content: @Composable () -> Unit) {
