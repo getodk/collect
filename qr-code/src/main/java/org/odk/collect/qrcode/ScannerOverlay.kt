@@ -1,6 +1,5 @@
 package org.odk.collect.qrcode
 
-import android.graphics.Rect
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
@@ -29,10 +28,10 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlin.math.min
 
 @Composable
 fun ScannerOverlay(
-    viewFinderRect: Rect,
     detectedState: DetectedState = DetectedState.None,
     prompt: String = ""
 ) {
@@ -45,10 +44,11 @@ fun ScannerOverlay(
     val standardMargin = dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        val viewFinderOffset = Offset(viewFinderRect.left.toFloat(), viewFinderRect.top.toFloat())
-        val viewFinderSize = Size(
-            (viewFinderRect.right - viewFinderRect.left).toFloat(),
-            (viewFinderRect.bottom - viewFinderRect.top).toFloat()
+        val viewFinderWidth = min(MAX_VIEWFINDER_WIDTH, size.width / 100 * 75)
+        val viewFinderSize = Size(viewFinderWidth, viewFinderWidth)
+        val viewFinderOffset = Offset(
+            (size.width - viewFinderSize.width) / 2,
+            (size.height - viewFinderSize.height) / 2
         )
 
         drawRect(
@@ -169,39 +169,39 @@ private fun DrawScope.drawPrompt(
     )
 }
 
-@Preview(widthDp = 400, heightDp = 400)
+private const val MAX_VIEWFINDER_WIDTH = 820f
+
+@Preview
 @Composable
 private fun PreviewNone() {
     MaterialTheme {
-        ScannerOverlay(calculateViewFinderRect(400.dp, 400.dp))
+        ScannerOverlay()
     }
 }
 
-@Preview(widthDp = 400, heightDp = 400)
+@Preview
 @Composable
 private fun PreviewPrompt() {
     MaterialTheme {
-        ScannerOverlay(calculateViewFinderRect(400.dp, 400.dp), prompt = "I am prompt!")
+        ScannerOverlay(prompt = "I am prompt!")
     }
 }
 
-@Preview(widthDp = 400, heightDp = 400)
+@Preview
 @Composable
 private fun PreviewPotential() {
     MaterialTheme {
         ScannerOverlay(
-            calculateViewFinderRect(400.dp, 400.dp),
             detectedState = DetectedState.Potential
         )
     }
 }
 
-@Preview(widthDp = 400, heightDp = 400)
+@Preview
 @Composable
 private fun PreviewFull() {
     MaterialTheme {
         ScannerOverlay(
-            calculateViewFinderRect(400.dp, 400.dp),
             detectedState = DetectedState.Full(
                 DetectedBarcode.Utf8(
                     "",
@@ -213,16 +213,10 @@ private fun PreviewFull() {
     }
 }
 
+@Preview(widthDp = 200, heightDp = 200)
 @Composable
-private fun calculateViewFinderRect(width: Dp, height: Dp): Rect {
-    return with(LocalDensity.current) {
-        val margin = 50.dp
-
-        Rect(
-            margin.toPx().toInt(),
-            margin.toPx().toInt(),
-            (width - margin).toPx().toInt(),
-            (height - margin).toPx().toInt()
-        )
+private fun PreviewSmall() {
+    MaterialTheme {
+        ScannerOverlay(detectedState = DetectedState.Potential)
     }
 }

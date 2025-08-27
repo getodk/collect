@@ -92,7 +92,7 @@ private class MlKitBarcodeScannerView(
                 val (promptRef) = createRefs()
 
                 val detectedState = remember { currentDetectedState }
-                ScannerOverlay(viewFinderRect, detectedState.value, prompt)
+                ScannerOverlay(detectedState.value, prompt)
             }
         }
     }
