@@ -30,7 +30,7 @@ interface ComposeThemeProvider {
 
     companion object {
         fun ComposeView.setContextThemedContent(content: @Composable () -> Unit) {
-            this.setContent {
+            setContent {
                 (context as ComposeThemeProvider).Theme {
                     content()
                 }
