@@ -69,7 +69,7 @@ class BarcodeWidget(
     }
 
     override fun setData(answer: Any) {
-        widgetAnswerView.setAnswer(answer as String)
+        widgetAnswerView.setAnswer(stripInvalidCharacters(answer as String))
         binding.barcodeButton.text = context.getString(R.string.replace_barcode)
         updateAnswerVisibility()
         widgetValueChanged()
@@ -114,5 +114,10 @@ class BarcodeWidget(
                 showLongToast(R.string.error_front_camera_unavailable)
             }
         }
+    }
+
+    // Remove control characters, invisible characters and unused code points.
+    private fun stripInvalidCharacters(data: String?): String? {
+        return data?.replace("\\p{C}".toRegex(), "")
     }
 }
