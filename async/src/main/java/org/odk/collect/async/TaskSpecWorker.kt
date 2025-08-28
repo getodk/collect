@@ -70,6 +70,14 @@ class TaskSpecWorker(
         }
     }
 
+    override fun onStopped() {
+        super.onStopped()
+        val specClass = inputData.getString(DATA_TASK_SPEC_CLASS)!!
+        val spec = Class.forName(specClass).getConstructor().newInstance() as TaskSpec
+
+        spec.onStoped()
+    }
+
     private fun getForegroundInfo(
         context: Context,
         notificationChannel: String,
