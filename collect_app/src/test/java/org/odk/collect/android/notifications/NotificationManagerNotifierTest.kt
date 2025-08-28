@@ -1,6 +1,7 @@
 package org.odk.collect.android.notifications
 
 import android.app.Application
+import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
@@ -11,12 +12,14 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.TestSettingsProvider
+import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.ManifestFile
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.strings.localization.getLocalizedString
 import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
@@ -50,6 +53,35 @@ class NotificationManagerNotifierTest {
         assertThat(
             Shadows.shadowOf(notificationManager).allNotifications.size,
             `is`(0)
+        )
+    }
+
+    @Test
+    fun onSyncStopped_sendsNotification() {
+        notifier.onSyncStopped(Project.DEMO_PROJECT_ID)
+
+        val context = ApplicationProvider.getApplicationContext<Application>()
+
+        val notifications = Shadows.shadowOf(notificationManager).allNotifications
+        val notification = notifications[0]
+        val intent = Shadows.shadowOf(notification.contentIntent).savedIntent
+
+        assertThat(notifications.size, `is`(1))
+        assertThat(
+            notification.extras.getString(Notification.EXTRA_TITLE),
+            `is`(context.getLocalizedString(org.odk.collect.strings.R.string.form_update_error))
+        )
+        assertThat(
+            notification.extras.getString(Notification.EXTRA_TEXT),
+            `is`(context.getLocalizedString(org.odk.collect.strings.R.string.form_update_error_massage))
+        )
+        assertThat(
+            notification.extras.getString(Notification.EXTRA_SUB_TEXT),
+            `is`(Project.DEMO_PROJECT_NAME)
+        )
+        assertThat(
+            intent.component?.className,
+            `is`(BlankFormListActivity::class.java.name)
         )
     }
 
