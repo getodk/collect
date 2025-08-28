@@ -1,7 +1,11 @@
 package org.odk.collect.qrcode
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -16,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalDensity
@@ -46,20 +51,20 @@ private fun ViewFinderHighlight(detectedState: DetectedState) {
     val tickIcon = rememberVectorPainter(Icons.Default.Check)
     val crossIcon = rememberVectorPainter(Icons.Default.Close)
 
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        val (viewFinderOffset, viewFinderSize) = calculateViewFinder(size.width, size.height)
+    if (detectedState != DetectedState.None) {
+        val darkColor = if (detectedState == DetectedState.Potential) {
+            Color(0xFFFFC107)
+        } else {
+            Color(0xFF9CCC65)
+        }
+        val lightColor = if (detectedState == DetectedState.Potential) {
+            Color(0xFFFAEDC4)
+        } else {
+            Color(0xFFCAF1D8)
+        }
 
-        if (detectedState != DetectedState.None) {
-            val darkColor = if (detectedState == DetectedState.Potential) {
-                Color(0xFFFFC107)
-            } else {
-                Color(0xFF9CCC65)
-            }
-            val lightColor = if (detectedState == DetectedState.Potential) {
-                Color(0xFFFAEDC4)
-            } else {
-                Color(0xFFCAF1D8)
-            }
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val (viewFinderOffset, viewFinderSize) = calculateViewFinder(size.width, size.height)
 
             val cornerSizePx = smallShapeCornerSize.toPx(viewFinderSize, density)
             val cornerRadius = CornerRadius(cornerSizePx, cornerSizePx)
@@ -70,28 +75,52 @@ private fun ViewFinderHighlight(detectedState: DetectedState) {
                 style = Stroke(width = 4.dp.toPx()),
                 cornerRadius = cornerRadius
             )
+        }
 
-            val circleCenter = Offset(viewFinderOffset.x + viewFinderSize.width, viewFinderOffset.y)
-            val circleRadius = 18.dp.toPx()
-            drawCircle(
-                lightColor,
-                center = circleCenter,
-                radius = circleRadius
-            )
-
-            val icon = if (detectedState == DetectedState.Potential) {
-                crossIcon
-            } else {
-                tickIcon
+        BoxWithConstraints {
+            val (viewFinderOffset, viewFinderSize) = with(density) {
+                calculateViewFinder(maxWidth.toPx(), maxHeight.toPx())
             }
 
-            val iconSize = Size(24.dp.toPx(), 24.dp.toPx())
-            translate(
-                left = circleCenter.x - (iconSize.width / 2),
-                top = circleCenter.y - (iconSize.height / 2)
+            val circleCenter = Offset(viewFinderOffset.x + viewFinderSize.width, viewFinderOffset.y)
+            val circleRadiusDp = 18.dp
+            val circleRadiusPx = with(density) {
+                circleRadiusDp.toPx()
+            }
+
+            Canvas(
+                modifier = Modifier
+                    .offset(
+                        with(density) { circleCenter.x.toDp() - circleRadiusDp },
+                        with(density) { circleCenter.y.toDp() - circleRadiusDp }
+                    )
+                    .size(circleRadiusDp * 2)
+                    .graphicsLayer(
+                        shadowElevation = 10f,
+                        shape = CircleShape,
+                        clip = false
+                    )
             ) {
-                icon.apply<Painter> {
-                    this@Canvas.draw(iconSize, colorFilter = ColorFilter.tint(darkColor))
+                drawCircle(
+                    lightColor,
+                    center = Offset(circleRadiusPx, circleRadiusPx),
+                    radius = circleRadiusPx
+                )
+
+                val icon = if (detectedState == DetectedState.Potential) {
+                    crossIcon
+                } else {
+                    tickIcon
+                }
+
+                val iconSize = Size(24.dp.toPx(), 24.dp.toPx())
+                translate(
+                    left = ((circleRadiusPx * 2) - iconSize.width) / 2,
+                    top = ((circleRadiusPx * 2) - iconSize.height) / 2
+                ) {
+                    icon.apply<Painter> {
+                        this@Canvas.draw(iconSize, colorFilter = ColorFilter.tint(darkColor))
+                    }
                 }
             }
         }
