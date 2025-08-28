@@ -6,7 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -47,12 +47,12 @@ class NotificationManagerNotifierTest {
         notifier.onSync(FormSourceException.FetchError(), Project.DEMO_PROJECT_ID)
         assertThat(
             Shadows.shadowOf(notificationManager).allNotifications.size,
-            `is`(1)
+            equalTo(1)
         )
         notifier.onSync(null, Project.DEMO_PROJECT_ID)
         assertThat(
             Shadows.shadowOf(notificationManager).allNotifications.size,
-            `is`(0)
+            equalTo(0)
         )
     }
 
@@ -66,22 +66,22 @@ class NotificationManagerNotifierTest {
         val notification = notifications[0]
         val intent = Shadows.shadowOf(notification.contentIntent).savedIntent
 
-        assertThat(notifications.size, `is`(1))
+        assertThat(notifications.size, equalTo(1))
         assertThat(
             notification.extras.getString(Notification.EXTRA_TITLE),
-            `is`(context.getLocalizedString(org.odk.collect.strings.R.string.form_update_error))
+            equalTo(context.getLocalizedString(org.odk.collect.strings.R.string.form_update_error))
         )
         assertThat(
             notification.extras.getString(Notification.EXTRA_TEXT),
-            `is`(context.getLocalizedString(org.odk.collect.strings.R.string.form_update_error_massage))
+            equalTo(context.getLocalizedString(org.odk.collect.strings.R.string.form_update_error_massage))
         )
         assertThat(
             notification.extras.getString(Notification.EXTRA_SUB_TEXT),
-            `is`(Project.DEMO_PROJECT_NAME)
+            equalTo(Project.DEMO_PROJECT_NAME)
         )
         assertThat(
             intent.component?.className,
-            `is`(BlankFormListActivity::class.java.name)
+            equalTo(BlankFormListActivity::class.java.name)
         )
     }
 
@@ -102,18 +102,18 @@ class NotificationManagerNotifierTest {
         notifier.onUpdatesAvailable(updates, Project.DEMO_PROJECT_ID)
         assertThat(
             Shadows.shadowOf(notificationManager).allNotifications.size,
-            `is`(1)
+            equalTo(1)
         )
         notificationManager.cancelAll()
         notifier.onUpdatesAvailable(updates, Project.DEMO_PROJECT_ID)
         assertThat(
             Shadows.shadowOf(notificationManager).allNotifications.size,
-            `is`(0)
+            equalTo(0)
         )
     }
 
     @Test
-    fun onUpdatesAvailable_whenUpdateForFormHasBeenHasNewHash_notifies() {
+    fun onUpdatesAvailable_whenFormHasNewHash_notifies() {
         var updates = listOf(
             ServerFormDetails(
                 "form-1",
@@ -129,7 +129,7 @@ class NotificationManagerNotifierTest {
         notifier.onUpdatesAvailable(updates, Project.DEMO_PROJECT_ID)
         assertThat(
             Shadows.shadowOf(notificationManager).allNotifications.size,
-            `is`(1)
+            equalTo(1)
         )
         updates = listOf(
             ServerFormDetails(
@@ -147,12 +147,12 @@ class NotificationManagerNotifierTest {
         notifier.onUpdatesAvailable(updates, Project.DEMO_PROJECT_ID)
         assertThat(
             Shadows.shadowOf(notificationManager).allNotifications.size,
-            `is`(1)
+            equalTo(1)
         )
     }
 
     @Test
-    fun onUpdatesAvailable_whenUpdateForFormHasBeenHasNewManifestHash_notifies() {
+    fun onUpdatesAvailable_whenFormHasNewManifestHash_notifies() {
         var updates = listOf(
             ServerFormDetails(
                 "form-1",
@@ -168,7 +168,7 @@ class NotificationManagerNotifierTest {
         notifier.onUpdatesAvailable(updates, Project.DEMO_PROJECT_ID)
         assertThat(
             Shadows.shadowOf(notificationManager).allNotifications.size,
-            `is`(1)
+            equalTo(1)
         )
         updates = listOf(
             ServerFormDetails(
@@ -186,7 +186,7 @@ class NotificationManagerNotifierTest {
         notifier.onUpdatesAvailable(updates, Project.DEMO_PROJECT_ID)
         assertThat(
             Shadows.shadowOf(notificationManager).allNotifications.size,
-            `is`(1)
+            equalTo(1)
         )
     }
 }
