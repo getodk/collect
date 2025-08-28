@@ -48,7 +48,7 @@ class TaskSpecWorker(
         }
 
         val spec = getTaskSpec()
-        val stringInputData = inputData.keyValueMap.mapValues { it.value.toString() }
+        val stringInputData = getStringInputData()
 
         try {
             val completed =
@@ -70,14 +70,20 @@ class TaskSpecWorker(
 
     override fun onStopped() {
         super.onStopped()
-        val stringInputData = inputData.keyValueMap.mapValues { it.value.toString() }
-        getTaskSpec().onStoped(stringInputData)
+
+        val spec = getTaskSpec()
+        val stringInputData = getStringInputData()
+        spec.onStoped(stringInputData)
     }
 
     private fun getTaskSpec(): TaskSpec {
         val specClass = inputData.getString(DATA_TASK_SPEC_CLASS)!!
         val spec = Class.forName(specClass).getConstructor().newInstance() as TaskSpec
         return spec
+    }
+
+    private fun getStringInputData(): Map<String, String> {
+        return inputData.keyValueMap.mapValues { it.value.toString() }
     }
 
     private fun getForegroundInfo(
