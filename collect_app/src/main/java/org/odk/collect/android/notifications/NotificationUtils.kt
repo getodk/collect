@@ -4,7 +4,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import org.odk.collect.android.BuildConfig
-import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.errors.ErrorActivity
 import org.odk.collect.errors.ErrorItem
@@ -21,20 +20,6 @@ object NotificationUtils {
         val intent = context
             .packageManager
             .getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)
-
-        return PendingIntent.getActivity(
-            context,
-            notificationId,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-    }
-
-    fun createOpenListOfFormsContentActionIntent(
-        context: Context,
-        notificationId: Int
-    ): PendingIntent {
-        val intent = Intent(context, BlankFormListActivity::class.java)
 
         return PendingIntent.getActivity(
             context,
