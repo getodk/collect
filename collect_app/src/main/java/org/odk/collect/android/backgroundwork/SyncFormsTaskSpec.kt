@@ -5,6 +5,7 @@ import androidx.work.BackoffPolicy
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.async.TaskSpec
 import java.util.function.Supplier
 import javax.inject.Inject
@@ -12,6 +13,9 @@ import javax.inject.Inject
 class SyncFormsTaskSpec : TaskSpec {
     @Inject
     lateinit var formsDataService: FormsDataService
+
+    @Inject
+    lateinit var notifier: Notifier
 
     override val maxRetries = 3
     override val backoffPolicy = BackoffPolicy.EXPONENTIAL
@@ -29,7 +33,14 @@ class SyncFormsTaskSpec : TaskSpec {
         }
     }
 
-    override fun onStoped() {}
+    override fun onStoped(inputData: Map<String, String>) {
+        val projectId = inputData[TaskData.DATA_PROJECT_ID]
+        if (projectId != null) {
+            notifier.onSyncStopped(projectId)
+        } else {
+            throw IllegalArgumentException("No project ID provided!")
+        }
+    }
 
     override fun onException(exception: Throwable) {
         Analytics.logNonFatal(exception)

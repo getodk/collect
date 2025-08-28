@@ -70,7 +70,8 @@ class TaskSpecWorker(
 
     override fun onStopped() {
         super.onStopped()
-        getTaskSpec().onStoped()
+        val stringInputData = inputData.keyValueMap.mapValues { it.value.toString() }
+        getTaskSpec().onStoped(stringInputData)
     }
 
     private fun getTaskSpec(): TaskSpec {

@@ -11,6 +11,7 @@ import org.odk.collect.android.notifications.builders.FormUpdatesAvailableNotifi
 import org.odk.collect.android.notifications.builders.FormUpdatesDownloadedNotificationBuilder
 import org.odk.collect.android.notifications.builders.FormsSubmissionNotificationBuilder
 import org.odk.collect.android.notifications.builders.FormsSyncFailedNotificationBuilder
+import org.odk.collect.android.notifications.builders.FormsSyncStoppedNotificationBuilder
 import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.instances.Instance
@@ -70,6 +71,17 @@ class NotificationManagerNotifier(
                 )
             )
         }
+    }
+
+    override fun onSyncStopped(projectId: String) {
+        notificationManager.notify(
+            FORM_SYNC_NOTIFICATION_ID,
+            FormsSyncStoppedNotificationBuilder.build(
+                application,
+                getProjectName(projectId),
+                FORM_SYNC_NOTIFICATION_ID
+            )
+        )
     }
 
     override fun onSubmission(result: Map<Instance, FormUploadException?>, projectId: String) {

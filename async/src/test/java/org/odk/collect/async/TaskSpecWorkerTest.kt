@@ -182,7 +182,7 @@ private class TestTaskSpec : TaskSpec {
         }
     }
 
-    override fun onStoped() {}
+    override fun onStoped(inputData: Map<String, String>) {}
 
     override fun onException(exception: Throwable) {
         onExceptionCalledWith = exception

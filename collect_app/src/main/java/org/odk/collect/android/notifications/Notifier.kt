@@ -10,5 +10,6 @@ interface Notifier {
     fun onUpdatesAvailable(updates: List<ServerFormDetails>, projectId: String)
     fun onUpdatesDownloaded(result: Map<ServerFormDetails, FormDownloadException?>, projectId: String)
     fun onSync(exception: FormSourceException?, projectId: String)
+    fun onSyncStopped(projectId: String)
     fun onSubmission(result: Map<Instance, FormUploadException?>, projectId: String)
 }
