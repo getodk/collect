@@ -14,19 +14,15 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.min
 
@@ -35,13 +31,77 @@ fun ScannerOverlay(
     detectedState: DetectedState = DetectedState.None,
     prompt: String = ""
 ) {
+    ViewFinder()
+    ViewFinderHighlight(detectedState)
+
+    if (prompt.isNotEmpty() && detectedState !is DetectedState.Full) {
+        ScannerPrompt(prompt)
+    }
+}
+
+@Composable
+private fun ViewFinderHighlight(detectedState: DetectedState) {
     val density = LocalDensity.current
-    val textMeasurer = rememberTextMeasurer()
     val smallShapeCornerSize = MaterialTheme.shapes.small.topStart
-    val bodyMediumTextStyle = MaterialTheme.typography.bodyMedium
     val tickIcon = rememberVectorPainter(Icons.Default.Check)
     val crossIcon = rememberVectorPainter(Icons.Default.Close)
-    val standardMargin = dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)
+
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        val (viewFinderOffset, viewFinderSize) = calculateViewFinder(size.width, size.height)
+
+        if (detectedState != DetectedState.None) {
+            val darkColor = if (detectedState == DetectedState.Potential) {
+                Color(0xFFFFC107)
+            } else {
+                Color(0xFF9CCC65)
+            }
+            val lightColor = if (detectedState == DetectedState.Potential) {
+                Color(0xFFFAEDC4)
+            } else {
+                Color(0xFFCAF1D8)
+            }
+
+            val cornerSizePx = smallShapeCornerSize.toPx(viewFinderSize, density)
+            val cornerRadius = CornerRadius(cornerSizePx, cornerSizePx)
+            drawRoundRect(
+                color = darkColor,
+                topLeft = viewFinderOffset,
+                size = viewFinderSize,
+                style = Stroke(width = 4.dp.toPx()),
+                cornerRadius = cornerRadius
+            )
+
+            val circleCenter = Offset(viewFinderOffset.x + viewFinderSize.width, viewFinderOffset.y)
+            val circleRadius = 18.dp.toPx()
+            drawCircle(
+                lightColor,
+                center = circleCenter,
+                radius = circleRadius
+            )
+
+            val icon = if (detectedState == DetectedState.Potential) {
+                crossIcon
+            } else {
+                tickIcon
+            }
+
+            val iconSize = Size(24.dp.toPx(), 24.dp.toPx())
+            translate(
+                left = circleCenter.x - (iconSize.width / 2),
+                top = circleCenter.y - (iconSize.height / 2)
+            ) {
+                icon.apply<Painter> {
+                    this@Canvas.draw(iconSize, colorFilter = ColorFilter.tint(darkColor))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ViewFinder() {
+    val density = LocalDensity.current
+    val smallShapeCornerSize = MaterialTheme.shapes.small.topStart
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         val (viewFinderOffset, viewFinderSize) = calculateViewFinder(size.width, size.height)
@@ -60,108 +120,36 @@ fun ScannerOverlay(
             blendMode = BlendMode.Clear,
             cornerRadius = cornerRadius
         )
-
-        if (detectedState != DetectedState.None) {
-            drawOutline(
-                detectedState,
-                viewFinderOffset,
-                viewFinderSize,
-                cornerRadius,
-                tickIcon,
-                crossIcon
-            )
-        }
-
-        if (prompt.isNotEmpty() && detectedState !is DetectedState.Full) {
-            drawPrompt(
-                prompt,
-                textMeasurer,
-                bodyMediumTextStyle,
-                viewFinderOffset,
-                viewFinderSize,
-                standardMargin
-            )
-        }
     }
 }
 
-private fun DrawScope.drawOutline(
-    detectedState: DetectedState,
-    viewFinderOffset: Offset,
-    viewFinderSize: Size,
-    cornerRadius: CornerRadius,
-    tickIcon: Painter,
-    crossIcon: Painter
-) {
-    val darkColor = if (detectedState == DetectedState.Potential) {
-        Color(0xFFFFC107)
-    } else {
-        Color(0xFF9CCC65)
+@Composable
+private fun ScannerPrompt(prompt: String) {
+    val textMeasurer = rememberTextMeasurer()
+    val bodyMediumTextStyle = MaterialTheme.typography.bodyMedium
+    val standardMargin = dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)
+
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        val (viewFinderOffset, viewFinderSize) = calculateViewFinder(size.width, size.height)
+
+        val textLayoutResult = textMeasurer.measure(
+            prompt,
+            bodyMediumTextStyle
+        )
+
+        val horizontalMiddleOfViewFinder = viewFinderOffset.x + (viewFinderSize.width / 2)
+        val textTopLeft = Offset(
+            horizontalMiddleOfViewFinder - (textLayoutResult.size.width / 2),
+            viewFinderOffset.y + viewFinderSize.height + standardMargin
+                .toPx()
+        )
+
+        drawText(
+            textLayoutResult,
+            color = Color.White,
+            topLeft = textTopLeft
+        )
     }
-
-    val lightColor = if (detectedState == DetectedState.Potential) {
-        Color(0xFFFAEDC4)
-    } else {
-        Color(0xFFCAF1D8)
-    }
-
-    drawRoundRect(
-        color = darkColor,
-        topLeft = viewFinderOffset,
-        size = viewFinderSize,
-        style = Stroke(width = 4.dp.toPx()),
-        cornerRadius = cornerRadius
-    )
-
-    val circleCenter = Offset(viewFinderOffset.x + viewFinderSize.width, viewFinderOffset.y)
-    val circleRadius = 18.dp.toPx()
-    drawCircle(
-        lightColor,
-        center = circleCenter,
-        radius = circleRadius
-    )
-
-    val icon = if (detectedState == DetectedState.Potential) {
-        crossIcon
-    } else {
-        tickIcon
-    }
-
-    val iconSize = Size(24.dp.toPx(), 24.dp.toPx())
-    translate(
-        left = circleCenter.x - (iconSize.width / 2),
-        top = circleCenter.y - (iconSize.height / 2)
-    ) {
-        icon.apply {
-            draw(iconSize, colorFilter = ColorFilter.tint(darkColor))
-        }
-    }
-}
-
-private fun DrawScope.drawPrompt(
-    prompt: String,
-    textMeasurer: TextMeasurer,
-    bodyMediumTextStyle: TextStyle,
-    viewFinderOffset: Offset,
-    viewFinderSize: Size,
-    standardMargin: Dp
-) {
-    val textLayoutResult = textMeasurer.measure(
-        prompt,
-        bodyMediumTextStyle
-    )
-
-    val horizontalMiddleOfViewFinder = viewFinderOffset.x + (viewFinderSize.width / 2)
-    val textTopLeft = Offset(
-        horizontalMiddleOfViewFinder - (textLayoutResult.size.width / 2),
-        viewFinderOffset.y + viewFinderSize.height + standardMargin.toPx()
-    )
-
-    drawText(
-        textLayoutResult,
-        color = Color.White,
-        topLeft = textTopLeft
-    )
 }
 
 fun calculateViewFinder(width: Float, height: Float): Pair<Offset, Size> {
