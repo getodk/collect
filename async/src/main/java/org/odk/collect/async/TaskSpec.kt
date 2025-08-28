@@ -20,6 +20,12 @@ interface TaskSpec {
     fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean>
 
     /**
+     * Called when the work is canceled or stopped for any reason,
+     * such as constraint changes, system conditions, or explicit cancellation.
+     */
+    fun onStoped()
+
+    /**
      * Called if an exception is thrown while executing the work.
      */
     fun onException(exception: Throwable)
