@@ -15,7 +15,6 @@ import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.common.moduleinstall.ModuleInstall
@@ -96,12 +95,8 @@ private class MlKitBarcodeScannerView(
 
     init {
         binding.composeView.setContextThemedContent {
-            ConstraintLayout {
-                val (promptRef) = createRefs()
-
-                val detectedState = remember { currentDetectedState }
-                ScannerOverlay(detectedState.value, prompt)
-            }
+            val detectedState = remember { currentDetectedState }
+            ScannerOverlay(detectedState.value, prompt)
         }
     }
 
