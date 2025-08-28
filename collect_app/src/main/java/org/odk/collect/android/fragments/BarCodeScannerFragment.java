@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -31,16 +30,15 @@ import com.google.zxing.client.android.BeepManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.qrcode.BarcodeScannerView;
 import org.odk.collect.qrcode.BarcodeScannerViewContainer;
+import org.odk.collect.qrcode.FlashlightToggleView;
 
 import javax.inject.Inject;
 
-public abstract class BarCodeScannerFragment extends Fragment implements BarcodeScannerView.TorchListener {
+public abstract class BarCodeScannerFragment extends Fragment {
 
     private BarcodeScannerViewContainer barcodeScannerViewContainer;
 
-    private Button switchFlashlightButton;
     private BeepManager beepManager;
 
     @Inject
@@ -62,13 +60,12 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
         View rootView = inflater.inflate(R.layout.fragment_scan, container, false);
         barcodeScannerViewContainer = rootView.findViewById(R.id.barcode_view);
         barcodeScannerViewContainer.setup(barcodeScannerViewFactory, requireActivity(), getViewLifecycleOwner(), isQrOnly(), getContext().getString(org.odk.collect.strings.R.string.barcode_scanner_prompt), frontCameraUsed());
-        barcodeScannerViewContainer.getBarcodeScannerView().setTorchListener(this);
 
-        switchFlashlightButton = rootView.findViewById(R.id.switch_flashlight);
-        switchFlashlightButton.setOnClickListener(v -> switchFlashlight());
+        FlashlightToggleView flashlightToggleView = rootView.<FlashlightToggleView>findViewById(R.id.switch_flashlight);
+        flashlightToggleView.setup(barcodeScannerViewContainer.getBarcodeScannerView());
         // if the device does not have flashlight in its camera, then remove the switch flashlight button...
         if (!hasFlash() || frontCameraUsed()) {
-            switchFlashlightButton.setVisibility(View.GONE);
+            flashlightToggleView.setVisibility(View.GONE);
         }
 
         barcodeScannerViewContainer.getBarcodeScannerView().getLatestBarcode().observe(getViewLifecycleOwner(), result -> {
@@ -93,24 +90,6 @@ public abstract class BarCodeScannerFragment extends Fragment implements Barcode
     private boolean frontCameraUsed() {
         Bundle bundle = getActivity().getIntent().getExtras();
         return bundle != null && bundle.getBoolean(Appearances.FRONT);
-    }
-
-    private void switchFlashlight() {
-        if (getString(org.odk.collect.strings.R.string.turn_on_flashlight).equals(switchFlashlightButton.getText())) {
-            barcodeScannerViewContainer.getBarcodeScannerView().setTorchOn(true);
-        } else {
-            barcodeScannerViewContainer.getBarcodeScannerView().setTorchOn(false);
-        }
-    }
-
-    @Override
-    public void onTorchOn() {
-        switchFlashlightButton.setText(org.odk.collect.strings.R.string.turn_off_flashlight);
-    }
-
-    @Override
-    public void onTorchOff() {
-        switchFlashlightButton.setText(org.odk.collect.strings.R.string.turn_on_flashlight);
     }
 
     protected void restartScanning() {

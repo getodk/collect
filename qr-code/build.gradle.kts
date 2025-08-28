@@ -46,6 +46,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar)
 
     implementation(project(":androidshared"))
+    implementation(project(":strings"))
 
     implementation(libs.zxingAndroidEmbedded)
     implementation(libs.mlkit.barcodescanning)
