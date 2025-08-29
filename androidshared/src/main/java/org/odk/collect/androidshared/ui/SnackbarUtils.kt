@@ -67,13 +67,14 @@ object SnackbarUtils {
      * @param message               The text to show. Can be formatted text.
      * @param displayDismissButton  True if the dismiss button should be displayed, false otherwise.
      */
-    private fun showSnackbar(
+    fun showSnackbar(
         parentView: View,
         message: String,
         duration: Int,
-        anchorView: View?,
+        anchorView: View? = null,
         action: Action? = null,
-        displayDismissButton: Boolean
+        displayDismissButton: Boolean = false,
+        onDismiss: () -> Unit = {}
     ) {
         if (message.isBlank()) {
             return
@@ -119,6 +120,7 @@ object SnackbarUtils {
         }.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 super.onDismissed(transientBottomBar, event)
+                onDismiss()
                 lastSnackbar = null
             }
         })

@@ -15,8 +15,6 @@ package org.odk.collect.android.fragments
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +24,7 @@ import com.google.zxing.client.android.BeepManager
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils.getComponent
 import org.odk.collect.android.utilities.Appearances
+import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.async.Scheduler
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.FlashlightToggleView
@@ -65,7 +64,8 @@ abstract class BarCodeScannerFragment : Fragment() {
             frontCameraUsed()
         )
 
-        rootView.findViewById<TextView>(R.id.prompt).setText(org.odk.collect.strings.R.string.barcode_scanner_prompt)
+        val promptView = rootView.findViewById<TextView>(R.id.prompt)
+        promptView.setText(org.odk.collect.strings.R.string.barcode_scanner_prompt)
 
         val flashlightToggleView =
             rootView.findViewById<FlashlightToggleView>(R.id.switch_flashlight)
@@ -83,10 +83,21 @@ abstract class BarCodeScannerFragment : Fragment() {
                     // ignored
                 }
 
+                promptView.visibility = View.GONE
+                flashlightToggleView.visibility = View.GONE
+
                 if (shouldConfirm()) {
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        handleScanningResult(result)
-                    }, 2000L)
+                    SnackbarUtils.showSnackbar(
+                        rootView,
+                        "Barcode scanned successfully",
+                        duration = 2000,
+                        action = SnackbarUtils.Action("Done") {
+                            handleScanningResult(result)
+                        },
+                        onDismiss = {
+                            handleScanningResult(result)
+                        }
+                    )
                 } else {
                     handleScanningResult(result)
                 }
