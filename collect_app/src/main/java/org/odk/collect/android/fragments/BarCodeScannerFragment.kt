@@ -19,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.google.zxing.client.android.BeepManager
 import org.odk.collect.android.R
@@ -28,6 +29,7 @@ import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.async.Scheduler
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.FlashlightToggleView
+import org.odk.collect.qrcode.calculateViewFinder
 import javax.inject.Inject
 
 abstract class BarCodeScannerFragment : Fragment() {
@@ -107,6 +109,22 @@ abstract class BarCodeScannerFragment : Fragment() {
 
         barcodeScannerViewContainer.barcodeScannerView.start()
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Layout the prompt/flashlight button under the view finder
+        view.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
+            val (offset, size) = calculateViewFinder(view.width.toFloat(), view.height.toFloat())
+            val bottomOfViewFinder = offset.y + size.height
+
+            val promptView = view.findViewById<TextView>(R.id.prompt)
+            val promptLayoutParams = promptView.layoutParams as ConstraintLayout.LayoutParams
+            val standardMargin =
+                resources.getDimension(org.odk.collect.androidshared.R.dimen.margin_standard)
+            promptView.layoutParams = ConstraintLayout.LayoutParams(promptLayoutParams).also {
+                it.topMargin = (bottomOfViewFinder + standardMargin).toInt()
+            }
+        }
     }
 
     private fun hasFlash(): Boolean {

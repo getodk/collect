@@ -50,22 +50,17 @@ private fun ViewFinderHighlight(
     val smallShapeCornerSize = MaterialTheme.shapes.small.topStart
 
     if (detectedState != DetectedState.None) {
-        val darkColor = if (detectedState == DetectedState.Potential) {
+        val outlineColor = if (detectedState == DetectedState.Potential) {
             Color(0xFFFFC107)
         } else {
             Color(0xFF9CCC65)
-        }
-        val lightColor = if (detectedState == DetectedState.Potential) {
-            Color(0xFFFAEDC4)
-        } else {
-            Color(0xFFCAF1D8)
         }
 
         Canvas(modifier = Modifier.fillMaxSize()) {
             val cornerSizePx = smallShapeCornerSize.toPx(viewFinderSize, density)
             val cornerRadius = CornerRadius(cornerSizePx, cornerSizePx)
             drawRoundRect(
-                color = darkColor,
+                color = outlineColor,
                 topLeft = viewFinderOffset,
                 size = viewFinderSize,
                 style = Stroke(width = 4.dp.toPx()),
@@ -79,8 +74,6 @@ private fun ViewFinderHighlight(
         val circleOffset = DpOffset(x = topRight.x - circleRadius, y = topRight.y - circleRadius)
 
         ViewFinderIcon(
-            lightColor,
-            darkColor,
             detectedState,
             modifier = Modifier
                 .offset(circleOffset.x, circleOffset.y)
@@ -91,17 +84,27 @@ private fun ViewFinderHighlight(
 
 @Composable
 private fun ViewFinderIcon(
-    lightColor: Color,
-    darkColor: Color,
     detectedState: DetectedState,
     modifier: Modifier = Modifier
 ) {
+    val lightColor = if (detectedState == DetectedState.Potential) {
+        Color(0xFFFAEDC4)
+    } else {
+        Color(0xFFCAF1D8)
+    }
+
     val tickIcon = rememberVectorPainter(Icons.Default.Check)
     val crossIcon = rememberVectorPainter(Icons.Default.Close)
     val icon = if (detectedState == DetectedState.Potential) {
         crossIcon
     } else {
         tickIcon
+    }
+
+    val iconColor = if (detectedState == DetectedState.Potential) {
+        Color(0xFFFFA726)
+    } else {
+        Color(0xFF66BB6A)
     }
 
     Canvas(modifier = modifier.graphicsLayer(shadowElevation = 10f, shape = CircleShape)) {
@@ -119,7 +122,7 @@ private fun ViewFinderIcon(
             top = (size.height - iconSize.height) / 2
         ) {
             with(icon) {
-                draw(iconSize, colorFilter = ColorFilter.tint(darkColor))
+                draw(iconSize, colorFilter = ColorFilter.tint(iconColor))
             }
         }
     }
@@ -132,7 +135,7 @@ private fun ViewFinder(size: Size, offset: Offset) {
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         drawRect(
-            color = Color(0x4B000000),
+            color = Color(0x80000000),
             size = this.size
         )
 
