@@ -89,9 +89,11 @@ abstract class BarCodeScannerFragment : Fragment() {
                 if (shouldConfirm()) {
                     SnackbarUtils.showSnackbar(
                         rootView,
-                        "Barcode scanned successfully",
+                        getString(org.odk.collect.strings.R.string.barcode_scanned),
                         duration = 2000,
-                        action = SnackbarUtils.Action("Done") {
+                        action = SnackbarUtils.Action(
+                            getString(org.odk.collect.strings.R.string.exit_scanning)
+                        ) {
                             handleScanningResult(result)
                         },
                         onDismiss = {
