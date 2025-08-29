@@ -5,8 +5,6 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.graphics.Rect
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
@@ -159,9 +157,7 @@ private class MlKitBarcodeScannerView(
                     val contents = processBarcode(detectedState.barcode)
                     if (!contents.isNullOrEmpty()) {
                         cameraController.unbind()
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            callback(contents)
-                        }, 2000L)
+                        callback(contents)
                     }
                 }
             }

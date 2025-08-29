@@ -15,6 +15,8 @@ package org.odk.collect.android.fragments
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,11 +80,17 @@ abstract class BarCodeScannerFragment : Fragment() {
                 } catch (_: Exception) {
                     // ignored
                 }
-                handleScanningResult(result)
+
+                if (shouldConfirm()) {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        handleScanningResult(result)
+                    }, 2000L)
+                } else {
+                    handleScanningResult(result)
+                }
             }
 
         barcodeScannerViewContainer.barcodeScannerView.start()
-
         return rootView
     }
 
@@ -103,6 +111,8 @@ abstract class BarCodeScannerFragment : Fragment() {
     }
 
     protected abstract fun isQrOnly(): Boolean
+
+    protected abstract fun shouldConfirm(): Boolean
 
     protected abstract fun handleScanningResult(result: String)
 }
