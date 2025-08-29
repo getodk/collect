@@ -204,9 +204,6 @@ private class MlKitBarcodeScannerView(
 
     companion object {
 
-        private const val VIEW_FINDER_SIZE = 820f
-        private const val MIN_BORDER_SIZE = 80f
-
         private fun Barcode.toCandidate(): BarcodeCandidate {
             val format = when (this.format) {
                 Barcode.FORMAT_PDF417 -> BarcodeFormat.PDF417
