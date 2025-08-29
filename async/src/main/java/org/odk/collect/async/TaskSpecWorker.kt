@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.work.ForegroundInfo
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -71,9 +72,32 @@ class TaskSpecWorker(
     override fun onStopped() {
         super.onStopped()
 
-        val spec = getTaskSpec()
-        val stringInputData = getStringInputData()
-        spec.onStoped(applicationContext, stringInputData)
+        val cancelledBySystem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            isSystemStop(stopReason)
+        } else {
+            false
+        }
+
+        if (cancelledBySystem) {
+            val spec = getTaskSpec()
+            val stringInputData = getStringInputData()
+            spec.onStopedBySystem(applicationContext, stringInputData)
+        }
+    }
+
+    private fun isSystemStop(reason: Int): Boolean {
+        return when (reason) {
+            WorkInfo.STOP_REASON_DEVICE_STATE,
+            WorkInfo.STOP_REASON_TIMEOUT,
+            WorkInfo.STOP_REASON_APP_STANDBY,
+            WorkInfo.STOP_REASON_BACKGROUND_RESTRICTION,
+            WorkInfo.STOP_REASON_QUOTA,
+            WorkInfo.STOP_REASON_PREEMPT,
+            WorkInfo.STOP_REASON_ESTIMATED_APP_LAUNCH_TIME_CHANGED,
+            WorkInfo.STOP_REASON_CONSTRAINT_CONNECTIVITY,
+            WorkInfo.STOP_REASON_SYSTEM_PROCESSING -> true
+            else -> false
+        }
     }
 
     private fun getTaskSpec(): TaskSpec {

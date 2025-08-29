@@ -34,7 +34,7 @@ class SyncFormsTaskSpec : TaskSpec {
         }
     }
 
-    override fun onStoped(context: Context, inputData: Map<String, String>) {
+    override fun onStopedBySystem(context: Context, inputData: Map<String, String>) {
         DaggerUtils.getComponent(context).inject(this)
 
         val projectId = inputData[TaskData.DATA_PROJECT_ID]
