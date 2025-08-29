@@ -48,7 +48,6 @@ class FakeBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
         qrOnly: Boolean,
-        prompt: String,
         useFrontCamera: Boolean
     ): BarcodeScannerView {
         return FakeBarcodeScannerView(activity).also {

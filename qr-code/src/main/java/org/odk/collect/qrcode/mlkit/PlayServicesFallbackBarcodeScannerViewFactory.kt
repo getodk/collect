@@ -15,7 +15,6 @@ class PlayServicesFallbackBarcodeScannerViewFactory(mlkitScanThreshold: Int) : B
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
         qrOnly: Boolean,
-        prompt: String,
         useFrontCamera: Boolean
     ): BarcodeScannerView {
         if (MlKitBarcodeScannerViewFactory.isAvailable()) {
@@ -23,7 +22,6 @@ class PlayServicesFallbackBarcodeScannerViewFactory(mlkitScanThreshold: Int) : B
                 activity,
                 lifecycleOwner,
                 qrOnly,
-                prompt,
                 useFrontCamera
             )
         } else {
@@ -31,7 +29,6 @@ class PlayServicesFallbackBarcodeScannerViewFactory(mlkitScanThreshold: Int) : B
                 activity,
                 lifecycleOwner,
                 qrOnly,
-                prompt,
                 useFrontCamera
             )
         }

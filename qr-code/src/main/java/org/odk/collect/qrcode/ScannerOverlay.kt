@@ -23,19 +23,13 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.text.drawText
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import kotlin.math.min
 
 @Composable
-fun ScannerOverlay(
-    detectedState: DetectedState = DetectedState.None,
-    prompt: String = ""
-) {
+fun ScannerOverlay(detectedState: DetectedState = DetectedState.None) {
     BoxWithConstraints {
         val (viewFinderOffset, viewFinderSize) = with(LocalDensity.current) {
             calculateViewFinder(maxWidth.toPx(), maxHeight.toPx())
@@ -43,10 +37,6 @@ fun ScannerOverlay(
 
         ViewFinder(viewFinderSize, viewFinderOffset)
         ViewFinderHighlight(detectedState, viewFinderSize, viewFinderOffset)
-
-        if (prompt.isNotEmpty() && detectedState !is DetectedState.Full) {
-            ScannerPrompt(prompt, viewFinderSize, viewFinderOffset)
-        }
     }
 }
 
@@ -159,33 +149,6 @@ private fun ViewFinder(size: Size, offset: Offset) {
 }
 
 @Composable
-private fun ScannerPrompt(prompt: String, viewFinderSize: Size, viewFinderOffset: Offset) {
-    val textMeasurer = rememberTextMeasurer()
-    val bodyMediumTextStyle = MaterialTheme.typography.bodyMedium
-    val standardMargin = dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)
-
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        val textLayoutResult = textMeasurer.measure(
-            prompt,
-            bodyMediumTextStyle
-        )
-
-        val horizontalMiddleOfViewFinder = viewFinderOffset.x + (viewFinderSize.width / 2)
-        val textTopLeft = Offset(
-            horizontalMiddleOfViewFinder - (textLayoutResult.size.width / 2),
-            viewFinderOffset.y + viewFinderSize.height + standardMargin
-                .toPx()
-        )
-
-        drawText(
-            textLayoutResult,
-            color = Color.White,
-            topLeft = textTopLeft
-        )
-    }
-}
-
-@Composable
 fun Offset.dp(): DpOffset {
     val offset = this
     return with(LocalDensity.current) {
@@ -211,14 +174,6 @@ private const val MAX_VIEWFINDER_WIDTH = 820f
 private fun PreviewNone() {
     MaterialTheme {
         ScannerOverlay()
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewPrompt() {
-    MaterialTheme {
-        ScannerOverlay(prompt = "I am prompt!")
     }
 }
 

@@ -20,6 +20,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.zxing.client.android.BeepManager
 import org.odk.collect.android.R
@@ -61,9 +62,10 @@ abstract class BarCodeScannerFragment : Fragment() {
             requireActivity(),
             getViewLifecycleOwner(),
             this.isQrOnly(),
-            requireContext().getString(org.odk.collect.strings.R.string.barcode_scanner_prompt),
             frontCameraUsed()
         )
+
+        rootView.findViewById<TextView>(R.id.prompt).setText(org.odk.collect.strings.R.string.barcode_scanner_prompt)
 
         val flashlightToggleView =
             rootView.findViewById<FlashlightToggleView>(R.id.switch_flashlight)
