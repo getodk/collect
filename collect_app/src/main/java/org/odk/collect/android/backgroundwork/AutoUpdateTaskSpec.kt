@@ -45,7 +45,7 @@ class AutoUpdateTaskSpec : TaskSpec {
         }
     }
 
-    override fun onStoped(inputData: Map<String, String>) {}
+    override fun onStoped(context: Context, inputData: Map<String, String>) {}
 
     override fun onException(exception: Throwable) {
         Analytics.logNonFatal(exception)

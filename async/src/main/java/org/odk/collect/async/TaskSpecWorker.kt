@@ -73,7 +73,7 @@ class TaskSpecWorker(
 
         val spec = getTaskSpec()
         val stringInputData = getStringInputData()
-        spec.onStoped(stringInputData)
+        spec.onStoped(applicationContext, stringInputData)
     }
 
     private fun getTaskSpec(): TaskSpec {

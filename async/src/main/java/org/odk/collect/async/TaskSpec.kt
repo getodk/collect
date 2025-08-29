@@ -23,7 +23,7 @@ interface TaskSpec {
      * Called when the work is canceled or stopped for any reason,
      * such as constraint changes, system conditions, or explicit cancellation.
      */
-    fun onStoped(inputData: Map<String, String>)
+    fun onStoped(context: Context, inputData: Map<String, String>)
 
     /**
      * Called if an exception is thrown while executing the work.

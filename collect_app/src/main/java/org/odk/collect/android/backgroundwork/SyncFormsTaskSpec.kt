@@ -23,6 +23,7 @@ class SyncFormsTaskSpec : TaskSpec {
 
     override fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
+
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
@@ -33,7 +34,9 @@ class SyncFormsTaskSpec : TaskSpec {
         }
     }
 
-    override fun onStoped(inputData: Map<String, String>) {
+    override fun onStoped(context: Context, inputData: Map<String, String>) {
+        DaggerUtils.getComponent(context).inject(this)
+
         val projectId = inputData[TaskData.DATA_PROJECT_ID]
         if (projectId != null) {
             notifier.onSyncStopped(projectId)
