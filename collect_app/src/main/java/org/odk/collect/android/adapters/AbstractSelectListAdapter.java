@@ -178,7 +178,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         void bind(final int index) {
             if (noButtonsMode) {
                 File imageFile = getImageFile(index);
-                noButtonsItem.setUpNoButtonsItem(imageFile, getChoiceText(index), getErrorMsg(imageFile), numColumns > 1);
+                noButtonsItem.setUpNoButtonsItem(imageFile, getChoiceText(index), getErrorMsg(imageFile), numColumns >= 1);
                 noButtonsItem.setOnClickListener(v -> onItemClick(filteredItems.get(index).selection(), v));
             } else {
                 addMediaFromChoice(audioVideoImageTextLabel, index, createButton(index, audioVideoImageTextLabel), filteredItems);
