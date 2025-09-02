@@ -11,6 +11,7 @@ import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
+import androidx.test.espresso.matcher.ViewMatchers.isClickable
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
@@ -126,6 +127,25 @@ class DeleteProjectDialogTest {
             assertThat(it.dialog, equalTo(null))
             verifyNoInteractions(projectDeleter)
         }
+    }
+
+    @Test
+    fun `During data loading the loading spinner is displayed and other UI elements are disabled`() {
+        launcherRule.launch(DeleteProjectDialog::class.java)
+
+        onView(withId(R.id.progress_bar)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withId(R.id.title)).inRoot(isDialog()).check(matches(not(isDisplayed())))
+        onView(withId(R.id.message)).inRoot(isDialog()).check(matches(not(isDisplayed())))
+        onView(withId(R.id.confirmation_field)).inRoot(isDialog()).check(matches(not(isDisplayed())))
+        onView(withId(R.id.delete_button)).inRoot(isDialog()).check(matches(not(isClickable())))
+
+        scheduler.flush()
+
+        onView(withId(R.id.progress_bar)).inRoot(isDialog()).check(matches(not(isDisplayed())))
+        onView(withId(R.id.title)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withId(R.id.message)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withId(R.id.confirmation_field)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withId(R.id.delete_button)).inRoot(isDialog()).check(matches(isClickable()))
     }
 
     @Test
