@@ -1131,7 +1131,9 @@
     <string name="using_project">Using %s</string>
     <!-- Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog -->
     <string name="switch_to_project">Switch to %s</string>
+    <!-- Text for the dialog title displayed when a user attempts to delete the current project -->
     <string name="delete_project_dialog_title">Delete %s</string>
+    <!-- Text for the dialog message displayed when a user attempts to delete the current project -->
     <string name="delete_project_dialog_message">By deleting this project, you will be permanently delete the following:&lt;br/&gt;&lt;br/&gt;
         • Form Definitions: %1$d&lt;br/&gt;
         • Sent: %2$d&lt;br/&gt;
@@ -1139,6 +1141,7 @@
         • Drafts: %5$d&lt;br/&gt;&lt;br/&gt;
         Type &lt;b&gt;Delete&lt;/b&gt; to confirm this action.
     </string>
+    <!-- Text for the button that confirms deleting the project -->
     <string name="delete_project_confirm_button_text">Delete project</string>
     <string name="or">OR</string>
     <string name="hex_color">Hex color</string>
