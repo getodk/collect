@@ -34,8 +34,6 @@ class DeleteProjectDialog(
     private val instancesDataService: InstancesDataService,
     private val scheduler: Scheduler
 ) : DialogFragment() {
-    lateinit var binding: DeleteProjectDialogLayoutBinding
-
     private val viewModel: DeleteProjectViewModel by viewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -51,7 +49,7 @@ class DeleteProjectDialog(
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DeleteProjectDialogLayoutBinding.inflate(layoutInflater).apply {
+        val binding = DeleteProjectDialogLayoutBinding.inflate(layoutInflater).apply {
             cancelButton.setOnClickListener { dismiss() }
             deleteButton.setOnClickListener { viewModel.deleteProject() }
 
