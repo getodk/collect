@@ -82,7 +82,7 @@ class DeleteProjectDialogTest {
         whenever(projectDataService.getCurrentProject()).thenReturn(MutableStateFlow(Project.DEMO_PROJECT))
         whenever(formsDataService.getFormsCount(projectId)).thenReturn(MutableStateFlow(0))
         whenever(instancesDataService.getSuccessfullySentCount(projectId)).thenReturn(MutableStateFlow(0))
-        whenever(instancesDataService.getUnsentCount(projectId)).thenReturn(MutableStateFlow(0))
+        whenever(instancesDataService.getSendableCount(projectId)).thenReturn(MutableStateFlow(0))
         whenever(instancesDataService.getEditableCount(projectId)).thenReturn(MutableStateFlow(0))
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
@@ -198,7 +198,7 @@ class DeleteProjectDialogTest {
 
     @Test
     fun `The message shows the correct number of unsent forms and drafts`() {
-        whenever(instancesDataService.getUnsentCount(projectId)).thenReturn(MutableStateFlow(5))
+        whenever(instancesDataService.getSendableCount(projectId)).thenReturn(MutableStateFlow(5))
         whenever(instancesDataService.getEditableCount(projectId)).thenReturn(MutableStateFlow(3))
         val message = HtmlCompat.fromHtml(
             context.getLocalizedString(string.delete_project_dialog_message, 0, 0, 5, "⚠\uFE0F", 3),

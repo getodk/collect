@@ -143,7 +143,7 @@ class DeleteProjectDialog(
 
                 val numberOfForms = formsDataService.getFormsCount(project.uuid).value
                 val numberOfSentForms = instancesDataService.getSuccessfullySentCount(project.uuid).value
-                val numberOfUnsentForms = instancesDataService.getUnsentCount(project.uuid).value
+                val numberOfUnsentForms = instancesDataService.getSendableCount(project.uuid).value
                 val numberOfDraftForms = instancesDataService.getEditableCount(project.uuid).value
                 _projectData.postValue(
                     ProjectData(

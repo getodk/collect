@@ -69,19 +69,6 @@ class InstancesDataService(
         instancesRepository.getCountByStatus(Instance.STATUS_SUBMITTED)
     }
 
-    private val unsentCount by qualifiedData(DataKeys.INSTANCES_UNSENT_COUNT, 0) { projectId ->
-        val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
-        val instancesRepository = projectDependencyModule.instancesRepository
-        instancesRepository.getCountByStatus(
-            Instance.STATUS_INCOMPLETE,
-            Instance.STATUS_INVALID,
-            Instance.STATUS_VALID,
-            Instance.STATUS_COMPLETE,
-            Instance.STATUS_NEW_EDIT,
-            Instance.STATUS_SUBMISSION_FAILED
-        )
-    }
-
     private val instances by qualifiedData(DataKeys.INSTANCES, emptyList()) { projectId ->
         val projectDependencyModule = projectDependencyModuleFactory.create(projectId)
         val instancesRepository = projectDependencyModule.instancesRepository
@@ -92,7 +79,6 @@ class InstancesDataService(
     fun getSendableCount(projectId: String): StateFlow<Int> = sendableCount.flow(projectId)
     fun getSentCount(projectId: String): StateFlow<Int> = sentCount.flow(projectId)
     fun getSuccessfullySentCount(projectId: String): StateFlow<Int> = successfullySentCount.flow(projectId)
-    fun getUnsentCount(projectId: String): StateFlow<Int> = unsentCount.flow(projectId)
 
     fun getInstances(projectId: String): StateFlow<List<Instance>> {
         return instances.flow(projectId)

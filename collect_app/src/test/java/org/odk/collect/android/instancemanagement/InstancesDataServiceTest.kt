@@ -234,13 +234,11 @@ class InstancesDataServiceTest {
         )
         assertThat(instancesDataService.getSentCount(projectId).value, equalTo(2))
         assertThat(instancesDataService.getSuccessfullySentCount(projectId).value, equalTo(1))
-        assertThat(instancesDataService.getUnsentCount(projectId).value, equalTo(3))
         assertThat(instancesDataService.getEditableCount(projectId).value, equalTo(1))
         assertThat(instancesDataService.getSendableCount(projectId).value, equalTo(2))
         assertThat(instancesDataService.getInstances("otherProjectId").value, equalTo(emptyList()))
         assertThat(instancesDataService.getSentCount("otherProjectId").value, equalTo(0))
         assertThat(instancesDataService.getSuccessfullySentCount("otherProjectId").value, equalTo(0))
-        assertThat(instancesDataService.getUnsentCount("otherProjectId").value, equalTo(0))
         assertThat(instancesDataService.getEditableCount("otherProjectId").value, equalTo(0))
         assertThat(instancesDataService.getSendableCount("otherProjectId").value, equalTo(0))
     }
