@@ -1,7 +1,6 @@
 package org.odk.collect.android.preferences.dialogs
 
 import android.app.Application
-import android.content.Context
 import androidx.core.text.HtmlCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -19,6 +18,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.WorkManager
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
@@ -32,8 +32,9 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
-import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.android.projects.ProjectsDataService
@@ -41,33 +42,25 @@ import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
-import org.odk.collect.forms.FormsRepository
-import org.odk.collect.forms.instances.Instance
-import org.odk.collect.forms.instances.InstancesRepository
-import org.odk.collect.formstest.FormUtils
-import org.odk.collect.formstest.InstanceUtils
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
+import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.shared.TempFiles
 import org.odk.collect.strings.R.string
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.FakeScheduler
 
 @RunWith(AndroidJUnit4::class)
 class DeleteProjectDialogTest {
-    private val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Context>() as Application)
-    private val projectDataService = component.currentProjectProvider()
+    private val projectDataService = mock<ProjectsDataService>()
     private val projectDeleter = mock<ProjectDeleter>()
-    private val formsDataService = component.formsDataService()
-    private val instancesDataService = component.instancesDataService()
+    private val formsDataService = mock<FormsDataService>()
+    private val instancesDataService = mock<InstancesDataService>()
     private val scheduler = FakeScheduler()
 
     private val context = ApplicationProvider.getApplicationContext<Application>()
 
     private lateinit var projectId: String
-    private lateinit var formsRepository: FormsRepository
-    private lateinit var instancesRepository: InstancesRepository
 
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule(
@@ -86,8 +79,11 @@ class DeleteProjectDialogTest {
     @Before
     fun setup() {
         projectId = CollectHelpers.setupDemoProject()
-        formsRepository = component.formsRepositoryProvider().create(projectId)
-        instancesRepository = component.instancesRepositoryProvider().create(projectId)
+        whenever(projectDataService.getCurrentProject()).thenReturn(MutableStateFlow(Project.DEMO_PROJECT))
+        whenever(formsDataService.getFormsCount(projectId)).thenReturn(MutableStateFlow(0))
+        whenever(instancesDataService.getSuccessfullySentCount(projectId)).thenReturn(MutableStateFlow(0))
+        whenever(instancesDataService.getUnsentCount(projectId)).thenReturn(MutableStateFlow(0))
+        whenever(instancesDataService.getEditableCount(projectId)).thenReturn(MutableStateFlow(0))
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesProjectDeleter(
@@ -176,10 +172,7 @@ class DeleteProjectDialogTest {
 
     @Test
     fun `The message shows the correct number of blank forms`() {
-        formsRepository.save(
-            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
-        )
-
+        whenever(formsDataService.getFormsCount(projectId)).thenReturn(MutableStateFlow(1))
         val message = HtmlCompat.fromHtml(
             context.getLocalizedString(string.delete_project_dialog_message, 1, 0, 0, "", 0),
             HtmlCompat.FROM_HTML_MODE_LEGACY
@@ -192,10 +185,7 @@ class DeleteProjectDialogTest {
 
     @Test
     fun `The message shows the correct number of sent forms`() {
-        instancesRepository.save(
-            InstanceUtils.buildInstance("1", "1", "Sent form", Instance.STATUS_SUBMITTED, null, TempFiles.createTempDir().absolutePath).build()
-        )
-
+        whenever(instancesDataService.getSuccessfullySentCount(projectId)).thenReturn(MutableStateFlow(1))
         val message = HtmlCompat.fromHtml(
             context.getLocalizedString(string.delete_project_dialog_message, 0, 1, 0, "", 0),
             HtmlCompat.FROM_HTML_MODE_LEGACY
@@ -208,22 +198,8 @@ class DeleteProjectDialogTest {
 
     @Test
     fun `The message shows the correct number of unsent forms and drafts`() {
-        instancesRepository.save(
-            InstanceUtils.buildInstance("1", "1", "Submission failed form", Instance.STATUS_SUBMISSION_FAILED, null, TempFiles.createTempDir().absolutePath).build()
-        )
-        instancesRepository.save(
-            InstanceUtils.buildInstance("1", "1", "Finalized form", Instance.STATUS_COMPLETE, null, TempFiles.createTempDir().absolutePath).build()
-        )
-        instancesRepository.save(
-            InstanceUtils.buildInstance("1", "1", "Draft valid form", Instance.STATUS_INVALID, null, TempFiles.createTempDir().absolutePath).build()
-        )
-        instancesRepository.save(
-            InstanceUtils.buildInstance("1", "1", "Draft invalid form", Instance.STATUS_VALID, null, TempFiles.createTempDir().absolutePath).build()
-        )
-        instancesRepository.save(
-            InstanceUtils.buildInstance("1", "1", "Draft new edit form", Instance.STATUS_NEW_EDIT, null, TempFiles.createTempDir().absolutePath).build()
-        )
-
+        whenever(instancesDataService.getUnsentCount(projectId)).thenReturn(MutableStateFlow(5))
+        whenever(instancesDataService.getEditableCount(projectId)).thenReturn(MutableStateFlow(3))
         val message = HtmlCompat.fromHtml(
             context.getLocalizedString(string.delete_project_dialog_message, 0, 0, 5, "⚠\uFE0F", 3),
             HtmlCompat.FROM_HTML_MODE_LEGACY
