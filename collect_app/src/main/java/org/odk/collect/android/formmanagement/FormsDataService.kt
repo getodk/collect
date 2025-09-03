@@ -32,12 +32,21 @@ class FormsDataService(
         projectDependencies.formsRepository.all
     }
 
+    private val lastMatchFormsWithServerCompletionTime by qualifiedData(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_COMPLETION_TIME, null) { projectId ->
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
+        projectDependencies.generalSettings.getLong(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_COMPLETION_TIME)
+    }
+
     private val syncing by qualifiedData(DataKeys.SYNC_STATUS_SYNCING, false)
     private val serverError by qualifiedData<FormSourceException?>(DataKeys.SYNC_STATUS_ERROR, null)
     private val diskError by qualifiedData<String?>(DataKeys.DISK_ERROR, null)
 
     fun getForms(projectId: String): Flow<List<Form>> {
         return forms.flow(projectId)
+    }
+
+    fun getLastMatchFormsWithServerCompletionTime(projectId: String): LiveData<Long?> {
+        return lastMatchFormsWithServerCompletionTime.flow(projectId).asLiveData()
     }
 
     fun isSyncing(projectId: String): LiveData<Boolean> {
@@ -160,7 +169,7 @@ class FormsDataService(
                     if (notify) {
                         notifier.onSync(null, projectId)
                     }
-
+                    projectDependencies.generalSettings.save(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_COMPLETION_TIME, clock.get())
                     null
                 } catch (e: FormSourceException) {
                     if (notify) {

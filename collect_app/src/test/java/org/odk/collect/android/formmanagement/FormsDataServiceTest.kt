@@ -60,6 +60,8 @@ class FormsDataServiceTest {
 
     private lateinit var project: Project.Saved
 
+    private var currentTime: Long = 0
+
     @Before
     fun setup() {
         project = setupProject()
@@ -84,7 +86,7 @@ class FormsDataServiceTest {
             appState = AppState(),
             notifier = notifier,
             projectDependencyModuleFactory = projectDependencyModuleFactory
-        ) { 0 }
+        ) { currentTime }
     }
 
     @Test
@@ -184,6 +186,21 @@ class FormsDataServiceTest {
 
         assertThat(formsDataService.getServerError(project.uuid).getOrAwaitValue(), equalTo(error))
         assertThat(formsDataService.getServerError("other").getOrAwaitValue(), equalTo(null))
+    }
+
+    @Test
+    fun `matchFormsWithServer() saves the task completion time`() {
+        currentTime = 5
+        formsDataService.matchFormsWithServer(project.uuid)
+        assertThat(formsDataService.getLastMatchFormsWithServerCompletionTime(project.uuid).getOrAwaitValue(), equalTo(5))
+    }
+
+    @Test
+    fun `matchFormsWithServer() does not save the task completion time if it fails`() {
+        whenever(formSource.fetchFormList()).thenThrow(FormSourceException.FetchError())
+        currentTime = 5
+        formsDataService.matchFormsWithServer(project.uuid)
+        assertThat(formsDataService.getLastMatchFormsWithServerCompletionTime(project.uuid).getOrAwaitValue(), equalTo(0))
     }
 
     @Test
