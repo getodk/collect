@@ -189,18 +189,29 @@ class FormsDataServiceTest {
     }
 
     @Test
-    fun `matchFormsWithServer() saves the task completion time`() {
+    fun `matchFormsWithServer() updates completion time and clears stopped flag on success`() {
         currentTime = 5
+        formsDataService.markLastMatchFormsWithServerAsStopped(project.uuid)
         formsDataService.matchFormsWithServer(project.uuid)
         assertThat(formsDataService.getLastMatchFormsWithServerCompletionTime(project.uuid).getOrAwaitValue(), equalTo(5))
+        assertThat(formsDataService.getLastMatchFormsWithServerStopped(project.uuid).getOrAwaitValue(), equalTo(false))
     }
 
     @Test
-    fun `matchFormsWithServer() does not save the task completion time if it fails`() {
+    fun `matchFormsWithServer() does not update completion time or clear stopped flag on failure`() {
         whenever(formSource.fetchFormList()).thenThrow(FormSourceException.FetchError())
+        formsDataService.markLastMatchFormsWithServerAsStopped(project.uuid)
         currentTime = 5
         formsDataService.matchFormsWithServer(project.uuid)
         assertThat(formsDataService.getLastMatchFormsWithServerCompletionTime(project.uuid).getOrAwaitValue(), equalTo(0))
+        assertThat(formsDataService.getLastMatchFormsWithServerStopped(project.uuid).getOrAwaitValue(), equalTo(true))
+    }
+
+    @Test
+    fun `markLastMatchFormsWithServerAsStopped() sets stopped flag to true`() {
+        assertThat(formsDataService.getLastMatchFormsWithServerStopped(project.uuid).getOrAwaitValue(), equalTo(false))
+        formsDataService.markLastMatchFormsWithServerAsStopped(project.uuid)
+        assertThat(formsDataService.getLastMatchFormsWithServerStopped(project.uuid).getOrAwaitValue(), equalTo(true))
     }
 
     @Test
