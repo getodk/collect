@@ -13,6 +13,7 @@ import org.odk.collect.android.activities.FormMapActivity
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
+import org.odk.collect.androidshared.livedata.LiveDataUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ObviousProgressBar
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -126,6 +127,18 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
                     supportFragmentManager
                 )
             }
+        }
+
+        LiveDataUtils.zip3(
+            viewModel.lastMatchFormsWithServerStopped,
+            viewModel.lastMatchFormsWithServerCompletionTime,
+            viewModel.isSyncingWithServer
+        ).observe(this) { (lastMatchFormsWithServerStopped, lastMatchFormsWithServerCompletionTime, isSyncing) ->
+            findViewById<MatchFormsWithServerBanner>(R.id.match_forms_with_server_banner).setData(
+                lastMatchFormsWithServerStopped,
+                lastMatchFormsWithServerCompletionTime,
+                isSyncing
+            )
         }
     }
 }

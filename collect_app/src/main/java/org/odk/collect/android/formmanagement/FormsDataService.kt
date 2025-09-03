@@ -1,6 +1,7 @@
 package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
 import org.odk.collect.android.formmanagement.download.FormDownloadException
@@ -42,7 +43,8 @@ class FormsDataService(
         projectDependencies.generalSettings.getBoolean(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_STOPPED)
     }
 
-    private val syncing by qualifiedData(DataKeys.SYNC_STATUS_SYNCING, false)
+    private val syncingWithStorage by qualifiedData(DataKeys.SYNC_WITH_STORAGE_STATUS_SYNCING, false)
+    private val syncingWithServer by qualifiedData(DataKeys.SYNC_WITH_SERVER_STATUS_SYNCING, false)
     private val serverError by qualifiedData<FormSourceException?>(DataKeys.SYNC_STATUS_ERROR, null)
     private val diskError by qualifiedData<String?>(DataKeys.DISK_ERROR, null)
 
@@ -59,7 +61,17 @@ class FormsDataService(
     }
 
     fun isSyncing(projectId: String): LiveData<Boolean> {
-        return syncing.flow(projectId).asLiveData()
+        val syncingWithStorageLiveData = syncingWithStorage.flow(projectId).asLiveData()
+        val syncingWithServerLiveData = syncingWithServer.flow(projectId).asLiveData()
+
+        return MediatorLiveData<Boolean>().apply {
+            addSource(syncingWithStorageLiveData) { value = it == true || (syncingWithServerLiveData.value == true) }
+            addSource(syncingWithServerLiveData) { value = it == true || (syncingWithStorageLiveData.value == true) }
+        }
+    }
+
+    fun isSyncingWithServer(projectId: String): LiveData<Boolean> {
+        return syncingWithServer.flow(projectId).asLiveData()
     }
 
     fun getServerError(projectId: String): LiveData<FormSourceException?> {
@@ -78,7 +90,7 @@ class FormsDataService(
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
         projectDependencies.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
-                startSync(projectId)
+                startSyncWithStorage(projectId)
                 syncWithStorage(projectId)
                 update(projectId)
                 finishSyncWithStorage(projectId)
@@ -160,7 +172,7 @@ class FormsDataService(
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
         return projectDependencies.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
-                startSync(projectId)
+                startSyncWithServer(projectId)
                 syncWithStorage(projectId)
 
                 val serverFormsDetailsFetcher = serverFormsDetailsFetcher(projectDependencies)
@@ -235,17 +247,21 @@ class FormsDataService(
         diskError.set(projectId, error)
     }
 
-    private fun startSync(projectId: String) {
-        syncing.set(projectId, true)
+    private fun startSyncWithStorage(projectId: String) {
+        syncingWithStorage.set(projectId, true)
+    }
+
+    private fun startSyncWithServer(projectId: String) {
+        syncingWithServer.set(projectId, true)
+    }
+
+    private fun finishSyncWithStorage(projectId: String) {
+        syncingWithStorage.set(projectId, false)
     }
 
     private fun finishSyncWithServer(projectId: String, exception: FormSourceException? = null) {
         serverError.set(projectId, exception)
-        syncing.set(projectId, false)
-    }
-
-    private fun finishSyncWithStorage(projectId: String) {
-        syncing.set(projectId, false)
+        syncingWithServer.set(projectId, false)
     }
 }
 
