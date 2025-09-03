@@ -189,18 +189,29 @@ class FormsDataServiceTest {
     }
 
     @Test
-    fun `matchFormsWithServer() saves the task completion time`() {
+    fun `matchFormsWithServer() marks last sync as completed on success`() {
         currentTime = 5
+        formsDataService.lastMatchFormsWithServerFailed(project.uuid)
         formsDataService.matchFormsWithServer(project.uuid)
         assertThat(formsDataService.getLastMatchFormsWithServerCompletionTime(project.uuid).getOrAwaitValue(), equalTo(5))
+        assertThat(formsDataService.getLastMatchFormsWithServerCompleted(project.uuid).getOrAwaitValue(), equalTo(true))
     }
 
     @Test
-    fun `matchFormsWithServer() does not save the task completion time if it fails`() {
+    fun `matchFormsWithServer() marks last sync as failed on failure`() {
         whenever(formSource.fetchFormList()).thenThrow(FormSourceException.FetchError())
+        formsDataService.lastMatchFormsWithServerFailed(project.uuid)
         currentTime = 5
         formsDataService.matchFormsWithServer(project.uuid)
         assertThat(formsDataService.getLastMatchFormsWithServerCompletionTime(project.uuid).getOrAwaitValue(), equalTo(0))
+        assertThat(formsDataService.getLastMatchFormsWithServerCompleted(project.uuid).getOrAwaitValue(), equalTo(false))
+    }
+
+    @Test
+    fun `lastMatchFormsWithServerFailed() marks last sync as failed`() {
+        assertThat(formsDataService.getLastMatchFormsWithServerCompleted(project.uuid).getOrAwaitValue(), equalTo(true))
+        formsDataService.lastMatchFormsWithServerFailed(project.uuid)
+        assertThat(formsDataService.getLastMatchFormsWithServerCompleted(project.uuid).getOrAwaitValue(), equalTo(false))
     }
 
     @Test

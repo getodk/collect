@@ -37,6 +37,11 @@ class FormsDataService(
         projectDependencies.generalSettings.getLong(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_COMPLETION_TIME)
     }
 
+    private val lastMatchFormsWithServerCompleted by qualifiedData(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_COMPLETED, true) { projectId ->
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
+        projectDependencies.generalSettings.getBoolean(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_COMPLETED)
+    }
+
     private val syncing by qualifiedData(DataKeys.SYNC_STATUS_SYNCING, false)
     private val serverError by qualifiedData<FormSourceException?>(DataKeys.SYNC_STATUS_ERROR, null)
     private val diskError by qualifiedData<String?>(DataKeys.DISK_ERROR, null)
@@ -47,6 +52,10 @@ class FormsDataService(
 
     fun getLastMatchFormsWithServerCompletionTime(projectId: String): LiveData<Long?> {
         return lastMatchFormsWithServerCompletionTime.flow(projectId).asLiveData()
+    }
+
+    fun getLastMatchFormsWithServerCompleted(projectId: String): LiveData<Boolean> {
+        return lastMatchFormsWithServerCompleted.flow(projectId).asLiveData()
     }
 
     fun isSyncing(projectId: String): LiveData<Boolean> {
@@ -169,13 +178,13 @@ class FormsDataService(
                     if (notify) {
                         notifier.onSync(null, projectId)
                     }
-                    projectDependencies.generalSettings.save(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_COMPLETION_TIME, clock.get())
+                    lastMatchFormsWithServerCompleted(projectId)
                     null
                 } catch (e: FormSourceException) {
                     if (notify) {
                         notifier.onSync(e, projectId)
                     }
-
+                    lastMatchFormsWithServerFailed(projectId)
                     e
                 }
 
@@ -197,6 +206,21 @@ class FormsDataService(
         )
 
         update(projectId)
+    }
+
+    fun lastMatchFormsWithServerFailed(projectId: String) {
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
+        projectDependencies.generalSettings.save(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_COMPLETED, false)
+        lastMatchFormsWithServerCompleted.set(projectId, false)
+    }
+
+    private fun lastMatchFormsWithServerCompleted(projectId: String) {
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
+        val currentTime = clock.get()
+        projectDependencies.generalSettings.save(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_COMPLETION_TIME, currentTime)
+        lastMatchFormsWithServerCompletionTime.set(projectId, currentTime)
+        projectDependencies.generalSettings.save(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_COMPLETED, true)
+        lastMatchFormsWithServerCompleted.set(projectId, true)
     }
 
     private fun syncWithStorage(projectId: String) {
