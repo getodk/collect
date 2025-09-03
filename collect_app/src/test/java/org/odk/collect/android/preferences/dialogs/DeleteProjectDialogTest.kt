@@ -1,6 +1,7 @@
 package org.odk.collect.android.preferences.dialogs
 
 import android.app.Application
+import android.text.TextUtils
 import androidx.core.text.HtmlCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -18,6 +19,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.WorkManager
+import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.not
@@ -168,6 +170,17 @@ class DeleteProjectDialogTest {
         scheduler.flush()
 
         verify(projectDeleter).deleteProject(projectId)
+    }
+
+    @Test
+    fun `The title is single-lined with end ellipsize`() {
+        launcherRule.launch(DeleteProjectDialog::class.java)
+        scheduler.flush()
+        onView(withId(R.id.title)).inRoot(isDialog()).check { view, _ ->
+            val textView = view as MaterialTextView
+            assertThat(textView.maxLines, equalTo(1))
+            assertThat(textView.ellipsize, equalTo(TextUtils.TruncateAt.END))
+        }
     }
 
     @Test
