@@ -35,7 +35,7 @@ class FormsDataService(
 
     private val formsCount by qualifiedData(DataKeys.FORMS_COUNT, 0) { projectId ->
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
-        projectDependencies.formsRepository.all.size
+        projectDependencies.formsRepository.all.filter { !it.isDeleted }.size
     }
 
     private val syncing by qualifiedData(DataKeys.SYNC_STATUS_SYNCING, false)
