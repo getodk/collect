@@ -209,6 +209,8 @@ class FormsDataService(
     }
 
     fun markLastMatchFormsWithServerAsStopped(projectId: String) {
+        notifier.onSyncStopped(projectId)
+
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
         projectDependencies.generalSettings.save(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_STOPPED, true)
         lastMatchFormsWithServerStopped.set(projectId, true)

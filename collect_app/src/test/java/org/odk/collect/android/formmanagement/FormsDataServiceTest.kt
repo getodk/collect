@@ -208,6 +208,12 @@ class FormsDataServiceTest {
     }
 
     @Test
+    fun `markLastMatchFormsWithServerAsStopped() calls notifier#onSyncStopped`() {
+        formsDataService.markLastMatchFormsWithServerAsStopped(project.uuid)
+        verify(notifier).onSyncStopped(project.uuid)
+    }
+
+    @Test
     fun `markLastMatchFormsWithServerAsStopped() sets stopped flag to true`() {
         assertThat(formsDataService.getLastMatchFormsWithServerStopped(project.uuid).getOrAwaitValue(), equalTo(false))
         formsDataService.markLastMatchFormsWithServerAsStopped(project.uuid)
