@@ -59,6 +59,7 @@ class ProjectPreferencesActivity :
     lateinit var scheduler: Scheduler
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        DaggerUtils.getComponent(this).inject(this)
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(ProjectPreferencesFragment::class.java) {
                 ProjectPreferencesFragment(intent.getBooleanExtra(EXTRA_IN_FORM_ENTRY, false))
@@ -76,7 +77,6 @@ class ProjectPreferencesActivity :
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preferences_layout)
-        DaggerUtils.getComponent(this).inject(this)
     }
 
     override fun onPause() {
