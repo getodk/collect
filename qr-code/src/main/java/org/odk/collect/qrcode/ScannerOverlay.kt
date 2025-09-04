@@ -18,6 +18,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
@@ -129,22 +130,29 @@ private fun ViewFinderIcon(
 }
 
 @Composable
-private fun ViewFinder(size: Size, offset: Offset) {
+private fun ViewFinder(viewFinderSize: Size, offset: Offset) {
     val density = LocalDensity.current
     val smallShapeCornerSize = MaterialTheme.shapes.small.topStart
 
-    Canvas(modifier = Modifier.fillMaxSize()) {
+    Canvas(
+        modifier = Modifier
+            .fillMaxSize()
+            .graphicsLayer {
+                // Make sure the resulting layer is drawn on screen in one visible move
+                compositingStrategy = CompositingStrategy.Offscreen
+            }
+    ) {
         drawRect(
             color = Color(0x80000000),
-            size = this.size
+            size = size
         )
 
-        val cornerSizePx = smallShapeCornerSize.toPx(size, density)
+        val cornerSizePx = smallShapeCornerSize.toPx(viewFinderSize, density)
         val cornerRadius = CornerRadius(cornerSizePx, cornerSizePx)
         drawRoundRect(
             color = Color(0x00000000),
             topLeft = offset,
-            size = size,
+            size = viewFinderSize,
             blendMode = BlendMode.Clear,
             cornerRadius = cornerRadius
         )
