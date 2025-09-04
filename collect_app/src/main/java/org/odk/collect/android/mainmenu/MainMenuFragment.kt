@@ -89,9 +89,10 @@ class MainMenuFragment(
         }
 
         mainMenuViewModel.savedForm.consume(viewLifecycleOwner) { value ->
-            SnackbarUtils.showLongSnackbar(
+            SnackbarUtils.showSnackbar(
                 requireView(),
                 getString(value.message),
+                SnackbarUtils.DURATION_LONG,
                 action = value.action?.let { action ->
                     SnackbarUtils.Action(getString(action)) {
                         formEntryFlowLauncher.launch(
