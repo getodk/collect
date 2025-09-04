@@ -72,6 +72,17 @@
 
     <!--
     ##############################################
+    # MATCH FORMS WITH SERVER BANNER
+    ##############################################
+    -->
+    <string name="sync_stopped_banner_title">Failed to sync forms</string>
+    <string name="sync_stopped_banner_message">\'Last updated on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+    <string name="sync_banner_in_progress_title">Syncing forms</string>
+    <string name="sync_banner_in_progress_message">Please wait until syncing is complete</string>
+    <string name="sync_banner_refresh_button">Refresh</string>
+
+    <!--
+    ##############################################
     # FILL BLANK FORM
     ##############################################
     -->
@@ -727,6 +738,7 @@
     <string name="form_updates_available">Form updates available</string>
     <string name="newer_version_of_a_form_info">This is an update to a form you have</string>
     <string name="form_update_error">Form update failed</string>
+    <string name="form_update_error_massage">Open ODK Collect to try again</string>
     <string name="form_update_succeeded">Form update succeeded</string>
 
     <!-- Text for notification shown while syncing forms with the server -->

@@ -8,7 +8,10 @@ object DataKeys {
     const val INSTANCES = "instances"
 
     const val FORMS = "forms"
-    const val SYNC_STATUS_SYNCING = "syncStatusSyncing"
+    const val SYNC_WITH_STORAGE_STATUS_SYNCING = "syncWithStorageStatusSyncing"
+    const val SYNC_WITH_SERVER_STATUS_SYNCING = "syncWithServerStatusSyncing"
     const val SYNC_STATUS_ERROR = "syncStatusError"
     const val DISK_ERROR = "diskError"
+    const val LAST_MATCH_FORMS_WITH_SERVER_COMPLETION_TIME = "lastMatchFormsWithServerCompletionTime"
+    const val LAST_MATCH_FORMS_WITH_SERVER_STOPPED = "lastMatchFormsWithServerStopped"
 }

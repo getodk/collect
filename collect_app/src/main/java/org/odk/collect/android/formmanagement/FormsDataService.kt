@@ -1,6 +1,7 @@
 package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
 import org.odk.collect.android.formmanagement.download.FormDownloadException
@@ -32,7 +33,18 @@ class FormsDataService(
         projectDependencies.formsRepository.all
     }
 
-    private val syncing by qualifiedData(DataKeys.SYNC_STATUS_SYNCING, false)
+    private val lastMatchFormsWithServerCompletionTime by qualifiedData(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_COMPLETION_TIME, null) { projectId ->
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
+        projectDependencies.generalSettings.getLong(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_COMPLETION_TIME)
+    }
+
+    private val lastMatchFormsWithServerStopped by qualifiedData(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_STOPPED, false) { projectId ->
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
+        projectDependencies.generalSettings.getBoolean(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_STOPPED)
+    }
+
+    private val syncingWithStorage by qualifiedData(DataKeys.SYNC_WITH_STORAGE_STATUS_SYNCING, false)
+    private val syncingWithServer by qualifiedData(DataKeys.SYNC_WITH_SERVER_STATUS_SYNCING, false)
     private val serverError by qualifiedData<FormSourceException?>(DataKeys.SYNC_STATUS_ERROR, null)
     private val diskError by qualifiedData<String?>(DataKeys.DISK_ERROR, null)
 
@@ -40,8 +52,26 @@ class FormsDataService(
         return forms.flow(projectId)
     }
 
+    fun getLastMatchFormsWithServerCompletionTime(projectId: String): LiveData<Long?> {
+        return lastMatchFormsWithServerCompletionTime.flow(projectId).asLiveData()
+    }
+
+    fun getLastMatchFormsWithServerStopped(projectId: String): LiveData<Boolean> {
+        return lastMatchFormsWithServerStopped.flow(projectId).asLiveData()
+    }
+
     fun isSyncing(projectId: String): LiveData<Boolean> {
-        return syncing.flow(projectId).asLiveData()
+        val syncingWithStorageLiveData = syncingWithStorage.flow(projectId).asLiveData()
+        val syncingWithServerLiveData = syncingWithServer.flow(projectId).asLiveData()
+
+        return MediatorLiveData<Boolean>().apply {
+            addSource(syncingWithStorageLiveData) { value = it == true || (syncingWithServerLiveData.value == true) }
+            addSource(syncingWithServerLiveData) { value = it == true || (syncingWithStorageLiveData.value == true) }
+        }
+    }
+
+    fun isSyncingWithServer(projectId: String): LiveData<Boolean> {
+        return syncingWithServer.flow(projectId).asLiveData()
     }
 
     fun getServerError(projectId: String): LiveData<FormSourceException?> {
@@ -60,7 +90,7 @@ class FormsDataService(
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
         projectDependencies.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
-                startSync(projectId)
+                startSyncWithStorage(projectId)
                 syncWithStorage(projectId)
                 update(projectId)
                 finishSyncWithStorage(projectId)
@@ -142,7 +172,7 @@ class FormsDataService(
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
         return projectDependencies.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
-                startSync(projectId)
+                startSyncWithServer(projectId)
                 syncWithStorage(projectId)
 
                 val serverFormsDetailsFetcher = serverFormsDetailsFetcher(projectDependencies)
@@ -160,7 +190,7 @@ class FormsDataService(
                     if (notify) {
                         notifier.onSync(null, projectId)
                     }
-
+                    markLastMatchFormsWithServerAsCompleted(projectId)
                     null
                 } catch (e: FormSourceException) {
                     if (notify) {
@@ -190,6 +220,23 @@ class FormsDataService(
         update(projectId)
     }
 
+    fun markLastMatchFormsWithServerAsStopped(projectId: String) {
+        notifier.onSyncStopped(projectId)
+
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
+        projectDependencies.generalSettings.save(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_STOPPED, true)
+        lastMatchFormsWithServerStopped.set(projectId, true)
+    }
+
+    private fun markLastMatchFormsWithServerAsCompleted(projectId: String) {
+        val projectDependencies = projectDependencyModuleFactory.create(projectId)
+        val currentTime = clock.get()
+        projectDependencies.generalSettings.save(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_COMPLETION_TIME, currentTime)
+        lastMatchFormsWithServerCompletionTime.set(projectId, currentTime)
+        projectDependencies.generalSettings.save(DataKeys.LAST_MATCH_FORMS_WITH_SERVER_STOPPED, false)
+        lastMatchFormsWithServerStopped.set(projectId, false)
+    }
+
     private fun syncWithStorage(projectId: String) {
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
         val error = LocalFormUseCases.synchronizeWithDisk(
@@ -200,17 +247,21 @@ class FormsDataService(
         diskError.set(projectId, error)
     }
 
-    private fun startSync(projectId: String) {
-        syncing.set(projectId, true)
+    private fun startSyncWithStorage(projectId: String) {
+        syncingWithStorage.set(projectId, true)
+    }
+
+    private fun startSyncWithServer(projectId: String) {
+        syncingWithServer.set(projectId, true)
+    }
+
+    private fun finishSyncWithStorage(projectId: String) {
+        syncingWithStorage.set(projectId, false)
     }
 
     private fun finishSyncWithServer(projectId: String, exception: FormSourceException? = null) {
         serverError.set(projectId, exception)
-        syncing.set(projectId, false)
-    }
-
-    private fun finishSyncWithStorage(projectId: String) {
-        syncing.set(projectId, false)
+        syncingWithServer.set(projectId, false)
     }
 }
 

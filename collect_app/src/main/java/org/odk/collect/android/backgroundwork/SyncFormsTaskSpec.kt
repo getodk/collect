@@ -19,6 +19,7 @@ class SyncFormsTaskSpec : TaskSpec {
 
     override fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
+
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
@@ -26,6 +27,17 @@ class SyncFormsTaskSpec : TaskSpec {
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }
+        }
+    }
+
+    override fun onStopedBySystem(context: Context, inputData: Map<String, String>) {
+        DaggerUtils.getComponent(context).inject(this)
+
+        val projectId = inputData[TaskData.DATA_PROJECT_ID]
+        if (projectId != null) {
+            formsDataService.markLastMatchFormsWithServerAsStopped(projectId)
+        } else {
+            throw IllegalArgumentException("No project ID provided!")
         }
     }
 
