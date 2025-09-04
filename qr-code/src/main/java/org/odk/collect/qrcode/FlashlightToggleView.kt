@@ -2,17 +2,16 @@ package org.odk.collect.qrcode
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
-import org.odk.collect.qrcode.databinding.FlashlightToggleLayoutBinding
 
 class FlashlightToggleView(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
 
@@ -20,8 +19,8 @@ class FlashlightToggleView(context: Context, attrs: AttributeSet?) : FrameLayout
     private var barcodeScannerView: BarcodeScannerView? = null
 
     init {
-        FlashlightToggleLayoutBinding.inflate(LayoutInflater.from(context)).also {
-            it.composeView.setContextThemedContent {
+        ComposeView(context).also {
+            it.setContextThemedContent {
                 FlashlightToggle(
                     flashlightOn = flashlightOnState.value,
                     onFlashlightToggled = {
@@ -30,7 +29,7 @@ class FlashlightToggleView(context: Context, attrs: AttributeSet?) : FrameLayout
                 )
             }
 
-            addView(it.root)
+            addView(it)
         }
     }
 
