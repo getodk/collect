@@ -26,10 +26,12 @@ import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.androidtest.recordValues
+import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.formstest.FormUtils
+import org.odk.collect.formstest.FormUtils.createXFormFile
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.locks.BooleanChangeLock
@@ -242,6 +244,32 @@ class FormsDataServiceTest {
             formsDataService.refresh(project.uuid)
             assertThat(projectValues, equalTo(listOf(false)))
         }
+    }
+
+    @Test
+    fun `#getFormsCount ignores soft-deleted forms`() {
+        formsRepositoryProvider.create(project.uuid).apply {
+            save(
+                Form.Builder()
+                    .displayName("1")
+                    .formId("1")
+                    .version("1")
+                    .deleted(false)
+                    .formFilePath(createXFormFile("1", "1").absolutePath)
+                    .build()
+            )
+            save(
+                Form.Builder()
+                    .displayName("2")
+                    .formId("2")
+                    .version("1")
+                    .deleted(true)
+                    .formFilePath(createXFormFile("2", "1").absolutePath)
+                    .build()
+            )
+        }
+        formsDataService.update(project.uuid)
+        assertThat(formsDataService.getFormsCount(project.uuid).value, equalTo(1))
     }
 
     private fun addFormToServer(updatedXForm: String, formId: String, formVersion: String) {

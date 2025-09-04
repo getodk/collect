@@ -876,12 +876,6 @@ Constraint processing</string>
   <string name="using_project">%s  کا استعمال ہو رہا ہے</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">%s میں تبدیل کریں</string>
-  <string name="delete_project_confirm_message">تمام خالی فارمز، بھیجا گیا ڈیٹا، اور سیٹنگز مستقل طور پر ختم ہو جایئں گی</string>
-  <string name="delete_project_yes">ہاں </string>
-  <string name="delete_project_no">نہیں </string>
-  <string name="cannot_delete_project_title">پراجیکٹ ختم نہیں ہو سکتا</string>
-  <string name="cannot_delete_project_message_one">آپ کے فون میں ابھی ایسا ڈیٹا موجود ہے جو سرور کو بھیجا نہیں گیا۔ پراجیکٹ کو ڈیلیٹ کرنے سے پہلے یا تو وہ ڈیٹا بھیجیں، یا پھر اس ڈیٹا کو ڈیلیٹ کریں۔</string>
-  <string name="cannot_delete_project_message_two">پس منظر میں کام چل رہا ہے، براہ مہربانی دوبارہ کوشش کریں</string>
   <string name="or">OR</string>
   <string name="hex_color">hex color</string>
   <string name="invalid_hex_code">hex code صحیح نہیں ہے</string>

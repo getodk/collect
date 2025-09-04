@@ -1,6 +1,5 @@
 package org.odk.collect.android.application.initialization
 
-import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -20,15 +19,7 @@ class GoogleDriveProjectsDeleter(
             val protocol = unprotectedSettings.getString(ProjectKeys.KEY_PROTOCOL)
 
             if (protocol == ProjectKeys.PROTOCOL_GOOGLE_SHEETS) {
-                // try to delete
-                val result = projectDeleter.deleteProject(it.uuid)
-
-                // if project cannot be deleted then convert it to ODK protocol
-                if (result == DeleteProjectResult.UnsentInstances || result == DeleteProjectResult.RunningBackgroundJobs) {
-                    unprotectedSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_SERVER)
-                    unprotectedSettings.save(ProjectKeys.KEY_SERVER_URL, "https://example.com")
-                    projectsRepository.save(it.copy(isOldGoogleDriveProject = true))
-                }
+                projectDeleter.deleteProject(it.uuid)
             }
         }
     }

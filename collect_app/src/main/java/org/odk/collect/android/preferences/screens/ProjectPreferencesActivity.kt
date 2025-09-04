@@ -18,11 +18,17 @@ package org.odk.collect.android.preferences.screens
 import android.os.Bundle
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
+import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MovingBackwardsDialogListener
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.ResetSettingsResultDialogListener
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.mainmenu.MainMenuActivity
+import org.odk.collect.android.preferences.dialogs.DeleteProjectDialog
+import org.odk.collect.android.projects.ProjectDeleter
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.async.Scheduler
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
@@ -37,16 +43,40 @@ class ProjectPreferencesActivity :
     @Inject
     lateinit var propertyManager: PropertyManager
 
+    @Inject
+    lateinit var projectDeleter: ProjectDeleter
+
+    @Inject
+    lateinit var projectsDataService: ProjectsDataService
+
+    @Inject
+    lateinit var formsDataService: FormsDataService
+
+    @Inject
+    lateinit var instancesDataService: InstancesDataService
+
+    @Inject
+    lateinit var scheduler: Scheduler
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        DaggerUtils.getComponent(this).inject(this)
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(ProjectPreferencesFragment::class.java) {
                 ProjectPreferencesFragment(intent.getBooleanExtra(EXTRA_IN_FORM_ENTRY, false))
+            }
+            .forClass(DeleteProjectDialog::class) {
+                DeleteProjectDialog(
+                    projectDeleter,
+                    projectsDataService,
+                    formsDataService,
+                    instancesDataService,
+                    scheduler
+                )
             }
             .build()
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preferences_layout)
-        DaggerUtils.getComponent(this).inject(this)
     }
 
     override fun onPause() {

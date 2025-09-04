@@ -913,12 +913,6 @@
   <string name="using_project">%s käytössä</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Vaihda projektiin %s</string>
-  <string name="delete_project_confirm_message">Kaikki tyhjät lomakkeet, lähetykset ja asetukset tullaan poistamaan pysyvästi.</string>
-  <string name="delete_project_yes">Kyllä</string>
-  <string name="delete_project_no">Ei</string>
-  <string name="cannot_delete_project_title">Projektia ei voida poistaa.</string>
-  <string name="cannot_delete_project_message_one">Sinulla on lomakkeita lähettämättä. Poistaaksesi projektin, sinun on ensin lähetettävä tai poistettava ne lomakkeet.</string>
-  <string name="cannot_delete_project_message_two">Taustatoimintoja kesken. Ole hyvä ja yritä myöhemmin uudelleen.</string>
   <string name="or">OR</string>
   <string name="hex_color">Heksadesimaalinen väri</string>
   <string name="invalid_hex_code">Heksadesimaalinen koodi ei kelpaa</string>
