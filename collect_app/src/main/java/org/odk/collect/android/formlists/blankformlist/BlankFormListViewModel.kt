@@ -52,6 +52,8 @@ class BlankFormListViewModel(
 
     val syncResult: LiveData<String?> = formsDataService.getDiskError(projectId)
     val isLoading: LiveData<Boolean> = formsDataService.isSyncing(projectId)
+    val lastMatchFormsWithServerCompletionTime: LiveData<Long?> = formsDataService.getLastMatchFormsWithServerCompletionTime(projectId)
+    val lastMatchFormsWithServerCompleted: LiveData<Boolean> = formsDataService.getLastMatchFormsWithServerCompleted(projectId)
 
     var sortingOrder: SortOrder = getSortOrder()
         get() { return getSortOrder() }

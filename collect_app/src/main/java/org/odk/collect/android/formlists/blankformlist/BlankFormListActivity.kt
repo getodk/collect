@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
@@ -13,6 +14,7 @@ import org.odk.collect.android.activities.FormMapActivity
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
+import org.odk.collect.androidshared.livedata.LiveDataUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ObviousProgressBar
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -34,6 +36,8 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
     @Inject
     lateinit var permissionsProvider: PermissionsProvider
+
+    private lateinit var banner: MatchFormsWithServerBanner
 
     private val viewModel: BlankFormListViewModel by viewModels { viewModelFactory }
 
@@ -59,6 +63,10 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
         list.layoutManager = LinearLayoutManager(this)
         list.addItemDecoration(RecyclerViewUtils.verticalLineDivider(this))
         list.adapter = adapter
+
+        banner = findViewById(R.id.match_forms_with_server_banner)
+        banner.isVisible = viewModel.isMatchExactlyEnabled()
+        banner.setListener { viewModel.syncWithServer() }
 
         initObservers()
     }
@@ -126,6 +134,18 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
                     supportFragmentManager
                 )
             }
+        }
+
+        LiveDataUtils.zip3(
+            viewModel.lastMatchFormsWithServerCompletionTime,
+            viewModel.lastMatchFormsWithServerCompleted,
+            viewModel.isLoading
+        ).observe(this) { (lastMatchFormsWithServerCompletionTime, lastMatchFormsWithServerCompleted, isSyncing) ->
+            banner.update(
+                lastMatchFormsWithServerCompletionTime,
+                lastMatchFormsWithServerCompleted,
+                isSyncing
+            )
         }
     }
 }

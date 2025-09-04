@@ -72,6 +72,18 @@
 
     <!--
     ##############################################
+    # MATCH FORMS WITH SERVER BANNER
+    ##############################################
+    -->
+    <string name="last_sync_completed">Forms successfully synced</string>
+    <string name="last_sync_failed">Failed to sync forms</string>
+    <string name="last_sync_completion_time">\'Last updated on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+    <string name="sync_in_progress_title">Syncing forms</string>
+    <string name="sync_in_progress_message">Please wait until syncing is complete</string>
+    <string name="sync_again">Refresh</string>
+
+    <!--
+    ##############################################
     # FILL BLANK FORM
     ##############################################
     -->
