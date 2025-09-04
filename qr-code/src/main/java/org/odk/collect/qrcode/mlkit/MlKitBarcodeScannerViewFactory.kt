@@ -12,7 +12,6 @@ import androidx.camera.core.TorchState
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.common.moduleinstall.ModuleInstall
@@ -86,11 +85,10 @@ private class MlKitBarcodeScannerView(
     private val cameraController = LifecycleCameraController(context)
     private val viewFinderRect = Rect()
 
-    private val currentDetectedState = mutableStateOf<DetectedState>(DetectedState.None)
+    private val detectedState = mutableStateOf<DetectedState>(DetectedState.None)
 
     init {
         binding.composeView.setContextThemedContent {
-            val detectedState = remember { currentDetectedState }
             ScannerOverlay(detectedState.value)
         }
     }
@@ -147,14 +145,15 @@ private class MlKitBarcodeScannerView(
             ) { result: MlKitAnalyzer.Result ->
                 val value = result.getValue(barcodeScanner)
                 val barcodeCandidates = value?.map { it.toCandidate() } ?: emptyList()
-                val detectedState = barcodeFilter.filter(barcodeCandidates)
-                currentDetectedState.value = detectedState
+                barcodeFilter.filter(barcodeCandidates).also {
+                    detectedState.value = it
 
-                if (detectedState is DetectedState.Full) {
-                    val contents = processBarcode(detectedState.barcode)
-                    if (!contents.isNullOrEmpty()) {
-                        cameraController.unbind()
-                        callback(contents)
+                    if (it is DetectedState.Full) {
+                        val contents = processBarcode(it.barcode)
+                        if (!contents.isNullOrEmpty()) {
+                            cameraController.unbind()
+                            callback(contents)
+                        }
                     }
                 }
             }
