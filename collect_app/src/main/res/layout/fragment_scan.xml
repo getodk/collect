@@ -15,13 +15,13 @@
         android:id="@+id/prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/barcode_scanner_prompt"
         android:textAppearance="?textAppearanceBodyMedium"
         android:textColor="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1"
-        tools:text="Prompt" />
+        app:layout_constraintVertical_bias="1" />
 
     <org.odk.collect.qrcode.FlashlightToggleView
         android:id="@+id/switch_flashlight"

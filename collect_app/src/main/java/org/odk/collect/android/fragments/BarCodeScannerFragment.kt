@@ -67,8 +67,6 @@ abstract class BarCodeScannerFragment : Fragment() {
         )
 
         val promptView = rootView.findViewById<TextView>(R.id.prompt)
-        promptView.setText(org.odk.collect.strings.R.string.barcode_scanner_prompt)
-
         val flashlightToggleView =
             rootView.findViewById<FlashlightToggleView>(R.id.switch_flashlight)
         flashlightToggleView.setup(barcodeScannerViewContainer.barcodeScannerView)
