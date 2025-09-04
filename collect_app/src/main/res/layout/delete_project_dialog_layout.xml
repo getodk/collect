@@ -57,6 +57,7 @@
                 android:id="@+id/confirmation_field_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/margin_standard"
                 android:inputType="text"
                 android:lines="1" />
         </com.google.android.material.textfield.TextInputLayout>
