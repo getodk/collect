@@ -20,6 +20,8 @@ class TaskSpecWorker(
     context: Context,
     workerParams: WorkerParameters
 ) : Worker(context, workerParams) {
+    private var isStopped = false
+
     private val taskSpec: TaskSpec by lazy {
         Class
             .forName(inputData.getString(DATA_TASK_SPEC_CLASS)!!)
@@ -60,7 +62,7 @@ class TaskSpecWorker(
 
         try {
             val completed =
-                taskSpec.getTask(applicationContext, stringInputData, isLastUniqueExecution(taskSpec)).get()
+                taskSpec.getTask(applicationContext, stringInputData, isLastUniqueExecution(taskSpec)) { isStopped }.get()
             val maxRetries = taskSpec.maxRetries
 
             return if (completed) {
@@ -86,7 +88,7 @@ class TaskSpecWorker(
         }
 
         if (cancelledBySystem) {
-            taskSpec.onStoppedBySystem()
+            isStopped = true
         }
     }
 

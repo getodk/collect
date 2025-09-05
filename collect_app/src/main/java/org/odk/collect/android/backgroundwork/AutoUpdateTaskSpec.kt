@@ -31,9 +31,13 @@ class AutoUpdateTaskSpec : TaskSpec {
     override val maxRetries: Int? = null
     override val backoffPolicy: BackoffPolicy? = null
     override val backoffDelay: Long? = null
-    override var isStopped: Boolean = false
 
-    override fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean> {
+    override fun getTask(
+        context: Context,
+        inputData: Map<String, String>,
+        isLastUniqueExecution: Boolean,
+        isStopped: (() -> Boolean)
+    ): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
@@ -45,8 +49,6 @@ class AutoUpdateTaskSpec : TaskSpec {
             }
         }
     }
-
-    override fun onStoppedBySystem() {}
 
     override fun onException(exception: Throwable) {
         Analytics.logNonFatal(exception)

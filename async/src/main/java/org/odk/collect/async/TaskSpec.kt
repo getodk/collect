@@ -8,7 +8,6 @@ interface TaskSpec {
     val maxRetries: Int?
     val backoffPolicy: BackoffPolicy?
     val backoffDelay: Long?
-    var isStopped: Boolean
 
     /**
      * Should return the work to be carried out by the task. The return value of the work
@@ -18,13 +17,12 @@ interface TaskSpec {
      * group. We want to know which task execution is the last one to for example notify a user only
      * once instead of doing that after every single execution.
      */
-    fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean>
-
-    /**
-     * Called when the work is canceled or stopped by the system for any reason,
-     * such as constraint changes, system conditions, or explicit cancellation.
-     */
-    fun onStoppedBySystem()
+    fun getTask(
+        context: Context,
+        inputData: Map<String, String>,
+        isLastUniqueExecution: Boolean,
+        isStopped: (() -> Boolean)
+    ): Supplier<Boolean>
 
     /**
      * Called if an exception is thrown while executing the work.

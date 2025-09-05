@@ -20,23 +20,23 @@ class SyncFormsTaskSpec : TaskSpec {
     override val maxRetries = 3
     override val backoffPolicy = BackoffPolicy.EXPONENTIAL
     override val backoffDelay: Long = 60_000
-    override var isStopped: Boolean = false
 
-    override fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean> {
+    override fun getTask(
+        context: Context,
+        inputData: Map<String, String>,
+        isLastUniqueExecution: Boolean,
+        isStopped: (() -> Boolean)
+    ): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
 
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
-                formsDataService.matchFormsWithServer(projectId, isLastUniqueExecution, { isStopped })
+                formsDataService.matchFormsWithServer(projectId, isLastUniqueExecution, isStopped)
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }
         }
-    }
-
-    override fun onStoppedBySystem() {
-        isStopped = true
     }
 
     override fun onException(exception: Throwable) {

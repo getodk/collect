@@ -53,7 +53,7 @@ class FakeScheduler : Scheduler {
         notificationInfo: NotificationInfo
     ) {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        backgroundTasks.push(spec.getTask(context, inputData, true)::get)
+        backgroundTasks.push(spec.getTask(context, inputData, true) { false }::get)
     }
 
     override fun networkDeferred(

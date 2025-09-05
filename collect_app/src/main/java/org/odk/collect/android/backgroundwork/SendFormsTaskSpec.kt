@@ -29,9 +29,13 @@ class SendFormsTaskSpec : TaskSpec {
     override val maxRetries: Int = 13 // Stop trying when backoff is > 5 days
     override val backoffPolicy = BackoffPolicy.EXPONENTIAL
     override val backoffDelay: Long = 60_000
-    override var isStopped: Boolean = false
 
-    override fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean> {
+    override fun getTask(
+        context: Context,
+        inputData: Map<String, String>,
+        isLastUniqueExecution: Boolean,
+        isStopped: (() -> Boolean)
+    ): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
@@ -47,8 +51,6 @@ class SendFormsTaskSpec : TaskSpec {
             }
         }
     }
-
-    override fun onStoppedBySystem() {}
 
     override fun onException(exception: Throwable) {
         Analytics.logNonFatal(exception)
