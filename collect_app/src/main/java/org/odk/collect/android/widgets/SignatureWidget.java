@@ -46,7 +46,7 @@ public class SignatureWidget extends BaseImageWidget {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = SignatureWidgetBinding.inflate(((Activity) context).getLayoutInflater());
         binding.signButton.setOnClickListener(v -> imageClickHandler.clickImage("signButton"));
         binding.image.setOnClickListener(v -> imageClickHandler.clickImage("viewImage"));
