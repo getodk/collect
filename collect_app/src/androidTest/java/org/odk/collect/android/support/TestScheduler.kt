@@ -60,7 +60,7 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         increment()
         val context = ApplicationProvider.getApplicationContext<Context>()
         wrappedScheduler.immediate {
-            spec.getTask(context, inputData, true).get()
+            spec.getTask(context, inputData, true) { false }.get()
             decrement()
         }
     }
@@ -93,12 +93,13 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         return wrappedScheduler.isDeferredRunning(tag)
     }
 
-    fun runDeferredTasks() {
+    @JvmOverloads
+    fun runDeferredTasks(isLastUniqueExecution: Boolean = true, isStopped: Boolean = false) {
         if (networkStateProvider.isDeviceOnline) {
             val applicationContext = ApplicationProvider.getApplicationContext<Context>()
             deferredTasks.removeIf { deferredTask ->
                 if (deferredTask.networkConstraint == null || deferredTask.networkConstraint == networkStateProvider.currentNetwork) {
-                    deferredTask.spec.getTask(applicationContext, deferredTask.inputData, true)
+                    deferredTask.spec.getTask(applicationContext, deferredTask.inputData, isLastUniqueExecution) { isStopped }
                         .get()
                     deferredTask.repeatPeriod == null
                 } else {

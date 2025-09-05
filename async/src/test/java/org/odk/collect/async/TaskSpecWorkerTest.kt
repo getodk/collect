@@ -169,7 +169,8 @@ private class TestTaskSpec : TaskSpec {
     override fun getTask(
         context: Context,
         inputData: Map<String, String>,
-        isLastUniqueExecution: Boolean
+        isLastUniqueExecution: Boolean,
+        isStopped: (() -> Boolean)
     ): Supplier<Boolean> {
         wasLastUniqueExecution = isLastUniqueExecution
 

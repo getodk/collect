@@ -53,7 +53,7 @@ class SendFormsTaskSpecTest {
 
         val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
         val spec = SendFormsTaskSpec()
-        val task = spec.getTask(ApplicationProvider.getApplicationContext(), inputData, true)
+        val task = spec.getTask(ApplicationProvider.getApplicationContext(), inputData, true) { false }
         assertThat(task.get(), equalTo(false))
     }
 
@@ -63,7 +63,7 @@ class SendFormsTaskSpecTest {
 
         val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
         val spec = SendFormsTaskSpec()
-        val task = spec.getTask(ApplicationProvider.getApplicationContext(), inputData, true)
+        val task = spec.getTask(ApplicationProvider.getApplicationContext(), inputData, true) { false }
         assertThat(task.get(), equalTo(true))
     }
 }
