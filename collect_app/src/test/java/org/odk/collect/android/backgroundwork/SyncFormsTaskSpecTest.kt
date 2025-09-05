@@ -3,11 +3,14 @@ package org.odk.collect.android.backgroundwork
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -51,7 +54,7 @@ class SyncFormsTaskSpecTest {
             it[TaskData.DATA_PROJECT_ID] = "projectId"
         }
         SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, true).get()
-        verify(formsDataService).matchFormsWithServer("projectId", true)
+        verify(formsDataService).matchFormsWithServer(eq("projectId"), eq(true), any())
     }
 
     @Test
@@ -60,7 +63,18 @@ class SyncFormsTaskSpecTest {
             it[TaskData.DATA_PROJECT_ID] = "projectId"
         }
         SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, false).get()
-        verify(formsDataService).matchFormsWithServer("projectId", false)
+        verify(formsDataService).matchFormsWithServer(eq("projectId"), eq(false), any())
+    }
+
+    @Test
+    fun `#getTask sets isStopped to false`() {
+        val inputData = HashMap<String, String>().also {
+            it[TaskData.DATA_PROJECT_ID] = "projectId"
+        }
+        val task = SyncFormsTaskSpec()
+        task.isStopped = true
+        task.getTask(ApplicationProvider.getApplicationContext(), inputData, false).get()
+        assertThat(task.isStopped, equalTo(false))
     }
 
     @Test
@@ -68,11 +82,11 @@ class SyncFormsTaskSpecTest {
         val inputData = HashMap<String, String>().also {
             it[TaskData.DATA_PROJECT_ID] = "projectId"
         }
-        whenever(formsDataService.matchFormsWithServer("projectId", true)).thenReturn(true)
+        whenever(formsDataService.matchFormsWithServer(eq("projectId"), any(), any())).thenReturn(true)
         var result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, true).get()
         assertThat(result, `is`(true))
 
-        whenever(formsDataService.matchFormsWithServer("projectId")).thenReturn(false)
+        whenever(formsDataService.matchFormsWithServer(eq("projectId"), any(), any())).thenReturn(false)
         result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, false).get()
         assertThat(result, `is`(false))
     }
@@ -88,16 +102,13 @@ class SyncFormsTaskSpecTest {
     }
 
     @Test
-    fun `#onStopedBySystem calls notifier#onSyncStopped`() {
+    fun `#onStopedBySystem sets isStopped to true`() {
         val inputData = HashMap<String, String>().also {
             it[TaskData.DATA_PROJECT_ID] = "projectId"
         }
-        SyncFormsTaskSpec().onStopedBySystem(ApplicationProvider.getApplicationContext(), inputData)
-        verify(notifier).onSyncStopped("projectId")
-    }
-
-    @Test(expected = IllegalArgumentException::class)
-    fun `#onStopedBySystem throws IllegalArgumentException when projectId is not set`() {
-        SyncFormsTaskSpec().onStopedBySystem(ApplicationProvider.getApplicationContext(), HashMap())
+        val task = SyncFormsTaskSpec()
+        task.isStopped = false
+        task.onStopedBySystem(ApplicationProvider.getApplicationContext(), inputData)
+        assertThat(task.isStopped, equalTo(true))
     }
 }

@@ -8,6 +8,7 @@ interface TaskSpec {
     val maxRetries: Int?
     val backoffPolicy: BackoffPolicy?
     val backoffDelay: Long?
+    var isStopped: Boolean
 
     /**
      * Should return the work to be carried out by the task. The return value of the work

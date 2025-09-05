@@ -165,6 +165,7 @@ private class TestTaskSpec : TaskSpec {
     override val maxRetries: Int? = Companion.maxRetries
     override val backoffPolicy: BackoffPolicy? = null
     override val backoffDelay: Long? = null
+    override var isStopped: Boolean = false
 
     override fun getTask(
         context: Context,

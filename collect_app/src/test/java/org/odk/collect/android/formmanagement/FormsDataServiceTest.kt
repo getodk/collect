@@ -198,27 +198,61 @@ class FormsDataServiceTest {
     }
 
     @Test
-    fun `matchFormsWithServer() notifies when called with default notify value`() {
+    fun `matchFormsWithServer() notifies on error when called with default notify value`() {
         val error = FormSourceException.FetchError()
         whenever(formSource.fetchFormList()).thenThrow(error)
-        formsDataService.matchFormsWithServer(project.uuid)
+        formsDataService.matchFormsWithServer(project.uuid) { false }
         verify(notifier).onSync(error, project.uuid)
     }
 
     @Test
-    fun `matchFormsWithServer() notifies when called with notify true`() {
+    fun `matchFormsWithServer() notifies on success when called with default notify value`() {
+        formsDataService.matchFormsWithServer(project.uuid) { false }
+        verify(notifier).onSync(null, project.uuid)
+    }
+
+    @Test
+    fun `matchFormsWithServer() notifies on error when called with notify true`() {
         val error = FormSourceException.FetchError()
         whenever(formSource.fetchFormList()).thenThrow(error)
-        formsDataService.matchFormsWithServer(project.uuid, true)
+        formsDataService.matchFormsWithServer(project.uuid, true) { false }
         verify(notifier).onSync(error, project.uuid)
     }
 
     @Test
-    fun `matchFormsWithServer() does not notify when called with notify false`() {
+    fun `matchFormsWithServer() notifies on success when called with notify true`() {
+        formsDataService.matchFormsWithServer(project.uuid, true) { false }
+        verify(notifier).onSync(null, project.uuid)
+    }
+
+    @Test
+    fun `matchFormsWithServer() does not notify on error when called with default isStopped value`() {
         val error = FormSourceException.FetchError()
         whenever(formSource.fetchFormList()).thenThrow(error)
-        formsDataService.matchFormsWithServer(project.uuid, false)
+        formsDataService.matchFormsWithServer(project.uuid, notify = false)
         verifyNoInteractions(notifier)
+    }
+
+    @Test
+    fun `matchFormsWithServer() does not notify on success when called with default isStopped value`() {
+        formsDataService.matchFormsWithServer(project.uuid, notify = false)
+        verifyNoInteractions(notifier)
+    }
+
+    @Test
+    fun `matchFormsWithServer() does not notify on error when called with isStopped false`() {
+        val error = FormSourceException.FetchError()
+        whenever(formSource.fetchFormList()).thenThrow(error)
+        formsDataService.matchFormsWithServer(project.uuid, false) { false }
+        verifyNoInteractions(notifier)
+    }
+
+    @Test
+    fun `matchFormsWithServer() notifies on error when called with isStopped true`() {
+        val error = FormSourceException.FetchError()
+        whenever(formSource.fetchFormList()).thenThrow(error)
+        formsDataService.matchFormsWithServer(project.uuid, false) { true }
+        verify(notifier).onSyncStopped(project.uuid)
     }
 
     @Test
