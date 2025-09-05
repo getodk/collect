@@ -53,7 +53,7 @@ object Defaults {
             hashMap[ProjectKeys.KEY_MAPBOX_MAP_STYLE] = "mapbox://styles/mapbox/streets-v11"
             // experimental_preferences.xml
             hashMap[ProjectKeys.KEY_DEBUG_FILTERS] = BuildConfig.BUILD_TYPE == "selfSignedRelease"
-            hashMap[ProjectKeys.KEY_MLKIT_SCANNING] = true
+            hashMap[ProjectKeys.KEY_ZXING_SCANNING] = false
             return hashMap
         }
 
