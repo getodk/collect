@@ -37,7 +37,7 @@ class SyncFormsTaskSpec : TaskSpec {
         }
     }
 
-    override fun onStopedBySystem() {
+    override fun onStoppedBySystem() {
         isStopped = true
     }
 

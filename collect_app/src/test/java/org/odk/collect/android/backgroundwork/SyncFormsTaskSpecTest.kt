@@ -102,10 +102,10 @@ class SyncFormsTaskSpecTest {
     }
 
     @Test
-    fun `#onStopedBySystem sets isStopped to true`() {
+    fun `#onStoppedBySystem sets isStopped to true`() {
         val task = SyncFormsTaskSpec()
         task.isStopped = false
-        task.onStopedBySystem()
+        task.onStoppedBySystem()
         assertThat(task.isStopped, equalTo(true))
     }
 }

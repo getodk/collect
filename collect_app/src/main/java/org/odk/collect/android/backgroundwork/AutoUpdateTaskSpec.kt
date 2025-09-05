@@ -46,7 +46,7 @@ class AutoUpdateTaskSpec : TaskSpec {
         }
     }
 
-    override fun onStopedBySystem() {}
+    override fun onStoppedBySystem() {}
 
     override fun onException(exception: Throwable) {
         Analytics.logNonFatal(exception)
