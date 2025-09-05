@@ -66,6 +66,16 @@ class SyncFormsTaskSpecTest {
     }
 
     @Test
+    fun `#getTask calls synchronize and forwards isStopped to it`() {
+        val inputData = HashMap<String, String>().also {
+            it[TaskData.DATA_PROJECT_ID] = "projectId"
+        }
+        val isStopped = { false }
+        SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, false, isStopped).get()
+        verify(formsDataService).matchFormsWithServer("projectId", false, isStopped)
+    }
+
+    @Test
     fun `#getTask returns result from FormUpdater`() {
         val inputData = HashMap<String, String>().also {
             it[TaskData.DATA_PROJECT_ID] = "projectId"
