@@ -20,6 +20,16 @@ class TaskSpecWorker(
     context: Context,
     workerParams: WorkerParameters
 ) : Worker(context, workerParams) {
+    private val taskSpec: TaskSpec by lazy {
+        Class
+            .forName(inputData.getString(DATA_TASK_SPEC_CLASS)!!)
+            .getConstructor()
+            .newInstance() as TaskSpec
+    }
+
+    private val stringInputData: Map<String, String> by lazy {
+        inputData.keyValueMap.mapValues { it.value.toString() }
+    }
 
     private val connectivityProvider: ConnectivityProvider = ConnectivityProvider(context)
 
@@ -48,13 +58,10 @@ class TaskSpecWorker(
             )
         }
 
-        val spec = getTaskSpec()
-        val stringInputData = getStringInputData()
-
         try {
             val completed =
-                spec.getTask(applicationContext, stringInputData, isLastUniqueExecution(spec)).get()
-            val maxRetries = spec.maxRetries
+                taskSpec.getTask(applicationContext, stringInputData, isLastUniqueExecution(taskSpec)).get()
+            val maxRetries = taskSpec.maxRetries
 
             return if (completed) {
                 Result.success()
@@ -64,7 +71,7 @@ class TaskSpecWorker(
                 Result.failure()
             }
         } catch (t: Throwable) {
-            spec.onException(t)
+            taskSpec.onException(t)
             return Result.failure()
         }
     }
@@ -79,9 +86,7 @@ class TaskSpecWorker(
         }
 
         if (cancelledBySystem) {
-            val spec = getTaskSpec()
-            val stringInputData = getStringInputData()
-            spec.onStopedBySystem(applicationContext, stringInputData)
+            taskSpec.onStopedBySystem(applicationContext, stringInputData)
         }
     }
 
@@ -98,16 +103,6 @@ class TaskSpecWorker(
             WorkInfo.STOP_REASON_SYSTEM_PROCESSING -> true
             else -> false
         }
-    }
-
-    private fun getTaskSpec(): TaskSpec {
-        val specClass = inputData.getString(DATA_TASK_SPEC_CLASS)!!
-        val spec = Class.forName(specClass).getConstructor().newInstance() as TaskSpec
-        return spec
-    }
-
-    private fun getStringInputData(): Map<String, String> {
-        return inputData.keyValueMap.mapValues { it.value.toString() }
     }
 
     private fun getForegroundInfo(
