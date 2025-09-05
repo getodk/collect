@@ -9,9 +9,8 @@
         app:persistent="false" />
 
     <SwitchPreference
-        android:key="mlkit_scanning"
-        android:summary="@string/mlkit_is_always_used_for_scanning_project_qr_codes"
-        android:title="@string/use_mlkit_for_barcode_scanning"
+        android:key="zxing_scanning"
+        android:title="@string/use_zxing_for_barcode_scanning"
         app:iconSpaceReserved="false" />
 
     <PreferenceCategory

@@ -1262,9 +1262,8 @@
     <string name="debug_filters">Debug filters</string>
     <string name="debug_filters_summary">Show debug information for filter expression executions during form entry</string>
 
-    <!-- Option provided in the Experimental settings to opt in/out of the newer ML Kit based barcode scanner -->
-    <string name="use_mlkit_for_barcode_scanning">Use ML Kit for barcode scanning</string>
-    <string name="mlkit_is_always_used_for_scanning_project_qr_codes">ML Kit is always used for scanning project QR codes</string>
+    <!-- Option provided in the Experimental settings to rever to the old Zxing based barcode scanner -->
+    <string name="use_zxing_for_barcode_scanning">Revert to older barcode scanner</string>
 
     <string name="permission_dialog_title">About permissions</string>
     <string name="permission_dialog_text">You will be asked to allow ODK Collect access to the features below, select “allow” if you want to use them.</string>

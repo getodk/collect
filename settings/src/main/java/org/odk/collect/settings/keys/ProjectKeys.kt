@@ -53,7 +53,7 @@ object ProjectKeys {
 
     // experimental_preferences.xml
     const val KEY_DEBUG_FILTERS = "experimental_debug_filters"
-    const val KEY_MLKIT_SCANNING = "mlkit_scanning"
+    const val KEY_ZXING_SCANNING = "zxing_scanning"
 
     // values
     const val PROTOCOL_SERVER = "odk_default"
