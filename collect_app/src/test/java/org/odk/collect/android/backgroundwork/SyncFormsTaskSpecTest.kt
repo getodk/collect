@@ -103,12 +103,9 @@ class SyncFormsTaskSpecTest {
 
     @Test
     fun `#onStopedBySystem sets isStopped to true`() {
-        val inputData = HashMap<String, String>().also {
-            it[TaskData.DATA_PROJECT_ID] = "projectId"
-        }
         val task = SyncFormsTaskSpec()
         task.isStopped = false
-        task.onStopedBySystem(ApplicationProvider.getApplicationContext(), inputData)
+        task.onStopedBySystem()
         assertThat(task.isStopped, equalTo(true))
     }
 }

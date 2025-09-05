@@ -11,6 +11,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.verifyNoInteractions
+import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -203,12 +204,14 @@ class FormsDataServiceTest {
         whenever(formSource.fetchFormList()).thenThrow(error)
         formsDataService.matchFormsWithServer(project.uuid) { false }
         verify(notifier).onSync(error, project.uuid)
+        verifyNoMoreInteractions(notifier)
     }
 
     @Test
     fun `matchFormsWithServer() notifies on success when called with default notify value`() {
         formsDataService.matchFormsWithServer(project.uuid) { false }
         verify(notifier).onSync(null, project.uuid)
+        verifyNoMoreInteractions(notifier)
     }
 
     @Test
@@ -217,12 +220,14 @@ class FormsDataServiceTest {
         whenever(formSource.fetchFormList()).thenThrow(error)
         formsDataService.matchFormsWithServer(project.uuid, true) { false }
         verify(notifier).onSync(error, project.uuid)
+        verifyNoMoreInteractions(notifier)
     }
 
     @Test
     fun `matchFormsWithServer() notifies on success when called with notify true`() {
         formsDataService.matchFormsWithServer(project.uuid, true) { false }
         verify(notifier).onSync(null, project.uuid)
+        verifyNoMoreInteractions(notifier)
     }
 
     @Test
@@ -253,6 +258,7 @@ class FormsDataServiceTest {
         whenever(formSource.fetchFormList()).thenThrow(error)
         formsDataService.matchFormsWithServer(project.uuid, false) { true }
         verify(notifier).onSyncStopped(project.uuid)
+        verifyNoMoreInteractions(notifier)
     }
 
     @Test
