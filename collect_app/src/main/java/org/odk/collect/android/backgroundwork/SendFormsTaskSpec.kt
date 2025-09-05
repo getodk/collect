@@ -48,7 +48,7 @@ class SendFormsTaskSpec : TaskSpec {
         }
     }
 
-    override fun onStopedBySystem(context: Context, inputData: Map<String, String>) {}
+    override fun onStopedBySystem() {}
 
     override fun onException(exception: Throwable) {
         Analytics.logNonFatal(exception)

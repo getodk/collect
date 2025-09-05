@@ -37,7 +37,7 @@ class SyncFormsTaskSpec : TaskSpec {
         }
     }
 
-    override fun onStopedBySystem(context: Context, inputData: Map<String, String>) {
+    override fun onStopedBySystem() {
         isStopped = true
     }
 

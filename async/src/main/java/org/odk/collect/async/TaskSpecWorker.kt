@@ -86,7 +86,7 @@ class TaskSpecWorker(
         }
 
         if (cancelledBySystem) {
-            taskSpec.onStopedBySystem(applicationContext, stringInputData)
+            taskSpec.onStopedBySystem()
         }
     }
 
