@@ -8,11 +8,6 @@
         android:title="@string/dev_tools"
         app:persistent="false" />
 
-    <SwitchPreference
-        android:key="zxing_scanning"
-        android:title="@string/use_zxing_for_barcode_scanning"
-        app:iconSpaceReserved="false" />
-
     <PreferenceCategory
         android:title="@string/entities_title"
         app:allowDividerAbove="false"
