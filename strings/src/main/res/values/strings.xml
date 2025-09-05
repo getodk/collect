@@ -1262,7 +1262,7 @@
     <string name="debug_filters">Debug filters</string>
     <string name="debug_filters_summary">Show debug information for filter expression executions during form entry</string>
 
-    <!-- Option provided in the Experimental settings to rever to the old Zxing based barcode scanner -->
+    <!-- Option provided in the Experimental settings to revert to the old ZXing based barcode scanner -->
     <string name="use_zxing_for_barcode_scanning">Revert to older barcode scanner</string>
 
     <string name="permission_dialog_title">About permissions</string>
