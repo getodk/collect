@@ -644,7 +644,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             getCurrentViewIfODKView().setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
             swipeHandler.setBeenSwiped(false);
         } else if (validationResult instanceof SuccessValidationResult) {
-            SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(org.odk.collect.strings.R.string.success_form_validation), findViewById(R.id.buttonholder));
+            SnackbarUtils.showSnackbar(
+                    findViewById(R.id.llParent),
+                    getString(org.odk.collect.strings.R.string.success_form_validation),
+                    SnackbarUtils.DURATION_LONG,
+                    findViewById(R.id.buttonholder)
+            );
         }
     }
 
@@ -2245,7 +2250,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             snackBarText = getString(backgroundLocationMessage.getMessageTextResourceId());
         }
 
-        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), snackBarText, findViewById(R.id.buttonholder));
+        SnackbarUtils.showSnackbar(
+                findViewById(R.id.llParent),
+                snackBarText,
+                SnackbarUtils.DURATION_LONG,
+                findViewById(R.id.buttonholder)
+        );
     }
 
     @Override

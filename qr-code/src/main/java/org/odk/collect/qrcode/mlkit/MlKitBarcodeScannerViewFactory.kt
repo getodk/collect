@@ -5,21 +5,13 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.graphics.Rect
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
 import androidx.camera.core.TorchState
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.common.moduleinstall.ModuleInstall
@@ -35,18 +27,24 @@ import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.DetectedBarcode
 import org.odk.collect.qrcode.DetectedState
 import org.odk.collect.qrcode.ScannerOverlay
+import org.odk.collect.qrcode.calculateViewFinder
 import org.odk.collect.qrcode.databinding.MlkitBarcodeScannerLayoutBinding
-import kotlin.math.max
 
-class MlKitBarcodeScannerViewFactory(private val scanThreshold: Int) : BarcodeScannerViewContainer.Factory {
+class MlKitBarcodeScannerViewFactory(private val scanThreshold: Int) :
+    BarcodeScannerViewContainer.Factory {
     override fun create(
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
         qrOnly: Boolean,
-        prompt: String,
         useFrontCamera: Boolean
     ): BarcodeScannerView {
-        return MlKitBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera, prompt, scanThreshold)
+        return MlKitBarcodeScannerView(
+            activity,
+            lifecycleOwner,
+            qrOnly,
+            useFrontCamera,
+            scanThreshold
+        )
     }
 
     companion object {
@@ -79,7 +77,6 @@ private class MlKitBarcodeScannerView(
     private val lifecycleOwner: LifecycleOwner,
     private val qrOnly: Boolean,
     private val useFrontCamera: Boolean,
-    prompt: String,
     private val scanThreshold: Int
 ) : BarcodeScannerView(context) {
 
@@ -88,27 +85,11 @@ private class MlKitBarcodeScannerView(
     private val cameraController = LifecycleCameraController(context)
     private val viewFinderRect = Rect()
 
-    private val currentDetectedState = mutableStateOf<DetectedState>(DetectedState.None)
+    private val detectedState = mutableStateOf<DetectedState>(DetectedState.None)
 
     init {
         binding.composeView.setContextThemedContent {
-            ConstraintLayout {
-                val (promptRef) = createRefs()
-
-                val detectedState = remember { currentDetectedState }
-                ScannerOverlay(viewFinderRect, detectedState.value)
-
-                Text(
-                    text = prompt,
-                    color = MaterialTheme.colorScheme.surface,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.constrainAs(promptRef) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom, margin = 4.dp)
-                    }
-                )
-            }
+            ScannerOverlay(detectedState.value)
         }
     }
 
@@ -119,13 +100,16 @@ private class MlKitBarcodeScannerView(
         right: Int,
         bottom: Int
     ) {
-        val verticalBorder = max((height - VIEW_FINDER_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
-        val horizontalBorder = max((width - VIEW_FINDER_SIZE) / 2f, MIN_BORDER_SIZE).toInt()
+        val (viewFinderOffset, viewFinderSize) = calculateViewFinder(
+            this.width.toFloat(),
+            this.height.toFloat()
+        )
+
         viewFinderRect.set(
-            horizontalBorder,
-            verticalBorder,
-            this.width - horizontalBorder,
-            this.height - verticalBorder
+            viewFinderOffset.x.toInt(),
+            viewFinderOffset.y.toInt(),
+            (viewFinderOffset.x + viewFinderSize.width).toInt(),
+            (viewFinderOffset.y + viewFinderSize.height).toInt()
         )
 
         super.onLayout(changed, left, top, right, bottom)
@@ -161,16 +145,15 @@ private class MlKitBarcodeScannerView(
             ) { result: MlKitAnalyzer.Result ->
                 val value = result.getValue(barcodeScanner)
                 val barcodeCandidates = value?.map { it.toCandidate() } ?: emptyList()
-                val detectedState = barcodeFilter.filter(barcodeCandidates)
-                currentDetectedState.value = detectedState
+                barcodeFilter.filter(barcodeCandidates).also {
+                    detectedState.value = it
 
-                if (detectedState is DetectedState.Full) {
-                    val contents = processBarcode(detectedState.barcode)
-                    if (!contents.isNullOrEmpty()) {
-                        cameraController.unbind()
-                        Handler(Looper.getMainLooper()).postDelayed({
+                    if (it is DetectedState.Full) {
+                        val contents = processBarcode(it.barcode)
+                        if (!contents.isNullOrEmpty()) {
+                            cameraController.unbind()
                             callback(contents)
-                        }, 2000L)
+                        }
                     }
                 }
             }
@@ -212,9 +195,6 @@ private class MlKitBarcodeScannerView(
     }
 
     companion object {
-
-        private const val VIEW_FINDER_SIZE = 820f
-        private const val MIN_BORDER_SIZE = 80f
 
         private fun Barcode.toCandidate(): BarcodeCandidate {
             val format = when (this.format) {

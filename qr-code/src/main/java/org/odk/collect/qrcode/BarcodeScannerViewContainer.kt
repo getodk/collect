@@ -19,11 +19,10 @@ class BarcodeScannerViewContainer(context: Context, attrs: AttributeSet?) :
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
         qrOnly: Boolean = false,
-        prompt: String = "",
         useFrontCamera: Boolean = false
     ) {
         barcodeScannerView =
-            factory.create(activity, lifecycleOwner, qrOnly, prompt, useFrontCamera)
+            factory.create(activity, lifecycleOwner, qrOnly, useFrontCamera)
         addView(barcodeScannerView)
     }
 
@@ -32,7 +31,6 @@ class BarcodeScannerViewContainer(context: Context, attrs: AttributeSet?) :
             activity: Activity,
             lifecycleOwner: LifecycleOwner,
             qrOnly: Boolean = false,
-            prompt: String = "",
             useFrontCamera: Boolean
         ): BarcodeScannerView
     }

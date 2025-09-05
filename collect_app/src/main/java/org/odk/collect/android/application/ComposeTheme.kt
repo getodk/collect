@@ -19,8 +19,17 @@ fun CollectTheme(
     content: @Composable () -> Unit
 ) {
     val resources = context.resources
-    val lightColors = lightColorScheme(surface = Color(resources.getColor(R.color.colorSurfaceLight)))
-    val darkColors = darkColorScheme(surface = Color(resources.getColor(R.color.colorSurfaceDark)))
+
+    val lightColors = lightColorScheme(
+        primary = Color(resources.getColor(R.color.colorPrimaryLight)),
+        onPrimary = Color(resources.getColor(R.color.colorOnPrimaryLight)),
+        surface = Color(resources.getColor(R.color.colorSurfaceLight))
+    )
+    val darkColors = darkColorScheme(
+        primary = Color(resources.getColor(R.color.colorPrimaryDark)),
+        onPrimary = Color(resources.getColor(R.color.colorOnPrimaryDark)),
+        surface = Color(resources.getColor(R.color.colorSurfaceDark))
+    )
     val colorScheme = if (isSystemInDarkTheme()) darkColors else lightColors
 
     MaterialTheme(

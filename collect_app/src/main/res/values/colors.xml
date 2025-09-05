@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimaryLight">#3e9fcc</color>
+    <color name="colorOnPrimaryLight">#ffffff</color>
     <color name="colorSurfaceLight">#ffffff</color>
+
+    <color name="colorPrimaryDark">#4cbcf0</color>
+    <color name="colorOnPrimaryDark">#003547</color>
     <color name="colorSurfaceDark">#001117</color>
 </resources>
