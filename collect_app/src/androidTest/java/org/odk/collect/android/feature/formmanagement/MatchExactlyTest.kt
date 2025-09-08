@@ -225,7 +225,7 @@ class MatchExactlyTest {
     }
 
     @Test
-    fun whenMatchExactlyStopped_showNotification_andOpenFormListOnClick() {
+    fun whenMatchExactlyStopped_andFails_showNotification_andOpenFormListOnClick() {
         testDependencies.server.alwaysReturnError()
 
         rule.startAtMainMenu()
@@ -242,5 +242,18 @@ class MatchExactlyTest {
                 "Form update failed",
                 FillBlankFormPage()
             )
+    }
+
+    @Test
+    fun whenMatchExactlyStopped_andSucceeds_showNotification_andOpenFormListOnClick() {
+        rule.startAtMainMenu()
+            .setServer(testDependencies.server.url)
+            .enableMatchExactly()
+
+        testDependencies.scheduler.runDeferredTasks(isLastUniqueExecution = false, isStopped = true)
+
+        notificationDrawerRule
+            .open()
+            .assertNoNotification("ODK Collect")
     }
 }

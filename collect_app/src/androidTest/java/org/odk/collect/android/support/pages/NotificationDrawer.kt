@@ -111,7 +111,7 @@ class NotificationDrawer {
         }
     }
 
-    private fun assertNoNotification(appName: String) {
+    fun assertNoNotification(appName: String) {
         open()
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
