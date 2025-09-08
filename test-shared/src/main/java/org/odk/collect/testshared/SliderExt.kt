@@ -11,6 +11,10 @@ fun Slider.clickOnMaxValue() {
     clickOnPosition(width.toFloat())
 }
 
+fun Slider.clickOnFractionalValue(fraction: Float) {
+    clickOnPosition(width.toFloat() * fraction)
+}
+
 fun Slider.clickOnPosition(xPosition: Float) {
     val currentTime = System.currentTimeMillis()
 
