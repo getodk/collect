@@ -17,7 +17,12 @@ interface TaskSpec {
      * group. We want to know which task execution is the last one to for example notify a user only
      * once instead of doing that after every single execution.
      */
-    fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean>
+    fun getTask(
+        context: Context,
+        inputData: Map<String, String>,
+        isLastUniqueExecution: Boolean,
+        isStopped: (() -> Boolean)
+    ): Supplier<Boolean>
 
     /**
      * Called if an exception is thrown while executing the work.

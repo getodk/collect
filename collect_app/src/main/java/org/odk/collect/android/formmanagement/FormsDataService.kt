@@ -146,7 +146,11 @@ class FormsDataService(
      * the project's form list.
      */
     @JvmOverloads
-    fun matchFormsWithServer(projectId: String, notify: Boolean = true): Boolean {
+    fun matchFormsWithServer(
+        projectId: String,
+        notify: Boolean = true,
+        isStopped: (() -> Boolean) = { false }
+    ): Boolean {
         val projectDependencies = projectDependencyModuleFactory.create(projectId)
         return projectDependencies.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
@@ -173,6 +177,8 @@ class FormsDataService(
                 } catch (e: FormSourceException) {
                     if (notify) {
                         notifier.onSync(e, projectId)
+                    } else if (isStopped()) {
+                        notifier.onSyncStopped(projectId)
                     }
 
                     e

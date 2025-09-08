@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.work.ForegroundInfo
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -19,6 +20,18 @@ class TaskSpecWorker(
     context: Context,
     workerParams: WorkerParameters
 ) : Worker(context, workerParams) {
+    private var isStopped = false
+
+    private val taskSpec: TaskSpec by lazy {
+        Class
+            .forName(inputData.getString(DATA_TASK_SPEC_CLASS)!!)
+            .getConstructor()
+            .newInstance() as TaskSpec
+    }
+
+    private val stringInputData: Map<String, String> by lazy {
+        inputData.keyValueMap.mapValues { it.value.toString() }
+    }
 
     private val connectivityProvider: ConnectivityProvider = ConnectivityProvider(context)
 
@@ -47,15 +60,10 @@ class TaskSpecWorker(
             )
         }
 
-        val specClass = inputData.getString(DATA_TASK_SPEC_CLASS)!!
-        val spec = Class.forName(specClass).getConstructor().newInstance() as TaskSpec
-
-        val stringInputData = inputData.keyValueMap.mapValues { it.value.toString() }
-
         try {
             val completed =
-                spec.getTask(applicationContext, stringInputData, isLastUniqueExecution(spec)).get()
-            val maxRetries = spec.maxRetries
+                taskSpec.getTask(applicationContext, stringInputData, isLastUniqueExecution(taskSpec)) { isStopped }.get()
+            val maxRetries = taskSpec.maxRetries
 
             return if (completed) {
                 Result.success()
@@ -65,8 +73,37 @@ class TaskSpecWorker(
                 Result.failure()
             }
         } catch (t: Throwable) {
-            spec.onException(t)
+            taskSpec.onException(t)
             return Result.failure()
+        }
+    }
+
+    override fun onStopped() {
+        super.onStopped()
+
+        val cancelledBySystem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            isSystemStop(stopReason)
+        } else {
+            false
+        }
+
+        if (cancelledBySystem) {
+            isStopped = true
+        }
+    }
+
+    private fun isSystemStop(reason: Int): Boolean {
+        return when (reason) {
+            WorkInfo.STOP_REASON_DEVICE_STATE,
+            WorkInfo.STOP_REASON_TIMEOUT,
+            WorkInfo.STOP_REASON_APP_STANDBY,
+            WorkInfo.STOP_REASON_BACKGROUND_RESTRICTION,
+            WorkInfo.STOP_REASON_QUOTA,
+            WorkInfo.STOP_REASON_PREEMPT,
+            WorkInfo.STOP_REASON_ESTIMATED_APP_LAUNCH_TIME_CHANGED,
+            WorkInfo.STOP_REASON_CONSTRAINT_CONNECTIVITY,
+            WorkInfo.STOP_REASON_SYSTEM_PROCESSING -> true
+            else -> false
         }
     }
 

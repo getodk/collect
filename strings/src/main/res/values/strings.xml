@@ -735,6 +735,7 @@
     <string name="form_updates_available">Form updates available</string>
     <string name="newer_version_of_a_form_info">This is an update to a form you have</string>
     <string name="form_update_error">Form update failed</string>
+    <string name="form_update_error_massage">Open ODK Collect to try again</string>
     <string name="form_update_succeeded">Form update succeeded</string>
 
     <!-- Text for notification shown while syncing forms with the server -->
