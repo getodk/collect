@@ -1150,6 +1150,7 @@
         • Drafts: %5$d&lt;br/&gt;&lt;br/&gt;
         Type &lt;b&gt;Delete&lt;/b&gt; to confirm this action.
     </string>
+    <string name="delete_trigger">delete</string>
     <!-- Text for the button that confirms deleting the project -->
     <string name="delete_project_confirm_button_text">Delete project</string>
     <string name="or">OR</string>

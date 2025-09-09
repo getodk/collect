@@ -19,7 +19,7 @@ class ProjectManagementPage : Page<ProjectManagementPage>() {
 
     fun deleteProject(): MainMenuPage {
         scrollToRecyclerViewItemAndClickText(org.odk.collect.strings.R.string.delete_project)
-        inputText("delete")
+        inputText(getTranslatedString(org.odk.collect.strings.R.string.delete_trigger))
         clickOnString(org.odk.collect.strings.R.string.delete_project_confirm_button_text)
         return MainMenuPage()
     }

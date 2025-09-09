@@ -54,7 +54,8 @@ class DeleteProjectDialog(
             deleteButton.setOnClickListener { viewModel.deleteProject() }
 
             confirmationFieldInput.doAfterTextChanged { text ->
-                deleteButton.isEnabled = "delete".equals(text.toString().trim(), true)
+                val deleteTrigger = getString(org.odk.collect.strings.R.string.delete_trigger)
+                deleteButton.isEnabled = deleteTrigger.equals(text.toString().trim(), true)
             }
         }
 
@@ -98,12 +99,14 @@ class DeleteProjectDialog(
                         )
                     )
                 }
+
                 is DeleteProjectResult.DeletedSuccessfullyLastProject -> {
                     ActivityUtils.startActivityAndCloseAllOthers(
                         requireActivity(),
                         FirstLaunchActivity::class.java
                     )
                 }
+
                 is DeleteProjectResult.DeletedSuccessfullyInactiveProject -> {
                     // not possible here
                 }
@@ -140,7 +143,8 @@ class DeleteProjectDialog(
                 instancesDataService.update(project.uuid)
 
                 val numberOfForms = formsDataService.getFormsCount(project.uuid).value
-                val numberOfSentForms = instancesDataService.getSuccessfullySentCount(project.uuid).value
+                val numberOfSentForms =
+                    instancesDataService.getSuccessfullySentCount(project.uuid).value
                 val numberOfUnsentForms = instancesDataService.getSendableCount(project.uuid).value
                 val numberOfDraftForms = instancesDataService.getEditableCount(project.uuid).value
                 _projectData.postValue(
