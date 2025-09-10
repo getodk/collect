@@ -72,12 +72,10 @@ class DeleteProjectDialog(
                 org.odk.collect.strings.R.string.delete_project_dialog_title,
                 projectData.projectName
             )
-            val message = getString(
-                org.odk.collect.strings.R.string.delete_project_dialog_message,
+            val message = createDeleteMessage(
                 projectData.numberOfForms,
                 projectData.numberOfSentForms,
                 projectData.numberOfUnsentForms,
-                if (projectData.numberOfUnsentForms > 0) "⚠\uFE0F" else "",
                 projectData.numberOfDraftForms
             )
             binding.message.text = HtmlCompat.fromHtml(message, HtmlCompat.FROM_HTML_MODE_LEGACY)
@@ -116,6 +114,32 @@ class DeleteProjectDialog(
         return MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
             .create()
+    }
+
+    private fun createDeleteMessage(
+        formDefinitionsCount: Int,
+        sentCount: Int,
+        unsentCount: Int,
+        draftsCount: Int
+    ): String {
+        val message = getString(org.odk.collect.strings.R.string.delete_project_message)
+        val formDefinitions =
+            getString(org.odk.collect.strings.R.string.form_definitions_count, formDefinitionsCount)
+        val sent = getString(org.odk.collect.strings.R.string.sent_count, sentCount)
+        val unsent = getString(org.odk.collect.strings.R.string.unsent_count, unsentCount)
+        val drafts = getString(org.odk.collect.strings.R.string.drafts_count, draftsCount)
+        val instructions = getString(org.odk.collect.strings.R.string.delete_project_instructions)
+
+        return """
+        $message:<br/>
+            <br/>
+        • $formDefinitions<br/>
+        • $sent<br/>
+        • $unsent<br/>
+        • $drafts<br/>
+        <br/>
+        $instructions
+        """
     }
 
     class DeleteProjectViewModel(

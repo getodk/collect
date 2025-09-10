@@ -40,7 +40,7 @@
             android:textAppearance="?textAppearanceBodyMedium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title"
-            tools:text="@string/delete_project_dialog_message" />
+            tools:text="Delete project message" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/confirmation_field"
