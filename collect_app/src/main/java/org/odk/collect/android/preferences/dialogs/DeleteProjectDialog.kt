@@ -54,7 +54,8 @@ class DeleteProjectDialog(
             deleteButton.setOnClickListener { viewModel.deleteProject() }
 
             confirmationFieldInput.doAfterTextChanged { text ->
-                deleteButton.isEnabled = "delete".equals(text.toString().trim(), true)
+                val deleteTrigger = getString(org.odk.collect.strings.R.string.delete_trigger)
+                deleteButton.isEnabled = deleteTrigger.equals(text.toString().trim(), true)
             }
         }
 
@@ -71,12 +72,10 @@ class DeleteProjectDialog(
                 org.odk.collect.strings.R.string.delete_project_dialog_title,
                 projectData.projectName
             )
-            val message = getString(
-                org.odk.collect.strings.R.string.delete_project_dialog_message,
+            val message = createDeleteMessage(
                 projectData.numberOfForms,
                 projectData.numberOfSentForms,
                 projectData.numberOfUnsentForms,
-                if (projectData.numberOfUnsentForms > 0) "⚠\uFE0F" else "",
                 projectData.numberOfDraftForms
             )
             binding.message.text = HtmlCompat.fromHtml(message, HtmlCompat.FROM_HTML_MODE_LEGACY)
@@ -98,12 +97,14 @@ class DeleteProjectDialog(
                         )
                     )
                 }
+
                 is DeleteProjectResult.DeletedSuccessfullyLastProject -> {
                     ActivityUtils.startActivityAndCloseAllOthers(
                         requireActivity(),
                         FirstLaunchActivity::class.java
                     )
                 }
+
                 is DeleteProjectResult.DeletedSuccessfullyInactiveProject -> {
                     // not possible here
                 }
@@ -113,6 +114,40 @@ class DeleteProjectDialog(
         return MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
             .create()
+    }
+
+    private fun createDeleteMessage(
+        formDefinitionsCount: Int,
+        sentCount: Int,
+        unsentCount: Int,
+        draftsCount: Int
+    ): String {
+        val message = getString(org.odk.collect.strings.R.string.delete_project_message)
+        val formDefinitions =
+            getString(org.odk.collect.strings.R.string.form_definitions_count, formDefinitionsCount)
+        val sent = getString(org.odk.collect.strings.R.string.sent_count, sentCount)
+        val drafts = getString(org.odk.collect.strings.R.string.drafts_count, draftsCount)
+        val unsent = if (unsentCount > 0) {
+            "${getString(org.odk.collect.strings.R.string.unsent_count, unsentCount)} ⚠\uFE0F"
+        } else {
+            getString(org.odk.collect.strings.R.string.unsent_count, unsentCount)
+        }
+
+        val instructions = getString(
+            org.odk.collect.strings.R.string.delete_project_instructions,
+            "<b>${getString(org.odk.collect.strings.R.string.delete_trigger)}</b>"
+        )
+
+        return """
+        $message:<br/>
+            <br/>
+        • $formDefinitions<br/>
+        • $sent<br/>
+        • $unsent<br/>
+        • $drafts<br/>
+        <br/>
+        $instructions
+        """
     }
 
     class DeleteProjectViewModel(
@@ -140,7 +175,8 @@ class DeleteProjectDialog(
                 instancesDataService.update(project.uuid)
 
                 val numberOfForms = formsDataService.getFormsCount(project.uuid).value
-                val numberOfSentForms = instancesDataService.getSuccessfullySentCount(project.uuid).value
+                val numberOfSentForms =
+                    instancesDataService.getSuccessfullySentCount(project.uuid).value
                 val numberOfUnsentForms = instancesDataService.getSendableCount(project.uuid).value
                 val numberOfDraftForms = instancesDataService.getEditableCount(project.uuid).value
                 _projectData.postValue(

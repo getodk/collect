@@ -2,7 +2,6 @@ package org.odk.collect.android.preferences.dialogs
 
 import android.app.Application
 import android.text.TextUtils
-import androidx.core.text.HtmlCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -23,6 +22,7 @@ import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.not
+import org.hamcrest.Matchers.containsString
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -49,7 +49,7 @@ import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
-import org.odk.collect.strings.localization.getLocalizedString
+import org.odk.collect.testshared.Assertions
 import org.odk.collect.testshared.FakeScheduler
 
 @RunWith(AndroidJUnit4::class)
@@ -186,40 +186,47 @@ class DeleteProjectDialogTest {
     @Test
     fun `The message shows the correct number of blank forms`() {
         whenever(formsDataService.getFormsCount(projectId)).thenReturn(MutableStateFlow(1))
-        val message = HtmlCompat.fromHtml(
-            context.getLocalizedString(string.delete_project_dialog_message, 1, 0, 0, "", 0),
-            HtmlCompat.FROM_HTML_MODE_LEGACY
-        ).toString()
 
         launcherRule.launch(DeleteProjectDialog::class.java)
         scheduler.flush()
-        onView(withText(message)).inRoot(isDialog()).check(matches(isDisplayed()))
+        assertCounts(forms = 1, sent = 0, unsent = 0, drafts = 0)
     }
 
     @Test
     fun `The message shows the correct number of sent forms`() {
         whenever(instancesDataService.getSuccessfullySentCount(projectId)).thenReturn(MutableStateFlow(1))
-        val message = HtmlCompat.fromHtml(
-            context.getLocalizedString(string.delete_project_dialog_message, 0, 1, 0, "", 0),
-            HtmlCompat.FROM_HTML_MODE_LEGACY
-        ).toString()
 
         launcherRule.launch(DeleteProjectDialog::class.java)
         scheduler.flush()
-        onView(withText(message)).inRoot(isDialog()).check(matches(isDisplayed()))
+        assertCounts(forms = 0, sent = 1, unsent = 0, drafts = 0)
     }
 
     @Test
     fun `The message shows the correct number of unsent forms and drafts`() {
         whenever(instancesDataService.getSendableCount(projectId)).thenReturn(MutableStateFlow(5))
         whenever(instancesDataService.getEditableCount(projectId)).thenReturn(MutableStateFlow(3))
-        val message = HtmlCompat.fromHtml(
-            context.getLocalizedString(string.delete_project_dialog_message, 0, 0, 5, "⚠\uFE0F", 3),
-            HtmlCompat.FROM_HTML_MODE_LEGACY
-        ).toString()
 
         launcherRule.launch(DeleteProjectDialog::class.java)
         scheduler.flush()
-        onView(withText(message)).inRoot(isDialog()).check(matches(isDisplayed()))
+        assertCounts(forms = 0, sent = 0, unsent = 5, drafts = 3)
+    }
+
+    private fun assertCounts(forms: Int, sent: Int, unsent: Int, drafts: Int) {
+        Assertions.assertVisible(
+            view = withText(containsString(context.getString(string.form_definitions_count, forms))),
+            root = isDialog()
+        )
+        Assertions.assertVisible(
+            view = withText(containsString(context.getString(string.sent_count, sent))),
+            root = isDialog()
+        )
+        Assertions.assertVisible(
+            view = withText(containsString(context.getString(string.unsent_count, unsent))),
+            root = isDialog()
+        )
+        Assertions.assertVisible(
+            view = withText(containsString(context.getString(string.drafts_count, drafts))),
+            root = isDialog()
+        )
     }
 }

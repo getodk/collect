@@ -1142,14 +1142,22 @@
     <string name="switch_to_project">Switch to %s</string>
     <!-- Text for the dialog title displayed when a user attempts to delete the current project -->
     <string name="delete_project_dialog_title">Delete %s</string>
-    <!-- Text for the dialog message displayed when a user attempts to delete the current project -->
-    <string name="delete_project_dialog_message">By deleting this project, you will permanently delete the following:&lt;br/&gt;&lt;br/&gt;
-        • Form Definitions: %1$d&lt;br/&gt;
-        • Sent: %2$d&lt;br/&gt;
-        • Unsent: %3$d %4$s&lt;br/&gt;
-        • Drafts: %5$d&lt;br/&gt;&lt;br/&gt;
-        Type &lt;b&gt;Delete&lt;/b&gt; to confirm this action.
-    </string>
+
+    <!-- Text that appears above the list of counts of different kinds of forms shown before deleting a project -->
+    <string name="delete_project_message">By deleting this project, you will permanently delete the following</string>
+    <!-- Instructions telling the user they need to type a specific word to confirm deletion of the project -->
+    <string name="delete_project_instructions">Type %1$s to confirm this action.</string>
+    <!-- The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching -->
+    <string name="delete_trigger">delete</string>
+    <!-- The list item for form definition count in the project delete confirmation dialog -->
+    <string name="form_definitions_count">Form definitions: %1$d</string>
+    <!-- The list item for sent count in the project delete confirmation dialog -->
+    <string name="sent_count">Sent: %1$d</string>
+    <!-- The list item for unsent count in the project delete confirmation dialog -->
+    <string name="unsent_count">Unsent: %1$d</string>
+    <!-- The list item for draft count in the project delete confirmation dialog -->
+    <string name="drafts_count">Drafts: %1$d</string>
+
     <!-- Text for the button that confirms deleting the project -->
     <string name="delete_project_confirm_button_text">Delete project</string>
     <string name="or">OR</string>
