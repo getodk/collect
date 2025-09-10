@@ -12,6 +12,9 @@
     <!-- require inputType attribute on all text fields -->
     <issue id="TextFields" severity="error" />
 
+    <!-- require 16KB alignment -->
+    <issue id="Aligned16KB" severity="error"/>
+
     <issue id="GradleOverrides" severity="error" />
     <issue id="FragmentTagUsage" severity="error" />
     <issue id="UseCompatLoadingForDrawables" severity="error" />
