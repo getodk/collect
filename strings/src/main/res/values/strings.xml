@@ -1144,7 +1144,7 @@
     <string name="delete_project_dialog_title">Delete %s</string>
 
     <string name="delete_project_message">By deleting this project, you will permanently delete the following</string>
-    <string name="delete_project_instructions">Type Delete to confirm this action.</string>
+    <string name="delete_project_instructions">Type %1$s to confirm this action.</string>
     <string name="form_definitions_count">Form definitions: %1$d</string>
     <string name="sent_count">Sent: %1$d</string>
     <string name="unsent_count">Unsent: %1$d</string>

@@ -127,12 +127,16 @@ class DeleteProjectDialog(
             getString(org.odk.collect.strings.R.string.form_definitions_count, formDefinitionsCount)
         val sent = getString(org.odk.collect.strings.R.string.sent_count, sentCount)
         val drafts = getString(org.odk.collect.strings.R.string.drafts_count, draftsCount)
-        val instructions = getString(org.odk.collect.strings.R.string.delete_project_instructions)
         val unsent = if (unsentCount > 0) {
             "${getString(org.odk.collect.strings.R.string.unsent_count, unsentCount)} ⚠\uFE0F"
         } else {
             getString(org.odk.collect.strings.R.string.unsent_count, unsentCount)
         }
+
+        val instructions = getString(
+            org.odk.collect.strings.R.string.delete_project_instructions,
+            "<b>${getString(org.odk.collect.strings.R.string.delete_trigger)}</b>"
+        )
 
         return """
         $message:<br/>
