@@ -159,7 +159,6 @@
     <string name="form_editing_enabled_after_finalizing_hint">To make changes after finalizing your form, go to \"Ready to send\", open the form, and tap the edit icon.</string>
     <!-- Details shown in an information box on the end of form screen when the form allows edits after sending -->
     <string name="form_editing_enabled_after_sending_hint">To make changes after sending your form, go to \"Sent\", open the form, and tap the edit icon.</string>
-    <string name="form_edits_warning_learn_more">Learn more</string>
     <!-- Button text for saving as draft -->
     <string name="save_as_draft">Save as draft</string>
     <!-- Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline -->

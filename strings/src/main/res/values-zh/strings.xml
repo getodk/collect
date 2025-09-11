@@ -116,7 +116,6 @@
   <string name="survey_internal_error">内部错误：提示步骤失败。</string>
   <string name="save_enter_data_description">您已在 %s 的末尾.</string>
   <string name="form_editing_disabled_hint">如果您需要对表格进行编辑，请“另存为草稿”，直到您准备好发送为止。</string>
-  <string name="form_edits_warning_learn_more">了解更多</string>
   <string name="save_as_draft">保存为草稿</string>
   <string name="finalize">最终确定</string>
   <string name="send">发送</string>

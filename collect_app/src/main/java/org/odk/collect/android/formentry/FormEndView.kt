@@ -1,24 +1,12 @@
 package org.odk.collect.android.formentry
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.text.SpannableStringBuilder
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.text.style.TextAppearanceSpan
 import android.view.LayoutInflater
 import android.view.View
-import androidx.core.text.color
-import androidx.core.text.inSpans
-import androidx.core.text.underline
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.FormEntryEndBinding
-import org.odk.collect.androidshared.system.ContextUtils
-import org.odk.collect.strings.localization.getLocalizedString
-import org.odk.collect.webpage.WebViewActivity
 
 class FormEndView(
     context: Context,
@@ -118,41 +106,10 @@ class FormEndView(
     private fun setWarning(icon: Int, title: Int, hint: Int?) {
         binding.formEditsIcon.setImageResource(icon)
         binding.formEditsWarningTitle.setText(title)
-        binding.formEditsWarningMessage.apply {
-            text = SpannableStringBuilder().apply {
-                if (hint != null) {
-                    append(context.getLocalizedString(hint))
-                    append(" ")
-                }
-                append(getLearnMoreLink())
-            }
-            movementMethod = LinkMovementMethod.getInstance()
-            highlightColor = Color.TRANSPARENT
-        }
-    }
 
-    private fun getLearnMoreLink(): SpannableStringBuilder {
-        return SpannableStringBuilder().inSpans(
-            span = object : ClickableSpan() {
-                override fun onClick(view: View) {
-                    val intent = Intent(context, WebViewActivity::class.java)
-                    intent.putExtra("url", "https://forum.getodk.org/t/42007")
-                    context.startActivity(intent)
-                }
-            },
-            builderAction = {
-                inSpans(
-                    span = TextAppearanceSpan(context, com.google.android.material.R.style.TextAppearance_Material3_TitleMedium),
-                    builderAction = {
-                        color(ContextUtils.getThemeAttributeValue(context, com.google.android.material.R.attr.colorAccent)) {
-                            underline {
-                                append(context.getLocalizedString(org.odk.collect.strings.R.string.form_edits_warning_learn_more))
-                            }
-                        }
-                    }
-                )
-            }
-        )
+        if (hint != null) {
+            binding.formEditsWarningMessage.setText(hint)
+        }
     }
 
     override fun shouldSuppressFlingGesture() = false
