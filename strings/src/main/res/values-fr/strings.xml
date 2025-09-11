@@ -123,7 +123,6 @@
   <string name="form_editing_disabled_hint">Si vous devrez modifier ce formulaire prochainement, choisissez \"Enregistrer comme ébauche\" jusqu\'à ce que vous soyez prêt à l\'envoyer.</string>
   <string name="form_editing_enabled_after_finalizing_hint">Pour modifier les données après avoir finalisé votre formulaire, trouvé le dans \"Prêt à envoyé\" et appuyez sur l\'icône d\'édition.</string>
   <string name="form_editing_enabled_after_sending_hint">Pour modifier les données après avoir envoyé votre formulaire, allez à \"Envoyé\" et appuyez sur l\'icône d\'édition.</string>
-  <string name="form_edits_warning_learn_more">En savoir plus</string>
   <string name="save_as_draft">Enregistrer comme ébauche</string>
   <string name="finalize">Finaliser</string>
   <string name="send">Envoyer</string>

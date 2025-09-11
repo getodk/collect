@@ -116,7 +116,6 @@
   <string name="survey_internal_error">Vnitřní chyba: přechod k otázce selhal.</string>
   <string name="save_enter_data_description">Jste na konci %s.</string>
   <string name="form_editing_disabled_hint">Pokud potřebujete formulář upravit, uložte jej jako návrh, dokud nebudete připraveni k odeslání.</string>
-  <string name="form_edits_warning_learn_more">Více informací</string>
   <string name="save_as_draft">Uložit jako návrh</string>
   <string name="finalize">Dokončit</string>
   <string name="send">Odeslat</string>

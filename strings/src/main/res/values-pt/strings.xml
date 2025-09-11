@@ -124,7 +124,6 @@
   <string name="form_editing_disabled_hint">Se você precisa fazer alterações em seu formulário, utilize \"Salvar como rascunho\" até que você esteja pronto para enviar.</string>
   <string name="form_editing_enabled_after_finalizing_hint">Para fazer alterações após finalizar o seu formulário, vá para \"Pronto para Enviar\" e toque no ícone de edição.</string>
   <string name="form_editing_enabled_after_sending_hint">Para fazer alterações após enviar o seu formulário, vá para Enviados e toque no ícone de edição.</string>
-  <string name="form_edits_warning_learn_more">Saiba mais</string>
   <string name="save_as_draft">Salvar como rascunho</string>
   <string name="finalize">Finalizar</string>
   <string name="send">Enviar</string>

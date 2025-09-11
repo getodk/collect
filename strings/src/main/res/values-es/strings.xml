@@ -118,7 +118,6 @@
   <string name="save_enter_data_description">Esta al final de \"%s\".</string>
   <string name="form_editing_disabled_after_finalizing">No es posible editar una vez completado</string>
   <string name="form_editing_disabled_hint">Si necesita hacer cambios, \"Guardar como borrador\" hasta que esté listo para enviar.</string>
-  <string name="form_edits_warning_learn_more">Aprende más</string>
   <string name="save_as_draft">Guardar como borrador</string>
   <string name="finalize">Finalizar</string>
   <string name="send">Enviar</string>

@@ -115,7 +115,6 @@
   <string name="survey_internal_error">Вътрешна грешка: преминавенето към подсказката е неуспешно.</string>
   <string name="save_enter_data_description">Вие сте в края на %s</string>
   <string name="form_editing_disabled_hint">Ако се налага да правите промени във формуляра, използвайте \"Запази като чернова\" докато сте готови да го изпратите.</string>
-  <string name="form_edits_warning_learn_more">Научи повече</string>
   <string name="save_as_draft">Запази като чернова</string>
   <string name="finalize">Финализирай</string>
   <string name="send">Изпрати</string>

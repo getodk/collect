@@ -123,7 +123,6 @@
   <string name="form_editing_disabled_hint">Jos sinun tarvitsee tehdä muutoksia lomakkeeseesi, \"Tallenna luonnoksena\" kunnes olet valmis lähettämään.</string>
   <string name="form_editing_enabled_after_finalizing_hint">Tehdäksesi muutoksia kun olet viimeistellyt lomakkeesi, mene kohtaan \"Valmis lähetettäväksi\" ja täppää muokkauskuvaketta.</string>
   <string name="form_editing_enabled_after_sending_hint">Tehdäksesi muutoksia kun olet lähettänyt lomakkeesi, mene kohtaan \"Lähetetty\" ja täppää muokkauskuvaketta.</string>
-  <string name="form_edits_warning_learn_more">Lisätietoja</string>
   <string name="save_as_draft">Tallenna luonnoksena</string>
   <string name="finalize">Viimeistele</string>
   <string name="send">Lähetä</string>

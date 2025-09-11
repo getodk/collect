@@ -115,7 +115,6 @@
   <string name="survey_internal_error">內部錯誤：提示步驟失敗。</string>
   <string name="save_enter_data_description">您已在 %s 的結尾。</string>
   <string name="form_editing_disabled_hint">如果您需要對表格進行編輯，請點選「儲存為草稿」，直到您準備好傳送為止。</string>
-  <string name="form_edits_warning_learn_more">瞭解更多</string>
   <string name="save_as_draft">儲存為草稿</string>
   <string name="finalize">確定完成</string>
   <string name="send">傳送</string>

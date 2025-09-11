@@ -114,7 +114,6 @@
   <string name="too_complex_form">این فرم برای این دستگاه بسیار پیچیده است. سعی کنید برای ساده سازی فرم  یا اصطلاحات کمک بخواهید.</string>
   <string name="survey_internal_error">خطای داخلی: گام به اعلان ناموفق بود.</string>
   <string name="save_enter_data_description">شما در پایان %sقرار دارید.</string>
-  <string name="form_edits_warning_learn_more">بیشتر بدانید</string>
   <string name="save_as_draft">ذخیره پیش نویس</string>
   <string name="finalize">نهایی</string>
   <string name="send">ارسال شد</string>

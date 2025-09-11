@@ -117,7 +117,6 @@
   <string name="survey_internal_error">Kesalahan internal: akses daftar isi tidak berhasil.</string>
   <string name="save_enter_data_description">Anda berada di akhir formulir\n\"%s\".</string>
   <string name="form_editing_disabled_hint">Jika Anda perlu mengedit formulir, simpan sebagai draf.</string>
-  <string name="form_edits_warning_learn_more">Pelajari lebih lanjut</string>
   <string name="save_as_draft">Simpan sebagai draf</string>
   <string name="finalize">Finalisasi</string>
   <string name="send">Kirim</string>

@@ -115,7 +115,6 @@
   <string name="survey_internal_error">Внутренняя ошибка: step to prompt failed.</string>
   <string name="save_enter_data_description">Вы в конце опросника \"%s\"</string>
   <string name="form_editing_disabled_hint">Если вам необходимо внести изменения в форму, сохраните ее как черновик, пока не будете готовы к отправке</string>
-  <string name="form_edits_warning_learn_more">Узнать больше</string>
   <string name="save_as_draft">Сохранить как черновик</string>
   <string name="finalize">Завершить</string>
   <string name="send">Отправить</string>

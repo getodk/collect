@@ -123,7 +123,6 @@
   <string name="form_editing_disabled_hint">Wenn Sie Änderungen an Ihrem Formular vornehmen müssen, \"Als Entwurf speichern\", bis Sie bereit sind, es zu senden.</string>
   <string name="form_editing_enabled_after_finalizing_hint">Um Änderung nach dem Abschließen des Formulars durchzuführen, auf \"Bereit zum Senden\" gehen und das Bearbeiten-Icon betätigen.</string>
   <string name="form_editing_enabled_after_sending_hint">Um Änderung nach dem Senden des Formulars durchzuführen, auf \"Gesendet\" gehen und das Bearbeiten-Icon betätigen.</string>
-  <string name="form_edits_warning_learn_more">Mehr erfahren</string>
   <string name="save_as_draft">Als Entwurf speichern</string>
   <string name="finalize">Abschließen</string>
   <string name="send">Senden</string>
