@@ -34,8 +34,7 @@ import org.odk.collect.webpage.ExternalWebPageHelper
 import javax.inject.Inject
 
 class AboutActivity : LocalizedActivity(), AboutItemClickListener {
-    private val websiteTabHelper = ExternalWebPageHelper()
-    private val forumTabHelper = ExternalWebPageHelper()
+    private val externalWebPageHelper = ExternalWebPageHelper()
     private lateinit var websiteUri: Uri
     private lateinit var forumUri: Uri
 
@@ -56,6 +55,8 @@ class AboutActivity : LocalizedActivity(), AboutItemClickListener {
 
         websiteUri = Uri.parse(getString(org.odk.collect.strings.R.string.app_url))
         forumUri = Uri.parse(getString(org.odk.collect.strings.R.string.forum_url))
+
+        externalWebPageHelper.preloadWebPages(this, listOf(websiteUri, forumUri))
     }
 
     private fun initToolbar() {
@@ -67,25 +68,13 @@ class AboutActivity : LocalizedActivity(), AboutItemClickListener {
     override fun onClick(position: Int) {
         if (allowClick(javaClass.name)) {
             when (position) {
-                0 -> websiteTabHelper.openWebPage(this, websiteUri)
-                1 -> forumTabHelper.openWebPage(this, forumUri)
+                0 -> externalWebPageHelper.openWebPage(this, websiteUri)
+                1 -> externalWebPageHelper.openWebPage(this, forumUri)
                 2 -> shareApp()
                 3 -> addReview()
                 4 -> startActivity(Intent(this, OssLicensesMenuActivity::class.java))
             }
         }
-    }
-
-    public override fun onStart() {
-        super.onStart()
-        websiteTabHelper.bindCustomTabsService(this, websiteUri)
-        forumTabHelper.bindCustomTabsService(this, forumUri)
-    }
-
-    public override fun onDestroy() {
-        unbindService(websiteTabHelper.serviceConnection)
-        unbindService(forumTabHelper.serviceConnection)
-        super.onDestroy()
     }
 
     private fun shareApp() {

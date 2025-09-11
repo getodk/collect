@@ -72,18 +72,10 @@ public class UrlWidget extends QuestionWidget {
         binding.urlButton.cancelLongPress();
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (externalWebPageHelper.getServiceConnection() != null) {
-            getContext().unbindService(externalWebPageHelper.getServiceConnection());
-        }
-    }
-
     public void onButtonClick() {
         if (getFormEntryPrompt().getAnswerValue() != null) {
-            externalWebPageHelper.bindCustomTabsService(getContext(), null);
-            externalWebPageHelper.openWebPage((Activity) getContext(), Uri.parse(getFormEntryPrompt().getAnswerText()));
+            Activity activity = (Activity) getContext();
+            externalWebPageHelper.openWebPage(activity, Uri.parse(getFormEntryPrompt().getAnswerText()));
         } else {
             ToastUtils.showShortToast("No URL set");
         }

@@ -6,53 +6,57 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.net.Uri
+import androidx.activity.ComponentActivity
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsServiceConnection
-import androidx.browser.customtabs.CustomTabsSession
 import androidx.core.net.toUri
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 
 class ExternalWebPageHelper {
 
-    private var customTabsClient: CustomTabsClient? = null
-    private var customTabsSession: CustomTabsSession? = null
-
-    /*
-     * unbind 'serviceConnection' after the context in which it was run is destroyed to
-     * prevent the leakage of service
+    /**
+     * Preload web pages using Custom Tabs so they'll be available faster when [openWebPage] is
+     * called.
      */
-    lateinit var serviceConnection: ServiceConnection
+    fun preloadWebPages(activity: ComponentActivity, uris: List<Uri>) {
+        activity.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            private var serviceConnection: ServiceConnection? = null
 
-    fun bindCustomTabsService(context: Context, url: Uri?) {
-        if (customTabsClient != null) {
-            return
-        }
+            override fun onCreate(owner: LifecycleOwner) {
+                serviceConnection = object : CustomTabsServiceConnection() {
+                    override fun onCustomTabsServiceConnected(
+                        componentName: ComponentName,
+                        customTabsClient: CustomTabsClient
+                    ) {
+                        customTabsClient.warmup(0L)
+                        val customTabsSession = customTabsClient.newSession(null)
 
-        serviceConnection = object : CustomTabsServiceConnection() {
-            override fun onCustomTabsServiceConnected(
-                componentName: ComponentName,
-                customTabsClient: CustomTabsClient
-            ) {
-                this@ExternalWebPageHelper.customTabsClient = customTabsClient
-                this@ExternalWebPageHelper.customTabsClient!!.warmup(0L)
-                customTabsSession = this@ExternalWebPageHelper.customTabsClient!!.newSession(null)
-                if (customTabsSession != null) {
-                    customTabsSession!!.mayLaunchUrl(getNonNullUri(url), null, null)
+                        uris.forEach {
+                            customTabsSession?.mayLaunchUrl(getNonNullUri(it), null, null)
+                        }
+                    }
+
+                    override fun onServiceDisconnected(p0: ComponentName?) {
+                        // Ignored
+                    }
+                }.also {
+                    CustomTabsClient.bindCustomTabsService(
+                        activity,
+                        CUSTOM_TAB_PACKAGE_NAME,
+                        it
+                    )
                 }
             }
 
-            override fun onServiceDisconnected(name: ComponentName?) {
-                customTabsClient = null
-                customTabsSession = null
+            override fun onDestroy(owner: LifecycleOwner) {
+                serviceConnection?.also {
+                    activity.unbindService(it)
+                }
             }
-        }.also {
-            CustomTabsClient.bindCustomTabsService(
-                context,
-                CUSTOM_TAB_PACKAGE_NAME,
-                it
-            )
-        }
+        })
     }
 
     /**
