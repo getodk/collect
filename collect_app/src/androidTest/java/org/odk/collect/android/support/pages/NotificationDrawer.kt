@@ -190,6 +190,6 @@ class NotificationDrawer {
     companion object {
         val SUPPORTED_SDKS = listOf(30, 34)
 
-        private val DRAWER_SEARCH_CONDITION = By.text(Pattern.compile("Manage|No notifications"))
+        private val DRAWER_SEARCH_CONDITION = By.text(Pattern.compile("Manage|No notifications|Silent"))
     }
 }
