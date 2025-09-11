@@ -115,10 +115,21 @@
   <string name="invalid_space_in_answer_plural">Peringatan: Nilai %s mengandung spasi</string>
   <string name="too_complex_form">Formulir ini terlalu rumit untuk perangkat ini. Coba sederhanakan atau minta bantuan di forum.</string>
   <string name="survey_internal_error">Kesalahan internal: akses daftar isi tidak berhasil.</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Anda berada di akhir formulir\n\"%s\".</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Jika Anda perlu mengedit formulir, simpan sebagai draf.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <!--Button text for saving as draft-->
   <string name="save_as_draft">Simpan sebagai draf</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
   <string name="finalize">Finalisasi</string>
+  <!--Button text for sending a submission.-->
   <string name="send">Kirim</string>
   <string name="data_saved_error">Maaf, tidak berhasil menyimpan formulir.</string>
   <string name="data_saved_ok">Formulir berhasil disimpan.</string>
@@ -132,9 +143,11 @@
   <string name="keep_editing">Lanjut edit</string>
   <string name="quit_form_title">Simpan formulir?</string>
   <string name="save_explanation">Anda dapat menyimpan formulir ini dan mengaksesnya dari draf anda kapan saja.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_explanation_with_last_saved">\'Formulir ini terakhir disimpan pada\' EEE, dd MMM yyyy\', pukul\' HH:mm\'. Simpan sebagai draf untuk menyimpan perubahan.\'</string>
   <string name="quit_form_continue_title">Lanjut edit?</string>
   <string name="discard_form_warning">Jika anda membuang formulir, anda akan kehilangan perubahan yang telah anda buat sejauh ini.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="discard_changes_warning">\'Formulir ini terakhir disimpan pada\' EEE, dd MMM yyyy\', pukul\' HH:mm\'. Jika anda membuang perubahan, anda akan kehilangan perubahan yang telah anda buat sejak saat itu.\'</string>
   <string name="saving_form">Menyimpan Formulir</string>
   <string name="survey_saving_validating_message">Memvalidasi jawaban…</string>
@@ -179,7 +192,10 @@
   <string name="install_openmapkit">Mohon instal OpenMapKit.</string>
   <string name="get_barcode">Ambil Barcode</string>
   <string name="replace_barcode">Ubah Barcode</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">Posisikan barcode ke dalam kotak</string>
+  <!--Message shown when barcode is successfully scanned-->
+  <!--Label for button that exits barcode scanning after success-->
   <string name="open_file">Buka berkas</string>
   <string name="rank_items">Peringkat isian</string>
   <string name="number_picker_title">Pemilihan nomor</string>
@@ -564,6 +580,7 @@
   <string name="newer_version_of_a_form_info">Ini adalah pembaruan dari formulir yang kamu miliki</string>
   <string name="form_update_error">Pembaruan formulir tidak berhasil</string>
   <string name="form_update_succeeded">Pembaruan formulir berhasil</string>
+  <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">Unduhan daftar formulir tidak berhasil</string>
   <string name="forms_download_succeeded">Pengunduhan formulir berhasil</string>
   <string name="forms_download_failed">Pengunduhan formulir gagal</string>
@@ -896,6 +913,15 @@
   <string name="using_project">Menggunakan %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Beralih ke %s</string>
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <!--Text for the button that confirms deleting the project-->
   <string name="or">ATAU</string>
   <string name="hex_color">Warna heksagonal</string>
   <string name="invalid_hex_code">Kode heksa tidak valid</string>
@@ -974,6 +1000,7 @@
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
   <string name="debug_filters">Filter debug</string>
   <string name="debug_filters_summary">Tampilkan informasi debug untuk eksekusi filter selama pengisian formulir.</string>
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
   <string name="permission_dialog_title">Tentang izin</string>
   <string name="permission_dialog_text">Anda akan diminta untuk mengizinkan ODK Collect mengakses fitur-fitur di bawah ini, pilih “izinkan” jika anda ingin menggunakannya.</string>
   <string name="notifications">Notifikasi</string>
@@ -1096,10 +1123,10 @@
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

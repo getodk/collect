@@ -115,17 +115,24 @@
   <string name="invalid_space_in_answer_plural">Atenção: as respostas %s contêm espaços</string>
   <string name="too_complex_form">Este formulário é complexo demais para este dispositivo. Tente simplificar expressões ou peça ajuda no fórum.</string>
   <string name="survey_internal_error">Erro interno: falha ao abrir a questão.</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Você está no fim de \"%s\".</string>
-  <string name="form_editing_disabled_after_finalizing">Não é possível editar após finalizar.</string>
-  <string name="form_editing_disabled_after_sending">Não é possível editar após o envio.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
   <string name="form_editing_enabled_after_finalizing">É possível editar após finalizar.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
   <string name="form_editing_enabled_after_sending">É possível editar após o envio.
 </string>
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Se você precisa fazer alterações em seu formulário, utilize \"Salvar como rascunho\" até que você esteja pronto para enviar.</string>
-  <string name="form_editing_enabled_after_finalizing_hint">Para fazer alterações após finalizar o seu formulário, vá para \"Pronto para Enviar\" e toque no ícone de edição.</string>
-  <string name="form_editing_enabled_after_sending_hint">Para fazer alterações após enviar o seu formulário, vá para Enviados e toque no ícone de edição.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <!--Button text for saving as draft-->
   <string name="save_as_draft">Salvar como rascunho</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
   <string name="finalize">Finalizar</string>
+  <!--Button text for sending a submission.-->
   <string name="send">Enviar</string>
   <string name="data_saved_error">Desculpe, falha ao salvar formulário!</string>
   <string name="data_saved_ok">Formulário salvo com sucesso!</string>
@@ -139,9 +146,11 @@
   <string name="keep_editing">Continuar editando</string>
   <string name="quit_form_title">Salvar o formulário?</string>
   <string name="save_explanation">Você pode salvar esse formulário e acessá-lo em seus rascunhos a qualquer momento.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_explanation_with_last_saved">\'Esse formulário foi salvo em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm\'. Salve como rascunho para manter as alterações.\'</string>
   <string name="quit_form_continue_title">Continuar editando?</string>
   <string name="discard_form_warning">Se descartar o formulário, você perderá todas as alterações que fez até agora.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="discard_changes_warning">\'Esse formulário foi salvo em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm\'. Se você descartar as alterações, você pederá qualquer mudança que tiver feito desde então.\'</string>
   <string name="saving_form">Salvando Formulário</string>
   <string name="survey_saving_validating_message">Validando respostas…</string>
@@ -186,7 +195,10 @@
   <string name="install_openmapkit">Por favor, instala o OpenMapKit!</string>
   <string name="get_barcode">Capturar Código de Barra</string>
   <string name="replace_barcode">Trocar Código de Barras</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">Coloque o código de barras dentro do retângulo</string>
+  <!--Message shown when barcode is successfully scanned-->
+  <!--Label for button that exits barcode scanning after success-->
   <string name="open_file">Abrir arquivo</string>
   <string name="rank_items">Ordenar itens</string>
   <string name="number_picker_title">Teclado para escolher números</string>
@@ -557,6 +569,7 @@
   <string name="newer_version_of_a_form_info">Esta é uma atualização de um formulário que você possui</string>
   <string name="form_update_error">Falha na atualização do formulário</string>
   <string name="form_update_succeeded">Sucesso na atualização do formulário</string>
+  <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">Falha ao baixar a lista de formulários</string>
   <string name="forms_download_succeeded">Formulários baixados com sucesso</string>
   <string name="forms_download_failed">Falha no download dos formulários</string>
@@ -887,6 +900,15 @@
   <string name="using_project">Usando %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Alternar para %s</string>
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <!--Text for the button that confirms deleting the project-->
   <string name="or">OR</string>
   <string name="hex_color">Código de cor hexadecimal</string>
   <string name="invalid_hex_code">Código de cor hexadecimal inválido</string>
@@ -959,6 +981,7 @@
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Forçar uma exceção não tratada causando a quebra do aplicativo</string>
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
   <string name="permission_dialog_title">Sobre permissões</string>
   <string name="permission_dialog_text">Você deverá permitir que o ODK Collect tenha acesso às configurações abaixo, selecione \"permitir\" se você deseja usá-las.</string>
   <string name="notifications">Notificações</string>
@@ -1096,10 +1119,10 @@
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

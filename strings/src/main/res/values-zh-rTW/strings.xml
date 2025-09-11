@@ -113,10 +113,21 @@
   <string name="invalid_space_in_answer_plural">警告：多個內在值 %s 有空白符號</string>
   <string name="too_complex_form">此表單對於此設備太複雜。嘗試簡化表達或在論壇上尋求幫助。</string>
   <string name="survey_internal_error">內部錯誤：提示步驟失敗。</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">您已在 %s 的結尾。</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">如果您需要對表格進行編輯，請點選「儲存為草稿」，直到您準備好傳送為止。</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <!--Button text for saving as draft-->
   <string name="save_as_draft">儲存為草稿</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
   <string name="finalize">確定完成</string>
+  <!--Button text for sending a submission.-->
   <string name="send">傳送</string>
   <string name="data_saved_error">表格儲存失敗!</string>
   <string name="data_saved_ok">表格已成功儲存!</string>
@@ -130,9 +141,11 @@
   <string name="keep_editing">繼續編輯</string>
   <string name="quit_form_title">儲存表格？</string>
   <string name="save_explanation">您可以儲存此表單，並隨時從草稿中存取它。</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_explanation_with_last_saved">\'此表格最後儲存於\' EEE, MMM dd, yyyy\' \'HH:mm\'。另存為草稿以保留變更。\'</string>
   <string name="quit_form_continue_title">繼續編輯？</string>
   <string name="discard_form_warning">如果您放棄儲存表單，您將失去所有已做的修改。</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="discard_changes_warning">\'此表格最後儲存於\' EEE, MMM dd, yyyy HH:mm \'，如果您放棄變更，將失去此後所做的更改。\'</string>
   <string name="saving_form">正在儲存表格</string>
   <string name="survey_saving_validating_message">正在驗證答案…</string>
@@ -177,7 +190,10 @@
   <string name="install_openmapkit">請安裝OpenMapKit！</string>
   <string name="get_barcode">取得條碼</string>
   <string name="replace_barcode">替換條碼</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">請將條碼放於矩形內</string>
+  <!--Message shown when barcode is successfully scanned-->
+  <!--Label for button that exits barcode scanning after success-->
   <string name="open_file">打開文件</string>
   <string name="rank_items">排序項目</string>
   <string name="number_picker_title">數字選擇器</string>
@@ -562,6 +578,7 @@
   <string name="newer_version_of_a_form_info">這是對您的表單的更新</string>
   <string name="form_update_error">表單更新失敗</string>
   <string name="form_update_succeeded">表單更新成功</string>
+  <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">表單列表下載失敗</string>
   <string name="forms_download_succeeded">表單下載成功</string>
   <string name="forms_download_failed">表單下載失敗</string>
@@ -892,6 +909,15 @@
   <string name="using_project">使用 %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">切換到 %s</string>
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <!--Text for the button that confirms deleting the project-->
   <string name="or">或</string>
   <string name="hex_color">十六進位顏色</string>
   <string name="invalid_hex_code">無效的十六進位代碼</string>
@@ -969,6 +995,7 @@
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">強制執行導致應用程式崩潰的未捕獲異常</string>
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
   <string name="permission_dialog_title">關於權限</string>
   <string name="permission_dialog_text">您將被要求允許 ODK Collect 存取以下功能，如果您想使用它們，請選擇「允許」。</string>
   <string name="notifications">提醒事項</string>
@@ -1091,10 +1118,10 @@
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>
