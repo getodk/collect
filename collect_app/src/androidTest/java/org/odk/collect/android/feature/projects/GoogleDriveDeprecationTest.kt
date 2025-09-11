@@ -2,10 +2,7 @@ package org.odk.collect.android.feature.projects
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
-import org.hamcrest.CoreMatchers.allOf
+import junit.framework.TestCase.fail
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -15,7 +12,6 @@ import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.projects.Project
-import org.odk.collect.webpage.WebViewActivity
 
 class GoogleDriveDeprecationTest {
     private val rule = CollectTestRule()
@@ -52,12 +48,7 @@ class GoogleDriveDeprecationTest {
             .selectProject("Old GD project")
             .clickOnString(org.odk.collect.strings.R.string.learn_more_button_text)
 
-        intended(
-            allOf(
-                hasComponent(WebViewActivity::class.java.name),
-                hasExtra("url", "https://forum.getodk.org/t/40097")
-            )
-        )
+        fail() // No way to assert this
     }
 
     @Test

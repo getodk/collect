@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.activities.DeleteFormsActivity
@@ -32,7 +33,7 @@ import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
-import org.odk.collect.webpage.WebViewActivity
+import org.odk.collect.webpage.ExternalWebPageHelper
 
 class MainMenuFragment(
     private val viewModelFactory: ViewModelProvider.Factory,
@@ -111,9 +112,10 @@ class MainMenuFragment(
             if (it?.isOldGoogleDriveProject == true) {
                 binding.googleDriveDeprecationBanner.root.visibility = View.VISIBLE
                 binding.googleDriveDeprecationBanner.learnMoreButton.setOnClickListener {
-                    val intent = Intent(requireContext(), WebViewActivity::class.java)
-                    intent.putExtra("url", "https://forum.getodk.org/t/40097")
-                    startActivity(intent)
+                    ExternalWebPageHelper().openWebPage(
+                        requireActivity(),
+                        "https://forum.getodk.org/t/40097".toUri()
+                    )
                 }
             } else {
                 binding.googleDriveDeprecationBanner.root.visibility = View.GONE
