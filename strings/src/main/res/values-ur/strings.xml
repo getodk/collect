@@ -113,10 +113,21 @@
   <string name="invalid_space_in_answer_plural">انتباہ: نیچے دی گئی ویلیو%s میں خالی جگہیں ہیں</string>
   <string name="too_complex_form">یہ فارم اس فون کے لئے بہت پیچیدہ ہے۔ اس کو سادہ کرنے کی کوشش کریں، یا پھر فورم پہ مدد حاصل کریں۔</string>
   <string name="survey_internal_error">اندرونی خرابی: فوری طور پر سیٹ اپ ناکام ہوگیا</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">آپ ‎%s‏ کے آخر پر ہیں۔</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">اگر آپ فارم میں تبدیلی کرنا چاہتے ہیں تو فارم کو \"ڈرافٹ میں محفوط\" رکھے، جب تک فارم جمع کرانے کے لئے تیار نہیں۔</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <!--Button text for saving as draft-->
   <string name="save_as_draft">ڈرافٹ میں محفوظ کریں</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
   <string name="finalize">فائنل کریں</string>
+  <!--Button text for sending a submission.-->
   <string name="send">بھیجیں</string>
   <string name="data_saved_error">معذرت, فارم محفوظ نہیں ہوسکا</string>
   <string name="data_saved_ok">فارم کامیابی سے محفوظ ہو گیا</string>
@@ -130,9 +141,11 @@
   <string name="keep_editing">ترامیم کرتے رہیں</string>
   <string name="quit_form_title">کیا فارم کو محفوظ کر لیا جائے؟</string>
   <string name="save_explanation">آواز کی ریکارڈنگ</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_explanation_with_last_saved"> یہ فارم آخری دفعہEEE, MMM dd, yyyy کو HH:mm بجے محفوظ کیا گیا تھا۔ نئی تبدیلیاں محفوظ کرنے کی لئے ڈرافٹ میں محفوظ کریں۔</string>
   <string name="quit_form_continue_title">کیا آپ ترامیم جاری رکھنا چاہتے ہیں؟</string>
   <string name="discard_form_warning">اگر آپ فارم مسترد کرتے ہیں تو آپ کی کی گئی تبدیلیاں ختم ہو جائیں گی۔</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="discard_changes_warning">یہ فارم آخری دفعہEEE, MMM dd, yyyy کو HH:mm بجے محفوظ کیا گیا تھا۔ اگر آپ تبدیلیاں مسترد کرتے ہیں توآپ کی دئیے گئے آخری وقت کے بعد کی ساری تبدیلیاں ضائع ہو جائیں گی۔</string>
   <string name="saving_form">فارم محفوظ ہو رہا ہے</string>
   <string name="survey_saving_validating_message"> جوابات کی تصدیق کی جا رہی ہے</string>
@@ -176,7 +189,10 @@
   <string name="install_openmapkit">برائے مہربانی اوپن میپ کیٹ  انسٹال کریں!</string>
   <string name="get_barcode">بارکوڈ حاصل کریں</string>
   <string name="replace_barcode">بار کوڈ تبدیل کریں</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">بارکوڈ کو مستطیل کے اندر رکھیں</string>
+  <!--Message shown when barcode is successfully scanned-->
+  <!--Label for button that exits barcode scanning after success-->
   <string name="open_file">فائل کھولیں</string>
   <string name="rank_items"> رینک آئٹمز</string>
   <string name="number_picker_title">نمبر منتخب کرنے کی جگہ</string>
@@ -530,6 +546,7 @@
   <string name="newer_version_of_a_form_info">یہ اس فارم کی اپ ڈیٹ ہے جو آپ کے پاس ہے</string>
   <string name="form_update_error">فارم اپ ڈیٹ نہیں ہو سکا</string>
   <string name="form_update_succeeded">فارمز کا اپ ڈیٹ کامیابی سے مکمل ہو گیا ہے۔</string>
+  <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">فارمز کی لسٹ ڈاون لوڈ نہیں ہو سکی</string>
   <string name="forms_download_succeeded">فارمز کا ڈاون لوڈ کامیابی سے مکمل ہو گیا ہے۔</string>
   <string name="forms_download_failed">فارمز کا ڈاون لوڈ نہیں ہو سکا</string>
@@ -875,6 +892,15 @@ Constraint processing</string>
   <string name="using_project">%s  کا استعمال ہو رہا ہے</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">%s میں تبدیل کریں</string>
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <!--Text for the button that confirms deleting the project-->
   <string name="or">OR</string>
   <string name="hex_color">hex color</string>
   <string name="invalid_hex_code">hex code صحیح نہیں ہے</string>
@@ -947,6 +973,7 @@ Constraint processing</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Force an uncaught exception causing the app to crash</string>
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
   <string name="permission_dialog_title">اجازت کی تفصیل</string>
   <string name="permission_dialog_text">آپ سے پوچھا جائے گا کہ ODK Collect نیچے دی گئی چیزوں کو استعمال کر سکتا ہے۔ اگر آپ مطمئن ہیں تو Allow کا بٹن دبایئں۔</string>
   <string name="notifications">نوٹس</string>
@@ -1057,10 +1084,10 @@ Constraint processing</string>
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

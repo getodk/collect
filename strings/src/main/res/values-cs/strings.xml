@@ -114,10 +114,21 @@
   <string name="invalid_space_in_answer_plural">Upozornění: základní hodnoty %s mají mezery</string>
   <string name="too_complex_form">Tento formulář je pro toto zařízení příliš složitý. Zkuste zjednodušit výrazy nebo požádat o pomoc na fóru.</string>
   <string name="survey_internal_error">Vnitřní chyba: přechod k otázce selhal.</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Jste na konci %s.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Pokud potřebujete formulář upravit, uložte jej jako návrh, dokud nebudete připraveni k odeslání.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <!--Button text for saving as draft-->
   <string name="save_as_draft">Uložit jako návrh</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
   <string name="finalize">Dokončit</string>
+  <!--Button text for sending a submission.-->
   <string name="send">Odeslat</string>
   <string name="data_saved_error">Uložení dotazníku selhalo!</string>
   <string name="data_saved_ok">Dotazník úspěšně uložen!</string>
@@ -131,9 +142,11 @@
   <string name="keep_editing">Pokračujte v úpravách</string>
   <string name="quit_form_title">Uložit formulář?</string>
   <string name="save_explanation">Tento formulář můžete uložit a kdykoli k němu přistupovat z návrhů.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_explanation_with_last_saved">\'Tento formulář byl naposledy uložen dne\' EEE, MMM dd, yyyy \'v\' HH:mm\'. Uložit jako návrh pro zachování změn.\'</string>
   <string name="quit_form_continue_title">Pokračovat v úpravách?</string>
   <string name="discard_form_warning">Pokud formulář zahodíte, ztratíte všechny dosud provedené změny.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="discard_changes_warning">\'Tento formulář byl naposledy uložen dne\' EEE, MMM dd, yyyy \'v\' HH:mm\'. Pokud změny zahodíte, ztratíte všechny změny, které jste od té doby provedli.\'</string>
   <string name="saving_form">Ukládám dotazník</string>
   <string name="survey_saving_validating_message">Ověřuji odpovědi…</string>
@@ -178,7 +191,10 @@
   <string name="install_openmapkit">Prosím nainstalujte OpenMapKit!</string>
   <string name="get_barcode">Získat čárový kód</string>
   <string name="replace_barcode">Změnit čárový kód</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">Vložte čárový kód do obdélníku</string>
+  <!--Message shown when barcode is successfully scanned-->
+  <!--Label for button that exits barcode scanning after success-->
   <string name="open_file">Otevřít soubor</string>
   <string name="rank_items">Pořadí položek</string>
   <string name="number_picker_title">Výběr čísla</string>
@@ -575,6 +591,7 @@
   <string name="newer_version_of_a_form_info">Toto je aktualizace formuláře, který máte</string>
   <string name="form_update_error">Aktualizace formuláře se nezdařila</string>
   <string name="form_update_succeeded">Aktualizace formuláře byla úspěšná</string>
+  <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">Stažení seznamu formulářů se nezdařilo</string>
   <string name="forms_download_succeeded">Formuláře úspěšně staženy</string>
   <string name="forms_download_failed">Stažení formulářů se nezdařilo</string>
@@ -907,6 +924,16 @@
   <string name="using_project">S pomocí %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Přepnout na %s</string>
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <!--Text for the button that confirms deleting the project-->
+  <string name="delete_project_confirm_button_text">Smazat projekt</string>
   <string name="or">OR</string>
   <string name="hex_color">Hex color</string>
   <string name="invalid_hex_code">Neplatný hexadecimální kód</string>
@@ -983,6 +1010,7 @@
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Vynucení nezachycené výjimky, která způsobí pád aplikace</string>
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
   <string name="permission_dialog_title">O oprávněních</string>
   <string name="permission_dialog_text">Budete požádáni o povolení přístupu ODK Collect k níže uvedeným funkcím, pokud je chcete používat, vyberte možnost \"povolit\".</string>
   <string name="notifications">Oznámení</string>
@@ -1087,10 +1115,10 @@
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

@@ -113,9 +113,20 @@
   <string name="invalid_space_in_answer_plural">هشدار: مقادیر اساسی %s دارای فاصله هستند</string>
   <string name="too_complex_form">این فرم برای این دستگاه بسیار پیچیده است. سعی کنید برای ساده سازی فرم  یا اصطلاحات کمک بخواهید.</string>
   <string name="survey_internal_error">خطای داخلی: گام به اعلان ناموفق بود.</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">شما در پایان %sقرار دارید.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <!--Button text for saving as draft-->
   <string name="save_as_draft">ذخیره پیش نویس</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
   <string name="finalize">نهایی</string>
+  <!--Button text for sending a submission.-->
   <string name="send">ارسال شد</string>
   <string name="data_saved_error">متاسفانه فرم ذخیره نشد!</string>
   <string name="data_saved_ok">فرم با موفقیت ذخیره شد!</string>
@@ -129,9 +140,11 @@
   <string name="keep_editing">به ویرایش ادامه دهید</string>
   <string name="quit_form_title">ذخبره فرم؟</string>
   <string name="save_explanation">شما می توانید این فرم را ذخیره کرده و در هر زمان که بخواهید از پیش نویس های خود به آن دسترسی داشته باشید.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_explanation_with_last_saved">\"این فرم آخرین بار در\" EEE، MMM dd، yyyy \"در\" HH:mm ذخیره شده است. ذخیره به عنوان پیش نویس برای حفظ تغییرات.</string>
   <string name="quit_form_continue_title">به ویرایش ادامه دهید؟</string>
   <string name="discard_form_warning">اگر فرم را نادیده بگیرید، تغییراتی را که تاکنون انجام داده اید از دست خواهید داد.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saving_form">در حال ذخیره فرم</string>
   <string name="survey_saving_validating_message">در حال اعتبار سنجی پاسخ ها….</string>
   <string name="survey_saving_collecting_message">در حال جمع آوری داده ها…</string>
@@ -173,7 +186,10 @@
   <string name="install_openmapkit">لطفاْ OpenMapKit را نصب کنید!</string>
   <string name="get_barcode">دریافت بارکد</string>
   <string name="replace_barcode">جاگزینی بارکود</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">بارکد را داخل مستطیل قرار دهید</string>
+  <!--Message shown when barcode is successfully scanned-->
+  <!--Label for button that exits barcode scanning after success-->
   <string name="open_file">فایل را باز کنید</string>
   <string name="rank_items">رده بندی اقلام</string>
   <string name="number_picker_title">شماره جمع کننده</string>
@@ -496,6 +512,7 @@
   <string name="newer_version_of_a_form_info">این یک آپدیت به فورمی است که شما در اختیار دارید. </string>
   <string name="form_update_error">آپدیت فورم ناموفق بود</string>
   <string name="form_update_succeeded">آپدیت فورم با موفقیت انجام شد</string>
+  <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">دانلود فهرست فورم ناموفق بود</string>
   <string name="forms_download_succeeded">دانلود فورم ها با موفقیت انجام شد</string>
   <string name="forms_download_failed">دانلود فورم ها انجام نشد</string>
@@ -824,6 +841,15 @@
   <string name="using_project">با استفاده از %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">به %s تغییر دهید</string>
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <!--Text for the button that confirms deleting the project-->
   <string name="or">یا</string>
   <string name="hex_color">رنگ Hex</string>
   <string name="invalid_hex_code">hex code نادرست است</string>
@@ -894,6 +920,7 @@
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">اجبار یک استثناء کشف نشده که باعث از کار افتادن برنامه می شود</string>
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
   <string name="permission_dialog_title">درباره محدودیت ها</string>
   <string name="permission_dialog_text">از شما خواسته می شود که به ODK Collect اجازه دسترسی به ویژگی های زیر را بدهید، اگر می خواهید از آنها استفاده کنید، \"اجازه\" را انتخاب کنید.</string>
   <string name="notifications">اعلان ها</string>
@@ -1003,10 +1030,10 @@
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

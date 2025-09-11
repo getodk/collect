@@ -81,7 +81,18 @@
   <string name="required_answer_error">Skal udfyldes</string>
   <string name="invalid_space_in_answer_singular">OBS! Indtastede værdi 1%s har mellemrum</string>
   <string name="invalid_space_in_answer_plural">OBS! Indtastede værdier 1 %s har mellemrum</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Du er ved slutningen af %s.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <!--Button text for saving as draft-->
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
+  <!--Button text for sending a submission.-->
   <string name="data_saved_error">Formularen kunne ikke gemmes</string>
   <string name="data_saved_ok">Formular gemt </string>
   <string name="save_point_error">Kunne ikke gemme gendannelsespunkt: %s</string>
@@ -89,6 +100,8 @@
   <string name="quit_application">Afslut 1%s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="keep_changes">Gem ændringer</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saving_form">Gemmer formular</string>
   <string name="survey_saving_validating_message">Validerer svar…</string>
   <string name="survey_saving_collecting_message">Indsamler data…</string>
@@ -115,6 +128,9 @@
   <string name="install_openmapkit">Installer venligst OpenMapKit!</string>
   <string name="get_barcode">Hent stregkode</string>
   <string name="replace_barcode">Erstat stregkode</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
+  <!--Message shown when barcode is successfully scanned-->
+  <!--Label for button that exits barcode scanning after success-->
   <string name="open_file">Åben fil</string>
   <string name="capture_image">Tag billede</string>
   <string name="choose_image">Vælg billede</string>
@@ -332,6 +348,7 @@
   <string name="fetching_file">Henter 1 %1$s. Formular 2%2$s af 3%3$s formularer. </string>
   <string name="form_download_progress">1%1$s. Henter mediefiler: 2%2$s af 3%3$s</string>
   <string name="version">Version:</string>
+  <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">Hentning af formular-oversigt fejlede</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <!--##############################################
@@ -513,6 +530,15 @@
   <!--Toast text shown when the current project is changed-->
   <!--Description for screen readers of which project is in use. This is part of the project selection dialog-->
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <!--Text for the button that confirms deleting the project-->
   <!--##############################################
      # First launch and initial configuration
      ##############################################-->
@@ -558,6 +584,7 @@
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
   <!--##############################################
     # Form saved Snackbar
     ##############################################-->
@@ -610,10 +637,10 @@
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

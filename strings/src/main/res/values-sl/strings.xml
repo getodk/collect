@@ -113,10 +113,21 @@
   <string name="invalid_space_in_answer_plural">Opozorila: vrednosti %s vsebujejo presledke</string>
   <string name="too_complex_form">Obrazec je preveč kompleksen za vašo napravo. Poskusite poenostaviti vprašanja ali vprašati za pomoč na forumu.</string>
   <string name="survey_internal_error">Interna napaka: prehod ni uspel.</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Ste pri koncu %s.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Če želite spreminjati shranjene odgovore, shranite kot osnutek dokler niste pripravljeni za oddajo.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <!--Button text for saving as draft-->
   <string name="save_as_draft">Shrani kot osnutek</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
   <string name="finalize">Zaključi</string>
+  <!--Button text for sending a submission.-->
   <string name="send">Pošlji</string>
   <string name="data_saved_error">Shranjevanje obrazca ni uspelo!</string>
   <string name="data_saved_ok">Obrazec uspešno shranjen!</string>
@@ -130,9 +141,11 @@
   <string name="keep_editing">Urejaj še naprej</string>
   <string name="quit_form_title">Shrani obrazec?</string>
   <string name="save_explanation">Obrazec lahko shranite kot osnutek in ga nato urejate iz osnutkov.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_explanation_with_last_saved">\'Obrazec zadnjič shranjen \' EEE, MMM dd, yyyy \'at\' HH:mm\'. Shranite kot osnutek, če želite shraniti spremembe.\'</string>
   <string name="quit_form_continue_title">Nadaljuj z urejanjem?</string>
   <string name="discard_form_warning">Če boste zavrgli obrazec, boste izgubili vse vnešene podatke do zdaj.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="discard_changes_warning">\'Obrazec zadnjič shranjen\' EEE, MMM dd, yyyy \'at\' HH:mm\'. Če boste zavrgli spremembe, jih boste izgubili.\'</string>
   <string name="saving_form">Shrani obrazec</string>
   <string name="survey_saving_validating_message">Vrednotim odgovore…</string>
@@ -176,7 +189,10 @@
   <string name="install_openmapkit">Prosim, namestite OpenMapKit!</string>
   <string name="get_barcode">Pridobi črtno kodo</string>
   <string name="replace_barcode">Zamenjaj črtno kodo</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">Postavite črtno kodo znotraj pravokotnika.</string>
+  <!--Message shown when barcode is successfully scanned-->
+  <!--Label for button that exits barcode scanning after success-->
   <string name="open_file">Odpri datoteko</string>
   <string name="rank_items">Razvrsti </string>
   <string name="number_picker_title">Izbirnik številk</string>
@@ -540,6 +556,7 @@
   <string name="newer_version_of_a_form_info">To je novejša verzija že prenešenega obrazca</string>
   <string name="form_update_error">Posodobitev obrazca ni uspela.</string>
   <string name="form_update_succeeded">Obrazec je bil uspešno posodobljen.</string>
+  <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">Seznam obrazcev ni bilo mogoče prenesti.</string>
   <string name="forms_download_succeeded">Obrazci so bili uspešno preneseni.</string>
   <string name="forms_download_failed">Obrazci niso bili preneseni.</string>
@@ -870,6 +887,15 @@
   <string name="using_project">Uporablja se %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Preklopi na %s</string>
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <!--Text for the button that confirms deleting the project-->
   <string name="or">ALI</string>
   <string name="hex_color">Hex barva</string>
   <string name="invalid_hex_code">Neveljaven hex koda</string>
@@ -941,6 +967,7 @@
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Neujeta napaka zaustavila aplikacijo</string>
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
   <string name="permission_dialog_title">O dovoljenjih</string>
   <string name="permission_dialog_text">Če želite dovoliti dostop ODK Collect do spodaj navedenih funkcij, izberite \"dovoli\", če jih želite uporabljati.</string>
   <string name="notifications">Obvestila</string>
@@ -1074,10 +1101,10 @@
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>
