@@ -83,7 +83,7 @@ public class UrlWidget extends QuestionWidget {
     public void onButtonClick() {
         if (getFormEntryPrompt().getAnswerValue() != null) {
             externalWebPageHelper.bindCustomTabsService(getContext(), null);
-            externalWebPageHelper.openWebPageInCustomTab((Activity) getContext(), Uri.parse(getFormEntryPrompt().getAnswerText()));
+            externalWebPageHelper.openWebPageInApp((Activity) getContext(), Uri.parse(getFormEntryPrompt().getAnswerText()));
         } else {
             ToastUtils.showShortToast("No URL set");
         }

@@ -251,7 +251,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         Interactions.clickOn(withText(string.get_help_with_offline_layers))
 
-        verify(externalWebPageHelper).openWebPageInCustomTab(
+        verify(externalWebPageHelper).openWebPageInApp(
             any(),
             eq(Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices"))
         )

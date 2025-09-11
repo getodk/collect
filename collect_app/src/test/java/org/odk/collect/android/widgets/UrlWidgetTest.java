@@ -77,7 +77,7 @@ public class UrlWidgetTest {
         widget.binding.urlButton.performClick();
 
         verify(externalWebPageHelper, never()).bindCustomTabsService(null, null);
-        verify(externalWebPageHelper, never()).openWebPageInCustomTab(null, null);
+        verify(externalWebPageHelper, never()).openWebPageInApp(null, null);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class UrlWidgetTest {
         widget.binding.urlButton.performClick();
 
         verify(externalWebPageHelper, never()).bindCustomTabsService(null, null);
-        verify(externalWebPageHelper, never()).openWebPageInCustomTab(null, null);
+        verify(externalWebPageHelper, never()).openWebPageInApp(null, null);
         assertThat(ShadowToast.getTextOfLatestToast(), equalTo("No URL set"));
     }
 
@@ -96,7 +96,7 @@ public class UrlWidgetTest {
         widget.binding.urlButton.performClick();
 
         verify(externalWebPageHelper).bindCustomTabsService(widget.getContext(), null);
-        verify(externalWebPageHelper).openWebPageInCustomTab((Activity) widget.getContext(), Uri.parse("blah"));
+        verify(externalWebPageHelper).openWebPageInApp((Activity) widget.getContext(), Uri.parse("blah"));
     }
 
     @Test

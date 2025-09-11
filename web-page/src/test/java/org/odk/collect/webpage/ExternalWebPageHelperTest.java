@@ -22,7 +22,7 @@ public class ExternalWebPageHelperTest {
         Activity activity = Robolectric.buildActivity(Activity.class).get();
 
         ExternalWebPageHelper externalWebPageHelper = new ExternalWebPageHelper();
-        externalWebPageHelper.openWebPageInCustomTab(activity, parse("HTTP://example.com"));
+        externalWebPageHelper.openWebPageInApp(activity, parse("HTTP://example.com"));
 
         Uri uri = shadowOf(activity).getNextStartedActivity().getData();
         assertThat(uri, equalTo(Uri.parse("http://example.com")));

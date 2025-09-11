@@ -67,8 +67,8 @@ class AboutActivity : LocalizedActivity(), AboutItemClickListener {
     override fun onClick(position: Int) {
         if (allowClick(javaClass.name)) {
             when (position) {
-                0 -> websiteTabHelper.openWebPageInCustomTab(this, websiteUri)
-                1 -> forumTabHelper.openWebPageInCustomTab(this, forumUri)
+                0 -> websiteTabHelper.openWebPageInApp(this, websiteUri)
+                1 -> forumTabHelper.openWebPageInApp(this, forumUri)
                 2 -> shareApp()
                 3 -> addReview()
                 4 -> startActivity(Intent(this, OssLicensesMenuActivity::class.java))

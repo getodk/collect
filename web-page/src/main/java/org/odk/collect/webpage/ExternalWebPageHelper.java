@@ -11,6 +11,8 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.browser.customtabs.CustomTabsSession;
 
+import org.odk.collect.androidshared.ui.ToastUtils;
+
 /**
  * Created by sanjeev on 17/3/17.
  */
@@ -51,46 +53,36 @@ public class ExternalWebPageHelper {
         CustomTabsClient.bindCustomTabsService(context, CUSTOM_TAB_PACKAGE_NAME, serviceConnection);
     }
 
-    // https://github.com/getodk/collect/issues/1221
-    private Uri getNonNullUri(Uri url) {
-        return url != null ? url : Uri.parse("");
-    }
-
     public CustomTabsServiceConnection getServiceConnection() {
         return serviceConnection;
     }
 
-    public void openWebPageInCustomTab(Activity activity, Uri uri) {
+    public void openWebPageInApp(Activity activity, Uri uri) {
         uri = uri.normalizeScheme();
 
         try {
-            openUriInChromeTabs(activity, uri);
+            openUriInCustomTab(activity, uri);
         } catch (Exception | Error e1) {
-            openWebPage(activity, uri);
+            openWebPageInBrowser(activity, uri);
         }
     }
 
-    public void openWebPage(Activity activity, Uri uri) {
+    public void openWebPageInBrowser(Activity activity, Uri uri) {
         uri = uri.normalizeScheme();
 
         try {
-            openUriInExternalBrowser(activity, uri);
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
         } catch (Exception | Error e2) {
-            openUriInWebView(activity, uri);
+            ToastUtils.showLongToast("No browser installed!");
         }
     }
 
-    void openUriInChromeTabs(Context context, Uri uri) {
+    private void openUriInCustomTab(Context context, Uri uri) {
         new CustomTabsIntent.Builder().build().launchUrl(context, uri);
     }
 
-    void openUriInExternalBrowser(Context context, Uri uri) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, uri));
-    }
-
-    void openUriInWebView(Context context, Uri uri) {
-        Intent intent = new Intent(context, WebViewActivity.class);
-        intent.putExtra(OPEN_URL, uri.toString());
-        context.startActivity(intent);
+    // https://github.com/getodk/collect/issues/1221
+    private Uri getNonNullUri(Uri url) {
+        return url != null ? url : Uri.parse("");
     }
 }
