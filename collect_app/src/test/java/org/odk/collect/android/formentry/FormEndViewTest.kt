@@ -147,7 +147,7 @@ class FormEndViewTest {
         assertThat(
             view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
             equalTo(
-                "${context.getString(org.odk.collect.strings.R.string.form_editing_enabled_after_sending_hint)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
+                context.getString(org.odk.collect.strings.R.string.form_editing_enabled_after_sending_hint)
             )
         )
     }
@@ -178,9 +178,7 @@ class FormEndViewTest {
         )
         assertThat(
             view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
-            equalTo(
-                "${context.getString(org.odk.collect.strings.R.string.form_editing_disabled_hint)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
-            )
+            equalTo(context.getString(org.odk.collect.strings.R.string.form_editing_disabled_hint))
         )
     }
 
@@ -211,7 +209,7 @@ class FormEndViewTest {
         assertThat(
             view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
             equalTo(
-                "${context.getString(org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing_hint)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
+                context.getString(org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing_hint)
             )
         )
     }
@@ -242,9 +240,7 @@ class FormEndViewTest {
         )
         assertThat(
             view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
-            equalTo(
-                "${context.getString(org.odk.collect.strings.R.string.form_editing_disabled_hint)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
-            )
+            equalTo(context.getString(org.odk.collect.strings.R.string.form_editing_disabled_hint))
         )
     }
 
@@ -275,7 +271,7 @@ class FormEndViewTest {
         assertThat(
             view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
             equalTo(
-                "${context.getString(org.odk.collect.strings.R.string.form_editing_enabled_after_sending_hint)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
+                context.getString(org.odk.collect.strings.R.string.form_editing_enabled_after_sending_hint)
             )
         )
     }
@@ -301,14 +297,6 @@ class FormEndViewTest {
             equalTo(
                 context.getString(
                     org.odk.collect.strings.R.string.form_editing_disabled_after_sending
-                )
-            )
-        )
-        assertThat(
-            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
-            equalTo(
-                context.getString(
-                    org.odk.collect.strings.R.string.form_edits_warning_learn_more
                 )
             )
         )
@@ -341,7 +329,7 @@ class FormEndViewTest {
         assertThat(
             view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
             equalTo(
-                "${context.getString(org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing_hint)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
+                context.getString(org.odk.collect.strings.R.string.form_editing_enabled_after_finalizing_hint)
             )
         )
     }
@@ -367,14 +355,6 @@ class FormEndViewTest {
             equalTo(
                 context.getString(
                     org.odk.collect.strings.R.string.form_editing_disabled_after_finalizing
-                )
-            )
-        )
-        assertThat(
-            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
-            equalTo(
-                context.getString(
-                    org.odk.collect.strings.R.string.form_edits_warning_learn_more
                 )
             )
         )
