@@ -57,7 +57,11 @@ public class ExternalWebPageHelper {
         return serviceConnection;
     }
 
-    public void openWebPageInApp(Activity activity, Uri uri) {
+    /**
+     * Opens web page using Android Custom Tabs. If the user's browser doesn't support Custom Tabs,
+     * the Uri will just be opened in their device's default browser.
+     */
+    public void openWebPage(Activity activity, Uri uri) {
         uri = uri.normalizeScheme();
 
         try {
@@ -67,7 +71,7 @@ public class ExternalWebPageHelper {
         }
     }
 
-    public void openWebPageInBrowser(Activity activity, Uri uri) {
+    private void openWebPageInBrowser(Activity activity, Uri uri) {
         uri = uri.normalizeScheme();
 
         try {

@@ -103,7 +103,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragment(
         val binding = OfflineMapLayersPickerBinding.inflate(inflater)
 
         binding.mbtilesInfoGroup.addOnClickListener {
-            externalWebPageHelper.openWebPageInApp(
+            externalWebPageHelper.openWebPage(
                 requireActivity(),
                 Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices")
             )
