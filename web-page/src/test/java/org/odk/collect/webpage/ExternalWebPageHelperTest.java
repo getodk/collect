@@ -21,8 +21,7 @@ public class ExternalWebPageHelperTest {
     public void uriShouldBeNormalized() {
         Activity activity = Robolectric.buildActivity(Activity.class).get();
 
-        ChromeTabsWebPageService chromeTabsWebPageService = new ChromeTabsWebPageService();
-        chromeTabsWebPageService.openWebPage(activity, parse("HTTP://example.com"));
+        ChromeTabsWebPageService.INSTANCE.openWebPage(activity, parse("HTTP://example.com"));
 
         Uri uri = shadowOf(activity).getNextStartedActivity().getData();
         assertThat(uri, equalTo(Uri.parse("http://example.com")));
