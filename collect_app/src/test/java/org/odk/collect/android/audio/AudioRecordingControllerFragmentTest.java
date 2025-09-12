@@ -92,7 +92,7 @@ public class AudioRecordingControllerFragmentTest {
             }
 
             @Override
-            public ChromeTabsWebPageService providesExternalWebPageHelper() {
+            public ChromeTabsWebPageService providesWebPageService() {
                 return chromeTabsWebPageService;
             }
         });

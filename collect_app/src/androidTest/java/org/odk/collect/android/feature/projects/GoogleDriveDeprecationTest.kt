@@ -1,8 +1,10 @@
 package org.odk.collect.android.feature.projects
 
 import android.app.Application
+import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
-import junit.framework.TestCase.fail
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -48,7 +50,10 @@ class GoogleDriveDeprecationTest {
             .selectProject("Old GD project")
             .clickOnString(org.odk.collect.strings.R.string.learn_more_button_text)
 
-        fail() // No way to assert this
+        assertThat(
+            testDependencies.webPageService.openedPages,
+            equalTo(listOf("https://forum.getodk.org/t/40097".toUri()))
+        )
     }
 
     @Test

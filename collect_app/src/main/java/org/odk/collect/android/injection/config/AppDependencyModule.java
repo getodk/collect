@@ -390,7 +390,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public WebPageService providesExternalWebPageHelper() {
+    public WebPageService providesWebPageService() {
         return ChromeTabsWebPageService.INSTANCE;
     }
 
