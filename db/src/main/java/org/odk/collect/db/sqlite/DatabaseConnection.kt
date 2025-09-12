@@ -1,6 +1,7 @@
 package org.odk.collect.db.sqlite
 
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CursorFactory
 import android.database.sqlite.SQLiteOpenHelper
@@ -91,7 +92,13 @@ open class DatabaseConnection @JvmOverloads constructor(
      */
     fun <T> withSynchronizedConnection(block: DatabaseConnection.() -> T): T {
         return synchronized(dbHelper) {
-            block(this)
+            val result = block(this)
+
+            if (result !is Cursor) {
+                result
+            } else {
+                throw IllegalStateException("Returning a Cursor removes synchronized guarantees!")
+            }
         }
     }
 

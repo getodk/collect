@@ -24,8 +24,8 @@ class SynchronizedDatabaseConnection(
         return databaseConnection.withSynchronizedConnection(block)
     }
 
-    fun <T> transaction(
-        body: SQLiteDatabase.() -> T
+    fun transaction(
+        body: SQLiteDatabase.() -> Unit
     ) {
         return withConnection {
             writableDatabase.transaction {
@@ -38,8 +38,8 @@ class SynchronizedDatabaseConnection(
      * Runs a transaction and then calls [DatabaseConnection.reset]. Useful for transactions
      * that will mutate the DB schema.
      */
-    fun <T> resetTransaction(
-        body: SQLiteDatabase.() -> T
+    fun resetTransaction(
+        body: SQLiteDatabase.() -> Unit
     ) {
         transaction(body)
         databaseConnection.reset()

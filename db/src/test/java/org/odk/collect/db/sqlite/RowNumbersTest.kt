@@ -2,7 +2,6 @@ package org.odk.collect.db.sqlite
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns._ID
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -15,6 +14,7 @@ import org.odk.collect.db.sqlite.CursorExt.rowToMap
 import org.odk.collect.db.sqlite.RowNumbers.invalidateRowNumbers
 import org.odk.collect.db.sqlite.RowNumbers.rawQueryWithRowNumber
 import org.odk.collect.db.sqlite.SQLiteColumns.ROW_NUMBER
+import org.odk.collect.db.sqlite.support.NoopMigrator
 import org.odk.collect.shared.TempFiles
 
 @RunWith(AndroidJUnit4::class)
@@ -41,8 +41,9 @@ class RowNumbersTest {
             insertOrThrow("test_table", null, ContentValues().also { it.put("position", "second") })
         }
 
-        val rows =
-            dbConnection.rawQueryWithRowNumber("test_table").foldAndClose { it.rowToMap() }
+        val rows = dbConnection.rawQueryWithRowNumber("test_table") { cursor ->
+            cursor.foldAndClose { it.rowToMap() }
+        }
         assertThat(rows.size, equalTo(2))
 
         assertThat(rows[0]["position"], equalTo("first"))
@@ -72,8 +73,9 @@ class RowNumbersTest {
             insertOrThrow("test_table", null, ContentValues().also { it.put("position", "third") })
         }
 
-        val beforeRows =
-            dbConnection.rawQueryWithRowNumber("test_table").foldAndClose { it.rowToMap() }
+        val beforeRows = dbConnection.rawQueryWithRowNumber("test_table") { cursor ->
+            cursor.foldAndClose { it.rowToMap() }
+        }
         assertThat(beforeRows.size, equalTo(3))
 
         dbConnection.transaction {
@@ -82,8 +84,9 @@ class RowNumbersTest {
 
         dbConnection.invalidateRowNumbers("test_table")
 
-        val afterRows =
-            dbConnection.rawQueryWithRowNumber("test_table").foldAndClose { it.rowToMap() }
+        val afterRows = dbConnection.rawQueryWithRowNumber("test_table") { cursor ->
+            cursor.foldAndClose { it.rowToMap() }
+        }
         assertThat(afterRows.size, equalTo(2))
 
         assertThat(afterRows[0]["position"], equalTo("first"))
@@ -92,9 +95,4 @@ class RowNumbersTest {
         assertThat(afterRows[1]["position"], equalTo("third"))
         assertThat(afterRows[1][ROW_NUMBER], equalTo("2"))
     }
-}
-
-private class NoopMigrator : DatabaseMigrator {
-    override fun onCreate(db: SQLiteDatabase?) {}
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int) {}
 }
