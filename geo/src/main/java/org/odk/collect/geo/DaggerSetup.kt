@@ -22,7 +22,7 @@ import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.webpage.ExternalWebPageHelper
+import org.odk.collect.webpage.WebPageService
 import javax.inject.Singleton
 
 interface GeoDependencyComponentProvider {
@@ -121,7 +121,7 @@ open class GeoDependencyModule {
     }
 
     @Provides
-    open fun providesExternalWebPageHelper(): ExternalWebPageHelper {
+    open fun providesWebPageService(): WebPageService {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 }

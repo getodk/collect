@@ -7,13 +7,13 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 
-class ExternalWebPageHelper {
+object ChromeTabsWebPageService : WebPageService {
 
     /**
      * Opens web page using Android Custom Tabs. If the user's browser doesn't support Custom Tabs,
      * the Uri will just be opened in their device's default browser.
      */
-    fun openWebPage(activity: Activity, uri: Uri) {
+    override fun openWebPage(activity: Activity, uri: Uri) {
         var uri = uri
         uri = uri.normalizeScheme()
 

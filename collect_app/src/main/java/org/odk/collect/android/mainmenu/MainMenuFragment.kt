@@ -31,13 +31,12 @@ import org.odk.collect.androidshared.data.consume
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
-import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
-import org.odk.collect.webpage.ExternalWebPageHelper
+import org.odk.collect.webpage.WebPageService
 
 class MainMenuFragment(
     private val viewModelFactory: ViewModelProvider.Factory,
-    private val settingsProvider: SettingsProvider
+    private val webPageService: WebPageService
 ) : Fragment() {
 
     private lateinit var mainMenuViewModel: MainMenuViewModel
@@ -112,7 +111,7 @@ class MainMenuFragment(
             if (it?.isOldGoogleDriveProject == true) {
                 binding.googleDriveDeprecationBanner.root.visibility = View.VISIBLE
                 binding.googleDriveDeprecationBanner.learnMoreButton.setOnClickListener {
-                    ExternalWebPageHelper().openWebPage(
+                    webPageService.openWebPage(
                         requireActivity(),
                         "https://forum.getodk.org/t/40097".toUri()
                     )

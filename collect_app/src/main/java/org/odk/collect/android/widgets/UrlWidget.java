@@ -26,19 +26,19 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.UrlWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.webpage.ExternalWebPageHelper;
+import org.odk.collect.webpage.ChromeTabsWebPageService;
 
 @SuppressLint("ViewConstructor")
 public class UrlWidget extends QuestionWidget {
     UrlWidgetAnswerBinding binding;
 
-    private final ExternalWebPageHelper externalWebPageHelper;
+    private final ChromeTabsWebPageService chromeTabsWebPageService;
 
-    public UrlWidget(Context context, QuestionDetails questionDetails, ExternalWebPageHelper externalWebPageHelper, Dependencies dependencies) {
+    public UrlWidget(Context context, QuestionDetails questionDetails, ChromeTabsWebPageService chromeTabsWebPageService, Dependencies dependencies) {
         super(context, dependencies, questionDetails);
         render();
 
-        this.externalWebPageHelper = externalWebPageHelper;
+        this.chromeTabsWebPageService = chromeTabsWebPageService;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class UrlWidget extends QuestionWidget {
     public void onButtonClick() {
         if (getFormEntryPrompt().getAnswerValue() != null) {
             Activity activity = (Activity) getContext();
-            externalWebPageHelper.openWebPage(activity, Uri.parse(getFormEntryPrompt().getAnswerText()));
+            chromeTabsWebPageService.openWebPage(activity, Uri.parse(getFormEntryPrompt().getAnswerText()));
         } else {
             ToastUtils.showShortToast("No URL set");
         }

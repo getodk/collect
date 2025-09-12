@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.WidgetTestActivity;
-import org.odk.collect.webpage.ExternalWebPageHelper;
+import org.odk.collect.webpage.ChromeTabsWebPageService;
 import org.robolectric.shadows.ShadowToast;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -36,13 +36,13 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 @RunWith(AndroidJUnit4.class)
 public class UrlWidgetTest {
     private WidgetTestActivity spyActivity;
-    private ExternalWebPageHelper externalWebPageHelper;
+    private ChromeTabsWebPageService chromeTabsWebPageService;
     private OnLongClickListener listener;
 
     @Before
     public void setUp() {
         spyActivity = spy(widgetTestActivity());
-        externalWebPageHelper = mock(ExternalWebPageHelper.class);
+        chromeTabsWebPageService = mock(ChromeTabsWebPageService.class);
         listener = mock(OnLongClickListener.class);
     }
 
@@ -76,8 +76,8 @@ public class UrlWidgetTest {
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.binding.urlButton.performClick();
 
-        verify(externalWebPageHelper, never()).bindCustomTabsService(null, null);
-        verify(externalWebPageHelper, never()).openWebPage(null, null);
+        verify(chromeTabsWebPageService, never()).bindCustomTabsService(null, null);
+        verify(chromeTabsWebPageService, never()).openWebPage(null, null);
     }
 
     @Test
@@ -85,8 +85,8 @@ public class UrlWidgetTest {
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.binding.urlButton.performClick();
 
-        verify(externalWebPageHelper, never()).bindCustomTabsService(null, null);
-        verify(externalWebPageHelper, never()).openWebPage(null, null);
+        verify(chromeTabsWebPageService, never()).bindCustomTabsService(null, null);
+        verify(chromeTabsWebPageService, never()).openWebPage(null, null);
         assertThat(ShadowToast.getTextOfLatestToast(), equalTo("No URL set"));
     }
 
@@ -95,8 +95,8 @@ public class UrlWidgetTest {
         UrlWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         widget.binding.urlButton.performClick();
 
-        verify(externalWebPageHelper).bindCustomTabsService(widget.getContext(), null);
-        verify(externalWebPageHelper).openWebPage((Activity) widget.getContext(), Uri.parse("blah"));
+        verify(chromeTabsWebPageService).bindCustomTabsService(widget.getContext(), null);
+        verify(chromeTabsWebPageService).openWebPage((Activity) widget.getContext(), Uri.parse("blah"));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class UrlWidgetTest {
 
     @Test
     public void detachingFromWindow_doesNotCallOnServiceDisconnected_whenServiceConnectionIsNull() {
-        when(externalWebPageHelper.getServiceConnection()).thenReturn(null);
+        when(chromeTabsWebPageService.getServiceConnection()).thenReturn(null);
 
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.onDetachedFromWindow();
@@ -119,7 +119,7 @@ public class UrlWidgetTest {
     @Test
     public void detachingFromWindow_disconnectsService_whenServiceConnectionIsNotNull() {
         CustomTabsServiceConnection serviceConnection = mock(CustomTabsServiceConnection.class);
-        when(externalWebPageHelper.getServiceConnection()).thenReturn(serviceConnection);
+        when(chromeTabsWebPageService.getServiceConnection()).thenReturn(serviceConnection);
 
         UrlWidget widget = createWidget(promptWithAnswer(null));
         widget.onDetachedFromWindow();
@@ -127,6 +127,6 @@ public class UrlWidgetTest {
     }
 
     private UrlWidget createWidget(FormEntryPrompt prompt) {
-        return new UrlWidget(spyActivity, new QuestionDetails(prompt), externalWebPageHelper, widgetDependencies());
+        return new UrlWidget(spyActivity, new QuestionDetails(prompt), chromeTabsWebPageService, widgetDependencies());
     }
 }
