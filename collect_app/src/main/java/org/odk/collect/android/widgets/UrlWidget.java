@@ -26,19 +26,19 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.UrlWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.webpage.ExternalWebPageHelper;
+import org.odk.collect.webpage.WebPageService;
 
 @SuppressLint("ViewConstructor")
 public class UrlWidget extends QuestionWidget {
     UrlWidgetAnswerBinding binding;
 
-    private final ExternalWebPageHelper externalWebPageHelper;
+    private final WebPageService webPageService;
 
-    public UrlWidget(Context context, QuestionDetails questionDetails, ExternalWebPageHelper externalWebPageHelper, Dependencies dependencies) {
+    public UrlWidget(Context context, QuestionDetails questionDetails, WebPageService webPageService, Dependencies dependencies) {
         super(context, dependencies, questionDetails);
         render();
 
-        this.externalWebPageHelper = externalWebPageHelper;
+        this.webPageService = webPageService;
     }
 
     @Override
@@ -72,18 +72,10 @@ public class UrlWidget extends QuestionWidget {
         binding.urlButton.cancelLongPress();
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (externalWebPageHelper.getServiceConnection() != null) {
-            getContext().unbindService(externalWebPageHelper.getServiceConnection());
-        }
-    }
-
     public void onButtonClick() {
         if (getFormEntryPrompt().getAnswerValue() != null) {
-            externalWebPageHelper.bindCustomTabsService(getContext(), null);
-            externalWebPageHelper.openWebPageInCustomTab((Activity) getContext(), Uri.parse(getFormEntryPrompt().getAnswerText()));
+            Activity activity = (Activity) getContext();
+            webPageService.openWebPage(activity, Uri.parse(getFormEntryPrompt().getAnswerText()));
         } else {
             ToastUtils.showShortToast("No URL set");
         }

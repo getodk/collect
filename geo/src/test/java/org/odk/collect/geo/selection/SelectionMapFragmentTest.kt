@@ -54,7 +54,7 @@ import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
-import org.odk.collect.webpage.ExternalWebPageHelper
+import org.odk.collect.webpage.WebPageService
 
 @RunWith(AndroidJUnit4::class)
 class SelectionMapFragmentTest {
@@ -116,7 +116,7 @@ class SelectionMapFragmentTest {
                     return InMemSettingsProvider()
                 }
 
-                override fun providesExternalWebPageHelper(): ExternalWebPageHelper {
+                override fun providesWebPageService(): WebPageService {
                     return mock()
                 }
             }).build()

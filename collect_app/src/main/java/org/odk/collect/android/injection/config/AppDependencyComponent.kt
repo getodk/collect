@@ -89,7 +89,7 @@ import org.odk.collect.projects.ProjectCreator
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.ODKAppSettingsImporter
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.webpage.ExternalWebPageHelper
+import org.odk.collect.webpage.WebPageService
 import javax.inject.Singleton
 
 /**
@@ -298,5 +298,5 @@ interface AppDependencyComponent {
 
     fun projectDependencyModuleFactory(): ProjectDependencyModuleFactory
 
-    fun externalWebPageHelper(): ExternalWebPageHelper
+    fun webPageService(): WebPageService
 }

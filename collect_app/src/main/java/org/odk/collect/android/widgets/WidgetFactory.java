@@ -68,7 +68,7 @@ import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionsProvider;
-import org.odk.collect.webpage.ExternalWebPageHelper;
+import org.odk.collect.webpage.ChromeTabsWebPageService;
 
 /**
  * Convenience class that handles creation of widgets.
@@ -197,7 +197,7 @@ public class WidgetFactory {
                         } else if (appearance.contains(Appearances.NUMBERS)) {
                             questionWidget = new StringNumberWidget(activity, questionDetails, dependencies);
                         } else if (appearance.equals(Appearances.URL)) {
-                            questionWidget = new UrlWidget(activity, questionDetails, new ExternalWebPageHelper(), dependencies);
+                            questionWidget = new UrlWidget(activity, questionDetails, ChromeTabsWebPageService.INSTANCE, dependencies);
                         } else {
                             questionWidget = new StringWidget(activity, questionDetails, dependencies);
                         }
