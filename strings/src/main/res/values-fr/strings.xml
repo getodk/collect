@@ -942,7 +942,7 @@
   <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
   <string name="delete_project_message">En supprimant ce projet, vous supprimerez</string>
   <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
-  <string name="delete_project_instructions">Tapez %1$spour confirmer cette action.</string>
+  <string name="delete_project_instructions">Tapez %1$s pour confirmer cette action.</string>
   <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
   <string name="delete_trigger">supprimer</string>
   <!--The list item for form definition count in the project delete confirmation dialog-->
