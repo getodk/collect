@@ -115,17 +115,28 @@
   <string name="invalid_space_in_answer_plural">Atenção: as respostas %s contêm espaços</string>
   <string name="too_complex_form">Este formulário é complexo demais para este dispositivo. Tente simplificar expressões ou peça ajuda no fórum.</string>
   <string name="survey_internal_error">Erro interno: falha ao abrir a questão.</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Você está no fim de \"%s\".</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
   <string name="form_editing_disabled_after_finalizing">Não é possível editar após finalizar.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
   <string name="form_editing_disabled_after_sending">Não é possível editar após o envio.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
   <string name="form_editing_enabled_after_finalizing">É possível editar após finalizar.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
   <string name="form_editing_enabled_after_sending">É possível editar após o envio.
 </string>
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Se você precisa fazer alterações em seu formulário, utilize \"Salvar como rascunho\" até que você esteja pronto para enviar.</string>
-  <string name="form_editing_enabled_after_finalizing_hint">Para fazer alterações após finalizar o seu formulário, vá para \"Pronto para Enviar\" e toque no ícone de edição.</string>
-  <string name="form_editing_enabled_after_sending_hint">Para fazer alterações após enviar o seu formulário, vá para Enviados e toque no ícone de edição.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <string name="form_editing_enabled_after_finalizing_hint">Para fazer alterações após finalizar o seu formulário, vá para \"Pronto para Enviar\", abra o formulário e toque no ícone de edição.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <string name="form_editing_enabled_after_sending_hint">Para fazer alterações após enviar o seu formulário, vá para Enviados, abra o formulário e toque no ícone de edição.</string>
+  <!--Button text for saving as draft-->
   <string name="save_as_draft">Salvar como rascunho</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
   <string name="finalize">Finalizar</string>
+  <!--Button text for sending a submission.-->
   <string name="send">Enviar</string>
   <string name="data_saved_error">Desculpe, falha ao salvar formulário!</string>
   <string name="data_saved_ok">Formulário salvo com sucesso!</string>
@@ -139,9 +150,11 @@
   <string name="keep_editing">Continuar editando</string>
   <string name="quit_form_title">Salvar o formulário?</string>
   <string name="save_explanation">Você pode salvar esse formulário e acessá-lo em seus rascunhos a qualquer momento.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_explanation_with_last_saved">\'Esse formulário foi salvo em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm\'. Salve como rascunho para manter as alterações.\'</string>
   <string name="quit_form_continue_title">Continuar editando?</string>
   <string name="discard_form_warning">Se descartar o formulário, você perderá todas as alterações que fez até agora.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="discard_changes_warning">\'Esse formulário foi salvo em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm\'. Se você descartar as alterações, você pederá qualquer mudança que tiver feito desde então.\'</string>
   <string name="saving_form">Salvando Formulário</string>
   <string name="survey_saving_validating_message">Validando respostas…</string>
@@ -186,7 +199,12 @@
   <string name="install_openmapkit">Por favor, instala o OpenMapKit!</string>
   <string name="get_barcode">Capturar Código de Barra</string>
   <string name="replace_barcode">Trocar Código de Barras</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">Coloque o código de barras dentro do retângulo</string>
+  <!--Message shown when barcode is successfully scanned-->
+  <string name="barcode_scanned">Código de barras lido com sucesso</string>
+  <!--Label for button that exits barcode scanning after success-->
+  <string name="exit_scanning">Feito</string>
   <string name="open_file">Abrir arquivo</string>
   <string name="rank_items">Ordenar itens</string>
   <string name="number_picker_title">Teclado para escolher números</string>
@@ -340,17 +358,29 @@
   <string name="persian_month_11">Bahman</string>
   <string name="persian_month_12">Esfand</string>
   <!--1st month in the Buddhist calendar-->
+  <string name="buddhist_month_1">makara</string>
   <!--2nd month in the Buddhist calendar-->
+  <string name="buddhist_month_2">kumbha</string>
   <!--3rd month in the Buddhist calendar-->
+  <string name="buddhist_month_3">mīna</string>
   <!--4th month in the Buddhist calendar-->
+  <string name="buddhist_month_4">meṣa</string>
   <!--5th month in the Buddhist calendar-->
+  <string name="buddhist_month_5">vṛṣabha</string>
   <!--6th month in the Buddhist calendar-->
+  <string name="buddhist_month_6">mithuna</string>
   <!--7th month in the Buddhist calendar-->
+  <string name="buddhist_month_7">karkaṭa</string>
   <!--8th month in the Buddhist calendar-->
+  <string name="buddhist_month_8">sinha</string>
   <!--9th month in the Buddhist calendar-->
+  <string name="buddhist_month_9">kanyā</string>
   <!--10th month in the Buddhist calendar-->
+  <string name="buddhist_month_10">tulā</string>
   <!--11th month in the Buddhist calendar-->
+  <string name="buddhist_month_11">vṛścika</string>
   <!--12th month in the Buddhist calendar-->
+  <string name="buddhist_month_12">dhanu</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
@@ -409,6 +439,7 @@
   <!--Title for the screen that allows the user to select a offline layer for maps-->
   <string name="offline_layer_dialog_title">Selecionar camada offline</string>
   <!--Description of how to add offline layers to the project-->
+  <string name="offline_layer_dialog_description">Selecione a camada offline para uso em todos os mapas deste projeto. Você pode adicionar opções à lista selecionando um arquivo MBTiles do seu dispositivo e também excluir camadas existentes da lista.</string>
   <!--Text of button user can press to get help when setting up Offline Layers-->
   <string name="get_help_with_offline_layers">Saber mais sobre adicionar MBTiles.</string>
   <!--Text for button that lets the user select a offline layer on their device to add-->
@@ -416,19 +447,31 @@
   <!--Text for button that lets the user delete a offline layer-->
   <string name="delete_layer">Apagar camada</string>
   <!--Text for title displayed in a dialog to inform that some/all the selected files are not MBTiles and they can't be imported-->
+  <plurals name="non_mbtiles_files_selected_title">
+    <item quantity="one">%d camada não pode ser adicionada</item>
+    <item quantity="many">%d camadas não puderam ser adicionadas</item>
+    <item quantity="other">%d camadas não puderam ser adicionadas</item>
+  </plurals>
   <!--Text for message displayed in a dialog to inform that all the selected files are not MBTiles and they can't be imported-->
   <string name="all_non_mbtiles_files_selected_message">Os arquivos selecionados não são do formato MTTiles. Você só pode adicionar arquivos do formato MBTiles.</string>
   <!--Text for message displayed in a dialog to inform that some of the selected files are not MBTiles and they can't be imported-->
+  <string name="some_non_mbtiles_files_selected_message">Alguns dos arquivos que você selecionou não são do formato MTTiles. Você só pode adicionar arquivos do formato MBTiles.</string>
   <!--Text for title above list of layers-->
   <string name="layers_list_title">Camadas</string>
   <!--Text for title and subtitle above options for how the layer can be access-->
+  <string name="select_layer_access_title">Selecionar acesso às camadas</string>
+  <string name="select_layer_access_subtitle">Você deseja que as camadas esteja disponíveis em todos os projetos ou somente no projeto atual?</string>
   <!--Text for option where layer should be available to all projects-->
   <string name="all_projects_option">Todos os projetos</string>
   <!--Text for option where layer should be available to the current project only-->
   <string name="current_project_option">Apenas o projeto atual</string>
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
+  <string name="delete_layer_confirmation_message">Você tem certeza que deseja excluir a camada offline %1$s?</string>
   <string name="record_geopoint">Registre um ponto</string>
+  <string name="location_accuracy">Precisão: %1$s</string>
+  <string name="location_accuracy_unacceptable">⚠️ Precisão: %1$s (inaceitável)</string>
   <string name="provider_disabled_error">Desculpe, provedor de localização desabilitado!</string>
+  <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$s m\nPrecisão: %4$s m</string>
   <string name="google_play_services_not_available">Este formulário necessita rastrear sua localização, mas o Google Play Services não está disponível.</string>
   <string name="location_providers_disabled_dialog_message">Este formulário necessita rastrear sua localização, mas a localização está desabilitada no seu dispositivo. Por favor, habilite nas configurações do celular.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -453,6 +496,7 @@
   <string name="improving_accuracy">Melhorando a acurácia. Por favor, aguarde.</string>
   <string name="accuracy_status_title">Obtendo localização</string>
   <!--The accuracy of a location fix in meters-->
+  <string name="accuracy_m">%1$s m</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s %2$s %3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -503,6 +547,7 @@
   <string name="collection_status_auto_minutes">Pontos inseridos: %1$d (registrados a cada %2$d min)</string>
   <string name="collection_status_auto_seconds_accuracy">Pontos inseridos: %1$d (registro a cada %2$d s, com precisão de %3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">Pontos inseridos: %1$d (registro a cada %2$d m, com precisão de %3$d m)</string>
+  <string name="geopoint_instruction">Pressione por mais tempo para colocar marcador ou selecione o botão Adicionar Marcador.</string>
   <string name="geopoint_no_draggable_instruction">Selecione o botão Adicionar Marcador.</string>
   <string name="discard">Descartar</string>
   <string name="select_item_count">1 %s: 2 %d (2 %d mostrado no mapa)</string>
@@ -556,7 +601,10 @@
   <string name="form_updates_available">Atualizações de formulários disponíveis</string>
   <string name="newer_version_of_a_form_info">Esta é uma atualização de um formulário que você possui</string>
   <string name="form_update_error">Falha na atualização do formulário</string>
+  <string name="form_update_error_massage">Abrir o ODK Collect para tentar novamente</string>
   <string name="form_update_succeeded">Sucesso na atualização do formulário</string>
+  <!--Text for notification shown while syncing forms with the server-->
+  <string name="form_update_notification_title">Sincronizando formulários</string>
   <string name="load_remote_form_error">Falha ao baixar a lista de formulários</string>
   <string name="forms_download_succeeded">Formulários baixados com sucesso</string>
   <string name="forms_download_failed">Falha no download dos formulários</string>
@@ -579,6 +627,7 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">O servidor não forneceu uma chave para esse formulário.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_parsing_error">Esse formulário não pode ser processado:</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">Um erro de acesso a disco ocorreu ao baixar esse formulário.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -611,6 +660,7 @@
   <!--Title of a settings section-->
   <string name="client">Interface de usuário</string>
   <!--Subtext of a settings section-->
+  <string name="user_interface_settings_subtext">Idioma do aplicativo, tamanho de fonte, navegação</string>
   <!--Title of a settings section-->
   <string name="maps">Mapas</string>
   <!--Subtext of a settings section-->
@@ -750,6 +800,7 @@
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">Configurações desbloqueadas</string>
   <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
+  <string name="setting_not_available_during_form_entry">Parâmetro não disponível durante o preenchimento do formulário</string>
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -887,6 +938,24 @@
   <string name="using_project">Usando %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Alternar para %s</string>
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <string name="delete_project_dialog_title">Apagar %s</string>
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <string name="delete_project_message">Ao excluir esse projeto, você excluirá permanentemente o seguinte</string>
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <string name="delete_project_instructions">Digite %1$s para confirmar essa ação.</string>
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <string name="delete_trigger">apagar</string>
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <string name="form_definitions_count">Definições do formulário: %1$d</string>
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <string name="sent_count">Enviado: %1$d</string>
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <string name="unsent_count">Não enviados: %1$d</string>
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <string name="drafts_count">Rascunhos: %1$d</string>
+  <!--Text for the button that confirms deleting the project-->
+  <string name="delete_project_confirm_button_text">Apagar o projeto</string>
   <string name="or">OR</string>
   <string name="hex_color">Código de cor hexadecimal</string>
   <string name="invalid_hex_code">Código de cor hexadecimal inválido</string>
@@ -929,6 +998,7 @@
   <!--Error shown when a user tries to open a form but there is more than one form with the same form ID-->
   <string name="survey_multiple_forms_error">Dois formulários foram descarregados com a mesma identificação e versão. Talvez eles sejam os mesmos formulários carregados várias vezes ou junto a servidores diferentes. De todo modo, um deles deve ser apagado.</string>
   <!--Error shown when a user tries to open a form when forms update is being applied in the background-->
+  <string name="cannot_open_form_because_of_forms_update">Esse formulário não pode ser aberto agora porque os formulários estão sendo atualizados. Por favor, tente novamente em breve.</string>
   <!--##############################################
     # Permissions
     ##############################################-->
@@ -939,7 +1009,9 @@
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">Ver listas de entidades</string>
   <!--Label for entity that has been created offline and is not on the server yet-->
+  <string name="offline">Offline</string>
   <!--Error message displayed when a user opens a form with an unrecognized entity version-->
+  <string name="unrecognized_entity_version">Este formulário não é compatível com esta versão do ODK Collect. Por favor, atualize o ODK Collect. Se o problema persistir, informe a pessoa responsável pela coleta de dados.\n\nVersão de especificação das Entidades do Formulário: %s</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
@@ -948,6 +1020,7 @@
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
+  <string name="google_drive_removed_message">Este projeto estava conectado anteriormente a uma conta do Google Drive. O suporte ao Google Drive foi removido. Você pode configurar um servidor ou enviar as respostas para um computador.</string>
   <string name="learn_more_button_text">Saiba mais</string>
   <!--##############################################
     # Developer tools
@@ -959,6 +1032,10 @@
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Forçar uma exceção não tratada causando a quebra do aplicativo</string>
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <string name="debug_filters">Filtros de debug</string>
+  <string name="debug_filters_summary">Mostrar informações de diagnóstico de erros para execuções de filtragens durante o preenchimento do formulário</string>
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
+  <string name="use_zxing_for_barcode_scanning">Reverter para o scanner de código de barras antigo</string>
   <string name="permission_dialog_title">Sobre permissões</string>
   <string name="permission_dialog_text">Você deverá permitir que o ODK Collect tenha acesso às configurações abaixo, selecione \"permitir\" se você deseja usá-las.</string>
   <string name="notifications">Notificações</string>
@@ -1068,6 +1145,7 @@
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">Recuperar o seu trabalho?</string>
   <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="savepoint_recovery_dialog_message">\'O Collect foi encerrado de forma inesperada em \'EEE, dd MMM yyyy \'às\' HH:mm\' e salvou o seu trabalho.\n\nVocê deseja recuperar ou descartar esses dados?\'</string>
   <!--Text for the button that accepts the recovery of the work-->
   <string name="recover">Recuperar</string>
   <!--Text for the button that declines the recovery of the work-->
@@ -1093,13 +1171,23 @@
   <!--Text for the button that displays a map for viewing an already existing polygon-->
   <string name="view_polygon">Visualizar polígono</string>
   <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <string name="settings_json">Parâmetros JSON</string>
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <string name="preparing_form_edit">Preparando o formulário para edição…</string>
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <string name="user_visible_instance_name">%s (Alteração %d )</string>
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_title">Continuar editando o rascunho?</string>
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="newer_draft_edit_found_dialog_message">\'Uma alteração rascunho foi salva em \'EEE, dd MMM yyyy \'às\' HH:mm\'\n\nVocê deseja retomar esta alteração?\'</string>
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_positive_button">Continuar editando</string>
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_title">Editar a versão mais recente?</string>
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="newer_finalized_edit_found_dialog_message">\'Essa resposta foi alterada anteriormente.\n\nVocê gostaria de alterar a última versão finalizada em\' EEE, dd MMM yyyy \'às\' HH:mm\'?\'</string>
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_positive_button">Editar o formulário mais recente</string>
   <!--Text for the snackbar shown when editing of a finalized form begins-->
+  <string name="finalized_form_edit_started">Você está em modo de edição do formulário agora. Toque em uma questão para começar a editar.</string>
 </resources>

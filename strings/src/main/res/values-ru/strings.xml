@@ -113,10 +113,21 @@
   <string name="invalid_space_in_answer_plural">Внимание: нижеследующие значения %s содержат пробелы</string>
   <string name="too_complex_form">Эта форма слишком сложна для этого устройства. Попробуйте упростить структуру или обратитесь за помощью на форум.</string>
   <string name="survey_internal_error">Внутренняя ошибка: step to prompt failed.</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Вы в конце опросника \"%s\"</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Если вам необходимо внести изменения в форму, сохраните ее как черновик, пока не будете готовы к отправке</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <!--Button text for saving as draft-->
   <string name="save_as_draft">Сохранить как черновик</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
   <string name="finalize">Завершить</string>
+  <!--Button text for sending a submission.-->
   <string name="send">Отправить</string>
   <string name="data_saved_error">Не удалось сохранить ответы</string>
   <string name="data_saved_ok">Ответы успешно сохранены</string>
@@ -130,9 +141,11 @@
   <string name="keep_editing">Продолжить редактирование</string>
   <string name="quit_form_title">Сохранить форму?</string>
   <string name="save_explanation">Вы можете сохранить эту форму и получить к ней доступ из своих черновиков в любое время.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_explanation_with_last_saved">\'В последний раз эта форма была сохранена\' EEE, MMM dd, yyyy \'в\' HH:mm\'. Сохраните как черновик, чтобы сохранить изменения\'.</string>
   <string name="quit_form_continue_title">Продолжить редактирование?</string>
   <string name="discard_form_warning">Если вы отмените форму, вы потеряете все изменения, которые вы сделали до сих пор.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="discard_changes_warning">\'В последний раз эта форма была сохранена\' EEE, MMM dd, yyyy \'в\' HH:mm\'. Если вы отмените изменения, вы потеряете все изменения, сделанные с тех пор\'.</string>
   <string name="saving_form">Выполняется сохранение …</string>
   <string name="survey_saving_validating_message">Проверка ответов…</string>
@@ -177,7 +190,10 @@
   <string name="install_openmapkit">Пожалуйста, установите OpenMapKit!</string>
   <string name="get_barcode">Получить штрих-код</string>
   <string name="replace_barcode">Заменить штрих-код</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">Вместите штрихкод внутрь прямоугольника</string>
+  <!--Message shown when barcode is successfully scanned-->
+  <!--Label for button that exits barcode scanning after success-->
   <string name="open_file">Открыть файл</string>
   <string name="rank_items">Сортировать</string>
   <string name="number_picker_title">Выбор номера</string>
@@ -524,6 +540,7 @@
   <string name="newer_version_of_a_form_info">Это обновление для уже имеющегося у вас опросника</string>
   <string name="form_update_error">Не удалось обновить форму</string>
   <string name="form_update_succeeded">Обновление формы выполнено успешно</string>
+  <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">Не удалось загрузить список форм</string>
   <string name="forms_download_succeeded">Загрузка форм выполнена успешно</string>
   <string name="forms_download_failed">Не удалось загрузить формы</string>
@@ -850,6 +867,15 @@
   <string name="using_project">Используется %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Переключить на %s</string>
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <!--Text for the button that confirms deleting the project-->
   <string name="or">ИЛИ</string>
   <string name="hex_color">HEX цвет</string>
   <string name="invalid_hex_code">Неверный HEX код</string>
@@ -923,6 +949,7 @@
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Вызвать исключение, вызывающее сбой приложения</string>
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
   <string name="permission_dialog_title">О доступе</string>
   <string name="notifications">Уведомления</string>
   <string name="required_for_notifications">Требуется для отображения обновлений при загрузке, обновлении и отправке форм.</string>
@@ -1017,10 +1044,10 @@
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <!--Text for the snackbar shown when editing of a finalized form begins-->
 </resources>

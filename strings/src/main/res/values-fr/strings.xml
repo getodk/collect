@@ -115,16 +115,27 @@
   <string name="invalid_space_in_answer_plural">Attention: les noms 1%s contiennent des espaces</string>
   <string name="too_complex_form">Ce formulaire est trop complexe pour cet appareil. Essayez de simplifier les expressions ou demandez de l\'aide sur le forum.</string>
   <string name="survey_internal_error">Erreur interne : un ou plusieurs champs de saisie peuvent avoir été ignorés.</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
   <string name="form_editing_disabled_after_finalizing">Vous ne pourrez pas éditer ce formulaire après sa finalisation.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
   <string name="form_editing_disabled_after_sending">Vous ne pourrez pas éditer ce formulaire après qu\'il soit envoyé.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
   <string name="form_editing_enabled_after_finalizing">Vous pourrez éditer ce formulaire après qu\'il soit finalisé.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
   <string name="form_editing_enabled_after_sending">Vous pourrez éditer ce formulaire après qu\'il soit envoyé.</string>
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Si vous devrez modifier ce formulaire prochainement, choisissez \"Enregistrer comme ébauche\" jusqu\'à ce que vous soyez prêt à l\'envoyer.</string>
-  <string name="form_editing_enabled_after_finalizing_hint">Pour modifier les données après avoir finalisé votre formulaire, trouvé le dans \"Prêt à envoyé\" et appuyez sur l\'icône d\'édition.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <string name="form_editing_enabled_after_finalizing_hint">Pour modifier les données après avoir finalisé votre formulaire, trouvé le dans \"Prêt à envoyer\" et appuyez sur l\'icône d\'édition.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
   <string name="form_editing_enabled_after_sending_hint">Pour modifier les données après avoir envoyé votre formulaire, allez à \"Envoyé\" et appuyez sur l\'icône d\'édition.</string>
+  <!--Button text for saving as draft-->
   <string name="save_as_draft">Enregistrer comme ébauche</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
   <string name="finalize">Finaliser</string>
+  <!--Button text for sending a submission.-->
   <string name="send">Envoyer</string>
   <string name="data_saved_error">Désolé, l\'enregistrement du formulaire a échoué.</string>
   <string name="data_saved_ok">Le formulaire a été enregistré avec succès.</string>
@@ -138,9 +149,11 @@
   <string name="keep_editing">Continuer l\'édition</string>
   <string name="quit_form_title">Enregistrer le formulaire ?</string>
   <string name="save_explanation">Vous pouvez enregistrer ce formulaire et y accéder depuis vos ébauches à tout moment.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_explanation_with_last_saved">\'Ce formulaire a été enregistré pour la dernière fois le\' EEE MMM dd yyyy \'à\' HH\'h\'mm\'. Enregistrer comme ébauche pour conserver les modifications.\'</string>
   <string name="quit_form_continue_title">Continuer l\'édition ?</string>
   <string name="discard_form_warning">Si vous fermez le formulaire, vous perdrez toutes les modifications que vous y avez apportées.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="discard_changes_warning">\'Ce formulaire a été enregistré pour la dernière fois le\' EEE MMM dd yyyy \'à\' HH\'h\'mm\'. Si vous abandonnez les modifications, vous perdrez toutes celles apportées depuis.\'</string>
   <string name="saving_form">Sauvegarde du formulaire…</string>
   <string name="survey_saving_validating_message">Validation des réponses…</string>
@@ -183,9 +196,14 @@
   <string name="invalid_osm_data">Une erreur s\'est produite. Les données OSM valides ne peuvent être obtenues.</string>
   <string name="alert">Alerte</string>
   <string name="install_openmapkit">Veuillez installer OpenMapKit.</string>
-  <string name="get_barcode">Obtention du code-barre</string>
+  <string name="get_barcode">Scanner un code-barres</string>
   <string name="replace_barcode">Remplacer le code-barre</string>
-  <string name="barcode_scanner_prompt">Mettre le code-barre dans le rectangle</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
+  <string name="barcode_scanner_prompt">Mettre le code-barres dans le rectangle</string>
+  <!--Message shown when barcode is successfully scanned-->
+  <string name="barcode_scanned">Code-barres numérisé avec succès</string>
+  <!--Label for button that exits barcode scanning after success-->
+  <string name="exit_scanning">Terminé</string>
   <string name="open_file">Ouvrir fichier</string>
   <string name="rank_items">Choisir l\'ordre des éléments</string>
   <string name="number_picker_title">Sélecteur de numéro</string>
@@ -582,7 +600,10 @@
   <string name="form_updates_available">Mise à jour de formulaire disponible</string>
   <string name="newer_version_of_a_form_info">Ceci est une version mise à jour d\'un formulaire dont vous disposez déjà !</string>
   <string name="form_update_error">Échec de mise à jour des formulaires</string>
+  <string name="form_update_error_massage">Ouvrez ODK Collect pour réessayer</string>
   <string name="form_update_succeeded">Succès de mise à jour des formulaires</string>
+  <!--Text for notification shown while syncing forms with the server-->
+  <string name="form_update_notification_title">Synchronisation des formulaires</string>
   <string name="load_remote_form_error">Échec de téléchargement de la liste des formulaires</string>
   <string name="forms_download_succeeded">Succès du téléchargement des formulaires.</string>
   <string name="forms_download_failed">Échec du téléchargement des formulaires.</string>
@@ -916,6 +937,24 @@
   <string name="using_project">Projet %s en utilisation</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Changer à %s</string>
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <string name="delete_project_dialog_title">Supprimer %s</string>
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <string name="delete_project_message">En supprimant ce projet, vous supprimerez</string>
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <string name="delete_project_instructions">Tapez %1$s pour confirmer cette action.</string>
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <string name="delete_trigger">supprimer</string>
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <string name="form_definitions_count">Formulaires vierges: %1$d</string>
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <string name="sent_count">Envoyés: %1$d</string>
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <string name="unsent_count">Prêts à envoyer: %1$d</string>
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <string name="drafts_count">Ébauches: %1$d</string>
+  <!--Text for the button that confirms deleting the project-->
+  <string name="delete_project_confirm_button_text">Supprimer projet</string>
   <string name="or">OU</string>
   <string name="hex_color">Couleur hex</string>
   <string name="invalid_hex_code">Code de couleur hex n\'est pas valide</string>
@@ -995,6 +1034,8 @@
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
   <string name="debug_filters">Filtres de débogage</string>
   <string name="debug_filters_summary">Afficher des informations de débogage pour les filtres pendant la saisie du formulaire</string>
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
+  <string name="use_zxing_for_barcode_scanning">Retourner à l\'ancien scanner de codes-barres</string>
   <string name="permission_dialog_title">A propos des permissions</string>
   <string name="permission_dialog_text">Il vous sera demandé d\'autoriser ODK Collect à accéder aux fonctions ci-dessous, sélectionnez \"autoriser\" si vous souhaitez les utiliser.</string>
   <string name="notifications">Notifications</string>
@@ -1137,13 +1178,13 @@
   <string name="user_visible_instance_name">%s (modification %d)</string>
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <string name="newer_draft_edit_found_dialog_title">Continuez d\'éditer l\'ébauche?</string>
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="newer_draft_edit_found_dialog_message">\'Il existe une ébauche de modification en cours sauvegardée le\' EEE dd MMM yyyy \'à\' HH\'h\'mm\'\n\nVoulez-vous la reprendre?\'</string>
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <string name="newer_draft_edit_found_dialog_positive_button">Reprendre l\'ébauche</string>
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <string name="newer_finalized_edit_found_dialog_title">Modifier la dernière version?</string>
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="newer_finalized_edit_found_dialog_message">\'Cette soumission a déjà été modifiée.\n\nAimeriez-vous modifier la dernière version finalisée le\' EEE dd MMM yyyy \'à\' HH\'h\'mm\'?\'</string>
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <string name="newer_finalized_edit_found_dialog_positive_button">Modifier la dernière version</string>

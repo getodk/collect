@@ -115,10 +115,27 @@
   <string name="invalid_space_in_answer_plural">Attenzione: ci sono degli spazi nei valori sottostanti %s </string>
   <string name="too_complex_form">Questo modulo è troppo complesso per questo dispositivo. Prova a semplificare le espressioni o chiedi aiuto sul forum. </string>
   <string name="survey_internal_error">Errore interno: invio suggerimento fallito.</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Ti trovi alla fine di \"%s\".</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <string name="form_editing_disabled_after_finalizing">Non è possibile apportare modifiche dopo la finalizzazione.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <string name="form_editing_disabled_after_sending">Non è possibile apportare modifiche dopo l\'invio.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <string name="form_editing_enabled_after_finalizing">È possibile apportare modifiche dopo la finalizzazione.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <string name="form_editing_enabled_after_sending">È possibile apportare modifiche dopo l\'invio.</string>
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Se devi apportare modifiche al modulo, \"Salva come bozza\" finché non sei pronto per l\'invio.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <string name="form_editing_enabled_after_finalizing_hint">Per apportare modifiche dopo aver completato il formulario, vai su “Pronto per l\'invio”, apri il formulario e tocca l\'icona di modifica.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <string name="form_editing_enabled_after_sending_hint">Per apportare modifiche dopo aver inviato il formulario, vai su “Inviati”, apri il formulario e tocca l\'icona di modifica.</string>
+  <!--Button text for saving as draft-->
   <string name="save_as_draft">Salva come bozza</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
   <string name="finalize">Finalizzare</string>
+  <!--Button text for sending a submission.-->
   <string name="send">Invia</string>
   <string name="data_saved_error">Spiacenti, salvataggio modulo fallito!</string>
   <string name="data_saved_ok">Modulo salvato correttamente!</string>
@@ -132,9 +149,11 @@
   <string name="keep_editing">Continua a modificare</string>
   <string name="quit_form_title">Salvare il Modulo?</string>
   <string name="save_explanation">Puoi salvare questo modulo e accedervi dalle tue bozze in qualsiasi momento.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_explanation_with_last_saved">\'Questo modulo è stato salvato l\'\'ultima volta il\' EEE, MMM dd, yyyy \'alle\' HH:mm\'. Salva come bozza per conservare le modifiche.\'</string>
   <string name="quit_form_continue_title">Continua con le modifiche?</string>
   <string name="discard_form_warning">Se elimini il modulo, perderai tutte le modifiche apportate fino a quel momento.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="discard_changes_warning">\'Questo modulo è stato salvato l\'\'ultima volta il\' EEE, MMM dd, yyyy \'alle\' HH:mm\'. Se scarti le modifiche, perderai tutte le modifiche apportate da allora.\'</string>
   <string name="saving_form">Salvataggio Modulo</string>
   <string name="survey_saving_validating_message">Convalida risposte…</string>
@@ -179,7 +198,10 @@
   <string name="install_openmapkit">Per favore installare OpenMapKit!</string>
   <string name="get_barcode">Cattura un codice a barre</string>
   <string name="replace_barcode">Sostituire il codice a barre</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">Inserire il codice a barre dentro il rettangolo</string>
+  <!--Message shown when barcode is successfully scanned-->
+  <!--Label for button that exits barcode scanning after success-->
   <string name="open_file">Apri documento</string>
   <string name="rank_items">Ordina gli elementi</string>
   <string name="number_picker_title">Selezionatore numerico</string>
@@ -521,6 +543,7 @@
   <string name="collection_status_auto_minutes">Punti inseriti: %1$d (salva ogni %2$d min)</string>
   <string name="collection_status_auto_seconds_accuracy">Punti inseriti: %1$d (salva ogni %2$d sec, precisione %3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">Punti inseriti: %1$d (salva ogni %2$d min, precisione %3$d m)</string>
+  <string name="geopoint_instruction">Long press to place mark or tap add marker button</string>
   <string name="geopoint_no_draggable_instruction">Tocca Aggiungi Posizione.</string>
   <string name="discard">Annulla</string>
   <string name="select_item_count">%s: %d (%d mostrato sulla mappa)</string>
@@ -575,6 +598,8 @@
   <string name="newer_version_of_a_form_info">Questo è un aggiornamento di un form che hai già</string>
   <string name="form_update_error">Aggiornamento Formulario fallito</string>
   <string name="form_update_succeeded">Aggiornamento Formulario riuscito</string>
+  <!--Text for notification shown while syncing forms with the server-->
+  <string name="form_update_notification_title">Sincronizzazione dei formulari</string>
   <string name="load_remote_form_error">Download elenco formulari non riuscito </string>
   <string name="forms_download_succeeded">Download Formulari riuscito</string>
   <string name="forms_download_failed">Download formulari non riuscito </string>
@@ -597,6 +622,7 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">Il server non ha fornito un hash per questo modulo.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_parsing_error">Questo formulario non può essere elaborato:</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">Si è verificato un errore del disco sul dispositivo durante il download di questo modulo.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -769,6 +795,7 @@
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">Impostazioni sbloccate</string>
   <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
+  <string name="setting_not_available_during_form_entry">Impostazione non disponibile durante l\' immissione nel formulario</string>
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -906,6 +933,15 @@
   <string name="using_project">Usando %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Cambia a %s</string>
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <!--Text for the button that confirms deleting the project-->
   <string name="or">O</string>
   <string name="hex_color">Colore esadecimale</string>
   <string name="invalid_hex_code">Invalido colore esadecimale</string>
@@ -983,6 +1019,7 @@
   <string name="crash_app_summary">Forza un\'eccezione non rilevata che causa l\'arresto anomalo dell\'app</string>
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
   <string name="debug_filters">filtri Debug </string>
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
   <string name="permission_dialog_title">In merito ai permessi</string>
   <string name="permission_dialog_text">Ti verrà chiesto di consentire a ODK Collect di accedere alle funzionalità seguenti, seleziona \"consenti\" se desideri utilizzarle.</string>
   <string name="notifications">Notifiche</string>
@@ -1120,16 +1157,19 @@
   <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
   <string name="settings_json">Impostazioni JSON</string>
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <string name="preparing_form_edit">Preparazione del formulario per la modifica…</string>
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
   <string name="user_visible_instance_name">%s (Modifica%d)</string>
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <string name="newer_draft_edit_found_dialog_title">Continua a modificare la bozza?</string>
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <string name="newer_draft_edit_found_dialog_positive_button">Ricomincia a modificare</string>
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_title">Modifica ultima versione?</string>
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <string name="newer_finalized_edit_found_dialog_positive_button">Modifica ultimo Modulo</string>
   <!--Text for the snackbar shown when editing of a finalized form begins-->
+  <string name="finalized_form_edit_started">Stai modificando questo formulario. Tocca una domanda per iniziare a modificarla.</string>
 </resources>

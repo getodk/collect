@@ -115,16 +115,27 @@
   <string name="invalid_space_in_answer_plural">Varoitus: taustalla olevissa arvoissa %s on välilyöntejä</string>
   <string name="too_complex_form">Tämä lomake on liian monimutkainen tälle laitteelle. Yritä lausekkeiden yksinkertaistamista tai pyydä apua verkon keskusteluryhmästä.</string>
   <string name="survey_internal_error">Sisäinen virhe: siirtyminen kehotteeseen epäonnistui.</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Olet lomakkeen %s lopussa.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
   <string name="form_editing_disabled_after_finalizing">Muokkauksia ei voi tehdä viimeistelyn jälkeen.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
   <string name="form_editing_disabled_after_sending">Muokkauksia ei voi tehdä lähettämisen jälkeen.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
   <string name="form_editing_enabled_after_finalizing">Muokkauksia voi tehdä viimeistelyn jälkeen.</string>
-  <string name="form_editing_enabled_after_sending">Muokkauksia ei voi tehdä lähettämisen jälkeen.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <string name="form_editing_enabled_after_sending">Muokkauksia voi tehdä lähettämisen jälkeen.</string>
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Jos sinun tarvitsee tehdä muutoksia lomakkeeseesi, \"Tallenna luonnoksena\" kunnes olet valmis lähettämään.</string>
-  <string name="form_editing_enabled_after_finalizing_hint">Tehdäksesi muutoksia kun olet viimeistellyt lomakkeesi, mene kohtaan \"Valmis lähetettäväksi\" ja täppää muokkauskuvaketta.</string>
-  <string name="form_editing_enabled_after_sending_hint">Tehdäksesi muutoksia kun olet lähettänyt lomakkeesi, mene kohtaan \"Lähetetty\" ja täppää muokkauskuvaketta.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <string name="form_editing_enabled_after_finalizing_hint">Tehdäksesi muutoksia kun olet viimeistellyt lomakkeesi, mene kohtaan \"Valmis lähetettäväksi\", avaa lomake ja täppää muokkauskuvaketta.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <string name="form_editing_enabled_after_sending_hint">Tehdäksesi muutoksia kun olet lähettänyt lomakkeesi, mene kohtaan \"Lähetetty\", avaa lomake ja täppää muokkauskuvaketta.</string>
+  <!--Button text for saving as draft-->
   <string name="save_as_draft">Tallenna luonnoksena</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
   <string name="finalize">Viimeistele</string>
+  <!--Button text for sending a submission.-->
   <string name="send">Lähetä</string>
   <string name="data_saved_error">Pahoittelut, lomakkeen tallennus epäonnistui!</string>
   <string name="data_saved_ok">Lomake tallennettu!</string>
@@ -138,9 +149,11 @@
   <string name="keep_editing">Jatka muokkausta</string>
   <string name="quit_form_title">Tallennetaanko lomake?</string>
   <string name="save_explanation">Voit tallentaa tämän lomakkeen ja löytää sen milloin tahansa luonnostesi joukosta.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_explanation_with_last_saved">\'Tämä lomake tallennettiin viimeksi\' EEE dd.MM.yyyy \'kello\' HH:mm\'. Tallenna luonnos säilyttääksesi muutokset.\'</string>
   <string name="quit_form_continue_title">Jatketaanko muokkausta?</string>
   <string name="discard_form_warning">Jos hylkäät lomakkeen, tulet menettämään kaikki tähän mennessä tekemäsi muutokset.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="discard_changes_warning">\'Tämä lomake tallennettiin viimeksi\' EEE dd.MM.yyyy \'kello\' HH:mm\'. Jos hylkäät muutokset, tulet menettämään kaikki tähän mennessä tekemäsi muutokset.\'</string>
   <string name="saving_form">Tallentamassa lomaketta</string>
   <string name="survey_saving_validating_message">Tarkistetaan vastauksia…</string>
@@ -185,7 +198,12 @@
   <string name="install_openmapkit">Ole hyvä ja asenna OpenMapKit!</string>
   <string name="get_barcode">Hae viivakoodi</string>
   <string name="replace_barcode">Korvaa viivakoodi</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">Aseta viivakoodi suorakaiteen sisään</string>
+  <!--Message shown when barcode is successfully scanned-->
+  <string name="barcode_scanned">Viivakoodin skannaus onnistui</string>
+  <!--Label for button that exits barcode scanning after success-->
+  <string name="exit_scanning">Valmis</string>
   <string name="open_file">Avaa tiedosto</string>
   <string name="rank_items">Järjestä</string>
   <string name="number_picker_title">Numerovalitsin</string>
@@ -578,7 +596,10 @@
   <string name="form_updates_available">Lomakepäivityksiä saatavilla</string>
   <string name="newer_version_of_a_form_info">Tämä on päivitys lomakkeeseen, joka sinulla on</string>
   <string name="form_update_error">Lomakkeen päivitys epäonnistui</string>
+  <string name="form_update_error_massage">Avaa ODK Collect yrittääksesi uudestaan</string>
   <string name="form_update_succeeded">Lomakkeen päivitys onnistui</string>
+  <!--Text for notification shown while syncing forms with the server-->
+  <string name="form_update_notification_title">Lomakkeita synkronoidaan</string>
   <string name="load_remote_form_error">Lomakeluettelon lataaminen epäonnistui</string>
   <string name="forms_download_succeeded">Lomakkeiden hakeminen onnistui</string>
   <string name="forms_download_failed">Lomakkeiden hakeminen epäonnistui</string>
@@ -850,7 +871,7 @@
   <string name="scan_qr_code_fragment_title">Skannaus</string>
   <string name="view_qr_code_fragment_title">QR-koodi</string>
   <string name="import_qrcode_sd">Tuo QR-koodi</string>
-  <string name="successfully_imported_settings">Asetukset haettu onnistuneesti</string>
+  <string name="successfully_imported_settings">Asetusten hakeminen onnistui</string>
   <string name="encoding_max_limit" tools:ignore="UnusedResources">Merkkien maksimimäärä ylitetty: QR-koodia ei voida luoda kaikille asetuksille</string>
   <string name="share">Jaa</string>
   <string name="turn_on_flashlight">Taskulamppu päälle</string>
@@ -912,6 +933,24 @@
   <string name="using_project">%s käytössä</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Vaihda projektiin %s</string>
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <string name="delete_project_dialog_title">Poista %s</string>
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <string name="delete_project_message">Poistamalla tämän projektin, poistat pysyvästi seuraavat</string>
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <string name="delete_project_instructions">Kirjoita %1$s vahvistaaksesi tämän.</string>
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <string name="delete_trigger">poista</string>
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <string name="form_definitions_count">Lomakemäärittelyjä: %1$d</string>
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <string name="sent_count">Lähetettyjä: %1$d</string>
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <string name="unsent_count">Lähettämättömiä: %1$d</string>
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <string name="drafts_count">Luonnoksia: %1$d</string>
+  <!--Text for the button that confirms deleting the project-->
+  <string name="delete_project_confirm_button_text">Poista projekti</string>
   <string name="or">OR</string>
   <string name="hex_color">Heksadesimaalinen väri</string>
   <string name="invalid_hex_code">Heksadesimaalinen koodi ei kelpaa</string>
@@ -990,6 +1029,8 @@
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
   <string name="debug_filters">Vianetsinnän suodattimet</string>
   <string name="debug_filters_summary">Näytä suodatinlausekesuorittamisen vianetsintätietoa lomaketta täyttäessä</string>
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
+  <string name="use_zxing_for_barcode_scanning">Paluu vanhempaan viivakoodilukijaan</string>
   <string name="permission_dialog_title">Tietoa luvista</string>
   <string name="permission_dialog_text">Sinulta tullaan pyytämään lupaa ODK Collectille pääsy toimintoihin alla, valitse \"Salli\" jos haluat käyttää niitä.</string>
   <string name="notifications">Ilmoitukset</string>
@@ -1124,13 +1165,13 @@
   <string name="user_visible_instance_name">%s (Muokkaus %d)</string>
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <string name="newer_draft_edit_found_dialog_title">Jatketaanko luonnoksen muokkausta?</string>
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="newer_draft_edit_found_dialog_message">\'Luonnos tallennettu\' EEE dd MMM yyyy \'klo\' HH:mm\'\n\nHaluatko jatkaa luonnoksen muokkaamista?\'</string>
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <string name="newer_draft_edit_found_dialog_positive_button">Jatka muokkausta</string>
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <string name="newer_finalized_edit_found_dialog_title">Muokataanko viimeistä versiota?</string>
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="newer_finalized_edit_found_dialog_message">\'Tätä lähetystä on aikaisemmin muokattu.\n\nHaluatko muokata viimeistä versiota, joka on viimeistelty\' EEE dd MMM yyyy \'klo\' HH:mm\'?\'</string>
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <string name="newer_finalized_edit_found_dialog_positive_button">Muokkaa viimeistä lomaketta</string>

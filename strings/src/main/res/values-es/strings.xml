@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:oat="http://schema.getodk.org/odkAndroidTools">
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
-  <string name="enter_data">Iniciar nuevo formulario</string>
+  <string name="enter_data">Llenar nuevo formulario</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">Borradores</string>
   <!--Text for an action button on the main screen.-->
@@ -115,11 +115,27 @@
   <string name="invalid_space_in_answer_plural">Advertencia: valores subyacentes %s contienen espacios</string>
   <string name="too_complex_form">Este formulario es muy complejo para este dispositivo. Intente simplificar las expresiones o busque ayuda en el Foro.</string>
   <string name="survey_internal_error">Error interno: Ha fallado la entrada de datos.</string>
+  <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Esta al final de \"%s\".</string>
-  <string name="form_editing_disabled_after_finalizing">No es posible editar una vez completado</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <string name="form_editing_disabled_after_finalizing">No se pueden realizar modificaciones una vez finalizado.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <string name="form_editing_disabled_after_sending">No se pueden realizar modificaciones después del envío.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <string name="form_editing_enabled_after_finalizing">Se pueden realizar modificaciones después de finalizar.</string>
+  <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <string name="form_editing_enabled_after_sending">No se pueden realizar modificaciones después del envío.</string>
+  <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Si necesita hacer cambios, \"Guardar como borrador\" hasta que esté listo para enviar.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <string name="form_editing_enabled_after_finalizing_hint">Para realizar cambios después de finalizar su formulario, vaya a \"Listo para enviar\", abra el formulario y toque el ícono de edición.</string>
+  <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <string name="form_editing_enabled_after_sending_hint">Para realizar cambios después de enviar su formulario, vaya a \"Enviados\", abra el formulario y toque el ícono de edición.</string>
+  <!--Button text for saving as draft-->
   <string name="save_as_draft">Guardar como borrador</string>
+  <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
   <string name="finalize">Finalizar</string>
+  <!--Button text for sending a submission.-->
   <string name="send">Enviar</string>
   <string name="data_saved_error">¡Atención, el formulario no se ha guardado correctamente!</string>
   <string name="data_saved_ok">Formulario guardado correctamente</string>
@@ -133,9 +149,11 @@
   <string name="keep_editing">Seguir editando</string>
   <string name="quit_form_title">Guardar formulario?</string>
   <string name="save_explanation">Puede guardar este formulario y acceder a él desde sus borradores en cualquier momento.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_explanation_with_last_saved">\'Este formulario se guardó por última vez el\' EEE, MMM dd, yyyy \'a las\' HH:mm\'. Guardar como borrador para conservar los cambios.\'</string>
   <string name="quit_form_continue_title">Seguir editando?</string>
   <string name="discard_form_warning">Si descarta el formulario, perderá todos los cambios que haya realizado hasta el momento.</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="discard_changes_warning">\'Este formulario se guardó por última vez el\' EEE, MMM dd, yyyy \'a las\' HH:mm\'. Si descarta los cambios, perderá los cambios que haya realizado desde entonces.\'</string>
   <string name="saving_form">Guardando el formulario</string>
   <string name="survey_saving_validating_message">Validando respuestas…</string>
@@ -180,7 +198,10 @@
   <string name="install_openmapkit">Por favor instalar OpenMapKit!</string>
   <string name="get_barcode">Escanear Codigo de Barras</string>
   <string name="replace_barcode">Reemplazar el Codigo de Barras</string>
+  <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">Coloque el código de barras dentro del rectángulo</string>
+  <!--Message shown when barcode is successfully scanned-->
+  <!--Label for button that exits barcode scanning after success-->
   <string name="open_file">Abrir archivo</string>
   <string name="rank_items">Ranking de Items</string>
   <string name="number_picker_title">Selector de números</string>
@@ -444,7 +465,10 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">¿Está seguro de que desea eliminar la capa sin conexión %1$s ?</string>
   <string name="record_geopoint">Registrando un punto</string>
+  <string name="location_accuracy">Precisión: %1$s</string>
+  <string name="location_accuracy_unacceptable">Precisión de ubicación: %1$s (inaceptable)</string>
   <string name="provider_disabled_error">¡Los proveedores de ubicación están deshabilitados!</string>
+  <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisión: %4$sm</string>
   <string name="google_play_services_not_available">Este formulario quiere rastrear su ubicación, pero los servicios de Google Play no están disponibles.</string>
   <string name="location_providers_disabled_dialog_message">Este formulario quiere rastrear su ubicación pero los proveedores de ubicación están deshabilitados Por favor, habilite en la configuración de Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -469,6 +493,7 @@
   <string name="improving_accuracy">Mejorando precisión. Espere por favor.</string>
   <string name="accuracy_status_title">Obteniendo ubicación</string>
   <!--The accuracy of a location fix in meters-->
+  <string name="accuracy_m">%1$s m</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -519,6 +544,7 @@
   <string name="collection_status_auto_minutes">Puntos ingresados: %1$d (registrando cada %2$d min)</string>
   <string name="collection_status_auto_seconds_accuracy">Puntos ingresados: %1$d (registrando cada %2$d seg, precisión %3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">Puntos ingresados: %1$d (registrando cada %2$d min, precisión %3$d m)</string>
+  <string name="geopoint_instruction">Mantenga pulsado para colocar una marca o toque el botón para agregar marcador</string>
   <string name="geopoint_no_draggable_instruction">Tap botón de agregar marker</string>
   <string name="discard">Descartar</string>
   <string name="select_item_count">%s: %d (%d mostrar en el mapa)</string>
@@ -573,6 +599,8 @@
   <string name="newer_version_of_a_form_info">Esta es una actualización a un formulario que tiene</string>
   <string name="form_update_error">Error al actualizar formulario</string>
   <string name="form_update_succeeded">La actualización del formulario se realizó correctamente</string>
+  <!--Text for notification shown while syncing forms with the server-->
+  <string name="form_update_notification_title">Sincronización de formularios</string>
   <string name="load_remote_form_error">Error al descargar la lista de formularios</string>
   <string name="forms_download_succeeded">Descarga de formularios exitosa</string>
   <string name="forms_download_failed">Error al descargar formularios</string>
@@ -595,6 +623,7 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">El servidor no proporcionó un hash para este formulario.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_parsing_error">Este formulario no puede ser procesado:</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">Se produjo un error de disco en el dispositivo al descargar este formulario.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -627,6 +656,7 @@
   <!--Title of a settings section-->
   <string name="client">Interfaz de usuario</string>
   <!--Subtext of a settings section-->
+  <string name="user_interface_settings_subtext">Idioma de la aplicación, tamaño de fuente, navegación</string>
   <!--Title of a settings section-->
   <string name="maps">Mapas</string>
   <!--Subtext of a settings section-->
@@ -766,6 +796,7 @@
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">Ajustes desbloqueados</string>
   <!--Summary on setting that's currently not available because the user has entered settings from form entry-->
+  <string name="setting_not_available_during_form_entry">Configuración no disponible durante la entrada del formulario</string>
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -903,6 +934,20 @@
   <string name="using_project">Usando %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Cambiar a %s</string>
+  <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <string name="delete_project_dialog_title">Eliminar %s</string>
+  <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <string name="delete_project_instructions">Escriba %1$s para confirmar esta acción.</string>
+  <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <string name="delete_trigger">eliminar</string>
+  <!--The list item for form definition count in the project delete confirmation dialog-->
+  <string name="form_definitions_count">Formularios en blanco: %1$d</string>
+  <!--The list item for sent count in the project delete confirmation dialog-->
+  <!--The list item for unsent count in the project delete confirmation dialog-->
+  <!--The list item for draft count in the project delete confirmation dialog-->
+  <!--Text for the button that confirms deleting the project-->
+  <string name="delete_project_confirm_button_text">Eliminar proyecto</string>
   <string name="or">O</string>
   <string name="hex_color">Color en Hex</string>
   <string name="invalid_hex_code">Código hexadecimal no válido</string>
@@ -980,6 +1025,9 @@
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Se forzó una excepción no detectada que hace que la aplicación se bloquee</string>
   <!--Option provided in the Developer tools settings to allow debugging filters during form entry-->
+  <string name="debug_filters">Filtros de depuración</string>
+  <string name="debug_filters_summary">Mostrar información de depuración para las ejecuciones de expresiones de filtro durante la entrada del formulario</string>
+  <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
   <string name="permission_dialog_title">Acerca de los permisos</string>
   <string name="permission_dialog_text">Se le pedirá que permita el acceso de ODK Collect a las siguientes funciones, seleccione \"permitir\" si desea usarlas.</string>
   <string name="notifications">Notificaciones</string>
@@ -1115,13 +1163,23 @@
   <!--Text for the button that displays a map for viewing an already existing polygon-->
   <string name="view_polygon">Ver polígono</string>
   <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <string name="settings_json">Configuración JSON</string>
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <string name="preparing_form_edit">Preparando el formulario para editarlo…</string>
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <string name="user_visible_instance_name">%s (Editar %d)</string>
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_title">¿Continuar editando el borrador?</string>
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="newer_draft_edit_found_dialog_message">\'Se guardó un borrador de edición el\' EEE, MMM dd, aaaa \'a las\' HH:mm\'\n\n¿Desea reanudar esta edición?\'</string>
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_positive_button">Seguir editando</string>
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
-  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_title">¿Editar la última versión?</string>
+  <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="newer_finalized_edit_found_dialog_message">\'Este envío fue editado previamente.\n\n¿Desea editar la última versión finalizada el \'EEE, MMM dd, yyyy\' a las \'HH:mm\'?\'</string>
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_positive_button">Editar último formulario</string>
   <!--Text for the snackbar shown when editing of a finalized form begins-->
+  <string name="finalized_form_edit_started">Estás editando este formulario. Pulsa una pregunta para empezar a editarla.</string>
 </resources>
