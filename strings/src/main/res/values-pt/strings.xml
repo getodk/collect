@@ -1145,7 +1145,7 @@
   <!--Title displayed in a dialog before starting a form if there is a work to recover-->
   <string name="savepoint_recovery_dialog_title">Recuperar o seu trabalho?</string>
   <!--Message displayed in a dialog before starting a form if there is a work to recover. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="savepoint_recovery_dialog_message">O Collect foi encerrado de forma inesperada em \'EEE, dd MMM yyyy \'às\' HH:mm\' e salvou o seu trabalho.\n\nVocê deseja recuperar ou descartar esses dados?</string>
+  <string name="savepoint_recovery_dialog_message">\'O Collect foi encerrado de forma inesperada em \'EEE, dd MMM yyyy \'às\' HH:mm\' e salvou o seu trabalho.\n\nVocê deseja recuperar ou descartar esses dados?\'</string>
   <!--Text for the button that accepts the recovery of the work-->
   <string name="recover">Recuperar</string>
   <!--Text for the button that declines the recovery of the work-->
@@ -1179,13 +1179,13 @@
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <string name="newer_draft_edit_found_dialog_title">Continuar editando o rascunho?</string>
   <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="newer_draft_edit_found_dialog_message">Uma alteração rascunho foi salva em \'EEE, dd MMM yyyy \'às\' HH:mm\'\n\nVocê deseja retomar esta alteração?</string>
+  <string name="newer_draft_edit_found_dialog_message">\'Uma alteração rascunho foi salva em \'EEE, dd MMM yyyy \'às\' HH:mm\'\n\nVocê deseja retomar esta alteração?\'</string>
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
   <string name="newer_draft_edit_found_dialog_positive_button">Continuar editando</string>
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <string name="newer_finalized_edit_found_dialog_title">Editar a versão mais recente?</string>
   <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="newer_finalized_edit_found_dialog_message">Essa resposta foi alterada anteriormente.\n\nVocê gostaria de alterar a última versão finalizada em\' EEE, dd MMM yyyy \'às\' HH:mm\'?\'</string>
+  <string name="newer_finalized_edit_found_dialog_message">\'Essa resposta foi alterada anteriormente.\n\nVocê gostaria de alterar a última versão finalizada em\' EEE, dd MMM yyyy \'às\' HH:mm\'?\'</string>
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
   <string name="newer_finalized_edit_found_dialog_positive_button">Editar o formulário mais recente</string>
   <!--Text for the snackbar shown when editing of a finalized form begins-->
