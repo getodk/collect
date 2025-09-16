@@ -100,11 +100,11 @@ public final class ThemeUtils {
 
     @ColorInt
     public int getAccentColor() {
-        return getThemeAttributeValue(context, com.google.android.material.R.attr.colorAccent);
+        return getThemeAttributeValue(context, androidx.appcompat.R.attr.colorAccent);
     }
 
     @ColorInt
     public int getColorPrimary() {
-        return getThemeAttributeValue(context, com.google.android.material.R.attr.colorPrimary);
+        return getThemeAttributeValue(context, androidx.appcompat.R.attr.colorPrimary);
     }
 }

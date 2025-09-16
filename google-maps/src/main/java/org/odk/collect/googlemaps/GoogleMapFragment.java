@@ -599,7 +599,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             );
         }
         if (accuracyCircle == null) {
-            int stroke = ContextUtils.getThemeAttributeValue(requireContext(), com.google.android.material.R.attr.colorPrimaryDark);
+            int stroke = ContextUtils.getThemeAttributeValue(requireContext(), androidx.appcompat.R.attr.colorPrimaryDark);
             int fill = getResources().getColor(org.odk.collect.androidshared.R.color.color_primary_low_emphasis);
             accuracyCircle = map.addCircle(new CircleOptions()
                 .center(loc)
