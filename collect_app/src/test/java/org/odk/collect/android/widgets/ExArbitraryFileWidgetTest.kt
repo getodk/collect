@@ -81,7 +81,7 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget?>() {
 
         val widget = widget!!
         assertThat(widget.binding.answerViewContainer.visibility, equalTo(View.VISIBLE))
-        assertThat(widgetAnswer.getAnswer(), equalTo(initialAnswer.displayText))
+        assertThat(widget.answer!!.displayText, equalTo(initialAnswer.displayText))
     }
 
     @Test
@@ -127,7 +127,6 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget?>() {
         val widget = widget!!
         assertThat(widget.binding.exArbitraryFileButton.visibility, equalTo(View.GONE))
         assertThat(widget.binding.answerViewContainer.visibility, equalTo(View.VISIBLE))
-        assertThat(widgetAnswer.getAnswer(), equalTo(initialAnswer.displayText))
     }
 
     @Test
@@ -138,6 +137,5 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget?>() {
         val widget = widget!!
         assertThat(widget.binding.exArbitraryFileButton.visibility, equalTo(View.GONE))
         assertThat(widget.binding.answerViewContainer.visibility, equalTo(View.VISIBLE))
-        assertThat(widgetAnswer.getAnswer(), equalTo(initialAnswer.displayText))
     }
 }

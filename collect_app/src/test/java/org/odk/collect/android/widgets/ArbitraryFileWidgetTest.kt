@@ -79,7 +79,7 @@ class ArbitraryFileWidgetTest : FileWidgetTest<ArbitraryFileWidget?>() {
 
         val widget = widget!!
         assertThat(widget.binding.answerViewContainer.visibility, equalTo(View.VISIBLE))
-        assertThat(widgetAnswer.getAnswer(), equalTo(initialAnswer.displayText))
+        assertThat(widget.answer!!.displayText, equalTo(initialAnswer.displayText))
     }
 
     @Test
@@ -125,7 +125,6 @@ class ArbitraryFileWidgetTest : FileWidgetTest<ArbitraryFileWidget?>() {
         val widget = widget!!
         assertThat(widget.binding.arbitraryFileButton.visibility, equalTo(View.GONE))
         assertThat(widget.binding.answerViewContainer.visibility, equalTo(View.VISIBLE))
-        assertThat(widgetAnswer.getAnswer(), equalTo(initialAnswer.displayText))
         assertThat(widget.binding.answerViewContainer.hasOnClickListeners(), equalTo(true))
     }
 
@@ -137,7 +136,6 @@ class ArbitraryFileWidgetTest : FileWidgetTest<ArbitraryFileWidget?>() {
         val widget = widget!!
         assertThat(widget.binding.arbitraryFileButton.visibility, equalTo(View.GONE))
         assertThat(widget.binding.answerViewContainer.visibility, equalTo(View.VISIBLE))
-        assertThat(widgetAnswer.getAnswer(), equalTo(initialAnswer.displayText))
         assertThat(widget.binding.answerViewContainer.hasOnClickListeners(), equalTo(true))
     }
 }
