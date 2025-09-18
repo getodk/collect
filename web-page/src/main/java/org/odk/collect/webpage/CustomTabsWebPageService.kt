@@ -29,7 +29,7 @@ object CustomTabsWebPageService : WebPageService {
         try {
             activity.startActivity(Intent(Intent.ACTION_VIEW, normalizedUri))
         } catch (_: Throwable) {
-            showLongToast("No browser installed!")
+            showLongToast(org.odk.collect.strings.R.string.no_browser_installed)
         }
     }
 

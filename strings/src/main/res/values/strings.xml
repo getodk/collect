@@ -1447,4 +1447,7 @@
     <string name="newer_finalized_edit_found_dialog_positive_button">Edit latest form</string>
     <!-- Text for the snackbar shown when editing of a finalized form begins -->
     <string name="finalized_form_edit_started">You are now editing this form. Tap on a question to start editing.</string>
+
+    <!-- Error shown when the user tries to open a web page from the app, but they don't have a browser installed -->
+    <string name="no_browser_installed">No browser installed!</string>
 </resources>
