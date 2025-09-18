@@ -58,9 +58,9 @@ class BarcodeWidgetTest {
 
     @Test
     fun `Display the answer if answer is present`() {
-        createWidget(QuestionWidgetHelpers.promptWithAnswer(StringData("blah")))
+        val widget = createWidget(QuestionWidgetHelpers.promptWithAnswer(StringData("blah")))
         assertThat(
-            barcodeWidgetAnswer.getAnswer(),
+            widget.answer!!.displayText,
             equalTo("blah")
         )
     }
@@ -87,7 +87,7 @@ class BarcodeWidgetTest {
         widget.clearAnswer()
 
         assertThat(
-            barcodeWidgetAnswer.getAnswer(),
+            widget.answer,
             equalTo(null)
         )
         assertThat(
@@ -110,7 +110,7 @@ class BarcodeWidgetTest {
         val widget = createWidget(QuestionWidgetHelpers.promptWithAnswer(null))
         widget.setData("\ud800blah\b")
         assertThat(
-            barcodeWidgetAnswer.getAnswer(),
+            widget.answer!!.displayText,
             equalTo("blah")
         )
     }
