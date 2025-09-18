@@ -7,7 +7,7 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 
-object ChromeTabsWebPageService : WebPageService {
+object CustomTabsWebPageService : WebPageService {
 
     /**
      * Opens web page using Android Custom Tabs. If the user's browser doesn't support Custom Tabs,

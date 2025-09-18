@@ -142,7 +142,7 @@ import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.UserAgentProvider;
-import org.odk.collect.webpage.ChromeTabsWebPageService;
+import org.odk.collect.webpage.CustomTabsWebPageService;
 import org.odk.collect.webpage.WebPageService;
 
 import java.io.File;
@@ -391,7 +391,7 @@ public class AppDependencyModule {
 
     @Provides
     public WebPageService providesWebPageService() {
-        return ChromeTabsWebPageService.INSTANCE;
+        return CustomTabsWebPageService.INSTANCE;
     }
 
     @Provides

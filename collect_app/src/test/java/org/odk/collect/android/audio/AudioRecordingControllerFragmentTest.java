@@ -34,7 +34,7 @@ import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
-import org.odk.collect.webpage.ChromeTabsWebPageService;
+import org.odk.collect.webpage.CustomTabsWebPageService;
 import org.robolectric.annotation.Config;
 
 import java.io.File;
@@ -48,7 +48,7 @@ public class AudioRecordingControllerFragmentTest {
     private FormEntryViewModel formEntryViewModel;
     private MutableNonNullLiveData<Boolean> hasBackgroundRecording;
     private MutableNonNullLiveData<Boolean> isBackgroundRecordingEnabled;
-    private ChromeTabsWebPageService chromeTabsWebPageService;
+    private CustomTabsWebPageService chromeTabsWebPageService;
 
     private ViewModelProvider.Factory viewModelFactory = new ViewModelProvider.Factory() {
         @NonNull
@@ -83,7 +83,7 @@ public class AudioRecordingControllerFragmentTest {
         isBackgroundRecordingEnabled = new MutableNonNullLiveData<>(false);
         when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(isBackgroundRecordingEnabled);
 
-        chromeTabsWebPageService = mock(ChromeTabsWebPageService.class);
+        chromeTabsWebPageService = mock(CustomTabsWebPageService.class);
 
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -92,7 +92,7 @@ public class AudioRecordingControllerFragmentTest {
             }
 
             @Override
-            public ChromeTabsWebPageService providesWebPageService() {
+            public CustomTabsWebPageService providesWebPageService() {
                 return chromeTabsWebPageService;
             }
         });
