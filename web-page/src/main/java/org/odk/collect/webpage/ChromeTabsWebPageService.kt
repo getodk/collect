@@ -19,9 +19,7 @@ object ChromeTabsWebPageService : WebPageService {
 
         try {
             openUriInCustomTab(activity, uri)
-        } catch (_: Exception) {
-            openWebPageInBrowser(activity, uri)
-        } catch (_: Error) {
+        } catch (_: Throwable) {
             openWebPageInBrowser(activity, uri)
         }
     }
@@ -32,9 +30,7 @@ object ChromeTabsWebPageService : WebPageService {
 
         try {
             activity.startActivity(Intent(Intent.ACTION_VIEW, uri))
-        } catch (_: Exception) {
-            showLongToast("No browser installed!")
-        } catch (_: Error) {
+        } catch (_: Throwable) {
             showLongToast("No browser installed!")
         }
     }
