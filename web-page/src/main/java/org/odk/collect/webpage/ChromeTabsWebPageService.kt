@@ -14,22 +14,20 @@ object ChromeTabsWebPageService : WebPageService {
      * the Uri will just be opened in their device's default browser.
      */
     override fun openWebPage(activity: Activity, uri: Uri) {
-        var uri = uri
-        uri = uri.normalizeScheme()
+        val normalizedUri = uri.normalizeScheme()
 
         try {
-            openUriInCustomTab(activity, uri)
+            openUriInCustomTab(activity, normalizedUri)
         } catch (_: Throwable) {
-            openWebPageInBrowser(activity, uri)
+            openWebPageInBrowser(activity, normalizedUri)
         }
     }
 
     private fun openWebPageInBrowser(activity: Activity, uri: Uri) {
-        var uri = uri
-        uri = uri.normalizeScheme()
+        val normalizedUri = uri.normalizeScheme()
 
         try {
-            activity.startActivity(Intent(Intent.ACTION_VIEW, uri))
+            activity.startActivity(Intent(Intent.ACTION_VIEW, normalizedUri))
         } catch (_: Throwable) {
             showLongToast("No browser installed!")
         }
