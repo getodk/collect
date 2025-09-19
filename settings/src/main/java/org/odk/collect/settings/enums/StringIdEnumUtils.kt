@@ -18,6 +18,12 @@ object StringIdEnumUtils {
         return parse(context, setting)
     }
 
+    @JvmStatic
+    fun Settings.getGuidanceHintMode(context: Context): GuidanceHintMode {
+        val setting = this.getString(ProjectKeys.KEY_GUIDANCE_HINT)
+        return parse(context, setting)
+    }
+
     private inline fun <reified T> parse(
         context: Context,
         value: String?

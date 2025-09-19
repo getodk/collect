@@ -84,9 +84,9 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/guidance_yes_collapsed</item>
     </string-array>
     <string-array name="guidance_hint_selector_entries_values" translatable="false">
-        <item>no</item>
-        <item>yes</item>
-        <item>yes_collapsed</item>
+        <item>@string/guidance_hint_no</item>
+        <item>@string/guidance_hint_yes</item>
+        <item>@string/guidance_hint_yes_collapsed</item>
     </string-array>
 
     <string-array name="ethiopian_months">

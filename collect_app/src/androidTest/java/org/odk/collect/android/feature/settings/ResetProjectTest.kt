@@ -43,7 +43,7 @@ class ResetProjectTest {
     fun canResetSavedForms() {
         testDependencies.server.addForm("one-question.xml")
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("what is your age", "34"))
 

@@ -26,7 +26,7 @@ class ViewEntitiesTest {
             listOf(StubOpenRosaServer.EntityListItem("people.csv"))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
             .openEntityBrowser()
@@ -41,7 +41,7 @@ class ViewEntitiesTest {
             listOf(StubOpenRosaServer.EntityListItem("people.csv"))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .refreshForms()
             .openEntityBrowser()
             .clickOnList("people")

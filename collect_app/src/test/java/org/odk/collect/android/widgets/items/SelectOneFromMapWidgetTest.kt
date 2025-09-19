@@ -23,7 +23,6 @@ import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.listeners.AdvanceToNextListener
-import org.odk.collect.android.preferences.GuidanceHint
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
@@ -43,6 +42,7 @@ import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.enums.GuidanceHintMode
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.robolectric.Robolectric
@@ -59,7 +59,10 @@ class SelectOneFromMapWidgetTest {
 
     private val settingsProvider = InMemSettingsProvider().also {
         it.getUnprotectedSettings().save(ProjectKeys.KEY_FONT_SIZE, "12")
-        it.getUnprotectedSettings().save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES.toString())
+        it.getUnprotectedSettings().save(
+            ProjectKeys.KEY_GUIDANCE_HINT,
+            GuidanceHintMode.YES.getValue(activityController.get())
+        )
     }
 
     @Before

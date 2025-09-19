@@ -26,7 +26,7 @@ class DynamicPreLoadedDataPullTest {
     fun canUsePullDataFunctionToPullDataFromCSV() {
         testDependencies.server.addForm("pull_data.xml", listOf(MediaFileItem("fruits.csv")))
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("pull_data")
             .assertText("The fruit Mango is pulled csv data.")
     }
@@ -39,7 +39,7 @@ class DynamicPreLoadedDataPullTest {
             listOf(EntityListItem("people.csv"))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
 

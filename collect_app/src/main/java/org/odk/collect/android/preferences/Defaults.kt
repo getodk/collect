@@ -19,7 +19,7 @@ object Defaults {
             hashMap[ProjectKeys.KEY_PASSWORD] = ""
             // form_management_preferences.xml
             hashMap[ProjectKeys.KEY_AUTOSEND] = "off"
-            hashMap[ProjectKeys.KEY_GUIDANCE_HINT] = "no"
+            hashMap[ProjectKeys.KEY_GUIDANCE_HINT] = "yes_collapsed"
             hashMap[ProjectKeys.KEY_DELETE_AFTER_SEND] = false
             hashMap[ProjectKeys.KEY_CONSTRAINT_BEHAVIOR] = ProjectKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE
             hashMap[ProjectKeys.KEY_HIGH_RESOLUTION] = true

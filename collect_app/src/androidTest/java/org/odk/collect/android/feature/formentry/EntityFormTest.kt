@@ -33,7 +33,7 @@ class EntityFormTest {
             listOf(EntityListItem("people.csv"))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
 
@@ -51,7 +51,7 @@ class EntityFormTest {
             listOf(EntityListItem("people.csv"))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Update") // Open to create cached form def
             .pressBackAndDiscardForm()
 
@@ -71,7 +71,7 @@ class EntityFormTest {
             listOf(EntityListItem("people.csv"))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
             .clickOnText("Roman Roy")
@@ -93,7 +93,7 @@ class EntityFormTest {
             listOf(EntityListItem("people.csv"))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
 
@@ -110,7 +110,7 @@ class EntityFormTest {
             listOf(EntityListItem("people.csv"))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
             .clickOnText("Roman Roy")
@@ -170,7 +170,7 @@ class EntityFormTest {
             )
         }
 
-        val mainMenuPage = rule.withMatchExactlyProject(testDependencies.server.url)
+        val mainMenuPage = rule.withProject(testDependencies.server.url, matchExactly = true)
 
         testDependencies.server.apply {
             removeForm("One Question Entity Update")
@@ -206,7 +206,7 @@ class EntityFormTest {
             listOf(EntityListItem("people.csv"))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
 
@@ -235,7 +235,7 @@ class EntityFormTest {
     fun automaticEntityFormDownload_withUnsupportedSpecVersion_completesSuccessfully_butThrowsAnErrorAfterOpeningIt() {
         testDependencies.server.addForm("one-question-entity-registration-v2020.1.xml")
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankFormWithError("One Question Entity Registration", true)
             .assertTextInDialog(R.string.unrecognized_entity_version, "2020.1.0")
             .clickOKOnDialog(MainMenuPage())
@@ -281,7 +281,7 @@ class EntityFormTest {
             listOf(EntityListItem("people.csv"))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
 
@@ -306,7 +306,7 @@ class EntityFormTest {
             listOf(EntityListItem("people.csv"))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Registration Editable")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
             .clickSendFinalizedForm(1)
@@ -331,7 +331,7 @@ class EntityFormTest {
             listOf(EntityListItem("people.csv"))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Update Editable")
             .assertQuestion("Select person")
             .clickOnText("Roman Roy")
@@ -359,7 +359,7 @@ class EntityFormTest {
             listOf(EntityListItem("people.csv", true))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Registration")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
 
@@ -376,7 +376,7 @@ class EntityFormTest {
             listOf(EntityListItem("people.csv", true))
         )
 
-        rule.withMatchExactlyProject(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url, matchExactly = true)
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
             .clickOnText("Roman Roy")
