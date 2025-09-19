@@ -33,6 +33,10 @@ android {
             isIncludeAndroidResources = true
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -56,6 +60,9 @@ dependencies {
     kapt(libs.daggerCompiler)
 
     debugImplementation(project(":fragments-test"))
+
+    testImplementation(project(":androidtest"))
+    testImplementation(project(":test-shared"))
 
     testImplementation(libs.androidxTestExtJunit)
     testImplementation(libs.mockitoKotlin)
