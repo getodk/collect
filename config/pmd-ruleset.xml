@@ -27,6 +27,7 @@
         <exclude name="MissingOverride" />
         <exclude name="NonExhaustiveSwitch" />
         <exclude name="PreserveStackTrace" />
+        <exclude name="RelianceOnDefaultCharset" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
         <exclude name="UnitTestContainsTooManyAsserts" />
         <exclude name="UnitTestShouldIncludeAssert" />
@@ -104,6 +105,7 @@
         <exclude name="CommentRequired" />
         <exclude name="UncommentedEmptyConstructor" />
         <exclude name="UncommentedEmptyMethodBody" />
+        <exclude name="DanglingJavadoc" />
     </rule>
 
     <rule ref="category/java/errorprone.xml">
@@ -132,6 +134,8 @@
         <exclude name="MissingSerialVersionUID" />
         <exclude name="MissingStaticMethodInNonInstantiatableClass" />
         <exclude name="NullAssignment" />
+        <exclude name="ReplaceJavaUtilCalendar" />
+        <exclude name="ReplaceJavaUtilDate" />
         <exclude name="ReturnEmptyCollectionRatherThanNull" />
         <exclude name="TestClassWithoutTestCases" />
     </rule>

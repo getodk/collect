@@ -92,24 +92,22 @@ task cacheToMavenLocal(type: Sync) {
     includeEmptyDirs false
 }
 
-tasks.register('testLab') {
+tasks.register('testLab', Exec) {
     dependsOn "collect_app:assembleDebug", "collect_app:assembleDebugAndroidTest"
-    doLast {
-        exec {
-            executable 'gcloud'
-            args('beta', 'firebase', 'test', 'android', 'run',
-                    '--type', 'instrumentation',
-                    '--num-uniform-shards=25',
-                    '--app', 'collect_app/build/outputs/apk/debug/ODK-Collect-debug.apk',
-                    '--test', 'collect_app/build/outputs/apk/androidTest/debug/ODK-Collect-debug-androidTest.apk',
-                    '--device', 'model=MediumPhone.arm,version=34,locale=en,orientation=portrait',
-                    '--timeout', '10m',
-                    '--directories-to-pull', '/sdcard',
-                    '--test-targets', "notPackage org.odk.collect.android.regression",
-                    '--test-targets', "notPackage org.odk.collect.android.benchmark"
-            )
-        }
-    }
+
+    executable = 'gcloud'
+    args = [
+            'beta', 'firebase', 'test', 'android', 'run',
+            '--type', 'instrumentation',
+            '--num-uniform-shards=25',
+            '--app', 'collect_app/build/outputs/apk/debug/ODK-Collect-debug.apk',
+            '--test', 'collect_app/build/outputs/apk/androidTest/debug/ODK-Collect-debug-androidTest.apk',
+            '--device', 'model=MediumPhone.arm,version=34,locale=en,orientation=portrait',
+            '--timeout', '10m',
+            '--directories-to-pull', '/sdcard',
+            '--test-targets', "notPackage org.odk.collect.android.regression",
+            '--test-targets', "notPackage org.odk.collect.android.benchmark"
+    ]
 }
 
 tasks.register('releaseCheck') {
