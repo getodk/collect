@@ -132,8 +132,6 @@
   <string name="data_saved_error">Запазването на формуляра беше неуспешно!</string>
   <string name="data_saved_ok">Успешно запазване на формуляра!</string>
   <string name="save_point_error">Грешка при запис на точка за възстановяване: %s</string>
-  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
-  <string name="quit_application">Изход %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="do_not_save">Отхвърли формуляра</string>
   <string name="discard_changes">Отхвърли промените</string>
@@ -340,7 +338,6 @@
   <string name="cancel_loading_form">Отмяна</string>
   <string name="cancel_location">Отмяна</string>
   <string name="do_not_change">Отмяна</string>
-  <string name="do_not_exit">Отмяна</string>
   <!--##############################################
      # Projects
      ##############################################-->
