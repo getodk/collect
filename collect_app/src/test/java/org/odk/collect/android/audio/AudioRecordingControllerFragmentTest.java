@@ -48,7 +48,7 @@ public class AudioRecordingControllerFragmentTest {
     private FormEntryViewModel formEntryViewModel;
     private MutableNonNullLiveData<Boolean> hasBackgroundRecording;
     private MutableNonNullLiveData<Boolean> isBackgroundRecordingEnabled;
-    private CustomTabsWebPageService chromeTabsWebPageService;
+    private CustomTabsWebPageService customTabsWebPageService;
 
     private ViewModelProvider.Factory viewModelFactory = new ViewModelProvider.Factory() {
         @NonNull
@@ -83,7 +83,7 @@ public class AudioRecordingControllerFragmentTest {
         isBackgroundRecordingEnabled = new MutableNonNullLiveData<>(false);
         when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(isBackgroundRecordingEnabled);
 
-        chromeTabsWebPageService = mock(CustomTabsWebPageService.class);
+        customTabsWebPageService = mock(CustomTabsWebPageService.class);
 
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
@@ -93,7 +93,7 @@ public class AudioRecordingControllerFragmentTest {
 
             @Override
             public CustomTabsWebPageService providesWebPageService() {
-                return chromeTabsWebPageService;
+                return customTabsWebPageService;
             }
         });
     }
