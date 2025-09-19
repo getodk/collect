@@ -53,7 +53,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
     private val referenceLayerRepository = InMemReferenceLayerRepository()
     private val scheduler = FakeScheduler()
     private val settingsProvider = InMemSettingsProvider()
-    private val chromeTabsWebPageService = mock<WebPageService>()
+    private val webPageService = mock<WebPageService>()
 
     private val testRegistry = TestRegistry()
 
@@ -66,7 +66,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
                     referenceLayerRepository,
                     scheduler,
                     settingsProvider,
-                    chromeTabsWebPageService
+                    webPageService
                 )
             }.build()
     )
@@ -251,7 +251,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         Interactions.clickOn(withText(string.get_help_with_offline_layers))
 
-        verify(chromeTabsWebPageService).openWebPage(
+        verify(webPageService).openWebPage(
             any(),
             eq(Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices"))
         )
