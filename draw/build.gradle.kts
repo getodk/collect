@@ -61,6 +61,9 @@ dependencies {
 
     debugImplementation(project(":fragments-test"))
 
+    testImplementation(project(":androidtest"))
+    testImplementation(project(":test-shared"))
+
     testImplementation(libs.androidxTestExtJunit)
     testImplementation(libs.mockitoKotlin)
     testImplementation(libs.androidxTestEspressoCore)
