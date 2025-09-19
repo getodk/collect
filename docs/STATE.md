@@ -38,11 +38,11 @@ The purpose of this document is to give anyone who reads it a quick overview  of
 
 * General effort to increase test coverage and quality while working on anything and enforcing tests for new code in PR review
 * Moving responsibilities out of `FormFillingActivity` into other components (like Fragments, ViewModels, use cases etc)
-* Writing all new code in Kotlin, and writing new UI using Jetpack Compose
+* Writing all new code in Kotlin, and writing new UI using Jetpack Compose (utilizing `ComposeView` within existing Activity/Fragment structures)
+* Moving towards a ["data services"](data_services_architecture.pdf) oriented architecture that has emerged over time
 * Writing new code using a [multi-module approach](CODE-GUIDELINES.md#gradle-sub-modules) (feature modules, mini frameworks etc) and breaking old code out into modules when opportunities come up
 * Trying to remove technical debt flagged with `@Deprecated`
 * Replacing async work such as `AsyncTask` with `Flow` (converted to `LiveData` in UI code) + `Scheduler` abstraction
 * Gradually removing use of `CursorLoader` (all remaining uses are in `CursorLoaderFactory`)
 * Using AndroidX Test in new local tests and migrating other local tests as we touch them (from classic Robolectric)
-* Moving towards a ["data services"](data_services_architecture.pdf) oriented architecture that has emerged over time that uses AndroidX Architecture Components for the core of the UI (Fragment, View, ViewModel etc.)
 * Improving the `MapFragment` abstraction so more logic can be shared between the map engines
