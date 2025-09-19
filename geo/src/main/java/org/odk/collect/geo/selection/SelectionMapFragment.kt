@@ -38,7 +38,7 @@ import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.webpage.ExternalWebPageHelper
+import org.odk.collect.webpage.WebPageService
 import javax.inject.Inject
 
 /**
@@ -69,7 +69,7 @@ class SelectionMapFragment(
     lateinit var settingsProvider: SettingsProvider
 
     @Inject
-    lateinit var externalWebPageHelper: ExternalWebPageHelper
+    lateinit var webPageService: WebPageService
 
     private val selectedItemViewModel by viewModels<SelectedItemViewModel>()
 
@@ -97,7 +97,7 @@ class SelectionMapFragment(
                 mapFragmentFactory.createMapFragment() as Fragment
             }
             .forClass(OfflineMapLayersPickerBottomSheetDialogFragment::class) {
-                OfflineMapLayersPickerBottomSheetDialogFragment(requireActivity().activityResultRegistry, referenceLayerRepository, scheduler, settingsProvider, externalWebPageHelper)
+                OfflineMapLayersPickerBottomSheetDialogFragment(requireActivity().activityResultRegistry, referenceLayerRepository, scheduler, settingsProvider, webPageService)
             }
             .build()
 

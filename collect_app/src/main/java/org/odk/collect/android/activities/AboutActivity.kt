@@ -30,17 +30,18 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.strings.localization.LocalizedActivity
-import org.odk.collect.webpage.ExternalWebPageHelper
+import org.odk.collect.webpage.WebPageService
 import javax.inject.Inject
 
 class AboutActivity : LocalizedActivity(), AboutItemClickListener {
-    private val websiteTabHelper = ExternalWebPageHelper()
-    private val forumTabHelper = ExternalWebPageHelper()
     private lateinit var websiteUri: Uri
     private lateinit var forumUri: Uri
 
     @Inject
     lateinit var intentLauncher: IntentLauncher
+
+    @Inject
+    lateinit var webPageService: WebPageService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,25 +68,13 @@ class AboutActivity : LocalizedActivity(), AboutItemClickListener {
     override fun onClick(position: Int) {
         if (allowClick(javaClass.name)) {
             when (position) {
-                0 -> websiteTabHelper.openWebPageInCustomTab(this, websiteUri)
-                1 -> forumTabHelper.openWebPageInCustomTab(this, forumUri)
+                0 -> webPageService.openWebPage(this, websiteUri)
+                1 -> webPageService.openWebPage(this, forumUri)
                 2 -> shareApp()
                 3 -> addReview()
                 4 -> startActivity(Intent(this, OssLicensesMenuActivity::class.java))
             }
         }
-    }
-
-    public override fun onStart() {
-        super.onStart()
-        websiteTabHelper.bindCustomTabsService(this, websiteUri)
-        forumTabHelper.bindCustomTabsService(this, forumUri)
-    }
-
-    public override fun onDestroy() {
-        unbindService(websiteTabHelper.serviceConnection)
-        unbindService(forumTabHelper.serviceConnection)
-        super.onDestroy()
     }
 
     private fun shareApp() {

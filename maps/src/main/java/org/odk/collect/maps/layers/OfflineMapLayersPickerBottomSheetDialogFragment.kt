@@ -29,14 +29,14 @@ import org.odk.collect.maps.databinding.OfflineMapLayersPickerBinding
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.localization.getLocalizedString
-import org.odk.collect.webpage.ExternalWebPageHelper
+import org.odk.collect.webpage.WebPageService
 
 class OfflineMapLayersPickerBottomSheetDialogFragment(
     registry: ActivityResultRegistry,
     private val referenceLayerRepository: ReferenceLayerRepository,
     private val scheduler: Scheduler,
     private val settingsProvider: SettingsProvider,
-    private val externalWebPageHelper: ExternalWebPageHelper
+    private val webPageService: WebPageService
 ) : BottomSheetDialogFragment(),
     OfflineMapLayersPickerAdapter.OfflineMapLayersPickerAdapterInterface {
 
@@ -103,7 +103,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragment(
         val binding = OfflineMapLayersPickerBinding.inflate(inflater)
 
         binding.mbtilesInfoGroup.addOnClickListener {
-            externalWebPageHelper.openWebPageInCustomTab(
+            webPageService.openWebPage(
                 requireActivity(),
                 Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices")
             )

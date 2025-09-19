@@ -21,7 +21,9 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.testshared.FakeAudioPlayerFactory
 import org.odk.collect.testshared.FakeBarcodeScannerViewFactory
 import org.odk.collect.testshared.FakeBroadcastReceiverRegister
+import org.odk.collect.testshared.MockWebPageService
 import org.odk.collect.utilities.UserAgentProvider
+import org.odk.collect.webpage.WebPageService
 
 open class TestDependencies @JvmOverloads constructor(
     private val useRealServer: Boolean = false
@@ -38,6 +40,7 @@ open class TestDependencies @JvmOverloads constructor(
         whenever(applicationRestrictions).thenReturn(Bundle())
     }
     val audioPlayerFactory = FakeAudioPlayerFactory()
+    val webPageService = MockWebPageService()
 
     override fun provideHttpInterface(
         mimeTypeMap: MimeTypeMap,
@@ -79,5 +82,9 @@ open class TestDependencies @JvmOverloads constructor(
 
     override fun providesAudioPlayerFactory(scheduler: Scheduler): AudioPlayerFactory {
         return audioPlayerFactory
+    }
+
+    override fun providesWebPageService(): WebPageService {
+        return webPageService
     }
 }

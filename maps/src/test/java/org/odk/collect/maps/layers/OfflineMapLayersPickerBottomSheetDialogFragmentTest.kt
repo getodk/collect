@@ -46,14 +46,14 @@ import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.ViewMatchers.atPositionInRecyclerView
 import org.odk.collect.testshared.WaitFor
-import org.odk.collect.webpage.ExternalWebPageHelper
+import org.odk.collect.webpage.WebPageService
 
 @RunWith(AndroidJUnit4::class)
 class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
     private val referenceLayerRepository = InMemReferenceLayerRepository()
     private val scheduler = FakeScheduler()
     private val settingsProvider = InMemSettingsProvider()
-    private val externalWebPageHelper = mock<ExternalWebPageHelper>()
+    private val webPageService = mock<WebPageService>()
 
     private val testRegistry = TestRegistry()
 
@@ -66,7 +66,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
                     referenceLayerRepository,
                     scheduler,
                     settingsProvider,
-                    externalWebPageHelper
+                    webPageService
                 )
             }.build()
     )
@@ -251,7 +251,7 @@ class OfflineMapLayersPickerBottomSheetDialogFragmentTest {
 
         Interactions.clickOn(withText(string.get_help_with_offline_layers))
 
-        verify(externalWebPageHelper).openWebPageInCustomTab(
+        verify(webPageService).openWebPage(
             any(),
             eq(Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices"))
         )
