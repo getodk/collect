@@ -22,8 +22,16 @@ class GuidanceTest {
     val ruleChain: RuleChain = chain(testDependencies).around(rule)
 
     @Test
-    fun guidanceForQuestion_ShouldBeHiddenByDefault() {
+    fun guidanceForQuestion_ShouldBeHiddenIfNoSelectedInSettings() {
         rule.withProject(testDependencies.server, "hints_textq.xml")
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .openFormManagement()
+            .openShowGuidanceForQuestions()
+            .clickOnString(org.odk.collect.strings.R.string.guidance_no)
+            .pressBack(ProjectSettingsPage())
+            .pressBack(MainMenuPage())
+
             .startBlankForm("hints textq")
             .assertText("Hint 1")
             .checkIfElementIsGone(R.id.help_icon)
@@ -40,6 +48,7 @@ class GuidanceTest {
             .clickOnString(org.odk.collect.strings.R.string.guidance_yes)
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
+
             .startBlankForm("hints textq")
             .assertText("Hint 1")
             .checkIfElementIsGone(R.id.help_icon)
@@ -47,15 +56,8 @@ class GuidanceTest {
     }
 
     @Test
-    fun guidanceForQuestion_ShouldBeCollapsedIfCollapsedEnabledInSettings() {
+    fun guidanceForQuestion_ShouldBeCollapsedByDefault() {
         rule.withProject(testDependencies.server, "hints_textq.xml")
-            .openProjectSettingsDialog()
-            .clickSettings()
-            .openFormManagement()
-            .openShowGuidanceForQuestions()
-            .clickOnString(org.odk.collect.strings.R.string.guidance_yes_collapsed)
-            .pressBack(ProjectSettingsPage())
-            .pressBack(MainMenuPage())
             .startBlankForm("hints textq")
             .assertText("Hint 1")
             .checkIsIdDisplayed(R.id.help_icon)
