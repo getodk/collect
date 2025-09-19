@@ -6,6 +6,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
+import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -13,15 +14,16 @@ import org.odk.collect.android.support.rules.TestRuleChain.chain
 
 @RunWith(AndroidJUnit4::class)
 class GuidanceTest {
-    private var rule = CollectTestRule()
+
+    private val rule = CollectTestRule(useDemoProject = false)
+    private val testDependencies = TestDependencies()
 
     @get:Rule
-    var copyFormChain: RuleChain = chain().around(rule)
+    val ruleChain: RuleChain = chain(testDependencies).around(rule)
 
     @Test
     fun guidanceForQuestion_ShouldBeHiddenByDefault() {
-        rule.startAtMainMenu()
-            .copyForm("hints_textq.xml")
+        rule.withProject(testDependencies.server, "hints_textq.xml")
             .startBlankForm("hints textq")
             .assertText("Hint 1")
             .checkIfElementIsGone(R.id.help_icon)
@@ -30,8 +32,7 @@ class GuidanceTest {
 
     @Test
     fun guidanceForQuestion_ShouldBeFullyDisplayedIfAlwaysShownEnabledInSettings() {
-        rule.startAtMainMenu()
-            .copyForm("hints_textq.xml")
+        rule.withProject(testDependencies.server, "hints_textq.xml")
             .openProjectSettingsDialog()
             .clickSettings()
             .openFormManagement()
@@ -47,8 +48,7 @@ class GuidanceTest {
 
     @Test
     fun guidanceForQuestion_ShouldBeCollapsedIfCollapsedEnabledInSettings() {
-        rule.startAtMainMenu()
-            .copyForm("hints_textq.xml")
+        rule.withProject(testDependencies.server, "hints_textq.xml")
             .openProjectSettingsDialog()
             .clickSettings()
             .openFormManagement()
