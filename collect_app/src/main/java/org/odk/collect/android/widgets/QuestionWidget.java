@@ -18,6 +18,7 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
+import static org.odk.collect.settings.enums.StringIdEnumUtils.getGuidanceHintMode;
 
 import android.app.Activity;
 import android.content.Context;
@@ -40,7 +41,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
@@ -49,13 +49,13 @@ import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.interfaces.Widget;
 import org.odk.collect.android.widgets.items.SelectImageMapWidget;
-import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.androidshared.utils.ScreenUtils;
+import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
-import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.settings.enums.GuidanceHintMode;
 import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
@@ -208,9 +208,9 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
         TextView guidance;
-        GuidanceHint setting = GuidanceHint.get(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_GUIDANCE_HINT));
+        GuidanceHintMode setting = getGuidanceHintMode(settings, getContext());
 
-        if (setting.equals(GuidanceHint.NO)) {
+        if (setting.equals(GuidanceHintMode.NO)) {
             return null;
         }
 
@@ -224,9 +224,9 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
         expanded = new AtomicBoolean(false);
 
-        if (setting.equals(GuidanceHint.YES)) {
+        if (setting.equals(GuidanceHintMode.YES)) {
             guidanceTextLayout.setVisibility(VISIBLE);
-        } else if (setting.equals(GuidanceHint.YES_COLLAPSED)) {
+        } else if (setting.equals(GuidanceHintMode.YES_COLLAPSED)) {
             guidanceTextLayout.setVisibility(expanded.get() ? VISIBLE : GONE);
 
             View icon = textLayout.findViewById(R.id.help_icon);
