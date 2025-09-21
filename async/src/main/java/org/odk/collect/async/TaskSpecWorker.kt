@@ -61,12 +61,12 @@ class TaskSpecWorker(
 
         try {
             val completed =
-                taskSpec.getTask(applicationContext, stringInputData, isLastUniqueExecution(taskSpec)) { isStopped }.get()
+                taskSpec.getTask(applicationContext, stringInputData, foreground || isLastUniqueExecution(taskSpec)) { isStopped }.get()
             val maxRetries = taskSpec.maxRetries
 
             return if (completed) {
                 Result.success()
-            } else if (maxRetries == null || runAttemptCount < maxRetries) {
+            } else if (!foreground && (maxRetries == null || runAttemptCount < maxRetries)) {
                 Result.retry()
             } else {
                 Result.failure()
