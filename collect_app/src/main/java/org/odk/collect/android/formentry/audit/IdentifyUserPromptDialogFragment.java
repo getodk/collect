@@ -67,7 +67,7 @@ public class IdentifyUserPromptDialogFragment extends MaterialFullScreenDialogFr
         super.onAttach(context);
 
         viewModel = new ViewModelProvider(requireActivity()).get(IdentityPromptViewModel.class);
-        viewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
+        viewModel.getRequiresIdentity().observe(this, requiresIdentity -> {
             if (!requiresIdentity) {
                 dismiss();
             }

@@ -543,13 +543,13 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         });
 
         identityPromptViewModel = viewModelProvider.get(IdentityPromptViewModel.class);
-        identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
+        identityPromptViewModel.getRequiresIdentity().observe(this, requiresIdentity -> {
             if (requiresIdentity) {
                 showIfNotShowing(IdentifyUserPromptDialogFragment.class, getSupportFragmentManager());
             }
         });
 
-        identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
+        identityPromptViewModel.getFormEntryCancelled().observe(this, isFormEntryCancelled -> {
             if (isFormEntryCancelled) {
                 exit();
             }
@@ -1758,7 +1758,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 }
             }
         } else {
-            if (formController == null && !identityPromptViewModel.requiresIdentityToContinue().getValue()) {
+            if (formController == null && !identityPromptViewModel.getRequiresIdentity().getValue()) {
                 throw new IllegalStateException("Null formController!");
             }
         }
@@ -1931,7 +1931,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 }
 
                 identityPromptViewModel.formLoaded(formController);
-                identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
+                identityPromptViewModel.getRequiresIdentity().observe(this, requiresIdentity -> {
                     if (!requiresIdentity) {
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
 
@@ -1964,7 +1964,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 String formMode = reqIntent.getStringExtra(FormOpeningMode.FORM_MODE_KEY);
                 if (FormOpeningMode.isEditableMode(formMode)) {
                     identityPromptViewModel.formLoaded(formController);
-                    identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
+                    identityPromptViewModel.getRequiresIdentity().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
                             formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
                             if (!allowMovingBackwards) {
