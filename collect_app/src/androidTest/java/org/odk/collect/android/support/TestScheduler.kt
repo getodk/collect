@@ -20,8 +20,6 @@ import kotlin.coroutines.CoroutineContext
 class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Scheduler, CoroutineDispatcher() {
 
     private val wrappedScheduler: Scheduler
-    private val lock = Any()
-    private var tasks = 0
     private var finishedCallback: Runnable? = null
     private val deferredTasks: MutableList<DeferredTask> = ArrayList()
     private val backgroundDispatcher = Dispatchers.IO
@@ -36,18 +34,18 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
     }
 
     override fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>) {
-        increment()
+        startTask()
         wrappedScheduler.immediate(background) { t: T ->
             foreground.accept(t)
-            decrement()
+            finishTask()
         }
     }
 
     override fun immediate(foreground: Boolean, delay: Long?, runnable: Runnable) {
-        increment()
+        startTask()
         wrappedScheduler.immediate(foreground, delay) {
             runnable.run()
-            decrement()
+            finishTask()
         }
     }
 
@@ -57,11 +55,11 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         inputData: Map<String, String>,
         notificationInfo: NotificationInfo
     ) {
-        increment()
+        startTask()
         val context = ApplicationProvider.getApplicationContext<Context>()
         wrappedScheduler.immediate {
             spec.getTask(context, inputData, true) { false }.get()
-            decrement()
+            finishTask()
         }
     }
 
@@ -113,14 +111,14 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         finishedCallback = callback
     }
 
-    private fun increment() {
-        synchronized(lock) { tasks++ }
+    private fun startTask() {
+        synchronized(lock) { runningTasks++ }
     }
 
-    private fun decrement() {
+    private fun finishTask() {
         synchronized(lock) {
-            tasks--
-            if (tasks == 0 && finishedCallback != null) {
+            runningTasks--
+            if (runningTasks == 0 && finishedCallback != null) {
                 finishedCallback!!.run()
             }
         }
@@ -128,7 +126,7 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
 
     val taskCount: Int
         get() {
-            synchronized(lock) { return tasks }
+            synchronized(lock) { return runningTasks }
         }
 
     fun getDeferredTasks(): List<DeferredTask> {
@@ -142,10 +140,10 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
     }
 
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        increment()
+        startTask()
         backgroundDispatcher.dispatch(context) {
             block.run()
-            decrement()
+            finishTask()
         }
     }
 
@@ -156,4 +154,9 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         val inputData: Map<String, String>,
         val networkConstraint: Scheduler.NetworkType?
     )
+
+    companion object {
+        private val lock = Any()
+        private var runningTasks = 0
+    }
 }
