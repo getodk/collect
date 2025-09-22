@@ -1930,7 +1930,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     showFormLoadErrorAndExit(getString(org.odk.collect.strings.R.string.loading_form_failed));
                 }
 
-                identityPromptViewModel.formLoaded(formController);
+                identityPromptViewModel.formLoaded(formController, instance);
                 identityPromptViewModel.getRequiresIdentity().observe(this, requiresIdentity -> {
                     if (!requiresIdentity) {
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
@@ -1963,7 +1963,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 // we've just loaded a saved form, so start in the hierarchy view
                 String formMode = reqIntent.getStringExtra(FormOpeningMode.FORM_MODE_KEY);
                 if (FormOpeningMode.isEditableMode(formMode)) {
-                    identityPromptViewModel.formLoaded(formController);
+                    identityPromptViewModel.formLoaded(formController, instance);
                     identityPromptViewModel.getRequiresIdentity().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
                             formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());

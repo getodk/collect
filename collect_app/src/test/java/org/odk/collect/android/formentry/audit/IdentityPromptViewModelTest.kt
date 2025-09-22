@@ -18,7 +18,7 @@ class IdentityPromptViewModelTest {
 
         val viewModel = IdentityPromptViewModel()
 
-        viewModel.formLoaded(formController)
+        viewModel.formLoaded(formController, null)
         viewModel.setIdentity("Picard")
         viewModel.done()
         verify(auditEventLogger).user = "Picard"

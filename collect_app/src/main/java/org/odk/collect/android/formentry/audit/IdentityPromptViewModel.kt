@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.odk.collect.android.javarosawrapper.FormController
+import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.forms.instances.Instance
 import org.odk.collect.shared.strings.StringUtils.isBlank
 
 class IdentityPromptViewModel : ViewModel() {
@@ -15,6 +17,9 @@ class IdentityPromptViewModel : ViewModel() {
 
     private var auditEventLogger: AuditEventLogger? = null
 
+    private lateinit var formController: FormController
+    private var instance: Instance? = null
+
     var user: String? = null
         private set
 
@@ -25,7 +30,9 @@ class IdentityPromptViewModel : ViewModel() {
         updateRequiresIdentity()
     }
 
-    fun formLoaded(formController: FormController) {
+    fun formLoaded(formController: FormController, instance: Instance?) {
+        this.formController = formController
+        this.instance = instance
         formTitle = formController.getFormTitle()
         auditEventLogger = formController.getAuditEventLogger()
         updateRequiresIdentity()
@@ -44,6 +51,9 @@ class IdentityPromptViewModel : ViewModel() {
     }
 
     fun promptDismissed() {
+        if (instance == null || instance!!.status == Instance.STATUS_NEW_EDIT) {
+            FileUtils.purgeMediaPath(formController.getInstanceFile()?.parent)
+        }
         _formEntryCancelled.value = true
     }
 
