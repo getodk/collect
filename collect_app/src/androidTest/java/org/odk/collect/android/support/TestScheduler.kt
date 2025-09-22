@@ -2,11 +2,13 @@ package org.odk.collect.android.support
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import androidx.work.BackoffPolicy
 import androidx.work.WorkManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.flow.Flow
+import org.odk.collect.android.support.TestSchedulerTaskSpec.Companion.DATA_WRAPPED_SPEC
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler
 import org.odk.collect.async.NotificationInfo
@@ -56,11 +58,13 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         notificationInfo: NotificationInfo
     ) {
         startTask()
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        wrappedScheduler.immediate {
-            spec.getTask(context, inputData, true) { false }.get()
-            finishTask()
-        }
+        val augmentedInputData = inputData + Pair(DATA_WRAPPED_SPEC, spec.javaClass.name)
+        wrappedScheduler.immediate(
+            tag,
+            TestSchedulerTaskSpec(),
+            augmentedInputData,
+            notificationInfo
+        )
     }
 
     override fun networkDeferred(
@@ -111,19 +115,6 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         finishedCallback = callback
     }
 
-    private fun startTask() {
-        synchronized(lock) { runningTasks++ }
-    }
-
-    private fun finishTask() {
-        synchronized(lock) {
-            runningTasks--
-            if (runningTasks == 0 && finishedCallback != null) {
-                finishedCallback!!.run()
-            }
-        }
-    }
-
     val taskCount: Int
         get() {
             synchronized(lock) { return runningTasks }
@@ -156,7 +147,56 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
     )
 
     companion object {
+        fun startTask() {
+            synchronized(lock) { runningTasks++ }
+        }
+
+        fun finishTask() {
+            synchronized(lock) {
+                if (runningTasks > 0) {
+                    runningTasks--
+                } else {
+                    throw IllegalStateException()
+                }
+            }
+        }
+
         private val lock = Any()
         private var runningTasks = 0
+    }
+}
+
+class TestSchedulerTaskSpec : TaskSpec {
+    override val maxRetries: Int? = null
+    override val backoffPolicy: BackoffPolicy? = null
+    override val backoffDelay: Long? = null
+
+    private lateinit var wrappedSpec: TaskSpec
+
+    override fun getTask(
+        context: Context,
+        inputData: Map<String, String>,
+        isLastUniqueExecution: Boolean,
+        isStopped: () -> Boolean
+    ): Supplier<Boolean> {
+        wrappedSpec = Class.forName(inputData[DATA_WRAPPED_SPEC]!!)
+            .getConstructor()
+            .newInstance() as TaskSpec
+
+        return Supplier {
+            val result =
+                wrappedSpec.getTask(context, inputData, isLastUniqueExecution, isStopped).get()
+
+            TestScheduler.finishTask()
+            result
+        }
+    }
+
+    override fun onException(exception: Throwable) {
+        wrappedSpec.onException(exception)
+    }
+
+    companion object {
+        const val DATA_WRAPPED_SPEC = "wrapped_spec"
     }
 }
