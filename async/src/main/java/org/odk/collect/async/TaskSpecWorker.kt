@@ -59,8 +59,13 @@ class TaskSpecWorker(
             )
         }
 
-        val result =
-            taskSpec.run(applicationContext, stringInputData, runAttemptCount, { isStopped })
+        val result = taskSpec.run(
+            applicationContext,
+            stringInputData,
+            runAttemptCount,
+            isForeground,
+            { isStopped }
+        )
 
         return when (result) {
             TaskSpec.Result.SUCCESS -> Result.success()
