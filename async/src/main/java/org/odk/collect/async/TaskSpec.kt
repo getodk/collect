@@ -40,6 +40,7 @@ fun TaskSpec.run(
     context: Context,
     inputData: Map<String, String>,
     runAttemptCount: Int,
+    isForeground: Boolean,
     isStopped: () -> Boolean
 ): TaskSpec.Result {
     try {
