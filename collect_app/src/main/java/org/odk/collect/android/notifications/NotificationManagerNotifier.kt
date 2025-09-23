@@ -13,6 +13,7 @@ import org.odk.collect.android.notifications.builders.FormsSubmissionNotificatio
 import org.odk.collect.android.notifications.builders.FormsSyncFailedNotificationBuilder
 import org.odk.collect.android.notifications.builders.FormsSyncStoppedNotificationBuilder
 import org.odk.collect.android.upload.FormUploadException
+import org.odk.collect.androidshared.utils.RuntimeUniqueIdGenerator
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.ProjectsRepository
@@ -98,9 +99,9 @@ class NotificationManagerNotifier(
 
     companion object {
         const val COLLECT_NOTIFICATION_CHANNEL = "collect_notification_channel"
-        const val FORM_UPDATE_NOTIFICATION_ID = 0
-        const val FORM_SYNC_NOTIFICATION_ID = 1
-        private const val AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928
+        private val FORM_UPDATE_NOTIFICATION_ID = RuntimeUniqueIdGenerator.nextInt()
+        private val FORM_SYNC_NOTIFICATION_ID = RuntimeUniqueIdGenerator.nextInt()
+        private val AUTO_SEND_RESULT_NOTIFICATION_ID = RuntimeUniqueIdGenerator.nextInt()
     }
 
     private fun getProjectName(projectId: String) = projectsRepository.get(projectId)?.name ?: ""
