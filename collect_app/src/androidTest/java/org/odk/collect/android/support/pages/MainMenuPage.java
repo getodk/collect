@@ -17,7 +17,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.StorageUtils;
-import org.odk.collect.android.support.TrackingCoroutineAndWorkManagerScheduler;
+import org.odk.collect.android.support.async.TrackingCoroutineAndWorkManagerScheduler;
 import org.odk.collect.testshared.WaitFor;
 
 import java.io.IOException;

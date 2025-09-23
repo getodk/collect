@@ -1,4 +1,4 @@
-package org.odk.collect.android.support
+package org.odk.collect.android.support.async
 
 object AsyncWorkTracker {
     private var runningTasks = 0

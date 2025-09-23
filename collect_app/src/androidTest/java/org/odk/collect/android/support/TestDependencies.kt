@@ -10,6 +10,7 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.support.async.TrackingCoroutineAndWorkManagerScheduler
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.system.BroadcastReceiverRegister
 import org.odk.collect.async.Scheduler
@@ -33,7 +34,8 @@ open class TestDependencies @JvmOverloads constructor(
     @JvmField val storagePathProvider: StoragePathProvider = StoragePathProvider()
 
     val networkStateProvider: FakeNetworkStateProvider = FakeNetworkStateProvider()
-    val scheduler: TrackingCoroutineAndWorkManagerScheduler = TrackingCoroutineAndWorkManagerScheduler(networkStateProvider)
+    val scheduler: TrackingCoroutineAndWorkManagerScheduler =
+        TrackingCoroutineAndWorkManagerScheduler(networkStateProvider)
     val fakeBarcodeScannerViewFactory = FakeBarcodeScannerViewFactory()
     val broadcastReceiverRegister: FakeBroadcastReceiverRegister = FakeBroadcastReceiverRegister()
     val restrictionsManager: RestrictionsManager = mock<RestrictionsManager>().apply {
