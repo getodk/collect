@@ -4,9 +4,9 @@ import android.Manifest
 import android.os.Build
 import androidx.test.rule.GrantPermissionRule
 import org.junit.rules.RuleChain
-import org.odk.collect.android.support.AsyncWorkTrackerIdlingResource
 import org.odk.collect.android.support.CountingTaskExecutorIdlingResource
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.async.AsyncWorkTrackerIdlingResource
 
 object TestRuleChain {
 

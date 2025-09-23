@@ -1,4 +1,4 @@
-package org.odk.collect.android.support;
+package org.odk.collect.android.support.async;
 
 import androidx.test.espresso.IdlingResource;
 
