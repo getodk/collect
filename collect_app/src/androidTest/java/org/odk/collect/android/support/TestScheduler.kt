@@ -22,7 +22,6 @@ import kotlin.coroutines.CoroutineContext
 class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Scheduler, CoroutineDispatcher() {
 
     private val wrappedScheduler: Scheduler
-    private var finishedCallback: Runnable? = null
     private val deferredTasks: MutableList<DeferredTask> = ArrayList()
     private val backgroundDispatcher = Dispatchers.IO
 
@@ -36,18 +35,18 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
     }
 
     override fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>) {
-        startTask()
+        AsyncWorkTracker.startWork()
         wrappedScheduler.immediate(background) { t: T ->
             foreground.accept(t)
-            finishTask()
+            AsyncWorkTracker.finishWork()
         }
     }
 
     override fun immediate(foreground: Boolean, delay: Long?, runnable: Runnable) {
-        startTask()
+        AsyncWorkTracker.startWork()
         wrappedScheduler.immediate(foreground, delay) {
             runnable.run()
-            finishTask()
+            AsyncWorkTracker.finishWork()
         }
     }
 
@@ -57,7 +56,7 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         inputData: Map<String, String>,
         notificationInfo: NotificationInfo
     ) {
-        startTask()
+        AsyncWorkTracker.startWork()
         val augmentedInputData = inputData + Pair(DATA_WRAPPED_SPEC, spec.javaClass.name)
         wrappedScheduler.immediate(
             tag,
@@ -111,15 +110,6 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         }
     }
 
-    fun setFinishedCallback(callback: Runnable?) {
-        finishedCallback = callback
-    }
-
-    val taskCount: Int
-        get() {
-            synchronized(lock) { return runningTasks }
-        }
-
     fun getDeferredTasks(): List<DeferredTask> {
         return deferredTasks
     }
@@ -131,10 +121,10 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
     }
 
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        startTask()
+        AsyncWorkTracker.startWork()
         backgroundDispatcher.dispatch(context) {
             block.run()
-            finishTask()
+            AsyncWorkTracker.finishWork()
         }
     }
 
@@ -145,25 +135,6 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         val inputData: Map<String, String>,
         val networkConstraint: Scheduler.NetworkType?
     )
-
-    companion object {
-        fun startTask() {
-            synchronized(lock) { runningTasks++ }
-        }
-
-        fun finishTask() {
-            synchronized(lock) {
-                if (runningTasks > 0) {
-                    runningTasks--
-                } else {
-                    throw IllegalStateException()
-                }
-            }
-        }
-
-        private val lock = Any()
-        private var runningTasks = 0
-    }
 }
 
 class TestSchedulerTaskSpec : TaskSpec {
@@ -187,7 +158,7 @@ class TestSchedulerTaskSpec : TaskSpec {
             val result =
                 wrappedSpec.getTask(context, inputData, isLastUniqueExecution, isStopped).get()
 
-            TestScheduler.finishTask()
+            AsyncWorkTracker.finishWork()
             result
         }
     }
