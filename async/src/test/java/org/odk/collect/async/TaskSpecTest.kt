@@ -33,8 +33,5 @@ private class OneRetryTaskSpec() : TaskSpec {
         }
     }
 
-    override fun onException(exception: Throwable) {
-
-    }
-
+    override fun onException(exception: Throwable) {}
 }
