@@ -50,7 +50,7 @@ fun TaskSpec.run(
 
         return if (completed) {
             TaskSpec.Result.SUCCESS
-        } else if (maxRetries == null || runAttemptCount < maxRetries) {
+        } else if (!isForeground && (maxRetries == null || runAttemptCount < maxRetries)) {
             TaskSpec.Result.RETRY
         } else {
             TaskSpec.Result.FAILURE
