@@ -12,10 +12,10 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.ReturnToAppActivity
+import org.odk.collect.androidshared.utils.RuntimeUniqueIdGenerator
 import org.odk.collect.location.Location
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClientProvider
-import org.odk.collect.location.R
 import org.odk.collect.strings.localization.getLocalizedString
 
 private const val LOCATION_KEY = "location"
@@ -132,7 +132,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
         const val EXTRA_RETAIN_MOCK_ACCURACY = "retain_mock_accuracy"
         const val EXTRA_UPDATE_INTERVAL = "update_interval"
 
-        private const val NOTIFICATION_ID = 1
+        private val NOTIFICATION_ID = RuntimeUniqueIdGenerator.nextInt()
         private const val NOTIFICATION_CHANNEL = "location_tracking"
     }
 }
