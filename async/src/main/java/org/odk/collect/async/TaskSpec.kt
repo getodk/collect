@@ -45,7 +45,7 @@ fun TaskSpec.run(
 ): TaskSpec.Result {
     try {
         val isLastUniqueExecution = maxRetries?.let { runAttemptCount >= it } ?: true
-        val completed = getTask(context, inputData, isLastUniqueExecution, isStopped).get()
+        val completed = getTask(context, inputData, isForeground || isLastUniqueExecution, isStopped).get()
         val maxRetries = this.maxRetries
 
         return if (completed) {
