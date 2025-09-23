@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.work.BackoffPolicy
 import androidx.work.WorkManager
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import org.odk.collect.android.support.TestSchedulerTaskSpec.Companion.DATA_WRAPPED_SPEC
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler
@@ -17,17 +17,16 @@ import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.network.NetworkStateProvider
 import java.util.function.Consumer
 import java.util.function.Supplier
-import kotlin.coroutines.CoroutineContext
 
-class TrackingCoroutineAndWorkManagerScheduler(private val networkStateProvider: NetworkStateProvider) : Scheduler, CoroutineDispatcher() {
+class TrackingCoroutineAndWorkManagerScheduler(private val networkStateProvider: NetworkStateProvider) : Scheduler {
 
-    private val wrappedScheduler: Scheduler
+    private val wrappedScheduler: CoroutineAndWorkManagerScheduler
     private val deferredTasks: MutableList<DeferredTask> = ArrayList()
-    private val backgroundDispatcher = Dispatchers.IO
+    private val backgroundDispatcher = TrackingCoroutineDispatcher(Dispatchers.IO)
 
     init {
         val workManager = WorkManager.getInstance(ApplicationProvider.getApplicationContext())
-        wrappedScheduler = CoroutineAndWorkManagerScheduler(Dispatchers.Main, this, workManager)
+        wrappedScheduler = CoroutineAndWorkManagerScheduler(Dispatchers.Main, backgroundDispatcher, workManager)
     }
 
     override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {
@@ -117,15 +116,7 @@ class TrackingCoroutineAndWorkManagerScheduler(private val networkStateProvider:
     override fun cancelAllDeferred() {}
 
     override fun <T> flowOnBackground(flow: Flow<T>): Flow<T> {
-        return wrappedScheduler.flowOnBackground(flow)
-    }
-
-    override fun dispatch(context: CoroutineContext, block: Runnable) {
-        AsyncWorkTracker.startWork()
-        backgroundDispatcher.dispatch(context) {
-            block.run()
-            AsyncWorkTracker.finishWork()
-        }
+        return flow.flowOn(backgroundDispatcher)
     }
 
     class DeferredTask(
