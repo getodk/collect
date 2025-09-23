@@ -19,7 +19,7 @@ import java.util.function.Consumer
 import java.util.function.Supplier
 import kotlin.coroutines.CoroutineContext
 
-class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Scheduler, CoroutineDispatcher() {
+class TrackingCoroutineAndWorkManagerScheduler(private val networkStateProvider: NetworkStateProvider) : Scheduler, CoroutineDispatcher() {
 
     private val wrappedScheduler: Scheduler
     private val deferredTasks: MutableList<DeferredTask> = ArrayList()

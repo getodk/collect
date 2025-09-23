@@ -33,7 +33,7 @@ open class TestDependencies @JvmOverloads constructor(
     @JvmField val storagePathProvider: StoragePathProvider = StoragePathProvider()
 
     val networkStateProvider: FakeNetworkStateProvider = FakeNetworkStateProvider()
-    val scheduler: TestScheduler = TestScheduler(networkStateProvider)
+    val scheduler: TrackingCoroutineAndWorkManagerScheduler = TrackingCoroutineAndWorkManagerScheduler(networkStateProvider)
     val fakeBarcodeScannerViewFactory = FakeBarcodeScannerViewFactory()
     val broadcastReceiverRegister: FakeBroadcastReceiverRegister = FakeBroadcastReceiverRegister()
     val restrictionsManager: RestrictionsManager = mock<RestrictionsManager>().apply {

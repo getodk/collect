@@ -14,7 +14,7 @@ import static org.hamcrest.core.StringContains.containsString;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.StorageUtils;
-import org.odk.collect.android.support.TestScheduler;
+import org.odk.collect.android.support.TrackingCoroutineAndWorkManagerScheduler;
 import org.odk.collect.testshared.WaitFor;
 
 import java.io.IOException;
@@ -181,7 +181,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new MainMenuPage());
     }
 
-    public MainMenuPage enableAutoSend(TestScheduler scheduler, int setting) {
+    public MainMenuPage enableAutoSend(TrackingCoroutineAndWorkManagerScheduler scheduler, int setting) {
         MainMenuPage mainMenuPage = openProjectSettingsDialog()
                 .clickSettings()
                 .clickFormManagement()
