@@ -112,7 +112,7 @@ class MapboxMapFragment :
     private var referenceLayerFile: File? = null
     private var clientWantsLocationUpdates = false
     private var topStyleLayerId: String? = null
-    private val locationCallback = MapboxLocationCallback(this)
+
     private val _mapViewModel by viewModels<MapViewModel> {
         viewModelFactory {
             addInitializer(MapViewModel::class) {
@@ -448,7 +448,7 @@ class MapboxMapFragment :
     }
 
     override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {
-        locationCallback.setRetainMockAccuracy(retainMockAccuracy)
+        locationClient.setRetainMockAccuracy(retainMockAccuracy)
     }
 
     override fun onMapClick(point: Point): Boolean {

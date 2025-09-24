@@ -157,7 +157,7 @@ public class GeoPointMapActivityTest {
     }
 
     @Test
-    public void passingRetainMockAccuracyExtra_showSetItOnLocationClient() {
+    public void passingRetainMockAccuracyExtra_updatesMapFragmentState() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointMapActivity.class);
         intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true);
         launcherRule.launch(intent);

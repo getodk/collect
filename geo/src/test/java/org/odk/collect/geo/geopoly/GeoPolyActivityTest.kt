@@ -27,6 +27,7 @@ import org.odk.collect.androidtest.ActivityScenarioExtensions.isFinishing
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.Constants
+import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.geo.R
@@ -281,6 +282,25 @@ class GeoPolyActivityTest {
         launcherRule.launch<Activity>(intent)
         mapFragment.ready()
         assertThat(mapFragment.isPolyDraggable(0), equalTo(false))
+    }
+
+    @Test
+    fun passingRetainMockAccuracyExtra_updatesMapFragmentState() {
+        val intent = Intent(
+            ApplicationProvider.getApplicationContext(),
+            GeoPolyActivity::class.java
+        )
+        intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true)
+        launcherRule.launch<Activity>(intent)
+        mapFragment.ready()
+
+        assertThat(mapFragment.isRetainMockAccuracy(), equalTo(true))
+
+        intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, false)
+        launcherRule.launch<Activity>(intent)
+        mapFragment.ready()
+
+        assertThat(mapFragment.isRetainMockAccuracy(), equalTo(false))
     }
 
     @Test
