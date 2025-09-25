@@ -49,12 +49,12 @@ internal class AccuracyProgressView @JvmOverloads constructor(
     private fun getBackgroundAndTextColor(accuracy: LocationAccuracy): Pair<Int, Int> {
         return if (accuracy is LocationAccuracy.Unacceptable) {
             Pair(
-                getThemeAttributeValue(context, com.google.android.material.R.attr.colorError),
+                getThemeAttributeValue(context, androidx.appcompat.R.attr.colorError),
                 getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnError)
             )
         } else {
             Pair(
-                getThemeAttributeValue(context, com.google.android.material.R.attr.colorPrimary),
+                getThemeAttributeValue(context, androidx.appcompat.R.attr.colorPrimary),
                 getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnPrimary)
             )
         }
