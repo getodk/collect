@@ -127,6 +127,8 @@ the specific language governing permissions and limitations under the License.
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="org.odk.collect.draw.DrawActivity"
+            android:theme="@style/Theme.Collect"
+            tools:replace="android:theme"
             android:screenOrientation="landscape" />
         <activity android:name=".activities.InstanceChooserList" />
         <activity
