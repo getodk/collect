@@ -22,7 +22,7 @@ class GuidanceTest {
     val ruleChain: RuleChain = chain(testDependencies).around(rule)
 
     @Test
-    fun guidanceForQuestion_ShouldBeHiddenIfNoSelectedInSettings() {
+    fun guidanceForQuestion_ShouldBeHiddenIfNotSelectedInSettings() {
         rule.withProject(testDependencies.server, "hints_textq.xml")
             .openProjectSettingsDialog()
             .clickSettings()
