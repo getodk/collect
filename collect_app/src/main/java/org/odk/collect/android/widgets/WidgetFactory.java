@@ -60,6 +60,7 @@ import org.odk.collect.android.widgets.utilities.AudioRecorderRecordingStatusHan
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.StringRequester;
@@ -68,6 +69,7 @@ import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.webpage.CustomTabsWebPageService;
 
 /**
@@ -93,6 +95,7 @@ public class WidgetFactory {
     private final StringRequester stringRequester;
     private final FormController formController;
     private final AdvanceToNextListener advanceToNextListener;
+    private final SettingsProvider settingsProvider;
 
     public WidgetFactory(Activity activity,
                          boolean useExternalRecorder,
@@ -107,7 +110,8 @@ public class WidgetFactory {
                          FileRequester fileRequester,
                          StringRequester stringRequester,
                          FormController formController,
-                         AdvanceToNextListener advanceToNextListener
+                         AdvanceToNextListener advanceToNextListener,
+                         SettingsProvider settingsProvider
     ) {
         this.activity = activity;
         this.useExternalRecorder = useExternalRecorder;
@@ -123,6 +127,7 @@ public class WidgetFactory {
         this.stringRequester = stringRequester;
         this.formController = formController;
         this.advanceToNextListener = advanceToNextListener;
+        this.settingsProvider = settingsProvider;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -133,6 +138,7 @@ public class WidgetFactory {
         String appearance = Appearances.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, readOnlyOverride);
         QuestionWidget.Dependencies dependencies = new QuestionWidget.Dependencies(audioPlayer);
+        Integer answerFontSize = QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.HEADLINE_6);
 
         final QuestionWidget questionWidget;
         switch (prompt.getControlType()) {
@@ -184,7 +190,7 @@ public class WidgetFactory {
                                 MapConfiguratorProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_BARCODE:
-                        questionWidget = new BarcodeWidget(activity, questionDetails, waitingForDataRegistry, new CameraUtils(), dependencies);
+                        questionWidget = new BarcodeWidget(activity, questionDetails, new BarcodeWidgetAnswerView(activity, answerFontSize), waitingForDataRegistry, new CameraUtils(), dependencies);
                         break;
                     case Constants.DATATYPE_TEXT:
                         String query = prompt.getQuestion().getAdditionalAttribute(null, "query");
@@ -209,9 +215,9 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_FILE_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExArbitraryFileWidget(activity, questionDetails, questionMediaManager, waitingForDataRegistry, fileRequester, dependencies);
+                    questionWidget = new ExArbitraryFileWidget(activity, questionDetails, new ArbitraryFileWidgetAnswerView(activity, answerFontSize), questionMediaManager, waitingForDataRegistry, fileRequester, dependencies);
                 } else {
-                    questionWidget = new ArbitraryFileWidget(activity, questionDetails, questionMediaManager, waitingForDataRegistry, dependencies);
+                    questionWidget = new ArbitraryFileWidget(activity, questionDetails, new ArbitraryFileWidgetAnswerView(activity, answerFontSize), questionMediaManager, waitingForDataRegistry, dependencies);
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:

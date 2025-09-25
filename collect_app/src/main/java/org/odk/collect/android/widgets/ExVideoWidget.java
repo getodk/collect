@@ -45,7 +45,7 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateWidgetView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         setupAnswerFile(prompt.getAnswerText());
 
         binding = ExVideoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
