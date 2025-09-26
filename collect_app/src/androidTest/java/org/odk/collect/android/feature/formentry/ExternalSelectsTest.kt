@@ -64,4 +64,15 @@ class ExternalSelectsTest {
             .startBlankForm("dynamic_and_static_choices")
             .assertTexts("Mango", "Oranges", "Strawberries", "Apples")
     }
+
+    @Test
+    fun missingFileMessage_shouldBeDisplayedIfDynamicChoicesUsedButTheConfigurationRowIsMissing() {
+        val formsDirPath = StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
+
+        rule.startAtMainMenu()
+            .copyForm("dynamic_and_static_choices.xml", listOf("fruits.csv"))
+            .startBlankForm("dynamic_and_static_choices")
+            .swipeToNextQuestion("Choose a number")
+            .assertText("File: $formsDirPath/dynamic_and_static_choices-media/numbers.csv is missing.")
+    }
 }

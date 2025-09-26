@@ -13,12 +13,14 @@
             <instance>
                 <data id="dynamic_and_static_choices">
                     <fruits/>
+                    <numbers/>
                     <meta>
                         <instanceID/>
                     </meta>
                 </data>
             </instance>
             <bind nodeset="/data/fruits" type="string"/>
+            <bind nodeset="/data/numbers" type="string"/>
             <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
         </model>
     </h:head>
@@ -32,6 +34,17 @@
             <item>
                 <label>Apples</label>
                 <value>0</value>
+            </item>
+        </select1>
+        <select1 ref="/data/numbers" appearance="search('numbers')">
+            <label>Choose a number</label>
+            <item>
+                <label>0</label>
+                <value>0</value>
+            </item>
+            <item>
+                <label>1</label>
+                <value>1</value>
             </item>
         </select1>
     </h:body>
