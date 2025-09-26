@@ -56,4 +56,12 @@ class ExternalSelectsTest {
             .assertText("File: $formsDirPath/search_and_select-media/nombre.csv is missing.")
             .assertText("File: $formsDirPath/search_and_select-media/nombre2.csv is missing.")
     }
+
+    @Test
+    fun dynamicChoicesCanBeMixedWithNumericInternalOnes() {
+        rule.startAtMainMenu()
+            .copyForm("dynamic_and_static_choices.xml", listOf("fruits.csv"))
+            .startBlankForm("dynamic_and_static_choices")
+            .assertTexts("Mango", "Oranges", "Strawberries", "Apples")
+    }
 }
