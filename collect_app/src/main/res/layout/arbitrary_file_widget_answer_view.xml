@@ -18,6 +18,7 @@
         android:id="@+id/answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:tag="ArbitraryFileWidgetAnswer"
         android:layout_marginStart="@dimen/margin_small"
         tools:text="file.pdf" />
 </LinearLayout>
