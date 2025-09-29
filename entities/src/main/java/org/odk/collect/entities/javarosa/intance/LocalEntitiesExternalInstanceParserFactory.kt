@@ -6,12 +6,12 @@ import org.odk.collect.entities.storage.EntitiesRepository
 
 class LocalEntitiesExternalInstanceParserFactory(
     private val entitiesRepositoryProvider: () -> EntitiesRepository,
-    private val enabled: () -> Boolean
+    private val usesEntities: () -> Boolean
 ) : ExternalInstanceParserFactory {
     override fun getExternalInstanceParser(): ExternalInstanceParser {
         val parser = ExternalInstanceParser()
 
-        if (enabled()) {
+        if (usesEntities()) {
             parser.addInstanceProvider(LocalEntitiesInstanceProvider(entitiesRepositoryProvider))
         }
 
