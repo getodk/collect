@@ -10,6 +10,7 @@ import org.odk.collect.forms.instances.Instance
 import org.odk.collect.shared.strings.UUIDGenerator
 
 class InMemFormSessionRepository : FormSessionRepository {
+    override var currentForm: Form? = null
 
     private val map = mutableMapOf<String, MutableLiveData<FormSession>>()
 

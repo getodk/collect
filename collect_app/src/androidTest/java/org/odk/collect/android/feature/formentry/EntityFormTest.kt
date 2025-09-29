@@ -391,7 +391,7 @@ class EntityFormTest {
             .assertTextDoesNotExist("Roman Roy")
     }
 
-    @Test //https://github.com/getodk/collect/issues/6425
+    @Test // https://github.com/getodk/collect/issues/6425
     fun nonEntityFormWithCsvMatchingEntityList_usesCsvChoices() {
         testDependencies.server.addForm("one-question-entity-registration.xml", listOf(EntityListItem("people.csv")))
         testDependencies.server.addForm("select-one-person.xml", listOf(MediaFileItem("people.csv")))
