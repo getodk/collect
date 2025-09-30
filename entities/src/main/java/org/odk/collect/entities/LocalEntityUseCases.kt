@@ -132,6 +132,27 @@ object LocalEntityUseCases {
         )
     }
 
+    fun updateOfflineLocalEntitiesFromServer(
+        list: String,
+        entitiesRepository: EntitiesRepository,
+        entitySource: EntitySource,
+        mediaFile: MediaFile
+    ) {
+        val offlineLocalEntities = entitiesRepository
+            .query(list)
+            .filter { it.state == Entity.State.OFFLINE }
+            .associateBy { it.id }
+            .toMutableMap()
+
+        handleMissingEntities(
+            list,
+            offlineLocalEntities.values,
+            entitiesRepository,
+            entitySource,
+            mediaFile.integrityUrl
+        )
+    }
+
     private fun handleMissingEntities(
         list: String,
         missingFromServer: Collection<Entity.Saved>,
