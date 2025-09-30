@@ -12,7 +12,7 @@ import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 
 @RunWith(AndroidJUnit4::class)
-class AudioAutoplayTest {
+class AudioPlayingTest {
     private val testDependencies = TestDependencies()
     private val rule = CollectTestRule()
 
