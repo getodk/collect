@@ -694,6 +694,27 @@ class LocalEntityUseCasesTest {
         }
     }
 
+    @Test
+    fun `updateOfflineLocalEntitiesFromServer removes offline entities that are deleted according to the entity source`() {
+        entitiesRepository.save("songs", Entity.New("cathedrals", "Cathedrals", state = Entity.State.OFFLINE))
+        entitiesRepository.save("songs", Entity.New("noah", "Noah", state = Entity.State.ONLINE))
+        entitiesRepository.save("songs", Entity.New("midnightCity", "Midnight City", state = Entity.State.OFFLINE))
+
+        entitySource.delete("cathedrals")
+
+        LocalEntityUseCases.updateOfflineLocalEntitiesFromServer(
+            "songs",
+            entitiesRepository,
+            entitySource,
+            FormFixtures.mediaFile(integrityUrl = entitySource.integrityUrl)
+        )
+
+        val songs = entitiesRepository.query("songs")
+        assertThat(songs.size, equalTo(2))
+        assertThat(songs[0].label, equalTo("Noah"))
+        assertThat(songs[1].label, equalTo("Midnight City"))
+    }
+
     private fun createCsv(header: List<String>, vararg rows: List<String?>): File {
         val csv = TempFiles.createTempFile()
         csv.writer().use { it ->
