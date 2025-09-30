@@ -395,11 +395,11 @@ public class AudioWidgetTest {
 
         audioController.binding.play.performClick();
         assertThat(audioPlayer.getCurrentClip(), is(expectedClip));
-        assertThat(audioPlayer.isPaused(), is(true));
+        assertThat(audioPlayer.isPlaying(), is(false));
 
         audioController.binding.play.performClick();
         assertThat(audioPlayer.getCurrentClip(), is(expectedClip));
-        assertThat(audioPlayer.isPaused(), is(false));
+        assertThat(audioPlayer.isPlaying(), is(true));
     }
 
     @Test
