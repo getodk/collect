@@ -16,6 +16,7 @@ package org.odk.collect.android.activities
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
+import androidx.activity.enableEdgeToEdge
 import org.odk.collect.android.R
 import org.odk.collect.android.application.CollectComposeThemeProvider
 import org.odk.collect.strings.localization.LocalizedActivity
@@ -26,6 +27,7 @@ import org.odk.collect.strings.localization.LocalizedActivity
 class ScannerWithFlashlightActivity : LocalizedActivity(), CollectComposeThemeProvider {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(
