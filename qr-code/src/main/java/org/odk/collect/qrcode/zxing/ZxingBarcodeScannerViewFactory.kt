@@ -21,7 +21,8 @@ class ZxingBarcodeScannerViewFactory : BarcodeScannerViewContainer.Factory {
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
         qrOnly: Boolean,
-        useFrontCamera: Boolean
+        useFrontCamera: Boolean,
+        fullScreenViewFinder: Boolean
     ): BarcodeScannerView {
         return ZxingBarcodeScannerView(activity, lifecycleOwner, qrOnly, useFrontCamera)
     }

@@ -20,7 +20,8 @@ class SettingsBarcodeScannerViewFactory(
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
         qrOnly: Boolean,
-        useFrontCamera: Boolean
+        useFrontCamera: Boolean,
+        fullScreenViewFinder: Boolean
     ): BarcodeScannerView {
         val factory = if (settings.getExperimentalOptIn(ProjectKeys.KEY_ZXING_SCANNING)) {
             zxingFactory
@@ -28,6 +29,6 @@ class SettingsBarcodeScannerViewFactory(
             playServicesFallbackFactory
         }
 
-        return factory.create(activity, lifecycleOwner, qrOnly, useFrontCamera)
+        return factory.create(activity, lifecycleOwner, qrOnly, useFrontCamera, fullScreenViewFinder)
     }
 }

@@ -58,13 +58,17 @@ abstract class BarCodeScannerFragment : Fragment() {
         beepManager = BeepManager(activity)
 
         val rootView = inflater.inflate(R.layout.fragment_scan, container, false)
+
+        val isLandscape =
+            requireContext().resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         barcodeScannerViewContainer = rootView.findViewById(R.id.barcode_view)
         barcodeScannerViewContainer.setup(
             barcodeScannerViewFactory,
             requireActivity(),
             getViewLifecycleOwner(),
-            this.isQrOnly(),
-            frontCameraUsed()
+            isQrOnly(),
+            frontCameraUsed(),
+            isLandscape
         )
 
         val promptView = rootView.findViewById<TextView>(R.id.prompt)
@@ -76,7 +80,7 @@ abstract class BarCodeScannerFragment : Fragment() {
             flashlightToggleView.visibility = View.GONE
         }
 
-        if (requireContext().resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (isLandscape) {
             promptView.visibility = View.GONE
             flashlightToggleView.visibility = View.GONE
         }
@@ -118,7 +122,11 @@ abstract class BarCodeScannerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Layout the prompt/flashlight button under the view finder
         view.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
-            val (offset, size) = calculateViewFinder(view.width.toFloat(), view.height.toFloat())
+            val (offset, size) = calculateViewFinder(
+                view.width.toFloat(),
+                view.height.toFloat(),
+                false
+            )
             val bottomOfViewFinder = offset.y + size.height
 
             val promptView = view.findViewById<TextView>(R.id.prompt)

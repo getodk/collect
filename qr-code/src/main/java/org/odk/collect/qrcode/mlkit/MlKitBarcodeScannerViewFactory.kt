@@ -36,14 +36,16 @@ class MlKitBarcodeScannerViewFactory(private val scanThreshold: Int) :
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
         qrOnly: Boolean,
-        useFrontCamera: Boolean
+        useFrontCamera: Boolean,
+        fullScreenViewFinder: Boolean
     ): BarcodeScannerView {
         return MlKitBarcodeScannerView(
             activity,
             lifecycleOwner,
             qrOnly,
             useFrontCamera,
-            scanThreshold
+            scanThreshold,
+            fullScreenViewFinder
         )
     }
 
@@ -77,7 +79,8 @@ private class MlKitBarcodeScannerView(
     private val lifecycleOwner: LifecycleOwner,
     private val qrOnly: Boolean,
     private val useFrontCamera: Boolean,
-    private val scanThreshold: Int
+    private val scanThreshold: Int,
+    private val fullScreenViewFinder: Boolean
 ) : BarcodeScannerView(context) {
 
     private val binding =
@@ -89,7 +92,7 @@ private class MlKitBarcodeScannerView(
 
     init {
         binding.composeView.setContextThemedContent {
-            ScannerOverlay(detectedState.value)
+            ScannerOverlay(detectedState.value, fullScreenViewFinder)
         }
     }
 
@@ -102,7 +105,8 @@ private class MlKitBarcodeScannerView(
     ) {
         val (viewFinderOffset, viewFinderSize) = calculateViewFinder(
             this.width.toFloat(),
-            this.height.toFloat()
+            this.height.toFloat(),
+            fullScreenViewFinder
         )
 
         viewFinderRect.set(
