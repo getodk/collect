@@ -14,6 +14,7 @@ package org.odk.collect.android.fragments
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -72,6 +73,11 @@ abstract class BarCodeScannerFragment : Fragment() {
         flashlightToggleView.setup(barcodeScannerViewContainer.barcodeScannerView)
         // if the device does not have flashlight in its camera, then remove the switch flashlight button...
         if (!hasFlash() || frontCameraUsed()) {
+            flashlightToggleView.visibility = View.GONE
+        }
+
+        if (requireContext().resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            promptView.visibility = View.GONE
             flashlightToggleView.visibility = View.GONE
         }
 
