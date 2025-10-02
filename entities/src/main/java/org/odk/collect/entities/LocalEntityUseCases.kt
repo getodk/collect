@@ -132,6 +132,42 @@ object LocalEntityUseCases {
         )
     }
 
+    /**
+     * Ensures local offline Entities are cleaned up when they have been deleted on the server.
+     *
+     * Normally this cleanup is triggered during sync as part of a full update with the server
+     * whenever the Entity list hash from Central changes.
+     * However, there is a case where the hash stays the same:
+     *  - a sync happens and the current hash is stored,
+     *  - an Entity is created locally and a form is uploaded, creating the Entity on the server,
+     *  - the Entity is then deleted on the server,
+     *  - another sync occurs, but the hash is the same as the stored one because the list
+     *    contents are identical to before the local Entity was added.
+     *
+     * In this case, the usual hash-based update will not detect the deletion. Collect must
+     * use the integrityUrl to check for missing Entities and remove them locally.
+     */
+    fun updateOfflineLocalEntitiesFromServer(
+        list: String,
+        entitiesRepository: EntitiesRepository,
+        entitySource: EntitySource,
+        mediaFile: MediaFile
+    ) {
+        val offlineLocalEntities = entitiesRepository
+            .query(list)
+            .filter { it.state == Entity.State.OFFLINE }
+            .associateBy { it.id }
+            .toMutableMap()
+
+        handleMissingEntities(
+            list,
+            offlineLocalEntities.values,
+            entitiesRepository,
+            entitySource,
+            mediaFile.integrityUrl
+        )
+    }
+
     private fun handleMissingEntities(
         list: String,
         missingFromServer: Collection<Entity.Saved>,
