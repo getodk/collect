@@ -89,10 +89,11 @@ private class MlKitBarcodeScannerView(
     private val viewFinderRect = Rect()
 
     private val detectedState = mutableStateOf<DetectedState>(DetectedState.None)
+    private val fullScreenViewFinderState = mutableStateOf(fullScreenViewFinder)
 
     init {
         binding.composeView.setContextThemedContent {
-            ScannerOverlay(detectedState.value, fullScreenViewFinder)
+            ScannerOverlay(detectedState.value, fullScreenViewFinderState.value)
         }
     }
 
@@ -176,6 +177,10 @@ private class MlKitBarcodeScannerView(
                 torchListener.onTorchOff()
             }
         }
+    }
+
+    override fun setFullScreenViewFinder(fullScreenViewFinder: Boolean) {
+        fullScreenViewFinderState.value = fullScreenViewFinder
     }
 
     private fun processBarcode(barcode: DetectedBarcode): String? {

@@ -117,7 +117,8 @@ the specific language governing permissions and limitations under the License.
         <activity android:name="org.odk.collect.android.activities.CrashHandlerActivity" />
 
         <activity
-            android:name=".activities.ScannerWithFlashlightActivity" />
+            android:name=".activities.ScannerWithFlashlightActivity"
+            android:configChanges="orientation|screenSize"/>
         <activity
             android:name=".activities.FormFillingActivity"
             android:theme="@style/Theme.Collect.FormEntry"

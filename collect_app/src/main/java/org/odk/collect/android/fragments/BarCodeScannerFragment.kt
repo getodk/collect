@@ -80,11 +80,6 @@ abstract class BarCodeScannerFragment : Fragment() {
             flashlightToggleView.visibility = View.GONE
         }
 
-        if (isLandscape) {
-            promptView.visibility = View.GONE
-            flashlightToggleView.visibility = View.GONE
-        }
-
         barcodeScannerViewContainer.barcodeScannerView.latestBarcode
             .observe(getViewLifecycleOwner()) { result: String ->
                 try {
@@ -136,6 +131,30 @@ abstract class BarCodeScannerFragment : Fragment() {
             promptView.layoutParams = ConstraintLayout.LayoutParams(promptLayoutParams).also {
                 it.topMargin = (bottomOfViewFinder + standardMargin).toInt()
             }
+        }
+
+        updateConfiguration(resources.configuration)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateConfiguration(newConfig)
+    }
+
+    private fun updateConfiguration(config: Configuration) {
+        val isLandscape = config.orientation == Configuration.ORIENTATION_LANDSCAPE
+        barcodeScannerViewContainer.barcodeScannerView.setFullScreenViewFinder(isLandscape)
+
+        val promptView = requireView().findViewById<TextView>(R.id.prompt)
+        val flashlightToggleView =
+            requireView().findViewById<FlashlightToggleView>(R.id.switch_flashlight)
+
+        if (isLandscape) {
+            promptView.visibility = View.GONE
+            flashlightToggleView.visibility = View.GONE
+        } else {
+            promptView.visibility = View.VISIBLE
+            flashlightToggleView.visibility = View.VISIBLE
         }
     }
 

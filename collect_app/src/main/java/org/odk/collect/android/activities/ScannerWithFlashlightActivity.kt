@@ -13,6 +13,7 @@
  */
 package org.odk.collect.android.activities
 
+import android.os.Build
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
@@ -28,6 +29,12 @@ class ScannerWithFlashlightActivity : LocalizedActivity(), CollectComposeThemePr
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        this.window.attributes.rotationAnimation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            WindowManager.LayoutParams.ROTATION_ANIMATION_SEAMLESS
+        } else {
+            WindowManager.LayoutParams.ROTATION_ANIMATION_CROSSFADE
+        }
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(
