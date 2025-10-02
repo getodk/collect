@@ -5,12 +5,12 @@ import org.odk.collect.db.sqlite.SQLiteColumns.ROW_ID
 import org.odk.collect.db.sqlite.SQLiteColumns.ROW_NUMBER
 
 object RowNumbers {
-    fun SynchronizedDatabaseConnection.rawQueryWithRowNumber(table: String, selection: String? = null, selectionArgs: Array<String>? = null): Cursor {
+    fun <T> SynchronizedDatabaseConnection.rawQueryWithRowNumber(table: String, selection: String? = null, selectionArgs: Array<String>? = null, cursorMapper: (Cursor) -> T): T {
         this.ensureRowIdTable(table)
 
-        val cursor = if (selection != null) {
+        return if (selection != null) {
             this.withConnection {
-                readableDatabase
+                val cursor = readableDatabase
                     .rawQuery(
                         """
                         SELECT *, i.$ROW_ID as $ROW_NUMBER
@@ -20,10 +20,12 @@ object RowNumbers {
                         """.trimIndent(),
                         selectionArgs
                     )
+
+                cursorMapper(cursor)
             }
         } else {
             this.withConnection {
-                readableDatabase
+                val cursor = readableDatabase
                     .rawQuery(
                         """
                         SELECT *, i.$ROW_ID as $ROW_NUMBER
@@ -33,10 +35,10 @@ object RowNumbers {
                         """.trimIndent(),
                         null
                     )
+
+                cursorMapper(cursor)
             }
         }
-
-        return cursor
     }
 
     fun SynchronizedDatabaseConnection.invalidateRowNumbers(table: String) {

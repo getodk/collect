@@ -93,9 +93,7 @@ abstract class BarCodeScannerFragment : Fragment() {
                         duration = 2000,
                         action = SnackbarUtils.Action(
                             getString(org.odk.collect.strings.R.string.exit_scanning)
-                        ) {
-                            handleScanningResult(result)
-                        },
+                        ),
                         onDismiss = {
                             handleScanningResult(result)
                         }

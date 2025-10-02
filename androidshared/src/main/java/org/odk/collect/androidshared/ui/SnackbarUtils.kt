@@ -90,7 +90,7 @@ object SnackbarUtils {
 
             if (action != null) {
                 setAction(action.text) {
-                    action.listener.invoke()
+                    action.beforeDismiss.invoke()
                     dismiss()
                 }
             }
@@ -109,7 +109,7 @@ object SnackbarUtils {
         val action: Action? = null
     )
 
-    data class Action(val text: String, val listener: () -> Unit)
+    data class Action(val text: String, val beforeDismiss: () -> Unit = {})
 
     abstract class SnackbarPresenterObserver<T : Any?>(private val parentView: View) :
         Observer<Consumable<T>?> {
