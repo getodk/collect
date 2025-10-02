@@ -12,7 +12,7 @@ import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 
 @RunWith(AndroidJUnit4::class)
-class AudioAutoplayTest {
+class AudioPlayingTest {
     private val testDependencies = TestDependencies()
     private val rule = CollectTestRule()
 
@@ -26,5 +26,15 @@ class AudioAutoplayTest {
             .startBlankForm("One Question Autoplay")
 
         assertThat(testDependencies.audioPlayerFactory.audioPlayer.playedClips, equalTo(1))
+    }
+
+    @Test
+    fun audioContinuesWhenNavigatingInForm() {
+        rule.startAtMainMenu()
+            .copyForm("one-question-autoplay.xml", listOf("sampleAudio.wav"))
+            .startBlankForm("One Question Autoplay")
+            .swipeToEndScreen()
+
+        assertThat(testDependencies.audioPlayerFactory.audioPlayer.isPlaying, equalTo(true))
     }
 }
