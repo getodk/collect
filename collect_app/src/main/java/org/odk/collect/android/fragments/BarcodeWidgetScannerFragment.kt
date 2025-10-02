@@ -8,7 +8,7 @@ class BarcodeWidgetScannerFragment : BarCodeScannerFragment() {
     }
 
     override fun shouldConfirm(): Boolean {
-        return true
+        return false
     }
 
     override fun handleScanningResult(result: String) {

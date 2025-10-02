@@ -25,19 +25,50 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import kotlin.math.min
 
 @Composable
-fun ScannerOverlay(detectedState: DetectedState = DetectedState.None) {
+fun ScannerOverlay(
+    detectedState: DetectedState = DetectedState.None,
+    fullScreenViewFinder: Boolean = false
+) {
     BoxWithConstraints {
         val (viewFinderOffset, viewFinderSize) = with(LocalDensity.current) {
-            calculateViewFinder(maxWidth.toPx(), maxHeight.toPx())
+            calculateViewFinder(maxWidth.toPx(), maxHeight.toPx(), fullScreenViewFinder)
         }
 
-        ViewFinder(viewFinderSize, viewFinderOffset)
-        ViewFinderHighlight(detectedState, viewFinderSize, viewFinderOffset)
+        val highlightWidth = if (fullScreenViewFinder) {
+            16.dp
+        } else {
+            4.dp
+        }
+
+        if (!fullScreenViewFinder) {
+            ViewFinder(viewFinderSize, viewFinderOffset)
+        }
+
+        ViewFinderHighlight(detectedState, viewFinderSize, viewFinderOffset, highlightWidth)
+
+        val topRight = if (fullScreenViewFinder) {
+            val landscapeMargin = 96
+            Offset(
+                viewFinderOffset.x + viewFinderSize.width - landscapeMargin,
+                viewFinderOffset.y + landscapeMargin
+            ).dp()
+        } else {
+            Offset(viewFinderOffset.x + viewFinderSize.width, viewFinderOffset.y).dp()
+        }
+        val circleRadius = 18.dp
+        val circleOffset = DpOffset(x = topRight.x - circleRadius, y = topRight.y - circleRadius)
+        ViewFinderIcon(
+            detectedState,
+            modifier = Modifier
+                .offset(circleOffset.x, circleOffset.y)
+                .size(circleRadius * 2)
+        )
     }
 }
 
@@ -45,7 +76,8 @@ fun ScannerOverlay(detectedState: DetectedState = DetectedState.None) {
 private fun ViewFinderHighlight(
     detectedState: DetectedState,
     viewFinderSize: Size,
-    viewFinderOffset: Offset
+    viewFinderOffset: Offset,
+    width: Dp
 ) {
     val density = LocalDensity.current
     val smallShapeCornerSize = MaterialTheme.shapes.small.topStart
@@ -64,22 +96,10 @@ private fun ViewFinderHighlight(
                 color = outlineColor,
                 topLeft = viewFinderOffset,
                 size = viewFinderSize,
-                style = Stroke(width = 4.dp.toPx()),
+                style = Stroke(width = width.toPx()),
                 cornerRadius = cornerRadius
             )
         }
-
-        val topRight =
-            Offset(viewFinderOffset.x + viewFinderSize.width, viewFinderOffset.y).dp()
-        val circleRadius = 18.dp
-        val circleOffset = DpOffset(x = topRight.x - circleRadius, y = topRight.y - circleRadius)
-
-        ViewFinderIcon(
-            detectedState,
-            modifier = Modifier
-                .offset(circleOffset.x, circleOffset.y)
-                .size(circleRadius * 2)
-        )
     }
 }
 
@@ -88,6 +108,10 @@ private fun ViewFinderIcon(
     detectedState: DetectedState,
     modifier: Modifier = Modifier
 ) {
+    if (detectedState == DetectedState.None) {
+        return
+    }
+
     val lightColor = if (detectedState == DetectedState.Potential) {
         Color(0xFFFAEDC4)
     } else {
@@ -167,15 +191,21 @@ fun Offset.dp(): DpOffset {
     }
 }
 
-fun calculateViewFinder(width: Float, height: Float): Pair<Offset, Size> {
-    val viewFinderWidth = min(MAX_VIEWFINDER_WIDTH, width / 100 * 75)
-    val viewFinderSize = Size(viewFinderWidth, viewFinderWidth)
-    val viewFinderOffset = Offset(
-        (width - viewFinderSize.width) / 2,
-        (height - viewFinderSize.height) / 2
-    )
+fun calculateViewFinder(width: Float, height: Float, fullScreen: Boolean): Pair<Offset, Size> {
+    return if (fullScreen) {
+        val viewFinderSize = Size(width, height)
+        val viewFinderOffset = Offset(0f, 0f)
+        Pair(viewFinderOffset, viewFinderSize)
+    } else {
+        val viewFinderWidth = min(MAX_VIEWFINDER_WIDTH, width / 100 * 75)
+        val viewFinderSize = Size(viewFinderWidth, viewFinderWidth)
+        val viewFinderOffset = Offset(
+            (width - viewFinderSize.width) / 2,
+            (height - viewFinderSize.height) / 2
+        )
 
-    return Pair(viewFinderOffset, viewFinderSize)
+        Pair(viewFinderOffset, viewFinderSize)
+    }
 }
 
 private const val MAX_VIEWFINDER_WIDTH = 820f
@@ -219,5 +249,13 @@ private fun PreviewFull() {
 private fun PreviewSmall() {
     MaterialTheme {
         ScannerOverlay(detectedState = DetectedState.Potential)
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewFullScreen() {
+    MaterialTheme {
+        ScannerOverlay(detectedState = DetectedState.Potential, fullScreenViewFinder = true)
     }
 }

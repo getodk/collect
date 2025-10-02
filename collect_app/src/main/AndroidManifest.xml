@@ -118,9 +118,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity
             android:name=".activities.ScannerWithFlashlightActivity"
-            android:screenOrientation="portrait"
-            android:stateNotNeeded="true"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:configChanges="orientation|screenSize"/>
         <activity
             android:name=".activities.FormFillingActivity"
             android:theme="@style/Theme.Collect.FormEntry"

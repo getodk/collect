@@ -13,9 +13,12 @@
  */
 package org.odk.collect.android.activities
 
+import android.os.Build
 import android.os.Bundle
-import android.view.Window
 import android.view.WindowManager
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import org.odk.collect.android.R
 import org.odk.collect.android.application.CollectComposeThemeProvider
 import org.odk.collect.strings.localization.LocalizedActivity
@@ -26,12 +29,17 @@ import org.odk.collect.strings.localization.LocalizedActivity
 class ScannerWithFlashlightActivity : LocalizedActivity(), CollectComposeThemeProvider {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.hide(systemBars())
+
+        // Remove rotation animation - we'll handle configuration changes in Fragments
+        this.window.attributes.rotationAnimation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            WindowManager.LayoutParams.ROTATION_ANIMATION_SEAMLESS
+        } else {
+            WindowManager.LayoutParams.ROTATION_ANIMATION_CROSSFADE
+        }
 
         setContentView(R.layout.activity_custom_scanner)
     }
