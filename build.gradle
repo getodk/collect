@@ -55,6 +55,17 @@ allprojects {
                 password = getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '')
             }
         }
+
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/snapshots/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = "mapbox"
+                password = getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '')
+            }
+        }
     }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
