@@ -18,6 +18,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.formentry.FormOpeningMode
+import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.instancemanagement.canBeEdited
@@ -71,6 +72,9 @@ class FormUriActivity : LocalizedActivity() {
     @Inject
     lateinit var changeLockProvider: ChangeLockProvider
 
+    @Inject
+    lateinit var formSessionRepository: FormSessionRepository
+
     private var formFillingAlreadyStarted = false
 
     private val openForm =
@@ -93,7 +97,8 @@ class FormUriActivity : LocalizedActivity() {
                     settingsProvider,
                     savepointsRepositoryProvider,
                     changeLockProvider,
-                    resources
+                    resources,
+                    formSessionRepository
                 ) as T
             }
         }
@@ -180,7 +185,8 @@ private class FormUriViewModel(
     private val settingsProvider: SettingsProvider,
     private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
     private val changeLockProvider: ChangeLockProvider,
-    private val resources: Resources
+    private val resources: Resources,
+    private val formSessionRepository: FormSessionRepository
 ) : ViewModel() {
     private val uri: Uri? = intent.data
 
@@ -335,6 +341,8 @@ private class FormUriViewModel(
             val instance = instancesRepositoryProvider.create().get(ContentUriHelper.getIdFromUri(uri))!!
             formsRepositoryProvider.create().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
         }
+
+        formSessionRepository.currentForm = form
 
         if (form.usesEntities()) {
             val formsLock = changeLockProvider.create(projectId).formsLock

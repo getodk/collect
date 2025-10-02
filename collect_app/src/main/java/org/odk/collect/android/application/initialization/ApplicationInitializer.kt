@@ -9,6 +9,7 @@ import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.application.initialization.upgrade.UpgradeInitializer
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
+import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.async.Scheduler
@@ -29,6 +30,7 @@ class ApplicationInitializer(
     private val analyticsInitializer: AnalyticsInitializer,
     private val mapsInitializer: MapsInitializer,
     private val projectsRepository: ProjectsRepository,
+    private val formSessionRepository: FormSessionRepository,
     private val settingsProvider: SettingsProvider,
     private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
     private val projectsDataService: ProjectsDataService,
@@ -55,7 +57,7 @@ class ApplicationInitializer(
             formsRepositoryProvider
         ).initialize()
         mapsInitializer.initialize()
-        JavaRosaInitializer(propertyManager, projectsDataService, entitiesRepositoryProvider, settingsProvider).initialize()
+        JavaRosaInitializer(propertyManager, projectsDataService, entitiesRepositoryProvider, formSessionRepository).initialize()
         SystemThemeMismatchFixInitializer(context).initialize()
     }
 

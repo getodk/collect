@@ -10,6 +10,8 @@ import org.odk.collect.forms.instances.Instance
 import org.odk.collect.shared.strings.UUIDGenerator
 
 interface FormSessionRepository {
+    var currentForm: Form?
+
     fun create(): String
     fun get(id: String): LiveData<FormSession>
     fun clear(id: String)
@@ -24,6 +26,7 @@ interface FormSessionRepository {
 }
 
 class AppStateFormSessionRepository(application: Application) : FormSessionRepository {
+    override var currentForm: Form? = null
 
     private val appState = application.getState()
 

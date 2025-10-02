@@ -8,6 +8,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
+import org.odk.collect.android.support.StubOpenRosaServer.MediaFileItem
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -388,5 +389,18 @@ class EntityFormTest {
             .startBlankForm("One Question Entity Update")
             .assertText("Romulus Roy")
             .assertTextDoesNotExist("Roman Roy")
+    }
+
+    @Test // https://github.com/getodk/collect/issues/6425
+    fun nonEntityFormWithCsvMatchingEntityList_usesCsvChoices() {
+        testDependencies.server.addForm("one-question-entity-registration.xml", listOf(EntityListItem("people.csv")))
+        testDependencies.server.addForm("select-one-person.xml", listOf(MediaFileItem("people.csv")))
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("One Question Entity Registration")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+            .startBlankForm("Select one person")
+            .assertText("Roman Roy")
+            .assertTextDoesNotExist("Logan Roy")
     }
 }
