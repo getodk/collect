@@ -59,16 +59,13 @@ abstract class BarCodeScannerFragment : Fragment() {
 
         val rootView = inflater.inflate(R.layout.fragment_scan, container, false)
 
-        val isLandscape =
-            requireContext().resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         barcodeScannerViewContainer = rootView.findViewById(R.id.barcode_view)
         barcodeScannerViewContainer.setup(
             barcodeScannerViewFactory,
             requireActivity(),
             getViewLifecycleOwner(),
             isQrOnly(),
-            frontCameraUsed(),
-            isLandscape
+            frontCameraUsed()
         )
 
         val promptView = rootView.findViewById<TextView>(R.id.prompt)
