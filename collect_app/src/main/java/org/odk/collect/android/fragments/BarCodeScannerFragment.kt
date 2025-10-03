@@ -19,18 +19,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import com.google.zxing.client.android.BeepManager
 import org.odk.collect.android.databinding.FragmentScanBinding
@@ -40,9 +29,7 @@ import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContex
 import org.odk.collect.async.Scheduler
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
-import org.odk.collect.qrcode.FlashlightToggle
-import org.odk.collect.qrcode.calculateViewFinder
-import org.odk.collect.strings.R
+import org.odk.collect.qrcode.ScannerControls
 import javax.inject.Inject
 
 abstract class BarCodeScannerFragment : Fragment() {
@@ -148,59 +135,4 @@ abstract class BarCodeScannerFragment : Fragment() {
     protected abstract fun isQrOnly(): Boolean
 
     protected abstract fun handleScanningResult(result: String)
-}
-
-@Composable
-private fun ScannerControls(
-    showFlashLight: Boolean,
-    flashlightOn: Boolean,
-    onFlashlightToggled: () -> Unit = {}
-) {
-    BoxWithConstraints {
-        val landscape =
-            LocalConfiguration.current.orientation != Configuration.ORIENTATION_LANDSCAPE
-
-        val bottomOfViewFinder = with(LocalDensity.current) {
-            val (viewFinderOffset, viewFinderSize) = calculateViewFinder(
-                maxWidth.toPx(),
-                maxHeight.toPx(),
-                false
-            )
-
-            viewFinderOffset.y.toDp() + viewFinderSize.height.toDp()
-        }
-
-        androidx.constraintlayout.compose.ConstraintLayout(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            val (prompt, flashLightToggle) = createRefs()
-
-            if (landscape) {
-                val standardMargin =
-                    dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)
-                Text(
-                    stringResource(R.string.barcode_scanner_prompt),
-                    color = Color.White,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.constrainAs(prompt) {
-                        top.linkTo(parent.top, margin = bottomOfViewFinder + standardMargin)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-                )
-
-                if (showFlashLight) {
-                    FlashlightToggle(
-                        flashlightOn = flashlightOn,
-                        onFlashlightToggled = onFlashlightToggled,
-                        modifier = Modifier.constrainAs(flashLightToggle) {
-                            top.linkTo(prompt.bottom, margin = standardMargin)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        }
-                    )
-                }
-            }
-        }
-    }
 }
