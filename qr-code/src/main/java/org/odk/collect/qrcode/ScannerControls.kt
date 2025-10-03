@@ -1,6 +1,5 @@
 package org.odk.collect.qrcode
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
@@ -8,22 +7,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.constraintlayout.compose.ConstraintLayout
 import org.odk.collect.strings.R
 
 @Composable
 fun ScannerControls(
     showFlashLight: Boolean,
     flashlightOn: Boolean,
+    fullScreenViewFinder: Boolean,
     onFlashlightToggled: () -> Unit = {}
 ) {
     BoxWithConstraints {
-        val landscape =
-            LocalConfiguration.current.orientation != Configuration.ORIENTATION_LANDSCAPE
-
         val bottomOfViewFinder = with(LocalDensity.current) {
             val (viewFinderOffset, viewFinderSize) = calculateViewFinder(
                 maxWidth.toPx(),
@@ -34,12 +31,10 @@ fun ScannerControls(
             viewFinderOffset.y.toDp() + viewFinderSize.height.toDp()
         }
 
-        androidx.constraintlayout.compose.ConstraintLayout(
-            modifier = Modifier.fillMaxWidth()
-        ) {
+        ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
             val (prompt, flashLightToggle) = createRefs()
 
-            if (landscape) {
+            if (!fullScreenViewFinder) {
                 val standardMargin =
                     dimensionResource(org.odk.collect.androidshared.R.dimen.margin_standard)
                 Text(

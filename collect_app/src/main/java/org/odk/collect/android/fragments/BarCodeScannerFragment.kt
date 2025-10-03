@@ -41,6 +41,7 @@ abstract class BarCodeScannerFragment : Fragment() {
     lateinit var scheduler: Scheduler
 
     private val beepManager: BeepManager by lazy { BeepManager(requireActivity()) }
+    private val fullScreenState = mutableStateOf(false)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -78,6 +79,7 @@ abstract class BarCodeScannerFragment : Fragment() {
             ScannerControls(
                 showFlashLight = hasFlash() && !frontCameraUsed(),
                 flashlightOn = flashlightOnState.value,
+                fullScreenViewFinder = fullScreenState.value,
                 onFlashlightToggled = {
                     binding.barcodeView.barcodeScannerView.setTorchOn(!flashlightOnState.value)
                 }
@@ -113,6 +115,7 @@ abstract class BarCodeScannerFragment : Fragment() {
 
         val isLandscape = config.orientation == Configuration.ORIENTATION_LANDSCAPE
         binding.barcodeView.barcodeScannerView.setFullScreenViewFinder(isLandscape)
+        fullScreenState.value = isLandscape
     }
 
     private fun hasFlash(): Boolean {
