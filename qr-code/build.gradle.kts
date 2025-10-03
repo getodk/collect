@@ -59,6 +59,7 @@ dependencies {
     val composeBom = platform(libs.androidxComposeBom)
     implementation(composeBom)
     implementation(libs.androidXComposeMaterial)
+    implementation(libs.androidXComposeMaterialIconsExtended)
     implementation(libs.androidXConstraintLayoutCompose)
 
     implementation(libs.androidXComposePreview)

@@ -1,24 +1,38 @@
 package org.odk.collect.qrcode
 
-import androidx.compose.material3.Button
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FlashlightOff
+import androidx.compose.material.icons.filled.FlashlightOn
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun FlashlightToggle(
-    flashlightOn: Boolean = false,
     modifier: Modifier = Modifier,
+    flashlightOn: Boolean = false,
     onFlashlightToggled: () -> Unit = {}
 ) {
-    Button(onClick = { onFlashlightToggled() }, modifier = modifier) {
+    IconButton(onClick = { onFlashlightToggled() }, modifier = modifier) {
         if (flashlightOn) {
-            Text(stringResource(org.odk.collect.strings.R.string.turn_off_flashlight))
+            Icon(
+                Icons.Filled.FlashlightOn,
+                stringResource(org.odk.collect.strings.R.string.turn_off_flashlight),
+                tint = Color.White
+            )
         } else {
-            Text(stringResource(org.odk.collect.strings.R.string.turn_on_flashlight))
+            Icon(
+                Icons.Filled.FlashlightOff,
+                stringResource(org.odk.collect.strings.R.string.turn_off_flashlight),
+                tint = Color.White
+            )
         }
     }
 }
@@ -27,7 +41,9 @@ fun FlashlightToggle(
 @Composable
 private fun PreviewFlashlightToggleOn() {
     MaterialTheme {
-        FlashlightToggle(true)
+        Box(Modifier.background(Color.Gray)) {
+            FlashlightToggle(flashlightOn = true)
+        }
     }
 }
 
@@ -35,6 +51,8 @@ private fun PreviewFlashlightToggleOn() {
 @Composable
 private fun PreviewFlashlightToggleOff() {
     MaterialTheme {
-        FlashlightToggle(false)
+        Box(Modifier.background(Color.Gray)) {
+            FlashlightToggle(flashlightOn = false)
+        }
     }
 }
