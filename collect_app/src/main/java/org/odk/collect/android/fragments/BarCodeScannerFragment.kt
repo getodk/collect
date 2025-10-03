@@ -80,6 +80,10 @@ abstract class BarCodeScannerFragment : Fragment() {
                 showFlashLight = hasFlash() && !frontCameraUsed(),
                 flashlightOn = flashlightOnState.value,
                 fullScreenViewFinder = fullScreenState.value,
+                onFullScreenToggled = {
+                    fullScreenState.value = !fullScreenState.value
+                    updateFullScreen(binding, fullScreenState.value)
+                },
                 onFlashlightToggled = {
                     binding.barcodeView.barcodeScannerView.setTorchOn(!flashlightOnState.value)
                 }
@@ -114,8 +118,12 @@ abstract class BarCodeScannerFragment : Fragment() {
         val binding = FragmentScanBinding.bind(requireView())
 
         val isLandscape = config.orientation == Configuration.ORIENTATION_LANDSCAPE
-        binding.barcodeView.barcodeScannerView.setFullScreenViewFinder(isLandscape)
-        fullScreenState.value = isLandscape
+        updateFullScreen(binding, isLandscape)
+    }
+
+    private fun updateFullScreen(binding: FragmentScanBinding, isFullScreen: Boolean) {
+        binding.barcodeView.barcodeScannerView.setFullScreenViewFinder(isFullScreen)
+        fullScreenState.value = isFullScreen
     }
 
     private fun hasFlash(): Boolean {
