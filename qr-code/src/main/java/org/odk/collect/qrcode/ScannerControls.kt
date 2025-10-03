@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.ScreenRotation
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -50,6 +50,7 @@ fun ScannerControls(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
+                .safeDrawingPadding()
         ) {
             val (fullScreenToggle) = createRefs()
 
@@ -57,19 +58,17 @@ fun ScannerControls(
                 LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
             FloatingActionButton(
                 onClick = onFullScreenToggled,
-                modifier = Modifier
-                    .safeDrawingPadding()
-                    .constrainAs(fullScreenToggle) {
-                        end.linkTo(parent.end, margin = standardMargin)
+                modifier = Modifier.constrainAs(fullScreenToggle) {
+                    end.linkTo(parent.end, margin = standardMargin)
 
-                        if (isLandscape) {
-                            top.linkTo(parent.top, margin = standardMargin)
-                        } else {
-                            bottom.linkTo(parent.bottom, margin = standardMargin)
-                        }
+                    if (isLandscape) {
+                        top.linkTo(parent.top, margin = standardMargin)
+                    } else {
+                        bottom.linkTo(parent.bottom, margin = standardMargin)
                     }
+                }
             ) {
-                Icon(Icons.Filled.Refresh, "")
+                Icon(Icons.Filled.ScreenRotation, "")
             }
 
             if (!fullScreenViewFinder) {
@@ -91,9 +90,8 @@ fun ScannerControls(
                         flashlightOn = flashlightOn,
                         onFlashlightToggled = onFlashlightToggled,
                         modifier = Modifier.constrainAs(flashLightToggle) {
-                            top.linkTo(prompt.bottom, margin = standardMargin)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
+                            top.linkTo(parent.top, margin = standardMargin)
+                            end.linkTo(parent.end, margin = standardMargin)
                         }
                     )
                 }
