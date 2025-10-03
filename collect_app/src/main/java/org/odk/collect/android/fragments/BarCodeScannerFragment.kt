@@ -37,7 +37,6 @@ import org.odk.collect.android.databinding.FragmentScanBinding
 import org.odk.collect.android.injection.DaggerUtils.getComponent
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
-import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.async.Scheduler
 import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
@@ -106,24 +105,7 @@ abstract class BarCodeScannerFragment : Fragment() {
                     // ignored
                 }
 
-//                binding.prompt.visibility = View.GONE
-//                binding.switchFlashlight.visibility = View.GONE
-
-                if (shouldConfirm()) {
-                    SnackbarUtils.showSnackbar(
-                        binding.root,
-                        getString(org.odk.collect.strings.R.string.barcode_scanned),
-                        duration = 2000,
-                        action = SnackbarUtils.Action(
-                            getString(org.odk.collect.strings.R.string.exit_scanning)
-                        ),
-                        onDismiss = {
-                            handleScanningResult(result)
-                        }
-                    )
-                } else {
-                    handleScanningResult(result)
-                }
+                handleScanningResult(result)
             }
 
         binding.barcodeView.barcodeScannerView.start()
@@ -164,8 +146,6 @@ abstract class BarCodeScannerFragment : Fragment() {
     }
 
     protected abstract fun isQrOnly(): Boolean
-
-    protected abstract fun shouldConfirm(): Boolean
 
     protected abstract fun handleScanningResult(result: String)
 }
