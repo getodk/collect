@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ScreenRotation
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -56,8 +56,10 @@ fun ScannerControls(
 
             val isLandscape =
                 LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-            FloatingActionButton(
+            ExtendedFloatingActionButton(
                 onClick = onFullScreenToggled,
+                icon = { Icon(Icons.Filled.ScreenRotation, "") },
+                text = { Text("Rotate device") },
                 modifier = Modifier.constrainAs(fullScreenToggle) {
                     end.linkTo(parent.end, margin = standardMargin)
 
@@ -67,9 +69,7 @@ fun ScannerControls(
                         bottom.linkTo(parent.bottom, margin = standardMargin)
                     }
                 }
-            ) {
-                Icon(Icons.Filled.ScreenRotation, "")
-            }
+            )
 
             if (!fullScreenViewFinder) {
                 val (prompt, flashLightToggle) = createRefs()
