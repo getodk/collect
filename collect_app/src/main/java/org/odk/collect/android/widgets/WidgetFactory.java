@@ -251,7 +251,7 @@ public class WidgetFactory {
                 if (appearance.startsWith(Appearances.EX)) {
                     questionWidget = new ExVideoWidget(activity, questionDetails, questionMediaManager, waitingForDataRegistry, fileRequester, dependencies);
                 } else {
-                    questionWidget = new VideoWidget(activity, questionDetails, questionMediaManager, waitingForDataRegistry, dependencies);
+                    questionWidget = new VideoWidget(activity, questionDetails, dependencies, questionMediaManager, waitingForDataRegistry);
                 }
                 break;
             case Constants.CONTROL_SELECT_ONE:
