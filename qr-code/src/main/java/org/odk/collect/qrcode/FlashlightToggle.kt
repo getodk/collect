@@ -30,7 +30,7 @@ fun FlashlightToggle(
         } else {
             Icon(
                 Icons.Filled.FlashlightOff,
-                stringResource(org.odk.collect.strings.R.string.turn_off_flashlight),
+                stringResource(org.odk.collect.strings.R.string.turn_on_flashlight),
                 tint = Color.White
             )
         }
