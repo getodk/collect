@@ -28,7 +28,8 @@ import org.odk.collect.strings.R
 fun ScannerControls(
     showFlashLight: Boolean,
     flashlightOn: Boolean,
-    fullScreenViewFinder: Boolean,
+    fullScreenViewFinder: Boolean = false,
+    fullScreenToggleExtended: Boolean = false,
     onFullScreenToggled: () -> Unit = {},
     onFlashlightToggled: () -> Unit = {}
 ) {
@@ -60,6 +61,7 @@ fun ScannerControls(
                 onClick = onFullScreenToggled,
                 icon = { Icon(Icons.Filled.ScreenRotation, "") },
                 text = { Text("Rotate device") },
+                expanded = fullScreenToggleExtended,
                 modifier = Modifier.constrainAs(fullScreenToggle) {
                     end.linkTo(parent.end, margin = standardMargin)
 

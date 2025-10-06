@@ -31,6 +31,7 @@ import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
 import org.odk.collect.qrcode.ScannerControls
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 abstract class BarCodeScannerFragment : Fragment() {
 
@@ -42,10 +43,15 @@ abstract class BarCodeScannerFragment : Fragment() {
 
     private val beepManager: BeepManager by lazy { BeepManager(requireActivity()) }
     private val fullScreenState = mutableStateOf(false)
+    private val fullScreenToggleExtendedState = mutableStateOf(false)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         getComponent(context).inject(this)
+
+        scheduler.immediate(delay = 10.seconds.inWholeMilliseconds) {
+            fullScreenToggleExtendedState.value = true
+        }
     }
 
     override fun onCreateView(
@@ -80,6 +86,7 @@ abstract class BarCodeScannerFragment : Fragment() {
                 showFlashLight = hasFlash() && !frontCameraUsed(),
                 flashlightOn = flashlightOnState.value,
                 fullScreenViewFinder = fullScreenState.value,
+                fullScreenToggleExtended = fullScreenToggleExtendedState.value,
                 onFullScreenToggled = {
                     fullScreenState.value = !fullScreenState.value
                     updateFullScreen(binding, fullScreenState.value)
