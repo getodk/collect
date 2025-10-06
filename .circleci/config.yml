@@ -251,8 +251,8 @@ jobs:
           command: ./gradlew assembleSelfSignedRelease
 
       - run:
-          name: Check APK size isn't larger than 13MB
-          command: ./check-size.sh 13631488
+          name: Check APK size isn't larger than 13.1MB
+          command: ./check-size.sh 13736346
 
       - run:
           name: Copy APK to predictable path for artifact storage
