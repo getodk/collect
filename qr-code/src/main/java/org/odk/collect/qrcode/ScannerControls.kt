@@ -53,11 +53,11 @@ fun ScannerControls(
                 .fillMaxWidth()
                 .fillMaxHeight()
         ) {
+            val isLandscape =
+                LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+
             if (showFullScreenToggle) {
                 val (fullScreenToggle) = createRefs()
-
-                val isLandscape =
-                    LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
                 ExtendedFloatingActionButton(
                     onClick = onFullScreenToggled,
                     icon = { Icon(Icons.Filled.ScreenRotation, "") },
@@ -98,8 +98,13 @@ fun ScannerControls(
                         modifier = Modifier
                             .safeDrawingPadding()
                             .constrainAs(flashLightToggle) {
+                                if (isLandscape) {
+                                    start.linkTo(parent.start, margin = standardMargin)
+                                } else {
+                                    end.linkTo(parent.end, margin = standardMargin)
+                                }
+
                                 top.linkTo(parent.top, margin = standardMargin)
-                                end.linkTo(parent.end, margin = standardMargin)
                             }
                     )
                 }
@@ -136,7 +141,7 @@ private fun PreviewFullScreen() {
     }
 }
 
-@Preview
+@Preview(device = "spec:width=411dp,height=891dp,orientation=landscape")
 @Composable
 private fun PreviewLandscape() {
     MaterialTheme {
@@ -144,7 +149,7 @@ private fun PreviewLandscape() {
             ScannerControls(
                 showFlashLight = true,
                 flashlightOn = false,
-                fullScreenViewFinder = true
+                fullScreenViewFinder = false
             )
         }
     }
