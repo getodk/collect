@@ -99,6 +99,10 @@ private class ZxingBarcodeScannerView(
         })
     }
 
+    override fun setFullScreenViewFinder(fullScannerViewFinder: Boolean) {
+        // Ignored
+    }
+
     private fun getCaptureManager(
         activity: Activity,
         barcodeView: DecoratedBarcodeView,
