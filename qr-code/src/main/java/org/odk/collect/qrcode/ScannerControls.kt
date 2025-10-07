@@ -51,7 +51,6 @@ fun ScannerControls(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .safeDrawingPadding()
         ) {
             val (fullScreenToggle) = createRefs()
 
@@ -62,7 +61,9 @@ fun ScannerControls(
                 icon = { Icon(Icons.Filled.ScreenRotation, "") },
                 text = { Text("Rotate device") },
                 expanded = fullScreenToggleExtended,
-                modifier = Modifier.constrainAs(fullScreenToggle) {
+                modifier = Modifier
+                    .safeDrawingPadding()
+                    .constrainAs(fullScreenToggle) {
                     end.linkTo(parent.end, margin = standardMargin)
 
                     if (isLandscape) {
@@ -91,7 +92,9 @@ fun ScannerControls(
                     FlashlightToggle(
                         flashlightOn = flashlightOn,
                         onFlashlightToggled = onFlashlightToggled,
-                        modifier = Modifier.constrainAs(flashLightToggle) {
+                        modifier = Modifier
+                            .safeDrawingPadding()
+                            .constrainAs(flashLightToggle) {
                             top.linkTo(parent.top, margin = standardMargin)
                             end.linkTo(parent.end, margin = standardMargin)
                         }
