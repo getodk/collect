@@ -98,9 +98,9 @@ fun ScannerControls(
                         modifier = Modifier
                             .safeDrawingPadding()
                             .constrainAs(flashLightToggle) {
-                            top.linkTo(parent.top, margin = standardMargin)
-                            end.linkTo(parent.end, margin = standardMargin)
-                        }
+                                top.linkTo(parent.top, margin = standardMargin)
+                                end.linkTo(parent.end, margin = standardMargin)
+                            }
                     )
                 }
             }
