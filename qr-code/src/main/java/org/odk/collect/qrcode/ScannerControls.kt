@@ -80,16 +80,18 @@ fun ScannerControls(
             if (!fullScreenViewFinder) {
                 val (prompt, flashLightToggle) = createRefs()
 
-                Text(
-                    stringResource(R.string.barcode_scanner_prompt),
-                    color = Color.White,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.constrainAs(prompt) {
-                        top.linkTo(parent.top, margin = bottomOfViewFinder + standardMargin)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-                )
+                if (!isLandscape) {
+                    Text(
+                        stringResource(R.string.barcode_scanner_prompt),
+                        color = Color.White,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.constrainAs(prompt) {
+                            top.linkTo(parent.top, margin = bottomOfViewFinder + standardMargin)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                    )
+                }
 
                 if (showFlashLight) {
                     FlashlightToggle(
