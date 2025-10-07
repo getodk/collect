@@ -8,10 +8,13 @@ import android.content.Intent
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ComposeView
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
-import org.odk.collect.android.databinding.VideoWidgetBinding
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
@@ -19,6 +22,7 @@ import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.interfaces.FileWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry
+import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.R
@@ -33,48 +37,38 @@ class VideoWidget(
     private val questionMediaManager: QuestionMediaManager,
     private val waitingForDataRegistry: WaitingForDataRegistry
 ) : QuestionWidget(context, dependencies, questionDetails), FileWidget, WidgetDataReceiver {
-    lateinit var binding: VideoWidgetBinding
-
-    private var binaryName: String?
+    private var binaryName by mutableStateOf<String?>(formEntryPrompt.getAnswerText())
 
     init {
-        binaryName = formEntryPrompt.getAnswerText()
         render()
     }
 
-    override fun onCreateWidgetView(
-        context: Context,
-        prompt: FormEntryPrompt,
-        answerFontSize: Int
-    ): View {
-        binding = VideoWidgetBinding.inflate((context as Activity).layoutInflater)
+    override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
+        val readOnly = formEntryPrompt.isReadOnly
+        val newVideoOnly = formEntryPrompt.appearanceHint?.lowercase()?.contains(Appearances.NEW) ?: false
 
-        binding.recordVideoButton.setOnClickListener {
-            getPermissionsProvider().requestCameraPermission(
-                context,
-                object : PermissionListener {
-                    override fun granted() {
-                        captureVideo()
-                    }
-                }
-            )
+        return ComposeView(context).apply {
+            setContextThemedContent {
+                VideoWidgetContent(
+                    binaryName,
+                    readOnly,
+                    newVideoOnly,
+                    onRecordClick = {
+                        getPermissionsProvider().requestCameraPermission(
+                            context as Activity,
+                            object : PermissionListener {
+                                override fun granted() {
+                                    captureVideo()
+                                }
+                            }
+                        )
+                    },
+                    onChooseClick = { chooseVideo() },
+                    onPlayClick = { playVideo() },
+                    onLongClick = { this.showContextMenu() }
+                )
+            }
         }
-        binding.chooseVideoButton.setOnClickListener { chooseVideo() }
-        binding.playVideoButton.isEnabled = binaryName != null
-        binding.playVideoButton.setOnClickListener { playVideoFile() }
-
-        if (formEntryPrompt.isReadOnly) {
-            binding.recordVideoButton.visibility = GONE
-            binding.chooseVideoButton.visibility = GONE
-        }
-
-        if (formEntryPrompt.appearanceHint != null &&
-            formEntryPrompt.appearanceHint.lowercase().contains(Appearances.NEW)
-        ) {
-            binding.chooseVideoButton.visibility = GONE
-        }
-
-        return binding.getRoot()
     }
 
     override fun deleteFile() {
@@ -87,7 +81,6 @@ class VideoWidget(
 
     override fun clearAnswer() {
         deleteFile()
-        binding.playVideoButton.isEnabled = false
         widgetValueChanged()
     }
 
@@ -112,7 +105,6 @@ class VideoWidget(
                 )
                 binaryName = answer.name
                 widgetValueChanged()
-                binding.playVideoButton.isEnabled = binaryName != null
             } else {
                 Timber.e(Error("Inserting Video file FAILED"))
             }
@@ -121,18 +113,7 @@ class VideoWidget(
         }
     }
 
-    override fun setOnLongClickListener(l: OnLongClickListener?) {
-        binding.recordVideoButton.setOnLongClickListener(l)
-        binding.chooseVideoButton.setOnLongClickListener(l)
-        binding.playVideoButton.setOnLongClickListener(l)
-    }
-
-    override fun cancelLongPress() {
-        super.cancelLongPress()
-        binding.recordVideoButton.cancelLongPress()
-        binding.chooseVideoButton.cancelLongPress()
-        binding.playVideoButton.cancelLongPress()
-    }
+    override fun setOnLongClickListener(listener: OnLongClickListener?) = Unit
 
     private fun captureVideo() {
         val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
@@ -155,8 +136,7 @@ class VideoWidget(
                     R.string.activity_not_found,
                     context.getString(R.string.capture_video)
                 ), Toast.LENGTH_SHORT
-            )
-                .show()
+            ).show()
             waitingForDataRegistry.cancelWaitingForData()
         }
     }
@@ -177,14 +157,13 @@ class VideoWidget(
                     R.string.activity_not_found,
                     context.getString(R.string.choose_video)
                 ), Toast.LENGTH_SHORT
-            )
-                .show()
+            ).show()
 
             waitingForDataRegistry.cancelWaitingForData()
         }
     }
 
-    private fun playVideoFile() {
+    private fun playVideo() {
         val file = questionMediaManager.getAnswerFile(binaryName)
         mediaUtils.openFile(context, file!!, "video/*")
     }

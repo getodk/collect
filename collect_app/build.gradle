@@ -354,6 +354,9 @@ dependencies {
     implementation(composeBom)
     implementation(libs.androidXComposeMaterial)
     implementation(libs.androidXConstraintLayoutCompose)
+    implementation(libs.androidXComposeMaterialIcons)
+    implementation(libs.androidXComposePreview)
+    debugImplementation(libs.androidXComposeTooling)
 
     testImplementation project(':forms-test')
 
