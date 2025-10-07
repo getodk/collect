@@ -176,6 +176,10 @@ private class MlKitBarcodeScannerView(
         }
     }
 
+    override fun supportsFullScreenViewFinder(): Boolean {
+        return true
+    }
+
     override fun setFullScreenViewFinder(fullScreenViewFinder: Boolean) {
         fullScreenViewFinderState.value = fullScreenViewFinder
     }

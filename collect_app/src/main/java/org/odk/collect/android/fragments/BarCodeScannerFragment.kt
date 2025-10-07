@@ -13,6 +13,7 @@
 package org.odk.collect.android.fragments
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
@@ -81,11 +82,14 @@ abstract class BarCodeScannerFragment : Fragment() {
             }
         })
 
+        val supportsFullScreen =
+            binding.barcodeView.barcodeScannerView.supportsFullScreenViewFinder()
         binding.composeView.setContextThemedContent {
             ScannerControls(
                 showFlashLight = hasFlash() && !frontCameraUsed(),
                 flashlightOn = flashlightOnState.value,
-                fullScreenViewFinder = fullScreenState.value,
+                fullScreenViewFinder = supportsFullScreen && fullScreenState.value,
+                showFullScreenToggle = supportsFullScreen,
                 fullScreenToggleExtended = fullScreenToggleExtendedState.value,
                 onFullScreenToggled = {
                     fullScreenState.value = !fullScreenState.value
@@ -113,6 +117,11 @@ abstract class BarCodeScannerFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = FragmentScanBinding.bind(view)
+        if (!binding.barcodeView.barcodeScannerView.supportsFullScreenViewFinder()) {
+            requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+
         updateConfiguration(resources.configuration)
     }
 

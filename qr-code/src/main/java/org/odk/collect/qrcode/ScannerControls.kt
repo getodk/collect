@@ -29,6 +29,7 @@ fun ScannerControls(
     showFlashLight: Boolean,
     flashlightOn: Boolean,
     fullScreenViewFinder: Boolean = false,
+    showFullScreenToggle: Boolean = true,
     fullScreenToggleExtended: Boolean = false,
     onFullScreenToggled: () -> Unit = {},
     onFlashlightToggled: () -> Unit = {}
@@ -52,27 +53,29 @@ fun ScannerControls(
                 .fillMaxWidth()
                 .fillMaxHeight()
         ) {
-            val (fullScreenToggle) = createRefs()
+            if (showFullScreenToggle) {
+                val (fullScreenToggle) = createRefs()
 
-            val isLandscape =
-                LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-            ExtendedFloatingActionButton(
-                onClick = onFullScreenToggled,
-                icon = { Icon(Icons.Filled.ScreenRotation, "") },
-                text = { Text("Rotate device") },
-                expanded = fullScreenToggleExtended,
-                modifier = Modifier
-                    .safeDrawingPadding()
-                    .constrainAs(fullScreenToggle) {
-                    end.linkTo(parent.end, margin = standardMargin)
+                val isLandscape =
+                    LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                ExtendedFloatingActionButton(
+                    onClick = onFullScreenToggled,
+                    icon = { Icon(Icons.Filled.ScreenRotation, "") },
+                    text = { Text("Rotate device") },
+                    expanded = fullScreenToggleExtended,
+                    modifier = Modifier
+                        .safeDrawingPadding()
+                        .constrainAs(fullScreenToggle) {
+                            end.linkTo(parent.end, margin = standardMargin)
 
-                    if (isLandscape) {
-                        top.linkTo(parent.top, margin = standardMargin)
-                    } else {
-                        bottom.linkTo(parent.bottom, margin = standardMargin)
-                    }
-                }
-            )
+                            if (isLandscape) {
+                                top.linkTo(parent.top, margin = standardMargin)
+                            } else {
+                                bottom.linkTo(parent.bottom, margin = standardMargin)
+                            }
+                        }
+                )
+            }
 
             if (!fullScreenViewFinder) {
                 val (prompt, flashLightToggle) = createRefs()
