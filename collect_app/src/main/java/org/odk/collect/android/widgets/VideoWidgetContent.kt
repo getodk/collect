@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.VideoLibrary
 import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.Icon
@@ -28,17 +28,18 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.strings.R.string
 
 @Composable
 fun VideoWidgetContent(
-    answer: String?,
+    videoUri: Uri?,
+    mediaUtils: MediaUtils?,
     readOnly: Boolean,
     newVideoOnly: Boolean,
     onRecordClick: () -> Unit,
     onChooseClick: () -> Unit,
-    onPlayClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
     Column {
@@ -62,15 +63,10 @@ fun VideoWidgetContent(
             )
         }
 
-        Spacer(Modifier.height(dimensionResource(id = dimen.margin_standard)))
-
-        IconButton(
-            Icons.Default.PlayCircle,
-            stringResource(string.play_video),
-            onPlayClick,
-            onLongClick,
-            answer != null
-        )
+        if (videoUri != null) {
+            Spacer(Modifier.height(dimensionResource(id = dimen.margin_standard)))
+            VideoWidgetAnswer(videoUri, mediaUtils)
+        }
     }
 }
 
@@ -129,9 +125,9 @@ private fun VideoWidgetContentPreview() {
     MaterialTheme {
         VideoWidgetContent(
             null,
+            null,
             false,
             false,
-            {},
             {},
             {},
             {}
@@ -145,9 +141,9 @@ private fun VideoWidgetContentReadOnlyPreview() {
     MaterialTheme {
         VideoWidgetContent(
             null,
+            null,
             true,
             false,
-            {},
             {},
             {},
             {}
@@ -161,9 +157,9 @@ private fun VideoWidgetContentNewVideoOnlyPreview() {
     MaterialTheme {
         VideoWidgetContent(
             null,
+            null,
             false,
             true,
-            {},
             {},
             {},
             {}

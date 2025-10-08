@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
+import androidx.core.net.toUri
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
@@ -50,7 +51,8 @@ class VideoWidget(
         return ComposeView(context).apply {
             setContextThemedContent {
                 VideoWidgetContent(
-                    binaryName,
+                    questionMediaManager.getAnswerFile(binaryName)?.toUri(),
+                    mediaUtils,
                     readOnly,
                     newVideoOnly,
                     onRecordClick = {
@@ -64,7 +66,6 @@ class VideoWidget(
                         )
                     },
                     onChooseClick = { chooseVideo() },
-                    onPlayClick = { playVideo() },
                     onLongClick = { this.showContextMenu() }
                 )
             }
@@ -161,10 +162,5 @@ class VideoWidget(
 
             waitingForDataRegistry.cancelWaitingForData()
         }
-    }
-
-    private fun playVideo() {
-        val file = questionMediaManager.getAnswerFile(binaryName)
-        mediaUtils.openFile(context, file!!, "video/*")
     }
 }
