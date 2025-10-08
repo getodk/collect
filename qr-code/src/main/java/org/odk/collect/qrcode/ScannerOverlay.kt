@@ -52,23 +52,17 @@ fun ScannerOverlay(
 
         ViewFinderHighlight(detectedState, viewFinderSize, viewFinderOffset, highlightWidth)
 
-        val topRight = if (fullScreenViewFinder) {
-            val landscapeMargin = 96
-            Offset(
-                viewFinderOffset.x + viewFinderSize.width - landscapeMargin,
-                viewFinderOffset.y + landscapeMargin
-            ).dp()
-        } else {
-            Offset(viewFinderOffset.x + viewFinderSize.width, viewFinderOffset.y).dp()
+        if (!fullScreenViewFinder) {
+            val topRight = Offset(viewFinderOffset.x + viewFinderSize.width, viewFinderOffset.y).dp()
+            val circleRadius = 18.dp
+            val circleOffset = DpOffset(x = topRight.x - circleRadius, y = topRight.y - circleRadius)
+            ViewFinderIcon(
+                detectedState,
+                modifier = Modifier
+                    .offset(circleOffset.x, circleOffset.y)
+                    .size(circleRadius * 2)
+            )
         }
-        val circleRadius = 18.dp
-        val circleOffset = DpOffset(x = topRight.x - circleRadius, y = topRight.y - circleRadius)
-        ViewFinderIcon(
-            detectedState,
-            modifier = Modifier
-                .offset(circleOffset.x, circleOffset.y)
-                .size(circleRadius * 2)
-        )
     }
 }
 
