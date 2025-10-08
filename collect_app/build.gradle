@@ -356,7 +356,6 @@ dependencies {
     implementation(libs.androidXConstraintLayoutCompose)
     implementation(libs.androidXComposeMaterialIcons)
     implementation(libs.androidXComposePreview)
-    debugImplementation(libs.androidXComposeTooling)
 
     testImplementation project(':forms-test')
 
@@ -386,6 +385,8 @@ dependencies {
     androidTestImplementation project(':androidtest')
     androidTestImplementation project(':test-forms')
 
+    androidTestImplementation(composeBom)
+    androidTestImplementation libs.androidXComposeUiTestJunit4
     androidTestImplementation libs.caverockAndroidsvg
     androidTestImplementation libs.mockitoAndroid
     androidTestImplementation libs.androidxTestExtJunit
@@ -407,6 +408,7 @@ dependencies {
 
     // Real LeakCanary for debug and selfSigned builds only: notifications, analysis, etc
     debugImplementation libs.leakcanary
+    debugImplementation(libs.androidXComposeTooling)
     selfSignedReleaseImplementation libs.leakcanary
 }
 

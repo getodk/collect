@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toFile
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +52,8 @@ fun VideoWidgetAnswer(
             .clip(RoundedCornerShape(16.dp))
             .clickable {
                 mediaUtils?.openFile(context, videoUri.toFile(), "video/*")
-            },
+            }
+            .testTag("video_widget_answer"),
         contentAlignment = Alignment.Center
     ) {
         bitmap?.let {
