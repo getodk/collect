@@ -93,7 +93,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     PermissionsProvider permissionsProvider;
 
     @Inject
-    SettingsProvider settingsProvider;
+    protected SettingsProvider settingsProvider;
 
     @Inject
     protected

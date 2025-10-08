@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.video
 
 import android.net.Uri
 import androidx.compose.foundation.background

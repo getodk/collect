@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.video
 
 import android.graphics.Bitmap
 import android.net.Uri

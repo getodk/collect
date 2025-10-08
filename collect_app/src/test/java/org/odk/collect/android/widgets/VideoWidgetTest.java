@@ -27,6 +27,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.android.widgets.video.VideoWidget;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.shared.TempFiles;
 
