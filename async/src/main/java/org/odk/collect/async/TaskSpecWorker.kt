@@ -70,7 +70,7 @@ class TaskSpecWorker(
         return when (result) {
             TaskSpec.Result.SUCCESS -> Result.success()
             TaskSpec.Result.FAILURE -> Result.failure()
-            TaskSpec.Result.RETRY -> Result.failure()
+            TaskSpec.Result.RETRY -> Result.retry()
         }
     }
 
