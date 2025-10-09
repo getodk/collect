@@ -40,4 +40,5 @@ dependencies {
     implementation(libs.androidxAppcompat)
     implementation(libs.androidxTestEspressoIntents)
     implementation(libs.timber)
+    implementation(libs.kotlinxCoroutinesTest)
 }
