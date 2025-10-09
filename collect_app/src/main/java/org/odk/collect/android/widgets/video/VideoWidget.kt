@@ -46,7 +46,7 @@ class VideoWidget(
     }
 
     override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
-        val readOnly = formEntryPrompt.isReadOnly
+        val readOnly = questionDetails.isReadOnly
         val newVideoOnly = formEntryPrompt.appearanceHint?.lowercase()?.contains(Appearances.NEW) ?: false
 
         return ComposeView(context).apply {

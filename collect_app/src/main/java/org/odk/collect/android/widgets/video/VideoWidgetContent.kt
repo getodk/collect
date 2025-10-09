@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,7 +49,8 @@ fun VideoWidgetContent(
                 Icons.Default.Videocam,
                 stringResource(string.capture_video),
                 onRecordClick,
-                onLongClick
+                onLongClick,
+                Modifier.testTag("record_video_button")
             )
         }
 
@@ -59,7 +61,8 @@ fun VideoWidgetContent(
                 Icons.Default.VideoLibrary,
                 stringResource(string.choose_video),
                 onChooseClick,
-                onLongClick
+                onLongClick,
+                Modifier.testTag("choose_video_button")
             )
         }
 
@@ -76,6 +79,7 @@ private fun IconButton(
     text: String,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
+    modifier: Modifier,
     enabled: Boolean = true
 ) {
     val backgroundColor = if (enabled) {
@@ -91,7 +95,7 @@ private fun IconButton(
     }
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clip(CircleShape)
             .background(backgroundColor)
