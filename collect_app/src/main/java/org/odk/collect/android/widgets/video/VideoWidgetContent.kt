@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.androidshared.R.dimen
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.strings.R.string
 
 @Composable
@@ -101,7 +102,11 @@ private fun IconButton(
             .background(backgroundColor)
             .combinedClickable(
                 enabled = enabled,
-                onClick = onClick,
+                onClick = {
+                    if (MultiClickGuard.allowClick()) {
+                        onClick()
+                    }
+                },
                 onLongClick = onLongClick
             )
             .padding(vertical = dimensionResource(id = dimen.margin_small)),
