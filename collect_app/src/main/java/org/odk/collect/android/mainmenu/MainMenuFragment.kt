@@ -2,6 +2,7 @@ package org.odk.collect.android.mainmenu
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -105,6 +106,14 @@ class MainMenuFragment(
                 },
                 displayDismissButton = true
             )
+        }
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O && !isMinSdkDeprecationBannerDismissed) {
+            binding.minSdkDeprecationBanner.root.visibility = View.VISIBLE
+            binding.minSdkDeprecationBanner.dismissButton.setOnClickListener {
+                isMinSdkDeprecationBannerDismissed = true
+                binding.minSdkDeprecationBanner.root.visibility = View.GONE
+            }
         }
 
         currentProjectViewModel.currentProject.observe(viewLifecycleOwner) {
@@ -261,5 +270,9 @@ class MainMenuFragment(
             if (mainMenuViewModel.shouldGetBlankFormButtonBeVisible()) View.VISIBLE else View.GONE
         binding.manageForms.visibility =
             if (mainMenuViewModel.shouldDeleteSavedFormButtonBeVisible()) View.VISIBLE else View.GONE
+    }
+
+    companion object {
+        var isMinSdkDeprecationBannerDismissed = false
     }
 }
