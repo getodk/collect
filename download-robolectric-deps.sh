@@ -2,6 +2,8 @@ set -e
 
 wget -nc https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/6.0.1_r3-robolectric-r1-i7/android-all-instrumented-6.0.1_r3-robolectric-r1-i7.jar -P robolectric-deps
 wget -nc https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/7.0.0_r1-robolectric-r1-i7/android-all-instrumented-7.0.0_r1-robolectric-r1-i7.jar -P robolectric-deps
+wget -nc https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/7.1.0_r7-robolectric-r1-i7/android-all-instrumented-7.1.0_r7-robolectric-r1-i7.jar -P robolectric-deps
+wget -nc https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/8.0.0_r4-robolectric-r1-i7/android-all-instrumented-8.0.0_r4-robolectric-r1-i7.jar -P robolectric-deps
 wget -nc https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/12.1-robolectric-8229987-i7/android-all-instrumented-12.1-robolectric-8229987-i7.jar -P robolectric-deps
 wget -nc https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/13-robolectric-9030017-i7/android-all-instrumented-13-robolectric-9030017-i7.jar -P robolectric-deps
 wget -nc https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/15-robolectric-12650502-i7/android-all-instrumented-15-robolectric-12650502-i7.jar -P robolectric-deps
