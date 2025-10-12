@@ -55,7 +55,9 @@ fun ScannerControls(
                 val (fullScreenToggle) = createRefs()
                 ExtendedFloatingActionButton(
                     onClick = onFullScreenToggled,
-                    icon = { Icon(Icons.Filled.ScreenRotation, "") },
+                    icon = {
+                        Icon(Icons.Filled.ScreenRotation, stringResource(R.string.rotate_device))
+                    },
                     text = { Text(stringResource(R.string.rotate_device)) },
                     expanded = fullScreenToggleExtended,
                     modifier = Modifier
