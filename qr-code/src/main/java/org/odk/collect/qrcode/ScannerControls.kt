@@ -56,7 +56,7 @@ fun ScannerControls(
                 ExtendedFloatingActionButton(
                     onClick = onFullScreenToggled,
                     icon = { Icon(Icons.Filled.ScreenRotation, "") },
-                    text = { Text("Rotate device") },
+                    text = { Text(stringResource(R.string.rotate_device)) },
                     expanded = fullScreenToggleExtended,
                     modifier = Modifier
                         .safeDrawingPadding()
