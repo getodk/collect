@@ -16,6 +16,7 @@ import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 
 class JavaRosaInitializer(
     private val propertyManager: PropertyManager,
@@ -45,7 +46,7 @@ class JavaRosaInitializer(
         val entityXFormParserFactory =
             EntityXFormParserFactory(
                 XFormParserFactory()
-            )
+            ) { settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_ENTITIES_SPEC_V2025_1) }
         val dynamicPreloadXFormParserFactory =
             DynamicPreloadXFormParserFactory(entityXFormParserFactory)
 
