@@ -44,6 +44,8 @@ abstract class BarcodeScannerView(context: Context) : FrameLayout(context) {
     protected abstract fun scan(callback: (String) -> Unit)
     abstract fun setTorchOn(on: Boolean)
     abstract fun setTorchListener(torchListener: TorchListener)
+
+    abstract fun supportsFullScreenViewFinder(): Boolean
     abstract fun setFullScreenViewFinder(fullScannerViewFinder: Boolean)
 
     fun start() {

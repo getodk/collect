@@ -42,6 +42,7 @@ androidMaterial = { group = "com.google.android.material", name = "material", ve
 androidFlexbox = { group = "com.google.android.flexbox", name = "flexbox", version = "3.0.0" }
 androidxComposeBom = { group = "androidx.compose", name = "compose-bom", version = "2025.08.00" }
 androidXComposeMaterial = { group = "androidx.compose.material3", name = "material3" }
+androidXComposeMaterialIconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidXComposePreview = { group = "androidx.compose.ui", name = "ui-tooling-preview"}
 androidXComposeTooling = { group = "androidx.compose.ui", name = "ui-tooling"}
 androidXConstraintLayoutCompose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.1.1" }

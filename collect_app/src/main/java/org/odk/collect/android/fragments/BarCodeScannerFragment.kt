@@ -13,23 +13,26 @@
 package org.odk.collect.android.fragments
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.compose.runtime.mutableStateOf
 import androidx.fragment.app.Fragment
 import com.google.zxing.client.android.BeepManager
 import org.odk.collect.android.databinding.FragmentScanBinding
 import org.odk.collect.android.injection.DaggerUtils.getComponent
 import org.odk.collect.android.utilities.Appearances
-import org.odk.collect.androidshared.ui.SnackbarUtils
+import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.async.Scheduler
+import org.odk.collect.qrcode.BarcodeScannerView
 import org.odk.collect.qrcode.BarcodeScannerViewContainer
-import org.odk.collect.qrcode.calculateViewFinder
+import org.odk.collect.qrcode.ScannerControls
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 abstract class BarCodeScannerFragment : Fragment() {
 
@@ -40,10 +43,16 @@ abstract class BarCodeScannerFragment : Fragment() {
     lateinit var scheduler: Scheduler
 
     private val beepManager: BeepManager by lazy { BeepManager(requireActivity()) }
+    private val fullScreenState = mutableStateOf(false)
+    private val fullScreenToggleExtendedState = mutableStateOf(false)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         getComponent(context).inject(this)
+
+        scheduler.immediate(delay = 10.seconds.inWholeMilliseconds) {
+            fullScreenToggleExtendedState.value = true
+        }
     }
 
     override fun onCreateView(
@@ -61,10 +70,35 @@ abstract class BarCodeScannerFragment : Fragment() {
             frontCameraUsed()
         )
 
-        binding.switchFlashlight.setup(binding.barcodeView.barcodeScannerView)
-        // if the device does not have flashlight in its camera, then remove the switch flashlight button...
-        if (!hasFlash() || frontCameraUsed()) {
-            binding.switchFlashlight.visibility = View.GONE
+        val flashlightOnState = mutableStateOf(false)
+        binding.barcodeView.barcodeScannerView.setTorchListener(object :
+            BarcodeScannerView.TorchListener {
+            override fun onTorchOn() {
+                flashlightOnState.value = true
+            }
+
+            override fun onTorchOff() {
+                flashlightOnState.value = false
+            }
+        })
+
+        val supportsFullScreen =
+            binding.barcodeView.barcodeScannerView.supportsFullScreenViewFinder()
+        binding.composeView.setContextThemedContent {
+            ScannerControls(
+                showFlashLight = hasFlash() && !frontCameraUsed(),
+                flashlightOn = flashlightOnState.value,
+                fullScreenViewFinder = supportsFullScreen && fullScreenState.value,
+                showFullScreenToggle = supportsFullScreen,
+                fullScreenToggleExtended = fullScreenToggleExtendedState.value,
+                onFullScreenToggled = {
+                    fullScreenState.value = !fullScreenState.value
+                    updateFullScreen(binding, fullScreenState.value)
+                },
+                onFlashlightToggled = {
+                    binding.barcodeView.barcodeScannerView.setTorchOn(!flashlightOnState.value)
+                }
+            )
         }
 
         binding.barcodeView.barcodeScannerView.latestBarcode
@@ -75,24 +109,7 @@ abstract class BarCodeScannerFragment : Fragment() {
                     // ignored
                 }
 
-                binding.prompt.visibility = View.GONE
-                binding.switchFlashlight.visibility = View.GONE
-
-                if (shouldConfirm()) {
-                    SnackbarUtils.showSnackbar(
-                        binding.root,
-                        getString(org.odk.collect.strings.R.string.barcode_scanned),
-                        duration = 2000,
-                        action = SnackbarUtils.Action(
-                            getString(org.odk.collect.strings.R.string.exit_scanning)
-                        ),
-                        onDismiss = {
-                            handleScanningResult(result)
-                        }
-                    )
-                } else {
-                    handleScanningResult(result)
-                }
+                handleScanningResult(result)
             }
 
         binding.barcodeView.barcodeScannerView.start()
@@ -101,23 +118,8 @@ abstract class BarCodeScannerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = FragmentScanBinding.bind(view)
-
-        // Layout the prompt/flashlight button under the view finder
-        view.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
-            val (offset, size) = calculateViewFinder(
-                view.width.toFloat(),
-                view.height.toFloat(),
-                false // We hide these views in landscape/full screen mode
-            )
-            val bottomOfViewFinder = offset.y + size.height
-
-            val promptView = binding.prompt
-            val promptLayoutParams = promptView.layoutParams as ConstraintLayout.LayoutParams
-            val standardMargin =
-                resources.getDimension(org.odk.collect.androidshared.R.dimen.margin_standard)
-            promptView.layoutParams = ConstraintLayout.LayoutParams(promptLayoutParams).also {
-                it.topMargin = (bottomOfViewFinder + standardMargin).toInt()
-            }
+        if (!binding.barcodeView.barcodeScannerView.supportsFullScreenViewFinder()) {
+            requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
         updateConfiguration(resources.configuration)
@@ -132,15 +134,12 @@ abstract class BarCodeScannerFragment : Fragment() {
         val binding = FragmentScanBinding.bind(requireView())
 
         val isLandscape = config.orientation == Configuration.ORIENTATION_LANDSCAPE
-        binding.barcodeView.barcodeScannerView.setFullScreenViewFinder(isLandscape)
+        updateFullScreen(binding, isLandscape)
+    }
 
-        if (isLandscape) {
-            binding.prompt.visibility = View.GONE
-            binding.switchFlashlight.visibility = View.GONE
-        } else {
-            binding.prompt.visibility = View.VISIBLE
-            binding.switchFlashlight.visibility = View.VISIBLE
-        }
+    private fun updateFullScreen(binding: FragmentScanBinding, isFullScreen: Boolean) {
+        binding.barcodeView.barcodeScannerView.setFullScreenViewFinder(isFullScreen)
+        fullScreenState.value = isFullScreen
     }
 
     private fun hasFlash(): Boolean {
@@ -161,8 +160,6 @@ abstract class BarCodeScannerFragment : Fragment() {
     }
 
     protected abstract fun isQrOnly(): Boolean
-
-    protected abstract fun shouldConfirm(): Boolean
 
     protected abstract fun handleScanningResult(result: String)
 }
