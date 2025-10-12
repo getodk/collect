@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">@color/colorPrimaryDark</color>
     <color name="colorOnPrimary">@color/colorOnPrimaryDark</color>
-    <color name="colorPrimaryContainer">#004d65</color>
+    <color name="colorPrimaryContainer">@color/colorPrimaryContainerDark</color>
     <color name="colorOnPrimaryContainer">@color/colorOnPrimaryContainerDark</color>
     <color name="colorPrimaryInverse">#006689</color>
 
