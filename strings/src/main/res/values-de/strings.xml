@@ -201,9 +201,7 @@
   <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">Positionieren Sie den Barcode innerhalb des Rechtecks.</string>
   <!--Message shown when barcode is successfully scanned-->
-  <string name="barcode_scanned">Barcode erfolgreich gescannt</string>
-  <!--Label for button that exits barcode scanning after success-->
-  <string name="exit_scanning">Fertig</string>
+    <!--Label for button that exits barcode scanning after success-->
   <string name="open_file">Datei öffnen</string>
   <string name="rank_items">Rangfolge festlegen</string>
   <string name="number_picker_title">Zahlenwähler</string>

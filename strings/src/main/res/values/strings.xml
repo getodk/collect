@@ -246,11 +246,8 @@
     <!-- Prompt under view finder to describe where to place the camera to scan a barcode -->
     <string name="barcode_scanner_prompt">Place the barcode inside the rectangle</string>
 
-    <!-- Message shown when barcode is successfully scanned -->
-    <string name="barcode_scanned">Barcode was scanned successfully</string>
-
-    <!-- Label for button that exits barcode scanning after success -->
-    <string name="exit_scanning">Done</string>
+    <!-- Label for button that rotates camera orientation when scanning barcodes -->
+    <string name="rotate_device">Rotate device</string>
 
     <string name="open_file">Open file</string>
 

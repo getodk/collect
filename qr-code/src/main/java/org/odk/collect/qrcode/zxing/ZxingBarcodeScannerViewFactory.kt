@@ -99,6 +99,10 @@ private class ZxingBarcodeScannerView(
         })
     }
 
+    override fun supportsFullScreenViewFinder(): Boolean {
+        return false
+    }
+
     override fun setFullScreenViewFinder(fullScannerViewFinder: Boolean) {
         // Ignored
     }

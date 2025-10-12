@@ -101,19 +101,7 @@ private class MlKitBarcodeScannerView(
         right: Int,
         bottom: Int
     ) {
-        val (viewFinderOffset, viewFinderSize) = calculateViewFinder(
-            this.width.toFloat(),
-            this.height.toFloat(),
-            fullScreenViewFinderState.value
-        )
-
-        viewFinderRect.set(
-            viewFinderOffset.x.toInt(),
-            viewFinderOffset.y.toInt(),
-            (viewFinderOffset.x + viewFinderSize.width).toInt(),
-            (viewFinderOffset.y + viewFinderSize.height).toInt()
-        )
-
+        updateViewFinderSize()
         super.onLayout(changed, left, top, right, bottom)
     }
 
@@ -176,8 +164,28 @@ private class MlKitBarcodeScannerView(
         }
     }
 
+    override fun supportsFullScreenViewFinder(): Boolean {
+        return true
+    }
+
     override fun setFullScreenViewFinder(fullScreenViewFinder: Boolean) {
         fullScreenViewFinderState.value = fullScreenViewFinder
+        updateViewFinderSize()
+    }
+
+    private fun updateViewFinderSize() {
+        val (viewFinderOffset, viewFinderSize) = calculateViewFinder(
+            this.width.toFloat(),
+            this.height.toFloat(),
+            fullScreenViewFinderState.value
+        )
+
+        viewFinderRect.set(
+            viewFinderOffset.x.toInt(),
+            viewFinderOffset.y.toInt(),
+            (viewFinderOffset.x + viewFinderSize.width).toInt(),
+            (viewFinderOffset.y + viewFinderSize.height).toInt()
+        )
     }
 
     private fun processBarcode(barcode: DetectedBarcode): String? {
