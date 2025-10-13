@@ -267,12 +267,13 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 - when creating a major release:
   - Tag the commit for the release (`vX.X.0`)
   - Run `./create-release.sh <last release version code> <release tag>`
-- when creating a hotfix release:
-  - Tag the commit for the release (`vX.X.X`)
-  - Run `./create-release.sh <last release version code> <release tag> <last beta tag>`
+- when creating a patch release:
+  - Tag the commit for the patch release (`vX.X.X`)
+  - (If beta has started for next release) Tag the commit for the beta release (`vX.X.X-beta.X`)
+  - Run `./create-release.sh <last release version code> <patch release tag> <beta release tag>`
 - when creating a beta release:
-  - Tag the commit for the release (`vX.X.X-beta.X`)
-  - Run `./create-release.sh <last release version code> <release tag>`
+  - Tag the commit for the beta release (`vX.X.X-beta.X`)
+  - Run `./create-release.sh <last release version code> <beta release tag>`
 - add a release to Github [here](https://github.com/getodk/collect/releases), generate release notes and attach the APK
 - upload APK(s) to Play Store
   - When creating a hotfix, the beta APK should be uploaded second as it will have a higher version code
