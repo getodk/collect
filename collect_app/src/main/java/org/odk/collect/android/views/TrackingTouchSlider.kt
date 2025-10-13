@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
-import com.google.android.material.R
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.slider.Slider
 
@@ -53,7 +52,7 @@ class TrackingTouchSlider(
             ColorStateList.valueOf(
                 MaterialColors.getColor(
                     this,
-                    R.attr.colorPrimary
+                    androidx.appcompat.R.attr.colorPrimary
                 )
             )
         )
