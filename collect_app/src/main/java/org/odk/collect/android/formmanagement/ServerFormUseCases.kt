@@ -119,29 +119,12 @@ object ServerFormUseCases {
                             entityListName,
                             tempMediaFile,
                             entitiesRepository,
-                            entitySource,
                             mediaFile
                         )
                     } catch (t: Throwable) {
                         throw EntityListUpdateException(t)
                     }
                 } else {
-                    /**
-                     * We wrap and then rethrow exceptions that happen here to make them easier to
-                     * track in Crashlytics. This can be removed in the next release once any
-                     * unexpected exceptions "in the wild" are identified.
-                     */
-                    try {
-                        LocalEntityUseCases.updateOfflineLocalEntitiesFromServer(
-                            entityListName,
-                            entitiesRepository,
-                            entitySource,
-                            mediaFile
-                        )
-                    } catch (t: Throwable) {
-                        throw EntityListUpdateException(t)
-                    }
-
                     val existingForm = formsRepository.getAllByFormIdAndVersion(
                         formToDownload.formId,
                         formToDownload.formVersion
@@ -153,6 +136,22 @@ object ServerFormUseCases {
                             newAttachmentsDownloaded = true
                         }
                     }
+                }
+
+                /**
+                 * We wrap and then rethrow exceptions that happen here to make them easier to
+                 * track in Crashlytics. This can be removed in the next release once any
+                 * unexpected exceptions "in the wild" are identified.
+                 */
+                try {
+                    LocalEntityUseCases.updateOfflineLocalEntitiesWithIntegrityUrl(
+                        entityListName,
+                        entitiesRepository,
+                        entitySource,
+                        mediaFile.integrityUrl
+                    )
+                } catch (t: Throwable) {
+                    throw EntityListUpdateException(t)
                 }
             } else {
                 val existingFile = searchForExistingMediaFile(currentOrLastFormVersion, mediaFile)

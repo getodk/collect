@@ -231,7 +231,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
@@ -254,7 +253,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
@@ -277,7 +275,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
@@ -300,7 +297,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
@@ -322,7 +318,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv1,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         assertThat(entitiesRepository.savedEntities, equalTo(1))
@@ -332,7 +327,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv2,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         assertThat(entitiesRepository.savedEntities, equalTo(2))
@@ -348,7 +342,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv1,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
 
@@ -359,7 +352,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv2,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
 
@@ -389,7 +381,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
@@ -413,7 +404,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
@@ -434,7 +424,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
@@ -455,7 +444,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         assertThat(entitiesRepository.getLists().size, equalTo(0))
@@ -473,7 +461,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         assertThat(entitiesRepository.getLists().size, equalTo(0))
@@ -491,7 +478,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         assertThat(entitiesRepository.getLists().size, equalTo(0))
@@ -505,7 +491,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
@@ -521,7 +506,6 @@ class LocalEntityUseCasesTest {
             "songs",
             file,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         assertThat(entitiesRepository.getLists().size, equalTo(0))
@@ -536,51 +520,10 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
         val songs = entitiesRepository.query("songs")
         assertThat(songs.size, equalTo(2))
-    }
-
-    @Test
-    fun `updateLocalEntitiesFromServer removes offline entities that are not in online entities but are deleted according to the entity source`() {
-        entitiesRepository.save("songs", Entity.New("noah", "Noah"))
-        entitiesRepository.save("songs", Entity.New("midnightCity", "Midnight City"))
-        entitySource.delete("noah")
-        entitySource.delete("midnightCity")
-
-        val csv = createEntityList(Entity.New("cathedrals", "Cathedrals"))
-        LocalEntityUseCases.updateLocalEntitiesFromServer(
-            "songs",
-            csv,
-            entitiesRepository,
-            entitySource,
-            FormFixtures.mediaFile(integrityUrl = entitySource.integrityUrl)
-        )
-
-        val songs = entitiesRepository.query("songs")
-        assertThat(songs.size, equalTo(1))
-        assertThat(songs.first().id, equalTo("cathedrals"))
-    }
-
-    @Test
-    fun `updateLocalEntitiesFromServer only checks for deletions with the entity source once`() {
-        entitiesRepository.save("songs", Entity.New("noah", "Noah"))
-        entitiesRepository.save("songs", Entity.New("midnightCity", "Midnight City"))
-        entitySource.delete("noah")
-        entitySource.delete("midnightCity")
-
-        val csv = createEntityList()
-        LocalEntityUseCases.updateLocalEntitiesFromServer(
-            "songs",
-            csv,
-            entitiesRepository,
-            entitySource,
-            FormFixtures.mediaFile(integrityUrl = entitySource.integrityUrl)
-        )
-
-        assertThat(entitySource.accesses, equalTo(1))
     }
 
     @Test
@@ -590,7 +533,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile(integrityUrl = entitySource.integrityUrl)
         )
 
@@ -606,7 +548,6 @@ class LocalEntityUseCasesTest {
             "songs",
             firstCsv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
 
@@ -615,7 +556,6 @@ class LocalEntityUseCasesTest {
             "songs",
             secondCsv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
 
@@ -634,7 +574,6 @@ class LocalEntityUseCasesTest {
             "songs",
             firstCsv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
 
@@ -643,7 +582,6 @@ class LocalEntityUseCasesTest {
             "songs",
             secondCsv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile()
         )
 
@@ -658,7 +596,6 @@ class LocalEntityUseCasesTest {
             "songs",
             csv,
             entitiesRepository,
-            entitySource,
             FormFixtures.mediaFile(hash = "hash")
         )
 
@@ -702,11 +639,11 @@ class LocalEntityUseCasesTest {
 
         entitySource.delete("cathedrals")
 
-        LocalEntityUseCases.updateOfflineLocalEntitiesFromServer(
+        LocalEntityUseCases.updateOfflineLocalEntitiesWithIntegrityUrl(
             "songs",
             entitiesRepository,
             entitySource,
-            FormFixtures.mediaFile(integrityUrl = entitySource.integrityUrl)
+            FormFixtures.mediaFile(integrityUrl = entitySource.integrityUrl).integrityUrl
         )
 
         val songs = entitiesRepository.query("songs")

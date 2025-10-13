@@ -67,7 +67,6 @@ object LocalEntityUseCases {
         list: String,
         serverList: File,
         entitiesRepository: EntitiesRepository,
-        entitySource: EntitySource,
         mediaFile: MediaFile
     ) {
         val existingListHash = entitiesRepository.getList(list)?.hash
@@ -117,13 +116,12 @@ object LocalEntityUseCases {
             }
         }
 
-        handleMissingEntities(
-            list,
-            missingFromServer.values,
-            entitiesRepository,
-            entitySource,
-            mediaFile.integrityUrl
-        )
+        missingFromServer.values
+            .filter { it.state == Entity.State.ONLINE }
+            .forEach {
+                entitiesRepository.delete(list, it.id)
+            }
+
         entitiesRepository.save(list, *newAndUpdated.toTypedArray())
         entitiesRepository.updateList(
             list,
@@ -147,43 +145,18 @@ object LocalEntityUseCases {
      * In this case, the usual hash-based update will not detect the deletion. Collect must
      * use the integrityUrl to check for missing Entities and remove them locally.
      */
-    fun updateOfflineLocalEntitiesFromServer(
+    fun updateOfflineLocalEntitiesWithIntegrityUrl(
         list: String,
-        entitiesRepository: EntitiesRepository,
-        entitySource: EntitySource,
-        mediaFile: MediaFile
-    ) {
-        val offlineLocalEntities = entitiesRepository
-            .query(list)
-            .filter { it.state == Entity.State.OFFLINE }
-            .associateBy { it.id }
-            .toMutableMap()
-
-        handleMissingEntities(
-            list,
-            offlineLocalEntities.values,
-            entitiesRepository,
-            entitySource,
-            mediaFile.integrityUrl
-        )
-    }
-
-    private fun handleMissingEntities(
-        list: String,
-        missingFromServer: Collection<Entity.Saved>,
         entitiesRepository: EntitiesRepository,
         entitySource: EntitySource,
         integrityUrl: String?
     ) {
-        val missingOnline = missingFromServer.filter { it.state == Entity.State.ONLINE }
-        val missingOffline = missingFromServer.filter { it.state == Entity.State.OFFLINE }
+        val offlineLocalEntities = entitiesRepository
+            .query(list)
+            .filter { it.state == Entity.State.OFFLINE }
 
-        missingOnline.forEach {
-            entitiesRepository.delete(list, it.id)
-        }
-
-        if (integrityUrl != null && missingOffline.isNotEmpty()) {
-            entitySource.fetchDeletedStates(integrityUrl, missingOffline.map { it.id }).forEach {
+        if (integrityUrl != null && offlineLocalEntities.isNotEmpty()) {
+            entitySource.fetchDeletedStates(integrityUrl, offlineLocalEntities.map { it.id }).forEach {
                 if (it.second) {
                     entitiesRepository.delete(list, it.first)
                 }
