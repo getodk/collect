@@ -639,11 +639,11 @@ class LocalEntityUseCasesTest {
 
         entitySource.delete("cathedrals")
 
-        LocalEntityUseCases.updateOfflineLocalEntitiesWithIntegrityUrl(
+        LocalEntityUseCases.cleanUpDeletedOfflineEntities(
             "songs",
             entitiesRepository,
             entitySource,
-            FormFixtures.mediaFile(integrityUrl = entitySource.integrityUrl).integrityUrl
+            FormFixtures.mediaFile(integrityUrl = entitySource.integrityUrl)
         )
 
         val songs = entitiesRepository.query("songs")

@@ -129,11 +129,11 @@ object ServerFormUseCases {
                     }
                 }
 
-                LocalEntityUseCases.updateOfflineLocalEntitiesWithIntegrityUrl(
+                LocalEntityUseCases.cleanUpDeletedOfflineEntities(
                     entityListName,
                     entitiesRepository,
                     entitySource,
-                    mediaFile.integrityUrl
+                    mediaFile
                 )
             } else {
                 val existingFile = searchForExistingMediaFile(currentOrLastFormVersion, mediaFile)

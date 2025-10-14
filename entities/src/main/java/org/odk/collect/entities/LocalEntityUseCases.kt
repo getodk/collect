@@ -145,16 +145,17 @@ object LocalEntityUseCases {
      * In this case, the usual hash-based update will not detect the deletion. Collect must
      * use the integrityUrl to check for missing Entities and remove them locally.
      */
-    fun updateOfflineLocalEntitiesWithIntegrityUrl(
+    fun cleanUpDeletedOfflineEntities(
         list: String,
         entitiesRepository: EntitiesRepository,
         entitySource: EntitySource,
-        integrityUrl: String?
+        mediaFile: MediaFile
     ) {
         val offlineLocalEntities = entitiesRepository
             .query(list)
             .filter { it.state == Entity.State.OFFLINE }
 
+        val integrityUrl = mediaFile.integrityUrl
         if (integrityUrl != null && offlineLocalEntities.isNotEmpty()) {
             entitySource.fetchDeletedStates(integrityUrl, offlineLocalEntities.map { it.id }).forEach {
                 if (it.second) {
