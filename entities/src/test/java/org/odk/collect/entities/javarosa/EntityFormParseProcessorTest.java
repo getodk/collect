@@ -53,7 +53,7 @@ public class EntityFormParseProcessorTest {
             )
         );
 
-        EntityFormParseProcessor processor = new EntityFormParseProcessor();
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> false);
         XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
         parser.addProcessor(processor);
         parser.parse(null);
@@ -84,7 +84,7 @@ public class EntityFormParseProcessorTest {
             )
         );
 
-        EntityFormParseProcessor processor = new EntityFormParseProcessor();
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> false);
         XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
         parser.addProcessor(processor);
 
@@ -125,7 +125,7 @@ public class EntityFormParseProcessorTest {
             )
         );
 
-        EntityFormParseProcessor processor = new EntityFormParseProcessor();
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> false);
         XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
         parser.addProcessor(processor);
         parser.parse(null);
@@ -158,7 +158,7 @@ public class EntityFormParseProcessorTest {
             )
         );
 
-        EntityFormParseProcessor processor = new EntityFormParseProcessor();
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> false);
         XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
         parser.addProcessor(processor);
 
@@ -193,7 +193,7 @@ public class EntityFormParseProcessorTest {
             )
         );
 
-        EntityFormParseProcessor processor = new EntityFormParseProcessor();
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> false);
         XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
         parser.addProcessor(processor);
 
@@ -227,7 +227,7 @@ public class EntityFormParseProcessorTest {
             )
         );
 
-        EntityFormParseProcessor processor = new EntityFormParseProcessor();
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> false);
         XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
         parser.addProcessor(processor);
 
