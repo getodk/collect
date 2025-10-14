@@ -16,7 +16,7 @@ class FakeAudioPlayer : AudioPlayer {
 
     var playedClips: Int = 0
         private set
-    var isPaused: Boolean = false
+    var isPlaying: Boolean = false
         private set
     var currentClip: Clip? = null
         private set
@@ -28,12 +28,12 @@ class FakeAudioPlayer : AudioPlayer {
     override fun play(clip: Clip) {
         this.currentClip = clip
         playedClips++
-        isPaused = false
+        isPlaying = true
         playingChangedListeners[clip.clipID]!!.accept(true)
     }
 
     override fun pause() {
-        isPaused = true
+        isPlaying = false
         playingChangedListeners[currentClip!!.clipID]!!.accept(false)
     }
 
@@ -58,15 +58,13 @@ class FakeAudioPlayer : AudioPlayer {
             playingChangedListeners[it.clipID]?.accept(false)
         }
 
+        isPlaying = false
         currentClip = null
     }
 
     override fun playInOrder(clips: List<Clip>) {
         playedClips += clips.size
-    }
-
-    fun getPosition(clipId: String): Int? {
-        return positions[clipId]
+        isPlaying = true
     }
 }
 

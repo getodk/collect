@@ -27,4 +27,14 @@ class AudioAutoplayTest {
 
         assertThat(testDependencies.audioPlayerFactory.audioPlayer.playedClips, equalTo(1))
     }
+
+    @Test
+    fun audioContinuesWhenNavigatingInForm() {
+        rule.startAtMainMenu()
+            .copyForm("one-question-autoplay.xml", listOf("sampleAudio.wav"))
+            .startBlankForm("One Question Autoplay")
+            .swipeToEndScreen()
+
+        assertThat(testDependencies.audioPlayerFactory.audioPlayer.isPlaying, equalTo(true))
+    }
 }
