@@ -72,7 +72,6 @@ class ProjectPreferencesFragmentTest {
 
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_SERVER, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_PROJECT_DISPLAY, false)
-        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
@@ -231,7 +230,6 @@ class ProjectPreferencesFragmentTest {
 
     @Test
     fun `When at least one user interface preference is enabled should preference be visible in Locked mode`() {
-        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, true)
@@ -246,7 +244,6 @@ class ProjectPreferencesFragmentTest {
 
     @Test
     fun `When all user interface preferences are disabled should preference be hidden in Locked mode`() {
-        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
@@ -261,7 +258,6 @@ class ProjectPreferencesFragmentTest {
 
     @Test
     fun `When at least one user interface preference is enabled should preference be visible in Unlocked mode`() {
-        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, true)
@@ -276,7 +272,6 @@ class ProjectPreferencesFragmentTest {
 
     @Test
     fun `When all user interface preferences are disabled should preference be visible in Unlocked mode`() {
-        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
@@ -291,7 +286,6 @@ class ProjectPreferencesFragmentTest {
 
     @Test
     fun `When at least one user interface preference is enabled should preference be visible in NotProtected mode`() {
-        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, true)
@@ -306,7 +300,6 @@ class ProjectPreferencesFragmentTest {
 
     @Test
     fun `When all user interface preferences are disabled should preference be hidden in NotProtected mode`() {
-        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)

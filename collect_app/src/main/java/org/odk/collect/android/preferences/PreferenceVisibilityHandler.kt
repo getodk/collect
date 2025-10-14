@@ -45,7 +45,6 @@ class PreferenceVisibilityHandler(
                 "project_display" -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_CHANGE_PROJECT_DISPLAY)
                 "user_interface" -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || hasAtLeastOnePreferenceEnabled(
                     listOf(
-                        ProtectedProjectKeys.KEY_APP_THEME,
                         ProtectedProjectKeys.KEY_APP_LANGUAGE,
                         ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE,
                         ProtectedProjectKeys.KEY_NAVIGATION

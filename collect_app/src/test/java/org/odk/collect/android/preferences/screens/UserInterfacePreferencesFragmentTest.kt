@@ -12,7 +12,6 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.odk.collect.android.TestSettingsProvider
-import org.odk.collect.android.application.FeatureFlags
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.support.CollectHelpers
@@ -58,10 +57,6 @@ class UserInterfacePreferencesFragmentTest {
 
         val scenario = launcherRule.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            if (!FeatureFlags.NO_THEME_SETTING) {
-                assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_THEME)!!.isVisible, `is`(true))
-            }
-
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
@@ -70,7 +65,6 @@ class UserInterfacePreferencesFragmentTest {
 
     @Test
     fun `Disabled preferences should be hidden in Locked mode`() {
-        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
@@ -79,10 +73,6 @@ class UserInterfacePreferencesFragmentTest {
 
         val scenario = launcherRule.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            if (!FeatureFlags.NO_THEME_SETTING) {
-                assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_THEME)!!.isVisible, `is`(false))
-            }
-
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(false))
@@ -95,10 +85,6 @@ class UserInterfacePreferencesFragmentTest {
 
         val scenario = launcherRule.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            if (!FeatureFlags.NO_THEME_SETTING) {
-                assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_THEME)!!.isVisible, `is`(true))
-            }
-
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
@@ -107,7 +93,6 @@ class UserInterfacePreferencesFragmentTest {
 
     @Test
     fun `Disabled preferences should be visible in Unlocked mode`() {
-        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
@@ -116,10 +101,6 @@ class UserInterfacePreferencesFragmentTest {
 
         val scenario = launcherRule.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            if (!FeatureFlags.NO_THEME_SETTING) {
-                assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_THEME)!!.isVisible, `is`(true))
-            }
-
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
@@ -132,10 +113,6 @@ class UserInterfacePreferencesFragmentTest {
 
         val scenario = launcherRule.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            if (!FeatureFlags.NO_THEME_SETTING) {
-                assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_THEME)!!.isVisible, `is`(true))
-            }
-
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
@@ -144,7 +121,6 @@ class UserInterfacePreferencesFragmentTest {
 
     @Test
     fun `Disabled preferences should be hidden in NotProtected mode`() {
-        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
@@ -153,10 +129,6 @@ class UserInterfacePreferencesFragmentTest {
 
         val scenario = launcherRule.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            if (!FeatureFlags.NO_THEME_SETTING) {
-                assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_THEME)!!.isVisible, `is`(false))
-            }
-
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(false))
