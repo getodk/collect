@@ -6,4 +6,6 @@
 
     <!-- touch target -->
     <dimen name="touch_target_size">48dp</dimen>
+
+    <dimen name="mediumCornerSize">8dp</dimen>
 </resources>

@@ -23,6 +23,11 @@ class FakeBarcodeScannerView(context: Context) : BarcodeScannerView(context) {
 
     override fun setTorchOn(on: Boolean) = Unit
     override fun setTorchListener(torchListener: TorchListener) = Unit
+    override fun supportsFullScreenViewFinder(): Boolean {
+        return false
+    }
+
+    override fun setFullScreenViewFinder(fullScannerViewFinder: Boolean) = Unit
 
     fun scan(result: String) {
         isScanning = false

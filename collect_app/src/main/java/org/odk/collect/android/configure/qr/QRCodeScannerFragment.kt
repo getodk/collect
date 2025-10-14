@@ -87,8 +87,4 @@ class QRCodeScannerFragment : BarCodeScannerFragment() {
     override fun isQrOnly(): Boolean {
         return true
     }
-
-    override fun shouldConfirm(): Boolean {
-        return false
-    }
 }

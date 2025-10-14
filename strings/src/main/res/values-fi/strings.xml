@@ -199,9 +199,7 @@
   <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">Aseta viivakoodi suorakaiteen sisään</string>
   <!--Message shown when barcode is successfully scanned-->
-  <string name="barcode_scanned">Viivakoodin skannaus onnistui</string>
-  <!--Label for button that exits barcode scanning after success-->
-  <string name="exit_scanning">Valmis</string>
+    <!--Label for button that exits barcode scanning after success-->
   <string name="open_file">Avaa tiedosto</string>
   <string name="rank_items">Järjestä</string>
   <string name="number_picker_title">Numerovalitsin</string>
