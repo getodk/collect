@@ -27,11 +27,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <include
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/min_sdk_deprecation_banner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/min_sdk_deprecation_banner"
-                layout="@layout/min_sdk_deprecation_banner"
+                android:name="org.odk.collect.android.mainmenu.MinSdkDeprecationBanner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/map_box_initialization_fragment" />
