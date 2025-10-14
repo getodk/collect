@@ -606,9 +606,6 @@
   <string name="password_error_whitespace">فضای خالی پیشرو یا انتهایی در پسورد مجاز نیست</string>
   <string name="username_error_whitespace">فضای خالی پیشرو یا انتهایی در نام کاربری مجاز نیست</string>
   <string name="app_theme">ظاهر</string>
-  <string name="theme_light">روشن</string>
-  <string name="theme_dark">تیره</string>
-  <string name="theme_system">آز موضوع دستگاه استفاده کنید</string>
   <string name="language">زبان</string>
   <string name="use_device_language">از زبان دستگاه استفاده کنید</string>
   <string name="font_size">اندازه فونت متن</string>

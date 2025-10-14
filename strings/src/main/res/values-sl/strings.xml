@@ -650,9 +650,6 @@
   <string name="password_error_whitespace">Presledki na začetku ali na koncu gesla niso dovoljeni</string>
   <string name="username_error_whitespace">Presledki na začetku ali na koncu uporabniškega imena niso dovoljeni</string>
   <string name="app_theme">Tema</string>
-  <string name="theme_light">Svetla tema</string>
-  <string name="theme_dark">Temna tema</string>
-  <string name="theme_system">Uporabi temo naprave</string>
   <string name="language">Jezik</string>
   <string name="use_device_language">Uporabi jezik naprave</string>
   <string name="font_size">Velikost črk</string>

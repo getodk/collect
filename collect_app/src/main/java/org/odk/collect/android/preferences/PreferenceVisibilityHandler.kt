@@ -74,7 +74,6 @@ class PreferenceVisibilityHandler(
                         ProtectedProjectKeys.KEY_ANALYTICS
                     )
                 )
-                ProjectKeys.KEY_APP_THEME -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_APP_THEME)
                 ProjectKeys.KEY_APP_LANGUAGE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_APP_LANGUAGE)
                 ProjectKeys.KEY_FONT_SIZE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE)
                 ProjectKeys.KEY_NAVIGATION -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_NAVIGATION)

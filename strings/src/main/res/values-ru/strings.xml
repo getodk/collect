@@ -634,9 +634,6 @@
   <string name="password_error_whitespace">Не допускается использовать пробелы в начале и конце пароля</string>
   <string name="username_error_whitespace">Не допускается использовать пробелы в начале и конце имени пользователя</string>
   <string name="app_theme">Тема</string>
-  <string name="theme_light">Светлая</string>
-  <string name="theme_dark">Тёмная</string>
-  <string name="theme_system">Использовать тему устройства</string>
   <string name="language">Язык</string>
   <string name="use_device_language">Использовать язык устройства</string>
   <string name="font_size">Размер шрифта</string>

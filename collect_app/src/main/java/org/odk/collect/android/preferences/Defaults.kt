@@ -2,7 +2,6 @@ package org.odk.collect.android.preferences
 
 import com.google.android.gms.maps.GoogleMap
 import org.odk.collect.android.BuildConfig
-import org.odk.collect.android.application.Collect
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
@@ -40,7 +39,6 @@ object Defaults {
             // server_preferences.xml
             hashMap[ProjectKeys.KEY_PROTOCOL] = ProjectKeys.PROTOCOL_SERVER
             // user_interface_preferences.xml
-            hashMap[ProjectKeys.KEY_APP_THEME] = Collect.getInstance().getString(org.odk.collect.strings.R.string.app_theme_system)
             hashMap[ProjectKeys.KEY_APP_LANGUAGE] = ""
             hashMap[ProjectKeys.KEY_FONT_SIZE] = QuestionFontSizeUtils.DEFAULT_FONT_SIZE.toString()
             hashMap[ProjectKeys.KEY_NAVIGATION] = ProjectKeys.NAVIGATION_BOTH

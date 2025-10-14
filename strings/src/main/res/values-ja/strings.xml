@@ -558,8 +558,6 @@
   <string name="password_error_whitespace">パスワードの先頭または末尾に空白は使用できません</string>
   <string name="username_error_whitespace">ユーザー名の先頭または末尾に空白は使用できません</string>
   <string name="app_theme">テーマ</string>
-  <string name="theme_light">ライトテーマ</string>
-  <string name="theme_dark">ダークテーマ</string>
   <string name="language">言語</string>
   <string name="use_device_language">デバイスの言語を使用する</string>
   <string name="font_size">文字フォントサイズ</string>

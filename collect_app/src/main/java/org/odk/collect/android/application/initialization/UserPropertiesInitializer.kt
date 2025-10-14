@@ -40,11 +40,6 @@ class UserPropertiesInitializer(
             )
 
             analytics.setUserProperty(
-                "UsingNonDefaultTheme",
-                projects.any { isNotUsingDefaultTheme(it) }.toString()
-            )
-
-            analytics.setUserProperty(
                 "HasUnsentAutosendForms",
                 projects.any { hasUnsentAutoSendForms(it) }.toString()
             )
@@ -60,12 +55,6 @@ class UserPropertiesInitializer(
         val notUsingMatchExactly = formUpdateMode != FormUpdateMode.MATCH_EXACTLY.getValue(context)
 
         return notUsingDefaultServer && notUsingMatchExactly
-    }
-
-    private fun isNotUsingDefaultTheme(project: Project.Saved): Boolean {
-        val settings = settingsProvider.getUnprotectedSettings(project.uuid)
-        val theme = settings.getString(ProjectKeys.KEY_APP_THEME)
-        return theme != Defaults.unprotected[ProjectKeys.KEY_APP_THEME]
     }
 
     private fun hasUnsentAutoSendForms(project: Project.Saved): Boolean {

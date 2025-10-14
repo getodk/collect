@@ -535,8 +535,6 @@
   <string name="password_error_whitespace">పాస్ వర్డ్ ముందు లేదా తరువాత స్పేస్ ఉండకూడదు </string>
   <string name="username_error_whitespace">యూసర్ నేమ్ లో ముందు లేదా తరువాత స్పేస్ ఉండకూడదు </string>
   <string name="app_theme">థీము</string>
-  <string name="theme_light">లైట్ థీము</string>
-  <string name="theme_dark">డార్క్ థీము</string>
   <string name="language">భాష</string>
   <string name="use_device_language">పరికర భాషను ఉపయోగించండి</string>
   <string name="font_size">అక్షరాల సైజు </string>

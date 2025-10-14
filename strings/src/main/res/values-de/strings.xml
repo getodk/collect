@@ -693,9 +693,6 @@
   <string name="password_error_whitespace">Leerzeichen am Anfang und Ende von Passwörtern nicht erlaubt</string>
   <string name="username_error_whitespace">Leerzeichen am Anfang und Ende von Benutzernamen nicht erlaubt</string>
   <string name="app_theme">Theme</string>
-  <string name="theme_light">Helles Theme</string>
-  <string name="theme_dark">Dunkles Theme</string>
-  <string name="theme_system">Gerätedesign verwenden</string>
   <string name="language">Sprache</string>
   <string name="use_device_language">Gerätesprache benutzen</string>
   <string name="font_size">Schriftgröße</string>

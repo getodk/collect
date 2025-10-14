@@ -695,9 +695,6 @@
   <string name="password_error_whitespace">Spazi vuoti all\'inizio e alla fine delle password non sono ammessi</string>
   <string name="username_error_whitespace">Spazi vuoti all\'inizio e alla fine delle username non sono ammessi</string>
   <string name="app_theme">Tema</string>
-  <string name="theme_light">Tema chiaro</string>
-  <string name="theme_dark">Tema scuro</string>
-  <string name="theme_system">Usa il tema del dispositivo</string>
   <string name="language">Lingua</string>
   <string name="use_device_language">Utilizza lingua del dispositivo</string>
   <string name="font_size">Dimensione dei caratteri del testo</string>

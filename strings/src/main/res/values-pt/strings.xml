@@ -698,9 +698,6 @@
   <string name="password_error_whitespace">Espaços em branco antes e depois de senhas não são permitidos</string>
   <string name="username_error_whitespace">Espaços em branco antes e depois de nomes de usuários não são permitidos</string>
   <string name="app_theme">Tema</string>
-  <string name="theme_light">Tema claro</string>
-  <string name="theme_dark">Tema escuro</string>
-  <string name="theme_system">Usar tema do dispositivo</string>
   <string name="language">Idioma</string>
   <string name="use_device_language">Utilizar idioma do dispositivo</string>
   <string name="font_size">Tamanho da Fonte do Texto</string>

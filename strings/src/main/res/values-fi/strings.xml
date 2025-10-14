@@ -693,9 +693,6 @@
   <string name="password_error_whitespace">Salasanan alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="username_error_whitespace">Käyttäjänimen alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="app_theme">Teema</string>
-  <string name="theme_light">Vaalea teema</string>
-  <string name="theme_dark">Tumma teema</string>
-  <string name="theme_system">Käytä laitteen teemaa.</string>
   <string name="language">Kieli</string>
   <string name="use_device_language">Käytä laitteen oletuskieltä</string>
   <string name="font_size">Tekstin koko</string>

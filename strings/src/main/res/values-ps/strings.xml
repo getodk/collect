@@ -268,8 +268,6 @@
   <string name="password">پټنوم</string>
   <string name="change_password">ODK پټنوم</string>
   <string name="app_theme">مدار</string>
-  <string name="theme_light">روښانه مدار</string>
-  <string name="theme_dark">تیاره مدار</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <!--Heading for the settings category about updating blank forms-->
