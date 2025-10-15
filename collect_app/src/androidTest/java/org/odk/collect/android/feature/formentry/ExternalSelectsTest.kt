@@ -62,7 +62,7 @@ class ExternalSelectsTest {
         rule.startAtMainMenu()
             .copyForm("dynamic_and_static_choices.xml", listOf("fruits.csv"))
             .startBlankForm("dynamic_and_static_choices")
-            .assertTexts("Mango", "Oranges", "Strawberries", "Apples")
+            .assertTexts("Mango", "Oranges", "Strawberries", "None of the above")
     }
 
     @Test
