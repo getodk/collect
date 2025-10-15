@@ -167,7 +167,7 @@ public final class ExternalDataUtil {
             XPathFuncExpr xpathfuncexpr, FormController formController) throws FileNotFoundException {
         try {
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
-            if (containsConfigurationChoice(selectChoices)) {
+            if (!containsConfigurationChoice(selectChoices)) {
                 String filePath = getFilePath(xpathfuncexpr, formController);
                 throw new FileNotFoundException(filePath);
             }
@@ -351,10 +351,10 @@ public final class ExternalDataUtil {
     private static boolean containsConfigurationChoice(List<SelectChoice> selectChoices) {
         for (SelectChoice choice : selectChoices) {
             if (!isAnInteger(choice.getValue())) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private static String getFilePath(XPathFuncExpr xpathfuncexpr, FormController formController) {
