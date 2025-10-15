@@ -31,7 +31,7 @@ class MapViewModel(
     }
 
     fun zoomTo(boundingBox: List<MapPoint>, scaleFactor: Double, animate: Boolean) {
-        _zoom.value = Zoom.Box(boundingBox, scaleFactor, _zoom.value?.level ?: DEFAULT_ZOOM, animate)
+        _zoom.value = Zoom.Box(boundingBox.distinct(), scaleFactor, _zoom.value?.level ?: DEFAULT_ZOOM, animate)
     }
 
     fun zoomToCurrentLocation(location: MapPoint?) {
