@@ -577,8 +577,7 @@
   <string name="form_updates_available">Tersedia pembaruan formulir</string>
   <string name="newer_version_of_a_form_info">Ini adalah pembaruan dari formulir yang kamu miliki</string>
   <string name="form_update_error">Pembaruan formulir tidak berhasil</string>
-  <string name="form_update_succeeded">Pembaruan formulir berhasil</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">Unduhan daftar formulir tidak berhasil</string>
   <string name="forms_download_succeeded">Pengunduhan formulir berhasil</string>
   <string name="forms_download_failed">Pengunduhan formulir gagal</string>

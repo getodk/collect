@@ -537,8 +537,7 @@
   <string name="form_updates_available">Доступен обновленный опросник</string>
   <string name="newer_version_of_a_form_info">Это обновление для уже имеющегося у вас опросника</string>
   <string name="form_update_error">Не удалось обновить форму</string>
-  <string name="form_update_succeeded">Обновление формы выполнено успешно</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">Не удалось загрузить список форм</string>
   <string name="forms_download_succeeded">Загрузка форм выполнена успешно</string>
   <string name="forms_download_failed">Не удалось загрузить формы</string>

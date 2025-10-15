@@ -2,7 +2,6 @@ package org.odk.collect.android.formlists.blankformlist
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
@@ -76,7 +75,7 @@ class BlankFormListViewModel(
         )
     }
 
-    fun syncWithServer(): LiveData<Boolean> {
+    fun syncWithServer() {
         scheduler.immediate(
             getSyncTag(projectId),
             SyncFormsTaskSpec(),
@@ -88,8 +87,6 @@ class BlankFormListViewModel(
                 org.odk.collect.strings.R.string.form_update_notification_title
             )
         )
-
-        return MutableLiveData()
     }
 
     fun isMatchExactlyEnabled(): Boolean {

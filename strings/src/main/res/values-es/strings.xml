@@ -596,8 +596,7 @@
   <string name="form_updates_available">Formularios actualizados disponibles</string>
   <string name="newer_version_of_a_form_info">Esta es una actualización a un formulario que tiene</string>
   <string name="form_update_error">Error al actualizar formulario</string>
-  <string name="form_update_succeeded">La actualización del formulario se realizó correctamente</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="form_update_notification_title">Sincronización de formularios</string>
   <string name="load_remote_form_error">Error al descargar la lista de formularios</string>
   <string name="forms_download_succeeded">Descarga de formularios exitosa</string>

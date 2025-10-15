@@ -588,8 +588,7 @@
   <string name="form_updates_available">Dostupné aktualizace formuláře</string>
   <string name="newer_version_of_a_form_info">Toto je aktualizace formuláře, který máte</string>
   <string name="form_update_error">Aktualizace formuláře se nezdařila</string>
-  <string name="form_update_succeeded">Aktualizace formuláře byla úspěšná</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">Stažení seznamu formulářů se nezdařilo</string>
   <string name="forms_download_succeeded">Formuláře úspěšně staženy</string>
   <string name="forms_download_failed">Stažení formulářů se nezdařilo</string>

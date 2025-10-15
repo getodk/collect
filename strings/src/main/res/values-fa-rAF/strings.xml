@@ -509,8 +509,7 @@
   <string name="form_updates_available">آپدیت های فورم موجود است</string>
   <string name="newer_version_of_a_form_info">این یک آپدیت به فورمی است که شما در اختیار دارید. </string>
   <string name="form_update_error">آپدیت فورم ناموفق بود</string>
-  <string name="form_update_succeeded">آپدیت فورم با موفقیت انجام شد</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">دانلود فهرست فورم ناموفق بود</string>
   <string name="forms_download_succeeded">دانلود فورم ها با موفقیت انجام شد</string>
   <string name="forms_download_failed">دانلود فورم ها انجام نشد</string>

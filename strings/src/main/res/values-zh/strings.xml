@@ -576,8 +576,7 @@
   <string name="form_updates_available">表单更新可用</string>
   <string name="newer_version_of_a_form_info">这是对您的表单的更新</string>
   <string name="form_update_error">表单更新失败</string>
-  <string name="form_update_succeeded">表单更新成功</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">表单列表下载失败</string>
   <string name="forms_download_succeeded">表单下载成功</string>
   <string name="forms_download_failed">表单下载失败</string>

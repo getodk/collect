@@ -534,8 +534,7 @@
   <string name="form_updates_available">تحديثات الاستمارة متاحة</string>
   <string name="newer_version_of_a_form_info">هذا تحديث للإستمارة التي لديك</string>
   <string name="form_update_error">فشل تحديث الإستمارة</string>
-  <string name="form_update_succeeded">نجاح تحديث الإستمارة</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">خطأ في تنزيل قائمة الإستمارة</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <!--##############################################

@@ -593,8 +593,7 @@
   <string name="newer_version_of_a_form_info">Dies ist eine aktualisierte Version eines bereits vorhandenen Formulars!</string>
   <string name="form_update_error">Formular-Update fehlgeschlagen</string>
   <string name="form_update_error_massage">ODK Collect öffnen um es erneut zu versuchen</string>
-  <string name="form_update_succeeded">Formular-Update erfolgreich</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="form_update_notification_title">Formulare synchronisieren</string>
   <string name="load_remote_form_error">Formularlisten-Download fehlgeschlagen</string>
   <string name="forms_download_succeeded">Formular-Download erfolgreich</string>

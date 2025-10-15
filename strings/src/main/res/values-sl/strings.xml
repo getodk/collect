@@ -553,8 +553,7 @@
   <string name="form_updates_available">Na voljo so posodobitve obrazca</string>
   <string name="newer_version_of_a_form_info">To je novejša verzija že prenešenega obrazca</string>
   <string name="form_update_error">Posodobitev obrazca ni uspela.</string>
-  <string name="form_update_succeeded">Obrazec je bil uspešno posodobljen.</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">Seznam obrazcev ni bilo mogoče prenesti.</string>
   <string name="forms_download_succeeded">Obrazci so bili uspešno preneseni.</string>
   <string name="forms_download_failed">Obrazci niso bili preneseni.</string>
