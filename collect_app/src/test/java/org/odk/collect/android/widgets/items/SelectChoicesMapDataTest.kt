@@ -10,11 +10,11 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.androidtest.getOrAwaitValue
+import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.geo.selection.IconifiedText
 import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.maps.MapPoint
@@ -365,6 +365,32 @@ class SelectChoicesMapDataTest {
         val secondItem = data.getMappableItems().getOrAwaitValue()!![1] as MappableSelectItem.MappableSelectPoint
         assertThat(secondItem.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small))
         assertThat(secondItem.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big))
+    }
+
+    @Test
+    fun `entity system properties are filtered out`() {
+        val choices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(
+                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(EntitySchema.VERSION, "version"),
+                        treeElement(EntitySchema.TRUNK_VERSION, "trunk-version"),
+                        treeElement(EntitySchema.BRANCH_ID, "branch-id")
+                    )
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .build()
+
+        val data = loadDataForPrompt(prompt)
+        val properties = data.getMappableItems().getOrAwaitValue()!![0].properties
+        assertThat(properties.size, equalTo(0))
     }
 
     private fun loadDataForPrompt(prompt: FormEntryPrompt): SelectChoicesMapData {
