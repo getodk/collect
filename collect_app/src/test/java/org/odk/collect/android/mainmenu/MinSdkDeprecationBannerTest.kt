@@ -9,13 +9,22 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
+import org.odk.collect.androidshared.data.AppState
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class MinSdkDeprecationBannerTest {
+    private val appState = AppState()
+
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule()
+    val launcherRule = FragmentScenarioLauncherRule(
+        FragmentFactoryBuilder()
+            .forClass(MinSdkDeprecationBanner::class) {
+                MinSdkDeprecationBanner(appState)
+            }.build()
+    )
 
     @Test
     @Config(sdk = [26])

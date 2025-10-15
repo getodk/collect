@@ -28,7 +28,9 @@ import org.odk.collect.android.projects.ProjectIconView
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ActionRegister
 import org.odk.collect.androidshared.data.consume
+import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.strings.R.string
@@ -50,6 +52,12 @@ class MainMenuFragment(
         }
 
     override fun onAttach(context: Context) {
+        childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
+            .forClass(MinSdkDeprecationBanner::class) {
+                MinSdkDeprecationBanner(context.getState())
+            }
+            .build()
+
         super.onAttach(context)
         val viewModelProvider = ViewModelProvider(requireActivity(), viewModelFactory)
         mainMenuViewModel = viewModelProvider[MainMenuViewModel::class.java]
