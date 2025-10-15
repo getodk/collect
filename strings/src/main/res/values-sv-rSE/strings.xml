@@ -480,8 +480,6 @@
   <string name="password_error_whitespace">Inledande eller avslutande blanksteg är inte tillåtet i lösenord</string>
   <string name="username_error_whitespace">Inledande eller avslutande blanksteg är inte tillåtet i användarnamn</string>
   <string name="app_theme">Tema</string>
-  <string name="theme_light">Ljust tema</string>
-  <string name="theme_dark">Mörkt tema</string>
   <string name="language">Språk</string>
   <string name="use_device_language">Använd enhetens språk</string>
   <string name="font_size">Textstorlek</string>

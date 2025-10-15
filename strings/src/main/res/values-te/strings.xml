@@ -466,8 +466,7 @@
   <string name="form_updates_available">ఫారంలో జరిగిన మార్పులు అందుబాటులో ఉన్నాయి</string>
   <string name="newer_version_of_a_form_info">ఇది మీ వద్ద ఉన్న ఫారమ్‌కు నవీకరణ</string>
   <string name="form_update_error">ఫారం నవీకరణ విఫలమైంది</string>
-  <string name="form_update_succeeded">ఫారం నవీకరణ విజయవంతమైంది</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">ఫారం జాబితా విఫలమైంది</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <!--##############################################
@@ -535,8 +534,6 @@
   <string name="password_error_whitespace">పాస్ వర్డ్ ముందు లేదా తరువాత స్పేస్ ఉండకూడదు </string>
   <string name="username_error_whitespace">యూసర్ నేమ్ లో ముందు లేదా తరువాత స్పేస్ ఉండకూడదు </string>
   <string name="app_theme">థీము</string>
-  <string name="theme_light">లైట్ థీము</string>
-  <string name="theme_dark">డార్క్ థీము</string>
   <string name="language">భాష</string>
   <string name="use_device_language">పరికర భాషను ఉపయోగించండి</string>
   <string name="font_size">అక్షరాల సైజు </string>

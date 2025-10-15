@@ -16,7 +16,6 @@ package org.odk.collect.android.preferences.screens;
 
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_APP_THEME;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_FONT_SIZE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_NAVIGATION;
 
@@ -26,7 +25,6 @@ import android.os.Bundle;
 import androidx.preference.ListPreference;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.FeatureFlags;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -62,36 +60,9 @@ public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFrag
         super.onCreatePreferences(savedInstanceState, rootKey);
         setPreferencesFromResource(R.xml.user_interface_preferences, rootKey);
 
-        initThemePrefs();
         initNavigationPrefs();
         initFontSizePref();
         initLanguagePrefs();
-    }
-
-    private void initThemePrefs() {
-        if (FeatureFlags.NO_THEME_SETTING) {
-            getPreferenceScreen().removePreference(findPreference(KEY_APP_THEME));
-        } else {
-            final ListPreference pref = findPreference(KEY_APP_THEME);
-
-            if (pref != null) {
-                if (!inFormEntry) {
-                    pref.setSummary(pref.getEntry());
-                    pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                        int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                        String entry = (String) ((ListPreference) preference).getEntries()[index];
-                        if (pref.getEntry() == null || !pref.getEntry().equals(entry)) {
-                            preference.setSummary(entry);
-                            startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);
-                        }
-                        return true;
-                    });
-                } else {
-                    pref.setEnabled(false);
-                    pref.setSummary(org.odk.collect.strings.R.string.setting_not_available_during_form_entry);
-                }
-            }
-        }
     }
 
     private void initNavigationPrefs() {

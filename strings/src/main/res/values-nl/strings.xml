@@ -435,8 +435,6 @@
   <string name="password">Wachtwoord</string>
   <string name="change_password">Wachtwoord</string>
   <string name="app_theme">Thema</string>
-  <string name="theme_light">Licht thema</string>
-  <string name="theme_dark">Donker thema</string>
   <string name="language">Taal</string>
   <string name="font_size">Tekstgrootte</string>
   <string name="change_font_size">Tekstgrootte</string>

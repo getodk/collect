@@ -577,8 +577,7 @@
   <string name="form_updates_available">Tersedia pembaruan formulir</string>
   <string name="newer_version_of_a_form_info">Ini adalah pembaruan dari formulir yang kamu miliki</string>
   <string name="form_update_error">Pembaruan formulir tidak berhasil</string>
-  <string name="form_update_succeeded">Pembaruan formulir berhasil</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">Unduhan daftar formulir tidak berhasil</string>
   <string name="forms_download_succeeded">Pengunduhan formulir berhasil</string>
   <string name="forms_download_failed">Pengunduhan formulir gagal</string>
@@ -675,9 +674,6 @@
   <string name="password_error_whitespace">Tidak diperkenankan menggunakan spasi pada kata sandi</string>
   <string name="username_error_whitespace">Tidak diperkenankan menggunakan spasi pada nama pengguna</string>
   <string name="app_theme">Tema</string>
-  <string name="theme_light">Tema terang</string>
-  <string name="theme_dark">Tema gelap</string>
-  <string name="theme_system">Gunakan tema perangkat</string>
   <string name="language">Bahasa</string>
   <string name="use_device_language">Gunakan bahasa perangkat</string>
   <string name="font_size">Ukuran teks font</string>

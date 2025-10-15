@@ -575,8 +575,7 @@
   <string name="form_updates_available">表單更新可用</string>
   <string name="newer_version_of_a_form_info">這是對您的表單的更新</string>
   <string name="form_update_error">表單更新失敗</string>
-  <string name="form_update_succeeded">表單更新成功</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">表單列表下載失敗</string>
   <string name="forms_download_succeeded">表單下載成功</string>
   <string name="forms_download_failed">表單下載失敗</string>
@@ -672,9 +671,6 @@
   <string name="password_error_whitespace">密碼字串前後不能有空格</string>
   <string name="username_error_whitespace">使用者名稱字串前後不能有空格</string>
   <string name="app_theme">主題</string>
-  <string name="theme_light">淺色主題</string>
-  <string name="theme_dark">深色主題</string>
-  <string name="theme_system">使用設備主題</string>
   <string name="language">語言</string>
   <string name="use_device_language">使用設備語言</string>
   <string name="font_size">字體大小</string>

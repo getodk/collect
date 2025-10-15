@@ -509,8 +509,7 @@
   <string name="form_updates_available">آپدیت های فورم موجود است</string>
   <string name="newer_version_of_a_form_info">این یک آپدیت به فورمی است که شما در اختیار دارید. </string>
   <string name="form_update_error">آپدیت فورم ناموفق بود</string>
-  <string name="form_update_succeeded">آپدیت فورم با موفقیت انجام شد</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">دانلود فهرست فورم ناموفق بود</string>
   <string name="forms_download_succeeded">دانلود فورم ها با موفقیت انجام شد</string>
   <string name="forms_download_failed">دانلود فورم ها انجام نشد</string>
@@ -606,9 +605,6 @@
   <string name="password_error_whitespace">فضای خالی پیشرو یا انتهایی در پسورد مجاز نیست</string>
   <string name="username_error_whitespace">فضای خالی پیشرو یا انتهایی در نام کاربری مجاز نیست</string>
   <string name="app_theme">ظاهر</string>
-  <string name="theme_light">روشن</string>
-  <string name="theme_dark">تیره</string>
-  <string name="theme_system">آز موضوع دستگاه استفاده کنید</string>
   <string name="language">زبان</string>
   <string name="use_device_language">از زبان دستگاه استفاده کنید</string>
   <string name="font_size">اندازه فونت متن</string>

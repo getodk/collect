@@ -593,8 +593,7 @@
   <string name="newer_version_of_a_form_info">Tämä on päivitys lomakkeeseen, joka sinulla on</string>
   <string name="form_update_error">Lomakkeen päivitys epäonnistui</string>
   <string name="form_update_error_massage">Avaa ODK Collect yrittääksesi uudestaan</string>
-  <string name="form_update_succeeded">Lomakkeen päivitys onnistui</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="form_update_notification_title">Lomakkeita synkronoidaan</string>
   <string name="load_remote_form_error">Lomakeluettelon lataaminen epäonnistui</string>
   <string name="forms_download_succeeded">Lomakkeiden hakeminen onnistui</string>
@@ -693,9 +692,6 @@
   <string name="password_error_whitespace">Salasanan alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="username_error_whitespace">Käyttäjänimen alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="app_theme">Teema</string>
-  <string name="theme_light">Vaalea teema</string>
-  <string name="theme_dark">Tumma teema</string>
-  <string name="theme_system">Käytä laitteen teemaa.</string>
   <string name="language">Kieli</string>
   <string name="use_device_language">Käytä laitteen oletuskieltä</string>
   <string name="font_size">Tekstin koko</string>

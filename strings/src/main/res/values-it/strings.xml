@@ -595,8 +595,7 @@
   <string name="form_updates_available">Aggiornamenti Modulo disponibili</string>
   <string name="newer_version_of_a_form_info">Questo è un aggiornamento di un form che hai già</string>
   <string name="form_update_error">Aggiornamento Formulario fallito</string>
-  <string name="form_update_succeeded">Aggiornamento Formulario riuscito</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="form_update_notification_title">Sincronizzazione dei formulari</string>
   <string name="load_remote_form_error">Download elenco formulari non riuscito </string>
   <string name="forms_download_succeeded">Download Formulari riuscito</string>
@@ -695,9 +694,6 @@
   <string name="password_error_whitespace">Spazi vuoti all\'inizio e alla fine delle password non sono ammessi</string>
   <string name="username_error_whitespace">Spazi vuoti all\'inizio e alla fine delle username non sono ammessi</string>
   <string name="app_theme">Tema</string>
-  <string name="theme_light">Tema chiaro</string>
-  <string name="theme_dark">Tema scuro</string>
-  <string name="theme_system">Usa il tema del dispositivo</string>
   <string name="language">Lingua</string>
   <string name="use_device_language">Utilizza lingua del dispositivo</string>
   <string name="font_size">Dimensione dei caratteri del testo</string>

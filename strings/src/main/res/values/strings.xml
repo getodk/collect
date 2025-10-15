@@ -733,7 +733,6 @@
     <string name="newer_version_of_a_form_info">This is an update to a form you have</string>
     <string name="form_update_error">Form update failed</string>
     <string name="form_update_error_massage">Open ODK Collect to try again</string>
-    <string name="form_update_succeeded">Form update succeeded</string>
 
     <!-- Text for notification shown while syncing forms with the server -->
     <string name="form_update_notification_title">Syncing forms</string>
@@ -858,9 +857,6 @@
     <string name="username_error_whitespace">Leading or trailing whitespace not allowed in usernames</string>
 
     <string name="app_theme">Theme</string>
-    <string name="theme_light">Light theme</string>
-    <string name="theme_dark">Dark theme</string>
-    <string name="theme_system">Use device theme</string>
 
     <string name="language">Language</string>
     <string name="use_device_language">Use device language</string>

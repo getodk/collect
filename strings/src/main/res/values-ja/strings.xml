@@ -484,8 +484,7 @@
   <string name="form_updates_available">フォームの更新が利用可能です</string>
   <string name="newer_version_of_a_form_info">これはお持ちのフォームの更新です</string>
   <string name="form_update_error">フォームを更新できませんでした</string>
-  <string name="form_update_succeeded">フォームの更新に成功しました</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">フォーム一覧がダウンロードできませんでした</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <!--##############################################
@@ -558,8 +557,6 @@
   <string name="password_error_whitespace">パスワードの先頭または末尾に空白は使用できません</string>
   <string name="username_error_whitespace">ユーザー名の先頭または末尾に空白は使用できません</string>
   <string name="app_theme">テーマ</string>
-  <string name="theme_light">ライトテーマ</string>
-  <string name="theme_dark">ダークテーマ</string>
   <string name="language">言語</string>
   <string name="use_device_language">デバイスの言語を使用する</string>
   <string name="font_size">文字フォントサイズ</string>

@@ -596,8 +596,7 @@
   <string name="form_updates_available">Formularios actualizados disponibles</string>
   <string name="newer_version_of_a_form_info">Esta es una actualización a un formulario que tiene</string>
   <string name="form_update_error">Error al actualizar formulario</string>
-  <string name="form_update_succeeded">La actualización del formulario se realizó correctamente</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="form_update_notification_title">Sincronización de formularios</string>
   <string name="load_remote_form_error">Error al descargar la lista de formularios</string>
   <string name="forms_download_succeeded">Descarga de formularios exitosa</string>
@@ -696,9 +695,6 @@
   <string name="password_error_whitespace">Los espacios al inicio o al final no están permitidos en las contraseñas</string>
   <string name="username_error_whitespace">No se permiten espacios al inicio o al final en el nombre de usuario.</string>
   <string name="app_theme">Tema</string>
-  <string name="theme_light">Tema Claro</string>
-  <string name="theme_dark">Tema Oscuro</string>
-  <string name="theme_system">Usar tema del dispositivo</string>
   <string name="language">Idioma</string>
   <string name="use_device_language">Usar el idioma del dispositivo</string>
   <string name="font_size">Tamaño del Texto</string>

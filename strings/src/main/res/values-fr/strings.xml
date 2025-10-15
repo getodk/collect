@@ -597,8 +597,7 @@
   <string name="newer_version_of_a_form_info">Ceci est une version mise à jour d\'un formulaire dont vous disposez déjà !</string>
   <string name="form_update_error">Échec de mise à jour des formulaires</string>
   <string name="form_update_error_massage">Ouvrez ODK Collect pour réessayer</string>
-  <string name="form_update_succeeded">Succès de mise à jour des formulaires</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="form_update_notification_title">Synchronisation des formulaires</string>
   <string name="load_remote_form_error">Échec de téléchargement de la liste des formulaires</string>
   <string name="forms_download_succeeded">Succès du téléchargement des formulaires.</string>
@@ -697,9 +696,6 @@
   <string name="password_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du mot de passe</string>
   <string name="username_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du nom d\'utilisateur</string>
   <string name="app_theme">Thème</string>
-  <string name="theme_light">Thème clair</string>
-  <string name="theme_dark">Thème sombre</string>
-  <string name="theme_system">Utiliser le thème de l\'appareil</string>
   <string name="language">Langue</string>
   <string name="use_device_language">Utiliser la langue de l\'appareil</string>
   <string name="font_size">Taille de la Police</string>

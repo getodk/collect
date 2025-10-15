@@ -13,7 +13,6 @@ object ProtectedProjectKeys {
     // User Settings
     const val KEY_CHANGE_SERVER = "change_server"
     const val KEY_CHANGE_PROJECT_DISPLAY = "change_project_display"
-    const val KEY_APP_THEME = "change_app_theme"
     const val KEY_APP_LANGUAGE = "change_app_language"
     const val KEY_CHANGE_FONT_SIZE = "change_font_size"
     const val KEY_NAVIGATION = "change_navigation"
@@ -54,7 +53,6 @@ object ProtectedProjectKeys {
         KEY_DELETE_SAVED,
         KEY_CHANGE_SERVER,
         KEY_CHANGE_PROJECT_DISPLAY,
-        KEY_APP_THEME,
         KEY_APP_LANGUAGE,
         KEY_CHANGE_FONT_SIZE,
         KEY_NAVIGATION,

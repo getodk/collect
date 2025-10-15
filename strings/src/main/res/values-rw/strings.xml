@@ -489,8 +489,7 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="form_updates_available">Ubu wabona ifishi igezweho</string>
   <string name="newer_version_of_a_form_info">Aya ni amakuru agezweho ku ifishi ufite</string>
   <string name="form_update_error">Gushyira ifishi ku gihe ntibyakunze</string>
-  <string name="form_update_succeeded">Gushyira ku gihe ifishi byagenze neza</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">Kubika amakuru ari mu ifishi kuri tabuleti ntibyakunze</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <!--##############################################
@@ -567,8 +566,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="password_error_whitespace">Mu ijambobanga ahantu hariho ubusa ntibyemewe </string>
   <string name="username_error_whitespace">Kuzuza ahantu hariho ubusa ntabwo byemewe mu izina ugomba gukoresha </string>
   <string name="app_theme">Isanganyamatsiko</string>
-  <string name="theme_light">Urumuri rw\'insanganyamatsiko.</string>
-  <string name="theme_dark">Umwijima w\'isanganyamatsiko.</string>
   <string name="language">Ururimi</string>
   <string name="use_device_language">Kurikiza imikorere y\'igikoresho</string>
   <string name="font_size">Ingano y\'amagambo</string>

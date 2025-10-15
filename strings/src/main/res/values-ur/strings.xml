@@ -543,8 +543,7 @@
   <string name="form_updates_available">فارم اپ ڈیٹس دستیاب ہیں</string>
   <string name="newer_version_of_a_form_info">یہ اس فارم کی اپ ڈیٹ ہے جو آپ کے پاس ہے</string>
   <string name="form_update_error">فارم اپ ڈیٹ نہیں ہو سکا</string>
-  <string name="form_update_succeeded">فارمز کا اپ ڈیٹ کامیابی سے مکمل ہو گیا ہے۔</string>
-  <!--Text for notification shown while syncing forms with the server-->
+    <!--Text for notification shown while syncing forms with the server-->
   <string name="load_remote_form_error">فارمز کی لسٹ ڈاون لوڈ نہیں ہو سکی</string>
   <string name="forms_download_succeeded">فارمز کا ڈاون لوڈ کامیابی سے مکمل ہو گیا ہے۔</string>
   <string name="forms_download_failed">فارمز کا ڈاون لوڈ نہیں ہو سکا</string>
@@ -640,9 +639,6 @@
   <string name="password_error_whitespace">پاس ورڈز میں شروع اور بعد میں سپیسس کی اجازت نہیں ہے</string>
   <string name="username_error_whitespace">صارف کےناموں میں شروع اور بعد میں سپیسس کی اجازت نہیں ہے</string>
   <string name="app_theme">تھیم </string>
-  <string name="theme_light">لائٹ تھیم </string>
-  <string name="theme_dark">ڈارک تھیم </string>
-  <string name="theme_system">فون کی منتخب تھیم استعمال کریں</string>
   <string name="language">زبان </string>
   <string name="use_device_language">ڈیوائس کی زبان استعمال کریں</string>
   <string name="font_size">ٹیکسٹ فونٹ سائز</string>
