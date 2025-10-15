@@ -8,6 +8,7 @@ import org.javarosa.xform.parse.XFormParser
 import org.javarosa.xform.parse.XFormParserFactory
 import org.javarosa.xform.util.XFormUtils
 import org.odk.collect.android.dynamicpreload.DynamicPreloadXFormParserFactory
+import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesExternalInstanceParserFactory
@@ -15,13 +16,12 @@ import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.projects.ProjectDependencyFactory
-import org.odk.collect.settings.SettingsProvider
 
 class JavaRosaInitializer(
     private val propertyManager: PropertyManager,
     private val projectsDataService: ProjectsDataService,
     private val entitiesRepositoryProvider: ProjectDependencyFactory<EntitiesRepository>,
-    private val settingsProvider: SettingsProvider
+    private val formSessionRepository: FormSessionRepository
 ) {
 
     fun initialize() {
@@ -53,7 +53,7 @@ class JavaRosaInitializer(
 
         val localEntitiesExternalInstanceParserFactory = LocalEntitiesExternalInstanceParserFactory(
             { entitiesRepositoryProvider.create(projectsDataService.requireCurrentProject().uuid) },
-            { true }
+            { formSessionRepository.currentForm!!.usesEntities() }
         )
 
         XFormUtils.setExternalInstanceParserFactory(localEntitiesExternalInstanceParserFactory)
