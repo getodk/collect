@@ -247,6 +247,15 @@ jobs:
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
+          name: Set up secrets.properties for Maps frameworks
+          command: |
+            if [[ -n "$GOOGLE_MAPS_API_KEY" ]]; then \
+              echo "GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY" >> secrets.properties
+              echo "MAPBOX_ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN" >> secrets.properties
+              echo "MAPBOX_DOWNLOADS_TOKEN=MAPBOX_DOWNLOADS_TOKEN" >> secrets.properties
+            fi
+
+      - run:
           name: Assemble self signed release build
           command: ./gradlew assembleSelfSignedRelease
 
@@ -319,7 +328,7 @@ jobs:
       - run:
           name: Authorize gcloud
           command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
+            if [[ -n "$GCLOUD_SERVICE_KEY" ]]; then \
               gcloud config set project api-project-322300403941
               echo $GCLOUD_SERVICE_KEY | base64 --decode > client-secret.json
               gcloud auth activate-service-account --key-file client-secret.json
@@ -327,8 +336,7 @@ jobs:
       - run:
           name: Run integration tests
           command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
-              echo "y" | gcloud beta firebase test android run \
+            echo "y" | gcloud beta firebase test android run \
               --type instrumentation \
               --num-uniform-shards=25 \
               --app collect_app/build/outputs/apk/debug/ODK-Collect-debug.apk \
@@ -338,7 +346,6 @@ jobs:
               --directories-to-pull /sdcard --timeout 20m \
               --test-targets "notPackage org.odk.collect.android.regression" \
               --test-targets "notPackage org.odk.collect.android.benchmark"
-            fi
           no_output_timeout: 25m
 
 workflows:
