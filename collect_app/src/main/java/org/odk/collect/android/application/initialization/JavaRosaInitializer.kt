@@ -9,6 +9,7 @@ import org.javarosa.xform.parse.XFormParserFactory
 import org.javarosa.xform.util.XFormUtils
 import org.odk.collect.android.dynamicpreload.DynamicPreloadXFormParserFactory
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
+import org.odk.collect.android.preferences.SettingsExt.getExperimentalOptIn
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesExternalInstanceParserFactory
 import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory
@@ -46,7 +47,7 @@ class JavaRosaInitializer(
         val entityXFormParserFactory =
             EntityXFormParserFactory(
                 XFormParserFactory()
-            ) { settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_ENTITIES_SPEC_V2025_1) }
+            ) { settingsProvider.getUnprotectedSettings().getExperimentalOptIn(ProjectKeys.KEY_ENTITIES_SPEC_V2025_1) }
         val dynamicPreloadXFormParserFactory =
             DynamicPreloadXFormParserFactory(entityXFormParserFactory)
 
