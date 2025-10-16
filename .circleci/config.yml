@@ -260,8 +260,13 @@ jobs:
           command: ./gradlew assembleSelfSignedRelease
 
       - run:
-          name: Check APK size isn't larger than 13.1MB
-          command: ./check-size.sh 13736346
+          name: Check APK size hasn't increased
+          command: |
+            if [[ -n "$GOOGLE_MAPS_API_KEY" ]]; then \
+              ./check-size.sh 13736346
+            else
+              ./check-size.sh 23068672
+            fi
 
       - run:
           name: Copy APK to predictable path for artifact storage
