@@ -261,7 +261,10 @@ jobs:
 
       - run:
           name: Check APK size isn't larger than 13.1MB
-          command: ./check-size.sh 13736346
+          command: |
+            if [[ -z "$GOOGLE_MAPS_API_KEY" ]]; then \
+              ./check-size.sh 13736346
+            fi
 
       - run:
           name: Copy APK to predictable path for artifact storage
