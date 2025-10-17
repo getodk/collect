@@ -20,6 +20,7 @@ import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.FileWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
 import org.odk.collect.android.widgets.utilities.FileRequester
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
@@ -44,6 +45,7 @@ class ExVideoWidget(
 
     override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         val readOnly = questionDetails.isReadOnly
+        val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
 
         return ComposeView(context).apply {
             setContextThemedContent {
@@ -51,6 +53,7 @@ class ExVideoWidget(
                     questionMediaManager.getAnswerFile(binaryName)?.toUri(),
                     mediaUtils,
                     readOnly,
+                    buttonFontSize,
                     onLaunchClick = { launchExternalApp() },
                     onLongClick = { this.showContextMenu() }
                 )

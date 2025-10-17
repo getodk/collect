@@ -23,6 +23,7 @@ import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.FileWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.permissions.PermissionListener
@@ -48,6 +49,7 @@ class VideoWidget(
     override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         val readOnly = questionDetails.isReadOnly
         val newVideoOnly = formEntryPrompt.appearanceHint?.lowercase()?.contains(Appearances.NEW) ?: false
+        val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
 
         return ComposeView(context).apply {
             setContextThemedContent {
@@ -56,6 +58,7 @@ class VideoWidget(
                     mediaUtils,
                     readOnly,
                     newVideoOnly,
+                    buttonFontSize,
                     onRecordClick = {
                         getPermissionsProvider().requestCameraPermission(
                             context as Activity,
