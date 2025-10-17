@@ -7,10 +7,13 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.StringContains.containsString;
+
+import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.StorageUtils;
@@ -26,7 +29,10 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public MainMenuPage assertOnPage() {
         return WaitFor.waitFor(() -> {
             onView(withText(org.odk.collect.strings.R.string.enter_data)).check(matches(isDisplayed()));
-            onView(withText(containsString(getTranslatedString(org.odk.collect.strings.R.string.collect_app_name)))).perform(scrollTo()).check(matches(isDisplayed()));
+            onView(allOf(
+                    withText(containsString(getTranslatedString(org.odk.collect.strings.R.string.collect_app_name))),
+                    withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))
+            ).perform(scrollTo()).check(matches(isDisplayed()));
             return this;
         });
     }
