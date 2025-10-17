@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.video
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.odk.collect.android.utilities.MediaUtils
-import org.odk.collect.android.widgets.video.VideoWidgetAnswer
+import org.odk.collect.android.widgets.WidgetIconButton
 import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.strings.R.string
 
