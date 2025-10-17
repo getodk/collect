@@ -39,7 +39,7 @@ import kotlin.Pair;
 
 public class EntitiesTest {
 
-    private final EntityXFormParserFactory entityXFormParserFactory = new EntityXFormParserFactory(new XFormParserFactory());
+    private final EntityXFormParserFactory entityXFormParserFactory = new EntityXFormParserFactory(new XFormParserFactory(), () -> false);
 
     @Before
     public void setup() {

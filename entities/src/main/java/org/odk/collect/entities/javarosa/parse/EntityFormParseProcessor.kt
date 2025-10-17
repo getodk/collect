@@ -8,7 +8,6 @@ import org.javarosa.xform.parse.XFormParser.BindAttributeProcessor
 import org.javarosa.xform.parse.XFormParser.FormDefProcessor
 import org.javarosa.xform.parse.XFormParser.MissingModelAttributeException
 import org.javarosa.xform.parse.XFormParser.ModelAttributeProcessor
-import org.odk.collect.entities.BuildConfig
 import org.odk.collect.entities.javarosa.parse.EntityFormParseProcessor.Companion.VERSIONS.V2022_1
 import org.odk.collect.entities.javarosa.parse.EntityFormParseProcessor.Companion.VERSIONS.V2023_1
 import org.odk.collect.entities.javarosa.parse.EntityFormParseProcessor.Companion.VERSIONS.V2024_1
@@ -16,7 +15,9 @@ import org.odk.collect.entities.javarosa.parse.EntityFormParseProcessor.Companio
 import org.odk.collect.entities.javarosa.spec.EntityFormParser
 import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException
 
-class EntityFormParseProcessor : BindAttributeProcessor, FormDefProcessor, ModelAttributeProcessor {
+class EntityFormParseProcessor(
+    private val v2025enabled: () -> Boolean
+) : BindAttributeProcessor, FormDefProcessor, ModelAttributeProcessor {
     private val saveTos = mutableListOf<Pair<XPathReference, String>>()
     private var version: String? = null
 
@@ -28,7 +29,7 @@ class EntityFormParseProcessor : BindAttributeProcessor, FormDefProcessor, Model
     override fun processModelAttribute(name: String, value: String) {
         version = value
 
-        if (BuildConfig.DEBUG && value.startsWith(V2025_1)) {
+        if (value.startsWith(V2025_1) && v2025enabled()) {
             return
         }
 

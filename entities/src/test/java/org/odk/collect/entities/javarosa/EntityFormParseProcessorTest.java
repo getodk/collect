@@ -53,7 +53,7 @@ public class EntityFormParseProcessorTest {
             )
         );
 
-        EntityFormParseProcessor processor = new EntityFormParseProcessor();
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> false);
         XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
         parser.addProcessor(processor);
         parser.parse(null);
@@ -84,7 +84,7 @@ public class EntityFormParseProcessorTest {
             )
         );
 
-        EntityFormParseProcessor processor = new EntityFormParseProcessor();
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> false);
         XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
         parser.addProcessor(processor);
 
@@ -125,7 +125,7 @@ public class EntityFormParseProcessorTest {
             )
         );
 
-        EntityFormParseProcessor processor = new EntityFormParseProcessor();
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> false);
         XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
         parser.addProcessor(processor);
         parser.parse(null);
@@ -158,7 +158,7 @@ public class EntityFormParseProcessorTest {
             )
         );
 
-        EntityFormParseProcessor processor = new EntityFormParseProcessor();
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> false);
         XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
         parser.addProcessor(processor);
 
@@ -193,7 +193,7 @@ public class EntityFormParseProcessorTest {
             )
         );
 
-        EntityFormParseProcessor processor = new EntityFormParseProcessor();
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> false);
         XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
         parser.addProcessor(processor);
 
@@ -227,11 +227,79 @@ public class EntityFormParseProcessorTest {
             )
         );
 
-        EntityFormParseProcessor processor = new EntityFormParseProcessor();
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> false);
         XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
         parser.addProcessor(processor);
 
         FormDef formDef = parser.parse(null);
         assertThat(formDef.getExtras().get(EntityFormExtra.class).getSaveTos(), is(empty()));
+    }
+
+    @Test
+    public void whenVersionIs2025_1_andFeatureIsEnabled_parsesCorrectly() throws XFormParser.ParseException {
+        String updateVersion = "2025.1.0";
+
+        XFormsElement form = XFormsElement.html(
+                asList(
+                        new Pair<>("entities", "http://www.opendatakit.org/xforms/entities")
+                ),
+                head(
+                        title("Create entity form"),
+                        model(asList(new Pair<>("entities:entities-version", updateVersion)),
+                                mainInstance(
+                                        t("data id=\"update-entity-form\"",
+                                                t("name"),
+                                                t("meta",
+                                                        t("entity dataset=\"people\" update=\"1\" id=\"17\"")
+                                                )
+                                        )
+                                ),
+                                bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
+                        )
+                ),
+                body(
+                        input("/data/name")
+                )
+        );
+
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> true);
+        XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
+        parser.addProcessor(processor);
+
+        FormDef formDef = parser.parse(null);
+        assertThat(formDef, notNullValue());
+    }
+
+    @Test(expected = UnrecognizedEntityVersionException.class)
+    public void whenVersionIs2025_1_andFeatureIsDisabled_throwsException() throws XFormParser.ParseException {
+        String updateVersion = "2025.1.0";
+
+        XFormsElement form = XFormsElement.html(
+                asList(
+                        new Pair<>("entities", "http://www.opendatakit.org/xforms/entities")
+                ),
+                head(
+                        title("Create entity form"),
+                        model(asList(new Pair<>("entities:entities-version", updateVersion)),
+                                mainInstance(
+                                        t("data id=\"update-entity-form\"",
+                                                t("name"),
+                                                t("meta",
+                                                        t("entity dataset=\"people\" update=\"1\" id=\"17\"")
+                                                )
+                                        )
+                                ),
+                                bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
+                        )
+                ),
+                body(
+                        input("/data/name")
+                )
+        );
+
+        EntityFormParseProcessor processor = new EntityFormParseProcessor(() -> false);
+        XFormParser parser = new XFormParser(new InputStreamReader(new ByteArrayInputStream(form.asXml().getBytes())));
+        parser.addProcessor(processor);
+        parser.parse(null);
     }
 }

@@ -14,6 +14,11 @@
         app:allowDividerBelow="false"
         app:iconSpaceReserved="false">
 
+        <SwitchPreferenceCompat
+            android:key="entities_spec_v2025_1"
+            android:title="@string/entities_spec_v2025_1"
+            app:iconSpaceReserved="false" />
+
         <Preference
             android:key="entities"
             android:title="@string/entity_browser_button"
