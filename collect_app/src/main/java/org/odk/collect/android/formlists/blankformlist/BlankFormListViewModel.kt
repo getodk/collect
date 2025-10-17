@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.map
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec
 import org.odk.collect.android.backgroundwork.TaskData
 import org.odk.collect.android.formmanagement.FormsDataService
+import org.odk.collect.androidshared.utils.RuntimeUniqueIdGenerator
 import org.odk.collect.async.NotificationInfo
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.flowOnBackground
@@ -194,7 +195,7 @@ class BlankFormListViewModel(
         private const val SYNC_NOTIFICATION_CHANNEL = "form_updates"
         private const val SYNC_NOTIFICATION_CHANNEL_NAME = "Form updates"
 
-        private const val SYNC_NOTIFICATION_ID = 3
+        private val SYNC_NOTIFICATION_ID = RuntimeUniqueIdGenerator.nextInt()
 
         private fun getSyncTag(projectId: String): String {
             return "match_exactly_foreground:$projectId"

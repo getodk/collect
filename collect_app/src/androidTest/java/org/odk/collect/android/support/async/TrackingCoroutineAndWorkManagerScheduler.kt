@@ -1,12 +1,15 @@
-package org.odk.collect.android.support
+package org.odk.collect.android.support.async
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import androidx.work.BackoffPolicy
 import androidx.work.WorkManager
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import org.odk.collect.android.support.async.AsyncWorkTracker
+import org.odk.collect.android.support.async.TestSchedulerTaskSpec.Companion.DATA_WRAPPED_SPEC
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler
 import org.odk.collect.async.NotificationInfo
@@ -15,20 +18,16 @@ import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.network.NetworkStateProvider
 import java.util.function.Consumer
 import java.util.function.Supplier
-import kotlin.coroutines.CoroutineContext
 
-class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Scheduler, CoroutineDispatcher() {
+class TrackingCoroutineAndWorkManagerScheduler(private val networkStateProvider: NetworkStateProvider) : Scheduler {
 
-    private val wrappedScheduler: Scheduler
-    private val lock = Any()
-    private var tasks = 0
-    private var finishedCallback: Runnable? = null
+    private val wrappedScheduler: CoroutineAndWorkManagerScheduler
     private val deferredTasks: MutableList<DeferredTask> = ArrayList()
-    private val backgroundDispatcher = Dispatchers.IO
+    private val backgroundDispatcher = TrackingCoroutineDispatcher(Dispatchers.IO)
 
     init {
         val workManager = WorkManager.getInstance(ApplicationProvider.getApplicationContext())
-        wrappedScheduler = CoroutineAndWorkManagerScheduler(Dispatchers.Main, this, workManager)
+        wrappedScheduler = CoroutineAndWorkManagerScheduler(Dispatchers.Main, backgroundDispatcher, workManager)
     }
 
     override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {
@@ -36,18 +35,18 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
     }
 
     override fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>) {
-        increment()
+        AsyncWorkTracker.startWork()
         wrappedScheduler.immediate(background) { t: T ->
             foreground.accept(t)
-            decrement()
+            AsyncWorkTracker.finishWork()
         }
     }
 
     override fun immediate(foreground: Boolean, delay: Long?, runnable: Runnable) {
-        increment()
+        AsyncWorkTracker.startWork()
         wrappedScheduler.immediate(foreground, delay) {
             runnable.run()
-            decrement()
+            AsyncWorkTracker.finishWork()
         }
     }
 
@@ -57,12 +56,14 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         inputData: Map<String, String>,
         notificationInfo: NotificationInfo
     ) {
-        increment()
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        wrappedScheduler.immediate {
-            spec.getTask(context, inputData, true) { false }.get()
-            decrement()
-        }
+        AsyncWorkTracker.startWork()
+        val augmentedInputData = inputData + Pair(DATA_WRAPPED_SPEC, spec.javaClass.name)
+        wrappedScheduler.immediate(
+            tag,
+            TestSchedulerTaskSpec(),
+            augmentedInputData,
+            notificationInfo
+        )
     }
 
     override fun networkDeferred(
@@ -109,28 +110,6 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         }
     }
 
-    fun setFinishedCallback(callback: Runnable?) {
-        finishedCallback = callback
-    }
-
-    private fun increment() {
-        synchronized(lock) { tasks++ }
-    }
-
-    private fun decrement() {
-        synchronized(lock) {
-            tasks--
-            if (tasks == 0 && finishedCallback != null) {
-                finishedCallback!!.run()
-            }
-        }
-    }
-
-    val taskCount: Int
-        get() {
-            synchronized(lock) { return tasks }
-        }
-
     fun getDeferredTasks(): List<DeferredTask> {
         return deferredTasks
     }
@@ -138,15 +117,7 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
     override fun cancelAllDeferred() {}
 
     override fun <T> flowOnBackground(flow: Flow<T>): Flow<T> {
-        return wrappedScheduler.flowOnBackground(flow)
-    }
-
-    override fun dispatch(context: CoroutineContext, block: Runnable) {
-        increment()
-        backgroundDispatcher.dispatch(context) {
-            block.run()
-            decrement()
-        }
+        return flow.flowOn(backgroundDispatcher)
     }
 
     class DeferredTask(
@@ -156,4 +127,39 @@ class TestScheduler(private val networkStateProvider: NetworkStateProvider) : Sc
         val inputData: Map<String, String>,
         val networkConstraint: Scheduler.NetworkType?
     )
+}
+
+class TestSchedulerTaskSpec : TaskSpec {
+    override val maxRetries: Int? = null
+    override val backoffPolicy: BackoffPolicy? = null
+    override val backoffDelay: Long? = null
+
+    private lateinit var wrappedSpec: TaskSpec
+
+    override fun getTask(
+        context: Context,
+        inputData: Map<String, String>,
+        isLastUniqueExecution: Boolean,
+        isStopped: () -> Boolean
+    ): Supplier<Boolean> {
+        wrappedSpec = Class.forName(inputData[DATA_WRAPPED_SPEC]!!)
+            .getConstructor()
+            .newInstance() as TaskSpec
+
+        return Supplier {
+            val result =
+                wrappedSpec.getTask(context, inputData, isLastUniqueExecution, isStopped).get()
+
+            AsyncWorkTracker.finishWork()
+            result
+        }
+    }
+
+    override fun onException(exception: Throwable) {
+        wrappedSpec.onException(exception)
+    }
+
+    companion object {
+        const val DATA_WRAPPED_SPEC = "wrapped_spec"
+    }
 }

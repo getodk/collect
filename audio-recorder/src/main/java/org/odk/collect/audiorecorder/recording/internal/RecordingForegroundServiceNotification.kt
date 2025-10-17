@@ -10,7 +10,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Observer
 import org.odk.collect.androidshared.ui.ReturnToAppActivity
-import org.odk.collect.audiorecorder.R
+import org.odk.collect.androidshared.utils.RuntimeUniqueIdGenerator
 import org.odk.collect.audiorecorder.recording.RecordingSession
 import org.odk.collect.strings.format.formatLength
 import org.odk.collect.strings.localization.getLocalizedString
@@ -61,7 +61,7 @@ internal class RecordingForegroundServiceNotification(private val service: Servi
     }
 
     companion object {
-        private const val NOTIFICATION_ID = 1
+        private val NOTIFICATION_ID = RuntimeUniqueIdGenerator.nextInt()
         private const val NOTIFICATION_CHANNEL = "recording_channel"
     }
 }
