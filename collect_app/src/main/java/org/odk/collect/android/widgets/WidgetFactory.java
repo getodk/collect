@@ -250,7 +250,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExVideoWidget(activity, questionDetails, questionMediaManager, waitingForDataRegistry, fileRequester, dependencies);
+                    questionWidget = new ExVideoWidget(activity, questionDetails, dependencies, questionMediaManager, waitingForDataRegistry, fileRequester);
                 } else {
                     questionWidget = new VideoWidget(activity, questionDetails, dependencies, questionMediaManager, waitingForDataRegistry);
                 }

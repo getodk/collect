@@ -66,7 +66,7 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     @Override
     public ExVideoWidget createWidget() {
         return new ExVideoWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
-                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), fileRequester, dependencies);
+                dependencies, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), fileRequester);
     }
 
     @Test
@@ -125,7 +125,7 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
 
         ExVideoWidget widget = getWidget();
         widget.binding.playVideoButton.performClick();
-        verify(mediaUtils).openFile(activity, widget.answerFile, "video/*");
+        verify(mediaUtils).openFile(activity, widget.getAnswerFile(), "video/*");
     }
 
     @Test
