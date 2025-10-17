@@ -109,22 +109,12 @@ object ServerFormUseCases {
                     newAttachmentsDownloaded = true
                     downloadMediaFile(formSource, mediaFile, tempMediaFile, tempDir, stateListener)
 
-                    /**
-                     * We wrap and then rethrow exceptions that happen here to make them easier to
-                     * track in Crashlytics. This can be removed in the next release once any
-                     * unexpected exceptions "in the wild" are identified.
-                     */
-                    try {
-                        LocalEntityUseCases.updateLocalEntitiesFromServer(
-                            entityListName,
-                            tempMediaFile,
-                            entitiesRepository,
-                            entitySource,
-                            mediaFile
-                        )
-                    } catch (t: Throwable) {
-                        throw EntityListUpdateException(t)
-                    }
+                    LocalEntityUseCases.updateLocalEntitiesFromServer(
+                        entityListName,
+                        tempMediaFile,
+                        entitiesRepository,
+                        mediaFile
+                    )
                 } else {
                     val existingForm = formsRepository.getAllByFormIdAndVersion(
                         formToDownload.formId,
@@ -138,6 +128,28 @@ object ServerFormUseCases {
                         }
                     }
                 }
+
+                /**
+                 * Ensures local offline Entities are cleaned up when they have been deleted on the server.
+                 *
+                 * Normally this cleanup is triggered during sync as part of a full update with the server
+                 * whenever the Entity list hash from Central changes.
+                 * However, there is a case where the hash stays the same:
+                 *  - a sync happens and the current hash is stored,
+                 *  - an Entity is created locally and a form is uploaded, creating the Entity on the server,
+                 *  - the Entity is then deleted on the server,
+                 *  - another sync occurs, but the hash is the same as the stored one because the list
+                 *    contents are identical to before the local Entity was added.
+                 *
+                 * In this case, the usual hash-based update will not detect the deletion. Collect must
+                 * use the integrityUrl to check for missing Entities and remove them locally.
+                 */
+                LocalEntityUseCases.cleanUpDeletedOfflineEntities(
+                    entityListName,
+                    entitiesRepository,
+                    entitySource,
+                    mediaFile
+                )
             } else {
                 val existingFile = searchForExistingMediaFile(currentOrLastFormVersion, mediaFile)
                 if (existingFile != null) {

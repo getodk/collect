@@ -286,7 +286,7 @@ class EntityFormTest {
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
 
             .also {
-                testDependencies.server.deleteEntity("people.csv", "Logan Roy")
+                testDependencies.server.deleteEntity("Logan Roy")
             }
 
             .clickFillBlankForm()
