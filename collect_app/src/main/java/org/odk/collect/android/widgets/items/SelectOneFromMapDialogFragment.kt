@@ -18,7 +18,6 @@ import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
 import org.javarosa.core.model.instance.geojson.GeojsonFeature
 import org.javarosa.form.api.FormEntryPrompt
-import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.injection.DaggerUtils
@@ -28,6 +27,7 @@ import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
+import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.geo.selection.IconifiedText
 import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.geo.selection.SelectionMapData
@@ -147,8 +147,8 @@ internal class SelectChoicesMapData(
                         }
 
                         if (withinBounds) {
-                            val properties = selectChoice.additionalChildren.filter {
-                                it.first != GeojsonFeature.GEOMETRY_CHILD_NAME
+                            val properties = selectChoice.additionalChildren.filterNot {
+                                FILTERED_PROPERTIES.contains(it.first)
                             }.map {
                                 IconifiedText(null, "${it.first}: ${it.second}")
                             }
@@ -250,5 +250,12 @@ internal class SelectChoicesMapData(
         const val STROKE = "stroke"
         const val STROKE_WIDTH = "stroke-width"
         const val FILL = "fill"
+
+        private val FILTERED_PROPERTIES = arrayOf(
+            GeojsonFeature.GEOMETRY_CHILD_NAME,
+            EntitySchema.VERSION,
+            EntitySchema.TRUNK_VERSION,
+            EntitySchema.BRANCH_ID
+        )
     }
 }
