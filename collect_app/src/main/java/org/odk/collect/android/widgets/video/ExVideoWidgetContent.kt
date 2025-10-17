@@ -23,6 +23,7 @@ fun ExVideoWidgetContent(
     videoUri: Uri?,
     mediaUtils: MediaUtils?,
     readOnly: Boolean,
+    fontSize: Int,
     onLaunchClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
@@ -31,6 +32,7 @@ fun ExVideoWidgetContent(
             WidgetIconButton(
                 Icons.AutoMirrored.Filled.OpenInNew,
                 stringResource(string.launch_app),
+                fontSize,
                 onLaunchClick,
                 onLongClick,
                 Modifier.testTag("record_video_button")
@@ -52,6 +54,7 @@ private fun ExVideoWidgetContentPreview() {
             null,
             null,
             false,
+            10,
             {},
             {}
         )
@@ -66,6 +69,7 @@ private fun ExVideoWidgetContentReadOnlyPreview() {
             null,
             null,
             true,
+            10,
             {},
             {}
         )

@@ -25,6 +25,7 @@ fun VideoWidgetContent(
     mediaUtils: MediaUtils?,
     readOnly: Boolean,
     newVideoOnly: Boolean,
+    fontSize: Int,
     onRecordClick: () -> Unit,
     onChooseClick: () -> Unit,
     onLongClick: () -> Unit
@@ -34,6 +35,7 @@ fun VideoWidgetContent(
             WidgetIconButton(
                 Icons.Default.Videocam,
                 stringResource(string.capture_video),
+                fontSize,
                 onRecordClick,
                 onLongClick,
                 Modifier.testTag("record_video_button")
@@ -46,6 +48,7 @@ fun VideoWidgetContent(
             WidgetIconButton(
                 Icons.Default.VideoLibrary,
                 stringResource(string.choose_video),
+                fontSize,
                 onChooseClick,
                 onLongClick,
                 Modifier.testTag("choose_video_button")
@@ -68,6 +71,7 @@ private fun VideoWidgetContentPreview() {
             null,
             false,
             false,
+            10,
             {},
             {},
             {}
@@ -84,6 +88,7 @@ private fun VideoWidgetContentReadOnlyPreview() {
             null,
             true,
             false,
+            10,
             {},
             {},
             {}
@@ -100,6 +105,7 @@ private fun VideoWidgetContentNewVideoOnlyPreview() {
             null,
             false,
             true,
+            10,
             {},
             {},
             {}

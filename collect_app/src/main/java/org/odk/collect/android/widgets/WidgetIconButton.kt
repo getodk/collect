@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
@@ -27,6 +28,7 @@ import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 fun WidgetIconButton(
     icon: ImageVector,
     text: String,
+    fontSize: Int,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier,
@@ -72,6 +74,7 @@ fun WidgetIconButton(
         Text(
             text = text,
             color = contentColor,
+            fontSize = fontSize.sp,
             style = MaterialTheme.typography.bodyLarge
         )
     }
