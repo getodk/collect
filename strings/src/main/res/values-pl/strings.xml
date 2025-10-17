@@ -180,7 +180,6 @@
   <string name="set_color">Ustaw Kolor</string>
   <string name="capture_video">Nagraj Wideo</string>
   <string name="choose_video">Wybierz Wideo</string>
-  <string name="play_video">Odtwórz Wideo</string>
   <string name="choose_file">Wybierz plik</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->

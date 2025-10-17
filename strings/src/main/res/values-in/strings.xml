@@ -219,7 +219,6 @@
   <string name="set_color">Atur Warna</string>
   <string name="capture_video">Rekam Video</string>
   <string name="choose_video">Pilih Video</string>
-  <string name="play_video">Mainkan video</string>
   <string name="choose_file">Pilih Berkas</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">Hapus</string>

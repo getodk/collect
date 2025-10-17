@@ -225,7 +225,6 @@
   <string name="set_color">Seleccionar Color</string>
   <string name="capture_video">Grabar el Video</string>
   <string name="choose_video">Escoja el Video</string>
-  <string name="play_video">Reproducir el Video</string>
   <string name="choose_file">Escoger Archivo</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">Eliminar</string>

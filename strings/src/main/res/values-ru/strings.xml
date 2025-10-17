@@ -217,7 +217,6 @@
   <string name="set_color">Выбрать цвет</string>
   <string name="capture_video">Записать видео</string>
   <string name="choose_video">Выберите видео</string>
-  <string name="play_video">Проиграть видео</string>
   <string name="choose_file">Выберите файл</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">Удалить</string>

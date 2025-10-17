@@ -180,7 +180,6 @@
   <string name="set_color">రంగును సెట్ చేయండి</string>
   <string name="capture_video">వీడియో రికార్డు చెయ్యి </string>
   <string name="choose_video">వీడియోను ఎంచుకోండి</string>
-  <string name="play_video">వీడియో ప్లే చెయ్యి</string>
   <string name="choose_file">ఫైల్‌ను ఎంచుకోండి</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->

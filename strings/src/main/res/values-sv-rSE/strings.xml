@@ -173,7 +173,6 @@
   <string name="set_color">Välj färg</string>
   <string name="capture_video">Spela in film</string>
   <string name="choose_video">Välj film</string>
-  <string name="play_video">Spela upp film</string>
   <string name="choose_file">Välj fil</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->

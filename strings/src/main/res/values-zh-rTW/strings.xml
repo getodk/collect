@@ -217,7 +217,6 @@
   <string name="set_color">選擇顏色</string>
   <string name="capture_video">拍攝影片</string>
   <string name="choose_video">選擇影片</string>
-  <string name="play_video">播放影片</string>
   <string name="choose_file">選擇文件</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">刪除</string>

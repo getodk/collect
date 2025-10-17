@@ -210,7 +210,6 @@
   <string name="set_color">تحديد اللون</string>
   <string name="capture_video">سجل فيديو</string>
   <string name="choose_video">إختر فيديو</string>
-  <string name="play_video">تشغيل تسجيل الفيديو</string>
   <string name="choose_file">إختر ملف</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">حذف</string>

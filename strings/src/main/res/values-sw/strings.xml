@@ -203,7 +203,6 @@
   <string name="set_color">Weka rangi</string>
   <string name="capture_video">Rekodi video</string>
   <string name="choose_video">Chagua video</string>
-  <string name="play_video">Cheza video</string>
   <string name="choose_file">Chagua faili</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">Futa</string>
