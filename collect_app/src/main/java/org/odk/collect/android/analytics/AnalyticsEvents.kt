@@ -115,4 +115,9 @@ object AnalyticsEvents {
      * Tracks how often shortcuts for forms are added
      */
     const val ADD_SHORTCUT = "AddShortcut"
+
+    /**
+     * Tracks how many forms include the `no-buttons columns-n` appearance
+     */
+    const val GALLERY_SELECT = "GallerySelect"
 }
