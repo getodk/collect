@@ -110,7 +110,6 @@
   <string name="set_color">কালার সেট</string>
   <string name="capture_video">ভিডিও রেকর্ড</string>
   <string name="choose_video">ভি ডি ও পছন্দ করুন</string>
-  <string name="play_video">ভিডিও চালান</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">শব্দ রেকর্ড</string>

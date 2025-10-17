@@ -185,7 +185,6 @@
   <string name="set_color">色を設定</string>
   <string name="capture_video">ビデオを録画</string>
   <string name="choose_video">ビデオを選択</string>
-  <string name="play_video">ビデオを再生</string>
   <string name="choose_file">ファイルを選択</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">削除</string>

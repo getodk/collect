@@ -16,6 +16,9 @@ package org.odk.collect.android.utilities
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
+import android.net.Uri
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidshared.ui.ToastUtils
@@ -102,5 +105,18 @@ class MediaUtils(private val intentLauncher: IntentLauncher, private val content
 
     fun isAudioFile(file: File): Boolean {
         return FileUtils.getMimeType(file).startsWith("audio")
+    }
+
+    fun getVideoFrame(context: Context, uri: Uri): Bitmap? {
+        return try {
+            MediaMetadataRetriever().apply {
+                setDataSource(context, uri)
+            }.use { retriever ->
+                retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+            }
+        } catch (e: Exception) {
+            Timber.w(e)
+            null
+        }
     }
 }

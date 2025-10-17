@@ -187,7 +187,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="set_color">Hitamo ibara</string>
   <string name="capture_video">Fata Video </string>
   <string name="choose_video">Hitamo Video</string>
-  <string name="play_video">Kina Video </string>
   <string name="choose_file">Hitamo dokima </string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">Siba</string>

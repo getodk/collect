@@ -152,7 +152,6 @@
   <string name="set_color">रंग सेट करें</string>
   <string name="capture_video">विडियो रिकार्ड करे</string>
   <string name="choose_video">वीडियो चुनें</string>
-  <string name="play_video">वीडियो चलाएं</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">आवाज़ रिकार्ड करे </string>

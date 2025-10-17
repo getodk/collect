@@ -124,7 +124,6 @@
   <string name="set_color">Verstel Kleur</string>
   <string name="capture_video">Neem video</string>
   <string name="choose_video">Kies Video</string>
-  <string name="play_video">Speel Video</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Neem klank op</string>

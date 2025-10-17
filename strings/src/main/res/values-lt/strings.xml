@@ -109,7 +109,6 @@
   <string name="set_color">Nustatyti spalvą</string>
   <string name="capture_video">Įrašyti video</string>
   <string name="choose_video">Pasirinkite video</string>
-  <string name="play_video">Groti video</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Įrašyti garsą</string>

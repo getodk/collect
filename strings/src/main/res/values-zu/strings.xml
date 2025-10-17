@@ -119,7 +119,6 @@
   <string name="set_color">Hlela ummbala</string>
   <string name="capture_video">Thwebula ividiyo</string>
   <string name="choose_video">Khetha ummboniso</string>
-  <string name="play_video">Dlala Umbukiso</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Qopha umsindo</string>

@@ -23,6 +23,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.core.content.FileProvider
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -36,7 +38,6 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withClassName
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -68,12 +69,14 @@ import java.io.IOException
  * Tests that intent groups work as described in https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields
  */
 class IntentGroupTest {
-    var rule: BlankFormTestRule = BlankFormTestRule(INTENT_GROUP_FORM, "intent-group")
+    private val composeRule = createEmptyComposeRule()
+    private val rule = BlankFormTestRule(INTENT_GROUP_FORM, "intent-group")
 
     @JvmField
     @Rule
     var copyFormChain: RuleChain = chain()
         .around(RecordedIntentsRule())
+        .around(composeRule)
         .around(rule)
 
     // Verifies that a value given to the label text with form buttonText is used as the button text.
@@ -289,12 +292,7 @@ class IntentGroupTest {
     }
 
     private fun assertVideoWidgetWithoutAnswer() {
-        onView(withText(Matchers.`is`("Video external")))
-            .perform(scrollTo())
-            .check(matches(isDisplayed()))
-
-        onView(withId(org.odk.collect.android.R.id.play_video_button))
-            .check(matches(CoreMatchers.not(isDisplayed())))
+        composeRule.onNodeWithTag("video_widget_answer").assertDoesNotExist()
     }
 
     private fun assertFileWidgetWithoutAnswer() {
@@ -322,11 +320,7 @@ class IntentGroupTest {
     }
 
     private fun assertVideoWidgetWithAnswer() {
-        onView(withId(org.odk.collect.android.R.id.play_video_button))
-            .perform(scrollTo())
-            .check(matches(isDisplayed()))
-        onView(withId(org.odk.collect.android.R.id.play_video_button))
-            .check(matches(isEnabled()))
+        composeRule.onNodeWithTag("video_widget_answer").assertExists()
     }
 
     private fun assertFileWidgetWithAnswer() {

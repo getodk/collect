@@ -218,7 +218,6 @@
   <string name="set_color">Nastavit barvu</string>
   <string name="capture_video">Nahrát video</string>
   <string name="choose_video">Vyberte video</string>
-  <string name="play_video">Přehrát video</string>
   <string name="choose_file">Vybrat soubor</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">Vymazat</string>

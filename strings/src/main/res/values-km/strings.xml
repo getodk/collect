@@ -188,7 +188,6 @@
   <string name="set_color">កំណត់ពណ៌</string>
   <string name="capture_video">ថត​វីដេអូ</string>
   <string name="choose_video">ជ្រើសរើសវីដេអូ</string>
-  <string name="play_video">ចាក់វីដេអូ</string>
   <string name="choose_file">ជ្រើសរើស​ឯកសារ</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">លុប</string>

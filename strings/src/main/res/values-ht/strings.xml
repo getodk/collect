@@ -153,7 +153,6 @@
   <string name="save_and_close">Sovgade epi fèmen</string>
   <string name="capture_video">Anrejistre video</string>
   <string name="choose_video">Chwazi video</string>
-  <string name="play_video">Jwe video</string>
   <string name="choose_file">Chwazi fichye</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">Siprime</string>

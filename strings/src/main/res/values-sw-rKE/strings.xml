@@ -127,7 +127,6 @@
   <string name="set_color">weka rangi</string>
   <string name="capture_video">Rekodi kanda</string>
   <string name="choose_video">Chagua video</string>
-  <string name="play_video">Cheza video</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Rekodi Sauti</string>
