@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.javarosa.test.BindBuilderXFormsElement.bind;
 import static org.javarosa.test.XFormsElement.body;
@@ -267,7 +268,7 @@ public class EntityFormParseProcessorTest {
         parser.addProcessor(processor);
 
         FormDef formDef = parser.parse(null);
-        assertThat(formDef, notNullValue());
+        assertThat(formDef.getExtras().get(EntityFormExtra.class).getSaveTos(), is(not(empty())));
     }
 
     @Test(expected = UnrecognizedEntityVersionException.class)
