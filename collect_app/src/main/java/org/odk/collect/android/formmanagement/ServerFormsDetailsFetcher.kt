@@ -19,12 +19,7 @@ import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormsRepository
 
-class ServerFormsDetailsFetcher(
-    private val formsRepository: FormsRepository,
-    private val formSource: FormSource
-) {
+interface ServerFormsDetailsFetcher {
     @Throws(FormSourceException::class)
-    fun fetchFormDetails(): List<ServerFormDetails> {
-        return ServerFormUseCases.fetchFormList(formsRepository, formSource)
-    }
+    fun fetchFormDetails(repository: FormsRepository, source: FormSource): List<ServerFormDetails>
 }

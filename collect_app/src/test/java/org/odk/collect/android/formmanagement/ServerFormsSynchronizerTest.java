@@ -5,6 +5,7 @@ import org.odk.collect.android.formmanagement.download.FormDownloadException;
 import org.odk.collect.android.formmanagement.download.FormDownloader;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
@@ -32,11 +33,12 @@ public class ServerFormsSynchronizerTest {
     private final InstancesRepository instancesRepository = new InMemInstancesRepository();
     private final RecordingFormDownloader formDownloader = new RecordingFormDownloader();
     private final ServerFormsDetailsFetcher serverFormDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
-    private final ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader);
+    private final FormSource formSource = mock(FormSource.class);
+    private final ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader, formSource);
 
     @Test
     public void downloadsNewForms() throws Exception {
-        when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
+        when(serverFormDetailsFetcher.fetchFormDetails(formsRepository, formSource)).thenReturn(asList(
                 new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", true, false, null)
         ));
 
@@ -46,7 +48,7 @@ public class ServerFormsSynchronizerTest {
 
     @Test
     public void downloadsUpdatedForms() throws Exception {
-        when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
+        when(serverFormDetailsFetcher.fetchFormDetails(formsRepository, formSource)).thenReturn(asList(
                 new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", false, true, null)
         ));
 
@@ -63,7 +65,7 @@ public class ServerFormsSynchronizerTest {
                 .formFilePath(FormUtils.createXFormFile("1", "1").getAbsolutePath())
                 .build());
 
-        when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
+        when(serverFormDetailsFetcher.fetchFormDetails(formsRepository, formSource)).thenReturn(asList(
                 new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", false, false, null)
         ));
 
@@ -73,7 +75,7 @@ public class ServerFormsSynchronizerTest {
 
     @Test
     public void doesNotDownloadExistingForms() throws Exception {
-        when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(asList(
+        when(serverFormDetailsFetcher.fetchFormDetails(formsRepository, formSource)).thenReturn(asList(
                 new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", false, false, null)
         ));
 
@@ -84,7 +86,7 @@ public class ServerFormsSynchronizerTest {
     @Test
     public void whenFetchingFormDetailsThrowsAnError_throwsError() throws Exception {
         FormSourceException exception = new FormSourceException.AuthRequired();
-        when(serverFormDetailsFetcher.fetchFormDetails()).thenThrow(exception);
+        when(serverFormDetailsFetcher.fetchFormDetails(formsRepository, formSource)).thenThrow(exception);
 
         try {
             synchronizer.synchronize();
@@ -100,12 +102,12 @@ public class ServerFormsSynchronizerTest {
                 new ServerFormDetails("form-2", "http://example.com/form-2", "form-2", "server", "form-2-hash", true, false, null)
         );
 
-        when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(serverForms);
+        when(serverFormDetailsFetcher.fetchFormDetails(formsRepository, formSource)).thenReturn(serverForms);
 
         FormDownloader formDownloader = mock(FormDownloader.class);
         doThrow(new FormDownloadException.FormSourceError(new FormSourceException.FetchError())).when(formDownloader).downloadForm(serverForms.get(0), null, null);
 
-        ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader);
+        ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader, formSource);
 
         try {
             synchronizer.synchronize();
