@@ -15,24 +15,14 @@
  */
 package org.odk.collect.android.formmanagement
 
-import org.odk.collect.android.utilities.WebCredentialsUtils
 import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormsRepository
-import org.odk.collect.openrosa.forms.OpenRosaClient
 
 class ServerFormsDetailsFetcher(
     private val formsRepository: FormsRepository,
     private val formSource: FormSource
 ) {
-    fun updateUrl(url: String) {
-        (formSource as OpenRosaClient).updateUrl(url)
-    }
-
-    fun updateCredentials(webCredentialsUtils: WebCredentialsUtils) {
-        (formSource as OpenRosaClient).updateWebCredentialsUtils(webCredentialsUtils)
-    }
-
     @Throws(FormSourceException::class)
     fun fetchFormDetails(): List<ServerFormDetails> {
         return ServerFormUseCases.fetchFormList(formsRepository, formSource)
