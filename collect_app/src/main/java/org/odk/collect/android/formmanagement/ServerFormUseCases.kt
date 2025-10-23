@@ -24,6 +24,8 @@ import java.io.IOException
 
 object ServerFormUseCases {
 
+    @JvmStatic
+    @Throws(FormSourceException::class)
     fun fetchFormList(
         formsRepository: FormsRepository,
         formSource: FormSource

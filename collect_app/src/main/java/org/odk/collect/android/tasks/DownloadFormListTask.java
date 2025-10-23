@@ -22,12 +22,17 @@ import androidx.core.util.Pair;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.formmanagement.ServerFormUseCases;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.ProjectDependencyModuleFactory;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
+import org.odk.collect.android.projects.ProjectDependencyModule;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.openrosa.forms.OpenRosaClient;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +52,9 @@ import javax.inject.Inject;
 @Deprecated
 public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<ServerFormDetails>, FormSourceException>> {
 
-    private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
+    private final FormsRepository formsRepository;
+    private final FormSource formSource;
+    private final String projectId;
 
     private FormListDownloaderListener stateListener;
     private WebCredentialsUtils webCredentialsUtils;
@@ -61,14 +68,21 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
     @Inject
     ProjectsDataService projectsDataService;
 
-    public DownloadFormListTask(ServerFormsDetailsFetcher serverFormsDetailsFetcher) {
-        this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
+    @Inject
+    ProjectDependencyModuleFactory projectDependencyModuleFactory;
+
+    public DownloadFormListTask() {
         DaggerUtils.getComponent(Collect.getInstance()).inject(this);
+
+        projectId = projectsDataService.requireCurrentProject().getUuid();
+        ProjectDependencyModule projectDependencyModule = projectDependencyModuleFactory.create(projectId);
+        formsRepository = projectDependencyModule.getFormsRepository();
+        formSource = projectDependencyModule.getFormSource();
     }
 
     @Override
     protected Pair<List<ServerFormDetails>, FormSourceException> doInBackground(Void... values) {
-        formsDataService.refresh(projectsDataService.requireCurrentProject().getUuid());
+        formsDataService.refresh(projectId);
 
         if (webCredentialsUtils != null) {
             setTemporaryCredentials();
@@ -78,7 +92,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
         FormSourceException exception = null;
 
         try {
-            formList = serverFormsDetailsFetcher.fetchFormDetails();
+            formList = ServerFormUseCases.fetchFormList(formsRepository, formSource);
         } catch (FormSourceException e) {
             exception = e;
         } finally {
@@ -116,11 +130,12 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
 
     public void setAlternateCredentials(WebCredentialsUtils webCredentialsUtils, String url, String username, String password) {
         this.webCredentialsUtils = webCredentialsUtils;
-        serverFormsDetailsFetcher.updateCredentials(webCredentialsUtils);
+        OpenRosaClient openRosaClient = (OpenRosaClient) formSource;
+        openRosaClient.updateWebCredentialsUtils(webCredentialsUtils);
 
         this.url = url;
         if (url != null && !url.isEmpty()) {
-            serverFormsDetailsFetcher.updateUrl(url);
+            openRosaClient.updateUrl(url);
         }
 
         this.username = username;
