@@ -27,23 +27,20 @@ import org.odk.collect.openrosa.forms.OpenRosaClient
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import timber.log.Timber
 
-/**
- * Open to allow mocking (used in existing Java tests)
- */
-open class ServerFormsDetailsFetcher(
+class ServerFormsDetailsFetcher(
     private val formsRepository: FormsRepository,
     private val formSource: FormSource
 ) {
-    open fun updateUrl(url: String) {
+    fun updateUrl(url: String) {
         (formSource as OpenRosaClient).updateUrl(url)
     }
 
-    open fun updateCredentials(webCredentialsUtils: WebCredentialsUtils) {
+    fun updateCredentials(webCredentialsUtils: WebCredentialsUtils) {
         (formSource as OpenRosaClient).updateWebCredentialsUtils(webCredentialsUtils)
     }
 
     @Throws(FormSourceException::class)
-    open fun fetchFormDetails(): List<ServerFormDetails> {
+    fun fetchFormDetails(): List<ServerFormDetails> {
         val formList = formSource.fetchFormList()
         return formList.map { listItem ->
             val manifestFile = listItem.manifestURL?.let {
