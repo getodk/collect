@@ -35,16 +35,13 @@ class ServerFormsDetailsFetcherTest {
         )
     }
 
-    private val fetcher =
-        ServerFormsDetailsFetcher(formsRepository, formSource)
-
     @Test
     fun whenFormHasManifestUrl_returnsMediaFilesInDetails() {
         whenever(formSource.fetchFormList()).thenReturn(
             listOf(FORM_WITHOUT_MANIFEST, FORM_WITH_MANIFEST)
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         assertThat(getFormFromList(serverFormDetails, "form-1").manifest, nullValue())
         assertThat(
             getFormFromList(serverFormDetails, "form-2").manifest!!.mediaFiles,
@@ -56,7 +53,7 @@ class ServerFormsDetailsFetcherTest {
     fun whenFormDoesNotExist_isNotOnDevice() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITHOUT_MANIFEST))
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         assertThat(getFormFromList(serverFormDetails, "form-1").isNotOnDevice, `is`(true))
     }
 
@@ -73,7 +70,7 @@ class ServerFormsDetailsFetcherTest {
                 .build()
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         assertThat(getFormFromList(serverFormDetails, "form-1").isNotOnDevice, `is`(true))
     }
 
@@ -88,7 +85,7 @@ class ServerFormsDetailsFetcherTest {
                 .build()
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         assertThat(getFormFromList(serverFormDetails, "form-1").isUpdated, `is`(true))
     }
 
@@ -105,7 +102,7 @@ class ServerFormsDetailsFetcherTest {
                 .build()
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         assertThat(getFormFromList(serverFormDetails, "form-2").isUpdated, `is`(true))
     }
 
@@ -126,7 +123,7 @@ class ServerFormsDetailsFetcherTest {
         val oldMediaFile = TempFiles.createTempFile(mediaDir, "blah", ".csv")
         writeToFile(oldMediaFile, "blah before")
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         assertThat(getFormFromList(serverFormDetails, "form-2").isUpdated, `is`(true))
     }
 
@@ -160,7 +157,7 @@ class ServerFormsDetailsFetcherTest {
         val mediaFile2 = TempFiles.createTempFile(mediaDir2, MEDIA_FILE.filename)
         writeToFile(mediaFile2, FILE_CONTENT)
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val form = getFormFromList(serverFormDetails, "form-2")
         assertThat(form.isUpdated, `is`(false))
         assertThat(form.isNotOnDevice, `is`(false))
@@ -188,7 +185,7 @@ class ServerFormsDetailsFetcherTest {
                 .build()
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val form = getFormFromList(serverFormDetails, "form-1")
         assertThat(form.isUpdated, `is`(true))
         assertThat(form.isNotOnDevice, `is`(false))
@@ -225,7 +222,7 @@ class ServerFormsDetailsFetcherTest {
         val mediaFile2 = TempFiles.createTempFile(mediaDir2, MEDIA_FILE.filename)
         writeToFile(mediaFile2, FILE_CONTENT)
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val form = getFormFromList(serverFormDetails, "form-2")
         assertThat(form.isUpdated, `is`(true))
         assertThat(form.isNotOnDevice, `is`(false))
@@ -244,7 +241,7 @@ class ServerFormsDetailsFetcherTest {
                 .build()
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val form = getFormFromList(serverFormDetails, "form-1")
         assertThat(form.isUpdated, `is`(false))
         assertThat(form.isNotOnDevice, `is`(false))
@@ -267,7 +264,7 @@ class ServerFormsDetailsFetcherTest {
         val mediaFile = TempFiles.createTempFile(mediaDir, "blah", ".csv")
         writeToFile(mediaFile, FILE_CONTENT)
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val form = getFormFromList(serverFormDetails, "form-2")
         assertThat(form.isNotOnDevice, `is`(false))
         assertThat(form.isUpdated, `is`(false))
@@ -289,7 +286,7 @@ class ServerFormsDetailsFetcherTest {
         val localMediaFile = TempFiles.createTempFile(mediaDir, "blah", ".csv")
         writeToFile(localMediaFile, FILE_CONTENT)
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         assertThat(getFormFromList(serverFormDetails, "form-2").isUpdated, `is`(true))
     }
 
@@ -308,7 +305,7 @@ class ServerFormsDetailsFetcherTest {
                 .build()
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val form = getFormFromList(serverFormDetails, "form-2")
         assertThat(form.isUpdated, `is`(false))
         assertThat(form.isNotOnDevice, `is`(false))

@@ -26,7 +26,7 @@ object ServerFormUseCases {
 
     @JvmStatic
     @Throws(FormSourceException::class)
-    fun fetchFormList(
+    fun fetchFormDetails(
         formsRepository: FormsRepository,
         formSource: FormSource
     ): List<ServerFormDetails> {

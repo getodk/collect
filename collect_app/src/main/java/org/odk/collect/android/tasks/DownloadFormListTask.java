@@ -92,7 +92,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
         FormSourceException exception = null;
 
         try {
-            formList = ServerFormUseCases.fetchFormList(formsRepository, formSource);
+            formList = ServerFormUseCases.fetchFormDetails(formsRepository, formSource);
         } catch (FormSourceException e) {
             exception = e;
         } finally {
