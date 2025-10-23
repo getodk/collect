@@ -15,17 +15,11 @@
  */
 package org.odk.collect.android.formmanagement
 
-import org.odk.collect.android.utilities.FormUtils
 import org.odk.collect.android.utilities.WebCredentialsUtils
-import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormsRepository
-import org.odk.collect.forms.ManifestFile
-import org.odk.collect.forms.MediaFile
 import org.odk.collect.openrosa.forms.OpenRosaClient
-import org.odk.collect.shared.strings.Md5.getMd5Hash
-import timber.log.Timber
 
 class ServerFormsDetailsFetcher(
     private val formsRepository: FormsRepository,
@@ -41,78 +35,6 @@ class ServerFormsDetailsFetcher(
 
     @Throws(FormSourceException::class)
     fun fetchFormDetails(): List<ServerFormDetails> {
-        val formList = formSource.fetchFormList()
-        return formList.map { listItem ->
-            val manifestFile = listItem.manifestURL?.let {
-                getManifestFile(formSource, it)
-            }
-
-            val forms = formsRepository.getAllNotDeletedByFormId(listItem.formID)
-            val thisFormAlreadyDownloaded = forms.isNotEmpty()
-
-            val formHash = listItem.hash
-            val existingForm = if (formHash != null) {
-                getFormByHash(formHash)
-            } else {
-                null
-            }
-
-            val isNewerFormVersionAvailable = listItem.hash.let {
-                if (it == null) {
-                    false
-                } else if (thisFormAlreadyDownloaded) {
-                    existingForm == null || existingForm.isDeleted
-                } else {
-                    false
-                }
-            }
-
-            val areNewerMediaFilesAvailable = if (existingForm != null && manifestFile != null) {
-                areNewerMediaFilesAvailable(existingForm, manifestFile.mediaFiles)
-            } else {
-                false
-            }
-
-            ServerFormDetails(
-                listItem.name,
-                listItem.downloadURL,
-                listItem.formID,
-                listItem.version,
-                listItem.hash,
-                !thisFormAlreadyDownloaded,
-                isNewerFormVersionAvailable || areNewerMediaFilesAvailable,
-                manifestFile
-            )
-        }
-    }
-
-    private fun getManifestFile(formSource: FormSource, manifestUrl: String): ManifestFile? {
-        return try {
-            formSource.fetchManifest(manifestUrl)
-        } catch (formSourceException: FormSourceException) {
-            Timber.w(formSourceException)
-            null
-        }
-    }
-
-    private fun areNewerMediaFilesAvailable(
-        existingForm: Form,
-        newMediaFiles: List<MediaFile>
-    ): Boolean {
-        if (newMediaFiles.isEmpty()) {
-            return false
-        }
-
-        val localMediaHashes = FormUtils.getMediaFiles(existingForm)
-            .map { it.getMd5Hash() }
-            .toSet()
-
-        return newMediaFiles.any {
-            !it.filename.endsWith(".zip") && it.hash !in localMediaHashes
-        }
-    }
-
-    private fun getFormByHash(hash: String): Form? {
-        return formsRepository.getOneByMd5Hash(hash)
+        return ServerFormUseCases.fetchFormList(formsRepository, formSource)
     }
 }
