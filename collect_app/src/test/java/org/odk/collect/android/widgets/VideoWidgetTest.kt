@@ -8,6 +8,7 @@ import androidx.compose.ui.test.performClick
 import net.bytebuddy.utility.RandomString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
+import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.StringData
 import org.junit.Before
 import org.junit.Rule
@@ -54,6 +55,7 @@ class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
     @Before
     override fun setUp() {
         super.setUp()
+        whenever(formEntryPrompt.controlType).thenReturn(Constants.CONTROL_VIDEO_CAPTURE)
         destinationName = RandomString.make()
         activity = composeRule.activity
     }
