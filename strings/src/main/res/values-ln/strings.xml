@@ -69,6 +69,7 @@
   <!--Label for button that exits barcode scanning after success-->
   <string name="capture_image">kanga elili</string>
   <!--Dialog heading for saving annotated image-->
+  <string name="play_video">beta video</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <!--Text for button that lets the user choose a sound file on their device-->

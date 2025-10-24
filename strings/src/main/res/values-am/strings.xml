@@ -128,6 +128,7 @@
   <string name="set_color">ቀለም አዘጋጅ</string>
   <string name="capture_video">ቪዲዮ ቅዳ</string>
   <string name="choose_video">ቪዲዮ ይምረጡ</string>
+  <string name="play_video">ቪድዮ አጫውት</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">ድምጽ ቅረፅ</string>

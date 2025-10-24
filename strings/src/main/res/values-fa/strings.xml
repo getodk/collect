@@ -213,6 +213,7 @@
   <string name="set_color">تنظیم رنگ</string>
   <string name="capture_video">ضبط ویدیو</string>
   <string name="choose_video">انتخاب ویدیو</string>
+  <string name="play_video">پخش ویدیو</string>
   <string name="choose_file">انتخاب فایل</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">حذف شده</string>

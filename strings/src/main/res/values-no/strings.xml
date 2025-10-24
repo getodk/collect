@@ -123,6 +123,7 @@
   <string name="set_color">Set Color</string>
   <string name="capture_video">Ta opp video</string>
   <string name="choose_video">Velg video</string>
+  <string name="play_video">Spill video</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Ta opp lyd</string>
