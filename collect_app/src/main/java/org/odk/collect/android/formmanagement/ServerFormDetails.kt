@@ -52,16 +52,8 @@ data class ServerFormDetails @JvmOverloads constructor(
         }
     )
 
-    @Deprecated(
-        message = "Use type instead",
-        replaceWith = ReplaceWith("type")
-    )
-    val isUpdated: Boolean = when (type) {
-        Type.OnDevice -> false
-        Type.New -> false
-        Type.UpdatedVersion -> true
-        Type.UpdatedHash -> true
-        Type.UpdatedMedia -> true
+    fun isUpdated(): Boolean {
+        return type != Type.OnDevice && type != Type.New
     }
 
     companion object {

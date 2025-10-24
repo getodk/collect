@@ -117,7 +117,7 @@ class FormsDataService(
                         projectDependencies.formsRepository,
                         projectDependencies.formSource
                     )
-                    val updatedForms = serverForms.filter { it.isUpdated }
+                    val updatedForms = serverForms.filter { it.isUpdated() }
                     if (updatedForms.isNotEmpty()) {
                         if (projectDependencies.generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE)) {
                             val results = ServerFormUseCases.downloadForms(
