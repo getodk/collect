@@ -86,8 +86,6 @@ object ServerFormUseCases {
                 listItem.formID,
                 listItem.version,
                 listItem.hash,
-                !thisFormAlreadyDownloaded,
-                isNewerFormVersionAvailable || areNewerMediaFilesAvailable,
                 manifestFile,
                 type
             )

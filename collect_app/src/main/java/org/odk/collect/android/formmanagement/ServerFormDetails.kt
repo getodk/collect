@@ -22,20 +22,62 @@ data class ServerFormDetails @JvmOverloads constructor(
     val formId: String?,
     val formVersion: String?,
     val hash: String?,
-    @Deprecated(
-        message = "Use type instead",
-        replaceWith = ReplaceWith("type")
-    ) val isNotOnDevice: Boolean,
-    @Deprecated(
-        message = "Use type instead",
-        replaceWith = ReplaceWith("type")
-    ) val isUpdated: Boolean,
     val manifest: ManifestFile?,
-    val type: Type? = null
+    val type: Type
 ) : Serializable {
 
+    @Deprecated(message = "Use primary constructor instead")
+    constructor(
+        formName: String?,
+        downloadUrl: String?,
+        formId: String?,
+        formVersion: String?,
+        hash: String?,
+        isNotOnDevice: Boolean,
+        isUpdated: Boolean,
+        manifest: ManifestFile?,
+    ) : this(
+        formName,
+        downloadUrl,
+        formId,
+        formVersion,
+        hash,
+        manifest,
+        if (isNotOnDevice) {
+            Type.New
+        } else if (isUpdated) {
+            Type.UpdatedVersion
+        } else {
+            Type.OnDevice
+        }
+    )
+
+    @Deprecated(
+        message = "Use type instead",
+        replaceWith = ReplaceWith("type")
+    )
+    val isNotOnDevice: Boolean = when (type) {
+        Type.OnDevice -> false
+        Type.New -> true
+        Type.UpdatedVersion -> false
+        Type.UpdatedHash -> false
+        Type.UpdatedMedia -> false
+    }
+
+    @Deprecated(
+        message = "Use type instead",
+        replaceWith = ReplaceWith("type")
+    )
+    val isUpdated: Boolean = when (type) {
+        Type.OnDevice -> false
+        Type.New -> false
+        Type.UpdatedVersion -> true
+        Type.UpdatedHash -> true
+        Type.UpdatedMedia -> true
+    }
+
     companion object {
-        private const val serialVersionUID = 3L
+        private const val serialVersionUID = 4L
     }
 
     enum class Type {
