@@ -40,7 +40,7 @@ public class ServerFormsSynchronizer {
         boolean downloadException = false;
 
         for (ServerFormDetails form : formList) {
-            if (form.isNotOnDevice() || form.isUpdated()) {
+            if (form.getType() != ServerFormDetails.Type.OnDevice) {
                 try {
                     formDownloader.downloadForm(form, null, null);
                 } catch (FormDownloadException.DownloadingInterrupted e) {
