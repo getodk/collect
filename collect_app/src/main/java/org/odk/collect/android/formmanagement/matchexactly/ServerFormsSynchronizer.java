@@ -2,7 +2,6 @@ package org.odk.collect.android.formmanagement.matchexactly;
 
 import org.odk.collect.android.formmanagement.LocalFormUseCases;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.download.FormDownloadException;
 import org.odk.collect.android.formmanagement.download.FormDownloader;
 import org.odk.collect.forms.Form;
@@ -55,5 +54,9 @@ public class ServerFormsSynchronizer {
         if (downloadException) {
             throw new FormSourceException.FetchError();
         }
+    }
+
+    public interface ServerFormsDetailsFetcher {
+        List<ServerFormDetails> fetchFormDetails(FormsRepository formsRepository, FormSource formSource) throws FormSourceException;
     }
 }

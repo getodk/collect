@@ -14,9 +14,7 @@ import org.odk.collect.android.state.DataKeys
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.androidshared.data.DataService
 import org.odk.collect.forms.Form
-import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
-import org.odk.collect.forms.FormsRepository
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
 import java.io.File
@@ -160,14 +158,7 @@ class FormsDataService(
                 val formDownloader = formDownloader(projectDependencies, clock)
 
                 val serverFormsSynchronizer = ServerFormsSynchronizer(
-                    object : ServerFormsDetailsFetcher {
-                        override fun fetchFormDetails(
-                            repository: FormsRepository,
-                            source: FormSource
-                        ): List<ServerFormDetails> {
-                            return ServerFormUseCases.fetchFormDetails(repository, source)
-                        }
-                    },
+                    { repository, source -> ServerFormUseCases.fetchFormDetails(repository, source) },
                     projectDependencies.formsRepository,
                     projectDependencies.instancesRepository,
                     formDownloader,

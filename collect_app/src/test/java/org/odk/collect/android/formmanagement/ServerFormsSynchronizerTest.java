@@ -1,5 +1,15 @@
 package org.odk.collect.android.formmanagement;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static java.util.Arrays.asList;
+
 import org.junit.Test;
 import org.odk.collect.android.formmanagement.download.FormDownloadException;
 import org.odk.collect.android.formmanagement.download.FormDownloader;
@@ -17,22 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static java.util.Arrays.asList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 public class ServerFormsSynchronizerTest {
 
     private final FormsRepository formsRepository = new InMemFormsRepository();
     private final InstancesRepository instancesRepository = new InMemInstancesRepository();
     private final RecordingFormDownloader formDownloader = new RecordingFormDownloader();
-    private final ServerFormsDetailsFetcher serverFormDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
+    private final ServerFormsSynchronizer.ServerFormsDetailsFetcher serverFormDetailsFetcher = mock(ServerFormsSynchronizer.ServerFormsDetailsFetcher.class);
     private final FormSource formSource = mock(FormSource.class);
     private final ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader, formSource);
 
