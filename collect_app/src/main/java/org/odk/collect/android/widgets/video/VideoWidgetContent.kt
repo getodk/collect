@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets.video
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.VideoLibrary
 import androidx.compose.material.icons.filled.Videocam
@@ -40,15 +41,15 @@ fun VideoWidgetContent(
         }
 
         if (!readOnly && !newVideoOnly) {
-            Spacer(Modifier.height(dimensionResource(id = dimen.margin_standard)))
-
             WidgetIconButton(
                 Icons.Default.VideoLibrary,
                 stringResource(string.choose_video),
                 fontSize,
                 onChooseClick,
                 onLongClick,
-                Modifier.testTag("choose_video_button")
+                Modifier
+                    .testTag("choose_video_button")
+                    .padding(top = dimensionResource(id = dimen.margin_standard))
             )
         }
 
