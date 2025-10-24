@@ -16,7 +16,7 @@ package org.odk.collect.android.formmanagement
 import org.odk.collect.forms.ManifestFile
 import java.io.Serializable
 
-data class ServerFormDetails @JvmOverloads constructor(
+data class ServerFormDetails(
     val formName: String?,
     val downloadUrl: String?,
     val formId: String?,
