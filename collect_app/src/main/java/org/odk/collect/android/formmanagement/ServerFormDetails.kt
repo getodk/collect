@@ -16,18 +16,52 @@ package org.odk.collect.android.formmanagement
 import org.odk.collect.forms.ManifestFile
 import java.io.Serializable
 
-data class ServerFormDetails(
+data class ServerFormDetails @JvmOverloads constructor(
     val formName: String?,
     val downloadUrl: String?,
     val formId: String?,
     val formVersion: String?,
     val hash: String?,
-    val isNotOnDevice: Boolean,
-    val isUpdated: Boolean,
-    val manifest: ManifestFile?
+    @Deprecated(
+        message = "Use type instead",
+        replaceWith = ReplaceWith("type")
+    ) val isNotOnDevice: Boolean,
+    @Deprecated(
+        message = "Use type instead",
+        replaceWith = ReplaceWith("type")
+    ) val isUpdated: Boolean,
+    val manifest: ManifestFile?,
+    val type: Type? = null
 ) : Serializable {
 
     companion object {
         private const val serialVersionUID = 3L
+    }
+
+    enum class Type {
+        /**
+         * The form is on the device already
+         */
+        OnDevice,
+
+        /**
+         * The form is not on the device
+         */
+        New,
+
+        /**
+         * The form is on the device, but this is a new version with a new version and hash
+         */
+        UpdatedVersion,
+
+        /**
+         * The form is on the device, but this is a new version with a new hash
+         */
+        UpdatedHash,
+
+        /**
+         * This version of the form is on the device, but new/updated media files are available
+         */
+        UpdatedMedia
     }
 }
