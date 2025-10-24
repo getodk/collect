@@ -37,14 +37,14 @@ fun VideoWidgetAnswer(
             .testTag("video_widget_answer"),
         contentAlignment = Alignment.Center
     ) {
-        bitmap?.let {
+        if (bitmap != null) {
             Image(
-                bitmap = it,
+                bitmap = bitmap,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
-        } ?: run {
+        } else {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
