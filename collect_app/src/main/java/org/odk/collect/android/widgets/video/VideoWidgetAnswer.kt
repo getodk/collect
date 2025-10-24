@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material3.Icon
@@ -32,7 +31,7 @@ fun VideoWidgetAnswer(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(max = 200.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(MaterialTheme.shapes.large)
             .clickable { onPlayClick() }
             .testTag("video_widget_answer"),
         contentAlignment = Alignment.Center
