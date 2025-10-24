@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets.video
 
-import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -13,19 +12,17 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.android.widgets.WidgetIconButton
 import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.strings.R.string
 
 @Composable
 fun ExVideoWidgetContent(
-    videoUri: Uri?,
-    mediaUtils: MediaUtils?,
     readOnly: Boolean,
     fontSize: Int,
     onLaunchClick: () -> Unit,
-    onLongClick: () -> Unit
+    onLongClick: () -> Unit,
+    widgetAnswer: (@Composable () -> Unit)?
 ) {
     Column {
         if (!readOnly) {
@@ -39,9 +36,9 @@ fun ExVideoWidgetContent(
             )
         }
 
-        if (videoUri != null) {
+        if (widgetAnswer != null) {
             Spacer(Modifier.height(dimensionResource(id = dimen.margin_standard)))
-            VideoWidgetAnswer(videoUri, mediaUtils)
+            widgetAnswer()
         }
     }
 }
@@ -51,10 +48,9 @@ fun ExVideoWidgetContent(
 private fun ExVideoWidgetContentPreview() {
     MaterialTheme {
         ExVideoWidgetContent(
-            null,
-            null,
             false,
             10,
+            {},
             {},
             {}
         )
@@ -66,10 +62,9 @@ private fun ExVideoWidgetContentPreview() {
 private fun ExVideoWidgetContentReadOnlyPreview() {
     MaterialTheme {
         ExVideoWidgetContent(
-            null,
-            null,
             true,
             10,
+            {},
             {},
             {}
         )

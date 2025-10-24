@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets.video
 
-import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -14,21 +13,19 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.android.widgets.WidgetIconButton
 import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.strings.R.string
 
 @Composable
 fun VideoWidgetContent(
-    videoUri: Uri?,
-    mediaUtils: MediaUtils?,
     readOnly: Boolean,
     newVideoOnly: Boolean,
     fontSize: Int,
     onRecordClick: () -> Unit,
     onChooseClick: () -> Unit,
-    onLongClick: () -> Unit
+    onLongClick: () -> Unit,
+    widgetAnswer: (@Composable () -> Unit)?,
 ) {
     Column {
         if (!readOnly) {
@@ -55,9 +52,9 @@ fun VideoWidgetContent(
             )
         }
 
-        if (videoUri != null) {
+        if (widgetAnswer != null) {
             Spacer(Modifier.height(dimensionResource(id = dimen.margin_standard)))
-            VideoWidgetAnswer(videoUri, mediaUtils)
+            widgetAnswer()
         }
     }
 }
@@ -67,11 +64,10 @@ fun VideoWidgetContent(
 private fun VideoWidgetContentPreview() {
     MaterialTheme {
         VideoWidgetContent(
-            null,
-            null,
             false,
             false,
             10,
+            {},
             {},
             {},
             {}
@@ -84,11 +80,10 @@ private fun VideoWidgetContentPreview() {
 private fun VideoWidgetContentReadOnlyPreview() {
     MaterialTheme {
         VideoWidgetContent(
-            null,
-            null,
             true,
             false,
             10,
+            {},
             {},
             {},
             {}
@@ -101,11 +96,10 @@ private fun VideoWidgetContentReadOnlyPreview() {
 private fun VideoWidgetContentNewVideoOnlyPreview() {
     MaterialTheme {
         VideoWidgetContent(
-            null,
-            null,
             false,
             true,
             10,
+            {},
             {},
             {},
             {}
