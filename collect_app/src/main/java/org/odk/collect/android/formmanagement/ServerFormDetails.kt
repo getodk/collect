@@ -56,18 +56,6 @@ data class ServerFormDetails @JvmOverloads constructor(
         message = "Use type instead",
         replaceWith = ReplaceWith("type")
     )
-    val isNotOnDevice: Boolean = when (type) {
-        Type.OnDevice -> false
-        Type.New -> true
-        Type.UpdatedVersion -> false
-        Type.UpdatedHash -> false
-        Type.UpdatedMedia -> false
-    }
-
-    @Deprecated(
-        message = "Use type instead",
-        replaceWith = ReplaceWith("type")
-    )
     val isUpdated: Boolean = when (type) {
         Type.OnDevice -> false
         Type.New -> false

@@ -460,7 +460,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         }
 
         ServerFormDetails form = viewModel.getFormDetailsByFormId().get(formId);
-        return form.isNotOnDevice() || form.isUpdated();
+        return form.getType() != ServerFormDetails.Type.OnDevice;
     }
 
     /**
