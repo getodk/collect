@@ -34,8 +34,9 @@ class NotificationManagerNotifier(
         val notificationId = uniqueIdGenerator.getInt(FORM_UPDATE_NOTIFICATION_IDENTIFIER)
 
         val metaPrefs = settingsProvider.getMetaSettings()
-        val updateId = updates
-            .mapTo(HashSet()) { (_, _, formId, _, hash, _, _, manifest) -> formId + hash + manifest?.hash }
+        val updateId = updates.mapTo(HashSet()) { (_, _, formId, _, hash, manifest, _) ->
+            formId + hash + manifest?.hash
+        }
         if (metaPrefs.getStringSet(MetaKeys.LAST_UPDATED_NOTIFICATION) != updateId) {
             notificationManager.notify(
                 notificationId,
