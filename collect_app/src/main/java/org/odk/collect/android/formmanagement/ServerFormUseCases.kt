@@ -47,10 +47,8 @@ object ServerFormUseCases {
             }
 
             val isNewerFormVersionAvailable = listItem.hash.let {
-                if (it == null) {
-                    false
-                } else if (thisFormAlreadyDownloaded) {
-                    existingForm == null || existingForm.isDeleted
+                if (thisFormAlreadyDownloaded) {
+                    existingForm == null
                 } else {
                     false
                 }
@@ -62,6 +60,26 @@ object ServerFormUseCases {
                 false
             }
 
+            val type = if (existingForm != null) {
+                if (existingForm.isDeleted) {
+                    ServerFormDetails.Type.New
+                } else if (areNewerMediaFilesAvailable) {
+                    ServerFormDetails.Type.UpdatedMedia
+                } else {
+                    ServerFormDetails.Type.OnDevice
+                }
+            } else if (thisFormAlreadyDownloaded) {
+                if (listItem.hash == null) {
+                    ServerFormDetails.Type.OnDevice
+                } else if (forms.any { it.version == listItem.version }) {
+                    ServerFormDetails.Type.UpdatedHash
+                } else {
+                    ServerFormDetails.Type.UpdatedVersion
+                }
+            } else {
+                ServerFormDetails.Type.New
+            }
+
             ServerFormDetails(
                 listItem.name,
                 listItem.downloadURL,
@@ -70,7 +88,8 @@ object ServerFormUseCases {
                 listItem.hash,
                 !thisFormAlreadyDownloaded,
                 isNewerFormVersionAvailable || areNewerMediaFilesAvailable,
-                manifestFile
+                manifestFile,
+                type
             )
         }
     }
