@@ -23,7 +23,7 @@ import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileWriter
 
-class ServerFormsDetailsFetcherTest {
+class FetchFormDetailsServerFormUseCasesTest {
 
     private val formsRepository: FormsRepository = InMemFormsRepository()
     private val formSource = mock<FormSource> {
