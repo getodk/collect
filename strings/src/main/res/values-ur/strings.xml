@@ -216,6 +216,7 @@
   <string name="set_color">رنگ ترتیب دیں</string>
   <string name="capture_video">ویڈیو ریکارڈ کریں</string>
   <string name="choose_video">ویڈیو منتخب کریں </string>
+  <string name="play_video">وڈیو لگا دیں</string>
   <string name="choose_file">فائل منتخب کریں</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">ختم کریں</string>

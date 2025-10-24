@@ -110,6 +110,7 @@
   <string name="set_color">I-set ang Kulay</string>
   <string name="capture_video">Mag-tala ng Bidyo</string>
   <string name="choose_video">Pumili ng Bidyo</string>
+  <string name="play_video">I-play ang Bidyo</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Mag-tala ng Tunog</string>

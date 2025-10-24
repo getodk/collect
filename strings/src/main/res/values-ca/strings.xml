@@ -135,6 +135,7 @@
   <string name="set_color">Definir Color</string>
   <string name="capture_video">Enregistrar Vídeo</string>
   <string name="choose_video">Escollir vídeo</string>
+  <string name="play_video">Reprodueix Vídeo</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Enregistrar so</string>

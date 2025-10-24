@@ -163,6 +163,7 @@
   <string name="set_color">Cakto ngjyrën</string>
   <string name="capture_video">Regjistro video</string>
   <string name="choose_video">Zgjidh video</string>
+  <string name="play_video">Shih videon</string>
   <string name="choose_file">Përzgjidh file</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->

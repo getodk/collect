@@ -112,6 +112,7 @@
   <string name="set_color">Chọn màu</string>
   <string name="capture_video">Quay Video</string>
   <string name="choose_video">Chọn Video</string>
+  <string name="play_video">Chạy Video</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Ghi âm</string>

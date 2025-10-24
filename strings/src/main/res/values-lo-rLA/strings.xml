@@ -121,6 +121,7 @@
   <string name="set_color">ເລືອກສີ</string>
   <string name="capture_video">ບັນທຶກວີດີໂອ</string>
   <string name="choose_video">ເລືອກວີດີໂອ</string>
+  <string name="play_video">ເປີດວີດີໂອ</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">ບັນທຶກສຽງ</string>

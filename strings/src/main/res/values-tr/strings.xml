@@ -157,6 +157,7 @@
   <string name="save_and_close">Sakla ve Kapat</string>
   <string name="capture_video">Video Kayit</string>
   <string name="choose_video">Video Seçimi</string>
+  <string name="play_video">Video Oynat</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Ses Kaydi</string>

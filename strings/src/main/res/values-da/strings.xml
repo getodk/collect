@@ -142,6 +142,7 @@
   <string name="set_color">Definér farve</string>
   <string name="capture_video">Optag video</string>
   <string name="choose_video">Vælg video</string>
+  <string name="play_video">Afspil video</string>
   <string name="choose_file">Vælg fil</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
