@@ -6,6 +6,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
+import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.StringData
 import org.junit.Before
 import org.junit.Rule
@@ -40,6 +41,7 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
 
     @Before
     fun setup() {
+        whenever(formEntryPrompt.controlType).thenReturn(Constants.CONTROL_VIDEO_CAPTURE)
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesMediaUtils(intentLauncher: IntentLauncher): MediaUtils {
                 return mediaUtils
