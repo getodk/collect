@@ -328,6 +328,7 @@ dependencies {
     // Android Architecture Components:
     implementation libs.androidxLifecycleRuntimeKtx
     implementation libs.androidxLifecycleLivedataKtx
+    implementation libs.androidxLifecycleViewmodelCompose
     implementation libs.androidxViewpager2
 
     // Dagger:

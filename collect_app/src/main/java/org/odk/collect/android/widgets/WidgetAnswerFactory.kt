@@ -2,19 +2,16 @@ package org.odk.collect.android.widgets
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.core.net.toFile
-import androidx.core.net.toUri
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import androidx.compose.runtime.remember
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.video.VideoWidgetAnswer
+import org.odk.collect.android.widgets.video.VideoWidgetAnswerViewModel
 
 @Composable
 fun widgetAnswer(
@@ -36,17 +33,20 @@ private fun videoWidgetAnswer(
     mediaUtils: MediaUtils
 ): (@Composable () -> Unit)? {
     val file = questionMediaManager.getAnswerFile(answer) ?: return null
-    val videoUri = file.toUri()
+
+    val viewModel: VideoWidgetAnswerViewModel = viewModel(
+        factory = VideoWidgetAnswerViewModel.Factory(questionMediaManager, mediaUtils)
+    )
+
+    val bitmapFlow = remember(answer) {
+        viewModel.init(answer, context)
+    }
 
     return {
-        val bitmap by produceState<ImageBitmap?>(initialValue = null, videoUri) {
-            value = withContext(Dispatchers.IO) {
-                mediaUtils.getVideoFrame(context, videoUri)?.asImageBitmap()
-            }
-        }
+        val bitmap by bitmapFlow.collectAsState()
 
         VideoWidgetAnswer(bitmap) {
-            mediaUtils.openFile(context, videoUri.toFile(), "video/*")
+            viewModel.playVideo(context, file)
         }
     }
 }
