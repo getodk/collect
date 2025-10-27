@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
-import org.javarosa.core.model.instance.geojson.GeojsonFeature
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
@@ -252,7 +251,7 @@ internal class SelectChoicesMapData(
         const val FILL = "fill"
 
         private val FILTERED_PROPERTIES = arrayOf(
-            GeojsonFeature.GEOMETRY_CHILD_NAME,
+            GEOMETRY,
             EntitySchema.VERSION,
             EntitySchema.TRUNK_VERSION,
             EntitySchema.BRANCH_ID
