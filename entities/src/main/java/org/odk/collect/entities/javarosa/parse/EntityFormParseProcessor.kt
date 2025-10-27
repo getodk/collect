@@ -71,7 +71,7 @@ class EntityFormParseProcessor(
 
         private const val ENTITIES_NAMESPACE = "http://www.opendatakit.org/xforms/entities"
         private val SUPPORTED_VERSIONS = arrayOf(V2022_1, V2023_1, V2024_1)
-        private val LOCAL_ENTITY_VERSIONS = arrayOf(V2024_1)
+        private val LOCAL_ENTITY_VERSIONS = arrayOf(V2024_1, V2025_1)
 
         private fun isEntityForm(formDef: FormDef): Boolean {
             return EntityFormParser.getEntityElement(formDef.mainInstance) != null
