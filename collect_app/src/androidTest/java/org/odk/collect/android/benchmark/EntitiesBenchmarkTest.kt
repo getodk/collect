@@ -1,7 +1,5 @@
 package org.odk.collect.android.benchmark
 
-import android.app.Application
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.blankOrNullString
@@ -44,7 +42,6 @@ class EntitiesBenchmarkTest {
             ENTITIES_FILTER_PROJECT_URL,
             not(blankOrNullString())
         )
-        clearAndroidCache()
 
         val benchmarker = Benchmarker()
 
@@ -141,10 +138,4 @@ class EntitiesBenchmarkTest {
 
         benchmarker.assertResults()
     }
-}
-
-private fun clearAndroidCache() {
-    val application = ApplicationProvider.getApplicationContext<Application>()
-    application.cacheDir.deleteRecursively()
-    application.cacheDir.mkdir()
 }
