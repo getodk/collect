@@ -101,6 +101,10 @@ class EntitiesBenchmarkTest {
      * [THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL] should be set to a project that contains the
      * "1000-media-files-entity-list" form.
      *
+     * This scenario could also arise when updating a form that has a single new/updated non-entity
+     * media file, but in practice this will probably be most common with entity forms as the list
+     * will always force a media file update.
+     *
      * Devices that currently pass:
      * - Fairphone 3
      */
