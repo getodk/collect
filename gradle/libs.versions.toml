@@ -26,6 +26,7 @@ androidxStartup = { group = "androidx.startup", name = "startup-runtime", versio
 androidxLifecycleRuntimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidxLifecycleLivedataKtx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidxLifecycleViewmodelKtx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+androidxLifecycleViewmodelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidxViewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version = "1.1.0" }
 androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version = "1.16.0" }
 androidxBrowser = { group = "androidx.browser", name = "browser", version = "1.8.0" }
