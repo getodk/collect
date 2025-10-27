@@ -127,7 +127,7 @@ class EntitiesBenchmarkTest {
             .clickGetBlankForm()
             .benchmark(
                 "Redownloading a form with 1k media files and entity list when there are no updates",
-                15,
+                5,
                 benchmarker
             ) {
                 it
