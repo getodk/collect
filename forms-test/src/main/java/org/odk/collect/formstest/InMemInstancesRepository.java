@@ -124,7 +124,7 @@ public final class InMemInstancesRepository implements InstancesRepository {
         boolean hasEdits = instances.stream()
                 .anyMatch(it -> instance.getDbId().equals(it.getEditOf()));
         if (hasEdits) {
-            throw new IntegrityException();
+            throw new IntegrityException("");
         }
 
         deleteInstanceFiles(instance);
@@ -214,17 +214,17 @@ public final class InMemInstancesRepository implements InstancesRepository {
 
     private void saveInstance(Instance instance) {
         if (instance.getEditOf() == null ^ instance.getEditNumber() == null) {
-            throw new IntegrityException();
+            throw new IntegrityException("");
         }
         if (instance.getDbId().equals(instance.getEditOf())) {
-            throw new IntegrityException();
+            throw new IntegrityException("");
         }
         if (instance.getEditOf() != null) {
             boolean referenceInstance = instances.stream()
                     .anyMatch(it -> it.getDbId().equals(instance.getEditOf()));
 
             if (!referenceInstance) {
-                throw new IntegrityException();
+                throw new IntegrityException("");
             }
         }
         instances.add(instance);
