@@ -26,6 +26,8 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.PrinterWidgetViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -251,6 +253,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_SELECT_ONE:
                 questionWidget = getSelectOneWidget(appearance, questionDetails, dependencies);
+                logGallerySelect(appearance);
                 break;
             case Constants.CONTROL_SELECT_MULTI:
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
@@ -270,6 +273,8 @@ public class WidgetFactory {
                 } else {
                     questionWidget = new SelectMultiWidget(activity, questionDetails, formEntryViewModel, dependencies);
                 }
+
+                logGallerySelect(appearance);
                 break;
             case Constants.CONTROL_RANK:
                 questionWidget = new RankingWidget(activity, questionDetails, waitingForDataRegistry, formEntryViewModel, dependencies);
@@ -335,4 +340,10 @@ public class WidgetFactory {
         return questionWidget;
     }
 
+    private void logGallerySelect(String appearance) {
+        if (appearance.contains(Appearances.NO_BUTTONS) &&
+                (appearance.contains(Appearances.COLUMNS_N) || appearance.contains(Appearances.COLUMNS))) {
+            Analytics.log(AnalyticsEvents.GALLERY_SELECT, "form");
+        }
+    }
 }
