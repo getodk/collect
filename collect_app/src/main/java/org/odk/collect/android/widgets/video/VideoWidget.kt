@@ -73,7 +73,6 @@ class VideoWidget(
                     onLongClick = { this.showContextMenu() },
                     widgetAnswer(
                         formEntryPrompt,
-                        context,
                         binaryName,
                         questionMediaManager,
                         WidgetAnswerViewModelProvider(context as ComponentActivity, questionMediaManager, mediaUtils)
