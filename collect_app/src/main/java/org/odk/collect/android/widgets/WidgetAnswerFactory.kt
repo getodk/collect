@@ -1,11 +1,11 @@
 package org.odk.collect.android.widgets
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.QuestionMediaManager
@@ -38,7 +38,7 @@ private fun videoWidgetAnswer(
     }
 
     return {
-        val bitmap by bitmapFlow.collectAsState()
+        val bitmap by bitmapFlow.collectAsStateWithLifecycle()
 
         VideoWidgetAnswer(bitmap) {
             viewModel.playVideo(context, file)
