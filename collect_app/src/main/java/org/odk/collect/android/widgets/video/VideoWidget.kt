@@ -75,7 +75,7 @@ class VideoWidget(
                         formEntryPrompt,
                         binaryName,
                         questionMediaManager,
-                        WidgetAnswerViewModelProvider(context as ComponentActivity, questionMediaManager, mediaUtils)
+                        WidgetAnswerViewModelProvider(context as ComponentActivity, scheduler, questionMediaManager, mediaUtils)
                     )
                 )
             }
