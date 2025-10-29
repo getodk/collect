@@ -8,6 +8,7 @@ import android.content.Intent
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -20,6 +21,7 @@ import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.QuestionWidget
+import org.odk.collect.android.widgets.WidgetAnswerViewModelProvider
 import org.odk.collect.android.widgets.interfaces.FileWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
@@ -74,7 +76,7 @@ class VideoWidget(
                         context,
                         binaryName,
                         questionMediaManager,
-                        mediaUtils
+                        WidgetAnswerViewModelProvider(context as ComponentActivity, questionMediaManager, mediaUtils)
                     )
                 )
             }

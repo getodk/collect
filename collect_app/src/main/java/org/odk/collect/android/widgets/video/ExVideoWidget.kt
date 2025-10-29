@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.view.View
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -16,6 +17,7 @@ import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.QuestionWidget
+import org.odk.collect.android.widgets.WidgetAnswerViewModelProvider
 import org.odk.collect.android.widgets.interfaces.FileWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
 import org.odk.collect.android.widgets.utilities.FileRequester
@@ -59,7 +61,7 @@ class ExVideoWidget(
                         context,
                         binaryName,
                         questionMediaManager,
-                        mediaUtils
+                        WidgetAnswerViewModelProvider(context as ComponentActivity, questionMediaManager, mediaUtils)
                     )
                 )
             }
