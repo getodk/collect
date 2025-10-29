@@ -1,12 +1,8 @@
 package org.odk.collect.android.widgets.video
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.media.MediaMetadataRetriever
-import android.net.Uri
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -16,9 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.android.utilities.QuestionMediaManager
-import timber.log.Timber
+import org.odk.collect.androidshared.utils.loadThumbnail
 import java.io.File
-import kotlin.use
 
 class VideoWidgetAnswerViewModel(
     private val questionMediaManager: QuestionMediaManager,
@@ -31,25 +26,12 @@ class VideoWidgetAnswerViewModel(
         val file = questionMediaManager.getAnswerFile(answer)
         if (file != null) {
             viewModelScope.launch(Dispatchers.IO) {
-                val thumbnail = loadThumbnail(context, file.toUri())?.asImageBitmap()
+                val thumbnail = file.loadThumbnail(context)?.asImageBitmap()
                 bitmapState.value = thumbnail
             }
         }
 
         return bitmapState
-    }
-
-    private fun loadThumbnail(context: Context, uri: Uri): Bitmap? {
-        return try {
-            MediaMetadataRetriever().apply {
-                setDataSource(context, uri)
-            }.use { retriever ->
-                retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
-            }
-        } catch (e: Exception) {
-            Timber.w(e)
-            null
-        }
     }
 
     fun playVideo(context: Context, file: File) {
