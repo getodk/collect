@@ -7,6 +7,7 @@ wget -nc https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented
 wget -nc https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/12.1-robolectric-8229987-i7/android-all-instrumented-12.1-robolectric-8229987-i7.jar -P robolectric-deps
 wget -nc https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/13-robolectric-9030017-i7/android-all-instrumented-13-robolectric-9030017-i7.jar -P robolectric-deps
 wget -nc https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/15-robolectric-12650502-i7/android-all-instrumented-15-robolectric-12650502-i7.jar -P robolectric-deps
+wget -nc https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/16-robolectric-13921718-i7/android-all-instrumented-16-robolectric-13921718-i7.jar -P robolectric-deps
 
 dest_dir="src/test/resources"
 mkdir -p collect_app/$dest_dir && cp robolectric-deps.properties collect_app/$dest_dir

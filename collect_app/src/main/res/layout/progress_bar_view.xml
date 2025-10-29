@@ -11,7 +11,7 @@
         android:layout_height="3dp"/>
     <View
         android:id="@+id/progress_view"
-        android:background="?colorAccent"
+        android:background="?colorPrimary"
         android:layout_width="0dp"
         tools:layout_width="match_parent"
         android:layout_height="3dp"/>

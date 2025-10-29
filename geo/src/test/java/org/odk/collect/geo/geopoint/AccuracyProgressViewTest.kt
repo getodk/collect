@@ -19,9 +19,9 @@ class AccuracyProgressViewTest {
         it.setTheme(com.google.android.material.R.style.Theme_MaterialComponents)
     }
 
-    private val colorPrimary = getThemeAttributeValue(context, com.google.android.material.R.attr.colorPrimary)
+    private val colorPrimary = getThemeAttributeValue(context, androidx.appcompat.R.attr.colorPrimary)
     private val colorOnPrimary = getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnPrimary)
-    private val colorError = getThemeAttributeValue(context, com.google.android.material.R.attr.colorError)
+    private val colorError = getThemeAttributeValue(context, androidx.appcompat.R.attr.colorError)
     private val colorOnError = getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnError)
 
     @Test

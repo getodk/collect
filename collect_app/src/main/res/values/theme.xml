@@ -7,7 +7,6 @@
 
         <!-- Original AppCompat attributes. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorPrimary</item>
         <item name="android:colorBackground">@color/colorSurface</item>
         <item name="colorError">@color/colorError</item>

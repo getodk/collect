@@ -89,7 +89,10 @@ android {
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
         vectorDrawables.useSupportLibrary = true
-        archivesBaseName = 'ODK-Collect'
+    }
+
+    base {
+        archivesName = "ODK-Collect"
     }
 
     signingConfigs {
