@@ -117,7 +117,7 @@ class FirstLaunchActivity : LocalizedActivity(), CollectComposeThemeProvider {
                 text = SpannableStringBuilder()
                     .append(getString(org.odk.collect.strings.R.string.dont_have_project))
                     .append(" ")
-                    .color(getThemeAttributeValue(context, androidx.appcompat.R.attr.colorAccent)) {
+                    .color(getThemeAttributeValue(context, androidx.appcompat.R.attr.colorPrimary)) {
                         append(getString(org.odk.collect.strings.R.string.try_demo))
                     }
 
