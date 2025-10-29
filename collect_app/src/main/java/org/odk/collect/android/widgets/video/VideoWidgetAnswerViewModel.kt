@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,14 +35,5 @@ class VideoWidgetAnswerViewModel(
 
     fun playVideo(context: Context, file: File) {
         mediaUtils.openFile(context, file, "video/*")
-    }
-
-    class Factory(
-        private val questionMediaManager: QuestionMediaManager,
-        private val mediaUtils: MediaUtils
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return VideoWidgetAnswerViewModel(questionMediaManager, mediaUtils) as T
-        }
     }
 }
