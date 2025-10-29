@@ -338,7 +338,8 @@ public class WidgetFactory {
     }
 
     private void logGallerySelect(String appearance) {
-        if (appearance.contains(Appearances.NO_BUTTONS) && appearance.contains(Appearances.COLUMNS_N)) {
+        if (appearance.contains(Appearances.NO_BUTTONS) &&
+                (appearance.contains(Appearances.COLUMNS_N) || appearance.contains(Appearances.COLUMNS))) {
             Analytics.log(AnalyticsEvents.GALLERY_SELECT, "form");
         }
     }
