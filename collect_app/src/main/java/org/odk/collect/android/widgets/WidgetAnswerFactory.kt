@@ -36,7 +36,7 @@ private fun videoWidgetAnswer(
     val viewModel = viewModelProvider[VideoWidgetAnswerViewModel::class]
 
     val bitmapFlow = remember(answer) {
-        viewModel.init(answer, context)
+        viewModel.getFrame(answer, context)
     }
 
     return {
