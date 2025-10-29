@@ -20,7 +20,7 @@ class VideoWidgetAnswerViewModel(
     private val mediaUtils: MediaUtils
 ) : ViewModel() {
 
-    fun init(answer: String?, context: Context): StateFlow<ImageBitmap?> {
+    fun getFrame(answer: String?, context: Context): StateFlow<ImageBitmap?> {
         val bitmapState = MutableStateFlow<ImageBitmap?>(null)
 
         val file = questionMediaManager.getAnswerFile(answer)
