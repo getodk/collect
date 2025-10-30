@@ -86,11 +86,7 @@ class ExVideoWidget(
     }
 
     override fun getAnswer(): IAnswerData? {
-        return if (binaryName != null) {
-            StringData(binaryName!!)
-        } else {
-            null
-        }
+        return binaryName?.let { StringData(it) }
     }
 
     override fun setData(answer: Any) {
