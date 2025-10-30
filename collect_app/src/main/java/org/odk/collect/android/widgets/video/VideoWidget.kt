@@ -70,13 +70,14 @@ class VideoWidget(
                         )
                     },
                     onChooseClick = { chooseVideo() },
-                    onLongClick = { this.showContextMenu() },
+                    onLongClick = { this.showContextMenu() }
+                ) {
                     widgetAnswer(
                         formEntryPrompt,
                         binaryName,
                         WidgetAnswerViewModelProvider(context as ComponentActivity, scheduler, questionMediaManager, mediaUtils)
                     )
-                )
+                }
             }
         }
     }

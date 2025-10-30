@@ -26,7 +26,7 @@ fun VideoWidgetContent(
     onRecordClick: () -> Unit,
     onChooseClick: () -> Unit,
     onLongClick: () -> Unit,
-    widgetAnswer: (@Composable () -> Unit)?,
+    widgetAnswer: @Composable () -> Unit
 ) {
     Column {
         if (!readOnly) {
@@ -53,10 +53,8 @@ fun VideoWidgetContent(
             )
         }
 
-        if (widgetAnswer != null) {
-            Spacer(Modifier.height(dimensionResource(id = dimen.margin_standard)))
-            widgetAnswer()
-        }
+        Spacer(Modifier.height(dimensionResource(id = dimen.margin_standard)))
+        widgetAnswer()
     }
 }
 

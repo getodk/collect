@@ -22,7 +22,7 @@ fun ExVideoWidgetContent(
     fontSize: Int,
     onLaunchClick: () -> Unit,
     onLongClick: () -> Unit,
-    widgetAnswer: (@Composable () -> Unit)?
+    widgetAnswer: @Composable () -> Unit
 ) {
     Column {
         if (!readOnly) {
@@ -36,10 +36,8 @@ fun ExVideoWidgetContent(
             )
         }
 
-        if (widgetAnswer != null) {
-            Spacer(Modifier.height(dimensionResource(id = dimen.margin_standard)))
-            widgetAnswer()
-        }
+        Spacer(Modifier.height(dimensionResource(id = dimen.margin_standard)))
+        widgetAnswer()
     }
 }
 
