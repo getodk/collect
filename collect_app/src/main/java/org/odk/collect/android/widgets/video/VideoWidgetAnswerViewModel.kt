@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.android.utilities.QuestionMediaManager
-import org.odk.collect.androidshared.utils.loadThumbnail
+import org.odk.collect.androidshared.utils.getVideoThumbnail
 import org.odk.collect.async.Scheduler
 
 class VideoWidgetAnswerViewModel(
@@ -23,7 +23,7 @@ class VideoWidgetAnswerViewModel(
         val file = questionMediaManager.getAnswerFile(answer)
         if (file != null) {
             scheduler.immediate {
-                val thumbnail = file.loadThumbnail(context)?.asImageBitmap()
+                val thumbnail = file.getVideoThumbnail(context)?.asImageBitmap()
                 bitmapState.value = thumbnail
             }
         }
