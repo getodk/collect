@@ -55,13 +55,14 @@ class ExVideoWidget(
                     readOnly,
                     buttonFontSize,
                     onLaunchClick = { launchExternalApp() },
-                    onLongClick = { this.showContextMenu() },
+                    onLongClick = { this.showContextMenu() }
+                ) {
                     widgetAnswer(
                         formEntryPrompt,
                         binaryName,
                         WidgetAnswerViewModelProvider(context as ComponentActivity, scheduler, questionMediaManager, mediaUtils)
                     )
-                )
+                }
             }
         }
     }

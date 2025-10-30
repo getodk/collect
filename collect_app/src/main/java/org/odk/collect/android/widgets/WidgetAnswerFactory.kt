@@ -16,28 +16,29 @@ fun widgetAnswer(
     prompt: FormEntryPrompt,
     answer: String?,
     viewModelProvider: ViewModelProvider
-): (@Composable () -> Unit)? = when (prompt.controlType) {
-    Constants.CONTROL_VIDEO_CAPTURE -> videoWidgetAnswer(answer, viewModelProvider)
-    else -> throw IllegalArgumentException("Unsupported control type: ${prompt.controlType}")
+) {
+    if (answer != null) {
+        when (prompt.controlType) {
+            Constants.CONTROL_VIDEO_CAPTURE -> videoWidgetAnswer(answer, viewModelProvider)
+            else -> throw IllegalArgumentException("Unsupported control type: ${prompt.controlType}")
+        }
+    }
 }
 
 @Composable
 private fun videoWidgetAnswer(
     answer: String?,
     viewModelProvider: ViewModelProvider
-): (@Composable () -> Unit)? {
+) {
     val context = LocalContext.current
     val viewModel = viewModelProvider[VideoWidgetAnswerViewModel::class]
 
     val bitmapFlow = remember(answer) {
         viewModel.getFrame(answer, context)
     }
+    val bitmap by bitmapFlow.collectAsStateWithLifecycle()
 
-    return {
-        val bitmap by bitmapFlow.collectAsStateWithLifecycle()
-
-        VideoWidgetAnswer(bitmap) {
-            viewModel.playVideo(context, answer)
-        }
+    VideoWidgetAnswer(bitmap) {
+        viewModel.playVideo(context, answer)
     }
 }
