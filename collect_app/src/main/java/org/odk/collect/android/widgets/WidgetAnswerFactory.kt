@@ -12,21 +12,21 @@ import org.odk.collect.android.widgets.video.VideoWidgetAnswer
 import org.odk.collect.android.widgets.video.VideoWidgetAnswerViewModel
 
 @Composable
-fun widgetAnswer(
+fun WidgetAnswer(
     prompt: FormEntryPrompt,
     answer: String?,
     viewModelProvider: ViewModelProvider
 ) {
     if (answer != null) {
         when (prompt.controlType) {
-            Constants.CONTROL_VIDEO_CAPTURE -> videoWidgetAnswer(answer, viewModelProvider)
+            Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(answer, viewModelProvider)
             else -> throw IllegalArgumentException("Unsupported control type: ${prompt.controlType}")
         }
     }
 }
 
 @Composable
-private fun videoWidgetAnswer(
+private fun VideoWidgetAnswer(
     answer: String?,
     viewModelProvider: ViewModelProvider
 ) {
