@@ -27,7 +27,7 @@ fun WidgetAnswer(
 
 @Composable
 private fun VideoWidgetAnswer(
-    answer: String?,
+    answer: String,
     viewModelProvider: ViewModelProvider
 ) {
     val context = LocalContext.current
