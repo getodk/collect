@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -13,13 +14,14 @@ import org.odk.collect.android.widgets.video.VideoWidgetAnswerViewModel
 
 @Composable
 fun WidgetAnswer(
+    modifier: Modifier = Modifier,
     prompt: FormEntryPrompt,
     answer: String?,
     viewModelProvider: ViewModelProvider
 ) {
     if (answer != null) {
         when (prompt.controlType) {
-            Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(answer, viewModelProvider)
+            Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(modifier, answer, viewModelProvider)
             else -> throw IllegalArgumentException("Unsupported control type: ${prompt.controlType}")
         }
     }
@@ -27,6 +29,7 @@ fun WidgetAnswer(
 
 @Composable
 private fun VideoWidgetAnswer(
+    modifier: Modifier,
     answer: String,
     viewModelProvider: ViewModelProvider
 ) {
@@ -38,7 +41,7 @@ private fun VideoWidgetAnswer(
     }
     val bitmap by bitmapFlow.collectAsStateWithLifecycle()
 
-    VideoWidgetAnswer(bitmap) {
+    VideoWidgetAnswer(modifier, bitmap) {
         viewModel.playVideo(context, answer)
     }
 }

@@ -25,11 +25,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun VideoWidgetAnswer(
+    modifier: Modifier,
     bitmap: ImageBitmap?,
     onPlayClick: () -> Unit
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .heightIn(max = 200.dp)
             .clip(MaterialTheme.shapes.large)

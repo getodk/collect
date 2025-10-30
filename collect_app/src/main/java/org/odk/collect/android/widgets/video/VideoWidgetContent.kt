@@ -1,8 +1,6 @@
 package org.odk.collect.android.widgets.video
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.VideoLibrary
@@ -53,7 +51,6 @@ fun VideoWidgetContent(
             )
         }
 
-        Spacer(Modifier.height(dimensionResource(id = dimen.margin_standard)))
         widgetAnswer()
     }
 }

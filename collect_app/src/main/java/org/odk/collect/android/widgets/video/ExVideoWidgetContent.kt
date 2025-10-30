@@ -1,19 +1,15 @@
 package org.odk.collect.android.widgets.video
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.odk.collect.android.widgets.WidgetIconButton
-import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.strings.R.string
 
 @Composable
@@ -36,7 +32,6 @@ fun ExVideoWidgetContent(
             )
         }
 
-        Spacer(Modifier.height(dimensionResource(id = dimen.margin_standard)))
         widgetAnswer()
     }
 }
