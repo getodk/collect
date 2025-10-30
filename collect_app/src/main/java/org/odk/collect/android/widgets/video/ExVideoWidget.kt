@@ -23,7 +23,7 @@ import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
 import org.odk.collect.android.widgets.utilities.FileRequester
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry
-import org.odk.collect.android.widgets.widgetAnswer
+import org.odk.collect.android.widgets.WidgetAnswer
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.strings.R
@@ -57,7 +57,7 @@ class ExVideoWidget(
                     onLaunchClick = { launchExternalApp() },
                     onLongClick = { this.showContextMenu() }
                 ) {
-                    widgetAnswer(
+                    WidgetAnswer(
                         formEntryPrompt,
                         binaryName,
                         WidgetAnswerViewModelProvider(context as ComponentActivity, scheduler, questionMediaManager, mediaUtils)
