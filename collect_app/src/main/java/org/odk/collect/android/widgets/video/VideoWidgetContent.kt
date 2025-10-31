@@ -8,7 +8,6 @@ import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,8 +32,7 @@ fun VideoWidgetContent(
                 stringResource(string.capture_video),
                 fontSize,
                 onRecordClick,
-                onLongClick,
-                Modifier.testTag("record_video_button")
+                onLongClick
             )
         }
 
@@ -46,7 +44,6 @@ fun VideoWidgetContent(
                 onChooseClick,
                 onLongClick,
                 Modifier
-                    .testTag("choose_video_button")
                     .padding(top = dimensionResource(id = dimen.margin_standard))
             )
         }
