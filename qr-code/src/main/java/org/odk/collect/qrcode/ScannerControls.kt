@@ -59,7 +59,7 @@ fun ScannerControls(
                         Icon(Icons.Filled.ScreenRotation, stringResource(R.string.rotate_device))
                     },
                     text = { Text(stringResource(R.string.rotate_device)) },
-                    expanded = fullScreenToggleExtended,
+                    expanded = fullScreenToggleExtended && !fullScreenViewFinder,
                     modifier = Modifier
                         .safeDrawingPadding()
                         .constrainAs(fullScreenToggle) {
