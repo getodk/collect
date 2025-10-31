@@ -54,7 +54,7 @@ class MainMenuFragment(
     override fun onAttach(context: Context) {
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(MinSdkDeprecationBanner::class) {
-                MinSdkDeprecationBanner(context.getState())
+                MinSdkDeprecationBanner(context.getState(), webPageService)
             }
             .build()
 
