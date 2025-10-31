@@ -22,8 +22,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -52,19 +53,21 @@ object VideoWidgetAnswer {
         bitmap: ImageBitmap?,
         onPlayClick: () -> Unit
     ) {
+        val description = stringResource(org.odk.collect.strings.R.string.play_video)
+
         Box(
             modifier = modifier
                 .fillMaxWidth()
                 .heightIn(max = 200.dp)
                 .clip(MaterialTheme.shapes.large)
                 .clickable { onPlayClick() }
-                .testTag("video_widget_answer"),
+                .semantics { contentDescription = description },
             contentAlignment = Alignment.Center
         ) {
             if (bitmap != null) {
                 Image(
                     bitmap = bitmap,
-                    contentDescription = stringResource(org.odk.collect.strings.R.string.play_video),
+                    contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )

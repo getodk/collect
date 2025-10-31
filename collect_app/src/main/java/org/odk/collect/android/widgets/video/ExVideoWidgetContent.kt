@@ -5,8 +5,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.odk.collect.android.widgets.WidgetIconButton
@@ -27,8 +25,7 @@ fun ExVideoWidgetContent(
                 stringResource(string.launch_app),
                 fontSize,
                 onLaunchClick,
-                onLongClick,
-                Modifier.testTag("record_video_button")
+                onLongClick
             )
         }
 

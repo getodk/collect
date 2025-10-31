@@ -3,7 +3,7 @@ package org.odk.collect.android.widgets
 import android.content.Intent
 import android.provider.MediaStore
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import net.bytebuddy.utility.RandomString
 import org.hamcrest.CoreMatchers.equalTo
@@ -29,6 +29,7 @@ import org.odk.collect.android.widgets.video.VideoWidget
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.shared.TempFiles.createTempDir
 import org.odk.collect.shared.TempFiles.createTempFile
+import org.odk.collect.strings.R.string
 import org.robolectric.Shadows
 
 class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
@@ -72,17 +73,17 @@ class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
         createWidget()
         stubAllRuntimePermissionsGranted(true)
 
-        composeRule.onNodeWithTag("record_video_button").performClick()
+        composeRule.onNodeWithContentDescription(activity.getString(string.capture_video)).performClick()
         var intent = Shadows.shadowOf(activity).nextStartedActivity
         assertActionEquals(MediaStore.ACTION_VIDEO_CAPTURE, intent)
 
-        composeRule.onNodeWithTag("choose_video_button").performClick()
+        composeRule.onNodeWithContentDescription(activity.getString(string.choose_video)).performClick()
         intent = Shadows.shadowOf(activity).nextStartedActivity
         assertActionEquals(Intent.ACTION_GET_CONTENT, intent)
         assertTypeEquals("video/*", intent)
 
         getWidget()!!.setData(createTempFile(createTempDir()))
-        composeRule.onNodeWithTag("video_widget_answer").performClick()
+        composeRule.onNodeWithContentDescription(activity.getString(string.play_video)).performClick()
         verify(mediaUtils).openFile(any(), any(), any<String>())
     }
 
@@ -91,7 +92,7 @@ class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
         createWidget()
         stubAllRuntimePermissionsGranted(false)
 
-        composeRule.onNodeWithTag("record_video_button").performClick()
+        composeRule.onNodeWithContentDescription(activity.getString(string.capture_video)).performClick()
         assertThat(Shadows.shadowOf(activity).nextStartedActivity, equalTo(null))
     }
 
@@ -100,9 +101,9 @@ class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
         whenever(formEntryPrompt.isReadOnly).thenReturn(true)
         createWidget()
 
-        composeRule.onNodeWithTag("record_video_button").assertDoesNotExist()
-        composeRule.onNodeWithTag("chose_video_button").assertDoesNotExist()
-        composeRule.onNodeWithTag("video_widget_answer").assertDoesNotExist()
+        composeRule.onNodeWithContentDescription(activity.getString(string.capture_video)).assertDoesNotExist()
+        composeRule.onNodeWithContentDescription(activity.getString(string.choose_video)).assertDoesNotExist()
+        composeRule.onNodeWithContentDescription(activity.getString(string.play_video)).assertDoesNotExist()
     }
 
     @Test
@@ -111,8 +112,8 @@ class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
         whenever(formEntryPrompt.isReadOnly).thenReturn(false)
         createWidget()
 
-        composeRule.onNodeWithTag("record_video_button").assertDoesNotExist()
-        composeRule.onNodeWithTag("chose_video_button").assertDoesNotExist()
-        composeRule.onNodeWithTag("video_widget_answer").assertDoesNotExist()
+        composeRule.onNodeWithContentDescription(activity.getString(string.capture_video)).assertDoesNotExist()
+        composeRule.onNodeWithContentDescription(activity.getString(string.choose_video)).assertDoesNotExist()
+        composeRule.onNodeWithContentDescription(activity.getString(string.play_video)).assertDoesNotExist()
     }
 }
