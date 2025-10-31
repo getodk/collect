@@ -1,7 +1,5 @@
 package org.odk.collect.android.benchmark
 
-import android.app.Application
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.blankOrNullString
@@ -44,7 +42,6 @@ class EntitiesBenchmarkTest {
             ENTITIES_FILTER_PROJECT_URL,
             not(blankOrNullString())
         )
-        clearAndroidCache()
 
         val benchmarker = Benchmarker()
 
@@ -101,6 +98,10 @@ class EntitiesBenchmarkTest {
      * [THOUSAND_MEDIA_FILE_ENTITY_LIST_PROJECT_URL] should be set to a project that contains the
      * "1000-media-files-entity-list" form.
      *
+     * This scenario could also arise when updating a form that has a single new/updated non-entity
+     * media file, but in practice this will probably be most common with entity forms as the list
+     * will always force a media file update.
+     *
      * Devices that currently pass:
      * - Fairphone 3
      */
@@ -127,7 +128,7 @@ class EntitiesBenchmarkTest {
             .clickGetBlankForm()
             .benchmark(
                 "Redownloading a form with 1k media files and entity list when there are no updates",
-                15,
+                5,
                 benchmarker
             ) {
                 it
@@ -137,10 +138,4 @@ class EntitiesBenchmarkTest {
 
         benchmarker.assertResults()
     }
-}
-
-private fun clearAndroidCache() {
-    val application = ApplicationProvider.getApplicationContext<Application>()
-    application.cacheDir.deleteRecursively()
-    application.cacheDir.mkdir()
 }
