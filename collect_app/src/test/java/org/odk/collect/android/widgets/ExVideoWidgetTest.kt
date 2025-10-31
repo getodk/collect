@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets
 
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -27,6 +26,7 @@ import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry
 import org.odk.collect.android.widgets.utilities.FileRequester
 import org.odk.collect.android.widgets.video.ExVideoWidget
 import org.odk.collect.androidshared.system.IntentLauncher
+import org.odk.collect.androidtest.onNodeWithClickLabel
 import org.odk.collect.strings.R.string
 import org.robolectric.shadows.ShadowToast
 import java.io.File
@@ -75,20 +75,20 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
     @Test
     fun whenWidgetCreated_shouldTheLaunchButtonBeVisible() {
         createWidget()
-        composeRule.onNodeWithContentDescription(activity.getString(string.launch_app)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertExists()
     }
 
     @Test
     fun whenWidgetCreated_shouldTheButtonHaveProperName() {
         createWidget()
-        composeRule.onNodeWithContentDescription(activity.getString(string.launch_app)).assertTextEquals("Launch")
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertTextEquals("Launch")
     }
 
     @Test
     fun whenThereIsNoAnswer_shouldOnlyLaunchButtonBeVisible() {
         createWidget()
-        composeRule.onNodeWithContentDescription(activity.getString(string.launch_app)).assertExists()
-        composeRule.onNodeWithContentDescription(activity.getString(string.play_video)).assertDoesNotExist()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).assertDoesNotExist()
     }
 
     @Test
@@ -96,8 +96,8 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
         whenever(formEntryPrompt.getAnswerText()).thenReturn(initialAnswer.displayText)
         createWidget()
 
-        composeRule.onNodeWithContentDescription(activity.getString(string.launch_app)).assertExists()
-        composeRule.onNodeWithContentDescription(activity.getString(string.play_video)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).assertExists()
     }
 
     @Test
@@ -105,14 +105,14 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
         whenever(formEntryPrompt.getAnswerText()).thenReturn(initialAnswer.displayText)
 
         widget.clearAnswer()
-        composeRule.onNodeWithContentDescription(activity.getString(string.launch_app)).assertExists()
-        composeRule.onNodeWithContentDescription(activity.getString(string.play_video)).assertDoesNotExist()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).assertDoesNotExist()
     }
 
     @Test
     fun whenCaptureVideoButtonClicked_exWidgetIntentLauncherShouldBeStarted() {
         createWidget()
-        composeRule.onNodeWithContentDescription(activity.getString(string.launch_app)).performClick()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).performClick()
         verify(fileRequester).launch(activity, ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, formEntryPrompt)
     }
 
@@ -120,7 +120,7 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
     fun whenClickingOnPlayButton_shouldFileViewerByCalled() {
         whenever(formEntryPrompt.getAnswerText()).thenReturn(initialAnswer.displayText)
         createWidget()
-        composeRule.onNodeWithContentDescription(activity.getString(string.play_video)).performClick()
+        composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).performClick()
 
         verify(mediaUtils).openFile(any(), any(), any<String>())
     }
@@ -160,7 +160,7 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
         whenever(formEntryPrompt.isReadOnly).thenReturn(true)
         createWidget()
 
-        composeRule.onNodeWithContentDescription(activity.getString(string.launch_app)).assertDoesNotExist()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertDoesNotExist()
     }
 
     @Test
@@ -169,6 +169,6 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
         whenever(formEntryPrompt.isReadOnly).thenReturn(false)
         createWidget()
 
-        composeRule.onNodeWithContentDescription(activity.getString(string.launch_app)).assertDoesNotExist()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertDoesNotExist()
     }
 }
