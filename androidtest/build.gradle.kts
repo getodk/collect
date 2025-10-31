@@ -41,4 +41,7 @@ dependencies {
     implementation(libs.androidxTestEspressoIntents)
     implementation(libs.timber)
     implementation(libs.kotlinxCoroutinesTest)
+    var composeBom = platform(libs.androidxComposeBom)
+    implementation(composeBom)
+    implementation(libs.androidXComposeUiTestJunit4)
 }

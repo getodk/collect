@@ -25,7 +25,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.core.content.FileProvider
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -62,6 +61,7 @@ import org.odk.collect.android.widgets.DecimalWidget
 import org.odk.collect.android.widgets.IntegerWidget
 import org.odk.collect.android.widgets.StringWidget
 import org.odk.collect.androidtest.RecordedIntentsRule
+import org.odk.collect.androidtest.onNodeWithClickLabel
 import org.odk.collect.strings.R
 import java.io.File
 import java.io.IOException
@@ -294,7 +294,7 @@ class IntentGroupTest {
 
     private fun assertVideoWidgetWithoutAnswer() {
         composeRule
-            .onNodeWithContentDescription(ApplicationProvider.getApplicationContext<Application>().getString(R.string.play_video))
+            .onNodeWithClickLabel(ApplicationProvider.getApplicationContext<Application>().getString(R.string.play_video))
             .assertDoesNotExist()
     }
 
@@ -324,7 +324,7 @@ class IntentGroupTest {
 
     private fun assertVideoWidgetWithAnswer() {
         composeRule
-            .onNodeWithContentDescription(ApplicationProvider.getApplicationContext<Application>().getString(R.string.play_video))
+            .onNodeWithClickLabel(ApplicationProvider.getApplicationContext<Application>().getString(R.string.play_video))
             .assertExists()
     }
 

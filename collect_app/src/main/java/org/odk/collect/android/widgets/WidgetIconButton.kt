@@ -19,8 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.odk.collect.androidshared.R.dimen
@@ -60,9 +58,9 @@ fun WidgetIconButton(
                         onClick()
                     }
                 },
-                onLongClick = onLongClick
+                onLongClick = onLongClick,
+                onClickLabel = text
             )
-            .semantics { contentDescription = text }
             .padding(vertical = dimensionResource(id = dimen.margin_small)),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
