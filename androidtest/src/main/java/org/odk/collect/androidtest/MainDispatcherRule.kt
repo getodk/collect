@@ -9,6 +9,10 @@ import kotlinx.coroutines.test.setMain
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
+/**
+ * Test rule that replaces `Dispatchers.Main` with a `TestDispatcher`
+ * so coroutine-based code using the Main dispatcher can run in JVM tests.
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainDispatcherRule(
     private val dispatcher: TestDispatcher = StandardTestDispatcher()
