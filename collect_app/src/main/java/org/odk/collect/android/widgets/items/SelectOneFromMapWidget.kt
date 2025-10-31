@@ -82,7 +82,7 @@ class SelectOneFromMapWidget(
 
     override fun setOnLongClickListener(l: OnLongClickListener?) {}
 
-    override fun setData(answer: Any?) {
+    override fun setData(answer: Any) {
         updateAnswer(answer as SelectOneData)
         widgetValueChanged()
         if (autoAdvance) {

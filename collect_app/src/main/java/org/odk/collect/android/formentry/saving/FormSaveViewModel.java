@@ -407,8 +407,8 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
 
     @Override
     @Nullable
-    public File getAnswerFile(String fileName) {
-        if (formController != null && formController.getInstanceFile() != null) {
+    public File getAnswerFile(@Nullable String fileName) {
+        if (fileName != null && formController != null && formController.getInstanceFile() != null) {
             return new File(formController.getInstanceFile().getParent(), fileName);
         } else {
             return null;

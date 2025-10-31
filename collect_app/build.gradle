@@ -331,6 +331,7 @@ dependencies {
     // Android Architecture Components:
     implementation libs.androidxLifecycleRuntimeKtx
     implementation libs.androidxLifecycleLivedataKtx
+    implementation libs.androidxLifecycleViewmodelCompose
     implementation libs.androidxViewpager2
 
     // Dagger:
@@ -357,6 +358,8 @@ dependencies {
     implementation(composeBom)
     implementation(libs.androidXComposeMaterial)
     implementation(libs.androidXConstraintLayoutCompose)
+    implementation(libs.androidXComposeMaterialIcons)
+    implementation(libs.androidXComposePreview)
 
     testImplementation project(':forms-test')
 
@@ -372,8 +375,8 @@ dependencies {
     testImplementation(project(":shadows"))
     testImplementation(project(":test-forms"))
 
+    testImplementation libs.androidXComposeUiTestJunit4
     testImplementation libs.robolectric
-
     testImplementation libs.androidxTestExtJunit
     testImplementation libs.androidxArchCoreTesting
 
@@ -386,6 +389,8 @@ dependencies {
     androidTestImplementation project(':androidtest')
     androidTestImplementation project(':test-forms')
 
+    androidTestImplementation(composeBom)
+    androidTestImplementation libs.androidXComposeUiTestJunit4
     androidTestImplementation libs.caverockAndroidsvg
     androidTestImplementation libs.mockitoAndroid
     androidTestImplementation libs.androidxTestExtJunit
@@ -407,6 +412,7 @@ dependencies {
 
     // Real LeakCanary for debug and selfSigned builds only: notifications, analysis, etc
     debugImplementation libs.leakcanary
+    debugImplementation(libs.androidXComposeTooling)
     selfSignedReleaseImplementation libs.leakcanary
 }
 

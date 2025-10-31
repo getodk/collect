@@ -109,16 +109,6 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget?>() {
     }
 
     @Test
-    fun `Remove the answer when set data called with unsupported type`() {
-        whenever(formEntryPrompt.answerText).thenReturn(initialAnswer.displayText)
-
-        val widget = widget!!
-        widget.setData(null)
-        assertThat(widget.answer, equalTo(null))
-        assertThat(widget.binding.answerViewContainer.visibility, equalTo(View.GONE))
-    }
-
-    @Test
     fun `All clickable elements should be disabled when read-only override option is used`() {
         readOnlyOverride = true
         whenever(formEntryPrompt.isReadOnly).thenReturn(false)

@@ -55,6 +55,8 @@ import org.odk.collect.android.widgets.range.RangeIntegerWidget;
 import org.odk.collect.android.widgets.range.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.range.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
+import org.odk.collect.android.widgets.video.ExVideoWidget;
+import org.odk.collect.android.widgets.video.VideoWidget;
 import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.AudioRecorderRecordingStatusHandler;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
@@ -249,9 +251,9 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExVideoWidget(activity, questionDetails, questionMediaManager, waitingForDataRegistry, fileRequester, dependencies);
+                    questionWidget = new ExVideoWidget(activity, questionDetails, dependencies, questionMediaManager, waitingForDataRegistry, fileRequester);
                 } else {
-                    questionWidget = new VideoWidget(activity, questionDetails, questionMediaManager, waitingForDataRegistry, dependencies);
+                    questionWidget = new VideoWidget(activity, questionDetails, dependencies, questionMediaManager, waitingForDataRegistry);
                 }
                 break;
             case Constants.CONTROL_SELECT_ONE:
