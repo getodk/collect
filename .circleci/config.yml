@@ -14,13 +14,13 @@ references:
     working_directory: ~/work
     docker:
       - image: cimg/android:2025.09
-    resource_class: medium+
+    resource_class: large
 
   android_config_large: &android_config_large
     working_directory: ~/work
     docker:
       - image: cimg/android:2025.09
-    resource_class: large
+    resource_class: x-large
 
 jobs:
   compile:
@@ -39,7 +39,7 @@ jobs:
             - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle-compile.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Download Robolectric deps
@@ -63,7 +63,7 @@ jobs:
             - .
 
   create_dependency_backup:
-    <<: *android_config
+    <<: *android_config_small
     steps:
       - attach_workspace:
           at: ~/work
@@ -85,7 +85,7 @@ jobs:
           path: maven.tar
 
   check_quality:
-    <<: *android_config_large
+    <<: *android_config
     steps:
       - attach_workspace:
           at: ~/work
@@ -99,7 +99,7 @@ jobs:
 
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle-large.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Run code quality checks
