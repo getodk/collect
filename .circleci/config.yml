@@ -20,7 +20,7 @@ references:
     working_directory: ~/work
     docker:
       - image: cimg/android:2025.09
-    resource_class: x-large
+    resource_class: xlarge
 
 jobs:
   compile:
