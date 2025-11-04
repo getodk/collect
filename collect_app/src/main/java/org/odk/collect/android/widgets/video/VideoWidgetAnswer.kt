@@ -2,7 +2,7 @@ package org.odk.collect.android.widgets.video
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,13 +26,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 object VideoWidgetAnswer {
     @Composable
     fun Container(
         modifier: Modifier,
         answer: String,
-        viewModelProvider: ViewModelProvider
+        viewModelProvider: ViewModelProvider,
+        onLongClick: () -> Unit
     ) {
         val context = LocalContext.current
         val viewModel = viewModelProvider[VideoWidgetAnswerViewModel::class]
@@ -40,24 +42,33 @@ object VideoWidgetAnswer {
         val bitmapFlow = remember(answer) { viewModel.getFrame(answer, context) }
         val bitmap by bitmapFlow.collectAsStateWithLifecycle()
 
-        Content(modifier, bitmap) {
-            viewModel.playVideo(context, answer)
-        }
+        Content(
+            modifier,
+            bitmap,
+            onPlayClick = { viewModel.playVideo(context, answer) },
+            onLongClick = onLongClick
+        )
     }
 
     @Composable
     fun Content(
         modifier: Modifier,
         bitmap: ImageBitmap?,
-        onPlayClick: () -> Unit
+        onPlayClick: () -> Unit,
+        onLongClick: () -> Unit
     ) {
         Box(
             modifier = modifier
                 .fillMaxWidth()
                 .heightIn(max = 200.dp)
                 .clip(MaterialTheme.shapes.large)
-                .clickable(
-                    onClick = onPlayClick,
+                .combinedClickable(
+                    onClick = {
+                        if (MultiClickGuard.allowClick()) {
+                            onPlayClick()
+                        }
+                    },
+                    onLongClick = onLongClick,
                     onClickLabel = stringResource(org.odk.collect.strings.R.string.play_video)
                 ),
             contentAlignment = Alignment.Center

@@ -68,13 +68,14 @@ class ExVideoWidget(
                     readOnly,
                     buttonFontSize,
                     onLaunchClick = { launchExternalApp() },
-                    onLongClick = { this.showContextMenu() }
+                    onLongClick = { showContextMenu() }
                 ) {
                     WidgetAnswer(
                         Modifier.padding(top = dimensionResource(id = dimen.margin_standard)),
                         formEntryPrompt,
                         binaryName,
-                        viewModelProvider
+                        viewModelProvider,
+                        onLongClick = { showContextMenu() }
                     )
                 }
             }

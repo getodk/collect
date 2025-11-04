@@ -12,11 +12,12 @@ fun WidgetAnswer(
     modifier: Modifier = Modifier,
     prompt: FormEntryPrompt,
     answer: String?,
-    viewModelProvider: ViewModelProvider
+    viewModelProvider: ViewModelProvider,
+    onLongClick: () -> Unit = {}
 ) {
     if (answer != null) {
         when (prompt.controlType) {
-            Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer.Container(modifier, answer, viewModelProvider)
+            Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer.Container(modifier, answer, viewModelProvider, onLongClick)
             else -> throw IllegalArgumentException("Unsupported control type: ${prompt.controlType}")
         }
     }
