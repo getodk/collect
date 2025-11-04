@@ -27,20 +27,13 @@ jobs:
     <<: *android_config
     steps:
       - checkout
-      - run:
-          name: Generate combined build.gradle file for cache key
-          command: cat build.gradle */build.gradle */build.gradle.kts .circleci/config.yml gradle/libs.versions.toml > deps.txt
       - restore_cache:
           keys:
-            - compile-deps-{{ checksum "deps.txt" }}
-            - compile-deps-
-      - restore_cache:
-          keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.version.toml" }}
+            - compile-
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
-
       - run:
           name: Download Robolectric deps
           command: ./download-robolectric-deps.sh
@@ -51,12 +44,8 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/wrapper
-          key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - save_cache:
-          paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: compile-deps-{{ checksum "deps.txt" }}
+            - ~/.gradle/caches
+          key: compile-{{ checksum "gradle/libs.version.toml" }}
       - persist_to_workspace:
           root: ~/work
           paths:
@@ -69,11 +58,8 @@ jobs:
           at: ~/work
       - restore_cache:
           keys:
-            - compile-deps-{{ checksum "deps.txt" }}
-            - compile-deps-
-      - restore_cache:
-          keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.version.toml" }}
+            - compile-
 
       - run:
           name: Create Maven repo from dependencies
@@ -91,11 +77,8 @@ jobs:
           at: ~/work
       - restore_cache:
           keys:
-            - compile-deps-{{ checksum "deps.txt" }}
-            - compile-deps-
-      - restore_cache:
-          keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.version.toml" }}
+            - compile-
 
       - run:
           name: Copy gradle config
@@ -117,12 +100,10 @@ jobs:
           at: ~/work
       - restore_cache:
           keys:
-            - test-modules-deps-{{ checksum "deps.txt" }}
-            - test-modules-deps-
-            - compile-deps-
-      - restore_cache:
-          keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - test_modules-{{ checksum "gradle/libs.version.toml" }}
+            - test_modules
+            - compile-{{ checksum "gradle/libs.version.toml" }}
+            - compile-
 
       - run:
           name: Copy gradle config
@@ -145,8 +126,8 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: test-modules-deps-{{ checksum "deps.txt" }}
+            - ~/.gradle/caches
+          key: test_modules-{{ checksum "gradle/libs.version.toml" }}
 
   test_app:
     <<: *android_config
@@ -156,12 +137,10 @@ jobs:
           at: ~/work
       - restore_cache:
           keys:
-            - test-app-deps-{{ checksum "deps.txt" }}
-            - test-app-deps-
-            - compile-deps-
-      - restore_cache:
-          keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - test_app-{{ checksum "gradle/libs.version.toml" }}
+            - test_app-
+            - compile-{{ checksum "gradle/libs.version.toml" }}
+            - compile-
 
       - run:
           name: Copy gradle config
@@ -194,8 +173,8 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: test-app-deps-{{ checksum "deps.txt" }}
+            - ~/.gradle/caches
+          key: test_app-{{ checksum "gradle/libs.version.toml" }}
 
   build_instrumented:
     <<: *android_config_large
@@ -204,12 +183,10 @@ jobs:
           at: ~/work
       - restore_cache:
           keys:
-            - intrumented-deps-{{ checksum "deps.txt" }}
-            - intrumented-deps-
-            - compile-deps-
-      - restore_cache:
-          keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - build_instrumented-{{ checksum "gradle/libs.version.toml" }}
+            - build_instrumented-
+            - compile-{{ checksum "gradle/libs.version.toml" }}
+            - compile-
 
       - run:
           name: Copy gradle config
@@ -221,8 +198,8 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: intrumented-deps-{{ checksum "deps.txt" }}
+            - ~/.gradle/caches
+          key: build_instrumented-{{ checksum "gradle/libs.version.toml" }}
 
       - persist_to_workspace:
           root: ~/work
@@ -236,11 +213,8 @@ jobs:
           at: ~/work
       - restore_cache:
           keys:
-            - compile-deps-{{ checksum "deps.txt" }}
-            - compile-deps
-      - restore_cache:
-          keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.version.toml" }}
+            - compile-
 
       - run:
           name: Copy gradle config
