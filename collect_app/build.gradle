@@ -45,23 +45,16 @@ def getMasterCommitCount = { ->
 }
 
 def getVersionName = { ->
-    try {
-        def stdout = new ByteArrayOutputStream()
-        exec {
-            switch (ant.properties.os) {
-                case 'windows':
-                    commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty', '--always'
-                    break
-                case 'unix':
-                    commandLine 'git', 'describe', '--tags', '--dirty', '--always'
-                    break
-            }
-            standardOutput = stdout
+    return providers.exec {
+        switch (ant.properties.os) {
+            case 'windows':
+                commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty', '--always'
+                break
+            case 'unix':
+                commandLine 'git', 'describe', '--tags', '--dirty', '--always'
+                break
         }
-        return stdout.toString().trim()
-    } catch (ignored) {
-        return null
-    }
+    }.getStandardOutput().getAsText().get().trim()
 }
 
 def secrets = getSecrets()
