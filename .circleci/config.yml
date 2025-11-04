@@ -49,7 +49,7 @@ jobs:
       - save_cache:
           paths:
             - ~/work
-          key: workflow-{{ echo $CIRCLE_WORKFLOW_ID }}
+          key: workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
 
       - persist_to_workspace:
           root: ~/work
@@ -62,7 +62,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - workflow-{{ echo $CIRCLE_WORKFLOW_ID }}
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
             - compile-{{ checksum "gradle/libs.versions.toml" }}
@@ -83,7 +83,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - workflow-{{ echo $CIRCLE_WORKFLOW_ID }}
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
             - compile-{{ checksum "gradle/libs.versions.toml" }}
@@ -108,7 +108,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - workflow-{{ echo $CIRCLE_WORKFLOW_ID }}
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
             - test_modules-{{ checksum "gradle/libs.versions.toml" }}
@@ -147,7 +147,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - workflow-{{ echo $CIRCLE_WORKFLOW_ID }}
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
             - test_app-{{ checksum "gradle/libs.versions.toml" }}
@@ -195,7 +195,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - workflow-{{ echo $CIRCLE_WORKFLOW_ID }}
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
             - build_instrumented-{{ checksum "gradle/libs.versions.toml" }}
@@ -227,7 +227,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - workflow-{{ echo $CIRCLE_WORKFLOW_ID }}
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
             - compile-{{ checksum "gradle/libs.versions.toml" }}
@@ -271,7 +271,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - workflow-{{ echo $CIRCLE_WORKFLOW_ID }}
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - attach_workspace:
           at: ~/work
 
@@ -304,7 +304,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - workflow-{{ echo $CIRCLE_WORKFLOW_ID }}
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - attach_workspace:
           at: ~/work
 
