@@ -339,7 +339,24 @@ workflows:
   version: 2
   commit:
     jobs:
-      - compile
+      - hold_pr:
+          type: approval
+          filters:
+            branches:
+              ignore:
+                - master
+      - compile:
+          filters:
+            branches:
+              only:
+                - master
+      - compile:
+          requires:
+            - hold_pr
+          filters:
+            branches:
+              ignore:
+                - master
       - check_quality:
           requires:
             - compile
