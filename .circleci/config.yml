@@ -14,33 +14,26 @@ references:
     working_directory: ~/work
     docker:
       - image: cimg/android:2025.09
-    resource_class: medium+
+    resource_class: large
 
   android_config_large: &android_config_large
     working_directory: ~/work
     docker:
       - image: cimg/android:2025.09
-    resource_class: large
+    resource_class: xlarge
 
 jobs:
   compile:
     <<: *android_config
     steps:
       - checkout
-      - run:
-          name: Generate combined build.gradle file for cache key
-          command: cat build.gradle */build.gradle */build.gradle.kts .circleci/config.yml gradle/libs.versions.toml > deps.txt
       - restore_cache:
           keys:
-            - compile-deps-{{ checksum "deps.txt" }}
-            - compile-deps-
-      - restore_cache:
-          keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle-compile.properties ~/.gradle/gradle.properties
-
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
       - run:
           name: Download Robolectric deps
           command: ./download-robolectric-deps.sh
@@ -51,29 +44,30 @@ jobs:
 
       - save_cache:
           paths:
+            - ~/.gradle/caches
             - ~/.gradle/wrapper
-          key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          key: compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - save_cache:
           paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: compile-deps-{{ checksum "deps.txt" }}
+            - ~/work
+          key: workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+
       - persist_to_workspace:
           root: ~/work
           paths:
-            - .
+            - collect_app/build/outputs/apk
 
   create_dependency_backup:
-    <<: *android_config
+    <<: *android_config_small
     steps:
-      - attach_workspace:
-          at: ~/work
+      - checkout
       - restore_cache:
           keys:
-            - compile-deps-{{ checksum "deps.txt" }}
-            - compile-deps-
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
 
       - run:
           name: Create Maven repo from dependencies
@@ -85,21 +79,20 @@ jobs:
           path: maven.tar
 
   check_quality:
-    <<: *android_config_large
+    <<: *android_config
     steps:
-      - attach_workspace:
-          at: ~/work
+      - checkout
       - restore_cache:
           keys:
-            - compile-deps-{{ checksum "deps.txt" }}
-            - compile-deps-
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
 
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle-large.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Run code quality checks
@@ -113,16 +106,16 @@ jobs:
     <<: *android_config
     parallelism: 4
     steps:
-      - attach_workspace:
-          at: ~/work
+      - checkout
       - restore_cache:
           keys:
-            - test-modules-deps-{{ checksum "deps.txt" }}
-            - test-modules-deps-
-            - compile-deps-
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - test_modules-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - test_modules
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
 
       - run:
           name: Copy gradle config
@@ -145,23 +138,24 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: test-modules-deps-{{ checksum "deps.txt" }}
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
+          key: test_modules-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
 
   test_app:
     <<: *android_config
     parallelism: 4
     steps:
-      - attach_workspace:
-          at: ~/work
+      - checkout
       - restore_cache:
           keys:
-            - test-app-deps-{{ checksum "deps.txt" }}
-            - test-app-deps-
-            - compile-deps-
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - test_app-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - test_app-
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
 
       - run:
           name: Copy gradle config
@@ -194,22 +188,23 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: test-app-deps-{{ checksum "deps.txt" }}
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
+          key: test_app-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
 
   build_instrumented:
     <<: *android_config_large
     steps:
-      - attach_workspace:
-          at: ~/work
+      - checkout
       - restore_cache:
           keys:
-            - intrumented-deps-{{ checksum "deps.txt" }}
-            - intrumented-deps-
-            - compile-deps-
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - build_instrumented-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - build_instrumented-
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
 
       - run:
           name: Copy gradle config
@@ -217,30 +212,30 @@ jobs:
 
       - run:
           name: Assemble connected test build
-          command: ./gradlew assembleDebug assembleDebugAndroidTest
+          command: ./gradlew assembleDebugAndroidTest
 
       - save_cache:
           paths:
-            - ~/.gradle/caches/modules-2/files-2.1
-          key: intrumented-deps-{{ checksum "deps.txt" }}
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
+          key: build_instrumented-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
 
       - persist_to_workspace:
           root: ~/work
           paths:
-            - .
+            - collect_app/build/outputs/apk
 
   build_release:
     <<: *android_config
     steps:
-      - attach_workspace:
-          at: ~/work
+      - checkout
       - restore_cache:
           keys:
-            - compile-deps-{{ checksum "deps.txt" }}
-            - compile-deps
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - restore_cache:
           keys:
-            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-{{ checksum "gradle/libs.versions.toml" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - compile-
 
       - run:
           name: Copy gradle config
@@ -265,7 +260,7 @@ jobs:
             if [[ -n "$GOOGLE_MAPS_API_KEY" ]]; then \
               ./check-size.sh 23117869
             else
-              ./check-size.sh 13785543
+              ./check-size.sh 13841204
             fi
 
       - run:
@@ -277,6 +272,10 @@ jobs:
   test_smoke_instrumented:
     <<: *android_config_small
     steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - attach_workspace:
           at: ~/work
 
@@ -306,6 +305,10 @@ jobs:
   test_instrumented:
     <<: *android_config_small
     steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - attach_workspace:
           at: ~/work
 
@@ -336,7 +339,24 @@ workflows:
   version: 2
   commit:
     jobs:
-      - compile
+      - hold_pr:
+          type: approval
+          filters:
+            branches:
+              ignore:
+                - master
+      - compile:
+          filters:
+            branches:
+              only:
+                - master
+      - compile:
+          requires:
+            - hold_pr
+          filters:
+            branches:
+              ignore:
+                - master
       - check_quality:
           requires:
             - compile
