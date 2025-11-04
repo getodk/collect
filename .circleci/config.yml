@@ -337,7 +337,7 @@ jobs:
 
 workflows:
   version: 2
-  commit:
+  pr:
     jobs:
       - hold_pr:
           type: approval
@@ -346,16 +346,30 @@ workflows:
               ignore:
                 - master
       - compile:
+          requires:
+            - hold_pr
+      - check_quality:
+          requires:
+            - compile
+      - test_modules:
+          requires:
+            - compile
+      - test_app:
+          requires:
+            - compile
+      - build_release:
+          requires:
+            - compile
+      - build_instrumented:
+          requires:
+            - compile
+
+  master:
+    jobs:
+      - compile:
           filters:
             branches:
               only:
-                - master
-      - compile:
-          requires:
-            - hold_pr
-          filters:
-            branches:
-              ignore:
                 - master
       - check_quality:
           requires:
@@ -375,10 +389,6 @@ workflows:
       - test_smoke_instrumented:
           requires:
             - build_instrumented
-          filters:
-            branches:
-              only:
-                - master
 
   nightly:
     triggers:
