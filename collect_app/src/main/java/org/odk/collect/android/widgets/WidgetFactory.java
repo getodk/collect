@@ -62,7 +62,6 @@ import org.odk.collect.android.widgets.utilities.AudioRecorderRecordingStatusHan
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.StringRequester;
@@ -71,7 +70,6 @@ import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionsProvider;
-import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.webpage.CustomTabsWebPageService;
 
 /**
@@ -96,7 +94,6 @@ public class WidgetFactory {
     private final FileRequester fileRequester;
     private final StringRequester stringRequester;
     private final FormController formController;
-    private final SettingsProvider settingsProvider;
 
     public WidgetFactory(Activity activity,
                          boolean useExternalRecorder,
@@ -110,8 +107,7 @@ public class WidgetFactory {
                          LifecycleOwner viewLifecycle,
                          FileRequester fileRequester,
                          StringRequester stringRequester,
-                         FormController formController,
-                         SettingsProvider settingsProvider
+                         FormController formController
     ) {
         this.activity = activity;
         this.useExternalRecorder = useExternalRecorder;
@@ -126,7 +122,6 @@ public class WidgetFactory {
         this.fileRequester = fileRequester;
         this.stringRequester = stringRequester;
         this.formController = formController;
-        this.settingsProvider = settingsProvider;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -137,7 +132,6 @@ public class WidgetFactory {
         String appearance = Appearances.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, readOnlyOverride);
         QuestionWidget.Dependencies dependencies = new QuestionWidget.Dependencies(audioPlayer);
-        Integer answerFontSize = QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.HEADLINE_6);
 
         final QuestionWidget questionWidget;
         switch (prompt.getControlType()) {
@@ -214,7 +208,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_FILE_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExArbitraryFileWidget(activity, questionDetails, new ArbitraryFileWidgetAnswerView(activity, answerFontSize), questionMediaManager, waitingForDataRegistry, fileRequester, dependencies);
+                    questionWidget = new ExArbitraryFileWidget(activity, questionDetails, dependencies, questionMediaManager, waitingForDataRegistry, fileRequester);
                 } else {
                     questionWidget = new ArbitraryFileWidget(activity, questionDetails, dependencies, questionMediaManager, waitingForDataRegistry);
                 }
