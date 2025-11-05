@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.arbitraryfile
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -20,8 +20,11 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.QuestionMediaManager
+import org.odk.collect.android.widgets.QuestionWidget
+import org.odk.collect.android.widgets.WidgetAnswer
 import org.odk.collect.android.widgets.interfaces.FileWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
+import org.odk.collect.android.widgets.utilities.FileRequester
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry
 import org.odk.collect.androidshared.R.dimen
@@ -30,12 +33,13 @@ import timber.log.Timber
 import java.io.File
 
 @SuppressLint("ViewConstructor")
-class ArbitraryFileWidget(
+class ExArbitraryFileWidget(
     context: Context,
     questionDetails: QuestionDetails,
     dependencies: Dependencies,
     private val questionMediaManager: QuestionMediaManager,
-    private val waitingForDataRegistry: WaitingForDataRegistry
+    private val waitingForDataRegistry: WaitingForDataRegistry,
+    private val fileRequester: FileRequester
 ) : QuestionWidget(context, dependencies, questionDetails), FileWidget, WidgetDataReceiver {
     private var answer by mutableStateOf<String?>(formEntryPrompt.answerText)
 
@@ -58,10 +62,10 @@ class ArbitraryFileWidget(
             val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
 
             setContextThemedContent {
-                ArbitraryFileWidgetContent(
+                ExArbitraryFileWidgetContent(
                     readOnly,
                     buttonFontSize,
-                    onChooseFileClick = { onButtonClick() },
+                    onLaunchClick = { onButtonClick() },
                     onLongClick = { showContextMenu() }
                 ) {
                     WidgetAnswer(
@@ -115,14 +119,13 @@ class ArbitraryFileWidget(
         widgetValueChanged()
     }
 
+    override fun setOnLongClickListener(listener: OnLongClickListener?) = Unit
+
     private fun onButtonClick() {
         waitingForDataRegistry.waitForData(formEntryPrompt.index)
-        mediaUtils.pickFile(
-            (context as Activity),
-            "*/*",
-            ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER
+        fileRequester.launch(
+            (context as Activity), ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER,
+            formEntryPrompt
         )
     }
-
-    override fun setOnLongClickListener(listener: OnLongClickListener?) = Unit
 }
