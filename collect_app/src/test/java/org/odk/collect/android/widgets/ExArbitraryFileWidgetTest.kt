@@ -15,6 +15,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.MediaUtils
+import org.odk.collect.android.widgets.arbitraryfile.ExArbitraryFileWidget
 import org.odk.collect.android.widgets.base.FileWidgetTest
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry

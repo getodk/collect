@@ -35,6 +35,8 @@ import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.widgets.arbitraryfile.ArbitraryFileWidget;
+import org.odk.collect.android.widgets.arbitraryfile.ExArbitraryFileWidget;
 import org.odk.collect.android.widgets.barcode.BarcodeWidget;
 import org.odk.collect.android.widgets.datetime.DateTimeWidget;
 import org.odk.collect.android.widgets.datetime.DateWidget;

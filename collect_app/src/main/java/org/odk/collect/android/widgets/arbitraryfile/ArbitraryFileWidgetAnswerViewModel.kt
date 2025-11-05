@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.arbitraryfile
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

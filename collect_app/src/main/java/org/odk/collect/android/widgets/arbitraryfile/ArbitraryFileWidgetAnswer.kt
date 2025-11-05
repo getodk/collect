@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.arbitraryfile
 
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
+import org.odk.collect.strings.R
 
 @Composable
 fun ArbitraryFileWidgetAnswer(
@@ -44,7 +45,7 @@ fun ArbitraryFileWidgetAnswer(
                     }
                 },
                 onLongClick = onLongClick,
-                onClickLabel = stringResource(org.odk.collect.strings.R.string.play_video)
+                onClickLabel = stringResource(R.string.play_video)
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
