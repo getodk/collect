@@ -30,6 +30,7 @@ fun WidgetAnswer(
                 }
             }
             Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(modifier, answer, viewModelProvider!!, onLongClick)
+            Constants.CONTROL_FILE_CAPTURE -> ArbitraryFileWidgetAnswer(modifier, answer, fontSize, viewModelProvider!!, onLongClick)
             else -> throw IllegalArgumentException("Unsupported control type: ${prompt.controlType}")
         }
     }
