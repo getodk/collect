@@ -7,8 +7,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import org.odk.collect.icons.R
 import org.odk.collect.android.widgets.WidgetIconButton
+import org.odk.collect.icons.R
 import org.odk.collect.strings.R.string
 
 @Composable
