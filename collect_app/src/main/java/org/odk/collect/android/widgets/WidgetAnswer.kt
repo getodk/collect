@@ -12,12 +12,18 @@ fun WidgetAnswer(
     modifier: Modifier = Modifier,
     prompt: FormEntryPrompt,
     answer: String?,
-    viewModelProvider: ViewModelProvider,
+    fontSize: Int = 0,
+    viewModelProvider: ViewModelProvider? = null,
     onLongClick: () -> Unit = {}
 ) {
     if (answer != null) {
         when (prompt.controlType) {
-            Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(modifier, answer, viewModelProvider, onLongClick)
+            Constants.CONTROL_INPUT -> {
+                when (prompt.dataType) {
+                    Constants.DATATYPE_BARCODE -> BarcodeWidgetAnswer(modifier, answer, fontSize, onLongClick)
+                }
+            }
+            Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(modifier, answer, viewModelProvider!!, onLongClick)
             else -> throw IllegalArgumentException("Unsupported control type: ${prompt.controlType}")
         }
     }
