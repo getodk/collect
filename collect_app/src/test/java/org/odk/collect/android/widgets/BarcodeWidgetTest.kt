@@ -18,6 +18,7 @@ import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.utilities.Appearances
+import org.odk.collect.android.widgets.barcode.BarcodeWidget
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies
