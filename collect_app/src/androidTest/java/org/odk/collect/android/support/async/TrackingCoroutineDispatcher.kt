@@ -12,8 +12,11 @@ class TrackingCoroutineDispatcher(private val dispatcher: CoroutineDispatcher) :
     ) {
         AsyncWorkTracker.startWork()
         dispatcher.dispatch(context) {
-            block.run()
-            AsyncWorkTracker.finishWork()
+            try {
+                block.run()
+            } finally {
+                AsyncWorkTracker.finishWork()
+            }
         }
     }
 }
