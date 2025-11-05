@@ -22,6 +22,12 @@ references:
       - image: cimg/android:2025.09
     resource_class: xlarge
 
+  gcloud_config: &gcloud_config
+    working_directory: ~/work
+    docker:
+      - image: cimg/gcp:2025.01
+    resource_class: small
+
 jobs:
   compile:
     <<: *android_config
@@ -270,14 +276,10 @@ jobs:
           path: selfSignedRelease.apk
 
   test_smoke_instrumented:
-    <<: *android_config_small
+    <<: *gcloud_config
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - attach_workspace:
-          at: ~/work
+          at: /tmp/workspace
 
       - run:
           name: Authorize gcloud
@@ -293,8 +295,8 @@ jobs:
             if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
               echo "y" | gcloud beta firebase test android run \
               --type instrumentation \
-              --app collect_app/build/outputs/apk/debug/ODK-Collect-debug.apk \
-              --test collect_app/build/outputs/apk/androidTest/debug/ODK-Collect-debug-androidTest.apk \
+              --app /tmp/workspace/collect_app/build/outputs/apk/debug/ODK-Collect-debug.apk \
+              --test /tmp/workspace/collect_app/build/outputs/apk/androidTest/debug/ODK-Collect-debug-androidTest.apk \
               --device model=MediumPhone.arm,version=34,locale=en,orientation=portrait \
               --results-bucket opendatakit-collect-test-results \
               --directories-to-pull /sdcard --timeout 20m \
@@ -303,14 +305,10 @@ jobs:
           no_output_timeout: 25m
 
   test_instrumented:
-    <<: *android_config_small
+    <<: *gcloud_config
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - workflow-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - attach_workspace:
-          at: ~/work
+          at: /tmp/workspace
 
       - run:
           name: Authorize gcloud
@@ -326,8 +324,8 @@ jobs:
             echo "y" | gcloud beta firebase test android run \
               --type instrumentation \
               --num-uniform-shards=25 \
-              --app collect_app/build/outputs/apk/debug/ODK-Collect-debug.apk \
-              --test collect_app/build/outputs/apk/androidTest/debug/ODK-Collect-debug-androidTest.apk \
+              --app /tmp/workspace/collect_app/build/outputs/apk/debug/ODK-Collect-debug.apk \
+              --test /tmp/workspace/collect_app/build/outputs/apk/androidTest/debug/ODK-Collect-debug-androidTest.apk \
               --device model=MediumPhone.arm,version=34,locale=en,orientation=portrait \
               --results-bucket opendatakit-collect-test-results \
               --directories-to-pull /sdcard --timeout 20m \
