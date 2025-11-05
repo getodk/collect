@@ -34,6 +34,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.widgets.barcode.BarcodeWidget;
 import org.odk.collect.android.widgets.datetime.DateTimeWidget;
 import org.odk.collect.android.widgets.datetime.DateWidget;
 import org.odk.collect.android.widgets.datetime.TimeWidget;

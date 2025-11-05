@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets
+package org.odk.collect.android.widgets.barcode
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -20,6 +20,8 @@ import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.utilities.Appearances.hasAppearance
 import org.odk.collect.android.utilities.Appearances.isFrontCameraAppearance
+import org.odk.collect.android.widgets.QuestionWidget
+import org.odk.collect.android.widgets.WidgetAnswer
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry
