@@ -17,7 +17,7 @@ fun WidgetAnswer(
 ) {
     if (answer != null) {
         when (prompt.controlType) {
-            Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer.Container(modifier, answer, viewModelProvider, onLongClick)
+            Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(modifier, answer, viewModelProvider, onLongClick)
             else -> throw IllegalArgumentException("Unsupported control type: ${prompt.controlType}")
         }
     }

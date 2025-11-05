@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -28,71 +27,53 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
-object VideoWidgetAnswer {
-    @Composable
-    fun Container(
-        modifier: Modifier,
-        answer: String,
-        viewModelProvider: ViewModelProvider,
-        onLongClick: () -> Unit
+@Composable
+fun VideoWidgetAnswer(
+    modifier: Modifier,
+    answer: String,
+    viewModelProvider: ViewModelProvider,
+    onLongClick: () -> Unit
+) {
+    val context = LocalContext.current
+    val viewModel = viewModelProvider[VideoWidgetAnswerViewModel::class]
+
+    val bitmapFlow = remember(answer) { viewModel.getFrame(answer, context) }
+    val bitmap by bitmapFlow.collectAsStateWithLifecycle()
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(max = 200.dp)
+            .clip(MaterialTheme.shapes.large)
+            .combinedClickable(
+                onClick = {
+                    if (MultiClickGuard.allowClick()) {
+                        viewModel.playVideo(context, answer)
+                    }
+                },
+                onLongClick = onLongClick,
+                onClickLabel = stringResource(org.odk.collect.strings.R.string.play_video)
+            ),
+        contentAlignment = Alignment.Center
     ) {
-        val context = LocalContext.current
-        val viewModel = viewModelProvider[VideoWidgetAnswerViewModel::class]
-
-        val bitmapFlow = remember(answer) { viewModel.getFrame(answer, context) }
-        val bitmap by bitmapFlow.collectAsStateWithLifecycle()
-
-        Content(
-            modifier,
-            bitmap,
-            onPlayClick = { viewModel.playVideo(context, answer) },
-            onLongClick = onLongClick
-        )
-    }
-
-    @Composable
-    fun Content(
-        modifier: Modifier,
-        bitmap: ImageBitmap?,
-        onPlayClick: () -> Unit,
-        onLongClick: () -> Unit
-    ) {
-        Box(
-            modifier = modifier
-                .fillMaxWidth()
-                .heightIn(max = 200.dp)
-                .clip(MaterialTheme.shapes.large)
-                .combinedClickable(
-                    onClick = {
-                        if (MultiClickGuard.allowClick()) {
-                            onPlayClick()
-                        }
-                    },
-                    onLongClick = onLongClick,
-                    onClickLabel = stringResource(org.odk.collect.strings.R.string.play_video)
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            if (bitmap != null) {
-                Image(
-                    bitmap = bitmap,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Gray)
-                )
-            }
-            Icon(
-                imageVector = Icons.Default.PlayCircle,
+        bitmap?.let {
+            Image(
+                bitmap = it,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(64.dp)
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
             )
-        }
+        } ?: Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Gray)
+        )
+
+        Icon(
+            imageVector = Icons.Default.PlayCircle,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.size(64.dp)
+        )
     }
 }
