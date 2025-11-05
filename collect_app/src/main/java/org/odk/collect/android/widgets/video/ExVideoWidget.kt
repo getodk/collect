@@ -74,7 +74,7 @@ class ExVideoWidget(
                         Modifier.padding(top = dimensionResource(id = dimen.margin_standard)),
                         formEntryPrompt,
                         binaryName,
-                        viewModelProvider,
+                        viewModelProvider = viewModelProvider,
                         onLongClick = { showContextMenu() }
                     )
                 }
