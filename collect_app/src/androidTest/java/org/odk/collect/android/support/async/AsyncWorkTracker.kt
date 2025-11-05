@@ -1,25 +1,24 @@
 package org.odk.collect.android.support.async
 
+import java.util.concurrent.atomic.AtomicInteger
+
 object AsyncWorkTracker {
-    private var runningTasks = 0
+    private val runningTasks = AtomicInteger(0)
 
     @JvmStatic
     val taskCount: Int
         get() {
-            synchronized(this) { return runningTasks }
+            return runningTasks.get()
         }
 
     fun startWork() {
-        synchronized(this) { runningTasks++ }
+        runningTasks.incrementAndGet()
     }
 
     fun finishWork() {
-        synchronized(this) {
-            if (runningTasks > 0) {
-                runningTasks--
-            } else {
-                throw IllegalStateException()
-            }
+        val decremented = runningTasks.decrementAndGet()
+        if (decremented < 0) {
+            throw IllegalStateException()
         }
     }
 }
