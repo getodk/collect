@@ -61,7 +61,7 @@ internal class RecordingForegroundServiceNotification(private val service: Servi
     }
 
     companion object {
-        private val NOTIFICATION_ID = RuntimeUniqueIdGenerator.nextInt()
+        private val NOTIFICATION_ID = RuntimeUniqueIdGenerator.getInt()
         private const val NOTIFICATION_CHANNEL = "recording_channel"
     }
 }

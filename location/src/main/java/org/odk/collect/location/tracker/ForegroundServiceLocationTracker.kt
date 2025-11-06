@@ -132,7 +132,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
         const val EXTRA_RETAIN_MOCK_ACCURACY = "retain_mock_accuracy"
         const val EXTRA_UPDATE_INTERVAL = "update_interval"
 
-        private val NOTIFICATION_ID = RuntimeUniqueIdGenerator.nextInt()
+        private val NOTIFICATION_ID = RuntimeUniqueIdGenerator.getInt()
         private const val NOTIFICATION_CHANNEL = "location_tracking"
     }
 }

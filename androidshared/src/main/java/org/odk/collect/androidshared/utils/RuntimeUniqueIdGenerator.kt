@@ -1,10 +1,10 @@
 package org.odk.collect.androidshared.utils
 
-object RuntimeUniqueIdGenerator {
+object RuntimeUniqueIdGenerator : UniqueIdGenerator {
 
     private var next = 1
 
-    fun nextInt(): Int {
+    override fun getInt(): Int {
         return synchronized(this) {
             next++
         }

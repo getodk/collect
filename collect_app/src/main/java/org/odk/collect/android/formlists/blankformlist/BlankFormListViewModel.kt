@@ -195,7 +195,7 @@ class BlankFormListViewModel(
         private const val SYNC_NOTIFICATION_CHANNEL = "form_updates"
         private const val SYNC_NOTIFICATION_CHANNEL_NAME = "Form updates"
 
-        private val SYNC_NOTIFICATION_ID = RuntimeUniqueIdGenerator.nextInt()
+        private val SYNC_NOTIFICATION_ID = RuntimeUniqueIdGenerator.getInt()
 
         private fun getSyncTag(projectId: String): String {
             return "match_exactly_foreground:$projectId"

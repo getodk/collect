@@ -99,9 +99,9 @@ class NotificationManagerNotifier(
 
     companion object {
         const val COLLECT_NOTIFICATION_CHANNEL = "collect_notification_channel"
-        private val FORM_UPDATE_NOTIFICATION_ID = RuntimeUniqueIdGenerator.nextInt()
-        private val FORM_SYNC_NOTIFICATION_ID = RuntimeUniqueIdGenerator.nextInt()
-        private val AUTO_SEND_RESULT_NOTIFICATION_ID = RuntimeUniqueIdGenerator.nextInt()
+        private val FORM_UPDATE_NOTIFICATION_ID = RuntimeUniqueIdGenerator.getInt()
+        private val FORM_SYNC_NOTIFICATION_ID = RuntimeUniqueIdGenerator.getInt()
+        private val AUTO_SEND_RESULT_NOTIFICATION_ID = RuntimeUniqueIdGenerator.getInt()
     }
 
     private fun getProjectName(projectId: String) = projectsRepository.get(projectId)?.name ?: ""
