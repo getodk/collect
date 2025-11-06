@@ -1,6 +1,6 @@
-package org.odk.collect.android.widgets.barcode
+package org.odk.collect.android.widgets
 
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,34 +12,40 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import org.odk.collect.androidshared.R.dimen
-import org.odk.collect.icons.R
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 @Composable
-fun BarcodeWidgetAnswer(
+fun TextWidgetAnswer(
     modifier: Modifier,
+    icon: ImageVector,
     answer: String,
     fontSize: Int,
-    onLongClick: () -> Unit
+    onLongClick: () -> Unit,
+    onClickLabel: String? = null,
+    onClick: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onLongPress = { onLongClick() }
-                )
-            },
+            .combinedClickable(
+                onClick = {
+                    if (MultiClickGuard.allowClick()) {
+                        onClick()
+                    }
+                },
+                onLongClick = onLongClick,
+                onClickLabel = onClickLabel
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_baseline_barcode_scanner_white_24),
+            imageVector = icon,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface
         )
