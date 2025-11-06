@@ -45,7 +45,7 @@ fun ArbitraryFileWidgetAnswer(
                     }
                 },
                 onLongClick = onLongClick,
-                onClickLabel = stringResource(R.string.play_video)
+                onClickLabel = stringResource(R.string.open_file)
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
