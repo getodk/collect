@@ -12,11 +12,12 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.ReturnToAppActivity
-import org.odk.collect.androidshared.utils.RuntimeUniqueIdGenerator
+import org.odk.collect.androidshared.utils.UniqueIdGenerator
 import org.odk.collect.location.Location
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClientProvider
 import org.odk.collect.strings.localization.getLocalizedString
+import javax.inject.Inject
 
 private const val LOCATION_KEY = "location"
 
@@ -44,6 +45,9 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
 
 class LocationTrackerService : Service(), LocationClient.LocationClientListener {
 
+    @Inject
+    private lateinit var uniqueIdGenerator: UniqueIdGenerator
+
     private val locationClient: LocationClient by lazy {
         LocationClientProvider.getClient(application)
     }
@@ -55,7 +59,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         setupNotificationChannel()
         startForeground(
-            NOTIFICATION_ID,
+            uniqueIdGenerator.getInt(NOTIFICATION_IDENTIFIER),
             createNotification()
         )
 
@@ -132,7 +136,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
         const val EXTRA_RETAIN_MOCK_ACCURACY = "retain_mock_accuracy"
         const val EXTRA_UPDATE_INTERVAL = "update_interval"
 
-        private val NOTIFICATION_ID = RuntimeUniqueIdGenerator.getInt()
+        private const val NOTIFICATION_IDENTIFIER = "location_tracking"
         private const val NOTIFICATION_CHANNEL = "location_tracking"
     }
 }

@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.playServicesLocation)
     implementation(libs.timber)
     implementation(libs.androidxAppcompat)
+    implementation(libs.dagger)
 
     testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))

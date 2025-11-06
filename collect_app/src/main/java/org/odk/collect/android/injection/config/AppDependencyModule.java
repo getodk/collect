@@ -93,7 +93,9 @@ import org.odk.collect.androidshared.system.BroadcastReceiverRegister;
 import org.odk.collect.androidshared.system.BroadcastReceiverRegisterImpl;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
+import org.odk.collect.androidshared.utils.RuntimeUniqueIdGenerator;
 import org.odk.collect.androidshared.utils.ScreenUtils;
+import org.odk.collect.androidshared.utils.UniqueIdGenerator;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.network.ConnectivityProvider;
@@ -337,8 +339,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider, ProjectsRepository projectsRepository) {
-        return new NotificationManagerNotifier(application, settingsProvider, projectsRepository);
+    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider, ProjectsRepository projectsRepository, UniqueIdGenerator uniqueIdGenerator) {
+        return new NotificationManagerNotifier(application, settingsProvider, projectsRepository, uniqueIdGenerator);
     }
 
     @Provides
@@ -593,8 +595,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public BlankFormListViewModel.Factory providesBlankFormListViewModel(FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider, Application application, FormsDataService formsDataService, Scheduler scheduler, SettingsProvider settingsProvider, ChangeLockProvider changeLockProvider, ProjectsDataService projectsDataService) {
-        return new BlankFormListViewModel.Factory(instancesRepositoryProvider.create(), application, formsDataService, scheduler, settingsProvider.getUnprotectedSettings(), projectsDataService.requireCurrentProject().getUuid());
+    public BlankFormListViewModel.Factory providesBlankFormListViewModel(InstancesRepositoryProvider instancesRepositoryProvider, Application application, FormsDataService formsDataService, Scheduler scheduler, SettingsProvider settingsProvider, ProjectsDataService projectsDataService, UniqueIdGenerator uniqueIdGenerator) {
+        return new BlankFormListViewModel.Factory(instancesRepositoryProvider.create(), application, formsDataService, scheduler, settingsProvider.getUnprotectedSettings(), projectsDataService.requireCurrentProject().getUuid(), uniqueIdGenerator);
     }
 
     @Provides
@@ -659,5 +661,10 @@ public class AppDependencyModule {
     @Provides
     public AudioPlayerFactory providesAudioPlayerFactory(Scheduler scheduler) {
         return new ViewModelAudioPlayerFactory(scheduler);
+    }
+
+    @Provides
+    public UniqueIdGenerator providesUniqueIdGenerator() {
+        return RuntimeUniqueIdGenerator.INSTANCE;
     }
 }
