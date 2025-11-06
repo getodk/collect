@@ -3,6 +3,8 @@ package org.odk.collect.android.widgets
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.StringData
 import org.junit.Before
@@ -131,5 +133,21 @@ class ArbitraryFileWidgetTest : FileWidgetTest<ArbitraryFileWidget>() {
         createWidget()
         composeRule.onNodeWithClickLabel(activity.getString(string.choose_file)).assertDoesNotExist()
         composeRule.onNodeWithText(initialAnswer.displayText).assertExists()
+    }
+
+    @Test
+    override fun settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
+        val file = questionMediaManager.addAnswerFile(File.createTempFile("document", ".pdf"))
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswer(StringData(file.name))
+            .build()
+
+        val widget = createWidget()
+        widget.setData(createBinaryData(nextAnswer))
+
+        assertThat(
+            questionMediaManager.originalFiles[formEntryPrompt.index.toString()],
+            equalTo(file.absolutePath)
+        )
     }
 }
