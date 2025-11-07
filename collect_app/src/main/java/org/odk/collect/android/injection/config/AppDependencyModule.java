@@ -93,8 +93,8 @@ import org.odk.collect.androidshared.system.BroadcastReceiverRegister;
 import org.odk.collect.androidshared.system.BroadcastReceiverRegisterImpl;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
-import org.odk.collect.androidshared.utils.InMemUniqueIdGenerator;
 import org.odk.collect.androidshared.utils.ScreenUtils;
+import org.odk.collect.androidshared.utils.SettingsUniqueIdGenerator;
 import org.odk.collect.androidshared.utils.UniqueIdGenerator;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
@@ -665,7 +665,7 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public UniqueIdGenerator providesUniqueIdGenerator() {
-        return new InMemUniqueIdGenerator();
+    public UniqueIdGenerator providesUniqueIdGenerator(SettingsProvider settingsProvider) {
+        return new SettingsUniqueIdGenerator(settingsProvider.getMetaSettings());
     }
 }
