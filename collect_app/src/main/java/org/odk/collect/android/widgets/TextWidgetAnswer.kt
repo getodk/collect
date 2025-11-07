@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
@@ -52,7 +51,12 @@ fun TextWidgetAnswer(
         Spacer(modifier = Modifier.width(dimensionResource(id = dimen.margin_small)))
         Text(
             text = answer,
-            style = TextStyle(fontSize = fontSize.sp)
+            style = MaterialTheme.typography.bodyLarge.copy(
+                fontSize = fontSize.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(
+                    alpha = dimen.high_emphasis.toFloat()
+                )
+            )
         )
     }
 }
