@@ -51,7 +51,7 @@ class AudioRecorderServiceTest {
                 }
 
                 override fun providesUniqueIdGenerator(): UniqueIdGenerator {
-                    return RuntimeUniqueIdGenerator
+                    return RuntimeUniqueIdGenerator()
                 }
             }
         )

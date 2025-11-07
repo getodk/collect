@@ -12,7 +12,7 @@ class RobolectricApplication : Application(), StateStore, LocationDependencyComp
         DaggerLocationDependencyComponent.builder().locationDependencyModule(
             object : LocationDependencyModule() {
                 override fun providesUniqueIdGenerator(): UniqueIdGenerator {
-                    return RuntimeUniqueIdGenerator
+                    return RuntimeUniqueIdGenerator()
                 }
             }
         ).build()

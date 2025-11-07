@@ -27,7 +27,7 @@ class RecordingForegroundServiceNotificationTest {
         val recordingForegroundServiceNotification = RecordingForegroundServiceNotification(
             service,
             recordingRepository,
-            RuntimeUniqueIdGenerator
+            RuntimeUniqueIdGenerator()
         )
 
         recordingForegroundServiceNotification.show()

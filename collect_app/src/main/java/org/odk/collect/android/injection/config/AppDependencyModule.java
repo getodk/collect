@@ -664,7 +664,8 @@ public class AppDependencyModule {
     }
 
     @Provides
+    @Singleton
     public UniqueIdGenerator providesUniqueIdGenerator() {
-        return RuntimeUniqueIdGenerator.INSTANCE;
+        return new RuntimeUniqueIdGenerator();
     }
 }

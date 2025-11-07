@@ -434,7 +434,7 @@ class BlankFormListViewModelTest {
             generalSettings,
             projectId,
             showAllVersions,
-            RuntimeUniqueIdGenerator
+            RuntimeUniqueIdGenerator()
         )
 
         if (runAllBackgroundTasks) {

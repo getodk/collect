@@ -1,6 +1,6 @@
 package org.odk.collect.androidshared.utils
 
-object RuntimeUniqueIdGenerator : UniqueIdGenerator {
+class RuntimeUniqueIdGenerator() : UniqueIdGenerator {
 
     private val ids = mutableMapOf<String, Int>()
     private var next = 1

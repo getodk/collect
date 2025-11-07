@@ -40,7 +40,7 @@ class NotificationManagerNotifierTest {
             context,
             TestSettingsProvider.getSettingsProvider(),
             projectsRepository,
-            RuntimeUniqueIdGenerator
+            RuntimeUniqueIdGenerator()
         )
     }
 

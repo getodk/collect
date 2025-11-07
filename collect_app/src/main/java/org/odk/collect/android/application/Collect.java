@@ -40,7 +40,6 @@ import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;
 import org.odk.collect.androidshared.data.StateStore;
 import org.odk.collect.androidshared.system.ExternalFilesUtils;
-import org.odk.collect.androidshared.utils.RuntimeUniqueIdGenerator;
 import org.odk.collect.androidshared.utils.UniqueIdGenerator;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.network.NetworkStateProvider;
@@ -172,7 +171,7 @@ public class Collect extends Application implements
                 .dependencyModule(new AudioRecorderDependencyModule() {
                     @Override
                     public @NotNull UniqueIdGenerator providesUniqueIdGenerator() {
-                        return RuntimeUniqueIdGenerator.INSTANCE;
+                        return applicationComponent.uniqueIdGenerator();
                     }
                 })
                 .build();
@@ -362,7 +361,7 @@ public class Collect extends Application implements
                 .locationDependencyModule(new LocationDependencyModule() {
                     @Override
                     public @NotNull UniqueIdGenerator providesUniqueIdGenerator() {
-                        return RuntimeUniqueIdGenerator.INSTANCE;
+                        return applicationComponent.uniqueIdGenerator();
                     }
                 })
                 .build();
