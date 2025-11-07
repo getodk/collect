@@ -12,7 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.androidshared.data.Consumable
-import org.odk.collect.androidshared.utils.RuntimeUniqueIdGenerator
+import org.odk.collect.androidshared.utils.InMemUniqueIdGenerator
 import org.odk.collect.androidshared.utils.UniqueIdGenerator
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
@@ -63,7 +63,7 @@ class ForegroundServiceAudioRecorderTest : AudioRecorderTest() {
                 }
 
                 override fun providesUniqueIdGenerator(): UniqueIdGenerator {
-                    return RuntimeUniqueIdGenerator()
+                    return InMemUniqueIdGenerator()
                 }
             }
         )

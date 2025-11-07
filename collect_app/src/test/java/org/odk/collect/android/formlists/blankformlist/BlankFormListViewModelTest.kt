@@ -18,7 +18,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.utilities.ChangeLockProvider
-import org.odk.collect.androidshared.utils.RuntimeUniqueIdGenerator
+import org.odk.collect.androidshared.utils.InMemUniqueIdGenerator
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.instances.Instance
@@ -434,7 +434,7 @@ class BlankFormListViewModelTest {
             generalSettings,
             projectId,
             showAllVersions,
-            RuntimeUniqueIdGenerator()
+            InMemUniqueIdGenerator()
         )
 
         if (runAllBackgroundTasks) {
