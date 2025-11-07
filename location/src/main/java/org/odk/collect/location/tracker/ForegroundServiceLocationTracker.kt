@@ -16,6 +16,7 @@ import org.odk.collect.androidshared.utils.UniqueIdGenerator
 import org.odk.collect.location.Location
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClientProvider
+import org.odk.collect.location.LocationDependencyComponentProvider
 import org.odk.collect.strings.localization.getLocalizedString
 import javax.inject.Inject
 
@@ -46,10 +47,16 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
 class LocationTrackerService : Service(), LocationClient.LocationClientListener {
 
     @Inject
-    private lateinit var uniqueIdGenerator: UniqueIdGenerator
+    lateinit var uniqueIdGenerator: UniqueIdGenerator
 
     private val locationClient: LocationClient by lazy {
         LocationClientProvider.getClient(application)
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        val provider = applicationContext as LocationDependencyComponentProvider
+        provider.locationDependencyComponent.inject(this)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
