@@ -14,6 +14,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.ServerFormDetails
+import org.odk.collect.androidshared.utils.RuntimeUniqueIdGenerator
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.ManifestFile
 import org.odk.collect.projects.InMemProjectsRepository
@@ -38,7 +39,8 @@ class NotificationManagerNotifierTest {
         notifier = NotificationManagerNotifier(
             context,
             TestSettingsProvider.getSettingsProvider(),
-            projectsRepository
+            projectsRepository,
+            RuntimeUniqueIdGenerator
         )
     }
 
