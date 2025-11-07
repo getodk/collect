@@ -1,13 +1,13 @@
 package org.odk.collect.androidshared.utils
 
+import java.util.concurrent.atomic.AtomicInteger
+
 class InMemUniqueIdGenerator() : UniqueIdGenerator {
 
     private val ids = mutableMapOf<String, Int>()
-    private var next = 1
+    private var next = AtomicInteger(1)
 
     override fun getInt(identifier: String): Int {
-        return synchronized(this) {
-            ids.getOrPut(identifier) { next++ }
-        }
+        return ids.getOrPut(identifier) { next.getAndIncrement() }
     }
 }
