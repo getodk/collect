@@ -252,6 +252,11 @@ internal class SelectChoicesMapData(
 
         private val FILTERED_PROPERTIES = arrayOf(
             GEOMETRY,
+            MARKER_COLOR,
+            MARKER_SYMBOL,
+            STROKE,
+            STROKE_WIDTH,
+            FILL,
             EntitySchema.VERSION,
             EntitySchema.TRUNK_VERSION,
             EntitySchema.BRANCH_ID

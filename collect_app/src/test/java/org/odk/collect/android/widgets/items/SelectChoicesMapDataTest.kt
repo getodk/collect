@@ -393,6 +393,34 @@ class SelectChoicesMapDataTest {
         assertThat(properties.size, equalTo(0))
     }
 
+    @Test
+    fun `marker styling properties are filtered out`() {
+        val choices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(
+                        treeElement(SelectChoicesMapData.GEOMETRY, "12.0 -1.0 305 0"),
+                        treeElement(SelectChoicesMapData.MARKER_COLOR, "#ffffff"),
+                        treeElement(SelectChoicesMapData.MARKER_SYMBOL, "A"),
+                        treeElement(SelectChoicesMapData.STROKE, "#ffffff"),
+                        treeElement(SelectChoicesMapData.STROKE_WIDTH, "5"),
+                        treeElement(SelectChoicesMapData.FILL, "#ffffff"),
+                    )
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .build()
+
+        val data = loadDataForPrompt(prompt)
+        val properties = data.getMappableItems().getOrAwaitValue()!![0].properties
+        assertThat(properties.size, equalTo(0))
+    }
+
     private fun loadDataForPrompt(prompt: FormEntryPrompt): SelectChoicesMapData {
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
         val data = SelectChoicesMapData(resources, scheduler, prompt, null)
