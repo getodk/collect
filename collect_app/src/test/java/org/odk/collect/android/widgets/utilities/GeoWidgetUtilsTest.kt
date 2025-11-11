@@ -16,9 +16,9 @@ import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.floor
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.getGeoPointAnswerToDisplay
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.getGeoPolyAnswerToDisplay
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.isWithinMapBounds
-import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.parseGeometry
-import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.parseGeometryPoint
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.truncateDouble
+import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
+import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometryPoint
 import org.odk.collect.maps.MapPoint
 
 @RunWith(AndroidJUnit4::class)

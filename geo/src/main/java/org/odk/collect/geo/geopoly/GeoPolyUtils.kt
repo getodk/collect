@@ -4,6 +4,40 @@ import org.odk.collect.maps.MapPoint
 
 object GeoPolyUtils {
 
+    fun parseGeometry(geometry: String?): ArrayList<MapPoint> {
+        val points = ArrayList<MapPoint>()
+
+        for (vertex in (geometry ?: "").split(";").toTypedArray()) {
+            val point = parseGeometryPoint(vertex)
+            if (point != null) {
+                points.add(MapPoint(point[0], point[1], point[2], point[3]))
+            } else {
+                return ArrayList()
+            }
+        }
+
+        return points
+    }
+
+    @JvmStatic
+    fun parseGeometryPoint(answer: String?): DoubleArray? {
+        if (answer != null && answer.isNotEmpty()) {
+            val sa = answer.trim { it <= ' ' }.split(" ").toTypedArray()
+            return try {
+                doubleArrayOf(
+                    sa[0].toDouble(),
+                    if (sa.size > 1) sa[1].toDouble() else 0.0,
+                    if (sa.size > 2) sa[2].toDouble() else 0.0,
+                    if (sa.size > 3) sa[3].toDouble() else 0.0
+                )
+            } catch (e: Throwable) {
+                null
+            }
+        } else {
+            return null
+        }
+    }
+
     /**
      * Returns `true` if any segment of the trace intersects with any other and `false` otherwise.
      */

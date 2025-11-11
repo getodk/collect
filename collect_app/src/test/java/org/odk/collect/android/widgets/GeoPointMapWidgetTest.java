@@ -27,6 +27,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
+import static org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometryPoint;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPointMapWidgetTest {
@@ -51,7 +52,7 @@ public class GeoPointMapWidgetTest {
     public void getAnswer_whenPromptHasAnswer_returnsPromptAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
         assertEquals(widget.getAnswer().getDisplayText(),
-                new GeoPointData(GeoWidgetUtils.parseGeometryPoint(answer.getDisplayText())).getDisplayText());
+                new GeoPointData(parseGeometryPoint(answer.getDisplayText())).getDisplayText());
     }
 
     @Test

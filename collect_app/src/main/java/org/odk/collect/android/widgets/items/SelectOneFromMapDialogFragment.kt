@@ -27,6 +27,8 @@ import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.entities.javarosa.parse.EntitySchema
+import org.odk.collect.geo.geopoly.GeoPolyUtils
+import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
 import org.odk.collect.geo.selection.IconifiedText
 import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.geo.selection.SelectionMapData
@@ -139,7 +141,7 @@ internal class SelectChoicesMapData(
 
             if (geometry != null) {
                 try {
-                    val points = GeoWidgetUtils.parseGeometry(geometry)
+                    val points = parseGeometry(geometry)
                     if (points.isNotEmpty()) {
                         val withinBounds = points.all {
                             GeoWidgetUtils.isWithinMapBounds(it)

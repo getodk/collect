@@ -64,6 +64,10 @@ dependencies {
     implementation(libs.androidxFragmentKtx)
     implementation(libs.dagger)
     kapt(libs.daggerCompiler)
+    implementation(libs.javarosa) {
+        exclude(group = "joda-time")
+        exclude(group = "org.hamcrest", module = "hamcrest-all")
+    }
 
     debugImplementation(project(":fragments-test"))
 
