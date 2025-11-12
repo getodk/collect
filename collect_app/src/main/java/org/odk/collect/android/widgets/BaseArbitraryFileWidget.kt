@@ -33,7 +33,7 @@ abstract class BaseArbitraryFileWidget(
         hideAnswerText()
     }
 
-    override fun setData(answer: Any?) {
+    override fun setData(answer: Any) {
         if (answerFile != null) {
             deleteFile()
         }

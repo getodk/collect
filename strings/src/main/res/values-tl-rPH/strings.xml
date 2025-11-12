@@ -55,7 +55,7 @@
   <string name="ok">OK</string>
   <string name="parse_error">Paumanhin, hindi ma-suri ang form.</string>
   <string name="password">Kontrasenyas</string>
-    <string name="play_video">I-play ang Bidyo</string>
+  <string name="play_video">I-play ang Bidyo</string>
   <string name="please_wait">Mag-hintay ng ilang sandali.</string>
   <string name="please_wait_long">Mag-hintay. Ito ay maaring tumagal ng ilang minuto.</string>
   <string name="refresh">Sariwain</string>

@@ -51,6 +51,7 @@ import org.odk.collect.android.widgets.interfaces.Widget;
 import org.odk.collect.android.widgets.items.SelectImageMapWidget;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.androidshared.utils.ScreenUtils;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.permissions.PermissionsProvider;
@@ -93,7 +94,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     PermissionsProvider permissionsProvider;
 
     @Inject
-    SettingsProvider settingsProvider;
+    protected SettingsProvider settingsProvider;
 
     @Inject
     protected
@@ -101,6 +102,9 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     @Inject
     ImageLoader imageLoader;
+
+    @Inject
+    protected Scheduler scheduler;
 
     protected AudioPlayer audioPlayer;
 

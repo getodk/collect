@@ -26,6 +26,7 @@ androidxStartup = { group = "androidx.startup", name = "startup-runtime", versio
 androidxLifecycleRuntimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidxLifecycleLivedataKtx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidxLifecycleViewmodelKtx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+androidxLifecycleViewmodelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidxViewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version = "1.1.0" }
 androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version = "1.17.0" }
 androidxBrowser = { group = "androidx.browser", name = "browser", version = "1.9.0" }
@@ -45,7 +46,9 @@ androidXComposeMaterial = { group = "androidx.compose.material3", name = "materi
 androidXComposeMaterialIconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidXComposePreview = { group = "androidx.compose.ui", name = "ui-tooling-preview"}
 androidXComposeTooling = { group = "androidx.compose.ui", name = "ui-tooling"}
+androidXComposeUiTestJunit4 = { group = "androidx.compose.ui", name = "ui-test-junit4"}
 androidXConstraintLayoutCompose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.1.1" }
+androidXComposeMaterialIcons = { group = "androidx.compose.material", name = "material-icons-extended", version ="1.7.8"}
 playServicesMaps = { group = "com.google.android.gms", name = "play-services-maps", version = "19.2.0" }
 playServicesLocation = { group = "com.google.android.gms", name = "play-services-location", version = "21.3.0" }
 playServicesOssLicenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version = "17.2.0" } # Newer versions require minSdkVersion >= 23
@@ -69,6 +72,7 @@ daggerCompiler = { group = "com.google.dagger", name = "dagger-compiler", versio
 daggerAndroid = { group = "com.google.dagger", name = "dagger-android", version.ref = "dagger" }
 daggerAndroidProcessor = { group = "com.google.dagger", name = "dagger-android-processor", version.ref = "dagger" }
 kotlinxCoroutinesAndroid = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = "1.10.2" }
+kotlinxCoroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "1.10.2" }
 armen101AudioRecorderView = { group = "com.github.Armen101", name = "AudioRecordView", version = "1.0.5" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glideCompiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
