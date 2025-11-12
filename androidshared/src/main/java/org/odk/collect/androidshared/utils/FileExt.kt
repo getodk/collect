@@ -6,17 +6,16 @@ import android.media.MediaMetadataRetriever
 import androidx.core.net.toUri
 import timber.log.Timber
 import java.io.File
-import kotlin.use
 
 fun File.getVideoThumbnail(context: Context): Bitmap? {
+    val retriever = MediaMetadataRetriever()
     return try {
-        MediaMetadataRetriever().apply {
-            setDataSource(context, this@getVideoThumbnail.toUri())
-        }.use { retriever ->
-            retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
-        }
+        retriever.setDataSource(context, this.toUri())
+        retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
     } catch (e: Exception) {
         Timber.w(e)
         null
+    } finally {
+        retriever.release()
     }
 }
