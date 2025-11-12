@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.map
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec
 import org.odk.collect.android.backgroundwork.TaskData
 import org.odk.collect.android.formmanagement.FormsDataService
+import org.odk.collect.androidshared.utils.UniqueIdGenerator
 import org.odk.collect.async.NotificationInfo
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.flowOnBackground
@@ -31,7 +32,8 @@ class BlankFormListViewModel(
     private val scheduler: Scheduler,
     private val generalSettings: Settings,
     private val projectId: String,
-    private val showAllVersions: Boolean = false
+    private val showAllVersions: Boolean = false,
+    private val uniqueIdGenerator: UniqueIdGenerator
 ) : ViewModel() {
 
     private val _filterText = MutableStateFlow("")
@@ -81,7 +83,7 @@ class BlankFormListViewModel(
             SyncFormsTaskSpec(),
             mapOf(TaskData.DATA_PROJECT_ID to projectId),
             NotificationInfo(
-                SYNC_NOTIFICATION_ID,
+                uniqueIdGenerator.getInt(SYNC_NOTIFICATION_IDENTIFIER),
                 SYNC_NOTIFICATION_CHANNEL_NAME,
                 SYNC_NOTIFICATION_CHANNEL,
                 org.odk.collect.strings.R.string.form_update_notification_title
@@ -166,7 +168,8 @@ class BlankFormListViewModel(
         private val formsDataService: FormsDataService,
         private val scheduler: Scheduler,
         private val generalSettings: Settings,
-        private val projectId: String
+        private val projectId: String,
+        private val uniqueIdGenerator: UniqueIdGenerator
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -177,7 +180,8 @@ class BlankFormListViewModel(
                 scheduler,
                 generalSettings,
                 projectId,
-                !generalSettings.getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
+                !generalSettings.getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS),
+                uniqueIdGenerator
             ) as T
         }
     }
@@ -193,8 +197,7 @@ class BlankFormListViewModel(
     companion object {
         private const val SYNC_NOTIFICATION_CHANNEL = "form_updates"
         private const val SYNC_NOTIFICATION_CHANNEL_NAME = "Form updates"
-
-        private const val SYNC_NOTIFICATION_ID = 3
+        private const val SYNC_NOTIFICATION_IDENTIFIER = "form_sync"
 
         private fun getSyncTag(projectId: String): String {
             return "match_exactly_foreground:$projectId"

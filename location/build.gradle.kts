@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinKapt)
 }
 
 apply(from = "../config/quality.gradle")
@@ -47,6 +48,8 @@ dependencies {
     implementation(libs.playServicesLocation)
     implementation(libs.timber)
     implementation(libs.androidxAppcompat)
+    implementation(libs.dagger)
+    kapt(libs.daggerCompiler)
 
     testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))

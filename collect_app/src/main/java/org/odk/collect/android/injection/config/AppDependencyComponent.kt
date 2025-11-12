@@ -76,6 +76,7 @@ import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment
+import org.odk.collect.androidshared.utils.UniqueIdGenerator
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.network.NetworkStateProvider
 import org.odk.collect.draw.DrawActivity
@@ -299,4 +300,6 @@ interface AppDependencyComponent {
     fun projectDependencyModuleFactory(): ProjectDependencyModuleFactory
 
     fun webPageService(): WebPageService
+
+    fun uniqueIdGenerator(): UniqueIdGenerator
 }

@@ -28,4 +28,35 @@ interface TaskSpec {
      * Called if an exception is thrown while executing the work.
      */
     fun onException(exception: Throwable)
+
+    enum class Result {
+        SUCCESS,
+        FAILURE,
+        RETRY
+    }
+}
+
+fun TaskSpec.run(
+    context: Context,
+    inputData: Map<String, String>,
+    runAttemptCount: Int,
+    isForeground: Boolean,
+    isStopped: () -> Boolean
+): TaskSpec.Result {
+    try {
+        val isLastUniqueExecution = maxRetries?.let { runAttemptCount >= it } ?: true
+        val completed = getTask(context, inputData, isForeground || isLastUniqueExecution, isStopped).get()
+        val maxRetries = this.maxRetries
+
+        return if (completed) {
+            TaskSpec.Result.SUCCESS
+        } else if (!isForeground && (maxRetries == null || runAttemptCount < maxRetries)) {
+            TaskSpec.Result.RETRY
+        } else {
+            TaskSpec.Result.FAILURE
+        }
+    } catch (t: Throwable) {
+        onException(t)
+        return TaskSpec.Result.FAILURE
+    }
 }

@@ -5,6 +5,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import org.odk.collect.androidshared.data.getState
+import org.odk.collect.androidshared.utils.UniqueIdGenerator
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider
@@ -23,6 +24,9 @@ class AudioRecorderService : Service() {
     @Inject
     internal lateinit var scheduler: Scheduler
 
+    @Inject
+    internal lateinit var uniqueIdGenerator: UniqueIdGenerator
+
     private lateinit var recordingRepository: RecordingRepository
     private lateinit var notification: RecordingForegroundServiceNotification
 
@@ -36,7 +40,7 @@ class AudioRecorderService : Service() {
         provider.audioRecorderDependencyComponent.inject(this)
 
         recordingRepository = RecordingRepository((applicationContext as Application).getState())
-        notification = RecordingForegroundServiceNotification(this, recordingRepository)
+        notification = RecordingForegroundServiceNotification(this, recordingRepository, uniqueIdGenerator)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

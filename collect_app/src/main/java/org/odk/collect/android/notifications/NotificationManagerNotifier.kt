@@ -13,6 +13,7 @@ import org.odk.collect.android.notifications.builders.FormsSubmissionNotificatio
 import org.odk.collect.android.notifications.builders.FormsSyncFailedNotificationBuilder
 import org.odk.collect.android.notifications.builders.FormsSyncStoppedNotificationBuilder
 import org.odk.collect.android.upload.FormUploadException
+import org.odk.collect.androidshared.utils.UniqueIdGenerator
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.ProjectsRepository
@@ -23,22 +24,25 @@ import org.odk.collect.strings.localization.getLocalizedString
 class NotificationManagerNotifier(
     private val application: Application,
     private val settingsProvider: SettingsProvider,
-    private val projectsRepository: ProjectsRepository
+    private val projectsRepository: ProjectsRepository,
+    private val uniqueIdGenerator: UniqueIdGenerator
 ) : Notifier {
     private val notificationManager: NotificationManager =
         application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     override fun onUpdatesAvailable(updates: List<ServerFormDetails>, projectId: String) {
+        val notificationId = uniqueIdGenerator.getInt(FORM_UPDATE_NOTIFICATION_IDENTIFIER)
+
         val metaPrefs = settingsProvider.getMetaSettings()
         val updateId = updates
             .mapTo(HashSet()) { (_, _, formId, _, hash, _, _, manifest) -> formId + hash + manifest?.hash }
         if (metaPrefs.getStringSet(MetaKeys.LAST_UPDATED_NOTIFICATION) != updateId) {
             notificationManager.notify(
-                FORM_UPDATE_NOTIFICATION_ID,
+                notificationId,
                 FormUpdatesAvailableNotificationBuilder.build(
                     application,
                     getProjectName(projectId),
-                    FORM_UPDATE_NOTIFICATION_ID
+                    notificationId
                 )
             )
             metaPrefs.save(MetaKeys.LAST_UPDATED_NOTIFICATION, updateId)
@@ -46,61 +50,69 @@ class NotificationManagerNotifier(
     }
 
     override fun onUpdatesDownloaded(result: Map<ServerFormDetails, FormDownloadException?>, projectId: String) {
+        val notificationId = uniqueIdGenerator.getInt(FORM_UPDATE_NOTIFICATION_IDENTIFIER)
+
         notificationManager.notify(
-            FORM_UPDATE_NOTIFICATION_ID,
+            notificationId,
             FormUpdatesDownloadedNotificationBuilder.build(
                 application,
                 result,
                 getProjectName(projectId),
-                FORM_UPDATE_NOTIFICATION_ID
+                notificationId
             )
         )
     }
 
     override fun onSync(exception: FormSourceException?, projectId: String) {
+        val notificationId = uniqueIdGenerator.getInt(FORM_SYNC_ERROR_NOTIFICATION_IDENTIFIER)
+
         if (exception == null) {
-            notificationManager.cancel(FORM_SYNC_NOTIFICATION_ID)
+            notificationManager.cancel(notificationId)
         } else {
             notificationManager.notify(
-                FORM_SYNC_NOTIFICATION_ID,
+                notificationId,
                 FormsSyncFailedNotificationBuilder.build(
                     application,
                     exception,
                     getProjectName(projectId),
-                    FORM_SYNC_NOTIFICATION_ID
+                    notificationId
                 )
             )
         }
     }
 
     override fun onSyncStopped(projectId: String) {
+        val notificationId = uniqueIdGenerator.getInt(FORM_SYNC_ERROR_NOTIFICATION_IDENTIFIER)
+
         notificationManager.notify(
-            FORM_SYNC_NOTIFICATION_ID,
+            notificationId,
             FormsSyncStoppedNotificationBuilder.build(
                 application,
                 getProjectName(projectId),
-                FORM_SYNC_NOTIFICATION_ID
+                notificationId
             )
         )
     }
 
     override fun onSubmission(result: Map<Instance, FormUploadException?>, projectId: String) {
+        val notificationId = uniqueIdGenerator.getInt(AUTO_SEND_RESULT_NOTIFICATION_IDENTIFIER)
+
         notificationManager.notify(
-            AUTO_SEND_RESULT_NOTIFICATION_ID,
+            notificationId,
             FormsSubmissionNotificationBuilder.build(
                 application,
                 result,
                 getProjectName(projectId),
-                AUTO_SEND_RESULT_NOTIFICATION_ID
+                notificationId
             )
         )
     }
 
     companion object {
         const val COLLECT_NOTIFICATION_CHANNEL = "collect_notification_channel"
-        const val FORM_UPDATE_NOTIFICATION_ID = 0
-        const val FORM_SYNC_NOTIFICATION_ID = 1
-        private const val AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928
+        private val FORM_UPDATE_NOTIFICATION_IDENTIFIER = "form_update"
+        private val FORM_SYNC_ERROR_NOTIFICATION_IDENTIFIER = "form_sync_error"
+        private val AUTO_SEND_RESULT_NOTIFICATION_IDENTIFIER = "auto_send_result"
     }
 
     private fun getProjectName(projectId: String) = projectsRepository.get(projectId)?.name ?: ""
