@@ -56,4 +56,23 @@ class ExternalSelectsTest {
             .assertText("File: $formsDirPath/search_and_select-media/nombre.csv is missing.")
             .assertText("File: $formsDirPath/search_and_select-media/nombre2.csv is missing.")
     }
+
+    @Test
+    fun dynamicChoicesCanBeMixedWithNumericInternalOnes() {
+        rule.startAtMainMenu()
+            .copyForm("dynamic_and_static_choices.xml", listOf("fruits.csv"))
+            .startBlankForm("dynamic_and_static_choices")
+            .assertTexts("Mango", "Oranges", "Strawberries", "None of the above")
+    }
+
+    @Test
+    fun missingFileMessage_shouldBeDisplayedIfDynamicChoicesUsedButTheConfigurationRowIsMissing() {
+        val formsDirPath = StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
+
+        rule.startAtMainMenu()
+            .copyForm("dynamic_and_static_choices.xml", listOf("fruits.csv"))
+            .startBlankForm("dynamic_and_static_choices")
+            .swipeToNextQuestion("Choose a number")
+            .assertText("File: $formsDirPath/dynamic_and_static_choices-media/numbers.csv is missing.")
+    }
 }
