@@ -21,7 +21,7 @@ import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 @Composable
 fun TextWidgetAnswer(
     modifier: Modifier,
-    icon: ImageVector,
+    icon: ImageVector?,
     answer: String,
     fontSize: Int,
     onLongClick: () -> Unit,
@@ -43,14 +43,16 @@ fun TextWidgetAnswer(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface.copy(
-                alpha = dimen.high_emphasis.toFloat()
+        if (icon != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface.copy(
+                    alpha = dimen.high_emphasis.toFloat()
+                )
             )
-        )
-        Spacer(modifier = Modifier.width(dimensionResource(id = dimen.margin_small)))
+            Spacer(modifier = Modifier.width(dimensionResource(id = dimen.margin_small)))
+        }
         Text(
             text = answer,
             style = MaterialTheme.typography.bodyLarge.copy(
