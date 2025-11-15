@@ -46,7 +46,9 @@ fun TextWidgetAnswer(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface
+            tint = MaterialTheme.colorScheme.onSurface.copy(
+                alpha = dimen.high_emphasis.toFloat()
+            )
         )
         Spacer(modifier = Modifier.width(dimensionResource(id = dimen.margin_small)))
         Text(
