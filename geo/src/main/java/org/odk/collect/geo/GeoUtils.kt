@@ -62,4 +62,23 @@ object GeoUtils {
         val formattedValue = DecimalFormat("#.##").format(accuracy.toDouble())
         return context.getString(R.string.accuracy_m, formattedValue)
     }
+
+    @JvmStatic
+    fun parseGeometryPoint(answer: String?): DoubleArray? {
+        if (answer != null && answer.isNotEmpty()) {
+            val sa = answer.trim { it <= ' ' }.split(" ").toTypedArray()
+            return try {
+                doubleArrayOf(
+                    sa[0].toDouble(),
+                    if (sa.size > 1) sa[1].toDouble() else 0.0,
+                    if (sa.size > 2) sa[2].toDouble() else 0.0,
+                    if (sa.size > 3) sa[3].toDouble() else 0.0
+                )
+            } catch (e: Throwable) {
+                null
+            }
+        } else {
+            return null
+        }
+    }
 }

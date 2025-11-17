@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
-import static org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometryPoint;
+import static org.odk.collect.geo.GeoUtils.parseGeometryPoint;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
