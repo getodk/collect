@@ -25,8 +25,8 @@ class GeoUtilsTest {
 
     @Test
     fun whenPointsAreNull_formatPoints_returnsEmptyString() {
-        assertEquals(formatPointsResultString(emptyList(), true), "")
-        assertEquals(formatPointsResultString(emptyList(), false), "")
+        assertEquals(formatPointsResultString(mutableListOf(), true), "")
+        assertEquals(formatPointsResultString(mutableListOf(), false), "")
     }
 
     @Test
