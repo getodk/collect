@@ -9,7 +9,6 @@ import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.data.GeoPointData
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
 import org.odk.collect.android.widgets.support.GeoWidgetHelpers
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.convertCoordinatesIntoDegreeFormat
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.floor
@@ -17,8 +16,6 @@ import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.getGeoPointAnswe
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.getGeoPolyAnswerToDisplay
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.isWithinMapBounds
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.truncateDouble
-import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
-import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometryPoint
 import org.odk.collect.maps.MapPoint
 
 @RunWith(AndroidJUnit4::class)
@@ -103,32 +100,6 @@ class GeoWidgetUtilsTest {
     }
 
     @Test
-    fun parseGeometryPointTest() {
-        var gp =
-            parseGeometryPoint("37.45153333333334 -122.15539166666667 0.0 20.0")!!
-        assertEquals(37.45153333333334, gp[0])
-        assertEquals(-122.15539166666667, gp[1])
-        assertEquals(0.0, gp[2])
-        assertEquals(20.0, gp[3])
-
-        gp = parseGeometryPoint("37.45153333333334")!!
-        assertEquals(37.45153333333334, gp[0])
-        assertEquals(0.0, gp[1])
-        assertEquals(0.0, gp[2])
-        assertEquals(0.0, gp[3])
-
-        gp = parseGeometryPoint(" 37.45153333333334 -122.15539166666667 0.0 ")!!
-        assertEquals(37.45153333333334, gp[0])
-        assertEquals(-122.15539166666667, gp[1])
-        assertEquals(0.0, gp[2])
-        assertEquals(0.0, gp[3])
-
-        assertEquals(null, parseGeometryPoint("37.45153333333334 -122.15539166666667 0.0 qwerty"))
-        assertEquals(null, parseGeometryPoint(""))
-        assertEquals(null, parseGeometryPoint(null))
-    }
-
-    @Test
     fun truncateDoubleTest() {
         assertEquals("5", truncateDouble("5"))
         assertEquals("-5", truncateDouble("-5"))
@@ -139,22 +110,6 @@ class GeoWidgetUtilsTest {
         assertEquals("", truncateDouble(""))
         assertEquals("", truncateDouble(null))
         assertEquals("", truncateDouble("qwerty"))
-    }
-
-    @Test
-    fun parseGeometryTest() {
-        assertThat(parseGeometry("1.0 2.0 3 4"), equalTo(listOf(MapPoint(1.0, 2.0, 3.0, 4.0))))
-        assertThat(
-            parseGeometry("1.0 2.0 3 4; 5.0 6.0 7 8"),
-            equalTo(listOf(MapPoint(1.0, 2.0, 3.0, 4.0), MapPoint(5.0, 6.0, 7.0, 8.0)))
-        )
-
-        assertThat(parseGeometry("blah"), equalTo(emptyList()))
-        assertThat(parseGeometry("1.0 2.0 3 4; blah"), equalTo(emptyList()))
-        assertThat(
-            parseGeometry("37.45153333333334 -122.15539166666667 0.0 qwerty"),
-            equalTo(emptyList())
-        )
     }
 
     @Test
