@@ -133,4 +133,43 @@ class IntersectsFunctionHandlerTest {
             assertThat(e.cause, instanceOf(expected))
         }
     }
+
+    @Test
+    fun `throws exception when passed too many args`() {
+        val expected = XPathTypeMismatchException::class.java
+        try {
+            Scenario.init(
+                "Intersects form",
+                html(
+                    head(
+                        title("Intersects form"),
+                        model(
+                            mainInstance(
+                                t(
+                                    "data id=\"intersects-form\"",
+                                    t("question"),
+                                    t("calculate")
+                                )
+                            ),
+                            bind("/data/question").type("geotrace"),
+                            bind("/data/calculate").type("boolean")
+                                .calculate("intersects(/data/question,/data/question)")
+                        )
+                    ),
+                    body(
+                        input("/data/question"),
+                        input("/data/calculate")
+                    )
+                )
+            ) { formDef ->
+                FormEntryController(FormEntryModel(formDef)).also {
+                    it.addFunctionHandler(IntersectsFunctionHandler())
+                }
+            }
+
+            fail("Expected exception: $expected")
+        } catch (e: Exception) {
+            assertThat(e.cause, instanceOf(expected))
+        }
+    }
 }
