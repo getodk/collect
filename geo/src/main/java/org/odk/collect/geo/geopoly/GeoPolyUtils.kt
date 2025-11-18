@@ -25,7 +25,7 @@ object GeoPolyUtils {
      */
     fun intersects(trace: List<MapPoint>): Boolean {
         return if (trace.size >= 3) {
-            val segments = getSegments(trace)
+            val segments = trace.zipWithNext()
             segments.any { line1 ->
                 segments.any { line2 ->
                     intersects(line1, line2)
@@ -33,16 +33,6 @@ object GeoPolyUtils {
             }
         } else {
             false
-        }
-    }
-
-    private fun getSegments(trace: List<MapPoint>): List<Pair<MapPoint, MapPoint>> {
-        return trace.flatMapIndexed { index, point ->
-            if (index != trace.size - 1) {
-                listOf(Pair(point, trace[index + 1]))
-            } else {
-                emptyList()
-            }
         }
     }
 
