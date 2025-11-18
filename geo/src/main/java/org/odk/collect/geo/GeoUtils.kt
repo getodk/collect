@@ -64,7 +64,8 @@ object GeoUtils {
     }
 
     @JvmStatic
-    fun parseGeometryPoint(answer: String?): DoubleArray? {
+    @JvmOverloads
+    fun parseGeometryPoint(answer: String?, strict: Boolean = false): DoubleArray? {
         if (answer != null && answer.isNotEmpty()) {
             val sa = answer.trim { it <= ' ' }.split(" ").toTypedArray()
             return try {
@@ -74,8 +75,12 @@ object GeoUtils {
                     if (sa.size > 2) sa[2].toDouble() else 0.0,
                     if (sa.size > 3) sa[3].toDouble() else 0.0
                 )
-            } catch (e: Throwable) {
-                null
+            } catch (_: Throwable) {
+                if (strict) {
+                    throw IllegalArgumentException()
+                } else {
+                    null
+                }
             }
         } else {
             return null

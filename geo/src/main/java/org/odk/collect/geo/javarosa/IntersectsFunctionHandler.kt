@@ -2,6 +2,7 @@ package org.odk.collect.geo.javarosa
 
 import org.javarosa.core.model.condition.EvaluationContext
 import org.javarosa.core.model.condition.IFunctionHandler
+import org.javarosa.xpath.XPathTypeMismatchException
 import org.odk.collect.geo.geopoly.GeoPolyUtils.intersects
 import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
 
@@ -26,7 +27,11 @@ class IntersectsFunctionHandler : IFunctionHandler {
         args: Array<out Any?>,
         ec: EvaluationContext
     ): Any {
-        val trace = parseGeometry(args[0] as String)
-        return intersects(trace)
+        try {
+            val trace = parseGeometry(args[0] as String, strict = true)
+            return intersects(trace)
+        } catch (_: IllegalArgumentException) {
+            throw XPathTypeMismatchException()
+        }
     }
 }

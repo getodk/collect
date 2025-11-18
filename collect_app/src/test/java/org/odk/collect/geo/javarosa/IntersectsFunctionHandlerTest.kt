@@ -2,6 +2,7 @@ package org.odk.collect.geo.javarosa
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.instanceOf
 import org.javarosa.core.model.data.BooleanData
 import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
@@ -15,6 +16,8 @@ import org.javarosa.test.XFormsElement.mainInstance
 import org.javarosa.test.XFormsElement.model
 import org.javarosa.test.XFormsElement.t
 import org.javarosa.test.XFormsElement.title
+import org.javarosa.xpath.XPathTypeMismatchException
+import org.junit.Assert.fail
 import org.junit.Test
 
 class IntersectsFunctionHandlerTest {
@@ -54,41 +57,6 @@ class IntersectsFunctionHandlerTest {
     }
 
     @Test
-    fun `returns false when input is a string`() {
-        val scenario = Scenario.init(
-            "Intersects form",
-            html(
-                head(
-                    title("Intersects form"),
-                    model(
-                        mainInstance(
-                            t(
-                                "data id=\"intersects-form\"",
-                                t("question"),
-                                t("calculate")
-                            )
-                        ),
-                        bind("/data/question").type("string"),
-                        bind("/data/calculate").type("boolean")
-                            .calculate("intersects(/data/question)")
-                    )
-                ),
-                body(
-                    input("/data/question"),
-                    input("/data/calculate")
-                )
-            )
-        ) { formDef ->
-            FormEntryController(FormEntryModel(formDef)).also {
-                it.addFunctionHandler(IntersectsFunctionHandler())
-            }
-        }
-
-        scenario.answer("/data/question", "blah")
-        assertThat(scenario.answerOf<BooleanData>("/data/calculate").value, equalTo(false))
-    }
-
-    @Test
     fun `returns true when input is intersecting trace`() {
         val scenario = Scenario.init(
             "Intersects form",
@@ -119,7 +87,50 @@ class IntersectsFunctionHandlerTest {
             }
         }
 
-        scenario.answer("/data/question", "1.0 1.0 0.0 0.0; 1.0 3.0 0.0 0.0; 2.0 3.0 0.0 0.0; 2.0 2.0 0.0 0.0; 0.0 2.0 0.0 0.0")
+        scenario.answer(
+            "/data/question",
+            "1.0 1.0 0.0 0.0; 1.0 3.0 0.0 0.0; 2.0 3.0 0.0 0.0; 2.0 2.0 0.0 0.0; 0.0 2.0 0.0 0.0"
+        )
         assertThat(scenario.answerOf<BooleanData>("/data/calculate").value, equalTo(true))
+    }
+
+    @Test
+    fun `throws exception when input is a non-geo string`() {
+        val scenario = Scenario.init(
+            "Intersects form",
+            html(
+                head(
+                    title("Intersects form"),
+                    model(
+                        mainInstance(
+                            t(
+                                "data id=\"intersects-form\"",
+                                t("question"),
+                                t("calculate")
+                            )
+                        ),
+                        bind("/data/question").type("string"),
+                        bind("/data/calculate").type("boolean")
+                            .calculate("intersects(/data/question)")
+                    )
+                ),
+                body(
+                    input("/data/question"),
+                    input("/data/calculate")
+                )
+            )
+        ) { formDef ->
+            FormEntryController(FormEntryModel(formDef)).also {
+                it.addFunctionHandler(IntersectsFunctionHandler())
+            }
+        }
+
+        val expected = XPathTypeMismatchException::class.java
+        try {
+            scenario.answer("/data/question", "blah")
+            fail("Expected exception: $expected")
+        } catch (e: Exception) {
+            assertThat(e.cause, instanceOf(expected))
+        }
     }
 }
