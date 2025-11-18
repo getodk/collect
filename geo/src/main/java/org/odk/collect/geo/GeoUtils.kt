@@ -36,7 +36,7 @@ object GeoUtils {
             )
         }
 
-        return removeEnd(result.toString().trim { it <= ' ' }, ";")
+        return removeEnd(result.toString().trim(), ";")
     }
 
     @JvmStatic
@@ -66,8 +66,8 @@ object GeoUtils {
     @JvmStatic
     @JvmOverloads
     fun parseGeometryPoint(answer: String?, strict: Boolean = false): DoubleArray? {
-        if (answer != null && answer.isNotEmpty()) {
-            val sa = answer.trim { it <= ' ' }.split(" ").toTypedArray()
+        if (!answer.isNullOrEmpty()) {
+            val sa = answer.trim().split(" ")
             return try {
                 doubleArrayOf(
                     sa[0].toDouble(),

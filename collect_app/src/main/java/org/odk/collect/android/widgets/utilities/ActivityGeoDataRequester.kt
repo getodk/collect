@@ -98,7 +98,7 @@ class ActivityGeoDataRequester(
                     val intent = Intent(activity, GeoPolyActivity::class.java).also {
                         it.putExtra(
                             GeoPolyActivity.EXTRA_POLYGON,
-                            parseGeometry(answerText)
+                            ArrayList(parseGeometry(answerText))
                         )
                         it.putExtra(
                             GeoPolyActivity.OUTPUT_MODE_KEY,
@@ -131,7 +131,7 @@ class ActivityGeoDataRequester(
                     val intent = Intent(activity, GeoPolyActivity::class.java).also {
                         it.putExtra(
                             GeoPolyActivity.EXTRA_POLYGON,
-                            parseGeometry(answerText)
+                            ArrayList(parseGeometry(answerText))
                         )
                         it.putExtra(
                             GeoPolyActivity.OUTPUT_MODE_KEY,

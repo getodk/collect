@@ -5,10 +5,10 @@ import org.odk.collect.maps.MapPoint
 
 object GeoPolyUtils {
 
-    fun parseGeometry(geometry: String?, strict: Boolean = false): ArrayList<MapPoint> {
+    fun parseGeometry(geometry: String?, strict: Boolean = false): List<MapPoint> {
         val points = ArrayList<MapPoint>()
 
-        for (vertex in (geometry ?: "").split(";").toTypedArray()) {
+        for (vertex in (geometry ?: "").split(";")) {
             val point = parseGeometryPoint(vertex, strict)
             if (point != null) {
                 points.add(MapPoint(point[0], point[1], point[2], point[3]))
