@@ -88,6 +88,18 @@ class GeoPolyUtilsTest {
     }
 
     @Test
+    fun `#intersects returns false when a segment's end points are both on different sides of another, but the segments do not intersect`() {
+        val trace = listOf(
+            MapPoint(1.0, 1.0),
+            MapPoint(1.0, 2.0),
+            MapPoint(3.0, 3.0),
+            MapPoint(0.0, 3.0)
+        )
+
+        assertThat(GeoPolyUtils.intersects(trace), equalTo(false))
+    }
+
+    @Test
     fun parseGeometryTest() {
         assertThat(parseGeometry("1.0 2.0 3 4"), equalTo(listOf(MapPoint(1.0, 2.0, 3.0, 4.0))))
         assertThat(
