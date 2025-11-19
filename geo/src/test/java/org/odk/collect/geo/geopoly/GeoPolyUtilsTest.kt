@@ -1,10 +1,8 @@
 package org.odk.collect.geo.geopoly
 
-import junit.framework.TestCase.assertEquals
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
-import org.odk.collect.geo.GeoUtils.parseGeometryPoint
 import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
 import org.odk.collect.maps.MapPoint
 
