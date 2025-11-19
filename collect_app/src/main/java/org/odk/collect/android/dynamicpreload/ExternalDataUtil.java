@@ -168,12 +168,18 @@ public final class ExternalDataUtil {
     public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt,
             XPathFuncExpr xpathfuncexpr, FormController formController) throws FileNotFoundException {
         try {
+            IAnswerData selectedValue = formEntryPrompt.getAnswerValue();
+            Selection selection = null;
+            if (selectedValue != null) {
+                selection = (Selection) selectedValue.getValue();
+            }
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
             ArrayList<SelectChoice> returnedChoices = new ArrayList<>();
             for (SelectChoice selectChoice : selectChoices) {
                 String value = selectChoice.getValue();
                 if (isAnInteger(value)) {
                     // treat this as a static choice
+                    attachChoiceToSelectionIfMatch(selection, selectChoice);
                     returnedChoices.add(selectChoice);
                 } else {
                     String displayColumns = formEntryPrompt.getSelectChoiceText(selectChoice);
@@ -203,6 +209,7 @@ public final class ExternalDataUtil {
                         @SuppressWarnings("unchecked")
                         List<SelectChoice> dynamicChoices = (ArrayList<SelectChoice>) eval;
                         for (SelectChoice dynamicChoice : dynamicChoices) {
+                            attachChoiceToSelectionIfMatch(selection, dynamicChoice);
                             returnedChoices.add(dynamicChoice);
                         }
                     } else {
@@ -212,7 +219,6 @@ public final class ExternalDataUtil {
                     }
                 }
             }
-            updateQuestionAnswer(formEntryPrompt, returnedChoices);
             return returnedChoices;
         } catch (Exception e) {
             String fileName = String.valueOf(xpathfuncexpr.args[0].eval(null, null));
@@ -231,21 +237,14 @@ public final class ExternalDataUtil {
         }
     }
 
-    private static void updateQuestionAnswer(FormEntryPrompt formEntryPrompt, List<SelectChoice> returnedChoices) {
-        IAnswerData value = formEntryPrompt.getAnswerValue();
-        if (value == null) {
+    private static void attachChoiceToSelectionIfMatch(Selection selection, SelectChoice selectChoice) {
+        if (selection == null || selection.index != -1) {
             return;
         }
 
-        Selection selection = (Selection) value.getValue();
-        if (selection.index != -1) {
-            return;
+        if (selection.getValue().equals(selectChoice.getValue())) {
+            selection.attachChoice(selectChoice);
         }
-
-        returnedChoices.stream()
-                .filter(choice -> selection.getValue().equals(choice.getValue()))
-                .findFirst()
-                .ifPresent(selection::attachChoice);
     }
 
     /**
