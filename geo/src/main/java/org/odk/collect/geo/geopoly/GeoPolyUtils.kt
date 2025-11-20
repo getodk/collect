@@ -28,7 +28,7 @@ object GeoPolyUtils {
             val segments = trace.zipWithNext()
             segments.any { line1 ->
                 segments.any { line2 ->
-                    intersects(line1, line2)
+                    crosses(line1, line2)
                 }
             }
         } else {
@@ -37,11 +37,11 @@ object GeoPolyUtils {
     }
 
     /**
-     * Work out whether two line segments intersect by calculating if the endpoints of one segment
+     * Work out whether two line segments cross by calculating if the endpoints of one segment
      * are on opposite sides of the other segment **and** vice versa. This is determined by finding
      * the orientation of endpoints relative to the other line.
      */
-    private fun intersects(
+    private fun crosses(
         segment1: Pair<MapPoint, MapPoint>,
         segment2: Pair<MapPoint, MapPoint>
     ): Boolean {
