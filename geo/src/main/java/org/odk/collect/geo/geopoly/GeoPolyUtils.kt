@@ -38,8 +38,10 @@ object GeoPolyUtils {
                 segments.filterIndexed { line2Index, line2 ->
                     if (line2Index >= line1Index + 2) {
                         crosses(line1, line2) || within(line1.first, line2)
+                    } else if (line2Index == line1Index + 1) {
+                        within(line2.second, line1)
                     } else {
-                        false // Only check following (non-neighbour) segments
+                        false
                     }
                 }.isNotEmpty()
             }.isNotEmpty()
