@@ -111,6 +111,20 @@ class GeoPolyUtilsTest {
     }
 
     @Test
+    fun `#intersects returns true when the trace closes on a non-origin vertex`() {
+        val trace = listOf(
+            MapPoint(0.0, 0.0),
+            MapPoint(0.0, 1.0),
+            MapPoint(0.0, 2.0),
+            MapPoint(1.0, 2.0),
+            MapPoint(1.0, 1.0),
+            MapPoint(0.0, 1.0)
+        )
+
+        assertThat(GeoPolyUtils.intersects(trace), equalTo(true))
+    }
+
+    @Test
     fun parseGeometryTest() {
         assertThat(parseGeometry("1.0 2.0 3 4"), equalTo(listOf(MapPoint(1.0, 2.0, 3.0, 4.0))))
         assertThat(
