@@ -25,6 +25,6 @@ class AddNewRepeatDialog(private val repeatName: String?) : Page<AddNewRepeatDia
     }
 
     fun <D : Page<D>> clickOnDoNotAdd(destination: D): D {
-        return clickOnTextInDialog(R.string.cancel, destination)
+        return clickOnTextInDialog(R.string.do_not_add_repeat, destination)
     }
 }
