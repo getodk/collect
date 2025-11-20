@@ -2,6 +2,8 @@ package org.odk.collect.geo.geopoly
 
 import org.odk.collect.geo.GeoUtils.parseGeometryPoint
 import org.odk.collect.maps.MapPoint
+import kotlin.math.max
+import kotlin.math.min
 
 object GeoPolyUtils {
 
@@ -24,16 +26,43 @@ object GeoPolyUtils {
      * Returns `true` if any segment of the trace intersects with any other and `false` otherwise.
      */
     fun intersects(trace: List<MapPoint>): Boolean {
-        return if (trace.size >= 3) {
-            val segments = trace.zipWithNext()
-            segments.any { line1 ->
-                segments.any { line2 ->
-                    crosses(line1, line2)
-                }
-            }
+        val unclosedTrace = if (trace.isNotEmpty() && trace.first() == trace.last()) {
+            trace.dropLast(1)
+        } else {
+            trace
+        }
+
+        return if (unclosedTrace.size >= 3) {
+            val segments = unclosedTrace.zipWithNext()
+            segments.filterIndexed { line1Index, line1 ->
+                segments.filterIndexed { line2Index, line2 ->
+                    if (line2Index >= line1Index + 2) {
+                        crosses(line1, line2) || within(line1.first, line2)
+                    } else {
+                        false // Only check following (non-neighbour) segments
+                    }
+                }.isNotEmpty()
+            }.isNotEmpty()
         } else {
             false
         }
+    }
+
+    /**
+     * Check if a point is within a line
+     */
+    fun within(
+        point: MapPoint,
+        line: Pair<MapPoint, MapPoint>
+    ): Boolean {
+        val lineLatMin = min(line.first.latitude, line.second.latitude)
+        val lineLatMax = max(line.first.latitude, line.second.latitude)
+        val lineLongMin = min(line.first.longitude, line.second.longitude)
+        val lineLongMax = max(line.first.longitude, line.second.longitude)
+        val latRange = lineLatMin..lineLatMax
+        val longRange = lineLongMin..lineLongMax
+
+        return point.latitude in latRange && point.longitude in longRange
     }
 
     /**
