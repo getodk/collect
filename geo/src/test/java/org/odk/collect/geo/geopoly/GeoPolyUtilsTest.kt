@@ -104,7 +104,7 @@ class GeoPolyUtilsTest {
         val trace = listOf(
             MapPoint(0.0, 0.0),
             MapPoint(0.0, 1.0),
-            MapPoint(0.0, 0.0)
+            MapPoint(0.0, 0.5)
         )
 
         assertThat(GeoPolyUtils.intersects(trace), equalTo(true))
