@@ -14,6 +14,7 @@ import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.geopoint.GeoPointActivity
 import org.odk.collect.geo.geopoint.GeoPointMapActivity
 import org.odk.collect.geo.geopoly.GeoPolyActivity
+import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
 import java.lang.Boolean.parseBoolean
@@ -35,7 +36,7 @@ class ActivityGeoDataRequester(
                     waitingForDataRegistry.waitForData(prompt.index)
 
                     val bundle = Bundle().also {
-                        val parsedGeometry = GeoWidgetUtils.parseGeometry(answerText)
+                        val parsedGeometry = parseGeometry(answerText)
                         if (parsedGeometry.isNotEmpty()) {
                             it.putParcelable(
                                 GeoPointMapActivity.EXTRA_LOCATION,
@@ -97,7 +98,7 @@ class ActivityGeoDataRequester(
                     val intent = Intent(activity, GeoPolyActivity::class.java).also {
                         it.putExtra(
                             GeoPolyActivity.EXTRA_POLYGON,
-                            GeoWidgetUtils.parseGeometry(answerText)
+                            ArrayList(parseGeometry(answerText))
                         )
                         it.putExtra(
                             GeoPolyActivity.OUTPUT_MODE_KEY,
@@ -130,7 +131,7 @@ class ActivityGeoDataRequester(
                     val intent = Intent(activity, GeoPolyActivity::class.java).also {
                         it.putExtra(
                             GeoPolyActivity.EXTRA_POLYGON,
-                            GeoWidgetUtils.parseGeometry(answerText)
+                            ArrayList(parseGeometry(answerText))
                         )
                         it.putExtra(
                             GeoPolyActivity.OUTPUT_MODE_KEY,

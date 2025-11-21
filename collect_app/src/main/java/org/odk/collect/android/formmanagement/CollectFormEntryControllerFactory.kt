@@ -22,6 +22,7 @@ import org.odk.collect.entities.javarosa.filter.PullDataFunctionHandler
 import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.geo.javarosa.IntersectsFunctionHandler
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 import java.io.File
@@ -46,6 +47,9 @@ class CollectFormEntryControllerFactory(
                     externalDataHandlerPull
                 )
             )
+
+            it.addFunctionHandler(IntersectsFunctionHandler())
+
             it.addPostProcessor(EntityFormFinalizationProcessor())
             it.addPostProcessor(EditedFormFinalizationProcessor(instance))
 

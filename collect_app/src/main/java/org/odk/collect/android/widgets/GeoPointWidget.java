@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.widgets;
 
+import static org.odk.collect.geo.GeoUtils.parseGeometryPoint;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -76,7 +78,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public IAnswerData getAnswer() {
-        double[] parsedGeometryPoint = GeoWidgetUtils.parseGeometryPoint(answerText);
+        double[] parsedGeometryPoint = parseGeometryPoint(answerText);
         return parsedGeometryPoint == null
                 ? null
                 : new GeoPointData(parsedGeometryPoint);
