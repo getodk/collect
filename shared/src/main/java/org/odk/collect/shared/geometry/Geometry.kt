@@ -62,7 +62,7 @@ fun Point.within(segment: LineSegment): Boolean {
  * are on opposite sides (or touching of the other segment **and** vice versa. This is
  * determined by finding the orientation of endpoints relative to the other line.
  */
-private fun LineSegment.intersects(other: LineSegment): Boolean {
+fun LineSegment.intersects(other: LineSegment): Boolean {
     val (a, b) = this
     val (c, d) = other
 
@@ -74,6 +74,12 @@ private fun LineSegment.intersects(other: LineSegment): Boolean {
     return if (orientationA.isOpposing(orientationB) && orientationC.isOpposing(orientationD)) {
         true
     } else if (orientationA == Orientation.Collinear && a.within(other)) {
+        true
+    } else if (orientationB == Orientation.Collinear && b.within(other)) {
+        true
+    } else if (orientationC == Orientation.Collinear && c.within(other)) {
+        true
+    } else if (orientationD == Orientation.Collinear && d.within(other)) {
         true
     } else {
         false

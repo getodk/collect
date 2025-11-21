@@ -5,6 +5,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 
 class GeometryTest {
+
     @Test
     fun `Trace#intersects returns false for an empty list`() {
         assertThat(Trace(emptyList()).intersects(), equalTo(false))
@@ -147,5 +148,22 @@ class GeometryTest {
         )
 
         assertThat(trace.intersects(), equalTo(false))
+    }
+
+    @Test
+    fun `LineSegment#intersects detects any endpoint touching the other line`() {
+        val line = LineSegment(Point(0.0, 0.0), Point(0.0, 2.0))
+
+        val aTouching = LineSegment(Point(-1.0, 0.0), Point(1.0, 0.0))
+        assertThat(line.intersects(aTouching), equalTo(true))
+
+        val bTouching = LineSegment(Point(-1.0, 2.0), Point(1.0, 2.0))
+        assertThat(line.intersects(bTouching), equalTo(true))
+
+        val cTouching = LineSegment(Point(0.0, 1.0), Point(1.0, 1.0))
+        assertThat(line.intersects(cTouching), equalTo(true))
+
+        val dTouching = LineSegment(Point(-1.0, 1.0), Point(0.0, 1.0))
+        assertThat(line.intersects(dTouching), equalTo(true))
     }
 }
