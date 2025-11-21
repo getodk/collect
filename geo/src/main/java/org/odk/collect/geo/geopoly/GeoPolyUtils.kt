@@ -26,20 +26,15 @@ object GeoPolyUtils {
      * Returns `true` if any segment of the trace intersects with any other and `false` otherwise.
      */
     fun intersects(trace: List<MapPoint>): Boolean {
-        val unclosedTrace = if (trace.isNotEmpty() && trace.first() == trace.last()) {
-            trace.dropLast(1)
-        } else {
-            trace
-        }
-
-        return if (unclosedTrace.size >= 3) {
-            val segments = unclosedTrace.zipWithNext()
+        return if (trace.size >= 3) {
+            val isClosed = trace.isNotEmpty() && trace.first() == trace.last()
+            val segments = trace.zipWithNext()
             segments.filterIndexed { line1Index, line1 ->
                 segments.filterIndexed { line2Index, line2 ->
-                    if (line2Index >= line1Index + 2) {
-                        crosses(line1, line2) || within(line1.first, line2)
-                    } else if (line2Index == line1Index + 1) {
-                        within(line2.second, line1)
+                    if (isClosed && line1Index == 0 && line2Index == segments.size - 1) {
+                        false
+                    } else if (line2Index >= line1Index + 2) {
+                        intersects(line1, line2)
                     } else {
                         false
                     }
@@ -51,7 +46,7 @@ object GeoPolyUtils {
     }
 
     /**
-     * Check if a point is within a line
+     * Check if a point is within the bounding box of a line
      */
     fun within(
         point: MapPoint,
@@ -68,18 +63,29 @@ object GeoPolyUtils {
     }
 
     /**
-     * Work out whether two line segments cross by calculating if the endpoints of one segment
-     * are on opposite sides of the other segment **and** vice versa. This is determined by finding
-     * the orientation of endpoints relative to the other line.
+     * Work out whether two line segments intersect by calculating if the endpoints of one segment
+     * are on opposite sides (or touching of the other segment **and** vice versa. This is
+     * determined by finding the orientation of endpoints relative to the other line.
      */
-    private fun crosses(
-        segment1: Pair<MapPoint, MapPoint>,
-        segment2: Pair<MapPoint, MapPoint>
+    private fun intersects(
+        aB: Pair<MapPoint, MapPoint>,
+        cD: Pair<MapPoint, MapPoint>
     ): Boolean {
-        return orientation(segment1.first, segment2.first, segment2.second)
-            .isOpposing(orientation(segment1.second, segment2.first, segment2.second)) &&
-            orientation(segment1.first, segment1.second, segment2.first)
-                .isOpposing(orientation(segment1.first, segment1.second, segment2.second))
+        val (a, b) = aB
+        val (c, d) = cD
+
+        val orientationA = orientation(a, c, d)
+        val orientationB = orientation(b, c, d)
+        val orientationC = orientation(a, b, c)
+        val orientationD = orientation(a, b, d)
+
+        return if (orientationA.isOpposing(orientationB) && orientationC.isOpposing(orientationD)) {
+            true
+        } else if (orientationA == Orientation.Collinear && within(a, cD)) {
+            true
+        } else {
+            false
+        }
     }
 
     /**

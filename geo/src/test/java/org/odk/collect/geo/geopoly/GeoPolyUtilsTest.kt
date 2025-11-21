@@ -124,6 +124,17 @@ class GeoPolyUtilsTest {
     }
 
     @Test
+    fun `#intersects returns false for right angled triangle`() {
+        val trace = listOf(
+            MapPoint(0.0, 0.0),
+            MapPoint(10.0, 10.0),
+            MapPoint(0.0, 10.0)
+        )
+
+        assertThat(GeoPolyUtils.intersects(trace), equalTo(false))
+    }
+
+    @Test
     fun parseGeometryTest() {
         assertThat(parseGeometry("1.0 2.0 3 4"), equalTo(listOf(MapPoint(1.0, 2.0, 3.0, 4.0))))
         assertThat(
