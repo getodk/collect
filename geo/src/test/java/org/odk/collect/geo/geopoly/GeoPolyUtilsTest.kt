@@ -114,10 +114,9 @@ class GeoPolyUtilsTest {
     fun `#intersects returns true when the trace closes on a non-origin vertex`() {
         val trace = listOf(
             MapPoint(0.0, 0.0),
-            MapPoint(0.0, 1.0),
+            MapPoint(0.0, 1.0), // Close back on this point
             MapPoint(0.0, 2.0),
             MapPoint(1.0, 2.0),
-            MapPoint(1.0, 1.0),
             MapPoint(0.0, 1.0)
         )
 
