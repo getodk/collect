@@ -27,19 +27,25 @@ object GeoPolyUtils {
      */
     fun intersects(trace: List<MapPoint>): Boolean {
         return if (trace.size >= 3) {
-            val isClosed = trace.isNotEmpty() && trace.first() == trace.last()
+            val isClosed = trace.first() == trace.last()
             val segments = trace.zipWithNext()
-            segments.filterIndexed { line1Index, line1 ->
-                segments.filterIndexed { line2Index, line2 ->
-                    if (isClosed && line1Index == 0 && line2Index == segments.size - 1) {
-                        false
-                    } else if (line2Index >= line1Index + 2) {
-                        intersects(line1, line2)
-                    } else {
-                        false
-                    }
+
+            return if (segments.size == 2) {
+                val orientation = orientation(segments[1].second, segments[0].first, segments[0].second)
+                return orientation == Orientation.Collinear && within(segments[1].second, segments[0])
+            } else {
+                segments.filterIndexed { line1Index, line1 ->
+                    segments.filterIndexed { line2Index, line2 ->
+                        if (isClosed && line1Index == 0 && line2Index == segments.size - 1) {
+                            false
+                        } else if (line2Index >= line1Index + 2) {
+                            intersects(line1, line2)
+                        } else {
+                            false
+                        }
+                    }.isNotEmpty()
                 }.isNotEmpty()
-            }.isNotEmpty()
+            }
         } else {
             false
         }
