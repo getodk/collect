@@ -3,8 +3,10 @@ package org.odk.collect.geo.javarosa
 import org.javarosa.core.model.condition.EvaluationContext
 import org.javarosa.core.model.condition.IFunctionHandler
 import org.javarosa.xpath.XPathTypeMismatchException
-import org.odk.collect.geo.geopoly.GeoPolyUtils.intersects
 import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
+import org.odk.collect.maps.toPoint
+import org.odk.collect.shared.geometry.Trace
+import org.odk.collect.shared.geometry.intersects
 
 class IntersectsFunctionHandler : IFunctionHandler {
     override fun getName(): String {
@@ -28,8 +30,9 @@ class IntersectsFunctionHandler : IFunctionHandler {
         ec: EvaluationContext
     ): Any {
         try {
-            val trace = parseGeometry(args[0] as String, strict = true)
-            return intersects(trace)
+            val mapPoints = parseGeometry(args[0] as String, strict = true)
+            val trace = Trace(mapPoints.map { it.toPoint() })
+            return trace.intersects()
         } catch (_: IllegalArgumentException) {
             throw XPathTypeMismatchException()
         }
