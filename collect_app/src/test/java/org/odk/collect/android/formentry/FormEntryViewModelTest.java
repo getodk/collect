@@ -34,6 +34,7 @@ import org.odk.collect.android.formentry.support.InMemFormSessionRepository;
 import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FakeFormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.ChangeLocks;
 import org.odk.collect.androidshared.data.Consumable;
 import org.odk.collect.forms.Form;
@@ -438,7 +439,6 @@ public class FormEntryViewModelTest {
     public void answerQuestion_savesAnswerToFormController() {
         TreeReference reference = new TreeReference();
         reference.add("blah", TreeReference.INDEX_UNBOUND);
-
         FormIndex formIndex = new FormIndex(null, 1, 1, reference);
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder().build();
         formController.setPrompt(formIndex, prompt);
@@ -446,5 +446,21 @@ public class FormEntryViewModelTest {
         viewModel.answerQuestion(formIndex, new StringData("answer"));
         scheduler.flush(true);
         assertThat(formController.getAnswer(formIndex.getReference()).getValue(), equalTo("answer"));
+    }
+
+    @Test
+    public void answerQuestion_whenQuestionIsAutoAdvance_movesForward() {
+        TreeReference reference = new TreeReference();
+        reference.add("blah", TreeReference.INDEX_UNBOUND);
+        FormIndex formIndex = new FormIndex(null, 1, 1, reference);
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withAppearance(Appearances.QUICK)
+                .build();
+        formController.setPrompt(formIndex, prompt);
+
+        FormIndex originalIndex = formController.getFormIndex();
+        viewModel.answerQuestion(formIndex, new StringData("answer"));
+        scheduler.flush(true);
+        assertThat(formController.getFormIndex(), equalTo(new FormIndex(null, originalIndex.getLocalIndex() + 1, 0, new TreeReference())));
     }
 }

@@ -32,6 +32,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.ChangeLocks;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.androidshared.async.TrackableWorker;
@@ -291,6 +292,12 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         worker.immediate(() -> {
             try {
                 formController.saveOneScreenAnswer(index, answer, false);
+
+                FormEntryPrompt prompt = formController.getQuestionPrompt(index);
+                if (Appearances.hasAppearance(prompt, Appearances.QUICK)) {
+                    formController.stepToNextScreenEvent();
+                }
+
                 updateIndex(true, null);
             } catch (JavaRosaException e) {
                 throw new RuntimeException(e);

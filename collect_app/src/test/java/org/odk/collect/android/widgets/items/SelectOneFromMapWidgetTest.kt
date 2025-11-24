@@ -16,13 +16,11 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.listeners.AdvanceToNextListener
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
@@ -97,8 +95,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(promptWithAnswer(null)),
-            false,
-            mock(),
             widgetDependencies()
         )
 
@@ -124,7 +120,7 @@ class SelectOneFromMapWidgetTest {
 
         val prompt = promptWithAnswer(null)
         val widget =
-            SelectOneFromMapWidget(activity, QuestionDetails(prompt), false, mock(), widgetDependencies())
+            SelectOneFromMapWidget(activity, QuestionDetails(prompt), widgetDependencies())
         whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).doReturn(prompt)
 
         widget.binding.button.performClick()
@@ -146,8 +142,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(promptWithAnswer(null)),
-            false,
-            mock(),
             widgetDependencies()
         )
 
@@ -173,8 +167,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(prompt),
-            false,
-            mock(),
             widgetDependencies()
         )
         assertThat(widget.binding.answer.text, equalTo("A"))
@@ -186,8 +178,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(promptWithAnswer(null)),
-            false,
-            mock(),
             widgetDependencies()
         )
 
@@ -205,8 +195,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(promptWithAnswer(answer)),
-            false,
-            mock(),
             widgetDependencies()
         )
         assertThat(widget.answer, equalTo(answer))
@@ -220,8 +208,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(promptWithAnswer(answer)),
-            false,
-            mock(),
             widgetDependencies()
         )
         widget.clearAnswer()
@@ -236,8 +222,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(promptWithAnswer(answer)),
-            false,
-            mock(),
             widgetDependencies()
         )
 
@@ -258,8 +242,6 @@ class SelectOneFromMapWidgetTest {
         val widget = SelectOneFromMapWidget(
             activityController.get(),
             QuestionDetails(prompt),
-            false,
-            mock(),
             widgetDependencies()
         )
 
