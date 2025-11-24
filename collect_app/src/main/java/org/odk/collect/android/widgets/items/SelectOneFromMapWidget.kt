@@ -29,7 +29,7 @@ class SelectOneFromMapWidget(
     private val autoAdvance: Boolean,
     private val autoAdvanceListener: AdvanceToNextListener,
     dependencies: Dependencies
-) : QuestionWidget(context, dependencies, questionDetails), WidgetDataReceiver {
+) : QuestionWidget(context, dependencies, questionDetails) {
 
     init {
         render()
@@ -81,14 +81,6 @@ class SelectOneFromMapWidget(
     }
 
     override fun setOnLongClickListener(l: OnLongClickListener?) {}
-
-    override fun setData(answer: Any) {
-        updateAnswer(answer as SelectOneData)
-        widgetValueChanged()
-        if (autoAdvance) {
-            autoAdvanceListener.advance()
-        }
-    }
 
     private fun updateAnswer(answer: SelectOneData?) {
         this.answer = answer

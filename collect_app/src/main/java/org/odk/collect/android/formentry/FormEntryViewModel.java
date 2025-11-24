@@ -76,9 +76,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     @Nullable
     private FormIndex jumpBackIndex;
 
-    @Nullable
-    private AnswerListener answerListener;
-
     private final Cancellable formSessionObserver;
     private final FormsRepository formsRepository;
     private final ChangeLocks changeLocks;
@@ -290,13 +287,12 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         return formController.getQuestionPrompt(formIndex);
     }
 
-    public void setAnswerListener(@Nullable AnswerListener answerListener) {
-        this.answerListener = answerListener;
-    }
-
     public void answerQuestion(FormIndex index, IAnswerData answer) {
-        if (this.answerListener != null) {
-            this.answerListener.onAnswer(index, answer);
+        try {
+            formController.saveOneScreenAnswer(index, answer, false);
+            refresh();
+        } catch (JavaRosaException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -315,7 +311,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     @Override
     protected void onCleared() {
-        this.answerListener = null;
         formSessionObserver.cancel();
     }
 
