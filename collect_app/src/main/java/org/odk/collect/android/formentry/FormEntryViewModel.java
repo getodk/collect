@@ -288,12 +288,14 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     public void answerQuestion(FormIndex index, IAnswerData answer) {
-        try {
-            formController.saveOneScreenAnswer(index, answer, false);
-            refresh();
-        } catch (JavaRosaException e) {
-            throw new RuntimeException(e);
-        }
+        worker.immediate(() -> {
+            try {
+                formController.saveOneScreenAnswer(index, answer, false);
+                updateIndex(true, null);
+            } catch (JavaRosaException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @NonNull

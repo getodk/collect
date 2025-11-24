@@ -444,6 +444,7 @@ public class FormEntryViewModelTest {
         formController.setPrompt(formIndex, prompt);
 
         viewModel.answerQuestion(formIndex, new StringData("answer"));
+        scheduler.flush(true);
         assertThat(formController.getAnswer(formIndex.getReference()).getValue(), equalTo("answer"));
     }
 }
