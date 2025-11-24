@@ -9,6 +9,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.utilities.StubFormController;
@@ -34,6 +35,7 @@ public class FakeFormController extends StubFormController {
     private JavaRosaException previousStepError;
     private FormIndex nextRepeatPrompt;
     private List<FormEntryPrompt> currentPrompts;
+    private Map<TreeReference, IAnswerData> answers = new HashMap<>();
 
     public FakeFormController(FormIndex startingIndex, AuditEventLogger auditEventLogger) {
         this.index = startingIndex;
@@ -88,16 +90,31 @@ public class FakeFormController extends StubFormController {
         }
     }
 
+    @Override
+    public @NotNull ValidationResult saveOneScreenAnswer(@Nullable FormIndex index, @Nullable IAnswerData data, boolean evaluateConstraints) {
+        if (failedConstraint != null) {
+            return failedConstraint;
+        } else {
+            answers.put(index.getReference(), data);
+            return SuccessValidationResult.INSTANCE;
+        }
+    }
+
     @NonNull
     @Override
     public ValidationResult saveAllScreenAnswers(@Nullable HashMap<FormIndex, IAnswerData> answers, boolean evaluateConstraints) throws JavaRosaException {
         if (saveError != null) {
             throw saveError;
-        } else if (failedConstraint != null) {
-            return failedConstraint;
         } else {
-            return SuccessValidationResult.INSTANCE;
+            for (Map.Entry<FormIndex, IAnswerData> entry : answers.entrySet()) {
+                ValidationResult validationResult = saveOneScreenAnswer(entry.getKey(), entry.getValue(), evaluateConstraints);
+                if (validationResult instanceof FailedValidationResult) {
+                    return validationResult;
+                }
+            }
         }
+
+        return SuccessValidationResult.INSTANCE;
     }
 
     @Nullable
@@ -146,6 +163,11 @@ public class FakeFormController extends StubFormController {
     public int jumpToIndex(@Nullable FormIndex index) {
         this.index = index;
         return FormEntryController.EVENT_END_OF_FORM;
+    }
+
+    @Override
+    public @Nullable IAnswerData getAnswer(@Nullable TreeReference treeReference) {
+        return answers.get(treeReference);
     }
 
     public void addNextEvents(List<Integer> events) {

@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.javarosa.core.model.Constants.CONTROL_SELECT_ONE;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -199,31 +198,6 @@ public class FormEntryViewModelTest {
         formController.setPrompt(formIndex, prompt);
 
         assertThat(viewModel.getQuestionPrompt(formIndex), is(prompt));
-    }
-
-    @Test
-    public void answerQuestion_callsAnswerListener() {
-        FormEntryViewModel.AnswerListener answerListener = mock(FormEntryViewModel.AnswerListener.class);
-        viewModel.setAnswerListener(answerListener);
-
-        FormIndex index = new FormIndex(null, 1, 1, new TreeReference());
-        StringData answer = new StringData("42");
-        viewModel.answerQuestion(index, answer);
-        verify(answerListener).onAnswer(index, answer);
-    }
-
-    @Test
-    public void onCleared_removesAnswerListener() {
-        FormEntryViewModel.AnswerListener answerListener = mock(FormEntryViewModel.AnswerListener.class);
-        viewModel.setAnswerListener(answerListener);
-
-        viewModel.onCleared();
-
-        viewModel.answerQuestion(
-                new FormIndex(null, 1, 1, new TreeReference()),
-                new StringData("42")
-        );
-        verify(answerListener, never()).onAnswer(any(), any());
     }
 
     @Test
@@ -458,5 +432,18 @@ public class FormEntryViewModelTest {
 
         viewModel.exit();
         assertThat(changeLocks.getFormsLock().tryLock(FORM_ENTRY_TOKEN), equalTo(true));
+    }
+
+    @Test
+    public void answerQuestion_savesAnswerToFormController() {
+        TreeReference reference = new TreeReference();
+        reference.add("blah", TreeReference.INDEX_UNBOUND);
+
+        FormIndex formIndex = new FormIndex(null, 1, 1, reference);
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder().build();
+        formController.setPrompt(formIndex, prompt);
+
+        viewModel.answerQuestion(formIndex, new StringData("answer"));
+        assertThat(formController.getAnswer(formIndex.getReference()).getValue(), equalTo("answer"));
     }
 }
