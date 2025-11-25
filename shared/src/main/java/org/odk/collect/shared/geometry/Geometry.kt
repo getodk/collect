@@ -24,7 +24,7 @@ fun Trace.intersects(): Boolean {
         val segments = segments()
         return if (segments.size == 2) {
             val orientation = orientation(segments[1].end, segments[0].start, segments[0].end)
-            return orientation == Orientation.Collinear && segments[1].end.within(segments[0])
+            orientation == Orientation.Collinear && segments[1].end.within(segments[0])
         } else {
             segments.filterIndexed { line1Index, line1 ->
                 segments.filterIndexed { line2Index, line2 ->
