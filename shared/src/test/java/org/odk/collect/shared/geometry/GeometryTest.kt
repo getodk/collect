@@ -166,4 +166,12 @@ class GeometryTest {
         val dTouching = LineSegment(Point(-1.0, 1.0), Point(0.0, 1.0))
         assertThat(line.intersects(dTouching), equalTo(true))
     }
+
+    @Test
+    fun `LineSegment#intersects does not detect intersections for collinear endpoints`() {
+        val segment1 = LineSegment(Point(0.0, 0.0), Point(4.0, 0.0))
+        val segment2 = LineSegment(Point(4.0, 4.0), Point(8.0, 0.0))
+
+        assertThat(segment1.intersects(segment2), equalTo(false))
+    }
 }

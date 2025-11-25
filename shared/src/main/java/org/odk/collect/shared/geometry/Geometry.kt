@@ -77,9 +77,9 @@ fun LineSegment.intersects(other: LineSegment): Boolean {
         true
     } else if (orientationB == Orientation.Collinear && b.within(other)) {
         true
-    } else if (orientationC == Orientation.Collinear && c.within(other)) {
+    } else if (orientationC == Orientation.Collinear && c.within(this)) {
         true
-    } else if (orientationD == Orientation.Collinear && d.within(other)) {
+    } else if (orientationD == Orientation.Collinear && d.within(this)) {
         true
     } else {
         false
