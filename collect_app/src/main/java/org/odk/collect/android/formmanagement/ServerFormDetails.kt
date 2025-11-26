@@ -72,7 +72,7 @@ data class ServerFormDetails @JvmOverloads constructor(
         New,
 
         /**
-         * The form is on the device, but this is a new version with a new version and hash
+         * The form is on the device, but this is a new version with a new form version and hash
          */
         UpdatedVersion,
 
