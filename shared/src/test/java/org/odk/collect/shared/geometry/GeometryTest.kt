@@ -110,16 +110,22 @@ class GeometryTest {
     }
 
     @Test
-    fun `Trace#intersects returns true when a segment is collinear and within another`() {
-        val trace = Trace(
+    fun `Trace#intersects returns true when two segments and they intersect`() {
+        val endpointWithin = Trace(
             listOf(
                 Point(0.0, 0.0),
                 Point(0.0, 1.0),
                 Point(0.0, 0.5)
             )
         )
+        assertThat(endpointWithin.intersects(), equalTo(true))
 
-        assertThat(trace.intersects(), equalTo(true))
+        val endpointBeyond = Trace(listOf(
+            Point(0.0, 0.0),
+            Point(0.0, 1.0),
+            Point(0.0, -1.0),
+        ))
+        assertThat(endpointBeyond.intersects(), equalTo(true))
     }
 
     @Test
