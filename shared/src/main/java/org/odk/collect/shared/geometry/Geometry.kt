@@ -12,7 +12,13 @@ data class Trace(val points: List<Point>) {
 }
 
 fun Trace.segments(): List<LineSegment> {
-    return points.zipWithNext().map { (start, end) -> LineSegment(start, end) }
+    return points.zipWithNext().flatMap { (start, end) ->
+        if (start != end) {
+            listOf(LineSegment(start, end))
+        } else {
+            emptyList()
+        }
+    }
 }
 
 /**

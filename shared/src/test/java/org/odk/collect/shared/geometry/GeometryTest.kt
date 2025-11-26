@@ -164,6 +164,37 @@ class GeometryTest {
     }
 
     @Test
+    fun `Trace#segments returns false for trace with duplicate points`() {
+        val trace = Trace(
+            listOf(
+                Point(0.0, 0.0),
+                Point(1.0, 0.0),
+                Point(1.0, 0.0),
+                Point(2.0, 0.0)
+            )
+        )
+
+        assertThat(trace.intersects(), equalTo(false))
+    }
+
+    @Test
+    fun `Trace#segments does not include zero-length segments`() {
+        val trace = Trace(
+            listOf(
+                Point(0.0, 0.0),
+                Point(1.0, 0.0),
+                Point(1.0, 0.0),
+                Point(2.0, 0.0)
+            )
+        )
+
+        assertThat(trace.segments(), equalTo(listOf(
+            LineSegment(Point(0.0, 0.0), Point(1.0, 0.0)),
+            LineSegment(Point(1.0, 0.0), Point(2.0, 0.0))
+        )))
+    }
+
+    @Test
     fun `LineSegment#intersects detects any endpoint touching the other line`() {
         val line = LineSegment(Point(0.0, 0.0), Point(0.0, 2.0))
 
