@@ -46,14 +46,6 @@ object ServerFormUseCases {
                 null
             }
 
-            val isNewerFormVersionAvailable = listItem.hash.let {
-                if (thisFormAlreadyDownloaded) {
-                    existingForm == null
-                } else {
-                    false
-                }
-            }
-
             val areNewerMediaFilesAvailable = if (existingForm != null && manifestFile != null) {
                 areNewerMediaFilesAvailable(existingForm, manifestFile.mediaFiles)
             } else {
