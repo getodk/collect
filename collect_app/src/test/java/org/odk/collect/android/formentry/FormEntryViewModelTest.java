@@ -18,6 +18,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SubmissionProfile;
+import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
@@ -217,7 +218,9 @@ public class FormEntryViewModelTest {
                 new Consumable<>(new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error));
         formController.setFailedConstraint(failedValidationResult.getValue());
 
-        viewModel.moveForward(new HashMap<>());
+        HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
+        answers.put(startingIndex, new StringData("answer"));
+        viewModel.moveForward(answers);
         scheduler.flush();
 
         assertThat(getOrAwaitValue(viewModel.getValidationResult()), equalTo(failedValidationResult));
@@ -231,7 +234,9 @@ public class FormEntryViewModelTest {
         FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
         formController.setFailedConstraint(failedValidationResult);
 
-        viewModel.moveForward(new HashMap<>());
+        HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
+        answers.put(startingIndex, new StringData("answer"));
+        viewModel.moveForward(answers);
         scheduler.flush();
 
         verify(auditEventLogger, never()).flush();
@@ -242,7 +247,9 @@ public class FormEntryViewModelTest {
         FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
         formController.setFailedConstraint(failedValidationResult);
 
-        viewModel.moveForward(new HashMap<>());
+        HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
+        answers.put(startingIndex, new StringData("answer"));
+        viewModel.moveForward(answers);
         scheduler.flush();
 
         assertThat(formController.getStepPosition(), equalTo(0));
