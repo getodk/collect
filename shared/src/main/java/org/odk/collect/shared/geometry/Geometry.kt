@@ -28,12 +28,12 @@ fun Trace.intersects(): Boolean {
     val points = this.points
     return if (points.size >= 3) {
         val segments = segments()
-        return if (segments.size == 2) {
+        if (segments.size == 2) {
             val (a, b) = segments[0]
             val (c, d) = segments[1]
             val orientationA = orientation(a, c, d)
             val orientationD = orientation(d, a, b)
-            return if (orientationA == Orientation.Collinear && a.within(segments[1])) {
+            if (orientationA == Orientation.Collinear && a.within(segments[1])) {
                 true
             } else if (orientationD == Orientation.Collinear && d.within(segments[0])) {
                 true
