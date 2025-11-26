@@ -23,8 +23,17 @@ fun Trace.intersects(): Boolean {
     return if (points.size >= 3) {
         val segments = segments()
         return if (segments.size == 2) {
-            val orientation = orientation(segments[1].end, segments[0].start, segments[0].end)
-            orientation == Orientation.Collinear && segments[1].end.within(segments[0])
+            val (a, b) = segments[0]
+            val (c, d) = segments[1]
+            val orientationA = orientation(a, c, d)
+            val orientationD = orientation(d, a, b)
+            return if (orientationA == Orientation.Collinear && a.within(segments[1])) {
+                true
+            } else if (orientationD == Orientation.Collinear && d.within(segments[0])) {
+                true
+            } else {
+                false
+            }
         } else {
             segments.filterIndexed { line1Index, line1 ->
                 segments.filterIndexed { line2Index, line2 ->

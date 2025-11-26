@@ -126,6 +126,13 @@ class GeometryTest {
             Point(0.0, -1.0),
         ))
         assertThat(endpointBeyond.intersects(), equalTo(true))
+
+        val endpointMatching = Trace(listOf(
+            Point(0.0, 0.0),
+            Point(0.0, 1.0),
+            Point(0.0, 0.0),
+        ))
+        assertThat(endpointMatching.intersects(), equalTo(true))
     }
 
     @Test
