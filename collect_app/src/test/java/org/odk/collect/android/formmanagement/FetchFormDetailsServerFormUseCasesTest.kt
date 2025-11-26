@@ -50,7 +50,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenFormDoesNotExist_isNotOnDevice() {
+    fun whenFormDoesNotExist_isNew() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITHOUT_MANIFEST))
 
         val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
@@ -59,7 +59,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormIsSoftDeleted_isNotOnDevice() {
+    fun whenAFormIsSoftDeleted_isNew() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITHOUT_MANIFEST))
         formsRepository.save(
             Form.Builder()
@@ -77,7 +77,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andListContainsNewVersionWithDifferentHash_isUpdated() {
+    fun whenAFormExists_andListContainsNewVersionWithDifferentHash_isUpdatedVersion() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITHOUT_MANIFEST))
         formsRepository.save(
             Form.Builder()
@@ -93,7 +93,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andListContainsSameVersionWithDifferentHash_isUpdated() {
+    fun whenAFormExists_andListContainsSameVersionWithDifferentHash_isUpdatedHash() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITHOUT_MANIFEST))
         formsRepository.save(
             Form.Builder()
@@ -110,7 +110,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andHasNewMediaFileOnServer_isUpdated() {
+    fun whenAFormExists_andHasNewMediaFileOnServer_isUpdatedMedia() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITH_MANIFEST))
         formsRepository.save(
             Form.Builder()
@@ -128,7 +128,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andHasUpdatedMediaFileOnServer_isUpdated() {
+    fun whenAFormExists_andHasUpdatedMediaFileOnServer_isUpdatedMedia() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITH_MANIFEST))
 
         val mediaDir = TempFiles.createTempDir()
@@ -150,7 +150,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andItsNewerVersionWithUpdatedMediaFilesHasBeenAlreadyDownloaded_isNotNewOrUpdated() {
+    fun whenAFormExists_andItsNewerVersionWithUpdatedMediaFilesHasBeenAlreadyDownloaded_isOnDevice() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITH_MANIFEST))
 
         val mediaDir1 = TempFiles.createTempDir()
@@ -248,7 +248,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andIsNotUpdatedOnServer_andDoesNotHaveAManifest_isNotNewOrUpdated() {
+    fun whenAFormExists_andIsNotUpdatedOnServer_andDoesNotHaveAManifest_isOnDevice() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITHOUT_MANIFEST))
 
         formsRepository.save(
@@ -266,7 +266,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenFormExists_andMediaFilesExist_isNotNewOrUpdated() {
+    fun whenFormExists_andMediaFilesExist_isOnDevice() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITH_MANIFEST))
 
         val mediaDir = TempFiles.createTempDir()
@@ -288,7 +288,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andIsUpdatedOnServer_andDoesNotHaveNewMedia_isUpdated() {
+    fun whenAFormExists_andIsUpdatedOnServer_andDoesNotHaveNewMedia_isUpdatedVersion() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITH_MANIFEST))
 
         val mediaDir = TempFiles.createTempDir()
@@ -309,7 +309,7 @@ class FetchFormDetailsServerFormUseCasesTest {
     }
 
     @Test
-    fun whenAFormExists_andItsNewerVersionWithManifestIsAvailableButHasNullHash_isNotNewOrUpdated() {
+    fun whenAFormExists_andItsNewerVersionWithManifestIsAvailableButHasNullHash_isOnDevice() {
         whenever(formSource.fetchFormList()).thenReturn(
             listOf(FORM_WITH_MANIFEST.copy(hash = null))
         )
