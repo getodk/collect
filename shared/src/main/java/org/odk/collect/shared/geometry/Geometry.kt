@@ -101,6 +101,12 @@ fun LineSegment.intersects(other: LineSegment, allowConnection: Boolean = false)
     }
 }
 
+fun LineSegment.interpolate(position: Double): Point {
+    val x = start.x + position * (end.x - start.x)
+    val y = start.y + position * (end.y - start.y)
+    return Point(x, y)
+}
+
 /**
  * Calculate the "orientation" (or "direction") of three points using the cross product of the
  * vectors of the pairs of points (see

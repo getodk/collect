@@ -214,27 +214,34 @@ class GeometryTest {
 
             // Check intersects is consistent when trace is reversed
             val reversedTrace = Trace(trace.points.reversed())
-            assertThat(reversedTrace.intersects(), equalTo(intersects))
+            assertThat(
+                "Expected intersects=$intersects:\n$reversedTrace",
+                reversedTrace.intersects(),
+                equalTo(intersects)
+            )
 
             // Check intersects is consistent when trace is scaled
             val scaleFactor = Random.nextDouble(0.1, 10.0)
             val scaledTrace = Trace(trace.points.map {
                 Point(it.x * scaleFactor, it.y * scaleFactor)
             })
-            assertThat(scaledTrace.intersects(), equalTo(intersects))
+            assertThat(
+                "Expected intersects=$intersects:\n$scaledTrace",
+                scaledTrace.intersects(),
+                equalTo(intersects)
+            )
 
             // Check adding an intersection makes intersects true
             if (!intersects) {
-                val randomSegment = if (trace.segments().size > 1) {
-                    trace.segments().drop(1).random()
-                } else {
-                    trace.segments().first()
-                }
-
-                val intersectionPoint = randomSegment.start
+                val intersectPosition = Random.nextDouble(0.0, 1.0)
+                val intersectionPoint = trace.segments().first().interpolate(intersectPosition)
                 val intersectingTrace =
                     Trace(trace.points + listOf(trace.points.last(), intersectionPoint))
-                assertThat(intersectingTrace.intersects(), equalTo(true))
+                assertThat(
+                    "Expected intersect=true:\n$intersectingTrace",
+                    intersectingTrace.intersects(),
+                    equalTo(true)
+                )
             }
         }
     }
