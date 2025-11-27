@@ -58,6 +58,21 @@ public class EntityFormParser {
         }
     }
 
+    public static boolean hasEntityElement(TreeElement treeElement) {
+        int numOfChildren = treeElement.getNumChildren();
+        for (int i = 0; i < numOfChildren; i++) {
+            TreeElement childTreeElement = treeElement.getChildAt(i);
+            if ("meta".equals(childTreeElement.getName())) {
+                return childTreeElement.getFirstChild(ELEMENT_ENTITY) != null;
+            } else if (childTreeElement.hasChildren()) {
+                if (hasEntityElement(childTreeElement)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Nullable
     public static EntityAction parseAction(@NotNull TreeElement entity) {
         String create = entity.getAttributeValue(null, ATTRIBUTE_CREATE);
