@@ -3,6 +3,7 @@ package org.odk.collect.shared.geometry
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
+import kotlin.random.Random
 
 class GeometryTest {
 
@@ -206,6 +207,39 @@ class GeometryTest {
     }
 
     @Test
+    fun `Trace#intersects satisfies metamorphic relationships`() {
+        0.until(1000).map {
+            val trace = generateTrace()
+            val intersects = trace.intersects()
+
+            // Check intersects is consistent when trace is reversed
+            val reversedTrace = Trace(trace.points.reversed())
+            assertThat(reversedTrace.intersects(), equalTo(intersects))
+
+            // Check intersects is consistent when trace is scaled
+            val scaleFactor = Random.nextDouble(0.1, 10.0)
+            val scaledTrace = Trace(trace.points.map {
+                Point(it.x * scaleFactor, it.y * scaleFactor)
+            })
+            assertThat(scaledTrace.intersects(), equalTo(intersects))
+
+            // Check adding an intersection makes intersects true
+            if (!intersects) {
+                val randomSegment = if (trace.segments().size > 1) {
+                    trace.segments().drop(1).random()
+                } else {
+                    trace.segments().first()
+                }
+
+                val intersectionPoint = randomSegment.start
+                val intersectingTrace =
+                    Trace(trace.points + listOf(trace.points.last(), intersectionPoint))
+                assertThat(intersectingTrace.intersects(), equalTo(true))
+            }
+        }
+    }
+
+    @Test
     fun `LineSegment#intersects detects any endpoint touching the other line`() {
         val line = LineSegment(Point(0.0, 0.0), Point(0.0, 2.0))
 
@@ -236,5 +270,26 @@ class GeometryTest {
         val segment2 = LineSegment(Point(0.0, -1.0), Point(0.0, 1.0))
 
         assertThat(segment1.intersects(segment2, allowConnection = true), equalTo(true))
+    }
+
+    private fun generateTrace(maxLength: Int = 10, maxCoordinate: Double = 100.0): Trace {
+        val length = Random.nextInt(2, maxLength)
+        val trace = Trace(0.until(length).map {
+            Point(
+                Random.nextDouble(maxCoordinate * -1, maxCoordinate),
+                Random.nextDouble(maxCoordinate * -1, maxCoordinate)
+            )
+        })
+
+        return if (trace.isClosed()) {
+            trace
+        } else {
+            val shouldClose = Random.nextBoolean()
+            if (shouldClose) {
+                trace.copy(points = trace.points + trace.points.first())
+            } else {
+                trace
+            }
+        }
     }
 }
