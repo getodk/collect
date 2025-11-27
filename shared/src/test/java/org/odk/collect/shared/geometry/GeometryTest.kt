@@ -208,7 +208,7 @@ class GeometryTest {
 
     @Test
     fun `Trace#intersects satisfies metamorphic relationships`() {
-        0.until(1000).map {
+        repeat(1000) {
             val trace = generateTrace()
             val intersects = trace.intersects()
 
