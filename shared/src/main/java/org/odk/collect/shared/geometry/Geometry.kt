@@ -1,5 +1,6 @@
 package org.odk.collect.shared.geometry
 
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -113,15 +114,17 @@ fun LineSegment.interpolate(position: Double): Point {
  * [here](https://en.wikipedia.org/wiki/Cross_product#Computational_geometry)). This can
  * either be clockwise, anticlockwise or collinear (the three points form a straight line).
  *
+ * @param epsilon the epsilon used to check for collinearity
+ *
  */
-private fun orientation(a: Point, b: Point, c: Point): Orientation {
+private fun orientation(a: Point, b: Point, c: Point, epsilon: Double = 0.00000000001): Orientation {
     val crossProduct = crossProduct(Pair(b.x - a.x, b.y - a.y), Pair(c.x - a.x, c.y - a.y))
-    return if (crossProduct > 0) {
-        Orientation.AntiClockwise
-    } else if (crossProduct < 0) {
-        Orientation.Clockwise
-    } else {
+    return if (abs(crossProduct) < epsilon) {
         Orientation.Collinear
+    } else if (crossProduct > 0) {
+        Orientation.AntiClockwise
+    } else {
+        Orientation.Clockwise
     }
 }
 

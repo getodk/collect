@@ -238,7 +238,7 @@ class GeometryTest {
                 val intersectingTrace =
                     Trace(trace.points + listOf(trace.points.last(), intersectionPoint))
                 assertThat(
-                    "Expected intersect=true:\n$intersectingTrace",
+                    "Expected intersects=true:\n$intersectingTrace",
                     intersectingTrace.intersects(),
                     equalTo(true)
                 )
