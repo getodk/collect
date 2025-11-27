@@ -195,6 +195,17 @@ class GeometryTest {
     }
 
     @Test
+    fun `Trace#intersects returns true for 3 segment closed trace reversing on itself`() {
+        val trace = Trace(listOf(
+            Point(0.0, 0.0),
+            Point(2.0, 0.0),
+            Point(1.0, 0.0),
+            Point(0.0, 0.0)
+        ))
+        assertThat(trace.intersects(), equalTo(true))
+    }
+
+    @Test
     fun `LineSegment#intersects detects any endpoint touching the other line`() {
         val line = LineSegment(Point(0.0, 0.0), Point(0.0, 2.0))
 
@@ -217,5 +228,13 @@ class GeometryTest {
         val segment2 = LineSegment(Point(4.0, 4.0), Point(8.0, 0.0))
 
         assertThat(segment1.intersects(segment2), equalTo(false))
+    }
+
+    @Test
+    fun `LineSegment#intersects with allowConnection true still finds intersections in a cross`() {
+        val segment1 = LineSegment(Point(-1.0, 0.0), Point(1.0, 0.0))
+        val segment2 = LineSegment(Point(0.0, -1.0), Point(0.0, 1.0))
+
+        assertThat(segment1.intersects(segment2, allowConnection = true), equalTo(true))
     }
 }

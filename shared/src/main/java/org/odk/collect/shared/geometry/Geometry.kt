@@ -29,22 +29,14 @@ fun Trace.intersects(): Boolean {
     return if (points.size >= 3) {
         val segments = segments()
         if (segments.size == 2) {
-            val (a, b) = segments[0]
-            val (c, d) = segments[1]
-            val orientationA = orientation(a, c, d)
-            val orientationD = orientation(d, a, b)
-            if (orientationA == Orientation.Collinear && a.within(segments[1])) {
-                true
-            } else if (orientationD == Orientation.Collinear && d.within(segments[0])) {
-                true
-            } else {
-                false
-            }
+            segments[0].intersects(segments[1], allowConnection = true)
         } else {
             segments.filterIndexed { line1Index, line1 ->
                 segments.filterIndexed { line2Index, line2 ->
                     if (isClosed() && line1Index == 0 && line2Index == segments.size - 1) {
                         false
+                    } else if (line2Index == line1Index + 1) {
+                        line1.intersects(line2, allowConnection = true)
                     } else if (line2Index >= line1Index + 2) {
                         line1.intersects(line2)
                     } else {
@@ -76,28 +68,36 @@ fun Point.within(segment: LineSegment): Boolean {
  * Work out whether two line segments intersect by calculating if the endpoints of one segment
  * are on opposite sides (or touching of the other segment **and** vice versa. This is
  * determined by finding the orientation of endpoints relative to the other line.
+ *
+ * @param allowConnection will allow the end of `this` and the start of `other` to intersect
+ * provided they are equivalent (the two segments are "connected")
  */
-fun LineSegment.intersects(other: LineSegment): Boolean {
+fun LineSegment.intersects(other: LineSegment, allowConnection: Boolean = false): Boolean {
     val (a, b) = this
     val (c, d) = other
 
     val orientationA = orientation(a, c, d)
-    val orientationB = orientation(b, c, d)
-    val orientationC = orientation(a, b, c)
     val orientationD = orientation(a, b, d)
 
-    return if (orientationA.isOpposing(orientationB) && orientationC.isOpposing(orientationD)) {
-        true
-    } else if (orientationA == Orientation.Collinear && a.within(other)) {
-        true
-    } else if (orientationB == Orientation.Collinear && b.within(other)) {
-        true
-    } else if (orientationC == Orientation.Collinear && c.within(this)) {
+    return if (orientationA == Orientation.Collinear && a.within(other)) {
         true
     } else if (orientationD == Orientation.Collinear && d.within(this)) {
         true
-    } else {
+    } else if (b == c && allowConnection) {
         false
+    } else {
+        val orientationB = orientation(b, c, d)
+        val orientationC = orientation(a, b, c)
+
+        if (orientationA.isOpposing(orientationB) && orientationC.isOpposing(orientationD)) {
+            true
+        } else if (orientationB == Orientation.Collinear && b.within(other)) {
+            true
+        } else if (orientationC == Orientation.Collinear && c.within(this)) {
+            true
+        } else {
+            false
+        }
     }
 }
 
