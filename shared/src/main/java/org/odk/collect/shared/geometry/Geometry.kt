@@ -102,6 +102,11 @@ fun LineSegment.intersects(other: LineSegment, allowConnection: Boolean = false)
     }
 }
 
+/**
+ * Calculate a [Point] on this [LineSegment] based on the `position` using
+ * [Linear interpolation](https://en.wikipedia.org/wiki/Linear_interpolation). `0` will return
+ * [LineSegment.start] and `1` will return [LineSegment.end].
+ */
 fun LineSegment.interpolate(position: Double): Point {
     val x = start.x + position * (end.x - start.x)
     val y = start.y + position * (end.y - start.y)
