@@ -233,8 +233,9 @@ class GeometryTest {
 
             // Check adding an intersection makes intersects true
             if (!intersects) {
-                val intersectPosition = Random.nextDouble(0.0, 1.0)
-                val intersectionPoint = trace.segments().first().interpolate(intersectPosition)
+                val intersectionSegment = trace.segments().random()
+                val intersectPosition = Random.nextDouble(0.1, 1.0)
+                val intersectionPoint = intersectionSegment.interpolate(intersectPosition)
                 val intersectingTrace =
                     Trace(trace.points + listOf(trace.points.last(), intersectionPoint))
                 assertThat(
