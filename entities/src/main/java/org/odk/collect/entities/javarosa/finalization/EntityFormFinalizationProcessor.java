@@ -1,13 +1,10 @@
 package org.odk.collect.entities.javarosa.finalization;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-
 import org.javarosa.core.model.FormDef;
-import org.javarosa.core.model.IDataReference;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryFinalizationProcessor;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.model.xform.XPathReference;
@@ -31,27 +28,29 @@ public class EntityFormFinalizationProcessor implements FormEntryFinalizationPro
         if (entityFormExtra != null) {
             List<Pair<XPathReference, String>> saveTos = entityFormExtra.getSaveTos();
 
-            TreeElement entityElement = EntityFormParser.getEntityElement(mainInstance);
-            if (entityElement != null) {
+            List<TreeElement> entityElements = EntityFormParser.getEntityElements(mainInstance.getRoot());
+            List<FormEntity> entities = new ArrayList<>();
+            for (TreeElement entityElement : entityElements) {
                 EntityAction action = EntityFormParser.parseAction(entityElement);
                 String dataset = EntityFormParser.parseDataset(entityElement);
 
                 if (action == EntityAction.CREATE || action == EntityAction.UPDATE) {
                     FormEntity entity = createEntity(entityElement, dataset, saveTos, mainInstance, action);
-                    formEntryModel.getExtras().put(new EntitiesExtra(asList(entity)));
-                } else {
-                    formEntryModel.getExtras().put(new EntitiesExtra(emptyList()));
+                    entities.add(entity);
                 }
             }
+            formEntryModel.getExtras().put(new EntitiesExtra(entities));
         }
     }
 
     private FormEntity createEntity(TreeElement entityElement, String dataset, List<Pair<XPathReference, String>> saveTos, FormInstance mainInstance, EntityAction action) {
         ArrayList<Pair<String, String>> fields = new ArrayList<>();
         for (Pair<XPathReference, String> saveTo : saveTos) {
-            IDataReference reference = saveTo.getFirst();
-            TreeElement element = mainInstance.resolveReference(reference);
+            TreeReference entityBindRef = (TreeReference) saveTo.getFirst().getReference();
+            TreeReference entityGroupRef = entityElement.getRef().getParentRef().getParentRef();
+            TreeReference entityFieldRef = entityBindRef.contextualize(entityGroupRef);
 
+            TreeElement element = mainInstance.resolveReference(entityFieldRef);
             if (element.isRelevant()) {
                 IAnswerData answerData = element.getValue();
                 if (answerData != null) {

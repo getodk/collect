@@ -7,12 +7,17 @@ import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ATTRIBUTE
 import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ELEMENT_ENTITY;
 import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ELEMENT_LABEL;
 
+import androidx.annotation.NonNull;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityFormParser {
 
@@ -56,6 +61,26 @@ public class EntityFormParser {
         } else {
             return null;
         }
+    }
+
+    @NonNull
+    public static List<TreeElement> getEntityElements(TreeElement treeElement) {
+        List<TreeElement> entityElements = new ArrayList<>();
+
+        int numOfChildren = treeElement.getNumChildren();
+        for (int i = 0; i < numOfChildren; i++) {
+            TreeElement childTreeElement = treeElement.getChildAt(i);
+            if ("meta".equals(childTreeElement.getName())) {
+                TreeElement entity = childTreeElement.getFirstChild(ELEMENT_ENTITY);
+                if (entity != null) {
+                    entityElements.add(entity);
+                }
+            } else if (childTreeElement.hasChildren()) {
+                entityElements.addAll(getEntityElements(childTreeElement));
+            }
+        }
+
+        return entityElements;
     }
 
     public static boolean hasEntityElement(TreeElement treeElement) {
