@@ -3,6 +3,7 @@ package org.odk.collect.shared.geometry
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
+import org.odk.collect.shared.quickCheck
 import kotlin.random.Random
 
 class GeometryTest {
@@ -208,10 +209,10 @@ class GeometryTest {
 
     @Test
     fun `Trace#intersects satisfies metamorphic relationships`() {
-        repeat(1000) {
-            val trace = generateTrace()
-            val intersects = trace.intersects()
-
+        { trace: Trace -> trace.intersects() }.quickCheck(
+            iterations = 1000,
+            generator = getTraceGenerator()
+        ) { trace, intersects ->
             // Check intersects is consistent when trace is reversed
             val reversedTrace = Trace(trace.points.reversed())
             assertThat(
@@ -299,23 +300,25 @@ class GeometryTest {
         assertThat(interpolatedPoint.within(segment), equalTo(true))
     }
 
-    private fun generateTrace(maxLength: Int = 10, maxCoordinate: Double = 100.0): Trace {
-        val length = Random.nextInt(2, maxLength)
-        val trace = Trace(0.until(length).map {
-            Point(
-                Random.nextDouble(maxCoordinate * -1, maxCoordinate),
-                Random.nextDouble(maxCoordinate * -1, maxCoordinate)
-            )
-        })
+    private fun getTraceGenerator(maxLength: Int = 10, maxCoordinate: Double = 100.0): Sequence<Trace> {
+        return generateSequence {
+            val length = Random.nextInt(2, maxLength)
+            val trace = Trace(0.until(length).map {
+                Point(
+                    Random.nextDouble(maxCoordinate * -1, maxCoordinate),
+                    Random.nextDouble(maxCoordinate * -1, maxCoordinate)
+                )
+            })
 
-        return if (trace.isClosed()) {
-            trace
-        } else {
-            val shouldClose = Random.nextBoolean()
-            if (shouldClose) {
-                trace.copy(points = trace.points + trace.points.first())
-            } else {
+            if (trace.isClosed()) {
                 trace
+            } else {
+                val shouldClose = Random.nextBoolean()
+                if (shouldClose) {
+                    trace.copy(points = trace.points + trace.points.first())
+                } else {
+                    trace
+                }
             }
         }
     }
