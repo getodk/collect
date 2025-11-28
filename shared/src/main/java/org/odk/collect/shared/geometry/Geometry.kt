@@ -122,7 +122,7 @@ fun LineSegment.interpolate(position: Double): Point {
  * @param epsilon the epsilon used to check for collinearity
  *
  */
-private fun orientation(a: Point, b: Point, c: Point, epsilon: Double = 0.00000000001): Orientation {
+fun orientation(a: Point, b: Point, c: Point, epsilon: Double = 0.00000000001): Orientation {
     val crossProduct = crossProduct(Pair(b.x - a.x, b.y - a.y), Pair(c.x - a.x, c.y - a.y))
     return if (abs(crossProduct) < epsilon) {
         Orientation.Collinear
@@ -140,7 +140,7 @@ private fun crossProduct(x: Pair<Double, Double>, y: Pair<Double, Double>): Doub
     return (x.first * y.second) - (y.first * x.second)
 }
 
-private enum class Orientation {
+enum class Orientation {
     Collinear,
     Clockwise,
     AntiClockwise;

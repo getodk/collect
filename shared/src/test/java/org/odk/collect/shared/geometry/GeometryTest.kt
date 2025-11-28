@@ -280,6 +280,25 @@ class GeometryTest {
         assertThat(segment1.intersects(segment2, allowConnection = true), equalTo(true))
     }
 
+    @Test
+    fun `LineSegment#interpolate returns a point on the segment at a proportional distance`() {
+        val segment = LineSegment(Point(0.0, 0.0), Point(1.0, 0.0))
+
+        assertThat(segment.interpolate(0.0), equalTo(Point(0.0, 0.0)))
+        assertThat(segment.interpolate(0.5), equalTo(Point(0.5, 0.0)))
+        assertThat(segment.interpolate(1.0), equalTo(Point(1.0, 0.0)))
+    }
+
+    @Test
+    fun `LineSegment#interpolate returns a collinear point within the line's bounding box`() {
+        val segment = LineSegment(Point(0.0, 0.0), Point(1.0, 1.0))
+        val interpolatedPoint = segment.interpolate(0.5)
+
+        val orientation = orientation(interpolatedPoint, segment.start, segment.end)
+        assertThat(orientation, equalTo(Orientation.Collinear))
+        assertThat(interpolatedPoint.within(segment), equalTo(true))
+    }
+
     private fun generateTrace(maxLength: Int = 10, maxCoordinate: Double = 100.0): Trace {
         val length = Random.nextInt(2, maxLength)
         val trace = Trace(0.until(length).map {
