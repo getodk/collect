@@ -22,10 +22,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/do_not_add_repeat"
-        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_standard"
         app:icon="@drawable/ic_close_24"
-        app:layout_constraintTop_toTopOf="@id/add_button"
-        app:layout_constraintEnd_toStartOf="@id/add_button" />
+        app:iconGravity="textStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/message" />
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeMaterialButton
         android:id="@+id/add_button"
@@ -33,9 +35,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/add_repeat"
-        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_extra_small"
         app:icon="@drawable/ic_add_white_24"
-        app:layout_constraintTop_toBottomOf="@id/message"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:iconGravity="textStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/do_not_add_button"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
