@@ -32,6 +32,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.ChangeLocks;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.androidshared.async.TrackableWorker;
@@ -75,9 +76,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     @Nullable
     private FormIndex jumpBackIndex;
-
-    @Nullable
-    private AnswerListener answerListener;
 
     private final Cancellable formSessionObserver;
     private final FormsRepository formsRepository;
@@ -290,14 +288,21 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         return formController.getQuestionPrompt(formIndex);
     }
 
-    public void setAnswerListener(@Nullable AnswerListener answerListener) {
-        this.answerListener = answerListener;
-    }
-
     public void answerQuestion(FormIndex index, IAnswerData answer) {
-        if (this.answerListener != null) {
-            this.answerListener.onAnswer(index, answer);
-        }
+        worker.immediate(() -> {
+            try {
+                formController.saveOneScreenAnswer(index, answer, false);
+
+                FormEntryPrompt prompt = formController.getQuestionPrompt(index);
+                if (Appearances.hasAppearance(prompt, Appearances.QUICK)) {
+                    formController.stepToNextScreenEvent();
+                }
+
+                updateIndex(true, null);
+            } catch (JavaRosaException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @NonNull
@@ -315,7 +320,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     @Override
     protected void onCleared() {
-        this.answerListener = null;
         formSessionObserver.cancel();
     }
 

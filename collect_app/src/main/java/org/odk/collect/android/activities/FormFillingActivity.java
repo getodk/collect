@@ -199,7 +199,6 @@ import org.odk.collect.strings.localization.LocalizedActivity;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -574,8 +573,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
             findViewById(R.id.loading_screen).setVisibility(isLoading ? View.VISIBLE : View.GONE);
         });
 
-        formEntryViewModel.setAnswerListener(this::onAnswer);
-
         formEntryViewModel.getError().observe(this, error -> {
             if (error instanceof FormError.NonFatal) {
                 createErrorDialog(error);
@@ -944,19 +941,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         return null;
     }
 
-    private void onAnswer(FormIndex index, IAnswerData answer) {
-        ODKView currentViewIfODKView = getCurrentViewIfODKView();
-        if (currentViewIfODKView != null) {
-            Optional<QuestionWidget> widgetForIndex = currentViewIfODKView.getWidgets().stream()
-                    .filter((widget) -> widget.getFormEntryPrompt().getIndex().equals(index))
-                    .findFirst();
-
-            widgetForIndex.ifPresent(questionWidget -> {
-                ((WidgetDataReceiver) questionWidget).setData(answer);
-            });
-        }
-    }
-
     public void setWidgetData(Object data) {
         ODKView currentViewIfODKView = getCurrentViewIfODKView();
 
@@ -1286,8 +1270,16 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
     public void onScreenRefresh(boolean isFormStart) {
         int event = getFormController().getEvent();
 
-        SwipeHandler.View current = createView(event, isFormStart);
-        showView(current, FormAnimationType.FADE);
+        if (isFormStart || odkView == null) {
+            SwipeHandler.View current = createView(event, true);
+            showView(current, FormAnimationType.FADE);
+        } else {
+            try {
+                odkView.onUpdated(null, getQuestionPrompts(getFormController()));
+            } catch (RepeatsInFieldListException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
     }
@@ -2274,11 +2266,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 public void run() {
                     try {
                         updateFieldListQuestions(changedWidget.getFormEntryPrompt().getIndex());
-                        odkView.post(() -> {
-                            if (odkView != null && !odkView.isDisplayed(changedWidget)) {
-                                odkView.scrollToTopOf(changedWidget);
-                            }
-                        });
                     } catch (RepeatsInFieldListException e) {
                         createErrorDialog(new FormError.NonFatal(e.getMessage()));
                     } catch (Exception | Error e) {

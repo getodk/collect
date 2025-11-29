@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -53,7 +54,6 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
 import org.odk.collect.android.exception.ExternalParamsException;
@@ -93,11 +93,13 @@ import org.odk.collect.settings.SettingsProvider;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -137,6 +139,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     private final LifecycleOwner viewLifecycle;
     private final AudioPlayer audioPlayer;
     private final FormController formController;
+
+    private List<QuestionWidget> visibleWidgets = Collections.emptyList();
 
     /**
      * Builds the view for a specified question or field-list of questions.
@@ -188,7 +192,6 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                 new FileRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
                 new StringRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
                 formController,
-                (FormFillingActivity) context,
                 settingsProvider
         );
 
@@ -210,6 +213,14 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
         setupAudioErrors();
         autoplayIfNeeded(advancingPage);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            findViewById(R.id.odk_view_container).setOnScrollChangeListener((view, i, i1, i2, i3) -> {
+                visibleWidgets = widgets.stream()
+                        .filter(this::isDisplayed)
+                        .collect(Collectors.toList());
+            });
+        }
     }
 
     private void setupAudioErrors() {
@@ -558,16 +569,14 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     /**
      * Returns true if any part of the question widget is currently on the screen or false otherwise.
      */
-    public boolean isDisplayed(QuestionWidget qw) {
+    private boolean isDisplayed(QuestionWidget qw) {
         Rect scrollBounds = new Rect();
         findViewById(R.id.odk_view_container).getHitRect(scrollBounds);
         return qw.getLocalVisibleRect(scrollBounds);
     }
 
-    public void scrollToTopOf(@Nullable QuestionWidget qw) {
-        if (qw != null && widgets.contains(qw)) {
-            findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
-        }
+    private void scrollToTopOf(@Nullable QuestionWidget qw) {
+        findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
     }
 
     /**
@@ -772,7 +781,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
             if (questionBeforeSave.sameAs(questionAtSameFormIndex)
                     && !formController.usesDatabaseExternalDataFeature(questionBeforeSave.getFormIndex())) {
                 questionsThatHaveNotChanged.add(questionAtSameFormIndex);
-            } else if (!lastChangedIndex.equals(questionBeforeSave.getFormIndex())) {
+            } else if (lastChangedIndex != null && !lastChangedIndex.equals(questionBeforeSave.getFormIndex())) {
                 formIndexesToRemove.add(questionBeforeSave.getFormIndex());
             }
         }
@@ -793,6 +802,16 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         }
 
         updateQuestions(questionsAfterSave);
+        this.post(() -> {
+            QuestionWidget scrollTarget = visibleWidgets.stream()
+                    .filter(widgets::contains)
+                    .findFirst()
+                    .orElse(null);
+
+            if (scrollTarget != null && !isDisplayed(scrollTarget)) {
+                scrollToTopOf(scrollTarget);
+            }
+        });
     }
 
     private void updateQuestions(FormEntryPrompt[] prompts) {

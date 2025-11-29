@@ -46,7 +46,6 @@ class WidgetFactoryTest {
         null,
         null,
         null,
-        mock(),
         InMemSettingsProvider().apply {
             getUnprotectedSettings().save(ProjectKeys.KEY_FONT_SIZE, QuestionFontSizeUtils.DEFAULT_FONT_SIZE.toString())
         }
