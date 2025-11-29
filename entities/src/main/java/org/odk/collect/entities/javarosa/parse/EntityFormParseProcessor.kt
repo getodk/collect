@@ -74,7 +74,7 @@ class EntityFormParseProcessor(
         private val LOCAL_ENTITY_VERSIONS = arrayOf(V2024_1, V2025_1)
 
         private fun isEntityForm(formDef: FormDef): Boolean {
-            return EntityFormParser.getEntityElement(formDef.mainInstance) != null
+            return EntityFormParser.hasEntityElement(formDef.mainInstance.root)
         }
     }
 }
