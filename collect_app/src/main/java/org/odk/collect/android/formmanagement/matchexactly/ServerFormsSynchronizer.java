@@ -1,11 +1,11 @@
 package org.odk.collect.android.formmanagement.matchexactly;
 
 import org.odk.collect.android.formmanagement.LocalFormUseCases;
+import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.download.FormDownloadException;
 import org.odk.collect.android.formmanagement.download.FormDownloader;
-import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
@@ -18,16 +18,18 @@ public class ServerFormsSynchronizer {
     private final InstancesRepository instancesRepository;
     private final FormDownloader formDownloader;
     private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
+    private final FormSource formSource;
 
-    public ServerFormsSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository, InstancesRepository instancesRepository, FormDownloader formDownloader) {
+    public ServerFormsSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository, InstancesRepository instancesRepository, FormDownloader formDownloader, FormSource formSource) {
         this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
         this.formsRepository = formsRepository;
         this.instancesRepository = instancesRepository;
         this.formDownloader = formDownloader;
+        this.formSource = formSource;
     }
 
     public void synchronize() throws FormSourceException {
-        List<ServerFormDetails> formList = serverFormsDetailsFetcher.fetchFormDetails();
+        List<ServerFormDetails> formList = serverFormsDetailsFetcher.fetchFormDetails(formsRepository, formSource);
         List<Form> formsOnDevice = formsRepository.getAll();
         formsOnDevice.stream().forEach(form -> {
             if (formList.stream().noneMatch(f -> form.getFormId().equals(f.getFormId()))) {
@@ -38,7 +40,7 @@ public class ServerFormsSynchronizer {
         boolean downloadException = false;
 
         for (ServerFormDetails form : formList) {
-            if (form.isNotOnDevice() || form.isUpdated()) {
+            if (form.getType() != ServerFormDetails.Type.OnDevice) {
                 try {
                     formDownloader.downloadForm(form, null, null);
                 } catch (FormDownloadException.DownloadingInterrupted e) {
@@ -52,5 +54,9 @@ public class ServerFormsSynchronizer {
         if (downloadException) {
             throw new FormSourceException.FetchError();
         }
+    }
+
+    public interface ServerFormsDetailsFetcher {
+        List<ServerFormDetails> fetchFormDetails(FormsRepository formsRepository, FormSource formSource) throws FormSourceException;
     }
 }

@@ -51,7 +51,6 @@ import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel;
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory;
 import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.OpenRosaClientProvider;
-import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.geo.MapFragmentFactoryImpl;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
@@ -104,7 +103,6 @@ import org.odk.collect.audioclips.AudioPlayerFactory;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.entities.storage.EntitiesRepository;
-import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.imageloader.GlideImageLoader;
 import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.location.GoogleFusedLocationClient;
@@ -125,7 +123,6 @@ import org.odk.collect.openrosa.http.okhttp.OkHttpConnection;
 import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
-import org.odk.collect.projects.Project;
 import org.odk.collect.projects.ProjectCreator;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SettingsConnectionMatcher;
@@ -329,13 +326,6 @@ public class AppDependencyModule {
     @Provides
     public QRCodeDecoder providesQRCodeDecoder() {
         return new QRCodeDecoderImpl();
-    }
-
-    @Provides
-    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepositoryProvider formsRepositoryProvider, OpenRosaClientProvider formSourceProvider, ProjectsDataService projectsDataService) {
-        Project.Saved currentProject = projectsDataService.requireCurrentProject();
-        FormsRepository formsRepository = formsRepositoryProvider.create(currentProject.getUuid());
-        return new ServerFormsDetailsFetcher(formsRepository, formSourceProvider.create(currentProject.getUuid()));
     }
 
     @Provides
