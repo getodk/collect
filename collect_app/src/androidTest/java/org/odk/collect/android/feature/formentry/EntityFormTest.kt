@@ -9,6 +9,7 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.FormEndPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -41,6 +42,29 @@ class EntityFormTest {
             .assertQuestion("Select person")
             .assertText("Roman Roy")
             .assertText("Logan Roy")
+    }
+
+    @Test
+    fun fillingEntityRegistrationFormWithRepeats_createsEntitiesForFollowUpForms() {
+        testDependencies.server.addForm("one-repeated-question-entity-registration.xml")
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("One Repeated Question Entity Registration")
+            .answerQuestion("Name", "Logan Roy")
+            .swipeToNextQuestionWithRepeatGroup("People")
+            .clickOnAdd(FormEntryPage("One Repeated Question Entity Registration"))
+            .answerQuestion("Name", "Kendall Roy")
+            .swipeToNextQuestionWithRepeatGroup("People")
+            .clickOnDoNotAdd(FormEndPage("One Repeated Question Entity Registration"))
+            .clickFinalize()
+
+            .startBlankForm("One Question Entity Update")
+            .assertQuestion("Select person")
+            .assertTexts("Roman Roy", "Shiv Roy", "Logan Roy", "Kendall Roy")
     }
 
     @Test
@@ -83,6 +107,33 @@ class EntityFormTest {
             .startBlankForm("One Question Entity Update")
             .assertText("Romulus Roy")
             .assertTextDoesNotExist("Roman Roy")
+    }
+
+    @Test
+    fun fillingEntityUpdateFormWithRepeats_updatesEntitiesForFollowUpForms() {
+        testDependencies.server.addForm(
+            "one-repeated-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("One Repeated Question Entity Update")
+            .assertQuestion("Select person")
+            .clickOnText("Roman Roy")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Romulus Roy")
+            .swipeToNextQuestionWithRepeatGroup("People")
+            .clickOnAdd(FormEntryPage("One Repeated Question Entity Update"))
+            .clickOnText("Shiv Roy")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Siobhan Roy")
+            .swipeToNextQuestionWithRepeatGroup("People")
+            .clickOnDoNotAdd(FormEndPage("One Repeated Question Entity Update"))
+            .clickFinalize()
+
+            .startBlankForm("One Repeated Question Entity Update")
+            .assertTexts("Romulus Roy", "Siobhan Roy")
+            .assertTextsDoNotExist("Roman Roy", "Shiv Roy")
     }
 
     @Test
