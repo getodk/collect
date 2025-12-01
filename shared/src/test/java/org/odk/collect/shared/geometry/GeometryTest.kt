@@ -233,15 +233,17 @@ class GeometryTest {
             )
 
             // Check adding an intersection makes intersects true
-            if (!intersects) {
-                val intersectionSegment = trace.segments().random()
+            if (!intersects && !trace.isClosed()) {
+                val intersectionSegment = trace.segments().dropLast(1).random()
                 val intersectPosition = Random.nextDouble(0.1, 1.0)
                 val intersectionPoint = intersectionSegment.interpolate(intersectPosition)
-                val intersectingTrace =
-                    Trace(trace.points + listOf(trace.points.last(), intersectionPoint))
+                val lineSegment = LineSegment(trace.points.last(), intersectionPoint)
+                val intersectingSegment =
+                    LineSegment(lineSegment.start, lineSegment.interpolate(1.1))
+                val intersectingTrace = Trace(trace.points + intersectingSegment.end)
                 assertThat(
                     "Expected intersects=true:\n$intersectingTrace",
-                    intersectingTrace.intersects(epsilon = 0.000001),
+                    intersectingTrace.intersects(),
                     equalTo(true)
                 )
             }
@@ -312,7 +314,7 @@ class GeometryTest {
 
     private fun getTraceGenerator(maxLength: Int = 10, maxCoordinate: Double = 100.0): Sequence<Trace> {
         return generateSequence {
-            val length = Random.nextInt(2, maxLength)
+            val length = Random.nextInt(3, maxLength)
             val trace = Trace(0.until(length).map {
                 Point(
                     Random.nextDouble(maxCoordinate * -1, maxCoordinate),
