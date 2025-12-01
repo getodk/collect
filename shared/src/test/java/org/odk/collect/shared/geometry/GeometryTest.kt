@@ -241,7 +241,7 @@ class GeometryTest {
                     Trace(trace.points + listOf(trace.points.last(), intersectionPoint))
                 assertThat(
                     "Expected intersects=true:\n$intersectingTrace",
-                    intersectingTrace.intersects(),
+                    intersectingTrace.intersects(epsilon = 0.000001),
                     equalTo(true)
                 )
             }
@@ -296,6 +296,16 @@ class GeometryTest {
         val interpolatedPoint = segment.interpolate(0.5)
 
         val orientation = orientation(interpolatedPoint, segment.start, segment.end)
+        assertThat(orientation, equalTo(Orientation.Collinear))
+        assertThat(interpolatedPoint.within(segment), equalTo(true))
+    }
+
+    @Test
+    fun `LineSegment#interpolate returns a collinear point within the line's bounding box for higher precision points with a suitable epsilon`() {
+        val segment = LineSegment(Point(56.6029153, 20.2311124), Point(56.6029192, 20.2310467))
+        val interpolatedPoint = segment.interpolate(0.5)
+
+        val orientation = orientation(interpolatedPoint, segment.start, segment.end, epsilon = 0.000001)
         assertThat(orientation, equalTo(Orientation.Collinear))
         assertThat(interpolatedPoint.within(segment), equalTo(true))
     }
