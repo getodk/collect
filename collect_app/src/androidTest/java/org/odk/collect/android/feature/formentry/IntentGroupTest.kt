@@ -300,7 +300,7 @@ class IntentGroupTest {
 
     private fun assertFileWidgetWithoutAnswer() {
         composeRule
-            .onNodeWithClickLabel(ApplicationProvider.getApplicationContext<Application>().getString(R.string.open_file))
+            .onNodeWithClickLabel(R.string.open_file)
             .assertDoesNotExist()
     }
 
@@ -325,7 +325,7 @@ class IntentGroupTest {
 
     private fun assertVideoWidgetWithAnswer() {
         composeRule
-            .onNodeWithClickLabel(ApplicationProvider.getApplicationContext<Application>().getString(R.string.play_video))
+            .onNodeWithClickLabel(R.string.play_video)
             .assertExists()
     }
 
