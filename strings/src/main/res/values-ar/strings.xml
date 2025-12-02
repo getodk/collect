@@ -443,12 +443,10 @@
   <string name="south">جنوب %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">شمال %1$s%2$s%3$s</string>
-  <string name="geoshape_title">مضلع</string>
-  <string name="input_method">طريقة الإدخال</string>
+    <string name="input_method">طريقة الإدخال</string>
   <string name="start">إبدأ</string>
   <string name="enable_gps">تفعيل GPS</string>
-  <string name="geotrace_title">تتبع المسار</string>
-  <string name="gps_enable_message">GPS غير مفعلة على جهازك. هل تريد تفعيلها؟</string>
+    <string name="gps_enable_message">GPS غير مفعلة على جهازك. هل تريد تفعيلها؟</string>
   <string name="geo_clear_warning">الميزة تم إنشاؤها مسبقاً. هل ترغب في إزالتها؟</string>
   <string name="geo_exit_warning">تجاهل التعديلات والعودة إلى ODK؟</string>
   <string name="polygon_validator">يجب توفر 3 نقاط لإنشاء مضلع</string>

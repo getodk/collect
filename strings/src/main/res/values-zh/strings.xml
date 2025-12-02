@@ -487,12 +487,10 @@
   <string name="south">S %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">N %1$s%2$s%3$s</string>
-  <string name="geoshape_title">GeoShape</string>
-  <string name="input_method">输入方法</string>
+    <string name="input_method">输入方法</string>
   <string name="start">开始</string>
   <string name="enable_gps">启用GPS</string>
-  <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">设备上的GPS已禁用。是否要启用它？</string>
+    <string name="gps_enable_message">设备上的GPS已禁用。是否要启用它？</string>
   <string name="geo_clear_warning">对象已创建。是否要清除该对象？</string>
   <string name="geo_exit_warning">放弃更改并返回应用？</string>
   <string name="polygon_validator">必须至少有3个点才能创建多边形</string>

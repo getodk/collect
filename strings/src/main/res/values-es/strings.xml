@@ -500,12 +500,10 @@
   <string name="south">S %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">N %1$s%2$s%3$s</string>
-  <string name="geoshape_title">GeoArea</string>
-  <string name="input_method">Método de ingreso</string>
+    <string name="input_method">Método de ingreso</string>
   <string name="start">Iniciar</string>
   <string name="enable_gps">Activar el GPS</string>
-  <string name="geotrace_title">GeoLínea</string>
-  <string name="gps_enable_message">El GPS está deshabilitado en este dispositivo. Le gustaría habilitarlo?</string>
+    <string name="gps_enable_message">El GPS está deshabilitado en este dispositivo. Le gustaría habilitarlo?</string>
   <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
   <string name="geo_exit_warning">¿Ignorar los cambios y regresar?</string>
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>

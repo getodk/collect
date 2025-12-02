@@ -457,12 +457,10 @@
   <string name="south">Ю %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">С %1$s%2$s%3$s</string>
-  <string name="geoshape_title">Геофигура</string>
-  <string name="input_method">Метод ввода</string>
+    <string name="input_method">Метод ввода</string>
   <string name="start">Начать</string>
   <string name="enable_gps">Включить GPS</string>
-  <string name="geotrace_title">Геослед</string>
-  <string name="gps_enable_message">GPS отключен на вашем устройстве. Хотите включить его?</string>
+    <string name="gps_enable_message">GPS отключен на вашем устройстве. Хотите включить его?</string>
   <string name="geo_clear_warning">Опция уже создана. Вы хотите удалить опцию?</string>
   <string name="geo_exit_warning">Отказаться от изменений и вернуться к ODK?</string>
   <string name="polygon_validator">В многоугольнике должно быть как минимум 3 точки</string>

@@ -501,12 +501,10 @@
   <string name="south">S %1$s %2$s %3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">N %1$s %2$s %3$s</string>
-  <string name="geoshape_title">GeoShape</string>
-  <string name="input_method">Método de entrada</string>
+    <string name="input_method">Método de entrada</string>
   <string name="start">Iniciar</string>
   <string name="enable_gps">Habilitar GPS</string>
-  <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">O GPS está desabilitado no seu dispositivo. Quer habilitá-lo?</string>
+    <string name="gps_enable_message">O GPS está desabilitado no seu dispositivo. Quer habilitá-lo?</string>
   <string name="geo_clear_warning">A feature já foi criada. Gostaria de limpar a feature?</string>
   <string name="geo_exit_warning">Descartar mudanças e retornar ao ODK?</string>
   <string name="polygon_validator">Precisa ter pelo menos 3 pontos para criar Polígono</string>

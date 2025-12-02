@@ -269,11 +269,9 @@
   <string name="south">ใต้ %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">เหนือ %1$s%2$s%3$s</string>
-  <string name="geoshape_title">GeoShape</string>
-  <string name="start">เริ่มต้น</string>
+    <string name="start">เริ่มต้น</string>
   <string name="enable_gps">เปิด GPS</string>
-  <string name="geotrace_title">GeoTrace</string>
-  <string name="geo_exit_warning">ยกเลิกการเปลี่ยนแปลงและกลับไปที่ ODK?</string>
+    <string name="geo_exit_warning">ยกเลิกการเปลี่ยนแปลงและกลับไปที่ ODK?</string>
   <string name="polygon_validator">ต้องมีจุดพิกัด 3 จุดขึ้นไปเพื่อสร้าง Polygon</string>
   <string name="clear">ลบ</string>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
