@@ -12,6 +12,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.equalTo
@@ -40,6 +41,8 @@ import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.strings.R.string
+import org.odk.collect.testshared.Assertions
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
 
@@ -231,14 +234,13 @@ class GeoPolyActivityTest {
         val intent =
             Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity::class.java)
         intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polyline)
-        val scenario = launcherRule.launch<GeoPolyActivity>(intent)
+        launcherRule.launch<GeoPolyActivity>(intent)
         mapFragment.ready()
-        scenario.onActivity { activity: GeoPolyActivity ->
-            assertThat(activity.playButton.isEnabled, equalTo(true))
-            assertThat(activity.backspaceButton.isEnabled, equalTo(true))
-            assertThat(activity.clearButton.isEnabled, equalTo(true))
-            assertThat(activity.saveButton.isEnabled, equalTo(true))
-        }
+
+        Assertions.assertEnabled(withContentDescription(string.input_method))
+        Assertions.assertEnabled(withContentDescription(string.remove_last_point))
+        Assertions.assertEnabled(withContentDescription(string.clear))
+        Assertions.assertEnabled(withContentDescription(string.save))
     }
 
     @Test
@@ -249,14 +251,13 @@ class GeoPolyActivityTest {
             Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity::class.java)
         intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon)
         intent.putExtra(Constants.EXTRA_READ_ONLY, true)
-        val scenario = launcherRule.launch<GeoPolyActivity>(intent)
+        launcherRule.launch<GeoPolyActivity>(intent)
         mapFragment.ready()
-        scenario.onActivity { activity: GeoPolyActivity ->
-            assertThat(activity.playButton.isEnabled, equalTo(false))
-            assertThat(activity.backspaceButton.isEnabled, equalTo(false))
-            assertThat(activity.clearButton.isEnabled, equalTo(false))
-            assertThat(activity.saveButton.isEnabled, equalTo(false))
-        }
+
+        Assertions.assertEnabled(withContentDescription(string.input_method), enabled = false)
+        Assertions.assertEnabled(withContentDescription(string.remove_last_point), enabled = false)
+        Assertions.assertEnabled(withContentDescription(string.clear), enabled = false)
+        Assertions.assertEnabled(withContentDescription(string.save), enabled = false)
     }
 
     @Test
