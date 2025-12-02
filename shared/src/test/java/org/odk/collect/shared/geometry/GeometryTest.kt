@@ -234,7 +234,7 @@ class GeometryTest {
             )
 
             // Check adding an intersection makes intersects true
-            if (!intersects && !trace.isClosed()) {
+            if (!intersects) {
                 val intersectingTrace = trace.addRandomIntersectingSegment()
                 assertThat(
                     "Expected intersects=true:\n$intersectingTrace",
