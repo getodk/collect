@@ -1,48 +1,49 @@
 package org.odk.collect.android.widgets.arbitraryfile
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
+import org.javarosa.form.api.FormEntryPrompt
+import org.odk.collect.android.widgets.WidgetAnswer
 import org.odk.collect.android.widgets.WidgetIconButton
+import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.strings.R.string
 
 @Composable
 fun ArbitraryFileWidgetContent(
+    viewModelProvider: ViewModelProvider,
+    formEntryPrompt: FormEntryPrompt,
+    answer: String?,
     readOnly: Boolean,
-    fontSize: Int,
+    buttonFontSize: Int,
+    answerFontSize: Int,
     onChooseFileClick: () -> Unit,
-    onLongClick: () -> Unit,
-    widgetAnswer: @Composable () -> Unit
+    onLongClick: () -> Unit
 ) {
     Column {
         if (!readOnly) {
             WidgetIconButton(
                 Icons.Default.AttachFile,
                 stringResource(string.choose_file),
-                fontSize,
+                buttonFontSize,
                 onChooseFileClick,
                 onLongClick
             )
         }
 
-        widgetAnswer()
-    }
-}
-
-@Preview
-@Composable
-private fun ArbitraryFileWidgetContentPreview() {
-    MaterialTheme {
-        ArbitraryFileWidgetContent(
-            false,
-            10,
-            {},
-            {},
-            {}
+        WidgetAnswer(
+            Modifier.padding(top = dimensionResource(id = dimen.margin_standard)),
+            formEntryPrompt,
+            answer,
+            answerFontSize,
+            viewModelProvider,
+            onLongClick = onLongClick
         )
     }
 }

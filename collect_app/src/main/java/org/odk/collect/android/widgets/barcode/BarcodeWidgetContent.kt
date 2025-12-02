@@ -1,25 +1,30 @@
 package org.odk.collect.android.widgets.barcode
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
+import org.javarosa.form.api.FormEntryPrompt
+import org.odk.collect.android.widgets.WidgetAnswer
 import org.odk.collect.android.widgets.WidgetIconButton
+import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.icons.R
 import org.odk.collect.strings.R.string
 
 @Composable
 fun BarcodeWidgetContent(
+    formEntryPrompt: FormEntryPrompt,
     answer: String?,
     readOnly: Boolean,
     isAnswerHidden: Boolean,
-    fontSize: Int,
+    buttonFontSize: Int,
+    answerFontSize: Int,
     onGetBarcodeClick: () -> Unit,
-    onLongClick: () -> Unit,
-    widgetAnswer: @Composable () -> Unit
+    onLongClick: () -> Unit
 ) {
     Column {
         if (!readOnly) {
@@ -30,46 +35,20 @@ fun BarcodeWidgetContent(
                 } else {
                     stringResource(string.replace_barcode)
                 },
-                fontSize,
+                buttonFontSize,
                 onGetBarcodeClick,
                 onLongClick
             )
         }
 
         if (!isAnswerHidden) {
-            widgetAnswer()
+            WidgetAnswer(
+                Modifier.padding(top = dimensionResource(id = dimen.margin_standard)),
+                formEntryPrompt,
+                answer,
+                answerFontSize,
+                onLongClick = onLongClick
+            )
         }
-    }
-}
-
-@Preview
-@Composable
-private fun BarcodeWidgetContentNoAnswerPreview() {
-    MaterialTheme {
-        BarcodeWidgetContent(
-            null,
-            false,
-            false,
-            10,
-            {},
-            {},
-            {}
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun BarcodeWidgetContentWithAnswerPreview() {
-    MaterialTheme {
-        BarcodeWidgetContent(
-            "123",
-            false,
-            false,
-            10,
-            {},
-            {},
-            {}
-        )
     }
 }
