@@ -9,13 +9,10 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.viewModelFactory
 import org.javarosa.core.model.data.IAnswerData
@@ -26,12 +23,10 @@ import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.QuestionWidget
-import org.odk.collect.android.widgets.WidgetAnswer
 import org.odk.collect.android.widgets.interfaces.FileWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry
-import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.settings.keys.ProjectKeys
@@ -69,6 +64,9 @@ class VideoWidget(
         return ComposeView(context).apply {
             setContextThemedContent {
                 VideoWidgetContent(
+                    viewModelProvider,
+                    formEntryPrompt,
+                    binaryName,
                     readOnly,
                     newVideoOnly,
                     buttonFontSize,
@@ -84,15 +82,7 @@ class VideoWidget(
                     },
                     onChooseClick = { chooseVideo() },
                     onLongClick = { showContextMenu() }
-                ) {
-                    WidgetAnswer(
-                        Modifier.padding(top = dimensionResource(id = dimen.margin_standard)),
-                        formEntryPrompt,
-                        binaryName,
-                        viewModelProvider = viewModelProvider,
-                        onLongClick = { showContextMenu() }
-                    )
-                }
+                )
             }
         }
     }
