@@ -421,12 +421,10 @@
   <string name="south">S %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">شمال %1$s%2$s%3$s</string>
-  <string name="geoshape_title">GeoShape</string>
-  <string name="input_method">روش وروردی</string>
+    <string name="input_method">روش وروردی</string>
   <string name="start">آغاز</string>
   <string name="enable_gps">فعال ساختن GPS</string>
-  <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">در دستگاه شما GPS غیرفعال گردید. آیا میخواهید دوباره آنرا فعال کنید؟</string>
+    <string name="gps_enable_message">در دستگاه شما GPS غیرفعال گردید. آیا میخواهید دوباره آنرا فعال کنید؟</string>
   <string name="geo_clear_warning">ویژگی قبلا ایجاد شده است. آیا می خواهید ویژگی را پاک کنید؟</string>
   <string name="geo_exit_warning">تغییرات کنار بگذرید و به ODK برگردید؟</string>
   <string name="polygon_validator">برای ایجاد Polygon باید حداقل 3 امتیاز داشته باشد</string>

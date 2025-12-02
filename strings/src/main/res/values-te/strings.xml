@@ -388,12 +388,10 @@
   <string name="south">దక్షిణం %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">ఉత్తరం %1$s%2$s%3$s</string>
-  <string name="geoshape_title">జియో షేప్ </string>
-  <string name="input_method">ఇన్‌పుట్ పద్ధతి</string>
+    <string name="input_method">ఇన్‌పుట్ పద్ధతి</string>
   <string name="start">మొదలు</string>
   <string name="enable_gps">GPS ని ప్రారంభించండి</string>
-  <string name="geotrace_title">జియోట్రేస్</string>
-  <string name="gps_enable_message">మీ పరికరంలో GPS డిజేబుల్ చేయబడి ఉంది. మీరు ఎనేబుల్ చేయదలుచుకుంటున్నారా?</string>
+    <string name="gps_enable_message">మీ పరికరంలో GPS డిజేబుల్ చేయబడి ఉంది. మీరు ఎనేబుల్ చేయదలుచుకుంటున్నారా?</string>
   <string name="geo_clear_warning">ఫీచర్ ఇప్పటికే క్రియేట్ చేయబడింది. మీరు ఫీచర్ తీసెయ్యాలనుకుంటున్నారా?</string>
   <string name="geo_exit_warning">మార్పులను విస్మరించి, ODK కి తిరిగి వెళ్లాలా?</string>
   <string name="polygon_validator">బహుభుజిని సృష్టించడానికి కనీసం 3 పాయింట్లు ఉండాలి</string>

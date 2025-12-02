@@ -158,9 +158,6 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         );
 
         requireLocationPermissions(requireActivity());
-        requireActivity().setTitle(getString(outputMode == GeoPolyActivity.OutputMode.GEOTRACE ?
-                org.odk.collect.strings.R.string.geotrace_title : org.odk.collect.strings.R.string.geoshape_title));
-
         requireActivity().getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
     }
 

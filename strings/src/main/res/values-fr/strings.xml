@@ -500,12 +500,10 @@
   <string name="south">S %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">N %1$s%2$s%3$s</string>
-  <string name="geoshape_title">Polygone</string>
-  <string name="input_method">Méthode de saisie</string>
+    <string name="input_method">Méthode de saisie</string>
   <string name="start">Démarrer</string>
   <string name="enable_gps">Activer le GPS</string>
-  <string name="geotrace_title">Ligne</string>
-  <string name="gps_enable_message">Le GPS est désactivé sur votre appareil. Voulez vous l\'activer ?</string>
+    <string name="gps_enable_message">Le GPS est désactivé sur votre appareil. Voulez vous l\'activer ?</string>
   <string name="geo_clear_warning">Objet déjà créé. Souhaitez-vous l\'effacer ?</string>
   <string name="geo_exit_warning">Abandoner les changements et retourner au formulaire?</string>
   <string name="polygon_validator">3 points minimum sont nécessaires pour créer un Polygone</string>

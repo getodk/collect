@@ -14,7 +14,6 @@
 package org.odk.collect.geo.geopoly
 
 import android.os.Bundle
-import android.view.Window
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.geo.R
@@ -29,7 +28,6 @@ class GeoPolyActivity : LocalizedActivity() {
             .build()
 
         super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_geopoly_layout)
 
         supportFragmentManager.setFragmentResultListener(REQUEST_GEOPOLY, this) { _, bundle ->

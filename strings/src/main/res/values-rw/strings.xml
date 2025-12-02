@@ -410,12 +410,10 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="south">S %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">N %1$s%2$s%3$s</string>
-  <string name="geoshape_title">Geoshape!</string>
-  <string name="input_method">Uburyo bwo kwinjiza amakuru</string>
+    <string name="input_method">Uburyo bwo kwinjiza amakuru</string>
   <string name="start">Tangira</string>
   <string name="enable_gps">Emeza GPS</string>
-  <string name="geotrace_title">Ibimenyetso biranga ahantu.</string>
-  <string name="gps_enable_message">GPS irafunze kuri tabuleti yawe. urifuza kuyifungura?</string>
+    <string name="gps_enable_message">GPS irafunze kuri tabuleti yawe. urifuza kuyifungura?</string>
   <string name="geo_clear_warning">Byamaze gutungana. Murifuza kubisiba? </string>
   <string name="geo_exit_warning">Siba ibyari byamaze guhindurwa ubundi usubire kuri porogaramu ya ODK</string>
   <string name="polygon_validator">Bigomba kuba bifite byibuze ibintu 3 kugirango bikore Polygon </string>

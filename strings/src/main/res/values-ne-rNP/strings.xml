@@ -267,8 +267,7 @@
   <string name="south">दक्षिण %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">उत्तर %1$s%2$s%3$s</string>
-  <string name="geoshape_title">जियो सेप</string>
-  <string name="start">शुरू</string>
+    <string name="start">शुरू</string>
   <string name="enable_gps">GPS शुरु गर्नुहोस्</string>
   <string name="clear">मेटाउनुहोस्</string>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
