@@ -4,6 +4,7 @@ import org.odk.collect.shared.geometry.LineSegment
 import org.odk.collect.shared.geometry.Point
 import org.odk.collect.shared.geometry.Trace
 import org.odk.collect.shared.geometry.segments
+import org.odk.collect.shared.geometry.support.GeometryTestUtils.interpolate
 import kotlin.random.Random
 
 object GeometryTestUtils {
@@ -41,6 +42,13 @@ object GeometryTestUtils {
         })
     }
 
+    /**
+     * Choose random segment, a random (interpolated) point on that segment and then create a new
+     * trace with an additional point just beyond that to create an intersecting trace.
+     *
+     * Never chooses the last segment as a target for intersecting as that can only create a
+     * collinear intersection which is unlikely to be accurate due to inaccuracies in [interpolate].
+     */
     fun Trace.addRandomIntersectingSegment(): Trace {
         val intersectionSegment = segments().dropLast(1).random()
         val intersectPosition = Random.nextDouble(0.1, 1.0)
