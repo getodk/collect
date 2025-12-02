@@ -60,6 +60,8 @@ class CoroutineAndWorkManagerScheduler(
         networkConstraint: Scheduler.NetworkType?
     ) {
         val networkRequest = NetworkRequest.Builder().apply {
+            addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+
             when (networkConstraint) {
                 Scheduler.NetworkType.WIFI -> addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                 Scheduler.NetworkType.CELLULAR -> addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
