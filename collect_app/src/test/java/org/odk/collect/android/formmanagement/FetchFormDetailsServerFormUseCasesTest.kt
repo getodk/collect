@@ -2,7 +2,7 @@ package org.odk.collect.android.formmanagement
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
-import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
 import org.junit.Test
 import org.mockito.kotlin.doReturn
@@ -23,7 +23,7 @@ import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileWriter
 
-class ServerFormsDetailsFetcherTest {
+class FetchFormDetailsServerFormUseCasesTest {
 
     private val formsRepository: FormsRepository = InMemFormsRepository()
     private val formSource = mock<FormSource> {
@@ -35,16 +35,13 @@ class ServerFormsDetailsFetcherTest {
         )
     }
 
-    private val fetcher =
-        ServerFormsDetailsFetcher(formsRepository, formSource)
-
     @Test
     fun whenFormHasManifestUrl_returnsMediaFilesInDetails() {
         whenever(formSource.fetchFormList()).thenReturn(
             listOf(FORM_WITHOUT_MANIFEST, FORM_WITH_MANIFEST)
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         assertThat(getFormFromList(serverFormDetails, "form-1").manifest, nullValue())
         assertThat(
             getFormFromList(serverFormDetails, "form-2").manifest!!.mediaFiles,
@@ -53,15 +50,16 @@ class ServerFormsDetailsFetcherTest {
     }
 
     @Test
-    fun whenFormDoesNotExist_isNotOnDevice() {
+    fun whenFormDoesNotExist_isNew() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITHOUT_MANIFEST))
 
-        val serverFormDetails = fetcher.fetchFormDetails()
-        assertThat(getFormFromList(serverFormDetails, "form-1").isNotOnDevice, `is`(true))
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
+        val form = getFormFromList(serverFormDetails, "form-1")
+        assertThat(form.type, equalTo(ServerFormDetails.Type.New))
     }
 
     @Test
-    fun whenAFormIsSoftDeleted_isNotOnDevice() {
+    fun whenAFormIsSoftDeleted_isNew() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITHOUT_MANIFEST))
         formsRepository.save(
             Form.Builder()
@@ -73,12 +71,13 @@ class ServerFormsDetailsFetcherTest {
                 .build()
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
-        assertThat(getFormFromList(serverFormDetails, "form-1").isNotOnDevice, `is`(true))
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
+        val form = getFormFromList(serverFormDetails, "form-1")
+        assertThat(form.type, equalTo(ServerFormDetails.Type.New))
     }
 
     @Test
-    fun whenAFormExists_andListContainsVersionWithDifferentHash_isUpdated() {
+    fun whenAFormExists_andListContainsNewVersionWithDifferentHash_isUpdatedVersion() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITHOUT_MANIFEST))
         formsRepository.save(
             Form.Builder()
@@ -88,12 +87,30 @@ class ServerFormsDetailsFetcherTest {
                 .build()
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
-        assertThat(getFormFromList(serverFormDetails, "form-1").isUpdated, `is`(true))
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
+        val form = getFormFromList(serverFormDetails, "form-1")
+        assertThat(form.type, equalTo(ServerFormDetails.Type.UpdatedVersion))
     }
 
     @Test
-    fun whenAFormExists_andHasNewMediaFileOnServer_isUpdated() {
+    fun whenAFormExists_andListContainsSameVersionWithDifferentHash_isUpdatedHash() {
+        whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITHOUT_MANIFEST))
+        formsRepository.save(
+            Form.Builder()
+                .formId("form-1")
+                .version("1")
+                .md5Hash("form-1-hash-old")
+                .formFilePath(FormUtils.createXFormFile("form-1", null).absolutePath)
+                .build()
+        )
+
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
+        val form = getFormFromList(serverFormDetails, "form-1")
+        assertThat(form.type, equalTo(ServerFormDetails.Type.UpdatedHash))
+    }
+
+    @Test
+    fun whenAFormExists_andHasNewMediaFileOnServer_isUpdatedMedia() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITH_MANIFEST))
         formsRepository.save(
             Form.Builder()
@@ -105,12 +122,13 @@ class ServerFormsDetailsFetcherTest {
                 .build()
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
-        assertThat(getFormFromList(serverFormDetails, "form-2").isUpdated, `is`(true))
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
+        val form = getFormFromList(serverFormDetails, "form-2")
+        assertThat(form.type, equalTo(ServerFormDetails.Type.UpdatedMedia))
     }
 
     @Test
-    fun whenAFormExists_andHasUpdatedMediaFileOnServer_isUpdated() {
+    fun whenAFormExists_andHasUpdatedMediaFileOnServer_isUpdatedMedia() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITH_MANIFEST))
 
         val mediaDir = TempFiles.createTempDir()
@@ -126,12 +144,13 @@ class ServerFormsDetailsFetcherTest {
         val oldMediaFile = TempFiles.createTempFile(mediaDir, "blah", ".csv")
         writeToFile(oldMediaFile, "blah before")
 
-        val serverFormDetails = fetcher.fetchFormDetails()
-        assertThat(getFormFromList(serverFormDetails, "form-2").isUpdated, `is`(true))
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
+        val form = getFormFromList(serverFormDetails, "form-2")
+        assertThat(form.type, equalTo(ServerFormDetails.Type.UpdatedMedia))
     }
 
     @Test
-    fun whenAFormExists_andItsNewerVersionWithUpdatedMediaFilesHasBeenAlreadyDownloaded_isNotNewOrUpdated() {
+    fun whenAFormExists_andItsNewerVersionWithUpdatedMediaFilesHasBeenAlreadyDownloaded_isOnDevice() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITH_MANIFEST))
 
         val mediaDir1 = TempFiles.createTempDir()
@@ -160,14 +179,13 @@ class ServerFormsDetailsFetcherTest {
         val mediaFile2 = TempFiles.createTempFile(mediaDir2, MEDIA_FILE.filename)
         writeToFile(mediaFile2, FILE_CONTENT)
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val form = getFormFromList(serverFormDetails, "form-2")
-        assertThat(form.isUpdated, `is`(false))
-        assertThat(form.isNotOnDevice, `is`(false))
+        assertThat(form.type, equalTo(ServerFormDetails.Type.OnDevice))
     }
 
     @Test
-    fun whenAFormExists_andItsNewerVersionHasBeenAlreadyDownloadedButThenSoftDeleted_isUpdated() {
+    fun whenAFormExists_andItsNewerVersionHasBeenAlreadyDownloadedButThenSoftDeleted_isNew() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITHOUT_MANIFEST))
 
         formsRepository.save(
@@ -188,14 +206,13 @@ class ServerFormsDetailsFetcherTest {
                 .build()
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val form = getFormFromList(serverFormDetails, "form-1")
-        assertThat(form.isUpdated, `is`(true))
-        assertThat(form.isNotOnDevice, `is`(false))
+        assertThat(form.type, equalTo(ServerFormDetails.Type.New))
     }
 
     @Test
-    fun whenAFormExists_andItsNewerVersionWithMediaFilesHasBeenAlreadyDownloadedButThenSoftDeleted_isUpdated() {
+    fun whenAFormExists_andItsNewerVersionWithMediaFilesHasBeenAlreadyDownloadedButThenSoftDeleted_isNew() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITH_MANIFEST))
 
         val mediaDir1 = TempFiles.createTempDir()
@@ -225,14 +242,13 @@ class ServerFormsDetailsFetcherTest {
         val mediaFile2 = TempFiles.createTempFile(mediaDir2, MEDIA_FILE.filename)
         writeToFile(mediaFile2, FILE_CONTENT)
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val form = getFormFromList(serverFormDetails, "form-2")
-        assertThat(form.isUpdated, `is`(true))
-        assertThat(form.isNotOnDevice, `is`(false))
+        assertThat(form.type, equalTo(ServerFormDetails.Type.New))
     }
 
     @Test
-    fun whenAFormExists_andIsNotUpdatedOnServer_andDoesNotHaveAManifest_isNotNewOrUpdated() {
+    fun whenAFormExists_andIsNotUpdatedOnServer_andDoesNotHaveAManifest_isOnDevice() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITHOUT_MANIFEST))
 
         formsRepository.save(
@@ -244,14 +260,13 @@ class ServerFormsDetailsFetcherTest {
                 .build()
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val form = getFormFromList(serverFormDetails, "form-1")
-        assertThat(form.isUpdated, `is`(false))
-        assertThat(form.isNotOnDevice, `is`(false))
+        assertThat(form.type, equalTo(ServerFormDetails.Type.OnDevice))
     }
 
     @Test
-    fun whenFormExists_andMediaFilesExist_isNotNewOrUpdated() {
+    fun whenFormExists_andMediaFilesExist_isOnDevice() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITH_MANIFEST))
 
         val mediaDir = TempFiles.createTempDir()
@@ -267,14 +282,13 @@ class ServerFormsDetailsFetcherTest {
         val mediaFile = TempFiles.createTempFile(mediaDir, "blah", ".csv")
         writeToFile(mediaFile, FILE_CONTENT)
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val form = getFormFromList(serverFormDetails, "form-2")
-        assertThat(form.isNotOnDevice, `is`(false))
-        assertThat(form.isUpdated, `is`(false))
+        assertThat(form.type, equalTo(ServerFormDetails.Type.OnDevice))
     }
 
     @Test
-    fun whenAFormExists_andIsUpdatedOnServer_andDoesNotHaveNewMedia_isUpdated() {
+    fun whenAFormExists_andIsUpdatedOnServer_andDoesNotHaveNewMedia_isUpdatedVersion() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITH_MANIFEST))
 
         val mediaDir = TempFiles.createTempDir()
@@ -289,12 +303,13 @@ class ServerFormsDetailsFetcherTest {
         val localMediaFile = TempFiles.createTempFile(mediaDir, "blah", ".csv")
         writeToFile(localMediaFile, FILE_CONTENT)
 
-        val serverFormDetails = fetcher.fetchFormDetails()
-        assertThat(getFormFromList(serverFormDetails, "form-2").isUpdated, `is`(true))
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
+        val form = getFormFromList(serverFormDetails, "form-2")
+        assertThat(form.type, equalTo(ServerFormDetails.Type.UpdatedVersion))
     }
 
     @Test
-    fun whenAFormExists_andItsNewerVersionWithManifestIsAvailableButHasNullHash_isNotNewOrUpdated() {
+    fun whenAFormExists_andItsNewerVersionWithManifestIsAvailableButHasNullHash_isOnDevice() {
         whenever(formSource.fetchFormList()).thenReturn(
             listOf(FORM_WITH_MANIFEST.copy(hash = null))
         )
@@ -308,10 +323,9 @@ class ServerFormsDetailsFetcherTest {
                 .build()
         )
 
-        val serverFormDetails = fetcher.fetchFormDetails()
+        val serverFormDetails = ServerFormUseCases.fetchFormDetails(formsRepository, formSource)
         val form = getFormFromList(serverFormDetails, "form-2")
-        assertThat(form.isUpdated, `is`(false))
-        assertThat(form.isNotOnDevice, `is`(false))
+        assertThat(form.type, equalTo(ServerFormDetails.Type.OnDevice))
     }
 
     private fun writeToFile(mediaFile: File, blah: String) {

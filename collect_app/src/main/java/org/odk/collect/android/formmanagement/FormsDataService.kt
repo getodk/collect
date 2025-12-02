@@ -19,7 +19,6 @@ import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.keys.ProjectKeys
 import java.io.File
 import java.util.function.Supplier
-import java.util.stream.Collectors
 
 class FormsDataService(
     appState: AppState,
@@ -111,15 +110,14 @@ class FormsDataService(
             if (acquiredLock) {
                 syncWithStorage(projectId)
 
-                val serverFormsDetailsFetcher = serverFormsDetailsFetcher(projectDependencies)
                 val formDownloader = formDownloader(projectDependencies, clock)
 
                 try {
-                    val serverForms: List<ServerFormDetails> =
-                        serverFormsDetailsFetcher.fetchFormDetails()
-                    val updatedForms =
-                        serverForms.stream().filter { obj: ServerFormDetails -> obj.isUpdated }
-                            .collect(Collectors.toList())
+                    val serverForms = ServerFormUseCases.fetchFormDetails(
+                        projectDependencies.formsRepository,
+                        projectDependencies.formSource
+                    )
+                    val updatedForms = serverForms.filter { it.isUpdated() }
                     if (updatedForms.isNotEmpty()) {
                         if (projectDependencies.generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE)) {
                             val results = ServerFormUseCases.downloadForms(
@@ -157,14 +155,14 @@ class FormsDataService(
                 startSync(projectId)
                 syncWithStorage(projectId)
 
-                val serverFormsDetailsFetcher = serverFormsDetailsFetcher(projectDependencies)
                 val formDownloader = formDownloader(projectDependencies, clock)
 
                 val serverFormsSynchronizer = ServerFormsSynchronizer(
-                    serverFormsDetailsFetcher,
+                    { repository, source -> ServerFormUseCases.fetchFormDetails(repository, source) },
                     projectDependencies.formsRepository,
                     projectDependencies.instancesRepository,
-                    formDownloader
+                    formDownloader,
+                    projectDependencies.formSource
                 )
 
                 val exception = try {
@@ -241,14 +239,5 @@ private fun formDownloader(
         clock,
         projectDependencyModule.entitiesRepository,
         projectDependencyModule.entitySource
-    )
-}
-
-private fun serverFormsDetailsFetcher(
-    projectDependencyModule: ProjectDependencyModule
-): ServerFormsDetailsFetcher {
-    return ServerFormsDetailsFetcher(
-        projectDependencyModule.formsRepository,
-        projectDependencyModule.formSource
     )
 }
