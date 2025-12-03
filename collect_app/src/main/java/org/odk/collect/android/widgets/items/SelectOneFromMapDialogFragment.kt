@@ -2,32 +2,19 @@ package org.odk.collect.android.widgets.items
 
 import android.content.Context
 import android.content.res.Resources
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.ComponentDialog
-import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.SelectChoice
-import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.SelectOneData
 import org.javarosa.form.api.FormEntryPrompt
-import org.odk.collect.android.R
-import org.odk.collect.android.databinding.WidgetAnswerDialogLayoutBinding
-import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils
+import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
-import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
@@ -36,9 +23,7 @@ import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.geo.selection.SelectionMapData
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
-import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
-import kotlin.reflect.KClass
 
 class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
     WidgetAnswerDialogFragment<SelectionMapFragment>(
@@ -73,66 +58,6 @@ class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory
 
     companion object {
         const val ARG_SELECTED_INDEX = "selected_index"
-    }
-}
-
-abstract class WidgetAnswerDialogFragment<T : Fragment>(
-    private val type: KClass<T>,
-    private val viewModelFactory: ViewModelProvider.Factory
-) : MaterialFullScreenDialogFragment() {
-
-    private val formEntryViewModel: FormEntryViewModel by activityViewModels { viewModelFactory }
-    private val prompt: FormEntryPrompt by lazy {
-        formEntryViewModel.getQuestionPrompt(requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex)
-    }
-
-    abstract fun onCreateFragment(prompt: FormEntryPrompt): T
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(type) { onCreateFragment(prompt) }
-            .build()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val binding = WidgetAnswerDialogLayoutBinding.inflate(inflater)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        childFragmentManager.commit {
-            add(R.id.answer_fragment, type.java, null)
-        }
-    }
-
-    override fun getToolbar(): Toolbar? {
-        return null
-    }
-
-    override fun onBackPressed() {
-        dismiss()
-    }
-
-    override fun onCloseClicked() {
-        // No toolbar so not relevant
-    }
-
-    fun onAnswer(answer: IAnswerData, dismiss: Boolean = true) {
-        formEntryViewModel.answerQuestion(prompt.index, answer)
-
-        if (dismiss) {
-            dismiss()
-        }
-    }
-
-    companion object {
-        const val ARG_FORM_INDEX = "form_index"
     }
 }
 

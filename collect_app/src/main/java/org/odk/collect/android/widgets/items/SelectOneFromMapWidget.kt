@@ -16,7 +16,7 @@ import org.odk.collect.android.databinding.SelectOneFromMapWidgetAnswerBinding
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_SELECTED_INDEX
-import org.odk.collect.android.widgets.items.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
+import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.permissions.PermissionListener
 
