@@ -8,16 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.ComponentDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.FragmentResultListener
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.SelectChoice
+import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.SelectOneData
 import org.javarosa.form.api.FormEntryPrompt
-import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
+import org.odk.collect.android.R
+import org.odk.collect.android.databinding.WidgetAnswerDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.Appearances
@@ -35,37 +38,62 @@ import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
+import kotlin.reflect.KClass
 
-class SelectOneFromMapDialogFragment(private val viewModelFactory: ViewModelProvider.Factory) :
-    MaterialFullScreenDialogFragment(), FragmentResultListener {
+class SelectOneFromMapDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
+    WidgetAnswerDialogFragment<SelectionMapFragment>(
+        SelectionMapFragment::class,
+        viewModelFactory
+    ) {
 
     @Inject
     lateinit var scheduler: Scheduler
 
-    private val formEntryViewModel: FormEntryViewModel by activityViewModels { viewModelFactory }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+    }
 
-        val formIndex = requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex
+    override fun onCreateFragment(prompt: FormEntryPrompt): SelectionMapFragment {
+        childFragmentManager.setFragmentResultListener(REQUEST_SELECT_ITEM, this) { _, result ->
+            val selectedIndex = result.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM).toInt()
+            val selectedChoice = prompt.selectChoices[selectedIndex]
+            onAnswer(SelectOneData(selectedChoice.selection()))
+        }
+
         val selectedIndex = requireArguments().getSerializable(ARG_SELECTED_INDEX) as Int?
-        val prompt = formEntryViewModel.getQuestionPrompt(formIndex)
-        val selectionMapData = SelectChoicesMapData(resources, scheduler, prompt, selectedIndex)
+        return SelectionMapFragment(
+            SelectChoicesMapData(this.resources, scheduler, prompt, selectedIndex),
+            skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
+            zoomToFitItems = false,
+            showNewItemButton = false,
+            onBackPressedDispatcher = { (requireDialog() as ComponentDialog).onBackPressedDispatcher }
+        )
+    }
+
+    companion object {
+        const val ARG_SELECTED_INDEX = "selected_index"
+    }
+}
+
+abstract class WidgetAnswerDialogFragment<T : Fragment>(
+    private val type: KClass<T>,
+    private val viewModelFactory: ViewModelProvider.Factory
+) : MaterialFullScreenDialogFragment() {
+
+    private val formEntryViewModel: FormEntryViewModel by activityViewModels { viewModelFactory }
+    private val prompt: FormEntryPrompt by lazy {
+        formEntryViewModel.getQuestionPrompt(requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex)
+    }
+
+    abstract fun onCreateFragment(prompt: FormEntryPrompt): T
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
 
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(SelectionMapFragment::class.java) {
-                SelectionMapFragment(
-                    selectionMapData,
-                    skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
-                    zoomToFitItems = false,
-                    showNewItemButton = false,
-                    onBackPressedDispatcher = { (requireDialog() as ComponentDialog).onBackPressedDispatcher }
-                )
-            }
+            .forClass(type) { onCreateFragment(prompt) }
             .build()
-
-        childFragmentManager.setFragmentResultListener(REQUEST_SELECT_ITEM, this, this)
     }
 
     override fun onCreateView(
@@ -73,8 +101,14 @@ class SelectOneFromMapDialogFragment(private val viewModelFactory: ViewModelProv
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = SelectOneFromMapDialogLayoutBinding.inflate(inflater)
+        val binding = WidgetAnswerDialogLayoutBinding.inflate(inflater)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        childFragmentManager.commit {
+            add(R.id.answer_fragment, type.java, null)
+        }
     }
 
     override fun getToolbar(): Toolbar? {
@@ -89,18 +123,16 @@ class SelectOneFromMapDialogFragment(private val viewModelFactory: ViewModelProv
         // No toolbar so not relevant
     }
 
-    override fun onFragmentResult(requestKey: String, result: Bundle) {
-        val selectedIndex = result.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM).toInt()
-        val formIndex = requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex
-        val prompt = formEntryViewModel.getQuestionPrompt(formIndex)
-        val selectedChoice = prompt.selectChoices[selectedIndex]
-        formEntryViewModel.answerQuestion(formIndex, SelectOneData(selectedChoice.selection()))
-        dismiss()
+    fun onAnswer(answer: IAnswerData, dismiss: Boolean = true) {
+        formEntryViewModel.answerQuestion(prompt.index, answer)
+
+        if (dismiss) {
+            dismiss()
+        }
     }
 
     companion object {
         const val ARG_FORM_INDEX = "form_index"
-        const val ARG_SELECTED_INDEX = "selected_index"
     }
 }
 
