@@ -40,8 +40,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertText("Logan Roy")
+            .assertTexts("Roman Roy", "Shiv Roy", "Logan Roy")
     }
 
     @Test
@@ -105,8 +104,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertText("Logan Roy")
+            .assertTexts("Roman Roy", "Shiv Roy", "Logan Roy")
     }
 
     @Test
@@ -196,7 +194,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
+            .assertTexts("Roman Roy", "Shiv Roy")
             .assertTextDoesNotExist("Logan Roy")
     }
 
@@ -218,7 +216,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertTextDoesNotExist("Romulus Roy")
-            .assertText("Roman Roy")
+            .assertTexts("Roman Roy", "Shiv Roy")
     }
 
     @Test
@@ -309,7 +307,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
+            .assertTexts("Roman Roy", "Shiv Roy")
             .assertTextDoesNotExist("Logan Roy")
     }
 
@@ -391,7 +389,7 @@ class EntityFormTest {
 
             .clickOnForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
+            .assertTexts("Roman Roy", "Shiv Roy")
             .assertTextDoesNotExist("Logan Roy")
     }
 
@@ -416,8 +414,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertText("Logan Roy")
+            .assertTexts("Roman Roy", "Shiv Roy", "Logan Roy")
             .assertTextDoesNotExist("Kendall Roy")
     }
 
