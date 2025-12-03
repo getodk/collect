@@ -3,6 +3,10 @@ package org.odk.collect.shared.geometry
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
+import org.odk.collect.shared.geometry.support.GeometryTestUtils.addRandomIntersectingSegment
+import org.odk.collect.shared.geometry.support.GeometryTestUtils.getTraceGenerator
+import org.odk.collect.shared.geometry.support.GeometryTestUtils.reverse
+import org.odk.collect.shared.geometry.support.GeometryTestUtils.scale
 import org.odk.collect.shared.quickCheck
 import kotlin.random.Random
 
@@ -214,7 +218,7 @@ class GeometryTest {
             generator = getTraceGenerator()
         ) { trace, intersects ->
             // Check intersects is consistent when trace is reversed
-            val reversedTrace = Trace(trace.points.reversed())
+            val reversedTrace = trace.reverse()
             assertThat(
                 "Expected intersects=$intersects:\n$reversedTrace",
                 reversedTrace.intersects(),
@@ -222,10 +226,7 @@ class GeometryTest {
             )
 
             // Check intersects is consistent when trace is scaled
-            val scaleFactor = Random.nextDouble(0.1, 10.0)
-            val scaledTrace = Trace(trace.points.map {
-                Point(it.x * scaleFactor, it.y * scaleFactor)
-            })
+            val scaledTrace = trace.scale(Random.nextDouble(0.1, 10.0))
             assertThat(
                 "Expected intersects=$intersects:\n$scaledTrace",
                 scaledTrace.intersects(),
@@ -234,11 +235,7 @@ class GeometryTest {
 
             // Check adding an intersection makes intersects true
             if (!intersects) {
-                val intersectionSegment = trace.segments().random()
-                val intersectPosition = Random.nextDouble(0.1, 1.0)
-                val intersectionPoint = intersectionSegment.interpolate(intersectPosition)
-                val intersectingTrace =
-                    Trace(trace.points + listOf(trace.points.last(), intersectionPoint))
+                val intersectingTrace = trace.addRandomIntersectingSegment()
                 assertThat(
                     "Expected intersects=true:\n$intersectingTrace",
                     intersectingTrace.intersects(),
@@ -279,47 +276,5 @@ class GeometryTest {
         val segment2 = LineSegment(Point(0.0, -1.0), Point(0.0, 1.0))
 
         assertThat(segment1.intersects(segment2, allowConnection = true), equalTo(true))
-    }
-
-    @Test
-    fun `LineSegment#interpolate returns a point on the segment at a proportional distance`() {
-        val segment = LineSegment(Point(0.0, 0.0), Point(1.0, 0.0))
-
-        assertThat(segment.interpolate(0.0), equalTo(Point(0.0, 0.0)))
-        assertThat(segment.interpolate(0.5), equalTo(Point(0.5, 0.0)))
-        assertThat(segment.interpolate(1.0), equalTo(Point(1.0, 0.0)))
-    }
-
-    @Test
-    fun `LineSegment#interpolate returns a collinear point within the line's bounding box`() {
-        val segment = LineSegment(Point(0.0, 0.0), Point(1.0, 1.0))
-        val interpolatedPoint = segment.interpolate(0.5)
-
-        val orientation = orientation(interpolatedPoint, segment.start, segment.end)
-        assertThat(orientation, equalTo(Orientation.Collinear))
-        assertThat(interpolatedPoint.within(segment), equalTo(true))
-    }
-
-    private fun getTraceGenerator(maxLength: Int = 10, maxCoordinate: Double = 100.0): Sequence<Trace> {
-        return generateSequence {
-            val length = Random.nextInt(2, maxLength)
-            val trace = Trace(0.until(length).map {
-                Point(
-                    Random.nextDouble(maxCoordinate * -1, maxCoordinate),
-                    Random.nextDouble(maxCoordinate * -1, maxCoordinate)
-                )
-            })
-
-            if (trace.isClosed()) {
-                trace
-            } else {
-                val shouldClose = Random.nextBoolean()
-                if (shouldClose) {
-                    trace.copy(points = trace.points + trace.points.first())
-                } else {
-                    trace
-                }
-            }
-        }
     }
 }

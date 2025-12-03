@@ -25,21 +25,21 @@ fun Trace.segments(): List<LineSegment> {
 /**
  * Returns `true` if any segment of the trace intersects with any other and `false` otherwise.
  */
-fun Trace.intersects(): Boolean {
+fun Trace.intersects(epsilon: Double = 0.0): Boolean {
     val points = this.points
     return if (points.size >= 3) {
         val segments = segments()
         if (segments.size == 2) {
-            segments[0].intersects(segments[1], allowConnection = true)
+            segments[0].intersects(segments[1], allowConnection = true, epsilon = epsilon)
         } else {
             segments.filterIndexed { line1Index, line1 ->
                 segments.filterIndexed { line2Index, line2 ->
                     if (isClosed() && line1Index == 0 && line2Index == segments.size - 1) {
                         false
                     } else if (line2Index == line1Index + 1) {
-                        line1.intersects(line2, allowConnection = true)
+                        line1.intersects(line2, allowConnection = true, epsilon = epsilon)
                     } else if (line2Index >= line1Index + 2) {
-                        line1.intersects(line2)
+                        line1.intersects(line2, epsilon = epsilon)
                     } else {
                         false
                     }
@@ -73,12 +73,12 @@ fun Point.within(segment: LineSegment): Boolean {
  * @param allowConnection will allow the end of `this` and the start of `other` to intersect
  * provided they are equivalent (the two segments are "connected")
  */
-fun LineSegment.intersects(other: LineSegment, allowConnection: Boolean = false): Boolean {
+fun LineSegment.intersects(other: LineSegment, allowConnection: Boolean = false, epsilon: Double = 0.0): Boolean {
     val (a, b) = this
     val (c, d) = other
 
-    val orientationA = orientation(a, c, d)
-    val orientationD = orientation(a, b, d)
+    val orientationA = orientation(a, c, d, epsilon)
+    val orientationD = orientation(a, b, d, epsilon)
 
     return if (orientationA == Orientation.Collinear && a.within(other)) {
         true
@@ -87,8 +87,8 @@ fun LineSegment.intersects(other: LineSegment, allowConnection: Boolean = false)
     } else if (b == c && allowConnection) {
         false
     } else {
-        val orientationB = orientation(b, c, d)
-        val orientationC = orientation(a, b, c)
+        val orientationB = orientation(b, c, d, epsilon)
+        val orientationC = orientation(a, b, c, epsilon)
 
         if (orientationA.isOpposing(orientationB) && orientationC.isOpposing(orientationD)) {
             true
@@ -103,17 +103,6 @@ fun LineSegment.intersects(other: LineSegment, allowConnection: Boolean = false)
 }
 
 /**
- * Calculate a [Point] on this [LineSegment] based on the `position` using
- * [Linear interpolation](https://en.wikipedia.org/wiki/Linear_interpolation). `0` will return
- * [LineSegment.start] and `1` will return [LineSegment.end].
- */
-fun LineSegment.interpolate(position: Double): Point {
-    val x = start.x + position * (end.x - start.x)
-    val y = start.y + position * (end.y - start.y)
-    return Point(x, y)
-}
-
-/**
  * Calculate the "orientation" (or "direction") of three points using the cross product of the
  * vectors of the pairs of points (see
  * [here](https://en.wikipedia.org/wiki/Cross_product#Computational_geometry)). This can
@@ -122,9 +111,9 @@ fun LineSegment.interpolate(position: Double): Point {
  * @param epsilon the epsilon used to check for collinearity
  *
  */
-fun orientation(a: Point, b: Point, c: Point, epsilon: Double = 0.00000000001): Orientation {
+fun orientation(a: Point, b: Point, c: Point, epsilon: Double = 0.0): Orientation {
     val crossProduct = crossProduct(Pair(b.x - a.x, b.y - a.y), Pair(c.x - a.x, c.y - a.y))
-    return if (abs(crossProduct) < epsilon) {
+    return if (abs(crossProduct) <= epsilon) {
         Orientation.Collinear
     } else if (crossProduct > 0) {
         Orientation.AntiClockwise
