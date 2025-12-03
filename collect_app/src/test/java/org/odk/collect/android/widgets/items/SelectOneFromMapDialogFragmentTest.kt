@@ -23,18 +23,18 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
+import org.odk.collect.android.databinding.WidgetAnswerDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.utilities.Appearances
-import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_SELECTED_INDEX
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.android.widgets.support.NoOpMapFragment
+import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
@@ -149,8 +149,8 @@ class SelectOneFromMapDialogFragmentTest {
         )
 
         scenario.onFragment {
-            val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
-            val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
+            val binding = WidgetAnswerDialogLayoutBinding.bind(it.view!!)
+            val fragment = binding.answerFragment.getFragment<SelectionMapFragment>()
             assertThat(fragment, notNullValue())
             assertThat(fragment.skipSummary, equalTo(false))
             assertThat(fragment.showNewItemButton, equalTo(false))
@@ -171,8 +171,8 @@ class SelectOneFromMapDialogFragmentTest {
         )
 
         scenario.onFragment {
-            val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
-            val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
+            val binding = WidgetAnswerDialogLayoutBinding.bind(it.view!!)
+            val fragment = binding.answerFragment.getFragment<SelectionMapFragment>()
 
             val data = fragment.selectionMapData
             scheduler.flush()
@@ -236,8 +236,8 @@ class SelectOneFromMapDialogFragmentTest {
         scheduler.flush()
 
         scenario.onFragment {
-            val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
-            val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
+            val binding = WidgetAnswerDialogLayoutBinding.bind(it.view!!)
+            val fragment = binding.answerFragment.getFragment<SelectionMapFragment>()
             assertThat(fragment, notNullValue())
             assertThat(fragment.skipSummary, equalTo(false))
             assertThat(fragment.showNewItemButton, equalTo(false))
@@ -264,8 +264,8 @@ class SelectOneFromMapDialogFragmentTest {
         scheduler.runBackground()
 
         scenario.onFragment {
-            val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
-            val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
+            val binding = WidgetAnswerDialogLayoutBinding.bind(it.view!!)
+            val fragment = binding.answerFragment.getFragment<SelectionMapFragment>()
             assertThat(fragment.skipSummary, equalTo(true))
         }
     }
