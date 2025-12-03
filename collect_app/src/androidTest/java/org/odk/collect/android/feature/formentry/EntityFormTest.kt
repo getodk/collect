@@ -68,6 +68,27 @@ class EntityFormTest {
     }
 
     @Test
+    fun fillingEntityRegistrationFormWithMultipleRegularGroups_createsEntitiesForFollowUpForms() {
+        testDependencies.server.addForm("two-questions-entity-registration.xml")
+        testDependencies.server.addForm(
+            "two-questions-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("Two Questions Entity Registration")
+            .answerQuestion("Name", "Logan Roy")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Kendall Roy")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .startBlankForm("Two Questions Entity Update")
+            .assertQuestion("Select person")
+            .assertTexts("Roman Roy", "Shiv Roy", "Logan Roy", "Kendall Roy")
+    }
+
+    @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpFormsWithCachedFormDefs() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
         testDependencies.server.addForm(
@@ -132,6 +153,31 @@ class EntityFormTest {
             .clickFinalize()
 
             .startBlankForm("One Repeated Question Entity Update")
+            .assertTexts("Romulus Roy", "Siobhan Roy")
+            .assertTextsDoNotExist("Roman Roy", "Shiv Roy")
+    }
+
+    @Test
+    fun fillingEntityUpdateFormWithMultipleRegularGroups_updatesEntitiesForFollowUpForms() {
+        testDependencies.server.addForm(
+            "two-questions-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("Two Questions Entity Update")
+            .assertQuestion("Select person")
+            .clickOnText("Roman Roy")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Romulus Roy")
+            .swipeToNextQuestion("Select person")
+            .clickOnText("Shiv Roy")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Siobhan Roy")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .startBlankForm("Two Questions Entity Update")
             .assertTexts("Romulus Roy", "Siobhan Roy")
             .assertTextsDoNotExist("Roman Roy", "Shiv Roy")
     }

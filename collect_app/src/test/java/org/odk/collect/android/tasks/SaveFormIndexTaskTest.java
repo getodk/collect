@@ -29,7 +29,7 @@ public class SaveFormIndexTaskTest {
 
     @Test
     public void saveAndReadFormIndexTest() {
-        String instanceName = "test.xml";
+        String instanceName = "two-questions-entity-registration.xml";
 
         // for loadFormIndexFromFile
         File instancePath = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES) + File.separator + instanceName);
