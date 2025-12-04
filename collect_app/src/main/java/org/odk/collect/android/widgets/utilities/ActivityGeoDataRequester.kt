@@ -14,6 +14,7 @@ import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.geopoint.GeoPointActivity
 import org.odk.collect.geo.geopoint.GeoPointMapActivity
 import org.odk.collect.geo.geopoly.GeoPolyActivity
+import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
@@ -102,7 +103,7 @@ class ActivityGeoDataRequester(
                         )
                         it.putExtra(
                             GeoPolyActivity.OUTPUT_MODE_KEY,
-                            GeoPolyActivity.OutputMode.GEOSHAPE
+                            GeoPolyFragment.OutputMode.GEOSHAPE
                         )
                         it.putExtra(EXTRA_READ_ONLY, prompt.isReadOnly)
                         it.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt))
@@ -135,7 +136,7 @@ class ActivityGeoDataRequester(
                         )
                         it.putExtra(
                             GeoPolyActivity.OUTPUT_MODE_KEY,
-                            GeoPolyActivity.OutputMode.GEOTRACE
+                            GeoPolyFragment.OutputMode.GEOTRACE
                         )
                         it.putExtra(EXTRA_READ_ONLY, prompt.isReadOnly)
                         it.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt))
