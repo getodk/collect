@@ -40,6 +40,7 @@ import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.geo.geopoint.GeoPointActivity;
 import org.odk.collect.geo.geopoint.GeoPointMapActivity;
 import org.odk.collect.geo.geopoly.GeoPolyActivity;
+import org.odk.collect.geo.geopoly.GeoPolyFragment;
 import org.odk.collect.maps.MapPoint;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
@@ -279,7 +280,7 @@ public class ActivityGeoDataRequesterTest {
         expectedPolygon.add(new MapPoint(6.0, 7.0, 8, 9));
         assertThat(bundle.getParcelableArrayList(GeoPolyActivity.EXTRA_POLYGON), equalTo(expectedPolygon));
 
-        assertThat(bundle.get(GeoPolyActivity.OUTPUT_MODE_KEY), equalTo(GeoPolyActivity.OutputMode.GEOSHAPE));
+        assertThat(bundle.get(GeoPolyActivity.OUTPUT_MODE_KEY), equalTo(GeoPolyFragment.OutputMode.GEOSHAPE));
         assertThat(bundle.getBoolean(EXTRA_READ_ONLY), equalTo(false));
     }
 
@@ -311,7 +312,7 @@ public class ActivityGeoDataRequesterTest {
         expectedPolygon.add(new MapPoint(6.0, 7.0, 8, 9));
         assertThat(bundle.getParcelableArrayList(GeoPolyActivity.EXTRA_POLYGON), equalTo(expectedPolygon));
 
-        assertThat(bundle.get(GeoPolyActivity.OUTPUT_MODE_KEY), equalTo(GeoPolyActivity.OutputMode.GEOTRACE));
+        assertThat(bundle.get(GeoPolyActivity.OUTPUT_MODE_KEY), equalTo(GeoPolyFragment.OutputMode.GEOTRACE));
         assertThat(bundle.getBoolean(EXTRA_READ_ONLY), equalTo(false));
     }
 

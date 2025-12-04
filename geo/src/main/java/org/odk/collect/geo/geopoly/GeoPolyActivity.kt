@@ -28,7 +28,7 @@ class GeoPolyActivity : LocalizedActivity() {
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(GeoPolyFragment::class) {
                 GeoPolyFragment(
-                    intent.getSerializableExtra(OUTPUT_MODE_KEY) as OutputMode?,
+                    intent.getSerializableExtra(OUTPUT_MODE_KEY) as GeoPolyFragment.OutputMode?,
                     intent.getBooleanExtra(EXTRA_READ_ONLY, false),
                     intent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false),
                     intent.getParcelableArrayListExtra(EXTRA_POLYGON)
@@ -47,10 +47,6 @@ class GeoPolyActivity : LocalizedActivity() {
                 finish()
             }
         }
-    }
-
-    enum class OutputMode {
-        GEOTRACE, GEOSHAPE
     }
 
     companion object {

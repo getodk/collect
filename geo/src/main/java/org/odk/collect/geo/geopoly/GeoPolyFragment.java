@@ -63,8 +63,8 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
     private final ScheduledExecutorService executorServiceScheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
 
-    private GeoPolyActivity.OutputMode outputMode;
-    private final Boolean readOnly;
+    public OutputMode outputMode;
+    public final Boolean readOnly;
     private final ArrayList<MapPoint> inputPolyon;
     private final Boolean retainMockAccuracy;
 
@@ -135,7 +135,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         }
     };
 
-    public GeoPolyFragment(@Nullable GeoPolyActivity.OutputMode outputMode, Boolean readOnly, Boolean retainMockAccuracy, @Nullable ArrayList<MapPoint> inputPolyon) {
+    public GeoPolyFragment(@Nullable OutputMode outputMode, Boolean readOnly, Boolean retainMockAccuracy, @Nullable ArrayList<MapPoint> inputPolyon) {
         super(R.layout.geopoly_layout);
         this.outputMode = outputMode;
         this.readOnly = readOnly;
@@ -238,7 +238,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         saveButton = view.findViewById(R.id.save);
         saveButton.setOnClickListener(v -> {
             if (!map.getPolyLinePoints(featureId).isEmpty()) {
-                if (outputMode == GeoPolyActivity.OutputMode.GEOTRACE) {
+                if (outputMode == OutputMode.GEOTRACE) {
                     saveAsPolyline();
                 } else {
                     saveAsPolygon();
@@ -270,7 +270,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         List<MapPoint> points = new ArrayList<>();
         if (inputPolyon != null) {
             if (!inputPolyon.isEmpty()) {
-                if (outputMode == GeoPolyActivity.OutputMode.GEOSHAPE) {
+                if (outputMode == OutputMode.GEOSHAPE) {
                     points = inputPolyon.subList(0, inputPolyon.size() - 1);
                 } else {
                     points = inputPolyon;
@@ -283,7 +283,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         if (restoredPoints != null) {
             points = restoredPoints;
         }
-        featureId = map.addPolyLine(new LineDescription(points, String.valueOf(MapConsts.DEFAULT_STROKE_WIDTH), null, !readOnly, outputMode == GeoPolyActivity.OutputMode.GEOSHAPE));
+        featureId = map.addPolyLine(new LineDescription(points, String.valueOf(MapConsts.DEFAULT_STROKE_WIDTH), null, !readOnly, outputMode == OutputMode.GEOSHAPE));
 
         if (inputActive && !readOnly) {
             startInput();
@@ -331,7 +331,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
 
     private void setResult() {
         List<MapPoint> points = map.getPolyLinePoints(featureId);
-        String result = GeoUtils.formatPointsResultString(points, outputMode.equals(GeoPolyActivity.OutputMode.GEOSHAPE));
+        String result = GeoUtils.formatPointsResultString(points, outputMode.equals(OutputMode.GEOSHAPE));
         Bundle bundle = new Bundle();
         bundle.putString(RESULT_GEOTRACE, result);
         getParentFragmentManager().setFragmentResult(REQUEST_GEOPOLY, bundle);
@@ -457,7 +457,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
 
     private void clear() {
         map.clearFeatures();
-        featureId = map.addPolyLine(new LineDescription(new ArrayList<>(), String.valueOf(MapConsts.DEFAULT_STROKE_WIDTH), null, !readOnly, outputMode == GeoPolyActivity.OutputMode.GEOSHAPE));
+        featureId = map.addPolyLine(new LineDescription(new ArrayList<>(), String.valueOf(MapConsts.DEFAULT_STROKE_WIDTH), null, !readOnly, outputMode == OutputMode.GEOSHAPE));
         inputActive = false;
         updateUi();
     }
@@ -536,5 +536,9 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
                 .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
                 .show();
 
+    }
+
+    public enum OutputMode {
+        GEOTRACE, GEOSHAPE
     }
 }
