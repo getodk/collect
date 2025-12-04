@@ -1,11 +1,8 @@
 package org.odk.collect.geo.geopoly;
 
-import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
-import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +21,6 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.geo.Constants;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.R;
@@ -56,21 +52,21 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
     public static final String REQUEST_GEOPOLY = "geopoly";
     public static final String RESULT_GEOTRACE = "geotrace";
 
-    public static final String EXTRA_POLYGON = "answer";
-    public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String POINTS_KEY = "points";
     public static final String INPUT_ACTIVE_KEY = "input_active";
     public static final String RECORDING_ENABLED_KEY = "recording_enabled";
     public static final String RECORDING_AUTOMATIC_KEY = "recording_automatic";
     public static final String INTERVAL_INDEX_KEY = "interval_index";
     public static final String ACCURACY_THRESHOLD_INDEX_KEY = "accuracy_threshold_index";
-    private final Intent intent;
     protected Bundle previousState;
 
     private final ScheduledExecutorService executorServiceScheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
 
     private GeoPolyActivity.OutputMode outputMode;
+    private final Boolean readOnly;
+    private final ArrayList<MapPoint> inputPolyon;
+    private final Boolean retainMockAccuracy;
 
     @Inject
     MapFragmentFactory mapFragmentFactory;
@@ -120,7 +116,6 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
     private boolean inputActive; // whether we are ready for the user to add points
     private boolean recordingEnabled; // whether points are taken from GPS readings (if not, placed by tapping)
     private boolean recordingAutomatic; // whether GPS readings are taken at regular intervals (if not, only when user-directed)
-    private boolean intentReadOnly; // whether the intent requested for the path to be read-only.
 
     private int intervalIndex = DEFAULT_INTERVAL_INDEX;
 
@@ -132,7 +127,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
     private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
-            if (!intentReadOnly && map != null && !originalPoly.equals(map.getPolyLinePoints(featureId))) {
+            if (!readOnly && map != null && !originalPoly.equals(map.getPolyLinePoints(featureId))) {
                 showBackDialog();
             } else {
                 cancel();
@@ -140,9 +135,12 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         }
     };
 
-    public GeoPolyFragment(Intent intent) {
+    public GeoPolyFragment(@Nullable GeoPolyActivity.OutputMode outputMode, Boolean readOnly, Boolean retainMockAccuracy, @Nullable ArrayList<MapPoint> inputPolyon) {
         super(R.layout.geopoly_layout);
-        this.intent = intent;
+        this.outputMode = outputMode;
+        this.readOnly = readOnly;
+        this.inputPolyon = inputPolyon;
+        this.retainMockAccuracy = retainMockAccuracy;
     }
 
     @Override
@@ -175,9 +173,6 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
             accuracyThresholdIndex = savedInstanceState.getInt(
                     ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX);
         }
-
-        intentReadOnly = intent.getBooleanExtra(EXTRA_READ_ONLY, false);
-        outputMode = (GeoPolyActivity.OutputMode) intent.getSerializableExtra(OUTPUT_MODE_KEY);
     }
 
     @Override
@@ -273,26 +268,24 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         zoomButton.setOnClickListener(v -> map.zoomToCurrentLocation(map.getGpsLocation()));
 
         List<MapPoint> points = new ArrayList<>();
-        if (intent != null && intent.hasExtra(EXTRA_POLYGON)) {
-            ArrayList<MapPoint> extraPoly = intent.getParcelableArrayListExtra(EXTRA_POLYGON);
-
-            if (!extraPoly.isEmpty()) {
+        if (inputPolyon != null) {
+            if (!inputPolyon.isEmpty()) {
                 if (outputMode == GeoPolyActivity.OutputMode.GEOSHAPE) {
-                    points = extraPoly.subList(0, extraPoly.size() - 1);
+                    points = inputPolyon.subList(0, inputPolyon.size() - 1);
                 } else {
-                    points = extraPoly;
+                    points = inputPolyon;
                 }
             }
 
-            originalPoly = extraPoly;
+            originalPoly = inputPolyon;
         }
 
         if (restoredPoints != null) {
             points = restoredPoints;
         }
-        featureId = map.addPolyLine(new LineDescription(points, String.valueOf(MapConsts.DEFAULT_STROKE_WIDTH), null, !intentReadOnly, outputMode == GeoPolyActivity.OutputMode.GEOSHAPE));
+        featureId = map.addPolyLine(new LineDescription(points, String.valueOf(MapConsts.DEFAULT_STROKE_WIDTH), null, !readOnly, outputMode == GeoPolyActivity.OutputMode.GEOSHAPE));
 
-        if (inputActive && !intentReadOnly) {
+        if (inputActive && !readOnly) {
             startInput();
         }
 
@@ -301,7 +294,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         map.setLongPressListener(this::onClick);
         map.setGpsLocationEnabled(true);
         map.setGpsLocationListener(this::onGpsLocation);
-        map.setRetainMockAccuracy(intent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
+        map.setRetainMockAccuracy(retainMockAccuracy);
 
         if (!map.hasCenter()) {
             if (!points.isEmpty()) {
@@ -348,7 +341,6 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
     public void startInput() {
         inputActive = true;
         if (recordingEnabled && recordingAutomatic) {
-            boolean retainMockAccuracy = intent.getBooleanExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, false);
             locationTracker.start(retainMockAccuracy);
 
             recordPoint(map.getGpsLocation());
@@ -465,7 +457,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
 
     private void clear() {
         map.clearFeatures();
-        featureId = map.addPolyLine(new LineDescription(new ArrayList<>(), String.valueOf(MapConsts.DEFAULT_STROKE_WIDTH), null, !intentReadOnly, outputMode == GeoPolyActivity.OutputMode.GEOSHAPE));
+        featureId = map.addPolyLine(new LineDescription(new ArrayList<>(), String.valueOf(MapConsts.DEFAULT_STROKE_WIDTH), null, !readOnly, outputMode == GeoPolyActivity.OutputMode.GEOSHAPE));
         inputActive = false;
         updateUi();
     }
@@ -487,7 +479,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         settingsView.findViewById(R.id.manual_mode).setEnabled(location != null);
         settingsView.findViewById(R.id.automatic_mode).setEnabled(location != null);
 
-        if (intentReadOnly) {
+        if (readOnly) {
             playButton.setEnabled(false);
             backspaceButton.setEnabled(false);
             clearButton.setEnabled(false);

@@ -16,6 +16,8 @@ package org.odk.collect.geo.geopoly
 import android.os.Bundle
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.externalapp.ExternalAppUtils
+import org.odk.collect.geo.Constants.EXTRA_READ_ONLY
+import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.R
 import org.odk.collect.geo.geopoly.GeoPolyFragment.REQUEST_GEOPOLY
 import org.odk.collect.strings.localization.LocalizedActivity
@@ -24,7 +26,14 @@ class GeoPolyActivity : LocalizedActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(GeoPolyFragment::class) { GeoPolyFragment(intent) }
+            .forClass(GeoPolyFragment::class) {
+                GeoPolyFragment(
+                    intent.getSerializableExtra(OUTPUT_MODE_KEY) as OutputMode?,
+                    intent.getBooleanExtra(EXTRA_READ_ONLY, false),
+                    intent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false),
+                    intent.getParcelableArrayListExtra(EXTRA_POLYGON)
+                )
+            }
             .build()
 
         super.onCreate(savedInstanceState)
