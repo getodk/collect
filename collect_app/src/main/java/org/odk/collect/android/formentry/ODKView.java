@@ -53,7 +53,6 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
 import org.odk.collect.android.exception.ExternalParamsException;
@@ -188,7 +187,6 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                 new FileRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
                 new StringRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
                 formController,
-                (FormFillingActivity) context,
                 settingsProvider
         );
 

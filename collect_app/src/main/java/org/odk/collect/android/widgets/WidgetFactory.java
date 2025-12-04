@@ -31,7 +31,6 @@ import org.odk.collect.android.formentry.PrinterWidgetViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -96,7 +95,6 @@ public class WidgetFactory {
     private final FileRequester fileRequester;
     private final StringRequester stringRequester;
     private final FormController formController;
-    private final AdvanceToNextListener advanceToNextListener;
     private final SettingsProvider settingsProvider;
 
     public WidgetFactory(Activity activity,
@@ -112,7 +110,6 @@ public class WidgetFactory {
                          FileRequester fileRequester,
                          StringRequester stringRequester,
                          FormController formController,
-                         AdvanceToNextListener advanceToNextListener,
                          SettingsProvider settingsProvider
     ) {
         this.activity = activity;
@@ -128,7 +125,6 @@ public class WidgetFactory {
         this.fileRequester = fileRequester;
         this.stringRequester = stringRequester;
         this.formController = formController;
-        this.advanceToNextListener = advanceToNextListener;
         this.settingsProvider = settingsProvider;
     }
 
@@ -333,7 +329,7 @@ public class WidgetFactory {
         } else if (appearance.contains(Appearances.IMAGE_MAP)) {
             questionWidget = new SelectOneImageMapWidget(activity, questionDetails, isQuick, formEntryViewModel, dependencies);
         } else if (appearance.contains(Appearances.MAP)) {
-            questionWidget = new SelectOneFromMapWidget(activity, questionDetails, isQuick, advanceToNextListener, dependencies);
+            questionWidget = new SelectOneFromMapWidget(activity, questionDetails, dependencies);
         } else {
             questionWidget = new SelectOneWidget(activity, questionDetails, isQuick, formController, formEntryViewModel, dependencies);
         }
