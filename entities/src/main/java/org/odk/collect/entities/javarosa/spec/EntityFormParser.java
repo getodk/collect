@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,7 +73,7 @@ public class EntityFormParser {
             TreeElement childTreeElement = treeElement.getChildAt(i);
             if ("meta".equals(childTreeElement.getName())) {
                 TreeElement entity = childTreeElement.getFirstChild(ELEMENT_ENTITY);
-                if (entity != null) {
+                if (entity != null && entity.getParent().getParent().getMult() != TreeReference.INDEX_TEMPLATE) {
                     entityElements.add(entity);
                 }
             } else if (childTreeElement.hasChildren()) {

@@ -9,6 +9,7 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.AddNewRepeatDialog
 import org.odk.collect.android.support.pages.FormEndPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -85,6 +86,32 @@ class EntityFormTest {
             .startBlankForm("Two Questions Entity Update")
             .assertQuestion("Select person")
             .assertTexts("Roman Roy", "Shiv Roy", "Logan Roy", "Kendall Roy")
+    }
+
+    @Test
+    fun xfillingEntityRegistrationFormWithRepeats_createsEntitiesForFollowUpForms() {
+        testDependencies.server.addForm("nested-repeats-with-entity-registration.xml")
+        testDependencies.server.addForm(
+            "nested-repeats-with-entity-update.xml",
+            listOf(EntityListItem("people.csv"), EntityListItem("cars.csv"))
+        )
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("Nested Repeats With Entity Registration")
+            .answerQuestion("Name", "Logan Roy")
+            .swipeToNextQuestion("Car model")
+            .answerQuestion("Car model", "Kia Stonic")
+            .swipeToNextQuestionWithRepeatGroup("Cars")
+            .clickOnDoNotAdd(AddNewRepeatDialog("People"))
+            .clickOnAdd(FormEntryPage("Nested Repeats With Entity Registration"))
+            .answerQuestion("Name", "Kendall Roy")
+            .swipeToNextQuestionWithRepeatGroup("Cars")
+            .clickOnAdd(FormEntryPage("Nested Repeats With Entity Registration"))
+            .answerQuestion("Car model", "Honda Accord")
+            .swipeToNextQuestionWithRepeatGroup("Cars")
+            .clickOnDoNotAdd(AddNewRepeatDialog("People"))
+            .clickOnDoNotAdd(FormEndPage("Nested Repeats With Entity Registration"))
+            .clickFinalize()
     }
 
     @Test

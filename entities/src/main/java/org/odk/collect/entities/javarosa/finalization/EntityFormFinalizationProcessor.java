@@ -7,8 +7,8 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryFinalizationProcessor;
 import org.javarosa.form.api.FormEntryModel;
-import org.javarosa.model.xform.XPathReference;
 import org.odk.collect.entities.javarosa.parse.EntityFormExtra;
+import org.odk.collect.entities.javarosa.parse.SaveTo;
 import org.odk.collect.entities.javarosa.spec.EntityAction;
 import org.odk.collect.entities.javarosa.spec.EntityFormParser;
 
@@ -26,7 +26,7 @@ public class EntityFormFinalizationProcessor implements FormEntryFinalizationPro
 
         EntityFormExtra entityFormExtra = formDef.getExtras().get(EntityFormExtra.class);
         if (entityFormExtra != null) {
-            List<Pair<XPathReference, String>> saveTos = entityFormExtra.getSaveTos();
+            List<SaveTo> saveTos = entityFormExtra.getSaveTos();
 
             List<TreeElement> entityElements = EntityFormParser.getEntityElements(mainInstance.getRoot());
             List<FormEntity> entities = new ArrayList<>();
@@ -43,20 +43,25 @@ public class EntityFormFinalizationProcessor implements FormEntryFinalizationPro
         }
     }
 
-    private FormEntity createEntity(TreeElement entityElement, String dataset, List<Pair<XPathReference, String>> saveTos, FormInstance mainInstance, EntityAction action) {
+    private FormEntity createEntity(TreeElement entityElement, String dataset, List<SaveTo> saveTos, FormInstance mainInstance, EntityAction action) {
         ArrayList<Pair<String, String>> fields = new ArrayList<>();
-        for (Pair<XPathReference, String> saveTo : saveTos) {
-            TreeReference entityBindRef = (TreeReference) saveTo.getFirst().getReference();
-            TreeReference entityGroupRef = entityElement.getRef().getParentRef().getParentRef();
+        TreeReference entityGroupRef = entityElement.getRef().getParentRef().getParentRef();
+
+        for (SaveTo saveTo : saveTos) {
+            if (!entityGroupRef.genericize().equals(saveTo.getEntityReference())) {
+                continue;
+            }
+
+            TreeReference entityBindRef = (TreeReference) saveTo.getReference().getReference();
             TreeReference entityFieldRef = entityBindRef.contextualize(entityGroupRef);
 
             TreeElement element = mainInstance.resolveReference(entityFieldRef);
-            if (element.isRelevant()) {
+            if (element != null && element.isRelevant()) {
                 IAnswerData answerData = element.getValue();
                 if (answerData != null) {
-                    fields.add(new Pair<>(saveTo.getSecond(), answerData.uncast().getString()));
+                    fields.add(new Pair<>(saveTo.getValue(), answerData.uncast().getString()));
                 } else {
-                    fields.add(new Pair<>(saveTo.getSecond(), ""));
+                    fields.add(new Pair<>(saveTo.getValue(), ""));
                 }
             }
         }
