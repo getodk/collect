@@ -9,6 +9,8 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.StubOpenRosaServer.EntityListItem
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.AddNewRepeatDialog
+import org.odk.collect.android.support.pages.FormEndPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -39,8 +41,77 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertText("Logan Roy")
+            .assertTexts("Roman Roy", "Shiv Roy", "Logan Roy")
+    }
+
+    @Test
+    fun fillingEntityRegistrationFormWithRepeats_createsEntitiesForFollowUpForms() {
+        testDependencies.server.addForm("one-repeated-question-entity-registration.xml")
+        testDependencies.server.addForm(
+            "one-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("One Repeated Question Entity Registration")
+            .answerQuestion("Name", "Logan Roy")
+            .swipeToNextQuestionWithRepeatGroup("People")
+            .clickOnAdd(FormEntryPage("One Repeated Question Entity Registration"))
+            .answerQuestion("Name", "Kendall Roy")
+            .swipeToNextQuestionWithRepeatGroup("People")
+            .clickOnDoNotAdd(FormEndPage("One Repeated Question Entity Registration"))
+            .clickFinalize()
+
+            .startBlankForm("One Question Entity Update")
+            .assertQuestion("Select person")
+            .assertTexts("Roman Roy", "Shiv Roy", "Logan Roy", "Kendall Roy")
+    }
+
+    @Test
+    fun fillingEntityRegistrationFormWithMultipleRegularGroups_createsEntitiesForFollowUpForms() {
+        testDependencies.server.addForm("two-questions-entity-registration.xml")
+        testDependencies.server.addForm(
+            "two-questions-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("Two Questions Entity Registration")
+            .answerQuestion("Name", "Logan Roy")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Kendall Roy")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .startBlankForm("Two Questions Entity Update")
+            .assertQuestion("Select person")
+            .assertTexts("Roman Roy", "Shiv Roy", "Logan Roy", "Kendall Roy")
+    }
+
+    @Test
+    fun xfillingEntityRegistrationFormWithRepeats_createsEntitiesForFollowUpForms() {
+        testDependencies.server.addForm("nested-repeats-with-entity-registration.xml")
+        testDependencies.server.addForm(
+            "nested-repeats-with-entity-update.xml",
+            listOf(EntityListItem("people.csv"), EntityListItem("cars.csv"))
+        )
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("Nested Repeats With Entity Registration")
+            .answerQuestion("Name", "Logan Roy")
+            .swipeToNextQuestion("Car model")
+            .answerQuestion("Car model", "Kia Stonic")
+            .swipeToNextQuestionWithRepeatGroup("Cars")
+            .clickOnDoNotAdd(AddNewRepeatDialog("People"))
+            .clickOnAdd(FormEntryPage("Nested Repeats With Entity Registration"))
+            .answerQuestion("Name", "Kendall Roy")
+            .swipeToNextQuestionWithRepeatGroup("Cars")
+            .clickOnAdd(FormEntryPage("Nested Repeats With Entity Registration"))
+            .answerQuestion("Car model", "Honda Accord")
+            .swipeToNextQuestionWithRepeatGroup("Cars")
+            .clickOnDoNotAdd(AddNewRepeatDialog("People"))
+            .clickOnDoNotAdd(FormEndPage("Nested Repeats With Entity Registration"))
+            .clickFinalize()
     }
 
     @Test
@@ -60,8 +131,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertText("Logan Roy")
+            .assertTexts("Roman Roy", "Shiv Roy", "Logan Roy")
     }
 
     @Test
@@ -86,6 +156,58 @@ class EntityFormTest {
     }
 
     @Test
+    fun fillingEntityUpdateFormWithRepeats_updatesEntitiesForFollowUpForms() {
+        testDependencies.server.addForm(
+            "one-repeated-question-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("One Repeated Question Entity Update")
+            .assertQuestion("Select person")
+            .clickOnText("Roman Roy")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Romulus Roy")
+            .swipeToNextQuestionWithRepeatGroup("People")
+            .clickOnAdd(FormEntryPage("One Repeated Question Entity Update"))
+            .clickOnText("Shiv Roy")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Siobhan Roy")
+            .swipeToNextQuestionWithRepeatGroup("People")
+            .clickOnDoNotAdd(FormEndPage("One Repeated Question Entity Update"))
+            .clickFinalize()
+
+            .startBlankForm("One Repeated Question Entity Update")
+            .assertTexts("Romulus Roy", "Siobhan Roy")
+            .assertTextsDoNotExist("Roman Roy", "Shiv Roy")
+    }
+
+    @Test
+    fun fillingEntityUpdateFormWithMultipleRegularGroups_updatesEntitiesForFollowUpForms() {
+        testDependencies.server.addForm(
+            "two-questions-entity-update.xml",
+            listOf(EntityListItem("people.csv"))
+        )
+
+        rule.withProject(testDependencies.server.url, matchExactly = true)
+            .startBlankForm("Two Questions Entity Update")
+            .assertQuestion("Select person")
+            .clickOnText("Roman Roy")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Romulus Roy")
+            .swipeToNextQuestion("Select person")
+            .clickOnText("Shiv Roy")
+            .swipeToNextQuestion("Name")
+            .answerQuestion("Name", "Siobhan Roy")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .startBlankForm("Two Questions Entity Update")
+            .assertTexts("Romulus Roy", "Siobhan Roy")
+            .assertTextsDoNotExist("Roman Roy", "Shiv Roy")
+    }
+
+    @Test
     fun fillingEntityCreateForm_withUpdate_doesNotCreateEntityForFollowUpForms() {
         testDependencies.server.addForm("one-question-entity-create-and-update.xml")
         testDependencies.server.addForm(
@@ -99,7 +221,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
+            .assertTexts("Roman Roy", "Shiv Roy")
             .assertTextDoesNotExist("Logan Roy")
     }
 
@@ -121,7 +243,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertTextDoesNotExist("Romulus Roy")
-            .assertText("Roman Roy")
+            .assertTexts("Roman Roy", "Shiv Roy")
     }
 
     @Test
@@ -212,7 +334,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
+            .assertTexts("Roman Roy", "Shiv Roy")
             .assertTextDoesNotExist("Logan Roy")
     }
 
@@ -294,7 +416,7 @@ class EntityFormTest {
 
             .clickOnForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
+            .assertTexts("Roman Roy", "Shiv Roy")
             .assertTextDoesNotExist("Logan Roy")
     }
 
@@ -319,8 +441,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertText("Logan Roy")
+            .assertTexts("Roman Roy", "Shiv Roy", "Logan Roy")
             .assertTextDoesNotExist("Kendall Roy")
     }
 
