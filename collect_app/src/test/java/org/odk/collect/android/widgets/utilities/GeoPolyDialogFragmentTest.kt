@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.utilities
 
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
@@ -22,6 +23,7 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
+import kotlin.reflect.KClass
 
 @RunWith(AndroidJUnit4::class)
 class GeoPolyDialogFragmentTest {
@@ -54,12 +56,12 @@ class GeoPolyDialogFragmentTest {
     @Test
     fun `configures GeoPolyFragment with readOnly from prompt`() {
         prompt = MockFormEntryPromptBuilder(prompt).withReadOnly(true).build()
-        launchAndAssertOnGeoPolyFragment {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
             assertThat(it.readOnly, equalTo(true))
         }
 
         prompt = MockFormEntryPromptBuilder(prompt).withReadOnly(false).build()
-        launchAndAssertOnGeoPolyFragment {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
             assertThat(it.readOnly, equalTo(false))
         }
     }
@@ -70,7 +72,7 @@ class GeoPolyDialogFragmentTest {
             .withControlType(Constants.DATATYPE_GEOSHAPE)
             .build()
 
-        launchAndAssertOnGeoPolyFragment {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
             assertThat(it.outputMode, equalTo(OutputMode.GEOSHAPE))
         }
     }
@@ -81,7 +83,7 @@ class GeoPolyDialogFragmentTest {
             .withControlType(Constants.DATATYPE_GEOTRACE)
             .build()
 
-        launchAndAssertOnGeoPolyFragment {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
             assertThat(it.outputMode, equalTo(OutputMode.GEOTRACE))
         }
     }
@@ -92,18 +94,20 @@ class GeoPolyDialogFragmentTest {
             .withControlType(Constants.DATATYPE_DATE)
             .build()
 
-        launchAndAssertOnGeoPolyFragment {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
             assertThat(it.outputMode, equalTo(null))
         }
     }
 
-    private fun launchAndAssertOnGeoPolyFragment(assertion: (GeoPolyFragment) -> Unit) {
-        launcherRule.launch(
-            GeoPolyDialogFragment::class.java,
+    @Suppress("UNCHECKED_CAST")
+    private fun <T : Fragment> FragmentScenarioLauncherRule.launchAndAssertOnChild(
+        fragment: KClass<out Fragment>, assertion: (T) -> Unit
+    ) {
+        this.launch(
+            fragment.java,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ).onFragment {
-            val geoPolyFragment = it.childFragmentManager.fragments[0] as GeoPolyFragment
-            assertion(geoPolyFragment)
+            assertion(it.childFragmentManager.fragments[0] as T)
         }
     }
 }
