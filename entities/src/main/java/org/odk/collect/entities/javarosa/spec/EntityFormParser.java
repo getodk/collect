@@ -10,7 +10,6 @@ import static org.odk.collect.entities.javarosa.spec.FormEntityElement.ELEMENT_L
 import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.xpath.expr.XPathFuncExpr;
@@ -50,18 +49,6 @@ public class EntityFormParser {
     @Nullable
     public static String parseId(TreeElement entity) {
         return entity.getAttributeValue("", ATTRIBUTE_ID);
-    }
-
-    @Nullable
-    public static TreeElement getEntityElement(FormInstance mainInstance) {
-        TreeElement root = mainInstance.getRoot();
-        TreeElement meta = root.getFirstChild("meta");
-
-        if (meta != null) {
-            return meta.getFirstChild(ELEMENT_ENTITY);
-        } else {
-            return null;
-        }
     }
 
     @NonNull
