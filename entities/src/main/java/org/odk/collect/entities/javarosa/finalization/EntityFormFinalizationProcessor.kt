@@ -23,7 +23,7 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
             val entities = mutableListOf<FormEntity>()
             for (entityElement in entityElements) {
                 val action = EntityFormParser.parseAction(entityElement)
-                val dataset = EntityFormParser.parseDataset(entityElement)
+                val dataset = EntityFormParser.parseDataset(entityElement)!!
 
                 if (action == EntityAction.CREATE || action == EntityAction.UPDATE) {
                     val entity = createEntity(entityElement, dataset, saveTos, mainInstance, action)
