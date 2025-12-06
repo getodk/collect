@@ -1,7 +1,6 @@
 package org.odk.collect.geo.geopoly;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,19 +28,14 @@ public class GeoPolySettingsDialogFragment extends DialogFragment {
 
     private View autoOptions;
     private RadioGroup radioGroup;
-    protected SettingsDialogCallback callback;
+    private final SettingsDialogCallback callback;
 
     private int checkedRadioButtonId = -1;
     private int intervalIndex = -1;
     private int accuracyThresholdIndex = -1;
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        if (context instanceof SettingsDialogCallback) {
-            callback = (SettingsDialogCallback) context;
-        }
+    public GeoPolySettingsDialogFragment(SettingsDialogCallback callback) {
+        this.callback = callback;
     }
 
     @NonNull

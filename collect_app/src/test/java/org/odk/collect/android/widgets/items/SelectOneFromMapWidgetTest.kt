@@ -34,6 +34,7 @@ import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithA
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize
+import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
@@ -136,7 +137,7 @@ class SelectOneFromMapWidgetTest {
         assertThat(fragment, notNullValue())
         assertThat(
             fragment?.requireArguments()
-                ?.getSerializable(SelectOneFromMapDialogFragment.ARG_FORM_INDEX),
+                ?.getSerializable(ARG_FORM_INDEX),
             equalTo(prompt.index)
         )
     }

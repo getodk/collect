@@ -455,12 +455,10 @@
   <string name="south">J %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">S %1$s%2$s%3$s</string>
-  <string name="geoshape_title">GeoShape</string>
-  <string name="input_method">Vhodna metoda</string>
+    <string name="input_method">Vhodna metoda</string>
   <string name="start">Začni</string>
   <string name="enable_gps">Omogoči GPS</string>
-  <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">GPS v napravi je onemogočen. Želite omogočiti?</string>
+    <string name="gps_enable_message">GPS v napravi je onemogočen. Želite omogočiti?</string>
   <string name="geo_clear_warning">Funkcija je že narejena. Želite izbrisati funkcijo?</string>
   <string name="geo_exit_warning">Želite zavreči spremembe in se vrniti v ODK?</string>
   <string name="polygon_validator">Potrebne so vsaj 3 točke za ustvarjenje poligona</string>

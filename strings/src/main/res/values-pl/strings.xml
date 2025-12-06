@@ -388,12 +388,10 @@
   <string name="south">Pd %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">Pn %1$s%2$s%3$s</string>
-  <string name="geoshape_title">GeoShape</string>
-  <string name="input_method">Metoda wprowadzania</string>
+    <string name="input_method">Metoda wprowadzania</string>
   <string name="start">Zacznij</string>
   <string name="enable_gps">Włącz GPS</string>
-  <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">GPS jest nieaktywne na twoim urządzeniu. Czy chcesz je włączyc?</string>
+    <string name="gps_enable_message">GPS jest nieaktywne na twoim urządzeniu. Czy chcesz je włączyc?</string>
   <string name="geo_clear_warning">Właściwość już stworzona. Chcesz usunąć właściwość?</string>
   <string name="geo_exit_warning">Usunąć zmiany i wrócić do ODK?</string>
   <string name="polygon_validator">Wymagane są przynajmniej 3 punkty aby utworzyć wielokąt</string>

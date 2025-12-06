@@ -499,12 +499,10 @@
   <string name="south">S %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">N %1$s%2$s%3$s</string>
-  <string name="geoshape_title">GeoShape</string>
-  <string name="input_method">Eingabemethode</string>
+    <string name="input_method">Eingabemethode</string>
   <string name="start">Start</string>
   <string name="enable_gps">GPS aktivieren</string>
-  <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">GPS ist auf Ihrem Gerät deaktiviert. Möchten Sie es aktivieren?</string>
+    <string name="gps_enable_message">GPS ist auf Ihrem Gerät deaktiviert. Möchten Sie es aktivieren?</string>
   <string name="geo_clear_warning">Merkmal bereits erzeugt. Möchten Sie das Merkmal löschen?</string>
   <string name="geo_exit_warning">Änderungen verwerfen und zu ODK zurückkehren?</string>
   <string name="polygon_validator">Min. 3 Punkte notwendig um ein Polygon zu erzeugen</string>

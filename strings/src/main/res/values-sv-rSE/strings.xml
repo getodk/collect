@@ -361,12 +361,10 @@
   <string name="south">S %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">N %1$s%2$s%3$s</string>
-  <string name="geoshape_title">GeoShape</string>
-  <string name="input_method">Inmatningsmetod</string>
+    <string name="input_method">Inmatningsmetod</string>
   <string name="start">Starta</string>
   <string name="enable_gps">Aktivera GPS</string>
-  <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">GPS är inte aktiverad på din enhet. Vill du aktivera den?</string>
+    <string name="gps_enable_message">GPS är inte aktiverad på din enhet. Vill du aktivera den?</string>
   <string name="geo_clear_warning">Objekt redan skapat. Vill du rensa objektet?</string>
   <string name="geo_exit_warning">Ignorera ändringar och återgå till ODK?</string>
   <string name="polygon_validator">Minst tre punkter krävs för att skapa en polygon</string>

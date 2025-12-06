@@ -4,9 +4,8 @@
     android:layout_height="match_parent">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/selection_map"
+        android:id="@+id/answer_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="org.odk.collect.geo.selection.SelectionMapFragment"/>
+        android:layout_height="match_parent" />
 
 </FrameLayout>

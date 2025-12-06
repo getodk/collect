@@ -451,12 +451,10 @@
   <string name="south">ایس%1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">این:%1$s%2$s%3$s</string>
-  <string name="geoshape_title">جیو شیپ </string>
-  <string name="input_method">اینٹری کی طریقہ</string>
+    <string name="input_method">اینٹری کی طریقہ</string>
   <string name="start">شروع </string>
   <string name="enable_gps">جی پی ایس کو فعال  کریں</string>
-  <string name="geotrace_title">جیو ٹریس </string>
-  <string name="gps_enable_message">آپ کے فون کا GPS بند ہے۔ کیا آپ اس کو کھولنا چاھیں گے؟</string>
+    <string name="gps_enable_message">آپ کے فون کا GPS بند ہے۔ کیا آپ اس کو کھولنا چاھیں گے؟</string>
   <string name="geo_clear_warning">فیچر پہلے سے ہی بنائی گئی ہے. کیا آپ کو فیچرکو ختم کرنا چاہیں گے؟</string>
   <string name="geo_exit_warning">تبدیلیوں کو ختم کریں اور او ڈی کے  کے پاس واپس جائیں؟</string>
   <string name="polygon_validator">قطبون بنانے کے لئے کم از کم 3 پوائنٹس لازمی ہیں</string>

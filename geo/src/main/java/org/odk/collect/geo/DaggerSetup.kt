@@ -14,6 +14,7 @@ import org.odk.collect.geo.geopoint.GeoPointMapActivity
 import org.odk.collect.geo.geopoint.GeoPointViewModelFactory
 import org.odk.collect.geo.geopoint.LocationTrackerGeoPointViewModel
 import org.odk.collect.geo.geopoly.GeoPolyActivity
+import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.satellites.SatelliteInfoClient
@@ -49,6 +50,7 @@ interface GeoDependencyComponent {
     fun inject(geoPointDialogFragment: GeoPointDialogFragment)
     fun inject(geoPointActivity: GeoPointActivity)
     fun inject(selectionMapFragment: SelectionMapFragment)
+    fun inject(geoPolyFragment: GeoPolyFragment)
 
     val scheduler: Scheduler
     val locationTracker: LocationTracker

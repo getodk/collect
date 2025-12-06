@@ -276,12 +276,10 @@
   <string name="south">S %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">N %1$s%2$s%3$s</string>
-  <string name="geoshape_title">GeoShape</string>
-  <string name="input_method">Inputmetode</string>
+    <string name="input_method">Inputmetode</string>
   <string name="start">Start</string>
   <string name="enable_gps">Tænd GPS</string>
-  <string name="geotrace_title">GeoTrace</string>
-  <string name="gps_enable_message">GPS er slukket på dit udstyr. Har du lyst til at tænde den?</string>
+    <string name="gps_enable_message">GPS er slukket på dit udstyr. Har du lyst til at tænde den?</string>
   <string name="geo_clear_warning">Funktion allerede oprettet. Vil du fjerne funktionen?</string>
   <string name="geo_exit_warning">Fortryd ændringer og returnér til ODK?</string>
   <string name="polygon_validator">Du skal have mindst 3 punkter for at lave et polygon</string>
