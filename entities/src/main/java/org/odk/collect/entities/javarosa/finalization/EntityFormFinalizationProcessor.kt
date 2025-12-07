@@ -2,11 +2,10 @@ package org.odk.collect.entities.javarosa.finalization
 
 import org.javarosa.core.model.instance.FormInstance
 import org.javarosa.core.model.instance.TreeElement
-import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.form.api.FormEntryFinalizationProcessor
 import org.javarosa.form.api.FormEntryModel
-import org.javarosa.model.xform.XPathReference
 import org.odk.collect.entities.javarosa.parse.EntityFormExtra
+import org.odk.collect.entities.javarosa.parse.SaveTo
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.javarosa.spec.EntityFormParser
 
@@ -37,14 +36,18 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
     private fun createEntity(
         entityElement: TreeElement,
         dataset: String,
-        saveTos: MutableList<Pair<XPathReference, String>>,
+        saveTos: List<SaveTo>,
         mainInstance: FormInstance,
         action: EntityAction
     ): FormEntity {
         val fields = mutableListOf<Pair<String, String>>()
+        val entityGroupRef = entityElement.ref.getParentRef().getParentRef()
         for (saveTo in saveTos) {
-            val entityBindRef = saveTo.first.reference as TreeReference
-            val entityGroupRef = entityElement.ref.getParentRef().getParentRef()
+            if (!entityGroupRef.genericize().equals(saveTo.entityGroupReference)) {
+                continue
+            }
+
+            val entityBindRef = saveTo.reference
             val entityFieldRef = entityBindRef.contextualize(entityGroupRef)
 
             val element = mainInstance.resolveReference(entityFieldRef)
@@ -53,12 +56,12 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
                 if (answerData != null) {
                     fields.add(
                         Pair<String, String>(
-                            saveTo.second,
+                            saveTo.value,
                             answerData.uncast().string
                         )
                     )
                 } else {
-                    fields.add(Pair(saveTo.second, ""))
+                    fields.add(Pair(saveTo.value, ""))
                 }
             }
         }
