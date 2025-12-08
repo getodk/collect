@@ -99,6 +99,32 @@ class GeoPolyDialogFragmentTest {
         }
     }
 
+    @Test
+    fun `configures GeoPolyFragment with retainMockAccruacy from allow-mock-accuracy bind attribute`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+            assertThat(it.retainMockAccuracy, equalTo(false))
+        }
+
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withBindAttribute(null, "allow-mock-accuracy", "true")
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+            assertThat(it.retainMockAccuracy, equalTo(true))
+        }
+
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withBindAttribute(null, "allow-mock-accuracy", "false")
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+            assertThat(it.retainMockAccuracy, equalTo(false))
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
     private fun <T : Fragment> FragmentScenarioLauncherRule.launchAndAssertOnChild(
         fragment: KClass<out Fragment>, assertion: (T) -> Unit

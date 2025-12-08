@@ -66,7 +66,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
     public OutputMode outputMode;
     public final Boolean readOnly;
     private final ArrayList<MapPoint> inputPolyon;
-    private final Boolean retainMockAccuracy;
+    public final Boolean retainMockAccuracy;
 
     @Inject
     MapFragmentFactory mapFragmentFactory;
