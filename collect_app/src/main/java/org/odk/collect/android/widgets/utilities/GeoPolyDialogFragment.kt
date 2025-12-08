@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets.utilities
 
 import androidx.lifecycle.ViewModelProvider
 import org.javarosa.core.model.Constants
+import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.FormEntryPromptUtils
 import org.odk.collect.geo.geopoly.GeoPolyFragment
@@ -15,6 +16,18 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
     ) {
 
     override fun onCreateFragment(prompt: FormEntryPrompt): GeoPolyFragment {
+        childFragmentManager.setFragmentResultListener(
+            GeoPolyFragment.REQUEST_GEOPOLY,
+            this
+        ) { _, result ->
+            val result = result.getString(GeoPolyFragment.RESULT_GEOTRACE)
+            if (result != null) {
+                onAnswer(StringData(result))
+            } else {
+                dismiss()
+            }
+        }
+
         val outputMode = when (prompt.dataType) {
             Constants.DATATYPE_GEOSHAPE -> OutputMode.GEOSHAPE
             Constants.DATATYPE_GEOTRACE -> OutputMode.GEOTRACE

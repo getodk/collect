@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.utilities
 
+import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -14,8 +15,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
@@ -145,6 +149,73 @@ class GeoPolyDialogFragmentTest {
                 it.inputPolyon,
                 equalTo(listOf(MapPoint(0.0, 0.0, 1.0, 1.0), MapPoint(0.0, 1.0, 1.0, 1.0)))
             )
+        }
+    }
+
+    @Test
+    fun `sets answer when REQUEST_GEOPOLY is returned`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .build()
+
+        val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOTRACE to answer)
+            )
+        }
+
+        verify(formEntryViewModel).answerQuestion(prompt.index, StringData(answer))
+    }
+
+    @Test
+    fun `dismisses when REQUEST_GEOPOLY is returned`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .build()
+
+        val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOTRACE to answer)
+            )
+
+            assertThat(it.dialog!!.isShowing, equalTo(false))
+        }
+    }
+
+    @Test
+    fun `does not set answer when REQUEST_GEOPOLY is cancelled`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .build()
+
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(GeoPolyFragment.REQUEST_GEOPOLY, Bundle.EMPTY)
+        }
+
+        verify(formEntryViewModel, never()).answerQuestion(any(), any())
+    }
+
+    @Test
+    fun `dismisses when REQUEST_GEOPOLY is cancelled`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .build()
+
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(GeoPolyFragment.REQUEST_GEOPOLY, Bundle.EMPTY)
+            assertThat(it.dialog!!.isShowing, equalTo(false))
         }
     }
 
