@@ -65,7 +65,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
 
     public OutputMode outputMode;
     public final Boolean readOnly;
-    private final ArrayList<MapPoint> inputPolyon;
+    public final List<MapPoint> inputPolyon;
     public final Boolean retainMockAccuracy;
 
     @Inject
@@ -135,7 +135,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         }
     };
 
-    public GeoPolyFragment(@Nullable OutputMode outputMode, Boolean readOnly, Boolean retainMockAccuracy, @Nullable ArrayList<MapPoint> inputPolyon) {
+    public GeoPolyFragment(@Nullable OutputMode outputMode, Boolean readOnly, Boolean retainMockAccuracy, @Nullable List<MapPoint> inputPolyon) {
         super(R.layout.geopoly_layout);
         this.outputMode = outputMode;
         this.readOnly = readOnly;

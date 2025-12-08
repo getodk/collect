@@ -6,6 +6,7 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.FormEntryPromptUtils
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
+import org.odk.collect.geo.geopoly.GeoPolyUtils
 
 class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
     WidgetAnswerDialogFragment<GeoPolyFragment>(
@@ -23,11 +24,18 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
         val retainMockAccuracy =
             FormEntryPromptUtils.getBindAttribute(prompt, "allow-mock-accuracy").toBoolean()
 
+        val answer = prompt.answerValue
+        val inputPolygon = if (answer != null) {
+            GeoPolyUtils.parseGeometry(answer.value as String)
+        } else {
+            null
+        }
+
         return GeoPolyFragment(
             outputMode,
             prompt.isReadOnly,
             retainMockAccuracy,
-            null
+            inputPolygon
         )
     }
 }

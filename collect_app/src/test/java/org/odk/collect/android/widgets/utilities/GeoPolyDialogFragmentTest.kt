@@ -9,6 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.Constants
+import org.javarosa.core.model.data.StringData
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -23,6 +24,7 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
+import org.odk.collect.maps.MapPoint
 import kotlin.reflect.KClass
 
 @RunWith(AndroidJUnit4::class)
@@ -122,6 +124,27 @@ class GeoPolyDialogFragmentTest {
 
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
             assertThat(it.retainMockAccuracy, equalTo(false))
+        }
+    }
+
+    @Test
+    fun `configures GeoPolyFragment inputPolgyon with existing answer`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+            assertThat(it.inputPolyon, equalTo(null))
+        }
+
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withAnswer(StringData("0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"))
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+            assertThat(
+                it.inputPolyon,
+                equalTo(listOf(MapPoint(0.0, 0.0, 1.0, 1.0), MapPoint(0.0, 1.0, 1.0, 1.0)))
+            )
         }
     }
 
