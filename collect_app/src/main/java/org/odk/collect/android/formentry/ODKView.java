@@ -41,6 +41,7 @@ import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.Constants;
@@ -145,7 +146,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * @param advancingPage   whether this view is being created after a forward swipe through the
      */
     public ODKView(
-            ComponentActivity context,
+            FragmentActivity context,
             final FormEntryPrompt[] questionPrompts,
             FormEntryCaption[] groups,
             boolean advancingPage,
