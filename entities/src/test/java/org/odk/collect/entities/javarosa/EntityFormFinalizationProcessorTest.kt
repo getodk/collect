@@ -3,6 +3,7 @@ package org.odk.collect.entities.javarosa
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.data.DateData
+import org.javarosa.core.model.data.StringData
 import org.javarosa.test.BindBuilderXFormsElement.bind
 import org.javarosa.test.Scenario
 import org.javarosa.test.XFormsElement
@@ -223,5 +224,65 @@ class EntityFormFinalizationProcessorTest {
 
         assertThat(entities.size, equalTo(1))
         assertThat(entities[0].properties, equalTo(emptyList()))
+    }
+
+    @Test
+    fun `when saveTo is nested in an extra group, creates entity with values`() {
+        val scenario = Scenario.init(
+            "Create entity form",
+            XFormsElement.html(
+                listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
+                head(
+                    title("Create entity form"),
+                    model(
+                        listOf(Pair("entities:entities-version", "2024.1.0")),
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t(
+                                    "group",
+                                    t("name")
+                                ),
+                                t(
+                                    "meta",
+                                    t(
+                                        "entity dataset=\"people\" create=\"1\" id=\"\"",
+                                        t("label")
+                                    )
+                                )
+                            )
+                        ),
+                        bind("/data/group"),
+                        bind("/data/group/name").type("string")
+                            .withAttribute("entities", "saveto", "name"),
+                        bind("/data/meta/entity/@id").type("string"),
+                        bind("/data/meta/entity/label").type("string")
+                            .calculate("/data/group/name"),
+                        setvalue("odk-instance-first-load", "/data/meta/entity/@id", "uuid()")
+                    )
+                ),
+                body(
+                    group(
+                        "/data/group",
+                        input("/data/group/name")
+                    )
+                )
+            )
+        )
+
+        val processor = EntityFormFinalizationProcessor()
+        val model = scenario.formEntryController.model
+        scenario.next()
+        scenario.next()
+        scenario.formEntryController.answerQuestion(StringData("John"), true)
+        processor.processForm(model)
+
+        val entities = model.extras.get(EntitiesExtra::class.java).entities
+
+        assertThat(entities.size, equalTo(1))
+        assertThat(
+            entities[0].properties[0],
+            equalTo(Pair("name", "John"))
+        )
     }
 }
