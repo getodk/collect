@@ -71,7 +71,7 @@ class GeoPolyDialogFragmentTest {
     @Test
     fun `configures GeoPolyFragment with geoshape output mode when prompt is geoshape`() {
         prompt = MockFormEntryPromptBuilder(prompt)
-            .withControlType(Constants.DATATYPE_GEOSHAPE)
+            .withDataType(Constants.DATATYPE_GEOSHAPE)
             .build()
 
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
@@ -82,7 +82,7 @@ class GeoPolyDialogFragmentTest {
     @Test
     fun `configures GeoPolyFragment with geotrace output mode when prompt is geotrace`() {
         prompt = MockFormEntryPromptBuilder(prompt)
-            .withControlType(Constants.DATATYPE_GEOTRACE)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
 
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
@@ -93,7 +93,7 @@ class GeoPolyDialogFragmentTest {
     @Test
     fun `configures GeoPolyFragment with null output mode when prompt is something else`() {
         prompt = MockFormEntryPromptBuilder(prompt)
-            .withControlType(Constants.DATATYPE_DATE)
+            .withDataType(Constants.DATATYPE_DATE)
             .build()
 
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {

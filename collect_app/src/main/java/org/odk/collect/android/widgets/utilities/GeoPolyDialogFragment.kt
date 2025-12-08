@@ -15,7 +15,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
     ) {
 
     override fun onCreateFragment(prompt: FormEntryPrompt): GeoPolyFragment {
-        val outputMode = when (prompt.controlType) {
+        val outputMode = when (prompt.dataType) {
             Constants.DATATYPE_GEOSHAPE -> OutputMode.GEOSHAPE
             Constants.DATATYPE_GEOTRACE -> OutputMode.GEOTRACE
             else -> null
