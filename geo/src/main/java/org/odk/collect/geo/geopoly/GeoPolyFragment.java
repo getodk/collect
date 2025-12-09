@@ -143,6 +143,10 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         this.retainMockAccuracy = retainMockAccuracy;
     }
 
+    public GeoPolyFragment(@Nullable OutputMode outputMode) {
+        this(outputMode, false, false, null);
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

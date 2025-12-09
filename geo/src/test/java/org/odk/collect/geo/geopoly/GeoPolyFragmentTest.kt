@@ -1,8 +1,8 @@
 package org.odk.collect.geo.geopoly
 
-import android.app.Activity
 import android.app.Application
-import android.content.Intent
+import android.os.Bundle
+import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
@@ -24,14 +24,13 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.androidtest.ActivityScenarioExtensions.isFinishing
-import org.odk.collect.androidtest.ActivityScenarioLauncherRule
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
-import org.odk.collect.geo.Constants
-import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.geo.R
+import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.tracker.LocationTracker
@@ -47,12 +46,12 @@ import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
-class GeoPolyActivityTest {
+class GeoPolyFragmentTest {
     private val mapFragment = FakeMapFragment()
     private val locationTracker = mock<LocationTracker>()
 
     @get:Rule
-    val launcherRule = ActivityScenarioLauncherRule()
+    val fragmentLauncherRule = FragmentScenarioLauncherRule()
 
     @Before
     fun setUp() {
@@ -96,8 +95,11 @@ class GeoPolyActivityTest {
 
     @Test
     fun testLocationTrackerLifecycle() {
-        val scenario = launcherRule.launch(
-            GeoPolyActivity::class.java
+        val scenario = fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OutputMode.GEOTRACE) }
+                .build()
         )
         mapFragment.ready()
 
@@ -108,7 +110,13 @@ class GeoPolyActivityTest {
 
     @Test
     fun recordButton_should_beHiddenForAutomaticMode() {
-        launcherRule.launch(GeoPolyActivity::class.java)
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OutputMode.GEOTRACE) }
+                .build()
+        )
+
         mapFragment.ready()
         startInput(R.id.automatic_mode)
         onView(withId(R.id.record_button)).check(matches(not(isDisplayed())))
@@ -116,7 +124,13 @@ class GeoPolyActivityTest {
 
     @Test
     fun recordButton_should_beVisibleForManualMode() {
-        launcherRule.launch(GeoPolyActivity::class.java)
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OutputMode.GEOTRACE) }
+                .build()
+        )
+
         mapFragment.ready()
         startInput(R.id.manual_mode)
         onView(withId(R.id.record_button)).check(matches(isDisplayed()))
@@ -124,12 +138,17 @@ class GeoPolyActivityTest {
 
     @Test
     fun whenPolygonExtraPresent_showsPoly() {
-        val intent =
-            Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity::class.java)
         val polygon = ArrayList<MapPoint>()
         polygon.add(MapPoint(1.0, 2.0, 3.0, 4.0))
-        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon)
-        launcherRule.launch<GeoPolyActivity>(intent)
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(OutputMode.GEOTRACE, false, false, polygon)
+                }
+                .build()
+        )
+
         mapFragment.ready()
         val polys = mapFragment.getPolyLines()
         assertThat(polys.size, equalTo(1))
@@ -138,15 +157,19 @@ class GeoPolyActivityTest {
 
     @Test
     fun whenPolygonExtraPresent_andOutputModeIsShape_showsClosedPoly() {
-        val intent =
-            Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity::class.java)
         val polygon = ArrayList<MapPoint>()
         polygon.add(MapPoint(1.0, 2.0, 3.0, 4.0))
         polygon.add(MapPoint(2.0, 3.0, 3.0, 4.0))
         polygon.add(MapPoint(1.0, 2.0, 3.0, 4.0))
-        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon)
-        intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyFragment.OutputMode.GEOSHAPE)
-        launcherRule.launch<GeoPolyActivity>(intent)
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(OutputMode.GEOSHAPE, false, false, polygon)
+                }
+                .build()
+        )
+
         mapFragment.ready()
         val polys = mapFragment.getPolyLines()
         assertThat(polys.size, equalTo(1))
@@ -159,12 +182,15 @@ class GeoPolyActivityTest {
 
     @Test
     fun whenPolygonExtraPresent_andPolyIsEmpty_andOutputModeIsShape_doesNotShowPoly() {
-        val intent =
-            Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity::class.java)
-        val polygon = ArrayList<MapPoint>()
-        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon)
-        intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyFragment.OutputMode.GEOSHAPE)
-        launcherRule.launch<GeoPolyActivity>(intent)
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(OutputMode.GEOSHAPE, false, false, emptyList())
+                }
+                .build()
+        )
+
         mapFragment.ready()
         val polys = mapFragment.getPolyLines()
         assertThat(polys.size, equalTo(1))
@@ -172,24 +198,36 @@ class GeoPolyActivityTest {
     }
 
     @Test
-    fun whenPolygonExtraPresent_andPolyIsEmpty_pressingBack_finishes() {
-        val intent =
-            Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity::class.java)
-        val polygon = ArrayList<MapPoint>()
-        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon)
-        intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyFragment.OutputMode.GEOSHAPE)
-        val scenario = launcherRule.launch<GeoPolyActivity>(intent)
+    fun whenPolygonExtraPresent_andPolyIsEmpty_pressingBack_setsCancelledResult() {
+        val scenario = fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(OutputMode.GEOTRACE, false, false, emptyList())
+                }
+                .build()
+        )
+
         mapFragment.ready()
+
+        val resultListener = mock<FragmentResultListener>()
+        scenario.onFragment { it.parentFragmentManager.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, it, resultListener) }
+
         Espresso.pressBack()
-        assertThat(scenario.isFinishing, equalTo(true))
+        verify(resultListener).onFragmentResult(GeoPolyFragment.REQUEST_GEOPOLY, Bundle.EMPTY)
     }
 
     @Test
     fun startingInput_usingAutomaticMode_usesRetainMockAccuracyTrueToStartLocationTracker() {
-        val intent =
-            Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity::class.java)
-        intent.putExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, true)
-        launcherRule.launch<GeoPolyActivity>(intent)
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(OutputMode.GEOTRACE, false, true, null)
+                }
+                .build()
+        )
+
         mapFragment.ready()
         startInput(R.id.automatic_mode)
         verify(locationTracker).start(true)
@@ -197,10 +235,15 @@ class GeoPolyActivityTest {
 
     @Test
     fun startingInput_usingAutomaticMode_usesRetainMockAccuracyFalseToStartLocationTracker() {
-        val intent =
-            Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity::class.java)
-        intent.putExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, false)
-        launcherRule.launch<GeoPolyActivity>(intent)
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(OutputMode.GEOTRACE, false, false, null)
+                }
+                .build()
+        )
+
         mapFragment.ready()
         startInput(R.id.automatic_mode)
         verify(locationTracker).start(false)
@@ -208,7 +251,13 @@ class GeoPolyActivityTest {
 
     @Test
     fun recordingPointManually_whenPointIsADuplicateOfTheLastPoint_skipsPoint() {
-        launcherRule.launch(GeoPolyActivity::class.java)
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OutputMode.GEOTRACE) }
+                .build()
+        )
+
         mapFragment.ready()
         startInput(R.id.manual_mode)
         mapFragment.setLocation(MapPoint(1.0, 1.0))
@@ -219,7 +268,13 @@ class GeoPolyActivityTest {
 
     @Test
     fun placingPoint_whenPointIsADuplicateOfTheLastPoint_skipsPoint() {
-        launcherRule.launch(GeoPolyActivity::class.java)
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OutputMode.GEOTRACE) }
+                .build()
+        )
+
         mapFragment.ready()
         startInput(R.id.placement_mode)
         mapFragment.click(MapPoint(1.0, 1.0))
@@ -231,12 +286,16 @@ class GeoPolyActivityTest {
     fun buttonsShouldBeEnabledInEditableMode() {
         val polyline = ArrayList<MapPoint>()
         polyline.add(MapPoint(1.0, 2.0, 3.0, 4.0))
-        val intent =
-            Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity::class.java)
-        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polyline)
-        launcherRule.launch<GeoPolyActivity>(intent)
-        mapFragment.ready()
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(OutputMode.GEOTRACE, false, false, polyline)
+                }
+                .build()
+        )
 
+        mapFragment.ready()
         Assertions.assertEnabled(withContentDescription(string.input_method))
         Assertions.assertEnabled(withContentDescription(string.remove_last_point))
         Assertions.assertEnabled(withContentDescription(string.clear))
@@ -247,13 +306,16 @@ class GeoPolyActivityTest {
     fun buttonsShouldBeDisabledInReadOnlyMode() {
         val polygon = ArrayList<MapPoint>()
         polygon.add(MapPoint(1.0, 2.0, 3.0, 4.0))
-        val intent =
-            Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity::class.java)
-        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon)
-        intent.putExtra(Constants.EXTRA_READ_ONLY, true)
-        launcherRule.launch<GeoPolyActivity>(intent)
-        mapFragment.ready()
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(OutputMode.GEOTRACE, true, false, polygon)
+                }
+                .build()
+        )
 
+        mapFragment.ready()
         Assertions.assertEnabled(withContentDescription(string.input_method), enabled = false)
         Assertions.assertEnabled(withContentDescription(string.remove_last_point), enabled = false)
         Assertions.assertEnabled(withContentDescription(string.clear), enabled = false)
@@ -264,10 +326,15 @@ class GeoPolyActivityTest {
     fun polyShouldBeDraggableInEditableMode() {
         val polyline = ArrayList<MapPoint>()
         polyline.add(MapPoint(1.0, 2.0, 3.0, 4.0))
-        val intent =
-            Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity::class.java)
-        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polyline)
-        launcherRule.launch<Activity>(intent)
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(OutputMode.GEOTRACE, false, false, polyline)
+                }
+                .build()
+        )
+
         mapFragment.ready()
         assertThat(mapFragment.isPolyDraggable(0), equalTo(true))
     }
@@ -276,37 +343,52 @@ class GeoPolyActivityTest {
     fun polyShouldNotBeDraggableInReadOnlyMode() {
         val polygon = ArrayList<MapPoint>()
         polygon.add(MapPoint(1.0, 2.0, 3.0, 4.0))
-        val intent =
-            Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity::class.java)
-        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon)
-        intent.putExtra(Constants.EXTRA_READ_ONLY, true)
-        launcherRule.launch<Activity>(intent)
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(OutputMode.GEOTRACE, true, false, polygon)
+                }
+                .build()
+        )
+
         mapFragment.ready()
         assertThat(mapFragment.isPolyDraggable(0), equalTo(false))
     }
 
     @Test
     fun passingRetainMockAccuracyExtra_updatesMapFragmentState() {
-        val intent = Intent(
-            ApplicationProvider.getApplicationContext(),
-            GeoPolyActivity::class.java
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(OutputMode.GEOTRACE, false, true, emptyList())
+                }
+                .build()
         )
-        intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true)
-        launcherRule.launch<Activity>(intent)
         mapFragment.ready()
-
         assertThat(mapFragment.isRetainMockAccuracy(), equalTo(true))
 
-        intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, false)
-        launcherRule.launch<Activity>(intent)
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(OutputMode.GEOTRACE, false, false, emptyList())
+                }
+                .build()
+        )
         mapFragment.ready()
-
         assertThat(mapFragment.isRetainMockAccuracy(), equalTo(false))
     }
 
     @Test
-    fun recreatingTheActivityWithTheLayersDialogDisplayedDoesNotCrashTheApp() {
-        val scenario = launcherRule.launch(GeoPolyActivity::class.java)
+    fun recreatingTheFragmentWithTheLayersDialogDisplayedDoesNotCrashTheApp() {
+        val scenario = fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OutputMode.GEOTRACE) }
+                .build()
+        )
         mapFragment.ready()
 
         onView(withId(R.id.layers)).perform(click())

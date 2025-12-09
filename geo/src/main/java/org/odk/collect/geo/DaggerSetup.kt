@@ -13,7 +13,6 @@ import org.odk.collect.geo.geopoint.GeoPointDialogFragment
 import org.odk.collect.geo.geopoint.GeoPointMapActivity
 import org.odk.collect.geo.geopoint.GeoPointViewModelFactory
 import org.odk.collect.geo.geopoint.LocationTrackerGeoPointViewModel
-import org.odk.collect.geo.geopoly.GeoPolyActivity
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.location.LocationClient
@@ -46,7 +45,6 @@ interface GeoDependencyComponent {
     }
 
     fun inject(geoPointMapActivity: GeoPointMapActivity)
-    fun inject(geoPolyActivity: GeoPolyActivity)
     fun inject(geoPointDialogFragment: GeoPointDialogFragment)
     fun inject(geoPointActivity: GeoPointActivity)
     fun inject(selectionMapFragment: SelectionMapFragment)

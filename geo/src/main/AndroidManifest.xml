@@ -7,10 +7,6 @@
             android:theme="@style/Theme.MaterialComponents" />
 
         <activity
-            android:name=".geopoly.GeoPolyActivity"
-            android:theme="@style/Theme.MaterialComponents" />
-
-        <activity
             android:name=".geopoint.GeoPointActivity"
             android:theme="@style/Theme.MaterialComponents" />
     </application>
