@@ -18,6 +18,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.QuestionMediaManager
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.FileWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
@@ -51,8 +52,8 @@ class ExVideoWidget(
         val viewModelProvider = ViewModelProvider(
             context as ComponentActivity,
             viewModelFactory {
-                addInitializer(VideoWidgetAnswerViewModel::class) {
-                    VideoWidgetAnswerViewModel(scheduler, questionMediaManager, mediaUtils)
+                addInitializer(MediaWidgetAnswerViewModel::class) {
+                    MediaWidgetAnswerViewModel(scheduler, questionMediaManager, mediaUtils)
                 }
             }
         )

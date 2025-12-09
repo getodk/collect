@@ -15,6 +15,7 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.QuestionMediaManager
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.FileWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
@@ -43,8 +44,8 @@ class ExArbitraryFileWidget(
         val viewModelProvider = ViewModelProvider(
             context as ComponentActivity,
             viewModelFactory {
-                addInitializer(ArbitraryFileWidgetAnswerViewModel::class) {
-                    ArbitraryFileWidgetAnswerViewModel(questionMediaManager, mediaUtils)
+                addInitializer(MediaWidgetAnswerViewModel::class) {
+                    MediaWidgetAnswerViewModel(scheduler, questionMediaManager, mediaUtils)
                 }
             }
         )

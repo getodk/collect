@@ -11,7 +11,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.lifecycle.ViewModelProvider
 import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
-import org.odk.collect.android.widgets.arbitraryfile.ArbitraryFileWidgetAnswerViewModel
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.android.widgets.video.VideoWidgetAnswer
 import org.odk.collect.icons.R
 
@@ -41,7 +41,7 @@ fun WidgetAnswer(
             Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(modifier, answer, viewModelProvider!!, onLongClick)
             Constants.CONTROL_FILE_CAPTURE -> {
                 val context = LocalContext.current
-                val viewModel = viewModelProvider!![ArbitraryFileWidgetAnswerViewModel::class]
+                val viewModel = viewModelProvider!![MediaWidgetAnswerViewModel::class]
 
                 TextWidgetAnswer(
                     modifier,

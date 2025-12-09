@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets.video
+package org.odk.collect.android.widgets
 
 import android.content.Context
 import androidx.compose.ui.graphics.ImageBitmap
@@ -11,12 +11,11 @@ import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.androidshared.utils.getVideoThumbnail
 import org.odk.collect.async.Scheduler
 
-class VideoWidgetAnswerViewModel(
+class MediaWidgetAnswerViewModel(
     private val scheduler: Scheduler,
     private val questionMediaManager: QuestionMediaManager,
     private val mediaUtils: MediaUtils
 ) : ViewModel() {
-
     fun getFrame(answer: String?, context: Context): StateFlow<ImageBitmap?> {
         val bitmapState = MutableStateFlow<ImageBitmap?>(null)
 
@@ -31,10 +30,10 @@ class VideoWidgetAnswerViewModel(
         return bitmapState
     }
 
-    fun playVideo(context: Context, answer: String?) {
+    fun openFile(context: Context, answer: String?, mimeType: String? = null) {
         val file = questionMediaManager.getAnswerFile(answer)
         if (file != null) {
-            mediaUtils.openFile(context, file, "video/*")
+            mediaUtils.openFile(context, file, mimeType)
         }
     }
 }

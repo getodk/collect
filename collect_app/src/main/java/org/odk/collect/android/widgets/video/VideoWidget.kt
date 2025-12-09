@@ -22,6 +22,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.android.utilities.QuestionMediaManager
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.FileWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
@@ -55,8 +56,8 @@ class VideoWidget(
         val viewModelProvider = ViewModelProvider(
             context as ComponentActivity,
             viewModelFactory {
-                addInitializer(VideoWidgetAnswerViewModel::class) {
-                    VideoWidgetAnswerViewModel(scheduler, questionMediaManager, mediaUtils)
+                addInitializer(MediaWidgetAnswerViewModel::class) {
+                    MediaWidgetAnswerViewModel(scheduler, questionMediaManager, mediaUtils)
                 }
             }
         )
