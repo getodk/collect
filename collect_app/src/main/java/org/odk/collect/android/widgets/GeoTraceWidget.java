@@ -27,7 +27,6 @@ import org.odk.collect.android.databinding.GeotraceQuestionBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
-import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.maps.MapConfigurator;
 
 /**
@@ -38,16 +37,14 @@ import org.odk.collect.maps.MapConfigurator;
 public class GeoTraceWidget extends QuestionWidget {
     GeotraceQuestionBinding binding;
 
-    private final WaitingForDataRegistry waitingForDataRegistry;
     private final MapConfigurator mapConfigurator;
     private final GeoDataRequester geoDataRequester;
 
-    public GeoTraceWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
+    public GeoTraceWidget(Context context, QuestionDetails questionDetails,
                           MapConfigurator mapConfigurator, GeoDataRequester geoDataRequester, Dependencies dependencies) {
         super(context, dependencies, questionDetails);
         render();
 
-        this.waitingForDataRegistry = waitingForDataRegistry;
         this.mapConfigurator = mapConfigurator;
         this.geoDataRequester = geoDataRequester;
     }
@@ -60,7 +57,7 @@ public class GeoTraceWidget extends QuestionWidget {
 
         binding.simpleButton.setOnClickListener(v -> {
             if (mapConfigurator.isAvailable(context)) {
-                geoDataRequester.requestGeoTrace(prompt, getAnswerText(), waitingForDataRegistry);
+                geoDataRequester.requestGeoPoly(prompt);
             } else {
                 mapConfigurator.showUnavailableMessage(context);
             }

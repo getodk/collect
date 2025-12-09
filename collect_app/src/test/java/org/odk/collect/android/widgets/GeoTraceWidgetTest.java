@@ -27,20 +27,17 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
-import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.maps.MapConfigurator;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoTraceWidgetTest {
     private final String answer = stringFromDoubleList();
 
-    private WaitingForDataRegistry waitingForDataRegistry;
     private GeoDataRequester geoDataRequester;
     private MapConfigurator mapConfigurator;
 
     @Before
     public void setup() {
-        waitingForDataRegistry = mock(WaitingForDataRegistry.class);
         geoDataRequester = mock(GeoDataRequester.class);
         mapConfigurator = mock(MapConfigurator.class);
         when(mapConfigurator.isAvailable(any())).thenReturn(true);
@@ -133,7 +130,7 @@ public class GeoTraceWidgetTest {
         when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(false);
         widget.binding.simpleButton.performClick();
 
-        verify(geoDataRequester, never()).requestGeoTrace(prompt, "",  waitingForDataRegistry);
+        verify(geoDataRequester, never()).requestGeoPoly(prompt);
         verify(mapConfigurator).showUnavailableMessage(widget.getContext());
     }
 
@@ -143,7 +140,7 @@ public class GeoTraceWidgetTest {
         GeoTraceWidget widget = createWidget(prompt);
         widget.binding.simpleButton.performClick();
 
-        verify(geoDataRequester).requestGeoTrace(prompt, "", waitingForDataRegistry);
+        verify(geoDataRequester).requestGeoPoly(prompt);
     }
 
     @Test
@@ -153,11 +150,11 @@ public class GeoTraceWidgetTest {
         widget.clearAnswer();
         widget.binding.simpleButton.performClick();
 
-        verify(geoDataRequester).requestGeoTrace(prompt, "", waitingForDataRegistry);
+        verify(geoDataRequester).requestGeoPoly(prompt);
     }
 
     private GeoTraceWidget createWidget(FormEntryPrompt prompt) {
         return new GeoTraceWidget(widgetTestActivity(), new QuestionDetails(prompt),
-                waitingForDataRegistry, mapConfigurator, geoDataRequester, widgetDependencies());
+                mapConfigurator, geoDataRequester, widgetDependencies());
     }
 }

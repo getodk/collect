@@ -103,7 +103,7 @@ public class ActivityGeoDataRequesterTest {
     @Test
     public void whenPermissionIsNotGranted_requestGeoTrace_doesNotOpenDialog() {
         permissionsProvider.setPermissionGranted(false);
-        activityGeoDataRequester.requestGeoTrace(prompt, "", waitingForDataRegistry);
+        activityGeoDataRequester.requestGeoPoly(prompt);
 
         assertThat(testActivity.getSupportFragmentManager().getFragments().size(), equalTo(0));
     }
@@ -296,7 +296,7 @@ public class ActivityGeoDataRequesterTest {
 
     @Test
     public void requestGeoTrace_opensDialog() {
-        activityGeoDataRequester.requestGeoTrace(prompt, "2.0 3.0 4 5; 6.0 7.0 8 9", waitingForDataRegistry);
+        activityGeoDataRequester.requestGeoPoly(prompt);
         MockDialogFragment mockFragment = (MockDialogFragment) testActivity.getSupportFragmentManager().getFragments().get(0);
         assertThat(mockFragment.fragmentClass, equalTo(GeoPolyDialogFragment.class));
         assertThat(mockFragment.requireArguments().getSerializable(WidgetAnswerDialogFragment.ARG_FORM_INDEX), equalTo(prompt.getIndex()));

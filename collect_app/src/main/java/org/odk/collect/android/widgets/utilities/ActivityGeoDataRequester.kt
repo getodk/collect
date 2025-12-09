@@ -120,11 +120,7 @@ class ActivityGeoDataRequester(
         )
     }
 
-    override fun requestGeoTrace(
-        prompt: FormEntryPrompt,
-        answerText: String?,
-        waitingForDataRegistry: WaitingForDataRegistry
-    ) {
+    override fun requestGeoPoly(prompt: FormEntryPrompt) {
         permissionsProvider.requestEnabledLocationPermissions(
             activity,
             object : PermissionListener {

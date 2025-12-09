@@ -184,7 +184,7 @@ public class WidgetFactory {
                                 new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_GEOTRACE:
-                        questionWidget = new GeoTraceWidget(activity, questionDetails, waitingForDataRegistry,
+                        questionWidget = new GeoTraceWidget(activity, questionDetails,
                                 MapConfiguratorProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_BARCODE:
