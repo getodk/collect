@@ -486,8 +486,4 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private boolean isQuestionRecalculated(FormEntryPrompt mutableQuestionBeforeSave, ImmutableDisplayableQuestion immutableQuestionBeforeSave) {
         return !Objects.equals(mutableQuestionBeforeSave.getAnswerText(), immutableQuestionBeforeSave.getAnswerText());
     }
-
-    public interface AnswerListener {
-        void onAnswer(FormIndex index, IAnswerData answer);
-    }
 }
