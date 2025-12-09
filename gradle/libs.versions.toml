@@ -39,7 +39,7 @@ androidxWorkRuntime = { group = "androidx.work", name = "work-runtime-ktx", vers
 androidxExinterface = { group = "androidx.exifinterface", name = "exifinterface", version = "1.4.1" }
 androidxPreferenceKtx = { group = "androidx.preference", name = "preference-ktx", version = "1.2.1" }
 androidxFragmentKtx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidxFragment" }
-androidMaterial = { group = "com.google.android.material", name = "material", version = "1.13.0" }
+androidMaterial = { group = "com.google.android.material", name = "material", version = "1.12.0" } # Check if https://github.com/getodk/collect/issues/6974 is still an issue before upgrading
 androidFlexbox = { group = "com.google.android.flexbox", name = "flexbox", version = "3.0.0" }
 androidxComposeBom = { group = "androidx.compose", name = "compose-bom", version = "2025.09.00" }
 androidXComposeMaterial = { group = "androidx.compose.material3", name = "material3" }
