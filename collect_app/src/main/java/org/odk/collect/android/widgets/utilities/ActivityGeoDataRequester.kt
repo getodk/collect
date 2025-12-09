@@ -15,8 +15,6 @@ import org.odk.collect.geo.Constants.EXTRA_READ_ONLY
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.geopoint.GeoPointActivity
 import org.odk.collect.geo.geopoint.GeoPointMapActivity
-import org.odk.collect.geo.geopoly.GeoPolyActivity
-import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
@@ -81,39 +79,6 @@ class ActivityGeoDataRequester(
                     activity.startActivityForResult(
                         intent,
                         ApplicationConstants.RequestCodes.LOCATION_CAPTURE
-                    )
-                }
-            }
-        )
-    }
-
-    override fun requestGeoShape(
-        prompt: FormEntryPrompt,
-        answerText: String?,
-        waitingForDataRegistry: WaitingForDataRegistry
-    ) {
-        permissionsProvider.requestEnabledLocationPermissions(
-            activity,
-            object : PermissionListener {
-                override fun granted() {
-                    waitingForDataRegistry.waitForData(prompt.index)
-
-                    val intent = Intent(activity, GeoPolyActivity::class.java).also {
-                        it.putExtra(
-                            GeoPolyActivity.EXTRA_POLYGON,
-                            ArrayList(parseGeometry(answerText))
-                        )
-                        it.putExtra(
-                            GeoPolyActivity.OUTPUT_MODE_KEY,
-                            GeoPolyFragment.OutputMode.GEOSHAPE
-                        )
-                        it.putExtra(EXTRA_READ_ONLY, prompt.isReadOnly)
-                        it.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt))
-                    }
-
-                    activity.startActivityForResult(
-                        intent,
-                        ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE
                     )
                 }
             }
