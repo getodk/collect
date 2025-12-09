@@ -50,8 +50,10 @@ abstract class WidgetAnswerDialogFragment<T : Fragment>(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        childFragmentManager.commit {
-            add(R.id.answer_fragment, type.java, null)
+        if (childFragmentManager.fragments.isEmpty()) {
+            childFragmentManager.commit {
+                add(R.id.answer_fragment, type.java, null)
+            }
         }
     }
 
