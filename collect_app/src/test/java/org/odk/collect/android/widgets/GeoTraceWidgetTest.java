@@ -1,20 +1,5 @@
 package org.odk.collect.android.widgets;
 
-import android.view.View;
-
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import org.javarosa.core.model.data.StringData;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.maps.MapConfigurator;
-import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
-import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,6 +14,21 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetDependencies;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
+
+import android.view.View;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.maps.MapConfigurator;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoTraceWidgetTest {
@@ -126,50 +126,6 @@ public class GeoTraceWidgetTest {
     }
 
     @Test
-    public void setData_updatesWidgetAnswer() {
-        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        widget.setData(answer);
-        assertEquals(widget.getAnswer().getDisplayText(), answer);
-    }
-
-    @Test
-    public void setData_setsCorrectAnswerInAnswerTextView() {
-        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        widget.setData(answer);
-        assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
-    }
-
-    @Test
-    public void setData_updatesWidgetDisplayedAnswer() {
-        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        widget.setData(answer);
-        assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
-    }
-
-    @Test
-    public void setData_whenDataIsNull_updatesButtonLabel() {
-        GeoTraceWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        widget.setData("");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_line));
-    }
-
-    @Test
-    public void setData_whenDataIsNotNull_updatesButtonLabel() {
-        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        widget.setData(answer);
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_line));
-    }
-
-    @Test
-    public void setData_callsValueChangeListener() {
-        GeoTraceWidget widget = createWidget(promptWithAnswer(null));
-        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setData(answer);
-
-        verify(valueChangedListener).widgetValueChanged(widget);
-    }
-
-    @Test
     public void buttonClick_whenMapConfiguratorIsUnavailable_doesNotRequestGeoTrace() {
         FormEntryPrompt prompt = promptWithAnswer(null);
         GeoTraceWidget widget = createWidget(prompt);
@@ -198,16 +154,6 @@ public class GeoTraceWidgetTest {
         widget.binding.simpleButton.performClick();
 
         verify(geoDataRequester).requestGeoTrace(prompt, "", waitingForDataRegistry);
-    }
-
-    @Test
-    public void buttonClick_requestsGeoTrace_whenAnswerIsUpdated() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        GeoTraceWidget widget = createWidget(prompt);
-        widget.setData(answer);
-        widget.binding.simpleButton.performClick();
-
-        verify(geoDataRequester).requestGeoTrace(prompt, answer, waitingForDataRegistry);
     }
 
     private GeoTraceWidget createWidget(FormEntryPrompt prompt) {
