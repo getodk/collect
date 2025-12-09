@@ -21,11 +21,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentFactory;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.FormIndex;
@@ -42,6 +38,8 @@ import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.geo.geopoint.GeoPointActivity;
 import org.odk.collect.geo.geopoint.GeoPointMapActivity;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.testshared.MockDialogFragment;
+import org.odk.collect.testshared.MockFragmentFactory;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
 
@@ -246,7 +244,7 @@ public class ActivityGeoDataRequesterTest {
     public void requestGeoTrace_opensDialog() {
         activityGeoDataRequester.requestGeoPoly(prompt);
         MockDialogFragment mockFragment = (MockDialogFragment) testActivity.getSupportFragmentManager().getFragments().get(0);
-        assertThat(mockFragment.fragmentClass, equalTo(GeoPolyDialogFragment.class));
+        assertThat(mockFragment.getFragmentClass(), equalTo(GeoPolyDialogFragment.class));
         assertThat(mockFragment.requireArguments().getSerializable(WidgetAnswerDialogFragment.ARG_FORM_INDEX), equalTo(prompt.getIndex()));
     }
 
@@ -269,36 +267,5 @@ public class ActivityGeoDataRequesterTest {
         startedIntent = shadowActivity.getNextStartedActivity();
         assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
         assertFalse(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, true));
-    }
-
-    private static class MockFragmentFactory extends FragmentFactory {
-        @NonNull
-        @Override
-        public Fragment instantiate(@NonNull ClassLoader classLoader, @NonNull String className) {
-            Class<? extends Fragment> fragmentClass = loadFragmentClass(classLoader, className);
-            if (DialogFragment.class.isAssignableFrom(fragmentClass)) {
-                return new MockDialogFragment(fragmentClass);
-            } else {
-                return new MockFragment(fragmentClass);
-            }
-        }
-    }
-
-    public static class MockFragment extends Fragment {
-
-        public final Class<? extends Fragment> fragmentClass;
-
-        MockFragment(Class<? extends Fragment> fragmentClass) {
-            this.fragmentClass = fragmentClass;
-        }
-    }
-
-    public static class MockDialogFragment extends DialogFragment {
-
-        public final Class<? extends Fragment> fragmentClass;
-
-        MockDialogFragment(Class<? extends Fragment> fragmentClass) {
-            this.fragmentClass = fragmentClass;
-        }
     }
 }
