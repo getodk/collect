@@ -199,7 +199,6 @@ import org.odk.collect.strings.localization.LocalizedActivity;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -574,8 +573,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
             findViewById(R.id.loading_screen).setVisibility(isLoading ? View.VISIBLE : View.GONE);
         });
 
-        formEntryViewModel.setAnswerListener(this::onAnswer);
-
         formEntryViewModel.getError().observe(this, error -> {
             if (error instanceof FormError.NonFatal) {
                 createErrorDialog(error);
@@ -942,19 +939,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
             Timber.e(new Error("currentView returned null."));
         }
         return null;
-    }
-
-    private void onAnswer(FormIndex index, IAnswerData answer) {
-        ODKView currentViewIfODKView = getCurrentViewIfODKView();
-        if (currentViewIfODKView != null) {
-            Optional<QuestionWidget> widgetForIndex = currentViewIfODKView.getWidgets().stream()
-                    .filter((widget) -> widget.getFormEntryPrompt().getIndex().equals(index))
-                    .findFirst();
-
-            widgetForIndex.ifPresent(questionWidget -> {
-                ((WidgetDataReceiver) questionWidget).setData(answer);
-            });
-        }
     }
 
     public void setWidgetData(Object data) {
