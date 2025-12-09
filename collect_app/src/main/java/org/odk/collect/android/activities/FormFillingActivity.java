@@ -903,7 +903,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 loadMedia(intent.getData());
                 break;
             case RequestCodes.LOCATION_CAPTURE:
-            case RequestCodes.GEOSHAPE_CAPTURE:
             case RequestCodes.BEARING_CAPTURE:
             case RequestCodes.BARCODE_CAPTURE:
             case RequestCodes.EX_STRING_CAPTURE:

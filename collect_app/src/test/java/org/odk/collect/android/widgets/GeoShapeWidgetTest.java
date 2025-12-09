@@ -119,43 +119,6 @@ public class GeoShapeWidgetTest {
     }
 
     @Test
-    public void setData_updatesWidgetAnswer() {
-        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
-        widget.setData(answer);
-        assertEquals(widget.getAnswer().getDisplayText(), answer);
-    }
-
-    @Test
-    public void setData_updatesWidgetDisplayedAnswer() {
-        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
-        widget.setData(answer);
-        assertEquals(widget.binding.geoAnswerText.getText().toString(), answer);
-    }
-
-    @Test
-    public void setData_whenDataIsNull_updatesButtonLabel() {
-        GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        widget.setData("");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_polygon));
-    }
-
-    @Test
-    public void setData_whenDataIsNotNull_updatesButtonLabel() {
-        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
-        widget.setData(answer);
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_polygon));
-    }
-
-    @Test
-    public void setData_callsValueChangeListener() {
-        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
-        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.setData(answer);
-
-        verify(valueChangedListener).widgetValueChanged(widget);
-    }
-
-    @Test
     public void buttonClick_requestsGeoShape() {
         FormEntryPrompt prompt = promptWithAnswer(new StringData(answer));
         GeoShapeWidget widget = createWidget(prompt);
@@ -173,18 +136,8 @@ public class GeoShapeWidgetTest {
         verify(geoDataRequester).requestGeoPoly(prompt);
     }
 
-    @Test
-    public void buttonClick_requestsGeoShape_whenAnswerIsUpdated() {
-        FormEntryPrompt prompt = promptWithAnswer(null);
-        GeoShapeWidget widget = createWidget(prompt);
-        widget.setData(answer);
-        widget.binding.simpleButton.performClick();
-
-        verify(geoDataRequester).requestGeoPoly(prompt);
-    }
-
     private GeoShapeWidget createWidget(FormEntryPrompt prompt) {
         return new GeoShapeWidget(widgetTestActivity(), new QuestionDetails(prompt),
-                waitingForDataRegistry, geoDataRequester, widgetDependencies());
+                geoDataRequester, widgetDependencies());
     }
 }

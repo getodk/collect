@@ -180,7 +180,7 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_GEOSHAPE:
-                        questionWidget = new GeoShapeWidget(activity, questionDetails, waitingForDataRegistry,
+                        questionWidget = new GeoShapeWidget(activity, questionDetails,
                                 new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_GEOTRACE:
