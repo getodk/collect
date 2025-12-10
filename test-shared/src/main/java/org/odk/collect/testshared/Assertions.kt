@@ -2,6 +2,7 @@ package org.odk.collect.testshared
 
 import android.content.Intent
 import android.view.View
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Root
 import androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow
@@ -17,7 +18,8 @@ import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
-import org.odk.collect.testshared.Assertions.assertVisible
+import org.odk.collect.androidshared.ui.AlertStore
+import org.odk.collect.testshared.WaitFor.waitFor
 
 object Assertions {
 
@@ -80,5 +82,21 @@ object Assertions {
 
     fun assertBelow(below: Matcher<View>, above: Matcher<View>) {
         onView(below).check(isCompletelyBelow(above))
+    }
+
+    fun assertAlert(alertStore: AlertStore, alert: String, failureMessage: String) {
+        Espresso.onIdle()
+        waitFor {
+            if (!alertStore.pop().stream().anyMatch { s: String -> s == alert }) {
+                throw RuntimeException(failureMessage)
+            }
+        }
+    }
+
+    fun assertNoAlert(alertStore: AlertStore, alert: String, failureMessage: String) {
+        Espresso.onIdle()
+        if (alertStore.pop().stream().anyMatch { s: String -> s == alert }) {
+            throw RuntimeException(failureMessage)
+        }
     }
 }

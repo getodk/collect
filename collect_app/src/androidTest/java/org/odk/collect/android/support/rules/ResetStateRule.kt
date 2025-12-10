@@ -35,7 +35,7 @@ private class ResetStateStatement(
     private fun setTestState() {
         MultiClickGuard.test = true
         DecoratedBarcodeView.test = true
-        ToastUtils.recordToasts = true
+        ToastUtils.alertStore.enabled = true
         BottomSheetBehavior.DRAGGING_ENABLED = false
     }
 

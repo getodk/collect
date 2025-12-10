@@ -53,7 +53,7 @@ import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
 import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.android.utilities.ActionRegister
-import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
+import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.strings.localization.getLocalizedQuantityString
 import org.odk.collect.strings.localization.getLocalizedString
@@ -224,19 +224,20 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertToastNotDisplayed(message: String): T {
-        Espresso.onIdle()
-        if (popRecordedToasts().stream().anyMatch { s: String -> s == message }) {
-            throw RuntimeException("Toast with text \"$message\" shown on screen!")
-        }
-
+        Assertions.assertNoAlert(
+            ToastUtils.alertStore,
+            message,
+            "Toast with text \"$message\" shown on screen!"
+        )
         return this as T
     }
 
     fun checkIsToastWithMessageDisplayed(message: String): T {
-        Espresso.onIdle()
-        if (!popRecordedToasts().stream().anyMatch { s: String -> s == message }) {
-            throw RuntimeException("No Toast with text \"$message\" shown on screen!")
-        }
+        Assertions.assertAlert(
+            ToastUtils.alertStore,
+            message,
+            "No Toast with text \"$message\" shown on screen!"
+        )
         return this as T
     }
 
