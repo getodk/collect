@@ -29,6 +29,9 @@ import org.odk.collect.androidshared.data.Consumable
  */
 object SnackbarUtils {
 
+    @JvmStatic
+    val alertStore = AlertStore()
+
     const val DURATION_SHORT = 3500
     const val DURATION_LONG = 5500
 
@@ -102,6 +105,8 @@ object SnackbarUtils {
             }
         })
         lastSnackbar?.show()
+
+        alertStore.register(message)
     }
 
     data class SnackbarDetails @JvmOverloads constructor(
