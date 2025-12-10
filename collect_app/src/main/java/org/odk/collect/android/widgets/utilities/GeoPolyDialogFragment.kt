@@ -30,8 +30,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
 
         val outputMode = when (prompt.dataType) {
             Constants.DATATYPE_GEOSHAPE -> OutputMode.GEOSHAPE
-            Constants.DATATYPE_GEOTRACE -> OutputMode.GEOTRACE
-            else -> null
+            else -> OutputMode.GEOTRACE
         }
 
         val retainMockAccuracy =

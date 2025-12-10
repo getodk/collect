@@ -105,7 +105,7 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
-    fun `configures GeoPolyFragment with null output mode when prompt is something else`() {
+    fun `configures GeoPolyFragment with geotrace output mode when prompt is something else`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .withDataType(Constants.DATATYPE_DATE)
             .build()
@@ -114,7 +114,7 @@ class GeoPolyDialogFragmentTest {
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
-            assertThat(it.outputMode, equalTo(null))
+            assertThat(it.outputMode, equalTo(OutputMode.GEOTRACE))
         }
     }
 
