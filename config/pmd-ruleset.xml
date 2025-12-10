@@ -16,11 +16,6 @@
         <exclude name="AvoidStringBufferField" />
         <exclude name="ForLoopCanBeForeach" />
         <exclude name="ImplicitFunctionalInterface" />
-        <exclude name="JUnit4TestShouldUseBeforeAnnotation" />
-        <exclude name="JUnit4TestShouldUseTestAnnotation" />
-        <exclude name="JUnitAssertionsShouldIncludeMessage" />
-        <exclude name="JUnitTestContainsTooManyAsserts" />
-        <exclude name="JUnitTestsShouldIncludeAssert" />
         <exclude name="JUnitUseExpected" /> <!-- Favor using fail explicitly to test correct exception -->
         <exclude name="LiteralsFirstInComparisons" />
         <exclude name="LooseCoupling" />
@@ -28,7 +23,6 @@
         <exclude name="NonExhaustiveSwitch" />
         <exclude name="PreserveStackTrace" />
         <exclude name="RelianceOnDefaultCharset" />
-        <exclude name="SwitchStmtsShouldHaveDefault" />
         <exclude name="UnitTestContainsTooManyAsserts" />
         <exclude name="UnitTestShouldIncludeAssert" />
         <exclude name="UnitTestShouldUseBeforeAnnotation" />
@@ -40,17 +34,14 @@
 
     <rule ref="category/java/codestyle.xml">
         <exclude name="AtLeastOneConstructor" />
-        <exclude name="AvoidPrefixingMethodParameters" />
         <exclude name="CallSuperInConstructor" />
         <exclude name="ClassNamingConventions" />
         <exclude name="CommentDefaultAccessModifier" />
         <exclude name="ConfusingTernary" />
-        <exclude name="DefaultPackage" />
         <exclude name="EmptyControlStatement" />
         <exclude name="FieldDeclarationsShouldBeAtStartOfClass" />
         <exclude name="LongVariable" />
         <exclude name="LocalVariableCouldBeFinal" />
-        <exclude name="MIsLeadingVariableName" />
         <exclude name="MethodArgumentCouldBeFinal" />
         <exclude name="MethodNamingConventions" />
         <exclude name="OnlyOneReturn" />
@@ -79,9 +70,7 @@
         <exclude name="DataClass" />
         <exclude name="ExceptionAsFlowControl" />
         <exclude name="ExcessiveImports" />
-        <exclude name="ExcessiveMethodLength" />
         <exclude name="ExcessivePublicCount" />
-        <exclude name="ExcessiveClassLength" />
         <exclude name="FinalFieldCouldBeStatic" />
         <exclude name="GodClass" />
         <exclude name="ImmutableField" />
@@ -119,18 +108,13 @@
         <exclude name="AvoidFieldNameMatchingMethodName" />
         <exclude name="AvoidInstanceofChecksInCatchClause" />
         <exclude name="AvoidLiteralsInIfCondition" />
-        <exclude name="BeanMembersShouldSerialize" />
         <exclude name="CloseResource" />
         <exclude name="ConfusingArgumentToVarargsMethod" />
         <exclude name="ConstructorCallsOverridableMethod" />
-        <exclude name="DataflowAnomalyAnalysis" />
         <exclude name="DetachedTestCase" />
         <exclude name="EmptyCatchBlock" />
-        <exclude name="EmptyIfStmt" />
-        <exclude name="EmptyWhileStmt" />
         <exclude name="ImplicitSwitchFallThrough" />
         <exclude name="JUnitSpelling" />
-        <exclude name="MissingBreakInSwitch" />
         <exclude name="MissingSerialVersionUID" />
         <exclude name="MissingStaticMethodInNonInstantiatableClass" />
         <exclude name="NullAssignment" />
@@ -154,8 +138,6 @@
         <exclude name="InefficientEmptyStringCheck" />
         <exclude name="InefficientStringBuffering" />
         <exclude name="InsufficientStringBufferDeclaration" />
-        <exclude name="SimplifyStartsWith" />
-        <exclude name="TooFewBranchesForASwitchStatement" /> <!-- Decided not to use in #2564 -->
         <exclude name="TooFewBranchesForSwitch" />
         <exclude name="UseArraysAsList" />
         <exclude name="UseStringBufferForStringAppends" />
