@@ -1,7 +1,6 @@
 package org.odk.collect.geo.geopoly
 
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -27,8 +26,6 @@ import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
-import org.odk.collect.maps.MapFragment.PointListener
-import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
@@ -114,29 +111,26 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (context.getApplicationContext() as GeoDependencyComponentProvider).geoDependencyComponent.inject(
-            this
-        )
+        (context.applicationContext as GeoDependencyComponentProvider)
+            .geoDependencyComponent.inject(this)
 
-        getChildFragmentManager().setFragmentFactory(
-            FragmentFactoryBuilder()
-                .forClass(MapFragment::class.java) { mapFragmentFactory!!.createMapFragment() as Fragment }
-                .forClass(OfflineMapLayersPickerBottomSheetDialogFragment::class.java) {
-                    OfflineMapLayersPickerBottomSheetDialogFragment(
-                        requireActivity().activityResultRegistry,
-                        referenceLayerRepository!!,
-                        scheduler!!,
-                        settingsProvider!!,
-                        webPageService!!
-                    )
-                }
-                .forClass(GeoPolySettingsDialogFragment::class.java) {
-                    GeoPolySettingsDialogFragment(
-                        this
-                    )
-                }
-                .build()
-        )
+        getChildFragmentManager().fragmentFactory = FragmentFactoryBuilder()
+            .forClass(MapFragment::class.java) { mapFragmentFactory.createMapFragment() as Fragment }
+            .forClass(OfflineMapLayersPickerBottomSheetDialogFragment::class.java) {
+                OfflineMapLayersPickerBottomSheetDialogFragment(
+                    requireActivity().activityResultRegistry,
+                    referenceLayerRepository,
+                    scheduler,
+                    settingsProvider,
+                    webPageService
+                )
+            }
+            .forClass(GeoPolySettingsDialogFragment::class.java) {
+                GeoPolySettingsDialogFragment(
+                    this
+                )
+            }
+            .build()
 
         requireLocationPermissions(requireActivity())
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
@@ -148,7 +142,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         previousState = savedInstanceState
 
         if (savedInstanceState != null) {
-            restoredPoints = savedInstanceState.getParcelableArrayList<MapPoint?>(POINTS_KEY)
+            restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY)
             inputActive = savedInstanceState.getBoolean(INPUT_ACTIVE_KEY, false)
             recordingEnabled = savedInstanceState.getBoolean(RECORDING_ENABLED_KEY, false)
             recordingAutomatic = savedInstanceState.getBoolean(RECORDING_AUTOMATIC_KEY, false)
@@ -162,12 +156,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val mapFragment: MapFragment =
             (view.findViewById<View?>(R.id.map_container) as FragmentContainerView).getFragment()
-        mapFragment.init(ReadyListener { mapFragment1: MapFragment? ->
-            initMap(
-                view,
-                mapFragment1
-            )
-        }, MapFragment.ErrorListener { this.cancel() })
+        mapFragment.init({ initMap(view, it) }, { this.cancel() })
     }
 
     override fun onSaveInstanceState(state: Bundle) {
@@ -193,40 +182,40 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     override fun onDestroy() {
-        if (schedulerHandler != null && !schedulerHandler!!.isCancelled()) {
+        if (schedulerHandler != null && !schedulerHandler!!.isCancelled) {
             schedulerHandler!!.cancel(true)
         }
 
-        locationTracker!!.stop()
+        locationTracker.stop()
         super.onDestroy()
     }
 
     fun initMap(view: View, newMapFragment: MapFragment?) {
         map = newMapFragment
 
-        locationStatus = view.findViewById<AccuracyStatusView>(R.id.location_status)
-        collectionStatus = view.findViewById<TextView>(R.id.collection_status)
+        locationStatus = view.findViewById(R.id.location_status)
+        collectionStatus = view.findViewById(R.id.collection_status)
         settingsView = getLayoutInflater().inflate(R.layout.geopoly_dialog, null)
 
-        clearButton = view.findViewById<ImageButton>(R.id.clear)
-        clearButton!!.setOnClickListener(View.OnClickListener { v: View? -> showClearDialog() })
+        clearButton = view.findViewById(R.id.clear)
+        clearButton!!.setOnClickListener { showClearDialog() }
 
-        pauseButton = view.findViewById<ImageButton>(R.id.pause)
-        pauseButton!!.setOnClickListener(View.OnClickListener { v: View? ->
+        pauseButton = view.findViewById(R.id.pause)
+        pauseButton!!.setOnClickListener {
             inputActive = false
             try {
                 schedulerHandler!!.cancel(true)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 // Do nothing
             }
             updateUi()
-        })
+        }
 
-        backspaceButton = view.findViewById<ImageButton>(R.id.backspace)
-        backspaceButton!!.setOnClickListener(View.OnClickListener { v: View? -> removeLastPoint() })
+        backspaceButton = view.findViewById(R.id.backspace)
+        backspaceButton!!.setOnClickListener { removeLastPoint() }
 
-        saveButton = view.findViewById<ImageButton>(R.id.save)
-        saveButton!!.setOnClickListener(View.OnClickListener { v: View? ->
+        saveButton = view.findViewById(R.id.save)
+        saveButton!!.setOnClickListener {
             if (!map!!.getPolyLinePoints(featureId).isEmpty()) {
                 if (outputMode == OutputMode.GEOTRACE) {
                     saveAsPolyline()
@@ -236,10 +225,10 @@ class GeoPolyFragment @JvmOverloads constructor(
             } else {
                 setResult()
             }
-        })
+        }
 
-        playButton = view.findViewById<ImageButton>(R.id.play)
-        playButton!!.setOnClickListener(View.OnClickListener { v: View? ->
+        playButton = view.findViewById(R.id.play)
+        playButton!!.setOnClickListener {
             if (map!!.getPolyLinePoints(featureId).isEmpty()) {
                 showIfNotShowing<GeoPolySettingsDialogFragment>(
                     GeoPolySettingsDialogFragment::class.java,
@@ -248,24 +237,24 @@ class GeoPolyFragment @JvmOverloads constructor(
             } else {
                 startInput()
             }
-        })
+        }
 
-        recordButton = view.findViewById<Button>(R.id.record_button)
-        recordButton!!.setOnClickListener(View.OnClickListener { v: View? -> recordPoint(map!!.getGpsLocation()) })
+        recordButton = view.findViewById(R.id.record_button)
+        recordButton!!.setOnClickListener { recordPoint(map!!.getGpsLocation()) }
 
-        view.findViewById<View?>(R.id.layers).setOnClickListener(View.OnClickListener { v: View? ->
-            showIfNotShowing<OfflineMapLayersPickerBottomSheetDialogFragment>(
+        view.findViewById<View>(R.id.layers).setOnClickListener {
+            showIfNotShowing(
                 OfflineMapLayersPickerBottomSheetDialogFragment::class.java,
                 getChildFragmentManager()
             )
-        })
+        }
 
-        zoomButton = view.findViewById<ImageButton>(R.id.zoom)
-        zoomButton!!.setOnClickListener(View.OnClickListener { v: View? ->
+        zoomButton = view.findViewById(R.id.zoom)
+        zoomButton!!.setOnClickListener {
             map!!.zoomToCurrentLocation(
                 map!!.getGpsLocation()
             )
-        })
+        }
 
         var points = emptyList<MapPoint>()
         if (!inputPolygon.isEmpty()) {
@@ -296,22 +285,18 @@ class GeoPolyFragment @JvmOverloads constructor(
             startInput()
         }
 
-        map!!.setClickListener(PointListener { point: MapPoint -> this.onClick(point) })
+        map!!.setClickListener(this::onClick)
         // Also allow long press to place point to match prior versions
-        map!!.setLongPressListener(PointListener { point: MapPoint -> this.onClick(point) })
+        map!!.setLongPressListener(this::onClick)
         map!!.setGpsLocationEnabled(true)
-        map!!.setGpsLocationListener(PointListener { point: MapPoint -> this.onGpsLocation(point) })
+        map!!.setGpsLocationListener(this::onGpsLocation)
         map!!.setRetainMockAccuracy(retainMockAccuracy)
 
         if (!map!!.hasCenter()) {
-            if (!points!!.isEmpty()) {
+            if (!points.isEmpty()) {
                 map!!.zoomToBoundingBox(points, 0.6, false)
             } else {
-                map!!.runOnGpsLocationReady(ReadyListener { map: MapFragment ->
-                    this.onGpsLocationReady(
-                        map
-                    )
-                })
+                map!!.runOnGpsLocationReady { this.onGpsLocationReady(it) }
             }
         }
 
@@ -334,8 +319,8 @@ class GeoPolyFragment @JvmOverloads constructor(
             // Close the polygon.
             val points = map!!.getPolyLinePoints(featureId)
             val count = points.size
-            if (count > 1 && points.get(0) != points.get(count - 1)) {
-                map!!.appendPointToPolyLine(featureId, points.get(0)!!)
+            if (count > 1 && points[0] != points[count - 1]) {
+                map!!.appendPointToPolyLine(featureId, points[0])
             }
             setResult()
         } else {
@@ -366,7 +351,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             schedulerHandler = executorServiceScheduler.scheduleAtFixedRate(
                 {
                     requireActivity().runOnUiThread {
-                        val currentLocation = locationTracker!!.getCurrentLocation()
+                        val currentLocation = locationTracker.getCurrentLocation()
                         if (currentLocation != null) {
                             val currentMapPoint = MapPoint(
                                 currentLocation.latitude,
@@ -393,10 +378,10 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     override fun getCheckedId(): Int {
-        if (recordingEnabled) {
-            return if (recordingAutomatic) R.id.automatic_mode else R.id.manual_mode
+        return if (recordingEnabled) {
+            if (recordingAutomatic) R.id.automatic_mode else R.id.manual_mode
         } else {
-            return R.id.placement_mode
+            R.id.placement_mode
         }
     }
 
@@ -428,7 +413,7 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private fun onGpsLocationReady(map: MapFragment) {
         // Don't zoom to current location if a user is manually entering points
-        if (requireActivity().getWindow().isActive() && (!inputActive || recordingEnabled)) {
+        if (requireActivity().window.isActive && (!inputActive || recordingEnabled)) {
             map.zoomToCurrentLocation(map.getGpsLocation())
         }
         updateUi()
@@ -449,7 +434,7 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private fun appendPointIfNew(point: MapPoint) {
         val points = map!!.getPolyLinePoints(featureId)
-        if (points.isEmpty() || point != points.get(points.size - 1)) {
+        if (points.isEmpty() || point != points[points.size - 1]) {
             map!!.appendPointToPolyLine(featureId, point)
             updateUi()
         }
@@ -480,7 +465,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         map!!.clearFeatures()
         featureId = map!!.addPolyLine(
             LineDescription(
-                mutableListOf<MapPoint>(),
+                emptyList(),
                 MapConsts.DEFAULT_STROKE_WIDTH.toString(),
                 null,
                 !readOnly,
@@ -497,22 +482,22 @@ class GeoPolyFragment @JvmOverloads constructor(
         val location = map!!.getGpsLocation()
 
         // Visibility state
-        playButton!!.setVisibility(if (inputActive) View.GONE else View.VISIBLE)
-        pauseButton!!.setVisibility(if (inputActive) View.VISIBLE else View.GONE)
-        recordButton!!.setVisibility(if (inputActive && recordingEnabled && !recordingAutomatic) View.VISIBLE else View.GONE)
+        playButton!!.visibility = if (inputActive) View.GONE else View.VISIBLE
+        pauseButton!!.visibility = if (inputActive) View.VISIBLE else View.GONE
+        recordButton!!.visibility = if (inputActive && recordingEnabled && !recordingAutomatic) View.VISIBLE else View.GONE
 
         // Enabled state
-        zoomButton!!.setEnabled(location != null)
-        backspaceButton!!.setEnabled(numPoints > 0)
-        clearButton!!.setEnabled(!inputActive && numPoints > 0)
-        settingsView!!.findViewById<View?>(R.id.manual_mode).setEnabled(location != null)
-        settingsView!!.findViewById<View?>(R.id.automatic_mode).setEnabled(location != null)
+        zoomButton!!.isEnabled = location != null
+        backspaceButton!!.isEnabled = numPoints > 0
+        clearButton!!.isEnabled = !inputActive && numPoints > 0
+        settingsView!!.findViewById<View>(R.id.manual_mode).setEnabled(location != null)
+        settingsView!!.findViewById<View>(R.id.automatic_mode).setEnabled(location != null)
 
         if (readOnly) {
-            playButton!!.setEnabled(false)
-            backspaceButton!!.setEnabled(false)
-            clearButton!!.setEnabled(false)
-            saveButton!!.setEnabled(false)
+            playButton!!.isEnabled = false
+            backspaceButton!!.isEnabled = false
+            clearButton!!.isEnabled = false
+            saveButton!!.isEnabled = false
         }
 
         // Settings dialog
@@ -587,9 +572,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         if (!map!!.getPolyLinePoints(featureId).isEmpty()) {
             MaterialAlertDialogBuilder(requireContext())
                 .setMessage(org.odk.collect.strings.R.string.geo_clear_warning)
-                .setPositiveButton(
-                    org.odk.collect.strings.R.string.clear,
-                    DialogInterface.OnClickListener { dialog: DialogInterface?, id: Int -> clear() })
+                .setPositiveButton(org.odk.collect.strings.R.string.clear) { _, _ -> clear() }
                 .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
                 .show()
         }
@@ -598,9 +581,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     private fun showBackDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(getString(org.odk.collect.strings.R.string.geo_exit_warning))
-            .setPositiveButton(
-                org.odk.collect.strings.R.string.discard,
-                DialogInterface.OnClickListener { dialog: DialogInterface?, id: Int -> cancel() })
+            .setPositiveButton(org.odk.collect.strings.R.string.discard) { _, _ -> cancel() }
             .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
             .show()
     }
