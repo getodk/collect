@@ -64,9 +64,16 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
     private final ScheduledExecutorService executorServiceScheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
 
-    public OutputMode outputMode;
+    @NonNull
+    public final OutputMode outputMode;
+
+    @NonNull
     public final Boolean readOnly;
+
+    @Nullable
     public final List<MapPoint> inputPolygon;
+
+    @NonNull
     public final Boolean retainMockAccuracy;
 
     @Inject
@@ -136,7 +143,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         }
     };
 
-    public GeoPolyFragment(@Nullable OutputMode outputMode, Boolean readOnly, Boolean retainMockAccuracy, @NonNull List<MapPoint> inputPolygon) {
+    public GeoPolyFragment(@NonNull OutputMode outputMode, Boolean readOnly, Boolean retainMockAccuracy, @NonNull List<MapPoint> inputPolygon) {
         super(R.layout.geopoly_layout);
         this.outputMode = outputMode;
         this.readOnly = readOnly;
@@ -144,7 +151,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         this.retainMockAccuracy = retainMockAccuracy;
     }
 
-    public GeoPolyFragment(@Nullable OutputMode outputMode) {
+    public GeoPolyFragment(@NonNull OutputMode outputMode) {
         this(outputMode, false, false, Collections.emptyList());
     }
 
