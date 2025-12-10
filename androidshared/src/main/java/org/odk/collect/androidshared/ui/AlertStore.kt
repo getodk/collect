@@ -1,5 +1,10 @@
 package org.odk.collect.androidshared.ui
 
+/**
+ * Component for recording "alerts". This is useful for testing transient UI elements like toasts,
+ * flashes or snackbars that are susceptible to flakiness with assertions running after they have
+ * disappeared.
+ */
 class AlertStore {
 
     var enabled = false
