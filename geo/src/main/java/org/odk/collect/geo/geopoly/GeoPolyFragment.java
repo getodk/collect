@@ -1,6 +1,7 @@
 package org.odk.collect.geo.geopoly;
 
 import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
+import static java.util.Collections.emptyList;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -279,7 +280,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         zoomButton = view.findViewById(R.id.zoom);
         zoomButton.setOnClickListener(v -> map.zoomToCurrentLocation(map.getGpsLocation()));
 
-        List<MapPoint> points = new ArrayList<>();
+        List<MapPoint> points = emptyList();
         if (!inputPolygon.isEmpty()) {
             if (outputMode == OutputMode.GEOSHAPE) {
                 points = inputPolygon.subList(0, inputPolygon.size() - 1);
@@ -467,7 +468,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
 
     private void clear() {
         map.clearFeatures();
-        featureId = map.addPolyLine(new LineDescription(new ArrayList<>(), String.valueOf(MapConsts.DEFAULT_STROKE_WIDTH), null, !readOnly, outputMode == OutputMode.GEOSHAPE));
+        featureId = map.addPolyLine(new LineDescription(emptyList(), String.valueOf(MapConsts.DEFAULT_STROKE_WIDTH), null, !readOnly, outputMode == OutputMode.GEOSHAPE));
         inputActive = false;
         updateUi();
     }
