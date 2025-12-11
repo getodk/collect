@@ -9,7 +9,10 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToastInMiddle
@@ -39,10 +42,11 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GeoPolyFragment @JvmOverloads constructor(
-    val outputMode: OutputMode,
+    val outputMode: OutputMode = OutputMode.GEOTRACE,
     val readOnly: Boolean = false,
     val retainMockAccuracy: Boolean = false,
-    val inputPolygon: List<MapPoint> = emptyList()
+    val inputPolygon: List<MapPoint> = emptyList(),
+    val invalidMessage: LiveData<String?> = MutableLiveData(null)
 ) : Fragment(R.layout.geopoly_layout), SettingsDialogCallback {
 
     @Inject
@@ -157,6 +161,16 @@ class GeoPolyFragment @JvmOverloads constructor(
         val mapFragment: MapFragment =
             (view.findViewById<View?>(R.id.map_container) as FragmentContainerView).getFragment()
         mapFragment.init({ initMap(view, it) }, { this.cancel() })
+
+        val snackbar = Snackbar.make(requireView(), "", Snackbar.LENGTH_INDEFINITE)
+        invalidMessage.observe(viewLifecycleOwner) {
+            if (it != null) {
+                snackbar.setText(it)
+                snackbar.show()
+            } else {
+                snackbar.dismiss()
+            }
+        }
     }
 
     override fun onSaveInstanceState(state: Bundle) {

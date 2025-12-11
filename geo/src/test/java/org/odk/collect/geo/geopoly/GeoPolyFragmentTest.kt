@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
@@ -14,6 +15,7 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
@@ -42,6 +44,8 @@ import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.Assertions
+import org.odk.collect.testshared.Assertions.assertNotVisible
+import org.odk.collect.testshared.Assertions.assertVisible
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
 
@@ -394,6 +398,25 @@ class GeoPolyFragmentTest {
         onView(withId(R.id.layers)).perform(click())
 
         scenario.recreate()
+    }
+
+    @Test
+    fun showsAndHidesInvalidMessageSnackbarBasedOnValue() {
+        val invalidMessage = MutableLiveData<String?>(null)
+
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment(invalidMessage = invalidMessage) }
+                .build()
+        )
+
+        val message = "Something is wrong"
+        invalidMessage.value = message
+        assertVisible(withText(message))
+
+        invalidMessage.value = null
+        assertNotVisible(withText(message))
     }
 
     private fun startInput(mode: Int) {
