@@ -316,10 +316,10 @@ class GeoPolyFragmentTest {
         )
 
         mapFragment.ready()
-        Assertions.assertEnabled(withContentDescription(string.input_method), enabled = false)
-        Assertions.assertEnabled(withContentDescription(string.remove_last_point), enabled = false)
-        Assertions.assertEnabled(withContentDescription(string.clear), enabled = false)
-        Assertions.assertEnabled(withContentDescription(string.save), enabled = false)
+        Assertions.assertDisabled(withContentDescription(string.input_method))
+        Assertions.assertDisabled(withContentDescription(string.remove_last_point))
+        Assertions.assertDisabled(withContentDescription(string.clear))
+        Assertions.assertDisabled(withContentDescription(string.save))
     }
 
     @Test
