@@ -18,10 +18,10 @@ import static org.odk.collect.android.utilities.Appearances.MAPS;
 import static org.odk.collect.android.utilities.Appearances.PLACEMENT_MAP;
 import static org.odk.collect.android.utilities.Appearances.hasAppearance;
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.SensorManager;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.Constants;
@@ -54,9 +54,6 @@ import org.odk.collect.android.widgets.range.RangeIntegerWidget;
 import org.odk.collect.android.widgets.range.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.range.RangePickerIntegerWidget;
 import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
-import org.odk.collect.android.widgets.video.ExVideoWidget;
-import org.odk.collect.android.widgets.video.VideoWidget;
-import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.AudioRecorderRecordingStatusHandler;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.utilities.FileRequester;
@@ -66,8 +63,11 @@ import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.android.widgets.video.ExVideoWidget;
+import org.odk.collect.android.widgets.video.VideoWidget;
 import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
+import org.odk.collect.audioclips.AudioPlayer;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
@@ -82,7 +82,7 @@ public class WidgetFactory {
 
     private static final String PICKER_APPEARANCE = "picker";
 
-    private final Activity activity;
+    private final FragmentActivity activity;
     private final boolean useExternalRecorder;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
@@ -97,7 +97,7 @@ public class WidgetFactory {
     private final FormController formController;
     private final SettingsProvider settingsProvider;
 
-    public WidgetFactory(Activity activity,
+    public WidgetFactory(FragmentActivity activity,
                          boolean useExternalRecorder,
                          WaitingForDataRegistry waitingForDataRegistry,
                          QuestionMediaManager questionMediaManager,
@@ -180,11 +180,11 @@ public class WidgetFactory {
                         }
                         break;
                     case Constants.DATATYPE_GEOSHAPE:
-                        questionWidget = new GeoShapeWidget(activity, questionDetails, waitingForDataRegistry,
+                        questionWidget = new GeoShapeWidget(activity, questionDetails,
                                 new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_GEOTRACE:
-                        questionWidget = new GeoTraceWidget(activity, questionDetails, waitingForDataRegistry,
+                        questionWidget = new GeoTraceWidget(activity, questionDetails,
                                 MapConfiguratorProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider, activity), dependencies);
                         break;
                     case Constants.DATATYPE_BARCODE:

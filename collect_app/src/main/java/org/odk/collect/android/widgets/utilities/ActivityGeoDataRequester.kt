@@ -1,19 +1,20 @@
 package org.odk.collect.android.widgets.utilities
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentActivity
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormEntryPromptUtils
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
+import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY
 import org.odk.collect.geo.Constants.EXTRA_READ_ONLY
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.geopoint.GeoPointActivity
 import org.odk.collect.geo.geopoint.GeoPointMapActivity
-import org.odk.collect.geo.geopoly.GeoPolyActivity
 import org.odk.collect.geo.geopoly.GeoPolyUtils.parseGeometry
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
@@ -21,7 +22,7 @@ import java.lang.Boolean.parseBoolean
 
 class ActivityGeoDataRequester(
     private val permissionsProvider: PermissionsProvider,
-    private val activity: Activity
+    private val activity: FragmentActivity
 ) : GeoDataRequester {
 
     override fun requestGeoPoint(
@@ -84,66 +85,15 @@ class ActivityGeoDataRequester(
         )
     }
 
-    override fun requestGeoShape(
-        prompt: FormEntryPrompt,
-        answerText: String?,
-        waitingForDataRegistry: WaitingForDataRegistry
-    ) {
+    override fun requestGeoPoly(prompt: FormEntryPrompt) {
         permissionsProvider.requestEnabledLocationPermissions(
             activity,
             object : PermissionListener {
                 override fun granted() {
-                    waitingForDataRegistry.waitForData(prompt.index)
-
-                    val intent = Intent(activity, GeoPolyActivity::class.java).also {
-                        it.putExtra(
-                            GeoPolyActivity.EXTRA_POLYGON,
-                            ArrayList(parseGeometry(answerText))
-                        )
-                        it.putExtra(
-                            GeoPolyActivity.OUTPUT_MODE_KEY,
-                            GeoPolyActivity.OutputMode.GEOSHAPE
-                        )
-                        it.putExtra(EXTRA_READ_ONLY, prompt.isReadOnly)
-                        it.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt))
-                    }
-
-                    activity.startActivityForResult(
-                        intent,
-                        ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE
-                    )
-                }
-            }
-        )
-    }
-
-    override fun requestGeoTrace(
-        prompt: FormEntryPrompt,
-        answerText: String?,
-        waitingForDataRegistry: WaitingForDataRegistry
-    ) {
-        permissionsProvider.requestEnabledLocationPermissions(
-            activity,
-            object : PermissionListener {
-                override fun granted() {
-                    waitingForDataRegistry.waitForData(prompt.index)
-
-                    val intent = Intent(activity, GeoPolyActivity::class.java).also {
-                        it.putExtra(
-                            GeoPolyActivity.EXTRA_POLYGON,
-                            ArrayList(parseGeometry(answerText))
-                        )
-                        it.putExtra(
-                            GeoPolyActivity.OUTPUT_MODE_KEY,
-                            GeoPolyActivity.OutputMode.GEOTRACE
-                        )
-                        it.putExtra(EXTRA_READ_ONLY, prompt.isReadOnly)
-                        it.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt))
-                    }
-
-                    activity.startActivityForResult(
-                        intent,
-                        ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE
+                    DialogFragmentUtils.showIfNotShowing(
+                        GeoPolyDialogFragment::class.java,
+                        bundleOf(WidgetAnswerDialogFragment.ARG_FORM_INDEX to prompt.index),
+                        activity.supportFragmentManager
                     )
                 }
             }

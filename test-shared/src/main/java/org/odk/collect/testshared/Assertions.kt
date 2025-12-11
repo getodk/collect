@@ -10,12 +10,14 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE
 import androidx.test.espresso.matcher.ViewMatchers.hasSibling
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
+import org.odk.collect.testshared.Assertions.assertVisible
 
 object Assertions {
 
@@ -39,6 +41,22 @@ object Assertions {
         }
 
         onView.check(matches(not(doesNotExist())))
+    }
+
+    fun assertEnabled(
+        view: Matcher<View>,
+        root: Matcher<Root>? = null,
+        sibling: Matcher<View>? = null
+    ) {
+        assertVisible(allOf(view, isEnabled()), root, sibling)
+    }
+
+    fun assertDisabled(
+        view: Matcher<View>,
+        root: Matcher<Root>? = null,
+        sibling: Matcher<View>? = null,
+    ) {
+        assertVisible(allOf(view, not(isEnabled())), root, sibling)
     }
 
     fun assertNotVisible(view: Matcher<View>, root: Matcher<Root>? = null) {

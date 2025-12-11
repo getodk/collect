@@ -618,11 +618,9 @@
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8" -->
     <string name="north">N %1$s%2$s%3$s</string>
 
-    <string name="geoshape_title">GeoShape</string>
     <string name="input_method">Input method</string>
     <string name="start">Start</string>
     <string name="enable_gps">Enable GPS</string>
-    <string name="geotrace_title">GeoTrace</string>
     <string name="gps_enable_message">GPS is disabled on your device. Would you like to enable it?</string>
     <string name="geo_clear_warning">Feature already created. Would you like to clear the feature?</string>
     <string name="geo_exit_warning">Discard changes and return to ODK?</string>
