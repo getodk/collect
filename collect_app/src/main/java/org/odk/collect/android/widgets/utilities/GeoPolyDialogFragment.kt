@@ -20,7 +20,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             GeoPolyFragment.REQUEST_GEOPOLY,
             this
         ) { _, result ->
-            val result = result.getString(GeoPolyFragment.RESULT_GEOTRACE)
+            val result = result.getString(GeoPolyFragment.RESULT_GEOPOLY)
             if (result != null) {
                 onAnswer(StringData(result))
             } else {

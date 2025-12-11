@@ -50,7 +50,7 @@ import javax.inject.Inject;
 public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFragment.SettingsDialogCallback {
 
     public static final String REQUEST_GEOPOLY = "geopoly";
-    public static final String RESULT_GEOTRACE = "geotrace";
+    public static final String RESULT_GEOPOLY = "geopoly";
 
     public static final String POINTS_KEY = "points";
     public static final String INPUT_ACTIVE_KEY = "input_active";
@@ -337,7 +337,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         List<MapPoint> points = map.getPolyLinePoints(featureId);
         String result = GeoUtils.formatPointsResultString(points, outputMode.equals(OutputMode.GEOSHAPE));
         Bundle bundle = new Bundle();
-        bundle.putString(RESULT_GEOTRACE, result);
+        bundle.putString(RESULT_GEOPOLY, result);
         getParentFragmentManager().setFragmentResult(REQUEST_GEOPOLY, bundle);
     }
 

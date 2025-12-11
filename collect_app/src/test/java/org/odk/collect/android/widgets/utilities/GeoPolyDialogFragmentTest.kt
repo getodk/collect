@@ -164,7 +164,7 @@ class GeoPolyDialogFragmentTest {
         ).onFragment {
             it.childFragmentManager.setFragmentResult(
                 GeoPolyFragment.REQUEST_GEOPOLY,
-                bundleOf(GeoPolyFragment.RESULT_GEOTRACE to answer)
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY to answer)
             )
         }
 
@@ -183,7 +183,7 @@ class GeoPolyDialogFragmentTest {
         ).onFragment {
             it.childFragmentManager.setFragmentResult(
                 GeoPolyFragment.REQUEST_GEOPOLY,
-                bundleOf(GeoPolyFragment.RESULT_GEOTRACE to answer)
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY to answer)
             )
 
             assertThat(it.dialog!!.isShowing, equalTo(false))
