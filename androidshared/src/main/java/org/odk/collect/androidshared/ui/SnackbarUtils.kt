@@ -20,6 +20,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import com.google.android.material.R
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import org.odk.collect.androidshared.data.Consumable
@@ -60,54 +61,79 @@ object SnackbarUtils {
             return
         }
 
+        val snackbar = make(
+            parentView,
+            message,
+            duration,
+            anchorView,
+            action,
+            displayDismissButton,
+            onDismiss
+        )
+
+        show(snackbar)
+    }
+
+    fun show(snackbar: Snackbar) {
         lastSnackbar?.dismiss()
-        lastSnackbar = Snackbar.make(parentView, message.trim(), duration).apply {
-            val textView =
-                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-            textView.isSingleLine = false
+        snackbar.show()
 
-            if (anchorView?.visibility != View.GONE) {
-                this.anchorView = anchorView
-            }
-
-            if (displayDismissButton) {
-                view.findViewById<Button>(com.google.android.material.R.id.snackbar_action).let {
-                    val dismissButton = ImageView(view.context).apply {
-                        setImageResource(org.odk.collect.androidshared.R.drawable.ic_close_24)
-                        setOnClickListener {
-                            dismiss()
-                        }
-                        contentDescription =
-                            context.getString(org.odk.collect.strings.R.string.close_snackbar)
-                    }
-
-                    val params = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT
-                    )
-                    params.setMargins(16, 0, 0, 0)
-
-                    (it.parent as ViewGroup).addView(dismissButton, params)
-                }
-            }
-
-            if (action != null) {
-                setAction(action.text) {
-                    action.beforeDismiss.invoke()
-                    dismiss()
-                }
-            }
-        }.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                super.onDismissed(transientBottomBar, event)
-                onDismiss()
-                lastSnackbar = null
-            }
-        })
-        lastSnackbar?.show()
-
+        lastSnackbar = snackbar
+        val message = snackbar.view.findViewById<TextView>(R.id.snackbar_text).text.toString()
         alertStore.register(message)
     }
+
+    fun make(
+        parentView: View,
+        message: String,
+        duration: Int,
+        anchorView: View? = null,
+        action: Action? = null,
+        displayDismissButton: Boolean = false,
+        onDismiss: () -> Unit = {}
+    ): Snackbar = Snackbar.make(parentView, message.trim(), duration).apply {
+        val textView =
+            view.findViewById<TextView>(R.id.snackbar_text)
+        textView.isSingleLine = false
+
+        if (anchorView?.visibility != View.GONE) {
+            this.anchorView = anchorView
+        }
+
+        if (displayDismissButton) {
+            view.findViewById<Button>(R.id.snackbar_action).let {
+                val dismissButton = ImageView(view.context).apply {
+                    setImageResource(org.odk.collect.androidshared.R.drawable.ic_close_24)
+                    setOnClickListener {
+                        dismiss()
+                    }
+                    contentDescription =
+                        context.getString(org.odk.collect.strings.R.string.close_snackbar)
+                }
+
+                val params = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+                params.setMargins(16, 0, 0, 0)
+
+                (it.parent as ViewGroup).addView(dismissButton, params)
+            }
+        }
+
+        if (action != null) {
+            setAction(action.text) {
+                action.beforeDismiss.invoke()
+                dismiss()
+            }
+        }
+    }.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+            super.onDismissed(transientBottomBar, event)
+            onDismiss()
+            lastSnackbar = null
+        }
+    })
 
     data class SnackbarDetails @JvmOverloads constructor(
         val text: String,
