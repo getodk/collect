@@ -65,7 +65,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
 
     public OutputMode outputMode;
     public final Boolean readOnly;
-    public final List<MapPoint> inputPolyon;
+    public final List<MapPoint> inputPolygon;
     public final Boolean retainMockAccuracy;
 
     @Inject
@@ -135,11 +135,11 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         }
     };
 
-    public GeoPolyFragment(@Nullable OutputMode outputMode, Boolean readOnly, Boolean retainMockAccuracy, @Nullable List<MapPoint> inputPolyon) {
+    public GeoPolyFragment(@Nullable OutputMode outputMode, Boolean readOnly, Boolean retainMockAccuracy, @Nullable List<MapPoint> inputPolygon) {
         super(R.layout.geopoly_layout);
         this.outputMode = outputMode;
         this.readOnly = readOnly;
-        this.inputPolyon = inputPolyon;
+        this.inputPolygon = inputPolygon;
         this.retainMockAccuracy = retainMockAccuracy;
     }
 
@@ -272,16 +272,16 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         zoomButton.setOnClickListener(v -> map.zoomToCurrentLocation(map.getGpsLocation()));
 
         List<MapPoint> points = new ArrayList<>();
-        if (inputPolyon != null) {
-            if (!inputPolyon.isEmpty()) {
+        if (inputPolygon != null) {
+            if (!inputPolygon.isEmpty()) {
                 if (outputMode == OutputMode.GEOSHAPE) {
-                    points = inputPolyon.subList(0, inputPolyon.size() - 1);
+                    points = inputPolygon.subList(0, inputPolygon.size() - 1);
                 } else {
-                    points = inputPolyon;
+                    points = inputPolygon;
                 }
             }
 
-            originalPoly = inputPolyon;
+            originalPoly = inputPolygon;
         }
 
         if (restoredPoints != null) {

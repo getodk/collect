@@ -137,7 +137,7 @@ class GeoPolyDialogFragmentTest {
             .build()
 
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
-            assertThat(it.inputPolyon, equalTo(null))
+            assertThat(it.inputPolygon, equalTo(null))
         }
 
         prompt = MockFormEntryPromptBuilder(prompt)
@@ -146,7 +146,7 @@ class GeoPolyDialogFragmentTest {
 
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
             assertThat(
-                it.inputPolyon,
+                it.inputPolygon,
                 equalTo(listOf(MapPoint(0.0, 0.0, 1.0, 1.0), MapPoint(0.0, 1.0, 1.0, 1.0)))
             )
         }
