@@ -237,7 +237,7 @@ class GeoPolyFragment @JvmOverloads constructor(
                     saveAsPolygon()
                 }
             } else {
-                setResult()
+                setResult(RESULT_GEOPOLY)
             }
         }
 
@@ -319,7 +319,7 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private fun saveAsPolyline() {
         if (map!!.getPolyLinePoints(featureId).size > 1) {
-            setResult()
+            setResult(RESULT_GEOPOLY)
         } else {
             showShortToastInMiddle(
                 requireActivity(),
@@ -336,7 +336,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             if (count > 1 && points[0] != points[count - 1]) {
                 map!!.appendPointToPolyLine(featureId, points[0])
             }
-            setResult()
+            setResult(RESULT_GEOPOLY)
         } else {
             showShortToastInMiddle(
                 requireActivity(),
@@ -345,14 +345,14 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
     }
 
-    private fun setResult() {
+    private fun setResult(result: String) {
         val points = map!!.getPolyLinePoints(featureId)
-        val result = GeoUtils.formatPointsResultString(
+        val geoString = GeoUtils.formatPointsResultString(
             points.toMutableList(),
             outputMode == OutputMode.GEOSHAPE
         )
         val bundle = Bundle()
-        bundle.putString(RESULT_GEOPOLY, result)
+        bundle.putString(result, geoString)
         getParentFragmentManager().setFragmentResult(REQUEST_GEOPOLY, bundle)
     }
 
@@ -452,6 +452,8 @@ class GeoPolyFragment @JvmOverloads constructor(
             map!!.appendPointToPolyLine(featureId, point)
             updateUi()
         }
+
+        setResult(RESULT_GEOTRACE_CHANGE)
     }
 
     private fun isLocationAcceptable(point: MapPoint): Boolean {
@@ -472,6 +474,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         if (featureId != -1) {
             map!!.removePolyLineLastPoint(featureId)
             updateUi()
+            setResult(RESULT_GEOTRACE_CHANGE)
         }
     }
 
@@ -607,6 +610,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     companion object {
         const val REQUEST_GEOPOLY: String = "geopoly"
         const val RESULT_GEOPOLY: String = "geopoly"
+        const val RESULT_GEOTRACE_CHANGE: String = "geotrace_change"
 
         const val POINTS_KEY: String = "points"
         const val INPUT_ACTIVE_KEY: String = "input_active"

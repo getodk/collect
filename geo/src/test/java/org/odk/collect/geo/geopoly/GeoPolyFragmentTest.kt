@@ -46,6 +46,7 @@ import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.Assertions
 import org.odk.collect.testshared.Assertions.assertNotVisible
 import org.odk.collect.testshared.Assertions.assertVisible
+import org.odk.collect.testshared.Interactions
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
 
@@ -59,7 +60,8 @@ class GeoPolyFragmentTest {
 
     @Before
     fun setUp() {
-        val shadowApplication = Shadows.shadowOf(ApplicationProvider.getApplicationContext<Application>())
+        val shadowApplication =
+            Shadows.shadowOf(ApplicationProvider.getApplicationContext<Application>())
         shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION")
         shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION")
         val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
@@ -215,7 +217,13 @@ class GeoPolyFragmentTest {
         mapFragment.ready()
 
         val resultListener = mock<FragmentResultListener>()
-        scenario.onFragment { it.parentFragmentManager.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, it, resultListener) }
+        scenario.onFragment {
+            it.parentFragmentManager.setFragmentResultListener(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                it,
+                resultListener
+            )
+        }
 
         Espresso.pressBack()
         verify(resultListener).onFragmentResult(GeoPolyFragment.REQUEST_GEOPOLY, Bundle.EMPTY)
@@ -419,9 +427,76 @@ class GeoPolyFragmentTest {
         assertNotVisible(withText(message))
     }
 
+    @Test
+    fun setsChangeResultWheneverAPointIsAdded() {
+        val scenario = fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment() }
+                .build()
+        )
+
+        val resultListener = FragmentResultRecorder()
+        scenario.onFragment {
+            it.parentFragmentManager.setFragmentResultListener(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                it,
+                resultListener
+            )
+        }
+
+        mapFragment.ready()
+
+        startInput(R.id.placement_mode)
+        mapFragment.click(MapPoint(1.0, 1.0))
+        val result = resultListener.result
+        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(
+            result.second.getString(GeoPolyFragment.RESULT_GEOTRACE_CHANGE),
+            equalTo("1.0 1.0 0.0 0.0")
+        )
+    }
+
+    @Test
+    fun setsChangeResultWheneverAPointIsRemoved() {
+        val scenario = fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(inputPolygon = listOf(MapPoint(1.0, 1.0)))
+                }
+                .build()
+        )
+
+        val resultListener = FragmentResultRecorder()
+        scenario.onFragment {
+            it.parentFragmentManager.setFragmentResultListener(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                it,
+                resultListener
+            )
+        }
+
+        mapFragment.ready()
+
+        Interactions.clickOn(withContentDescription(string.remove_last_point))
+        val result = resultListener.result
+        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(result.second.getString(GeoPolyFragment.RESULT_GEOTRACE_CHANGE), equalTo(""))
+    }
+
     private fun startInput(mode: Int) {
         onView(withId(R.id.play)).perform(click())
         onView(withId(mode)).inRoot(isDialog()).perform(click())
         onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click())
+    }
+}
+
+private class FragmentResultRecorder : FragmentResultListener {
+
+    var result: Pair<String, Bundle>? = null
+
+    override fun onFragmentResult(requestKey: String, result: Bundle) {
+        this.result = Pair(requestKey, result)
     }
 }
