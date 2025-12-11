@@ -162,7 +162,7 @@ class GeoPolyDialogFragmentTest {
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
-            assertThat(it.inputPolygon, equalTo(null))
+            assertThat(it.inputPolygon, equalTo(emptyList()))
         }
 
         prompt = MockFormEntryPromptBuilder(prompt)

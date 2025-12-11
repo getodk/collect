@@ -223,7 +223,7 @@ class GeoPolyFragmentTest {
             GeoPolyFragment::class.java,
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(OutputMode.GEOTRACE, false, true, null)
+                    GeoPolyFragment(OutputMode.GEOTRACE, false, true, emptyList())
                 }
                 .build()
         )
@@ -239,7 +239,7 @@ class GeoPolyFragmentTest {
             GeoPolyFragment::class.java,
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(OutputMode.GEOTRACE, false, false, null)
+                    GeoPolyFragment(OutputMode.GEOTRACE, false, false, emptyList())
                 }
                 .build()
         )

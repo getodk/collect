@@ -39,6 +39,7 @@ import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.webpage.WebPageService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -135,7 +136,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         }
     };
 
-    public GeoPolyFragment(@Nullable OutputMode outputMode, Boolean readOnly, Boolean retainMockAccuracy, @Nullable List<MapPoint> inputPolygon) {
+    public GeoPolyFragment(@Nullable OutputMode outputMode, Boolean readOnly, Boolean retainMockAccuracy, @NonNull List<MapPoint> inputPolygon) {
         super(R.layout.geopoly_layout);
         this.outputMode = outputMode;
         this.readOnly = readOnly;
@@ -144,7 +145,7 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
     }
 
     public GeoPolyFragment(@Nullable OutputMode outputMode) {
-        this(outputMode, false, false, null);
+        this(outputMode, false, false, Collections.emptyList());
     }
 
     @Override
@@ -272,17 +273,15 @@ public class GeoPolyFragment extends Fragment implements GeoPolySettingsDialogFr
         zoomButton.setOnClickListener(v -> map.zoomToCurrentLocation(map.getGpsLocation()));
 
         List<MapPoint> points = new ArrayList<>();
-        if (inputPolygon != null) {
-            if (!inputPolygon.isEmpty()) {
-                if (outputMode == OutputMode.GEOSHAPE) {
-                    points = inputPolygon.subList(0, inputPolygon.size() - 1);
-                } else {
-                    points = inputPolygon;
-                }
+        if (!inputPolygon.isEmpty()) {
+            if (outputMode == OutputMode.GEOSHAPE) {
+                points = inputPolygon.subList(0, inputPolygon.size() - 1);
+            } else {
+                points = inputPolygon;
             }
-
-            originalPoly = inputPolygon;
         }
+
+        originalPoly = inputPolygon;
 
         if (restoredPoints != null) {
             points = restoredPoints;

@@ -38,11 +38,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             FormEntryPromptUtils.getBindAttribute(prompt, "allow-mock-accuracy").toBoolean()
 
         val answer = prompt.answerValue
-        val inputPolygon = if (answer != null) {
-            GeoPolyUtils.parseGeometry(answer.value as String)
-        } else {
-            null
-        }
+        val inputPolygon = GeoPolyUtils.parseGeometry(answer?.value as String?)
 
         return GeoPolyFragment(
             outputMode,
