@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.lifecycle.Lifecycle
 import org.junit.rules.ExternalResource
+import kotlin.reflect.KClass
 
 /**
  * Alternative to [FragmentScenario] that allows tests to do work before launching the [Fragment]
@@ -75,6 +76,20 @@ class FragmentScenarioLauncherRule @JvmOverloads constructor(
 
         return scenario.also {
             scenarios.add(it)
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <Child : Fragment> launchAndAssertOnChild(
+        fragment: KClass<out Fragment>,
+        args: Bundle,
+        assertion: (Child) -> Unit
+    ) {
+        launch(
+            fragment.java,
+            args
+        ).onFragment {
+            assertion(it.childFragmentManager.fragments[0] as Child)
         }
     }
 

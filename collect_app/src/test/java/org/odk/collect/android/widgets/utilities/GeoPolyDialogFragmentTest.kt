@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets.utilities
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
@@ -29,7 +28,6 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.maps.MapPoint
-import kotlin.reflect.KClass
 
 @RunWith(AndroidJUnit4::class)
 class GeoPolyDialogFragmentTest {
@@ -62,12 +60,18 @@ class GeoPolyDialogFragmentTest {
     @Test
     fun `configures GeoPolyFragment with readOnly from prompt`() {
         prompt = MockFormEntryPromptBuilder(prompt).withReadOnly(true).build()
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
             assertThat(it.readOnly, equalTo(true))
         }
 
         prompt = MockFormEntryPromptBuilder(prompt).withReadOnly(false).build()
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
             assertThat(it.readOnly, equalTo(false))
         }
     }
@@ -78,7 +82,10 @@ class GeoPolyDialogFragmentTest {
             .withDataType(Constants.DATATYPE_GEOSHAPE)
             .build()
 
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
             assertThat(it.outputMode, equalTo(OutputMode.GEOSHAPE))
         }
     }
@@ -89,7 +96,10 @@ class GeoPolyDialogFragmentTest {
             .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
 
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
             assertThat(it.outputMode, equalTo(OutputMode.GEOTRACE))
         }
     }
@@ -100,7 +110,10 @@ class GeoPolyDialogFragmentTest {
             .withDataType(Constants.DATATYPE_DATE)
             .build()
 
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
             assertThat(it.outputMode, equalTo(null))
         }
     }
@@ -110,7 +123,10 @@ class GeoPolyDialogFragmentTest {
         prompt = MockFormEntryPromptBuilder(prompt)
             .build()
 
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
             assertThat(it.retainMockAccuracy, equalTo(false))
         }
 
@@ -118,7 +134,10 @@ class GeoPolyDialogFragmentTest {
             .withBindAttribute(null, "allow-mock-accuracy", "true")
             .build()
 
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
             assertThat(it.retainMockAccuracy, equalTo(true))
         }
 
@@ -126,7 +145,10 @@ class GeoPolyDialogFragmentTest {
             .withBindAttribute(null, "allow-mock-accuracy", "false")
             .build()
 
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
             assertThat(it.retainMockAccuracy, equalTo(false))
         }
     }
@@ -136,7 +158,10 @@ class GeoPolyDialogFragmentTest {
         prompt = MockFormEntryPromptBuilder(prompt)
             .build()
 
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
             assertThat(it.inputPolygon, equalTo(null))
         }
 
@@ -144,7 +169,10 @@ class GeoPolyDialogFragmentTest {
             .withAnswer(StringData("0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"))
             .build()
 
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(GeoPolyDialogFragment::class) {
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
             assertThat(
                 it.inputPolygon,
                 equalTo(listOf(MapPoint(0.0, 0.0, 1.0, 1.0), MapPoint(0.0, 1.0, 1.0, 1.0)))
@@ -216,18 +244,6 @@ class GeoPolyDialogFragmentTest {
         ).onFragment {
             it.childFragmentManager.setFragmentResult(GeoPolyFragment.REQUEST_GEOPOLY, Bundle.EMPTY)
             assertThat(it.dialog!!.isShowing, equalTo(false))
-        }
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun <T : Fragment> FragmentScenarioLauncherRule.launchAndAssertOnChild(
-        fragment: KClass<out Fragment>, assertion: (T) -> Unit
-    ) {
-        this.launch(
-            fragment.java,
-            bundleOf(ARG_FORM_INDEX to prompt.index)
-        ).onFragment {
-            assertion(it.childFragmentManager.fragments[0] as T)
         }
     }
 }
