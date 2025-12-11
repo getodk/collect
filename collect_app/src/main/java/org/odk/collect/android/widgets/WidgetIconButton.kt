@@ -4,11 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -69,9 +67,10 @@ fun WidgetIconButton(
             imageVector = icon,
             tint = contentColor,
             contentDescription = text,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier
+                .padding(end = dimensionResource(id = dimen.margin_extra_small))
+                .size(20.dp)
         )
-        Spacer(modifier = Modifier.width(dimensionResource(id = dimen.margin_extra_small)))
         Text(
             text = text,
             color = contentColor,

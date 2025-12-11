@@ -3,9 +3,8 @@ package org.odk.collect.android.widgets
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -45,13 +44,13 @@ fun TextWidgetAnswer(
     ) {
         if (icon != null) {
             Icon(
+                modifier = Modifier.padding(end = dimensionResource(id = dimen.margin_small)),
                 imageVector = icon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface.copy(
                     alpha = dimen.high_emphasis.toFloat()
                 )
             )
-            Spacer(modifier = Modifier.width(dimensionResource(id = dimen.margin_small)))
         }
         Text(
             text = answer,
