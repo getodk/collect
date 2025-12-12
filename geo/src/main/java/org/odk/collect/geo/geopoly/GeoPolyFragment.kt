@@ -453,7 +453,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             updateUi()
         }
 
-        setResult(RESULT_GEOTRACE_CHANGE)
+        setResult(RESULT_GEOPOLY_CHANGE)
     }
 
     private fun isLocationAcceptable(point: MapPoint): Boolean {
@@ -474,7 +474,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         if (featureId != -1) {
             map!!.removePolyLineLastPoint(featureId)
             updateUi()
-            setResult(RESULT_GEOTRACE_CHANGE)
+            setResult(RESULT_GEOPOLY_CHANGE)
         }
     }
 
@@ -610,7 +610,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     companion object {
         const val REQUEST_GEOPOLY: String = "geopoly"
         const val RESULT_GEOPOLY: String = "geopoly"
-        const val RESULT_GEOTRACE_CHANGE: String = "geotrace_change"
+        const val RESULT_GEOPOLY_CHANGE: String = "geotrace_change"
 
         const val POINTS_KEY: String = "points"
         const val INPUT_ACTIVE_KEY: String = "input_active"
