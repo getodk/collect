@@ -29,6 +29,9 @@ abstract class WidgetAnswerDialogFragment<T : Fragment>(
     private val prompt: FormEntryPrompt by lazy {
         formEntryViewModel.getQuestionPrompt(requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex)
     }
+    protected val currentIndex by lazy {
+        formEntryViewModel.currentIndex
+    }
 
     abstract fun onCreateFragment(prompt: FormEntryPrompt): T
 
@@ -69,8 +72,8 @@ abstract class WidgetAnswerDialogFragment<T : Fragment>(
         // No toolbar so not relevant
     }
 
-    fun onAnswer(answer: IAnswerData, dismiss: Boolean = true) {
-        formEntryViewModel.answerQuestion(prompt.index, answer)
+    fun onAnswer(answer: IAnswerData, dismiss: Boolean = true, validate: Boolean = false) {
+        formEntryViewModel.answerQuestion(prompt.index, answer, validate)
 
         if (dismiss) {
             dismiss()

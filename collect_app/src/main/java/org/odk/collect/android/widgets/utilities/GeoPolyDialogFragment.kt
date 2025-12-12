@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.utilities
 
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.map
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
@@ -20,9 +21,14 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             GeoPolyFragment.REQUEST_GEOPOLY,
             this
         ) { _, result ->
-            val result = result.getString(GeoPolyFragment.RESULT_GEOPOLY)
-            if (result != null) {
-                onAnswer(StringData(result))
+            val geopolyChange = result.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE)
+            val geopoly = result.getString(GeoPolyFragment.RESULT_GEOPOLY)
+            val incremental = FormEntryPromptUtils.getBindAttribute(prompt, "incremental")
+
+            if (incremental == "true" && geopolyChange != null) {
+                onAnswer(StringData(geopolyChange), dismiss = false, validate = true)
+            } else if (geopoly != null) {
+                onAnswer(StringData(geopoly))
             } else {
                 dismiss()
             }
@@ -30,8 +36,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
 
         val outputMode = when (prompt.dataType) {
             Constants.DATATYPE_GEOSHAPE -> OutputMode.GEOSHAPE
-            Constants.DATATYPE_GEOTRACE -> OutputMode.GEOTRACE
-            else -> null
+            else -> OutputMode.GEOTRACE
         }
 
         val retainMockAccuracy =
@@ -44,7 +49,16 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             outputMode,
             prompt.isReadOnly,
             retainMockAccuracy,
-            inputPolygon
+            inputPolygon,
+            currentIndex.map {
+                val validationResult = it.second
+                if (validationResult != null) {
+                    validationResult.customErrorMessage
+                        ?: getString(validationResult.defaultErrorMessage)
+                } else {
+                    null
+                }
+            }
         )
     }
 }

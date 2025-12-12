@@ -10,6 +10,7 @@ import org.odk.collect.android.injection.config.AppDependencyComponent
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.views.DecoratedBarcodeView
+import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.db.sqlite.DatabaseConnection
@@ -35,7 +36,8 @@ private class ResetStateStatement(
     private fun setTestState() {
         MultiClickGuard.test = true
         DecoratedBarcodeView.test = true
-        ToastUtils.recordToasts = true
+        ToastUtils.alertStore.enabled = true
+        SnackbarUtils.alertStore.enabled = true
         BottomSheetBehavior.DRAGGING_ENABLED = false
     }
 

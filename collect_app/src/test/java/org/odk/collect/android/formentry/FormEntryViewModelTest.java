@@ -213,14 +213,14 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void moveForward_whenThereIsAFailedConstraint_setsFailedConstraint() {
+    public void moveForward_withEvaluateConstraints_whenThereIsAFailedConstraint_setsFailedConstraint() {
         Consumable<FailedValidationResult> failedValidationResult =
                 new Consumable<>(new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error));
         formController.setFailedConstraint(failedValidationResult.getValue());
 
         HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
         answers.put(startingIndex, new StringData("answer"));
-        viewModel.moveForward(answers);
+        viewModel.moveForward(answers, true);
         scheduler.flush();
 
         assertThat(getOrAwaitValue(viewModel.getValidationResult()), equalTo(failedValidationResult));
@@ -230,26 +230,26 @@ public class FormEntryViewModelTest {
      * We don't want to flush the log before answers are actually committed.
      */
     @Test
-    public void moveForward_whenThereIsAFailedConstraint_doesNotFlushAuditLog() throws Exception {
+    public void moveForward_withEvaluateConstraints_whenThereIsAFailedConstraint_doesNotFlushAuditLog() throws Exception {
         FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
         formController.setFailedConstraint(failedValidationResult);
 
         HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
         answers.put(startingIndex, new StringData("answer"));
-        viewModel.moveForward(answers);
+        viewModel.moveForward(answers, true);
         scheduler.flush();
 
         verify(auditEventLogger, never()).flush();
     }
 
     @Test
-    public void moveForward_whenThereIsAFailedConstraint_doesNotStepToNextEvent() throws Exception {
+    public void moveForward_withEvaluateConstraints_whenThereIsAFailedConstraint_doesNotStepToNextEvent() throws Exception {
         FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
         formController.setFailedConstraint(failedValidationResult);
 
         HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
         answers.put(startingIndex, new StringData("answer"));
-        viewModel.moveForward(answers);
+        viewModel.moveForward(answers, true);
         scheduler.flush();
 
         assertThat(formController.getStepPosition(), equalTo(0));
@@ -453,6 +453,22 @@ public class FormEntryViewModelTest {
         viewModel.answerQuestion(formIndex, new StringData("answer"));
         scheduler.flush(true);
         assertThat(formController.getAnswer(formIndex.getReference()).getValue(), equalTo("answer"));
+    }
+
+    @Test
+    public void answerQuestion_withValidateTrue_updatesIndexWithValidationResult() {
+        TreeReference reference = new TreeReference();
+        reference.add("blah", TreeReference.INDEX_UNBOUND);
+        FormIndex formIndex = new FormIndex(null, 1, 1, reference);
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder().build();
+        formController.setPrompt(formIndex, prompt);
+
+        FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
+        formController.setFailedConstraint(failedValidationResult);
+
+        viewModel.answerQuestion(formIndex, new StringData("answer"), true);
+        scheduler.flush(true);
+        assertThat(viewModel.getCurrentIndex().getValue().getSecond(), equalTo(failedValidationResult));
     }
 
     @Test
