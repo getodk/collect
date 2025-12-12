@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.utilities
 
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.map
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
@@ -47,7 +48,8 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             outputMode,
             prompt.isReadOnly,
             retainMockAccuracy,
-            inputPolygon
+            inputPolygon,
+            currentIndex.map { it.second?.customErrorMessage }
         )
     }
 }

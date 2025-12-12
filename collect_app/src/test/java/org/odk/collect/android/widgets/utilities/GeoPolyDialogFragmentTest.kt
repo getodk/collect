@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets.utilities
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
@@ -9,6 +10,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.Constants
+import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.data.StringData
 import org.junit.Before
 import org.junit.Rule
@@ -20,6 +22,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.odk.collect.android.formentry.FormEntryViewModel
+import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
@@ -28,13 +31,17 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.testshared.getOrAwaitValue
 
 @RunWith(AndroidJUnit4::class)
 class GeoPolyDialogFragmentTest {
 
     private var prompt = MockFormEntryPromptBuilder().build()
+    private val index =
+        MutableLiveData<Pair<FormIndex, FailedValidationResult?>>(Pair(prompt.index, null))
     private val formEntryViewModel = mock<FormEntryViewModel> {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
+        on { currentIndex } doReturn index
     }
 
     private val viewModelFactory = object : ViewModelProvider.Factory {
@@ -323,6 +330,28 @@ class GeoPolyDialogFragmentTest {
         ).onFragment {
             it.childFragmentManager.setFragmentResult(GeoPolyFragment.REQUEST_GEOPOLY, Bundle.EMPTY)
             assertThat(it.dialog!!.isShowing, equalTo(false))
+        }
+    }
+
+    @Test
+    fun `uses validation result for invalidMessage`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .build()
+
+        index.value = Pair(prompt.index, null)
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
+        }
+
+        index.value = Pair(prompt.index, FailedValidationResult(prompt.index, 0, "blah", 0))
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo("blah"))
         }
     }
 }
