@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets.video
+package org.odk.collect.android.widgets.arbitraryfile
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -16,12 +16,13 @@ import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.strings.R.string
 
 @Composable
-fun ExVideoWidgetContent(
+fun ExArbitraryFileWidgetContent(
     viewModelProvider: ViewModelProvider,
     formEntryPrompt: FormEntryPrompt,
     answer: String?,
     readOnly: Boolean,
     buttonFontSize: Int,
+    answerFontSize: Int,
     onLaunchClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
@@ -40,7 +41,8 @@ fun ExVideoWidgetContent(
             Modifier.padding(top = dimensionResource(id = dimen.margin_standard)),
             formEntryPrompt,
             answer,
-            viewModelProvider = viewModelProvider,
+            answerFontSize,
+            viewModelProvider,
             onLongClick = onLongClick
         )
     }
