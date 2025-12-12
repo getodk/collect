@@ -49,7 +49,15 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             prompt.isReadOnly,
             retainMockAccuracy,
             inputPolygon,
-            currentIndex.map { it.second?.customErrorMessage }
+            currentIndex.map {
+                val validationResult = it.second
+                if (validationResult != null) {
+                    validationResult.customErrorMessage
+                        ?: getString(validationResult.defaultErrorMessage)
+                } else {
+                    null
+                }
+            }
         )
     }
 }

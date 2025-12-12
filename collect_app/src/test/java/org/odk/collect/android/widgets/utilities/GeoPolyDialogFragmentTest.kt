@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.utilities
 
+import android.R
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
@@ -334,7 +335,7 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
-    fun `uses validation result for invalidMessage`() {
+    fun `uses validation result message for invalidMessage`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .build()
 
@@ -352,6 +353,28 @@ class GeoPolyDialogFragmentTest {
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
             assertThat(it.invalidMessage.getOrAwaitValue(), equalTo("blah"))
+        }
+    }
+
+    @Test
+    fun `uses validation result default message for invalidMessage if there's no custom message`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .build()
+
+        index.value = Pair(prompt.index, null)
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
+        }
+
+        index.value = Pair(prompt.index, FailedValidationResult(prompt.index, 0, null, R.string.cancel))
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo("Cancel"))
         }
     }
 }
