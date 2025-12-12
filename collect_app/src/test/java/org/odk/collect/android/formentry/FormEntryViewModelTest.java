@@ -456,6 +456,22 @@ public class FormEntryViewModelTest {
     }
 
     @Test
+    public void answerQuestion_withValidateTrue_updatesIndexWithValidationResult() {
+        TreeReference reference = new TreeReference();
+        reference.add("blah", TreeReference.INDEX_UNBOUND);
+        FormIndex formIndex = new FormIndex(null, 1, 1, reference);
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder().build();
+        formController.setPrompt(formIndex, prompt);
+
+        FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
+        formController.setFailedConstraint(failedValidationResult);
+
+        viewModel.answerQuestion(formIndex, new StringData("answer"), true);
+        scheduler.flush(true);
+        assertThat(viewModel.getCurrentIndex().getValue().getSecond(), equalTo(failedValidationResult));
+    }
+
+    @Test
     public void answerQuestion_whenQuestionIsAutoAdvance_movesForward() {
         TreeReference reference = new TreeReference();
         reference.add("blah", TreeReference.INDEX_UNBOUND);

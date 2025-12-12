@@ -25,7 +25,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             val geopoly = result.getString(GeoPolyFragment.RESULT_GEOPOLY)
 
             if (prompt.bindAttributes.any { it.name == "incremental" && it.value?.value == "true" } && geopolyChange != null) {
-                onAnswer(StringData(geopolyChange), dismiss = false)
+                onAnswer(StringData(geopolyChange), dismiss = false, validate = true)
             } else if (geopoly != null) {
                 onAnswer(StringData(geopoly))
             } else {

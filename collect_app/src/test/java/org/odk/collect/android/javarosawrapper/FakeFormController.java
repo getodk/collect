@@ -92,7 +92,7 @@ public class FakeFormController extends StubFormController {
 
     @Override
     public @NotNull ValidationResult saveOneScreenAnswer(@Nullable FormIndex index, @Nullable IAnswerData data, boolean evaluateConstraints) {
-        if (failedConstraint != null) {
+        if (failedConstraint != null && evaluateConstraints) {
             return failedConstraint;
         } else {
             answers.put(index.getReference(), data);

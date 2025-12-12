@@ -203,7 +203,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).answerQuestion(prompt.index, StringData(answer))
+        verify(formEntryViewModel).answerQuestion(prompt.index, StringData(answer), false)
     }
 
     @Test
@@ -228,7 +228,7 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
-    fun `sets answer when REQUEST_GEOPOLY_CHANGE is returned if question is incremental`() {
+    fun `sets answer with validate when REQUEST_GEOPOLY_CHANGE is returned if question is incremental`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .withBindAttribute("", "incremental", "true")
             .build()
@@ -244,7 +244,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).answerQuestion(prompt.index, StringData(answer))
+        verify(formEntryViewModel).answerQuestion(prompt.index, StringData(answer), true)
     }
 
     @Test
