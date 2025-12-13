@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:entities="http://www.opendatakit.org/xforms/entities">
+    <h:head>
+        <h:title>Nested Repeats With Entity Update</h:title>
+        <model odk:xforms-version="1.0.0" entities:entities-version="2024.1.0">
+            <instance>
+                <data id="nested_repeats_with_entity_update" version="1">
+                    <people jr:template="">
+                        <person/>
+                        <name/>
+                        <cars jr:template="">
+                            <car/>
+                            <model/>
+                            <meta>
+                                <entity dataset="cars" create="1" id="">
+                                    <label/>
+                                </entity>
+                            </meta>
+                        </cars>
+                        <meta>
+                            <entity dataset="people" create="1" id="">
+                                <label/>
+                            </entity>
+                        </meta>
+                    </people>
+                    <people>
+                        <person/>
+                        <name/>
+                        <cars>
+                            <car/>
+                            <model/>
+                            <meta>
+                                <entity dataset="cars" update="true" id="" baseVersion="" trunkVersion="" branchId="">
+                                    <label/>
+                                </entity>
+                            </meta>
+                        </cars>
+                        <meta>
+                            <entity dataset="people" update="true" id="" baseVersion="" trunkVersion="" branchId="">
+                                <label/>
+                            </entity>
+                        </meta>
+                    </people>
+                    <meta>
+                        <instanceID/>
+                        <instanceName/>
+                    </meta>
+                </data>
+            </instance>
+
+            <instance id="people" src="jr://file-csv/people.csv"/>
+            <instance id="cars" src="jr://file-csv/cars.csv"/>
+
+            <bind nodeset="/data/people/person" type="string"/>
+            <bind nodeset="/data/people/name" type="string" entities:saveto="full_name"/>
+
+            <bind nodeset="/data/people/cars/car" type="string"/>
+            <bind nodeset="/data/people/cars/model" type="string" entities:saveto="car_model"/>
+
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+
+            <bind nodeset="/data/people/meta/entity/@id" type="string" calculate="/data/people/person"/>
+            <bind calculate="/data/people/name" nodeset="/data/people/meta/entity/label" type="string"/>
+            <bind nodeset="/data/people/meta/entity/@baseVersion" calculate="instance('people')/root/item[name=current()/../../../person]/__version" type="string"/>
+            <bind nodeset="/data/people/meta/entity/@trunkVersion" calculate="instance('people')/root/item[name=current()/../../../person]/__trunkVersion" type="string"/>
+            <bind nodeset="/data/people/meta/entity/@branchId" calculate="instance('people')/root/item[name=current()/../../../person]/__branchId" type="string"/>
+
+            <bind nodeset="/data/people/cars/meta/entity/@id" type="string" calculate="/data/people/cars/car"/>
+            <bind calculate="/data/people/cars/model" nodeset="/data/people/cars/meta/entity/label" type="string"/>
+            <bind nodeset="/data/people/cars/meta/entity/@baseVersion" calculate="instance('cars')/root/item[name=current()/../../../car]/__version" type="string"/>
+            <bind nodeset="/data/people/cars/meta/entity/@trunkVersion" calculate="instance('cars')/root/item[name=current()/../../../car]/__trunkVersion" type="string"/>
+            <bind nodeset="/data/people/cars/meta/entity/@branchId" calculate="instance('cars')/root/item[name=current()/../../../car]/__branchId" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <group ref="/data/people">
+            <label>People</label>
+            <repeat nodeset="/data/people">
+                <select1 ref="/data/people/person">
+                    <label>Select person</label>
+                    <itemset nodeset="instance('people')/root/item">
+                        <value ref="name"/>
+                        <label ref="label"/>
+                    </itemset>
+                </select1>
+                <input ref="/data/people/name">
+                    <label>Name</label>
+                </input>
+                <group ref="/data/people/cars">
+                    <label>Cars</label>
+                    <repeat nodeset="/data/people/cars">
+                        <select1 ref="/data/people/cars/car">
+                            <label>Select car</label>
+                            <itemset nodeset="instance('cars')/root/item">
+                                <value ref="name"/>
+                                <label ref="label"/>
+                            </itemset>
+                        </select1>
+                        <input ref="/data/people/cars/model">
+                            <label>Car model</label>
+                        </input>
+                    </repeat>
+                </group>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>
