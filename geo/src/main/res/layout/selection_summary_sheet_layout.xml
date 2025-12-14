@@ -41,23 +41,25 @@
         <TextView
             android:id="@+id/name"
             style="?textAppearanceHeadline6"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="?colorOnSurface"
             android:layout_marginTop="@dimen/margin_extra_extra_small"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/status_chip"
             tools:text="Name" />
 
         <TextView
             android:id="@+id/info"
             style="?textAppearanceBody2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textColor="@color/color_on_surface_medium_emphasis"
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/name"
             tools:text="Info"
             tools:visibility="visible" />
