@@ -16,6 +16,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToastInMiddle
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions
@@ -163,11 +164,11 @@ class GeoPolyFragment @JvmOverloads constructor(
             (view.findViewById<View?>(R.id.map_container) as FragmentContainerView).getFragment()
         mapFragment.init({ initMap(view, it) }, { this.cancel() })
 
-        val snackbar = Snackbar.make(requireView(), "", Snackbar.LENGTH_INDEFINITE)
+        val snackbar = SnackbarUtils.make(requireView(), "", Snackbar.LENGTH_INDEFINITE)
         invalidMessage.observe(viewLifecycleOwner) {
             if (it != null) {
                 snackbar.setText(it)
-                snackbar.show()
+                SnackbarUtils.show(snackbar)
             } else {
                 snackbar.dismiss()
             }
