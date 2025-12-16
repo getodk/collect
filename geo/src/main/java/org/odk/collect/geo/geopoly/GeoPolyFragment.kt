@@ -105,7 +105,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (!readOnly && map != null && (originalPoly != map!!.getPolyLinePoints(featureId))) {
+                if (!readOnly && map != null && originalPoly != map!!.getPolyLinePoints(featureId)) {
                     showBackDialog()
                 } else {
                     cancel()
