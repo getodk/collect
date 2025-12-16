@@ -612,7 +612,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     companion object {
         const val REQUEST_GEOPOLY: String = "geopoly"
         const val RESULT_GEOPOLY: String = "geopoly"
-        const val RESULT_GEOPOLY_CHANGE: String = "geotrace_change"
+        const val RESULT_GEOPOLY_CHANGE: String = "geopoly_change"
 
         const val POINTS_KEY: String = "points"
         const val INPUT_ACTIVE_KEY: String = "input_active"
