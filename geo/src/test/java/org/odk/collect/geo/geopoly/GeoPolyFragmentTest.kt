@@ -46,6 +46,7 @@ import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.Assertions
 import org.odk.collect.testshared.Assertions.assertNotVisible
 import org.odk.collect.testshared.Assertions.assertVisible
+import org.odk.collect.testshared.FragmentResultRecorder
 import org.odk.collect.testshared.Interactions
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
@@ -489,14 +490,5 @@ class GeoPolyFragmentTest {
         onView(withId(R.id.play)).perform(click())
         onView(withId(mode)).inRoot(isDialog()).perform(click())
         onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click())
-    }
-}
-
-private class FragmentResultRecorder : FragmentResultListener {
-
-    var result: Pair<String, Bundle>? = null
-
-    override fun onFragmentResult(requestKey: String, result: Bundle) {
-        this.result = Pair(requestKey, result)
     }
 }
