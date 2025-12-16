@@ -307,7 +307,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         map!!.setRetainMockAccuracy(retainMockAccuracy)
 
         if (!map!!.hasCenter()) {
-            if (!points.isEmpty()) {
+            if (points.isNotEmpty()) {
                 map!!.zoomToBoundingBox(points, 0.6, false)
             } else {
                 map!!.runOnGpsLocationReady { this.onGpsLocationReady(it) }
