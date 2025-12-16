@@ -527,7 +527,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         val meters: Int = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex]
 
         if (location != null) {
-            if (usingThreshold and !acceptable) {
+            if (usingThreshold && !acceptable) {
                 locationStatus!!.accuracy = Unacceptable(location.accuracy.toFloat())
             } else {
                 locationStatus!!.accuracy = Improving(location.accuracy.toFloat())
