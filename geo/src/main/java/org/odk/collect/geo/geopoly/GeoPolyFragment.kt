@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.LiveData
@@ -499,9 +500,9 @@ class GeoPolyFragment @JvmOverloads constructor(
         val location = map!!.getGpsLocation()
 
         // Visibility state
-        playButton!!.visibility = if (inputActive) View.GONE else View.VISIBLE
-        pauseButton!!.visibility = if (inputActive) View.VISIBLE else View.GONE
-        recordButton!!.visibility = if (inputActive && recordingEnabled && !recordingAutomatic) View.VISIBLE else View.GONE
+        playButton!!.isVisible = !inputActive
+        pauseButton!!.isVisible = inputActive
+        recordButton!!.isVisible = inputActive && recordingEnabled && !recordingAutomatic
 
         // Enabled state
         zoomButton!!.isEnabled = location != null
