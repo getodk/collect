@@ -249,7 +249,7 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
-    fun `does not set answer when REQUEST_GEOPOLY_CHANGE is returned`() {
+    fun `does not set answer when REQUEST_GEOPOLY_CHANGE is returned if question is not incremental`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .build()
 
