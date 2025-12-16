@@ -284,7 +284,7 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
-    fun `does not dismiss when REQUEST_GEOPOLY_CHANGE is returned if question is incremental`() {
+    fun `does not dismiss when REQUEST_GEOPOLY_CHANGE is returned regardless of incremental value`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .withBindAttribute("", "incremental", "true")
             .build()
@@ -296,6 +296,22 @@ class GeoPolyDialogFragmentTest {
         ).onFragment {
             assertThat(it.dialog!!.isShowing, equalTo(true))
 
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY_CHANGE to answer)
+            )
+
+            assertThat(it.dialog!!.isShowing, equalTo(true))
+        }
+
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withBindAttribute("", "incremental", "false")
+            .build()
+
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
             it.childFragmentManager.setFragmentResult(
                 GeoPolyFragment.REQUEST_GEOPOLY,
                 bundleOf(GeoPolyFragment.RESULT_GEOPOLY_CHANGE to answer)
