@@ -87,7 +87,7 @@ object Assertions {
     fun assertAlert(alertStore: AlertStore, alert: String, failureMessage: String) {
         Espresso.onIdle()
         waitFor {
-            if (!alertStore.popAll().stream().anyMatch { s: String -> s == alert }) {
+            if (alertStore.popAll().none { it == alert }) {
                 throw RuntimeException(failureMessage)
             }
         }
@@ -95,7 +95,7 @@ object Assertions {
 
     fun assertNoAlert(alertStore: AlertStore, alert: String, failureMessage: String) {
         Espresso.onIdle()
-        if (alertStore.popAll().stream().anyMatch { s: String -> s == alert }) {
+        if (alertStore.popAll().any { it == alert }) {
             throw RuntimeException(failureMessage)
         }
     }
