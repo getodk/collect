@@ -16,7 +16,7 @@ class AlertStore {
         }
     }
 
-    fun pop(): List<String> {
+    fun popAll(): List<String> {
         val copy = recordedAlerts.toList()
         recordedAlerts.clear()
 
