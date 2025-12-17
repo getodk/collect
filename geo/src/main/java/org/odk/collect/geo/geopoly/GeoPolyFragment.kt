@@ -321,6 +321,12 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private fun setResult(result: String) {
         val points = map!!.getPolyLinePoints(featureId)
+        if (outputMode == OutputMode.GEOSHAPE && points.size < 3) {
+            return
+        } else if (points.size < 2) {
+            return
+        }
+
         val geoString = GeoUtils.formatPointsResultString(
             points.toMutableList(),
             outputMode == OutputMode.GEOSHAPE

@@ -429,11 +429,11 @@ class GeoPolyFragmentTest {
     }
 
     @Test
-    fun setsChangeResultWheneverAPointIsAdded() {
+    fun whenOutputModeIsGeoTrace_setsChangeResultWheneverAPointIsAddedAfterTheFirst() {
         val scenario = fragmentLauncherRule.launchInContainer(
             GeoPolyFragment::class.java,
             factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment() }
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OutputMode.GEOTRACE) }
                 .build()
         )
 
@@ -449,12 +449,53 @@ class GeoPolyFragmentTest {
         mapFragment.ready()
 
         startInput(R.id.placement_mode)
+
+        mapFragment.click(MapPoint(0.0, 0.0))
+        assertThat(resultListener.result, equalTo(null))
+
         mapFragment.click(MapPoint(1.0, 1.0))
         val result = resultListener.result
         assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
-            equalTo("1.0 1.0 0.0 0.0")
+            equalTo("0.0 0.0 0.0 0.0;1.0 1.0 0.0 0.0")
+        )
+    }
+
+    @Test
+    fun whenOutputModeIsGeoShape_doesNotSetChangeResultUntilThereAre3Points() {
+        val scenario = fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OutputMode.GEOSHAPE) }
+                .build()
+        )
+
+        val resultListener = FragmentResultRecorder()
+        scenario.onFragment {
+            it.parentFragmentManager.setFragmentResultListener(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                it,
+                resultListener
+            )
+        }
+
+        mapFragment.ready()
+
+        startInput(R.id.placement_mode)
+
+        mapFragment.click(MapPoint(0.0, 0.0))
+        assertThat(resultListener.result, equalTo(null))
+
+        mapFragment.click(MapPoint(1.0, 0.0))
+        assertThat(resultListener.result, equalTo(null))
+
+        mapFragment.click(MapPoint(1.0, 1.0))
+        val result = resultListener.result
+        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(
+            result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
+            equalTo("0.0 0.0 0.0 0.0;1.0 0.0 0.0 0.0;1.0 1.0 0.0 0.0;0.0 0.0 0.0 0.0")
         )
     }
 
@@ -464,7 +505,14 @@ class GeoPolyFragmentTest {
             GeoPolyFragment::class.java,
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(inputPolygon = listOf(MapPoint(1.0, 1.0)))
+                    GeoPolyFragment(
+                        inputPolygon =
+                            listOf(
+                                MapPoint(0.0, 0.0),
+                                MapPoint(1.0, 0.0),
+                                MapPoint(1.0, 1.0)
+                            )
+                    )
                 }
                 .build()
         )
@@ -483,7 +531,10 @@ class GeoPolyFragmentTest {
         Interactions.clickOn(withContentDescription(string.remove_last_point))
         val result = resultListener.result
         assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
-        assertThat(result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE), equalTo(""))
+        assertThat(
+            result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
+            equalTo("0.0 0.0 0.0 0.0;1.0 0.0 0.0 0.0")
+        )
     }
 
     private fun startInput(mode: Int) {
