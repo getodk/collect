@@ -1,7 +1,9 @@
 package org.odk.collect.android.widgets.utilities
 
+import android.R
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
@@ -9,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.Constants
+import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.data.StringData
 import org.junit.Before
 import org.junit.Rule
@@ -20,6 +23,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.odk.collect.android.formentry.FormEntryViewModel
+import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
@@ -28,13 +32,17 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.testshared.getOrAwaitValue
 
 @RunWith(AndroidJUnit4::class)
 class GeoPolyDialogFragmentTest {
 
     private var prompt = MockFormEntryPromptBuilder().build()
+    private val index =
+        MutableLiveData<Pair<FormIndex, FailedValidationResult?>>(Pair(prompt.index, null))
     private val formEntryViewModel = mock<FormEntryViewModel> {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
+        on { currentIndex } doReturn index
     }
 
     private val viewModelFactory = object : ViewModelProvider.Factory {
@@ -105,7 +113,7 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
-    fun `configures GeoPolyFragment with null output mode when prompt is something else`() {
+    fun `configures GeoPolyFragment with geotrace output mode when prompt is something else`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .withDataType(Constants.DATATYPE_DATE)
             .build()
@@ -114,7 +122,7 @@ class GeoPolyDialogFragmentTest {
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
-            assertThat(it.outputMode, equalTo(null))
+            assertThat(it.outputMode, equalTo(OutputMode.GEOTRACE))
         }
     }
 
@@ -196,7 +204,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).answerQuestion(prompt.index, StringData(answer))
+        verify(formEntryViewModel).answerQuestion(prompt.index, StringData(answer), false)
     }
 
     @Test
@@ -209,12 +217,107 @@ class GeoPolyDialogFragmentTest {
             GeoPolyDialogFragment::class.java,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ).onFragment {
+            assertThat(it.dialog!!.isShowing, equalTo(true))
+
             it.childFragmentManager.setFragmentResult(
                 GeoPolyFragment.REQUEST_GEOPOLY,
                 bundleOf(GeoPolyFragment.RESULT_GEOPOLY to answer)
             )
 
             assertThat(it.dialog!!.isShowing, equalTo(false))
+        }
+    }
+
+    @Test
+    fun `sets answer with validate when REQUEST_GEOPOLY_CHANGE is returned if question is incremental`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withBindAttribute("", "incremental", "true")
+            .build()
+
+        val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY_CHANGE to answer)
+            )
+        }
+
+        verify(formEntryViewModel).answerQuestion(prompt.index, StringData(answer), true)
+    }
+
+    @Test
+    fun `does not set answer when REQUEST_GEOPOLY_CHANGE is returned if question is not incremental`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .build()
+
+        val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY_CHANGE to answer)
+            )
+        }
+
+        verify(formEntryViewModel, never()).answerQuestion(prompt.index, StringData(answer))
+
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withBindAttribute("", "incremental", "false")
+            .build()
+
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY_CHANGE to answer)
+            )
+        }
+
+        verify(formEntryViewModel, never()).answerQuestion(prompt.index, StringData(answer))
+    }
+
+    @Test
+    fun `does not dismiss when REQUEST_GEOPOLY_CHANGE is returned regardless of incremental value`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withBindAttribute("", "incremental", "true")
+            .build()
+
+        val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            assertThat(it.dialog!!.isShowing, equalTo(true))
+
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY_CHANGE to answer)
+            )
+
+            assertThat(it.dialog!!.isShowing, equalTo(true))
+        }
+
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withBindAttribute("", "incremental", "false")
+            .build()
+
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY_CHANGE to answer)
+            )
+
+            assertThat(it.dialog!!.isShowing, equalTo(true))
         }
     }
 
@@ -244,6 +347,50 @@ class GeoPolyDialogFragmentTest {
         ).onFragment {
             it.childFragmentManager.setFragmentResult(GeoPolyFragment.REQUEST_GEOPOLY, Bundle.EMPTY)
             assertThat(it.dialog!!.isShowing, equalTo(false))
+        }
+    }
+
+    @Test
+    fun `uses validation result message for invalidMessage`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .build()
+
+        index.value = Pair(prompt.index, null)
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
+        }
+
+        index.value = Pair(prompt.index, FailedValidationResult(prompt.index, 0, "blah", 0))
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo("blah"))
+        }
+    }
+
+    @Test
+    fun `uses validation result default message for invalidMessage if there's no custom message`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .build()
+
+        index.value = Pair(prompt.index, null)
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
+        }
+
+        index.value = Pair(prompt.index, FailedValidationResult(prompt.index, 0, null, R.string.cancel))
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo("Cancel"))
         }
     }
 }

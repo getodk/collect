@@ -9,6 +9,7 @@ import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormEntryPromptUtils
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester
+import org.odk.collect.android.widgets.utilities.BindAttributes.ALLOW_MOCK_ACCURACY
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY
 import org.odk.collect.geo.Constants.EXTRA_READ_ONLY
@@ -104,7 +105,7 @@ class ActivityGeoDataRequester(
         return parseBoolean(
             FormEntryPromptUtils.getBindAttribute(
                 prompt,
-                "allow-mock-accuracy"
+                ALLOW_MOCK_ACCURACY
             )
         )
     }

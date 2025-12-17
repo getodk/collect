@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
@@ -14,6 +15,7 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
@@ -42,6 +44,10 @@ import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.Assertions
+import org.odk.collect.testshared.Assertions.assertNotVisible
+import org.odk.collect.testshared.Assertions.assertVisible
+import org.odk.collect.testshared.FragmentResultRecorder
+import org.odk.collect.testshared.Interactions
 import org.odk.collect.webpage.WebPageService
 import org.robolectric.Shadows
 
@@ -55,7 +61,8 @@ class GeoPolyFragmentTest {
 
     @Before
     fun setUp() {
-        val shadowApplication = Shadows.shadowOf(ApplicationProvider.getApplicationContext<Application>())
+        val shadowApplication =
+            Shadows.shadowOf(ApplicationProvider.getApplicationContext<Application>())
         shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION")
         shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION")
         val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
@@ -211,7 +218,13 @@ class GeoPolyFragmentTest {
         mapFragment.ready()
 
         val resultListener = mock<FragmentResultListener>()
-        scenario.onFragment { it.parentFragmentManager.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, it, resultListener) }
+        scenario.onFragment {
+            it.parentFragmentManager.setFragmentResultListener(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                it,
+                resultListener
+            )
+        }
 
         Espresso.pressBack()
         verify(resultListener).onFragmentResult(GeoPolyFragment.REQUEST_GEOPOLY, Bundle.EMPTY)
@@ -394,6 +407,83 @@ class GeoPolyFragmentTest {
         onView(withId(R.id.layers)).perform(click())
 
         scenario.recreate()
+    }
+
+    @Test
+    fun showsAndHidesInvalidMessageSnackbarBasedOnValue() {
+        val invalidMessage = MutableLiveData<String?>(null)
+
+        fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment(invalidMessage = invalidMessage) }
+                .build()
+        )
+
+        val message = "Something is wrong"
+        invalidMessage.value = message
+        assertVisible(withText(message))
+
+        invalidMessage.value = null
+        assertNotVisible(withText(message))
+    }
+
+    @Test
+    fun setsChangeResultWheneverAPointIsAdded() {
+        val scenario = fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment() }
+                .build()
+        )
+
+        val resultListener = FragmentResultRecorder()
+        scenario.onFragment {
+            it.parentFragmentManager.setFragmentResultListener(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                it,
+                resultListener
+            )
+        }
+
+        mapFragment.ready()
+
+        startInput(R.id.placement_mode)
+        mapFragment.click(MapPoint(1.0, 1.0))
+        val result = resultListener.result
+        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(
+            result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
+            equalTo("1.0 1.0 0.0 0.0")
+        )
+    }
+
+    @Test
+    fun setsChangeResultWheneverAPointIsRemoved() {
+        val scenario = fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(inputPolygon = listOf(MapPoint(1.0, 1.0)))
+                }
+                .build()
+        )
+
+        val resultListener = FragmentResultRecorder()
+        scenario.onFragment {
+            it.parentFragmentManager.setFragmentResultListener(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                it,
+                resultListener
+            )
+        }
+
+        mapFragment.ready()
+
+        Interactions.clickOn(withContentDescription(string.remove_last_point))
+        val result = resultListener.result
+        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE), equalTo(""))
     }
 
     private fun startInput(mode: Int) {
