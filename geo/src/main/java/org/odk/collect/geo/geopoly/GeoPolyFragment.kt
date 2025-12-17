@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
@@ -41,6 +42,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GeoPolyFragment @JvmOverloads constructor(
+    val onBackPressedDispatcher: OnBackPressedDispatcher,
     val outputMode: OutputMode = OutputMode.GEOTRACE,
     val readOnly: Boolean = false,
     val retainMockAccuracy: Boolean = false,
@@ -123,7 +125,6 @@ class GeoPolyFragment @JvmOverloads constructor(
             .build()
 
         requireLocationPermissions(requireActivity())
-        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -157,6 +158,8 @@ class GeoPolyFragment @JvmOverloads constructor(
                 snackbar.dismiss()
             }
         }
+
+        onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
     }
 
     override fun onSaveInstanceState(state: Bundle) {

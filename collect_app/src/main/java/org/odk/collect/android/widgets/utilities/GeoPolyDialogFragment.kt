@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.utilities
 
+import androidx.activity.ComponentDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import org.javarosa.core.model.Constants
@@ -50,6 +51,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
         val inputPolygon = GeoPolyUtils.parseGeometry(answer?.value as String?)
 
         return GeoPolyFragment(
+            (requireDialog() as ComponentDialog).onBackPressedDispatcher,
             outputMode,
             prompt.isReadOnly,
             retainMockAccuracy,
