@@ -321,16 +321,17 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private fun setResult(result: String) {
         val points = map!!.getPolyLinePoints(featureId)
-        if (outputMode == OutputMode.GEOSHAPE && points.size < 3) {
-            return
+        val geoString = if (outputMode == OutputMode.GEOSHAPE && points.size < 3) {
+            ""
         } else if (points.size < 2) {
-            return
+            ""
+        } else {
+            GeoUtils.formatPointsResultString(
+                points.toMutableList(),
+                outputMode == OutputMode.GEOSHAPE
+            )
         }
 
-        val geoString = GeoUtils.formatPointsResultString(
-            points.toMutableList(),
-            outputMode == OutputMode.GEOSHAPE
-        )
         val bundle = Bundle()
         bundle.putString(result, geoString)
         getParentFragmentManager().setFragmentResult(REQUEST_GEOPOLY, bundle)

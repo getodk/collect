@@ -451,10 +451,15 @@ class GeoPolyFragmentTest {
         startInput(R.id.placement_mode)
 
         mapFragment.click(MapPoint(0.0, 0.0))
-        assertThat(resultListener.result, equalTo(null))
+        var result = resultListener.result
+        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(
+            result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
+            equalTo("")
+        )
 
         mapFragment.click(MapPoint(1.0, 1.0))
-        val result = resultListener.result
+        result = resultListener.result
         assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
@@ -485,13 +490,23 @@ class GeoPolyFragmentTest {
         startInput(R.id.placement_mode)
 
         mapFragment.click(MapPoint(0.0, 0.0))
-        assertThat(resultListener.result, equalTo(null))
+        var result = resultListener.result
+        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(
+            result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
+            equalTo("")
+        )
 
         mapFragment.click(MapPoint(1.0, 0.0))
-        assertThat(resultListener.result, equalTo(null))
+        result = resultListener.result
+        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(
+            result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
+            equalTo("")
+        )
 
         mapFragment.click(MapPoint(1.0, 1.0))
-        val result = resultListener.result
+        result = resultListener.result
         assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
