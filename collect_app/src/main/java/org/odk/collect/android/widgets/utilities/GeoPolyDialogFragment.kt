@@ -7,8 +7,8 @@ import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.FormEntryPromptUtils
+import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.BindAttributes.ALLOW_MOCK_ACCURACY
-import org.odk.collect.android.widgets.utilities.BindAttributes.INCREMENTAL
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.geo.geopoly.GeoPolyUtils
@@ -26,7 +26,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
         ) { _, result ->
             val geopolyChange = result.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE)
             val geopoly = result.getString(GeoPolyFragment.RESULT_GEOPOLY)
-            val incremental = FormEntryPromptUtils.getBindAttribute(prompt, INCREMENTAL)
+            val incremental = FormEntryPromptUtils.getAdditionalAttribute(prompt, INCREMENTAL)
 
             if (geopolyChange != null) {
                 if (incremental == "true") {
