@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GeoPolyFragment @JvmOverloads constructor(
-    val onBackPressedDispatcher: OnBackPressedDispatcher,
+    val onBackPressedDispatcher: () -> OnBackPressedDispatcher,
     val outputMode: OutputMode = OutputMode.GEOTRACE,
     val readOnly: Boolean = false,
     val retainMockAccuracy: Boolean = false,
@@ -159,7 +159,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
         }
 
-        onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
+        onBackPressedDispatcher().addCallback(viewLifecycleOwner, onBackPressedCallback)
     }
 
     override fun onSaveInstanceState(state: Bundle) {

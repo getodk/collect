@@ -51,7 +51,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
         val inputPolygon = GeoPolyUtils.parseGeometry(answer?.value as String?)
 
         return GeoPolyFragment(
-            (requireDialog() as ComponentDialog).onBackPressedDispatcher,
+            { (requireDialog() as ComponentDialog).onBackPressedDispatcher },
             outputMode,
             prompt.isReadOnly,
             retainMockAccuracy,

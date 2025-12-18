@@ -103,7 +103,7 @@ class GeoPolyFragmentTest {
         val scenario = fragmentLauncherRule.launchInContainer(
             GeoPolyFragment::class.java,
             factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OnBackPressedDispatcher()) }
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ OnBackPressedDispatcher() }) }
                 .build()
         )
         mapFragment.ready()
@@ -118,7 +118,7 @@ class GeoPolyFragmentTest {
         fragmentLauncherRule.launchInContainer(
             GeoPolyFragment::class.java,
             factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OnBackPressedDispatcher()) }
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ OnBackPressedDispatcher() }) }
                 .build()
         )
 
@@ -132,7 +132,7 @@ class GeoPolyFragmentTest {
         fragmentLauncherRule.launchInContainer(
             GeoPolyFragment::class.java,
             factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OnBackPressedDispatcher()) }
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ OnBackPressedDispatcher() }) }
                 .build()
         )
 
@@ -149,7 +149,7 @@ class GeoPolyFragmentTest {
             GeoPolyFragment::class.java,
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(OnBackPressedDispatcher(), inputPolygon = polygon)
+                    GeoPolyFragment({ OnBackPressedDispatcher() }, inputPolygon = polygon)
                 }
                 .build()
         )
@@ -171,7 +171,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         OutputMode.GEOSHAPE,
                         inputPolygon = polygon
                     )
@@ -196,7 +196,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         OutputMode.GEOSHAPE,
                         inputPolygon = emptyList()
                     )
@@ -216,7 +216,7 @@ class GeoPolyFragmentTest {
         val scenario = fragmentLauncherRule.launchInContainer(
             GeoPolyFragment::class.java,
             factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment(onBackPressedDispatcher = onBackPressedDispatcher) }
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment(onBackPressedDispatcher = { onBackPressedDispatcher }) }
                 .build()
         )
 
@@ -244,7 +244,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         OutputMode.GEOTRACE,
                         false,
                         true,
@@ -266,7 +266,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         OutputMode.GEOTRACE,
                         false,
                         false,
@@ -286,7 +286,7 @@ class GeoPolyFragmentTest {
         fragmentLauncherRule.launchInContainer(
             GeoPolyFragment::class.java,
             factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OnBackPressedDispatcher()) }
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ OnBackPressedDispatcher() }) }
                 .build()
         )
 
@@ -303,7 +303,7 @@ class GeoPolyFragmentTest {
         fragmentLauncherRule.launchInContainer(
             GeoPolyFragment::class.java,
             factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OnBackPressedDispatcher()) }
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ OnBackPressedDispatcher() }) }
                 .build()
         )
 
@@ -323,7 +323,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         OutputMode.GEOTRACE,
                         false,
                         false,
@@ -349,7 +349,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         OutputMode.GEOTRACE,
                         true,
                         false,
@@ -375,7 +375,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         OutputMode.GEOTRACE,
                         false,
                         false,
@@ -398,7 +398,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         OutputMode.GEOTRACE,
                         true,
                         false,
@@ -419,7 +419,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         OutputMode.GEOTRACE,
                         false,
                         true,
@@ -436,7 +436,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         OutputMode.GEOTRACE,
                         false,
                         false,
@@ -454,7 +454,7 @@ class GeoPolyFragmentTest {
         val scenario = fragmentLauncherRule.launchInContainer(
             GeoPolyFragment::class.java,
             factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment(OnBackPressedDispatcher()) }
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ OnBackPressedDispatcher() }) }
                 .build()
         )
         mapFragment.ready()
@@ -473,7 +473,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         invalidMessage = invalidMessage
                     )
                 }
@@ -495,7 +495,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         OutputMode.GEOTRACE
                     )
                 }
@@ -539,7 +539,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         OutputMode.GEOSHAPE
                     )
                 }
@@ -591,7 +591,7 @@ class GeoPolyFragmentTest {
             factory = FragmentFactoryBuilder()
                 .forClass(GeoPolyFragment::class) {
                     GeoPolyFragment(
-                        OnBackPressedDispatcher(),
+                        { OnBackPressedDispatcher() },
                         inputPolygon =
                             listOf(
                                 MapPoint(0.0, 0.0),
