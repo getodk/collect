@@ -25,6 +25,7 @@ import org.mockito.Mockito
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidtest.FragmentScenarioExtensions.setFragmentResultListener
 import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.DaggerGeoDependencyComponent
@@ -211,30 +212,110 @@ class GeoPolyFragmentTest {
     }
 
     @Test
-    fun whenPolygonExtraPresent_andPolyIsEmpty_pressingBack_setsCancelledResult() {
+    fun pressingBack_setsCancelledResult() {
         val onBackPressedDispatcher = OnBackPressedDispatcher()
         val scenario = fragmentLauncherRule.launchInContainer(
             GeoPolyFragment::class.java,
             factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment(onBackPressedDispatcher = { onBackPressedDispatcher }) }
+                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ onBackPressedDispatcher }) }
                 .build()
         )
 
         mapFragment.ready()
 
         val resultListener = FragmentResultRecorder()
-        scenario.onFragment {
-            it.parentFragmentManager.setFragmentResultListener(
-                GeoPolyFragment.REQUEST_GEOPOLY,
-                it,
-                resultListener
-            )
-        }
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
 
         onBackPressedDispatcher.onBackPressed()
-        val result = resultListener.result
+        val result = resultListener.lastResult
         assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(result.second.isEmpty, equalTo(true))
+    }
+
+    @Test
+    fun whenInputPolyIsNotEmpty_pressingBack_setsCancelledResult() {
+        val onBackPressedDispatcher = OnBackPressedDispatcher()
+        val scenario = fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(
+                        { onBackPressedDispatcher },
+                        inputPolygon = listOf(MapPoint(1.0, 1.0))
+                    )
+                }
+                .build()
+        )
+
+        mapFragment.ready()
+
+        val resultListener = FragmentResultRecorder()
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
+
+        onBackPressedDispatcher.onBackPressed()
+        val result = resultListener.lastResult
+        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(result.second.isEmpty, equalTo(true))
+    }
+
+    @Test
+    fun whenPolygonHasBeenModified_pressingBack_andClickingCancel_setsNoResult() {
+        val onBackPressedDispatcher = OnBackPressedDispatcher()
+        val scenario = fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment({ onBackPressedDispatcher })
+                }
+                .build()
+        )
+
+        mapFragment.ready()
+
+        val resultListener = FragmentResultRecorder()
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
+
+        startInput(R.id.placement_mode)
+        mapFragment.click(MapPoint(1.0, 1.0))
+        resultListener.clear()
+
+        onBackPressedDispatcher.onBackPressed()
+        Interactions.clickOn(withText(string.cancel), root = isDialog())
+
+        val result = resultListener.lastResult
+        assertThat(result, equalTo(null))
+    }
+
+    @Test
+    fun whenPolygonHasBeenCreated_pressingBack_andClickingDiscard_setsEmptyResult() {
+        val onBackPressedDispatcher = OnBackPressedDispatcher()
+        val scenario = fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(
+                        { onBackPressedDispatcher }
+                    )
+                }
+                .build()
+        )
+
+        mapFragment.ready()
+
+        val resultListener = FragmentResultRecorder()
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
+
+        startInput(R.id.placement_mode)
+        mapFragment.click(MapPoint(1.0, 1.0))
+        mapFragment.click(MapPoint(2.0, 2.0))
+        resultListener.clear()
+
+        onBackPressedDispatcher.onBackPressed()
+        Interactions.clickOn(withText(string.discard), root = isDialog())
+
+        val result = resultListener.lastResult
+        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(result.second.getString(GeoPolyFragment.RESULT_GEOPOLY), equalTo(""))
     }
 
     @Test
@@ -503,20 +584,14 @@ class GeoPolyFragmentTest {
         )
 
         val resultListener = FragmentResultRecorder()
-        scenario.onFragment {
-            it.parentFragmentManager.setFragmentResultListener(
-                GeoPolyFragment.REQUEST_GEOPOLY,
-                it,
-                resultListener
-            )
-        }
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
 
         mapFragment.ready()
 
         startInput(R.id.placement_mode)
 
         mapFragment.click(MapPoint(0.0, 0.0))
-        var result = resultListener.result
+        var result = resultListener.lastResult
         assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
@@ -524,7 +599,7 @@ class GeoPolyFragmentTest {
         )
 
         mapFragment.click(MapPoint(1.0, 1.0))
-        result = resultListener.result
+        result = resultListener.lastResult
         assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
@@ -547,20 +622,14 @@ class GeoPolyFragmentTest {
         )
 
         val resultListener = FragmentResultRecorder()
-        scenario.onFragment {
-            it.parentFragmentManager.setFragmentResultListener(
-                GeoPolyFragment.REQUEST_GEOPOLY,
-                it,
-                resultListener
-            )
-        }
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
 
         mapFragment.ready()
 
         startInput(R.id.placement_mode)
 
         mapFragment.click(MapPoint(0.0, 0.0))
-        var result = resultListener.result
+        var result = resultListener.lastResult
         assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
@@ -568,7 +637,7 @@ class GeoPolyFragmentTest {
         )
 
         mapFragment.click(MapPoint(1.0, 0.0))
-        result = resultListener.result
+        result = resultListener.lastResult
         assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
@@ -576,7 +645,7 @@ class GeoPolyFragmentTest {
         )
 
         mapFragment.click(MapPoint(1.0, 1.0))
-        result = resultListener.result
+        result = resultListener.lastResult
         assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
@@ -604,18 +673,12 @@ class GeoPolyFragmentTest {
         )
 
         val resultListener = FragmentResultRecorder()
-        scenario.onFragment {
-            it.parentFragmentManager.setFragmentResultListener(
-                GeoPolyFragment.REQUEST_GEOPOLY,
-                it,
-                resultListener
-            )
-        }
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
 
         mapFragment.ready()
 
         Interactions.clickOn(withContentDescription(string.remove_last_point))
-        val result = resultListener.result
+        val result = resultListener.lastResult
         assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
