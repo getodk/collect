@@ -289,6 +289,34 @@ class GeoPolyFragmentTest {
     }
 
     @Test
+    fun whenInputPolygonIsOnlyOnePoint_andHasBeenModified_pressingBack_andClickingDiscard_setsOriginalAsResult() {
+        val onBackPressedDispatcher = OnBackPressedDispatcher()
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { onBackPressedDispatcher },
+                inputPolygon = listOf(MapPoint(0.0, 0.0))
+            )
+        }
+
+        val resultListener = FragmentResultRecorder()
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
+
+        startInput()
+        mapFragment.click(MapPoint(2.0, 2.0))
+        resultListener.clear()
+
+        onBackPressedDispatcher.onBackPressed()
+        Interactions.clickOn(withText(string.discard), root = isDialog())
+
+        val result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(
+            result.second.getString(GeoPolyFragment.RESULT_GEOPOLY),
+            equalTo("0.0 0.0 0.0 0.0")
+        )
+    }
+
+    @Test
     fun whenPolygonHasBeenModified_recreating_andPressingBack_andClickingDiscard_setsOriginalAsResult() {
         val onBackPressedDispatcher = OnBackPressedDispatcher()
         val scenario = fragmentLauncherRule.launchInContainer {
