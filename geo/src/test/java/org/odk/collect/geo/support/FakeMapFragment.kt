@@ -12,7 +12,7 @@ import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 import kotlin.random.Random
 
-class FakeMapFragment : Fragment(), MapFragment {
+class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragment {
 
     private var clickListener: PointListener? = null
     private var gpsLocationListener: PointListener? = null
@@ -37,6 +37,10 @@ class FakeMapFragment : Fragment(), MapFragment {
         errorListener: MapFragment.ErrorListener?
     ) {
         this.readyListener = readyListener
+
+        if (ready) {
+            ready()
+        }
     }
 
     fun ready() {

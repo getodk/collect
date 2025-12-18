@@ -52,7 +52,7 @@ import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
 class GeoPolyFragmentTest {
-    private val mapFragment = FakeMapFragment()
+    private val mapFragment = FakeMapFragment(ready = true)
     private val locationTracker = mock<LocationTracker>()
 
     @get:Rule
@@ -101,13 +101,9 @@ class GeoPolyFragmentTest {
 
     @Test
     fun testLocationTrackerLifecycle() {
-        val scenario = fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ OnBackPressedDispatcher() }) }
-                .build()
-        )
-        mapFragment.ready()
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
 
         // Stopping the activity should stop the location tracker
         scenario.moveToState(Lifecycle.State.DESTROYED)
@@ -116,28 +112,20 @@ class GeoPolyFragmentTest {
 
     @Test
     fun recordButton_should_beHiddenForAutomaticMode() {
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ OnBackPressedDispatcher() }) }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
 
-        mapFragment.ready()
         startInput(R.id.automatic_mode)
         onView(withId(R.id.record_button)).check(matches(not(isDisplayed())))
     }
 
     @Test
     fun recordButton_should_beVisibleForManualMode() {
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ OnBackPressedDispatcher() }) }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
 
-        mapFragment.ready()
         startInput(R.id.manual_mode)
         onView(withId(R.id.record_button)).check(matches(isDisplayed()))
     }
@@ -146,16 +134,10 @@ class GeoPolyFragmentTest {
     fun whenPolygonExtraPresent_showsPoly() {
         val polygon = ArrayList<MapPoint>()
         polygon.add(MapPoint(1.0, 2.0, 3.0, 4.0))
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment({ OnBackPressedDispatcher() }, inputPolygon = polygon)
-                }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() }, inputPolygon = polygon)
+        }
 
-        mapFragment.ready()
         val polys = mapFragment.getPolyLines()
         assertThat(polys.size, equalTo(1))
         assertThat(polys[0].points, equalTo(polygon))
@@ -167,20 +149,14 @@ class GeoPolyFragmentTest {
         polygon.add(MapPoint(1.0, 2.0, 3.0, 4.0))
         polygon.add(MapPoint(2.0, 3.0, 3.0, 4.0))
         polygon.add(MapPoint(1.0, 2.0, 3.0, 4.0))
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        OutputMode.GEOSHAPE,
-                        inputPolygon = polygon
-                    )
-                }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                OutputMode.GEOSHAPE,
+                inputPolygon = polygon
+            )
+        }
 
-        mapFragment.ready()
         val polys = mapFragment.getPolyLines()
         assertThat(polys.size, equalTo(1))
         val expectedPolygon = ArrayList<MapPoint>()
@@ -192,20 +168,14 @@ class GeoPolyFragmentTest {
 
     @Test
     fun whenPolygonExtraPresent_andPolyIsEmpty_andOutputModeIsShape_doesNotShowPoly() {
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        OutputMode.GEOSHAPE,
-                        inputPolygon = emptyList()
-                    )
-                }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                OutputMode.GEOSHAPE,
+                inputPolygon = emptyList()
+            )
+        }
 
-        mapFragment.ready()
         val polys = mapFragment.getPolyLines()
         assertThat(polys.size, equalTo(1))
         assertThat(polys[0].points.isEmpty(), equalTo(true))
@@ -214,14 +184,9 @@ class GeoPolyFragmentTest {
     @Test
     fun pressingBack_setsCancelledResult() {
         val onBackPressedDispatcher = OnBackPressedDispatcher()
-        val scenario = fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ onBackPressedDispatcher }) }
-                .build()
-        )
-
-        mapFragment.ready()
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ onBackPressedDispatcher })
+        }
 
         val resultListener = FragmentResultRecorder()
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
@@ -235,19 +200,12 @@ class GeoPolyFragmentTest {
     @Test
     fun whenInputPolyIsNotEmpty_pressingBack_setsCancelledResult() {
         val onBackPressedDispatcher = OnBackPressedDispatcher()
-        val scenario = fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { onBackPressedDispatcher },
-                        inputPolygon = listOf(MapPoint(1.0, 1.0))
-                    )
-                }
-                .build()
-        )
-
-        mapFragment.ready()
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { onBackPressedDispatcher },
+                inputPolygon = listOf(MapPoint(1.0, 1.0))
+            )
+        }
 
         val resultListener = FragmentResultRecorder()
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
@@ -261,16 +219,9 @@ class GeoPolyFragmentTest {
     @Test
     fun whenPolygonHasBeenModified_pressingBack_andClickingCancel_setsNoResult() {
         val onBackPressedDispatcher = OnBackPressedDispatcher()
-        val scenario = fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment({ onBackPressedDispatcher })
-                }
-                .build()
-        )
-
-        mapFragment.ready()
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ onBackPressedDispatcher })
+        }
 
         val resultListener = FragmentResultRecorder()
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
@@ -289,18 +240,9 @@ class GeoPolyFragmentTest {
     @Test
     fun whenPolygonHasBeenCreated_pressingBack_andClickingDiscard_setsEmptyResult() {
         val onBackPressedDispatcher = OnBackPressedDispatcher()
-        val scenario = fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { onBackPressedDispatcher }
-                    )
-                }
-                .build()
-        )
-
-        mapFragment.ready()
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ onBackPressedDispatcher })
+        }
 
         val resultListener = FragmentResultRecorder()
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
@@ -321,19 +263,12 @@ class GeoPolyFragmentTest {
     @Test
     fun whenPolygonHasBeenModified_pressingBack_andClickingDiscard_setsOriginalAsResult() {
         val onBackPressedDispatcher = OnBackPressedDispatcher()
-        val scenario = fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { onBackPressedDispatcher },
-                        inputPolygon = listOf(MapPoint(0.0, 0.0), MapPoint(1.0, 1.0))
-                    )
-                }
-                .build()
-        )
-
-        mapFragment.ready()
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { onBackPressedDispatcher },
+                inputPolygon = listOf(MapPoint(0.0, 0.0), MapPoint(1.0, 1.0))
+            )
+        }
 
         val resultListener = FragmentResultRecorder()
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
@@ -356,20 +291,12 @@ class GeoPolyFragmentTest {
     @Test
     fun whenPolygonHasBeenModified_recreating_andPressingBack_andClickingDiscard_setsOriginalAsResult() {
         val onBackPressedDispatcher = OnBackPressedDispatcher()
-        val scenario = fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { onBackPressedDispatcher },
-                        inputPolygon = listOf(MapPoint(0.0, 0.0), MapPoint(1.0, 1.0))
-                    )
-                }
-                .build()
-        )
-
-        mapFragment.ready()
-
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { onBackPressedDispatcher },
+                inputPolygon = listOf(MapPoint(0.0, 0.0), MapPoint(1.0, 1.0))
+            )
+        }
         val resultListener = FragmentResultRecorder()
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
 
@@ -379,7 +306,6 @@ class GeoPolyFragmentTest {
 
         scenario.recreate()
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
-        mapFragment.ready()
 
         onBackPressedDispatcher.onBackPressed()
         Interactions.clickOn(withText(string.discard), root = isDialog())
@@ -394,58 +320,40 @@ class GeoPolyFragmentTest {
 
     @Test
     fun startingInput_usingAutomaticMode_usesRetainMockAccuracyTrueToStartLocationTracker() {
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        OutputMode.GEOTRACE,
-                        false,
-                        true,
-                        emptyList()
-                    )
-                }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                OutputMode.GEOTRACE,
+                false,
+                true,
+                emptyList()
+            )
+        }
 
-        mapFragment.ready()
         startInput(R.id.automatic_mode)
         verify(locationTracker).start(true)
     }
 
     @Test
     fun startingInput_usingAutomaticMode_usesRetainMockAccuracyFalseToStartLocationTracker() {
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        OutputMode.GEOTRACE,
-                        false,
-                        false,
-                        emptyList()
-                    )
-                }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                OutputMode.GEOTRACE,
+                false,
+                false,
+                emptyList()
+            )
+        }
 
-        mapFragment.ready()
         startInput(R.id.automatic_mode)
         verify(locationTracker).start(false)
     }
 
     @Test
     fun recordingPointManually_whenPointIsADuplicateOfTheLastPoint_skipsPoint() {
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ OnBackPressedDispatcher() }) }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer { GeoPolyFragment({ OnBackPressedDispatcher() }) }
 
-        mapFragment.ready()
         startInput(R.id.manual_mode)
         mapFragment.setLocation(MapPoint(1.0, 1.0))
         onView(withId(R.id.record_button)).perform(click())
@@ -455,14 +363,8 @@ class GeoPolyFragmentTest {
 
     @Test
     fun placingPoint_whenPointIsADuplicateOfTheLastPoint_skipsPoint() {
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ OnBackPressedDispatcher() }) }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer { GeoPolyFragment({ OnBackPressedDispatcher() }) }
 
-        mapFragment.ready()
         startInput(R.id.placement_mode)
         mapFragment.click(MapPoint(1.0, 1.0))
         mapFragment.click(MapPoint(1.0, 1.0))
@@ -473,22 +375,16 @@ class GeoPolyFragmentTest {
     fun buttonsShouldBeEnabledInEditableMode() {
         val polyline = ArrayList<MapPoint>()
         polyline.add(MapPoint(1.0, 2.0, 3.0, 4.0))
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        OutputMode.GEOTRACE,
-                        false,
-                        false,
-                        polyline
-                    )
-                }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                OutputMode.GEOTRACE,
+                false,
+                false,
+                polyline
+            )
+        }
 
-        mapFragment.ready()
         Assertions.assertEnabled(withContentDescription(string.input_method))
         Assertions.assertEnabled(withContentDescription(string.remove_last_point))
         Assertions.assertEnabled(withContentDescription(string.clear))
@@ -499,22 +395,16 @@ class GeoPolyFragmentTest {
     fun buttonsShouldBeDisabledInReadOnlyMode() {
         val polygon = ArrayList<MapPoint>()
         polygon.add(MapPoint(1.0, 2.0, 3.0, 4.0))
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        OutputMode.GEOTRACE,
-                        true,
-                        false,
-                        polygon
-                    )
-                }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                OutputMode.GEOTRACE,
+                true,
+                false,
+                polygon
+            )
+        }
 
-        mapFragment.ready()
         Assertions.assertDisabled(withContentDescription(string.input_method))
         Assertions.assertDisabled(withContentDescription(string.remove_last_point))
         Assertions.assertDisabled(withContentDescription(string.clear))
@@ -525,22 +415,16 @@ class GeoPolyFragmentTest {
     fun polyShouldBeDraggableInEditableMode() {
         val polyline = ArrayList<MapPoint>()
         polyline.add(MapPoint(1.0, 2.0, 3.0, 4.0))
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        OutputMode.GEOTRACE,
-                        false,
-                        false,
-                        polyline
-                    )
-                }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                OutputMode.GEOTRACE,
+                false,
+                false,
+                polyline
+            )
+        }
 
-        mapFragment.ready()
         assertThat(mapFragment.isPolyDraggable(0), equalTo(true))
     }
 
@@ -548,42 +432,31 @@ class GeoPolyFragmentTest {
     fun polyShouldNotBeDraggableInReadOnlyMode() {
         val polygon = ArrayList<MapPoint>()
         polygon.add(MapPoint(1.0, 2.0, 3.0, 4.0))
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        OutputMode.GEOTRACE,
-                        true,
-                        false,
-                        polygon
-                    )
-                }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                OutputMode.GEOTRACE,
+                true,
+                false,
+                polygon
+            )
+        }
 
-        mapFragment.ready()
         assertThat(mapFragment.isPolyDraggable(0), equalTo(false))
     }
 
     @Test
     fun passingRetainMockAccuracyExtra_updatesMapFragmentState() {
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        OutputMode.GEOTRACE,
-                        false,
-                        true,
-                        emptyList()
-                    )
-                }
-                .build()
-        )
-        mapFragment.ready()
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                OutputMode.GEOTRACE,
+                false,
+                true,
+                emptyList()
+            )
+        }
+
         assertThat(mapFragment.isRetainMockAccuracy(), equalTo(true))
 
         fragmentLauncherRule.launchInContainer(
@@ -600,19 +473,14 @@ class GeoPolyFragmentTest {
                 }
                 .build()
         )
-        mapFragment.ready()
+
         assertThat(mapFragment.isRetainMockAccuracy(), equalTo(false))
     }
 
     @Test
     fun recreatingTheFragmentWithTheLayersDialogDisplayedDoesNotCrashTheApp() {
-        val scenario = fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) { GeoPolyFragment({ OnBackPressedDispatcher() }) }
-                .build()
-        )
-        mapFragment.ready()
+        val scenario =
+            fragmentLauncherRule.launchInContainer { GeoPolyFragment({ OnBackPressedDispatcher() }) }
 
         onView(withId(R.id.layers)).perform(click())
 
@@ -623,17 +491,12 @@ class GeoPolyFragmentTest {
     fun showsAndHidesInvalidMessageSnackbarBasedOnValue() {
         val invalidMessage = MutableLiveData<String?>(null)
 
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        invalidMessage = invalidMessage
-                    )
-                }
-                .build()
-        )
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                invalidMessage = invalidMessage
+            )
+        }
 
         val message = "Something is wrong"
         invalidMessage.value = message
@@ -645,22 +508,15 @@ class GeoPolyFragmentTest {
 
     @Test
     fun whenOutputModeIsGeoTrace_setsChangeResultWheneverAPointIsAddedAfterTheFirst() {
-        val scenario = fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        OutputMode.GEOTRACE
-                    )
-                }
-                .build()
-        )
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                OutputMode.GEOTRACE
+            )
+        }
 
         val resultListener = FragmentResultRecorder()
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
-
-        mapFragment.ready()
 
         startInput(R.id.placement_mode)
 
@@ -683,22 +539,15 @@ class GeoPolyFragmentTest {
 
     @Test
     fun whenOutputModeIsGeoShape_doesNotSetChangeResultUntilThereAre3Points() {
-        val scenario = fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        OutputMode.GEOSHAPE
-                    )
-                }
-                .build()
-        )
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                OutputMode.GEOSHAPE
+            )
+        }
 
         val resultListener = FragmentResultRecorder()
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
-
-        mapFragment.ready()
 
         startInput(R.id.placement_mode)
 
@@ -729,27 +578,20 @@ class GeoPolyFragmentTest {
 
     @Test
     fun setsChangeResultWheneverAPointIsRemoved() {
-        val scenario = fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        inputPolygon =
-                            listOf(
-                                MapPoint(0.0, 0.0),
-                                MapPoint(1.0, 0.0),
-                                MapPoint(1.0, 1.0)
-                            )
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                inputPolygon =
+                    listOf(
+                        MapPoint(0.0, 0.0),
+                        MapPoint(1.0, 0.0),
+                        MapPoint(1.0, 1.0)
                     )
-                }
-                .build()
-        )
+            )
+        }
 
         val resultListener = FragmentResultRecorder()
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
-
-        mapFragment.ready()
 
         Interactions.clickOn(withContentDescription(string.remove_last_point))
         val result = resultListener.getAll().last()
