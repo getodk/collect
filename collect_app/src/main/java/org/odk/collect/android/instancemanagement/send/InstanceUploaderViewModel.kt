@@ -54,20 +54,9 @@ class InstanceUploadViewModel(
         _state.value = UploadState.Starting
 
         uploadJob = viewModelScope.launch(Dispatchers.IO) {
-            val uploader = InstanceUploader(
-                httpInterface,
-                webCredentialsUtils,
-                settingsProvider.getUnprotectedSettings(),
-                instancesRepository
-            )
-
-            val instancesToUpload = instanceIdsToUpload
-                .mapNotNull { instancesRepository.get(it) }
-                .sortedBy { it.finalizationDate }
-
-            val deviceId = propertyManager
-                .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID)
-
+            val uploader = createUploader()
+            val instancesToUpload = getInstancesToUpload(instanceIdsToUpload)
+            val deviceId = propertyManager.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID)
             val results = mutableMapOf<String, String>()
 
             try {
@@ -84,17 +73,7 @@ class InstanceUploadViewModel(
                     }
 
                     try {
-                        val destinationUrl = uploader.getUrlToSubmitTo(
-                            instance,
-                            deviceId,
-                            completeDestinationUrl,
-                            null
-                        )
-
-                        val message = uploader.uploadOneSubmission(instance, destinationUrl)
-                            ?: defaultSuccessMessage
-
-                        results[instance.dbId.toString()] = message
+                        results[instance.dbId.toString()] = uploadInstance(uploader, instance, deviceId)
 
                         Analytics.log(
                             SUBMISSION,
@@ -122,6 +101,11 @@ class InstanceUploadViewModel(
             instancesDataService.update(projectId)
             _state.postValue(UploadState.Completed(results))
         }
+    }
+
+    fun cancel() {
+        clearTemporaryCredentials()
+        uploadJob?.cancel()
     }
 
     fun setDeleteInstanceAfterSubmission(deleteInstanceAfterSubmission: Boolean) {
@@ -165,6 +149,32 @@ class InstanceUploadViewModel(
         }
     }
 
+    private fun createUploader() = InstanceUploader(
+        httpInterface,
+        webCredentialsUtils,
+        settingsProvider.getUnprotectedSettings(),
+        instancesRepository
+    )
+
+    private fun getInstancesToUpload(instanceIds: List<Long>) =
+        instanceIds
+            .mapNotNull { instancesRepository.get(it) }
+            .sortedBy { it.finalizationDate }
+
+    private fun uploadInstance(uploader: InstanceUploader, instance: Instance, deviceId: String): String {
+        val destinationUrl = uploader.getUrlToSubmitTo(
+            instance,
+            deviceId,
+            completeDestinationUrl,
+            null
+        )
+
+        val message = uploader.uploadOneSubmission(instance, destinationUrl)
+            ?: defaultSuccessMessage
+
+        return message
+    }
+
     // Delete instances that were successfully sent and that need to be deleted
     // either because app-level auto-delete is enabled or because the form
     // specifies it.
@@ -190,11 +200,6 @@ class InstanceUploadViewModel(
 
         val instanceDeleter = InstanceDeleter(instancesRepository, formsRepository)
         instanceDeleter.delete(idsToDelete)
-    }
-
-    fun cancel() {
-        clearTemporaryCredentials()
-        uploadJob?.cancel()
     }
 }
 
