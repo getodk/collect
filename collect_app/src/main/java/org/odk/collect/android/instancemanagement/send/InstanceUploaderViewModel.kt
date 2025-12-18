@@ -114,31 +114,7 @@ class InstanceUploadViewModel(
                 }
             }
 
-            // Delete instances that were successfully sent and that need to be deleted
-            // either because app-level auto-delete is enabled or because the form
-            // specifies it.
-            val isFormAutoDeleteOptionEnabled =
-                deleteInstanceAfterSubmission
-                    ?: settingsProvider
-                        .getUnprotectedSettings()
-                        .getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND)
-
-            val idsToDelete = results.keys
-                .mapNotNull { id -> instancesRepository.get(id.toLong()) }
-                .filter { it.status == Instance.STATUS_SUBMITTED }
-                .filter {
-                    InstanceAutoDeleteChecker.shouldInstanceBeDeleted(
-                        formsRepository,
-                        isFormAutoDeleteOptionEnabled,
-                        it
-                    )
-                }
-                .map { it.dbId }
-                .toTypedArray()
-
-            val instanceDeleter = InstanceDeleter(instancesRepository, formsRepository)
-            instanceDeleter.delete(idsToDelete)
-
+            deleteInstances(results)
             clearTemporaryCredentials()
             instancesDataService.update(projectId)
             _state.postValue(UploadState.Completed(results))
@@ -184,6 +160,33 @@ class InstanceUploadViewModel(
         if (customUsername != null && customPassword != null) {
             webCredentialsUtils.clearCredentials(completeDestinationUrl!!)
         }
+    }
+
+    // Delete instances that were successfully sent and that need to be deleted
+    // either because app-level auto-delete is enabled or because the form
+    // specifies it.
+    private fun deleteInstances(results: Map<String, String>) {
+        val isFormAutoDeleteOptionEnabled =
+            deleteInstanceAfterSubmission
+                ?: settingsProvider
+                    .getUnprotectedSettings()
+                    .getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND)
+
+        val idsToDelete = results.keys
+            .mapNotNull { id -> instancesRepository.get(id.toLong()) }
+            .filter { it.status == Instance.STATUS_SUBMITTED }
+            .filter {
+                InstanceAutoDeleteChecker.shouldInstanceBeDeleted(
+                    formsRepository,
+                    isFormAutoDeleteOptionEnabled,
+                    it
+                )
+            }
+            .map { it.dbId }
+            .toTypedArray()
+
+        val instanceDeleter = InstanceDeleter(instancesRepository, formsRepository)
+        instanceDeleter.delete(idsToDelete)
     }
 
     fun cancel() {
