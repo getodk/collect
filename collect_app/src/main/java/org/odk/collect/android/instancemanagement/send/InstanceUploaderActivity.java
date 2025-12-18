@@ -22,27 +22,37 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+
 import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.instancemanagement.InstancesDataService;
+import org.odk.collect.android.projects.ProjectsDataService;
+import org.odk.collect.android.upload.InstanceUploadViewModel;
+import org.odk.collect.android.upload.UploadState;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.openrosa.http.OpenRosaConstants;
+import org.odk.collect.openrosa.http.OpenRosaHttpInterface;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -54,8 +64,7 @@ import timber.log.Timber;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceUploaderActivity extends LocalizedActivity implements InstanceUploaderListener,
-        AuthDialogUtility.AuthDialogUtilityResultListener {
+public class InstanceUploaderActivity extends LocalizedActivity implements AuthDialogUtility.AuthDialogUtilityResultListener {
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
 
@@ -66,8 +75,6 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
     private ProgressDialog progressDialog;
 
     private String alertMsg;
-
-    private InstanceUploaderTask instanceUploaderTask;
 
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
     private Long[] instancesToSend;
@@ -83,6 +90,21 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
     private boolean isInstanceStateSaved;
 
     @Inject
+    OpenRosaHttpInterface httpInterface;
+
+    @Inject
+    WebCredentialsUtils webCredentialsUtils;
+
+    @Inject
+    PropertyManager propertyManager;
+
+    @Inject
+    InstancesDataService instancesDataService;
+
+    @Inject
+    ProjectsDataService projectsDataService;
+
+    @Inject
     InstancesRepositoryProvider instancesRepositoryProvider;
     private InstancesRepository instancesRepository;
 
@@ -93,12 +115,49 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
     @Inject
     SettingsProvider settingsProvider;
 
+    private InstanceUploadViewModel instanceUploadViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
         instancesRepository = instancesRepositoryProvider.create();
         formsRepository = formsRepositoryProvider.create();
+
+        instanceUploadViewModel = new ViewModelProvider(
+                this,
+                new ViewModelProvider.Factory() {
+                    @NonNull
+                    @Override
+                    @SuppressWarnings("unchecked")
+                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                        if (modelClass.isAssignableFrom(InstanceUploadViewModel.class)) {
+                            return (T) new InstanceUploadViewModel(
+                                    httpInterface,
+                                    webCredentialsUtils,
+                                    propertyManager,
+                                    instancesRepository,
+                                    formsRepository,
+                                    settingsProvider,
+                                    instancesDataService,
+                                    projectsDataService.requireCurrentProject().getUuid(),
+                                    getString(org.odk.collect.strings.R.string.success)
+                            );
+                        }
+                        throw new IllegalArgumentException("Unknown ViewModel class");
+                    }
+                }
+        ).get(InstanceUploadViewModel.class);
+
+        instanceUploadViewModel.getState().observe(this, state -> {
+            if (state instanceof UploadState.AuthRequired) {
+                authRequest(((UploadState.AuthRequired) state).getServer(), ((UploadState.AuthRequired) state).getResults());
+            } else if (state instanceof UploadState.Progress) {
+                progressUpdate(((UploadState.Progress) state).getCurrent(), ((UploadState.Progress) state).getTotal());
+            } else if (state instanceof UploadState.Completed) {
+                uploadingComplete(((UploadState.Completed) state).getResults());
+            }
+        });
 
         init(savedInstanceState);
     }
@@ -166,47 +225,31 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
             Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
-        // Get the task if there was a configuration change but the app did not go out of memory.
-        // If the app went out of memory, the task is null but the simple state was saved so
-        // the task status is reconstructed from that state.
-        instanceUploaderTask = (InstanceUploaderTask) getLastCustomNonConfigurationInstance();
+        showDialog(PROGRESS_DIALOG);
 
-        if (instanceUploaderTask == null) {
-            // set up dialog and upload task
-            showDialog(PROGRESS_DIALOG);
-            instanceUploaderTask = new InstanceUploaderTask();
+        if (url != null) {
+            instanceUploadViewModel.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerUri(), true);
 
-            if (url != null) {
-                instanceUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerUri(), true);
-
-                if (deleteInstanceAfterUpload != null) {
-                    instanceUploaderTask.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
-                }
-
-                String host = Uri.parse(url).getHost();
-                if (host != null) {
-                    // We do not need to clear the cookies since they are cleared before any request is made and the Credentials provider is used
-                    if (password != null && username != null) {
-                        instanceUploaderTask.setCustomUsername(username);
-                        instanceUploaderTask.setCustomPassword(password);
-                    }
-                }
+            if (deleteInstanceAfterUpload != null) {
+                instanceUploadViewModel.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
             }
 
-            // register this activity with the new uploader task
-            instanceUploaderTask.setUploaderListener(this);
-            instanceUploaderTask.setRepositories(instancesRepository, formsRepository, settingsProvider);
-            instanceUploaderTask.execute(instancesToSend);
+            String host = Uri.parse(url).getHost();
+            if (host != null) {
+                // We do not need to clear the cookies since they are cleared before any request is made and the Credentials provider is used
+                if (password != null && username != null) {
+                    instanceUploadViewModel.setCustomCredentials(username, password);
+                }
+            }
         }
+
+        instanceUploadViewModel.upload(Arrays.asList(instancesToSend));
     }
 
     @Override
     protected void onResume() {
         if (instancesToSend != null) {
             Timber.i("onResume: Resuming upload of %d instances!", instancesToSend.length);
-        }
-        if (instanceUploaderTask != null) {
-            instanceUploaderTask.setUploaderListener(this);
         }
         super.onResume();
     }
@@ -235,21 +278,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
         }
     }
 
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        return instanceUploaderTask;
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (instanceUploaderTask != null) {
-            instanceUploaderTask.setUploaderListener(null);
-        }
-        super.onDestroy();
-    }
-
-    @Override
-    public void uploadingComplete(HashMap<String, String> result) {
+    private void uploadingComplete(Map<String, String> result) {
         Timber.i("uploadingComplete: Processing results (%d) from upload of %d instances!",
                 result.size(), instancesToSend.length);
 
@@ -268,8 +297,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
         }
     }
 
-    @Override
-    public void progressUpdate(int progress, int total) {
+    private void progressUpdate(int progress, int total) {
         alertMsg = getString(org.odk.collect.strings.R.string.sending_items, String.valueOf(progress), String.valueOf(total));
         progressDialog.setMessage(alertMsg);
     }
@@ -284,8 +312,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                instanceUploaderTask.cancel(true);
-                                instanceUploaderTask.setUploaderListener(null);
+                                instanceUploadViewModel.cancel();
                                 finish();
                             }
                         };
@@ -320,8 +347,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
      * of the latest submission attempt. The database provides generic status which could have come
      * from an unrelated submission attempt.
      */
-    @Override
-    public void authRequest(Uri url, HashMap<String, String> messagesByInstanceIdAttempted) {
+    private void authRequest(Uri url, Map<String, String> messagesByInstanceIdAttempted) {
         if (progressDialog.isShowing()) {
             // should always be showing here
             progressDialog.dismiss();
@@ -367,19 +393,15 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
     @Override
     public void updatedCredentials() {
         showDialog(PROGRESS_DIALOG);
-        instanceUploaderTask = new InstanceUploaderTask();
 
-        // register this activity with the new uploader task
-        instanceUploaderTask.setUploaderListener(this);
         // In the case of credentials set via intent extras, the credentials are stored in the
         // global WebCredentialsUtils but the task also needs to know what server to set to
         // TODO: is this really needed here? When would the task not have gotten a server set in
         // init already?
         if (url != null) {
-            instanceUploaderTask.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerUri(), false);
+            instanceUploadViewModel.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerUri(), false);
         }
-        instanceUploaderTask.setRepositories(instancesRepository, formsRepository, settingsProvider);
-        instanceUploaderTask.execute(instancesToSend);
+        instanceUploadViewModel.upload(Arrays.asList(instancesToSend));
     }
 
     @Override

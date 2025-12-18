@@ -48,7 +48,7 @@ public abstract class InstanceUploader {
     /**
      * Returns a list of Instance objects corresponding to the database IDs passed in.
      */
-    public List<Instance> getInstancesFromIds(Long... instanceDatabaseIds) {
+    public List<Instance> getInstancesFromIds(List<Long> instanceDatabaseIds) {
         List<Instance> instances = new ArrayList<>();
 
         for (Long id : instanceDatabaseIds) {
