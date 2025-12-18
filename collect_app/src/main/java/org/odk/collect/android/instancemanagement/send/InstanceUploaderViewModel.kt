@@ -54,7 +54,7 @@ class InstanceUploadViewModel(
         _state.value = UploadState.Starting
 
         uploadJob = viewModelScope.launch(Dispatchers.IO) {
-            val uploader = InstanceServerUploader(
+            val uploader = InstanceUploader(
                 httpInterface,
                 webCredentialsUtils,
                 settingsProvider.getUnprotectedSettings(),
