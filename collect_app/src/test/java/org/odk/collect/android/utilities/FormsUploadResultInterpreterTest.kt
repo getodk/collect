@@ -7,8 +7,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
-import org.odk.collect.android.upload.FormUploadException
+import org.odk.collect.android.instancemanagement.send.FormUploadException
 import org.odk.collect.forms.instances.Instance
 
 @RunWith(AndroidJUnit4::class)

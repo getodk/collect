@@ -31,8 +31,6 @@ import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.projects.ProjectsDataService;
-import org.odk.collect.android.upload.InstanceUploadViewModel;
-import org.odk.collect.android.upload.UploadState;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;

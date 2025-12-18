@@ -4,9 +4,9 @@ import android.app.Application
 import android.app.Notification
 import androidx.core.app.NotificationCompat
 import org.odk.collect.android.R
+import org.odk.collect.android.instancemanagement.send.FormUploadException
 import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.notifications.NotificationUtils
-import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.android.utilities.FormsUploadResultInterpreter
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.strings.localization.getLocalizedString

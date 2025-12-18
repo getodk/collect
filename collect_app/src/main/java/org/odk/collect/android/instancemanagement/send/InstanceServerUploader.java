@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.upload;
+package org.odk.collect.android.instancemanagement.send;
 
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
