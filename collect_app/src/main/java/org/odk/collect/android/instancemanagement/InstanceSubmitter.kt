@@ -4,7 +4,7 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.instancemanagement.send.FormUploadException
-import org.odk.collect.android.instancemanagement.send.InstanceServerUploader
+import org.odk.collect.android.instancemanagement.send.InstanceUploader
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -49,8 +49,8 @@ class InstanceSubmitter(
         return result
     }
 
-    private fun setUpODKUploader(): InstanceServerUploader {
-        return InstanceServerUploader(
+    private fun setUpODKUploader(): InstanceUploader {
+        return InstanceUploader(
             httpInterface,
             WebCredentialsUtils(generalSettings),
             generalSettings,
