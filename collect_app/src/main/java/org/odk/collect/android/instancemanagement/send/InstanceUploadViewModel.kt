@@ -1,4 +1,4 @@
-package org.odk.collect.android.upload
+package org.odk.collect.android.instancemanagement.send
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
