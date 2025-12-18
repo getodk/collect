@@ -6,10 +6,10 @@ import androidx.fragment.app.FragmentResultListener
 class FragmentResultRecorder : FragmentResultListener {
 
     private val results = mutableListOf<Pair<String, Bundle>>()
-    val lastResult: Pair<String, Bundle>?
-        get() {
-            return results.lastOrNull()
-        }
+
+    fun getAll(): List<Pair<String, Bundle>> {
+        return results
+    }
 
     fun clear() {
         results.clear()

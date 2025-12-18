@@ -227,8 +227,8 @@ class GeoPolyFragmentTest {
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
 
         onBackPressedDispatcher.onBackPressed()
-        val result = resultListener.lastResult
-        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        val result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(result.second.isEmpty, equalTo(true))
     }
 
@@ -253,7 +253,7 @@ class GeoPolyFragmentTest {
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
 
         onBackPressedDispatcher.onBackPressed()
-        val result = resultListener.lastResult
+        val result = resultListener.getAll().lastOrNull()
         assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(result.second.isEmpty, equalTo(true))
     }
@@ -282,7 +282,7 @@ class GeoPolyFragmentTest {
         onBackPressedDispatcher.onBackPressed()
         Interactions.clickOn(withText(string.cancel), root = isDialog())
 
-        val result = resultListener.lastResult
+        val result = resultListener.getAll().lastOrNull()
         assertThat(result, equalTo(null))
     }
 
@@ -313,8 +313,8 @@ class GeoPolyFragmentTest {
         onBackPressedDispatcher.onBackPressed()
         Interactions.clickOn(withText(string.discard), root = isDialog())
 
-        val result = resultListener.lastResult
-        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        val result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(result.second.getString(GeoPolyFragment.RESULT_GEOPOLY), equalTo(""))
     }
 
@@ -345,8 +345,8 @@ class GeoPolyFragmentTest {
         onBackPressedDispatcher.onBackPressed()
         Interactions.clickOn(withText(string.discard), root = isDialog())
 
-        val result = resultListener.lastResult
-        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        val result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY),
             equalTo("0.0 0.0 0.0 0.0;1.0 1.0 0.0 0.0")
@@ -384,8 +384,8 @@ class GeoPolyFragmentTest {
         onBackPressedDispatcher.onBackPressed()
         Interactions.clickOn(withText(string.discard), root = isDialog())
 
-        val result = resultListener.lastResult
-        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        val result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY),
             equalTo("0.0 0.0 0.0 0.0;1.0 1.0 0.0 0.0")
@@ -665,16 +665,16 @@ class GeoPolyFragmentTest {
         startInput(R.id.placement_mode)
 
         mapFragment.click(MapPoint(0.0, 0.0))
-        var result = resultListener.lastResult
-        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        var result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
             equalTo("")
         )
 
         mapFragment.click(MapPoint(1.0, 1.0))
-        result = resultListener.lastResult
-        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
             equalTo("0.0 0.0 0.0 0.0;1.0 1.0 0.0 0.0")
@@ -703,24 +703,24 @@ class GeoPolyFragmentTest {
         startInput(R.id.placement_mode)
 
         mapFragment.click(MapPoint(0.0, 0.0))
-        var result = resultListener.lastResult
-        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        var result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
             equalTo("")
         )
 
         mapFragment.click(MapPoint(1.0, 0.0))
-        result = resultListener.lastResult
-        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
             equalTo("")
         )
 
         mapFragment.click(MapPoint(1.0, 1.0))
-        result = resultListener.lastResult
-        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
             equalTo("0.0 0.0 0.0 0.0;1.0 0.0 0.0 0.0;1.0 1.0 0.0 0.0;0.0 0.0 0.0 0.0")
@@ -752,8 +752,8 @@ class GeoPolyFragmentTest {
         mapFragment.ready()
 
         Interactions.clickOn(withContentDescription(string.remove_last_point))
-        val result = resultListener.lastResult
-        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        val result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
             equalTo("0.0 0.0 0.0 0.0;1.0 0.0 0.0 0.0")
