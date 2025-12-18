@@ -319,6 +319,41 @@ class GeoPolyFragmentTest {
     }
 
     @Test
+    fun whenPolygonHasBeenModified_pressingBack_andClickingDiscard_setsOriginalAsResult() {
+        val onBackPressedDispatcher = OnBackPressedDispatcher()
+        val scenario = fragmentLauncherRule.launchInContainer(
+            GeoPolyFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(GeoPolyFragment::class) {
+                    GeoPolyFragment(
+                        { onBackPressedDispatcher },
+                        inputPolygon = listOf(MapPoint(0.0, 0.0), MapPoint(1.0, 1.0))
+                    )
+                }
+                .build()
+        )
+
+        mapFragment.ready()
+
+        val resultListener = FragmentResultRecorder()
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
+
+        startInput()
+        mapFragment.click(MapPoint(2.0, 2.0))
+        resultListener.clear()
+
+        onBackPressedDispatcher.onBackPressed()
+        Interactions.clickOn(withText(string.discard), root = isDialog())
+
+        val result = resultListener.lastResult
+        assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(
+            result.second.getString(GeoPolyFragment.RESULT_GEOPOLY),
+            equalTo("0.0 0.0 0.0 0.0; 1.0 1.0 0.0 0.0")
+        )
+    }
+
+    @Test
     fun startingInput_usingAutomaticMode_usesRetainMockAccuracyTrueToStartLocationTracker() {
         fragmentLauncherRule.launchInContainer(
             GeoPolyFragment::class.java,
@@ -686,9 +721,12 @@ class GeoPolyFragmentTest {
         )
     }
 
-    private fun startInput(mode: Int) {
+    private fun startInput(mode: Int? = null) {
         onView(withId(R.id.play)).perform(click())
-        onView(withId(mode)).inRoot(isDialog()).perform(click())
-        onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click())
+
+        if (mode != null) {
+            onView(withId(mode)).inRoot(isDialog()).perform(click())
+            onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click())
+        }
     }
 }
