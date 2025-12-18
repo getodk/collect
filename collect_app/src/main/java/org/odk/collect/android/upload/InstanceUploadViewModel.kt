@@ -61,8 +61,8 @@ class InstanceUploadViewModel(
                 instancesRepository
             )
 
-            val instancesToUpload = uploader
-                .getInstancesFromIds(instanceIdsToUpload)
+            val instancesToUpload = instanceIdsToUpload
+                .mapNotNull { instancesRepository.get(it) }
                 .sortedBy { it.finalizationDate }
 
             val deviceId = propertyManager

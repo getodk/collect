@@ -20,9 +20,6 @@ import androidx.annotation.Nullable;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class InstanceUploader {
 
     private final InstancesRepository instancesRepository;
@@ -44,19 +41,6 @@ public abstract class InstanceUploader {
 
     @NonNull
     public abstract String getUrlToSubmitTo(Instance currentInstance, String deviceId, String overrideURL, String urlFromSettings);
-
-    /**
-     * Returns a list of Instance objects corresponding to the database IDs passed in.
-     */
-    public List<Instance> getInstancesFromIds(List<Long> instanceDatabaseIds) {
-        List<Instance> instances = new ArrayList<>();
-
-        for (Long id : instanceDatabaseIds) {
-            instances.add(instancesRepository.get(id));
-        }
-
-        return instances;
-    }
 
     public void markSubmissionFailed(Instance instance) {
         instancesRepository
