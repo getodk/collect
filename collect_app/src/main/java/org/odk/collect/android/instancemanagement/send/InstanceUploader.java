@@ -47,7 +47,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import timber.log.Timber;
 
-public class InstanceServerUploader {
+public class InstanceUploader {
     private static final String URL_PATH_SEP = "/";
     public static final String FAIL = "Error: ";
 
@@ -57,10 +57,10 @@ public class InstanceServerUploader {
     private final InstancesRepository instancesRepository;
     private final Map<Uri, Uri> uriRemap = new HashMap<>();
 
-    public InstanceServerUploader(OpenRosaHttpInterface httpInterface,
-                                  WebCredentialsUtils webCredentialsUtils,
-                                  Settings generalSettings,
-                                  InstancesRepository instancesRepository
+    public InstanceUploader(OpenRosaHttpInterface httpInterface,
+                            WebCredentialsUtils webCredentialsUtils,
+                            Settings generalSettings,
+                            InstancesRepository instancesRepository
     ) {
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
