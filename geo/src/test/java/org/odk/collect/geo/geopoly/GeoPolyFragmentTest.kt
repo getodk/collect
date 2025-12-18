@@ -349,7 +349,7 @@ class GeoPolyFragmentTest {
         assertThat(result!!.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY),
-            equalTo("0.0 0.0 0.0 0.0; 1.0 1.0 0.0 0.0")
+            equalTo("0.0 0.0 0.0 0.0;1.0 1.0 0.0 0.0")
         )
     }
 

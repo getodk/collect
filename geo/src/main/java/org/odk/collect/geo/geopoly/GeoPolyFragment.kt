@@ -403,6 +403,17 @@ class GeoPolyFragment @JvmOverloads constructor(
         getParentFragmentManager().setFragmentResult(REQUEST_GEOPOLY, Bundle.EMPTY)
     }
 
+    private fun discard() {
+        val geoString = GeoUtils.formatPointsResultString(
+            (originalPoly ?: emptyList()).toMutableList(),
+            outputMode == OutputMode.GEOSHAPE
+        )
+
+        val bundle = Bundle()
+        bundle.putString(RESULT_GEOPOLY, geoString)
+        getParentFragmentManager().setFragmentResult(REQUEST_GEOPOLY, bundle)
+    }
+
     private fun onClick(point: MapPoint) {
         if (inputActive && !recordingEnabled) {
             appendPointIfNew(point)
@@ -582,7 +593,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     private fun showBackDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(getString(org.odk.collect.strings.R.string.geo_exit_warning))
-            .setPositiveButton(org.odk.collect.strings.R.string.discard) { _, _ -> cancel() }
+            .setPositiveButton(org.odk.collect.strings.R.string.discard) { _, _ -> discard() }
             .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
             .show()
     }
