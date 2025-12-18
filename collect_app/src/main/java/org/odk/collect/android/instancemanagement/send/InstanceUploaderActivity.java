@@ -114,7 +114,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
     @Inject
     SettingsProvider settingsProvider;
 
-    private InstanceUploadViewModel instanceUploadViewModel;
+    private InstanceUploadViewModel instanceUploaderViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +123,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
         instancesRepository = instancesRepositoryProvider.create();
         formsRepository = formsRepositoryProvider.create();
 
-        instanceUploadViewModel = new ViewModelProvider(
+        instanceUploaderViewModel = new ViewModelProvider(
                 this,
                 new ViewModelProvider.Factory() {
                     @NonNull
@@ -148,7 +148,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                 }
         ).get(InstanceUploadViewModel.class);
 
-        instanceUploadViewModel.getState().observe(this, state -> {
+        instanceUploaderViewModel.getState().observe(this, state -> {
             if (state instanceof UploadState.AuthRequired) {
                 authRequest(((UploadState.AuthRequired) state).getServer(), ((UploadState.AuthRequired) state).getResults());
             } else if (state instanceof UploadState.Progress) {
@@ -227,22 +227,22 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
         showDialog(PROGRESS_DIALOG);
 
         if (url != null) {
-            instanceUploadViewModel.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerUri(), true);
+            instanceUploaderViewModel.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerUri(), true);
 
             if (deleteInstanceAfterUpload != null) {
-                instanceUploadViewModel.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
+                instanceUploaderViewModel.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
             }
 
             String host = Uri.parse(url).getHost();
             if (host != null) {
                 // We do not need to clear the cookies since they are cleared before any request is made and the Credentials provider is used
                 if (password != null && username != null) {
-                    instanceUploadViewModel.setCustomCredentials(username, password);
+                    instanceUploaderViewModel.setCustomCredentials(username, password);
                 }
             }
         }
 
-        instanceUploadViewModel.upload(Arrays.asList(instancesToSend));
+        instanceUploaderViewModel.upload(Arrays.asList(instancesToSend));
     }
 
     @Override
@@ -311,7 +311,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                instanceUploadViewModel.cancel();
+                                instanceUploaderViewModel.cancel();
                                 finish();
                             }
                         };
@@ -398,9 +398,9 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
         // TODO: is this really needed here? When would the task not have gotten a server set in
         // init already?
         if (url != null) {
-            instanceUploadViewModel.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerUri(), false);
+            instanceUploaderViewModel.setCompleteDestinationUrl(url + OpenRosaConstants.SUBMISSION, getReferrerUri(), false);
         }
-        instanceUploadViewModel.upload(Arrays.asList(instancesToSend));
+        instanceUploaderViewModel.upload(Arrays.asList(instancesToSend));
     }
 
     @Override
