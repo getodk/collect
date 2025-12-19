@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 @Composable
@@ -35,7 +36,7 @@ fun VideoWidgetAnswer(
     onLongClick: () -> Unit
 ) {
     val context = LocalContext.current
-    val viewModel = viewModelProvider[VideoWidgetAnswerViewModel::class]
+    val viewModel = viewModelProvider[MediaWidgetAnswerViewModel::class]
 
     val bitmapFlow = remember(answer) { viewModel.getFrame(answer, context) }
     val bitmap by bitmapFlow.collectAsStateWithLifecycle()
@@ -48,7 +49,7 @@ fun VideoWidgetAnswer(
             .combinedClickable(
                 onClick = {
                     if (MultiClickGuard.allowClick()) {
-                        viewModel.playVideo(context, answer)
+                        viewModel.openFile(context, answer, "video/*")
                     }
                 },
                 onLongClick = onLongClick,

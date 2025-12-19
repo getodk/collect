@@ -24,9 +24,6 @@ import org.odk.collect.android.widgets.items.SelectOneFromMapWidget
 import org.odk.collect.android.widgets.items.SelectOneImageMapWidget
 import org.odk.collect.android.widgets.items.SelectOneMinimalWidget
 import org.odk.collect.android.widgets.items.SelectOneWidget
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
-import org.odk.collect.settings.InMemSettingsProvider
-import org.odk.collect.settings.keys.ProjectKeys
 
 @RunWith(AndroidJUnit4::class)
 class WidgetFactoryTest {
@@ -45,10 +42,7 @@ class WidgetFactoryTest {
         null,
         null,
         null,
-        null,
-        InMemSettingsProvider().apply {
-            getUnprotectedSettings().save(ProjectKeys.KEY_FONT_SIZE, QuestionFontSizeUtils.DEFAULT_FONT_SIZE.toString())
-        }
+        null
     )
 
     @Test

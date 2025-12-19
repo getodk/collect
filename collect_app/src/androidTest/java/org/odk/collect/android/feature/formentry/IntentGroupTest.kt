@@ -299,8 +299,9 @@ class IntentGroupTest {
     }
 
     private fun assertFileWidgetWithoutAnswer() {
-        onView(withTagValue(Matchers.`is`("ArbitraryFileWidgetAnswer")))
-            .check(matches(CoreMatchers.not(isDisplayed())))
+        composeRule
+            .onNodeWithClickLabel(R.string.open_file)
+            .assertDoesNotExist()
     }
 
     private fun assertImageWidgetWithAnswer() {
@@ -324,14 +325,14 @@ class IntentGroupTest {
 
     private fun assertVideoWidgetWithAnswer() {
         composeRule
-            .onNodeWithClickLabel(ApplicationProvider.getApplicationContext<Application>().getString(R.string.play_video))
+            .onNodeWithClickLabel(R.string.play_video)
             .assertExists()
     }
 
     private fun assertFileWidgetWithAnswer() {
-        onView(withTagValue(Matchers.`is`("ArbitraryFileWidgetAnswer")))
-            .perform(scrollTo())
-            .check(matches(isDisplayed()))
+        composeRule
+            .onNodeWithClickLabel(ApplicationProvider.getApplicationContext<Application>().getString(R.string.open_file))
+            .assertExists()
     }
 
     @Throws(IOException::class)

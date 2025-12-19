@@ -1,10 +1,14 @@
 package org.odk.collect.android.widgets
 
-import android.view.View
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
+import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.StringData
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
@@ -13,24 +17,28 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.android.support.MockFormEntryPromptBuilder
+import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.MediaUtils
+import org.odk.collect.android.widgets.arbitraryfile.ExArbitraryFileWidget
 import org.odk.collect.android.widgets.base.FileWidgetTest
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry
-import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
 import org.odk.collect.android.widgets.utilities.FileRequester
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.getFontSize
 import org.odk.collect.androidshared.system.IntentLauncher
-import org.odk.collect.settings.keys.ProjectKeys.KEY_FONT_SIZE
+import org.odk.collect.androidtest.onNodeWithClickLabel
+import org.odk.collect.strings.R.string
+import java.io.File
 
-class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget?>() {
+class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget>() {
+    @get:Rule
+    val composeRule = createAndroidComposeRule<WidgetTestActivity>()
     private val fileRequester = mock<FileRequester>()
     private val mediaUtils = mock<MediaUtils>().also {
         whenever(it.isAudioFile(any())).thenReturn(true)
     }
-    private val widgetAnswer = ArbitraryFileWidgetAnswerView(QuestionWidgetHelpers.widgetTestActivity(), 5)
+    private val questionMediaManager = FakeQuestionMediaManager()
 
     @Before
     fun setup() {
@@ -39,6 +47,9 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget?>() {
                 return mediaUtils
             }
         })
+        formEntryPrompt = MockFormEntryPromptBuilder()
+            .withControlType(Constants.CONTROL_FILE_CAPTURE)
+            .build()
     }
 
     override fun getInitialAnswer(): StringData {
@@ -51,81 +62,95 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget?>() {
 
     override fun createWidget(): ExArbitraryFileWidget {
         return ExArbitraryFileWidget(
-            activity, QuestionDetails(formEntryPrompt, readOnlyOverride), widgetAnswer,
-            FakeQuestionMediaManager(), FakeWaitingForDataRegistry(), fileRequester, dependencies
-        )
-    }
-
-    @Test
-    fun `Use custom font size when font size changes`() {
-        settingsProvider.getUnprotectedSettings().save(KEY_FONT_SIZE, "30")
-
-        assertThat(
-            widget!!.binding.exArbitraryFileButton.textSize.toInt(), equalTo(
-                getFontSize(
-                    settingsProvider.getUnprotectedSettings(),
-                    QuestionFontSizeUtils.FontSize.BODY_LARGE
-                )
-            )
-        )
-    }
-
-    @Test
-    fun `Hide the answer text when there is no answer`() {
-        assertThat(widget!!.binding.answerViewContainer.visibility, equalTo(View.GONE))
+            composeRule.activity,
+            QuestionDetails(formEntryPrompt, readOnlyOverride),
+            dependencies,
+            questionMediaManager,
+            FakeWaitingForDataRegistry(),
+            fileRequester
+        ).also {
+            composeRule.activity.setContentView(it)
+            activity = composeRule.activity
+        }
     }
 
     @Test
     fun `Display the answer text when there is answer`() {
-        whenever(formEntryPrompt.answerText).thenReturn(initialAnswer.displayText)
-
-        val widget = widget!!
-        assertThat(widget.binding.answerViewContainer.visibility, equalTo(View.VISIBLE))
-        assertThat(widget.answer!!.displayText, equalTo(initialAnswer.displayText))
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswer(StringData(initialAnswer.displayText))
+            .build()
+        createWidget()
+        composeRule.onNodeWithText(initialAnswer.displayText).assertExists()
     }
 
     @Test
     fun `External file picker should be called when clicking on button`() {
-        widget!!.binding.exArbitraryFileButton.performClick()
+        createWidget()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).performClick()
         verify(fileRequester).launch(activity, ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, formEntryPrompt)
     }
 
     @Test
     fun `File viewer should be called when clicking on answer`() {
-        whenever(formEntryPrompt.answerText).thenReturn(initialAnswer.displayText)
+        val file = questionMediaManager.addAnswerFile(File.createTempFile("document", ".pdf"))
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswer(StringData(file.name))
+            .build()
 
-        val widget = widget!!
-        widget.binding.answerViewContainer.performClick()
-        verify(mediaUtils).openFile(activity, widget.answerFile!!, null)
+        createWidget()
+        composeRule.onNodeWithText(file.name).performClick()
+        verify(mediaUtils).openFile(activity, file, null)
     }
 
     @Test
     fun `Hide the answer when clear answer is called`() {
-        whenever(formEntryPrompt.answerText).thenReturn(initialAnswer.displayText)
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswer(StringData(initialAnswer.displayText))
+            .build()
 
-        val widget = widget!!
+        val widget = createWidget()
         widget.clearAnswer()
-        assertThat(widget.binding.answerViewContainer.visibility, equalTo(View.GONE))
+        composeRule.onNodeWithText(initialAnswer.displayText).assertDoesNotExist()
     }
 
     @Test
     fun `All clickable elements should be disabled when read-only override option is used`() {
         readOnlyOverride = true
-        whenever(formEntryPrompt.isReadOnly).thenReturn(false)
-        whenever(formEntryPrompt.answerText).thenReturn(initialAnswer.displayText)
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withReadOnly(false)
+            .withAnswer(StringData(initialAnswer.displayText))
+            .build()
 
-        val widget = widget!!
-        assertThat(widget.binding.exArbitraryFileButton.visibility, equalTo(View.GONE))
-        assertThat(widget.binding.answerViewContainer.visibility, equalTo(View.VISIBLE))
+        createWidget()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertDoesNotExist()
+        composeRule.onNodeWithText(initialAnswer.displayText).assertExists()
     }
 
     @Test
     override fun usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
-        whenever(formEntryPrompt.isReadOnly).thenReturn(true)
-        whenever(formEntryPrompt.answerText).thenReturn(initialAnswer.displayText)
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withReadOnly(true)
+            .withAnswer(StringData(initialAnswer.displayText))
+            .build()
 
-        val widget = widget!!
-        assertThat(widget.binding.exArbitraryFileButton.visibility, equalTo(View.GONE))
-        assertThat(widget.binding.answerViewContainer.visibility, equalTo(View.VISIBLE))
+        createWidget()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertDoesNotExist()
+        composeRule.onNodeWithText(initialAnswer.displayText).assertExists()
+    }
+
+    @Test
+    override fun settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
+        val file = questionMediaManager.addAnswerFile(File.createTempFile("document", ".pdf"))
+        formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
+            .withAnswer(StringData(file.name))
+            .build()
+
+        val widget = createWidget()
+        widget.setData(createBinaryData(nextAnswer))
+
+        assertThat(
+            questionMediaManager.originalFiles[formEntryPrompt.index.toString()],
+            equalTo(file.absolutePath)
+        )
     }
 }
