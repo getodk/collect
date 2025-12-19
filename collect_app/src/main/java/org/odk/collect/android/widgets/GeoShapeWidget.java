@@ -74,7 +74,7 @@ public class GeoShapeWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return getAnswerText().isEmpty() ? null : new StringData(getAnswerText());
+        return getFormEntryPrompt().getAnswerValue();
     }
 
     @Override
