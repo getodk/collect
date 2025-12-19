@@ -12,7 +12,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.FormIndex
-import org.javarosa.core.model.data.StringData
+import org.javarosa.core.model.data.GeoTraceData
+import org.javarosa.core.model.data.UncastData
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -163,7 +164,7 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
-    fun `configures GeoPolyFragment inputPolgyon with existing answer`() {
+    fun `configures GeoPolyFragment inputPolygon with existing answer`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .build()
 
@@ -174,18 +175,16 @@ class GeoPolyDialogFragmentTest {
             assertThat(it.inputPolygon, equalTo(emptyList()))
         }
 
+        val points = listOf(MapPoint(0.0, 0.0, 1.0, 1.0), MapPoint(0.0, 1.0, 1.0, 1.0))
         prompt = MockFormEntryPromptBuilder(prompt)
-            .withAnswer(StringData("0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"))
+            .withAnswer(geoTraceOf(points))
             .build()
 
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
-            assertThat(
-                it.inputPolygon,
-                equalTo(listOf(MapPoint(0.0, 0.0, 1.0, 1.0), MapPoint(0.0, 1.0, 1.0, 1.0)))
-            )
+            assertThat(it.inputPolygon, equalTo(points))
         }
     }
 
@@ -205,7 +204,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).answerQuestion(prompt.index, StringData(answer), false)
+        verify(formEntryViewModel).answerQuestion(prompt.index, geoTraceOf(answer), false)
     }
 
     @Test
@@ -246,7 +245,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).answerQuestion(prompt.index, StringData(answer), true)
+        verify(formEntryViewModel).answerQuestion(prompt.index, geoTraceOf(answer), true)
     }
 
     @Test
@@ -265,7 +264,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel, never()).answerQuestion(prompt.index, StringData(answer))
+        verify(formEntryViewModel, never()).answerQuestion(prompt.index, geoTraceOf(answer))
 
         prompt = MockFormEntryPromptBuilder(prompt)
             .withAdditionalAttribute(INCREMENTAL, "false")
@@ -281,7 +280,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel, never()).answerQuestion(prompt.index, StringData(answer))
+        verify(formEntryViewModel, never()).answerQuestion(prompt.index, geoTraceOf(answer))
     }
 
     @Test
@@ -386,12 +385,34 @@ class GeoPolyDialogFragmentTest {
             assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
         }
 
-        index.value = Pair(prompt.index, FailedValidationResult(prompt.index, 0, null, R.string.cancel))
+        index.value =
+            Pair(prompt.index, FailedValidationResult(prompt.index, 0, null, R.string.cancel))
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
             assertThat(it.invalidMessage.getOrAwaitValue(), equalTo("Cancel"))
         }
+    }
+
+    private fun geoTraceOf(points: List<MapPoint>): GeoTraceData {
+        return GeoTraceData(
+            GeoTraceData.GeoTrace(
+                ArrayList(
+                    points.map {
+                        doubleArrayOf(
+                            it.latitude,
+                            it.longitude,
+                            it.altitude,
+                            it.accuracy
+                        )
+                    }
+                )
+            )
+        )
+    }
+
+    private fun geoTraceOf(answer: String): GeoTraceData {
+        return GeoTraceData().cast(UncastData(answer))
     }
 }
