@@ -75,7 +75,10 @@ object SnackbarUtils {
     }
 
     fun show(snackbar: Snackbar) {
-        lastSnackbar?.dismiss()
+        if (snackbar != lastSnackbar) {
+            lastSnackbar?.dismiss()
+        }
+
         snackbar.show()
 
         lastSnackbar = snackbar

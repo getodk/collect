@@ -5,9 +5,17 @@ import androidx.fragment.app.FragmentResultListener
 
 class FragmentResultRecorder : FragmentResultListener {
 
-    var result: Pair<String, Bundle>? = null
+    private val results = mutableListOf<Pair<String, Bundle>>()
+
+    fun getAll(): List<Pair<String, Bundle>> {
+        return results
+    }
+
+    fun clear() {
+        results.clear()
+    }
 
     override fun onFragmentResult(requestKey: String, result: Bundle) {
-        this.result = Pair(requestKey, result)
+        results.add(Pair(requestKey, result))
     }
 }

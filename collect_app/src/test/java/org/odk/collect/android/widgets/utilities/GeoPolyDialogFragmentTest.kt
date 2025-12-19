@@ -26,6 +26,7 @@ import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
+import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
@@ -231,7 +232,7 @@ class GeoPolyDialogFragmentTest {
     @Test
     fun `sets answer with validate when REQUEST_GEOPOLY_CHANGE is returned if question is incremental`() {
         prompt = MockFormEntryPromptBuilder(prompt)
-            .withBindAttribute("", "incremental", "true")
+            .withAdditionalAttribute(INCREMENTAL, "true")
             .build()
 
         val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"
@@ -267,7 +268,7 @@ class GeoPolyDialogFragmentTest {
         verify(formEntryViewModel, never()).answerQuestion(prompt.index, StringData(answer))
 
         prompt = MockFormEntryPromptBuilder(prompt)
-            .withBindAttribute("", "incremental", "false")
+            .withAdditionalAttribute(INCREMENTAL, "false")
             .build()
 
         launcherRule.launch(
@@ -286,7 +287,7 @@ class GeoPolyDialogFragmentTest {
     @Test
     fun `does not dismiss when REQUEST_GEOPOLY_CHANGE is returned regardless of incremental value`() {
         prompt = MockFormEntryPromptBuilder(prompt)
-            .withBindAttribute("", "incremental", "true")
+            .withAdditionalAttribute(INCREMENTAL, "true")
             .build()
 
         val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"
@@ -305,7 +306,7 @@ class GeoPolyDialogFragmentTest {
         }
 
         prompt = MockFormEntryPromptBuilder(prompt)
-            .withBindAttribute("", "incremental", "false")
+            .withAdditionalAttribute(INCREMENTAL, "false")
             .build()
 
         launcherRule.launch(

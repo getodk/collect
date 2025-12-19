@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
@@ -41,6 +43,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GeoPolyFragment @JvmOverloads constructor(
+    val onBackPressedDispatcher: () -> OnBackPressedDispatcher,
     val outputMode: OutputMode = OutputMode.GEOTRACE,
     val readOnly: Boolean = false,
     val retainMockAccuracy: Boolean = false,
@@ -123,7 +126,6 @@ class GeoPolyFragment @JvmOverloads constructor(
             .build()
 
         requireLocationPermissions(requireActivity())
-        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -157,6 +159,8 @@ class GeoPolyFragment @JvmOverloads constructor(
                 snackbar.dismiss()
             }
         }
+
+        onBackPressedDispatcher().addCallback(viewLifecycleOwner, onBackPressedCallback)
     }
 
     override fun onSaveInstanceState(state: Bundle) {
@@ -215,7 +219,7 @@ class GeoPolyFragment @JvmOverloads constructor(
                     saveAsPolygon()
                 }
             } else {
-                setResult(RESULT_GEOPOLY)
+                setResult()
             }
         }
 
@@ -293,7 +297,7 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private fun saveAsPolyline() {
         if (map!!.getPolyLinePoints(featureId).size > 1) {
-            setResult(RESULT_GEOPOLY)
+            setResult()
         } else {
             showShortToastInMiddle(
                 requireActivity(),
@@ -310,7 +314,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             if (count > 1 && points[0] != points[count - 1]) {
                 map!!.appendPointToPolyLine(featureId, points[0])
             }
-            setResult(RESULT_GEOPOLY)
+            setResult()
         } else {
             showShortToastInMiddle(
                 requireActivity(),
@@ -319,15 +323,35 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
     }
 
-    private fun setResult(result: String) {
+    private fun setChangeResult() {
         val points = map!!.getPolyLinePoints(featureId)
-        val geoString = GeoUtils.formatPointsResultString(
+        val geoString = if (outputMode == OutputMode.GEOSHAPE && points.size < 3) {
+            ""
+        } else if (points.size < 2) {
+            ""
+        } else {
+            getGeoString(points)
+        }
+
+        getParentFragmentManager().setFragmentResult(
+            REQUEST_GEOPOLY,
+            bundleOf(RESULT_GEOPOLY_CHANGE to geoString)
+        )
+    }
+
+    private fun setResult() {
+        val points = map!!.getPolyLinePoints(featureId)
+        getParentFragmentManager().setFragmentResult(
+            REQUEST_GEOPOLY,
+            bundleOf(RESULT_GEOPOLY to getGeoString(points))
+        )
+    }
+
+    private fun getGeoString(points: List<MapPoint>): String? {
+        return GeoUtils.formatPointsResultString(
             points.toMutableList(),
             outputMode == OutputMode.GEOSHAPE
         )
-        val bundle = Bundle()
-        bundle.putString(result, geoString)
-        getParentFragmentManager().setFragmentResult(REQUEST_GEOPOLY, bundle)
     }
 
     override fun startInput() {
@@ -393,6 +417,17 @@ class GeoPolyFragment @JvmOverloads constructor(
         getParentFragmentManager().setFragmentResult(REQUEST_GEOPOLY, Bundle.EMPTY)
     }
 
+    private fun discard() {
+        val geoString = GeoUtils.formatPointsResultString(
+            (originalPoly ?: emptyList()).toMutableList(),
+            outputMode == OutputMode.GEOSHAPE
+        )
+
+        val bundle = Bundle()
+        bundle.putString(RESULT_GEOPOLY, geoString)
+        getParentFragmentManager().setFragmentResult(REQUEST_GEOPOLY, bundle)
+    }
+
     private fun onClick(point: MapPoint) {
         if (inputActive && !recordingEnabled) {
             appendPointIfNew(point)
@@ -427,7 +462,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             updateUi()
         }
 
-        setResult(RESULT_GEOPOLY_CHANGE)
+        setChangeResult()
     }
 
     private fun isLocationAcceptable(point: MapPoint): Boolean {
@@ -448,7 +483,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         if (featureId != -1) {
             map!!.removePolyLineLastPoint(featureId)
             updateUi()
-            setResult(RESULT_GEOPOLY_CHANGE)
+            setChangeResult()
         }
     }
 
@@ -572,7 +607,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     private fun showBackDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(getString(org.odk.collect.strings.R.string.geo_exit_warning))
-            .setPositiveButton(org.odk.collect.strings.R.string.discard) { _, _ -> cancel() }
+            .setPositiveButton(org.odk.collect.strings.R.string.discard) { _, _ -> discard() }
             .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
             .show()
     }
