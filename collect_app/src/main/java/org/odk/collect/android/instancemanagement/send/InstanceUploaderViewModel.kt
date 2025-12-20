@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
@@ -25,7 +25,8 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 
 class InstanceUploadViewModel(
-    private val instanceUploader: ServerInstanceUploader,
+    private val dispatcher: CoroutineDispatcher,
+    private val instanceUploader: InstanceUploader,
     private val instanceDeleter: InstanceDeleter,
     private val webCredentialsUtils: WebCredentialsUtils,
     private val propertyManager: PropertyManager,
@@ -53,7 +54,7 @@ class InstanceUploadViewModel(
         }
         _state.value = UploadState.Starting
 
-        uploadJob = viewModelScope.launch(Dispatchers.IO) {
+        uploadJob = viewModelScope.launch(dispatcher) {
             val instancesToUpload = getInstancesToUpload(instanceIdsToUpload)
             val deviceId = propertyManager.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID)
             val results = mutableMapOf<String, String>()
