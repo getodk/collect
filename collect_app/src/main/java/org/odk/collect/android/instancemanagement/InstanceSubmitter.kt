@@ -40,7 +40,7 @@ class InstanceSubmitter(
                 result[instance] = null
 
                 deleteInstance(instance)
-                logUploadedForm(instance)
+                logUploadedForm(formsRepository, instance)
             } catch (e: FormUploadException) {
                 Timber.d(e)
                 result[instance] = e
@@ -72,8 +72,8 @@ class InstanceSubmitter(
         }
     }
 
-    private fun logUploadedForm(instance: Instance) {
-        val value = Collect.getFormIdentifierHash(instance.formId, instance.formVersion)
+    private fun logUploadedForm(formsRepository: FormsRepository, instance: Instance) {
+        val value = Collect.getFormIdentifierHash(formsRepository, instance.formId, instance.formVersion)
 
         Analytics.log(AnalyticsEvents.SUBMISSION, "HTTP auto", value)
     }
