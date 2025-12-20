@@ -25,7 +25,7 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 
 class InstanceUploadViewModel(
-    private val instanceUploader: InstanceUploader,
+    private val instanceUploader: ServerInstanceUploader,
     private val instanceDeleter: InstanceDeleter,
     private val webCredentialsUtils: WebCredentialsUtils,
     private val propertyManager: PropertyManager,
@@ -158,8 +158,7 @@ class InstanceUploadViewModel(
         val destinationUrl = instanceUploader.getUrlToSubmitTo(
             instance,
             deviceId,
-            completeDestinationUrl,
-            null
+            completeDestinationUrl
         )
 
         val message = instanceUploader.uploadOneSubmission(instance, destinationUrl)

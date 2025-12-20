@@ -132,7 +132,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                         if (modelClass.isAssignableFrom(InstanceUploadViewModel.class)) {
                             return (T) new InstanceUploadViewModel(
-                                    new InstanceUploader(httpInterface, webCredentialsUtils, settingsProvider.getUnprotectedSettings(), instancesRepository),
+                                    new ServerInstanceUploader(httpInterface, webCredentialsUtils, settingsProvider.getUnprotectedSettings(), instancesRepository),
                                     new InstanceDeleter(instancesRepository, formsRepository),
                                     webCredentialsUtils,
                                     propertyManager,
