@@ -47,7 +47,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import timber.log.Timber;
 
-public class InstanceUploader {
+public class ServerInstanceUploader implements InstanceUploader {
     private static final String URL_PATH_SEP = "/";
     public static final String FAIL = "Error: ";
 
@@ -57,10 +57,10 @@ public class InstanceUploader {
     private final InstancesRepository instancesRepository;
     private final Map<Uri, Uri> uriRemap = new HashMap<>();
 
-    public InstanceUploader(OpenRosaHttpInterface httpInterface,
-                            WebCredentialsUtils webCredentialsUtils,
-                            Settings generalSettings,
-                            InstancesRepository instancesRepository
+    public ServerInstanceUploader(OpenRosaHttpInterface httpInterface,
+                                  WebCredentialsUtils webCredentialsUtils,
+                                  Settings generalSettings,
+                                  InstancesRepository instancesRepository
     ) {
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
@@ -74,6 +74,7 @@ public class InstanceUploader {
      * <p>
      * Returns a custom success message if one is provided by the server.
      */
+    @Override
     public String uploadOneSubmission(Instance instance, String urlString) throws FormUploadException {
         markSubmissionFailed(instance);
 
@@ -266,7 +267,8 @@ public class InstanceUploader {
      * URL configured at the app level.
      */
     @NonNull
-    public String getUrlToSubmitTo(Instance currentInstance, String deviceId, String overrideURL, String urlFromSettings) {
+    @Override
+    public String getUrlToSubmitTo(Instance currentInstance, String deviceId, String overrideURL) {
         String urlString;
 
         if (overrideURL != null) {

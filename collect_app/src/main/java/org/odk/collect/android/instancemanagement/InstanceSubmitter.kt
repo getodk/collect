@@ -4,7 +4,7 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.instancemanagement.send.FormUploadException
-import org.odk.collect.android.instancemanagement.send.InstanceUploader
+import org.odk.collect.android.instancemanagement.send.ServerInstanceUploader
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstanceAutoDeleteChecker
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -35,7 +35,7 @@ class InstanceSubmitter(
 
         for (instance in toUpload.sortedBy { it.finalizationDate }) {
             try {
-                val destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, null, null)
+                val destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, null)
                 uploader.uploadOneSubmission(instance, destinationUrl)
                 result[instance] = null
 
@@ -49,8 +49,8 @@ class InstanceSubmitter(
         return result
     }
 
-    private fun setUpODKUploader(): InstanceUploader {
-        return InstanceUploader(
+    private fun setUpODKUploader(): ServerInstanceUploader {
+        return ServerInstanceUploader(
             httpInterface,
             WebCredentialsUtils(generalSettings),
             generalSettings,
