@@ -57,6 +57,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import kotlinx.coroutines.Dispatchers;
 import timber.log.Timber;
 
 /**
@@ -133,6 +134,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements AuthD
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                         if (modelClass.isAssignableFrom(InstanceUploadViewModel.class)) {
                             return (T) new InstanceUploadViewModel(
+                                    Dispatchers.getIO(),
                                     new ServerInstanceUploader(httpInterface, webCredentialsUtils, settingsProvider.getUnprotectedSettings(), instancesRepository),
                                     new InstanceDeleter(instancesRepository, formsRepository),
                                     webCredentialsUtils,
