@@ -79,6 +79,7 @@ class InstanceUploadViewModel(
                             SUBMISSION,
                             "HTTP",
                             Collect.getFormIdentifierHash(
+                                formsRepository,
                                 instance.formId,
                                 instance.formVersion
                             )
