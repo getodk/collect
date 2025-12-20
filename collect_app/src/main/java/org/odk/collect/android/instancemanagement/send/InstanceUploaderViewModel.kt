@@ -21,12 +21,12 @@ import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.metadata.PropertyManager
-import org.odk.collect.openrosa.http.OpenRosaHttpInterface
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 
 class InstanceUploadViewModel(
-    private val httpInterface: OpenRosaHttpInterface,
+    private val instanceUploader: InstanceUploader,
+    private val instanceDeleter: InstanceDeleter,
     private val webCredentialsUtils: WebCredentialsUtils,
     private val propertyManager: PropertyManager,
     private val instancesRepository: InstancesRepository,
@@ -54,7 +54,6 @@ class InstanceUploadViewModel(
         _state.value = UploadState.Starting
 
         uploadJob = viewModelScope.launch(Dispatchers.IO) {
-            val uploader = createUploader()
             val instancesToUpload = getInstancesToUpload(instanceIdsToUpload)
             val deviceId = propertyManager.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID)
             val results = mutableMapOf<String, String>()
@@ -73,7 +72,7 @@ class InstanceUploadViewModel(
                     }
 
                     try {
-                        results[instance.dbId.toString()] = uploadInstance(uploader, instance, deviceId)
+                        results[instance.dbId.toString()] = uploadInstance(instance, deviceId)
 
                         Analytics.log(
                             SUBMISSION,
@@ -150,27 +149,20 @@ class InstanceUploadViewModel(
         }
     }
 
-    private fun createUploader() = InstanceUploader(
-        httpInterface,
-        webCredentialsUtils,
-        settingsProvider.getUnprotectedSettings(),
-        instancesRepository
-    )
-
     private fun getInstancesToUpload(instanceIds: List<Long>) =
         instanceIds
             .mapNotNull { instancesRepository.get(it) }
             .sortedBy { it.finalizationDate }
 
-    private fun uploadInstance(uploader: InstanceUploader, instance: Instance, deviceId: String): String {
-        val destinationUrl = uploader.getUrlToSubmitTo(
+    private fun uploadInstance(instance: Instance, deviceId: String): String {
+        val destinationUrl = instanceUploader.getUrlToSubmitTo(
             instance,
             deviceId,
             completeDestinationUrl,
             null
         )
 
-        val message = uploader.uploadOneSubmission(instance, destinationUrl)
+        val message = instanceUploader.uploadOneSubmission(instance, destinationUrl)
             ?: defaultSuccessMessage
 
         return message
@@ -199,7 +191,6 @@ class InstanceUploadViewModel(
             .map { it.dbId }
             .toTypedArray()
 
-        val instanceDeleter = InstanceDeleter(instancesRepository, formsRepository)
         instanceDeleter.delete(idsToDelete)
     }
 }
