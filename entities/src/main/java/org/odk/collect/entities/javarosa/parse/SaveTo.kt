@@ -17,14 +17,12 @@ class SaveTo() : Externalizable {
 
     constructor(
         reference: TreeReference,
-        value: String
+        value: String,
+        entityGroupReference: TreeReference
     ) : this() {
         this.reference = reference
         this.value = value
-    }
-
-    fun updateEntityReference(entityReference: TreeReference) {
-        this.entityGroupReference = entityReference
+        this.entityGroupReference = entityGroupReference
     }
 
     override fun readExternal(input: DataInputStream, pf: PrototypeFactory) {

@@ -18,7 +18,7 @@ import org.odk.collect.entities.javarosa.spec.EntityFormParser
 import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException
 
 class EntityFormParseProcessor() : BindAttributeProcessor, FormDefProcessor, ModelAttributeProcessor {
-    private val saveTos = mutableListOf<SaveTo>()
+    private val bindAttributes = mutableListOf<Pair<TreeReference, String>>()
     private var version: String? = null
 
     override fun getModelAttributes(): Set<Pair<String, String>> {
@@ -40,7 +40,7 @@ class EntityFormParseProcessor() : BindAttributeProcessor, FormDefProcessor, Mod
 
     override fun processBindAttribute(name: String, value: String, binding: DataBinding) {
         val reference = (binding.reference as XPathReference).reference as TreeReference
-        saveTos.add(SaveTo(reference, value))
+        bindAttributes.add(Pair(reference, value))
     }
 
     @Throws(XFormParser.ParseException::class)
@@ -50,10 +50,11 @@ class EntityFormParseProcessor() : BindAttributeProcessor, FormDefProcessor, Mod
                 if (it == null) {
                     throw MissingModelAttributeException(ENTITIES_NAMESPACE, "entities-version")
                 } else if (LOCAL_ENTITY_VERSIONS.any { prefix -> it.startsWith(prefix) }) {
-                    for (saveTo in saveTos) {
-                        val parentElement = formDef.mainInstance.resolveReference(saveTo.reference).parent as TreeElement
+                    val saveTos = mutableListOf<SaveTo>()
+                    for (bindAttribute in bindAttributes) {
+                        val parentElement = formDef.mainInstance.resolveReference(bindAttribute.first).parent as TreeElement
                         findNearestEntityGroupElement(parentElement)?.let { entityGroup ->
-                            saveTo.updateEntityReference(entityGroup.ref.genericize())
+                            saveTos.add(SaveTo(bindAttribute.first, bindAttribute.second, entityGroup.ref.genericize()))
                         }
                     }
                     val entityFormExtra = EntityFormExtra(saveTos)
