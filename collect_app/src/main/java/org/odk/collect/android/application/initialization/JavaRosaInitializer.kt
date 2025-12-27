@@ -9,21 +9,17 @@ import org.javarosa.xform.parse.XFormParserFactory
 import org.javarosa.xform.util.XFormUtils
 import org.odk.collect.android.dynamicpreload.DynamicPreloadXFormParserFactory
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
-import org.odk.collect.android.preferences.SettingsExt.getExperimentalOptIn
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.entities.javarosa.intance.LocalEntitiesExternalInstanceParserFactory
 import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.projects.ProjectDependencyFactory
-import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.settings.keys.ProjectKeys
 
 class JavaRosaInitializer(
     private val propertyManager: PropertyManager,
     private val projectsDataService: ProjectsDataService,
-    private val entitiesRepositoryProvider: ProjectDependencyFactory<EntitiesRepository>,
-    private val settingsProvider: SettingsProvider
+    private val entitiesRepositoryProvider: ProjectDependencyFactory<EntitiesRepository>
 ) {
 
     fun initialize() {
@@ -45,9 +41,7 @@ class JavaRosaInitializer(
 
         // Configure default parser factory
         val entityXFormParserFactory =
-            EntityXFormParserFactory(
-                XFormParserFactory()
-            ) { settingsProvider.getUnprotectedSettings().getExperimentalOptIn(ProjectKeys.KEY_ENTITIES_SPEC_V2025_1) }
+            EntityXFormParserFactory(XFormParserFactory())
         val dynamicPreloadXFormParserFactory =
             DynamicPreloadXFormParserFactory(entityXFormParserFactory)
 

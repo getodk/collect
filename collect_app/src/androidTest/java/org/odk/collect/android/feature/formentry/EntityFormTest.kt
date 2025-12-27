@@ -26,24 +26,6 @@ class EntityFormTest {
         .around(rule)
 
     @Test
-    fun fillingEntityRegistrationForm_createsEntityForFollowUpForms() {
-        testDependencies.server.addForm("one-question-entity-registration.xml")
-        testDependencies.server.addForm(
-            "one-question-entity-update.xml",
-            listOf(EntityListItem("people.csv"))
-        )
-
-        rule.withProject(testDependencies.server.url, matchExactly = true)
-            .startBlankForm("One Question Entity Registration")
-            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
-
-            .startBlankForm("One Question Entity Update")
-            .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertText("Logan Roy")
-    }
-
-    @Test
     fun fillingEntityRegistrationForm_createsEntityForFollowUpFormsWithCachedFormDefs() {
         testDependencies.server.addForm("one-question-entity-registration.xml")
         testDependencies.server.addForm(
@@ -60,29 +42,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertText("Logan Roy")
-    }
-
-    @Test
-    fun fillingEntityUpdateForm_updatesEntityForFollowUpForms() {
-        testDependencies.server.addForm(
-            "one-question-entity-update.xml",
-            listOf(EntityListItem("people.csv"))
-        )
-
-        rule.withProject(testDependencies.server.url, matchExactly = true)
-            .startBlankForm("One Question Entity Update")
-            .assertQuestion("Select person")
-            .clickOnText("Roman Roy")
-            .swipeToNextQuestion("Name")
-            .answerQuestion("Name", "Romulus Roy")
-            .swipeToEndScreen()
-            .clickFinalize()
-
-            .startBlankForm("One Question Entity Update")
-            .assertText("Romulus Roy")
-            .assertTextDoesNotExist("Roman Roy")
+            .assertTexts("Roman Roy", "Logan Roy")
     }
 
     @Test
@@ -319,8 +279,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertText("Roman Roy")
-            .assertText("Logan Roy")
+            .assertTexts("Roman Roy", "Logan Roy")
             .assertTextDoesNotExist("Kendall Roy")
     }
 
