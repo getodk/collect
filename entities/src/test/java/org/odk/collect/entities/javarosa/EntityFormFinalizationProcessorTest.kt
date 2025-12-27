@@ -29,7 +29,7 @@ import java.sql.Date
 
 class EntityFormFinalizationProcessorTest {
 
-    private val entityXFormParserFactory = EntityXFormParserFactory(XFormParserFactory()) { false }
+    private val entityXFormParserFactory = EntityXFormParserFactory(XFormParserFactory())
 
     @Before
     fun setup() {

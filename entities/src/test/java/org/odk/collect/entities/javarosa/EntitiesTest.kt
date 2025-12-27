@@ -21,7 +21,7 @@ import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory
 import org.odk.collect.entities.javarosa.spec.EntityAction
 
 class EntitiesTest {
-    private val entityXFormParserFactory = EntityXFormParserFactory(XFormParserFactory()) { false }
+    private val entityXFormParserFactory = EntityXFormParserFactory(XFormParserFactory())
 
     @Before
     fun setup() {

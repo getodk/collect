@@ -55,7 +55,7 @@ class ApplicationInitializer(
             formsRepositoryProvider
         ).initialize()
         mapsInitializer.initialize()
-        JavaRosaInitializer(propertyManager, projectsDataService, entitiesRepositoryProvider, settingsProvider).initialize()
+        JavaRosaInitializer(propertyManager, projectsDataService, entitiesRepositoryProvider).initialize()
     }
 
     private fun initializeFrameworks() {

@@ -52,7 +52,6 @@ object Defaults {
             // experimental_preferences.xml
             hashMap[ProjectKeys.KEY_DEBUG_FILTERS] = BuildConfig.BUILD_TYPE == "selfSignedRelease"
             hashMap[ProjectKeys.KEY_ZXING_SCANNING] = false
-            hashMap[ProjectKeys.KEY_ENTITIES_SPEC_V2025_1] = false
             return hashMap
         }
 

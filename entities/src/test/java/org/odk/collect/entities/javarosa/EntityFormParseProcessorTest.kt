@@ -38,7 +38,7 @@ class EntityFormParseProcessorTest {
             )
         )
 
-        val processor = EntityFormParseProcessor { false }
+        val processor = EntityFormParseProcessor
         val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
         parser.addProcessor(processor)
         parser.parse(null)
@@ -67,7 +67,7 @@ class EntityFormParseProcessorTest {
             )
         )
 
-        val processor = EntityFormParseProcessor { false }
+        val processor = EntityFormParseProcessor
         val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
         parser.addProcessor(processor)
 
@@ -106,7 +106,7 @@ class EntityFormParseProcessorTest {
             )
         )
 
-        val processor = EntityFormParseProcessor { false }
+        val processor = EntityFormParseProcessor
         val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
         parser.addProcessor(processor)
         parser.parse(null)
@@ -137,7 +137,7 @@ class EntityFormParseProcessorTest {
             )
         )
 
-        val processor = EntityFormParseProcessor { false }
+        val processor = EntityFormParseProcessor
         val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
         parser.addProcessor(processor)
 
@@ -170,7 +170,7 @@ class EntityFormParseProcessorTest {
             )
         )
 
-        val processor = EntityFormParseProcessor { false }
+        val processor = EntityFormParseProcessor
         val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
         parser.addProcessor(processor)
 
@@ -205,75 +205,11 @@ class EntityFormParseProcessorTest {
             )
         )
 
-        val processor = EntityFormParseProcessor { false }
+        val processor = EntityFormParseProcessor
         val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
         parser.addProcessor(processor)
 
         val formDef: FormDef = parser.parse(null)
         assertThat(formDef.extras.get(EntityFormExtra::class.java).saveTos.isEmpty(), equalTo(true))
-    }
-
-    @Test
-    fun `when version is 2025_1 and feature is enabled parses correctly`() {
-        val updateVersion = "2025.1.0"
-        val form = XFormsElement.html(
-            listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-            XFormsElement.head(
-                XFormsElement.title("Create entity form"),
-                XFormsElement.model(
-                    listOf(Pair("entities:entities-version", updateVersion)),
-                    XFormsElement.mainInstance(
-                        XFormsElement.t("data id=\"update-entity-form\"",
-                            XFormsElement.t("name"),
-                            XFormsElement.t("meta",
-                                XFormsElement.t("entity dataset=\"people\" update=\"1\" id=\"17\"")
-                            )
-                        )
-                    ),
-                    bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
-                )
-            ),
-            XFormsElement.body(
-                XFormsElement.input("/data/name")
-            )
-        )
-
-        val processor = EntityFormParseProcessor { true }
-        val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
-        parser.addProcessor(processor)
-
-        val formDef: FormDef = parser.parse(null)
-        assertThat(formDef.extras.get(EntityFormExtra::class.java).saveTos.isEmpty(), equalTo(false))
-    }
-
-    @Test(expected = UnrecognizedEntityVersionException::class)
-    fun `when version is 2025_1 and feature is disabled throws exception`() {
-        val updateVersion = "2025.1.0"
-        val form = XFormsElement.html(
-            listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-            XFormsElement.head(
-                XFormsElement.title("Create entity form"),
-                XFormsElement.model(
-                    listOf(Pair("entities:entities-version", updateVersion)),
-                    XFormsElement.mainInstance(
-                        XFormsElement.t("data id=\"update-entity-form\"",
-                            XFormsElement.t("name"),
-                            XFormsElement.t("meta",
-                                XFormsElement.t("entity dataset=\"people\" update=\"1\" id=\"17\"")
-                            )
-                        )
-                    ),
-                    bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
-                )
-            ),
-            XFormsElement.body(
-                XFormsElement.input("/data/name")
-            )
-        )
-
-        val processor = EntityFormParseProcessor { false }
-        val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
-        parser.addProcessor(processor)
-        parser.parse(null)
     }
 }

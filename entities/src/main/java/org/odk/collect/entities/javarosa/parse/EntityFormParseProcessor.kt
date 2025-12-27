@@ -17,9 +17,7 @@ import org.odk.collect.entities.javarosa.parse.EntityFormParseProcessor.Companio
 import org.odk.collect.entities.javarosa.spec.EntityFormParser
 import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException
 
-class EntityFormParseProcessor(
-    private val v2025enabled: () -> Boolean
-) : BindAttributeProcessor, FormDefProcessor, ModelAttributeProcessor {
+class EntityFormParseProcessor() : BindAttributeProcessor, FormDefProcessor, ModelAttributeProcessor {
     private val saveTos = mutableListOf<SaveTo>()
     private var version: String? = null
 
@@ -30,10 +28,6 @@ class EntityFormParseProcessor(
     @Throws(XFormParser.ParseException::class)
     override fun processModelAttribute(name: String, value: String) {
         version = value
-
-        if (value.startsWith(V2025_1) && v2025enabled()) {
-            return
-        }
 
         if (SUPPORTED_VERSIONS.none { value.startsWith(it) }) {
             throw UnrecognizedEntityVersionException(value)

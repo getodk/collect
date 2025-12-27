@@ -1225,9 +1225,6 @@
     <!-- An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project. -->
     <string name="entities_title">Entity lists</string>
 
-    <!-- Title for setting that controls whether entities spec v2025.1 are enabled or not -->
-    <string name="entities_spec_v2025_1">Enable entities spec v2025.1</string>
-
     <!-- Text for button that leads to browser for the user to view and manage entity lists -->
     <string name="entity_browser_button">View entity lists</string>
 
