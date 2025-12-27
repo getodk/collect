@@ -63,15 +63,14 @@ class EntityFormParseProcessor() : BindAttributeProcessor, FormDefProcessor, Mod
         }
     }
 
-    private fun findNearestEntityGroupElement(element: TreeElement): TreeElement? {
-        var currentElement = element
-        while (currentElement != null) {
-            if (EntityFormParser.hasEntityElement(currentElement)) {
-                return currentElement
-            }
-            currentElement = currentElement.parent as TreeElement
+    private fun findNearestEntityGroupElement(element: TreeElement?): TreeElement? {
+        if (element == null) {
+            return null
         }
-        return null
+        if (EntityFormParser.hasEntityElement(element)) {
+            return element
+        }
+        return findNearestEntityGroupElement(element.parent as? TreeElement)
     }
 
     companion object {
