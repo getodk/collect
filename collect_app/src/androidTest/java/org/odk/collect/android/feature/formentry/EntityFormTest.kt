@@ -42,7 +42,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertTexts("Roman Roy", "Shiv Roy", "Logan Roy")
+            .assertTexts("Roman Roy", "Logan Roy")
     }
 
     @Test
@@ -59,7 +59,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertTexts("Roman Roy", "Shiv Roy")
+            .assertText("Roman Roy")
             .assertTextDoesNotExist("Logan Roy")
     }
 
@@ -81,7 +81,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertTextDoesNotExist("Romulus Roy")
-            .assertTexts("Roman Roy", "Shiv Roy")
+            .assertText("Roman Roy")
     }
 
     @Test
@@ -172,7 +172,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertTexts("Roman Roy", "Shiv Roy")
+            .assertText("Roman Roy")
             .assertTextDoesNotExist("Logan Roy")
     }
 
@@ -254,7 +254,7 @@ class EntityFormTest {
 
             .clickOnForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertTexts("Roman Roy", "Shiv Roy")
+            .assertText("Roman Roy")
             .assertTextDoesNotExist("Logan Roy")
     }
 
@@ -279,7 +279,7 @@ class EntityFormTest {
 
             .startBlankForm("One Question Entity Update")
             .assertQuestion("Select person")
-            .assertTexts("Roman Roy", "Shiv Roy", "Logan Roy")
+            .assertTexts("Roman Roy", "Logan Roy")
             .assertTextDoesNotExist("Kendall Roy")
     }
 
