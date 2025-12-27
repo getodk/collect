@@ -38,7 +38,7 @@ class EntityFormParseProcessorTest {
             )
         )
 
-        val processor = EntityFormParseProcessor
+        val processor = EntityFormParseProcessor()
         val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
         parser.addProcessor(processor)
         parser.parse(null)
@@ -67,7 +67,7 @@ class EntityFormParseProcessorTest {
             )
         )
 
-        val processor = EntityFormParseProcessor
+        val processor = EntityFormParseProcessor()
         val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
         parser.addProcessor(processor)
 
@@ -106,7 +106,7 @@ class EntityFormParseProcessorTest {
             )
         )
 
-        val processor = EntityFormParseProcessor
+        val processor = EntityFormParseProcessor()
         val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
         parser.addProcessor(processor)
         parser.parse(null)
@@ -137,7 +137,7 @@ class EntityFormParseProcessorTest {
             )
         )
 
-        val processor = EntityFormParseProcessor
+        val processor = EntityFormParseProcessor()
         val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
         parser.addProcessor(processor)
 
@@ -170,7 +170,7 @@ class EntityFormParseProcessorTest {
             )
         )
 
-        val processor = EntityFormParseProcessor
+        val processor = EntityFormParseProcessor()
         val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
         parser.addProcessor(processor)
 
@@ -205,7 +205,7 @@ class EntityFormParseProcessorTest {
             )
         )
 
-        val processor = EntityFormParseProcessor
+        val processor = EntityFormParseProcessor()
         val parser = XFormParser(InputStreamReader(ByteArrayInputStream(form.asXml().toByteArray())))
         parser.addProcessor(processor)
 
