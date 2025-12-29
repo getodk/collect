@@ -1,5 +1,6 @@
 package org.odk.collect.android.activities
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
@@ -75,22 +76,7 @@ class FormEntryViewModelFactory(
                 changeLockProvider.create(projectId)
             )
 
-            FormSaveViewModel::class.java -> {
-                FormSaveViewModel(
-                    extras.createSavedStateHandle(),
-                    System::currentTimeMillis,
-                    DiskFormSaver(),
-                    mediaUtils,
-                    scheduler,
-                    audioRecorder,
-                    projectsDataService,
-                    formSessionRepository.get(sessionId),
-                    entitiesRepositoryProvider.create(projectId),
-                    instancesRepositoryProvider.create(projectId),
-                    savepointsRepositoryProvider.create(projectId),
-                    instancesDataService
-                )
-            }
+            FormSaveViewModel::class.java -> createFormSaveViewModel(extras.createSavedStateHandle())
 
             BackgroundAudioViewModel::class.java -> {
                 val recordAudioActionRegistry =
@@ -152,5 +138,24 @@ class FormEntryViewModelFactory(
 
             else -> throw IllegalArgumentException()
         } as T
+    }
+
+    private fun createFormSaveViewModel(handle: SavedStateHandle): FormSaveViewModel {
+        val projectId = projectsDataService.requireCurrentProject().uuid
+
+        return FormSaveViewModel(
+            handle,
+            System::currentTimeMillis,
+            DiskFormSaver(),
+            mediaUtils,
+            scheduler,
+            audioRecorder,
+            projectsDataService,
+            formSessionRepository.get(sessionId),
+            entitiesRepositoryProvider.create(projectId),
+            instancesRepositoryProvider.create(projectId),
+            savepointsRepositoryProvider.create(projectId),
+            instancesDataService
+        )
     }
 }
