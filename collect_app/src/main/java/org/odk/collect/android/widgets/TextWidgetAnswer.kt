@@ -22,7 +22,7 @@ fun TextWidgetAnswer(
     modifier: Modifier,
     icon: ImageVector?,
     answer: String,
-    fontSize: Int,
+    fontSize: Int? = null,
     onLongClick: () -> Unit,
     onClickLabel: String? = null,
     onClick: () -> Unit = {}
@@ -55,7 +55,7 @@ fun TextWidgetAnswer(
         Text(
             text = answer,
             style = MaterialTheme.typography.bodyLarge.copy(
-                fontSize = fontSize.sp,
+                fontSize = fontSize?.sp ?: MaterialTheme.typography.bodyLarge.fontSize,
                 color = MaterialTheme.colorScheme.onSurface.copy(
                     alpha = dimen.high_emphasis.toFloat()
                 )

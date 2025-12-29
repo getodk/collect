@@ -5,6 +5,7 @@ import androidx.navigation.fragment.NavHostFragment
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryViewModelFactory
+import org.odk.collect.android.application.CollectComposeThemeProvider
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormOpeningMode
 import org.odk.collect.android.formentry.FormSessionRepository
@@ -30,7 +31,7 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class FormHierarchyFragmentHostActivity : LocalizedActivity() {
+class FormHierarchyFragmentHostActivity : LocalizedActivity(), CollectComposeThemeProvider {
 
     @Inject
     lateinit var scheduler: Scheduler

@@ -20,11 +20,11 @@ fun WidgetAnswer(
     modifier: Modifier = Modifier,
     prompt: FormEntryPrompt,
     answer: String?,
-    fontSize: Int = 0,
+    fontSize: Int? = null,
     viewModelProvider: ViewModelProvider? = null,
     onLongClick: () -> Unit = {}
 ) {
-    if (answer != null) {
+    if (!answer.isNullOrEmpty()) {
         when (prompt.controlType) {
             Constants.CONTROL_INPUT -> {
                 when (prompt.dataType) {
