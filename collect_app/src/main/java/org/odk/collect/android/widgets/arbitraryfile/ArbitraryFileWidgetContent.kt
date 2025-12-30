@@ -42,7 +42,7 @@ fun ArbitraryFileWidgetContent(
             formEntryPrompt,
             answer,
             answerFontSize,
-            viewModelProvider,
+            viewModelProvider = viewModelProvider,
             onLongClick = onLongClick
         )
     }
