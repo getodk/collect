@@ -22,7 +22,7 @@ fun WidgetAnswer(
     answer: String?,
     fontSize: Int? = null,
     summaryView: Boolean = false,
-    viewModelProvider: ViewModelProvider? = null,
+    viewModelProvider: ViewModelProvider,
     onLongClick: () -> Unit = {}
 ) {
     if (!answer.isNullOrEmpty()) {
@@ -47,10 +47,10 @@ fun WidgetAnswer(
                     )
                 }
             }
-            Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(modifier, answer, viewModelProvider!!, onLongClick)
+            Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(modifier, answer, viewModelProvider, onLongClick)
             Constants.CONTROL_FILE_CAPTURE -> {
                 val context = LocalContext.current
-                val viewModel = viewModelProvider!![MediaWidgetAnswerViewModel::class]
+                val viewModel = viewModelProvider[MediaWidgetAnswerViewModel::class]
 
                 TextWidgetAnswer(
                     modifier,
