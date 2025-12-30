@@ -136,9 +136,17 @@ class FormEntryViewModelFactory(
                 autoSendSettingsProvider
             )
 
-            PrinterWidgetViewModel::class.java -> PrinterWidgetViewModel(scheduler, qrCodeCreator, htmlPrinter)
+            PrinterWidgetViewModel::class.java -> PrinterWidgetViewModel(
+                scheduler,
+                qrCodeCreator,
+                htmlPrinter
+            )
 
-            MediaWidgetAnswerViewModel::class.java -> MediaWidgetAnswerViewModel(scheduler, createFormSaveViewModel(handle), mediaUtils)
+            MediaWidgetAnswerViewModel::class.java -> MediaWidgetAnswerViewModel(
+                scheduler,
+                createFormSaveViewModel(handle),
+                mediaUtils
+            )
 
             else -> throw IllegalArgumentException()
         } as T
