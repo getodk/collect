@@ -32,6 +32,7 @@ class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(conte
                     Modifier.padding(top = dimensionResource(id = dimen.margin_standard)),
                     item.formEntryPrompt!!,
                     item.answer,
+                    summaryView = true,
                     viewModelProvider = viewModelProvider
                 )
             }

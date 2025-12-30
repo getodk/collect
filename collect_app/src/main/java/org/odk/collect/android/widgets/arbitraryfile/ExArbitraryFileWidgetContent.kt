@@ -42,7 +42,7 @@ fun ExArbitraryFileWidgetContent(
             formEntryPrompt,
             answer,
             answerFontSize,
-            viewModelProvider,
+            viewModelProvider = viewModelProvider,
             onLongClick = onLongClick
         )
     }
