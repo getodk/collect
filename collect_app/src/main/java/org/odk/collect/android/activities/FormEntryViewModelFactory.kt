@@ -29,6 +29,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.android.widgets.viewmodels.QuestionViewModel
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
@@ -132,9 +133,19 @@ class FormEntryViewModelFactory(
                 autoSendSettingsProvider
             )
 
-            PrinterWidgetViewModel::class.java -> PrinterWidgetViewModel(scheduler, qrCodeCreator, htmlPrinter)
+            PrinterWidgetViewModel::class.java -> PrinterWidgetViewModel(
+                scheduler,
+                qrCodeCreator,
+                htmlPrinter
+            )
 
             QuestionViewModel::class.java -> QuestionViewModel(scheduler, formSessionRepository, sessionId)
+
+            MediaWidgetAnswerViewModel::class.java -> MediaWidgetAnswerViewModel(
+                scheduler,
+                createFormSaveViewModel(extras.createSavedStateHandle()),
+                mediaUtils
+            )
 
             else -> throw IllegalArgumentException()
         } as T
