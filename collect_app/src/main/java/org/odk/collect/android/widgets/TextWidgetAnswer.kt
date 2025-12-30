@@ -24,9 +24,9 @@ fun TextWidgetAnswer(
     answer: String,
     fontSize: Int? = null,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Center,
+    onClick: () -> Unit = {},
     onLongClick: () -> Unit,
-    onClickLabel: String? = null,
-    onClick: () -> Unit = {}
+    onClickLabel: String? = null
 ) {
     Row(
         modifier = modifier

@@ -24,7 +24,11 @@ class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(conte
         }
     }
 
-    fun setElement(item: HierarchyItem, viewModelProvider: ViewModelProvider) {
+    fun setElement(
+        item: HierarchyItem,
+        viewModelProvider: ViewModelProvider,
+        onCLick: () -> Unit
+    ) {
         findViewById<MaterialTextView>(R.id.primary_text).text = item.primaryText
         if (item.hierarchyItemType == HierarchyItemType.QUESTION) {
             findViewById<ComposeView>(R.id.answer_view).setContextThemedContent {
@@ -33,7 +37,8 @@ class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(conte
                     item.formEntryPrompt!!,
                     item.answer,
                     summaryView = true,
-                    viewModelProvider = viewModelProvider
+                    viewModelProvider = viewModelProvider,
+                    onClick = onCLick
                 )
             }
         }

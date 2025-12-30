@@ -23,6 +23,7 @@ fun WidgetAnswer(
     fontSize: Int? = null,
     summaryView: Boolean = false,
     viewModelProvider: ViewModelProvider,
+    onClick: () -> Unit = {},
     onLongClick: () -> Unit = {}
 ) {
     if (!answer.isNullOrEmpty()) {
@@ -35,6 +36,7 @@ fun WidgetAnswer(
                         answer,
                         fontSize,
                         if (summaryView) Arrangement.Start else Arrangement.Center,
+                        onClick,
                         onLongClick
                     )
                     else -> TextWidgetAnswer(
@@ -43,6 +45,7 @@ fun WidgetAnswer(
                         answer,
                         fontSize,
                         if (summaryView) Arrangement.Start else Arrangement.Center,
+                        onClick,
                         onLongClick
                     )
                 }
@@ -58,9 +61,10 @@ fun WidgetAnswer(
                     answer,
                     fontSize,
                     if (summaryView) Arrangement.Start else Arrangement.Center,
+                    { viewModel.openFile(context, answer) },
                     onLongClick,
                     stringResource(org.odk.collect.strings.R.string.open_file)
-                ) { viewModel.openFile(context, answer) }
+                )
             }
             else -> TextWidgetAnswer(
                 modifier,
@@ -68,6 +72,7 @@ fun WidgetAnswer(
                 answer,
                 fontSize,
                 if (summaryView) Arrangement.Start else Arrangement.Center,
+                onClick,
                 onLongClick
             )
         }

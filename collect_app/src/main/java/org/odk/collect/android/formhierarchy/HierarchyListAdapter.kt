@@ -48,7 +48,7 @@ class HierarchyListAdapter(
         private val viewModelProvider: ViewModelProvider
     ) : RecyclerView.ViewHolder(view) {
         fun bind(element: HierarchyItem, listener: OnElementClickListener) {
-            view.setElement(element, viewModelProvider)
+            view.setElement(element, viewModelProvider) { listener.onElementClick(element) }
             view.setOnClickListener { listener.onElementClick(element) }
         }
     }
