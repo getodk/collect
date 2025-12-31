@@ -58,9 +58,6 @@ public class FormHierarchyTest {
                 .atPositionOnView(0, R.id.primary_text))
                 .check(matches(withText("How many guests are in your party?")));
         onView(withRecyclerView(R.id.list)
-                .atPositionOnView(0, R.id.secondary_text))
-                .check(matches(withText("2")));
-        onView(withRecyclerView(R.id.list)
                 .atPositionOnView(1, R.id.primary_text))
                 .check(matches(withText("Please provide details for each guest.")));
         onView(withRecyclerView(R.id.list)
