@@ -1,5 +1,8 @@
 package org.odk.collect.android.feature.formentry;
 
+import static androidx.compose.ui.test.junit4.AndroidComposeTestRule_androidKt.createEmptyComposeRule;
+
+import androidx.compose.ui.test.junit4.ComposeTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
@@ -12,11 +15,12 @@ import org.odk.collect.android.support.rules.TestRuleChain;
 
 @RunWith(AndroidJUnit4.class)
 public class QuickSaveTest {
-
+    private final ComposeTestRule composeRule = createEmptyComposeRule();
     public final CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public final RuleChain chain = TestRuleChain.chain()
+            .around(composeRule)
             .around(rule);
 
     @Test
@@ -33,8 +37,8 @@ public class QuickSaveTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question")
-                .assertText("Reuben")
-                .assertText("32");
+                .assertText("Reuben", composeRule)
+                .assertText("32", composeRule);
     }
 
     @Test
@@ -49,7 +53,7 @@ public class QuickSaveTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Reuben");
+                .assertText("Reuben", composeRule);
     }
 
     @Test
@@ -71,6 +75,6 @@ public class QuickSaveTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Another Reuben");
+                .assertText("Another Reuben", composeRule);
     }
 }

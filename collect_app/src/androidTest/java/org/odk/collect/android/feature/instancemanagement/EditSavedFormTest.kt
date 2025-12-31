@@ -1,5 +1,6 @@
 package org.odk.collect.android.feature.instancemanagement
 
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -21,6 +22,7 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class EditSavedFormTest {
+    private val composeRule = createEmptyComposeRule()
     private val rule = CollectTestRule()
 
     val testDependencies: TestDependencies = TestDependencies()
@@ -29,6 +31,7 @@ class EditSavedFormTest {
     @get:Rule
     var copyFormChain: RuleChain = chain(testDependencies)
         .around(recentAppsRule)
+        .around(composeRule)
         .around(rule)
 
     @Test
@@ -292,7 +295,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .acceptEditingNewerDraftEdit("One Question Editable")
-            .assertText("456")
+            .assertText("456", composeRule)
     }
 
     @Test
@@ -316,7 +319,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .discardEditingNewerEdit()
-            .assertText("123")
+            .assertText("123", composeRule)
     }
 
     @Test
@@ -341,7 +344,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .acceptEditingNewerFinalizedEdit("One Question Editable")
-            .assertText("456")
+            .assertText("456", composeRule)
     }
 
     @Test
@@ -366,7 +369,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .discardEditingNewerEdit()
-            .assertText("123")
+            .assertText("123", composeRule)
     }
 
     @Test
