@@ -4,6 +4,8 @@ import android.content.Intent
 import android.provider.MediaStore
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.performClick
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import net.bytebuddy.utility.RandomString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -17,15 +19,13 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.formentry.questions.QuestionDetails
-import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.utilities.MediaUtils
+import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.base.FileWidgetTest
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry
 import org.odk.collect.android.widgets.video.VideoWidget
-import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidtest.onNodeWithClickLabel
 import org.odk.collect.shared.TempFiles.createTempDir
 import org.odk.collect.shared.TempFiles.createTempFile
@@ -36,6 +36,17 @@ class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
     @get:Rule
     val composeRule = createAndroidComposeRule<WidgetTestActivity>()
     private var destinationName: String? = null
+    private var questionMediaManager = mock<QuestionMediaManager>()
+    private var mediaUtils = mock<MediaUtils>()
+    private val viewModelFactory = viewModelFactory {
+        initializer {
+            MediaWidgetAnswerViewModel(mock(), questionMediaManager, mediaUtils)
+        }
+    }
+    private val dependencies = QuestionWidget.Dependencies(
+        null,
+        viewModelFactory
+    )
 
     override fun createWidget(): VideoWidget {
         return VideoWidget(
@@ -63,13 +74,6 @@ class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
 
     @Test
     fun buttonsShouldLaunchCorrectIntents() {
-        val mediaUtils = mock<MediaUtils>()
-        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesMediaUtils(intentLauncher: IntentLauncher): MediaUtils {
-                return mediaUtils
-            }
-        })
-
         createWidget()
         stubAllRuntimePermissionsGranted(true)
 
@@ -82,7 +86,10 @@ class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
         assertActionEquals(Intent.ACTION_GET_CONTENT, intent)
         assertTypeEquals("video/*", intent)
 
-        getWidget()!!.setData(createTempFile(createTempDir()))
+        val newFile = createTempFile(createTempDir())
+        getWidget()!!.setData(newFile)
+        whenever(questionMediaManager.getAnswerFile(newFile.name)).thenReturn(newFile)
+
         composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).performClick()
         verify(mediaUtils).openFile(any(), any(), any<String>())
     }
