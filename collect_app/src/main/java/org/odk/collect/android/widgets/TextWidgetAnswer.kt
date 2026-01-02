@@ -15,7 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.unit.sp
+import org.odk.collect.android.utilities.HtmlUtils
 import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
@@ -60,7 +63,7 @@ fun TextWidgetAnswer(
             )
         }
         Text(
-            text = answer,
+            text = AnnotatedString.fromHtml(HtmlUtils.markdownToHtml(answer)),
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontSize = fontSize?.sp ?: MaterialTheme.typography.bodyLarge.fontSize,
                 color = MaterialTheme.colorScheme.onSurface.copy(
