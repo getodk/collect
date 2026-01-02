@@ -3,6 +3,8 @@ package org.odk.collect.android.widgets
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.Constants
@@ -37,6 +39,15 @@ class ArbitraryFileWidgetTest : FileWidgetTest<ArbitraryFileWidget>() {
         whenever(it.isAudioFile(any())).thenReturn(true)
     }
     private val questionMediaManager = FakeQuestionMediaManager()
+    private val viewModelFactory = viewModelFactory {
+        initializer {
+            MediaWidgetAnswerViewModel(mock(), questionMediaManager, mediaUtils)
+        }
+    }
+    private val dependencies = QuestionWidget.Dependencies(
+        null,
+        viewModelFactory
+    )
 
     @Before
     fun setup() {

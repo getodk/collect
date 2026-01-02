@@ -19,7 +19,7 @@ import org.robolectric.shadows.ShadowEnvironment;
  * @author James Knight
  */
 
-public class RobolectricApplication extends Collect {
+public class RobolectricApplication extends Collect implements CollectComposeThemeProvider {
 
     @Override
     public void onCreate() {
