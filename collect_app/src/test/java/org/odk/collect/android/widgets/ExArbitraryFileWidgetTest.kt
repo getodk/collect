@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -87,7 +88,7 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget>() {
             .withAnswer(StringData(initialAnswer.displayText))
             .build()
         createWidget()
-        composeRule.onNodeWithText(initialAnswer.displayText).assertExists()
+        composeRule.onNodeWithText(initialAnswer.displayText).assertIsDisplayed()
     }
 
     @Test
@@ -130,7 +131,7 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget>() {
 
         createWidget()
         composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertDoesNotExist()
-        composeRule.onNodeWithText(initialAnswer.displayText).assertExists()
+        composeRule.onNodeWithText(initialAnswer.displayText).assertIsDisplayed()
     }
 
     @Test
@@ -142,7 +143,7 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget>() {
 
         createWidget()
         composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertDoesNotExist()
-        composeRule.onNodeWithText(initialAnswer.displayText).assertExists()
+        composeRule.onNodeWithText(initialAnswer.displayText).assertIsDisplayed()
     }
 
     @Test
