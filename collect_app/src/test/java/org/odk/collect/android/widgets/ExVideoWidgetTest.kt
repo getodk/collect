@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.performClick
@@ -88,7 +89,7 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
     @Test
     fun whenWidgetCreated_shouldTheLaunchButtonBeVisible() {
         createWidget()
-        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertIsDisplayed()
     }
 
     @Test
@@ -100,7 +101,7 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
     @Test
     fun whenThereIsNoAnswer_shouldOnlyLaunchButtonBeVisible() {
         createWidget()
-        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertIsDisplayed()
         composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).assertDoesNotExist()
     }
 
@@ -109,8 +110,8 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
         whenever(formEntryPrompt.getAnswerText()).thenReturn(initialAnswer.displayText)
         createWidget()
 
-        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertExists()
-        composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertIsDisplayed()
+        composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).assertIsDisplayed()
     }
 
     @Test
@@ -118,7 +119,7 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
         whenever(formEntryPrompt.getAnswerText()).thenReturn(initialAnswer.displayText)
 
         widget.clearAnswer()
-        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertIsDisplayed()
         composeRule.onNodeWithClickLabel(activity.getString(string.play_video)).assertDoesNotExist()
     }
 
