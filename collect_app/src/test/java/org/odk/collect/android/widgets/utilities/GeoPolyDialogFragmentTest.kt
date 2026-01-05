@@ -186,6 +186,17 @@ class GeoPolyDialogFragmentTest {
         ) {
             assertThat(it.inputPolygon, equalTo(points))
         }
+
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withAnswer(geoShapeOf(points))
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.inputPolygon, equalTo(points))
+        }
     }
 
     @Test
@@ -439,6 +450,23 @@ class GeoPolyDialogFragmentTest {
     private fun geoTraceOf(points: List<MapPoint>): GeoTraceData {
         return GeoTraceData(
             GeoTraceData.GeoTrace(
+                ArrayList(
+                    points.map {
+                        doubleArrayOf(
+                            it.latitude,
+                            it.longitude,
+                            it.altitude,
+                            it.accuracy
+                        )
+                    }
+                )
+            )
+        )
+    }
+
+    private fun geoShapeOf(points: List<MapPoint>): GeoShapeData {
+        return GeoShapeData(
+            GeoShapeData.GeoShape(
                 ArrayList(
                     points.map {
                         doubleArrayOf(

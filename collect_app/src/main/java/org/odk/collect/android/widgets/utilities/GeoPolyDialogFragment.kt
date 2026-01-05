@@ -50,6 +50,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
 
         val inputPolygon = when (val answer = prompt.answerValue) {
             is GeoTraceData -> answer.points.map { it.toMapPoint() }
+            is GeoShapeData -> answer.points.map { it.toMapPoint() }
             null -> emptyList()
             else -> throw IllegalArgumentException()
         }
