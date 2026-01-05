@@ -38,7 +38,7 @@ allprojects {
         mavenLocal() // Only used for javarosa_local dependency
         mavenCentral()
 
-        maven { url 'https://oss.sonatype.org/content/groups/public' }
+        maven { url 'https://central.sonatype.com/repository/maven-snapshots' }
         maven { url 'https://jitpack.io' }
         maven {
             url 'https://staging.dev.medicmobile.org/_couch/maven-repo'
