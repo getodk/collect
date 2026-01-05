@@ -7,7 +7,7 @@ data class HierarchyItem @JvmOverloads constructor(
     val formIndex: FormIndex,
     val hierarchyItemType: HierarchyItemType,
     val primaryText: CharSequence,
-    val answer: String? = null,
+    val secondaryText: String? = null,
     val formEntryPrompt: FormEntryPrompt? = null
 )
 

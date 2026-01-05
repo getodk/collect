@@ -32,7 +32,7 @@ class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(conte
                 WidgetAnswer(
                     Modifier,
                     item.formEntryPrompt!!,
-                    item.answer,
+                    item.secondaryText,
                     summaryView = true,
                     viewModelProvider = viewModelProvider,
                     onClick = onCLick
