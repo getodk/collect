@@ -34,6 +34,10 @@ fun TextWidgetAnswer(
     onClickLabel: String? = null
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+    val annotatedAnswer = remember(answer) {
+        AnnotatedString.fromHtml(HtmlUtils.markdownToHtml(answer))
+    }
+    val hasFormatting = remember(annotatedAnswer) { annotatedAnswer.spanStyles.isNotEmpty() }
 
     Row(
         modifier = modifier
@@ -63,11 +67,11 @@ fun TextWidgetAnswer(
             )
         }
         Text(
-            text = AnnotatedString.fromHtml(HtmlUtils.markdownToHtml(answer)),
+            text = annotatedAnswer,
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontSize = fontSize?.sp ?: MaterialTheme.typography.bodyLarge.fontSize,
                 color = MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = dimen.high_emphasis.toFloat()
+                    alpha = if (!hasFormatting) dimen.high_emphasis.toFloat() else 1f
                 )
             )
         )
