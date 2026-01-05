@@ -4,14 +4,15 @@ import androidx.activity.ComponentDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import org.javarosa.core.model.Constants
-import org.javarosa.core.model.data.StringData
+import org.javarosa.core.model.data.GeoTraceData
+import org.javarosa.core.model.data.UncastData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.FormEntryPromptUtils
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.BindAttributes.ALLOW_MOCK_ACCURACY
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
-import org.odk.collect.geo.geopoly.GeoPolyUtils
+import org.odk.collect.maps.MapPoint
 
 class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
     WidgetAnswerDialogFragment<GeoPolyFragment>(
@@ -30,10 +31,10 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
 
             if (geopolyChange != null) {
                 if (incremental == "true") {
-                    onAnswer(StringData(geopolyChange), dismiss = false, validate = true)
+                    onAnswer(GeoTraceData().cast(UncastData(geopolyChange)), dismiss = false, validate = true)
                 }
             } else if (geopoly != null) {
-                onAnswer(StringData(geopoly))
+                onAnswer(GeoTraceData().cast(UncastData(geopoly)))
             } else {
                 dismiss()
             }
@@ -47,8 +48,19 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
         val retainMockAccuracy =
             FormEntryPromptUtils.getBindAttribute(prompt, ALLOW_MOCK_ACCURACY).toBoolean()
 
-        val answer = prompt.answerValue
-        val inputPolygon = GeoPolyUtils.parseGeometry(answer?.value as String?)
+        val inputPolygon = when (val answer = prompt.answerValue) {
+            is GeoTraceData -> answer.points.map {
+                MapPoint(
+                    it.getPart(0),
+                    it.getPart(1),
+                    it.getPart(2),
+                    it.getPart(3)
+                )
+            }
+
+            null -> emptyList()
+            else -> throw IllegalArgumentException()
+        }
 
         return GeoPolyFragment(
             { (requireDialog() as ComponentDialog).onBackPressedDispatcher },
