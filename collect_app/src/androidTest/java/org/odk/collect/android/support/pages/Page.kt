@@ -5,6 +5,8 @@ import android.app.Application
 import android.content.pm.ActivityInfo
 import android.view.View
 import androidx.annotation.StringRes
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.recyclerview.widget.RecyclerView
@@ -136,7 +138,7 @@ abstract class Page<T : Page<T>> {
     @JvmOverloads
     fun assertText(text: String, composeRule: ComposeTestRule? = null): T {
         if (composeRule != null) {
-            composeRule.onNodeWithText(text)
+            composeRule.onNodeWithText(text).assertIsDisplayed()
         } else {
             Assertions.assertVisible(withText(text))
         }
@@ -201,7 +203,7 @@ abstract class Page<T : Page<T>> {
     @JvmOverloads
     fun assertTextDoesNotExist(text: String?, composeRule: ComposeTestRule? = null): T {
         if (composeRule != null) {
-            composeRule.onNodeWithText(text!!)
+            composeRule.onNodeWithText(text!!).assertIsNotDisplayed()
         } else {
             onView(
                 allOf(
