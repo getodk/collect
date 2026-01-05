@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.GeoTraceData
-import org.javarosa.core.model.data.UncastData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.FormEntryPromptUtils
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
@@ -13,7 +12,6 @@ import org.odk.collect.android.widgets.utilities.BindAttributes.ALLOW_MOCK_ACCUR
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
-import org.odk.collect.maps.MapPoint
 
 class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
     WidgetAnswerDialogFragment<GeoPolyFragment>(
@@ -32,10 +30,10 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
 
             if (geopolyChange != null) {
                 if (incremental == "true") {
-                    onAnswer(GeoTraceData().cast(UncastData(geopolyChange)), dismiss = false, validate = true)
+                    onAnswer(GeoTraceData().also { it.value = geopolyChange }, dismiss = false, validate = true)
                 }
             } else if (geopoly != null) {
-                onAnswer(GeoTraceData().cast(UncastData(geopoly)))
+                onAnswer(GeoTraceData().also { it.value = geopoly })
             } else {
                 dismiss()
             }
