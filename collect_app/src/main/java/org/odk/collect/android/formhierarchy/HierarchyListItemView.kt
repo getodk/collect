@@ -3,15 +3,12 @@ package org.odk.collect.android.formhierarchy
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textview.MaterialTextView
 import org.odk.collect.android.R
 import org.odk.collect.android.widgets.WidgetAnswer
-import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 
 class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(context) {
@@ -33,7 +30,7 @@ class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(conte
         if (item.hierarchyItemType == HierarchyItemType.QUESTION) {
             findViewById<ComposeView>(R.id.answer_view).setContextThemedContent {
                 WidgetAnswer(
-                    Modifier.padding(top = dimensionResource(id = dimen.margin_standard)),
+                    Modifier,
                     item.formEntryPrompt!!,
                     item.answer,
                     summaryView = true,
