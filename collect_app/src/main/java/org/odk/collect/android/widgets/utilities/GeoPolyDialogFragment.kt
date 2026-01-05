@@ -4,6 +4,7 @@ import androidx.activity.ComponentDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import org.javarosa.core.model.Constants
+import org.javarosa.core.model.data.GeoShapeData
 import org.javarosa.core.model.data.GeoTraceData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.FormEntryPromptUtils
@@ -20,28 +21,28 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
     ) {
 
     override fun onCreateFragment(prompt: FormEntryPrompt): GeoPolyFragment {
+        val incremental = FormEntryPromptUtils.getAdditionalAttribute(prompt, INCREMENTAL)
+        val outputMode = when (prompt.dataType) {
+            Constants.DATATYPE_GEOSHAPE -> OutputMode.GEOSHAPE
+            else -> OutputMode.GEOTRACE
+        }
+
         childFragmentManager.setFragmentResultListener(
             GeoPolyFragment.REQUEST_GEOPOLY,
             this
         ) { _, result ->
             val geopolyChange = result.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE)
             val geopoly = result.getString(GeoPolyFragment.RESULT_GEOPOLY)
-            val incremental = FormEntryPromptUtils.getAdditionalAttribute(prompt, INCREMENTAL)
 
             if (geopolyChange != null) {
                 if (incremental == "true") {
-                    onAnswer(GeoTraceData().also { it.value = geopolyChange }, dismiss = false, validate = true)
+                    onAnswer(geopolyChange, outputMode, dismiss = false, validate = true)
                 }
             } else if (geopoly != null) {
-                onAnswer(GeoTraceData().also { it.value = geopoly })
+                onAnswer(geopoly, outputMode, dismiss = true, validate = false)
             } else {
                 dismiss()
             }
-        }
-
-        val outputMode = when (prompt.dataType) {
-            Constants.DATATYPE_GEOSHAPE -> OutputMode.GEOSHAPE
-            else -> OutputMode.GEOTRACE
         }
 
         val retainMockAccuracy =
@@ -69,5 +70,19 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
                 }
             }
         )
+    }
+
+    private fun onAnswer(
+        geoString: String,
+        outputMode: OutputMode,
+        dismiss: Boolean,
+        validate: Boolean
+    ) {
+        val answer = when (outputMode) {
+            OutputMode.GEOTRACE -> GeoTraceData().also { it.value = geoString }
+            OutputMode.GEOSHAPE -> GeoShapeData().also { it.value = geoString }
+        }
+
+        onAnswer(answer, dismiss, validate)
     }
 }

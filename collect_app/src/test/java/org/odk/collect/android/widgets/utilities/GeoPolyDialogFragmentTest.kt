@@ -12,8 +12,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.FormIndex
+import org.javarosa.core.model.data.GeoShapeData
 import org.javarosa.core.model.data.GeoTraceData
-import org.javarosa.core.model.data.UncastData
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -208,6 +208,26 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
+    fun `sets GeoShapeData answer when REQUEST_GEOPOLY is returned for GEOSHAPE prompt`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOSHAPE)
+            .build()
+
+        val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0; 1.0 1.0 0.0 0.0"
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY to answer)
+            )
+        }
+
+        verify(formEntryViewModel).answerQuestion(prompt.index, geoShapeOf(answer), false)
+    }
+
+    @Test
     fun `dismisses when REQUEST_GEOPOLY is returned`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .build()
@@ -246,6 +266,27 @@ class GeoPolyDialogFragmentTest {
         }
 
         verify(formEntryViewModel).answerQuestion(prompt.index, geoTraceOf(answer), true)
+    }
+
+    @Test
+    fun `sets GeoShapeData answer with validate when REQUEST_GEOPOLY_CHANGE is returned if GEOSHAPE question is incremental`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withAdditionalAttribute(INCREMENTAL, "true")
+            .withDataType(Constants.DATATYPE_GEOSHAPE)
+            .build()
+
+        val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY_CHANGE to answer)
+            )
+        }
+
+        verify(formEntryViewModel).answerQuestion(prompt.index, geoShapeOf(answer), true)
     }
 
     @Test
@@ -413,6 +454,10 @@ class GeoPolyDialogFragmentTest {
     }
 
     private fun geoTraceOf(answer: String): GeoTraceData {
-        return GeoTraceData().cast(UncastData(answer))
+        return GeoTraceData().also { it.value = answer }
+    }
+
+    private fun geoShapeOf(answer: String): GeoShapeData {
+        return GeoShapeData().also { it.value = answer }
     }
 }
