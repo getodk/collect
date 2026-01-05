@@ -10,6 +10,7 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.FormEntryPromptUtils
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.BindAttributes.ALLOW_MOCK_ACCURACY
+import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.maps.MapPoint
@@ -49,15 +50,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             FormEntryPromptUtils.getBindAttribute(prompt, ALLOW_MOCK_ACCURACY).toBoolean()
 
         val inputPolygon = when (val answer = prompt.answerValue) {
-            is GeoTraceData -> answer.points.map {
-                MapPoint(
-                    it.getPart(0),
-                    it.getPart(1),
-                    it.getPart(2),
-                    it.getPart(3)
-                )
-            }
-
+            is GeoTraceData -> answer.points.map { it.toMapPoint() }
             null -> emptyList()
             else -> throw IllegalArgumentException()
         }
