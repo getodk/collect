@@ -283,6 +283,9 @@ class GeoPolyFragment @JvmOverloads constructor(
         map!!.setGpsLocationEnabled(true)
         map!!.setGpsLocationListener(this::onGpsLocation)
         map!!.setRetainMockAccuracy(retainMockAccuracy)
+        map!!.setDragEndListener {
+            setChangeResult()
+        }
 
         if (!map!!.hasCenter()) {
             if (points.isNotEmpty()) {

@@ -630,6 +630,27 @@ class GeoPolyFragmentTest {
         )
     }
 
+    @Test
+    fun setsChangeResultWheneverAPointIsMoved() {
+        val inputPolygon = listOf(MapPoint(0.0, 0.0), MapPoint(1.0, 0.0), MapPoint(1.0, 1.0))
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() }, inputPolygon = inputPolygon)
+        }
+
+        val resultListener = FragmentResultRecorder()
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
+
+        val lineId = mapFragment.getFeatureId(inputPolygon)
+        mapFragment.dragPolyLine(lineId, inputPolygon.dropLast(1) + MapPoint(2.0, 2.0))
+
+        val result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(
+            result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
+            equalTo("0.0 0.0 0.0 0.0;1.0 0.0 0.0 0.0;2.0 2.0 0.0 0.0")
+        )
+    }
+
     private fun startInput(mode: Int? = null) {
         onView(withId(R.id.play)).perform(click())
 
