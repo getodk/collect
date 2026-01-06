@@ -2,7 +2,6 @@ package org.odk.collect.entities.javarosa
 
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers
 import org.javarosa.core.model.data.IntegerData
 import org.javarosa.core.model.instance.TreeElement
 import org.junit.Test
@@ -21,7 +20,7 @@ class EntityFormParserTest {
         entityElement.setAttribute(null, ATTRIBUTE_CREATE, "true")
 
         val action = parseAction(entityElement)
-        assertThat<EntityAction?>(action, equalTo(EntityAction.CREATE))
+        assertThat(action, equalTo(EntityAction.CREATE))
     }
 
     @Test
@@ -41,6 +40,6 @@ class EntityFormParserTest {
         entityElement.addChild(labelElement)
 
         val label = parseLabel(entityElement)
-        assertThat(label, Matchers.equalTo<String?>("0"))
+        assertThat(label, equalTo("0"))
     }
 }
