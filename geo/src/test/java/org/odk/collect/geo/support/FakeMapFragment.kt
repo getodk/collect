@@ -24,6 +24,7 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
     private var readyListener: ReadyListener? = null
     private var gpsLocation: MapPoint? = null
     private var featureClickListener: FeatureListener? = null
+    private var dragListener: FeatureListener? = null
     private val markers = mutableMapOf<Int, MapPoint>()
     private val markerIcons = mutableMapOf<Int, MarkerIconDescription?>()
     private val polyLines = mutableMapOf<Int, LineDescription>()
@@ -166,7 +167,10 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         featureClickListener = listener
     }
 
-    override fun setDragEndListener(listener: FeatureListener?) {}
+    override fun setDragEndListener(listener: FeatureListener?) {
+        dragListener = listener
+    }
+
     override fun setGpsLocationEnabled(enabled: Boolean) {}
     override fun getGpsLocation(): MapPoint? {
         return gpsLocation
@@ -267,5 +271,10 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
 
     fun setZoomLevel(zoomLevel: Float?) {
         zoomLevelSetByUser = zoomLevel
+    }
+
+    fun dragPolyLine(featureId: Int, new: List<MapPoint>) {
+        polyLines[featureId] = polyLines[featureId]!!.copy(points = new)
+        dragListener?.onFeature(featureId)
     }
 }
