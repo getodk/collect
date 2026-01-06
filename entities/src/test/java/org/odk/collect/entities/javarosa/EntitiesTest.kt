@@ -1,8 +1,8 @@
 package org.odk.collect.entities.javarosa
 
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.CoreMatchers.hasItem
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.containsInAnyOrder
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.data.UncastData
 import org.javarosa.core.model.instance.TreeElement
@@ -196,25 +196,21 @@ class EntitiesTest {
 
         assertThat(
             entities,
-            hasItem(
+            containsInAnyOrder(
                 FormEntity(
                     EntityAction.CREATE,
                     "people",
                     scenario.answerOf<StringData>("/data/people/meta/entity/@id").value as String?,
                     "Tom Wambsgans",
-                    listOf(Pair("name", "Tom Wambsgans")))
-            )
-        )
-
-        assertThat(
-            entities,
-            hasItem(
+                    listOf(Pair("name", "Tom Wambsgans"))
+                ),
                 FormEntity(
                     EntityAction.CREATE,
                     "cars",
                     scenario.answerOf<StringData>("/data/cars/meta/entity/@id").value as String?,
                     "Range Rover",
-                    listOf(Pair("car_model", "Range Rover")))
+                    listOf(Pair("car_model", "Range Rover"))
+                )
             )
         )
     }
@@ -296,25 +292,21 @@ class EntitiesTest {
 
         assertThat(
             entities,
-            hasItem(
+            containsInAnyOrder(
                 FormEntity(
                     EntityAction.UPDATE,
                     "people",
                     scenario.answerOf<StringData>("/data/people/meta/entity/@id").value as String?,
                     "Tom Wambsgans",
-                    listOf(Pair("name", "Tom Wambsgans")))
-            )
-        )
-
-        assertThat(
-            entities,
-            hasItem(
+                    listOf(Pair("name", "Tom Wambsgans"))
+                ),
                 FormEntity(
                     EntityAction.UPDATE,
                     "cars",
                     scenario.answerOf<StringData>("/data/cars/meta/entity/@id").value as String?,
                     "Range Rover",
-                    listOf(Pair("car_model", "Range Rover")))
+                    listOf(Pair("car_model", "Range Rover"))
+                )
             )
         )
     }
@@ -377,25 +369,21 @@ class EntitiesTest {
 
         assertThat(
             entities,
-            hasItem(
+            containsInAnyOrder(
                 FormEntity(
                     EntityAction.CREATE,
                     "people",
                     scenario.answerOf<StringData>("/data/people[1]/meta/entity/@id").value as String?,
                     "Tom Wambsgans",
-                    listOf(Pair("name", "Tom Wambsgans")))
-            )
-        )
-
-        assertThat(
-            entities,
-            hasItem(
+                    listOf(Pair("name", "Tom Wambsgans"))
+                ),
                 FormEntity(
                     EntityAction.CREATE,
                     "people",
                     scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String?,
                     "Shiv Roy",
-                    listOf(Pair("name", "Shiv Roy")))
+                    listOf(Pair("name", "Shiv Roy"))
+                )
             )
         )
     }
@@ -458,25 +446,21 @@ class EntitiesTest {
 
         assertThat(
             entities,
-            hasItem(
+            containsInAnyOrder(
                 FormEntity(
                     EntityAction.UPDATE,
                     "people",
                     scenario.answerOf<StringData>("/data/people[1]/meta/entity/@id").value as String?,
                     "Tom Wambsgans",
-                    listOf(Pair("name", "Tom Wambsgans")))
-            )
-        )
-
-        assertThat(
-            entities,
-            hasItem(
+                    listOf(Pair("name", "Tom Wambsgans"))
+                ),
                 FormEntity(
                     EntityAction.UPDATE,
                     "people",
                     scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String?,
                     "Shiv Roy",
-                    listOf(Pair("name", "Shiv Roy")))
+                    listOf(Pair("name", "Shiv Roy"))
+                )
             )
         )
     }
@@ -567,49 +551,35 @@ class EntitiesTest {
 
         assertThat(
             entities,
-            hasItem(
+            containsInAnyOrder(
                 FormEntity(
                     EntityAction.CREATE,
                     "people",
                     scenario.answerOf<StringData>("/data/people[1]/meta/entity/@id").value as String?,
                     "Tom Wambsgans",
-                    listOf(Pair("name", "Tom Wambsgans")))
-            )
-        )
-
-        assertThat(
-            entities,
-            hasItem(
+                    listOf(Pair("name", "Tom Wambsgans"))
+                ),
                 FormEntity(
                     EntityAction.CREATE,
                     "people",
                     scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String?,
                     "Shiv Roy",
-                    listOf(Pair("name", "Shiv Roy")))
-            )
-        )
-
-        assertThat(
-            entities,
-            hasItem(
+                    listOf(Pair("name", "Shiv Roy"))
+                ),
                 FormEntity(
                     EntityAction.CREATE,
                     "cars",
                     scenario.answerOf<StringData>("/data/people[1]/cars[1]/meta/entity/@id").value as String?,
                     "Range Rover",
-                    listOf(Pair("car_model", "Range Rover")))
-            )
-        )
-
-        assertThat(
-            entities,
-            hasItem(
+                    listOf(Pair("car_model", "Range Rover"))
+                ),
                 FormEntity(
                     EntityAction.CREATE,
                     "cars",
                     scenario.answerOf<UncastData>("/data/people[2]/cars[1]/meta/entity/@id").value as String?,
                     "Audi A8",
-                    listOf(Pair("car_model", "Audi A8")))
+                    listOf(Pair("car_model", "Audi A8"))
+                )
             )
         )
     }
@@ -700,49 +670,35 @@ class EntitiesTest {
 
         assertThat(
             entities,
-            hasItem(
+            containsInAnyOrder(
                 FormEntity(
                     EntityAction.UPDATE,
                     "people",
                     scenario.answerOf<StringData>("/data/people[1]/meta/entity/@id").value as String?,
                     "Tom Wambsgans",
-                    listOf(Pair("name", "Tom Wambsgans")))
-            )
-        )
-
-        assertThat(
-            entities,
-            hasItem(
+                    listOf(Pair("name", "Tom Wambsgans"))
+                ),
                 FormEntity(
                     EntityAction.UPDATE,
                     "people",
                     scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String?,
                     "Shiv Roy",
-                    listOf(Pair("name", "Shiv Roy")))
-            )
-        )
-
-        assertThat(
-            entities,
-            hasItem(
+                    listOf(Pair("name", "Shiv Roy"))
+                ),
                 FormEntity(
                     EntityAction.UPDATE,
                     "cars",
                     scenario.answerOf<StringData>("/data/people[1]/cars[1]/meta/entity/@id").value as String?,
                     "Range Rover",
-                    listOf(Pair("car_model", "Range Rover")))
-            )
-        )
-
-        assertThat(
-            entities,
-            hasItem(
+                    listOf(Pair("car_model", "Range Rover"))
+                ),
                 FormEntity(
                     EntityAction.UPDATE,
                     "cars",
                     scenario.answerOf<UncastData>("/data/people[2]/cars[1]/meta/entity/@id").value as String?,
                     "Audi A8",
-                    listOf(Pair("car_model", "Audi A8")))
+                    listOf(Pair("car_model", "Audi A8"))
+                )
             )
         )
     }
