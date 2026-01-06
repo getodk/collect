@@ -218,16 +218,16 @@ class EntitiesTest {
     @Test
     fun `filling form with update in multiple groups makes entities available`() {
         val scenario = Scenario.init(
-            "Create entities from multiple groups form",
+            "Update entities from multiple groups form",
             XFormsElement.html(
                 listOf("entities" to "http://www.opendatakit.org/xforms/entities"),
                 XFormsElement.head(
-                    XFormsElement.title("Create entities from multiple groups form"),
+                    XFormsElement.title("Update entities from multiple groups form"),
                     XFormsElement.model(
                         listOf(Pair("entities:entities-version", "2025.1.0")),
                         XFormsElement.mainInstance(
                             XFormsElement.t(
-                                "data id=\"create-entities-from-multiple-groups-form\"",
+                                "data id=\"update-entities-from-multiple-groups-form\"",
                                 XFormsElement.t(
                                     "people",
                                     XFormsElement.t("name"),
@@ -391,16 +391,16 @@ class EntitiesTest {
     @Test
     fun `filling form with update in repeats makes entities available`() {
         val scenario = Scenario.init(
-            "Create entities from repeats form",
+            "Update entities from repeats form",
             XFormsElement.html(
                 listOf("entities" to "http://www.opendatakit.org/xforms/entities"),
                 XFormsElement.head(
-                    XFormsElement.title("Create entities from repeats form"),
+                    XFormsElement.title("Update entities from repeats form"),
                     XFormsElement.model(
                         listOf(Pair("entities:entities-version", "2025.1.0")),
                         XFormsElement.mainInstance(
                             XFormsElement.t(
-                                "data id=\"create-entities-from-repeats-form\"",
+                                "data id=\"update-entities-from-repeats-form\"",
                                 XFormsElement.t(
                                     "people",
                                     XFormsElement.t("name"),
@@ -587,16 +587,16 @@ class EntitiesTest {
     @Test
     fun `filling form with update in nested repeats makes entities available`() {
         val scenario = Scenario.init(
-            "Create entities from nested repeats form",
+            "Update entities from nested repeats form",
             XFormsElement.html(
                 listOf("entities" to "http://www.opendatakit.org/xforms/entities"),
                 XFormsElement.head(
-                    XFormsElement.title("Create entities from nested repeats form"),
+                    XFormsElement.title("Update entities from nested repeats form"),
                     XFormsElement.model(
                         listOf(Pair("entities:entities-version", "2025.1.0")),
                         XFormsElement.mainInstance(
                             XFormsElement.t(
-                                "data id=\"create-entities-from-nested-repeats-form\"",
+                                "data id=\"update-entities-from-nested-repeats-form\"",
                                 XFormsElement.t(
                                     "people",
                                     XFormsElement.t("name"),
@@ -751,7 +751,7 @@ class EntitiesTest {
     @Test
     fun `filling form with update makes entity available`() {
         val scenario = Scenario.init(
-            "Create entity form",
+            "Update entity form",
             XFormsElement.html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
                 XFormsElement.head(
@@ -841,7 +841,7 @@ class EntitiesTest {
     @Test
     fun `filling form with update with null id makes entity available`() {
         val scenario = Scenario.init(
-            "Create entity form",
+            "Update entity form",
             XFormsElement.html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
                 XFormsElement.head(
@@ -881,7 +881,7 @@ class EntitiesTest {
     @Test
     fun `filling form with create and update does not make entity available`() {
         val scenario = Scenario.init(
-            "Create entity form",
+            "Upsert entity form",
             XFormsElement.html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
                 XFormsElement.head(
