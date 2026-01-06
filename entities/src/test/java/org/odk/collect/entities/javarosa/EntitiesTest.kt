@@ -130,7 +130,7 @@ class EntitiesTest {
                 XFormsElement.head(
                     XFormsElement.title("Create entities from multiple groups form"),
                     XFormsElement.model(
-                        listOf(Pair("entities:entities-version", "2024.1.0")),
+                        listOf(Pair("entities:entities-version", "2025.1.0")),
                         XFormsElement.mainInstance(
                             XFormsElement.t(
                                 "data id=\"create-entities-from-multiple-groups-form\"",
@@ -224,7 +224,7 @@ class EntitiesTest {
                 XFormsElement.head(
                     XFormsElement.title("Create entities from multiple groups form"),
                     XFormsElement.model(
-                        listOf(Pair("entities:entities-version", "2024.1.0")),
+                        listOf(Pair("entities:entities-version", "2025.1.0")),
                         XFormsElement.mainInstance(
                             XFormsElement.t(
                                 "data id=\"create-entities-from-multiple-groups-form\"",
@@ -320,7 +320,7 @@ class EntitiesTest {
                 XFormsElement.head(
                     XFormsElement.title("Create entities from repeats form"),
                     XFormsElement.model(
-                        listOf(Pair("entities:entities-version", "2024.1.0")),
+                        listOf(Pair("entities:entities-version", "2025.1.0")),
                         XFormsElement.mainInstance(
                             XFormsElement.t(
                                 "data id=\"create-entities-from-repeats-form\"",
@@ -397,7 +397,7 @@ class EntitiesTest {
                 XFormsElement.head(
                     XFormsElement.title("Create entities from repeats form"),
                     XFormsElement.model(
-                        listOf(Pair("entities:entities-version", "2024.1.0")),
+                        listOf(Pair("entities:entities-version", "2025.1.0")),
                         XFormsElement.mainInstance(
                             XFormsElement.t(
                                 "data id=\"create-entities-from-repeats-form\"",
@@ -474,7 +474,7 @@ class EntitiesTest {
                 XFormsElement.head(
                     XFormsElement.title("Create entities from nested repeats form"),
                     XFormsElement.model(
-                        listOf(Pair("entities:entities-version", "2024.1.0")),
+                        listOf(Pair("entities:entities-version", "2025.1.0")),
                         XFormsElement.mainInstance(
                             XFormsElement.t(
                                 "data id=\"create-entities-from-nested-repeats-form\"",
@@ -593,7 +593,7 @@ class EntitiesTest {
                 XFormsElement.head(
                     XFormsElement.title("Create entities from nested repeats form"),
                     XFormsElement.model(
-                        listOf(Pair("entities:entities-version", "2024.1.0")),
+                        listOf(Pair("entities:entities-version", "2025.1.0")),
                         XFormsElement.mainInstance(
                             XFormsElement.t(
                                 "data id=\"create-entities-from-nested-repeats-form\"",
