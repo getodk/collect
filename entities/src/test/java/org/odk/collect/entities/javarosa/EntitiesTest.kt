@@ -76,8 +76,7 @@ class EntitiesTest {
 
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
 
-        scenario.next()
-        scenario.answer("Tom Wambsgans")
+        scenario.answer("/data/name", "Tom Wambsgans")
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
@@ -120,8 +119,7 @@ class EntitiesTest {
 
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
 
-        scenario.next()
-        scenario.answer("Tom Wambsgans")
+        scenario.answer("/data/name", "Tom Wambsgans")
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
@@ -195,12 +193,8 @@ class EntitiesTest {
 
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
 
-        scenario.next()
-        scenario.next()
-        scenario.answer("Tom Wambsgans")
-        scenario.next()
-        scenario.next()
-        scenario.answer("Range Rover")
+        scenario.answer("/data/people/name", "Tom Wambsgans")
+        scenario.answer("/data/cars/model", "Range Rover")
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
@@ -291,12 +285,8 @@ class EntitiesTest {
 
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
 
-        scenario.next()
-        scenario.next()
-        scenario.answer("Tom Wambsgans")
-        scenario.next()
-        scenario.next()
-        scenario.answer("Range Rover")
+        scenario.answer("/data/people/name", "Tom Wambsgans")
+        scenario.answer("/data/cars/model", "Range Rover")
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
@@ -367,13 +357,9 @@ class EntitiesTest {
 
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
 
-        scenario.next()
-        scenario.next()
-        scenario.answer("Tom Wambsgans")
-        scenario.next()
-        scenario.createNewRepeat()
-        scenario.next()
-        scenario.answer("Shiv Roy")
+        scenario.answer("/data/people[1]/name", "Tom Wambsgans")
+        scenario.createNewRepeat("/data/people")
+        scenario.answer("/data/people[2]/name", "Shiv Roy")
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
@@ -444,13 +430,9 @@ class EntitiesTest {
 
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
 
-        scenario.next()
-        scenario.next()
-        scenario.answer("Tom Wambsgans")
-        scenario.next()
-        scenario.createNewRepeat()
-        scenario.next()
-        scenario.answer("Shiv Roy")
+        scenario.answer("/data/people[1]/name", "Tom Wambsgans")
+        scenario.createNewRepeat("/data/people")
+        scenario.answer("/data/people[2]/name", "Shiv Roy")
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
@@ -541,21 +523,12 @@ class EntitiesTest {
 
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
 
-        scenario.next()
-        scenario.next()
-        scenario.answer("Tom Wambsgans")
-        scenario.next()
-        scenario.next()
-        scenario.answer("Range Rover")
-        scenario.next()
-        scenario.next()
-        scenario.createNewRepeat()
-        scenario.next()
-        scenario.answer("Shiv Roy")
-        scenario.next()
-        scenario.createNewRepeat()
-        scenario.next()
-        scenario.answer("Audi A8")
+        scenario.answer("/data/people[1]/name", "Tom Wambsgans")
+        scenario.answer("/data/people[1]/cars[1]/model", "Range Rover")
+        scenario.createNewRepeat("/data/people")
+        scenario.answer("/data/people[2]/name", "Shiv Roy")
+        scenario.createNewRepeat("/data/people[2]/cars")
+        scenario.answer("/data/people[2]/cars[1]/model", "Audi A8")
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
@@ -660,21 +633,12 @@ class EntitiesTest {
 
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
 
-        scenario.next()
-        scenario.next()
-        scenario.answer("Tom Wambsgans")
-        scenario.next()
-        scenario.next()
-        scenario.answer("Range Rover")
-        scenario.next()
-        scenario.next()
-        scenario.createNewRepeat()
-        scenario.next()
-        scenario.answer("Shiv Roy")
-        scenario.next()
-        scenario.createNewRepeat()
-        scenario.next()
-        scenario.answer("Audi A8")
+        scenario.answer("/data/people[1]/name", "Tom Wambsgans")
+        scenario.answer("/data/people[1]/cars[1]/model", "Range Rover")
+        scenario.createNewRepeat("/data/people")
+        scenario.answer("/data/people[2]/name", "Shiv Roy")
+        scenario.createNewRepeat("/data/people[2]/cars")
+        scenario.answer("/data/people[2]/cars[1]/model", "Audi A8")
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
@@ -794,8 +758,7 @@ class EntitiesTest {
         )
 
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
-        scenario.next()
-        scenario.answer("Tom Wambsgans")
+        scenario.answer("/data/name", "Tom Wambsgans")
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
@@ -838,8 +801,7 @@ class EntitiesTest {
         )
 
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
-        scenario.next()
-        scenario.answer("Tom Wambsgans")
+        scenario.answer("/data/name", "Tom Wambsgans")
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
@@ -923,8 +885,7 @@ class EntitiesTest {
         )
 
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
-        scenario.next()
-        scenario.answer("Tom Wambsgans")
+        scenario.answer("/data/name", "Tom Wambsgans")
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
@@ -1060,8 +1021,7 @@ class EntitiesTest {
 
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
 
-        scenario.next()
-        scenario.answer("Tom Wambsgans")
+        scenario.answer("/data/name", "Tom Wambsgans")
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
