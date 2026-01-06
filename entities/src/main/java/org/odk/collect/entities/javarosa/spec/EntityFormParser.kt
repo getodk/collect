@@ -18,14 +18,7 @@ object EntityFormParser {
     @JvmStatic
     fun parseLabel(entity: TreeElement): String? {
         val labelElement = entity.getFirstChild(ELEMENT_LABEL)
-
-        return if (labelElement != null) {
-            val labelValue = labelElement.value
-
-            labelValue?.uncast()?.string
-        } else {
-            null
-        }
+        return labelElement?.value?.uncast()?.string
     }
 
     fun parseId(entity: TreeElement): String? {
