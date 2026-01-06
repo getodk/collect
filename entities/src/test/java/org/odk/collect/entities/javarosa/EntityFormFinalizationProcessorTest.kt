@@ -6,10 +6,10 @@ import org.javarosa.core.model.data.DateData
 import org.javarosa.core.model.data.StringData
 import org.javarosa.test.BindBuilderXFormsElement.bind
 import org.javarosa.test.Scenario
-import org.javarosa.test.XFormsElement
 import org.javarosa.test.XFormsElement.body
 import org.javarosa.test.XFormsElement.group
 import org.javarosa.test.XFormsElement.head
+import org.javarosa.test.XFormsElement.html
 import org.javarosa.test.XFormsElement.input
 import org.javarosa.test.XFormsElement.mainInstance
 import org.javarosa.test.XFormsElement.model
@@ -45,7 +45,7 @@ class EntityFormFinalizationProcessorTest {
     fun `when form does not have entity element, adds no entities to extras`() {
         val scenario = Scenario.init(
             "Normal form",
-            XFormsElement.html(
+            html(
                 head(
                     title("Normal form"),
                     model(
@@ -74,7 +74,7 @@ class EntityFormFinalizationProcessorTest {
     fun `when saveTo is not relevant, it is not included in entity`() {
         val scenario = Scenario.init(
             "Create entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
                 head(
                     title("Create entity form"),
@@ -123,7 +123,7 @@ class EntityFormFinalizationProcessorTest {
     fun `creates entity with values treated as opaque strings`() {
         val scenario = Scenario.init(
             "Create entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
                 head(
                     title("Create entity form"),
@@ -176,7 +176,7 @@ class EntityFormFinalizationProcessorTest {
     fun `when saveTo is in not relevant group, it is not included in entity`() {
         val scenario = Scenario.init(
             "Create entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
                 head(
                     title("Create entity form"),
@@ -230,7 +230,7 @@ class EntityFormFinalizationProcessorTest {
     fun `when saveTo is nested in an extra group, creates entity with values`() {
         val scenario = Scenario.init(
             "Create entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
                 head(
                     title("Create entity form"),

@@ -8,7 +8,19 @@ import org.javarosa.core.model.data.UncastData
 import org.javarosa.core.model.instance.TreeElement
 import org.javarosa.test.BindBuilderXFormsElement.bind
 import org.javarosa.test.Scenario
-import org.javarosa.test.XFormsElement
+import org.javarosa.test.XFormsElement.body
+import org.javarosa.test.XFormsElement.group
+import org.javarosa.test.XFormsElement.head
+import org.javarosa.test.XFormsElement.html
+import org.javarosa.test.XFormsElement.input
+import org.javarosa.test.XFormsElement.item
+import org.javarosa.test.XFormsElement.mainInstance
+import org.javarosa.test.XFormsElement.model
+import org.javarosa.test.XFormsElement.repeat
+import org.javarosa.test.XFormsElement.select1
+import org.javarosa.test.XFormsElement.setvalue
+import org.javarosa.test.XFormsElement.t
+import org.javarosa.test.XFormsElement.title
 import org.javarosa.xform.parse.XFormParserFactory
 import org.javarosa.xform.util.XFormUtils
 import org.junit.After
@@ -37,27 +49,27 @@ class EntitiesTest {
     fun `filling form without create does not create any entities`() {
         val scenario = Scenario.init(
             "Entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                XFormsElement.head(
-                    XFormsElement.title("Entity form"),
-                    XFormsElement.model(
+                head(
+                    title("Entity form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2024.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"entity-form\"",
-                                XFormsElement.t("name"),
-                                XFormsElement.t(
+                                t("name"),
+                                t(
                                     "meta",
-                                    XFormsElement.t("entity dataset=\"people\"")
+                                    t("entity dataset=\"people\"")
                                 )
                             )
                         ),
                         bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.input("/data/name")
+                body(
+                    input("/data/name")
                 )
             )
         )
@@ -76,20 +88,20 @@ class EntitiesTest {
     fun `filling form with create makes entity available`() {
         val scenario = Scenario.init(
             "Create entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                XFormsElement.head(
-                    XFormsElement.title("Create entity form"),
-                    XFormsElement.model(
+                head(
+                    title("Create entity form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2024.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"create-entity-form\"",
-                                XFormsElement.t("name"),
-                                XFormsElement.t(
+                                t("name"),
+                                t(
                                     "meta",
-                                    XFormsElement.t("entity dataset=\"people\" create=\"1\" id=\"\"",
-                                        XFormsElement.t("label")
+                                    t("entity dataset=\"people\" create=\"1\" id=\"\"",
+                                        t("label")
                                     )
                                 )
                             )
@@ -97,11 +109,11 @@ class EntitiesTest {
                         bind("/data/name").type("string").withAttribute("entities", "saveto", "name"),
                         bind("/data/meta/entity/@id").type("string"),
                         bind("/data/meta/entity/label").type("string").calculate("/data/name"),
-                        XFormsElement.setvalue("odk-instance-first-load", "/data/meta/entity/@id", "uuid()")
+                        setvalue("odk-instance-first-load", "/data/meta/entity/@id", "uuid()")
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.input("/data/name")
+                body(
+                    input("/data/name")
                 )
             )
         )
@@ -125,34 +137,34 @@ class EntitiesTest {
     fun `filling form with create in multiple groups makes entities available`() {
         val scenario = Scenario.init(
             "Create entities from multiple groups form",
-            XFormsElement.html(
+            html(
                 listOf("entities" to "http://www.opendatakit.org/xforms/entities"),
-                XFormsElement.head(
-                    XFormsElement.title("Create entities from multiple groups form"),
-                    XFormsElement.model(
+                head(
+                    title("Create entities from multiple groups form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2025.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"create-entities-from-multiple-groups-form\"",
-                                XFormsElement.t(
+                                t(
                                     "people",
-                                    XFormsElement.t("name"),
-                                    XFormsElement.t(
+                                    t("name"),
+                                    t(
                                         "meta",
-                                        XFormsElement.t(
+                                        t(
                                             "entity dataset=\"people\" create=\"1\" id=\"\"",
-                                            XFormsElement.t("label")
+                                            t("label")
                                         )
                                     )
                                 ),
-                                XFormsElement.t(
+                                t(
                                     "cars",
-                                    XFormsElement.t("model"),
-                                    XFormsElement.t(
+                                    t("model"),
+                                    t(
                                         "meta",
-                                        XFormsElement.t(
+                                        t(
                                             "entity dataset=\"cars\" create=\"1\" id=\"\"",
-                                            XFormsElement.t("label")
+                                            t("label")
                                         )
                                     )
                                 )
@@ -161,21 +173,21 @@ class EntitiesTest {
                         bind("/data/people/name").type("string").withAttribute("entities", "saveto", "name"),
                         bind("/data/people/meta/entity/@id").type("string"),
                         bind("/data/people/meta/entity/label").type("string").calculate("/data/people/name"),
-                        XFormsElement.setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
+                        setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
                         bind("/data/cars/model").type("string").withAttribute("entities", "saveto", "car_model"),
                         bind("/data/cars/meta/entity/@id").type("string"),
                         bind("/data/cars/meta/entity/label").type("string").calculate("/data/cars/model"),
-                        XFormsElement.setvalue("odk-instance-first-load", "/data/cars/meta/entity/@id", "uuid()"),
+                        setvalue("odk-instance-first-load", "/data/cars/meta/entity/@id", "uuid()"),
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.group(
+                body(
+                    group(
                         "/data/people",
-                        XFormsElement.input("/data/people/name"),
+                        input("/data/people/name"),
                     ),
-                    XFormsElement.group(
+                    group(
                         "/data/cars",
-                        XFormsElement.input("/data/cars/model"),
+                        input("/data/cars/model"),
                     )
                 )
             )
@@ -219,34 +231,34 @@ class EntitiesTest {
     fun `filling form with update in multiple groups makes entities available`() {
         val scenario = Scenario.init(
             "Update entities from multiple groups form",
-            XFormsElement.html(
+            html(
                 listOf("entities" to "http://www.opendatakit.org/xforms/entities"),
-                XFormsElement.head(
-                    XFormsElement.title("Update entities from multiple groups form"),
-                    XFormsElement.model(
+                head(
+                    title("Update entities from multiple groups form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2025.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"update-entities-from-multiple-groups-form\"",
-                                XFormsElement.t(
+                                t(
                                     "people",
-                                    XFormsElement.t("name"),
-                                    XFormsElement.t(
+                                    t("name"),
+                                    t(
                                         "meta",
-                                        XFormsElement.t(
+                                        t(
                                             "entity dataset=\"people\" update=\"1\" id=\"123\" baseVersion=\"1\"",
-                                            XFormsElement.t("label")
+                                            t("label")
                                         )
                                     )
                                 ),
-                                XFormsElement.t(
+                                t(
                                     "cars",
-                                    XFormsElement.t("model"),
-                                    XFormsElement.t(
+                                    t("model"),
+                                    t(
                                         "meta",
-                                        XFormsElement.t(
+                                        t(
                                             "entity dataset=\"cars\" update=\"1\" id=\"123\" baseVersion=\"1\"",
-                                            XFormsElement.t("label")
+                                            t("label")
                                         )
                                     )
                                 )
@@ -255,23 +267,23 @@ class EntitiesTest {
                         bind("/data/people/name").type("string").withAttribute("entities", "saveto", "name"),
                         bind("/data/people/meta/entity/@id").type("string"),
                         bind("/data/people/meta/entity/label").type("string").calculate("/data/people/name"),
-                        XFormsElement.setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
+                        setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
                         bind("/data/cars/model").type("string").withAttribute("entities", "saveto", "car_model"),
                         bind("/data/cars/meta/entity/@id").type("string"),
                         bind("/data/cars/meta/entity/label").type("string").calculate("/data/cars/model"),
-                        XFormsElement.setvalue("odk-instance-first-load", "/data/cars/meta/entity/@id", "uuid()"),
+                        setvalue("odk-instance-first-load", "/data/cars/meta/entity/@id", "uuid()"),
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.group(
+                body(
+                    group(
                         "/data/people",
-                        XFormsElement.input("/data/people/name"),
-                        XFormsElement.setvalue("odk-new-repeat", "/data/people/meta/entity/@id", "uuid()")
+                        input("/data/people/name"),
+                        setvalue("odk-new-repeat", "/data/people/meta/entity/@id", "uuid()")
                     ),
-                    XFormsElement.group(
+                    group(
                         "/data/cars",
-                        XFormsElement.input("/data/cars/model"),
-                        XFormsElement.setvalue("odk-new-repeat", "/data/cars/meta/entity/@id", "uuid()")
+                        input("/data/cars/model"),
+                        setvalue("odk-new-repeat", "/data/cars/meta/entity/@id", "uuid()")
                     )
                 )
             )
@@ -315,23 +327,23 @@ class EntitiesTest {
     fun `filling form with create in repeats makes entities available`() {
         val scenario = Scenario.init(
             "Create entities from repeats form",
-            XFormsElement.html(
+            html(
                 listOf("entities" to "http://www.opendatakit.org/xforms/entities"),
-                XFormsElement.head(
-                    XFormsElement.title("Create entities from repeats form"),
-                    XFormsElement.model(
+                head(
+                    title("Create entities from repeats form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2025.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"create-entities-from-repeats-form\"",
-                                XFormsElement.t(
+                                t(
                                     "people",
-                                    XFormsElement.t("name"),
-                                    XFormsElement.t(
+                                    t("name"),
+                                    t(
                                         "meta",
-                                        XFormsElement.t(
+                                        t(
                                             "entity dataset=\"people\" create=\"1\" id=\"\"",
-                                            XFormsElement.t("label")
+                                            t("label")
                                         )
                                     )
                                 )
@@ -340,14 +352,14 @@ class EntitiesTest {
                         bind("/data/people/name").type("string").withAttribute("entities", "saveto", "name"),
                         bind("/data/people/meta/entity/@id").type("string"),
                         bind("/data/people/meta/entity/label").type("string").calculate("/data/people/name"),
-                        XFormsElement.setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
+                        setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.repeat(
+                body(
+                    repeat(
                         "/data/people",
-                        XFormsElement.input("/data/people/name"),
-                        XFormsElement.setvalue("odk-new-repeat", "/data/people/meta/entity/@id", "uuid()")
+                        input("/data/people/name"),
+                        setvalue("odk-new-repeat", "/data/people/meta/entity/@id", "uuid()")
                     )
                 )
             )
@@ -392,23 +404,23 @@ class EntitiesTest {
     fun `filling form with update in repeats makes entities available`() {
         val scenario = Scenario.init(
             "Update entities from repeats form",
-            XFormsElement.html(
+            html(
                 listOf("entities" to "http://www.opendatakit.org/xforms/entities"),
-                XFormsElement.head(
-                    XFormsElement.title("Update entities from repeats form"),
-                    XFormsElement.model(
+                head(
+                    title("Update entities from repeats form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2025.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"update-entities-from-repeats-form\"",
-                                XFormsElement.t(
+                                t(
                                     "people",
-                                    XFormsElement.t("name"),
-                                    XFormsElement.t(
+                                    t("name"),
+                                    t(
                                         "meta",
-                                        XFormsElement.t(
+                                        t(
                                             "entity dataset=\"people\" update=\"1\" id=\"123\" baseVersion=\"1\"",
-                                            XFormsElement.t("label")
+                                            t("label")
                                         )
                                     )
                                 )
@@ -417,14 +429,14 @@ class EntitiesTest {
                         bind("/data/people/name").type("string").withAttribute("entities", "saveto", "name"),
                         bind("/data/people/meta/entity/@id").type("string"),
                         bind("/data/people/meta/entity/label").type("string").calculate("/data/people/name"),
-                        XFormsElement.setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
+                        setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.repeat(
+                body(
+                    repeat(
                         "/data/people",
-                        XFormsElement.input("/data/people/name"),
-                        XFormsElement.setvalue("odk-new-repeat", "/data/people/meta/entity/@id", "uuid()")
+                        input("/data/people/name"),
+                        setvalue("odk-new-repeat", "/data/people/meta/entity/@id", "uuid()")
                     )
                 )
             )
@@ -469,34 +481,34 @@ class EntitiesTest {
     fun `filling form with create in nested repeats makes entities available`() {
         val scenario = Scenario.init(
             "Create entities from nested repeats form",
-            XFormsElement.html(
+            html(
                 listOf("entities" to "http://www.opendatakit.org/xforms/entities"),
-                XFormsElement.head(
-                    XFormsElement.title("Create entities from nested repeats form"),
-                    XFormsElement.model(
+                head(
+                    title("Create entities from nested repeats form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2025.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"create-entities-from-nested-repeats-form\"",
-                                XFormsElement.t(
+                                t(
                                     "people",
-                                    XFormsElement.t("name"),
-                                    XFormsElement.t(
+                                    t("name"),
+                                    t(
                                         "cars",
-                                        XFormsElement.t("model"),
-                                        XFormsElement.t(
+                                        t("model"),
+                                        t(
                                             "meta",
-                                            XFormsElement.t(
+                                            t(
                                                 "entity dataset=\"cars\" create=\"1\" id=\"\"",
-                                                XFormsElement.t("label")
+                                                t("label")
                                             )
                                         )
                                     ),
-                                    XFormsElement.t(
+                                    t(
                                         "meta",
-                                        XFormsElement.t(
+                                        t(
                                             "entity dataset=\"people\" create=\"1\" id=\"\"",
-                                            XFormsElement.t("label")
+                                            t("label")
                                         )
                                     )
                                 )
@@ -505,22 +517,22 @@ class EntitiesTest {
                         bind("/data/people/name").type("string").withAttribute("entities", "saveto", "name"),
                         bind("/data/people/meta/entity/@id").type("string"),
                         bind("/data/people/meta/entity/label").type("string").calculate("/data/people/name"),
-                        XFormsElement.setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
+                        setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
                         bind("/data/people/cars/model").type("string").withAttribute("entities", "saveto", "car_model"),
                         bind("/data/people/cars/meta/entity/@id").type("string"),
                         bind("/data/people/cars/meta/entity/label").type("string").calculate("/data/people/cars/model"),
-                        XFormsElement.setvalue("odk-instance-first-load", "/data/people/cars/meta/entity/@id", "uuid()"),
+                        setvalue("odk-instance-first-load", "/data/people/cars/meta/entity/@id", "uuid()"),
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.repeat(
+                body(
+                    repeat(
                         "/data/people",
-                        XFormsElement.input("/data/people/name"),
-                        XFormsElement.setvalue("odk-new-repeat", "/data/people/meta/entity/@id", "uuid()"),
-                        XFormsElement.repeat(
+                        input("/data/people/name"),
+                        setvalue("odk-new-repeat", "/data/people/meta/entity/@id", "uuid()"),
+                        repeat(
                             "/data/people/cars",
-                            XFormsElement.input("/data/people/cars/model"),
-                            XFormsElement.setvalue("odk-new-repeat", "/data/people/cars/meta/entity/@id", "uuid()")
+                            input("/data/people/cars/model"),
+                            setvalue("odk-new-repeat", "/data/people/cars/meta/entity/@id", "uuid()")
                         )
                     )
                 )
@@ -588,34 +600,34 @@ class EntitiesTest {
     fun `filling form with update in nested repeats makes entities available`() {
         val scenario = Scenario.init(
             "Update entities from nested repeats form",
-            XFormsElement.html(
+            html(
                 listOf("entities" to "http://www.opendatakit.org/xforms/entities"),
-                XFormsElement.head(
-                    XFormsElement.title("Update entities from nested repeats form"),
-                    XFormsElement.model(
+                head(
+                    title("Update entities from nested repeats form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2025.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"update-entities-from-nested-repeats-form\"",
-                                XFormsElement.t(
+                                t(
                                     "people",
-                                    XFormsElement.t("name"),
-                                    XFormsElement.t(
+                                    t("name"),
+                                    t(
                                         "cars",
-                                        XFormsElement.t("model"),
-                                        XFormsElement.t(
+                                        t("model"),
+                                        t(
                                             "meta",
-                                            XFormsElement.t(
+                                            t(
                                                 "entity dataset=\"cars\" update=\"1\" id=\"123\" baseVersion=\"1\"",
-                                                XFormsElement.t("label")
+                                                t("label")
                                             )
                                         )
                                     ),
-                                    XFormsElement.t(
+                                    t(
                                         "meta",
-                                        XFormsElement.t(
+                                        t(
                                             "entity dataset=\"people\" update=\"1\" id=\"123\" baseVersion=\"1\"",
-                                            XFormsElement.t("label")
+                                            t("label")
                                         )
                                     )
                                 )
@@ -624,22 +636,22 @@ class EntitiesTest {
                         bind("/data/people/name").type("string").withAttribute("entities", "saveto", "name"),
                         bind("/data/people/meta/entity/@id").type("string"),
                         bind("/data/people/meta/entity/label").type("string").calculate("/data/people/name"),
-                        XFormsElement.setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
+                        setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
                         bind("/data/people/cars/model").type("string").withAttribute("entities", "saveto", "car_model"),
                         bind("/data/people/cars/meta/entity/@id").type("string"),
                         bind("/data/people/cars/meta/entity/label").type("string").calculate("/data/people/cars/model"),
-                        XFormsElement.setvalue("odk-instance-first-load", "/data/people/cars/meta/entity/@id", "uuid()"),
+                        setvalue("odk-instance-first-load", "/data/people/cars/meta/entity/@id", "uuid()"),
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.repeat(
+                body(
+                    repeat(
                         "/data/people",
-                        XFormsElement.input("/data/people/name"),
-                        XFormsElement.setvalue("odk-new-repeat", "/data/people/meta/entity/@id", "uuid()"),
-                        XFormsElement.repeat(
+                        input("/data/people/name"),
+                        setvalue("odk-new-repeat", "/data/people/meta/entity/@id", "uuid()"),
+                        repeat(
                             "/data/people/cars",
-                            XFormsElement.input("/data/people/cars/model"),
-                            XFormsElement.setvalue("odk-new-repeat", "/data/people/cars/meta/entity/@id", "uuid()")
+                            input("/data/people/cars/model"),
+                            setvalue("odk-new-repeat", "/data/people/cars/meta/entity/@id", "uuid()")
                         )
                     )
                 )
@@ -707,21 +719,21 @@ class EntitiesTest {
     fun `filling form with create without an id makes entity available`() {
         val scenario = Scenario.init(
             "Create entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                XFormsElement.head(
-                    XFormsElement.title("Create entity form"),
-                    XFormsElement.model(
+                head(
+                    title("Create entity form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2024.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"create-entity-form\"",
-                                XFormsElement.t("id"),
-                                XFormsElement.t("name"),
-                                XFormsElement.t(
+                                t("id"),
+                                t("name"),
+                                t(
                                     "meta",
-                                    XFormsElement.t("entity dataset=\"people\" create=\"1\" id=\"\"",
-                                        XFormsElement.t("label")
+                                    t("entity dataset=\"people\" create=\"1\" id=\"\"",
+                                        t("label")
                                     )
                                 )
                             )
@@ -731,9 +743,9 @@ class EntitiesTest {
                         bind("/data/meta/entity/label").type("string").calculate("/data/name")
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.input("/data/id"),
-                    XFormsElement.input("/data/name")
+                body(
+                    input("/data/id"),
+                    input("/data/name")
                 )
             )
         )
@@ -752,20 +764,20 @@ class EntitiesTest {
     fun `filling form with update makes entity available`() {
         val scenario = Scenario.init(
             "Update entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                XFormsElement.head(
-                    XFormsElement.title("Update entity form"),
-                    XFormsElement.model(
+                head(
+                    title("Update entity form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2024.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"update-entity-form\"",
-                                XFormsElement.t("name"),
-                                XFormsElement.t(
+                                t("name"),
+                                t(
                                     "meta",
-                                    XFormsElement.t("entity dataset=\"people\" update=\"1\" id=\"123\" baseVersion=\"1\"",
-                                        XFormsElement.t("label")
+                                    t("entity dataset=\"people\" update=\"1\" id=\"123\" baseVersion=\"1\"",
+                                        t("label")
                                     )
                                 )
                             )
@@ -775,8 +787,8 @@ class EntitiesTest {
                         bind("/data/meta/entity/label").type("string").calculate("/data/name")
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.input("/data/name")
+                body(
+                    input("/data/name")
                 )
             )
         )
@@ -799,19 +811,19 @@ class EntitiesTest {
     fun `filling form with update and no label makes entity available with null label`() {
         val scenario = Scenario.init(
             "Update entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                XFormsElement.head(
-                    XFormsElement.title("Update entity form"),
-                    XFormsElement.model(
+                head(
+                    title("Update entity form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2024.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"update-entity-form\"",
-                                XFormsElement.t("name"),
-                                XFormsElement.t(
+                                t("name"),
+                                t(
                                     "meta",
-                                    XFormsElement.t("entity dataset=\"people\" update=\"1\" id=\"123\" baseVersion=\"1\"")
+                                    t("entity dataset=\"people\" update=\"1\" id=\"123\" baseVersion=\"1\"")
                                 )
                             )
                         ),
@@ -819,8 +831,8 @@ class EntitiesTest {
                         bind("/data/meta/entity/@id").type("string")
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.input("/data/name")
+                body(
+                    input("/data/name")
                 )
             )
         )
@@ -842,19 +854,19 @@ class EntitiesTest {
     fun `filling form with update with null id makes entity available`() {
         val scenario = Scenario.init(
             "Update entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                XFormsElement.head(
-                    XFormsElement.title("Update entity form"),
-                    XFormsElement.model(
+                head(
+                    title("Update entity form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2024.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"update-entity-form\"",
-                                XFormsElement.t("id"),
-                                XFormsElement.t(
+                                t("id"),
+                                t(
                                     "meta",
-                                    XFormsElement.t("entity dataset=\"people\" update=\"1\" id=\"\" baseVersion=\"\"")
+                                    t("entity dataset=\"people\" update=\"1\" id=\"\" baseVersion=\"\"")
                                 )
                             )
                         ),
@@ -862,8 +874,8 @@ class EntitiesTest {
                         bind("/data/meta/entity/@id").type("string").calculate("/data/id").readonly()
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.input("/data/id")
+                body(
+                    input("/data/id")
                 )
             )
         )
@@ -882,20 +894,20 @@ class EntitiesTest {
     fun `filling form with create and update does not make entity available`() {
         val scenario = Scenario.init(
             "Upsert entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                XFormsElement.head(
-                    XFormsElement.title("Upsert entity form"),
-                    XFormsElement.model(
+                head(
+                    title("Upsert entity form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2024.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"upsert-entity-form\"",
-                                XFormsElement.t("name"),
-                                XFormsElement.t(
+                                t("name"),
+                                t(
                                     "meta",
-                                    XFormsElement.t("entity dataset=\"people\" create=\"1\" update=\"1\" id=\"123\" baseVersion=\"1\"",
-                                        XFormsElement.t("label")
+                                    t("entity dataset=\"people\" create=\"1\" update=\"1\" id=\"123\" baseVersion=\"1\"",
+                                        t("label")
                                     )
                                 )
                             )
@@ -904,8 +916,8 @@ class EntitiesTest {
                         bind("/data/meta/entity/label").type("string").calculate("/data/name")
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.input("/data/name")
+                body(
+                    input("/data/name")
                 )
             )
         )
@@ -923,20 +935,20 @@ class EntitiesTest {
     fun `filling form with dynamic create expression conditionally creates entities`() {
         val scenario = Scenario.init(
             "Create entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                XFormsElement.head(
-                    XFormsElement.title("Create entity form"),
-                    XFormsElement.model(
+                head(
+                    title("Create entity form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2024.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"create-entity-form\"",
-                                XFormsElement.t("name"),
-                                XFormsElement.t("join"),
-                                XFormsElement.t(
+                                t("name"),
+                                t("join"),
+                                t(
                                     "meta",
-                                    XFormsElement.t("entity dataset=\"members\" create=\"\" id=\"1\"")
+                                    t("entity dataset=\"members\" create=\"\" id=\"1\"")
                                 )
                             )
                         ),
@@ -944,9 +956,9 @@ class EntitiesTest {
                         bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.input("/data/name"),
-                    XFormsElement.select1("/data/join", XFormsElement.item("yes", "Yes"), XFormsElement.item("no", "No"))
+                body(
+                    input("/data/name"),
+                    select1("/data/join", item("yes", "Yes"), item("no", "No"))
                 )
             )
         )
@@ -978,27 +990,27 @@ class EntitiesTest {
     fun `entity form can be serialized`() {
         val scenario = Scenario.init(
             "Create entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                XFormsElement.head(
-                    XFormsElement.title("Create entity form"),
-                    XFormsElement.model(
+                head(
+                    title("Create entity form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2024.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"create-entity-form\"",
-                                XFormsElement.t("name"),
-                                XFormsElement.t(
+                                t("name"),
+                                t(
                                     "meta",
-                                    XFormsElement.t("entities:entity dataset=\"people\" create=\"1\" id=\"1\"")
+                                    t("entities:entity dataset=\"people\" create=\"1\" id=\"1\"")
                                 )
                             )
                         ),
                         bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.input("/data/name")
+                body(
+                    input("/data/name")
                 )
             )
         )
@@ -1021,27 +1033,27 @@ class EntitiesTest {
     fun `entities namespace works regardless of name`() {
         val scenario = Scenario.init(
             "Create entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("blah", "http://www.opendatakit.org/xforms/entities")),
-                XFormsElement.head(
-                    XFormsElement.title("Create entity form"),
-                    XFormsElement.model(
+                head(
+                    title("Create entity form"),
+                    model(
                         listOf(Pair("blah:entities-version", "2024.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"create-entity-form\"",
-                                XFormsElement.t("name"),
-                                XFormsElement.t(
+                                t("name"),
+                                t(
                                     "meta",
-                                    XFormsElement.t("entity dataset=\"people\" create=\"1\" id=\"1\"")
+                                    t("entity dataset=\"people\" create=\"1\" id=\"1\"")
                                 )
                             )
                         ),
                         bind("/data/name").type("string").withAttribute("blah", "saveto", "name")
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.input("/data/name")
+                body(
+                    input("/data/name")
                 )
             )
         )
@@ -1061,27 +1073,29 @@ class EntitiesTest {
     fun `filling form with select saveto and with create saves values correctly to entity`() {
         val scenario = Scenario.init(
             "Create entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                XFormsElement.head(
-                    XFormsElement.title("Create entity form"),
-                    XFormsElement.model(
+                head(
+                    title("Create entity form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2024.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"create-entity-form\"",
-                                XFormsElement.t("team"),
-                                XFormsElement.t(
+                                t("team"),
+                                t(
                                     "meta",
-                                    XFormsElement.t("entity dataset=\"people\" create=\"1\" id=\"1\"")
+                                    t("entity dataset=\"people\" create=\"1\" id=\"1\"")
                                 )
                             )
                         ),
                         bind("/data/team").type("string").withAttribute("entities", "saveto", "team")
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.select1("/data/team", XFormsElement.item("kendall", "Kendall"), XFormsElement.item("logan", "Logan"))
+                body(
+                    select1("/data/team", item("kendall", "Kendall"),
+                        item("logan", "Logan")
+                    )
                 )
             )
         )
@@ -1101,27 +1115,27 @@ class EntitiesTest {
     fun `when saveto question is not answered, entity property is empty string`() {
         val scenario = Scenario.init(
             "Create entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                XFormsElement.head(
-                    XFormsElement.title("Create entity form"),
-                    XFormsElement.model(
+                head(
+                    title("Create entity form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2024.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"create-entity-form\"",
-                                XFormsElement.t("name"),
-                                XFormsElement.t(
+                                t("name"),
+                                t(
                                     "meta",
-                                    XFormsElement.t("entity dataset=\"people\" create=\"1\" id=\"1\"")
+                                    t("entity dataset=\"people\" create=\"1\" id=\"1\"")
                                 )
                             )
                         ),
                         bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.input("/data/name")
+                body(
+                    input("/data/name")
                 )
             )
         )
@@ -1138,27 +1152,27 @@ class EntitiesTest {
     fun `saveto is removed from bind attributes for clients`() {
         val scenario = Scenario.init(
             "Create entity form",
-            XFormsElement.html(
+            html(
                 listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                XFormsElement.head(
-                    XFormsElement.title("Create entity form"),
-                    XFormsElement.model(
+                head(
+                    title("Create entity form"),
+                    model(
                         listOf(Pair("entities:entities-version", "2024.1.0")),
-                        XFormsElement.mainInstance(
-                            XFormsElement.t(
+                        mainInstance(
+                            t(
                                 "data id=\"create-entity-form\"",
-                                XFormsElement.t("name"),
-                                XFormsElement.t(
+                                t("name"),
+                                t(
                                     "meta",
-                                    XFormsElement.t("entity dataset=\"people\" create=\"1\"")
+                                    t("entity dataset=\"people\" create=\"1\"")
                                 )
                             )
                         ),
                         bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
                     )
                 ),
-                XFormsElement.body(
-                    XFormsElement.input("/data/name")
+                body(
+                    input("/data/name")
                 )
             )
         )

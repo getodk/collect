@@ -6,7 +6,14 @@ import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.FormDef
 import org.javarosa.test.BindBuilderXFormsElement.bind
-import org.javarosa.test.XFormsElement
+import org.javarosa.test.XFormsElement.body
+import org.javarosa.test.XFormsElement.head
+import org.javarosa.test.XFormsElement.html
+import org.javarosa.test.XFormsElement.input
+import org.javarosa.test.XFormsElement.mainInstance
+import org.javarosa.test.XFormsElement.model
+import org.javarosa.test.XFormsElement.t
+import org.javarosa.test.XFormsElement.title
 import org.javarosa.xform.parse.XFormParser
 import org.javarosa.xform.parse.XFormParser.MissingModelAttributeException
 import org.junit.Assert.fail
@@ -20,21 +27,21 @@ import java.io.InputStreamReader
 class EntityFormParseProcessorTest {
     @Test
     fun `when version is missing parses without error`() {
-        val form = XFormsElement.html(
-            XFormsElement.head(
-                XFormsElement.title("Non entity form"),
-                XFormsElement.model(
-                    XFormsElement.mainInstance(
-                        XFormsElement.t("data id=\"create-entity-form\"",
-                            XFormsElement.t("name"),
-                            XFormsElement.t("meta")
+        val form = html(
+            head(
+                title("Non entity form"),
+                model(
+                    mainInstance(
+                        t("data id=\"create-entity-form\"",
+                            t("name"),
+                            t("meta")
                         )
                     ),
                     bind("/data/name").type("string")
                 )
             ),
-            XFormsElement.body(
-                XFormsElement.input("/data/name")
+            body(
+                input("/data/name")
             )
         )
 
@@ -46,24 +53,24 @@ class EntityFormParseProcessorTest {
 
     @Test
     fun `when version is missing and there is an entity element throws exception`() {
-        val form = XFormsElement.html(
+        val form = html(
             listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-            XFormsElement.head(
-                XFormsElement.title("Create entity form"),
-                XFormsElement.model(
-                    XFormsElement.mainInstance(
-                        XFormsElement.t("data id=\"create-entity-form\"",
-                            XFormsElement.t("name"),
-                            XFormsElement.t("meta",
-                                XFormsElement.t("entity dataset=\"people\"")
+            head(
+                title("Create entity form"),
+                model(
+                    mainInstance(
+                        t("data id=\"create-entity-form\"",
+                            t("name"),
+                            t("meta",
+                                t("entity dataset=\"people\"")
                             )
                         )
                     ),
                     bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
                 )
             ),
-            XFormsElement.body(
-                XFormsElement.input("/data/name")
+            body(
+                input("/data/name")
             )
         )
 
@@ -84,25 +91,25 @@ class EntityFormParseProcessorTest {
 
     @Test(expected = UnrecognizedEntityVersionException::class)
     fun `when version is not recognized throws exception`() {
-        val form = XFormsElement.html(
+        val form = html(
             listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-            XFormsElement.head(
-                XFormsElement.title("Create entity form"),
-                XFormsElement.model(
+            head(
+                title("Create entity form"),
+                model(
                     listOf(Pair("entities:entities-version", "somethingElse")),
-                    XFormsElement.mainInstance(
-                        XFormsElement.t("data id=\"create-entity-form\"",
-                            XFormsElement.t("name"),
-                            XFormsElement.t("meta",
-                                XFormsElement.t("entity dataset=\"people\"")
+                    mainInstance(
+                        t("data id=\"create-entity-form\"",
+                            t("name"),
+                            t("meta",
+                                t("entity dataset=\"people\"")
                             )
                         )
                     ),
                     bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
                 )
             ),
-            XFormsElement.body(
-                XFormsElement.input("/data/name")
+            body(
+                input("/data/name")
             )
         )
 
@@ -115,25 +122,25 @@ class EntityFormParseProcessorTest {
     @Test
     fun `when version is new patch parses correctly`() {
         val newPatchVersion = "2022.1.12"
-        val form = XFormsElement.html(
+        val form = html(
             listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-            XFormsElement.head(
-                XFormsElement.title("Create entity form"),
-                XFormsElement.model(
+            head(
+                title("Create entity form"),
+                model(
                     listOf(Pair("entities:entities-version", newPatchVersion)),
-                    XFormsElement.mainInstance(
-                        XFormsElement.t("data id=\"create-entity-form\"",
-                            XFormsElement.t("name"),
-                            XFormsElement.t("meta",
-                                XFormsElement.t("entity dataset=\"people\"")
+                    mainInstance(
+                        t("data id=\"create-entity-form\"",
+                            t("name"),
+                            t("meta",
+                                t("entity dataset=\"people\"")
                             )
                         )
                     ),
                     bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
                 )
             ),
-            XFormsElement.body(
-                XFormsElement.input("/data/name")
+            body(
+                input("/data/name")
             )
         )
 
@@ -148,25 +155,25 @@ class EntityFormParseProcessorTest {
     @Test
     fun `when version is new version with updates parses correctly`() {
         val updateVersion = "2023.1.0"
-        val form = XFormsElement.html(
+        val form = html(
             listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-            XFormsElement.head(
-                XFormsElement.title("Create entity form"),
-                XFormsElement.model(
+            head(
+                title("Create entity form"),
+                model(
                     listOf(Pair("entities:entities-version", updateVersion)),
-                    XFormsElement.mainInstance(
-                        XFormsElement.t("data id=\"update-entity-form\"",
-                            XFormsElement.t("name"),
-                            XFormsElement.t("meta",
-                                XFormsElement.t("entity dataset=\"people\" update=\"1\" id=\"17\"")
+                    mainInstance(
+                        t("data id=\"update-entity-form\"",
+                            t("name"),
+                            t("meta",
+                                t("entity dataset=\"people\" update=\"1\" id=\"17\"")
                             )
                         )
                     ),
                     bind("/data/name").type("string").withAttribute("entities", "saveto", "name")
                 )
             ),
-            XFormsElement.body(
-                XFormsElement.input("/data/name")
+            body(
+                input("/data/name")
             )
         )
 
@@ -180,28 +187,28 @@ class EntityFormParseProcessorTest {
 
     @Test
     fun `saveTos with incorrect namespace are ignored`() {
-        val form = XFormsElement.html(
+        val form = html(
             listOf(
                 Pair("correct", "http://www.opendatakit.org/xforms/entities"),
                 Pair("incorrect", "blah")
             ),
-            XFormsElement.head(
-                XFormsElement.title("Create entity form"),
-                XFormsElement.model(
+            head(
+                title("Create entity form"),
+                model(
                     listOf(Pair("correct:entities-version", "2024.1.0")),
-                    XFormsElement.mainInstance(
-                        XFormsElement.t("data id=\"create-entity-form\"",
-                            XFormsElement.t("name"),
-                            XFormsElement.t("meta",
-                                XFormsElement.t("entity dataset=\"people\"")
+                    mainInstance(
+                        t("data id=\"create-entity-form\"",
+                            t("name"),
+                            t("meta",
+                                t("entity dataset=\"people\"")
                             )
                         )
                     ),
                     bind("/data/name").type("string").withAttribute("incorrect", "saveto", "name")
                 )
             ),
-            XFormsElement.body(
-                XFormsElement.input("/data/name")
+            body(
+                input("/data/name")
             )
         )
 
