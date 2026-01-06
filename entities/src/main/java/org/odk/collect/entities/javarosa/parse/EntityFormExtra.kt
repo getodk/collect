@@ -7,8 +7,10 @@ import java.io.DataInputStream
 import java.io.DataOutputStream
 
 class EntityFormExtra @JvmOverloads constructor(
-    private val _saveTos: MutableList<SaveTo> = mutableListOf()
+    saveTos: List<SaveTo> = emptyList()
 ) : Externalizable {
+    private val _saveTos: MutableList<SaveTo> = saveTos.toMutableList()
+
     val saveTos: List<SaveTo>
         get() = _saveTos
 
