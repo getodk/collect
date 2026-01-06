@@ -19,14 +19,14 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
             val saveTos = entityFormExtra.saveTos
 
             val entityElements = EntityFormParser.getEntityElements(mainInstance.getRoot())
-            val entities = mutableListOf<FormEntity>()
-            for (entityElement in entityElements) {
+            val entities = entityElements.mapNotNull { entityElement ->
                 val action = EntityFormParser.parseAction(entityElement)
                 val dataset = EntityFormParser.parseDataset(entityElement)!!
 
                 if (action == EntityAction.CREATE || action == EntityAction.UPDATE) {
-                    val entity = createEntity(entityElement, dataset, saveTos, mainInstance, action)
-                    entities.add(entity)
+                    createEntity(entityElement, dataset, saveTos, mainInstance, action)
+                } else {
+                    null
                 }
             }
             formEntryModel.extras.put(EntitiesExtra(entities))
@@ -40,28 +40,20 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
         mainInstance: FormInstance,
         action: EntityAction
     ): FormEntity {
-        val fields = mutableListOf<Pair<String, String>>()
         val entityGroupRef = entityElement.ref.getParentRef().getParentRef()
-        for (saveTo in saveTos) {
+        val fields = saveTos.mapNotNull { saveTo ->
             if (!entityGroupRef.genericize().equals(saveTo.entityGroupReference)) {
-                continue
-            }
+                null
+            } else {
+                val entityBindRef = saveTo.reference
+                val entityFieldRef = entityBindRef.contextualize(entityGroupRef)
 
-            val entityBindRef = saveTo.reference
-            val entityFieldRef = entityBindRef.contextualize(entityGroupRef)
-
-            val element = mainInstance.resolveReference(entityFieldRef)
-            if (element.isRelevant) {
-                val answerData = element.value
-                if (answerData != null) {
-                    fields.add(
-                        Pair<String, String>(
-                            saveTo.value,
-                            answerData.uncast().string
-                        )
-                    )
+                val element = mainInstance.resolveReference(entityFieldRef)
+                if (element.isRelevant) {
+                    val value = element.value?.uncast()?.string ?: ""
+                    saveTo.value to value
                 } else {
-                    fields.add(Pair(saveTo.value, ""))
+                    null
                 }
             }
         }
