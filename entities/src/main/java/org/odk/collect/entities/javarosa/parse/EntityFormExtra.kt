@@ -7,14 +7,14 @@ import java.io.DataInputStream
 import java.io.DataOutputStream
 
 class EntityFormExtra @JvmOverloads constructor(
-    private var _saveTos: MutableList<SaveTo> = mutableListOf()
+    private val _saveTos: MutableList<SaveTo> = mutableListOf()
 ) : Externalizable {
     val saveTos: List<SaveTo>
         get() = _saveTos
 
     override fun readExternal(input: DataInputStream, pf: PrototypeFactory) {
         val size = ExtUtil.readInt(input)
-        _saveTos = mutableListOf()
+        _saveTos.clear()
         repeat(size) {
             val entry = SaveTo()
             entry.readExternal(input, pf)
