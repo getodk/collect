@@ -17,18 +17,7 @@ class IntersectsFunctionHandler : IFunctionHandler {
         return listOf(arrayOf(String::class.java))
     }
 
-    override fun rawArgs(): Boolean {
-        return false
-    }
-
-    override fun realTime(): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun eval(
-        args: Array<out Any?>,
-        ec: EvaluationContext
-    ): Any {
+    override fun eval(args: Array<out Any>, ec: EvaluationContext): Any {
         try {
             val mapPoints = parseGeometry(args[0] as String, strict = true)
             val trace = Trace(mapPoints.map { it.toPoint() })

@@ -15,6 +15,7 @@
 package org.odk.collect.android.tasks;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.ENCRYPT_SUBMISSION;
+import static org.odk.collect.geo.GeoUtils.toMapPoint;
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 import android.content.ContentValues;
@@ -60,6 +61,7 @@ import org.odk.collect.entities.storage.EntitiesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.maps.MapPoint;
 import org.odk.collect.shared.files.FileExt;
 
 import java.io.File;
@@ -294,10 +296,9 @@ public class SaveFormToDisk {
 
     @NonNull
     private JSONObject toGeoJson(GeoPointData data) throws JSONException {
-        // For a GeoPointData object, the four fields exposed by getPart() are
-        // latitude, longitude, altitude, and accuracy radius, in that order.
-        double lat = data.getPart(0);
-        double lon = data.getPart(1);
+        MapPoint mapPoint = toMapPoint(data);
+        double lat = mapPoint.latitude;
+        double lon = mapPoint.longitude;
 
         // In GeoJSON, longitude comes before latitude.
         JSONArray coordinates = new JSONArray();

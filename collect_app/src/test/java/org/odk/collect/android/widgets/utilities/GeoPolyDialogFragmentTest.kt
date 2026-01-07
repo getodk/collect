@@ -12,7 +12,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.FormIndex
-import org.javarosa.core.model.data.StringData
+import org.javarosa.core.model.data.GeoShapeData
+import org.javarosa.core.model.data.GeoTraceData
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -68,7 +69,11 @@ class GeoPolyDialogFragmentTest {
 
     @Test
     fun `configures GeoPolyFragment with readOnly from prompt`() {
-        prompt = MockFormEntryPromptBuilder(prompt).withReadOnly(true).build()
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
+            .withReadOnly(true)
+            .build()
+
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
@@ -113,8 +118,8 @@ class GeoPolyDialogFragmentTest {
         }
     }
 
-    @Test
-    fun `configures GeoPolyFragment with geotrace output mode when prompt is something else`() {
+    @Test(expected = IllegalArgumentException::class)
+    fun `throws exception when prompt is something else`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .withDataType(Constants.DATATYPE_DATE)
             .build()
@@ -130,6 +135,7 @@ class GeoPolyDialogFragmentTest {
     @Test
     fun `configures GeoPolyFragment with retainMockAccruacy from allow-mock-accuracy bind attribute`() {
         prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
 
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
@@ -163,8 +169,9 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
-    fun `configures GeoPolyFragment inputPolgyon with existing answer`() {
+    fun `configures GeoPolyFragment inputPolygon with existing answer`() {
         prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
 
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
@@ -174,24 +181,36 @@ class GeoPolyDialogFragmentTest {
             assertThat(it.inputPolygon, equalTo(emptyList()))
         }
 
+        val points = listOf(MapPoint(0.0, 0.0, 1.0, 1.0), MapPoint(0.0, 1.0, 1.0, 1.0))
         prompt = MockFormEntryPromptBuilder(prompt)
-            .withAnswer(StringData("0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"))
+            .withDataType(Constants.DATATYPE_GEOTRACE)
+            .withAnswer(geoTraceOf(points))
             .build()
 
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
-            assertThat(
-                it.inputPolygon,
-                equalTo(listOf(MapPoint(0.0, 0.0, 1.0, 1.0), MapPoint(0.0, 1.0, 1.0, 1.0)))
-            )
+            assertThat(it.inputPolygon, equalTo(points))
+        }
+
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOSHAPE)
+            .withAnswer(geoShapeOf(points))
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.inputPolygon, equalTo(points))
         }
     }
 
     @Test
     fun `sets answer when REQUEST_GEOPOLY is returned`() {
         prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
 
         val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"
@@ -205,12 +224,33 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).answerQuestion(prompt.index, StringData(answer), false)
+        verify(formEntryViewModel).answerQuestion(prompt.index, geoTraceOf(answer), false)
+    }
+
+    @Test
+    fun `sets GeoShapeData answer when REQUEST_GEOPOLY is returned for GEOSHAPE prompt`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOSHAPE)
+            .build()
+
+        val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0; 1.0 1.0 0.0 0.0"
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY to answer)
+            )
+        }
+
+        verify(formEntryViewModel).answerQuestion(prompt.index, geoShapeOf(answer), false)
     }
 
     @Test
     fun `dismisses when REQUEST_GEOPOLY is returned`() {
         prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
 
         val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"
@@ -232,6 +272,7 @@ class GeoPolyDialogFragmentTest {
     @Test
     fun `sets answer with validate when REQUEST_GEOPOLY_CHANGE is returned if question is incremental`() {
         prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
             .withAdditionalAttribute(INCREMENTAL, "true")
             .build()
 
@@ -246,12 +287,14 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).answerQuestion(prompt.index, StringData(answer), true)
+        verify(formEntryViewModel).answerQuestion(prompt.index, geoTraceOf(answer), true)
     }
 
     @Test
-    fun `does not set answer when REQUEST_GEOPOLY_CHANGE is returned if question is not incremental`() {
+    fun `sets GeoShapeData answer with validate when REQUEST_GEOPOLY_CHANGE is returned if GEOSHAPE question is incremental`() {
         prompt = MockFormEntryPromptBuilder(prompt)
+            .withAdditionalAttribute(INCREMENTAL, "true")
+            .withDataType(Constants.DATATYPE_GEOSHAPE)
             .build()
 
         val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"
@@ -265,7 +308,27 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel, never()).answerQuestion(prompt.index, StringData(answer))
+        verify(formEntryViewModel).answerQuestion(prompt.index, geoShapeOf(answer), true)
+    }
+
+    @Test
+    fun `does not set answer when REQUEST_GEOPOLY_CHANGE is returned if question is not incremental`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
+            .build()
+
+        val answer = "0.0 0.0 1.0 1.0; 0.0 1.0 1.0 1.0"
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY_CHANGE to answer)
+            )
+        }
+
+        verify(formEntryViewModel, never()).answerQuestion(prompt.index, geoTraceOf(answer))
 
         prompt = MockFormEntryPromptBuilder(prompt)
             .withAdditionalAttribute(INCREMENTAL, "false")
@@ -281,12 +344,13 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel, never()).answerQuestion(prompt.index, StringData(answer))
+        verify(formEntryViewModel, never()).answerQuestion(prompt.index, geoTraceOf(answer))
     }
 
     @Test
     fun `does not dismiss when REQUEST_GEOPOLY_CHANGE is returned regardless of incremental value`() {
         prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
             .withAdditionalAttribute(INCREMENTAL, "true")
             .build()
 
@@ -325,6 +389,7 @@ class GeoPolyDialogFragmentTest {
     @Test
     fun `does not set answer when REQUEST_GEOPOLY is cancelled`() {
         prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
 
         launcherRule.launch(
@@ -340,6 +405,7 @@ class GeoPolyDialogFragmentTest {
     @Test
     fun `dismisses when REQUEST_GEOPOLY is cancelled`() {
         prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
 
         launcherRule.launch(
@@ -354,6 +420,7 @@ class GeoPolyDialogFragmentTest {
     @Test
     fun `uses validation result message for invalidMessage`() {
         prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
 
         index.value = Pair(prompt.index, null)
@@ -376,6 +443,7 @@ class GeoPolyDialogFragmentTest {
     @Test
     fun `uses validation result default message for invalidMessage if there's no custom message`() {
         prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
 
         index.value = Pair(prompt.index, null)
@@ -386,12 +454,55 @@ class GeoPolyDialogFragmentTest {
             assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
         }
 
-        index.value = Pair(prompt.index, FailedValidationResult(prompt.index, 0, null, R.string.cancel))
+        index.value =
+            Pair(prompt.index, FailedValidationResult(prompt.index, 0, null, R.string.cancel))
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
             assertThat(it.invalidMessage.getOrAwaitValue(), equalTo("Cancel"))
         }
+    }
+
+    private fun geoTraceOf(points: List<MapPoint>): GeoTraceData {
+        return GeoTraceData(
+            GeoTraceData.GeoTrace(
+                ArrayList(
+                    points.map {
+                        doubleArrayOf(
+                            it.latitude,
+                            it.longitude,
+                            it.altitude,
+                            it.accuracy
+                        )
+                    }
+                )
+            )
+        )
+    }
+
+    private fun geoShapeOf(points: List<MapPoint>): GeoShapeData {
+        return GeoShapeData(
+            GeoShapeData.GeoShape(
+                ArrayList(
+                    points.map {
+                        doubleArrayOf(
+                            it.latitude,
+                            it.longitude,
+                            it.altitude,
+                            it.accuracy
+                        )
+                    }
+                )
+            )
+        )
+    }
+
+    private fun geoTraceOf(answer: String): GeoTraceData {
+        return GeoTraceData().also { it.value = answer }
+    }
+
+    private fun geoShapeOf(answer: String): GeoShapeData {
+        return GeoShapeData().also { it.value = answer }
     }
 }

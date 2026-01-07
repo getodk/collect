@@ -20,7 +20,6 @@ import android.util.TypedValue;
 import android.view.View;
 
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.GeoshapeQuestionBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -74,7 +73,7 @@ public class GeoShapeWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return getAnswerText().isEmpty() ? null : new StringData(getAnswerText());
+        return getFormEntryPrompt().getAnswerValue();
     }
 
     @Override
