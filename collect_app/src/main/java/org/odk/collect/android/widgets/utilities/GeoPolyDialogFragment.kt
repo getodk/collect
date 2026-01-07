@@ -23,7 +23,8 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
     override fun onCreateFragment(prompt: FormEntryPrompt): GeoPolyFragment {
         val outputMode = when (prompt.dataType) {
             Constants.DATATYPE_GEOSHAPE -> OutputMode.GEOSHAPE
-            else -> OutputMode.GEOTRACE
+            Constants.DATATYPE_GEOTRACE -> OutputMode.GEOTRACE
+            else -> throw IllegalArgumentException()
         }
 
         childFragmentManager.setFragmentResultListener(
