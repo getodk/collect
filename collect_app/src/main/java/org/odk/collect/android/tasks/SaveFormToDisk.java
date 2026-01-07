@@ -296,8 +296,6 @@ public class SaveFormToDisk {
 
     @NonNull
     private JSONObject toGeoJson(GeoPointData data) throws JSONException {
-        // For a GeoPointData object, the four fields exposed by getPart() are
-        // latitude, longitude, altitude, and accuracy radius, in that order.
         MapPoint mapPoint = toMapPoint(data);
         double lat = mapPoint.latitude;
         double lon = mapPoint.longitude;
