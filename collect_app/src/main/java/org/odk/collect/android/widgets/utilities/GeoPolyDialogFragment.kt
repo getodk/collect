@@ -21,7 +21,6 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
     ) {
 
     override fun onCreateFragment(prompt: FormEntryPrompt): GeoPolyFragment {
-        val incremental = FormEntryPromptUtils.getAdditionalAttribute(prompt, INCREMENTAL)
         val outputMode = when (prompt.dataType) {
             Constants.DATATYPE_GEOSHAPE -> OutputMode.GEOSHAPE
             else -> OutputMode.GEOTRACE
@@ -35,6 +34,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             val geopoly = result.getString(GeoPolyFragment.RESULT_GEOPOLY)
 
             if (geopolyChange != null) {
+                val incremental = FormEntryPromptUtils.getAdditionalAttribute(prompt, INCREMENTAL)
                 if (incremental == "true") {
                     onAnswer(geopolyChange, outputMode, dismiss = false, validate = true)
                 }
