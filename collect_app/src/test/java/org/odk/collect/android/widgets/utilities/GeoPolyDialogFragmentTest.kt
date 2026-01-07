@@ -183,6 +183,7 @@ class GeoPolyDialogFragmentTest {
 
         val points = listOf(MapPoint(0.0, 0.0, 1.0, 1.0), MapPoint(0.0, 1.0, 1.0, 1.0))
         prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
             .withAnswer(geoTraceOf(points))
             .build()
 
@@ -194,6 +195,7 @@ class GeoPolyDialogFragmentTest {
         }
 
         prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOSHAPE)
             .withAnswer(geoShapeOf(points))
             .build()
 
