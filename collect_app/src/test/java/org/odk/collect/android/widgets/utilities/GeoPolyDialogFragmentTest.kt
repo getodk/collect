@@ -11,7 +11,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.Constants
-import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.data.GeoShapeData
 import org.javarosa.core.model.data.GeoTraceData
 import org.junit.Before
@@ -25,10 +24,13 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.javarosawrapper.FailedValidationResult
+import org.odk.collect.android.javarosawrapper.SuccessValidationResult
+import org.odk.collect.android.javarosawrapper.ValidationResult
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
+import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.geopoly.GeoPolyFragment
@@ -40,11 +42,12 @@ import org.odk.collect.testshared.getOrAwaitValue
 class GeoPolyDialogFragmentTest {
 
     private var prompt = MockFormEntryPromptBuilder().build()
-    private val index =
-        MutableLiveData<Pair<FormIndex, FailedValidationResult?>>(Pair(prompt.index, null))
+    private val validationResult = MutableLiveData<Consumable<ValidationResult>>(
+        Consumable(SuccessValidationResult)
+    )
     private val formEntryViewModel = mock<FormEntryViewModel> {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
-        on { currentIndex } doReturn index
+        on { validationResult } doReturn validationResult
     }
 
     private val viewModelFactory = object : ViewModelProvider.Factory {
@@ -423,7 +426,6 @@ class GeoPolyDialogFragmentTest {
             .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
 
-        index.value = Pair(prompt.index, null)
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
@@ -431,7 +433,7 @@ class GeoPolyDialogFragmentTest {
             assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
         }
 
-        index.value = Pair(prompt.index, FailedValidationResult(prompt.index, 0, "blah", 0))
+        validationResult.value = Consumable(FailedValidationResult(prompt.index, 0, "blah", 0))
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
@@ -446,7 +448,6 @@ class GeoPolyDialogFragmentTest {
             .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
 
-        index.value = Pair(prompt.index, null)
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
@@ -454,8 +455,8 @@ class GeoPolyDialogFragmentTest {
             assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
         }
 
-        index.value =
-            Pair(prompt.index, FailedValidationResult(prompt.index, 0, null, R.string.cancel))
+        validationResult.value =
+            Consumable(FailedValidationResult(prompt.index, 0, null, R.string.cancel))
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)

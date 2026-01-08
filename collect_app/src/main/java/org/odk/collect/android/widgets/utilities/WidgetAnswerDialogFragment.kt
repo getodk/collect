@@ -29,8 +29,8 @@ abstract class WidgetAnswerDialogFragment<T : Fragment>(
     private val prompt: FormEntryPrompt by lazy {
         formEntryViewModel.getQuestionPrompt(requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex)
     }
-    protected val currentIndex by lazy {
-        formEntryViewModel.currentIndex
+    protected val validationResult by lazy {
+        formEntryViewModel.validationResult
     }
 
     abstract fun onCreateFragment(prompt: FormEntryPrompt): T

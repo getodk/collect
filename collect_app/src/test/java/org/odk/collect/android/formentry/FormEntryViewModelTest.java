@@ -456,19 +456,19 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void validateAnswer_updatesIndexWithValidationResult() {
+    public void validateAnswer_updatesValidationResult() {
         TreeReference reference = new TreeReference();
         reference.add("blah", TreeReference.INDEX_UNBOUND);
         FormIndex formIndex = new FormIndex(null, 1, 1, reference);
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder().build();
         formController.setPrompt(formIndex, prompt);
 
-        FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
+        FailedValidationResult failedValidationResult = new FailedValidationResult(formIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
         formController.setFailedConstraint(failedValidationResult);
 
         viewModel.validateAnswer(formIndex, new StringData("answer"));
         scheduler.flush(true);
-        assertThat(viewModel.getCurrentIndex().getValue().getSecond(), equalTo(failedValidationResult));
+        assertThat(viewModel.getValidationResult().getValue().getValue(), equalTo(failedValidationResult));
     }
 
     @Test

@@ -7,6 +7,7 @@ import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.GeoShapeData
 import org.javarosa.core.model.data.GeoTraceData
 import org.javarosa.form.api.FormEntryPrompt
+import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.utilities.FormEntryPromptUtils
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.BindAttributes.ALLOW_MOCK_ACCURACY
@@ -62,11 +63,10 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             prompt.isReadOnly,
             retainMockAccuracy,
             inputPolygon,
-            currentIndex.map {
-                val validationResult = it.second
-                if (validationResult != null) {
-                    validationResult.customErrorMessage
-                        ?: getString(validationResult.defaultErrorMessage)
+            validationResult.map {
+                val validationResult = it.value
+                if (validationResult is FailedValidationResult) {
+                    validationResult.customErrorMessage ?: getString(validationResult.defaultErrorMessage)
                 } else {
                     null
                 }

@@ -292,7 +292,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         worker.immediate(() -> {
             try {
                 ValidationResult result = formController.saveOneScreenAnswer(index, answer, true);
-                currentIndex.postValue(new Pair(index, result instanceof FailedValidationResult ? result : null));
+                validationResult.postValue(new Consumable<>(result));
             } catch (JavaRosaException e) {
                 throw new RuntimeException(e);
             }
