@@ -299,12 +299,12 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         });
     }
 
-    public void answerQuestion(FormIndex index, IAnswerData answer, Boolean validate) {
+    public void answerQuestion(FormIndex index, IAnswerData answer) {
         worker.immediate(() -> {
             try {
                 FormEntryPrompt prompt = formController.getQuestionPrompt(index);
                 boolean autoAdvance = Appearances.hasAppearance(prompt, Appearances.QUICK);
-                ValidationResult result = formController.saveOneScreenAnswer(index, answer, validate || autoAdvance);
+                ValidationResult result = formController.saveOneScreenAnswer(index, answer, autoAdvance);
 
                 if (result instanceof FailedValidationResult) {
                     updateIndex(true, (FailedValidationResult) result);

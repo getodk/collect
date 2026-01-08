@@ -40,7 +40,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
                     onValidate(geopolyChange, outputMode)
                 }
             } else if (geopoly != null) {
-                onAnswer(geopoly, outputMode, dismiss = true, validate = false)
+                onAnswer(geopoly, outputMode)
             } else {
                 dismiss()
             }
@@ -83,17 +83,12 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
         onValidate(answer)
     }
 
-    private fun onAnswer(
-        geoString: String,
-        outputMode: OutputMode,
-        dismiss: Boolean,
-        validate: Boolean
-    ) {
+    private fun onAnswer(geoString: String, outputMode: OutputMode) {
         val answer = when (outputMode) {
             OutputMode.GEOTRACE -> GeoTraceData().also { it.value = geoString }
             OutputMode.GEOSHAPE -> GeoShapeData().also { it.value = geoString }
         }
 
-        onAnswer(answer, dismiss, validate)
+        onAnswer(answer)
     }
 }

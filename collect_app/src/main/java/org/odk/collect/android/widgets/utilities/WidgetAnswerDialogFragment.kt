@@ -76,12 +76,9 @@ abstract class WidgetAnswerDialogFragment<T : Fragment>(
         formEntryViewModel.validateAnswer(prompt.index, answer)
     }
 
-    fun onAnswer(answer: IAnswerData, dismiss: Boolean = true, validate: Boolean = false) {
-        formEntryViewModel.answerQuestion(prompt.index, answer, validate)
-
-        if (dismiss) {
-            dismiss()
-        }
+    fun onAnswer(answer: IAnswerData) {
+        formEntryViewModel.answerQuestion(prompt.index, answer)
+        dismiss()
     }
 
     companion object {
