@@ -288,17 +288,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         return formController.getQuestionPrompt(formIndex);
     }
 
-    public void validateAnswer(FormIndex index, IAnswerData answer) {
-        worker.immediate(() -> {
-            try {
-                ValidationResult result = formController.saveOneScreenAnswer(index, answer, true);
-                validationResult.postValue(new Consumable<>(result));
-            } catch (JavaRosaException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
     public void answerQuestion(FormIndex index, IAnswerData answer) {
         worker.immediate(() -> {
             try {
@@ -397,7 +386,18 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         changeLocks.getFormsLock().unlock(FORM_ENTRY_TOKEN);
     }
 
-    public void validate() {
+    public void validateAnswer(FormIndex index, IAnswerData answer) {
+        worker.immediate(() -> {
+            try {
+                ValidationResult result = formController.saveOneScreenAnswer(index, answer, true);
+                validationResult.postValue(new Consumable<>(result));
+            } catch (JavaRosaException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public void validateForm() {
         worker.immediate(
                 () -> {
                     ValidationResult result = null;
