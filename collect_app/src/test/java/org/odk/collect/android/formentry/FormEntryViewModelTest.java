@@ -450,13 +450,13 @@ public class FormEntryViewModelTest {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder().build();
         formController.setPrompt(formIndex, prompt);
 
-        viewModel.answerQuestion(formIndex, new StringData("answer"), false);
+        viewModel.answerQuestion(formIndex, new StringData("answer"));
         scheduler.flush(true);
         assertThat(formController.getAnswer(formIndex.getReference()).getValue(), equalTo("answer"));
     }
 
     @Test
-    public void answerQuestion_withValidateTrue_updatesIndexWithValidationResult() {
+    public void validateAnswer_updatesIndexWithValidationResult() {
         TreeReference reference = new TreeReference();
         reference.add("blah", TreeReference.INDEX_UNBOUND);
         FormIndex formIndex = new FormIndex(null, 1, 1, reference);
@@ -466,7 +466,7 @@ public class FormEntryViewModelTest {
         FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
         formController.setFailedConstraint(failedValidationResult);
 
-        viewModel.answerQuestion(formIndex, new StringData("answer"), true);
+        viewModel.validateAnswer(formIndex, new StringData("answer"));
         scheduler.flush(true);
         assertThat(viewModel.getCurrentIndex().getValue().getSecond(), equalTo(failedValidationResult));
     }
@@ -482,7 +482,7 @@ public class FormEntryViewModelTest {
         formController.setPrompt(formIndex, prompt);
 
         FormIndex originalIndex = formController.getFormIndex();
-        viewModel.answerQuestion(formIndex, new StringData("answer"), false);
+        viewModel.answerQuestion(formIndex, new StringData("answer"));
         scheduler.flush(true);
         assertThat(formController.getFormIndex(), equalTo(new FormIndex(null, originalIndex.getLocalIndex() + 1, 0, new TreeReference())));
     }
@@ -501,7 +501,7 @@ public class FormEntryViewModelTest {
         formController.setFailedConstraint(failedValidationResult);
 
         FormIndex originalIndex = formController.getFormIndex();
-        viewModel.answerQuestion(formIndex, new StringData("answer"), false);
+        viewModel.answerQuestion(formIndex, new StringData("answer"));
         scheduler.flush(true);
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()).getSecond(), equalTo(failedValidationResult));
         assertThat(formController.getFormIndex(), equalTo(new FormIndex(null, originalIndex.getLocalIndex(), 0, new TreeReference())));

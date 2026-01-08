@@ -208,7 +208,7 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
-    fun `sets answer when REQUEST_GEOPOLY is returned`() {
+    fun `sets GeoTraceData answer when REQUEST_GEOPOLY is returned`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
@@ -224,7 +224,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).answerQuestion(prompt.index, geoTraceOf(answer), false)
+        verify(formEntryViewModel).answerQuestion(prompt.index, geoTraceOf(answer))
     }
 
     @Test
@@ -244,7 +244,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).answerQuestion(prompt.index, geoShapeOf(answer), false)
+        verify(formEntryViewModel).answerQuestion(prompt.index, geoShapeOf(answer))
     }
 
     @Test
@@ -270,7 +270,7 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
-    fun `sets answer with validate when REQUEST_GEOPOLY_CHANGE is returned if question is incremental`() {
+    fun `validate GeoTraceData answer when REQUEST_GEOPOLY_CHANGE is returned if question is incremental`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .withDataType(Constants.DATATYPE_GEOTRACE)
             .withAdditionalAttribute(INCREMENTAL, "true")
@@ -287,11 +287,11 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).answerQuestion(prompt.index, geoTraceOf(answer), true)
+        verify(formEntryViewModel).validateAnswer(prompt.index, geoTraceOf(answer))
     }
 
     @Test
-    fun `sets GeoShapeData answer with validate when REQUEST_GEOPOLY_CHANGE is returned if GEOSHAPE question is incremental`() {
+    fun `validate GeoShapeData answer when REQUEST_GEOPOLY_CHANGE is returned if GEOSHAPE question is incremental`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .withAdditionalAttribute(INCREMENTAL, "true")
             .withDataType(Constants.DATATYPE_GEOSHAPE)
@@ -308,11 +308,11 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).answerQuestion(prompt.index, geoShapeOf(answer), true)
+        verify(formEntryViewModel).validateAnswer(prompt.index, geoShapeOf(answer))
     }
 
     @Test
-    fun `does not set answer when REQUEST_GEOPOLY_CHANGE is returned if question is not incremental`() {
+    fun `does not validate answer when REQUEST_GEOPOLY_CHANGE is returned if question is not incremental`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
@@ -328,7 +328,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel, never()).answerQuestion(prompt.index, geoTraceOf(answer), false)
+        verify(formEntryViewModel, never()).answerQuestion(prompt.index, geoTraceOf(answer))
 
         prompt = MockFormEntryPromptBuilder(prompt)
             .withAdditionalAttribute(INCREMENTAL, "false")
@@ -344,7 +344,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel, never()).answerQuestion(prompt.index, geoTraceOf(answer), false)
+        verify(formEntryViewModel, never()).validateAnswer(prompt.index, geoTraceOf(answer))
     }
 
     @Test
@@ -399,7 +399,7 @@ class GeoPolyDialogFragmentTest {
             it.childFragmentManager.setFragmentResult(GeoPolyFragment.REQUEST_GEOPOLY, Bundle.EMPTY)
         }
 
-        verify(formEntryViewModel, never()).answerQuestion(any(), any(), false)
+        verify(formEntryViewModel, never()).answerQuestion(any(), any())
     }
 
     @Test
