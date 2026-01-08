@@ -15,7 +15,6 @@ import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
 import org.javarosa.test.BindBuilderXFormsElement.bind
 import org.javarosa.test.Scenario
-import org.javarosa.test.XFormsElement
 import org.javarosa.test.XFormsElement.body
 import org.javarosa.test.XFormsElement.head
 import org.javarosa.test.XFormsElement.html
@@ -23,6 +22,7 @@ import org.javarosa.test.XFormsElement.input
 import org.javarosa.test.XFormsElement.instance
 import org.javarosa.test.XFormsElement.mainInstance
 import org.javarosa.test.XFormsElement.model
+import org.javarosa.test.XFormsElement.repeat
 import org.javarosa.test.XFormsElement.select1Dynamic
 import org.javarosa.test.XFormsElement.t
 import org.javarosa.test.XFormsElement.title
@@ -300,7 +300,7 @@ class LocalEntitiesFilterStrategyTest {
                     )
                 ),
                 body(
-                    XFormsElement.repeat("/data/people",
+                    repeat("/data/people",
                         input("/data/people/name"),
                         input("/data/people/age")
                     ),

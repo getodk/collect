@@ -2,6 +2,8 @@ package org.odk.collect.entities.javarosa.parse
 
 import org.javarosa.core.model.DataBinding
 import org.javarosa.core.model.FormDef
+import org.javarosa.core.model.instance.TreeElement
+import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.model.xform.XPathReference
 import org.javarosa.xform.parse.XFormParser
 import org.javarosa.xform.parse.XFormParser.BindAttributeProcessor
@@ -15,10 +17,8 @@ import org.odk.collect.entities.javarosa.parse.EntityFormParseProcessor.Companio
 import org.odk.collect.entities.javarosa.spec.EntityFormParser
 import org.odk.collect.entities.javarosa.spec.UnrecognizedEntityVersionException
 
-class EntityFormParseProcessor(
-    private val v2025enabled: () -> Boolean
-) : BindAttributeProcessor, FormDefProcessor, ModelAttributeProcessor {
-    private val saveTos = mutableListOf<Pair<XPathReference, String>>()
+class EntityFormParseProcessor() : BindAttributeProcessor, FormDefProcessor, ModelAttributeProcessor {
+    private val bindAttributes = mutableListOf<Pair<TreeReference, String>>()
     private var version: String? = null
 
     override fun getModelAttributes(): Set<Pair<String, String>> {
@@ -28,10 +28,6 @@ class EntityFormParseProcessor(
     @Throws(XFormParser.ParseException::class)
     override fun processModelAttribute(name: String, value: String) {
         version = value
-
-        if (value.startsWith(V2025_1) && v2025enabled()) {
-            return
-        }
 
         if (SUPPORTED_VERSIONS.none { value.startsWith(it) }) {
             throw UnrecognizedEntityVersionException(value)
@@ -43,7 +39,8 @@ class EntityFormParseProcessor(
     }
 
     override fun processBindAttribute(name: String, value: String, binding: DataBinding) {
-        saveTos.add(Pair(binding.reference as XPathReference, value))
+        val reference = (binding.reference as XPathReference).reference as TreeReference
+        bindAttributes.add(Pair(reference, value))
     }
 
     @Throws(XFormParser.ParseException::class)
@@ -53,11 +50,27 @@ class EntityFormParseProcessor(
                 if (it == null) {
                     throw MissingModelAttributeException(ENTITIES_NAMESPACE, "entities-version")
                 } else if (LOCAL_ENTITY_VERSIONS.any { prefix -> it.startsWith(prefix) }) {
+                    val saveTos = bindAttributes.mapNotNull { (ref, value) ->
+                        val parentElement = formDef.mainInstance.resolveReference(ref).parent as TreeElement
+                        findNearestEntityGroupElement(parentElement)?.let { entityGroup ->
+                            SaveTo(ref, value, entityGroup.ref.genericize())
+                        }
+                    }
                     val entityFormExtra = EntityFormExtra(saveTos)
                     formDef.extras.put(entityFormExtra)
                 }
             }
         }
+    }
+
+    private fun findNearestEntityGroupElement(element: TreeElement?): TreeElement? {
+        if (element == null) {
+            return null
+        }
+        if (EntityFormParser.hasEntityElement(element)) {
+            return element
+        }
+        return findNearestEntityGroupElement(element.parent as? TreeElement)
     }
 
     companion object {
@@ -70,11 +83,11 @@ class EntityFormParseProcessor(
         }
 
         private const val ENTITIES_NAMESPACE = "http://www.opendatakit.org/xforms/entities"
-        private val SUPPORTED_VERSIONS = arrayOf(V2022_1, V2023_1, V2024_1)
+        private val SUPPORTED_VERSIONS = arrayOf(V2022_1, V2023_1, V2024_1, V2025_1)
         private val LOCAL_ENTITY_VERSIONS = arrayOf(V2024_1, V2025_1)
 
         private fun isEntityForm(formDef: FormDef): Boolean {
-            return EntityFormParser.getEntityElement(formDef.mainInstance) != null
+            return EntityFormParser.hasEntityElement(formDef.mainInstance.root)
         }
     }
 }
