@@ -45,18 +45,7 @@ object EntityFormParser {
     }
 
     fun hasEntityElement(treeElement: TreeElement): Boolean {
-        val numOfChildren = treeElement.numChildren
-        for (i in 0..<numOfChildren) {
-            val childTreeElement = treeElement.getChildAt(i)
-            if ("meta" == childTreeElement.name) {
-                return childTreeElement.getFirstChild(ELEMENT_ENTITY) != null
-            } else if (childTreeElement.hasChildren()) {
-                if (hasEntityElement(childTreeElement)) {
-                    return true
-                }
-            }
-        }
-        return false
+        return getEntityElements(treeElement).isNotEmpty()
     }
 
     @JvmStatic
