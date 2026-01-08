@@ -288,10 +288,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         return formController.getQuestionPrompt(formIndex);
     }
 
-    public void answerQuestion(FormIndex index, IAnswerData answer) {
-        answerQuestion(index, answer, false);
-    }
-
     public void answerQuestion(FormIndex index, IAnswerData answer, Boolean validate) {
         worker.immediate(() -> {
             try {

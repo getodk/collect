@@ -328,7 +328,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel, never()).answerQuestion(prompt.index, geoTraceOf(answer))
+        verify(formEntryViewModel, never()).answerQuestion(prompt.index, geoTraceOf(answer), false)
 
         prompt = MockFormEntryPromptBuilder(prompt)
             .withAdditionalAttribute(INCREMENTAL, "false")
@@ -344,7 +344,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel, never()).answerQuestion(prompt.index, geoTraceOf(answer))
+        verify(formEntryViewModel, never()).answerQuestion(prompt.index, geoTraceOf(answer), false)
     }
 
     @Test
@@ -399,7 +399,7 @@ class GeoPolyDialogFragmentTest {
             it.childFragmentManager.setFragmentResult(GeoPolyFragment.REQUEST_GEOPOLY, Bundle.EMPTY)
         }
 
-        verify(formEntryViewModel, never()).answerQuestion(any(), any())
+        verify(formEntryViewModel, never()).answerQuestion(any(), any(), false)
     }
 
     @Test

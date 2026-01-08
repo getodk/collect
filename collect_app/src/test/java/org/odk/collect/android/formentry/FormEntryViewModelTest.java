@@ -450,7 +450,7 @@ public class FormEntryViewModelTest {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder().build();
         formController.setPrompt(formIndex, prompt);
 
-        viewModel.answerQuestion(formIndex, new StringData("answer"));
+        viewModel.answerQuestion(formIndex, new StringData("answer"), false);
         scheduler.flush(true);
         assertThat(formController.getAnswer(formIndex.getReference()).getValue(), equalTo("answer"));
     }
@@ -482,7 +482,7 @@ public class FormEntryViewModelTest {
         formController.setPrompt(formIndex, prompt);
 
         FormIndex originalIndex = formController.getFormIndex();
-        viewModel.answerQuestion(formIndex, new StringData("answer"));
+        viewModel.answerQuestion(formIndex, new StringData("answer"), false);
         scheduler.flush(true);
         assertThat(formController.getFormIndex(), equalTo(new FormIndex(null, originalIndex.getLocalIndex() + 1, 0, new TreeReference())));
     }
@@ -501,7 +501,7 @@ public class FormEntryViewModelTest {
         formController.setFailedConstraint(failedValidationResult);
 
         FormIndex originalIndex = formController.getFormIndex();
-        viewModel.answerQuestion(formIndex, new StringData("answer"));
+        viewModel.answerQuestion(formIndex, new StringData("answer"), false);
         scheduler.flush(true);
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()).getSecond(), equalTo(failedValidationResult));
         assertThat(formController.getFormIndex(), equalTo(new FormIndex(null, originalIndex.getLocalIndex(), 0, new TreeReference())));
