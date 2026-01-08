@@ -37,7 +37,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             if (geopolyChange != null) {
                 val incremental = FormEntryPromptUtils.getAdditionalAttribute(prompt, INCREMENTAL)
                 if (incremental == "true") {
-                    onAnswer(geopolyChange, outputMode, dismiss = false, validate = true)
+                    onValidate(geopolyChange, outputMode)
                 }
             } else if (geopoly != null) {
                 onAnswer(geopoly, outputMode, dismiss = true, validate = false)
@@ -72,6 +72,15 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
                 }
             }
         )
+    }
+
+    private fun onValidate(geoString: String, outputMode: OutputMode) {
+        val answer = when (outputMode) {
+            OutputMode.GEOTRACE -> GeoTraceData().also { it.value = geoString }
+            OutputMode.GEOSHAPE -> GeoShapeData().also { it.value = geoString }
+        }
+
+        onValidate(answer)
     }
 
     private fun onAnswer(

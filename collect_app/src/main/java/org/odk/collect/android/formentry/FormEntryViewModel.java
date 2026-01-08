@@ -288,6 +288,17 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         return formController.getQuestionPrompt(formIndex);
     }
 
+    public void validateAnswer(FormIndex index, IAnswerData answer) {
+        worker.immediate(() -> {
+            try {
+                ValidationResult result = formController.saveOneScreenAnswer(index, answer, true);
+                currentIndex.postValue(new Pair(index, result instanceof FailedValidationResult ? result : null));
+            } catch (JavaRosaException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     public void answerQuestion(FormIndex index, IAnswerData answer, Boolean validate) {
         worker.immediate(() -> {
             try {

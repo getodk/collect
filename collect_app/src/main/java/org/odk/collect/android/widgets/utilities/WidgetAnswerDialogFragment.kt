@@ -72,6 +72,10 @@ abstract class WidgetAnswerDialogFragment<T : Fragment>(
         // No toolbar so not relevant
     }
 
+    fun onValidate(answer: IAnswerData) {
+        formEntryViewModel.validateAnswer(prompt.index, answer)
+    }
+
     fun onAnswer(answer: IAnswerData, dismiss: Boolean = true, validate: Boolean = false) {
         formEntryViewModel.answerQuestion(prompt.index, answer, validate)
 
