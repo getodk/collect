@@ -12,37 +12,37 @@ import org.odk.collect.maps.markers.MarkerIconDescription
 class MarkerIconDescriptionTest {
     @Test
     fun `return null when color is null`() {
-        val markerIconDescription = MarkerIconDescription(0, null)
+        val markerIconDescription = MarkerIconDescription.Resource(0, null)
         assertThat(markerIconDescription.getColor(), `is`(nullValue()))
     }
 
     @Test
     fun `return null when symbol is null`() {
-        val markerIconDescription = MarkerIconDescription(0, symbol = null)
+        val markerIconDescription = MarkerIconDescription.Resource(0, symbol = null)
         assertThat(markerIconDescription.getSymbol(), `is`(nullValue()))
     }
 
     @Test
     fun `return null when symbol is empty`() {
-        val markerIconDescription = MarkerIconDescription(0, symbol = "")
+        val markerIconDescription = MarkerIconDescription.Resource(0, symbol = "")
         assertThat(markerIconDescription.getSymbol(), `is`(nullValue()))
     }
 
     @Test
     fun `return first char when symbol consists of multiple chars`() {
-        val markerIconDescription = MarkerIconDescription(0, symbol = "Blah")
+        val markerIconDescription = MarkerIconDescription.Resource(0, symbol = "Blah")
         assertThat(markerIconDescription.getSymbol(), `is`("B"))
     }
 
     @Test
     fun `return uppercase symbol`() {
-        val markerIconDescription = MarkerIconDescription(0, symbol = "b")
+        val markerIconDescription = MarkerIconDescription.Resource(0, symbol = "b")
         assertThat(markerIconDescription.getSymbol(), `is`("B"))
     }
 
     @Test
     fun `return emoji symbol`() {
-        val markerIconDescription = MarkerIconDescription(0, symbol = "\uD83E\uDDDB")
+        val markerIconDescription = MarkerIconDescription.Resource(0, symbol = "\uD83E\uDDDB")
         assertThat(markerIconDescription.getSymbol(), `is`("\uD83E\uDDDB"))
     }
 }
