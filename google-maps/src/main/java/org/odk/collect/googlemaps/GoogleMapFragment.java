@@ -594,7 +594,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         if (locationCrosshairs == null) {
             locationCrosshairs = map.addMarker(new MarkerOptions()
                 .position(loc)
-                .icon(getBitmapDescriptor(getContext(), new MarkerIconDescription(org.odk.collect.maps.R.drawable.ic_crosshairs)))
+                .icon(getBitmapDescriptor(getContext(), new MarkerIconDescription.Resource(org.odk.collect.maps.R.drawable.ic_crosshairs)))
                 .anchor(0.5f, 0.5f)  // center the crosshairs on the position
             );
         }
@@ -871,7 +871,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             }
 
             for (MapPoint point : lineDescription.getPoints()) {
-                markers.add(createMarker(context, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(org.odk.collect.icons.R.drawable.ic_map_point)), map));
+                markers.add(createMarker(context, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.Resource(org.odk.collect.icons.R.drawable.ic_map_point)), map));
             }
 
             update();
@@ -937,7 +937,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
-            markers.add(createMarker(context, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(org.odk.collect.icons.R.drawable.ic_map_point)), map));
+            markers.add(createMarker(context, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.Resource(org.odk.collect.icons.R.drawable.ic_map_point)), map));
             update();
         }
 

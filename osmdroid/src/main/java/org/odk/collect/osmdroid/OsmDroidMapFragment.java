@@ -874,8 +874,10 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         final List<Marker> markers = new ArrayList<>();
         final Polyline polyline;
         final boolean closedPolygon;
+        private final LineDescription lineDescription;
 
         DynamicPolyLineFeature(MapView map, LineDescription lineDescription) {
+            this.lineDescription = lineDescription;
             this.map = map;
             this.closedPolygon = lineDescription.getClosed();
             polyline = new Polyline();
@@ -892,7 +894,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             paint.setStrokeWidth(lineDescription.getStrokeWidth());
             map.getOverlays().add(polyline);
             for (MapPoint point : lineDescription.getPoints()) {
-                markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(org.odk.collect.icons.R.drawable.ic_map_point))));
+                markers.add(getPointMarker(point));
             }
             update();
         }
@@ -944,8 +946,13 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         }
 
         public void addPoint(MapPoint point) {
-            markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(org.odk.collect.icons.R.drawable.ic_map_point))));
+            markers.add(getPointMarker(point));
             update();
+        }
+
+        @NonNull
+        private Marker getPointMarker(MapPoint point) {
+            return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth())));
         }
 
         public void removeLastPoint() {

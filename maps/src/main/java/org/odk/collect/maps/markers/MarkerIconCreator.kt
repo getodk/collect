@@ -2,6 +2,7 @@ package org.odk.collect.maps.markers
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Bitmap.Config
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -10,6 +11,7 @@ import android.util.LruCache
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
+import org.odk.collect.maps.MapConsts
 
 object MarkerIconCreator {
     /**
@@ -22,14 +24,53 @@ object MarkerIconCreator {
 
     @JvmStatic
     fun getMarkerIcon(context: Context, markerIconDescription: MarkerIconDescription): Bitmap {
-        val drawableId = markerIconDescription.icon
-        val color = markerIconDescription.getColor()
-        val symbol = markerIconDescription.getSymbol()
+        return when (markerIconDescription) {
+            is MarkerIconDescription.LinePoint -> {
+                fromCache("LinePoint") {
+                    val size = markerIconDescription.lineSize * 6
+                    val bitmap =
+                        Bitmap.createBitmap(size.toInt(), size.toInt(), Config.ARGB_8888)
 
-        val bitmapId = drawableId.toString() + color + symbol
+                    Canvas(bitmap).also { canvas ->
+                        val radius = size / 2
 
+                        val fill = Paint().also {
+                            it.style = Paint.Style.FILL
+                            it.color = MapConsts.DEFAULT_STROKE_COLOR
+                        }
+                        canvas.drawCircle(radius, radius, radius, fill)
+
+                        val strokeWidth = markerIconDescription.lineSize
+                        val stroke = Paint().also {
+                            it.style = Paint.Style.STROKE
+                            it.color = Color.parseColor("#ffffff")
+                            it.strokeWidth = strokeWidth
+                        }
+                        canvas.drawCircle(radius, radius, radius - (strokeWidth / 2), stroke)
+                    }
+
+                    bitmap
+                }
+            }
+
+            is MarkerIconDescription.Resource -> {
+                val drawableId = markerIconDescription.icon
+                val color = markerIconDescription.getColor()
+                val symbol = markerIconDescription.getSymbol()
+
+                val bitmapId = drawableId.toString() + color + symbol
+                fromCache(bitmapId) {
+                    createBitmap(context, drawableId, color, symbol).also {
+                        cache.put(bitmapId, it)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun fromCache(bitmapId: String, factory: () -> Bitmap): Bitmap {
         return if (cache[bitmapId] == null) {
-            createBitmap(context, drawableId, color, symbol).also {
+            factory().also {
                 cache.put(bitmapId, it)
             }
         } else {
