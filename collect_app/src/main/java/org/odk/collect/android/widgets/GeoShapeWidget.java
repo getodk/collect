@@ -77,12 +77,7 @@ public class GeoShapeWidget extends QuestionWidget {
     }
 
     @Override
-    public void clearAnswer() {
-        binding.geoAnswerText.setText(null);
-        binding.geoAnswerText.setVisibility(GONE);
-        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_polygon);
-        widgetValueChanged();
-    }
+    public void clearAnswer() {}
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
@@ -95,9 +90,5 @@ public class GeoShapeWidget extends QuestionWidget {
         super.cancelLongPress();
         binding.simpleButton.cancelLongPress();
         binding.geoAnswerText.cancelLongPress();
-    }
-
-    private String getAnswerText() {
-        return binding.geoAnswerText.getText().toString();
     }
 }

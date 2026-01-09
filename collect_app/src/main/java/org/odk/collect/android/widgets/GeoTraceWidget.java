@@ -97,21 +97,12 @@ public class GeoTraceWidget extends QuestionWidget {
     }
 
     @Override
-    public void clearAnswer() {
-        binding.geoAnswerText.setText(null);
-        binding.geoAnswerText.setVisibility(GONE);
-        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_line);
-        widgetValueChanged();
-    }
+    public void clearAnswer() {}
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
         binding.simpleButton.cancelLongPress();
         binding.geoAnswerText.cancelLongPress();
-    }
-
-    private String getAnswerText() {
-        return binding.geoAnswerText.getText().toString();
     }
 }
