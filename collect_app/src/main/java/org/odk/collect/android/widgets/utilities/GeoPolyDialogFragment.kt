@@ -7,6 +7,7 @@ import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.GeoShapeData
 import org.javarosa.core.model.data.GeoTraceData
 import org.javarosa.core.model.data.IAnswerData
+import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.utilities.FormEntryPromptUtils
@@ -66,7 +67,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             inputPolygon,
             validationResult.map {
                 val validationResult = it.value
-                if (validationResult is FailedValidationResult) {
+                if (validationResult is FailedValidationResult && validationResult.status == FormEntryController.ANSWER_CONSTRAINT_VIOLATED) {
                     validationResult.customErrorMessage ?: getString(validationResult.defaultErrorMessage)
                 } else {
                     null

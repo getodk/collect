@@ -13,6 +13,7 @@ import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.GeoShapeData
 import org.javarosa.core.model.data.GeoTraceData
+import org.javarosa.form.api.FormEntryController
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -461,6 +462,28 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
+    fun `ignores the validation message if it was triggered by a required but empty answer`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
+            .build()
+
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
+        }
+
+        validationResult.value = Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_REQUIRED_BUT_EMPTY, "blah", 0))
+        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
+            GeoPolyDialogFragment::class,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ) {
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
+        }
+    }
+
+    @Test
     fun `uses validation result message for invalidMessage`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .withDataType(Constants.DATATYPE_GEOTRACE)
@@ -473,7 +496,7 @@ class GeoPolyDialogFragmentTest {
             assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
         }
 
-        validationResult.value = Consumable(FailedValidationResult(prompt.index, 0, "blah", 0))
+        validationResult.value = Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0))
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
@@ -496,7 +519,7 @@ class GeoPolyDialogFragmentTest {
         }
 
         validationResult.value =
-            Consumable(FailedValidationResult(prompt.index, 0, null, R.string.cancel))
+            Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, null, R.string.cancel))
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
