@@ -292,7 +292,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         worker.immediate(() -> {
             try {
                 FormEntryPrompt prompt = formController.getQuestionPrompt(index);
-                boolean autoAdvance = Appearances.hasAppearance(prompt, Appearances.QUICK);
+                boolean autoAdvance = Appearances.isQuick(prompt);
                 ValidationResult result = formController.saveOneScreenAnswer(index, answer, autoAdvance);
 
                 if (result instanceof FailedValidationResult) {

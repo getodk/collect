@@ -208,4 +208,14 @@ object Appearances {
         val appearance = getSanitizedAppearanceHint(prompt)
         return appearance.contains(MULTILINE)
     }
+
+    @JvmStatic
+    fun isQuick(prompt: FormEntryPrompt): Boolean {
+        return if (prompt.controlType == Constants.CONTROL_SELECT_ONE) {
+            val appearance = getSanitizedAppearanceHint(prompt)
+            appearance.contains(QUICK)
+        } else {
+            false
+        }
+    }
 }

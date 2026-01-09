@@ -477,6 +477,7 @@ public class FormEntryViewModelTest {
         reference.add("blah", TreeReference.INDEX_UNBOUND);
         FormIndex formIndex = new FormIndex(null, 1, 1, reference);
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withControlType(CONTROL_SELECT_ONE)
                 .withAppearance(Appearances.QUICK)
                 .build();
         formController.setPrompt(formIndex, prompt);
@@ -493,6 +494,7 @@ public class FormEntryViewModelTest {
         reference.add("blah", TreeReference.INDEX_UNBOUND);
         FormIndex formIndex = new FormIndex(null, 1, 1, reference);
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withControlType(CONTROL_SELECT_ONE)
                 .withAppearance(Appearances.QUICK)
                 .build();
         formController.setPrompt(formIndex, prompt);
@@ -530,6 +532,7 @@ public class FormEntryViewModelTest {
         reference.add("blah", TreeReference.INDEX_UNBOUND);
         FormIndex formIndex = new FormIndex(null, 1, 1, reference);
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withControlType(CONTROL_SELECT_ONE)
                 .withAppearance(Appearances.QUICK)
                 .build();
         formController.setPrompt(formIndex, prompt);
@@ -549,6 +552,7 @@ public class FormEntryViewModelTest {
         reference.add("blah", TreeReference.INDEX_UNBOUND);
         FormIndex formIndex = new FormIndex(null, 1, 1, reference);
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withControlType(CONTROL_SELECT_ONE)
                 .withAppearance(Appearances.QUICK)
                 .build();
         formController.setPrompt(formIndex, prompt);
