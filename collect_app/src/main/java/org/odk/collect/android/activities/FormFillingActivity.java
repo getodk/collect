@@ -43,6 +43,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -567,6 +569,12 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 formIndexAnimationHandler.handle(formIndex);
                 if (validationResult != null) {
                     handleValidationResult(validationResult);
+                } else {
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        if (odkView != null) {
+                            odkView.scrollToTopOf(formIndex);
+                        }
+                    }, 400);
                 }
             }
         });

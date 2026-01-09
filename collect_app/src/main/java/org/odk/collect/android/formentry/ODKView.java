@@ -562,6 +562,15 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         return qw.getLocalVisibleRect(scrollBounds);
     }
 
+    public void scrollToTopOf(FormIndex index) {
+        for (QuestionWidget widget : widgets) {
+            if (widget.getFormEntryPrompt().getIndex().equals(index)) {
+                scrollToTopOf(widget);
+                break;
+            }
+        }
+    }
+
     public void scrollToTopOf(@Nullable QuestionWidget qw) {
         if (qw != null && widgets.contains(qw)) {
             findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());

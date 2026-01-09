@@ -15,16 +15,18 @@ class FormIndexAnimationHandler(private val listener: Listener) {
     private var lastIndex: FormIndex? = null
 
     fun handle(index: FormIndex) {
-        if (lastIndex == null) {
-            listener.onScreenRefresh(true)
-        } else {
-            if (index > lastIndex) {
+        lastIndex?.let {
+            if (index.toString().startsWith(it.toString())) {
+                listener.onScreenRefresh(false)
+            } else if (index > it) {
                 listener.onScreenChange(Direction.FORWARDS)
-            } else if (index < lastIndex) {
+            } else if (index < it) {
                 listener.onScreenChange(Direction.BACKWARDS)
             } else {
                 listener.onScreenRefresh(false)
             }
+        } ?: run {
+            listener.onScreenRefresh(true)
         }
 
         lastIndex = index

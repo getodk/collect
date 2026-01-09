@@ -300,9 +300,10 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 } else {
                     if (autoAdvance) {
                         formController.stepToNextScreenEvent();
+                        updateIndex(true, null);
+                    } else {
+                        updateIndex(true, null, index);
                     }
-
-                    updateIndex(true, null);
                 }
             } catch (JavaRosaException e) {
                 throw new RuntimeException(e);
@@ -344,6 +345,10 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     private void updateIndex(boolean isAsync, @Nullable FailedValidationResult validationResult) {
+        updateIndex(isAsync, validationResult, null);
+    }
+
+    private void updateIndex(boolean isAsync, @Nullable FailedValidationResult validationResult, @Nullable FormIndex questionIndex) {
         choices.clear();
 
         if (formController != null) {
@@ -373,9 +378,9 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
             AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), clock.get());
             if (isAsync) {
-                currentIndex.postValue(new Pair<>(formController.getFormIndex(), validationResult));
+                currentIndex.postValue(new Pair<>(questionIndex != null ? questionIndex : formController.getFormIndex(), validationResult));
             } else {
-                currentIndex.setValue(new Pair<>(formController.getFormIndex(), validationResult));
+                currentIndex.setValue(new Pair<>(questionIndex != null ? questionIndex : formController.getFormIndex(), validationResult));
             }
         }
     }
