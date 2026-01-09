@@ -48,6 +48,7 @@ import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
 import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
@@ -527,12 +528,12 @@ class SelectionMapFragmentTest {
 
         map.clickOnFeature(1)
 
-        val firstIcon = map.getMarkerIcons()[0]!!
+        val firstIcon = map.getMarkerIcons()[0]!! as MarkerIconDescription.Resource
         assertThat(firstIcon.icon, equalTo(items[0].smallIcon))
         assertThat(firstIcon.getSymbol(), equalTo("A"))
         assertThat(firstIcon.getColor(), equalTo(Color.parseColor("#ffffff")))
 
-        val secondIcon = map.getMarkerIcons()[1]!!
+        val secondIcon = map.getMarkerIcons()[1]!! as MarkerIconDescription.Resource
         assertThat(secondIcon.icon, equalTo(items[1].largeIcon))
         assertThat(secondIcon.getSymbol(), equalTo("B"))
         assertThat(secondIcon.getColor(), equalTo(Color.parseColor("#000000")))
@@ -564,12 +565,12 @@ class SelectionMapFragmentTest {
         map.clickOnFeature(0)
         map.clickOnFeature(1)
 
-        val firstIcon = map.getMarkerIcons()[0]!!
+        val firstIcon = map.getMarkerIcons()[0]!! as MarkerIconDescription.Resource
         assertThat(firstIcon.icon, equalTo(items[0].smallIcon))
         assertThat(firstIcon.getSymbol(), equalTo("A"))
         assertThat(firstIcon.getColor(), equalTo(Color.parseColor("#ffffff")))
 
-        val secondIcon = map.getMarkerIcons()[1]!!
+        val secondIcon = map.getMarkerIcons()[1]!! as MarkerIconDescription.Resource
         assertThat(secondIcon.icon, equalTo(items[1].largeIcon))
         assertThat(secondIcon.getSymbol(), equalTo("B"))
         assertThat(secondIcon.getColor(), equalTo(Color.parseColor("#000000")))
@@ -642,7 +643,7 @@ class SelectionMapFragmentTest {
 
         onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Blah1")))
             .check(matches(not(isDisplayed())))
-        assertThat(map.getMarkerIcons()[0]!!.icon, equalTo(item.smallIcon))
+        assertThat((map.getMarkerIcons()[0]!! as MarkerIconDescription.Resource).icon, equalTo(item.smallIcon))
     }
 
     @Test
@@ -662,9 +663,10 @@ class SelectionMapFragmentTest {
         onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Blah1")))
             .check(matches(not(isDisplayed())))
 
-        assertThat(map.getMarkerIcons()[0]!!.icon, equalTo(item.smallIcon))
-        assertThat(map.getMarkerIcons()[0]!!.getSymbol(), equalTo("A"))
-        assertThat(map.getMarkerIcons()[0]!!.getColor(), equalTo(Color.parseColor("#ffffff")))
+        val icon = map.getMarkerIcons()[0]!! as MarkerIconDescription.Resource
+        assertThat(icon.icon, equalTo(item.smallIcon))
+        assertThat(icon.getSymbol(), equalTo("A"))
+        assertThat(icon.getColor(), equalTo(Color.parseColor("#ffffff")))
     }
 
     @Test
