@@ -47,6 +47,7 @@ import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
+import org.odk.collect.maps.MapConsts;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapViewModel;
@@ -337,7 +338,11 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     public int addPolyLine(LineDescription lineDescription) {
         int featureId = nextFeatureId++;
         if (lineDescription.getDraggable()) {
-            features.put(featureId, new DynamicPolyLineFeature(map, lineDescription));
+            if (lineDescription.getClosed()) {
+                features.put(featureId, new DynamicPolygonFeature(map, lineDescription));
+            } else {
+                features.put(featureId, new DynamicPolyLineFeature(map, lineDescription));
+            }
         } else {
             features.put(featureId, new StaticPolyLineFeature(map, lineDescription));
         }
@@ -356,6 +361,8 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         MapFeature feature = features.get(featureId);
         if (feature instanceof DynamicPolyLineFeature) {
             ((DynamicPolyLineFeature) feature).addPoint(point);
+        } else if (feature instanceof DynamicPolygonFeature) {
+            ((DynamicPolygonFeature) feature).addPoint(point);
         }
     }
 
@@ -374,6 +381,8 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         MapFeature feature = features.get(featureId);
         if (feature instanceof DynamicPolyLineFeature) {
             ((DynamicPolyLineFeature) feature).removeLastPoint();
+        } else if (feature instanceof DynamicPolygonFeature) {
+            ((DynamicPolygonFeature) feature).removeLastPoint();
         }
     }
 
@@ -873,13 +882,11 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         final MapView map;
         final List<Marker> markers = new ArrayList<>();
         final Polyline polyline;
-        final boolean closedPolygon;
         private final LineDescription lineDescription;
 
         DynamicPolyLineFeature(MapView map, LineDescription lineDescription) {
             this.lineDescription = lineDescription;
             this.map = map;
-            this.closedPolygon = lineDescription.getClosed();
             polyline = new Polyline();
             polyline.setColor(lineDescription.getStrokeColor());
             polyline.setOnClickListener((clickedPolyline, mapView, eventPos) -> {
@@ -920,9 +927,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             for (Marker marker : markers) {
                 geoPoints.add(marker.getPosition());
             }
-            if (closedPolygon && !geoPoints.isEmpty()) {
-                geoPoints.add(geoPoints.get(0));
-            }
+
             polyline.setPoints(geoPoints);
             map.invalidate();
         }
@@ -934,6 +939,102 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             }
             markers.clear();
             map.getOverlays().remove(polyline);
+        }
+
+        @Override
+        public List<MapPoint> getPoints() {
+            List<MapPoint> points = new ArrayList<>();
+            for (Marker marker : markers) {
+                points.add(fromMarker(marker));
+            }
+            return points;
+        }
+
+        public void addPoint(MapPoint point) {
+            markers.add(getPointMarker(point));
+            update();
+        }
+
+        @NonNull
+        private Marker getPointMarker(MapPoint point) {
+            return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth())));
+        }
+
+        public void removeLastPoint() {
+            if (!markers.isEmpty()) {
+                int last = markers.size() - 1;
+                map.getOverlays().remove(markers.get(last));
+                markers.remove(last);
+                update();
+            }
+        }
+    }
+
+    private  class DynamicPolygonFeature implements LineFeature {
+
+        final MapView map;
+        final List<Marker> markers = new ArrayList<>();
+        final Polygon polygon;
+        private final LineDescription lineDescription;
+
+        DynamicPolygonFeature(MapView map, LineDescription lineDescription) {
+            this.lineDescription = lineDescription;
+            this.map = map;
+            polygon = new Polygon();
+            polygon.setStrokeColor(lineDescription.getStrokeColor());
+            polygon.setStrokeWidth(lineDescription.getStrokeWidth());
+            polygon.getFillPaint().setColor(lineDescription.getStrokeColor());
+            polygon.getFillPaint().setAlpha(MapConsts.DEFAULT_FILL_COLOR_OPACITY);
+            polygon.setOnClickListener((clickedPolygon, mapView, eventPos) -> {
+                int featureId = findFeature(clickedPolygon);
+                if (featureClickListener != null && featureId != -1) {
+                    featureClickListener.onFeature(featureId);
+                    return true;  // consume the event
+                }
+                return false;
+            });
+
+            map.getOverlays().add(polygon);
+            for (MapPoint point : lineDescription.getPoints()) {
+                markers.add(getPointMarker(point));
+            }
+            update();
+        }
+
+
+        @Override
+        public boolean ownsMarker(Marker givenMarker) {
+            return markers.contains(givenMarker);
+        }
+
+        @Override
+        public boolean ownsPolyline(Polyline other) {
+            return false;
+        }
+
+        @Override
+        public boolean ownsPolygon(Polygon other) {
+            return polygon.equals(other);
+        }
+
+        @Override
+        public void update() {
+            List<GeoPoint> geoPoints = new ArrayList<>();
+            for (Marker marker : markers) {
+                geoPoints.add(marker.getPosition());
+            }
+
+            polygon.setPoints(geoPoints);
+            map.invalidate();
+        }
+
+        @Override
+        public void dispose() {
+            for (Marker marker : markers) {
+                map.getOverlays().remove(marker);
+            }
+            markers.clear();
+            map.getOverlays().remove(polygon);
         }
 
         @Override
