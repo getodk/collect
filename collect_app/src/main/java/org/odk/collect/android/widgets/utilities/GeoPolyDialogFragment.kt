@@ -6,6 +6,7 @@ import androidx.lifecycle.map
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.data.GeoShapeData
 import org.javarosa.core.model.data.GeoTraceData
+import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.utilities.FormEntryPromptUtils
@@ -75,20 +76,23 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
     }
 
     private fun onValidate(geoString: String, outputMode: OutputMode) {
-        val answer = when (outputMode) {
-            OutputMode.GEOTRACE -> GeoTraceData().also { it.value = geoString }
-            OutputMode.GEOSHAPE -> GeoShapeData().also { it.value = geoString }
-        }
-
+        val answer = getAnswerData(geoString, outputMode)
         onValidate(answer)
     }
 
     private fun onAnswer(geoString: String, outputMode: OutputMode) {
-        val answer = when (outputMode) {
-            OutputMode.GEOTRACE -> GeoTraceData().also { it.value = geoString }
-            OutputMode.GEOSHAPE -> GeoShapeData().also { it.value = geoString }
-        }
-
+        val answer = getAnswerData(geoString, outputMode)
         onAnswer(answer)
+    }
+
+    private fun getAnswerData(geoString: String, outputMode: OutputMode): IAnswerData? {
+        return if (geoString.isBlank()) {
+            null
+        } else {
+            when (outputMode) {
+                OutputMode.GEOTRACE -> GeoTraceData().also { it.value = geoString }
+                OutputMode.GEOSHAPE -> GeoShapeData().also { it.value = geoString }
+            }
+        }
     }
 }

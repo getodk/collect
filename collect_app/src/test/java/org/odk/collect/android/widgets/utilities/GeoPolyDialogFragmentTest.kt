@@ -211,7 +211,27 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
-    fun `sets GeoTraceData answer when REQUEST_GEOPOLY is returned`() {
+    fun `sets null answer when REQUEST_GEOPOLY with empty value is returned for GEOTRACE prompt`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
+            .build()
+
+        val answer = ""
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY to answer)
+            )
+        }
+
+        verify(formEntryViewModel).answerQuestion(prompt.index, null)
+    }
+
+    @Test
+    fun `sets GeoTraceData answer when REQUEST_GEOPOLY is returned for GEOTRACE prompt`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .withDataType(Constants.DATATYPE_GEOTRACE)
             .build()
@@ -228,6 +248,26 @@ class GeoPolyDialogFragmentTest {
         }
 
         verify(formEntryViewModel).answerQuestion(prompt.index, geoTraceOf(answer))
+    }
+
+    @Test
+    fun `sets null answer when REQUEST_GEOPOLY with empty value is returned for GEOSHAPE prompt`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOSHAPE)
+            .build()
+
+        val answer = ""
+        launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        ).onFragment {
+            it.childFragmentManager.setFragmentResult(
+                GeoPolyFragment.REQUEST_GEOPOLY,
+                bundleOf(GeoPolyFragment.RESULT_GEOPOLY to answer)
+            )
+        }
+
+        verify(formEntryViewModel).answerQuestion(prompt.index, null)
     }
 
     @Test
