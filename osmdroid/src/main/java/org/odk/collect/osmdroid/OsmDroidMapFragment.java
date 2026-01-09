@@ -16,7 +16,6 @@ package org.odk.collect.osmdroid;
 
 import static androidx.core.graphics.drawable.BitmapDrawableKt.toDrawable;
 import static androidx.core.graphics.drawable.DrawableKt.toBitmap;
-
 import static org.odk.collect.maps.markers.MarkerIconCreator.getBitmap;
 
 import android.content.BroadcastReceiver;
@@ -995,8 +994,9 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             });
 
             map.getOverlays().add(polygon);
-            for (MapPoint point : lineDescription.getPoints()) {
-                markers.add(getPointMarker(point));
+            for (int i = 0; i < lineDescription.getPoints().size(); i++) {
+                MapPoint point = lineDescription.getPoints().get(i);
+                markers.add(getPointMarker(point, i));
             }
             update();
         }
@@ -1047,13 +1047,17 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         }
 
         public void addPoint(MapPoint point) {
-            markers.add(getPointMarker(point));
+            markers.add(getPointMarker(point, markers.size()));
             update();
         }
 
         @NonNull
-        private Marker getPointMarker(MapPoint point) {
-            return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth())));
+        private Marker getPointMarker(MapPoint point, int index) {
+            if (index == 0) {
+                return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.ShapeFirstPoint(lineDescription.getStrokeWidth())));
+            } else {
+                return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth())));
+            }
         }
 
         public void removeLastPoint() {

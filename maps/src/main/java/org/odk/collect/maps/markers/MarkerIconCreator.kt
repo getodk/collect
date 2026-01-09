@@ -27,29 +27,16 @@ object MarkerIconCreator {
         return when (markerIconDescription) {
             is MarkerIconDescription.LinePoint -> {
                 fromCache("LinePoint") {
-                    val size = markerIconDescription.lineSize * 6
-                    val bitmap =
-                        Bitmap.createBitmap(size.toInt(), size.toInt(), Config.ARGB_8888)
+                    createPoint(markerIconDescription.lineSize * 6, markerIconDescription.lineSize)
+                }
+            }
 
-                    Canvas(bitmap).also { canvas ->
-                        val radius = size / 2
-
-                        val fill = Paint().also {
-                            it.style = Paint.Style.FILL
-                            it.color = MapConsts.DEFAULT_STROKE_COLOR
-                        }
-                        canvas.drawCircle(radius, radius, radius, fill)
-
-                        val strokeWidth = markerIconDescription.lineSize
-                        val stroke = Paint().also {
-                            it.style = Paint.Style.STROKE
-                            it.color = Color.parseColor("#ffffff")
-                            it.strokeWidth = strokeWidth
-                        }
-                        canvas.drawCircle(radius, radius, radius - (strokeWidth / 2), stroke)
-                    }
-
-                    bitmap
+            is MarkerIconDescription.ShapeFirstPoint -> {
+                fromCache("ShapeFirstPoint") {
+                    createPoint(
+                        markerIconDescription.lineSize * 8,
+                        markerIconDescription.lineSize * 1.2f
+                    )
                 }
             }
 
@@ -66,6 +53,30 @@ object MarkerIconCreator {
                 }
             }
         }
+    }
+
+    private fun createPoint(diameter: Float, strokeSize: Float): Bitmap {
+        val bitmap =
+            Bitmap.createBitmap(diameter.toInt(), diameter.toInt(), Config.ARGB_8888)
+
+        Canvas(bitmap).also { canvas ->
+            val radius = diameter / 2
+
+            val fill = Paint().also {
+                it.style = Paint.Style.FILL
+                it.color = MapConsts.DEFAULT_STROKE_COLOR
+            }
+            canvas.drawCircle(radius, radius, radius, fill)
+
+            val stroke = Paint().also {
+                it.style = Paint.Style.STROKE
+                it.color = Color.parseColor("#ffffff")
+                it.strokeWidth = strokeSize
+            }
+            canvas.drawCircle(radius, radius, radius - (strokeSize / 2), stroke)
+        }
+
+        return bitmap
     }
 
     private fun fromCache(bitmapId: String, factory: () -> Bitmap): Bitmap {
