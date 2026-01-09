@@ -21,7 +21,7 @@ object BitmapDescriptorCache {
         val drawableId = markerIconDescription.hashCode()
 
         if (cache[drawableId] == null) {
-            BitmapDescriptorFactory.fromBitmap(MarkerIconCreator.getMarkerIconBitmap(context, markerIconDescription)).also {
+            BitmapDescriptorFactory.fromBitmap(MarkerIconCreator.getMarkerIcon(context, markerIconDescription)).also {
                 cache.put(drawableId, it)
             }
         }

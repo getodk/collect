@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
-import android.graphics.drawable.BitmapDrawable
 import android.util.LruCache
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -22,11 +21,7 @@ object MarkerIconCreator {
     private val cache = LruCache<String, Bitmap>(10)
 
     @JvmStatic
-    fun getMarkerIconDrawable(context: Context, markerIconDescription: MarkerIconDescription) =
-        BitmapDrawable(context.resources, getMarkerIconBitmap(context, markerIconDescription))
-
-    @JvmStatic
-    fun getMarkerIconBitmap(context: Context, markerIconDescription: MarkerIconDescription): Bitmap {
+    fun getMarkerIcon(context: Context, markerIconDescription: MarkerIconDescription): Bitmap {
         val drawableId = markerIconDescription.icon
         val color = markerIconDescription.getColor()
         val symbol = markerIconDescription.getSymbol()
