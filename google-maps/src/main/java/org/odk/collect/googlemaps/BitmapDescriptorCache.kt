@@ -5,6 +5,7 @@ import android.util.LruCache
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import org.odk.collect.maps.markers.MarkerIconCreator
+import org.odk.collect.maps.markers.MarkerIconCreator.getBitmap
 import org.odk.collect.maps.markers.MarkerIconDescription
 
 object BitmapDescriptorCache {
@@ -21,7 +22,7 @@ object BitmapDescriptorCache {
         val drawableId = markerIconDescription.hashCode()
 
         if (cache[drawableId] == null) {
-            BitmapDescriptorFactory.fromBitmap(MarkerIconCreator.getMarkerIcon(context, markerIconDescription)).also {
+            BitmapDescriptorFactory.fromBitmap(markerIconDescription.getBitmap(context)).also {
                 cache.put(drawableId, it)
             }
         }

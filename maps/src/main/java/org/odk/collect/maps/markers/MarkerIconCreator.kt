@@ -78,4 +78,9 @@ object MarkerIconCreator {
     fun clearCache() {
         cache.evictAll()
     }
+
+    @JvmStatic
+    fun MarkerIconDescription.getBitmap(context: Context): Bitmap {
+        return getMarkerIcon(context, this)
+    }
 }
