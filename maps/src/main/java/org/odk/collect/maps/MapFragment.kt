@@ -113,7 +113,7 @@ interface MapFragment {
      * Returns the vertices of the polyline or polygon specified by featureId, or an
      * empty list if the featureId does not identify an existing polyline or polygon.
      */
-    fun getPolyLinePoints(featureId: Int): List<MapPoint>
+    fun getPolyPoints(featureId: Int): List<MapPoint>
 
     /** Removes all map features from the map.  */
     fun clearFeatures()
