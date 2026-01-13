@@ -11,8 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -36,9 +41,6 @@ import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragme
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.webpage.WebPageService
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -70,10 +72,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     lateinit var webPageService: WebPageService
 
     private var previousState: Bundle? = null
-    private val executorServiceScheduler: ScheduledExecutorService =
-        Executors.newSingleThreadScheduledExecutor()
-    private var schedulerHandler: ScheduledFuture<*>? = null
-
+    private var recordingJob: Job? = null
     private var map: MapFragment? = null
     private var featureId = -1 // will be a positive featureId once map is ready
     private var originalPoly: List<MapPoint>? = null
@@ -186,12 +185,8 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     override fun onDestroy() {
-        schedulerHandler?.let {
-            if (!it.isCancelled) {
-                it.cancel(true)
-            }
-        }
-
+        recordingJob?.cancel()
+        recordingJob = null
         locationTracker.stop()
         super.onDestroy()
     }
@@ -203,7 +198,8 @@ class GeoPolyFragment @JvmOverloads constructor(
         binding.pause.setOnClickListener {
             inputActive = false
             try {
-                schedulerHandler?.cancel(true)
+                recordingJob?.cancel()
+                recordingJob = null
             } catch (_: Exception) {
                 // Do nothing
             }
@@ -359,31 +355,32 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     override fun startInput() {
         inputActive = true
+
         if (recordingEnabled && recordingAutomatic) {
             locationTracker.start(retainMockAccuracy)
 
             recordPoint(map!!.getGpsLocation())
-            schedulerHandler = executorServiceScheduler.scheduleAtFixedRate(
-                {
-                    requireActivity().runOnUiThread {
-                        val currentLocation = locationTracker.getCurrentLocation()
-                        if (currentLocation != null) {
-                            val currentMapPoint = MapPoint(
-                                currentLocation.latitude,
-                                currentLocation.longitude,
-                                currentLocation.altitude,
-                                currentLocation.accuracy.toDouble()
-                            )
 
-                            recordPoint(currentMapPoint)
-                        }
-                    }
-                },
-                INTERVAL_OPTIONS[intervalIndex].toLong(),
-                INTERVAL_OPTIONS[intervalIndex].toLong(),
-                TimeUnit.SECONDS
-            )
+            recordingJob = viewLifecycleOwner.lifecycleScope.launch {
+                val intervalSeconds = INTERVAL_OPTIONS[intervalIndex].toLong()
+                val intervalMillis = TimeUnit.SECONDS.toMillis(intervalSeconds)
+
+                while (isActive) {
+                    delay(intervalMillis)
+
+                    val currentLocation = locationTracker.getCurrentLocation() ?: continue
+                    val currentMapPoint = MapPoint(
+                        currentLocation.latitude,
+                        currentLocation.longitude,
+                        currentLocation.altitude,
+                        currentLocation.accuracy.toDouble()
+                    )
+
+                    recordPoint(currentMapPoint)
+                }
+            }
         }
+
         updateUi()
     }
 
