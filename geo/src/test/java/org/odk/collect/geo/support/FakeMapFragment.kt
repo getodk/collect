@@ -146,7 +146,7 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
     }
 
     override fun getPolyPoints(featureId: Int): List<MapPoint> {
-        return polyLines[featureId]!!.points
+        return polyLines[featureId]?.points ?: polygons[featureId]?.points ?: emptyList()
     }
 
     override fun clearFeatures() {

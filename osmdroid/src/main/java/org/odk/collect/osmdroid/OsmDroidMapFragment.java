@@ -1070,12 +1070,15 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         }
     }
 
-    private class StaticPolygonFeature implements MapFeature {
+    private class StaticPolygonFeature implements LineFeature {
         private final MapView map;
+        @NonNull
+        private final PolygonDescription polygonDescription;
         private final Polygon polygon = new Polygon();
 
         StaticPolygonFeature(MapView map, PolygonDescription polygonDescription) {
             this.map = map;
+            this.polygonDescription = polygonDescription;
 
             map.getOverlays().add(polygon);
             polygon.getOutlinePaint().setColor(polygonDescription.getStrokeColor());
@@ -1115,6 +1118,11 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         @Override
         public void dispose() {
             map.getOverlays().remove(polygon);
+        }
+
+        @Override
+        public List<MapPoint> getPoints() {
+            return polygonDescription.getPoints();
         }
     }
 
