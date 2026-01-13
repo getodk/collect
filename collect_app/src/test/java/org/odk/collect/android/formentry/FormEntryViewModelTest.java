@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.javarosa.core.model.Constants.CONTROL_SELECT_ONE;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -457,6 +458,10 @@ public class FormEntryViewModelTest {
 
     @Test
     public void validateAnswer_updatesValidationResult() {
+        FormDef formDef = mock();
+        when(formDef.evaluateConstraint(any(), any())).thenReturn(false);
+        formController.setFormDef(formDef);
+
         TreeReference reference = new TreeReference();
         reference.add("blah", TreeReference.INDEX_UNBOUND);
         FormIndex formIndex = new FormIndex(null, 1, 1, reference);

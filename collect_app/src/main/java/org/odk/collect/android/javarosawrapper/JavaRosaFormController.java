@@ -411,7 +411,8 @@ public class JavaRosaFormController implements FormController {
         }
     }
 
-    private ValidationResult getFailedValidationResult(FormIndex index, int status) {
+    @Override
+    public ValidationResult getFailedValidationResult(FormIndex index, int status) {
         ValidationResult validationResult = null;
 
         String errorMessage;

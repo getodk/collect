@@ -140,6 +140,15 @@ public class FakeFormController extends StubFormController {
     }
 
     @Override
+    public @NotNull ValidationResult getFailedValidationResult(@NotNull FormIndex index, int status) {
+        if (failedConstraint != null) {
+            return failedConstraint;
+        } else {
+            return SuccessValidationResult.INSTANCE;
+        }
+    }
+
+    @Override
     public int stepToPreviousScreenEvent() throws JavaRosaException {
         if (previousStepError != null) {
             throw previousStepError;

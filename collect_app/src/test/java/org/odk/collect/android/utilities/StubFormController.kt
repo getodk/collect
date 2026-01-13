@@ -78,6 +78,10 @@ open class StubFormController : FormController {
     @Throws(JavaRosaException::class)
     override fun validateAnswers(moveToInvalidIndex: Boolean): ValidationResult = SuccessValidationResult
 
+    override fun getFailedValidationResult(index: FormIndex, status: Int): ValidationResult {
+        return SuccessValidationResult
+    }
+
     override fun saveAnswer(index: FormIndex?, data: IAnswerData?): Boolean = false
 
     override fun stepToNextEvent(stepIntoGroup: Boolean): Int = -1

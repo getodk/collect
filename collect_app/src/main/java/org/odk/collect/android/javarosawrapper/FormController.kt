@@ -140,6 +140,8 @@ interface FormController {
     @Throws(JavaRosaException::class)
     fun validateAnswers(moveToInvalidIndex: Boolean): ValidationResult
 
+    fun getFailedValidationResult(index: FormIndex, status: Int): ValidationResult
+
     /**
      * saveAnswer attempts to save the current answer into the data model without doing any
      * constraint checking. Only use this if you know what you're doing. For normal form filling
