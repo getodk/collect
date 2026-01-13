@@ -67,7 +67,10 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             inputPolygon,
             validationResult.map {
                 val validationResult = it.value
-                if (validationResult is FailedValidationResult && validationResult.status == FormEntryController.ANSWER_CONSTRAINT_VIOLATED) {
+                if (validationResult is FailedValidationResult &&
+                    validationResult.index == prompt.index &&
+                    validationResult.status == FormEntryController.ANSWER_CONSTRAINT_VIOLATED
+                ) {
                     validationResult.customErrorMessage ?: getString(validationResult.defaultErrorMessage)
                 } else {
                     null
