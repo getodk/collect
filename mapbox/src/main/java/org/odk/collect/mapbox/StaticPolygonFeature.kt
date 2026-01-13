@@ -6,6 +6,7 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import org.odk.collect.maps.MapFragment
+import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
 
 class StaticPolygonFeature(
@@ -13,7 +14,9 @@ class StaticPolygonFeature(
     polygonDescription: PolygonDescription,
     featureClickListener: MapFragment.FeatureListener?,
     featureId: Int
-) : MapFeature {
+) : LineFeature {
+
+    override val points: List<MapPoint> = polygonDescription.points
 
     private val polygonAnnotation: PolygonAnnotation = polygonAnnotationManager.create(
         PolygonAnnotationOptions()

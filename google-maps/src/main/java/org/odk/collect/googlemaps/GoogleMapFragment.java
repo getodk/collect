@@ -780,7 +780,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     }
 
     private interface LineFeature extends MapFeature {
-
         List<MapPoint> getPoints();
     }
 
@@ -958,10 +957,13 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }
     }
 
-    private static class StaticPolygonFeature implements MapFeature {
+    private static class StaticPolygonFeature implements LineFeature {
+        @NonNull
+        private final PolygonDescription polygonDescription;
         private Polygon polygon;
 
         StaticPolygonFeature(GoogleMap map, PolygonDescription polygonDescription) {
+            this.polygonDescription = polygonDescription;
             polygon = map.addPolygon(new PolygonOptions()
                     .addAll(StreamSupport.stream(polygonDescription.getPoints().spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList()))
                     .strokeColor(polygonDescription.getStrokeColor())
@@ -996,6 +998,11 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                 polygon.remove();
                 polygon = null;
             }
+        }
+
+        @Override
+        public List<MapPoint> getPoints() {
+            return polygonDescription.getPoints();
         }
     }
 
