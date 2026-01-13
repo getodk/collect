@@ -185,10 +185,14 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     override fun onDestroy() {
-        recordingJob?.cancel()
-        recordingJob = null
         locationTracker.stop()
         super.onDestroy()
+    }
+
+    override fun onDestroyView() {
+        recordingJob?.cancel()
+        recordingJob = null
+        super.onDestroyView()
     }
 
     fun initMap(newMapFragment: MapFragment?, binding: GeopolyLayoutBinding) {
