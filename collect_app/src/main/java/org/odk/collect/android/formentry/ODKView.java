@@ -573,7 +573,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
     public void scrollToTopOf(@Nullable QuestionWidget qw) {
         if (qw != null && widgets.contains(qw)) {
-            findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
+            postDelayed(() -> findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop()), 400);
         }
     }
 
@@ -700,12 +700,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         for (QuestionWidget questionWidget : getWidgets()) {
             if (formIndex.equals(questionWidget.getFormEntryPrompt().getIndex())) {
                 questionWidget.displayError(errorMessage);
-                // postDelayed is needed because otherwise scrolling may not work as expected in case when
-                // answers are validated during form finalization.
-                postDelayed(() -> {
-                    questionWidget.setFocus(getContext());
-                    scrollToTopOf(questionWidget);
-                }, 400);
+                scrollToTopOf(questionWidget);
             } else {
                 questionWidget.hideError();
             }
