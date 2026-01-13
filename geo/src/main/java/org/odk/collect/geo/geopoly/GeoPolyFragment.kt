@@ -90,11 +90,12 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     // restored from savedInstanceState
     private var restoredPoints: List<MapPoint>? = null
+    private val line = mutableListOf<MapPoint>()
 
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (!readOnly && map != null && originalPoly != map!!.getPolyPoints(featureId)) {
+                if (!readOnly && map != null && originalPoly != getLine()) {
                     showBackDialog()
                 } else {
                     cancel()
@@ -176,7 +177,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
         state.putParcelableArrayList(
             POINTS_KEY,
-            ArrayList<MapPoint?>(map!!.getPolyPoints(featureId))
+            ArrayList<MapPoint?>(getLine())
         )
         state.putBoolean(INPUT_ACTIVE_KEY, inputActive)
         state.putBoolean(RECORDING_ENABLED_KEY, recordingEnabled)
@@ -212,7 +213,7 @@ class GeoPolyFragment @JvmOverloads constructor(
 
         binding.backspace.setOnClickListener { removeLastPoint() }
         binding.save.setOnClickListener {
-            if (!map!!.getPolyPoints(featureId).isEmpty()) {
+            if (!getLine().isEmpty()) {
                 if (outputMode == OutputMode.GEOTRACE) {
                     saveAsPolyline()
                 } else {
@@ -224,7 +225,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
 
         binding.play.setOnClickListener {
-            if (map!!.getPolyPoints(featureId).isEmpty()) {
+            if (getLine().isEmpty()) {
                 showIfNotShowing<GeoPolySettingsDialogFragment>(
                     GeoPolySettingsDialogFragment::class.java,
                     getChildFragmentManager()
@@ -263,15 +264,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             points = it
         }
 
-        featureId = map!!.addPolyLine(
-            LineDescription(
-                points,
-                MapConsts.DEFAULT_STROKE_WIDTH.toString(),
-                null,
-                !readOnly,
-                outputMode == OutputMode.GEOSHAPE
-            )
-        )
+        line.addAll(points)
 
         if (inputActive && !readOnly) {
             startInput()
@@ -284,6 +277,8 @@ class GeoPolyFragment @JvmOverloads constructor(
         map!!.setGpsLocationListener(this::onGpsLocation)
         map!!.setRetainMockAccuracy(retainMockAccuracy)
         map!!.setDragEndListener {
+            line.clear()
+            line.addAll(map!!.getPolyPoints(it))
             setChangeResult()
         }
 
@@ -299,7 +294,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun saveAsPolyline() {
-        if (map!!.getPolyPoints(featureId).size > 1) {
+        if (getLine().size > 1) {
             setResult()
         } else {
             showShortToastInMiddle(
@@ -310,9 +305,9 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun saveAsPolygon() {
-        if (map!!.getPolyPoints(featureId).size > 2) {
+        if (getLine().size > 2) {
             // Close the polygon.
-            val points = map!!.getPolyPoints(featureId)
+            val points = getLine()
             val count = points.size
             if (count > 1 && points[0] != points[count - 1]) {
                 map!!.appendPointToPolyLine(featureId, points[0])
@@ -327,7 +322,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun setChangeResult() {
-        val points = map!!.getPolyPoints(featureId)
+        val points = getLine()
         val geoString = if (outputMode == OutputMode.GEOSHAPE && points.size < 3) {
             ""
         } else if (points.size < 2) {
@@ -343,7 +338,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun setResult() {
-        val points = map!!.getPolyPoints(featureId)
+        val points = getLine()
         getParentFragmentManager().setFragmentResult(
             REQUEST_GEOPOLY,
             bundleOf(RESULT_GEOPOLY to getGeoString(points))
@@ -459,9 +454,9 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun appendPointIfNew(point: MapPoint) {
-        val points = map!!.getPolyPoints(featureId)
+        val points = getLine()
         if (points.isEmpty() || point != points[points.size - 1]) {
-            map!!.appendPointToPolyLine(featureId, point)
+            line.add(point)
             updateUi()
         }
 
@@ -484,7 +479,7 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private fun removeLastPoint() {
         if (featureId != -1) {
-            map!!.removePolyLineLastPoint(featureId)
+            line.removeAt(line.lastIndex)
             updateUi()
             setChangeResult()
         }
@@ -492,15 +487,6 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private fun clear() {
         map!!.clearFeatures()
-        featureId = map!!.addPolyLine(
-            LineDescription(
-                emptyList(),
-                MapConsts.DEFAULT_STROKE_WIDTH.toString(),
-                null,
-                !readOnly,
-                outputMode == OutputMode.GEOSHAPE
-            )
-        )
         inputActive = false
         updateUi()
     }
@@ -509,7 +495,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     private fun updateUi() {
         val binding = GeopolyLayoutBinding.bind(requireView())
 
-        val numPoints = map!!.getPolyPoints(featureId).size
+        val numPoints = getLine().size
         val location = map!!.getGpsLocation()
 
         // Visibility state
@@ -595,10 +581,21 @@ class GeoPolyFragment @JvmOverloads constructor(
                 }
             }
         }
+
+        map!!.clearFeatures()
+        featureId = map!!.addPolyLine(
+            LineDescription(
+                line,
+                MapConsts.DEFAULT_STROKE_WIDTH.toString(),
+                null,
+                !readOnly,
+                outputMode == OutputMode.GEOSHAPE
+            )
+        )
     }
 
     private fun showClearDialog() {
-        if (!map!!.getPolyPoints(featureId).isEmpty()) {
+        if (!getLine().isEmpty()) {
             MaterialAlertDialogBuilder(requireContext())
                 .setMessage(org.odk.collect.strings.R.string.geo_clear_warning)
                 .setPositiveButton(org.odk.collect.strings.R.string.clear) { _, _ -> clear() }
@@ -606,6 +603,8 @@ class GeoPolyFragment @JvmOverloads constructor(
                 .show()
         }
     }
+
+    private fun getLine(): List<MapPoint> = line
 
     private fun showBackDialog() {
         MaterialAlertDialogBuilder(requireContext())
