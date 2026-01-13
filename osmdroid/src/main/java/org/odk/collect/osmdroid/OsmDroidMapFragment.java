@@ -367,7 +367,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
 
     @Override
     public @NonNull
-    List<MapPoint> getPolyLinePoints(int featureId) {
+    List<MapPoint> getPolyPoints(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof LineFeature) {
             return ((LineFeature) feature).getPoints();

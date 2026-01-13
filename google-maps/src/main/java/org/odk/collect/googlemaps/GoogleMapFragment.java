@@ -328,7 +328,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }
     }
 
-    @Override public @NonNull List<MapPoint> getPolyLinePoints(int featureId) {
+    @Override public @NonNull List<MapPoint> getPolyPoints(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof LineFeature) {
             return ((LineFeature) feature).getPoints();
