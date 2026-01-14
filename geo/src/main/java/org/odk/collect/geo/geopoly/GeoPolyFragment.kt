@@ -578,7 +578,7 @@ class GeoPolyFragment @JvmOverloads constructor(
 
         map!!.clearFeatures()
 
-        if (outputMode == OutputMode.GEOSHAPE) {
+        if (map!!.supportsDraggablePolygon() && outputMode == OutputMode.GEOSHAPE) {
             featureId = map!!.addPolygon(
                 PolygonDescription(
                     line,
@@ -594,7 +594,8 @@ class GeoPolyFragment @JvmOverloads constructor(
                     line,
                     null,
                     null,
-                    !readOnly
+                    !readOnly,
+                    outputMode == OutputMode.GEOSHAPE
                 )
             )
         }

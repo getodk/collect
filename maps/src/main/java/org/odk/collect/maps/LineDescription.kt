@@ -7,7 +7,7 @@ data class LineDescription(
     private val strokeWidth: String? = null,
     private val strokeColor: String? = null,
     val draggable: Boolean = false,
-    val closed: Boolean = false
+    @Deprecated("Use PolygonDescription instead") val closed: Boolean = false
 ) {
     fun getStrokeWidth(): Float {
         return try {
