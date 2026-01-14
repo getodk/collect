@@ -289,8 +289,7 @@ class SelectOneFromMapDialogFragmentTest {
 
         verify(formEntryViewModel).answerQuestion(
             prompt.index,
-            SelectOneData(selectChoices[1].selection()),
-            false
+            SelectOneData(selectChoices[1].selection())
         )
     }
 }

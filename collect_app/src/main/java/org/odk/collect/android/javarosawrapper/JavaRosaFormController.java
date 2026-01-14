@@ -393,6 +393,15 @@ public class JavaRosaFormController implements FormController {
         }
     }
 
+    public ValidationResult validateAnswerConstraint(FormIndex index, IAnswerData answer) {
+        boolean isAnswerValid = getFormDef().evaluateConstraint(index.getReference(), answer);
+        if (isAnswerValid) {
+            return SuccessValidationResult.INSTANCE;
+        } else {
+            return getFailedValidationResult(index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED);
+        }
+    }
+
     public ValidationResult validateAnswers(boolean moveToInvalidIndex) throws JavaRosaException {
         try {
             ValidateOutcome validateOutcome = getFormDef().validate();

@@ -53,7 +53,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import kotlin.Pair;
+import kotlin.Triple;
 import timber.log.Timber;
 
 public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader {
@@ -62,7 +62,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
-    private final MutableLiveData<Pair<FormIndex, FailedValidationResult>> currentIndex = new MutableLiveData<>(null);
+    private final MutableLiveData<Triple<FormIndex, FormIndex, FailedValidationResult>> currentIndex = new MutableLiveData<>(null);
     private final MutableLiveData<Consumable<ValidationResult>>
             validationResult = new MutableLiveData<>(new Consumable<>(null));
     @NonNull
@@ -117,7 +117,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         return formController;
     }
 
-    public LiveData<Pair<FormIndex, FailedValidationResult>> getCurrentIndex() {
+    public LiveData<Triple<FormIndex, FormIndex, FailedValidationResult>> getCurrentIndex() {
         return currentIndex;
     }
 
@@ -289,24 +289,21 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     public void answerQuestion(FormIndex index, IAnswerData answer) {
-        answerQuestion(index, answer, false);
-    }
-
-    public void answerQuestion(FormIndex index, IAnswerData answer, Boolean validate) {
         worker.immediate(() -> {
             try {
                 FormEntryPrompt prompt = formController.getQuestionPrompt(index);
-                boolean autoAdvance = Appearances.hasAppearance(prompt, Appearances.QUICK);
-                ValidationResult result = formController.saveOneScreenAnswer(index, answer, validate || autoAdvance);
+                boolean autoAdvance = Appearances.isQuick(prompt);
+                ValidationResult result = formController.saveOneScreenAnswer(index, answer, autoAdvance);
 
                 if (result instanceof FailedValidationResult) {
                     updateIndex(true, (FailedValidationResult) result);
                 } else {
                     if (autoAdvance) {
                         formController.stepToNextScreenEvent();
+                        updateIndex(true, null);
+                    } else {
+                        updateIndex(true, null, index);
                     }
-
-                    updateIndex(true, null);
                 }
             } catch (JavaRosaException e) {
                 throw new RuntimeException(e);
@@ -348,6 +345,10 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     private void updateIndex(boolean isAsync, @Nullable FailedValidationResult validationResult) {
+        updateIndex(isAsync, validationResult, null);
+    }
+
+    private void updateIndex(boolean isAsync, @Nullable FailedValidationResult validationResult, @Nullable FormIndex questionIndex) {
         choices.clear();
 
         if (formController != null) {
@@ -377,9 +378,9 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
             AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), clock.get());
             if (isAsync) {
-                currentIndex.postValue(new Pair<>(formController.getFormIndex(), validationResult));
+                currentIndex.postValue(new Triple<>(formController.getFormIndex(), questionIndex, validationResult));
             } else {
-                currentIndex.setValue(new Pair<>(formController.getFormIndex(), validationResult));
+                currentIndex.setValue(new Triple<>(formController.getFormIndex(), questionIndex, validationResult));
             }
         }
     }
@@ -390,7 +391,14 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         changeLocks.getFormsLock().unlock(FORM_ENTRY_TOKEN);
     }
 
-    public void validate() {
+    public void validateAnswerConstraint(FormIndex index, IAnswerData answer) {
+        worker.immediate(() -> {
+            ValidationResult result = formController.validateAnswerConstraint(index, answer);
+            validationResult.postValue(new Consumable<>(result));
+        });
+    }
+
+    public void validateForm() {
         worker.immediate(
                 () -> {
                     ValidationResult result = null;
@@ -485,9 +493,5 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     private boolean isQuestionRecalculated(FormEntryPrompt mutableQuestionBeforeSave, ImmutableDisplayableQuestion immutableQuestionBeforeSave) {
         return !Objects.equals(mutableQuestionBeforeSave.getAnswerText(), immutableQuestionBeforeSave.getAnswerText());
-    }
-
-    public interface AnswerListener {
-        void onAnswer(FormIndex index, IAnswerData answer);
     }
 }

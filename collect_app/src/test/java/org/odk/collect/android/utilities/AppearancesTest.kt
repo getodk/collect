@@ -408,4 +408,31 @@ class AppearancesTest {
         whenever(formEntryPrompt.appearanceHint).thenReturn("masked numbers")
         assertFalse(Appearances.isMasked(formEntryPrompt))
     }
+
+    @Test
+    fun `isQuick returns true when 'quick' appearance is found for select_one questions`() {
+        whenever(formEntryPrompt.controlType).thenReturn(Constants.CONTROL_SELECT_ONE)
+        assertFalse(Appearances.isQuick(formEntryPrompt))
+
+        whenever(formEntryPrompt.appearanceHint).thenReturn("quick")
+        assertTrue(Appearances.isQuick(formEntryPrompt))
+    }
+
+    @Test
+    fun `isQuick returns false when 'quick' appearance is not found for select_one questions`() {
+        whenever(formEntryPrompt.controlType).thenReturn(Constants.CONTROL_SELECT_ONE)
+        assertFalse(Appearances.isQuick(formEntryPrompt))
+
+        whenever(formEntryPrompt.appearanceHint).thenReturn("blah")
+        assertFalse(Appearances.isQuick(formEntryPrompt))
+    }
+
+    @Test
+    fun `isQuick returns false when 'quick' appearance is found for select_multiple questions`() {
+        whenever(formEntryPrompt.controlType).thenReturn(Constants.CONTROL_SELECT_MULTI)
+        assertFalse(Appearances.isQuick(formEntryPrompt))
+
+        whenever(formEntryPrompt.appearanceHint).thenReturn("quick")
+        assertFalse(Appearances.isQuick(formEntryPrompt))
+    }
 }

@@ -154,7 +154,7 @@ class FormEntryMenuProvider(
             }
             R.id.menu_validate -> {
                 formEntryViewModel.saveScreenAnswersToFormController(answersProvider.answers, false)
-                formEntryViewModel.validate()
+                formEntryViewModel.validateForm()
                 true
             }
             R.id.menu_languages -> {

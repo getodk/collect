@@ -158,6 +158,8 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.SoftKeyboardController;
+import org.odk.collect.android.widgets.GeoShapeWidget;
+import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.datetime.DateTimeWidget;
 import org.odk.collect.android.widgets.datetime.pickers.CustomDatePickerDialog;
@@ -562,11 +564,16 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
 
         formEntryViewModel.getCurrentIndex().observe(this, indexAndValidationResult -> {
             if (indexAndValidationResult != null) {
-                FormIndex formIndex = indexAndValidationResult.component1();
-                FailedValidationResult validationResult = indexAndValidationResult.component2();
-                formIndexAnimationHandler.handle(formIndex);
+                FormIndex screenIndex = indexAndValidationResult.getFirst();
+                FormIndex questionIndex = indexAndValidationResult.getSecond();
+                FailedValidationResult validationResult = indexAndValidationResult.getThird();
+                formIndexAnimationHandler.handle(screenIndex);
                 if (validationResult != null) {
                     handleValidationResult(validationResult);
+                } else {
+                    if (odkView != null) {
+                        odkView.scrollToTopOf(questionIndex);
+                    }
                 }
             }
         });
@@ -973,7 +980,9 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
      * Clears the answer on the screen.
      */
     private void clearAnswer(QuestionWidget qw) {
-        if (qw.getAnswer() != null || qw instanceof DateTimeWidget) {
+        if (qw instanceof GeoTraceWidget || qw instanceof GeoShapeWidget) {
+            formEntryViewModel.answerQuestion(qw.getFormEntryPrompt().getIndex(), null);
+        } else if (qw.getAnswer() != null || qw instanceof DateTimeWidget) {
             qw.clearAnswer();
         }
     }

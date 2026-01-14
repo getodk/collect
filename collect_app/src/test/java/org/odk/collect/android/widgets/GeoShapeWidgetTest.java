@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.stringFromDoubleList;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndAnswer;
@@ -22,21 +21,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
-import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoShapeWidgetTest {
     private final String answer = stringFromDoubleList();
 
     private GeoDataRequester geoDataRequester;
-    private WaitingForDataRegistry waitingForDataRegistry;
 
     @Before
     public void setup() {
         geoDataRequester = mock(GeoDataRequester.class);
-        waitingForDataRegistry = mock(WaitingForDataRegistry.class);
     }
 
     @Test
@@ -85,24 +80,6 @@ public class GeoShapeWidgetTest {
     public void whenPromptIsNotReadOnlyAndHasAnswer_viewOrChangeGeoShapeButtonIsShown() {
         GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
         assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.view_or_change_polygon));
-    }
-
-    @Test
-    public void clearAnswer_clearsWidgetAnswer() {
-        GeoShapeWidget widget = createWidget(promptWithAnswer(new StringData(answer)));
-        widget.clearAnswer();
-
-        assertEquals(widget.binding.geoAnswerText.getText(), "");
-        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.get_polygon));
-    }
-
-    @Test
-    public void clearAnswer_callsValueChangeListeners() {
-        GeoShapeWidget widget = createWidget(promptWithAnswer(null));
-        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
-        widget.clearAnswer();
-
-        verify(valueChangedListener).widgetValueChanged(widget);
     }
 
     @Test
