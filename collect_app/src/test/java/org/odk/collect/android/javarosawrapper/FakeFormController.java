@@ -129,20 +129,20 @@ public class FakeFormController extends StubFormController {
         return currentPrompts.get(0);
     }
 
-    @NonNull
     @Override
-    public ValidationResult validateAnswers(boolean moveToInvalidIndex) throws JavaRosaException {
-        if (validationError != null) {
-            throw validationError;
+    public @NotNull ValidationResult validateAnswerConstraint(@NotNull FormIndex index, @Nullable IAnswerData answer) {
+        if (failedConstraint != null) {
+            return failedConstraint;
         } else {
             return SuccessValidationResult.INSTANCE;
         }
     }
 
+    @NonNull
     @Override
-    public @NotNull ValidationResult getFailedValidationResult(@NotNull FormIndex index, int status) {
-        if (failedConstraint != null) {
-            return failedConstraint;
+    public ValidationResult validateAnswers(boolean moveToInvalidIndex) throws JavaRosaException {
+        if (validationError != null) {
+            throw validationError;
         } else {
             return SuccessValidationResult.INSTANCE;
         }

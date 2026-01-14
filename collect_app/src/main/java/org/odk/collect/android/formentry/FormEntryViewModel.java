@@ -30,7 +30,6 @@ import org.odk.collect.android.formentry.questions.SelectChoiceUtils;
 import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
-import org.odk.collect.android.javarosawrapper.SuccessValidationResult;
 import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.utilities.Appearances;
@@ -394,12 +393,8 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     public void validateAnswerConstraint(FormIndex index, IAnswerData answer) {
         worker.immediate(() -> {
-            boolean isAnswerValid = formController.getFormDef().evaluateConstraint(index.getReference(), answer);
-            if (isAnswerValid) {
-                validationResult.postValue(new Consumable<>(SuccessValidationResult.INSTANCE));
-            } else {
-                validationResult.postValue(new Consumable<>(formController.getFailedValidationResult(index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED)));
-            }
+            ValidationResult result = formController.validateAnswerConstraint(index, answer);
+            validationResult.postValue(new Consumable<>(result));
         });
     }
 

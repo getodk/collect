@@ -130,6 +130,14 @@ interface FormController {
     fun answerQuestion(index: FormIndex?, data: IAnswerData?): Int
 
     /**
+     * Validates a single answer against its constraint.
+     *
+     * @return SuccessValidationResult if the answer is valid, or an error result describing
+     * the violated constraint.
+     */
+    fun validateAnswerConstraint(index: FormIndex, answer: IAnswerData?): ValidationResult
+
+    /**
      * Goes through the entire form to make sure all entered answers comply with their constraints.
      * Constraints are ignored on 'jump to', so answers can be outside of constraints. We don't
      * allow saving to disk, though, until all answers conform to their constraints/requirements.
@@ -139,8 +147,6 @@ interface FormController {
      */
     @Throws(JavaRosaException::class)
     fun validateAnswers(moveToInvalidIndex: Boolean): ValidationResult
-
-    fun getFailedValidationResult(index: FormIndex, status: Int): ValidationResult
 
     /**
      * saveAnswer attempts to save the current answer into the data model without doing any
