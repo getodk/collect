@@ -651,6 +651,21 @@ class GeoPolyFragmentTest {
         )
     }
 
+    @Test
+    fun clickingClear_clearsPoints() {
+        val inputPolygon = listOf(MapPoint(0.0, 0.0), MapPoint(1.0, 0.0), MapPoint(1.0, 1.0))
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() }, inputPolygon = inputPolygon)
+        }
+
+        val resultListener = FragmentResultRecorder()
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
+
+        Interactions.clickOn(withContentDescription(string.clear))
+        Interactions.clickOn(withText(string.clear), root = isDialog())
+        assertThat(mapFragment.getPolyLines().first().points.size, equalTo(0))
+    }
+
     private fun startInput(mode: Int? = null) {
         onView(withId(R.id.play)).perform(click())
 
