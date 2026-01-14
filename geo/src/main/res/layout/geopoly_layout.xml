@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:contentDescription="@string/show_my_location"
+        android:contentDescription="@string/show_how_to_modify_map"
         android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/location_status"
@@ -58,6 +58,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/zoom"
         app:srcCompat="@drawable/ic_layers" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/info"
+        style="@style/Widget.Geo.FloatingActionButton.Map.Small.Surface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:contentDescription="@string/layer_data_file"
+        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layers"
+        app:srcCompat="@drawable/ic_info" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/play"

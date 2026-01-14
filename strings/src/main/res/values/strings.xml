@@ -683,6 +683,9 @@
     <!-- Description for button that removes the last recorded point -->
     <string name="remove_last_point">Remove last point</string>
 
+    <!-- Description for button that explains how to modify the map -->
+    <string name="show_how_to_modify_map">Show how to modify the map</string>
+
     <!--
     ##############################################
     # SEND FINALIZED FORM
