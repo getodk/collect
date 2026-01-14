@@ -564,14 +564,15 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
 
         formEntryViewModel.getCurrentIndex().observe(this, indexAndValidationResult -> {
             if (indexAndValidationResult != null) {
-                FormIndex formIndex = indexAndValidationResult.component1();
-                FailedValidationResult validationResult = indexAndValidationResult.component2();
-                formIndexAnimationHandler.handle(formIndex);
+                FormIndex screenIndex = indexAndValidationResult.getFirst();
+                FormIndex questionIndex = indexAndValidationResult.getSecond();
+                FailedValidationResult validationResult = indexAndValidationResult.getThird();
+                formIndexAnimationHandler.handle(screenIndex);
                 if (validationResult != null) {
                     handleValidationResult(validationResult);
                 } else {
                     if (odkView != null) {
-                        odkView.scrollToTopOf(formIndex);
+                        odkView.scrollToTopOf(questionIndex);
                     }
                 }
             }

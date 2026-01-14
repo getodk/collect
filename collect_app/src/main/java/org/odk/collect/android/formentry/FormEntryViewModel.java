@@ -54,7 +54,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import kotlin.Pair;
+import kotlin.Triple;
 import timber.log.Timber;
 
 public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader {
@@ -63,7 +63,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
-    private final MutableLiveData<Pair<FormIndex, FailedValidationResult>> currentIndex = new MutableLiveData<>(null);
+    private final MutableLiveData<Triple<FormIndex, FormIndex, FailedValidationResult>> currentIndex = new MutableLiveData<>(null);
     private final MutableLiveData<Consumable<ValidationResult>>
             validationResult = new MutableLiveData<>(new Consumable<>(null));
     @NonNull
@@ -118,7 +118,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         return formController;
     }
 
-    public LiveData<Pair<FormIndex, FailedValidationResult>> getCurrentIndex() {
+    public LiveData<Triple<FormIndex, FormIndex, FailedValidationResult>> getCurrentIndex() {
         return currentIndex;
     }
 
@@ -379,9 +379,9 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
             AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), clock.get());
             if (isAsync) {
-                currentIndex.postValue(new Pair<>(questionIndex != null ? questionIndex : formController.getFormIndex(), validationResult));
+                currentIndex.postValue(new Triple<>(formController.getFormIndex(), questionIndex, validationResult));
             } else {
-                currentIndex.setValue(new Pair<>(questionIndex != null ? questionIndex : formController.getFormIndex(), validationResult));
+                currentIndex.setValue(new Triple<>(formController.getFormIndex(), questionIndex, validationResult));
             }
         }
     }

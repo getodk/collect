@@ -510,12 +510,12 @@ public class FormEntryViewModelTest {
         FormIndex originalIndex = formController.getFormIndex();
         viewModel.answerQuestion(formIndex, new StringData("answer"));
         scheduler.flush(true);
-        assertThat(getOrAwaitValue(viewModel.getCurrentIndex()).getSecond(), equalTo(failedValidationResult));
+        assertThat(getOrAwaitValue(viewModel.getCurrentIndex()).getThird(), equalTo(failedValidationResult));
         assertThat(formController.getFormIndex(), equalTo(new FormIndex(null, originalIndex.getLocalIndex(), 0, new TreeReference())));
     }
 
     @Test
-    public void answerQuestion_setsCurrentIndexToUpdatedQuestionIndex() {
+    public void answerQuestion_setsQuestionIndexToUpdatedQuestionIndex() {
         TreeReference reference = new TreeReference();
         reference.add("blah", TreeReference.INDEX_UNBOUND);
         FormIndex formIndex = new FormIndex(null, 1, 1, reference);
@@ -523,16 +523,21 @@ public class FormEntryViewModelTest {
                 .build();
         formController.setPrompt(formIndex, prompt);
 
+        FormIndex originalIndex = formController.getFormIndex();
         viewModel.answerQuestion(formIndex, new StringData("answer"));
         scheduler.flush(true);
         assertThat(
                 getOrAwaitValue(viewModel.getCurrentIndex()).getFirst(),
+                equalTo(originalIndex)
+        );
+        assertThat(
+                getOrAwaitValue(viewModel.getCurrentIndex()).getSecond(),
                 equalTo(formIndex)
         );
     }
 
     @Test
-    public void answerQuestion_whenQuestionIsAutoAdvance_setsCurrentIndexToNextScreenIndex() {
+    public void answerQuestion_whenQuestionIsAutoAdvance_setsScreenIndexToNextScreenIndex() {
         TreeReference reference = new TreeReference();
         reference.add("blah", TreeReference.INDEX_UNBOUND);
         FormIndex formIndex = new FormIndex(null, 1, 1, reference);
@@ -549,10 +554,14 @@ public class FormEntryViewModelTest {
                 getOrAwaitValue(viewModel.getCurrentIndex()).getFirst(),
                 equalTo(new FormIndex(null, originalIndex.getLocalIndex() + 1, 0, new TreeReference()))
         );
+        assertThat(
+                getOrAwaitValue(viewModel.getCurrentIndex()).getSecond(),
+                equalTo(null)
+        );
     }
 
     @Test
-    public void answerQuestion_whenQuestionIsAutoAdvance_andAnswerViolatesConstraint_setsCurrentIndexToCurrentScreenIndex() {
+    public void answerQuestion_whenQuestionIsAutoAdvance_andAnswerViolatesConstraint_setsScreenIndexToCurrentScreenIndex() {
         TreeReference reference = new TreeReference();
         reference.add("blah", TreeReference.INDEX_UNBOUND);
         FormIndex formIndex = new FormIndex(null, 1, 1, reference);
@@ -571,6 +580,10 @@ public class FormEntryViewModelTest {
         assertThat(
                 getOrAwaitValue(viewModel.getCurrentIndex()).getFirst(),
                 equalTo(originalIndex)
+        );
+        assertThat(
+                getOrAwaitValue(viewModel.getCurrentIndex()).getSecond(),
+                equalTo(null)
         );
     }
 }
