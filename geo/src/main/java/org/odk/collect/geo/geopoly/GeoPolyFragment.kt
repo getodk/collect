@@ -28,10 +28,10 @@ import org.odk.collect.geo.geopoint.LocationAccuracy.Unacceptable
 import org.odk.collect.geo.geopoly.GeoPolySettingsDialogFragment.SettingsDialogCallback
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.LineDescription
-import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
@@ -577,15 +577,27 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
 
         map!!.clearFeatures()
-        featureId = map!!.addPolyLine(
-            LineDescription(
-                line,
-                MapConsts.DEFAULT_STROKE_WIDTH.toString(),
-                null,
-                !readOnly,
-                outputMode == OutputMode.GEOSHAPE
+
+        if (outputMode == OutputMode.GEOSHAPE) {
+            featureId = map!!.addPolygon(
+                PolygonDescription(
+                    line,
+                    null,
+                    null,
+                    null,
+                    !readOnly
+                )
             )
-        )
+        } else {
+            featureId = map!!.addPolyLine(
+                LineDescription(
+                    line,
+                    null,
+                    null,
+                    !readOnly
+                )
+            )
+        }
     }
 
     private fun showClearDialog() {

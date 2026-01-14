@@ -337,11 +337,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     public int addPolyLine(LineDescription lineDescription) {
         int featureId = nextFeatureId++;
         if (lineDescription.getDraggable()) {
-            if (lineDescription.getClosed()) {
-                features.put(featureId, new DynamicPolygonFeature(map, lineDescription));
-            } else {
-                features.put(featureId, new DynamicPolyLineFeature(map, lineDescription));
-            }
+            features.put(featureId, new DynamicPolyLineFeature(map, lineDescription));
         } else {
             features.put(featureId, new StaticPolyLineFeature(map, lineDescription));
         }
@@ -351,7 +347,12 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     @Override
     public int addPolygon(PolygonDescription polygonDescription) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new StaticPolygonFeature(map, polygonDescription));
+        if (polygonDescription.getDraggable()) {
+            features.put(featureId, new DynamicPolygonFeature(map, polygonDescription));
+        } else {
+            features.put(featureId, new StaticPolygonFeature(map, polygonDescription));
+        }
+
         return featureId;
     }
 
@@ -974,15 +975,15 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         final MapView map;
         final List<Marker> markers = new ArrayList<>();
         final Polygon polygon;
-        private final LineDescription lineDescription;
+        private final PolygonDescription polygonDescription;
 
-        DynamicPolygonFeature(MapView map, LineDescription lineDescription) {
-            this.lineDescription = lineDescription;
+        DynamicPolygonFeature(MapView map, PolygonDescription polygonDescription) {
+            this.polygonDescription = polygonDescription;
             this.map = map;
             polygon = new Polygon();
-            polygon.setStrokeColor(lineDescription.getStrokeColor());
-            polygon.setStrokeWidth(lineDescription.getStrokeWidth());
-            polygon.getFillPaint().setColor(lineDescription.getStrokeColor());
+            polygon.setStrokeColor(polygonDescription.getStrokeColor());
+            polygon.setStrokeWidth(polygonDescription.getStrokeWidth());
+            polygon.getFillPaint().setColor(polygonDescription.getFillColor());
             polygon.getFillPaint().setAlpha(MapConsts.DEFAULT_FILL_COLOR_OPACITY);
             polygon.setOnClickListener((clickedPolygon, mapView, eventPos) -> {
                 int featureId = findFeature(clickedPolygon);
@@ -994,8 +995,8 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             });
 
             map.getOverlays().add(polygon);
-            for (int i = 0; i < lineDescription.getPoints().size(); i++) {
-                MapPoint point = lineDescription.getPoints().get(i);
+            for (int i = 0; i < polygonDescription.getPoints().size(); i++) {
+                MapPoint point = polygonDescription.getPoints().get(i);
                 markers.add(getPointMarker(point, i));
             }
             update();
@@ -1054,9 +1055,9 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         @NonNull
         private Marker getPointMarker(MapPoint point, int index) {
             if (index == 0) {
-                return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.ShapeFirstPoint(lineDescription.getStrokeWidth())));
+                return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.ShapeFirstPoint(polygonDescription.getStrokeWidth())));
             } else {
-                return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth())));
+                return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(polygonDescription.getStrokeWidth())));
             }
         }
 

@@ -157,13 +157,12 @@ class GeoPolyFragmentTest {
             )
         }
 
-        val polys = mapFragment.getPolyLines()
+        val polys = mapFragment.getPolygons()
         assertThat(polys.size, equalTo(1))
         val expectedPolygon = ArrayList<MapPoint>()
         expectedPolygon.add(MapPoint(1.0, 2.0, 3.0, 4.0))
         expectedPolygon.add(MapPoint(2.0, 3.0, 3.0, 4.0))
         assertThat(polys[0].points, equalTo(expectedPolygon))
-        assertThat(mapFragment.isPolyClosed(0), equalTo(true))
     }
 
     @Test
@@ -176,7 +175,7 @@ class GeoPolyFragmentTest {
             )
         }
 
-        val polys = mapFragment.getPolyLines()
+        val polys = mapFragment.getPolygons()
         assertThat(polys.size, equalTo(1))
         assertThat(polys[0].points.isEmpty(), equalTo(true))
     }
