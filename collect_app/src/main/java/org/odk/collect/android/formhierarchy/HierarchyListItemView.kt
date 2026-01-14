@@ -2,11 +2,14 @@ package org.odk.collect.android.formhierarchy
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textview.MaterialTextView
 import org.odk.collect.android.R
-import org.odk.collect.android.utilities.HtmlUtils
+import org.odk.collect.android.widgets.WidgetAnswer
+import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 
 class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(context) {
     init {
@@ -18,14 +21,22 @@ class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(conte
         }
     }
 
-    fun setElement(item: HierarchyItem) {
+    fun setElement(
+        item: HierarchyItem,
+        viewModelProvider: ViewModelProvider,
+        onCLick: () -> Unit
+    ) {
         findViewById<MaterialTextView>(R.id.primary_text).text = item.primaryText
         if (item.hierarchyItemType == HierarchyItemType.QUESTION) {
-            if (item.secondaryText.isNullOrBlank()) {
-                findViewById<MaterialTextView>(R.id.secondary_text).visibility = View.GONE
-            } else {
-                findViewById<MaterialTextView>(R.id.secondary_text).visibility = View.VISIBLE
-                findViewById<MaterialTextView>(R.id.secondary_text).text = HtmlUtils.textToHtml(item.secondaryText)
+            findViewById<ComposeView>(R.id.answer_view).setContextThemedContent {
+                WidgetAnswer(
+                    Modifier,
+                    item.formEntryPrompt!!,
+                    item.secondaryText,
+                    summaryView = true,
+                    viewModelProvider = viewModelProvider,
+                    onClick = onCLick
+                )
             }
         }
     }

@@ -1,5 +1,6 @@
 package org.odk.collect.android.feature.formentry
 
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
@@ -10,11 +11,12 @@ import org.odk.collect.android.support.rules.TestRuleChain.chain
 
 @RunWith(AndroidJUnit4::class)
 class SaveIncompleteTest {
-
+    private val composeRule = createEmptyComposeRule()
     var rule = CollectTestRule()
 
     @get:Rule
     var chain: RuleChain = chain()
+        .around(composeRule)
         .around(rule)
 
     @Test
@@ -28,7 +30,7 @@ class SaveIncompleteTest {
 
             .clickDrafts(1)
             .clickOnForm("Two Question Save Incomplete")
-            .assertText("Dez")
+            .assertText("Dez", composeRule)
     }
 
     @Test
@@ -42,6 +44,6 @@ class SaveIncompleteTest {
 
             .clickDrafts(1)
             .clickOnForm("Two Question Save Incomplete Required")
-            .assertText("Dez")
+            .assertText("Dez", composeRule)
     }
 }
