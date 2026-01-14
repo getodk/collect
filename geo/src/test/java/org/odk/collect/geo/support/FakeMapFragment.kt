@@ -152,6 +152,8 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
     override fun clearFeatures() {
         markers.clear()
         markerIcons.clear()
+        polyLines.clear()
+        polygons.clear()
     }
 
     override fun setClickListener(listener: PointListener?) {

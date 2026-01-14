@@ -486,7 +486,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun clear() {
-        map!!.clearFeatures()
+        line.clear()
         inputActive = false
         updateUi()
     }
