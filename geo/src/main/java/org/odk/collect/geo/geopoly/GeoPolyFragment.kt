@@ -306,12 +306,6 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private fun saveAsPolygon() {
         if (getLine().size > 2) {
-            // Close the polygon.
-            val points = getLine()
-            val count = points.size
-            if (count > 1 && points[0] != points[count - 1]) {
-                map!!.appendPointToPolyLine(featureId, points[0])
-            }
             setResult()
         } else {
             showShortToastInMiddle(
