@@ -392,7 +392,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         changeLocks.getFormsLock().unlock(FORM_ENTRY_TOKEN);
     }
 
-    public void validateAnswer(FormIndex index, IAnswerData answer) {
+    public void validateAnswerConstraint(FormIndex index, IAnswerData answer) {
         worker.immediate(() -> {
             boolean isAnswerValid = formController.getFormDef().evaluateConstraint(index.getReference(), answer);
             if (isAnswerValid) {

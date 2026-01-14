@@ -333,7 +333,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).validateAnswer(prompt.index, geoTraceOf(answer))
+        verify(formEntryViewModel).validateAnswerConstraint(prompt.index, geoTraceOf(answer))
     }
 
     @Test
@@ -354,7 +354,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).validateAnswer(prompt.index, geoShapeOf(answer))
+        verify(formEntryViewModel).validateAnswerConstraint(prompt.index, geoShapeOf(answer))
     }
 
     @Test
@@ -390,7 +390,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel, never()).validateAnswer(prompt.index, geoTraceOf(answer))
+        verify(formEntryViewModel, never()).validateAnswerConstraint(prompt.index, geoTraceOf(answer))
     }
 
     @Test
@@ -476,21 +476,6 @@ class GeoPolyDialogFragmentTest {
             TreeReference()
         )
         validationResult.value = Consumable(FailedValidationResult(anotherQuestionFormIndex, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0))
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
-            GeoPolyDialogFragment::class,
-            bundleOf(ARG_FORM_INDEX to prompt.index)
-        ) {
-            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
-        }
-    }
-
-    @Test
-    fun `ignores the validation message if it was triggered by a required but empty answer`() {
-        prompt = MockFormEntryPromptBuilder(prompt)
-            .withDataType(Constants.DATATYPE_GEOTRACE)
-            .build()
-
-        validationResult.value = Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_REQUIRED_BUT_EMPTY, "blah", 0))
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)

@@ -457,7 +457,7 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void validateAnswer_updatesValidationResult() {
+    public void validateAnswerConstraint_updatesValidationResult() {
         FormDef formDef = mock();
         when(formDef.evaluateConstraint(any(), any())).thenReturn(false);
         formController.setFormDef(formDef);
@@ -471,7 +471,7 @@ public class FormEntryViewModelTest {
         FailedValidationResult failedValidationResult = new FailedValidationResult(formIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
         formController.setFailedConstraint(failedValidationResult);
 
-        viewModel.validateAnswer(formIndex, new StringData("answer"));
+        viewModel.validateAnswerConstraint(formIndex, new StringData("answer"));
         scheduler.flush(true);
         assertThat(viewModel.getValidationResult().getValue().getValue(), equalTo(failedValidationResult));
     }

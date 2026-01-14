@@ -73,7 +73,7 @@ abstract class WidgetAnswerDialogFragment<T : Fragment>(
     }
 
     fun onValidate(answer: IAnswerData?) {
-        formEntryViewModel.validateAnswer(prompt.index, answer)
+        formEntryViewModel.validateAnswerConstraint(prompt.index, answer)
     }
 
     fun onAnswer(answer: IAnswerData?) {
