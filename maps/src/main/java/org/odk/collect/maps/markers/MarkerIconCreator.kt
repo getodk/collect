@@ -31,10 +31,10 @@ object MarkerIconCreator {
                 }
             }
 
-            is MarkerIconDescription.ShapeFirstPoint -> {
-                fromCache("ShapeFirstPoint") {
+            is MarkerIconDescription.LastLinePoint -> {
+                fromCache("LastLinePoint") {
                     createPoint(
-                        markerIconDescription.lineSize * 8,
+                        markerIconDescription.lineSize * 6,
                         markerIconDescription.lineSize * 1.2f
                     )
                 }
@@ -64,13 +64,13 @@ object MarkerIconCreator {
 
             val fill = Paint().also {
                 it.style = Paint.Style.FILL
-                it.color = MapConsts.DEFAULT_STROKE_COLOR
+                it.color = Color.parseColor("#ffffff")
             }
             canvas.drawCircle(radius, radius, radius, fill)
 
             val stroke = Paint().also {
                 it.style = Paint.Style.STROKE
-                it.color = Color.parseColor("#ffffff")
+                it.color = MapConsts.DEFAULT_STROKE_COLOR
                 it.strokeWidth = strokeSize
             }
             canvas.drawCircle(radius, radius, radius - (strokeSize / 2), stroke)

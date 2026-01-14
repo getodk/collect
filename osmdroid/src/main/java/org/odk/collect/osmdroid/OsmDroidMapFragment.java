@@ -738,6 +738,15 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         return true;
     }
 
+    @NonNull
+    private Marker getLinePointMarker(MapPoint point, float strokeWidth, boolean isLast) {
+        if (isLast) {
+            return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LastLinePoint(strokeWidth)));
+        } else {
+            return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(strokeWidth)));
+        }
+    }
+
     /**
      * A MapFeature is a physical feature on a map, such as a point, a road,
      * a building, a region, etc.  It is presented to the user as one editable
@@ -905,8 +914,11 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             Paint paint = polyline.getPaint();
             paint.setStrokeWidth(lineDescription.getStrokeWidth());
             map.getOverlays().add(polyline);
-            for (MapPoint point : lineDescription.getPoints()) {
-                markers.add(getPointMarker(point));
+
+            List<MapPoint> points = lineDescription.getPoints();
+            for (int i = 0; i < points.size(); i++) {
+                MapPoint point = points.get(i);
+                markers.add(getLinePointMarker(point, lineDescription.getStrokeWidth(), i == points.size() - 1));
             }
             update();
         }
@@ -956,13 +968,8 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         }
 
         public void addPoint(MapPoint point) {
-            markers.add(getPointMarker(point));
+            markers.add(getLinePointMarker(point, lineDescription.getStrokeWidth(), true));
             update();
-        }
-
-        @NonNull
-        private Marker getPointMarker(MapPoint point) {
-            return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth())));
         }
 
         public void removeLastPoint() {
@@ -1002,7 +1009,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             map.getOverlays().add(polygon);
             for (int i = 0; i < polygonDescription.getPoints().size(); i++) {
                 MapPoint point = polygonDescription.getPoints().get(i);
-                markers.add(getPointMarker(point, i));
+                markers.add(getLinePointMarker(point, polygonDescription.getStrokeWidth(), i == polygonDescription.getPoints().size() - 1));
             }
             update();
         }
@@ -1053,17 +1060,8 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         }
 
         public void addPoint(MapPoint point) {
-            markers.add(getPointMarker(point, markers.size()));
+            markers.add(getLinePointMarker(point, polygonDescription.getStrokeWidth(), true));
             update();
-        }
-
-        @NonNull
-        private Marker getPointMarker(MapPoint point, int index) {
-            if (index == 0) {
-                return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.ShapeFirstPoint(polygonDescription.getStrokeWidth())));
-            } else {
-                return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(polygonDescription.getStrokeWidth())));
-            }
         }
 
         public void removeLastPoint() {
