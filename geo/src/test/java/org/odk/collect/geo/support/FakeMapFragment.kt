@@ -238,10 +238,6 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         return polyLines.values.toList()
     }
 
-    fun isPolyClosed(index: Int): Boolean {
-        return polyLines[featureIds[index]]!!.closed
-    }
-
     fun isPolyDraggable(index: Int): Boolean {
         return polyLines[featureIds[index]]!!.draggable
     }
