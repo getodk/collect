@@ -66,6 +66,8 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         return -1
     }
 
+    override fun updatePolyLine(featureId: Int, lineDescription: LineDescription) {}
+
     override fun addPolygon(polygonDescription: PolygonDescription): Int {
         return -1
     }

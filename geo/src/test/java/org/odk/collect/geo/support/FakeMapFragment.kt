@@ -128,6 +128,13 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         return featureId
     }
 
+    override fun updatePolyLine(
+        featureId: Int,
+        lineDescription: LineDescription
+    ) {
+        polyLines[featureId] = lineDescription
+    }
+
     override fun addPolygon(polygonDescription: PolygonDescription): Int {
         val featureId = generateFeatureId()
         polygons[featureId] = polygonDescription
