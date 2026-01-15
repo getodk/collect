@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
@@ -146,8 +148,12 @@ private fun InfoContent(
     vararg items: InfoDialog.InfoItem,
     onDone: () -> Unit
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
-        modifier = Modifier.padding(dimensionResource(id = dimen.margin_standard))
+        modifier = Modifier
+            .padding(dimensionResource(id = dimen.margin_standard))
+            .verticalScroll(scrollState)
     ) {
         Title()
         items.forEachIndexed { index, item ->
