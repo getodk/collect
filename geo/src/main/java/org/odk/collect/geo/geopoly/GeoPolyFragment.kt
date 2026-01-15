@@ -35,6 +35,7 @@ import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.strings.R.string
 import org.odk.collect.webpage.WebPageService
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -150,7 +151,14 @@ class GeoPolyFragment @JvmOverloads constructor(
             (view.findViewById<View?>(R.id.map_container) as FragmentContainerView).getFragment()
         mapFragment.init({ initMap(it, GeopolyLayoutBinding.bind(view)) }, { this.cancel() })
 
-        val snackbar = SnackbarUtils.make(requireView(), "", Snackbar.LENGTH_INDEFINITE)
+        val snackbar = SnackbarUtils.make(
+            parentView = requireView(),
+            message = "",
+            duration = Snackbar.LENGTH_INDEFINITE,
+            action = SnackbarUtils.Action(getString(string.how_to_modify)) {
+                showInfoDialog(true)
+            }
+        )
         invalidMessage.observe(viewLifecycleOwner) {
             if (it != null) {
                 snackbar.setText(it)
@@ -199,6 +207,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     fun initMap(newMapFragment: MapFragment?, binding: GeopolyLayoutBinding) {
         map = newMapFragment
 
+        binding.info.setOnClickListener { showInfoDialog(false) }
         binding.clear.setOnClickListener { showClearDialog() }
         binding.pause.setOnClickListener {
             inputActive = false
@@ -595,6 +604,15 @@ class GeoPolyFragment @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    private fun showInfoDialog(fromSnackbar: Boolean) {
+        val type = if (recordingAutomatic || recordingEnabled) {
+            InfoDialog.Type.MANUAL_OR_AUTOMATIC
+        } else {
+            InfoDialog.Type.PLACEMENT
+        }
+        InfoDialog.show(requireContext(), type, fromSnackbar)
     }
 
     private fun showClearDialog() {
