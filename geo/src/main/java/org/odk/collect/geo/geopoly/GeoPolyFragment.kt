@@ -517,10 +517,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             map!!.clearFeatures()
             val polygonDescription = PolygonDescription(
                 viewModel.points.value,
-                null,
-                null,
-                null,
-                !readOnly
+                draggable = !readOnly
             )
 
             if (featureId == -1) {
@@ -531,10 +528,8 @@ class GeoPolyFragment @JvmOverloads constructor(
         } else {
             val lineDescription = LineDescription(
                 viewModel.points.value,
-                null,
-                null,
-                !readOnly,
-                outputMode == OutputMode.GEOSHAPE
+                draggable = !readOnly,
+                closed = outputMode == OutputMode.GEOSHAPE
             )
 
             if (featureId == -1) {
