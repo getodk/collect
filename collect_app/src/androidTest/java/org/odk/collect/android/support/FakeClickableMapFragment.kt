@@ -72,6 +72,8 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         return -1
     }
 
+    override fun updatePolygon(featureId: Int, polygonDescription: PolygonDescription) {}
+
     override fun getPolyPoints(featureId: Int): MutableList<MapPoint> {
         return mutableListOf()
     }
