@@ -741,9 +741,9 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     @NonNull
     private Marker getLinePointMarker(MapPoint point, float strokeWidth, boolean isLast) {
         if (isLast) {
-            return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LastLinePoint(strokeWidth)));
+            return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(strokeWidth, MapConsts.DEFAULT_HIGHLIGHT_COLOR)));
         } else {
-            return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(strokeWidth)));
+            return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(strokeWidth, MapConsts.DEFAULT_STROKE_COLOR)));
         }
     }
 
