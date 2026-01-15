@@ -182,6 +182,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     fun initMap(newMapFragment: MapFragment?, binding: GeopolyLayoutBinding) {
         map = newMapFragment
 
+        binding.info.setOnClickListener { InfoDialog.show(requireContext(), InfoDialog.Type.MANUAL_FROM_INFO_BUTTON) }
         binding.clear.setOnClickListener { showClearDialog() }
         binding.pause.setOnClickListener {
             viewModel.stopRecording()
