@@ -93,6 +93,7 @@ interface MapFragment {
      * Returns a positive integer, the featureId for the newly added shape.
      */
     fun addPolyLine(lineDescription: LineDescription): Int
+    fun updatePolyLine(featureId: Int, lineDescription: LineDescription)
 
     /**
      * Adds a polygon to the map with given sequence of vertices. * Returns a positive integer,

@@ -513,9 +513,8 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
         }
 
-        map!!.clearFeatures()
-
         if (map!!.supportsDraggablePolygon() && outputMode == OutputMode.GEOSHAPE) {
+            map!!.clearFeatures()
             featureId = map!!.addPolygon(
                 PolygonDescription(
                     viewModel.points.value,
@@ -526,15 +525,19 @@ class GeoPolyFragment @JvmOverloads constructor(
                 )
             )
         } else {
-            featureId = map!!.addPolyLine(
-                LineDescription(
-                    viewModel.points.value,
-                    null,
-                    null,
-                    !readOnly,
-                    outputMode == OutputMode.GEOSHAPE
-                )
+            val lineDescription = LineDescription(
+                viewModel.points.value,
+                null,
+                null,
+                !readOnly,
+                outputMode == OutputMode.GEOSHAPE
             )
+
+            if (featureId == -1) {
+                featureId = map!!.addPolyLine(lineDescription)
+            } else {
+                map!!.updatePolyLine(featureId, lineDescription)
+            }
         }
     }
 

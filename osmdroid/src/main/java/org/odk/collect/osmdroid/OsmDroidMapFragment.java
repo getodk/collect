@@ -42,6 +42,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.location.LocationListener;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.LineDescription;
@@ -336,12 +337,22 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     @Override
     public int addPolyLine(LineDescription lineDescription) {
         int featureId = nextFeatureId++;
+        addPolyLine(featureId, lineDescription);
+        return featureId;
+    }
+
+    private void addPolyLine(int featureId, LineDescription lineDescription) {
         if (lineDescription.getDraggable()) {
             features.put(featureId, new DynamicPolyLineFeature(map, lineDescription));
         } else {
             features.put(featureId, new StaticPolyLineFeature(map, lineDescription));
         }
-        return featureId;
+    }
+
+    @Override
+    public void updatePolyLine(int featureId, @NotNull LineDescription lineDescription) {
+        features.get(featureId).dispose();
+        addPolyLine(featureId, lineDescription);
     }
 
     @Override

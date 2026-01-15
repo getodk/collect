@@ -49,6 +49,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
@@ -306,12 +307,22 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
     @Override public int addPolyLine(LineDescription lineDescription) {
         int featureId = nextFeatureId++;
+        addPolyLine(featureId, lineDescription);
+        return featureId;
+    }
+
+    private void addPolyLine(int featureId, LineDescription lineDescription) {
         if (lineDescription.getDraggable()) {
             features.put(featureId, new DynamicPolyLineFeature(getActivity(), lineDescription, map));
         } else {
             features.put(featureId, new StaticPolyLineFeature(lineDescription, map));
         }
-        return featureId;
+    }
+
+    @Override
+    public void updatePolyLine(int featureId, @NotNull LineDescription lineDescription) {
+        features.get(featureId).dispose();
+        addPolyLine(featureId, lineDescription);
     }
 
     @Override

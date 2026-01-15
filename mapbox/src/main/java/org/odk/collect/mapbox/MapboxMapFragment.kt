@@ -339,6 +339,19 @@ class MapboxMapFragment :
 
     override fun addPolyLine(lineDescription: LineDescription): Int {
         val featureId = nextFeatureId++
+        addPolyLine(featureId, lineDescription)
+        return featureId
+    }
+
+    override fun updatePolyLine(featureId: Int, lineDescription: LineDescription) {
+        features[featureId]?.dispose()
+        addPolyLine(featureId, lineDescription)
+    }
+
+    private fun addPolyLine(
+        featureId: Int,
+        lineDescription: LineDescription
+    ) {
         if (lineDescription.draggable) {
             features[featureId] = DynamicPolyLineFeature(
                 requireContext(),
@@ -357,7 +370,6 @@ class MapboxMapFragment :
                 lineDescription
             )
         }
-        return featureId
     }
 
     override fun addPolygon(polygonDescription: PolygonDescription): Int {
