@@ -372,20 +372,6 @@ class MapboxMapFragment :
         return featureId
     }
 
-    override fun appendPointToPolyLine(featureId: Int, point: MapPoint) {
-        val feature = features[featureId]
-        if (feature is DynamicPolyLineFeature) {
-            feature.appendPoint(point)
-        }
-    }
-
-    override fun removePolyLineLastPoint(featureId: Int) {
-        val feature = features[featureId]
-        if (feature is DynamicPolyLineFeature) {
-            feature.removeLastPoint()
-        }
-    }
-
     override fun getPolyPoints(featureId: Int): List<MapPoint> {
         val feature = features[featureId]
         return if (feature is LineFeature) {

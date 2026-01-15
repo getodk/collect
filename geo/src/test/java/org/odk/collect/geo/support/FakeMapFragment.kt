@@ -135,16 +135,6 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         return featureId
     }
 
-    override fun appendPointToPolyLine(featureId: Int, point: MapPoint) {
-        val poly = polyLines[featureId]!!
-        polyLines[featureId] = poly.copy(points = poly.points + point)
-    }
-
-    override fun removePolyLineLastPoint(featureId: Int) {
-        val poly = polyLines[featureId]!!
-        polyLines[featureId] = poly.copy(points = poly.points.dropLast(1))
-    }
-
     override fun getPolyPoints(featureId: Int): List<MapPoint> {
         return polyLines[featureId]?.points ?: polygons[featureId]?.points ?: emptyList()
     }

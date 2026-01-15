@@ -357,16 +357,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     }
 
     @Override
-    public void appendPointToPolyLine(int featureId, @NonNull MapPoint point) {
-        MapFeature feature = features.get(featureId);
-        if (feature instanceof DynamicPolyLineFeature) {
-            ((DynamicPolyLineFeature) feature).addPoint(point);
-        } else if (feature instanceof DynamicPolygonFeature) {
-            ((DynamicPolygonFeature) feature).addPoint(point);
-        }
-    }
-
-    @Override
     public @NonNull
     List<MapPoint> getPolyPoints(int featureId) {
         MapFeature feature = features.get(featureId);
@@ -374,16 +364,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             return ((LineFeature) feature).getPoints();
         }
         return new ArrayList<>();
-    }
-
-    @Override
-    public void removePolyLineLastPoint(int featureId) {
-        MapFeature feature = features.get(featureId);
-        if (feature instanceof DynamicPolyLineFeature) {
-            ((DynamicPolyLineFeature) feature).removeLastPoint();
-        } else if (feature instanceof DynamicPolygonFeature) {
-            ((DynamicPolygonFeature) feature).removeLastPoint();
-        }
     }
 
     @Override
@@ -896,10 +876,8 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         final MapView map;
         final List<Marker> markers = new ArrayList<>();
         final Polyline polyline;
-        private final LineDescription lineDescription;
 
         DynamicPolyLineFeature(MapView map, LineDescription lineDescription) {
-            this.lineDescription = lineDescription;
             this.map = map;
             polyline = new Polyline();
             polyline.setColor(lineDescription.getStrokeColor());
@@ -966,20 +944,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             }
             return points;
         }
-
-        public void addPoint(MapPoint point) {
-            markers.add(getLinePointMarker(point, lineDescription.getStrokeWidth(), true));
-            update();
-        }
-
-        public void removeLastPoint() {
-            if (!markers.isEmpty()) {
-                int last = markers.size() - 1;
-                map.getOverlays().remove(markers.get(last));
-                markers.remove(last);
-                update();
-            }
-        }
     }
 
     private  class DynamicPolygonFeature implements LineFeature {
@@ -987,10 +951,8 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         final MapView map;
         final List<Marker> markers = new ArrayList<>();
         final Polygon polygon;
-        private final PolygonDescription polygonDescription;
 
         DynamicPolygonFeature(MapView map, PolygonDescription polygonDescription) {
-            this.polygonDescription = polygonDescription;
             this.map = map;
             polygon = new Polygon();
             polygon.setStrokeColor(polygonDescription.getStrokeColor());
@@ -1057,20 +1019,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
                 points.add(fromMarker(marker));
             }
             return points;
-        }
-
-        public void addPoint(MapPoint point) {
-            markers.add(getLinePointMarker(point, polygonDescription.getStrokeWidth(), true));
-            update();
-        }
-
-        public void removeLastPoint() {
-            if (!markers.isEmpty()) {
-                int last = markers.size() - 1;
-                map.getOverlays().remove(markers.get(last));
-                markers.remove(last);
-                update();
-            }
         }
     }
 

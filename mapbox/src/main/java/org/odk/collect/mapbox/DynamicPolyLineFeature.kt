@@ -75,30 +75,6 @@ internal class DynamicPolyLineFeature(
         points.clear()
     }
 
-    fun appendPoint(point: MapPoint) {
-        points.add(point)
-        pointAnnotations.add(
-            MapUtils.createPointAnnotation(
-                pointAnnotationManager,
-                point,
-                true,
-                MapFragment.CENTER,
-                org.odk.collect.icons.R.drawable.ic_map_point,
-                context
-            )
-        )
-        updateLine()
-    }
-
-    fun removeLastPoint() {
-        if (pointAnnotations.isNotEmpty()) {
-            pointAnnotationManager.delete(pointAnnotations.last())
-            pointAnnotations.removeAt(pointAnnotations.lastIndex)
-            points.removeAt(points.lastIndex)
-            updateLine()
-        }
-    }
-
     private fun updateLine() {
         val points = points
             .map {
