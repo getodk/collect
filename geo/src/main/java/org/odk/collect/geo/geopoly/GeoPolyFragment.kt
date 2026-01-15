@@ -514,7 +514,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
 
         if (map!!.supportsDraggablePolygon() && outputMode == OutputMode.GEOSHAPE) {
-            map!!.clearFeatures()
             val polygonDescription = PolygonDescription(
                 viewModel.points.value,
                 draggable = !readOnly
