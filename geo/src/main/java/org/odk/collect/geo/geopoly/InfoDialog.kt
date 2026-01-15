@@ -24,10 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
+import org.odk.collect.strings.R.string
 
 object InfoDialog {
     data class InfoItem(
@@ -64,11 +66,10 @@ object InfoDialog {
 
 @Composable
 private fun PlacementFromSnackbarInfo(onDone: () -> Unit) {
-    InfoContent(
-        InfoDialog.InfoItem(Icons.Filled.TouchApp, "Long press to move point"),
-        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, "Remove last point"),
-        InfoDialog.InfoItem(Icons.Filled.Delete, "Delete shape to start over"),
-        InfoDialog.InfoItem(Icons.Filled.AddLocation, "Add point"),
+    InfoContent(InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
+        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
+        InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_shape_to_start_over_info_item)),
+        InfoDialog.InfoItem(Icons.Filled.AddLocation, stringResource(string.add_point_info_item)),
         onDone = onDone
     )
 }
@@ -76,10 +77,10 @@ private fun PlacementFromSnackbarInfo(onDone: () -> Unit) {
 @Composable
 private fun PlacementFromInfoButtonInfo(onDone: () -> Unit) {
     InfoContent(
-        InfoDialog.InfoItem(Icons.Filled.TouchApp, "Tap to add a point"),
-        InfoDialog.InfoItem(Icons.Filled.TouchApp, "Long press to move point"),
-        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, "Remove last point"),
-        InfoDialog.InfoItem(Icons.Filled.Delete, "Delete entire shape"),
+        InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.tap_to_add_a_point_info_item)),
+        InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
+        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
+        InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_entire_shape_info_item)),
         onDone = onDone
     )
 }
@@ -87,10 +88,10 @@ private fun PlacementFromInfoButtonInfo(onDone: () -> Unit) {
 @Composable
 private fun ManualFromSnackbarInfo(onDone: () -> Unit) {
     InfoContent(
-        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.DirectionsWalk, "Physically move to correct"),
-        InfoDialog.InfoItem(Icons.Filled.TouchApp, "Long press to move point"),
-        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, "Remove last point"),
-        InfoDialog.InfoItem(Icons.Filled.Delete, "Delete entire shape"),
+        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.DirectionsWalk, stringResource(string.physically_move_to_correct_info_item)),
+        InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
+        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
+        InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_entire_shape_info_item)),
         onDone = onDone
     )
 }
@@ -98,11 +99,11 @@ private fun ManualFromSnackbarInfo(onDone: () -> Unit) {
 @Composable
 private fun ManualFromInfoButtonInfo(onDone: () -> Unit) {
     InfoContent(
-        InfoDialog.InfoItem(Icons.Filled.TouchApp, "Tap to add a point"),
-        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.DirectionsWalk, "Physically move to correct"),
-        InfoDialog.InfoItem(Icons.Filled.TouchApp, "Long press to move point"),
-        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, "Remove last point"),
-        InfoDialog.InfoItem(Icons.Filled.Delete, "Delete entire shape"),
+        InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.tap_to_add_a_point_info_item)),
+        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.DirectionsWalk, stringResource(string.physically_move_to_correct_info_item)),
+        InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
+        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
+        InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_entire_shape_info_item)),
         onDone = onDone
     )
 }
@@ -115,7 +116,7 @@ private fun Title() {
             top = dimensionResource(id = dimen.margin_extra_small),
             bottom = dimensionResource(id = dimen.margin_standard)
         ),
-        text = "How to modify the map",
+        text = stringResource(string.how_to_modify_map),
         style = MaterialTheme.typography.titleLarge
     )
 }
@@ -164,11 +165,13 @@ private fun InfoContent(
 @Composable
 private fun DoneButton(onDone: () -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(top = dimensionResource(id = dimen.margin_standard)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = dimensionResource(id = dimen.margin_standard)),
         horizontalArrangement = Arrangement.End
     ) {
         TextButton(onClick = onDone) {
-            Text("Done")
+            Text(stringResource(string.done))
         }
     }
 }
