@@ -25,7 +25,7 @@ private const val LOCATION_KEY = "location"
 class ForegroundServiceLocationTracker(private val application: Application) : LocationTracker {
 
     override fun getCurrentLocation(): Location? {
-        return application.getState().get(LOCATION_KEY)
+        return application.getState().getFlow<Location?>(LOCATION_KEY, null).value
     }
 
     override fun start(retainMockAccuracy: Boolean, updateInterval: Long?) {
@@ -96,7 +96,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
 
     override fun onClientStart() {
         locationClient.requestLocationUpdates {
-            application.getState().set(
+            application.getState().setFlow(
                 LOCATION_KEY,
                 Location(it.latitude, it.longitude, it.altitude, it.accuracy)
             )
