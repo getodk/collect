@@ -11,7 +11,6 @@ import android.util.LruCache
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
-import org.odk.collect.maps.MapConsts
 
 object MarkerIconCreator {
     /**
@@ -26,16 +25,11 @@ object MarkerIconCreator {
     fun getMarkerIcon(context: Context, markerIconDescription: MarkerIconDescription): Bitmap {
         return when (markerIconDescription) {
             is MarkerIconDescription.LinePoint -> {
-                fromCache("LinePoint") {
-                    createPoint(markerIconDescription.lineSize * 6, markerIconDescription.lineSize)
-                }
-            }
-
-            is MarkerIconDescription.LastLinePoint -> {
-                fromCache("LastLinePoint") {
+                fromCache("LinePoint" + markerIconDescription.lineSize + markerIconDescription.color) {
                     createPoint(
                         markerIconDescription.lineSize * 6,
-                        markerIconDescription.lineSize * 1.2f
+                        markerIconDescription.lineSize,
+                        markerIconDescription.color
                     )
                 }
             }
@@ -55,7 +49,7 @@ object MarkerIconCreator {
         }
     }
 
-    private fun createPoint(diameter: Float, strokeSize: Float): Bitmap {
+    private fun createPoint(diameter: Float, strokeSize: Float, color: Int): Bitmap {
         val bitmap =
             Bitmap.createBitmap(diameter.toInt(), diameter.toInt(), Config.ARGB_8888)
 
@@ -70,7 +64,7 @@ object MarkerIconCreator {
 
             val stroke = Paint().also {
                 it.style = Paint.Style.STROKE
-                it.color = MapConsts.DEFAULT_STROKE_COLOR
+                it.color = color
                 it.strokeWidth = strokeSize
             }
             canvas.drawCircle(radius, radius, radius - (strokeSize / 2), stroke)

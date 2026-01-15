@@ -21,6 +21,5 @@ sealed interface MarkerIconDescription {
         }
     }
 
-    class LinePoint(val lineSize: Float) : MarkerIconDescription
-    class LastLinePoint(val lineSize: Float) : MarkerIconDescription
+    class LinePoint(val lineSize: Float, val color: Int) : MarkerIconDescription
 }
