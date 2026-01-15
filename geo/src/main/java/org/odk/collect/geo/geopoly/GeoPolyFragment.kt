@@ -39,10 +39,6 @@ import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragme
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.webpage.WebPageService
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.ScheduledFuture
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GeoPolyFragment @JvmOverloads constructor(
@@ -73,9 +69,6 @@ class GeoPolyFragment @JvmOverloads constructor(
     lateinit var webPageService: WebPageService
 
     private var previousState: Bundle? = null
-    private val executorServiceScheduler: ScheduledExecutorService =
-        Executors.newSingleThreadScheduledExecutor()
-    private var schedulerHandler: ScheduledFuture<*>? = null
 
     private var map: MapFragment? = null
     private var featureId = -1 // will be a positive featureId once map is ready
@@ -105,7 +98,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     private val viewModel: GeoPolyViewModel by viewModels {
         viewModelFactory {
             addInitializer(GeoPolyViewModel::class) {
-                GeoPolyViewModel(outputMode, inputPolygon)
+                GeoPolyViewModel(outputMode, inputPolygon, locationTracker)
             }
         }
     }
@@ -188,28 +181,13 @@ class GeoPolyFragment @JvmOverloads constructor(
         state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex)
     }
 
-    override fun onDestroy() {
-        schedulerHandler?.let {
-            if (!it.isCancelled) {
-                it.cancel(true)
-            }
-        }
-
-        locationTracker.stop()
-        super.onDestroy()
-    }
-
     fun initMap(newMapFragment: MapFragment?, binding: GeopolyLayoutBinding) {
         map = newMapFragment
 
         binding.clear.setOnClickListener { showClearDialog() }
         binding.pause.setOnClickListener {
+            viewModel.stopRecording()
             inputActive = false
-            try {
-                schedulerHandler?.cancel(true)
-            } catch (_: Exception) {
-                // Do nothing
-            }
             updateUi()
         }
 
@@ -336,28 +314,10 @@ class GeoPolyFragment @JvmOverloads constructor(
     override fun startInput() {
         inputActive = true
         if (recordingEnabled && recordingAutomatic) {
-            locationTracker.start(retainMockAccuracy)
-
-            recordPoint(map!!.getGpsLocation())
-            schedulerHandler = executorServiceScheduler.scheduleAtFixedRate(
-                {
-                    requireActivity().runOnUiThread {
-                        val currentLocation = locationTracker.getCurrentLocation()
-                        if (currentLocation != null) {
-                            val currentMapPoint = MapPoint(
-                                currentLocation.latitude,
-                                currentLocation.longitude,
-                                currentLocation.altitude,
-                                currentLocation.accuracy.toDouble()
-                            )
-
-                            recordPoint(currentMapPoint)
-                        }
-                    }
-                },
-                INTERVAL_OPTIONS[intervalIndex].toLong(),
-                INTERVAL_OPTIONS[intervalIndex].toLong(),
-                TimeUnit.SECONDS
+            viewModel.startRecording(
+                retainMockAccuracy,
+                ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex],
+                INTERVAL_OPTIONS[intervalIndex].toLong() * 1000
             )
         }
         updateUi()

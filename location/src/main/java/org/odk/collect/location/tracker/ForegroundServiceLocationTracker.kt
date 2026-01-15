@@ -86,7 +86,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
             val interval = intent.getLongExtra(EXTRA_UPDATE_INTERVAL, -1)
             locationClient.setUpdateIntervals(
                 interval,
-                interval / 2
+                interval
             )
         }
 

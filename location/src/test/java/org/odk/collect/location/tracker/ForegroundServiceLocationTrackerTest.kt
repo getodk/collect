@@ -78,7 +78,7 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
         locationTracker.start(updateInterval = 1000)
         runBackground()
 
-        assertThat(locationClient.getUpdateIntervals(), equalTo(Pair(1000L, 500L)))
+        assertThat(locationClient.getUpdateIntervals(), equalTo(Pair(1000L, 1000L)))
     }
 
     @Test
@@ -90,7 +90,7 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
         runBackground()
 
         assertThat(locationClient.getRetainMockAccuracy(), equalTo(true))
-        assertThat(locationClient.getUpdateIntervals(), equalTo(Pair(2000L, 1000L)))
+        assertThat(locationClient.getUpdateIntervals(), equalTo(Pair(2000L, 2000L)))
     }
 }
 
