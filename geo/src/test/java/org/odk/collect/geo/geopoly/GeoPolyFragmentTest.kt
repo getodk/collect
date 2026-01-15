@@ -22,6 +22,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
+import org.mockito.kotlin.any
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -358,7 +360,7 @@ class GeoPolyFragmentTest {
         }
 
         startInput(R.id.automatic_mode)
-        verify(locationTracker).start(true)
+        verify(locationTracker).start(eq(true), any())
     }
 
     @Test
@@ -374,7 +376,7 @@ class GeoPolyFragmentTest {
         }
 
         startInput(R.id.automatic_mode)
-        verify(locationTracker).start(false)
+        verify(locationTracker).start(eq(false), any())
     }
 
     @Test
