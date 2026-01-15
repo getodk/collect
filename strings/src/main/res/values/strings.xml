@@ -686,6 +686,33 @@
     <!-- Description for button that explains how to modify the map -->
     <string name="show_how_to_modify_map">Show how to modify the map</string>
 
+    <!-- Title for instructions on how to modify map features -->
+    <string name="how_to_modify_map">How to modify the map</string>
+
+    <!-- Instruction in a list on how to move a point -->
+    <string name="long_press_to_move_point_info_item">Long press to move point</string>
+
+    <!-- Instruction in a list on how to remove the most recently added point -->
+    <string name="remove_last_point_info_item">Remove last point</string>
+
+    <!-- Instruction in a list on how to delete the current shape to start over -->
+    <string name="delete_shape_to_start_over_info_item">Delete shape to start over</string>
+
+    <!-- Instruction in a list on how to add a new point -->
+    <string name="add_point_info_item">Add point</string>
+
+    <!-- Instruction in a list on how to tap to add a point -->
+    <string name="tap_to_add_a_point_info_item">Tap to add a point</string>
+
+    <!-- Instruction in a list on how to delete the entire shape -->
+    <string name="delete_entire_shape_info_item">Delete entire shape</string>
+
+    <!-- Instruction in a list on how to correct map features -->
+    <string name="physically_move_to_correct_info_item">Physically move to correct</string>
+
+    <!-- Button text to close the instructions dialog -->
+    <string name="done">Done</string>
+
     <!--
     ##############################################
     # SEND FINALIZED FORM
