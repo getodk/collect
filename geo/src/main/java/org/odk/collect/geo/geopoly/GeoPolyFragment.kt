@@ -40,6 +40,7 @@ import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.strings.R.string
 import org.odk.collect.webpage.WebPageService
 import javax.inject.Inject
 
@@ -182,7 +183,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     fun initMap(newMapFragment: MapFragment?, binding: GeopolyLayoutBinding) {
         map = newMapFragment
 
-        binding.info.setOnClickListener { InfoDialog.show(requireContext(), InfoDialog.Type.MANUAL_FROM_INFO_BUTTON) }
+        binding.info.setOnClickListener { showInfoDialog() }
         binding.clear.setOnClickListener { showClearDialog() }
         binding.pause.setOnClickListener {
             viewModel.stopRecording()
@@ -248,7 +249,14 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
         }
 
-        val snackbar = SnackbarUtils.make(requireView(), "", Snackbar.LENGTH_INDEFINITE)
+        val snackbar = SnackbarUtils.make(
+            requireView(),
+            "",
+            Snackbar.LENGTH_INDEFINITE,
+            action = SnackbarUtils.Action(getString(string.how_to_modify)) {
+                showInfoDialog()
+            }
+        )
         val viewData = viewModel.points.asLiveData().zip(invalidMessage)
         viewData.observe(viewLifecycleOwner) { (points, invalidMessage) ->
             val isValid = invalidMessage == null
@@ -551,6 +559,10 @@ class GeoPolyFragment @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    private fun showInfoDialog() {
+        InfoDialog.show(requireContext(), InfoDialog.Type.MANUAL_FROM_INFO_BUTTON)
     }
 
     private fun showClearDialog() {

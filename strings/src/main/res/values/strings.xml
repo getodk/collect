@@ -713,6 +713,9 @@
     <!-- Button text to close the instructions dialog -->
     <string name="done">Done</string>
 
+    <!-- Button text to open the instructions dialog from the error snackbar -->
+    <string name="how_to_modify">How to modify</string>
+
     <!--
     ##############################################
     # SEND FINALIZED FORM
