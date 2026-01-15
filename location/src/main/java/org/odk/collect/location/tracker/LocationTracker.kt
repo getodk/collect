@@ -1,5 +1,6 @@
 package org.odk.collect.location.tracker
 
+import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.location.Location
 
 /**
@@ -12,6 +13,7 @@ interface LocationTracker {
      * or [LocationTracker.start] hasn't been called yet.
      */
     fun getCurrentLocation(): Location?
+    fun getLocation(): StateFlow<Location?>
 
     fun start(retainMockAccuracy: Boolean, updateInterval: Long? = null)
     fun start(retainMockAccuracy: Boolean) = start(retainMockAccuracy, null)
