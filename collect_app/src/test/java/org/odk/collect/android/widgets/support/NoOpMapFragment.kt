@@ -62,7 +62,21 @@ class NoOpMapFragment : Fragment(), MapFragment {
         TODO("Not yet implemented")
     }
 
+    override fun updatePolyLine(
+        featureId: Int,
+        lineDescription: LineDescription
+    ) {
+        TODO("Not yet implemented")
+    }
+
     override fun addPolygon(polygonDescription: PolygonDescription): Int {
+        TODO("Not yet implemented")
+    }
+
+    override fun updatePolygon(
+        featureId: Int,
+        polygonDescription: PolygonDescription
+    ) {
         TODO("Not yet implemented")
     }
 
