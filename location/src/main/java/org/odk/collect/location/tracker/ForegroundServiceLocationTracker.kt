@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.ReturnToAppActivity
 import org.odk.collect.androidshared.utils.UniqueIdGenerator
@@ -25,7 +26,11 @@ private const val LOCATION_KEY = "location"
 class ForegroundServiceLocationTracker(private val application: Application) : LocationTracker {
 
     override fun getCurrentLocation(): Location? {
-        return application.getState().getFlow<Location?>(LOCATION_KEY, null).value
+        return getLocation().value
+    }
+
+    override fun getLocation(): StateFlow<Location?> {
+        return application.getState().getFlow(LOCATION_KEY, null)
     }
 
     override fun start(retainMockAccuracy: Boolean, updateInterval: Long?) {
