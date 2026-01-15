@@ -358,13 +358,22 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     @Override
     public int addPolygon(PolygonDescription polygonDescription) {
         int featureId = nextFeatureId++;
+        addPolygon(featureId, polygonDescription);
+        return featureId;
+    }
+
+    private void addPolygon(int featureId, PolygonDescription polygonDescription) {
         if (polygonDescription.getDraggable()) {
             features.put(featureId, new DynamicPolygonFeature(map, polygonDescription));
         } else {
             features.put(featureId, new StaticPolygonFeature(map, polygonDescription));
         }
+    }
 
-        return featureId;
+    @Override
+    public void updatePolygon(int featureId, @NotNull PolygonDescription polygonDescription) {
+        features.get(featureId).dispose();
+        addPolygon(featureId, polygonDescription);
     }
 
     @Override

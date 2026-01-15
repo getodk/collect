@@ -11,7 +11,6 @@ import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 import kotlin.random.Random
-
 class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragment {
 
     private var clickListener: PointListener? = null
@@ -140,6 +139,13 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         polygons[featureId] = polygonDescription
         featureIds.add(featureId)
         return featureId
+    }
+
+    override fun updatePolygon(
+        featureId: Int,
+        polygonDescription: PolygonDescription
+    ) {
+        polygons[featureId] = polygonDescription
     }
 
     override fun getPolyPoints(featureId: Int): List<MapPoint> {

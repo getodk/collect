@@ -328,8 +328,18 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     @Override
     public int addPolygon(PolygonDescription polygonDescription) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new StaticPolygonFeature(map, polygonDescription));
+        addPolygon(featureId, polygonDescription);
         return featureId;
+    }
+
+    private void addPolygon(int featureId, PolygonDescription polygonDescription) {
+        features.put(featureId, new StaticPolygonFeature(map, polygonDescription));
+    }
+
+    @Override
+    public void updatePolygon(int featureId, @NotNull PolygonDescription polygonDescription) {
+        features.get(featureId).dispose();
+        addPolygon(featureId, polygonDescription);
     }
 
     @Override public @NonNull List<MapPoint> getPolyPoints(int featureId) {

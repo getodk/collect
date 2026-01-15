@@ -100,6 +100,7 @@ interface MapFragment {
      * the featureId for the newly added shape.
      */
     fun addPolygon(polygonDescription: PolygonDescription): Int
+    fun updatePolygon(featureId: Int, polygonDescription: PolygonDescription)
 
     /**
      * Returns the vertices of the polyline or polygon specified by featureId, or an

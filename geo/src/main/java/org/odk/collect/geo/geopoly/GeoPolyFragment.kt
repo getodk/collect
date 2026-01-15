@@ -515,15 +515,19 @@ class GeoPolyFragment @JvmOverloads constructor(
 
         if (map!!.supportsDraggablePolygon() && outputMode == OutputMode.GEOSHAPE) {
             map!!.clearFeatures()
-            featureId = map!!.addPolygon(
-                PolygonDescription(
-                    viewModel.points.value,
-                    null,
-                    null,
-                    null,
-                    !readOnly
-                )
+            val polygonDescription = PolygonDescription(
+                viewModel.points.value,
+                null,
+                null,
+                null,
+                !readOnly
             )
+
+            if (featureId == -1) {
+                featureId = map!!.addPolygon(polygonDescription)
+            } else {
+                map!!.updatePolygon(featureId, polygonDescription)
+            }
         } else {
             val lineDescription = LineDescription(
                 viewModel.points.value,

@@ -374,14 +374,29 @@ class MapboxMapFragment :
 
     override fun addPolygon(polygonDescription: PolygonDescription): Int {
         val featureId = nextFeatureId++
+        addPolgon(featureId, polygonDescription)
+
+        return featureId
+    }
+
+    private fun addPolgon(
+        featureId: Int,
+        polygonDescription: PolygonDescription
+    ) {
         features[featureId] = StaticPolygonFeature(
             mapView.annotations.createPolygonAnnotationManager(),
             polygonDescription,
             featureClickListener,
             featureId
         )
+    }
 
-        return featureId
+    override fun updatePolygon(
+        featureId: Int,
+        polygonDescription: PolygonDescription
+    ) {
+        features[featureId]?.dispose()
+        addPolgon(featureId, polygonDescription)
     }
 
     override fun getPolyPoints(featureId: Int): List<MapPoint> {
