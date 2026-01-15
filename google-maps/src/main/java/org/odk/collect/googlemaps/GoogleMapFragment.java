@@ -840,14 +840,12 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
     private static class DynamicPolyLineFeature implements LineFeature {
 
-        private final Context context;
         private final GoogleMap map;
         private final List<Marker> markers = new ArrayList<>();
         private final LineDescription lineDescription;
         private Polyline polyline;
 
         DynamicPolyLineFeature(Context context, LineDescription lineDescription, GoogleMap map) {
-            this.context = context;
             this.lineDescription = lineDescription;
             this.map = map;
 
