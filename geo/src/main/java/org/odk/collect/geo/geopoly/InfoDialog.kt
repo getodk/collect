@@ -40,22 +40,29 @@ object InfoDialog {
     )
 
     enum class Type {
-        PLACEMENT_FROM_SNACKBAR,
-        PLACEMENT_FROM_INFO_BUTTON,
-        MANUAL_FROM_SNACKBAR,
-        MANUAL_FROM_INFO_BUTTON,
+        PLACEMENT, MANUAL_OR_AUTOMATIC
     }
 
-    fun show(context: Context, type: Type) {
+    fun show(context: Context, type: Type, fromSnackbar: Boolean) {
         var dialog: AlertDialog? = null
 
         val info = ComposeView(context).apply {
             setContextThemedContent {
                 when (type) {
-                    Type.PLACEMENT_FROM_SNACKBAR -> PlacementFromSnackbarInfo { dialog?.dismiss() }
-                    Type.PLACEMENT_FROM_INFO_BUTTON -> PlacementFromInfoButtonInfo { dialog?.dismiss() }
-                    Type.MANUAL_FROM_SNACKBAR -> ManualFromSnackbarInfo { dialog?.dismiss() }
-                    Type.MANUAL_FROM_INFO_BUTTON -> ManualFromInfoButtonInfo { dialog?.dismiss() }
+                    Type.PLACEMENT -> {
+                        if (fromSnackbar) {
+                            PlacementFromSnackbarInfo { dialog?.dismiss() }
+                        } else {
+                            PlacementFromInfoButtonInfo { dialog?.dismiss() }
+                        }
+                    }
+                    Type.MANUAL_OR_AUTOMATIC -> {
+                        if (fromSnackbar) {
+                            ManualOrAutomaticFromSnackbarInfo { dialog?.dismiss() }
+                        } else {
+                            ManualOrAutomaticFromInfoButtonInfo { dialog?.dismiss() }
+                        }
+                    }
                 }
             }
         }
@@ -88,7 +95,7 @@ private fun PlacementFromInfoButtonInfo(onDone: () -> Unit) {
 }
 
 @Composable
-private fun ManualFromSnackbarInfo(onDone: () -> Unit) {
+private fun ManualOrAutomaticFromSnackbarInfo(onDone: () -> Unit) {
     InfoContent(
         InfoDialog.InfoItem(Icons.AutoMirrored.Filled.DirectionsWalk, stringResource(string.physically_move_to_correct_info_item)),
         InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
@@ -99,7 +106,7 @@ private fun ManualFromSnackbarInfo(onDone: () -> Unit) {
 }
 
 @Composable
-private fun ManualFromInfoButtonInfo(onDone: () -> Unit) {
+private fun ManualOrAutomaticFromInfoButtonInfo(onDone: () -> Unit) {
     InfoContent(
         InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.tap_to_add_a_point_info_item)),
         InfoDialog.InfoItem(Icons.AutoMirrored.Filled.DirectionsWalk, stringResource(string.physically_move_to_correct_info_item)),
@@ -196,12 +203,12 @@ private fun PlacementFromInfoButtonInfoPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun ManualFromSnackbarInfoPreview() {
-    ManualFromSnackbarInfo {}
+private fun ManualOrAutomaticFromSnackbarInfoPreview() {
+    ManualOrAutomaticFromSnackbarInfo {}
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun ManualFromInfoButtonInfoPreview() {
-    ManualFromInfoButtonInfo {}
+private fun ManualOrAutomaticFromInfoButtonInfoPreview() {
+    ManualOrAutomaticFromInfoButtonInfo {}
 }

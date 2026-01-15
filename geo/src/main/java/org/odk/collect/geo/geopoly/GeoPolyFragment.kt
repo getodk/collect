@@ -183,7 +183,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     fun initMap(newMapFragment: MapFragment?, binding: GeopolyLayoutBinding) {
         map = newMapFragment
 
-        binding.info.setOnClickListener { showInfoDialog() }
+        binding.info.setOnClickListener { showInfoDialog(false) }
         binding.clear.setOnClickListener { showClearDialog() }
         binding.pause.setOnClickListener {
             viewModel.stopRecording()
@@ -254,7 +254,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             "",
             Snackbar.LENGTH_INDEFINITE,
             action = SnackbarUtils.Action(getString(string.how_to_modify)) {
-                showInfoDialog()
+                showInfoDialog(true)
             }
         )
         val viewData = viewModel.points.asLiveData().zip(invalidMessage)
@@ -561,8 +561,13 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
     }
 
-    private fun showInfoDialog() {
-        InfoDialog.show(requireContext(), InfoDialog.Type.MANUAL_FROM_INFO_BUTTON)
+    private fun showInfoDialog(fromSnackbar: Boolean) {
+        val type = if (recordingAutomatic || recordingEnabled) {
+            InfoDialog.Type.MANUAL_OR_AUTOMATIC
+        } else {
+            InfoDialog.Type.PLACEMENT
+        }
+        InfoDialog.show(requireContext(), type, fromSnackbar)
     }
 
     private fun showClearDialog() {
