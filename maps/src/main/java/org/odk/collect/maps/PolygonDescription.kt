@@ -7,7 +7,8 @@ data class PolygonDescription(
     val points: List<MapPoint> = emptyList(),
     private val strokeWidth: String? = null,
     private val strokeColor: String? = null,
-    private val fillColor: String? = null
+    private val fillColor: String? = null,
+    val draggable: Boolean = false
 ) {
     fun getStrokeWidth(): Float {
         return try {

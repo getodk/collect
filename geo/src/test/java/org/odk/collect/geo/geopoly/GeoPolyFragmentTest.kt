@@ -22,6 +22,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
+import org.mockito.kotlin.any
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -157,13 +159,12 @@ class GeoPolyFragmentTest {
             )
         }
 
-        val polys = mapFragment.getPolyLines()
+        val polys = mapFragment.getPolygons()
         assertThat(polys.size, equalTo(1))
         val expectedPolygon = ArrayList<MapPoint>()
         expectedPolygon.add(MapPoint(1.0, 2.0, 3.0, 4.0))
         expectedPolygon.add(MapPoint(2.0, 3.0, 3.0, 4.0))
         assertThat(polys[0].points, equalTo(expectedPolygon))
-        assertThat(mapFragment.isPolyClosed(0), equalTo(true))
     }
 
     @Test
@@ -176,7 +177,7 @@ class GeoPolyFragmentTest {
             )
         }
 
-        val polys = mapFragment.getPolyLines()
+        val polys = mapFragment.getPolygons()
         assertThat(polys.size, equalTo(1))
         assertThat(polys[0].points.isEmpty(), equalTo(true))
     }
@@ -359,7 +360,7 @@ class GeoPolyFragmentTest {
         }
 
         startInput(R.id.automatic_mode)
-        verify(locationTracker).start(true)
+        verify(locationTracker).start(eq(true), any())
     }
 
     @Test
@@ -375,7 +376,7 @@ class GeoPolyFragmentTest {
         }
 
         startInput(R.id.automatic_mode)
-        verify(locationTracker).start(false)
+        verify(locationTracker).start(eq(false), any())
     }
 
     @Test
@@ -649,6 +650,21 @@ class GeoPolyFragmentTest {
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
             equalTo("0.0 0.0 0.0 0.0;1.0 0.0 0.0 0.0;2.0 2.0 0.0 0.0")
         )
+    }
+
+    @Test
+    fun clickingClear_clearsPoints() {
+        val inputPolygon = listOf(MapPoint(0.0, 0.0), MapPoint(1.0, 0.0), MapPoint(1.0, 1.0))
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() }, inputPolygon = inputPolygon)
+        }
+
+        val resultListener = FragmentResultRecorder()
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
+
+        Interactions.clickOn(withContentDescription(string.clear))
+        Interactions.clickOn(withText(string.clear), root = isDialog())
+        assertThat(mapFragment.getPolyLines().first().points.size, equalTo(0))
     }
 
     private fun startInput(mode: Int? = null) {

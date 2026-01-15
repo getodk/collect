@@ -59,13 +59,13 @@ class PolygonDescriptionTest {
     @Test
     fun `getFillColor returns the default color when the passed one is null`() {
         val polygonDescription = PolygonDescription(fillColor = null)
-        assertThat(polygonDescription.getFillColor(), equalTo(1157562368))
+        assertThat(polygonDescription.getFillColor(), equalTo(1144954828))
     }
 
     @Test
     fun `getFillColor returns the default color when the passed one is invalid`() {
         val polygonDescription = PolygonDescription(fillColor = "blah")
-        assertThat(polygonDescription.getFillColor(), equalTo(1157562368))
+        assertThat(polygonDescription.getFillColor(), equalTo(1144954828))
     }
 
     @Test
