@@ -321,13 +321,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         return featureId;
     }
 
-    @Override public void appendPointToPolyLine(int featureId, @NonNull MapPoint point) {
-        MapFeature feature = features.get(featureId);
-        if (feature instanceof DynamicPolyLineFeature) {
-            ((DynamicPolyLineFeature) feature).addPoint(point);
-        }
-    }
-
     @Override public @NonNull List<MapPoint> getPolyPoints(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof LineFeature) {
@@ -335,13 +328,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }
 
         return new ArrayList<>();
-    }
-
-    @Override public void removePolyLineLastPoint(int featureId) {
-        MapFeature feature = features.get(featureId);
-        if (feature instanceof DynamicPolyLineFeature) {
-            ((DynamicPolyLineFeature) feature).removeLastPoint();
-        }
     }
 
     @Override public void clearFeatures() {
@@ -930,23 +916,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                 points.add(fromMarker(marker));
             }
             return points;
-        }
-
-        public void addPoint(MapPoint point) {
-            if (map == null) {  // during Robolectric tests, map will be null
-                return;
-            }
-            markers.add(createMarker(context, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.Resource(org.odk.collect.icons.R.drawable.ic_map_point)), map));
-            update();
-        }
-
-        public void removeLastPoint() {
-            if (!markers.isEmpty()) {
-                int last = markers.size() - 1;
-                markers.get(last).remove();
-                markers.remove(last);
-                update();
-            }
         }
 
         private void clearPolyline() {

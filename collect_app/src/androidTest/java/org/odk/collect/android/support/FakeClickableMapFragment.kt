@@ -70,10 +70,6 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         return -1
     }
 
-    override fun appendPointToPolyLine(featureId: Int, point: MapPoint) {}
-
-    override fun removePolyLineLastPoint(featureId: Int) {}
-
     override fun getPolyPoints(featureId: Int): MutableList<MapPoint> {
         return mutableListOf()
     }

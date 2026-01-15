@@ -100,15 +100,6 @@ interface MapFragment {
      */
     fun addPolygon(polygonDescription: PolygonDescription): Int
 
-    /** Appends a vertex to the polyline or polygon specified by featureId.  */
-    fun appendPointToPolyLine(featureId: Int, point: MapPoint)
-
-    /**
-     * Removes the last vertex of the polyline or polygon specified by featureId.
-     * If there are no vertices, does nothing.
-     */
-    fun removePolyLineLastPoint(featureId: Int)
-
     /**
      * Returns the vertices of the polyline or polygon specified by featureId, or an
      * empty list if the featureId does not identify an existing polyline or polygon.
