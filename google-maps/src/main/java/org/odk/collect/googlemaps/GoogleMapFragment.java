@@ -726,6 +726,11 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }).get(MapViewModel.class);
     }
 
+    @Override
+    public boolean supportsDraggablePolygon() {
+        return true;
+    }
+
     /**
      * A MapFeature is a physical feature on a map, such as a point, a road,
      * a building, a region, etc.  It is presented to the user as one editable
