@@ -950,6 +950,91 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }
     }
 
+    /** A polygon that can be manipulated by dragging markers at its vertices. */
+    private static class DynamicPolygonFeature implements LineFeature {
+
+        private final GoogleMap map;
+        private final List<Marker> markers = new ArrayList<>();
+        private final PolygonDescription polygonDescription;
+        private Polygon polygon;
+
+        DynamicPolygonFeature(Context context, PolygonDescription polygonDescription, GoogleMap map) {
+            this.polygonDescription = polygonDescription;
+            this.map = map;
+
+            if (map == null) {  // during Robolectric tests, map will be null
+                return;
+            }
+
+            for (MapPoint point : polygonDescription.getPoints()) {
+                markers.add(createMarker(context, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.Resource(org.odk.collect.icons.R.drawable.ic_map_point)), map));
+            }
+
+            update();
+        }
+
+        @Override
+        public boolean ownsMarker(Marker givenMarker) {
+            return markers.contains(givenMarker);
+        }
+
+        @Override
+        public boolean ownsPolyline(Polyline givenPolyline) {
+            return false;
+        }
+
+        @Override
+        public boolean ownsPolygon(Polygon polygon) {
+            return this.polygon.equals(polygon);
+        }
+
+        @Override
+        public void update() {
+            List<LatLng> latLngs = new ArrayList<>();
+            for (Marker marker : markers) {
+                latLngs.add(marker.getPosition());
+            }
+            if (markers.isEmpty()) {
+                clearPolyline();
+            } else if (polygon == null) {
+                polygon = map.addPolygon(new PolygonOptions()
+                        .strokeColor(polygonDescription.getStrokeColor())
+                        .zIndex(1)
+                        .strokeWidth(polygonDescription.getStrokeWidth())
+                        .fillColor(polygonDescription.getFillColor())
+                        .addAll(latLngs)
+                        .clickable(true)
+                );
+            } else {
+                polygon.setPoints(latLngs);
+            }
+        }
+
+        @Override
+        public void dispose() {
+            clearPolyline();
+            for (Marker marker : markers) {
+                marker.remove();
+            }
+            markers.clear();
+        }
+
+        public List<MapPoint> getPoints() {
+            List<MapPoint> points = new ArrayList<>();
+            for (Marker marker : markers) {
+                points.add(fromMarker(marker));
+            }
+            return points;
+        }
+
+        private void clearPolyline() {
+            if (polygon != null) {
+                polygon.remove();
+                polygon = null;
+            }
+        }
+    }
+
     private static class StaticPolygonFeature implements LineFeature {
         @NonNull
         private final PolygonDescription polygonDescription;
