@@ -734,11 +734,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         return mapViewModel;
     }
 
-    @Override
-    public boolean supportsDraggablePolygon() {
-        return true;
-    }
-
     @NonNull
     private Marker getLinePointMarker(MapPoint point, float strokeWidth, boolean isLast) {
         if (isLast) {

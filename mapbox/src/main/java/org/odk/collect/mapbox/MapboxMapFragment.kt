@@ -296,10 +296,6 @@ class MapboxMapFragment :
         return _mapViewModel
     }
 
-    override fun supportsDraggablePolygon(): Boolean {
-        return true
-    }
-
     override fun addMarker(markerDescription: MarkerDescription): Int {
         return addMarkers(listOf(markerDescription)).first()
     }

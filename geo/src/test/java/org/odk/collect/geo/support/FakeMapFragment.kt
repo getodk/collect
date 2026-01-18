@@ -202,10 +202,6 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         return hasCenter
     }
 
-    override fun supportsDraggablePolygon(): Boolean {
-        return true
-    }
-
     fun setLocation(mapPoint: MapPoint?) {
         gpsLocation = mapPoint
         if (gpsLocationListener != null) {

@@ -731,11 +731,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }).get(MapViewModel.class);
     }
 
-    @Override
-    public boolean supportsDraggablePolygon() {
-        return true;
-    }
-
     @NonNull
     private Marker getLinePointMarker(MapPoint point, float strokeWidth, boolean isLast) {
         if (isLast) {
