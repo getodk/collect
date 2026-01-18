@@ -872,7 +872,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }
     }
 
-    /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
     private class DynamicPolyLineFeature implements LineFeature {
 
         private final GoogleMap map;
@@ -961,7 +960,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }
     }
 
-    /** A polygon that can be manipulated by dragging markers at its vertices. */
     private class DynamicPolygonFeature implements LineFeature {
 
         private final GoogleMap map;

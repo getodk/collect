@@ -16,7 +16,6 @@ import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 
-/** A polygon that can be manipulated by dragging Symbols at its vertices. */
 internal class DynamicPolygonFeature(
     private val context: Context,
     private val pointAnnotationManager: PointAnnotationManager,

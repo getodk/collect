@@ -824,9 +824,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         List<MapPoint> getPoints();
     }
 
-    /**
-     * A polyline or polygon that can be manipulated by dragging markers at its vertices.
-     */
     private class StaticPolyLineFeature implements LineFeature {
         final MapView map;
         final Polyline polyline;
@@ -889,9 +886,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         }
     }
 
-    /**
-     * A polyline or polygon that can be manipulated by dragging markers at its vertices.
-     */
     private class DynamicPolyLineFeature implements LineFeature {
         final MapView map;
         final List<Marker> markers = new ArrayList<>();
