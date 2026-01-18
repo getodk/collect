@@ -37,6 +37,7 @@ import com.mapbox.maps.plugin.animation.MapAnimationOptions.Companion.mapAnimati
 import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
+import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPolygonAnnotationManager
@@ -92,7 +93,7 @@ class MapboxMapFragment :
 
     private lateinit var pointAnnotationManager: PointAnnotationManager
     private lateinit var polylineAnnotationManager: PolylineAnnotationManager
-
+    private lateinit var polygonAnnotationManager: PolygonAnnotationManager
     private var mapReadyListener: ReadyListener? = null
     private val gpsLocationReadyListeners = mutableListOf<ReadyListener>()
 
@@ -197,6 +198,10 @@ class MapboxMapFragment :
         polylineAnnotationManager = mapView
             .annotations
             .createPolylineAnnotationManager()
+
+        polygonAnnotationManager = mapView
+            .annotations
+            .createPolygonAnnotationManager()
 
         pointAnnotationManager = mapView
             .annotations
@@ -387,12 +392,24 @@ class MapboxMapFragment :
         featureId: Int,
         polygonDescription: PolygonDescription
     ) {
-        features[featureId] = StaticPolygonFeature(
-            mapView.annotations.createPolygonAnnotationManager(),
-            polygonDescription,
-            featureClickListener,
-            featureId
-        )
+        if (polygonDescription.draggable) {
+            features[featureId] = DynamicPolygonFeature(
+                requireContext(),
+                pointAnnotationManager,
+                polygonAnnotationManager,
+                featureId,
+                featureClickListener,
+                featureDragEndListener,
+                polygonDescription
+            )
+        } else {
+            features[featureId] = StaticPolygonFeature(
+                polygonAnnotationManager,
+                polygonDescription,
+                featureClickListener,
+                featureId
+            )
+        }
     }
 
     override fun updatePolygon(
