@@ -12,25 +12,23 @@ import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconCreator.toBitmap
 import org.odk.collect.maps.markers.MarkerIconDescription
+import org.odk.collect.maps.markers.MarkerIconCreator.getBitmap
 
 object MapUtils {
     fun createPointAnnotation(
         pointAnnotationManager: PointAnnotationManager,
-        point: MapPoint,
-        draggable: Boolean,
-        @MapFragment.Companion.IconAnchor iconAnchor: String,
-        iconDrawableId: Int,
-        context: Context
+        context: Context,
+        markerDescription: MarkerDescription
     ): PointAnnotation {
         return pointAnnotationManager.create(
             PointAnnotationOptions()
-                .withPoint(Point.fromLngLat(point.longitude, point.latitude, point.altitude))
-                .withIconImage(MarkerIconDescription.DrawableResource(iconDrawableId).toBitmap(context))
+                .withPoint(Point.fromLngLat(markerDescription.point.longitude, markerDescription.point.latitude, markerDescription.point.altitude))
+                .withIconImage(markerDescription.iconDescription.getBitmap(context))
                 .withIconSize(1.0)
                 .withSymbolSortKey(10.0)
-                .withDraggable(draggable)
+                .withDraggable(markerDescription.isDraggable)
                 .withTextOpacity(0.0)
-                .withIconAnchor(getIconAnchorValue(iconAnchor))
+                .withIconAnchor(getIconAnchorValue(markerDescription.iconAnchor))
         )
     }
 

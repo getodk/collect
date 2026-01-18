@@ -10,8 +10,11 @@ import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
 import org.odk.collect.maps.LineDescription
+import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.markers.MarkerDescription
+import org.odk.collect.maps.markers.MarkerIconDescription
 
 /** A polyline that can be manipulated by dragging Symbols at its vertices. */
 internal class DynamicPolyLineFeature(
@@ -30,16 +33,24 @@ internal class DynamicPolyLineFeature(
     private var polylineAnnotation: PolylineAnnotation? = null
 
     init {
-        lineDescription.points.forEach {
-            points.add(it)
+        lineDescription.points.forEachIndexed { index, point ->
+            points.add(point)
+
+            val markerIconDescription = if (index == lineDescription.points.lastIndex) {
+                MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth(), MapConsts.DEFAULT_HIGHLIGHT_COLOR)
+            } else {
+                MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth(), MapConsts.DEFAULT_STROKE_COLOR)
+            }
             pointAnnotations.add(
                 MapUtils.createPointAnnotation(
                     pointAnnotationManager,
-                    it,
-                    true,
-                    MapFragment.CENTER,
-                    org.odk.collect.icons.R.drawable.ic_map_point,
-                    context
+                    context,
+                    MarkerDescription(
+                        point,
+                        true,
+                        MapFragment.CENTER,
+                        markerIconDescription
+                    )
                 )
             )
         }

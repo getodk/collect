@@ -9,9 +9,12 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
+import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
+import org.odk.collect.maps.markers.MarkerDescription
+import org.odk.collect.maps.markers.MarkerIconDescription
 
 /** A polygon that can be manipulated by dragging Symbols at its vertices. */
 internal class DynamicPolygonFeature(
@@ -30,16 +33,24 @@ internal class DynamicPolygonFeature(
     private var polygonAnnotation: PolygonAnnotation? = null
 
     init {
-        polygonDescription.points.forEach {
-            points.add(it)
+        polygonDescription.points.forEachIndexed { index, point ->
+            points.add(point)
+
+            val markerIconDescription = if (index == polygonDescription.points.lastIndex) {
+                MarkerIconDescription.LinePoint(polygonDescription.getStrokeWidth(), MapConsts.DEFAULT_HIGHLIGHT_COLOR)
+            } else {
+                MarkerIconDescription.LinePoint(polygonDescription.getStrokeWidth(), MapConsts.DEFAULT_STROKE_COLOR)
+            }
             pointAnnotations.add(
                 MapUtils.createPointAnnotation(
                     pointAnnotationManager,
-                    it,
-                    true,
-                    MapFragment.CENTER,
-                    org.odk.collect.icons.R.drawable.ic_map_point,
-                    context
+                    context,
+                    MarkerDescription(
+                        point,
+                        true,
+                        MapFragment.CENTER,
+                        markerIconDescription
+                    )
                 )
             )
         }
