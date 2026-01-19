@@ -971,7 +971,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         }
     }
 
-    private  class DynamicPolygonFeature implements LineFeature {
+    private class DynamicPolygonFeature implements LineFeature {
 
         final MapView map;
         final List<Marker> markers = new ArrayList<>();
@@ -1000,7 +1000,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             }
             update();
         }
-
 
         @Override
         public boolean ownsMarker(Marker givenMarker) {
