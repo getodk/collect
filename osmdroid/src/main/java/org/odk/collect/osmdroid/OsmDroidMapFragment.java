@@ -983,7 +983,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             polygon.setStrokeColor(polygonDescription.getStrokeColor());
             polygon.setStrokeWidth(polygonDescription.getStrokeWidth());
             polygon.getFillPaint().setColor(polygonDescription.getFillColor());
-            polygon.getFillPaint().setAlpha(MapConsts.DEFAULT_FILL_COLOR_OPACITY);
             polygon.setOnClickListener((clickedPolygon, mapView, eventPos) -> {
                 int featureId = findFeature(clickedPolygon);
                 if (featureClickListener != null && featureId != -1) {
