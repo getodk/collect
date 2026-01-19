@@ -374,12 +374,12 @@ class MapboxMapFragment :
 
     override fun addPolygon(polygonDescription: PolygonDescription): Int {
         val featureId = nextFeatureId++
-        addPolgon(featureId, polygonDescription)
+        addPolygon(featureId, polygonDescription)
 
         return featureId
     }
 
-    private fun addPolgon(
+    private fun addPolygon(
         featureId: Int,
         polygonDescription: PolygonDescription
     ) {
@@ -396,7 +396,7 @@ class MapboxMapFragment :
         polygonDescription: PolygonDescription
     ) {
         features[featureId]?.dispose()
-        addPolgon(featureId, polygonDescription)
+        addPolygon(featureId, polygonDescription)
     }
 
     override fun getPolyPoints(featureId: Int): List<MapPoint> {
