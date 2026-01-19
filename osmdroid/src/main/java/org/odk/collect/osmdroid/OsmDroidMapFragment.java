@@ -603,7 +603,8 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         marker.setPosition(toGeoPoint(markerDescription.getPoint()));
         marker.setSubDescription(Double.toString(markerDescription.getPoint().accuracy));
         marker.setDraggable(markerDescription.isDraggable());
-        marker.setIcon(toDrawable(getBitmap(markerDescription.getIconDescription(), requireContext()), requireContext().getResources()));
+        Bitmap iconBitmap = getBitmap(markerDescription.getIconDescription(), requireContext());
+        marker.setIcon(toDrawable(iconBitmap, requireContext().getResources()));
         marker.setAnchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()));
         marker.setOnMarkerClickListener((clickedMarker, mapView) -> {
             int featureId = findFeature(clickedMarker);
@@ -790,7 +791,11 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         }
 
         public void setIcon(MarkerIconDescription markerIconDescription) {
-            marker.setIcon(toDrawable(getBitmap(markerIconDescription, requireContext()), requireContext().getResources()));
+            Context context = requireContext();
+            Bitmap bitmap = getBitmap(markerIconDescription, context);
+            Drawable drawable = toDrawable(bitmap, context.getResources());
+
+            marker.setIcon(drawable);
         }
 
         public MapPoint getPoint() {
