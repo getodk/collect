@@ -41,9 +41,7 @@ object MarkerIconCreator {
 
                 val bitmapId = drawableId.toString() + color + symbol
                 fromCache(bitmapId) {
-                    createBitmap(context, drawableId, color, symbol).also {
-                        cache.put(bitmapId, it)
-                    }
+                    createBitmap(context, drawableId, color, symbol)
                 }
             }
         }
