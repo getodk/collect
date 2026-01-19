@@ -11,8 +11,6 @@ import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconCreator.toBitmap
-import org.odk.collect.maps.markers.MarkerIconDescription
-import org.odk.collect.maps.markers.MarkerIconCreator.getBitmap
 
 object MapUtils {
     fun createPointAnnotation(
@@ -23,7 +21,7 @@ object MapUtils {
         return pointAnnotationManager.create(
             PointAnnotationOptions()
                 .withPoint(Point.fromLngLat(markerDescription.point.longitude, markerDescription.point.latitude, markerDescription.point.altitude))
-                .withIconImage(markerDescription.iconDescription.getBitmap(context))
+                .withIconImage(markerDescription.iconDescription.toBitmap(context))
                 .withIconSize(1.0)
                 .withSymbolSortKey(10.0)
                 .withDraggable(markerDescription.isDraggable)
