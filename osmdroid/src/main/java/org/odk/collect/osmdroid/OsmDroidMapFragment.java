@@ -16,7 +16,7 @@ package org.odk.collect.osmdroid;
 
 import static androidx.core.graphics.drawable.BitmapDrawableKt.toDrawable;
 import static androidx.core.graphics.drawable.DrawableKt.toBitmap;
-import static org.odk.collect.maps.markers.MarkerIconCreator.getBitmap;
+import static org.odk.collect.maps.markers.MarkerIconCreator.toBitmap;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -603,7 +603,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         marker.setPosition(toGeoPoint(markerDescription.getPoint()));
         marker.setSubDescription(Double.toString(markerDescription.getPoint().accuracy));
         marker.setDraggable(markerDescription.isDraggable());
-        Bitmap iconBitmap = getBitmap(markerDescription.getIconDescription(), requireContext());
+        Bitmap iconBitmap = toBitmap(markerDescription.getIconDescription(), requireContext());
         marker.setIcon(toDrawable(iconBitmap, requireContext().getResources()));
         marker.setAnchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()));
         marker.setOnMarkerClickListener((clickedMarker, mapView) -> {
@@ -792,7 +792,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
 
         public void setIcon(MarkerIconDescription markerIconDescription) {
             Context context = requireContext();
-            Bitmap bitmap = getBitmap(markerIconDescription, context);
+            Bitmap bitmap = toBitmap(markerIconDescription, context);
             Drawable drawable = toDrawable(bitmap, context.getResources());
 
             marker.setIcon(drawable);

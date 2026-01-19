@@ -126,7 +126,7 @@ object MarkerIconCreator {
     }
 
     @JvmStatic
-    fun MarkerIconDescription.getBitmap(context: Context): Bitmap {
+    fun MarkerIconDescription.toBitmap(context: Context): Bitmap {
         return getMarkerIcon(context, this)
     }
 }
