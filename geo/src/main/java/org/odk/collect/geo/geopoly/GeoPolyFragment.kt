@@ -445,6 +445,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     private fun clear() {
         inputActive = false
         viewModel.update(emptyList())
+        setChangeResult()
     }
 
     /** Updates the state of various UI widgets to reflect internal state.  */
