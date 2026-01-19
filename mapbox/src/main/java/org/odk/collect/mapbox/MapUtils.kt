@@ -25,7 +25,7 @@ object MapUtils {
         return pointAnnotationManager.create(
             PointAnnotationOptions()
                 .withPoint(Point.fromLngLat(point.longitude, point.latitude, point.altitude))
-                .withIconImage(MarkerIconDescription.Resource(iconDrawableId).toBitmap(context))
+                .withIconImage(MarkerIconDescription.DrawableResource(iconDrawableId).toBitmap(context))
                 .withIconSize(1.0)
                 .withSymbolSortKey(10.0)
                 .withDraggable(draggable)

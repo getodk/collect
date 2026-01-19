@@ -34,8 +34,8 @@ object MarkerIconCreator {
                 }
             }
 
-            is MarkerIconDescription.Resource -> {
-                val drawableId = markerIconDescription.icon
+            is MarkerIconDescription.DrawableResource -> {
+                val drawableId = markerIconDescription.drawable
                 val color = markerIconDescription.getColor()
                 val symbol = markerIconDescription.getSymbol()
 

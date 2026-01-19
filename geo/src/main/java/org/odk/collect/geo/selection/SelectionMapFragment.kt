@@ -319,7 +319,7 @@ class SelectionMapFragment(
 
                         map.setMarkerIcon(
                             featureId,
-                            MarkerIconDescription.Resource(item.largeIcon, item.color, item.symbol)
+                            MarkerIconDescription.DrawableResource(item.largeIcon, item.color, item.symbol)
                         )
                     }
                 }
@@ -380,7 +380,7 @@ class SelectionMapFragment(
         if (featureId != null) {
             map.setMarkerIcon(
                 featureId,
-                MarkerIconDescription.Resource(selectedItem.smallIcon, selectedItem.color, selectedItem.symbol)
+                MarkerIconDescription.DrawableResource(selectedItem.smallIcon, selectedItem.color, selectedItem.symbol)
             )
         }
     }
@@ -402,7 +402,7 @@ class SelectionMapFragment(
                 MapPoint(it.point.latitude, it.point.longitude),
                 false,
                 MapFragment.BOTTOM,
-                MarkerIconDescription.Resource(it.smallIcon, it.color, it.symbol)
+                MarkerIconDescription.DrawableResource(it.smallIcon, it.color, it.symbol)
             )
         }
 

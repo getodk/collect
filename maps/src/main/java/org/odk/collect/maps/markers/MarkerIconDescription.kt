@@ -5,8 +5,8 @@ import org.odk.collect.shared.strings.StringUtils
 import java.util.Locale
 
 sealed interface MarkerIconDescription {
-    class Resource @JvmOverloads constructor(
-        val icon: Int,
+    class DrawableResource @JvmOverloads constructor(
+        val drawable: Int,
         private val color: String? = null,
         private val symbol: String? = null
     ) : MarkerIconDescription {
