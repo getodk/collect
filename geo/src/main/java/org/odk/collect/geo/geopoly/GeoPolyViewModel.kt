@@ -13,8 +13,7 @@ class GeoPolyViewModel(
     outputMode: OutputMode,
     points: List<MapPoint>,
     private val locationTracker: LocationTracker
-) :
-    ViewModel() {
+) : ViewModel() {
 
     private val _points = MutableStateFlow(
         if (!points.isEmpty()) {
