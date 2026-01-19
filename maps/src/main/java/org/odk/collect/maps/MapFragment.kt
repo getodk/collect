@@ -93,27 +93,20 @@ interface MapFragment {
      * Returns a positive integer, the featureId for the newly added shape.
      */
     fun addPolyLine(lineDescription: LineDescription): Int
+    fun updatePolyLine(featureId: Int, lineDescription: LineDescription)
 
     /**
      * Adds a polygon to the map with given sequence of vertices. * Returns a positive integer,
      * the featureId for the newly added shape.
      */
     fun addPolygon(polygonDescription: PolygonDescription): Int
-
-    /** Appends a vertex to the polyline or polygon specified by featureId.  */
-    fun appendPointToPolyLine(featureId: Int, point: MapPoint)
-
-    /**
-     * Removes the last vertex of the polyline or polygon specified by featureId.
-     * If there are no vertices, does nothing.
-     */
-    fun removePolyLineLastPoint(featureId: Int)
+    fun updatePolygon(featureId: Int, polygonDescription: PolygonDescription)
 
     /**
      * Returns the vertices of the polyline or polygon specified by featureId, or an
      * empty list if the featureId does not identify an existing polyline or polygon.
      */
-    fun getPolyLinePoints(featureId: Int): List<MapPoint>
+    fun getPolyPoints(featureId: Int): List<MapPoint>
 
     /** Removes all map features from the map.  */
     fun clearFeatures()
@@ -166,6 +159,10 @@ interface MapFragment {
      * @return true if the [MapFragment] center has already been set (by [MapFragment.zoomToPoint] for instance).
      */
     fun hasCenter(): Boolean
+
+    fun supportsDraggablePolygon(): Boolean {
+        return false
+    }
 
     fun interface ErrorListener {
         fun onError()

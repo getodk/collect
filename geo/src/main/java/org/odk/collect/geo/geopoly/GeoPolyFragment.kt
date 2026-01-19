@@ -9,8 +9,11 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
@@ -28,18 +31,14 @@ import org.odk.collect.geo.geopoint.LocationAccuracy.Unacceptable
 import org.odk.collect.geo.geopoly.GeoPolySettingsDialogFragment.SettingsDialogCallback
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.LineDescription
-import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.layers.OfflineMapLayersPickerBottomSheetDialogFragment
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.webpage.WebPageService
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.ScheduledFuture
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GeoPolyFragment @JvmOverloads constructor(
@@ -70,9 +69,6 @@ class GeoPolyFragment @JvmOverloads constructor(
     lateinit var webPageService: WebPageService
 
     private var previousState: Bundle? = null
-    private val executorServiceScheduler: ScheduledExecutorService =
-        Executors.newSingleThreadScheduledExecutor()
-    private var schedulerHandler: ScheduledFuture<*>? = null
 
     private var map: MapFragment? = null
     private var featureId = -1 // will be a positive featureId once map is ready
@@ -88,19 +84,24 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private var accuracyThresholdIndex: Int = DEFAULT_ACCURACY_THRESHOLD_INDEX
 
-    // restored from savedInstanceState
-    private var restoredPoints: List<MapPoint>? = null
-
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (!readOnly && map != null && originalPoly != map!!.getPolyLinePoints(featureId)) {
+                if (!readOnly && map != null && originalPoly != viewModel.points.value) {
                     showBackDialog()
                 } else {
                     cancel()
                 }
             }
         }
+
+    private val viewModel: GeoPolyViewModel by viewModels {
+        viewModelFactory {
+            addInitializer(GeoPolyViewModel::class) {
+                GeoPolyViewModel(outputMode, inputPolygon, locationTracker)
+            }
+        }
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -134,7 +135,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         previousState = savedInstanceState
 
         if (savedInstanceState != null) {
-            restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY)
             inputActive = savedInstanceState.getBoolean(INPUT_ACTIVE_KEY, false)
             recordingEnabled = savedInstanceState.getBoolean(RECORDING_ENABLED_KEY, false)
             recordingAutomatic = savedInstanceState.getBoolean(RECORDING_AUTOMATIC_KEY, false)
@@ -174,10 +174,6 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
             return
         }
-        state.putParcelableArrayList(
-            POINTS_KEY,
-            ArrayList<MapPoint?>(map!!.getPolyLinePoints(featureId))
-        )
         state.putBoolean(INPUT_ACTIVE_KEY, inputActive)
         state.putBoolean(RECORDING_ENABLED_KEY, recordingEnabled)
         state.putBoolean(RECORDING_AUTOMATIC_KEY, recordingAutomatic)
@@ -185,34 +181,19 @@ class GeoPolyFragment @JvmOverloads constructor(
         state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex)
     }
 
-    override fun onDestroy() {
-        schedulerHandler?.let {
-            if (!it.isCancelled) {
-                it.cancel(true)
-            }
-        }
-
-        locationTracker.stop()
-        super.onDestroy()
-    }
-
     fun initMap(newMapFragment: MapFragment?, binding: GeopolyLayoutBinding) {
         map = newMapFragment
 
         binding.clear.setOnClickListener { showClearDialog() }
         binding.pause.setOnClickListener {
+            viewModel.stopRecording()
             inputActive = false
-            try {
-                schedulerHandler?.cancel(true)
-            } catch (_: Exception) {
-                // Do nothing
-            }
             updateUi()
         }
 
         binding.backspace.setOnClickListener { removeLastPoint() }
         binding.save.setOnClickListener {
-            if (!map!!.getPolyLinePoints(featureId).isEmpty()) {
+            if (!viewModel.points.value.isEmpty()) {
                 if (outputMode == OutputMode.GEOTRACE) {
                     saveAsPolyline()
                 } else {
@@ -224,7 +205,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
 
         binding.play.setOnClickListener {
-            if (map!!.getPolyLinePoints(featureId).isEmpty()) {
+            if (viewModel.points.value.isEmpty()) {
                 showIfNotShowing<GeoPolySettingsDialogFragment>(
                     GeoPolySettingsDialogFragment::class.java,
                     getChildFragmentManager()
@@ -248,31 +229,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             )
         }
 
-        var points = emptyList<MapPoint>()
-        if (!inputPolygon.isEmpty()) {
-            if (outputMode == OutputMode.GEOSHAPE) {
-                points = inputPolygon.subList(0, inputPolygon.size - 1)
-            } else {
-                points = inputPolygon
-            }
-        }
-
         originalPoly = inputPolygon
-
-        restoredPoints?.also {
-            points = it
-        }
-
-        featureId = map!!.addPolyLine(
-            LineDescription(
-                points,
-                MapConsts.DEFAULT_STROKE_WIDTH.toString(),
-                null,
-                !readOnly,
-                outputMode == OutputMode.GEOSHAPE
-            )
-        )
-
         if (inputActive && !readOnly) {
             startInput()
         }
@@ -284,14 +241,42 @@ class GeoPolyFragment @JvmOverloads constructor(
         map!!.setGpsLocationListener(this::onGpsLocation)
         map!!.setRetainMockAccuracy(retainMockAccuracy)
         map!!.setDragEndListener {
+            viewModel.update(map!!.getPolyPoints(it))
             setChangeResult()
         }
 
         if (!map!!.hasCenter()) {
-            if (points.isNotEmpty()) {
-                map!!.zoomToBoundingBox(points, 0.6, false)
+            if (viewModel.points.value.isNotEmpty()) {
+                map!!.zoomToBoundingBox(viewModel.points.value, 0.6, false)
             } else {
                 map!!.runOnGpsLocationReady { this.onGpsLocationReady(it) }
+            }
+        }
+
+        viewModel.points.asLiveData().observe(viewLifecycleOwner) { points ->
+            if (map!!.supportsDraggablePolygon() && outputMode == OutputMode.GEOSHAPE) {
+                val polygonDescription = PolygonDescription(
+                    points,
+                    draggable = !readOnly
+                )
+
+                if (featureId == -1) {
+                    featureId = map!!.addPolygon(polygonDescription)
+                } else {
+                    map!!.updatePolygon(featureId, polygonDescription)
+                }
+            } else {
+                val lineDescription = LineDescription(
+                    points,
+                    draggable = !readOnly,
+                    closed = outputMode == OutputMode.GEOSHAPE
+                )
+
+                if (featureId == -1) {
+                    featureId = map!!.addPolyLine(lineDescription)
+                } else {
+                    map!!.updatePolyLine(featureId, lineDescription)
+                }
             }
         }
 
@@ -299,7 +284,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun saveAsPolyline() {
-        if (map!!.getPolyLinePoints(featureId).size > 1) {
+        if (viewModel.points.value.size > 1) {
             setResult()
         } else {
             showShortToastInMiddle(
@@ -310,13 +295,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun saveAsPolygon() {
-        if (map!!.getPolyLinePoints(featureId).size > 2) {
-            // Close the polygon.
-            val points = map!!.getPolyLinePoints(featureId)
-            val count = points.size
-            if (count > 1 && points[0] != points[count - 1]) {
-                map!!.appendPointToPolyLine(featureId, points[0])
-            }
+        if (viewModel.points.value.size > 2) {
             setResult()
         } else {
             showShortToastInMiddle(
@@ -327,7 +306,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun setChangeResult() {
-        val points = map!!.getPolyLinePoints(featureId)
+        val points = viewModel.points.value
         val geoString = if (outputMode == OutputMode.GEOSHAPE && points.size < 3) {
             ""
         } else if (points.size < 2) {
@@ -343,7 +322,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun setResult() {
-        val points = map!!.getPolyLinePoints(featureId)
+        val points = viewModel.points.value
         getParentFragmentManager().setFragmentResult(
             REQUEST_GEOPOLY,
             bundleOf(RESULT_GEOPOLY to getGeoString(points))
@@ -360,28 +339,10 @@ class GeoPolyFragment @JvmOverloads constructor(
     override fun startInput() {
         inputActive = true
         if (recordingEnabled && recordingAutomatic) {
-            locationTracker.start(retainMockAccuracy)
-
-            recordPoint(map!!.getGpsLocation())
-            schedulerHandler = executorServiceScheduler.scheduleAtFixedRate(
-                {
-                    requireActivity().runOnUiThread {
-                        val currentLocation = locationTracker.getCurrentLocation()
-                        if (currentLocation != null) {
-                            val currentMapPoint = MapPoint(
-                                currentLocation.latitude,
-                                currentLocation.longitude,
-                                currentLocation.altitude,
-                                currentLocation.accuracy.toDouble()
-                            )
-
-                            recordPoint(currentMapPoint)
-                        }
-                    }
-                },
-                INTERVAL_OPTIONS[intervalIndex].toLong(),
-                INTERVAL_OPTIONS[intervalIndex].toLong(),
-                TimeUnit.SECONDS
+            viewModel.startRecording(
+                retainMockAccuracy,
+                ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex],
+                INTERVAL_OPTIONS[intervalIndex].toLong() * 1000
             )
         }
         updateUi()
@@ -433,7 +394,8 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private fun onClick(point: MapPoint) {
         if (inputActive && !recordingEnabled) {
-            appendPointIfNew(point)
+            viewModel.add(point)
+            setChangeResult()
         }
     }
 
@@ -454,18 +416,9 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private fun recordPoint(point: MapPoint?) {
         if (point != null && isLocationAcceptable(point)) {
-            appendPointIfNew(point)
+            viewModel.add(point)
+            setChangeResult()
         }
-    }
-
-    private fun appendPointIfNew(point: MapPoint) {
-        val points = map!!.getPolyLinePoints(featureId)
-        if (points.isEmpty() || point != points[points.size - 1]) {
-            map!!.appendPointToPolyLine(featureId, point)
-            updateUi()
-        }
-
-        setChangeResult()
     }
 
     private fun isLocationAcceptable(point: MapPoint): Boolean {
@@ -484,32 +437,21 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private fun removeLastPoint() {
         if (featureId != -1) {
-            map!!.removePolyLineLastPoint(featureId)
-            updateUi()
+            viewModel.removeLast()
             setChangeResult()
         }
     }
 
     private fun clear() {
-        map!!.clearFeatures()
-        featureId = map!!.addPolyLine(
-            LineDescription(
-                emptyList(),
-                MapConsts.DEFAULT_STROKE_WIDTH.toString(),
-                null,
-                !readOnly,
-                outputMode == OutputMode.GEOSHAPE
-            )
-        )
         inputActive = false
-        updateUi()
+        viewModel.update(emptyList())
     }
 
     /** Updates the state of various UI widgets to reflect internal state.  */
     private fun updateUi() {
         val binding = GeopolyLayoutBinding.bind(requireView())
 
-        val numPoints = map!!.getPolyLinePoints(featureId).size
+        val numPoints = viewModel.points.value.size
         val location = map!!.getGpsLocation()
 
         // Visibility state
@@ -598,7 +540,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun showClearDialog() {
-        if (!map!!.getPolyLinePoints(featureId).isEmpty()) {
+        if (!viewModel.points.value.isEmpty()) {
             MaterialAlertDialogBuilder(requireContext())
                 .setMessage(org.odk.collect.strings.R.string.geo_clear_warning)
                 .setPositiveButton(org.odk.collect.strings.R.string.clear) { _, _ -> clear() }
@@ -624,7 +566,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         const val RESULT_GEOPOLY: String = "geopoly"
         const val RESULT_GEOPOLY_CHANGE: String = "geopoly_change"
 
-        const val POINTS_KEY: String = "points"
         const val INPUT_ACTIVE_KEY: String = "input_active"
         const val RECORDING_ENABLED_KEY: String = "recording_enabled"
         const val RECORDING_AUTOMATIC_KEY: String = "recording_automatic"

@@ -49,6 +49,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
@@ -306,42 +307,48 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
     @Override public int addPolyLine(LineDescription lineDescription) {
         int featureId = nextFeatureId++;
+        addPolyLine(featureId, lineDescription);
+        return featureId;
+    }
+
+    private void addPolyLine(int featureId, LineDescription lineDescription) {
         if (lineDescription.getDraggable()) {
             features.put(featureId, new DynamicPolyLineFeature(getActivity(), lineDescription, map));
         } else {
             features.put(featureId, new StaticPolyLineFeature(lineDescription, map));
         }
-        return featureId;
+    }
+
+    @Override
+    public void updatePolyLine(int featureId, @NotNull LineDescription lineDescription) {
+        features.get(featureId).dispose();
+        addPolyLine(featureId, lineDescription);
     }
 
     @Override
     public int addPolygon(PolygonDescription polygonDescription) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new StaticPolygonFeature(map, polygonDescription));
+        addPolygon(featureId, polygonDescription);
         return featureId;
     }
 
-    @Override public void appendPointToPolyLine(int featureId, @NonNull MapPoint point) {
-        MapFeature feature = features.get(featureId);
-        if (feature instanceof DynamicPolyLineFeature) {
-            ((DynamicPolyLineFeature) feature).addPoint(point);
-        }
+    private void addPolygon(int featureId, PolygonDescription polygonDescription) {
+        features.put(featureId, new StaticPolygonFeature(map, polygonDescription));
     }
 
-    @Override public @NonNull List<MapPoint> getPolyLinePoints(int featureId) {
+    @Override
+    public void updatePolygon(int featureId, @NotNull PolygonDescription polygonDescription) {
+        features.get(featureId).dispose();
+        addPolygon(featureId, polygonDescription);
+    }
+
+    @Override public @NonNull List<MapPoint> getPolyPoints(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof LineFeature) {
             return ((LineFeature) feature).getPoints();
         }
 
         return new ArrayList<>();
-    }
-
-    @Override public void removePolyLineLastPoint(int featureId) {
-        MapFeature feature = features.get(featureId);
-        if (feature instanceof DynamicPolyLineFeature) {
-            ((DynamicPolyLineFeature) feature).removeLastPoint();
-        }
     }
 
     @Override public void clearFeatures() {
@@ -594,7 +601,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         if (locationCrosshairs == null) {
             locationCrosshairs = map.addMarker(new MarkerOptions()
                 .position(loc)
-                .icon(getBitmapDescriptor(getContext(), new MarkerIconDescription(org.odk.collect.maps.R.drawable.ic_crosshairs)))
+                .icon(getBitmapDescriptor(getContext(), new MarkerIconDescription.DrawableResource(org.odk.collect.maps.R.drawable.ic_crosshairs)))
                 .anchor(0.5f, 0.5f)  // center the crosshairs on the position
             );
         }
@@ -780,7 +787,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     }
 
     private interface LineFeature extends MapFeature {
-
         List<MapPoint> getPoints();
     }
 
@@ -855,14 +861,12 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
     private static class DynamicPolyLineFeature implements LineFeature {
 
-        private final Context context;
         private final GoogleMap map;
         private final List<Marker> markers = new ArrayList<>();
         private final LineDescription lineDescription;
         private Polyline polyline;
 
         DynamicPolyLineFeature(Context context, LineDescription lineDescription, GoogleMap map) {
-            this.context = context;
             this.lineDescription = lineDescription;
             this.map = map;
 
@@ -871,7 +875,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             }
 
             for (MapPoint point : lineDescription.getPoints()) {
-                markers.add(createMarker(context, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(org.odk.collect.icons.R.drawable.ic_map_point)), map));
+                markers.add(createMarker(context, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.DrawableResource(org.odk.collect.icons.R.drawable.ic_map_point)), map));
             }
 
             update();
@@ -933,23 +937,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             return points;
         }
 
-        public void addPoint(MapPoint point) {
-            if (map == null) {  // during Robolectric tests, map will be null
-                return;
-            }
-            markers.add(createMarker(context, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(org.odk.collect.icons.R.drawable.ic_map_point)), map));
-            update();
-        }
-
-        public void removeLastPoint() {
-            if (!markers.isEmpty()) {
-                int last = markers.size() - 1;
-                markers.get(last).remove();
-                markers.remove(last);
-                update();
-            }
-        }
-
         private void clearPolyline() {
             if (polyline != null) {
                 polyline.remove();
@@ -958,10 +945,13 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }
     }
 
-    private static class StaticPolygonFeature implements MapFeature {
+    private static class StaticPolygonFeature implements LineFeature {
+        @NonNull
+        private final PolygonDescription polygonDescription;
         private Polygon polygon;
 
         StaticPolygonFeature(GoogleMap map, PolygonDescription polygonDescription) {
+            this.polygonDescription = polygonDescription;
             polygon = map.addPolygon(new PolygonOptions()
                     .addAll(StreamSupport.stream(polygonDescription.getPoints().spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList()))
                     .strokeColor(polygonDescription.getStrokeColor())
@@ -996,6 +986,11 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                 polygon.remove();
                 polygon = null;
             }
+        }
+
+        @Override
+        public List<MapPoint> getPoints() {
+            return polygonDescription.getPoints();
         }
     }
 

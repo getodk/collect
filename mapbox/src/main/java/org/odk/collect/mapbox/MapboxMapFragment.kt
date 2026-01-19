@@ -339,6 +339,19 @@ class MapboxMapFragment :
 
     override fun addPolyLine(lineDescription: LineDescription): Int {
         val featureId = nextFeatureId++
+        addPolyLine(featureId, lineDescription)
+        return featureId
+    }
+
+    override fun updatePolyLine(featureId: Int, lineDescription: LineDescription) {
+        features[featureId]?.dispose()
+        addPolyLine(featureId, lineDescription)
+    }
+
+    private fun addPolyLine(
+        featureId: Int,
+        lineDescription: LineDescription
+    ) {
         if (lineDescription.draggable) {
             features[featureId] = DynamicPolyLineFeature(
                 requireContext(),
@@ -357,36 +370,36 @@ class MapboxMapFragment :
                 lineDescription
             )
         }
-        return featureId
     }
 
     override fun addPolygon(polygonDescription: PolygonDescription): Int {
         val featureId = nextFeatureId++
+        addPolygon(featureId, polygonDescription)
+
+        return featureId
+    }
+
+    private fun addPolygon(
+        featureId: Int,
+        polygonDescription: PolygonDescription
+    ) {
         features[featureId] = StaticPolygonFeature(
             mapView.annotations.createPolygonAnnotationManager(),
             polygonDescription,
             featureClickListener,
             featureId
         )
-
-        return featureId
     }
 
-    override fun appendPointToPolyLine(featureId: Int, point: MapPoint) {
-        val feature = features[featureId]
-        if (feature is DynamicPolyLineFeature) {
-            feature.appendPoint(point)
-        }
+    override fun updatePolygon(
+        featureId: Int,
+        polygonDescription: PolygonDescription
+    ) {
+        features[featureId]?.dispose()
+        addPolygon(featureId, polygonDescription)
     }
 
-    override fun removePolyLineLastPoint(featureId: Int) {
-        val feature = features[featureId]
-        if (feature is DynamicPolyLineFeature) {
-            feature.removeLastPoint()
-        }
-    }
-
-    override fun getPolyLinePoints(featureId: Int): List<MapPoint> {
+    override fun getPolyPoints(featureId: Int): List<MapPoint> {
         val feature = features[featureId]
         return if (feature is LineFeature) {
             feature.points

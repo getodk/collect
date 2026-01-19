@@ -2,11 +2,11 @@ package org.odk.collect.maps.markers
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Bitmap.Config
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
-import android.graphics.drawable.BitmapDrawable
 import android.util.LruCache
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -22,19 +22,58 @@ object MarkerIconCreator {
     private val cache = LruCache<String, Bitmap>(10)
 
     @JvmStatic
-    fun getMarkerIconDrawable(context: Context, markerIconDescription: MarkerIconDescription) =
-        BitmapDrawable(context.resources, getMarkerIconBitmap(context, markerIconDescription))
+    fun getMarkerIcon(context: Context, markerIconDescription: MarkerIconDescription): Bitmap {
+        return when (markerIconDescription) {
+            is MarkerIconDescription.LinePoint -> {
+                fromCache("LinePoint" + markerIconDescription.lineSize + markerIconDescription.color) {
+                    createPoint(
+                        markerIconDescription.lineSize * 6,
+                        markerIconDescription.lineSize,
+                        markerIconDescription.color
+                    )
+                }
+            }
 
-    @JvmStatic
-    fun getMarkerIconBitmap(context: Context, markerIconDescription: MarkerIconDescription): Bitmap {
-        val drawableId = markerIconDescription.icon
-        val color = markerIconDescription.getColor()
-        val symbol = markerIconDescription.getSymbol()
+            is MarkerIconDescription.DrawableResource -> {
+                val drawableId = markerIconDescription.drawable
+                val color = markerIconDescription.getColor()
+                val symbol = markerIconDescription.getSymbol()
 
-        val bitmapId = drawableId.toString() + color + symbol
+                val bitmapId = drawableId.toString() + color + symbol
+                fromCache(bitmapId) {
+                    createBitmap(context, drawableId, color, symbol)
+                }
+            }
+        }
+    }
 
+    private fun createPoint(diameter: Float, strokeSize: Float, color: Int): Bitmap {
+        val bitmap =
+            Bitmap.createBitmap(diameter.toInt(), diameter.toInt(), Config.ARGB_8888)
+
+        Canvas(bitmap).also { canvas ->
+            val radius = diameter / 2
+
+            val fill = Paint().also {
+                it.style = Paint.Style.FILL
+                it.color = Color.parseColor("#ffffff")
+            }
+            canvas.drawCircle(radius, radius, radius, fill)
+
+            val stroke = Paint().also {
+                it.style = Paint.Style.STROKE
+                it.color = color
+                it.strokeWidth = strokeSize
+            }
+            canvas.drawCircle(radius, radius, radius - (strokeSize / 2), stroke)
+        }
+
+        return bitmap
+    }
+
+    private fun fromCache(bitmapId: String, factory: () -> Bitmap): Bitmap {
         return if (cache[bitmapId] == null) {
-            createBitmap(context, drawableId, color, symbol).also {
+            factory().also {
                 cache.put(bitmapId, it)
             }
         } else {
@@ -82,5 +121,10 @@ object MarkerIconCreator {
     @JvmStatic
     fun clearCache() {
         cache.evictAll()
+    }
+
+    @JvmStatic
+    fun MarkerIconDescription.toBitmap(context: Context): Bitmap {
+        return getMarkerIcon(context, this)
     }
 }
