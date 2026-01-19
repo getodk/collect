@@ -16,7 +16,7 @@ class GeoPolyViewModel(
 ) : ViewModel() {
 
     private val _points = MutableStateFlow(
-        if (!points.isEmpty()) {
+        if (points.isNotEmpty()) {
             if (outputMode == OutputMode.GEOSHAPE) {
                 points.subList(0, points.size - 1)
             } else {
