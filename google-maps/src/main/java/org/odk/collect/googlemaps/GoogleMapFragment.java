@@ -975,8 +975,9 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                 return;
             }
 
-            for (int i = 0; i < polygonDescription.getPoints().size(); i++) {
-                MapPoint point = polygonDescription.getPoints().get(i);
+            List<MapPoint> points = polygonDescription.getPoints();
+            for (int i = 0; i < points.size(); i++) {
+                MapPoint point = points.get(i);
                 markers.add(getLinePointMarker(point, polygonDescription.getStrokeWidth(), i == polygonDescription.getPoints().size() - 1));
             }
 
