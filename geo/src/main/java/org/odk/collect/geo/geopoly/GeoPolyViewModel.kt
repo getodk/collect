@@ -33,17 +33,15 @@ class GeoPolyViewModel(
         viewModelScope.launch {
             locationTracker.getLocation().collect {
                 if (it != null) {
-                    accuracyThreshold.let { threshold ->
-                        if (threshold == 0 || it.accuracy <= threshold) {
-                            add(
-                                MapPoint(
-                                    it.latitude,
-                                    it.longitude,
-                                    it.altitude,
-                                    it.accuracy.toDouble()
-                                )
+                    if (accuracyThreshold == 0 || it.accuracy <= accuracyThreshold) {
+                        add(
+                            MapPoint(
+                                it.latitude,
+                                it.longitude,
+                                it.altitude,
+                                it.accuracy.toDouble()
                             )
-                        }
+                        )
                     }
                 }
             }
