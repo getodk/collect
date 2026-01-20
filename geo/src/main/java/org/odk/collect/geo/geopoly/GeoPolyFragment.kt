@@ -278,9 +278,9 @@ class GeoPolyFragment @JvmOverloads constructor(
                     map!!.updatePolyLine(featureId, lineDescription)
                 }
             }
-        }
 
-        updateUi()
+            updateUi()
+        }
     }
 
     private fun saveAsPolyline() {
