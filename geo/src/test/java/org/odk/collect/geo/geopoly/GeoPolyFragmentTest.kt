@@ -60,10 +60,12 @@ class GeoPolyFragmentTest {
     @get:Rule
     val fragmentLauncherRule = FragmentScenarioLauncherRule()
 
+    private val application = ApplicationProvider.getApplicationContext<Application>()
+
     @Before
     fun setUp() {
         val shadowApplication =
-            Shadows.shadowOf(ApplicationProvider.getApplicationContext<Application>())
+            Shadows.shadowOf(application)
         shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION")
         shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION")
         val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
@@ -130,6 +132,17 @@ class GeoPolyFragmentTest {
 
         startInput(R.id.manual_mode)
         onView(withId(R.id.record_button)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun placingPoint_updatesCollectionStatus() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        startInput(R.id.placement_mode)
+        mapFragment.click(MapPoint(1.0, 1.0))
+        assertVisible(withText(application.getString(string.collection_status_placement, 1)))
     }
 
     @Test
