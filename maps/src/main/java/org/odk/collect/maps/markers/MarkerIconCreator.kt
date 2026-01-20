@@ -11,6 +11,7 @@ import android.util.LruCache
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.toColorInt
 
 object MarkerIconCreator {
     /**
@@ -56,7 +57,7 @@ object MarkerIconCreator {
 
             val fill = Paint().also {
                 it.style = Paint.Style.FILL
-                it.color = Color.parseColor("#ffffff")
+                it.color = "#ffffff".toColorInt()
             }
             canvas.drawCircle(radius, radius, radius, fill)
 

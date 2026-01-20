@@ -254,7 +254,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
 
         viewModel.points.asLiveData().observe(viewLifecycleOwner) { points ->
-            if (map!!.supportsDraggablePolygon() && outputMode == OutputMode.GEOSHAPE) {
+            if (outputMode == OutputMode.GEOSHAPE) {
                 val polygonDescription = PolygonDescription(
                     points,
                     draggable = !readOnly

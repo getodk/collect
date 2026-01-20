@@ -160,10 +160,6 @@ interface MapFragment {
      */
     fun hasCenter(): Boolean
 
-    fun supportsDraggablePolygon(): Boolean {
-        return false
-    }
-
     fun interface ErrorListener {
         fun onError()
     }

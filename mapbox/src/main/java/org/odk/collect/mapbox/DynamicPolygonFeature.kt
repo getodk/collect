@@ -6,39 +6,39 @@ import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListene
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationDragListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
-import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
-import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
-import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
-import org.odk.collect.maps.LineDescription
+import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
+import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
+import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.PolygonDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 
-internal class DynamicPolyLineFeature(
+internal class DynamicPolygonFeature(
     private val context: Context,
     private val pointAnnotationManager: PointAnnotationManager,
-    private val polylineAnnotationManager: PolylineAnnotationManager,
+    private val polygonAnnotationManager: PolygonAnnotationManager,
     private val featureId: Int,
     private val featureClickListener: MapFragment.FeatureListener?,
     private val featureDragEndListener: MapFragment.FeatureListener?,
-    private val lineDescription: LineDescription
+    private val polygonDescription: PolygonDescription
 ) : LineFeature {
     override val points = mutableListOf<MapPoint>()
     private val pointAnnotations = mutableListOf<PointAnnotation>()
     private val pointAnnotationClickListener = ClickListener()
     private val pointAnnotationDragListener = DragListener()
-    private var polylineAnnotation: PolylineAnnotation? = null
+    private var polygonAnnotation: PolygonAnnotation? = null
 
     init {
-        lineDescription.points.forEachIndexed { index, point ->
+        polygonDescription.points.forEachIndexed { index, point ->
             points.add(point)
 
-            val markerIconDescription = if (index == lineDescription.points.lastIndex) {
-                MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth(), MapConsts.DEFAULT_HIGHLIGHT_COLOR)
+            val markerIconDescription = if (index == polygonDescription.points.lastIndex) {
+                MarkerIconDescription.LinePoint(polygonDescription.getStrokeWidth(), MapConsts.DEFAULT_HIGHLIGHT_COLOR)
             } else {
-                MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth(), MapConsts.DEFAULT_STROKE_COLOR)
+                MarkerIconDescription.LinePoint(polygonDescription.getStrokeWidth(), MapConsts.DEFAULT_STROKE_COLOR)
             }
             pointAnnotations.add(
                 MapUtils.createPointAnnotation(
@@ -58,8 +58,8 @@ internal class DynamicPolyLineFeature(
 
         pointAnnotationManager.addClickListener(pointAnnotationClickListener)
         pointAnnotationManager.addDragListener(pointAnnotationDragListener)
-        polylineAnnotationManager.addClickListener { annotation ->
-            polylineAnnotation?.let {
+        polygonAnnotationManager.addClickListener { annotation ->
+            polygonAnnotation?.let {
                 if (annotation.id == it.id && featureClickListener != null) {
                     featureClickListener.onFeature(featureId)
                     true
@@ -77,8 +77,8 @@ internal class DynamicPolyLineFeature(
             delete(pointAnnotations)
         }
 
-        polylineAnnotation?.let {
-            polylineAnnotationManager.delete(it)
+        polygonAnnotation?.let {
+            polygonAnnotationManager.delete(it)
         }
 
         pointAnnotations.clear()
@@ -90,25 +90,19 @@ internal class DynamicPolyLineFeature(
             .map {
                 Point.fromLngLat(it.longitude, it.latitude, it.altitude)
             }
-            .toMutableList()
-            .also {
-                if (lineDescription.closed && it.isNotEmpty()) {
-                    it.add(it.first())
-                }
-            }
 
-        polylineAnnotation?.let {
-            polylineAnnotationManager.delete(it)
+        polygonAnnotation?.let {
+            polygonAnnotationManager.delete(it)
         }
 
         if (points.size > 1) {
-            polylineAnnotation = polylineAnnotationManager.create(
-                PolylineAnnotationOptions()
-                    .withPoints(points)
-                    .withLineColor(lineDescription.getStrokeColor())
-                    .withLineWidth(MapUtils.convertStrokeWidth(lineDescription))
+            polygonAnnotation = polygonAnnotationManager.create(
+                PolygonAnnotationOptions()
+                    .withPoints(listOf(points))
+                    .withFillOutlineColor(polygonDescription.getStrokeColor())
+                    .withFillColor(polygonDescription.getFillColor())
             ).also {
-                polylineAnnotationManager.update(it)
+                polygonAnnotationManager.update(it)
             }
         }
     }

@@ -734,11 +734,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         return mapViewModel;
     }
 
-    @Override
-    public boolean supportsDraggablePolygon() {
-        return true;
-    }
-
     @NonNull
     private Marker getLinePointMarker(MapPoint point, float strokeWidth, boolean isLast) {
         if (isLast) {
@@ -829,9 +824,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         List<MapPoint> getPoints();
     }
 
-    /**
-     * A polyline or polygon that can be manipulated by dragging markers at its vertices.
-     */
     private class StaticPolyLineFeature implements LineFeature {
         final MapView map;
         final Polyline polyline;
@@ -894,9 +886,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         }
     }
 
-    /**
-     * A polyline or polygon that can be manipulated by dragging markers at its vertices.
-     */
     private class DynamicPolyLineFeature implements LineFeature {
         final MapView map;
         final List<Marker> markers = new ArrayList<>();
@@ -993,8 +982,10 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             });
 
             map.getOverlays().add(polygon);
-            for (int i = 0; i < polygonDescription.getPoints().size(); i++) {
-                MapPoint point = polygonDescription.getPoints().get(i);
+
+            List<MapPoint> points = polygonDescription.getPoints();
+            for (int i = 0; i < points.size(); i++) {
+                MapPoint point = points.get(i);
                 markers.add(getLinePointMarker(point, polygonDescription.getStrokeWidth(), i == polygonDescription.getPoints().size() - 1));
             }
             update();

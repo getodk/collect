@@ -57,6 +57,7 @@ import org.odk.collect.googlemaps.scaleview.MapScaleView;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
+import org.odk.collect.maps.MapConsts;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapViewModel;
@@ -333,7 +334,11 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     }
 
     private void addPolygon(int featureId, PolygonDescription polygonDescription) {
-        features.put(featureId, new StaticPolygonFeature(map, polygonDescription));
+        if (polygonDescription.getDraggable()) {
+            features.put(featureId, new DynamicPolygonFeature(map, polygonDescription));
+        } else {
+            features.put(featureId, new StaticPolygonFeature(map, polygonDescription));
+        }
     }
 
     @Override
@@ -726,6 +731,15 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }).get(MapViewModel.class);
     }
 
+    @NonNull
+    private Marker getLinePointMarker(MapPoint point, float strokeWidth, boolean isLast) {
+        if (isLast) {
+            return createMarker(requireContext(), new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(strokeWidth, MapConsts.DEFAULT_HIGHLIGHT_COLOR)), map);
+        } else {
+            return createMarker(requireContext(), new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(strokeWidth, MapConsts.DEFAULT_STROKE_COLOR)), map);
+        }
+    }
+
     /**
      * A MapFeature is a physical feature on a map, such as a point, a road,
      * a building, a region, etc.  It is presented to the user as one editable
@@ -858,8 +872,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }
     }
 
-    /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
-    private static class DynamicPolyLineFeature implements LineFeature {
+    private class DynamicPolyLineFeature implements LineFeature {
 
         private final GoogleMap map;
         private final List<Marker> markers = new ArrayList<>();
@@ -874,8 +887,10 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                 return;
             }
 
-            for (MapPoint point : lineDescription.getPoints()) {
-                markers.add(createMarker(context, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.DrawableResource(org.odk.collect.icons.R.drawable.ic_map_point)), map));
+            List<MapPoint> points = lineDescription.getPoints();
+            for (int i = 0; i < points.size(); i++) {
+                MapPoint point = points.get(i);
+                markers.add(getLinePointMarker(point, lineDescription.getStrokeWidth(), i == points.size() - 1));
             }
 
             update();
@@ -941,6 +956,92 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             if (polyline != null) {
                 polyline.remove();
                 polyline = null;
+            }
+        }
+    }
+
+    private class DynamicPolygonFeature implements LineFeature {
+
+        private final GoogleMap map;
+        private final List<Marker> markers = new ArrayList<>();
+        private final PolygonDescription polygonDescription;
+        private Polygon polygon;
+
+        DynamicPolygonFeature(GoogleMap map, PolygonDescription polygonDescription) {
+            this.map = map;
+            this.polygonDescription = polygonDescription;
+
+            if (map == null) {  // during Robolectric tests, map will be null
+                return;
+            }
+
+            List<MapPoint> points = polygonDescription.getPoints();
+            for (int i = 0; i < points.size(); i++) {
+                MapPoint point = points.get(i);
+                markers.add(getLinePointMarker(point, polygonDescription.getStrokeWidth(), i == polygonDescription.getPoints().size() - 1));
+            }
+
+            update();
+        }
+
+        @Override
+        public boolean ownsMarker(Marker givenMarker) {
+            return markers.contains(givenMarker);
+        }
+
+        @Override
+        public boolean ownsPolyline(Polyline givenPolyline) {
+            return false;
+        }
+
+        @Override
+        public boolean ownsPolygon(Polygon polygon) {
+            return this.polygon.equals(polygon);
+        }
+
+        @Override
+        public void update() {
+            List<LatLng> latLngs = new ArrayList<>();
+            for (Marker marker : markers) {
+                latLngs.add(marker.getPosition());
+            }
+            if (markers.isEmpty()) {
+                clearPolyline();
+            } else if (polygon == null) {
+                polygon = map.addPolygon(new PolygonOptions()
+                        .strokeColor(polygonDescription.getStrokeColor())
+                        .zIndex(1)
+                        .strokeWidth(polygonDescription.getStrokeWidth())
+                        .fillColor(polygonDescription.getFillColor())
+                        .addAll(latLngs)
+                        .clickable(true)
+                );
+            } else {
+                polygon.setPoints(latLngs);
+            }
+        }
+
+        @Override
+        public void dispose() {
+            clearPolyline();
+            for (Marker marker : markers) {
+                marker.remove();
+            }
+            markers.clear();
+        }
+
+        public List<MapPoint> getPoints() {
+            List<MapPoint> points = new ArrayList<>();
+            for (Marker marker : markers) {
+                points.add(fromMarker(marker));
+            }
+            return points;
+        }
+
+        private void clearPolyline() {
+            if (polygon != null) {
+                polygon.remove();
+                polygon = null;
             }
         }
     }

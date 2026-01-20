@@ -1,13 +1,13 @@
 package org.odk.collect.maps
 
-import android.graphics.Color
+import androidx.core.graphics.toColorInt
 
 object MapConsts {
     @JvmField
-    val DEFAULT_STROKE_COLOR = Color.parseColor("#3e9fcc")
+    val DEFAULT_STROKE_COLOR = "#3e9fcc".toColorInt()
 
     @JvmField
-    val DEFAULT_HIGHLIGHT_COLOR = Color.parseColor("#1F5976")
+    val DEFAULT_HIGHLIGHT_COLOR = "#1F5976".toColorInt()
 
     const val DEFAULT_STROKE_WIDTH = 8f
     const val DEFAULT_FILL_COLOR_OPACITY = 68
