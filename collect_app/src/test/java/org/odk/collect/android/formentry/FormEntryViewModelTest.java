@@ -457,7 +457,7 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void validateAnswerConstraint_updatesValidationResult() {
+    public void validateAnswerConstraint_updatesValidationResult_ifIsIsFailedValidationResult() {
         FormDef formDef = mock();
         when(formDef.evaluateConstraint(any(), any())).thenReturn(false);
         formController.setFormDef(formDef);
@@ -474,6 +474,23 @@ public class FormEntryViewModelTest {
         viewModel.validateAnswerConstraint(formIndex, new StringData("answer"));
         scheduler.flush(true);
         assertThat(viewModel.getValidationResult().getValue().getValue(), equalTo(failedValidationResult));
+    }
+
+    @Test
+    public void validateAnswerConstraint_clearsResult_ifItIsSuccessValidationResult() {
+        FormDef formDef = mock();
+        when(formDef.evaluateConstraint(any(), any())).thenReturn(false);
+        formController.setFormDef(formDef);
+
+        TreeReference reference = new TreeReference();
+        reference.add("blah", TreeReference.INDEX_UNBOUND);
+        FormIndex formIndex = new FormIndex(null, 1, 1, reference);
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder().build();
+        formController.setPrompt(formIndex, prompt);
+
+        viewModel.validateAnswerConstraint(formIndex, new StringData("answer"));
+        scheduler.flush(true);
+        assertThat(viewModel.getValidationResult().getValue().getValue(), equalTo(null));
     }
 
     @Test
