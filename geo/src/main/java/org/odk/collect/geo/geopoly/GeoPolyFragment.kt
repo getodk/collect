@@ -242,7 +242,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         map!!.setRetainMockAccuracy(retainMockAccuracy)
         map!!.setDragEndListener {
             viewModel.update(map!!.getPolyPoints(it))
-            setChangeResult()
         }
 
         if (!map!!.hasCenter()) {
@@ -280,6 +279,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
 
             updateUi()
+            setChangeResult()
         }
     }
 
@@ -395,7 +395,6 @@ class GeoPolyFragment @JvmOverloads constructor(
     private fun onClick(point: MapPoint) {
         if (inputActive && !recordingEnabled) {
             viewModel.add(point)
-            setChangeResult()
         }
     }
 
@@ -417,7 +416,6 @@ class GeoPolyFragment @JvmOverloads constructor(
     private fun recordPoint(point: MapPoint?) {
         if (point != null && isLocationAcceptable(point)) {
             viewModel.add(point)
-            setChangeResult()
         }
     }
 
@@ -438,14 +436,12 @@ class GeoPolyFragment @JvmOverloads constructor(
     private fun removeLastPoint() {
         if (featureId != -1) {
             viewModel.removeLast()
-            setChangeResult()
         }
     }
 
     private fun clear() {
         inputActive = false
         viewModel.update(emptyList())
-        setChangeResult()
     }
 
     /** Updates the state of various UI widgets to reflect internal state.  */
