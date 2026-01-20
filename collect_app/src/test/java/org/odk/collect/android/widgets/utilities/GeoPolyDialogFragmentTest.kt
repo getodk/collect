@@ -45,12 +45,12 @@ import org.odk.collect.testshared.getOrAwaitValue
 class GeoPolyDialogFragmentTest {
 
     private var prompt = MockFormEntryPromptBuilder().build()
-    private val validationResult = MutableLiveData<Consumable<ValidationResult>>(
+    private val constraintValidationResult = MutableLiveData<Consumable<ValidationResult>>(
         Consumable(SuccessValidationResult)
     )
     private val formEntryViewModel = mock<FormEntryViewModel> {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
-        on { validationResult } doReturn validationResult
+        on { constraintValidationResult } doReturn constraintValidationResult
     }
 
     private val viewModelFactory = object : ViewModelProvider.Factory {
@@ -475,22 +475,7 @@ class GeoPolyDialogFragmentTest {
             0,
             TreeReference()
         )
-        validationResult.value = Consumable(FailedValidationResult(anotherQuestionFormIndex, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0))
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
-            GeoPolyDialogFragment::class,
-            bundleOf(ARG_FORM_INDEX to prompt.index)
-        ) {
-            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
-        }
-    }
-
-    @Test
-    fun `ignores the validation message if it was triggered by a required but empty answer`() {
-        prompt = MockFormEntryPromptBuilder(prompt)
-            .withDataType(Constants.DATATYPE_GEOTRACE)
-            .build()
-
-        validationResult.value = Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_REQUIRED_BUT_EMPTY, "blah", 0))
+        constraintValidationResult.value = Consumable(FailedValidationResult(anotherQuestionFormIndex, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0))
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
@@ -512,7 +497,7 @@ class GeoPolyDialogFragmentTest {
             assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
         }
 
-        validationResult.value = Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0))
+        constraintValidationResult.value = Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0))
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
@@ -534,7 +519,7 @@ class GeoPolyDialogFragmentTest {
             assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
         }
 
-        validationResult.value =
+        constraintValidationResult.value =
             Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, null, R.string.cancel))
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
