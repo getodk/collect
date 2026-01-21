@@ -25,7 +25,10 @@ internal class DynamicPolyLineFeature(
     private val featureDragEndListener: MapFragment.FeatureListener?,
     private val lineDescription: LineDescription
 ) : LineFeature {
-    override val points = mutableListOf<MapPoint>()
+    override val points: List<MapPoint>
+        get() = _points.toList()
+
+    private val _points = mutableListOf<MapPoint>()
     private val pointAnnotations = mutableListOf<PointAnnotation>()
     private val pointAnnotationClickListener = ClickListener()
     private val pointAnnotationDragListener = DragListener()
@@ -33,7 +36,7 @@ internal class DynamicPolyLineFeature(
 
     init {
         lineDescription.points.forEachIndexed { index, point ->
-            points.add(point)
+            _points.add(point)
 
             val markerIconDescription = if (index == lineDescription.points.lastIndex) {
                 MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth(), MapConsts.DEFAULT_HIGHLIGHT_COLOR)
@@ -82,7 +85,7 @@ internal class DynamicPolyLineFeature(
         }
 
         pointAnnotations.clear()
-        points.clear()
+        _points.clear()
     }
 
     private fun updateLine() {
@@ -131,7 +134,7 @@ internal class DynamicPolyLineFeature(
         override fun onAnnotationDrag(annotation: com.mapbox.maps.plugin.annotation.Annotation<*>) {
             pointAnnotations.forEachIndexed { index, pointAnnotation ->
                 if (annotation.id == pointAnnotation.id) {
-                    points[index] = MapUtils.mapPointFromPointAnnotation(pointAnnotation)
+                    _points[index] = MapUtils.mapPointFromPointAnnotation(pointAnnotation)
                 }
             }
             updateLine()
