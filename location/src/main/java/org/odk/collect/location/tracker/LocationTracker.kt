@@ -15,6 +15,9 @@ interface LocationTracker {
     fun getCurrentLocation(): Location?
     fun getLocation(): StateFlow<Location?>
 
+    /**
+     * @param updateInterval requested (not guaranteed) interval for location updates
+     */
     fun start(retainMockAccuracy: Boolean, updateInterval: Long? = null)
     fun start(retainMockAccuracy: Boolean) = start(retainMockAccuracy, null)
     fun start(updateInterval: Long?) = start(false, updateInterval)

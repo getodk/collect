@@ -98,7 +98,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     private val viewModel: GeoPolyViewModel by viewModels {
         viewModelFactory {
             addInitializer(GeoPolyViewModel::class) {
-                GeoPolyViewModel(outputMode, inputPolygon, locationTracker)
+                GeoPolyViewModel(outputMode, inputPolygon, locationTracker, scheduler)
             }
         }
     }
@@ -568,10 +568,10 @@ class GeoPolyFragment @JvmOverloads constructor(
         const val RECORDING_AUTOMATIC_KEY: String = "recording_automatic"
         const val INTERVAL_INDEX_KEY: String = "interval_index"
         const val ACCURACY_THRESHOLD_INDEX_KEY: String = "accuracy_threshold_index"
-        private val INTERVAL_OPTIONS = intArrayOf(
+        val INTERVAL_OPTIONS = intArrayOf(
             1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
         )
-        private const val DEFAULT_INTERVAL_INDEX = 3 // default is 20 seconds
+        const val DEFAULT_INTERVAL_INDEX = 3 // default is 20 seconds
 
         private val ACCURACY_THRESHOLD_OPTIONS = intArrayOf(
             0, 3, 5, 10, 15, 20
