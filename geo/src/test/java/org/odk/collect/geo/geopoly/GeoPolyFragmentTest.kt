@@ -15,6 +15,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Before
@@ -26,6 +27,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidtest.FragmentScenarioExtensions.setFragmentResultListener
 import org.odk.collect.async.Scheduler
@@ -36,6 +38,7 @@ import org.odk.collect.geo.R
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.RobolectricApplication
+import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
@@ -698,6 +701,29 @@ class GeoPolyFragmentTest {
         assertThat(
             result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
             equalTo("")
+        )
+    }
+
+    @Test
+    fun recordingPoints_usingAutomaticMode_setsChangeResult() {
+        val locations = MutableStateFlow<Location?>(null)
+        whenever(locationTracker.getLocation()).thenReturn(locations)
+
+        val scenario = fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+        val resultListener = FragmentResultRecorder()
+        scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
+
+        startInput(R.id.automatic_mode)
+        locations.value = Location(1.0, 1.0, 1.0, 1f)
+        locations.value = Location(2.0, 2.0, 1.0, 1f)
+
+        val result = resultListener.getAll().last()
+        assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
+        assertThat(
+            result.second.getString(GeoPolyFragment.RESULT_GEOPOLY_CHANGE),
+            equalTo("1.0 1.0 1.0 1.0;2.0 2.0 1.0 1.0")
         )
     }
 
