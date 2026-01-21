@@ -928,7 +928,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                     .zIndex(1)
                     .width(lineDescription.getStrokeWidth())
                     .addAll(latLngs)
-                    .clickable(true)
                 );
             } else {
                 polyline.setPoints(latLngs);
@@ -1014,7 +1013,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                         .strokeWidth(polygonDescription.getStrokeWidth())
                         .fillColor(polygonDescription.getFillColor())
                         .addAll(latLngs)
-                        .clickable(true)
                 );
             } else {
                 polygon.setPoints(latLngs);
