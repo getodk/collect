@@ -116,7 +116,7 @@ public class FakeLocationClient implements LocationClient {
         return false;
     }
 
-    public void setUpdateIntervals(long updateInterval, long fastestUpdateInterval) { }
+    public void setUpdateIntervals(long updateInterval) { }
 
     public void resetUpdateIntervals() { }
 }

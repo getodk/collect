@@ -62,7 +62,7 @@ public class FakeLocationClient implements LocationClient {
         throw new UnsupportedOperationException();
     }
 
-    public void setUpdateIntervals(long updateInterval, long fastestUpdateInterval) { }
+    public void setUpdateIntervals(long updateInterval) { }
 
     public void setLocation(Location location) {
         this.lastLocation = location;

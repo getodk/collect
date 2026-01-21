@@ -73,7 +73,7 @@ class GoogleFusedLocationClientTest {
     @Test
     fun `#requestLocationUpdates builds location request based on passed values`() {
         client.setPriority(LocationClient.Priority.PRIORITY_NO_POWER)
-        client.setUpdateIntervals(10L, 5L)
+        client.setUpdateIntervals(10L)
         val listener = TestLocationListener()
         client.requestLocationUpdates(listener)
 
@@ -81,7 +81,7 @@ class GoogleFusedLocationClientTest {
             argThat { locationRequest: LocationRequest ->
                 assertThat(locationRequest.priority, equalTo(LocationClient.Priority.PRIORITY_NO_POWER.value))
                 assertThat(locationRequest.interval, equalTo(10L))
-                assertThat(locationRequest.fastestInterval, equalTo(5L))
+                assertThat(locationRequest.fastestInterval, equalTo(10L))
                 true
             }
         )
