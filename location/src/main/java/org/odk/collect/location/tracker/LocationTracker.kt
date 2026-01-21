@@ -9,10 +9,9 @@ import org.odk.collect.location.Location
 interface LocationTracker {
 
     /**
-     * The last location tracked. Will return `null` if a location hasn't been determined
-     * or [LocationTracker.start] hasn't been called yet.
+     * Will be `null` if a location hasn't been determined or [LocationTracker.start] hasn't been
+     * called yet.
      */
-    fun getCurrentLocation(): Location?
     fun getLocation(): StateFlow<Location?>
 
     /**
@@ -27,4 +26,8 @@ interface LocationTracker {
      * Stops tracking location. Does not reset the value returned by [LocationTracker.getCurrentLocation].
      */
     fun stop()
+}
+
+fun LocationTracker.getCurrentLocation(): Location? {
+    return this.getLocation().value
 }

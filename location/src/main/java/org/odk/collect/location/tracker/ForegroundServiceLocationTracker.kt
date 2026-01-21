@@ -25,10 +25,6 @@ private const val LOCATION_KEY = "location"
 
 class ForegroundServiceLocationTracker(private val application: Application) : LocationTracker {
 
-    override fun getCurrentLocation(): Location? {
-        return getLocation().value
-    }
-
     override fun getLocation(): StateFlow<Location?> {
         return application.getState().getFlow(LOCATION_KEY, null)
     }
