@@ -98,7 +98,13 @@ class GeoPolyFragment @JvmOverloads constructor(
     private val viewModel: GeoPolyViewModel by viewModels {
         viewModelFactory {
             addInitializer(GeoPolyViewModel::class) {
-                GeoPolyViewModel(outputMode, inputPolygon, locationTracker, scheduler)
+                GeoPolyViewModel(
+                    outputMode,
+                    inputPolygon,
+                    retainMockAccuracy,
+                    locationTracker,
+                    scheduler
+                )
             }
         }
     }
@@ -340,7 +346,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         inputActive = true
         if (recordingEnabled && recordingAutomatic) {
             viewModel.startRecording(
-                retainMockAccuracy,
                 ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex],
                 INTERVAL_OPTIONS[intervalIndex].toLong() * 1000
             )
