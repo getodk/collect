@@ -15,18 +15,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.flow.MutableStateFlow
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
-import org.mockito.kotlin.any
-import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidtest.FragmentScenarioExtensions.setFragmentResultListener
 import org.odk.collect.async.Scheduler
@@ -36,6 +31,7 @@ import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.geo.R
 import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
+import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.Location
@@ -60,10 +56,7 @@ import org.robolectric.Shadows
 class GeoPolyFragmentTest {
     private val mapFragment = FakeMapFragment(ready = true)
 
-    private val currentLocation = MutableStateFlow<Location?>(null)
-    private val locationTracker = mock<LocationTracker> {
-        on { getLocation() }.thenReturn(currentLocation)
-    }
+    private val locationTracker = FakeLocationTracker()
 
     @get:Rule
     val fragmentLauncherRule = FragmentScenarioLauncherRule()
@@ -120,7 +113,7 @@ class GeoPolyFragmentTest {
 
         // Stopping the activity should stop the location tracker
         scenario.moveToState(Lifecycle.State.DESTROYED)
-        Mockito.verify(locationTracker).stop()
+        assertThat(locationTracker.isStarted, equalTo(false))
     }
 
     @Test
@@ -167,7 +160,7 @@ class GeoPolyFragmentTest {
             )
         )
 
-        currentLocation.value = Location(1.0, 1.0)
+        locationTracker.currentLocation = Location(1.0, 1.0)
         scheduler.runForeground(0)
         assertVisible(
             withText(
@@ -175,7 +168,7 @@ class GeoPolyFragmentTest {
             )
         )
 
-        currentLocation.value = Location(2.0, 2.0)
+        locationTracker.currentLocation = Location(2.0, 2.0)
         scheduler.runForeground(DEFAULT_RECORDING_INTERVAL)
         assertVisible(
             withText(
@@ -191,7 +184,7 @@ class GeoPolyFragmentTest {
         }
 
         startInput(R.id.automatic_mode)
-        currentLocation.value = Location(1.0, 1.0)
+        locationTracker.currentLocation = Location(1.0, 1.0)
         assertVisible(
             withText(
                 application.getString(string.collection_status_auto_seconds_accuracy, 0, 20, 10)
@@ -212,7 +205,7 @@ class GeoPolyFragmentTest {
             )
         )
 
-        currentLocation.value = Location(1.0, 1.0)
+        locationTracker.currentLocation = Location(1.0, 1.0)
         scheduler.runForeground(0)
         assertVisible(
             withText(
@@ -221,7 +214,7 @@ class GeoPolyFragmentTest {
         )
 
         Interactions.clickOn(withContentDescription(string.pause_location_recording))
-        currentLocation.value = Location(2.0, 2.0)
+        locationTracker.currentLocation = Location(2.0, 2.0)
         scheduler.runForeground(DEFAULT_RECORDING_INTERVAL)
         assertVisible(
             withText(
@@ -458,7 +451,7 @@ class GeoPolyFragmentTest {
         }
 
         startInput(R.id.automatic_mode)
-        verify(locationTracker).start(eq(true), any())
+        assertThat(locationTracker.retainMockAccuracy, equalTo(true))
     }
 
     @Test
@@ -474,7 +467,7 @@ class GeoPolyFragmentTest {
         }
 
         startInput(R.id.automatic_mode)
-        verify(locationTracker).start(eq(false), any())
+        assertThat(locationTracker.retainMockAccuracy, equalTo(false))
     }
 
     @Test
@@ -795,9 +788,9 @@ class GeoPolyFragmentTest {
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
 
         startInput(R.id.automatic_mode)
-        currentLocation.value = Location(1.0, 1.0, 1.0, 1f)
+        locationTracker.currentLocation = Location(1.0, 1.0, 1.0, 1f)
         scheduler.runForeground(0)
-        currentLocation.value = Location(2.0, 2.0, 1.0, 1f)
+        locationTracker.currentLocation = Location(2.0, 2.0, 1.0, 1f)
         scheduler.runForeground(DEFAULT_RECORDING_INTERVAL)
 
         val result = resultListener.getAll().last()
