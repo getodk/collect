@@ -928,7 +928,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                     .zIndex(1)
                     .width(lineDescription.getStrokeWidth())
                     .addAll(latLngs)
-                    .clickable(true)
                 );
             } else {
                 polyline.setPoints(latLngs);
@@ -1006,7 +1005,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                 latLngs.add(marker.getPosition());
             }
             if (markers.isEmpty()) {
-                clearPolyline();
+                clearPolygon();
             } else if (polygon == null) {
                 polygon = map.addPolygon(new PolygonOptions()
                         .strokeColor(polygonDescription.getStrokeColor())
@@ -1014,7 +1013,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                         .strokeWidth(polygonDescription.getStrokeWidth())
                         .fillColor(polygonDescription.getFillColor())
                         .addAll(latLngs)
-                        .clickable(true)
                 );
             } else {
                 polygon.setPoints(latLngs);
@@ -1023,7 +1021,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
         @Override
         public void dispose() {
-            clearPolyline();
+            clearPolygon();
             for (Marker marker : markers) {
                 marker.remove();
             }
@@ -1038,7 +1036,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             return points;
         }
 
-        private void clearPolyline() {
+        private void clearPolygon() {
             if (polygon != null) {
                 polygon.remove();
                 polygon = null;
