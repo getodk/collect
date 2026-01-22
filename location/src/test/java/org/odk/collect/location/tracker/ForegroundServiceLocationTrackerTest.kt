@@ -70,7 +70,7 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
         locationTracker.start(updateInterval = null)
         runBackground()
 
-        assertThat(locationClient.getUpdateIntervals(), equalTo(null))
+        assertThat(locationClient.getUpdateInterval(), equalTo(null))
     }
 
     @Test
@@ -78,7 +78,7 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
         locationTracker.start(updateInterval = 1000)
         runBackground()
 
-        assertThat(locationClient.getUpdateIntervals(), equalTo(1000L))
+        assertThat(locationClient.getUpdateInterval(), equalTo(1000L))
     }
 
     @Test
@@ -90,7 +90,7 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
         runBackground()
 
         assertThat(locationClient.getRetainMockAccuracy(), equalTo(true))
-        assertThat(locationClient.getUpdateIntervals(), equalTo(2000L))
+        assertThat(locationClient.getUpdateInterval(), equalTo(2000L))
     }
 }
 
@@ -150,7 +150,7 @@ private class FakeLocationClient : LocationClient {
         TODO("Not yet implemented")
     }
 
-    override fun setUpdateIntervals(updateInterval: Long) {
+    override fun setUpdateInterval(updateInterval: Long) {
         this@FakeLocationClient.updateInterval = updateInterval
     }
 
@@ -164,7 +164,7 @@ private class FakeLocationClient : LocationClient {
         return retainMockAccuracy
     }
 
-    fun getUpdateIntervals(): Long? {
+    fun getUpdateInterval(): Long? {
         return updateInterval
     }
 }

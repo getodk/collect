@@ -101,7 +101,7 @@ public interface LocationClient {
      *
      * @param updateInterval How often we would like updates from the LocationClient (inexact).
      */
-    void setUpdateIntervals(long updateInterval);
+    void setUpdateInterval(long updateInterval);
 
     /**
      * An interface for listening to status changes on a LocaitonClient.

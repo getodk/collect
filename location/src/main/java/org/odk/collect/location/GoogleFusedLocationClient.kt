@@ -72,7 +72,7 @@ class GoogleFusedLocationClient(
         return locationListener != null
     }
 
-    override fun setUpdateIntervals(updateInterval: Long) {
+    override fun setUpdateInterval(updateInterval: Long) {
         this.updateInterval = updateInterval
     }
 
