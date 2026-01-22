@@ -86,7 +86,7 @@ private fun PlacementFromSnackbarInfo(onDone: () -> Unit) {
 @Composable
 private fun PlacementFromInfoButtonInfo(onDone: () -> Unit) {
     InfoContent(
-        InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.tap_to_add_a_point_info_item)),
+        InfoDialog.InfoItem(Icons.Filled.AddLocation, stringResource(string.tap_to_add_a_point_info_item)),
         InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
         InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
         InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_entire_shape_info_item)),
@@ -108,7 +108,7 @@ private fun ManualOrAutomaticFromSnackbarInfo(onDone: () -> Unit) {
 @Composable
 private fun ManualOrAutomaticFromInfoButtonInfo(onDone: () -> Unit) {
     InfoContent(
-        InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.tap_to_add_a_point_info_item)),
+        InfoDialog.InfoItem(Icons.Filled.AddLocation, stringResource(string.tap_to_add_a_point_info_item)),
         InfoDialog.InfoItem(Icons.AutoMirrored.Filled.DirectionsWalk, stringResource(string.physically_move_to_correct_info_item)),
         InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
         InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
