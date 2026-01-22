@@ -24,6 +24,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils
+import org.odk.collect.geo.GeoUtils.toLocation
 import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.GeopolyLayoutBinding
 import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
@@ -345,6 +346,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     override fun startInput() {
         inputActive = true
         if (recordingEnabled && recordingAutomatic) {
+            locationTracker.warm(map!!.getGpsLocation()?.toLocation())
             viewModel.startRecording(
                 ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex],
                 INTERVAL_OPTIONS[intervalIndex].toLong() * 1000
