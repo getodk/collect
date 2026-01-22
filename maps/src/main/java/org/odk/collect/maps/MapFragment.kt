@@ -129,12 +129,15 @@ interface MapFragment {
      * runOnGpsLocationReady(), and every GPS fix will invoke the callback set
      * by setGpsLocationListener().
      */
+    @Deprecated(message = "Location should be handled outside of MapFragment")
     fun setGpsLocationEnabled(enabled: Boolean)
 
     /** Gets the last GPS location fix, or null if there hasn't been one.  */
+    @Deprecated(message = "Location should be handled outside of MapFragment")
     fun getGpsLocation(): MapPoint?
 
     /** Gets the provider of the last fix, or null if there hasn't been one.  */
+    @Deprecated(message = "Location should be handled outside of MapFragment")
     fun getLocationProvider(): String?
 
     /**
@@ -145,14 +148,17 @@ interface MapFragment {
      * Activities that set callbacks should call setGpsLocationEnabled(false)
      * in their onStop() or onDestroy() methods, to prevent invalid callbacks.
      */
+    @Deprecated(message = "Location should be handled outside of MapFragment")
     fun runOnGpsLocationReady(listener: ReadyListener)
 
     /**
      * Sets or clears the callback for GPS location updates.  This callback
      * will only be invoked while GPS is enabled with setGpsLocationEnabled().
      */
+    @Deprecated(message = "Location should be handled outside of MapFragment")
     fun setGpsLocationListener(listener: PointListener?)
 
+    @Deprecated(message = "Location should be handled outside of MapFragment")
     fun setRetainMockAccuracy(retainMockAccuracy: Boolean)
 
     /**
