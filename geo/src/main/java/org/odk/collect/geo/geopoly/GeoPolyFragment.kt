@@ -156,9 +156,9 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val mapFragment: MapFragment =
-            (view.findViewById<View?>(R.id.map_container) as FragmentContainerView).getFragment()
-        mapFragment.init({ initMap(it, GeopolyLayoutBinding.bind(view)) }, { this.cancel() })
+        val binding = GeopolyLayoutBinding.bind(view)
+        val mapFragment: MapFragment = binding.mapContainer.getFragment()
+        mapFragment.init({ initMap(it, binding) }, { this.cancel() })
 
         val snackbar = SnackbarUtils.make(requireView(), "", Snackbar.LENGTH_INDEFINITE)
         invalidMessage.observe(viewLifecycleOwner) {
@@ -168,6 +168,8 @@ class GeoPolyFragment @JvmOverloads constructor(
             } else {
                 snackbar.dismiss()
             }
+
+            binding.save.isEnabled = !readOnly && it == null
         }
 
         onBackPressedDispatcher().addCallback(viewLifecycleOwner, onBackPressedCallback)
@@ -483,7 +485,6 @@ class GeoPolyFragment @JvmOverloads constructor(
             binding.play.isEnabled = false
             binding.backspace.isEnabled = false
             binding.clear.isEnabled = false
-            binding.save.isEnabled = false
         }
 
         // Settings dialog

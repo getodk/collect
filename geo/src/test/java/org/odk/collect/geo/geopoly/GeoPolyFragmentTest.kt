@@ -688,6 +688,24 @@ class GeoPolyFragmentTest {
     }
 
     @Test
+    fun disablesSaveButtonWhenInvalid() {
+        val invalidMessage = MutableLiveData<String?>(null)
+
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                invalidMessage = invalidMessage
+            )
+        }
+
+        invalidMessage.value = "Blah"
+        Assertions.assertDisabled(withContentDescription(string.save))
+
+        invalidMessage.value = null
+        Assertions.assertEnabled(withContentDescription(string.save))
+    }
+
+    @Test
     fun whenOutputModeIsGeoTrace_setsChangeResultWheneverAPointIsAddedAfterTheFirst() {
         val scenario = fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
