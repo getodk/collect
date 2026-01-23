@@ -33,6 +33,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
+import org.odk.collect.android.widgets.viewmodels.QuestionViewModel
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
@@ -50,12 +51,19 @@ class GeoPolyDialogFragmentTest {
     )
     private val formEntryViewModel = mock<FormEntryViewModel> {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
+    }
+
+    private val questionViewModel = mock<QuestionViewModel> {
         on { constraintValidationResult } doReturn constraintValidationResult
     }
 
     private val viewModelFactory = object : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-            return formEntryViewModel as T
+            return when (modelClass) {
+                FormEntryViewModel::class.java -> formEntryViewModel as T
+                QuestionViewModel::class.java -> questionViewModel as T
+                else -> throw IllegalArgumentException()
+            }
         }
     }
 
@@ -333,7 +341,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).validateAnswerConstraint(prompt.index, geoTraceOf(answer))
+        verify(questionViewModel).validate(prompt.index, geoTraceOf(answer))
     }
 
     @Test
@@ -354,7 +362,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel).validateAnswerConstraint(prompt.index, geoShapeOf(answer))
+        verify(questionViewModel).validate(prompt.index, geoShapeOf(answer))
     }
 
     @Test
@@ -390,7 +398,7 @@ class GeoPolyDialogFragmentTest {
             )
         }
 
-        verify(formEntryViewModel, never()).validateAnswerConstraint(prompt.index, geoTraceOf(answer))
+        verify(questionViewModel, never()).validate(prompt.index, geoTraceOf(answer))
     }
 
     @Test

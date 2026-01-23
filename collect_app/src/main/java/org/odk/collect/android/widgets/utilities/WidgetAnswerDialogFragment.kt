@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.data.IAnswerData
@@ -16,6 +17,7 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.WidgetAnswerDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
+import org.odk.collect.android.widgets.viewmodels.QuestionViewModel
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import kotlin.reflect.KClass
@@ -26,18 +28,18 @@ abstract class WidgetAnswerDialogFragment<T : Fragment>(
 ) : MaterialFullScreenDialogFragment() {
 
     private val formEntryViewModel: FormEntryViewModel by activityViewModels { viewModelFactory }
+    private val questionViewModel: QuestionViewModel by viewModels { viewModelFactory }
     private val prompt: FormEntryPrompt by lazy {
         formEntryViewModel.getQuestionPrompt(requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex)
     }
     protected val constraintValidationResult by lazy {
-        formEntryViewModel.constraintValidationResult
+        questionViewModel.constraintValidationResult
     }
 
     abstract fun onCreateFragment(prompt: FormEntryPrompt): T
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(type) { onCreateFragment(prompt) }
             .build()
@@ -73,7 +75,7 @@ abstract class WidgetAnswerDialogFragment<T : Fragment>(
     }
 
     fun onValidate(answer: IAnswerData?) {
-        formEntryViewModel.validateAnswerConstraint(prompt.index, answer)
+        questionViewModel.validate(prompt.index, answer)
     }
 
     fun onAnswer(answer: IAnswerData?) {

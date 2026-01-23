@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.javarosa.core.model.Constants.CONTROL_SELECT_ONE;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -454,26 +453,6 @@ public class FormEntryViewModelTest {
         viewModel.answerQuestion(formIndex, new StringData("answer"));
         scheduler.flush(true);
         assertThat(formController.getAnswer(formIndex.getReference()).getValue(), equalTo("answer"));
-    }
-
-    @Test
-    public void validateAnswerConstraint_updatesConstraintValidationResult_ifIsIsFailedValidationResult() {
-        FormDef formDef = mock();
-        when(formDef.evaluateConstraint(any(), any())).thenReturn(false);
-        formController.setFormDef(formDef);
-
-        TreeReference reference = new TreeReference();
-        reference.add("blah", TreeReference.INDEX_UNBOUND);
-        FormIndex formIndex = new FormIndex(null, 1, 1, reference);
-        FormEntryPrompt prompt = new MockFormEntryPromptBuilder().build();
-        formController.setPrompt(formIndex, prompt);
-
-        FailedValidationResult failedValidationResult = new FailedValidationResult(formIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
-        formController.setFailedConstraint(failedValidationResult);
-
-        viewModel.validateAnswerConstraint(formIndex, new StringData("answer"));
-        scheduler.flush(true);
-        assertThat(viewModel.getConstraintValidationResult().getValue().getValue(), equalTo(failedValidationResult));
     }
 
     @Test

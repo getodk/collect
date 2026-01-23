@@ -65,8 +65,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private final MutableLiveData<Triple<FormIndex, FormIndex, FailedValidationResult>> currentIndex = new MutableLiveData<>(null);
     private final MutableLiveData<Consumable<ValidationResult>>
             validationResult = new MutableLiveData<>(new Consumable<>(null));
-    private final MutableLiveData<Consumable<ValidationResult>>
-            constraintValidationResult = new MutableLiveData<>(new Consumable<>(null));
     @NonNull
     private final FormSessionRepository formSessionRepository;
     private final String sessionId;
@@ -129,10 +127,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     public LiveData<Consumable<ValidationResult>> getValidationResult() {
         return validationResult;
-    }
-
-    public LiveData<Consumable<ValidationResult>> getConstraintValidationResult() {
-        return constraintValidationResult;
     }
 
     public NonNullLiveData<Boolean> isLoading() {
@@ -395,13 +389,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         formSessionRepository.clear(sessionId);
         ReferenceManager.instance().reset();
         changeLocks.getFormsLock().unlock(FORM_ENTRY_TOKEN);
-    }
-
-    public void validateAnswerConstraint(FormIndex index, IAnswerData answer) {
-        worker.immediate(() -> {
-            ValidationResult result = formController.validateAnswerConstraint(index, answer);
-            constraintValidationResult.postValue(new Consumable<>(result));
-        });
     }
 
     public void validateForm() {
