@@ -331,7 +331,11 @@ public class FormHierarchyFragment extends Fragment {
             formHierarchyViewModel.setCurrentIndex(formController.getFormIndex());
 
             calculateElementsToDisplay(formController, groupIcon, groupPathTextView);
-            recyclerView.setAdapter(new HierarchyListAdapter(formHierarchyViewModel.getElementsToDisplay(), this::onElementClick));
+            recyclerView.setAdapter(new HierarchyListAdapter(
+                    formHierarchyViewModel.getElementsToDisplay(),
+                    new ViewModelProvider(requireActivity(), viewModelFactory),
+                    this::onElementClick)
+            );
 
             formController.jumpToIndex(formHierarchyViewModel.getCurrentIndex());
 
@@ -426,7 +430,8 @@ public class FormHierarchyFragment extends Fragment {
                                     fp.getIndex(),
                                     HierarchyItemType.QUESTION,
                                     FormEntryPromptUtils.styledQuestionText(label, fp.isRequired()),
-                                    answerDisplay
+                                    answerDisplay,
+                                    fp
                             )
                     );
                     break;

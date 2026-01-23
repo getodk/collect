@@ -231,7 +231,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
                 .build();
 
         AudioPlayer audioPlayer = mock();
-        dependencies = new QuestionWidget.Dependencies(audioPlayer);
+        dependencies = new QuestionWidget.Dependencies(audioPlayer, null);
         populateRecyclerView(getWidget());
 
         getChoiceView(getWidget(), 0).findViewById(R.id.audioButton).performClick();

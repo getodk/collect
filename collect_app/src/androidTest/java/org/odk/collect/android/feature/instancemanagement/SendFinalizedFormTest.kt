@@ -1,5 +1,6 @@
 package org.odk.collect.android.feature.instancemanagement
 
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -23,11 +24,13 @@ import org.odk.collect.androidtest.RecordedIntentsRule
 class SendFinalizedFormTest {
 
     private val testDependencies = TestDependencies()
+    private val composeRule = createEmptyComposeRule()
     private val rule = CollectTestRule(useDemoProject = false)
 
     @get:Rule
     val chain: RuleChain = chain(testDependencies)
         .around(RecordedIntentsRule())
+        .around(composeRule)
         .around(rule)
 
     @Test
@@ -38,7 +41,7 @@ class SendFinalizedFormTest {
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
             .clickSendFinalizedForm(1)
             .clickOnForm("One Question")
-            .assertText("52")
+            .assertText("52", composeRule)
     }
 
     @Test
@@ -74,7 +77,7 @@ class SendFinalizedFormTest {
             .pressBack(MainMenuPage())
             .clickViewSentForm(1)
             .clickOnForm("One Question")
-            .assertText("123")
+            .assertText("123", composeRule)
             .assertText(org.odk.collect.strings.R.string.exit)
     }
 
@@ -96,7 +99,7 @@ class SendFinalizedFormTest {
             .assertNumberOfFinalizedForms(1)
             .clickViewSentForm(1)
             .clickOnForm("One Question")
-            .assertText("123")
+            .assertText("123", composeRule)
     }
 
     @Test

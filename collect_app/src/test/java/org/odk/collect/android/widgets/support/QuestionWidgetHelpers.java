@@ -22,7 +22,7 @@ public final class QuestionWidgetHelpers {
     }
 
     public static QuestionWidget.Dependencies widgetDependencies() {
-        return new QuestionWidget.Dependencies(mock());
+        return new QuestionWidget.Dependencies(mock(), mock());
     }
 
     public static <T extends QuestionWidget> WidgetValueChangedListener mockValueChangedListener(T widget) {

@@ -5,6 +5,10 @@ import android.app.Application
 import android.content.pm.ActivityInfo
 import android.view.View
 import androidx.annotation.StringRes
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
@@ -131,8 +135,13 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertText(text: String): T {
-        Assertions.assertVisible(withText(text))
+    @JvmOverloads
+    fun assertText(text: String, composeRule: ComposeTestRule? = null): T {
+        if (composeRule != null) {
+            composeRule.onNodeWithText(text).assertIsDisplayed()
+        } else {
+            Assertions.assertVisible(withText(text))
+        }
         return this as T
     }
 
@@ -191,13 +200,18 @@ abstract class Page<T : Page<T>> {
         return assertTextDoesNotExist(getTranslatedString(string))
     }
 
-    fun assertTextDoesNotExist(text: String?): T {
-        onView(
-            allOf(
-                withText(text),
-                withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
-            )
-        ).check(doesNotExist())
+    @JvmOverloads
+    fun assertTextDoesNotExist(text: String?, composeRule: ComposeTestRule? = null): T {
+        if (composeRule != null) {
+            composeRule.onNodeWithText(text!!).assertIsNotDisplayed()
+        } else {
+            onView(
+                allOf(
+                    withText(text),
+                    withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
+                )
+            ).check(doesNotExist())
+        }
         return this as T
     }
 
