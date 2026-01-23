@@ -459,8 +459,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage assertBackgroundLocationSnackbarShown() {
-        onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(withText(String.format(ApplicationProvider.getApplicationContext().getString(org.odk.collect.strings.R.string.background_location_enabled), "⋮"))));
+        checkIsSnackbarWithMessageDisplayed(String.format(ApplicationProvider.getApplicationContext().getString(org.odk.collect.strings.R.string.background_location_enabled), "⋮"));
         return this;
     }
 

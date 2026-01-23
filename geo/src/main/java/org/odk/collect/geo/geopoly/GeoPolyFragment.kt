@@ -237,9 +237,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
 
         originalPoly = inputPolygon
-        if (inputActive && !readOnly) {
-            startInput()
-        }
 
         map!!.setClickListener(this::onClick)
         // Also allow long press to place point to match prior versions
