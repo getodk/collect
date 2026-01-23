@@ -8,12 +8,10 @@ import androidx.activity.OnBackPressedDispatcher
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -160,18 +158,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         val mapFragment: MapFragment = binding.mapContainer.getFragment()
         mapFragment.init({ initMap(it, binding) }, { this.cancel() })
 
-        val snackbar = SnackbarUtils.make(requireView(), "", Snackbar.LENGTH_INDEFINITE)
-        invalidMessage.observe(viewLifecycleOwner) {
-            if (it != null) {
-                snackbar.setText(it)
-                SnackbarUtils.show(snackbar)
-            } else {
-                snackbar.dismiss()
-            }
-
-            binding.save.isEnabled = !readOnly && it == null
-        }
-
         onBackPressedDispatcher().addCallback(viewLifecycleOwner, onBackPressedCallback)
     }
 
@@ -261,12 +247,24 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
         }
 
-        val pointsAndInvalid = viewModel.points.asLiveData().zip(invalidMessage.map { it != null })
-        pointsAndInvalid.observe(viewLifecycleOwner) { (points, invalid) ->
-            val color = if (invalid) {
-                MapConsts.DEFAULT_ERROR_COLOR
+        val snackbar = SnackbarUtils.make(requireView(), "", Snackbar.LENGTH_INDEFINITE)
+        val viewData = viewModel.points.asLiveData().zip(invalidMessage)
+        viewData.observe(viewLifecycleOwner) { (points, invalidMessage) ->
+            val isValid = invalidMessage == null
+
+            if (invalidMessage != null) {
+                snackbar.setText(invalidMessage)
+                SnackbarUtils.show(snackbar)
             } else {
+                snackbar.dismiss()
+            }
+
+            binding.save.isEnabled = !readOnly && isValid
+
+            val color = if (isValid) {
                 MapConsts.DEFAULT_STROKE_COLOR
+            } else {
+                MapConsts.DEFAULT_ERROR_COLOR
             }
 
             if (outputMode == OutputMode.GEOSHAPE) {
@@ -275,7 +273,7 @@ class GeoPolyFragment @JvmOverloads constructor(
                     draggable = !readOnly,
                     strokeColor = color,
                     fillColor = color,
-                    highlightLastPoint = !invalid
+                    highlightLastPoint = isValid
                 )
 
                 if (featureId == -1) {
@@ -288,7 +286,7 @@ class GeoPolyFragment @JvmOverloads constructor(
                     points,
                     draggable = !readOnly,
                     strokeColor = color,
-                    highlightLastPoint = !invalid
+                    highlightLastPoint = isValid
                 )
 
                 if (featureId == -1) {
