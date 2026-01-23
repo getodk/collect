@@ -14,6 +14,8 @@
 
 package org.odk.collect.googlemaps;
 
+import static org.odk.collect.maps.markers.MarkerIconDescriptionKt.getMarkerIconDescriptionForPoint;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
@@ -57,7 +59,6 @@ import org.odk.collect.googlemaps.scaleview.MapScaleView;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
-import org.odk.collect.maps.MapConsts;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapViewModel;
@@ -731,15 +732,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }).get(MapViewModel.class);
     }
 
-    @NonNull
-    private Marker getLinePointMarker(MapPoint point, float strokeWidth, boolean isLast) {
-        if (isLast) {
-            return createMarker(requireContext(), new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(strokeWidth, MapConsts.DEFAULT_HIGHLIGHT_COLOR)), map);
-        } else {
-            return createMarker(requireContext(), new MarkerDescription(point, true, CENTER, new MarkerIconDescription.LinePoint(strokeWidth, MapConsts.DEFAULT_STROKE_COLOR)), map);
-        }
-    }
-
     /**
      * A MapFeature is a physical feature on a map, such as a point, a road,
      * a building, a region, etc.  It is presented to the user as one editable
@@ -890,7 +882,9 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             List<MapPoint> points = lineDescription.getPoints();
             for (int i = 0; i < points.size(); i++) {
                 MapPoint point = points.get(i);
-                markers.add(getLinePointMarker(point, lineDescription.getStrokeWidth(), i == points.size() - 1));
+                MarkerIconDescription iconDescription = getMarkerIconDescriptionForPoint(lineDescription, i == lineDescription.getPoints().size() - 1);
+                Marker marker = createMarker(requireContext(), new MarkerDescription(point, true, CENTER, iconDescription), map);
+                markers.add(marker);
             }
 
             update();
@@ -977,7 +971,9 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             List<MapPoint> points = polygonDescription.getPoints();
             for (int i = 0; i < points.size(); i++) {
                 MapPoint point = points.get(i);
-                markers.add(getLinePointMarker(point, polygonDescription.getStrokeWidth(), i == polygonDescription.getPoints().size() - 1));
+                MarkerIconDescription iconDescription = getMarkerIconDescriptionForPoint(polygonDescription, i == polygonDescription.getPoints().size() - 1);
+                Marker marker = createMarker(requireContext(), new MarkerDescription(point, true, CENTER, iconDescription), map);
+                markers.add(marker);
             }
 
             update();
