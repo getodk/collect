@@ -1,6 +1,6 @@
 package org.odk.collect.maps
 
-import org.odk.collect.androidshared.utils.toColorInt
+import org.odk.collect.androidshared.utils.sanitizeToColorInt
 
 data class LineDescription(
     val points: List<MapPoint> = emptyList(),
@@ -24,7 +24,7 @@ data class LineDescription(
     }
 
     fun getStrokeColor(): Int {
-        val customColor = strokeColor?.toColorInt()
+        val customColor = strokeColor?.sanitizeToColorInt()
         return customColor ?: MapConsts.DEFAULT_STROKE_COLOR
     }
 }

@@ -1,7 +1,7 @@
 package org.odk.collect.maps
 
 import androidx.core.graphics.ColorUtils
-import org.odk.collect.androidshared.utils.toColorInt
+import org.odk.collect.androidshared.utils.sanitizeToColorInt
 
 data class PolygonDescription(
     val points: List<MapPoint> = emptyList(),
@@ -25,12 +25,12 @@ data class PolygonDescription(
     }
 
     fun getStrokeColor(): Int {
-        val customColor = strokeColor?.toColorInt()
+        val customColor = strokeColor?.sanitizeToColorInt()
         return customColor ?: MapConsts.DEFAULT_STROKE_COLOR
     }
 
     fun getFillColor(): Int {
-        val customColor = fillColor?.toColorInt()?.let {
+        val customColor = fillColor?.sanitizeToColorInt()?.let {
             ColorUtils.setAlphaComponent(
                 it,
                 MapConsts.DEFAULT_FILL_COLOR_OPACITY
