@@ -645,10 +645,12 @@ class GeoPolyFragmentTest {
         invalidMessage.value = "blah"
         val errorPolyLine = mapFragment.getPolyLines()[0]
         assertThat(errorPolyLine.getStrokeColor(), equalTo(MapConsts.DEFAULT_ERROR_COLOR))
+        assertThat(errorPolyLine.highlightLastPoint, equalTo(false))
 
         invalidMessage.value = null
         val normalPolyLine = mapFragment.getPolyLines()[0]
         assertThat(normalPolyLine.getStrokeColor(), equalTo(MapConsts.DEFAULT_STROKE_COLOR))
+        assertThat(normalPolyLine.highlightLastPoint, equalTo(true))
     }
 
     @Test
@@ -669,6 +671,7 @@ class GeoPolyFragmentTest {
         invalidMessage.value = "blah"
         val errorPolyLine = mapFragment.getPolygons()[0]
         assertThat(errorPolyLine.getStrokeColor(), equalTo(MapConsts.DEFAULT_ERROR_COLOR))
+        assertThat(errorPolyLine.highlightLastPoint, equalTo(false))
         assertThat(
             errorPolyLine.getFillColor().opaque(),
             equalTo(MapConsts.DEFAULT_ERROR_COLOR.opaque())
@@ -677,6 +680,7 @@ class GeoPolyFragmentTest {
         invalidMessage.value = null
         val normalPolyLine = mapFragment.getPolygons()[0]
         assertThat(normalPolyLine.getStrokeColor(), equalTo(MapConsts.DEFAULT_STROKE_COLOR))
+        assertThat(normalPolyLine.highlightLastPoint, equalTo(true))
         assertThat(
             normalPolyLine.getFillColor().opaque(),
             equalTo(MapConsts.DEFAULT_STROKE_COLOR.opaque())

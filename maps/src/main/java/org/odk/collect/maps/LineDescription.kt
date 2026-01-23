@@ -4,6 +4,7 @@ data class LineDescription(
     val points: List<MapPoint> = emptyList(),
     private val strokeWidth: String? = null,
     private val strokeColor: Int? = null,
+    val highlightLastPoint: Boolean = false,
     val draggable: Boolean = false,
     @Deprecated("Use PolygonDescription instead") val closed: Boolean = false
 ) {

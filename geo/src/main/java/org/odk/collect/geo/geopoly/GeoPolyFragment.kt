@@ -272,7 +272,8 @@ class GeoPolyFragment @JvmOverloads constructor(
                     points,
                     draggable = !readOnly,
                     strokeColor = color,
-                    fillColor = color
+                    fillColor = color,
+                    highlightLastPoint = !invalid
                 )
 
                 if (featureId == -1) {
@@ -284,7 +285,8 @@ class GeoPolyFragment @JvmOverloads constructor(
                 val lineDescription = LineDescription(
                     points,
                     draggable = !readOnly,
-                    strokeColor = color
+                    strokeColor = color,
+                    highlightLastPoint = !invalid
                 )
 
                 if (featureId == -1) {

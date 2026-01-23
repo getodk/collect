@@ -28,7 +28,7 @@ sealed interface MarkerIconDescription {
 }
 
 fun LineDescription.getMarkerIconDescriptionForPoint(isLast: Boolean): MarkerIconDescription {
-    val color = if (isLast) {
+    val color = if (highlightLastPoint && isLast) {
         MapConsts.DEFAULT_HIGHLIGHT_COLOR
     } else {
         getStrokeColor()
@@ -38,7 +38,7 @@ fun LineDescription.getMarkerIconDescriptionForPoint(isLast: Boolean): MarkerIco
 }
 
 fun PolygonDescription.getMarkerIconDescriptionForPoint(isLast: Boolean): MarkerIconDescription {
-    val color = if (isLast) {
+    val color = if (highlightLastPoint && isLast) {
         MapConsts.DEFAULT_HIGHLIGHT_COLOR
     } else {
         getStrokeColor()
