@@ -23,6 +23,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidshared.utils.opaque
 import org.odk.collect.androidtest.FragmentScenarioExtensions.setFragmentResultListener
 import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
@@ -36,6 +37,7 @@ import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
+import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
@@ -624,6 +626,61 @@ class GeoPolyFragmentTest {
 
         invalidMessage.value = null
         assertNotVisible(withText(message))
+    }
+
+    @Test
+    fun changesPolyLineColorBasedOnInvalidMessage() {
+        val invalidMessage = MutableLiveData<String?>(null)
+
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                invalidMessage = invalidMessage
+            )
+        }
+
+        startInput(R.id.placement_mode)
+        mapFragment.click(MapPoint(0.0, 0.0))
+
+        invalidMessage.value = "blah"
+        val errorPolyLine = mapFragment.getPolyLines()[0]
+        assertThat(errorPolyLine.getStrokeColor(), equalTo(MapConsts.DEFAULT_ERROR_COLOR))
+
+        invalidMessage.value = null
+        val normalPolyLine = mapFragment.getPolyLines()[0]
+        assertThat(normalPolyLine.getStrokeColor(), equalTo(MapConsts.DEFAULT_STROKE_COLOR))
+    }
+
+    @Test
+    fun changesPolygonColorBasedOnInvalidMessage() {
+        val invalidMessage = MutableLiveData<String?>(null)
+
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                outputMode = OutputMode.GEOSHAPE,
+                invalidMessage = invalidMessage
+            )
+        }
+
+        startInput(R.id.placement_mode)
+        mapFragment.click(MapPoint(0.0, 0.0))
+
+        invalidMessage.value = "blah"
+        val errorPolyLine = mapFragment.getPolygons()[0]
+        assertThat(errorPolyLine.getStrokeColor(), equalTo(MapConsts.DEFAULT_ERROR_COLOR))
+        assertThat(
+            errorPolyLine.getFillColor().opaque(),
+            equalTo(MapConsts.DEFAULT_ERROR_COLOR.opaque())
+        )
+
+        invalidMessage.value = null
+        val normalPolyLine = mapFragment.getPolygons()[0]
+        assertThat(normalPolyLine.getStrokeColor(), equalTo(MapConsts.DEFAULT_STROKE_COLOR))
+        assertThat(
+            normalPolyLine.getFillColor().opaque(),
+            equalTo(MapConsts.DEFAULT_STROKE_COLOR.opaque())
+        )
     }
 
     @Test

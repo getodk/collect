@@ -1,6 +1,7 @@
 package org.odk.collect.androidshared.utils
 
 import androidx.annotation.ColorInt
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.toColorInt
 
 @ColorInt
@@ -18,6 +19,10 @@ fun String.sanitizeToColorInt() = try {
     sanitizedColor.toColorInt()
 } catch (e: IllegalArgumentException) {
     null
+}
+
+fun Int.opaque(): Int {
+    return ColorUtils.setAlphaComponent(this, 100)
 }
 
 private fun shorthandToLonghandHexColor(shorthandColor: String): String {

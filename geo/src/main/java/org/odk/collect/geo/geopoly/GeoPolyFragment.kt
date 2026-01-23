@@ -13,9 +13,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import org.odk.collect.androidshared.livedata.LiveDataExt.zip
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -32,6 +34,7 @@ import org.odk.collect.geo.geopoint.LocationAccuracy.Unacceptable
 import org.odk.collect.geo.geopoly.GeoPolySettingsDialogFragment.SettingsDialogCallback
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.LineDescription
+import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
@@ -256,11 +259,20 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
         }
 
-        viewModel.points.asLiveData().observe(viewLifecycleOwner) { points ->
+        val pointsAndInvalid = viewModel.points.asLiveData().zip(invalidMessage.map { it != null })
+        pointsAndInvalid.observe(viewLifecycleOwner) { (points, invalid) ->
+            val color = if (invalid) {
+                MapConsts.DEFAULT_ERROR_COLOR
+            } else {
+                MapConsts.DEFAULT_STROKE_COLOR
+            }
+
             if (outputMode == OutputMode.GEOSHAPE) {
                 val polygonDescription = PolygonDescription(
                     points,
-                    draggable = !readOnly
+                    draggable = !readOnly,
+                    strokeColor = color,
+                    fillColor = color
                 )
 
                 if (featureId == -1) {
@@ -272,7 +284,7 @@ class GeoPolyFragment @JvmOverloads constructor(
                 val lineDescription = LineDescription(
                     points,
                     draggable = !readOnly,
-                    closed = outputMode == OutputMode.GEOSHAPE
+                    strokeColor = color
                 )
 
                 if (featureId == -1) {
