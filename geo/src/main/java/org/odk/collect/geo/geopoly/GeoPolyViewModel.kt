@@ -12,6 +12,7 @@ import org.odk.collect.maps.MapPoint
 class GeoPolyViewModel(
     outputMode: OutputMode,
     points: List<MapPoint>,
+    private val retainMockAccuracy: Boolean,
     private val locationTracker: LocationTracker,
     private val scheduler: Scheduler
 ) : ViewModel() {
@@ -46,7 +47,7 @@ class GeoPolyViewModel(
         _points.value = points
     }
 
-    fun startRecording(retainMockAccuracy: Boolean, accuracyThreshold: Int, interval: Long) {
+    fun startRecording(accuracyThreshold: Int, interval: Long) {
         this.accuracyThreshold = accuracyThreshold
         locationTracker.start(retainMockAccuracy)
         recording = scheduler.repeat({ recordPoint(accuracyThreshold) }, interval)

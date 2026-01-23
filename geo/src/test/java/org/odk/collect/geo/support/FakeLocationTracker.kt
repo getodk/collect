@@ -36,4 +36,8 @@ class FakeLocationTracker : LocationTracker {
         isStarted = false
         _currentLocation.value = null
     }
+
+    override fun warm(location: Location?) {
+        currentLocation = location
+    }
 }

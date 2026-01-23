@@ -92,4 +92,8 @@ object GeoUtils {
     fun GeoPointData.toMapPoint(): MapPoint {
         return MapPoint(this.getPart(0), this.getPart(1), this.getPart(2), this.getPart(3))
     }
+
+    fun MapPoint.toLocation(): org.odk.collect.location.Location {
+        return org.odk.collect.location.Location(latitude, longitude, altitude, accuracy.toFloat())
+    }
 }
