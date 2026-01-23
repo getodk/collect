@@ -70,7 +70,7 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
         locationTracker.start(updateInterval = null)
         runBackground()
 
-        assertThat(locationClient.getUpdateIntervals(), equalTo(null))
+        assertThat(locationClient.getUpdateInterval(), equalTo(null))
     }
 
     @Test
@@ -78,7 +78,7 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
         locationTracker.start(updateInterval = 1000)
         runBackground()
 
-        assertThat(locationClient.getUpdateIntervals(), equalTo(Pair(1000L, 1000L)))
+        assertThat(locationClient.getUpdateInterval(), equalTo(1000L))
     }
 
     @Test
@@ -90,7 +90,7 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
         runBackground()
 
         assertThat(locationClient.getRetainMockAccuracy(), equalTo(true))
-        assertThat(locationClient.getUpdateIntervals(), equalTo(Pair(2000L, 2000L)))
+        assertThat(locationClient.getUpdateInterval(), equalTo(2000L))
     }
 }
 
@@ -100,7 +100,7 @@ private class FakeLocationClient : LocationClient {
     private var locationListener: LocationListener? = null
     private var locationClientListener: LocationClientListener? = null
     private var retainMockAccuracy: Boolean = false
-    private var updateIntervals: Pair<Long, Long>? = null
+    private var updateInterval: Long? = null
 
     override fun start(listener: LocationClientListener) {
         setListener(listener)
@@ -150,8 +150,8 @@ private class FakeLocationClient : LocationClient {
         TODO("Not yet implemented")
     }
 
-    override fun setUpdateIntervals(updateInterval: Long, fastestUpdateInterval: Long) {
-        updateIntervals = Pair(updateInterval, fastestUpdateInterval)
+    override fun setUpdateInterval(updateInterval: Long) {
+        this@FakeLocationClient.updateInterval = updateInterval
     }
 
     fun updateLocation(location: android.location.Location) {
@@ -164,7 +164,7 @@ private class FakeLocationClient : LocationClient {
         return retainMockAccuracy
     }
 
-    fun getUpdateIntervals(): Pair<Long, Long>? {
-        return updateIntervals
+    fun getUpdateInterval(): Long? {
+        return updateInterval
     }
 }

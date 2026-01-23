@@ -13,6 +13,7 @@ import org.odk.collect.geo.analytics.AnalyticsEvents
 import org.odk.collect.location.Location
 import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
+import org.odk.collect.location.tracker.getCurrentLocation
 
 internal abstract class GeoPointViewModel : ViewModel() {
 

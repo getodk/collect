@@ -25,10 +25,6 @@ private const val LOCATION_KEY = "location"
 
 class ForegroundServiceLocationTracker(private val application: Application) : LocationTracker {
 
-    override fun getCurrentLocation(): Location? {
-        return getLocation().value
-    }
-
     override fun getLocation(): StateFlow<Location?> {
         return application.getState().getFlow(LOCATION_KEY, null)
     }
@@ -84,8 +80,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
 
         if (intent?.hasExtra(EXTRA_UPDATE_INTERVAL) == true) {
             val interval = intent.getLongExtra(EXTRA_UPDATE_INTERVAL, -1)
-            locationClient.setUpdateIntervals(
-                interval,
+            locationClient.setUpdateInterval(
                 interval
             )
         }

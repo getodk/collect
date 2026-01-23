@@ -15,19 +15,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.flow.MutableStateFlow
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
-import org.mockito.kotlin.any
-import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidtest.FragmentScenarioExtensions.setFragmentResultListener
 import org.odk.collect.async.Scheduler
@@ -35,7 +29,9 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.DaggerGeoDependencyComponent
 import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.geo.R
+import org.odk.collect.geo.geopoly.GeoPolyFragment.Companion.INTERVAL_OPTIONS
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
+import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.Location
@@ -50,6 +46,7 @@ import org.odk.collect.strings.R.string
 import org.odk.collect.testshared.Assertions
 import org.odk.collect.testshared.Assertions.assertNotVisible
 import org.odk.collect.testshared.Assertions.assertVisible
+import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.FragmentResultRecorder
 import org.odk.collect.testshared.Interactions
 import org.odk.collect.webpage.WebPageService
@@ -58,12 +55,14 @@ import org.robolectric.Shadows
 @RunWith(AndroidJUnit4::class)
 class GeoPolyFragmentTest {
     private val mapFragment = FakeMapFragment(ready = true)
-    private val locationTracker = mock<LocationTracker>()
+
+    private val locationTracker = FakeLocationTracker()
 
     @get:Rule
     val fragmentLauncherRule = FragmentScenarioLauncherRule()
 
     private val application = ApplicationProvider.getApplicationContext<Application>()
+    private val scheduler = FakeScheduler()
 
     @Before
     fun setUp() {
@@ -92,7 +91,7 @@ class GeoPolyFragmentTest {
                 }
 
                 override fun providesScheduler(): Scheduler {
-                    return mock()
+                    return scheduler
                 }
 
                 override fun providesSettingsProvider(): SettingsProvider {
@@ -114,7 +113,7 @@ class GeoPolyFragmentTest {
 
         // Stopping the activity should stop the location tracker
         scenario.moveToState(Lifecycle.State.DESTROYED)
-        Mockito.verify(locationTracker).stop()
+        assertThat(locationTracker.isStarted, equalTo(false))
     }
 
     @Test
@@ -146,6 +145,82 @@ class GeoPolyFragmentTest {
         startInput(R.id.placement_mode)
         mapFragment.click(MapPoint(1.0, 1.0))
         assertVisible(withText(application.getString(string.collection_status_placement, 1)))
+    }
+
+    @Test
+    fun recordingPointsAutomatically_updatesCollectionStatus() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        startInput(R.id.automatic_mode)
+        assertVisible(
+            withText(
+                application.getString(string.collection_status_auto_seconds_accuracy, 0, 20, 10)
+            )
+        )
+
+        locationTracker.currentLocation = Location(1.0, 1.0)
+        scheduler.runForeground(0)
+        assertVisible(
+            withText(
+                application.getString(string.collection_status_auto_seconds_accuracy, 1, 20, 10)
+            )
+        )
+
+        locationTracker.currentLocation = Location(2.0, 2.0)
+        scheduler.runForeground(DEFAULT_RECORDING_INTERVAL)
+        assertVisible(
+            withText(
+                application.getString(string.collection_status_auto_seconds_accuracy, 2, 20, 10)
+            )
+        )
+    }
+
+    @Test
+    fun recordingPointsAutomatically_doesNotRecordFasterThanInterval() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        startInput(R.id.automatic_mode)
+        locationTracker.currentLocation = Location(1.0, 1.0)
+        assertVisible(
+            withText(
+                application.getString(string.collection_status_auto_seconds_accuracy, 0, 20, 10)
+            )
+        )
+    }
+
+    @Test
+    fun recordingPointsAutomatically_andClickingPause_stopsRecording() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        startInput(R.id.automatic_mode)
+        assertVisible(
+            withText(
+                application.getString(string.collection_status_auto_seconds_accuracy, 0, 20, 10)
+            )
+        )
+
+        locationTracker.currentLocation = Location(1.0, 1.0)
+        scheduler.runForeground(0)
+        assertVisible(
+            withText(
+                application.getString(string.collection_status_auto_seconds_accuracy, 1, 20, 10)
+            )
+        )
+
+        Interactions.clickOn(withContentDescription(string.pause_location_recording))
+        locationTracker.currentLocation = Location(2.0, 2.0)
+        scheduler.runForeground(DEFAULT_RECORDING_INTERVAL)
+        assertVisible(
+            withText(
+                application.getString(string.collection_status_paused, 1)
+            )
+        )
     }
 
     @Test
@@ -364,7 +439,7 @@ class GeoPolyFragmentTest {
     }
 
     @Test
-    fun startingInput_usingAutomaticMode_usesRetainMockAccuracyTrueToStartLocationTracker() {
+    fun recordingPointsAutomatically_usesRetainMockAccuracyTrueToStartLocationTracker() {
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },
@@ -376,11 +451,11 @@ class GeoPolyFragmentTest {
         }
 
         startInput(R.id.automatic_mode)
-        verify(locationTracker).start(eq(true), any())
+        assertThat(locationTracker.retainMockAccuracy, equalTo(true))
     }
 
     @Test
-    fun startingInput_usingAutomaticMode_usesRetainMockAccuracyFalseToStartLocationTracker() {
+    fun recordingPointsAutomatically_usesRetainMockAccuracyFalseToStartLocationTracker() {
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },
@@ -392,7 +467,7 @@ class GeoPolyFragmentTest {
         }
 
         startInput(R.id.automatic_mode)
-        verify(locationTracker).start(eq(false), any())
+        assertThat(locationTracker.retainMockAccuracy, equalTo(false))
     }
 
     @Test
@@ -705,10 +780,7 @@ class GeoPolyFragmentTest {
     }
 
     @Test
-    fun recordingPoints_usingAutomaticMode_setsChangeResult() {
-        val locations = MutableStateFlow<Location?>(null)
-        whenever(locationTracker.getLocation()).thenReturn(locations)
-
+    fun recordingPointsAutomatically_setsChangeResult() {
         val scenario = fragmentLauncherRule.launchInContainer {
             GeoPolyFragment({ OnBackPressedDispatcher() })
         }
@@ -716,8 +788,10 @@ class GeoPolyFragmentTest {
         scenario.setFragmentResultListener(GeoPolyFragment.REQUEST_GEOPOLY, resultListener)
 
         startInput(R.id.automatic_mode)
-        locations.value = Location(1.0, 1.0, 1.0, 1f)
-        locations.value = Location(2.0, 2.0, 1.0, 1f)
+        locationTracker.currentLocation = Location(1.0, 1.0, 1.0, 1f)
+        scheduler.runForeground(0)
+        locationTracker.currentLocation = Location(2.0, 2.0, 1.0, 1f)
+        scheduler.runForeground(DEFAULT_RECORDING_INTERVAL)
 
         val result = resultListener.getAll().last()
         assertThat(result.first, equalTo(GeoPolyFragment.REQUEST_GEOPOLY))
@@ -727,12 +801,17 @@ class GeoPolyFragmentTest {
         )
     }
 
-    private fun startInput(mode: Int? = null) {
-        onView(withId(R.id.play)).perform(click())
+    companion object {
+        private val DEFAULT_RECORDING_INTERVAL =
+            INTERVAL_OPTIONS[GeoPolyFragment.DEFAULT_INTERVAL_INDEX].toLong() * 1000
 
-        if (mode != null) {
-            onView(withId(mode)).inRoot(isDialog()).perform(click())
-            onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click())
+        private fun startInput(mode: Int? = null) {
+            onView(withId(R.id.play)).perform(click())
+
+            if (mode != null) {
+                onView(withId(mode)).inRoot(isDialog()).perform(click())
+                onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click())
+            }
         }
     }
 }
