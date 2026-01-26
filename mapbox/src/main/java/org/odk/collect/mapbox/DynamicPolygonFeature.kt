@@ -9,12 +9,10 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
-import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
-import org.odk.collect.maps.markers.MarkerDescription
-import org.odk.collect.maps.markers.MarkerIconDescription
+import org.odk.collect.maps.getMarkersForPoints
 
 internal class DynamicPolygonFeature(
     private val context: Context,
@@ -35,25 +33,11 @@ internal class DynamicPolygonFeature(
     private var polygonAnnotation: PolygonAnnotation? = null
 
     init {
-        polygonDescription.points.forEachIndexed { index, point ->
-            _points.add(point)
-
-            val markerIconDescription = if (index == polygonDescription.points.lastIndex) {
-                MarkerIconDescription.TracePoint(polygonDescription.getStrokeWidth(), MapConsts.DEFAULT_HIGHLIGHT_COLOR)
-            } else {
-                MarkerIconDescription.TracePoint(polygonDescription.getStrokeWidth(), MapConsts.DEFAULT_STROKE_COLOR)
-            }
+        val markerDescriptions = polygonDescription.getMarkersForPoints()
+        markerDescriptions.forEach {
+            _points.add(it.point)
             pointAnnotations.add(
-                MapUtils.createPointAnnotation(
-                    pointAnnotationManager,
-                    context,
-                    MarkerDescription(
-                        point,
-                        true,
-                        MapFragment.CENTER,
-                        markerIconDescription
-                    )
-                )
+                MapUtils.createPointAnnotation(pointAnnotationManager, context, it)
             )
         }
 

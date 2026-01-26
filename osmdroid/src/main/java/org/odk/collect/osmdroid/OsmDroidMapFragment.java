@@ -16,6 +16,7 @@ package org.odk.collect.osmdroid;
 
 import static androidx.core.graphics.drawable.BitmapDrawableKt.toDrawable;
 import static androidx.core.graphics.drawable.DrawableKt.toBitmap;
+import static org.odk.collect.maps.TraceDescriptionKt.getMarkersForPoints;
 import static org.odk.collect.maps.markers.MarkerIconCreator.toBitmap;
 
 import android.content.BroadcastReceiver;
@@ -47,7 +48,6 @@ import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.LineDescription;
 import org.odk.collect.maps.MapConfigurator;
-import org.odk.collect.maps.MapConsts;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapViewModel;
@@ -734,15 +734,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         return mapViewModel;
     }
 
-    @NonNull
-    private Marker getLinePointMarker(MapPoint point, float strokeWidth, boolean isLast) {
-        if (isLast) {
-            return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.TracePoint(strokeWidth, MapConsts.DEFAULT_HIGHLIGHT_COLOR)));
-        } else {
-            return createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription.TracePoint(strokeWidth, MapConsts.DEFAULT_STROKE_COLOR)));
-        }
-    }
-
     /**
      * A MapFeature is a physical feature on a map, such as a point, a road,
      * a building, a region, etc.  It is presented to the user as one editable
@@ -907,10 +898,9 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
             paint.setStrokeWidth(lineDescription.getStrokeWidth());
             map.getOverlays().add(polyline);
 
-            List<MapPoint> points = lineDescription.getPoints();
-            for (int i = 0; i < points.size(); i++) {
-                MapPoint point = points.get(i);
-                markers.add(getLinePointMarker(point, lineDescription.getStrokeWidth(), i == points.size() - 1));
+            List<MarkerDescription> markerDescriptions = getMarkersForPoints(lineDescription);
+            for (MarkerDescription markerDescription : markerDescriptions) {
+                markers.add(createMarker(map, markerDescription));
             }
             update();
         }
@@ -983,10 +973,9 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
 
             map.getOverlays().add(polygon);
 
-            List<MapPoint> points = polygonDescription.getPoints();
-            for (int i = 0; i < points.size(); i++) {
-                MapPoint point = points.get(i);
-                markers.add(getLinePointMarker(point, polygonDescription.getStrokeWidth(), i == polygonDescription.getPoints().size() - 1));
+            List<MarkerDescription> markerDescriptions = getMarkersForPoints(polygonDescription);
+            for (MarkerDescription markerDescription : markerDescriptions) {
+                markers.add(createMarker(map, markerDescription));
             }
             update();
         }
