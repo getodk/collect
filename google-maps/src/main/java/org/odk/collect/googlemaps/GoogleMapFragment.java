@@ -14,7 +14,7 @@
 
 package org.odk.collect.googlemaps;
 
-import static org.odk.collect.maps.markers.MarkerDescriptionKt.getMarkersForPoints;
+import static org.odk.collect.maps.TraceDescriptionKt.getMarkersForPoints;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
