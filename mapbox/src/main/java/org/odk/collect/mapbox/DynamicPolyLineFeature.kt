@@ -39,9 +39,9 @@ internal class DynamicPolyLineFeature(
             _points.add(point)
 
             val markerIconDescription = if (index == lineDescription.points.lastIndex) {
-                MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth(), MapConsts.DEFAULT_HIGHLIGHT_COLOR)
+                MarkerIconDescription.TracePoint(lineDescription.getStrokeWidth(), MapConsts.DEFAULT_HIGHLIGHT_COLOR)
             } else {
-                MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth(), MapConsts.DEFAULT_STROKE_COLOR)
+                MarkerIconDescription.TracePoint(lineDescription.getStrokeWidth(), MapConsts.DEFAULT_STROKE_COLOR)
             }
             pointAnnotations.add(
                 MapUtils.createPointAnnotation(

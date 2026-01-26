@@ -25,7 +25,7 @@ object MarkerIconCreator {
     @JvmStatic
     fun getMarkerIcon(context: Context, markerIconDescription: MarkerIconDescription): Bitmap {
         return when (markerIconDescription) {
-            is MarkerIconDescription.LinePoint -> {
+            is MarkerIconDescription.TracePoint -> {
                 fromCache("LinePoint" + markerIconDescription.lineSize + markerIconDescription.color) {
                     createPoint(
                         markerIconDescription.lineSize * 6,

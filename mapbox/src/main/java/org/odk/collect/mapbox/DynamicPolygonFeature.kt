@@ -39,9 +39,9 @@ internal class DynamicPolygonFeature(
             _points.add(point)
 
             val markerIconDescription = if (index == polygonDescription.points.lastIndex) {
-                MarkerIconDescription.LinePoint(polygonDescription.getStrokeWidth(), MapConsts.DEFAULT_HIGHLIGHT_COLOR)
+                MarkerIconDescription.TracePoint(polygonDescription.getStrokeWidth(), MapConsts.DEFAULT_HIGHLIGHT_COLOR)
             } else {
-                MarkerIconDescription.LinePoint(polygonDescription.getStrokeWidth(), MapConsts.DEFAULT_STROKE_COLOR)
+                MarkerIconDescription.TracePoint(polygonDescription.getStrokeWidth(), MapConsts.DEFAULT_STROKE_COLOR)
             }
             pointAnnotations.add(
                 MapUtils.createPointAnnotation(

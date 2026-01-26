@@ -7,10 +7,10 @@ data class PolygonDescription(
     private val strokeWidth: String? = null,
     private val strokeColor: Int? = null,
     private val fillColor: Int? = null,
-    val highlightLastPoint: Boolean = false,
+    override val highlightLastPoint: Boolean = false,
     val draggable: Boolean = false
-) {
-    fun getStrokeWidth(): Float {
+) : TraceDescription {
+    override fun getStrokeWidth(): Float {
         return try {
             strokeWidth?.toFloat()?.let {
                 if (it >= 0) {
@@ -24,7 +24,7 @@ data class PolygonDescription(
         }
     }
 
-    fun getStrokeColor(): Int {
+    override fun getStrokeColor(): Int {
         return strokeColor ?: MapConsts.DEFAULT_STROKE_COLOR
     }
 
