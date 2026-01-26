@@ -1,7 +1,7 @@
 package org.odk.collect.maps
 
 data class LineDescription(
-    val points: List<MapPoint> = emptyList(),
+    override val points: List<MapPoint> = emptyList(),
     private val strokeWidth: String? = null,
     private val strokeColor: Int? = null,
     override val highlightLastPoint: Boolean = false,

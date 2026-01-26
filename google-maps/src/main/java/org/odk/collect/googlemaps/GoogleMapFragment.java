@@ -14,7 +14,7 @@
 
 package org.odk.collect.googlemaps;
 
-import static org.odk.collect.maps.markers.MarkerIconDescriptionKt.getMarkerIconDescriptionForPoint;
+import static org.odk.collect.maps.markers.MarkerDescriptionKt.getMarkersForPoints;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -879,11 +879,9 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                 return;
             }
 
-            List<MapPoint> points = lineDescription.getPoints();
-            for (int i = 0; i < points.size(); i++) {
-                MapPoint point = points.get(i);
-                MarkerIconDescription iconDescription = getMarkerIconDescriptionForPoint(lineDescription, i == lineDescription.getPoints().size() - 1);
-                Marker marker = createMarker(requireContext(), new MarkerDescription(point, true, CENTER, iconDescription), map);
+            List<MarkerDescription> markerDescriptions = getMarkersForPoints(lineDescription);
+            for (MarkerDescription markerDescription : markerDescriptions) {
+                Marker marker = createMarker(requireContext(), markerDescription, map);
                 markers.add(marker);
             }
 
@@ -968,11 +966,9 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
                 return;
             }
 
-            List<MapPoint> points = polygonDescription.getPoints();
-            for (int i = 0; i < points.size(); i++) {
-                MapPoint point = points.get(i);
-                MarkerIconDescription iconDescription = getMarkerIconDescriptionForPoint(polygonDescription, i == polygonDescription.getPoints().size() - 1);
-                Marker marker = createMarker(requireContext(), new MarkerDescription(point, true, CENTER, iconDescription), map);
+            List<MarkerDescription> markerDescriptions = getMarkersForPoints(polygonDescription);
+            for (MarkerDescription markerDescription : markerDescriptions) {
+                Marker marker = createMarker(requireContext(), markerDescription, map);
                 markers.add(marker);
             }
 

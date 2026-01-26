@@ -3,7 +3,7 @@ package org.odk.collect.maps
 import androidx.core.graphics.ColorUtils
 
 data class PolygonDescription(
-    val points: List<MapPoint> = emptyList(),
+    override val points: List<MapPoint> = emptyList(),
     private val strokeWidth: String? = null,
     private val strokeColor: Int? = null,
     private val fillColor: Int? = null,

@@ -1,8 +1,6 @@
 package org.odk.collect.maps.markers
 
 import org.odk.collect.androidshared.utils.sanitizeToColorInt
-import org.odk.collect.maps.MapConsts
-import org.odk.collect.maps.TraceDescription
 import org.odk.collect.shared.strings.StringUtils
 import java.util.Locale
 
@@ -24,14 +22,4 @@ sealed interface MarkerIconDescription {
     }
 
     class TracePoint(val lineSize: Float, val color: Int) : MarkerIconDescription
-}
-
-fun TraceDescription.getMarkerIconDescriptionForPoint(isLast: Boolean): MarkerIconDescription {
-    val color = if (highlightLastPoint && isLast) {
-        MapConsts.DEFAULT_HIGHLIGHT_COLOR
-    } else {
-        getStrokeColor()
-    }
-
-    return MarkerIconDescription.TracePoint(getStrokeWidth(), color)
 }
