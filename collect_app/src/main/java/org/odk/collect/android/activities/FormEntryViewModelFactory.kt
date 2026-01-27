@@ -1,9 +1,9 @@
 package org.odk.collect.android.activities
 
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.savedstate.SavedStateRegistryOwner
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewmodel.CreationExtras
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActions
 import org.javarosa.core.model.instance.TreeReference
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
@@ -28,6 +28,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
+import org.odk.collect.android.widgets.viewmodels.QuestionViewModel
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
@@ -39,7 +40,6 @@ import org.odk.collect.settings.SettingsProvider
 import java.util.function.BiConsumer
 
 class FormEntryViewModelFactory(
-    owner: SavedStateRegistryOwner,
     private val mode: String?,
     private val sessionId: String,
     private val scheduler: Scheduler,
@@ -60,13 +60,9 @@ class FormEntryViewModelFactory(
     private val htmlPrinter: HtmlPrinter,
     private val instancesDataService: InstancesDataService,
     private val changeLockProvider: ChangeLockProvider
-) : AbstractSavedStateViewModelFactory(owner, null) {
+) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel> create(
-        key: String,
-        modelClass: Class<T>,
-        handle: SavedStateHandle
-    ): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         val projectId = projectsDataService.requireCurrentProject().uuid
 
         return when (modelClass) {
@@ -81,7 +77,7 @@ class FormEntryViewModelFactory(
 
             FormSaveViewModel::class.java -> {
                 FormSaveViewModel(
-                    handle,
+                    extras.createSavedStateHandle(),
                     System::currentTimeMillis,
                     DiskFormSaver(),
                     mediaUtils,
@@ -151,6 +147,8 @@ class FormEntryViewModelFactory(
             )
 
             PrinterWidgetViewModel::class.java -> PrinterWidgetViewModel(scheduler, qrCodeCreator, htmlPrinter)
+
+            QuestionViewModel::class.java -> QuestionViewModel(scheduler, formSessionRepository, sessionId)
 
             else -> throw IllegalArgumentException()
         } as T

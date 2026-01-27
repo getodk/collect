@@ -412,7 +412,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
             sessionId = savedInstanceState.getString(KEY_SESSION_ID);
         }
 
-        viewModelFactory = new FormEntryViewModelFactory(this,
+        viewModelFactory = new FormEntryViewModelFactory(
                 getIntent().getStringExtra(FormOpeningMode.FORM_MODE_KEY),
                 sessionId,
                 scheduler,
