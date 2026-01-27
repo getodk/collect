@@ -1,5 +1,6 @@
 package org.odk.collect.geo.geopoly
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,8 @@ class GeoPolyViewModel(
     points: List<MapPoint>,
     private val retainMockAccuracy: Boolean,
     private val locationTracker: LocationTracker,
-    private val scheduler: Scheduler
+    private val scheduler: Scheduler,
+    val invalidMessage: LiveData<String?>
 ) : ViewModel() {
 
     private val _points = MutableStateFlow(
@@ -33,9 +35,11 @@ class GeoPolyViewModel(
     private var recording: Cancellable? = null
 
     fun add(point: MapPoint) {
-        val points = _points.value
-        if (points.isEmpty() || point != points.last()) {
-            _points.value = points + point
+        if (invalidMessage.value == null) {
+            val points = _points.value
+            if (points.isEmpty() || point != points.last()) {
+                _points.value = points + point
+            }
         }
     }
 

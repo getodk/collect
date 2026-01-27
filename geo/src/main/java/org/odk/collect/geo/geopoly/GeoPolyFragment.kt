@@ -105,7 +105,8 @@ class GeoPolyFragment @JvmOverloads constructor(
                     inputPolygon,
                     retainMockAccuracy,
                     locationTracker,
-                    scheduler
+                    scheduler,
+                    invalidMessage
                 )
             }
         }
@@ -248,7 +249,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
 
         val snackbar = SnackbarUtils.make(requireView(), "", Snackbar.LENGTH_INDEFINITE)
-        val viewData = viewModel.points.asLiveData().zip(invalidMessage)
+        val viewData = viewModel.points.asLiveData().zip(viewModel.invalidMessage)
         viewData.observe(viewLifecycleOwner) { (points, invalidMessage) ->
             val isValid = invalidMessage == null
             if (!isValid) {
