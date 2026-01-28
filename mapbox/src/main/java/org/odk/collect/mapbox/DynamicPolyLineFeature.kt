@@ -10,11 +10,9 @@ import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
 import org.odk.collect.maps.LineDescription
-import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.markers.MarkerDescription
-import org.odk.collect.maps.markers.MarkerIconDescription
+import org.odk.collect.maps.getMarkersForPoints
 
 internal class DynamicPolyLineFeature(
     private val context: Context,
@@ -35,25 +33,11 @@ internal class DynamicPolyLineFeature(
     private var polylineAnnotation: PolylineAnnotation? = null
 
     init {
-        lineDescription.points.forEachIndexed { index, point ->
-            _points.add(point)
-
-            val markerIconDescription = if (index == lineDescription.points.lastIndex) {
-                MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth(), MapConsts.DEFAULT_HIGHLIGHT_COLOR)
-            } else {
-                MarkerIconDescription.LinePoint(lineDescription.getStrokeWidth(), MapConsts.DEFAULT_STROKE_COLOR)
-            }
+        val markerDescriptions = lineDescription.getMarkersForPoints()
+        markerDescriptions.forEach {
+            _points.add(it.point)
             pointAnnotations.add(
-                MapUtils.createPointAnnotation(
-                    pointAnnotationManager,
-                    context,
-                    MarkerDescription(
-                        point,
-                        true,
-                        MapFragment.CENTER,
-                        markerIconDescription
-                    )
-                )
+                MapUtils.createPointAnnotation(pointAnnotationManager, context, it)
             )
         }
 
@@ -94,11 +78,6 @@ internal class DynamicPolyLineFeature(
                 Point.fromLngLat(it.longitude, it.latitude, it.altitude)
             }
             .toMutableList()
-            .also {
-                if (lineDescription.closed && it.isNotEmpty()) {
-                    it.add(it.first())
-                }
-            }
 
         polylineAnnotation?.let {
             polylineAnnotationManager.delete(it)

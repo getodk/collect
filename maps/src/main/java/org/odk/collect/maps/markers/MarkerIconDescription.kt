@@ -5,7 +5,7 @@ import org.odk.collect.shared.strings.StringUtils
 import java.util.Locale
 
 sealed interface MarkerIconDescription {
-    class DrawableResource @JvmOverloads constructor(
+    data class DrawableResource @JvmOverloads constructor(
         val drawable: Int,
         private val color: String? = null,
         private val symbol: String? = null
@@ -21,5 +21,5 @@ sealed interface MarkerIconDescription {
         }
     }
 
-    class LinePoint(val lineSize: Float, val color: Int) : MarkerIconDescription
+    data class TracePoint(val lineSize: Float, val color: Int) : MarkerIconDescription
 }

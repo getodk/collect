@@ -45,14 +45,8 @@ class PolygonDescriptionTest {
     }
 
     @Test
-    fun `getStrokeColor returns the default color when the passed one is invalid`() {
-        val polygonDescription = PolygonDescription(strokeColor = "blah")
-        assertThat(polygonDescription.getStrokeColor(), equalTo(MapConsts.DEFAULT_STROKE_COLOR))
-    }
-
-    @Test
-    fun `getStrokeColor returns custom color when it is valid`() {
-        val polygonDescription = PolygonDescription(strokeColor = "#aaccee")
+    fun `getStrokeColor returns custom color`() {
+        val polygonDescription = PolygonDescription(strokeColor = -5583634)
         assertThat(polygonDescription.getStrokeColor(), equalTo(-5583634))
     }
 
@@ -63,14 +57,8 @@ class PolygonDescriptionTest {
     }
 
     @Test
-    fun `getFillColor returns the default color when the passed one is invalid`() {
-        val polygonDescription = PolygonDescription(fillColor = "blah")
-        assertThat(polygonDescription.getFillColor(), equalTo(1144954828))
-    }
-
-    @Test
-    fun `getFillColor returns custom color when it is valid`() {
-        val polygonDescription = PolygonDescription(fillColor = "#aaccee")
+    fun `getFillColor returns custom color`() {
+        val polygonDescription = PolygonDescription(fillColor = 1152044270)
         assertThat(polygonDescription.getFillColor(), equalTo(1152044270))
     }
 }

@@ -1,15 +1,13 @@
 package org.odk.collect.maps
 
-import org.odk.collect.androidshared.utils.sanitizeToColorInt
-
 data class LineDescription(
-    val points: List<MapPoint> = emptyList(),
+    override val points: List<MapPoint> = emptyList(),
     private val strokeWidth: String? = null,
-    private val strokeColor: String? = null,
-    val draggable: Boolean = false,
-    @Deprecated("Use PolygonDescription instead") val closed: Boolean = false
-) {
-    fun getStrokeWidth(): Float {
+    private val strokeColor: Int? = null,
+    override val highlightLastPoint: Boolean = false,
+    val draggable: Boolean = false
+) : TraceDescription {
+    override fun getStrokeWidth(): Float {
         return try {
             strokeWidth?.toFloat()?.let {
                 if (it >= 0) {
@@ -23,8 +21,7 @@ data class LineDescription(
         }
     }
 
-    fun getStrokeColor(): Int {
-        val customColor = strokeColor?.sanitizeToColorInt()
-        return customColor ?: MapConsts.DEFAULT_STROKE_COLOR
+    override fun getStrokeColor(): Int {
+        return strokeColor ?: MapConsts.DEFAULT_STROKE_COLOR
     }
 }
