@@ -251,8 +251,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         val viewData = viewModel.points.asLiveData().zip(invalidMessage)
         viewData.observe(viewLifecycleOwner) { (points, invalidMessage) ->
             val isValid = invalidMessage == null
-
-            if (invalidMessage != null) {
+            if (!isValid) {
                 snackbar.setText(invalidMessage)
                 SnackbarUtils.show(snackbar)
             } else {
