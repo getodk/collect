@@ -2,8 +2,10 @@ package org.odk.collect.geo.geopoly
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
@@ -41,6 +43,18 @@ class GeoPolyViewModel(
         }
     )
     val points: StateFlow<List<MapPoint>> = _points
+
+    private var lastInvalidMessage: String? = null
+    val fixedAlerts = invalidMessage.map {
+        if (it == null && lastInvalidMessage != null) {
+            lastInvalidMessage = it
+            Consumable(Unit)
+        } else {
+            lastInvalidMessage = it
+            null
+        }
+    }
+
     private var accuracyThreshold: Int = 0
     private var recording: Cancellable? = null
 

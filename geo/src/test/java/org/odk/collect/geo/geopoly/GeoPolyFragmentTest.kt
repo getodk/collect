@@ -17,12 +17,14 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.utils.opaque
 import org.odk.collect.androidtest.FragmentScenarioExtensions.setFragmentResultListener
 import org.odk.collect.async.Scheduler
@@ -105,6 +107,13 @@ class GeoPolyFragmentTest {
                 }
             })
             .build()
+
+        SnackbarUtils.alertStore.enabled = true
+    }
+
+    @After
+    fun teardown() {
+        SnackbarUtils.alertStore.enabled = false
     }
 
     @Test
@@ -677,6 +686,11 @@ class GeoPolyFragmentTest {
 
         invalidMessage.value = null
         assertNotVisible(withText(message))
+        Assertions.assertAlert(
+            SnackbarUtils.alertStore,
+            "✅ Error fixed",
+            "No error fixed message shown!"
+        )
     }
 
     @Test
