@@ -17,12 +17,14 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.utils.opaque
 import org.odk.collect.androidtest.FragmentScenarioExtensions.setFragmentResultListener
 import org.odk.collect.async.Scheduler
@@ -105,6 +107,13 @@ class GeoPolyFragmentTest {
                 }
             })
             .build()
+
+        SnackbarUtils.alertStore.enabled = true
+    }
+
+    @After
+    fun teardown() {
+        SnackbarUtils.alertStore.enabled = false
     }
 
     @Test
@@ -610,9 +619,60 @@ class GeoPolyFragmentTest {
     }
 
     @Test
+    fun whenInvalidMessageIsNotNull_pointsCannotBeAddedByClicking() {
+        val invalidMessage = MutableLiveData<String?>(null)
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                invalidMessage = invalidMessage
+            )
+        }
+
+        startInput(R.id.placement_mode)
+
+        invalidMessage.value = "Blah"
+        mapFragment.click(MapPoint(0.0, 0.0))
+        assertThat(mapFragment.getPolyLines()[0].points.size, equalTo(0))
+    }
+
+    @Test
+    fun whenInvalidMessageIsNotNull_pointsCannotBeAddedManually() {
+        val invalidMessage = MutableLiveData<String?>(null)
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                invalidMessage = invalidMessage
+            )
+        }
+
+        startInput(R.id.manual_mode)
+
+        invalidMessage.value = "Blah"
+        Interactions.clickOn(withContentDescription(string.record_geopoint))
+        assertThat(mapFragment.getPolyLines()[0].points.size, equalTo(0))
+    }
+
+    @Test
+    fun whenInvalidMessageIsNotNull_automaticRecordingStops() {
+        val invalidMessage = MutableLiveData<String?>(null)
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                invalidMessage = invalidMessage
+            )
+        }
+
+        startInput(R.id.automatic_mode)
+
+        invalidMessage.value = "Blah"
+        locationTracker.currentLocation = Location(1.0, 1.0, 1.0, 1f)
+        scheduler.runForeground(0)
+        assertThat(mapFragment.getPolyLines()[0].points.size, equalTo(0))
+    }
+
+    @Test
     fun showsAndHidesInvalidMessageSnackbarBasedOnValue() {
         val invalidMessage = MutableLiveData<String?>(null)
-
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },
@@ -626,12 +686,16 @@ class GeoPolyFragmentTest {
 
         invalidMessage.value = null
         assertNotVisible(withText(message))
+        Assertions.assertAlert(
+            SnackbarUtils.alertStore,
+            "✅ Error fixed",
+            "No error fixed message shown!"
+        )
     }
 
     @Test
     fun changesPolyLineColorBasedOnInvalidMessage() {
         val invalidMessage = MutableLiveData<String?>(null)
-
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },
@@ -656,7 +720,6 @@ class GeoPolyFragmentTest {
     @Test
     fun changesPolygonColorBasedOnInvalidMessage() {
         val invalidMessage = MutableLiveData<String?>(null)
-
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },
@@ -690,7 +753,6 @@ class GeoPolyFragmentTest {
     @Test
     fun disablesSaveButtonWhenInvalid() {
         val invalidMessage = MutableLiveData<String?>(null)
-
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },

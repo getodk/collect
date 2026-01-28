@@ -19,6 +19,7 @@ import org.odk.collect.androidshared.livedata.LiveDataExt.zip
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
+import org.odk.collect.androidshared.ui.SnackbarUtils.showSnackbar
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToastInMiddle
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions
@@ -105,7 +106,8 @@ class GeoPolyFragment @JvmOverloads constructor(
                     inputPolygon,
                     retainMockAccuracy,
                     locationTracker,
-                    scheduler
+                    scheduler,
+                    invalidMessage
                 )
             }
         }
@@ -159,6 +161,10 @@ class GeoPolyFragment @JvmOverloads constructor(
         mapFragment.init({ initMap(it, binding) }, { this.cancel() })
 
         onBackPressedDispatcher().addCallback(viewLifecycleOwner, onBackPressedCallback)
+
+        viewModel.fixedAlerts.showSnackbar(viewLifecycleOwner, view) {
+            SnackbarUtils.SnackbarDetails("✅ Error fixed")
+        }
     }
 
     override fun onSaveInstanceState(state: Bundle) {
@@ -248,7 +254,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
 
         val snackbar = SnackbarUtils.make(requireView(), "", Snackbar.LENGTH_INDEFINITE)
-        val viewData = viewModel.points.asLiveData().zip(invalidMessage)
+        val viewData = viewModel.points.asLiveData().zip(viewModel.invalidMessage)
         viewData.observe(viewLifecycleOwner) { (points, invalidMessage) ->
             val isValid = invalidMessage == null
             if (!isValid) {

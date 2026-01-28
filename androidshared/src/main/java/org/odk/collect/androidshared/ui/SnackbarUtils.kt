@@ -19,6 +19,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.google.android.material.R
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -161,5 +163,13 @@ object SnackbarUtils {
                 consumable.consume()
             }
         }
+    }
+
+    fun <T : Any?> LiveData<Consumable<T>?>.showSnackbar(lifecycleOwner: LifecycleOwner, parentView: View, details: (T) -> SnackbarDetails) {
+        observe(lifecycleOwner, object : SnackbarPresenterObserver<T>(parentView) {
+            override fun getSnackbarDetails(value: T): SnackbarDetails {
+                return details(value)
+            }
+        })
     }
 }
