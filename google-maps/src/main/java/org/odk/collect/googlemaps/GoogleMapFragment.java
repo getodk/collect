@@ -809,9 +809,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
             points = lineDescription.getPoints();
             List<LatLng> latLngs = StreamSupport.stream(points.spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList());
-            if (lineDescription.getClosed() && !latLngs.isEmpty()) {
-                latLngs.add(latLngs.get(0));
-            }
             if (latLngs.isEmpty()) {
                 clearPolyline();
             } else if (polyline == null) {
@@ -908,9 +905,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
             List<LatLng> latLngs = new ArrayList<>();
             for (Marker marker : markers) {
                 latLngs.add(marker.getPosition());
-            }
-            if (lineDescription.getClosed() && !latLngs.isEmpty()) {
-                latLngs.add(latLngs.get(0));
             }
             if (markers.isEmpty()) {
                 clearPolyline();

@@ -818,12 +818,10 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     private class StaticPolyLineFeature implements LineFeature {
         final MapView map;
         final Polyline polyline;
-        final boolean closedPolygon;
         private final List<MapPoint> points;
 
         StaticPolyLineFeature(MapView map, LineDescription lineDescription) {
             this.map = map;
-            this.closedPolygon = lineDescription.getClosed();
             polyline = new Polyline();
             polyline.setColor(lineDescription.getStrokeColor());
             polyline.setOnClickListener((clickedPolyline, mapView, eventPos) -> {
@@ -840,9 +838,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
 
             points = lineDescription.getPoints();
             List<GeoPoint> geoPoints = StreamSupport.stream(points.spliterator(), false).map(mapPoint -> new GeoPoint(mapPoint.latitude, mapPoint.longitude, mapPoint.altitude)).collect(Collectors.toList());
-            if (closedPolygon && !geoPoints.isEmpty()) {
-                geoPoints.add(geoPoints.get(0));
-            }
             polyline.setPoints(geoPoints);
             map.invalidate();
         }

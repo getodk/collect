@@ -5,8 +5,7 @@ data class LineDescription(
     private val strokeWidth: String? = null,
     private val strokeColor: Int? = null,
     override val highlightLastPoint: Boolean = false,
-    val draggable: Boolean = false,
-    @Deprecated("Use PolygonDescription instead") val closed: Boolean = false
+    val draggable: Boolean = false
 ) : TraceDescription {
     override fun getStrokeWidth(): Float {
         return try {
