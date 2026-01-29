@@ -27,7 +27,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.androidshared.R.dimen
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
@@ -44,22 +43,7 @@ object InfoDialog {
 
         val info = ComposeView(context).apply {
             setContextThemedContent {
-                when (viewModel.recordingMode) {
-                    GeoPolyViewModel.RecordingMode.PLACEMENT -> {
-                        if (fromSnackbar) {
-                            PlacementFromSnackbarInfo { dialog?.dismiss() }
-                        } else {
-                            PlacementFromInfoButtonInfo { dialog?.dismiss() }
-                        }
-                    }
-                    GeoPolyViewModel.RecordingMode.MANUAL, GeoPolyViewModel.RecordingMode.AUTOMATIC -> {
-                        if (fromSnackbar) {
-                            ManualOrAutomaticFromSnackbarInfo { dialog?.dismiss() }
-                        } else {
-                            ManualOrAutomaticFromInfoButtonInfo { dialog?.dismiss() }
-                        }
-                    }
-                }
+                InfoContent(viewModel, fromSnackbar) { dialog?.dismiss() }
             }
         }
 
@@ -70,47 +54,67 @@ object InfoDialog {
 }
 
 @Composable
-private fun PlacementFromSnackbarInfo(onDone: () -> Unit) {
-    InfoContent(InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
-        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
-        InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_shape_to_start_over_info_item)),
-        InfoDialog.InfoItem(Icons.Filled.AddLocation, stringResource(string.add_point_info_item)),
-        onDone = onDone
-    )
-}
+fun InfoContent(
+    viewModel: GeoPolyViewModel,
+    fromSnackbar: Boolean,
+    onDone: () -> Unit
+) {
+    val items = when (viewModel.recordingMode) {
+        GeoPolyViewModel.RecordingMode.PLACEMENT -> {
+            if (fromSnackbar) {
+                listOf(
+                    InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
+                    InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
+                    InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_shape_to_start_over_info_item)),
+                    InfoDialog.InfoItem(Icons.Filled.AddLocation, stringResource(string.add_point_info_item))
+                )
+            } else {
+                listOf(
+                    InfoDialog.InfoItem(Icons.Filled.AddLocation, stringResource(string.tap_to_add_a_point_info_item)),
+                    InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
+                    InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
+                    InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_entire_shape_info_item))
+                )
+            }
+        }
+        GeoPolyViewModel.RecordingMode.MANUAL, GeoPolyViewModel.RecordingMode.AUTOMATIC -> {
+            if (fromSnackbar) {
+                listOf(
+                    InfoDialog.InfoItem(Icons.AutoMirrored.Filled.DirectionsWalk, stringResource(string.physically_move_to_correct_info_item)),
+                    InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
+                    InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
+                    InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_entire_shape_info_item)),
+                )
+            } else {
+                listOf(
+                    InfoDialog.InfoItem(Icons.Filled.AddLocation, stringResource(string.tap_to_add_a_point_info_item)),
+                    InfoDialog.InfoItem(Icons.AutoMirrored.Filled.DirectionsWalk, stringResource(string.physically_move_to_correct_info_item)),
+                    InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
+                    InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
+                    InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_entire_shape_info_item))
+                )
+            }
+        }
+    }
 
-@Composable
-private fun PlacementFromInfoButtonInfo(onDone: () -> Unit) {
-    InfoContent(
-        InfoDialog.InfoItem(Icons.Filled.AddLocation, stringResource(string.tap_to_add_a_point_info_item)),
-        InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
-        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
-        InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_entire_shape_info_item)),
-        onDone = onDone
-    )
-}
+    val scrollState = rememberScrollState()
 
-@Composable
-private fun ManualOrAutomaticFromSnackbarInfo(onDone: () -> Unit) {
-    InfoContent(
-        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.DirectionsWalk, stringResource(string.physically_move_to_correct_info_item)),
-        InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
-        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
-        InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_entire_shape_info_item)),
-        onDone = onDone
-    )
-}
-
-@Composable
-private fun ManualOrAutomaticFromInfoButtonInfo(onDone: () -> Unit) {
-    InfoContent(
-        InfoDialog.InfoItem(Icons.Filled.AddLocation, stringResource(string.tap_to_add_a_point_info_item)),
-        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.DirectionsWalk, stringResource(string.physically_move_to_correct_info_item)),
-        InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
-        InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
-        InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_entire_shape_info_item)),
-        onDone = onDone
-    )
+    Column(
+        modifier = Modifier
+            .padding(dimensionResource(id = dimen.margin_standard))
+            .verticalScroll(scrollState)
+    ) {
+        Title()
+        items.forEachIndexed { index, item ->
+            Info(item.icon, item.text)
+            if (index < items.lastIndex) {
+                HorizontalDivider(
+                    Modifier.padding(horizontal = dimensionResource(id = dimen.margin_small))
+                )
+            }
+        }
+        DoneButton(onDone)
+    }
 }
 
 @Composable
@@ -147,31 +151,6 @@ private fun Info(icon: ImageVector, text: String) {
 }
 
 @Composable
-private fun InfoContent(
-    vararg items: InfoDialog.InfoItem,
-    onDone: () -> Unit
-) {
-    val scrollState = rememberScrollState()
-
-    Column(
-        modifier = Modifier
-            .padding(dimensionResource(id = dimen.margin_standard))
-            .verticalScroll(scrollState)
-    ) {
-        Title()
-        items.forEachIndexed { index, item ->
-            Info(item.icon, item.text)
-            if (index < items.lastIndex) {
-                HorizontalDivider(
-                    Modifier.padding(horizontal = dimensionResource(id = dimen.margin_small))
-                )
-            }
-        }
-        DoneButton(onDone)
-    }
-}
-
-@Composable
 private fun DoneButton(onDone: () -> Unit) {
     Row(
         modifier = Modifier
@@ -183,28 +162,4 @@ private fun DoneButton(onDone: () -> Unit) {
             Text(stringResource(string.done))
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PlacementFromSnackbarInfoPreview() {
-    PlacementFromSnackbarInfo {}
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PlacementFromInfoButtonInfoPreview() {
-    PlacementFromInfoButtonInfo {}
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ManualOrAutomaticFromSnackbarInfoPreview() {
-    ManualOrAutomaticFromSnackbarInfo {}
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ManualOrAutomaticFromInfoButtonInfoPreview() {
-    ManualOrAutomaticFromInfoButtonInfo {}
 }
