@@ -87,4 +87,5 @@ dependencies {
     testImplementation(libs.robolectric)
     testImplementation(libs.androidxTestEspressoCore)
     testImplementation(libs.androidxArchCoreTesting)
+    testImplementation(libs.androidXComposeUiTestJunit4)
 }
