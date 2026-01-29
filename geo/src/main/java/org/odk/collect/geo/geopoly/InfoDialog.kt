@@ -39,24 +39,20 @@ object InfoDialog {
         val text: String
     )
 
-    enum class Type {
-        PLACEMENT, MANUAL_OR_AUTOMATIC
-    }
-
-    fun show(context: Context, type: Type, fromSnackbar: Boolean) {
+    fun show(context: Context, viewModel: GeoPolyViewModel, fromSnackbar: Boolean) {
         var dialog: AlertDialog? = null
 
         val info = ComposeView(context).apply {
             setContextThemedContent {
-                when (type) {
-                    Type.PLACEMENT -> {
+                when (viewModel.recordingMode) {
+                    GeoPolyViewModel.RecordingMode.PLACEMENT -> {
                         if (fromSnackbar) {
                             PlacementFromSnackbarInfo { dialog?.dismiss() }
                         } else {
                             PlacementFromInfoButtonInfo { dialog?.dismiss() }
                         }
                     }
-                    Type.MANUAL_OR_AUTOMATIC -> {
+                    GeoPolyViewModel.RecordingMode.MANUAL, GeoPolyViewModel.RecordingMode.AUTOMATIC -> {
                         if (fromSnackbar) {
                             ManualOrAutomaticFromSnackbarInfo { dialog?.dismiss() }
                         } else {

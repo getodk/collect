@@ -550,12 +550,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun showInfoDialog(fromSnackbar: Boolean) {
-        val type = if (viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT) {
-            InfoDialog.Type.MANUAL_OR_AUTOMATIC
-        } else {
-            InfoDialog.Type.PLACEMENT
-        }
-        InfoDialog.show(requireContext(), type, fromSnackbar)
+        InfoDialog.show(requireContext(), viewModel, fromSnackbar)
     }
 
     private fun showClearDialog() {
