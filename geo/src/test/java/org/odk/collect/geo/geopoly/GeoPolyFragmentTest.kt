@@ -694,6 +694,22 @@ class GeoPolyFragmentTest {
     }
 
     @Test
+    fun invalidSnackbarCanBeDismissed() {
+        val invalidMessage = MutableLiveData<String?>(null)
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment(
+                { OnBackPressedDispatcher() },
+                invalidMessage = invalidMessage
+            )
+        }
+
+        val message = "Something is wrong"
+        invalidMessage.value = message
+        Interactions.clickOn(withContentDescription(string.close_snackbar))
+        assertNotVisible(withText(message))
+    }
+
+    @Test
     fun changesPolyLineColorBasedOnInvalidMessage() {
         val invalidMessage = MutableLiveData<String?>(null)
         fragmentLauncherRule.launchInContainer {

@@ -246,7 +246,8 @@ class GeoPolyFragment @JvmOverloads constructor(
             Snackbar.LENGTH_INDEFINITE,
             action = SnackbarUtils.Action(getString(string.how_to_modify)) {
                 showInfoDialog(true)
-            }
+            },
+            displayDismissButton = true
         )
         val viewData = viewModel.points.asLiveData().zip(viewModel.invalidMessage)
         viewData.observe(viewLifecycleOwner) { (points, invalidMessage) ->
