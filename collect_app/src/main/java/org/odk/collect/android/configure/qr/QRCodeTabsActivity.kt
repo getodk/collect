@@ -6,11 +6,11 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import org.odk.collect.android.R
-import org.odk.collect.android.application.CollectComposeThemeProvider
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FileProvider
 import org.odk.collect.androidshared.system.IntentLauncher
+import org.odk.collect.androidshared.ui.CollectComposeThemeProvider
 import org.odk.collect.androidshared.ui.ListFragmentStateAdapter
 import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
 import org.odk.collect.async.Scheduler

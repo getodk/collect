@@ -2,7 +2,7 @@ package org.odk.collect.android.support
 
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import org.odk.collect.android.application.CollectComposeThemeProvider
+import org.odk.collect.androidshared.ui.CollectComposeThemeProvider
 
 class WidgetTestActivity : AppCompatActivity(), CollectComposeThemeProvider {
     @JvmField

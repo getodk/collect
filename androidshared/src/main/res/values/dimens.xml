@@ -14,4 +14,6 @@
     <dimen name="low_emphasis">0.12</dimen>
     <dimen name="medium_emphasis">0.6</dimen>
     <dimen name="high_emphasis">0.87</dimen>
+
+    <dimen name="mediumCornerSize">8dp</dimen>
 </resources>

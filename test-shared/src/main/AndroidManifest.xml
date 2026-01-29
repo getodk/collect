@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    /
     <application>
-        <activity android:name="org.odk.collect.testshared.DummyActivity" />
+        <activity
+            android:name="org.odk.collect.testshared.DummyActivity"
+            android:theme="@style/Theme.MaterialComponents" />
     </application>
 </manifest>

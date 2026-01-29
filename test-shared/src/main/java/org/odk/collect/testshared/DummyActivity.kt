@@ -1,10 +1,11 @@
 package org.odk.collect.testshared
 
-import android.app.Activity
 import android.os.Bundle
 import android.widget.TextView
+import androidx.activity.ComponentActivity
+import org.odk.collect.androidshared.ui.CollectComposeThemeProvider
 
-class DummyActivity : Activity() {
+class DummyActivity : ComponentActivity(), CollectComposeThemeProvider {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

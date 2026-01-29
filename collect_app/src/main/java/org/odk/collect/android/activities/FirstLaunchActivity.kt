@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.application.CollectComposeThemeProvider
 import org.odk.collect.android.databinding.FirstLaunchLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.MainMenuActivity
@@ -20,6 +19,7 @@ import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
+import org.odk.collect.androidshared.ui.CollectComposeThemeProvider
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.async.Scheduler
 import org.odk.collect.material.MaterialProgressDialogFragment
