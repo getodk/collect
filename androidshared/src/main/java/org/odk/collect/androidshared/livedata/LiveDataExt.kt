@@ -23,7 +23,7 @@ object LiveDataExt {
     /**
      * Returns a [LiveData] where each value is a [Pair] made up of the latest value and the
      * previous value.
-    */
+     */
     fun <T : Any?> LiveData<T>.withLast(): LiveData<Pair<T?, T?>> {
         return this.runningFold(Pair(null, null) as Pair<T?, T?>) { last, current ->
             Pair(last.second, current)
