@@ -20,7 +20,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import org.odk.collect.android.R
-import org.odk.collect.android.application.CollectComposeThemeProvider
+import org.odk.collect.androidshared.ui.CollectComposeThemeProvider
 import org.odk.collect.strings.localization.LocalizedActivity
 
 /**

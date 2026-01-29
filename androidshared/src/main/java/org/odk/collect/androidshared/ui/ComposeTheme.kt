@@ -1,4 +1,4 @@
-package org.odk.collect.android.application
+package org.odk.collect.androidshared.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,8 +10,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
-import org.odk.collect.android.R
-import org.odk.collect.androidshared.ui.ComposeThemeProvider
+import org.odk.collect.androidshared.R
 
 /**
  * Changes to this theme should also be made in `theme.xml`
