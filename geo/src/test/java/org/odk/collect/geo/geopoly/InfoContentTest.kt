@@ -14,7 +14,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
-class InfoDialogTest {
+class InfoContentTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
