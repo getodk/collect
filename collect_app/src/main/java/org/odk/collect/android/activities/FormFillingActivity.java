@@ -566,7 +566,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
             if (indexAndValidationResult != null) {
                 FormIndex screenIndex = indexAndValidationResult.getFirst();
                 FormIndex questionIndex = indexAndValidationResult.getSecond();
-                FailedValidationResult validationResult = indexAndValidationResult.getThird();
+                ValidationResult validationResult = indexAndValidationResult.getThird();
                 formIndexAnimationHandler.handle(screenIndex);
                 if (validationResult != null) {
                     handleValidationResult(validationResult);
@@ -587,15 +587,6 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 createErrorDialog(error);
                 formEntryViewModel.errorDisplayed();
             }
-        });
-
-        formEntryViewModel.getValidationResult().observe(this, consumable -> {
-            if (consumable.isConsumed()) {
-                return;
-            }
-            ValidationResult validationResult = consumable.getValue();
-            handleValidationResult(validationResult);
-            consumable.consume();
         });
 
         formSaveViewModel = viewModelProvider.get(FormSaveViewModel.class);

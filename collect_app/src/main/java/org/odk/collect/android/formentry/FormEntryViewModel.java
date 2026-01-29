@@ -36,7 +36,6 @@ import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.ChangeLocks;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.androidshared.async.TrackableWorker;
-import org.odk.collect.androidshared.data.Consumable;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.livedata.NonNullLiveData;
 import org.odk.collect.async.Cancellable;
@@ -62,9 +61,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
-    private final MutableLiveData<Triple<FormIndex, FormIndex, FailedValidationResult>> currentIndex = new MutableLiveData<>(null);
-    private final MutableLiveData<Consumable<ValidationResult>>
-            validationResult = new MutableLiveData<>(new Consumable<>(null));
+    private final MutableLiveData<Triple<FormIndex, FormIndex, ValidationResult>> currentIndex = new MutableLiveData<>(null);
     @NonNull
     private final FormSessionRepository formSessionRepository;
     private final String sessionId;
@@ -117,16 +114,12 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         return formController;
     }
 
-    public LiveData<Triple<FormIndex, FormIndex, FailedValidationResult>> getCurrentIndex() {
+    public LiveData<Triple<FormIndex, FormIndex, ValidationResult>> getCurrentIndex() {
         return currentIndex;
     }
 
     public LiveData<FormError> getError() {
         return error;
-    }
-
-    public LiveData<Consumable<ValidationResult>> getValidationResult() {
-        return validationResult;
     }
 
     public NonNullLiveData<Boolean> isLoading() {
@@ -265,7 +258,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         try {
             ValidationResult result = formController.saveAllScreenAnswers(answers, evaluateConstraints);
             if (result instanceof FailedValidationResult) {
-                validationResult.postValue(new Consumable<>(result));
+                updateIndex(true, result);
                 return false;
             }
         } catch (JavaRosaException e) {
@@ -296,7 +289,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 ValidationResult result = formController.saveOneScreenAnswer(index, answer, autoAdvance);
 
                 if (result instanceof FailedValidationResult) {
-                    updateIndex(true, (FailedValidationResult) result);
+                    updateIndex(true, result);
                 } else {
                     if (autoAdvance) {
                         formController.stepToNextScreenEvent();
@@ -344,11 +337,11 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         }, ignored -> {});
     }
 
-    private void updateIndex(boolean isAsync, @Nullable FailedValidationResult validationResult) {
+    private void updateIndex(boolean isAsync, @Nullable ValidationResult validationResult) {
         updateIndex(isAsync, validationResult, null);
     }
 
-    private void updateIndex(boolean isAsync, @Nullable FailedValidationResult validationResult, @Nullable FormIndex questionIndex) {
+    private void updateIndex(boolean isAsync, @Nullable ValidationResult validationResult, @Nullable FormIndex questionIndex) {
         choices.clear();
 
         if (formController != null) {
@@ -401,13 +394,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                         error.postValue(new FormError.NonFatal(e.getMessage()));
                     }
 
-                    // JavaRosa moves to the index where the contraint failed
-                    if (result instanceof FailedValidationResult) {
-                        updateIndex(true, (FailedValidationResult) result);
-                    } else {
-                        validationResult.postValue(new Consumable<>(result));
-                    }
-
+                    updateIndex(true, result);
                     return null;
                 }, ignored -> {}
         );
