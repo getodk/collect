@@ -17,6 +17,16 @@ class GeoPolyViewModel(
     private val scheduler: Scheduler
 ) : ViewModel() {
 
+    enum class RecordingMode {
+        PLACEMENT, MANUAL, AUTOMATIC
+    }
+
+    var recordingMode: RecordingMode = RecordingMode.PLACEMENT
+        private set
+
+    var inputActive: Boolean = false
+        private set
+
     private val _points = MutableStateFlow(
         if (points.isNotEmpty()) {
             if (outputMode == OutputMode.GEOSHAPE) {
@@ -69,8 +79,21 @@ class GeoPolyViewModel(
     }
 
     fun stopRecording() {
+        disableInput()
         recording?.cancel()
         locationTracker.stop()
+    }
+
+    fun setRecordingMode(mode: RecordingMode) {
+        recordingMode = mode
+    }
+
+    fun enableInput() {
+        inputActive = true
+    }
+
+    fun disableInput() {
+        inputActive = false
     }
 
     override fun onCleared() {

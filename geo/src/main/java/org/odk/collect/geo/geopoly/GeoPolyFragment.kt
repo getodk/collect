@@ -76,15 +76,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     private var map: MapFragment? = null
     private var featureId = -1 // will be a positive featureId once map is ready
     private var originalPoly: List<MapPoint>? = null
-
-    private var inputActive = false // whether we are ready for the user to add points
-    private var recordingEnabled =
-        false // whether points are taken from GPS readings (if not, placed by tapping)
-    private var recordingAutomatic =
-        false // whether GPS readings are taken at regular intervals (if not, only when user-directed)
-
     private var intervalIndex: Int = DEFAULT_INTERVAL_INDEX
-
     private var accuracyThresholdIndex: Int = DEFAULT_ACCURACY_THRESHOLD_INDEX
 
     private val onBackPressedCallback: OnBackPressedCallback =
@@ -144,9 +136,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         previousState = savedInstanceState
 
         if (savedInstanceState != null) {
-            inputActive = savedInstanceState.getBoolean(INPUT_ACTIVE_KEY, false)
-            recordingEnabled = savedInstanceState.getBoolean(RECORDING_ENABLED_KEY, false)
-            recordingAutomatic = savedInstanceState.getBoolean(RECORDING_AUTOMATIC_KEY, false)
             intervalIndex = savedInstanceState.getInt(INTERVAL_INDEX_KEY, DEFAULT_INTERVAL_INDEX)
             accuracyThresholdIndex = savedInstanceState.getInt(
                 ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX
@@ -173,9 +162,6 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
             return
         }
-        state.putBoolean(INPUT_ACTIVE_KEY, inputActive)
-        state.putBoolean(RECORDING_ENABLED_KEY, recordingEnabled)
-        state.putBoolean(RECORDING_AUTOMATIC_KEY, recordingAutomatic)
         state.putInt(INTERVAL_INDEX_KEY, intervalIndex)
         state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex)
     }
@@ -187,7 +173,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         binding.clear.setOnClickListener { showClearDialog() }
         binding.pause.setOnClickListener {
             viewModel.stopRecording()
-            inputActive = false
             updateUi()
         }
 
@@ -363,8 +348,8 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     override fun startInput() {
-        inputActive = true
-        if (recordingEnabled && recordingAutomatic) {
+        viewModel.enableInput()
+        if (viewModel.recordingMode == GeoPolyViewModel.RecordingMode.AUTOMATIC) {
             locationTracker.warm(map!!.getGpsLocation()?.toLocation())
             viewModel.startRecording(
                 ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex],
@@ -375,15 +360,18 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     override fun updateRecordingMode(id: Int) {
-        recordingEnabled = id != R.id.placement_mode
-        recordingAutomatic = id == R.id.automatic_mode
+        when (id) {
+            R.id.placement_mode -> viewModel.setRecordingMode(GeoPolyViewModel.RecordingMode.PLACEMENT)
+            R.id.manual_mode -> viewModel.setRecordingMode(GeoPolyViewModel.RecordingMode.MANUAL)
+            R.id.automatic_mode -> viewModel.setRecordingMode(GeoPolyViewModel.RecordingMode.AUTOMATIC)
+        }
     }
 
     override fun getCheckedId(): Int {
-        return if (recordingEnabled) {
-            if (recordingAutomatic) R.id.automatic_mode else R.id.manual_mode
-        } else {
-            R.id.placement_mode
+        return when (viewModel.recordingMode) {
+            GeoPolyViewModel.RecordingMode.PLACEMENT -> R.id.placement_mode
+            GeoPolyViewModel.RecordingMode.MANUAL -> R.id.manual_mode
+            GeoPolyViewModel.RecordingMode.AUTOMATIC -> R.id.automatic_mode
         }
     }
 
@@ -419,21 +407,21 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun onClick(point: MapPoint) {
-        if (inputActive && !recordingEnabled) {
+        if (viewModel.inputActive && viewModel.recordingMode == GeoPolyViewModel.RecordingMode.PLACEMENT) {
             viewModel.add(point)
         }
     }
 
     private fun onGpsLocationReady(map: MapFragment) {
         // Don't zoom to current location if a user is manually entering points
-        if (requireActivity().window.isActive && (!inputActive || recordingEnabled)) {
+        if (requireActivity().window.isActive && (!viewModel.inputActive || viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT)) {
             map.zoomToCurrentLocation(map.getGpsLocation())
         }
         updateUi()
     }
 
     private fun onGpsLocation(point: MapPoint?) {
-        if (inputActive && recordingEnabled) {
+        if (viewModel.inputActive && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT) {
             map!!.setCenter(point, false)
         }
         updateUi()
@@ -456,7 +444,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         get() {
             val meters: Int =
                 ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex]
-            return recordingEnabled && recordingAutomatic && meters > 0
+            return viewModel.recordingMode == GeoPolyViewModel.RecordingMode.AUTOMATIC && meters > 0
         }
 
     private fun removeLastPoint() {
@@ -466,7 +454,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun clear() {
-        inputActive = false
+        viewModel.disableInput()
         viewModel.update(emptyList())
     }
 
@@ -478,14 +466,14 @@ class GeoPolyFragment @JvmOverloads constructor(
         val location = map!!.getGpsLocation()
 
         // Visibility state
-        binding.play.isVisible = !inputActive
-        binding.pause.isVisible = inputActive
-        binding.recordButton.isVisible = inputActive && recordingEnabled && !recordingAutomatic
+        binding.play.isVisible = !viewModel.inputActive
+        binding.pause.isVisible = viewModel.inputActive
+        binding.recordButton.isVisible = viewModel.inputActive && viewModel.recordingMode == GeoPolyViewModel.RecordingMode.MANUAL
 
         // Enabled state
         binding.zoom.isEnabled = location != null
         binding.backspace.isEnabled = numPoints > 0
-        binding.clear.isEnabled = !inputActive && numPoints > 0
+        binding.clear.isEnabled = !viewModel.inputActive && numPoints > 0
 
         if (readOnly) {
             binding.play.isEnabled = false
@@ -510,16 +498,16 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
         }
 
-        binding.collectionStatus.text = if (!inputActive) {
+        binding.collectionStatus.text = if (!viewModel.inputActive) {
             getString(org.odk.collect.strings.R.string.collection_status_paused, numPoints)
         } else {
-            if (!recordingEnabled) {
+            if (viewModel.recordingMode == GeoPolyViewModel.RecordingMode.PLACEMENT) {
                 getString(
                     org.odk.collect.strings.R.string.collection_status_placement,
                     numPoints
                 )
             } else {
-                if (!recordingAutomatic) {
+                if (viewModel.recordingMode == GeoPolyViewModel.RecordingMode.MANUAL) {
                     getString(
                         org.odk.collect.strings.R.string.collection_status_manual,
                         numPoints
@@ -562,7 +550,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun showInfoDialog(fromSnackbar: Boolean) {
-        val type = if (recordingAutomatic || recordingEnabled) {
+        val type = if (viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT) {
             InfoDialog.Type.MANUAL_OR_AUTOMATIC
         } else {
             InfoDialog.Type.PLACEMENT
@@ -596,10 +584,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         const val REQUEST_GEOPOLY: String = "geopoly"
         const val RESULT_GEOPOLY: String = "geopoly"
         const val RESULT_GEOPOLY_CHANGE: String = "geopoly_change"
-
-        const val INPUT_ACTIVE_KEY: String = "input_active"
-        const val RECORDING_ENABLED_KEY: String = "recording_enabled"
-        const val RECORDING_AUTOMATIC_KEY: String = "recording_automatic"
         const val INTERVAL_INDEX_KEY: String = "interval_index"
         const val ACCURACY_THRESHOLD_INDEX_KEY: String = "accuracy_threshold_index"
         val INTERVAL_OPTIONS = intArrayOf(
