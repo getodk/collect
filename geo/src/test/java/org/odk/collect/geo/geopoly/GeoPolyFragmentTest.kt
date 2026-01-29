@@ -688,7 +688,7 @@ class GeoPolyFragmentTest {
         assertNotVisible(withText(message))
         Assertions.assertAlert(
             SnackbarUtils.alertStore,
-            "✅ Error fixed",
+            application.getString(string.error_fixed),
             "No error fixed message shown!"
         )
     }

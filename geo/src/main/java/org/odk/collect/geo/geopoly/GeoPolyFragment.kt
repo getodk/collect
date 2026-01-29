@@ -153,7 +153,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         onBackPressedDispatcher().addCallback(viewLifecycleOwner, onBackPressedCallback)
 
         viewModel.fixedAlerts.showSnackbar(viewLifecycleOwner, view) {
-            SnackbarUtils.SnackbarDetails("✅ Error fixed")
+            SnackbarUtils.SnackbarDetails(getString(string.error_fixed))
         }
     }
 
