@@ -22,20 +22,26 @@ fun CollectTheme(content: @Composable () -> Unit) {
         primary = colorResource(R.color.colorPrimaryLight),
         onPrimary = colorResource(R.color.colorOnPrimaryLight),
         surface = colorResource(R.color.colorSurfaceLight),
+        onSurface = colorResource(R.color.colorOnSurfaceLight),
         primaryContainer = colorResource(R.color.colorPrimaryContainerLight),
         onPrimaryContainer = colorResource(R.color.colorOnPrimaryContainerLight)
     )
+
     val darkColors = darkColorScheme(
         primary = colorResource(R.color.colorPrimaryDark),
         onPrimary = colorResource(R.color.colorOnPrimaryDark),
         surface = colorResource(R.color.colorSurfaceDark),
+        onSurface = colorResource(R.color.colorOnSurfaceDark),
         primaryContainer = colorResource(R.color.colorPrimaryContainerDark),
         onPrimaryContainer = colorResource(R.color.colorOnPrimaryContainerDark)
     )
+
     val colorScheme = if (isSystemInDarkTheme()) darkColors else lightColors
 
     val typography = Typography(
-        bodyMedium = MaterialTheme.typography.bodyMedium
+        bodyMedium = MaterialTheme.typography.bodyMedium,
+        bodyLarge = MaterialTheme.typography.bodyLarge,
+        titleLarge = MaterialTheme.typography.titleLarge,
     )
 
     val shapes = Shapes(

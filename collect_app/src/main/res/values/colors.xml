@@ -5,10 +5,12 @@
     <color name="colorPrimaryContainerLight">#bfe9ff</color>
     <color name="colorOnPrimaryContainerLight">#001f2a</color>
     <color name="colorSurfaceLight">#ffffff</color>
+    <color name="colorOnSurfaceLight">#001f2a</color>
 
     <color name="colorPrimaryDark">#4cbcf0</color>
     <color name="colorOnPrimaryDark">#003547</color>
     <color name="colorPrimaryContainerDark">#004d65</color>
     <color name="colorOnPrimaryContainerDark">#bfe9ff</color>
     <color name="colorSurfaceDark">#001117</color>
+    <color name="colorOnSurfaceDark">#d3e5ef</color>
 </resources>

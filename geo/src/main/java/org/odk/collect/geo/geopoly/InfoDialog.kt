@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -99,21 +100,23 @@ fun InfoContent(
 
     val scrollState = rememberScrollState()
 
-    Column(
-        modifier = Modifier
-            .padding(dimensionResource(id = dimen.margin_standard))
-            .verticalScroll(scrollState)
-    ) {
-        Title()
-        items.forEachIndexed { index, item ->
-            Info(item.icon, item.text)
-            if (index < items.lastIndex) {
-                HorizontalDivider(
-                    Modifier.padding(horizontal = dimensionResource(id = dimen.margin_small))
-                )
+    Surface {
+        Column(
+            modifier = Modifier
+                .padding(dimensionResource(id = dimen.margin_standard))
+                .verticalScroll(scrollState)
+        ) {
+            Title()
+            items.forEachIndexed { index, item ->
+                Info(item.icon, item.text)
+                if (index < items.lastIndex) {
+                    HorizontalDivider(
+                        Modifier.padding(horizontal = dimensionResource(id = dimen.margin_small))
+                    )
+                }
             }
+            DoneButton(onDone)
         }
-        DoneButton(onDone)
     }
 }
 
