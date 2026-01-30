@@ -94,6 +94,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
+import org.odk.collect.android.formentry.CurrentFormIndex;
 import org.odk.collect.android.formentry.FormAnimation;
 import org.odk.collect.android.formentry.FormAnimationType;
 import org.odk.collect.android.formentry.FormEndView;
@@ -562,19 +563,9 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         formEntryViewModel = viewModelProvider.get(FormEntryViewModel.class);
         printerWidgetViewModel = viewModelProvider.get(PrinterWidgetViewModel.class);
 
-        formEntryViewModel.getCurrentIndex().observe(this, indexAndValidationResult -> {
-            if (indexAndValidationResult != null) {
-                FormIndex screenIndex = indexAndValidationResult.getFirst();
-                FormIndex questionIndex = indexAndValidationResult.getSecond();
-                ValidationResult validationResult = indexAndValidationResult.getThird();
-                formIndexAnimationHandler.handle(screenIndex);
-                if (validationResult != null) {
-                    handleValidationResult(validationResult);
-                } else {
-                    if (odkView != null) {
-                        odkView.scrollToTopOf(questionIndex);
-                    }
-                }
+        formEntryViewModel.getCurrentIndex().observe(this, index -> {
+            if (index != null) {
+                formIndexAnimationHandler.handle(index.getScreenIndex());
             }
         });
 
@@ -633,13 +624,13 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         });
     }
 
-    private void handleValidationResult(ValidationResult validationResult) {
+    private void handleValidationResult(ODKView view, ValidationResult validationResult) {
         if (validationResult instanceof FailedValidationResult failedValidationResult) {
             String errorMessage = failedValidationResult.getCustomErrorMessage();
             if (errorMessage == null) {
                 errorMessage = getString(failedValidationResult.getDefaultErrorMessage());
             }
-            getCurrentViewIfODKView().setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
+            view.setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
             swipeHandler.setBeenSwiped(false);
         } else if (validationResult instanceof SuccessValidationResult) {
             SnackbarUtils.showSnackbar(
@@ -1816,9 +1807,19 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
     private int animationCompletionSet;
 
     private void afterAllAnimations() {
-        if (getCurrentViewIfODKView() != null) {
-            getCurrentViewIfODKView().setFocus(this);
+        ODKView view = getCurrentViewIfODKView();
+        if (view != null) {
+            CurrentFormIndex index = formEntryViewModel.getCurrentIndex().getValue();
+            ValidationResult validationResult = index.getValidationResult();
+            if (validationResult != null) {
+                handleValidationResult(view, validationResult);
+            } else if (index.getQuestionIndex() != null) {
+                view.scrollToTopOf(index.getQuestionIndex());
+            } else {
+                view.setFocus(this);
+            }
         }
+
         swipeHandler.setBeenSwiped(false);
     }
 

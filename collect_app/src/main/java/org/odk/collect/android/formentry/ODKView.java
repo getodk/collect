@@ -573,7 +573,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
     public void scrollToTopOf(@Nullable QuestionWidget qw) {
         if (qw != null && widgets.contains(qw)) {
-            postDelayed(() -> findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop()), 400);
+            findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
+            qw.setFocus(getContext());
         }
     }
 

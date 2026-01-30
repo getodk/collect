@@ -52,7 +52,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import kotlin.Triple;
 import timber.log.Timber;
 
 public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader {
@@ -61,7 +60,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
-    private final MutableLiveData<Triple<FormIndex, FormIndex, ValidationResult>> currentIndex = new MutableLiveData<>(null);
+    private final MutableLiveData<CurrentFormIndex> currentIndex = new MutableLiveData<>(null);
     @NonNull
     private final FormSessionRepository formSessionRepository;
     private final String sessionId;
@@ -114,7 +113,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         return formController;
     }
 
-    public LiveData<Triple<FormIndex, FormIndex, ValidationResult>> getCurrentIndex() {
+    public LiveData<CurrentFormIndex> getCurrentIndex() {
         return currentIndex;
     }
 
@@ -371,9 +370,9 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
             AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), clock.get());
             if (isAsync) {
-                currentIndex.postValue(new Triple<>(formController.getFormIndex(), questionIndex, validationResult));
+                currentIndex.postValue(new CurrentFormIndex(formController.getFormIndex(), questionIndex, validationResult));
             } else {
-                currentIndex.setValue(new Triple<>(formController.getFormIndex(), questionIndex, validationResult));
+                currentIndex.setValue(new CurrentFormIndex(formController.getFormIndex(), questionIndex, validationResult));
             }
         }
     }
