@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kotlinKapt)
+    alias(libs.plugins.composeCompiler)
 }
 
 apply(from = "../config/quality.gradle")
@@ -69,6 +70,11 @@ dependencies {
         exclude(group = "org.hamcrest", module = "hamcrest-all")
     }
 
+    implementation(libs.androidXComposeMaterial)
+    implementation(libs.androidXComposeMaterialIcons)
+    implementation(libs.androidXComposePreview)
+    debugImplementation(libs.androidXComposeTooling)
+
     debugImplementation(project(":fragments-test"))
 
     testImplementation(project(":androidtest"))
@@ -81,4 +87,6 @@ dependencies {
     testImplementation(libs.robolectric)
     testImplementation(libs.androidxTestEspressoCore)
     testImplementation(libs.androidxArchCoreTesting)
+    testImplementation(libs.androidXComposeUiTestJunit4)
+    debugImplementation(libs.androidXComposeUiTestManifest)
 }
