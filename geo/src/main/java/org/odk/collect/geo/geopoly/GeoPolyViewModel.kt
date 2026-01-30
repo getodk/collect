@@ -1,8 +1,12 @@
 package org.odk.collect.geo.geopoly
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.odk.collect.androidshared.data.Consumable
+import org.odk.collect.androidshared.livedata.LiveDataExt.withLast
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
@@ -14,7 +18,8 @@ class GeoPolyViewModel(
     points: List<MapPoint>,
     private val retainMockAccuracy: Boolean,
     private val locationTracker: LocationTracker,
-    private val scheduler: Scheduler
+    private val scheduler: Scheduler,
+    val invalidMessage: LiveData<String?>
 ) : ViewModel() {
 
     enum class RecordingMode {
@@ -39,13 +44,24 @@ class GeoPolyViewModel(
         }
     )
     val points: StateFlow<List<MapPoint>> = _points
+
+    val fixedAlerts = invalidMessage.withLast().map {
+        if (it.second == null && it.first != null) {
+            Consumable(Unit)
+        } else {
+            null
+        }
+    }
+
     private var accuracyThreshold: Int = 0
     private var recording: Cancellable? = null
 
     fun add(point: MapPoint) {
-        val points = _points.value
-        if (points.isEmpty() || point != points.last()) {
-            _points.value = points + point
+        if (invalidMessage.value == null) {
+            val points = _points.value
+            if (points.isEmpty() || point != points.last()) {
+                _points.value = points + point
+            }
         }
     }
 
