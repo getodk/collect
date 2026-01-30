@@ -21,8 +21,12 @@ class MultiSelectViewModel<T>(
 ) : ViewModel() {
 
     private val selected = MutableNonNullLiveData(emptySet<String>())
-    private val isAllSelected = LiveDataUtils.zip(data, selected).map { (data, selected) ->
-        data.isNotEmpty() && data.size == selected.size
+    private val isAllSelected = LiveDataUtils.combine(data, selected).map { (data, selected) ->
+        if (data != null && selected != null) {
+            data.isNotEmpty() && data.size == selected.size
+        } else {
+            false
+        }
     }
 
     fun getData(): LiveData<List<SelectItem<T>>> {

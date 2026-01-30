@@ -15,7 +15,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import org.odk.collect.androidshared.livedata.LiveDataExt.zip
+import org.odk.collect.androidshared.livedata.LiveDataExt.combine
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -130,6 +130,10 @@ class GeoPolyFragment @JvmOverloads constructor(
             .build()
 
         requireLocationPermissions(requireActivity())
+
+        viewModel.points.asLiveData().observe(this) {
+            setChangeResult(it)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -249,7 +253,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             },
             displayDismissButton = true
         )
-        val viewData = viewModel.points.asLiveData().zip(viewModel.invalidMessage)
+        val viewData = viewModel.points.asLiveData().combine(viewModel.invalidMessage)
         viewData.observe(viewLifecycleOwner) { (points, invalidMessage) ->
             val isValid = invalidMessage == null
             if (!isValid) {
@@ -297,7 +301,6 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
 
             updateUi()
-            setChangeResult()
         }
     }
 
@@ -323,8 +326,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
     }
 
-    private fun setChangeResult() {
-        val points = viewModel.points.value
+    private fun setChangeResult(points: List<MapPoint>) {
         val geoString = if (outputMode == OutputMode.GEOSHAPE && points.size < 3) {
             ""
         } else if (points.size < 2) {

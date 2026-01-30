@@ -149,12 +149,14 @@ class OfflineMapLayersPickerBottomSheetDialogFragment(
 
         val adapter = OfflineMapLayersPickerAdapter(this)
         binding.layers.setAdapter(adapter)
-        LiveDataUtils.zip3(
+        LiveDataUtils.combine3(
             sharedViewModel.existingLayers,
             checkedStateViewModel.getSelected(),
             expandedStateViewModel.getSelected()
         ).observe(this) { (layers, checkedLayerId, expandedLayerIds) ->
-            updateAdapter(layers, checkedLayerId, expandedLayerIds.toList(), adapter)
+            if (layers != null && expandedLayerIds != null) {
+                updateAdapter(layers, checkedLayerId, expandedLayerIds.toList(), adapter)
+            }
         }
     }
 
