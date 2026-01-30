@@ -72,10 +72,13 @@ public class LiveDataUtils {
         }
 
         public <S> void addDeferredSource(@NonNull LiveData<S> source, @NonNull Observer<? super S> onChanged) {
-            addSource(source, s -> {
-                registeredSources.add(sourceCounter++);
-                onChanged.onChanged(s);
-            });
+            registeredSources.add(sourceCounter++);
+            addSource(source, onChanged::onChanged);
+
+            // Handle case where onChanged is not called in addSource above
+            if (!source.isInitialized()) {
+                onChanged.onChanged(null);
+            }
         }
 
         /**
