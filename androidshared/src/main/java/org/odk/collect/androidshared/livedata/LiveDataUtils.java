@@ -1,6 +1,5 @@
 package org.odk.collect.androidshared.livedata;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -8,8 +7,6 @@ import androidx.lifecycle.Observer;
 
 import org.odk.collect.async.Cancellable;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -61,61 +58,28 @@ public class LiveDataUtils {
         );
     }
 
-    private abstract static class DeferrableUpdateMediatorLiveData<T> extends MediatorLiveData<T> {
-
-        private final int sources;
-        private final Set<Integer> registeredSources = new HashSet<>();
-        private int sourceCounter;
-
-        DeferrableUpdateMediatorLiveData(int sources) {
-            this.sources = sources;
-        }
-
-        public <S> void addDeferredSource(@NonNull LiveData<S> source, @NonNull Observer<? super S> onChanged) {
-            registeredSources.add(sourceCounter++);
-            addSource(source, onChanged::onChanged);
-
-            // Handle case where onChanged is not called in addSource above
-            if (!source.isInitialized()) {
-                onChanged.onChanged(null);
-            }
-        }
-
-        /**
-         * The value of the this {@link LiveData} will only be set once the `onChanged` for each
-         * source (other than the last) added via
-         * {@link DeferrableUpdateMediatorLiveData#addDeferredSource(LiveData, Observer)} has been
-         * called once. This prevents unneeded early  calls to {@link LiveData#setValue(Object)}
-         * when building up the initial state of a {@link MediatorLiveData} with many sources.
-         */
-        public void deferredSetValue(T value) {
-            if (registeredSources.size() >= sources) {
-                super.setValue(value);
-            }
-        }
-    }
-
-    private static class CombinedLiveData<T> extends DeferrableUpdateMediatorLiveData<T> {
+    private static class CombinedLiveData<T> extends MediatorLiveData<T> {
 
         private final Object[] values;
         private final Function<Object[], T> map;
 
         CombinedLiveData(LiveData<?>[] sources, Function<Object[], T> map) {
-            super(sources.length);
             this.map = map;
             values = new Object[sources.length];
 
             for (int i = 0; i < sources.length; i++) {
                 int index = i;
-                addDeferredSource(sources[i], value -> {
+                addSource(sources[i], value -> {
                     values[index] = value;
                     update();
                 });
             }
+
+            update();
         }
 
         private void update() {
-            deferredSetValue(map.apply(values));
+            setValue(map.apply(values));
         }
     }
 
