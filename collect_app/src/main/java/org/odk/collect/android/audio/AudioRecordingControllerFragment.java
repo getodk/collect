@@ -72,12 +72,14 @@ public class AudioRecordingControllerFragment extends Fragment {
                 audioRecorder.getCurrentSession(),
                 audioRecorder.failedToStart()
         ).observe(getViewLifecycleOwner(), quad -> {
-            boolean hasBackgroundRecording = quad.first;
-            boolean isBackgroundRecordingEnabled = quad.second;
-            RecordingSession session = quad.third;
-            Consumable<Exception> failedToStart = quad.fourth;
+            if (quad.second != null && quad.fourth != null) {
+                boolean hasBackgroundRecording = quad.first;
+                boolean isBackgroundRecordingEnabled = quad.second;
+                RecordingSession session = quad.third;
+                Consumable<Exception> failedToStart = quad.fourth;
 
-            update(hasBackgroundRecording, isBackgroundRecordingEnabled, session, failedToStart);
+                update(hasBackgroundRecording, isBackgroundRecordingEnabled, session, failedToStart);
+            }
         });
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {

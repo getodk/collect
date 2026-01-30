@@ -154,7 +154,9 @@ class OfflineMapLayersPickerBottomSheetDialogFragment(
             checkedStateViewModel.getSelected(),
             expandedStateViewModel.getSelected()
         ).observe(this) { (layers, checkedLayerId, expandedLayerIds) ->
-            updateAdapter(layers, checkedLayerId, expandedLayerIds.toList(), adapter)
+            if (layers != null && expandedLayerIds != null) {
+                updateAdapter(layers, checkedLayerId, expandedLayerIds.toList(), adapter)
+            }
         }
     }
 
