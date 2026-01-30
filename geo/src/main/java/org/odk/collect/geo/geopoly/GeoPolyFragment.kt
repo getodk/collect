@@ -130,6 +130,10 @@ class GeoPolyFragment @JvmOverloads constructor(
             .build()
 
         requireLocationPermissions(requireActivity())
+
+        viewModel.points.asLiveData().observe(this) {
+            setChangeResult(it)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -297,7 +301,6 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
 
             updateUi()
-            setChangeResult()
         }
     }
 
@@ -323,8 +326,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
     }
 
-    private fun setChangeResult() {
-        val points = viewModel.points.value
+    private fun setChangeResult(points: List<MapPoint>) {
         val geoString = if (outputMode == OutputMode.GEOSHAPE && points.size < 3) {
             ""
         } else if (points.size < 2) {
