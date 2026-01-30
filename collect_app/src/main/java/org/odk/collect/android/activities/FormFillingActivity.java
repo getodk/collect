@@ -1814,7 +1814,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
             if (validationResult != null) {
                 handleValidationResult(view, validationResult);
             } else if (index.getQuestionIndex() != null) {
-                view.scrollToTopOf(index.getQuestionIndex());
+                view.focusToTopOf(index.getQuestionIndex());
             } else {
                 view.setFocus(this);
             }
@@ -2261,7 +2261,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                         updateFieldListQuestions(changedWidget.getFormEntryPrompt().getIndex());
                         odkView.post(() -> {
                             if (odkView != null && !odkView.isDisplayed(changedWidget)) {
-                                odkView.scrollToTopOf(changedWidget);
+                                odkView.focusToTopOf(changedWidget);
                             }
                         });
                     } catch (RepeatsInFieldListException e) {
