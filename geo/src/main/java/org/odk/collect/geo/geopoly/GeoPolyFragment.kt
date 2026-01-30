@@ -461,7 +461,6 @@ class GeoPolyFragment @JvmOverloads constructor(
     }
 
     private fun clear() {
-        viewModel.disableInput()
         viewModel.update(emptyList())
     }
 
