@@ -13,7 +13,7 @@
 
     <color name="colorSurface">@color/colorSurfaceDark</color>
     <color name="colorSurfaceVariant">#40484c</color>
-    <color name="colorOnSurface">#d3e5ef</color>
+    <color name="colorOnSurface">@color/colorOnSurfaceDark</color>
     <color name="colorOnSurfaceVariant">#c0c8cd</color>
     <color name="colorSurfaceContainerLowest">#001117</color>
     <color name="colorSurfaceContainerLow">#293134</color>
