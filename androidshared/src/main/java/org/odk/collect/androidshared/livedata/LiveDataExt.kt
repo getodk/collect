@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 
 object LiveDataExt {
-    fun <T, U> LiveData<T>.zip(other: LiveData<U>): LiveData<Pair<T, U>> {
-        return LiveDataUtils.zip(this, other)
+    fun <T, U> LiveData<T>.combine(other: LiveData<U>): LiveData<Pair<T, U>> {
+        return LiveDataUtils.combine(this, other)
     }
 
     fun <T, U> LiveData<T>.runningFold(initial: U, operation: (U, T) -> U): LiveData<U> {

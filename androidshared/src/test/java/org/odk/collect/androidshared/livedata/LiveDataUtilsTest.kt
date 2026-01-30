@@ -6,7 +6,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
-import org.odk.collect.androidshared.livedata.LiveDataExt.zip
+import org.odk.collect.androidshared.livedata.LiveDataExt.combine
 import org.odk.collect.testshared.getOrAwaitValue
 
 class LiveDataUtilsTest {
@@ -15,23 +15,23 @@ class LiveDataUtilsTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Test
-    fun `#zip has initial value from both LiveData instances`() {
-        val zipped = MutableLiveData("one").zip(MutableLiveData("two"))
-        assertThat(zipped.getOrAwaitValue(), equalTo(Pair("one", "two")))
+    fun `#combine has initial value from both LiveData instances`() {
+        val combined = MutableLiveData("one").combine(MutableLiveData("two"))
+        assertThat(combined.getOrAwaitValue(), equalTo(Pair("one", "two")))
     }
 
     @Test
-    fun `#zip uses null values for uninitialized LiveData instances`() {
-        val zipped = MutableLiveData<String>().zip(MutableLiveData<String>())
-        assertThat(zipped.getOrAwaitValue(), equalTo(Pair(null, null)))
+    fun `#combine uses null values for uninitialized LiveData instances`() {
+        val combined = MutableLiveData<String>().combine(MutableLiveData<String>())
+        assertThat(combined.getOrAwaitValue(), equalTo(Pair(null, null)))
     }
 
     @Test
-    fun `#zip updates when either LiveData updates`() {
+    fun `#combine updates when either LiveData updates`() {
         val one = MutableLiveData("one")
-        val zipped = one.zip(MutableLiveData("two"))
+        val combined = one.combine(MutableLiveData("two"))
         one.value = "one-updated"
 
-        assertThat(zipped.getOrAwaitValue(), equalTo(Pair("one-updated", "two")))
+        assertThat(combined.getOrAwaitValue(), equalTo(Pair("one-updated", "two")))
     }
 }

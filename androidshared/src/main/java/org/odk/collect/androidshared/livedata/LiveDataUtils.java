@@ -40,22 +40,22 @@ public class LiveDataUtils {
         return new MutableLiveData<>(value);
     }
 
-    public static <T, U> LiveData<Pair<T, U>> zip(LiveData<T> one, LiveData<U> two) {
-        return new ZippedLiveData<>(
+    public static <T, U> LiveData<Pair<T, U>> combine(LiveData<T> one, LiveData<U> two) {
+        return new CombinedLiveData<>(
                 new LiveData[]{one, two},
                 values -> new Pair<>((T) values[0], (U) values[1])
         );
     }
 
-    public static <T, U, V> LiveData<Triple<T, U, V>> zip3(LiveData<T> one, LiveData<U> two, LiveData<V> three) {
-        return new ZippedLiveData<>(
+    public static <T, U, V> LiveData<Triple<T, U, V>> combine3(LiveData<T> one, LiveData<U> two, LiveData<V> three) {
+        return new CombinedLiveData<>(
                 new LiveData[]{one, two, three},
                 values -> new Triple<>((T) values[0], (U) values[1], (V) values[2])
         );
     }
 
-    public static <T, U, V, W> LiveData<Quad<T, U, V, W>> zip4(LiveData<T> one, LiveData<U> two, LiveData<V> three, LiveData<W> four) {
-        return new ZippedLiveData<>(
+    public static <T, U, V, W> LiveData<Quad<T, U, V, W>> combine4(LiveData<T> one, LiveData<U> two, LiveData<V> three, LiveData<W> four) {
+        return new CombinedLiveData<>(
                 new LiveData[]{one, two, three, four},
                 values -> new Quad<>((T) values[0], (U) values[1], (V) values[2], (W) values[3])
         );
@@ -95,12 +95,12 @@ public class LiveDataUtils {
         }
     }
 
-    private static class ZippedLiveData<T> extends DeferrableUpdateMediatorLiveData<T> {
+    private static class CombinedLiveData<T> extends DeferrableUpdateMediatorLiveData<T> {
 
         private final Object[] values;
         private final Function<Object[], T> map;
 
-        ZippedLiveData(LiveData<?>[] sources, Function<Object[], T> map) {
+        CombinedLiveData(LiveData<?>[] sources, Function<Object[], T> map) {
             super(sources.length);
             this.map = map;
             values = new Object[sources.length];
