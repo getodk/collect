@@ -15,7 +15,6 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import org.odk.collect.androidshared.livedata.LiveDataExt.combine
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -253,8 +252,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             },
             displayDismissButton = true
         )
-        val viewData = viewModel.points.asLiveData().combine(viewModel.invalidMessage)
-        viewData.observe(viewLifecycleOwner) { (points, invalidMessage) ->
+        viewModel.viewData.observe(viewLifecycleOwner) { (points, invalidMessage) ->
             val isValid = invalidMessage == null
             if (!isValid) {
                 snackbar.setText(invalidMessage)
