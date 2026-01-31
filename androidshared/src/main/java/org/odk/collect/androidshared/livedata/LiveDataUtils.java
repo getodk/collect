@@ -62,6 +62,7 @@ public class LiveDataUtils {
 
         private final Object[] values;
         private final Function<Object[], T> map;
+        private T lastEmitted;
 
         CombinedLiveData(LiveData<?>[] sources, Function<Object[], T> map) {
             this.map = map;
@@ -79,7 +80,12 @@ public class LiveDataUtils {
         }
 
         private void update() {
-            setValue(map.apply(values));
+            T newValue = map.apply(values);
+
+            if (lastEmitted == null || !lastEmitted.equals(newValue)) {
+                lastEmitted = newValue;
+                setValue(newValue);
+            }
         }
     }
 
