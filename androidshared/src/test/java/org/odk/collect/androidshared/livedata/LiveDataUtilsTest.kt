@@ -34,4 +34,19 @@ class LiveDataUtilsTest {
 
         assertThat(combined.getOrAwaitValue(), equalTo(Pair("one-updated", "two")))
     }
+
+    @Test
+    fun `#combine skips emission when result is equal to previous`() {
+        val one = MutableLiveData("one")
+        val combined = one.combine(MutableLiveData<String>())
+
+        var counter = 0
+        LiveDataUtils.observe(combined) {
+            counter++
+        }
+
+        one.value = "one"
+
+        assertThat(counter, equalTo(1))
+    }
 }

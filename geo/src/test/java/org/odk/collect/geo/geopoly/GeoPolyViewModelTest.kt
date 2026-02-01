@@ -7,12 +7,16 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
+import org.odk.collect.androidtest.MainDispatcherRule
 import org.odk.collect.testshared.getOrAwaitValue
 
 class GeoPolyViewModelTest {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Test
     fun `#fixedAlerts is null until after invalid message is non-null`() {

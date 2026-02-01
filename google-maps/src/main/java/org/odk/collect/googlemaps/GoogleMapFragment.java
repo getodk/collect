@@ -850,6 +850,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
         private void clearPolyline() {
             if (polyline != null) {
+                polyline.setVisible(false);
                 polyline.remove();
                 polyline = null;
             }
@@ -1024,6 +1025,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
         private void clearPolygon() {
             if (polygon != null) {
+                polygon.setVisible(false);
                 polygon.remove();
                 polygon = null;
             }
