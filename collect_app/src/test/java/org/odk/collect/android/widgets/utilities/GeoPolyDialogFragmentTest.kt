@@ -34,6 +34,7 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.android.widgets.viewmodels.QuestionViewModel
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.geopoly.GeoPolyFragment
@@ -507,7 +508,7 @@ class GeoPolyDialogFragmentTest {
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
-            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo("blah"))
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(DisplayString.Raw("blah")))
         }
     }
 
@@ -530,7 +531,7 @@ class GeoPolyDialogFragmentTest {
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
-            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo("Cancel"))
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(DisplayString.Resource(R.string.cancel)))
         }
     }
 

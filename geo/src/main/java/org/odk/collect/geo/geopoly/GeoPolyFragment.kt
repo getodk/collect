@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils.showSnackbar
@@ -50,7 +51,7 @@ class GeoPolyFragment @JvmOverloads constructor(
     val readOnly: Boolean = false,
     val retainMockAccuracy: Boolean = false,
     val inputPolygon: List<MapPoint> = emptyList(),
-    val invalidMessage: LiveData<String?> = MutableLiveData(null)
+    val invalidMessage: LiveData<DisplayString?> = MutableLiveData(null)
 ) : Fragment(R.layout.geopoly_layout), SettingsDialogCallback {
 
     @Inject
@@ -252,10 +253,11 @@ class GeoPolyFragment @JvmOverloads constructor(
             },
             displayDismissButton = true
         )
+
         viewModel.viewData.observe(viewLifecycleOwner) { (points, invalidMessage) ->
             val isValid = invalidMessage == null
             if (!isValid) {
-                snackbar.setText(invalidMessage)
+                snackbar.setText(invalidMessage.getString(requireContext()))
                 SnackbarUtils.show(snackbar)
             } else {
                 snackbar.dismiss()

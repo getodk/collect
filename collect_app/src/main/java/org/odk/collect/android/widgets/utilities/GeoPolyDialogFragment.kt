@@ -12,6 +12,7 @@ import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.utilities.FormEntryPromptUtils
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.BindAttributes.ALLOW_MOCK_ACCURACY
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.geopoly.GeoPolyFragment
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
@@ -58,7 +59,6 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             else -> throw IllegalArgumentException()
         }
 
-        val application = requireContext().applicationContext
         return GeoPolyFragment(
             { (requireDialog() as ComponentDialog).onBackPressedDispatcher },
             outputMode,
@@ -67,7 +67,11 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             inputPolygon,
             constraintValidationResult.map {
                 if (it is FailedValidationResult && it.index == prompt.index) {
-                    it.customErrorMessage ?: application.getString(it.defaultErrorMessage)
+                    if (it.customErrorMessage != null) {
+                        DisplayString.Raw(it.customErrorMessage)
+                    } else {
+                        DisplayString.Resource(it.defaultErrorMessage)
+                    }
                 } else {
                     null
                 }
