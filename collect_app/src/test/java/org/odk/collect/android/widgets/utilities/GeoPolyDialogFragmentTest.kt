@@ -537,6 +537,27 @@ class GeoPolyDialogFragmentTest {
         }
     }
 
+    /**
+     * This scenario can cause a crash if there's a [androidx.fragment.app.Fragment.getString]
+     * call the evaluation chain for however [GeoPolyDialogFragment] or its children deal with
+     * the invalid message [LiveData].
+     */
+    @Test
+    fun `recreating and setting a default failed constraint does not crash`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
+            .build()
+
+        val scenario = launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        )
+
+        scenario.recreate()
+        constraintValidationResult.value =
+            Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, null, R.string.cancel))
+    }
+
     private fun geoTraceOf(points: List<MapPoint>): GeoTraceData {
         return GeoTraceData(
             GeoTraceData.GeoTrace(
