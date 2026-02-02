@@ -34,7 +34,6 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.android.widgets.viewmodels.QuestionViewModel
-import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.geopoly.GeoPolyFragment
@@ -46,9 +45,7 @@ import org.odk.collect.testshared.getOrAwaitValue
 class GeoPolyDialogFragmentTest {
 
     private var prompt = MockFormEntryPromptBuilder().build()
-    private val constraintValidationResult = MutableLiveData<Consumable<ValidationResult>>(
-        Consumable(SuccessValidationResult)
-    )
+    private val constraintValidationResult = MutableLiveData<ValidationResult>(SuccessValidationResult)
     private val formEntryViewModel = mock<FormEntryViewModel> {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
     }
@@ -483,7 +480,7 @@ class GeoPolyDialogFragmentTest {
             0,
             TreeReference()
         )
-        constraintValidationResult.value = Consumable(FailedValidationResult(anotherQuestionFormIndex, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0))
+        constraintValidationResult.value = FailedValidationResult(anotherQuestionFormIndex, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0)
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
@@ -505,7 +502,7 @@ class GeoPolyDialogFragmentTest {
             assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
         }
 
-        constraintValidationResult.value = Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0))
+        constraintValidationResult.value = FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0)
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
@@ -528,7 +525,7 @@ class GeoPolyDialogFragmentTest {
         }
 
         constraintValidationResult.value =
-            Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, null, R.string.cancel))
+            FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, null, R.string.cancel)
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
@@ -555,7 +552,7 @@ class GeoPolyDialogFragmentTest {
 
         scenario.recreate()
         constraintValidationResult.value =
-            Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, null, R.string.cancel))
+            FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, null, R.string.cancel)
     }
 
     private fun geoTraceOf(points: List<MapPoint>): GeoTraceData {
