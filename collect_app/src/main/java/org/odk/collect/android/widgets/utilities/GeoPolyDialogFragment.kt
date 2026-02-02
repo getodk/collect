@@ -58,6 +58,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             else -> throw IllegalArgumentException()
         }
 
+        val application = requireContext().applicationContext
         return GeoPolyFragment(
             { (requireDialog() as ComponentDialog).onBackPressedDispatcher },
             outputMode,
@@ -67,7 +68,8 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             constraintValidationResult.map {
                 val validationResult = it.value
                 if (validationResult is FailedValidationResult && validationResult.index == prompt.index) {
-                    validationResult.customErrorMessage ?: getString(validationResult.defaultErrorMessage)
+                    validationResult.customErrorMessage
+                        ?: application.getString(validationResult.defaultErrorMessage)
                 } else {
                     null
                 }
