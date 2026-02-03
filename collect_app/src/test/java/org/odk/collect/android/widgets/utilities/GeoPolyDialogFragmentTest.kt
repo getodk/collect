@@ -514,7 +514,7 @@ class GeoPolyDialogFragmentTest {
 
     /**
      * This scenario can cause a crash if there's a [androidx.fragment.app.Fragment.getString]
-     * call the evaluation chain for however [GeoPolyDialogFragment] or its children deal with
+     * call in the evaluation chain for however [GeoPolyDialogFragment] or its children deal with
      * the invalid message [LiveData].
      */
     @Test
