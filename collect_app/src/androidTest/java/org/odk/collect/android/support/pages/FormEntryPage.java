@@ -206,6 +206,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormHierarchyPage clickGoToArrow() {
+        // This click sometimes ends up turning into a long press
         tryFlakyAction(() -> {
             onView(withId(R.id.menu_goto)).perform(click());
         });
