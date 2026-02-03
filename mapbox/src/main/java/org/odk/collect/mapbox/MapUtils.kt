@@ -6,9 +6,9 @@ import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
-import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.TraceDescription
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconCreator.toBitmap
 
@@ -65,7 +65,7 @@ object MapUtils {
 
     // To ensure consistent stroke width across map platforms like Mapbox, Google, and OSM,
     // the value for Mapbox needs to be divided by 3.
-    fun convertStrokeWidth(lineDescription: LineDescription): Double {
-        return (lineDescription.getStrokeWidth() / 3).toDouble()
+    fun convertStrokeWidth(traceDescription: TraceDescription): Double {
+        return (traceDescription.getStrokeWidth() / 3).toDouble()
     }
 }

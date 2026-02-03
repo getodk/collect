@@ -393,6 +393,7 @@ class MapboxMapFragment :
                 requireContext(),
                 pointAnnotationManager,
                 polygonAnnotationManager,
+                polylineAnnotationManager,
                 featureId,
                 featureClickListener,
                 featureDragEndListener,
