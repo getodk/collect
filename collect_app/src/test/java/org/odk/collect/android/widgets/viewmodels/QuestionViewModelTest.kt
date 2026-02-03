@@ -53,7 +53,7 @@ class QuestionViewModelTest {
 
         viewModel.validate(formIndex, StringData("answer"))
         assertThat(
-            viewModel.constraintValidationResult.getOrAwaitValue(scheduler).value,
+            viewModel.constraintValidationResult.getOrAwaitValue(scheduler),
             equalTo(failedValidationResult)
         )
     }

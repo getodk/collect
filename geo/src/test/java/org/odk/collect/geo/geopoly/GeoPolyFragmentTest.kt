@@ -23,6 +23,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.utils.opaque
@@ -620,7 +621,7 @@ class GeoPolyFragmentTest {
 
     @Test
     fun whenInvalidMessageIsNotNull_pointsCannotBeAddedByClicking() {
-        val invalidMessage = MutableLiveData<String?>(null)
+        val invalidMessage = MutableLiveData<DisplayString?>(null)
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },
@@ -630,14 +631,14 @@ class GeoPolyFragmentTest {
 
         startInput(R.id.placement_mode)
 
-        invalidMessage.value = "Blah"
+        invalidMessage.value = DisplayString.Raw("Blah")
         mapFragment.click(MapPoint(0.0, 0.0))
         assertThat(mapFragment.getPolyLines()[0].points.size, equalTo(0))
     }
 
     @Test
     fun whenInvalidMessageIsNotNull_pointsCannotBeAddedManually() {
-        val invalidMessage = MutableLiveData<String?>(null)
+        val invalidMessage = MutableLiveData<DisplayString?>(null)
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },
@@ -647,14 +648,14 @@ class GeoPolyFragmentTest {
 
         startInput(R.id.manual_mode)
 
-        invalidMessage.value = "Blah"
+        invalidMessage.value = DisplayString.Raw("Blah")
         Interactions.clickOn(withContentDescription(string.record_geopoint))
         assertThat(mapFragment.getPolyLines()[0].points.size, equalTo(0))
     }
 
     @Test
     fun whenInvalidMessageIsNotNull_automaticRecordingStops() {
-        val invalidMessage = MutableLiveData<String?>(null)
+        val invalidMessage = MutableLiveData<DisplayString?>(null)
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },
@@ -664,7 +665,7 @@ class GeoPolyFragmentTest {
 
         startInput(R.id.automatic_mode)
 
-        invalidMessage.value = "Blah"
+        invalidMessage.value = DisplayString.Raw("Blah")
         locationTracker.currentLocation = Location(1.0, 1.0, 1.0, 1f)
         scheduler.runForeground(0)
         assertThat(mapFragment.getPolyLines()[0].points.size, equalTo(0))
@@ -672,7 +673,7 @@ class GeoPolyFragmentTest {
 
     @Test
     fun showsAndHidesInvalidMessageSnackbarBasedOnValue() {
-        val invalidMessage = MutableLiveData<String?>(null)
+        val invalidMessage = MutableLiveData<DisplayString?>(null)
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },
@@ -681,7 +682,7 @@ class GeoPolyFragmentTest {
         }
 
         val message = "Something is wrong"
-        invalidMessage.value = message
+        invalidMessage.value = DisplayString.Raw(message)
         assertVisible(withText(message))
 
         invalidMessage.value = null
@@ -695,7 +696,7 @@ class GeoPolyFragmentTest {
 
     @Test
     fun invalidSnackbarCanBeDismissed() {
-        val invalidMessage = MutableLiveData<String?>(null)
+        val invalidMessage = MutableLiveData<DisplayString?>(null)
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },
@@ -704,14 +705,14 @@ class GeoPolyFragmentTest {
         }
 
         val message = "Something is wrong"
-        invalidMessage.value = message
+        invalidMessage.value = DisplayString.Raw(message)
         Interactions.clickOn(withContentDescription(string.close_snackbar))
         assertNotVisible(withText(message))
     }
 
     @Test
     fun changesPolyLineColorBasedOnInvalidMessage() {
-        val invalidMessage = MutableLiveData<String?>(null)
+        val invalidMessage = MutableLiveData<DisplayString?>(null)
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },
@@ -722,7 +723,7 @@ class GeoPolyFragmentTest {
         startInput(R.id.placement_mode)
         mapFragment.click(MapPoint(0.0, 0.0))
 
-        invalidMessage.value = "blah"
+        invalidMessage.value = DisplayString.Raw("blah")
         val errorPolyLine = mapFragment.getPolyLines()[0]
         assertThat(errorPolyLine.getStrokeColor(), equalTo(MapConsts.DEFAULT_ERROR_COLOR))
         assertThat(errorPolyLine.highlightLastPoint, equalTo(false))
@@ -735,7 +736,7 @@ class GeoPolyFragmentTest {
 
     @Test
     fun changesPolygonColorBasedOnInvalidMessage() {
-        val invalidMessage = MutableLiveData<String?>(null)
+        val invalidMessage = MutableLiveData<DisplayString?>(null)
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },
@@ -747,7 +748,7 @@ class GeoPolyFragmentTest {
         startInput(R.id.placement_mode)
         mapFragment.click(MapPoint(0.0, 0.0))
 
-        invalidMessage.value = "blah"
+        invalidMessage.value = DisplayString.Raw("blah")
         val errorPolyLine = mapFragment.getPolygons()[0]
         assertThat(errorPolyLine.getStrokeColor(), equalTo(MapConsts.DEFAULT_ERROR_COLOR))
         assertThat(errorPolyLine.highlightLastPoint, equalTo(false))
@@ -768,7 +769,7 @@ class GeoPolyFragmentTest {
 
     @Test
     fun disablesSaveButtonWhenInvalid() {
-        val invalidMessage = MutableLiveData<String?>(null)
+        val invalidMessage = MutableLiveData<DisplayString?>(null)
         fragmentLauncherRule.launchInContainer {
             GeoPolyFragment(
                 { OnBackPressedDispatcher() },
@@ -776,7 +777,7 @@ class GeoPolyFragmentTest {
             )
         }
 
-        invalidMessage.value = "Blah"
+        invalidMessage.value = DisplayString.Raw("Blah")
         Assertions.assertDisabled(withContentDescription(string.save))
 
         invalidMessage.value = null

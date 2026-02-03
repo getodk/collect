@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.livedata.LiveDataExt.combine
 import org.odk.collect.androidshared.livedata.LiveDataExt.withLast
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.geopoly.GeoPolyFragment.OutputMode
@@ -21,7 +22,7 @@ class GeoPolyViewModel(
     private val retainMockAccuracy: Boolean,
     private val locationTracker: LocationTracker,
     private val scheduler: Scheduler,
-    val invalidMessage: LiveData<String?>
+    val invalidMessage: LiveData<DisplayString?>
 ) : ViewModel() {
 
     enum class RecordingMode {

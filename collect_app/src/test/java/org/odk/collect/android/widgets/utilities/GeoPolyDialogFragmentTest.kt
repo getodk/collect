@@ -11,10 +11,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.Constants
-import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.data.GeoShapeData
 import org.javarosa.core.model.data.GeoTraceData
-import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.form.api.FormEntryController
 import org.junit.Before
 import org.junit.Rule
@@ -34,7 +32,7 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.utilities.AdditionalAttributes.INCREMENTAL
 import org.odk.collect.android.widgets.utilities.WidgetAnswerDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.android.widgets.viewmodels.QuestionViewModel
-import org.odk.collect.androidshared.data.Consumable
+import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.geopoly.GeoPolyFragment
@@ -46,9 +44,7 @@ import org.odk.collect.testshared.getOrAwaitValue
 class GeoPolyDialogFragmentTest {
 
     private var prompt = MockFormEntryPromptBuilder().build()
-    private val constraintValidationResult = MutableLiveData<Consumable<ValidationResult>>(
-        Consumable(SuccessValidationResult)
-    )
+    private val constraintValidationResult = MutableLiveData<ValidationResult>(SuccessValidationResult)
     private val formEntryViewModel = mock<FormEntryViewModel> {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
     }
@@ -472,27 +468,6 @@ class GeoPolyDialogFragmentTest {
     }
 
     @Test
-    fun `ignores the validation message if it belongs to a different question`() {
-        prompt = MockFormEntryPromptBuilder(prompt)
-            .withDataType(Constants.DATATYPE_GEOTRACE)
-            .build()
-
-        val anotherQuestionFormIndex = FormIndex(
-            null,
-            prompt.index.localIndex + 1,
-            0,
-            TreeReference()
-        )
-        constraintValidationResult.value = Consumable(FailedValidationResult(anotherQuestionFormIndex, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0))
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
-            GeoPolyDialogFragment::class,
-            bundleOf(ARG_FORM_INDEX to prompt.index)
-        ) {
-            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
-        }
-    }
-
-    @Test
     fun `uses validation result message for invalidMessage`() {
         prompt = MockFormEntryPromptBuilder(prompt)
             .withDataType(Constants.DATATYPE_GEOTRACE)
@@ -505,12 +480,12 @@ class GeoPolyDialogFragmentTest {
             assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
         }
 
-        constraintValidationResult.value = Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0))
+        constraintValidationResult.value = FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0)
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
-            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo("blah"))
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(DisplayString.Raw("blah")))
         }
     }
 
@@ -528,13 +503,34 @@ class GeoPolyDialogFragmentTest {
         }
 
         constraintValidationResult.value =
-            Consumable(FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, null, R.string.cancel))
+            FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, null, R.string.cancel)
         launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
             GeoPolyDialogFragment::class,
             bundleOf(ARG_FORM_INDEX to prompt.index)
         ) {
-            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo("Cancel"))
+            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(DisplayString.Resource(R.string.cancel)))
         }
+    }
+
+    /**
+     * This scenario can cause a crash if there's a [androidx.fragment.app.Fragment.getString]
+     * call in the evaluation chain for however [GeoPolyDialogFragment] or its children deal with
+     * the invalid message [LiveData].
+     */
+    @Test
+    fun `recreating and setting a default failed constraint does not crash`() {
+        prompt = MockFormEntryPromptBuilder(prompt)
+            .withDataType(Constants.DATATYPE_GEOTRACE)
+            .build()
+
+        val scenario = launcherRule.launch(
+            GeoPolyDialogFragment::class.java,
+            bundleOf(ARG_FORM_INDEX to prompt.index)
+        )
+
+        scenario.recreate()
+        constraintValidationResult.value =
+            FailedValidationResult(prompt.index, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, null, R.string.cancel)
     }
 
     private fun geoTraceOf(points: List<MapPoint>): GeoTraceData {
