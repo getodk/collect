@@ -66,7 +66,7 @@ class GeoPolyDialogFragment(viewModelFactory: ViewModelProvider.Factory) :
             retainMockAccuracy,
             inputPolygon,
             constraintValidationResult.map {
-                if (it is FailedValidationResult && it.index == prompt.index) {
+                if (it is FailedValidationResult) {
                     if (it.customErrorMessage != null) {
                         DisplayString.Raw(it.customErrorMessage)
                     } else {

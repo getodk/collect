@@ -11,10 +11,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.Constants
-import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.data.GeoShapeData
 import org.javarosa.core.model.data.GeoTraceData
-import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.form.api.FormEntryController
 import org.junit.Before
 import org.junit.Rule
@@ -466,27 +464,6 @@ class GeoPolyDialogFragmentTest {
         ).onFragment {
             it.childFragmentManager.setFragmentResult(GeoPolyFragment.REQUEST_GEOPOLY, Bundle.EMPTY)
             assertThat(it.dialog!!.isShowing, equalTo(false))
-        }
-    }
-
-    @Test
-    fun `ignores the validation message if it belongs to a different question`() {
-        prompt = MockFormEntryPromptBuilder(prompt)
-            .withDataType(Constants.DATATYPE_GEOTRACE)
-            .build()
-
-        val anotherQuestionFormIndex = FormIndex(
-            null,
-            prompt.index.localIndex + 1,
-            0,
-            TreeReference()
-        )
-        constraintValidationResult.value = FailedValidationResult(anotherQuestionFormIndex, FormEntryController.ANSWER_CONSTRAINT_VIOLATED, "blah", 0)
-        launcherRule.launchAndAssertOnChild<GeoPolyFragment>(
-            GeoPolyDialogFragment::class,
-            bundleOf(ARG_FORM_INDEX to prompt.index)
-        ) {
-            assertThat(it.invalidMessage.getOrAwaitValue(), equalTo(null))
         }
     }
 
