@@ -257,6 +257,14 @@
     <string name="number_picker_title">Number Picker</string>
     <string name="invalid_range_widget">This widget has invalid parameters!</string>
 
+    <string name="horizontal_slider">Horizontal slider</string>
+    <string name="vertical_slider">Vertical slider</string>
+    <string name="current_slider_value">Current slider value</string>
+    <string name="slider_tick">Slider tick</string>
+    <string name="slider_thumb">Slider thumb</string>
+    <string name="slider_start_label">Slider start label</string>
+    <string name="slider_end_label">Slider end label</string>
+
     <string name="svg_file_does_not_exist">SVG file does not exist!</string>
 
     <string name="capture_image">Take Picture</string>

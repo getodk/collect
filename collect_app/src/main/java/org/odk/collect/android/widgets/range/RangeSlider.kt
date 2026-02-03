@@ -30,6 +30,8 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -76,11 +78,15 @@ private fun HorizontalRangeSlider(
     onValueChange: (Float) -> Unit,
     onValueChangeFinished: () -> Unit
 ) {
+    val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.horizontal_slider)
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         ValueLabel(rangeSliderState.valueLabel)
 
         Slider(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().semantics {
+                contentDescription = sliderContentDescription
+            },
             value = rangeSliderState.sliderValue ?: 0f,
             steps = rangeSliderState.numOfSteps,
             onValueChange = onValueChange,
@@ -91,7 +97,10 @@ private fun HorizontalRangeSlider(
             enabled = rangeSliderState.isEnabled
         )
 
-        HorizontalEdgeLabels(rangeSliderState.startLabel, rangeSliderState.endLabel)
+        HorizontalEdgeLabels(
+            rangeSliderState.startLabel,
+            rangeSliderState.endLabel
+        )
     }
 }
 
@@ -104,12 +113,16 @@ private fun VerticalRangeSlider(
     onValueChangeFinished: () -> Unit
 ) {
     val view = LocalView.current
+    val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.vertical_slider)
 
     ConstraintLayout(Modifier.fillMaxWidth()) {
         val (left, center, right) = createRefs()
 
         Slider(
             modifier = Modifier
+                .semantics {
+                    contentDescription = sliderContentDescription
+                }
                 .constrainAs(center) {
                     centerHorizontallyTo(parent)
                 }
@@ -180,9 +193,13 @@ private fun ValueLabel(
     value: String,
     modifier: Modifier = Modifier
 ) {
+    val currentSliderValueContentDescription = stringResource(org.odk.collect.strings.R.string.current_slider_value)
+
     Text(
         text = value,
-        modifier = modifier,
+        modifier = modifier.semantics {
+            contentDescription = currentSliderValueContentDescription
+        },
         style = MaterialTheme.typography.headlineSmall
     )
 }
@@ -190,6 +207,8 @@ private fun ValueLabel(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Track(sliderState: SliderState, ticks: Int) {
+    val sliderTickContentDescription = stringResource(org.odk.collect.strings.R.string.slider_tick)
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -220,6 +239,9 @@ private fun Track(sliderState: SliderState, ticks: Int) {
                         .size(5.dp)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.onPrimary)
+                        .semantics {
+                            contentDescription = sliderTickContentDescription
+                        }
                 )
             }
         }
@@ -228,8 +250,13 @@ private fun Track(sliderState: SliderState, ticks: Int) {
 
 @Composable
 private fun Thumb(value: Float?, interactionSource: MutableInteractionSource) {
+    val sliderThumbContentDescription = stringResource(org.odk.collect.strings.R.string.slider_thumb)
+
     if (value != null) {
         SliderDefaults.Thumb(
+            modifier = Modifier.semantics {
+                contentDescription = sliderThumbContentDescription
+            },
             interactionSource = interactionSource
         )
     }
@@ -237,16 +264,25 @@ private fun Thumb(value: Float?, interactionSource: MutableInteractionSource) {
 
 @Composable
 private fun HorizontalEdgeLabels(labelStart: String, labelEnd: String) {
+    val sliderStartLabelContentDescription = stringResource(org.odk.collect.strings.R.string.slider_start_label)
+    val sliderEndLabelContentDescription = stringResource(org.odk.collect.strings.R.string.slider_end_label)
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = labelStart,
+            modifier = Modifier.semantics {
+                contentDescription = sliderStartLabelContentDescription
+            },
             style = MaterialTheme.typography.titleLarge
         )
         Text(
             text = labelEnd,
+            modifier = Modifier.semantics {
+                contentDescription = sliderEndLabelContentDescription
+            },
             style = MaterialTheme.typography.titleLarge
         )
     }
