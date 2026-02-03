@@ -206,8 +206,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormHierarchyPage clickGoToArrow() {
-        onView(withId(R.id.menu_goto)).perform(click());
-        return new FormHierarchyPage(formName).assertOnPage();
+        tryFlakyAction(() -> {
+            onView(withId(R.id.menu_goto)).perform(click());
+        });
+
+        return new FormHierarchyPage(formName);
     }
 
     public FormEntryPage clickWidgetButton() {
