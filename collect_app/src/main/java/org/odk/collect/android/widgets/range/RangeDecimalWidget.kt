@@ -3,17 +3,20 @@ package org.odk.collect.android.widgets.range
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
-import android.widget.TextView
-import com.google.android.material.slider.Slider
+import androidx.compose.foundation.interaction.DragInteraction
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ComposeView
 import org.javarosa.core.model.data.DecimalData
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.formentry.questions.QuestionDetails
-import org.odk.collect.android.views.TrackingTouchSlider
 import org.odk.collect.android.widgets.QuestionWidget
-import org.odk.collect.android.widgets.utilities.RangeWidgetUtils
-import java.math.BigDecimal
-import java.util.Locale
+import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 
 @SuppressLint("ViewConstructor")
 class RangeDecimalWidget(
@@ -24,60 +27,54 @@ class RangeDecimalWidget(
         context,
         dependencies,
         prompt
-    ), Slider.OnChangeListener {
-    lateinit var slider: TrackingTouchSlider
-    lateinit var currentValue: TextView
+    ) {
+    private var rangeSliderState by mutableStateOf(RangeSliderState.fromPrompt(formEntryPrompt))
+    private var shouldSuppressFlingGesture = false
 
     init {
         render()
     }
 
-    override fun onCreateWidgetView(
-        context: Context,
-        prompt: FormEntryPrompt,
-        answerFontSize: Int
-    ): View {
-        val layoutElements = RangeWidgetUtils.setUpLayoutElements(context, prompt)
-        slider = layoutElements.slider
-        currentValue = layoutElements.currentValue
+    override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
+        return ComposeView(context).apply {
+            setContextThemedContent {
+                val interactionSource = remember { MutableInteractionSource() }
 
-        setUpActualValueLabel(RangeWidgetUtils.setUpSlider(prompt, slider, false))
+                LaunchedEffect(interactionSource) {
+                    interactionSource.interactions.collect { interaction ->
+                        when (interaction) {
+                            is DragInteraction.Start -> shouldSuppressFlingGesture = true
+                            is DragInteraction.Stop, is DragInteraction.Cancel -> shouldSuppressFlingGesture = false
+                        }
+                    }
+                }
 
-        if (slider.isEnabled) {
-            slider.setListener(this)
+                RangeSlider(
+                    rangeSliderState,
+                    interactionSource,
+                    onValueChange = {
+                        rangeSliderState = rangeSliderState.copy(sliderValue = it)
+                    },
+                    onValueChangeFinished = {
+                        widgetValueChanged()
+                    }
+                )
+            }
         }
-        return layoutElements.answerView
     }
 
     override fun getAnswer(): IAnswerData? {
-        val stringAnswer = currentValue.getText().toString()
-        return if (stringAnswer.isEmpty()) null else DecimalData(stringAnswer.toDouble())
+        return rangeSliderState.realValue?.let {
+            DecimalData(it.toDouble())
+        }
     }
 
     override fun setOnLongClickListener(l: OnLongClickListener?) = Unit
 
-    override fun shouldSuppressFlingGesture() = slider.isTrackingTouch
+    override fun shouldSuppressFlingGesture() = shouldSuppressFlingGesture
 
     override fun clearAnswer() {
-        setUpActualValueLabel(null)
+        rangeSliderState = rangeSliderState.copy(sliderValue = null)
         widgetValueChanged()
-    }
-
-    @SuppressLint("RestrictedApi")
-    override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
-        if (fromUser) {
-            val actualValue = RangeWidgetUtils.getActualValue(formEntryPrompt, value)
-            setUpActualValueLabel(actualValue)
-            widgetValueChanged()
-        }
-    }
-
-    private fun setUpActualValueLabel(actualValue: BigDecimal?) {
-        if (actualValue != null) {
-            currentValue.text = String.format(Locale.getDefault(), "%s", actualValue.toDouble())
-        } else {
-            currentValue.text = ""
-            slider.reset()
-        }
     }
 }

@@ -91,6 +91,8 @@ object Appearances {
     const val MASKED = "masked"
     const val COUNTER = "counter"
     const val MULTILINE = "multiline"
+    const val VERTICAL = "vertical"
+    const val NO_TICKS = "no-ticks"
 
     // Get appearance hint and clean it up so it is lower case, without the search function and never null.
     @JvmStatic
