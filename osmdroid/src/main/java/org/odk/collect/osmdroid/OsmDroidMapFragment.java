@@ -446,13 +446,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     }
 
     @Override
-    public @Nullable
-    String getLocationProvider() {
-        Location fix = myLocationOverlay.getLastFix();
-        return fix != null ? fix.getProvider() : null;
-    }
-
-    @Override
     public void onLocationChanged(Location location) {
         Timber.i("onLocationChanged: location = %s", location);
         if (gpsLocationListener != null) {

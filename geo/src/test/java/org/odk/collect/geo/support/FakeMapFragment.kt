@@ -181,10 +181,6 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         return gpsLocation
     }
 
-    override fun getLocationProvider(): String? {
-        return locationProvider
-    }
-
     override fun runOnGpsLocationReady(listener: ReadyListener) {}
     override fun setGpsLocationListener(listener: PointListener?) {
         gpsLocationListener = listener
