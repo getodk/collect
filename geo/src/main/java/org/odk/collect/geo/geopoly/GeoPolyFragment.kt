@@ -163,6 +163,9 @@ class GeoPolyFragment @JvmOverloads constructor(
 
         locationTracker.getLocation().asLiveData().observe(viewLifecycleOwner) {
             binding.zoom.isEnabled = it != null
+            if (viewModel.inputActive && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT) {
+                map!!.setCenter(it?.toMapPoint(), false)
+            }
         }
     }
 
@@ -235,8 +238,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         map!!.setClickListener(this::onClick)
         // Also allow long press to place point to match prior versions
         map!!.setLongPressListener(this::onClick)
-        map!!.setGpsLocationEnabled(true)
-        map!!.setGpsLocationListener(this::onGpsLocation)
         map!!.setDragEndListener {
             viewModel.update(map!!.getPolyPoints(it))
         }
@@ -433,13 +434,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         updateUi()
     }
 
-    private fun onGpsLocation(point: MapPoint?) {
-        if (viewModel.inputActive && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT) {
-            map!!.setCenter(point, false)
-        }
-        updateUi()
-    }
-
     private fun isLocationAcceptable(point: MapPoint): Boolean {
         if (!this.isAccuracyThresholdActive) {
             return true
@@ -469,7 +463,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         val binding = GeopolyLayoutBinding.bind(requireView())
 
         val numPoints = viewModel.points.value.size
-        val location = map!!.getGpsLocation()
+        val location = locationTracker.getCurrentLocation()?.toMapPoint()
 
         // Visibility state
         binding.play.isVisible = !viewModel.inputActive
