@@ -398,14 +398,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }
     }
 
-    @Override public void runOnGpsLocationReady(@NonNull ReadyListener listener) {
-        if (lastLocationFix != null) {
-            listener.onReady(this);
-        } else {
-            gpsLocationReadyListeners.add(listener);
-        }
-    }
-
     @Override public void onLocationChanged(Location location) {
         Timber.i("onLocationChanged: location = %s", location);
         lastLocationFix = fromLocation(location);
