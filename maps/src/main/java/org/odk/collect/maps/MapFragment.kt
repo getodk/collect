@@ -137,17 +137,6 @@ interface MapFragment {
     fun getGpsLocation(): MapPoint?
 
     /**
-     * Queues a callback to be invoked on the UI thread as soon as a GPS fix is
-     * available.  If there already is a location fix, the callback is invoked
-     * immediately; otherwise, when a fix is obtained, it will be invoked once.
-     * To begin searching for a GPS fix, call setGpsLocationEnabled(true).
-     * Activities that set callbacks should call setGpsLocationEnabled(false)
-     * in their onStop() or onDestroy() methods, to prevent invalid callbacks.
-     */
-    @Deprecated(message = "Location should be handled outside of MapFragment")
-    fun runOnGpsLocationReady(listener: ReadyListener)
-
-    /**
      * Sets or clears the callback for GPS location updates.  This callback
      * will only be invoked while GPS is enabled with setGpsLocationEnabled().
      */

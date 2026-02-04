@@ -427,11 +427,6 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
     }
 
     @Override
-    public void runOnGpsLocationReady(@NonNull ReadyListener listener) {
-        myLocationOverlay.runOnFirstFix(() -> getActivity().runOnUiThread(() -> listener.onReady(this)));
-    }
-
-    @Override
     public void setGpsLocationEnabled(boolean enable) {
         if (enable != clientWantsLocationUpdates) {
             clientWantsLocationUpdates = enable;
