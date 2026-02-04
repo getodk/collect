@@ -19,7 +19,7 @@ import org.odk.collect.maps.MapPoint
 class GeoPolyViewModel(
     outputMode: OutputMode,
     points: List<MapPoint>,
-    private val retainMockAccuracy: Boolean,
+    retainMockAccuracy: Boolean,
     private val locationTracker: LocationTracker,
     private val scheduler: Scheduler,
     val invalidMessage: LiveData<DisplayString?>

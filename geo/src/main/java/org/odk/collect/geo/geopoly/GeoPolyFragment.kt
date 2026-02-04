@@ -233,7 +233,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         map!!.setLongPressListener(this::onClick)
         map!!.setGpsLocationEnabled(true)
         map!!.setGpsLocationListener(this::onGpsLocation)
-        map!!.setRetainMockAccuracy(retainMockAccuracy)
         map!!.setDragEndListener {
             viewModel.update(map!!.getPolyPoints(it))
         }
