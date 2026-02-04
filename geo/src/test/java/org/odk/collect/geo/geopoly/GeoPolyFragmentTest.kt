@@ -948,10 +948,23 @@ class GeoPolyFragmentTest {
             GeoPolyFragment({ OnBackPressedDispatcher() })
         }
 
-        val location = Location(5.0, 5.0)
-        locationTracker.currentLocation = location
+        locationTracker.currentLocation = Location(5.0, 5.0)
         Interactions.clickOn(withContentDescription(string.show_my_location))
         assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
+    }
+
+    @Test
+    fun whenAutomaticallyRecordingLocation_mapCenterUpdates() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        startInput(R.id.automatic_mode)
+        locationTracker.currentLocation = Location(5.0, 5.0)
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
+
+        locationTracker.currentLocation = Location(1.0, 1.0)
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(1.0, 1.0)))
     }
 
     companion object {
