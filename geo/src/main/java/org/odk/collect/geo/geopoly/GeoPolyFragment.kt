@@ -25,12 +25,14 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils
+import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.GeopolyLayoutBinding
 import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
 import org.odk.collect.geo.geopoint.LocationAccuracy.Unacceptable
 import org.odk.collect.geo.geopoly.GeoPolySettingsDialogFragment.SettingsDialogCallback
 import org.odk.collect.location.tracker.LocationTracker
+import org.odk.collect.location.tracker.getCurrentLocation
 import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
@@ -158,6 +160,10 @@ class GeoPolyFragment @JvmOverloads constructor(
         viewModel.fixedAlerts.showSnackbar(viewLifecycleOwner, view) {
             SnackbarUtils.SnackbarDetails(getString(string.error_fixed))
         }
+
+        locationTracker.getLocation().asLiveData().observe(viewLifecycleOwner) {
+            binding.zoom.isEnabled = it != null
+        }
     }
 
     override fun onSaveInstanceState(state: Bundle) {
@@ -221,9 +227,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
 
         binding.zoom.setOnClickListener {
-            map!!.zoomToCurrentLocation(
-                map!!.getGpsLocation()
-            )
+            map!!.zoomToCurrentLocation(locationTracker.getCurrentLocation()?.toMapPoint())
         }
 
         originalPoly = inputPolygon
@@ -436,12 +440,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         updateUi()
     }
 
-    private fun recordPoint(point: MapPoint?) {
-        if (point != null && isLocationAcceptable(point)) {
-            viewModel.add(point)
-        }
-    }
-
     private fun isLocationAcceptable(point: MapPoint): Boolean {
         if (!this.isAccuracyThresholdActive) {
             return true
@@ -479,7 +477,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         binding.recordButton.isVisible = viewModel.inputActive && viewModel.recordingMode == GeoPolyViewModel.RecordingMode.MANUAL
 
         // Enabled state
-        binding.zoom.isEnabled = location != null
         binding.backspace.isEnabled = numPoints > 0
         binding.clear.isEnabled = !viewModel.inputActive && numPoints > 0
 

@@ -942,6 +942,18 @@ class GeoPolyFragmentTest {
         )
     }
 
+    @Test
+    fun clickingZoom_zoomsToCurrentLocation() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        val location = Location(5.0, 5.0)
+        locationTracker.currentLocation = location
+        Interactions.clickOn(withContentDescription(string.show_my_location))
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
+    }
+
     companion object {
         private val DEFAULT_RECORDING_INTERVAL =
             INTERVAL_OPTIONS[GeoPolyFragment.DEFAULT_INTERVAL_INDEX].toLong() * 1000
