@@ -118,7 +118,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
     private boolean clientWantsLocationUpdates;
     private MapPoint lastLocationFix;
-    private String lastLocationProvider;
 
     private int nextFeatureId = 1;
     private final Map<Integer, MapFeature> features = new HashMap<>();
@@ -410,7 +409,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
     @Override public void onLocationChanged(Location location) {
         Timber.i("onLocationChanged: location = %s", location);
         lastLocationFix = fromLocation(location);
-        lastLocationProvider = location.getProvider();
         for (ReadyListener listener : gpsLocationReadyListeners) {
             listener.onReady(this);
         }
@@ -426,10 +424,6 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
 
     @Override public @Nullable MapPoint getGpsLocation() {
         return lastLocationFix;
-    }
-
-    @Override public @Nullable String getLocationProvider() {
-        return lastLocationProvider;
     }
 
     @Override public void onMapClick(LatLng latLng) {

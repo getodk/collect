@@ -136,10 +136,6 @@ interface MapFragment {
     @Deprecated(message = "Location should be handled outside of MapFragment")
     fun getGpsLocation(): MapPoint?
 
-    /** Gets the provider of the last fix, or null if there hasn't been one.  */
-    @Deprecated(message = "Location should be handled outside of MapFragment")
-    fun getLocationProvider(): String?
-
     /**
      * Queues a callback to be invoked on the UI thread as soon as a GPS fix is
      * available.  If there already is a location fix, the callback is invoked

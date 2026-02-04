@@ -96,10 +96,6 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         return null
     }
 
-    override fun getLocationProvider(): String? {
-        return null
-    }
-
     override fun runOnGpsLocationReady(listener: MapFragment.ReadyListener) {}
 
     override fun setGpsLocationListener(listener: MapFragment.PointListener?) {}

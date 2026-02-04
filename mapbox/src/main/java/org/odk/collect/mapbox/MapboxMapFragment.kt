@@ -461,10 +461,6 @@ class MapboxMapFragment :
         return lastLocationFix
     }
 
-    override fun getLocationProvider(): String? {
-        return lastLocationProvider
-    }
-
     override fun runOnGpsLocationReady(listener: ReadyListener) {
         if (lastLocationFix != null) {
             listener.onReady(this)
