@@ -209,7 +209,10 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
         }
 
-        binding.recordButton.setOnClickListener { recordPoint(map!!.getGpsLocation()) }
+        binding.recordButton.setOnClickListener {
+            viewModel.recordPoint()
+        }
+
         binding.layers.setOnClickListener {
             showIfNotShowing(
                 OfflineMapLayersPickerBottomSheetDialogFragment::class.java,
