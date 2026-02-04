@@ -87,7 +87,7 @@ class GeoPolyViewModel(
         recording = scheduler.repeat({ recordPoint(accuracyThreshold) }, interval)
     }
 
-    private fun recordPoint(accuracyThreshold: Int) {
+    fun recordPoint(accuracyThreshold: Int = 0) {
         locationTracker.getLocation().value?.let {
             if (accuracyThreshold == 0 || it.accuracy <= accuracyThreshold) {
                 add(
