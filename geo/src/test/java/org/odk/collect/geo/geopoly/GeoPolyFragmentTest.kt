@@ -502,7 +502,7 @@ class GeoPolyFragmentTest {
         fragmentLauncherRule.launchInContainer { GeoPolyFragment({ OnBackPressedDispatcher() }) }
 
         startInput(R.id.manual_mode)
-        mapFragment.setLocation(MapPoint(1.0, 1.0))
+        locationTracker.currentLocation = Location(1.0, 1.0)
         onView(withId(R.id.record_button)).perform(click())
         onView(withId(R.id.record_button)).perform(click())
         assertThat(mapFragment.getPolyLines()[0].points.size, equalTo(1))
