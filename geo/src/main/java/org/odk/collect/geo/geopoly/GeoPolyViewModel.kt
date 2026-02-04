@@ -61,6 +61,10 @@ class GeoPolyViewModel(
     private var accuracyThreshold: Int = 0
     private var recording: Cancellable? = null
 
+    init {
+        locationTracker.start(retainMockAccuracy)
+    }
+
     fun add(point: MapPoint) {
         if (invalidMessage.value == null) {
             val points = _points.value
@@ -80,7 +84,6 @@ class GeoPolyViewModel(
 
     fun startRecording(accuracyThreshold: Int, interval: Long) {
         this.accuracyThreshold = accuracyThreshold
-        locationTracker.start(retainMockAccuracy)
         recording = scheduler.repeat({ recordPoint(accuracyThreshold) }, interval)
     }
 

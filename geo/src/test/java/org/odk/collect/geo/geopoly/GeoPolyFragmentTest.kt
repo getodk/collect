@@ -24,7 +24,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.odk.collect.androidshared.ui.DisplayString
-import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.utils.opaque
 import org.odk.collect.androidtest.FragmentScenarioExtensions.setFragmentResultListener
@@ -231,6 +230,22 @@ class GeoPolyFragmentTest {
         assertVisible(
             withText(
                 application.getString(string.collection_status_paused, 1)
+            )
+        )
+    }
+
+    @Test
+    fun recordingPointsAutomatically_usesCurrentLocationWhenThereIsOne() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        locationTracker.currentLocation = Location(1.0, 1.0)
+        startInput(R.id.automatic_mode)
+        scheduler.runForeground(0)
+        assertVisible(
+            withText(
+                application.getString(string.collection_status_auto_seconds_accuracy, 1, 20, 10)
             )
         )
     }
@@ -575,38 +590,6 @@ class GeoPolyFragmentTest {
         }
 
         assertThat(mapFragment.isPolyDraggable(0), equalTo(false))
-    }
-
-    @Test
-    fun passingRetainMockAccuracyExtra_updatesMapFragmentState() {
-        fragmentLauncherRule.launchInContainer {
-            GeoPolyFragment(
-                { OnBackPressedDispatcher() },
-                OutputMode.GEOTRACE,
-                false,
-                true,
-                emptyList()
-            )
-        }
-
-        assertThat(mapFragment.isRetainMockAccuracy(), equalTo(true))
-
-        fragmentLauncherRule.launchInContainer(
-            GeoPolyFragment::class.java,
-            factory = FragmentFactoryBuilder()
-                .forClass(GeoPolyFragment::class) {
-                    GeoPolyFragment(
-                        { OnBackPressedDispatcher() },
-                        OutputMode.GEOTRACE,
-                        false,
-                        false,
-                        emptyList()
-                    )
-                }
-                .build()
-        )
-
-        assertThat(mapFragment.isRetainMockAccuracy(), equalTo(false))
     }
 
     @Test
