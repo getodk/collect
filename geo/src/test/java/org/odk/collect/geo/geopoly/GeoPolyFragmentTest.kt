@@ -74,39 +74,7 @@ class GeoPolyFragmentTest {
             Shadows.shadowOf(application)
         shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION")
         shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION")
-        val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
-        application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
-            .application(application)
-            .geoDependencyModule(object : GeoDependencyModule() {
-                override fun providesMapFragmentFactory(): MapFragmentFactory {
-                    return object : MapFragmentFactory {
-                        override fun createMapFragment(): MapFragment {
-                            return mapFragment
-                        }
-                    }
-                }
-
-                override fun providesLocationTracker(application: Application): LocationTracker {
-                    return locationTracker
-                }
-
-                override fun providesReferenceLayerRepository(): ReferenceLayerRepository {
-                    return mock()
-                }
-
-                override fun providesScheduler(): Scheduler {
-                    return scheduler
-                }
-
-                override fun providesSettingsProvider(): SettingsProvider {
-                    return InMemSettingsProvider()
-                }
-
-                override fun providesWebPageService(): WebPageService {
-                    return mock()
-                }
-            })
-            .build()
+        overrideDependencies(mapFragment)
 
         SnackbarUtils.alertStore.enabled = true
     }
@@ -114,6 +82,16 @@ class GeoPolyFragmentTest {
     @After
     fun teardown() {
         SnackbarUtils.alertStore.enabled = false
+    }
+
+    @Test
+    fun zoomsToCurrentLocation() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        locationTracker.currentLocation = Location(2.0, 2.0)
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(2.0, 2.0)))
     }
 
     @Test
@@ -980,6 +958,42 @@ class GeoPolyFragmentTest {
         Interactions.clickOn(withContentDescription(string.pause_location_recording))
         locationTracker.currentLocation = Location(1.0, 1.0)
         assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
+    }
+
+    private fun overrideDependencies(mapFragment: MapFragment) {
+        val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
+        application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
+            .application(application)
+            .geoDependencyModule(object : GeoDependencyModule() {
+                override fun providesMapFragmentFactory(): MapFragmentFactory {
+                    return object : MapFragmentFactory {
+                        override fun createMapFragment(): MapFragment {
+                            return mapFragment
+                        }
+                    }
+                }
+
+                override fun providesLocationTracker(application: Application): LocationTracker {
+                    return locationTracker
+                }
+
+                override fun providesReferenceLayerRepository(): ReferenceLayerRepository {
+                    return mock()
+                }
+
+                override fun providesScheduler(): Scheduler {
+                    return scheduler
+                }
+
+                override fun providesSettingsProvider(): SettingsProvider {
+                    return InMemSettingsProvider()
+                }
+
+                override fun providesWebPageService(): WebPageService {
+                    return mock()
+                }
+            })
+            .build()
     }
 
     companion object {

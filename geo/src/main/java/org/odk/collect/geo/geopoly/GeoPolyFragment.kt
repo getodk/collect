@@ -161,10 +161,14 @@ class GeoPolyFragment @JvmOverloads constructor(
             SnackbarUtils.SnackbarDetails(getString(string.error_fixed))
         }
 
-        locationTracker.getLocation().asLiveData().observe(viewLifecycleOwner) {
-            binding.zoom.isEnabled = it != null
-            if (viewModel.inputActive && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT) {
-                map!!.setCenter(it?.toMapPoint(), false)
+        locationTracker.getLocation().asLiveData().observe(viewLifecycleOwner) { location ->
+            map?.let {
+                binding.zoom.isEnabled = location != null
+                val shouldFollowLocation =
+                    viewModel.inputActive && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT
+                if (!it.hasCenter() || shouldFollowLocation) {
+                    it.setCenter(location?.toMapPoint(), false)
+                }
             }
         }
     }
@@ -245,8 +249,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         if (!map!!.hasCenter()) {
             if (viewModel.points.value.isNotEmpty()) {
                 map!!.zoomToBoundingBox(viewModel.points.value, 0.6, false)
-            } else {
-                map!!.runOnGpsLocationReady { this.onGpsLocationReady(it) }
             }
         }
 
@@ -426,14 +428,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
     }
 
-    private fun onGpsLocationReady(map: MapFragment) {
-        // Don't zoom to current location if a user is manually entering points
-        if (requireActivity().window.isActive && (!viewModel.inputActive || viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT)) {
-            map.zoomToCurrentLocation(map.getGpsLocation())
-        }
-        updateUi()
-    }
-
     private fun isLocationAcceptable(point: MapPoint): Boolean {
         if (!this.isAccuracyThresholdActive) {
             return true
@@ -468,7 +462,8 @@ class GeoPolyFragment @JvmOverloads constructor(
         // Visibility state
         binding.play.isVisible = !viewModel.inputActive
         binding.pause.isVisible = viewModel.inputActive
-        binding.recordButton.isVisible = viewModel.inputActive && viewModel.recordingMode == GeoPolyViewModel.RecordingMode.MANUAL
+        binding.recordButton.isVisible =
+            viewModel.inputActive && viewModel.recordingMode == GeoPolyViewModel.RecordingMode.MANUAL
 
         // Enabled state
         binding.backspace.isEnabled = numPoints > 0

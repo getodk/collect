@@ -56,6 +56,10 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
     }
 
     override fun setCenter(center: MapPoint?, animate: Boolean) {
+        if (center == null) {
+            return
+        }
+
         this.center = center
         hasCenter = true
     }
