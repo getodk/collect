@@ -6,11 +6,14 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
 class FormSaveTest {
-    private val composeRule = createEmptyComposeRule()
+    private val composeRule = createEmptyComposeRule().also {
+        Page.composeRule = it
+    }
     private val rule = CollectTestRule()
     private val testDependencies = TestDependencies()
 
@@ -30,7 +33,7 @@ class FormSaveTest {
             .clickSaveAsDraft()
             .assertText(org.odk.collect.strings.R.string.form_saved_as_draft)
             .clickOnString(org.odk.collect.strings.R.string.edit_form)
-            .assertText("25", composeRule)
+            .assertText("25")
             .assertText(org.odk.collect.strings.R.string.jump_to_beginning)
             .assertText(org.odk.collect.strings.R.string.jump_to_end)
     }
@@ -49,7 +52,7 @@ class FormSaveTest {
             .clickFinalize()
             .assertText(org.odk.collect.strings.R.string.form_saved)
             .clickOnString(org.odk.collect.strings.R.string.view_form)
-            .assertText("25", composeRule)
+            .assertText("25")
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_beginning)
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_end)
             .assertText(org.odk.collect.strings.R.string.exit)

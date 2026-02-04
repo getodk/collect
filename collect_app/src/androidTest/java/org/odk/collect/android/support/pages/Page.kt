@@ -135,13 +135,13 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    @JvmOverloads
-    fun assertText(text: String, composeRule: ComposeTestRule? = null): T {
-        if (composeRule != null) {
-            composeRule.onNodeWithText(text).assertIsDisplayed()
-        } else {
+    fun assertText(text: String): T {
+        try {
             Assertions.assertVisible(withText(text))
+        } catch (_: Throwable) {
+            composeRule.onNodeWithText(text).assertIsDisplayed()
         }
+
         return this as T
     }
 
@@ -200,18 +200,18 @@ abstract class Page<T : Page<T>> {
         return assertTextDoesNotExist(getTranslatedString(string))
     }
 
-    @JvmOverloads
-    fun assertTextDoesNotExist(text: String?, composeRule: ComposeTestRule? = null): T {
-        if (composeRule != null) {
-            composeRule.onNodeWithText(text!!).assertIsNotDisplayed()
-        } else {
+    fun assertTextDoesNotExist(text: String?): T {
+        try {
             onView(
                 allOf(
                     withText(text),
                     withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
                 )
             ).check(doesNotExist())
+        } catch (_: Throwable) {
+            composeRule.onNodeWithText(text!!).assertIsNotDisplayed()
         }
+
         return this as T
     }
 
@@ -627,6 +627,9 @@ abstract class Page<T : Page<T>> {
     }
 
     companion object {
+        @JvmStatic
+        lateinit var composeRule: ComposeTestRule
+
         private fun rotateToLandscape(): ViewAction {
             return RotateAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
         }

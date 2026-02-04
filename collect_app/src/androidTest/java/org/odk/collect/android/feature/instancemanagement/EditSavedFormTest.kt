@@ -14,6 +14,7 @@ import org.odk.collect.android.support.SubmissionParser
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.RecentAppsRule
@@ -22,7 +23,9 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class EditSavedFormTest {
-    private val composeRule = createEmptyComposeRule()
+    private val composeRule = createEmptyComposeRule().also {
+        Page.composeRule = it
+    }
     private val rule = CollectTestRule()
 
     val testDependencies: TestDependencies = TestDependencies()
@@ -295,7 +298,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .acceptEditingNewerDraftEdit("One Question Editable")
-            .assertText("456", composeRule)
+            .assertText("456")
     }
 
     @Test
@@ -319,7 +322,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .discardEditingNewerEdit()
-            .assertText("123", composeRule)
+            .assertText("123")
     }
 
     @Test
@@ -344,7 +347,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .acceptEditingNewerFinalizedEdit("One Question Editable")
-            .assertText("456", composeRule)
+            .assertText("456")
     }
 
     @Test
@@ -369,7 +372,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .discardEditingNewerEdit()
-            .assertText("123", composeRule)
+            .assertText("123")
     }
 
     @Test

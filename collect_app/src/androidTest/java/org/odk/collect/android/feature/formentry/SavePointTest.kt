@@ -12,6 +12,7 @@ import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
+import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.FormEntryActivityTestRule
 import org.odk.collect.android.support.rules.RecentAppsRule
@@ -20,7 +21,9 @@ import org.odk.collect.android.support.rules.TestRuleChain
 @RunWith(AndroidJUnit4::class)
 class SavePointTest {
     private val recentAppsRule = RecentAppsRule()
-    private val composeRule = createEmptyComposeRule()
+    private val composeRule = createEmptyComposeRule().also {
+        Page.composeRule = it
+    }
     private val rule = FormEntryActivityTestRule()
 
     @get:Rule
@@ -42,8 +45,8 @@ class SavePointTest {
         // Start blank form and check save point is loaded
         rule.fillNewFormWithSavepoint("two-question-audit.xml")
             .clickRecover(FormHierarchyPage("Two Question"))
-            .assertText("Alexei", composeRule)
-            .assertTextDoesNotExist("46", composeRule)
+            .assertText("Alexei")
+            .assertTextDoesNotExist("46")
             .pressBack(FormEntryPage("Two Question"))
             .closeSoftKeyboard()
             .assertQuestion("What is your name?")
@@ -87,9 +90,9 @@ class SavePointTest {
         // Edit instance and check save point is loaded
         rule.editFormWithSavepoint("two-question-audit.xml")
             .clickRecover(FormHierarchyPage("Two Question"))
-            .assertText("Alexei", composeRule)
-            .assertText("52", composeRule)
-            .assertTextDoesNotExist("46", composeRule)
+            .assertText("Alexei")
+            .assertText("52")
+            .assertTextDoesNotExist("46")
             .pressBack(FormEntryPage("Two Question"))
             .closeSoftKeyboard()
             .assertQuestion("What is your name?")
@@ -124,7 +127,7 @@ class SavePointTest {
         // Start blank form and check save point is loaded
         rule.fillNewFormWithSavepoint("two-question-audit.xml")
             .clickRecover(FormHierarchyPage("Two Question"))
-            .assertText("Alexei", composeRule)
+            .assertText("Alexei")
             .pressBack(FormEntryPage("Two Question"))
             .closeSoftKeyboard()
             .assertQuestion("What is your name?")
@@ -166,8 +169,8 @@ class SavePointTest {
         // Edit instance and check save point is loaded
         rule.editFormWithSavepoint("two-question-audit.xml")
             .clickRecover(FormHierarchyPage("Two Question"))
-            .assertText("Alexei", composeRule)
-            .assertText("52", composeRule)
+            .assertText("Alexei")
+            .assertText("52")
             .pressBack(FormEntryPage("Two Question"))
             .closeSoftKeyboard()
             .assertQuestion("What is your name?")
@@ -208,9 +211,9 @@ class SavePointTest {
 
         // Check editing instance doesn't load save point
         rule.editForm("two-question-audit.xml", "Two Question")
-            .assertText("Pasquale", composeRule)
-            .assertText("52", composeRule)
-            .assertTextDoesNotExist("Alexei", composeRule)
+            .assertText("Pasquale")
+            .assertText("52")
+            .assertTextDoesNotExist("Alexei")
     }
 
     @Test
@@ -254,8 +257,8 @@ class SavePointTest {
         // Edit saved form and check save point is loaded
         rule.editFormWithSavepoint("two-question.xml")
             .clickRecover(FormHierarchyPage("Two Question"))
-            .assertText("Alexei", composeRule)
-            .assertText("46", composeRule)
+            .assertText("Alexei")
+            .assertText("46")
     }
 
     /**

@@ -5,11 +5,13 @@ import static androidx.compose.ui.test.junit4.AndroidComposeTestRule_androidKt.c
 import androidx.compose.ui.test.junit4.ComposeTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer;
+import org.odk.collect.android.support.pages.Page;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
@@ -22,6 +24,11 @@ public class QuickSaveTest {
     public final RuleChain chain = TestRuleChain.chain()
             .around(composeRule)
             .around(rule);
+
+    @Before
+    public void setUp() {
+        Page.composeRule = composeRule;
+    }
 
     @Test
     public void whenFillingForm_clickingSaveIcon_savesCurrentAnswers() {
@@ -37,8 +44,8 @@ public class QuickSaveTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question")
-                .assertText("Reuben", composeRule)
-                .assertText("32", composeRule);
+                .assertText("Reuben")
+                .assertText("32");
     }
 
     @Test
@@ -53,7 +60,7 @@ public class QuickSaveTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Reuben", composeRule);
+                .assertText("Reuben");
     }
 
     @Test
@@ -75,6 +82,6 @@ public class QuickSaveTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Another Reuben", composeRule);
+                .assertText("Another Reuben");
     }
 }
