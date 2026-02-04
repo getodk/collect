@@ -967,6 +967,21 @@ class GeoPolyFragmentTest {
         assertThat(mapFragment.getCenter(), equalTo(MapPoint(1.0, 1.0)))
     }
 
+    @Test
+    fun whenNotRecordingLocation_mapCenterDoesNoUpdate() {
+        fragmentLauncherRule.launchInContainer {
+            GeoPolyFragment({ OnBackPressedDispatcher() })
+        }
+
+        startInput(R.id.automatic_mode)
+        locationTracker.currentLocation = Location(5.0, 5.0)
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
+
+        Interactions.clickOn(withContentDescription(string.pause_location_recording))
+        locationTracker.currentLocation = Location(1.0, 1.0)
+        assertThat(mapFragment.getCenter(), equalTo(MapPoint(5.0, 5.0)))
+    }
+
     companion object {
         private val DEFAULT_RECORDING_INTERVAL =
             INTERVAL_OPTIONS[GeoPolyFragment.DEFAULT_INTERVAL_INDEX].toLong() * 1000
