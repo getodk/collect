@@ -36,12 +36,7 @@ Please note that the `master` branch reflects ongoing development and is not pro
 
 ## Release cycle
 
-Releases are planned to happen every 2-3 months (resulting in ~4 releases a year). Soon before (or just after) the end of one release cycle, the core team will plan a new set of work for the next release. This involves:
-
-1. Moving issues not finished in the last release and new items from the [ODK Roadmap](https://getodk.org/roadmap) to the [planning board](https://github.com/orgs/getodk/projects/9/views/25)
-2. Giving the core team a few days to review and reflect on the planning board
-3. The core team will then meet to trim work that will not be included in the next release and pitch alternative things to work on
-4. The milestone for the new release is added to [the backlog](https://github.com/orgs/getodk/projects/9) and is prioritized
+The work to be done is continuously revised and prioritized in [the backlog](https://github.com/orgs/getodk/projects/9/views/8) by the Collect team. The majority of this is influenced by the priorities in [the ODK roadmap](https://getodk.org/roadmap). Releases are planned to happen every 2-3 months (resulting in ~4 releases a year). This goal is to balance the pace of delivery with keeping things stable for users while also minimizing the risk in each release.
 
 Sometimes issues will be assigned to core team members before they are actually started (moved to "in progress") to make it clear who's going to be working on what.
 
