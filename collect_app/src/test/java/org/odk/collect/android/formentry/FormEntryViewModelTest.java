@@ -37,7 +37,6 @@ import org.odk.collect.android.javarosawrapper.FakeFormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.ChangeLocks;
-import org.odk.collect.androidshared.data.Consumable;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.formstest.InMemFormsRepository;
@@ -214,16 +213,16 @@ public class FormEntryViewModelTest {
 
     @Test
     public void moveForward_withEvaluateConstraints_whenThereIsAFailedConstraint_setsFailedConstraint() {
-        Consumable<FailedValidationResult> failedValidationResult =
-                new Consumable<>(new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error));
-        formController.setFailedConstraint(failedValidationResult.getValue());
+        FailedValidationResult failedValidationResult =
+                new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
+        formController.setFailedConstraint(failedValidationResult);
 
         HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
         answers.put(startingIndex, new StringData("answer"));
         viewModel.moveForward(answers, true);
         scheduler.flush();
 
-        assertThat(getOrAwaitValue(viewModel.getValidationResult()), equalTo(failedValidationResult));
+        assertThat(getOrAwaitValue(viewModel.getCurrentIndex()).getValidationResult(), equalTo(failedValidationResult));
     }
 
     /**
@@ -489,7 +488,7 @@ public class FormEntryViewModelTest {
         FormIndex originalIndex = formController.getFormIndex();
         viewModel.answerQuestion(formIndex, new StringData("answer"));
         scheduler.flush(true);
-        assertThat(getOrAwaitValue(viewModel.getCurrentIndex()).getThird(), equalTo(failedValidationResult));
+        assertThat(getOrAwaitValue(viewModel.getCurrentIndex()).getValidationResult(), equalTo(failedValidationResult));
         assertThat(formController.getFormIndex(), equalTo(new FormIndex(null, originalIndex.getLocalIndex(), 0, new TreeReference())));
     }
 
@@ -506,11 +505,11 @@ public class FormEntryViewModelTest {
         viewModel.answerQuestion(formIndex, new StringData("answer"));
         scheduler.flush(true);
         assertThat(
-                getOrAwaitValue(viewModel.getCurrentIndex()).getFirst(),
+                getOrAwaitValue(viewModel.getCurrentIndex()).getScreenIndex(),
                 equalTo(originalIndex)
         );
         assertThat(
-                getOrAwaitValue(viewModel.getCurrentIndex()).getSecond(),
+                getOrAwaitValue(viewModel.getCurrentIndex()).getQuestionIndex(),
                 equalTo(formIndex)
         );
     }
@@ -530,11 +529,11 @@ public class FormEntryViewModelTest {
         viewModel.answerQuestion(formIndex, new StringData("answer"));
         scheduler.flush(true);
         assertThat(
-                getOrAwaitValue(viewModel.getCurrentIndex()).getFirst(),
+                getOrAwaitValue(viewModel.getCurrentIndex()).getScreenIndex(),
                 equalTo(new FormIndex(null, originalIndex.getLocalIndex() + 1, 0, new TreeReference()))
         );
         assertThat(
-                getOrAwaitValue(viewModel.getCurrentIndex()).getSecond(),
+                getOrAwaitValue(viewModel.getCurrentIndex()).getQuestionIndex(),
                 equalTo(null)
         );
     }
@@ -557,11 +556,11 @@ public class FormEntryViewModelTest {
         viewModel.answerQuestion(formIndex, new StringData("answer"));
         scheduler.flush(true);
         assertThat(
-                getOrAwaitValue(viewModel.getCurrentIndex()).getFirst(),
+                getOrAwaitValue(viewModel.getCurrentIndex()).getScreenIndex(),
                 equalTo(originalIndex)
         );
         assertThat(
-                getOrAwaitValue(viewModel.getCurrentIndex()).getSecond(),
+                getOrAwaitValue(viewModel.getCurrentIndex()).getQuestionIndex(),
                 equalTo(null)
         );
     }

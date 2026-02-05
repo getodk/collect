@@ -562,18 +562,19 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         return qw.getLocalVisibleRect(scrollBounds);
     }
 
-    public void scrollToTopOf(FormIndex index) {
+    public void focusToTopOf(FormIndex index) {
         for (QuestionWidget widget : widgets) {
             if (widget.getFormEntryPrompt().getIndex().equals(index)) {
-                scrollToTopOf(widget);
+                focusToTopOf(widget);
                 break;
             }
         }
     }
 
-    public void scrollToTopOf(@Nullable QuestionWidget qw) {
+    public void focusToTopOf(@Nullable QuestionWidget qw) {
         if (qw != null && widgets.contains(qw)) {
-            postDelayed(() -> findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop()), 400);
+            findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
+            qw.setFocus(getContext());
         }
     }
 
@@ -700,7 +701,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         for (QuestionWidget questionWidget : getWidgets()) {
             if (formIndex.equals(questionWidget.getFormEntryPrompt().getIndex())) {
                 questionWidget.displayError(errorMessage);
-                scrollToTopOf(questionWidget);
+                focusToTopOf(questionWidget);
             } else {
                 questionWidget.hideError();
             }
