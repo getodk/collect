@@ -1,56 +1,36 @@
 package org.odk.collect.android.widgets.range
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.RangeQuestion
-import org.javarosa.core.model.data.StringData
-import org.javarosa.form.api.FormEntryPrompt
-import org.junit.Test
+import org.javarosa.core.model.data.IntegerData
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.formentry.questions.QuestionDetails
+import org.odk.collect.android.widgets.base.QuestionWidgetTest
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
 import java.math.BigDecimal
 
 @RunWith(AndroidJUnit4::class)
-class RangeIntegerWidgetTest {
+class RangeIntegerWidgetTest : QuestionWidgetTest<RangeIntegerWidget, IntegerData>() {
     private var rangeQuestion = mock<RangeQuestion>().apply {
         whenever(rangeStart).thenReturn(BigDecimal.ONE)
         whenever(rangeEnd).thenReturn(BigDecimal.TEN)
         whenever(rangeStep).thenReturn(BigDecimal.ONE)
     }
 
-    @Test
-    fun getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
-        val widget = createWidget(
-            QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef(
-                rangeQuestion
-            )
+    override fun createWidget(): RangeIntegerWidget {
+        whenever(formEntryPrompt.question).thenReturn(rangeQuestion)
+
+        return RangeIntegerWidget(
+            activity,
+            QuestionDetails(formEntryPrompt),
+            QuestionWidgetHelpers.widgetDependencies()
         )
-        assertThat(widget.answer, equalTo(null))
     }
 
-    @Test
-    fun getAnswer_whenPromptHasAnswer_returnsAnswer() {
-        val widget = createWidget(
-            QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(
-                rangeQuestion,
-                StringData("4")
-            )
-        )
-        assertThat(widget.answer!!.value, equalTo(4))
-    }
+    override fun getNextAnswer() = IntegerData(5)
 
-    //
-    //    @Test
-    //    public void clearAnswer_clearsWidgetAnswer() {
-    //        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
-    //        widget.clearAnswer();
-    //        assertThat(widget.currentValue.getText(), equalTo(""));
-    //    }
     //
     //    @Test
     //    public void clearAnswer_hidesSliderThumb() {
@@ -58,20 +38,6 @@ class RangeIntegerWidgetTest {
     //        widget.clearAnswer();
     //        assertThat(widget.slider.getThumbRadius(), equalTo(0));
     //    }
-    @Test
-    fun clearAnswer_callsValueChangeListener() {
-        val widget = createWidget(
-            QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(
-                rangeQuestion,
-                null
-            )
-        )
-        val valueChangedListener = QuestionWidgetHelpers.mockValueChangedListener(widget)
-        widget.clearAnswer()
-
-        verify(valueChangedListener).widgetValueChanged(widget)
-    }
-
     //    @Test
     //    public void changingSliderValue_showsSliderThumb() {
     //        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
@@ -147,12 +113,7 @@ class RangeIntegerWidgetTest {
     //
     //        assertThat(widget.currentValue.getText(), equalTo("10"));
     //    }
-    private fun createWidget(prompt: FormEntryPrompt?): RangeIntegerWidget {
-        val widget = RangeIntegerWidget(
-            QuestionWidgetHelpers.widgetTestActivity(),
-            QuestionDetails(prompt),
-            QuestionWidgetHelpers.widgetDependencies()
-        )
-        return widget
+
+    override fun usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
     }
 }
