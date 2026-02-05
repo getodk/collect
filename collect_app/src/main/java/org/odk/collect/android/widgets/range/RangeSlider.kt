@@ -89,6 +89,11 @@ private fun HorizontalRangeSlider(
         Slider(
             modifier = Modifier.fillMaxWidth().semantics {
                 contentDescription = sliderContentDescription
+            }.pointerInteropFilter { event ->
+                if (rangeSliderState.sliderValue == null && event.action == MotionEvent.ACTION_DOWN) {
+                    onValueChange(0f)
+                }
+                false
             },
             value = rangeSliderState.sliderValue ?: 0f,
             steps = rangeSliderState.numOfSteps,
@@ -132,7 +137,12 @@ private fun VerticalRangeSlider(
                 .height(330.dp)
                 .pointerInteropFilter { event ->
                     when (event.action) {
-                        MotionEvent.ACTION_DOWN,
+                        MotionEvent.ACTION_DOWN -> {
+                            view.parent?.requestDisallowInterceptTouchEvent(true)
+                            if (rangeSliderState.sliderValue == null) {
+                                onValueChange(0f)
+                            }
+                        }
                         MotionEvent.ACTION_MOVE ->
                             view.parent?.requestDisallowInterceptTouchEvent(true)
                         MotionEvent.ACTION_UP,

@@ -199,12 +199,12 @@ class RangeSliderTest {
     }
 
     @Test
-    fun `calls onValueChange callback upon slider value change by click`() {
+    fun `calls onValueChange callback with minimum when horizontal slider is clicked`() {
         var changedValue: Float? = null
 
         composeTestRule.setContent {
             RangeSlider(
-                rangeSliderState = createTestState(sliderValue = null),
+                rangeSliderState = createTestState(sliderValue = null, isHorizontal = true),
                 interactionSource = MutableInteractionSource(),
                 onValueChange = { changedValue = it },
                 onValueChangeFinished = {}
@@ -213,6 +213,66 @@ class RangeSliderTest {
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
+            .performTouchInput { click(centerLeft) }
+
+        assertThat(changedValue, equalTo(0F))
+    }
+
+    @Test
+    fun `calls onValueChange callback with midpoint when horizontal slider is clicked`() {
+        var changedValue: Float? = null
+
+        composeTestRule.setContent {
+            RangeSlider(
+                rangeSliderState = createTestState(sliderValue = null, isHorizontal = true),
+                interactionSource = MutableInteractionSource(),
+                onValueChange = { changedValue = it },
+                onValueChangeFinished = {}
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
+            .performTouchInput { click() }
+
+        assertThat(changedValue, equalTo(0.5F))
+    }
+
+    @Test
+    fun `calls onValueChange callback with minimum when vertical slider is clicked`() {
+        var changedValue: Float? = null
+
+        composeTestRule.setContent {
+            RangeSlider(
+                rangeSliderState = createTestState(sliderValue = null, isHorizontal = false),
+                interactionSource = MutableInteractionSource(),
+                onValueChange = { changedValue = it },
+                onValueChangeFinished = {}
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.vertical_slider))
+            .performTouchInput { click(bottomCenter) }
+
+        assertThat(changedValue, equalTo(0F))
+    }
+
+    @Test
+    fun `calls onValueChange callback with midpoint when vertical slider is clicked`() {
+        var changedValue: Float? = null
+
+        composeTestRule.setContent {
+            RangeSlider(
+                rangeSliderState = createTestState(sliderValue = null, isHorizontal = false),
+                interactionSource = MutableInteractionSource(),
+                onValueChange = { changedValue = it },
+                onValueChangeFinished = {}
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.vertical_slider))
             .performTouchInput { click() }
 
         assertThat(changedValue, equalTo(0.5F))
