@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SliderState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,20 +54,22 @@ fun RangeSlider(
         }
     }
 
-    if (rangeSliderState.isHorizontal) {
-        HorizontalRangeSlider(
-            rangeSliderState,
-            interactionSource,
-            onValueChange = onValueChange,
-            onValueChangeFinished = onValueChangeFinished
-        )
-    } else {
-        VerticalRangeSlider(
-            rangeSliderState,
-            interactionSource,
-            onValueChange = onValueChange,
-            onValueChangeFinished = onValueChangeFinished
-        )
+    Surface {
+        if (rangeSliderState.isHorizontal) {
+            HorizontalRangeSlider(
+                rangeSliderState,
+                interactionSource,
+                onValueChange = onValueChange,
+                onValueChangeFinished = onValueChangeFinished
+            )
+        } else {
+            VerticalRangeSlider(
+                rangeSliderState,
+                interactionSource,
+                onValueChange = onValueChange,
+                onValueChangeFinished = onValueChangeFinished
+            )
+        }
     }
 }
 
