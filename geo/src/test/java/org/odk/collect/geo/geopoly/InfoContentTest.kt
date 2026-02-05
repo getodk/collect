@@ -76,7 +76,6 @@ class InfoContentTest {
 
         assertInfo(
             listOf(
-                org.odk.collect.strings.R.string.physically_move_to_correct_info_item,
                 org.odk.collect.strings.R.string.long_press_to_move_point_info_item,
                 org.odk.collect.strings.R.string.remove_last_point_info_item,
                 org.odk.collect.strings.R.string.delete_entire_shape_info_item,
@@ -96,8 +95,6 @@ class InfoContentTest {
 
         assertInfo(
             listOf(
-                org.odk.collect.strings.R.string.tap_to_add_a_point_info_item,
-                org.odk.collect.strings.R.string.physically_move_to_correct_info_item,
                 org.odk.collect.strings.R.string.long_press_to_move_point_info_item,
                 org.odk.collect.strings.R.string.remove_last_point_info_item,
                 org.odk.collect.strings.R.string.delete_entire_shape_info_item,
@@ -117,7 +114,6 @@ class InfoContentTest {
 
         assertInfo(
             listOf(
-                org.odk.collect.strings.R.string.physically_move_to_correct_info_item,
                 org.odk.collect.strings.R.string.long_press_to_move_point_info_item,
                 org.odk.collect.strings.R.string.remove_last_point_info_item,
                 org.odk.collect.strings.R.string.delete_entire_shape_info_item,
@@ -137,8 +133,6 @@ class InfoContentTest {
 
         assertInfo(
             listOf(
-                org.odk.collect.strings.R.string.tap_to_add_a_point_info_item,
-                org.odk.collect.strings.R.string.physically_move_to_correct_info_item,
                 org.odk.collect.strings.R.string.long_press_to_move_point_info_item,
                 org.odk.collect.strings.R.string.remove_last_point_info_item,
                 org.odk.collect.strings.R.string.delete_entire_shape_info_item,
