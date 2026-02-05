@@ -106,13 +106,6 @@ class NoOpMapFragment : Fragment(), MapFragment {
         TODO("Not yet implemented")
     }
 
-    override fun getLocationProvider(): String? {
-        TODO("Not yet implemented")
-    }
-
-    override fun runOnGpsLocationReady(listener: MapFragment.ReadyListener) {
-    }
-
     override fun setGpsLocationListener(listener: MapFragment.PointListener?) {
     }
 
