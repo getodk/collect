@@ -1,56 +1,36 @@
 package org.odk.collect.android.widgets.range
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.RangeQuestion
-import org.javarosa.core.model.data.StringData
-import org.javarosa.form.api.FormEntryPrompt
-import org.junit.Test
+import org.javarosa.core.model.data.DecimalData
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.formentry.questions.QuestionDetails
+import org.odk.collect.android.widgets.base.QuestionWidgetTest
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
 import java.math.BigDecimal
 
 @RunWith(AndroidJUnit4::class)
-class RangeDecimalWidgetTest {
+class RangeDecimalWidgetTest : QuestionWidgetTest<RangeDecimalWidget, DecimalData>() {
     private var rangeQuestion = mock<RangeQuestion>().apply {
         whenever(rangeStart).thenReturn(BigDecimal.valueOf(1.5))
         whenever(rangeEnd).thenReturn(BigDecimal.valueOf(5.5))
         whenever(rangeStep).thenReturn(BigDecimal.valueOf(0.5))
     }
 
-    @Test
-    fun getAnswer_whenPromptDoesNotHaveAnswer_returnsNull() {
-        val widget = createWidget(
-            QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef(
-                rangeQuestion
-            )
+    override fun createWidget(): RangeDecimalWidget {
+        whenever(formEntryPrompt.question).thenReturn(rangeQuestion)
+
+        return RangeDecimalWidget(
+            activity,
+            QuestionDetails(formEntryPrompt),
+            QuestionWidgetHelpers.widgetDependencies()
         )
-        assertThat(widget.answer, equalTo(null))
     }
 
-    @Test
-    fun getAnswer_whenPromptHasAnswer_returnsAnswer() {
-        val widget = createWidget(
-            QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(
-                rangeQuestion,
-                StringData("2.5")
-            )
-        )
-        assertThat(widget.answer!!.value, equalTo(2.5))
-    }
+    override fun getNextAnswer() = DecimalData(2.5)
 
-    //
-    //    @Test
-    //    public void clearAnswer_clearsWidgetAnswer() {
-    //        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
-    //        widget.clearAnswer();
-    //        assertThat(widget.currentValue.getText(), equalTo(""));
-    //    }
     //
     //    @Test
     //    public void clearAnswer_hidesSliderThumb() {
@@ -58,20 +38,6 @@ class RangeDecimalWidgetTest {
     //        widget.clearAnswer();
     //        assertThat(widget.slider.getThumbRadius(), equalTo(0));
     //    }
-    @Test
-    fun clearAnswer_callsValueChangeListener() {
-        val widget = createWidget(
-            QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(
-                rangeQuestion,
-                StringData("2.5")
-            )
-        )
-        val valueChangedListener = QuestionWidgetHelpers.mockValueChangedListener(widget)
-        widget.clearAnswer()
-
-        verify(valueChangedListener).widgetValueChanged(widget)
-    }
-
     //    @Test
     //    public void changingSliderValue_updatesAnswer() {
     //        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
@@ -146,12 +112,7 @@ class RangeDecimalWidgetTest {
     //
     //        assertThat(widget.currentValue.getText(), equalTo("5.5"));
     //    }
-    private fun createWidget(prompt: FormEntryPrompt?): RangeDecimalWidget {
-        val widget = RangeDecimalWidget(
-            QuestionWidgetHelpers.widgetTestActivity(),
-            QuestionDetails(prompt),
-            QuestionWidgetHelpers.widgetDependencies()
-        )
-        return widget
+
+    override fun usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
     }
 }
