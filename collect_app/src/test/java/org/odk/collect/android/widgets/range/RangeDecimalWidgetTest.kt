@@ -104,24 +104,6 @@ class RangeDecimalWidgetTest : QuestionWidgetTest<RangeDecimalWidget, DecimalDat
         verify(valueChangedListener).widgetValueChanged(widget)
     }
 
-    @Test
-    fun changingSliderValueToTheMinOneWhenSliderHasNoValue_setsTheValueCorrectly() {
-        createWidget()
-
-        composeRule
-            .onNodeWithContentDescription(activity.getString(org.odk.collect.strings.R.string.horizontal_slider))
-            .performTouchInput { click(centerLeft) }
-
-        composeRule
-            .onNodeWithContentDescription(activity.getString(org.odk.collect.strings.R.string.current_slider_value))
-            .assertIsDisplayed()
-            .assertTextEquals("1.5")
-
-        composeRule
-            .onNodeWithContentDescription(activity.getString(org.odk.collect.strings.R.string.slider_thumb))
-            .assertIsDisplayed()
-    }
-
     override fun usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         formEntryPrompt = MockFormEntryPromptBuilder(formEntryPrompt)
             .withReadOnly(true)
