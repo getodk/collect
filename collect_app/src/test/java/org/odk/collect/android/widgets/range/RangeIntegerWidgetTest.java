@@ -57,56 +57,6 @@ public class RangeIntegerWidgetTest {
         assertEquals(widget.getAnswer().getValue(), 4);
     }
 
-//    @Test
-//    public void whenPromptDoesNotHaveAnswer_sliderShowsNoAnswerMarked() {
-//        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-//        assertThat(widget.slider.getValue(), equalTo(1.0F));
-//        assertThat(widget.slider.getThumbRadius(), equalTo(0));
-//    }
-//
-//    @Test
-//    public void whenPromptHasAnswer_sliderShowsCorrectAnswer() {
-//        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
-//        assertThat(widget.slider.getValue(), equalTo(4.0F));
-//        assertThat(widget.slider.getThumbRadius(), not(0));
-//    }
-//
-//    @Test
-//    public void whenPromptDoesNotHaveAnswer_widgetShowsNullAnswer() {
-//        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-//        assertThat(widget.currentValue.getText(), equalTo(""));
-//    }
-//
-//    @Test
-//    public void whenPromptHasAnswer_widgetShouldShowCorrectAnswer() {
-//        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
-//        assertThat(widget.currentValue.getText(), equalTo("4"));
-//    }
-//
-//    @Test
-//    public void whenSliderIsDiscrete_widgetShowsCorrectSliderValues() {
-//        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("4")));
-//
-//        assertThat(widget.slider.getValueFrom(), equalTo(1.0F));
-//        assertThat(widget.slider.getValueTo(), equalTo(10.0F));
-//        assertThat(widget.slider.getValue(), equalTo(4.0F));
-//        assertThat(widget.slider.isTickVisible(), equalTo(true));
-//    }
-//
-//    @Test
-//    public void whenSliderIsContinuous_widgetShowsCorrectSliderValues() {
-//        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
-//                .withQuestion(rangeQuestion)
-//                .withAnswer(new StringData("4"))
-//                .withAppearance(NO_TICKS_APPEARANCE)
-//                .build();
-//        RangeIntegerWidget widget = createWidget(prompt);
-//
-//        assertThat(widget.slider.getValueFrom(), equalTo(1.0F));
-//        assertThat(widget.slider.getValueTo(), equalTo(10.0F));
-//        assertThat(widget.slider.getValue(), equalTo(4.0F));
-//        assertThat(widget.slider.isTickVisible(), equalTo(false));
-//    }
 //
 //    @Test
 //    public void clearAnswer_clearsWidgetAnswer() {
@@ -179,17 +129,6 @@ public class RangeIntegerWidgetTest {
 //        widget.slider.setValue(4);
 //
 //        verify(valueChangedListener, never()).widgetValueChanged(widget);
-//    }
-//
-//    @Test
-//    public void clickingSliderForLong_doesNotCallLongClickListener() {
-//        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
-//
-//        RangeIntegerWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-//        widget.setOnLongClickListener(listener);
-//        widget.slider.performLongClick();
-//
-//        verify(listener, never()).onLongClick(widget.slider);
 //    }
 //
 //    @Test // https://github.com/getodk/collect/issues/5530

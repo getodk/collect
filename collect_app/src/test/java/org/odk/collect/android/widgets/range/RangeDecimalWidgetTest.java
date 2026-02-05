@@ -56,56 +56,6 @@ public class RangeDecimalWidgetTest {
         assertThat(widget.getAnswer().getValue(), equalTo(2.5));
     }
 
-//    @Test
-//    public void whenPromptDoesNotHaveAnswer_sliderShowsNoAnswerMarked() {
-//        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-//        assertThat(widget.slider.getValue(), equalTo(1.5F));
-//        assertThat(widget.slider.getThumbRadius(), equalTo(0));
-//    }
-//
-//    @Test
-//    public void whenPromptHasAnswer_sliderShowsCorrectAnswer() {
-//        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
-//        assertThat(widget.slider.getValue(), equalTo(2.5F));
-//        assertThat(widget.slider.getThumbRadius(), not(0));
-//    }
-//
-//    @Test
-//    public void whenPromptDoesNotHaveAnswer_widgetShouldShowNullAnswer() {
-//        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-//        assertThat(widget.currentValue.getText(), equalTo(""));
-//    }
-//
-//    @Test
-//    public void whenPromptHasAnswer_widgetShouldShowCorrectAnswer() {
-//        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
-//        assertThat(widget.currentValue.getText(), equalTo("2.5"));
-//    }
-//
-//    @Test
-//    public void whenSliderIsDiscrete_widgetShowsCorrectSlider() {
-//        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, new StringData("2.5")));
-//
-//        assertThat(widget.slider.getValueFrom(), equalTo(1.5F));
-//        assertThat(widget.slider.getValueTo(), equalTo(5.5F));
-//        assertThat(widget.slider.getValue(), equalTo(2.5F));
-//        assertThat(widget.slider.isTickVisible(), equalTo(true));
-//    }
-//
-//    @Test
-//    public void whenSliderIsContinuous_widgetShowsCorrectSlider() {
-//        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
-//                .withQuestion(rangeQuestion)
-//                .withAnswer(new StringData("2.5"))
-//                .withAppearance(NO_TICKS_APPEARANCE)
-//                .build();
-//        RangeDecimalWidget widget = createWidget(prompt);
-//
-//        assertThat(widget.slider.getValueFrom(), equalTo(1.5F));
-//        assertThat(widget.slider.getValueTo(), equalTo(5.5F));
-//        assertThat(widget.slider.getValue(), equalTo(2.5F));
-//        assertThat(widget.slider.isTickVisible(), equalTo(false));
-//    }
 //
 //    @Test
 //    public void clearAnswer_clearsWidgetAnswer() {
@@ -177,16 +127,6 @@ public class RangeDecimalWidgetTest {
 //        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
 //        widget.slider.setValue(2.5F);
 //        verify(valueChangedListener, never()).widgetValueChanged(widget);
-//    }
-//
-//    @Test
-//    public void clickingSliderForLong_doesNotCallLongClickListener() {
-//        View.OnLongClickListener listener = mock(View.OnLongClickListener.class);
-//        RangeDecimalWidget widget = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
-//        widget.setOnLongClickListener(listener);
-//        widget.slider.performLongClick();
-//
-//        verify(listener, never()).onLongClick(widget.slider);
 //    }
 //
 //    @Test // https://github.com/getodk/collect/issues/5530
