@@ -32,7 +32,6 @@ import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
 import org.odk.collect.geo.geopoint.LocationAccuracy.Unacceptable
 import org.odk.collect.geo.geopoly.GeoPolySettingsDialogFragment.SettingsDialogCallback
 import org.odk.collect.location.tracker.LocationTracker
-import org.odk.collect.location.tracker.getCurrentLocation
 import org.odk.collect.maps.LineDescription
 import org.odk.collect.maps.MapConsts
 import org.odk.collect.maps.MapFragment
@@ -223,7 +222,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
 
         binding.zoom.setOnClickListener {
-            map.zoomToCurrentLocation(locationTracker.getCurrentLocation()?.toMapPoint())
+            map.zoomToCurrentLocation(viewModel.currentLocation.value?.toMapPoint())
         }
 
         originalPoly = inputPolygon
@@ -251,7 +250,7 @@ class GeoPolyFragment @JvmOverloads constructor(
             displayDismissButton = true
         )
 
-        locationTracker.getLocation().asLiveData().observe(viewLifecycleOwner) { location ->
+        viewModel.currentLocation.observe(viewLifecycleOwner) { location ->
             binding.zoom.isEnabled = location != null
             val shouldFollowLocation =
                 viewModel.inputActive && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT
@@ -260,15 +259,17 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
         }
 
-        viewModel.viewData.observe(viewLifecycleOwner) { (points, invalidMessage) ->
-            val isValid = invalidMessage == null
+        viewModel.invalidMessage.observe(viewLifecycleOwner) {
+            val isValid = it == null
             if (!isValid) {
-                snackbar.setText(invalidMessage.getString(requireContext()))
+                snackbar.setText(it.getString(requireContext()))
                 SnackbarUtils.show(snackbar)
             } else {
                 snackbar.dismiss()
             }
+        }
 
+        viewModel.geoPoly.observe(viewLifecycleOwner) { (points, isValid) ->
             binding.save.isEnabled = !readOnly && isValid
 
             val color = if (isValid) {
@@ -455,7 +456,7 @@ class GeoPolyFragment @JvmOverloads constructor(
         val binding = GeopolyLayoutBinding.bind(requireView())
 
         val numPoints = viewModel.points.value.size
-        val location = locationTracker.getCurrentLocation()?.toMapPoint()
+        val location = viewModel.currentLocation.value?.toMapPoint()
 
         // Visibility state
         binding.play.isVisible = !viewModel.inputActive
