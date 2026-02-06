@@ -19,7 +19,7 @@ import org.odk.collect.maps.MapPoint
 class GeoPolyViewModel(
     outputMode: OutputMode,
     points: List<MapPoint>,
-    private val retainMockAccuracy: Boolean,
+    retainMockAccuracy: Boolean,
     private val locationTracker: LocationTracker,
     private val scheduler: Scheduler,
     val invalidMessage: LiveData<DisplayString?>
@@ -56,10 +56,20 @@ class GeoPolyViewModel(
         }
     }
 
-    val viewData = _points.asLiveData().combine(invalidMessage)
+    val geoPoly = _points.asLiveData()
+        .combine(invalidMessage)
+        .map {
+            GeoPoly(it.first ?: emptyList(), it.second == null)
+        }
+
+    val currentLocation = locationTracker.getLocation().asLiveData()
 
     private var accuracyThreshold: Int = 0
     private var recording: Cancellable? = null
+
+    init {
+        locationTracker.start(retainMockAccuracy)
+    }
 
     fun add(point: MapPoint) {
         if (invalidMessage.value == null) {
@@ -80,11 +90,10 @@ class GeoPolyViewModel(
 
     fun startRecording(accuracyThreshold: Int, interval: Long) {
         this.accuracyThreshold = accuracyThreshold
-        locationTracker.start(retainMockAccuracy)
         recording = scheduler.repeat({ recordPoint(accuracyThreshold) }, interval)
     }
 
-    private fun recordPoint(accuracyThreshold: Int) {
+    fun recordPoint(accuracyThreshold: Int = 0) {
         locationTracker.getLocation().value?.let {
             if (accuracyThreshold == 0 || it.accuracy <= accuracyThreshold) {
                 add(
@@ -117,7 +126,9 @@ class GeoPolyViewModel(
         inputActive = false
     }
 
-    override fun onCleared() {
+    public override fun onCleared() {
         stopRecording()
     }
+
+    data class GeoPoly(val points: List<MapPoint>, val isValid: Boolean)
 }
