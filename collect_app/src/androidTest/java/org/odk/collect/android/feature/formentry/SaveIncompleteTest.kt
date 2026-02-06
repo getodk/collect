@@ -9,6 +9,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
+import org.odk.collect.testshared.AssertionFramework
 
 @RunWith(AndroidJUnit4::class)
 class SaveIncompleteTest {
@@ -33,7 +34,7 @@ class SaveIncompleteTest {
 
             .clickDrafts(1)
             .clickOnForm("Two Question Save Incomplete")
-            .assertText("Dez")
+            .assertText("Dez", AssertionFramework.COMPOSE)
     }
 
     @Test
@@ -47,6 +48,6 @@ class SaveIncompleteTest {
 
             .clickDrafts(1)
             .clickOnForm("Two Question Save Incomplete Required")
-            .assertText("Dez")
+            .assertText("Dez", AssertionFramework.COMPOSE)
     }
 }

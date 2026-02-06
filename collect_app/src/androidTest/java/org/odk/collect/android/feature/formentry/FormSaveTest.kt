@@ -9,6 +9,7 @@ import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
+import org.odk.collect.testshared.AssertionFramework
 
 class FormSaveTest {
     private val composeRule = createEmptyComposeRule().also {
@@ -33,7 +34,7 @@ class FormSaveTest {
             .clickSaveAsDraft()
             .assertText(org.odk.collect.strings.R.string.form_saved_as_draft)
             .clickOnString(org.odk.collect.strings.R.string.edit_form)
-            .assertText("25")
+            .assertText("25", AssertionFramework.COMPOSE)
             .assertText(org.odk.collect.strings.R.string.jump_to_beginning)
             .assertText(org.odk.collect.strings.R.string.jump_to_end)
     }
@@ -52,7 +53,7 @@ class FormSaveTest {
             .clickFinalize()
             .assertText(org.odk.collect.strings.R.string.form_saved)
             .clickOnString(org.odk.collect.strings.R.string.view_form)
-            .assertText("25")
+            .assertText("25", AssertionFramework.COMPOSE)
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_beginning)
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_end)
             .assertText(org.odk.collect.strings.R.string.exit)

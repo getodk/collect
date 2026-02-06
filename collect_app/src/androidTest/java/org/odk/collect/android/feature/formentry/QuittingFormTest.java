@@ -17,6 +17,7 @@ import org.odk.collect.android.support.pages.Page;
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
+import org.odk.collect.testshared.AssertionFramework;
 
 @RunWith(AndroidJUnit4.class)
 public class QuittingFormTest {
@@ -49,8 +50,8 @@ public class QuittingFormTest {
                 .assertNumberOfFinalizedForms(0)
                 .clickDrafts(1)
                 .clickOnForm("Two Question")
-                .assertText("Reuben")
-                .assertText("10");
+                .assertText("Reuben", AssertionFramework.COMPOSE)
+                .assertText("10", AssertionFramework.COMPOSE);
     }
 
     @Test
@@ -78,8 +79,8 @@ public class QuittingFormTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question")
-                .assertText("Reuben")
-                .assertTextDoesNotExist("10");
+                .assertText("Reuben", AssertionFramework.COMPOSE)
+                .assertTextDoesNotExist("10", AssertionFramework.COMPOSE);
     }
 
     @Test
@@ -95,7 +96,7 @@ public class QuittingFormTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Reuben");
+                .assertText("Reuben", AssertionFramework.COMPOSE);
     }
 
     @Test
@@ -118,6 +119,6 @@ public class QuittingFormTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Another Reuben");
+                .assertText("Another Reuben", AssertionFramework.COMPOSE);
     }
 }

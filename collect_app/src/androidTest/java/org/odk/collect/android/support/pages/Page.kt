@@ -5,10 +5,7 @@ import android.app.Application
 import android.content.pm.ActivityInfo
 import android.view.View
 import androidx.annotation.StringRes
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.ComposeTestRule
-import androidx.compose.ui.test.onNodeWithText
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
@@ -62,7 +59,9 @@ import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.strings.localization.getLocalizedQuantityString
 import org.odk.collect.strings.localization.getLocalizedString
+import org.odk.collect.testshared.AssertionFramework
 import org.odk.collect.testshared.Assertions
+import org.odk.collect.testshared.ComposeAssertions
 import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.WaitFor.tryAgainOnFail
@@ -135,11 +134,11 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertText(text: String): T {
-        try {
-            Assertions.assertVisible(withText(text))
-        } catch (_: Throwable) {
-            composeRule.onNodeWithText(text).assertIsDisplayed()
+    @JvmOverloads
+    fun assertText(text: String, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
+        when (assertionFramework) {
+            AssertionFramework.ESPRESSO -> Assertions.assertVisible(withText(text))
+            AssertionFramework.COMPOSE -> ComposeAssertions.assertVisible(composeRule, text)
         }
 
         return this as T
@@ -189,7 +188,7 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertTextsDoNotExist(vararg texts: String?): T {
+    fun assertTextsDoNotExist(vararg texts: String): T {
         for (text in texts) {
             assertTextDoesNotExist(text)
         }
@@ -200,16 +199,11 @@ abstract class Page<T : Page<T>> {
         return assertTextDoesNotExist(getTranslatedString(string))
     }
 
-    fun assertTextDoesNotExist(text: String?): T {
-        try {
-            onView(
-                allOf(
-                    withText(text),
-                    withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
-                )
-            ).check(doesNotExist())
-        } catch (_: Throwable) {
-            composeRule.onNodeWithText(text!!).assertIsNotDisplayed()
+    @JvmOverloads
+    fun assertTextDoesNotExist(text: String, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
+        when (assertionFramework) {
+            AssertionFramework.ESPRESSO -> Assertions.assertNotVisible(withText(text))
+            AssertionFramework.COMPOSE -> ComposeAssertions.assertNotVisible(composeRule, text)
         }
 
         return this as T
