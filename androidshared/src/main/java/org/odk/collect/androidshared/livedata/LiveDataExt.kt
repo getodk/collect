@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 
 object LiveDataExt {
-    fun <T, U> LiveData<T>.combine(other: LiveData<U>): LiveData<Pair<T, U>> {
+    fun <T, U> LiveData<T>.combine(other: LiveData<U>): LiveData<Pair<T?, U?>> {
         return LiveDataUtils.combine(this, other)
     }
 
