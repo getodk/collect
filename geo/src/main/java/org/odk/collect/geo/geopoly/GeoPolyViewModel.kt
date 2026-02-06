@@ -56,7 +56,13 @@ class GeoPolyViewModel(
         }
     }
 
-    val viewData = _points.asLiveData().combine(invalidMessage)
+    val geoPoly = _points.asLiveData()
+        .combine(invalidMessage)
+        .map {
+            GeoPoly(it.first ?: emptyList(), it.second == null)
+        }
+
+    val currentLocation = locationTracker.getLocation().asLiveData()
 
     private var accuracyThreshold: Int = 0
     private var recording: Cancellable? = null
@@ -123,4 +129,6 @@ class GeoPolyViewModel(
     public override fun onCleared() {
         stopRecording()
     }
+
+    data class GeoPoly(val points: List<MapPoint>, val isValid: Boolean)
 }
