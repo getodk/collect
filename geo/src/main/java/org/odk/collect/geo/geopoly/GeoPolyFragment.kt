@@ -75,16 +75,16 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private var previousState: Bundle? = null
 
-    private var map: MapFragment? = null
     private var featureId = -1 // will be a positive featureId once map is ready
     private var originalPoly: List<MapPoint>? = null
     private var intervalIndex: Int = DEFAULT_INTERVAL_INDEX
     private var accuracyThresholdIndex: Int = DEFAULT_ACCURACY_THRESHOLD_INDEX
+    private var mapInitialized = false
 
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (!readOnly && map != null && originalPoly != viewModel.points.value) {
+                if (!readOnly && originalPoly != viewModel.points.value) {
                     showBackDialog()
                 } else {
                     cancel()
@@ -160,22 +160,11 @@ class GeoPolyFragment @JvmOverloads constructor(
         viewModel.fixedAlerts.showSnackbar(viewLifecycleOwner, view) {
             SnackbarUtils.SnackbarDetails(getString(string.error_fixed))
         }
-
-        locationTracker.getLocation().asLiveData().observe(viewLifecycleOwner) { location ->
-            map?.let {
-                binding.zoom.isEnabled = location != null
-                val shouldFollowLocation =
-                    viewModel.inputActive && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT
-                if (!it.hasCenter() || shouldFollowLocation) {
-                    it.setCenter(location?.toMapPoint(), false)
-                }
-            }
-        }
     }
 
     override fun onSaveInstanceState(state: Bundle) {
         super.onSaveInstanceState(state)
-        if (map == null) {
+        if (!mapInitialized) {
             // initMap() is called asynchronously, so map can be null if the activity
             // is stopped (e.g. by screen rotation) before initMap() gets to run.
             // In this case, preserve any provided instance state.
@@ -188,8 +177,8 @@ class GeoPolyFragment @JvmOverloads constructor(
         state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex)
     }
 
-    fun initMap(newMapFragment: MapFragment?, binding: GeopolyLayoutBinding) {
-        map = newMapFragment
+    fun initMap(map: MapFragment, binding: GeopolyLayoutBinding) {
+        mapInitialized = true
 
         binding.info.setOnClickListener { showInfoDialog(false) }
         binding.clear.setOnClickListener { showClearDialog() }
@@ -234,21 +223,21 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
 
         binding.zoom.setOnClickListener {
-            map!!.zoomToCurrentLocation(locationTracker.getCurrentLocation()?.toMapPoint())
+            map.zoomToCurrentLocation(locationTracker.getCurrentLocation()?.toMapPoint())
         }
 
         originalPoly = inputPolygon
 
-        map!!.setClickListener(this::onClick)
+        map.setClickListener(this::onClick)
         // Also allow long press to place point to match prior versions
-        map!!.setLongPressListener(this::onClick)
-        map!!.setDragEndListener {
-            viewModel.update(map!!.getPolyPoints(it))
+        map.setLongPressListener(this::onClick)
+        map.setDragEndListener {
+            viewModel.update(map.getPolyPoints(it))
         }
 
-        if (!map!!.hasCenter()) {
+        if (!map.hasCenter()) {
             if (viewModel.points.value.isNotEmpty()) {
-                map!!.zoomToBoundingBox(viewModel.points.value, 0.6, false)
+                map.zoomToBoundingBox(viewModel.points.value, 0.6, false)
             }
         }
 
@@ -261,6 +250,15 @@ class GeoPolyFragment @JvmOverloads constructor(
             },
             displayDismissButton = true
         )
+
+        locationTracker.getLocation().asLiveData().observe(viewLifecycleOwner) { location ->
+            binding.zoom.isEnabled = location != null
+            val shouldFollowLocation =
+                viewModel.inputActive && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT
+            if (!map.hasCenter() || shouldFollowLocation) {
+                map.setCenter(location?.toMapPoint(), false)
+            }
+        }
 
         viewModel.viewData.observe(viewLifecycleOwner) { (points, invalidMessage) ->
             val isValid = invalidMessage == null
@@ -289,9 +287,9 @@ class GeoPolyFragment @JvmOverloads constructor(
                 )
 
                 if (featureId == -1) {
-                    featureId = map!!.addPolygon(polygonDescription)
+                    featureId = map.addPolygon(polygonDescription)
                 } else {
-                    map!!.updatePolygon(featureId, polygonDescription)
+                    map.updatePolygon(featureId, polygonDescription)
                 }
             } else {
                 val lineDescription = LineDescription(
@@ -302,9 +300,9 @@ class GeoPolyFragment @JvmOverloads constructor(
                 )
 
                 if (featureId == -1) {
-                    featureId = map!!.addPolyLine(lineDescription)
+                    featureId = map.addPolyLine(lineDescription)
                 } else {
-                    map!!.updatePolyLine(featureId, lineDescription)
+                    map.updatePolyLine(featureId, lineDescription)
                 }
             }
 
