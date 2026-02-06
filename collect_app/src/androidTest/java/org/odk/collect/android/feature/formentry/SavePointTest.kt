@@ -13,18 +13,22 @@ import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.FormEntryActivityTestRule
+import org.odk.collect.android.support.rules.ManagedComposeRule
 import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.android.support.rules.TestRuleChain
+import org.odk.collect.testshared.AssertionFramework
 
 @RunWith(AndroidJUnit4::class)
 class SavePointTest {
-
-    private val rule = FormEntryActivityTestRule()
     private val recentAppsRule = RecentAppsRule()
+    private val managedComposeRule = ManagedComposeRule()
+    private val rule = FormEntryActivityTestRule()
 
     @get:Rule
     val ruleChain: RuleChain = TestRuleChain.chain()
         .around(recentAppsRule)
+        .around(managedComposeRule)
+        .around(managedComposeRule.composeRule)
         .around(rule)
 
     @Test
@@ -40,8 +44,8 @@ class SavePointTest {
         // Start blank form and check save point is loaded
         rule.fillNewFormWithSavepoint("two-question-audit.xml")
             .clickRecover(FormHierarchyPage("Two Question"))
-            .assertText("Alexei")
-            .assertTextDoesNotExist("46")
+            .assertText("Alexei", AssertionFramework.COMPOSE)
+            .assertTextDoesNotExist("46", AssertionFramework.COMPOSE)
             .pressBack(FormEntryPage("Two Question"))
             .closeSoftKeyboard()
             .assertQuestion("What is your name?")
@@ -85,9 +89,9 @@ class SavePointTest {
         // Edit instance and check save point is loaded
         rule.editFormWithSavepoint("two-question-audit.xml")
             .clickRecover(FormHierarchyPage("Two Question"))
-            .assertText("Alexei")
-            .assertText("52")
-            .assertTextDoesNotExist("46")
+            .assertText("Alexei", AssertionFramework.COMPOSE)
+            .assertText("52", AssertionFramework.COMPOSE)
+            .assertTextDoesNotExist("46", AssertionFramework.COMPOSE)
             .pressBack(FormEntryPage("Two Question"))
             .closeSoftKeyboard()
             .assertQuestion("What is your name?")
@@ -122,7 +126,7 @@ class SavePointTest {
         // Start blank form and check save point is loaded
         rule.fillNewFormWithSavepoint("two-question-audit.xml")
             .clickRecover(FormHierarchyPage("Two Question"))
-            .assertText("Alexei")
+            .assertText("Alexei", AssertionFramework.COMPOSE)
             .pressBack(FormEntryPage("Two Question"))
             .closeSoftKeyboard()
             .assertQuestion("What is your name?")
@@ -164,8 +168,8 @@ class SavePointTest {
         // Edit instance and check save point is loaded
         rule.editFormWithSavepoint("two-question-audit.xml")
             .clickRecover(FormHierarchyPage("Two Question"))
-            .assertText("Alexei")
-            .assertText("52")
+            .assertText("Alexei", AssertionFramework.COMPOSE)
+            .assertText("52", AssertionFramework.COMPOSE)
             .pressBack(FormEntryPage("Two Question"))
             .closeSoftKeyboard()
             .assertQuestion("What is your name?")
@@ -206,9 +210,9 @@ class SavePointTest {
 
         // Check editing instance doesn't load save point
         rule.editForm("two-question-audit.xml", "Two Question")
-            .assertText("Pasquale")
-            .assertText("52")
-            .assertTextDoesNotExist("Alexei")
+            .assertText("Pasquale", AssertionFramework.COMPOSE)
+            .assertText("52", AssertionFramework.COMPOSE)
+            .assertTextDoesNotExist("Alexei", AssertionFramework.COMPOSE)
     }
 
     @Test
@@ -252,8 +256,8 @@ class SavePointTest {
         // Edit saved form and check save point is loaded
         rule.editFormWithSavepoint("two-question.xml")
             .clickRecover(FormHierarchyPage("Two Question"))
-            .assertText("Alexei")
-            .assertText("46")
+            .assertText("Alexei", AssertionFramework.COMPOSE)
+            .assertText("46", AssertionFramework.COMPOSE)
     }
 
     /**

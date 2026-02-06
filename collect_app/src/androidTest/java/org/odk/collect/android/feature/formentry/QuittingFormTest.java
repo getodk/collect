@@ -1,6 +1,5 @@
 package org.odk.collect.android.feature.formentry;
 
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
@@ -11,15 +10,20 @@ import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.ManagedComposeRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
+import org.odk.collect.testshared.AssertionFramework;
 
 @RunWith(AndroidJUnit4.class)
 public class QuittingFormTest {
+    private final ManagedComposeRule managedComposeRule = new ManagedComposeRule();
 
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
+            .around(managedComposeRule)
+            .around(managedComposeRule.getComposeRule())
             .around(rule);
 
     @Test
@@ -37,8 +41,8 @@ public class QuittingFormTest {
                 .assertNumberOfFinalizedForms(0)
                 .clickDrafts(1)
                 .clickOnForm("Two Question")
-                .assertText("Reuben")
-                .assertText("10");
+                .assertText("Reuben", AssertionFramework.COMPOSE)
+                .assertText("10", AssertionFramework.COMPOSE);
     }
 
     @Test
@@ -66,8 +70,8 @@ public class QuittingFormTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question")
-                .assertText("Reuben")
-                .assertTextDoesNotExist("10");
+                .assertText("Reuben", AssertionFramework.COMPOSE)
+                .assertTextDoesNotExist("10", AssertionFramework.COMPOSE);
     }
 
     @Test
@@ -83,7 +87,7 @@ public class QuittingFormTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Reuben");
+                .assertText("Reuben", AssertionFramework.COMPOSE);
     }
 
     @Test
@@ -106,6 +110,6 @@ public class QuittingFormTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Another Reuben");
+                .assertText("Another Reuben", AssertionFramework.COMPOSE);
     }
 }

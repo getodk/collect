@@ -15,12 +15,15 @@ import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.ManagedComposeRule
 import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
+import org.odk.collect.testshared.AssertionFramework
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class EditSavedFormTest {
+    private val managedComposeRule = ManagedComposeRule()
     private val rule = CollectTestRule()
 
     val testDependencies: TestDependencies = TestDependencies()
@@ -29,6 +32,8 @@ class EditSavedFormTest {
     @get:Rule
     var copyFormChain: RuleChain = chain(testDependencies)
         .around(recentAppsRule)
+        .around(managedComposeRule)
+        .around(managedComposeRule.composeRule)
         .around(rule)
 
     @Test
@@ -292,7 +297,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .acceptEditingNewerDraftEdit("One Question Editable")
-            .assertText("456")
+            .assertText("456", AssertionFramework.COMPOSE)
     }
 
     @Test
@@ -316,7 +321,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .discardEditingNewerEdit()
-            .assertText("123")
+            .assertText("123", AssertionFramework.COMPOSE)
     }
 
     @Test
@@ -341,7 +346,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .acceptEditingNewerFinalizedEdit("One Question Editable")
-            .assertText("456")
+            .assertText("456", AssertionFramework.COMPOSE)
     }
 
     @Test
@@ -366,7 +371,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .discardEditingNewerEdit()
-            .assertText("123")
+            .assertText("123", AssertionFramework.COMPOSE)
     }
 
     @Test

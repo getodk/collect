@@ -49,7 +49,7 @@ import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
-import org.odk.collect.testshared.Assertions
+import org.odk.collect.testshared.EspressoAssertions
 import org.odk.collect.testshared.FakeScheduler
 
 @RunWith(AndroidJUnit4::class)
@@ -212,19 +212,19 @@ class DeleteProjectDialogTest {
     }
 
     private fun assertCounts(forms: Int, sent: Int, unsent: Int, drafts: Int) {
-        Assertions.assertVisible(
+        EspressoAssertions.assertVisible(
             view = withText(containsString(context.getString(string.form_definitions_count, forms))),
             root = isDialog()
         )
-        Assertions.assertVisible(
+        EspressoAssertions.assertVisible(
             view = withText(containsString(context.getString(string.sent_count, sent))),
             root = isDialog()
         )
-        Assertions.assertVisible(
+        EspressoAssertions.assertVisible(
             view = withText(containsString(context.getString(string.unsent_count, unsent))),
             root = isDialog()
         )
-        Assertions.assertVisible(
+        EspressoAssertions.assertVisible(
             view = withText(containsString(context.getString(string.drafts_count, drafts))),
             root = isDialog()
         )

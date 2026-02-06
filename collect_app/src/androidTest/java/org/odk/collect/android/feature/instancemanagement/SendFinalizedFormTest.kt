@@ -16,18 +16,23 @@ import org.odk.collect.android.support.pages.OkDialog
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.ManagedComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
+import org.odk.collect.testshared.AssertionFramework
 
 @RunWith(AndroidJUnit4::class)
 class SendFinalizedFormTest {
 
     private val testDependencies = TestDependencies()
+    private val managedComposeRule = ManagedComposeRule()
     private val rule = CollectTestRule(useDemoProject = false)
 
     @get:Rule
     val chain: RuleChain = chain(testDependencies)
         .around(RecordedIntentsRule())
+        .around(managedComposeRule)
+        .around(managedComposeRule.composeRule)
         .around(rule)
 
     @Test
@@ -38,7 +43,7 @@ class SendFinalizedFormTest {
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
             .clickSendFinalizedForm(1)
             .clickOnForm("One Question")
-            .assertText("52")
+            .assertText("52", AssertionFramework.COMPOSE)
     }
 
     @Test
@@ -74,7 +79,7 @@ class SendFinalizedFormTest {
             .pressBack(MainMenuPage())
             .clickViewSentForm(1)
             .clickOnForm("One Question")
-            .assertText("123")
+            .assertText("123", AssertionFramework.COMPOSE)
             .assertText(org.odk.collect.strings.R.string.exit)
     }
 
@@ -96,7 +101,7 @@ class SendFinalizedFormTest {
             .assertNumberOfFinalizedForms(1)
             .clickViewSentForm(1)
             .clickOnForm("One Question")
-            .assertText("123")
+            .assertText("123", AssertionFramework.COMPOSE)
     }
 
     @Test

@@ -39,7 +39,7 @@ import org.odk.collect.formstest.FormFixtures.form
 import org.odk.collect.strings.R
 import org.odk.collect.testshared.ActivityControllerRule
 import org.odk.collect.testshared.AssertIntentsHelper
-import org.odk.collect.testshared.Assertions.assertVisible
+import org.odk.collect.testshared.EspressoAssertions.assertVisible
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RobolectricHelpers.recreateWithProcessRestore

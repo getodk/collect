@@ -8,15 +8,19 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer;
 import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.ManagedComposeRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
+import org.odk.collect.testshared.AssertionFramework;
 
 @RunWith(AndroidJUnit4.class)
 public class QuickSaveTest {
-
+    private final ManagedComposeRule managedComposeRule = new ManagedComposeRule();
     public final CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public final RuleChain chain = TestRuleChain.chain()
+            .around(managedComposeRule)
+            .around(managedComposeRule.getComposeRule())
             .around(rule);
 
     @Test
@@ -33,8 +37,8 @@ public class QuickSaveTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question")
-                .assertText("Reuben")
-                .assertText("32");
+                .assertText("Reuben", AssertionFramework.COMPOSE)
+                .assertText("32", AssertionFramework.COMPOSE);
     }
 
     @Test
@@ -49,7 +53,7 @@ public class QuickSaveTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Reuben");
+                .assertText("Reuben", AssertionFramework.COMPOSE);
     }
 
     @Test
@@ -71,6 +75,6 @@ public class QuickSaveTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Another Reuben");
+                .assertText("Another Reuben", AssertionFramework.COMPOSE);
     }
 }

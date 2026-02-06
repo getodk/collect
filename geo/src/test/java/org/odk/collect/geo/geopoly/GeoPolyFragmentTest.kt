@@ -48,9 +48,9 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.R.string
-import org.odk.collect.testshared.Assertions
-import org.odk.collect.testshared.Assertions.assertNotVisible
-import org.odk.collect.testshared.Assertions.assertVisible
+import org.odk.collect.testshared.EspressoAssertions
+import org.odk.collect.testshared.EspressoAssertions.assertNotVisible
+import org.odk.collect.testshared.EspressoAssertions.assertVisible
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.FragmentResultRecorder
 import org.odk.collect.testshared.Interactions
@@ -517,10 +517,10 @@ class GeoPolyFragmentTest {
             )
         }
 
-        Assertions.assertEnabled(withContentDescription(string.input_method))
-        Assertions.assertEnabled(withContentDescription(string.remove_last_point))
-        Assertions.assertEnabled(withContentDescription(string.clear))
-        Assertions.assertEnabled(withContentDescription(string.save))
+        EspressoAssertions.assertEnabled(withContentDescription(string.input_method))
+        EspressoAssertions.assertEnabled(withContentDescription(string.remove_last_point))
+        EspressoAssertions.assertEnabled(withContentDescription(string.clear))
+        EspressoAssertions.assertEnabled(withContentDescription(string.save))
     }
 
     @Test
@@ -537,10 +537,10 @@ class GeoPolyFragmentTest {
             )
         }
 
-        Assertions.assertDisabled(withContentDescription(string.input_method))
-        Assertions.assertDisabled(withContentDescription(string.remove_last_point))
-        Assertions.assertDisabled(withContentDescription(string.clear))
-        Assertions.assertDisabled(withContentDescription(string.save))
+        EspressoAssertions.assertDisabled(withContentDescription(string.input_method))
+        EspressoAssertions.assertDisabled(withContentDescription(string.remove_last_point))
+        EspressoAssertions.assertDisabled(withContentDescription(string.clear))
+        EspressoAssertions.assertDisabled(withContentDescription(string.save))
     }
 
     @Test
@@ -687,7 +687,7 @@ class GeoPolyFragmentTest {
 
         invalidMessage.value = null
         assertNotVisible(withText(message))
-        Assertions.assertAlert(
+        EspressoAssertions.assertAlert(
             SnackbarUtils.alertStore,
             application.getString(string.error_fixed),
             "No error fixed message shown!"
@@ -778,10 +778,10 @@ class GeoPolyFragmentTest {
         }
 
         invalidMessage.value = DisplayString.Raw("Blah")
-        Assertions.assertDisabled(withContentDescription(string.save))
+        EspressoAssertions.assertDisabled(withContentDescription(string.save))
 
         invalidMessage.value = null
-        Assertions.assertEnabled(withContentDescription(string.save))
+        EspressoAssertions.assertEnabled(withContentDescription(string.save))
     }
 
     @Test
