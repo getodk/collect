@@ -27,7 +27,7 @@ class GeoPolyViewModelTest {
             GeoPolyFragment.OutputMode.GEOTRACE,
             emptyList(),
             false,
-            mock(),
+            FakeLocationTracker(),
             mock(),
             invalidMessage
         )
@@ -48,7 +48,7 @@ class GeoPolyViewModelTest {
             GeoPolyFragment.OutputMode.GEOTRACE,
             emptyList(),
             false,
-            mock(),
+            FakeLocationTracker(),
             mock(),
             invalidMessage
         )
