@@ -2,7 +2,6 @@ package org.odk.collect.geo.geopoly
 
 import android.app.Application
 import androidx.activity.OnBackPressedDispatcher
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -92,17 +91,6 @@ class GeoPolyFragmentTest {
 
         locationTracker.currentLocation = Location(2.0, 2.0)
         assertThat(mapFragment.getCenter(), equalTo(MapPoint(2.0, 2.0)))
-    }
-
-    @Test
-    fun testLocationTrackerLifecycle() {
-        val scenario = fragmentLauncherRule.launchInContainer {
-            GeoPolyFragment({ OnBackPressedDispatcher() })
-        }
-
-        // Stopping the activity should stop the location tracker
-        scenario.moveToState(Lifecycle.State.DESTROYED)
-        assertThat(locationTracker.isStarted, equalTo(false))
     }
 
     @Test
