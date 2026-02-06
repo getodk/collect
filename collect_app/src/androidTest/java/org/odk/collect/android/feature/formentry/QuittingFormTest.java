@@ -1,39 +1,30 @@
 package org.odk.collect.android.feature.formentry;
 
-
-import static androidx.compose.ui.test.junit4.AndroidComposeTestRule_androidKt.createEmptyComposeRule;
-
-import androidx.compose.ui.test.junit4.ComposeTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.pages.Page;
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.ManagedComposeRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.testshared.AssertionFramework;
 
 @RunWith(AndroidJUnit4.class)
 public class QuittingFormTest {
-    private final ComposeTestRule composeRule = createEmptyComposeRule();
+    private final ManagedComposeRule managedComposeRule = new ManagedComposeRule();
 
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
-            .around(composeRule)
+            .around(managedComposeRule)
+            .around(managedComposeRule.getComposeRule())
             .around(rule);
-
-    @Before
-    public void setUp() {
-        Page.setComposeRule(composeRule);
-    }
 
     @Test
     public void whenFillingForm_pressingBack_andClickingSaveChanges_savesCurrentAnswers() {

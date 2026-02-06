@@ -1,27 +1,25 @@
 package org.odk.collect.android.feature.formentry
 
-import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
-import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.ManagedComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.testshared.AssertionFramework
 
 class FormSaveTest {
-    private val composeRule = createEmptyComposeRule().also {
-        Page.composeRule = it
-    }
+    private val managedComposeRule = ManagedComposeRule()
     private val rule = CollectTestRule()
     private val testDependencies = TestDependencies()
 
     @get:Rule
     val copyFormChain: RuleChain = TestRuleChain
         .chain(testDependencies)
-        .around(composeRule)
+        .around(managedComposeRule)
+        .around(managedComposeRule.composeRule)
         .around(rule)
 
     @Test

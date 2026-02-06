@@ -1,6 +1,5 @@
 package org.odk.collect.android.feature.formentry
 
-import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -12,9 +11,9 @@ import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
-import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.FormEntryActivityTestRule
+import org.odk.collect.android.support.rules.ManagedComposeRule
 import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.testshared.AssertionFramework
@@ -22,15 +21,14 @@ import org.odk.collect.testshared.AssertionFramework
 @RunWith(AndroidJUnit4::class)
 class SavePointTest {
     private val recentAppsRule = RecentAppsRule()
-    private val composeRule = createEmptyComposeRule().also {
-        Page.composeRule = it
-    }
+    private val managedComposeRule = ManagedComposeRule()
     private val rule = FormEntryActivityTestRule()
 
     @get:Rule
     val ruleChain: RuleChain = TestRuleChain.chain()
         .around(recentAppsRule)
-        .around(composeRule)
+        .around(managedComposeRule)
+        .around(managedComposeRule.composeRule)
         .around(rule)
 
     @Test

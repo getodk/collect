@@ -1,6 +1,5 @@
 package org.odk.collect.android.feature.instancemanagement
 
-import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -14,10 +13,10 @@ import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.OkDialog
-import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.ManagedComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.testshared.AssertionFramework
@@ -26,15 +25,14 @@ import org.odk.collect.testshared.AssertionFramework
 class SendFinalizedFormTest {
 
     private val testDependencies = TestDependencies()
-    private val composeRule = createEmptyComposeRule().also {
-        Page.composeRule = it
-    }
+    private val managedComposeRule = ManagedComposeRule()
     private val rule = CollectTestRule(useDemoProject = false)
 
     @get:Rule
     val chain: RuleChain = chain(testDependencies)
         .around(RecordedIntentsRule())
-        .around(composeRule)
+        .around(managedComposeRule)
+        .around(managedComposeRule.composeRule)
         .around(rule)
 
     @Test

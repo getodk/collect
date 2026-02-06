@@ -138,7 +138,7 @@ abstract class Page<T : Page<T>> {
     fun assertText(text: String, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
         when (assertionFramework) {
             AssertionFramework.ESPRESSO -> Assertions.assertVisible(withText(text))
-            AssertionFramework.COMPOSE -> ComposeAssertions.assertVisible(composeRule, text)
+            AssertionFramework.COMPOSE -> ComposeAssertions.assertVisible(composeRule!!, text)
         }
 
         return this as T
@@ -203,7 +203,7 @@ abstract class Page<T : Page<T>> {
     fun assertTextDoesNotExist(text: String, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
         when (assertionFramework) {
             AssertionFramework.ESPRESSO -> Assertions.assertNotVisible(withText(text))
-            AssertionFramework.COMPOSE -> ComposeAssertions.assertNotVisible(composeRule, text)
+            AssertionFramework.COMPOSE -> ComposeAssertions.assertNotVisible(composeRule!!, text)
         }
 
         return this as T
@@ -622,7 +622,7 @@ abstract class Page<T : Page<T>> {
 
     companion object {
         @JvmStatic
-        lateinit var composeRule: ComposeTestRule
+        var composeRule: ComposeTestRule? = null
 
         private fun rotateToLandscape(): ViewAction {
             return RotateAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
