@@ -20,7 +20,7 @@ gradle = { group = "com.android.tools.build", name = "gradle", version = "8.13.0
 kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 navigationSafeArgsGradlePlugin = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 ktlintGradle = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version = "13.1.0" }
-ossLicensesPlugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version = "0.10.9" }
+ossLicensesPlugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version = "0.10.10" }
 desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.5" }
 androidxStartup = { group = "androidx.startup", name = "startup-runtime", version = "1.2.0" }
 androidxLifecycleRuntimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
