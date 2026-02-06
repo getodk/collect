@@ -60,8 +60,8 @@ import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.strings.localization.getLocalizedQuantityString
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.AssertionFramework
-import org.odk.collect.testshared.Assertions
 import org.odk.collect.testshared.ComposeAssertions
+import org.odk.collect.testshared.EspressoAssertions
 import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.WaitFor.tryAgainOnFail
@@ -137,7 +137,7 @@ abstract class Page<T : Page<T>> {
     @JvmOverloads
     fun assertText(text: String, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
         when (assertionFramework) {
-            AssertionFramework.ESPRESSO -> Assertions.assertVisible(withText(text))
+            AssertionFramework.ESPRESSO -> EspressoAssertions.assertVisible(withText(text))
             AssertionFramework.COMPOSE -> ComposeAssertions.assertVisible(composeRule!!, text)
         }
 
@@ -202,7 +202,7 @@ abstract class Page<T : Page<T>> {
     @JvmOverloads
     fun assertTextDoesNotExist(text: String, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
         when (assertionFramework) {
-            AssertionFramework.ESPRESSO -> Assertions.assertNotVisible(withText(text))
+            AssertionFramework.ESPRESSO -> EspressoAssertions.assertNotVisible(withText(text))
             AssertionFramework.COMPOSE -> ComposeAssertions.assertNotVisible(composeRule!!, text)
         }
 
@@ -228,7 +228,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun checkIsSnackbarWithMessageDisplayed(message: String): T {
-        Assertions.assertAlert(
+        EspressoAssertions.assertAlert(
             SnackbarUtils.alertStore,
             message,
             "No Snackbar with text \"$message\" shown on screen!"
@@ -237,7 +237,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertToastNotDisplayed(message: String): T {
-        Assertions.assertNoAlert(
+        EspressoAssertions.assertNoAlert(
             ToastUtils.alertStore,
             message,
             "Toast with text \"$message\" shown on screen!"
@@ -246,7 +246,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun checkIsToastWithMessageDisplayed(message: String): T {
-        Assertions.assertAlert(
+        EspressoAssertions.assertAlert(
             ToastUtils.alertStore,
             message,
             "No Toast with text \"$message\" shown on screen!"
@@ -601,22 +601,22 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertTextBelow(below: String, above: String): T {
-        Assertions.assertBelow(withText(below), withText(above))
+        EspressoAssertions.assertBelow(withText(below), withText(above))
         return this as T
     }
 
     fun assertTextBelow(below: Int, above: String): T {
-        Assertions.assertBelow(withText(getTranslatedString(below)), withText(above))
+        EspressoAssertions.assertBelow(withText(getTranslatedString(below)), withText(above))
         return this as T
     }
 
     fun assertTextBelow(below: String, above: Int): T {
-        Assertions.assertBelow(withText(below), withText(getTranslatedString(above)))
+        EspressoAssertions.assertBelow(withText(below), withText(getTranslatedString(above)))
         return this as T
     }
 
     fun assertTextBesides(one: Matcher<String>, two: Matcher<String>): T {
-        Assertions.assertVisible(withText(one), sibling = withText(two))
+        EspressoAssertions.assertVisible(withText(one), sibling = withText(two))
         return this as T
     }
 

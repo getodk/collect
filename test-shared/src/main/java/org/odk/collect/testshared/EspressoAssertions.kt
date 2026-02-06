@@ -21,7 +21,7 @@ import org.hamcrest.Matchers.equalTo
 import org.odk.collect.androidshared.ui.AlertStore
 import org.odk.collect.testshared.WaitFor.waitFor
 
-object Assertions {
+object EspressoAssertions {
 
     fun assertVisible(
         view: Matcher<View>,
