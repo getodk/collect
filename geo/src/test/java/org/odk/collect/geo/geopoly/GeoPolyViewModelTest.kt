@@ -9,6 +9,7 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 import org.odk.collect.androidshared.ui.DisplayString
 import org.odk.collect.androidtest.MainDispatcherRule
+import org.odk.collect.geo.support.FakeLocationTracker
 import org.odk.collect.testshared.getOrAwaitValue
 
 class GeoPolyViewModelTest {
@@ -56,5 +57,23 @@ class GeoPolyViewModelTest {
         invalidMessage.value = null
         invalidMessage.value = null
         assertThat(viewModel.fixedAlerts.getOrAwaitValue(), equalTo(null))
+    }
+
+    @Test
+    fun `#onCleared stops LocationTracker`() {
+        val locationTracker = FakeLocationTracker()
+        val viewModel = GeoPolyViewModel(
+            GeoPolyFragment.OutputMode.GEOTRACE,
+            emptyList(),
+            false,
+            locationTracker,
+            mock(),
+            MutableLiveData(null)
+        )
+
+        assertThat(locationTracker.isStarted, equalTo(true))
+
+        viewModel.onCleared()
+        assertThat(locationTracker.isStarted, equalTo(false))
     }
 }

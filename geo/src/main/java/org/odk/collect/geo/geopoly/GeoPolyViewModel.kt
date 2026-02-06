@@ -120,7 +120,7 @@ class GeoPolyViewModel(
         inputActive = false
     }
 
-    override fun onCleared() {
+    public override fun onCleared() {
         stopRecording()
     }
 }
