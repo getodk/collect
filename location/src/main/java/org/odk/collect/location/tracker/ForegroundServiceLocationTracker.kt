@@ -43,10 +43,6 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
     override fun stop() {
         application.stopService(Intent(application, LocationTrackerService::class.java))
     }
-
-    override fun warm(location: Location?) {
-        application.getState().setFlow(LOCATION_KEY, location)
-    }
 }
 
 class LocationTrackerService : Service(), LocationClient.LocationClientListener {
