@@ -14,7 +14,7 @@ import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.strings.R
 
 @RunWith(AndroidJUnit4::class)
-class RequiredQuestionTest {
+class RequiredAndConstraintQuestionTest {
     var rule: CollectTestRule = CollectTestRule()
 
     @get:Rule
@@ -141,5 +141,15 @@ class RequiredQuestionTest {
             .startBlankForm("Two Question Required")
             .clickSave()
             .swipeToNextQuestion("What is your age?")
+    }
+
+    @Test // https://github.com/getodk/collect/issues/7078
+    fun navigatingToNextQuestion_withInvalidAnswer_keepsInvalidAnswer() {
+        rule.startAtMainMenu()
+            .copyForm("one-question-with-constraint.xml")
+            .startBlankForm("One Question With Constraint")
+            .answerQuestion("What is your age?", "17")
+            .swipeToNextQuestionWithConstraintViolation("Age must be at least 18")
+            .assertAnswer("What is your age?", "17")
     }
 }
