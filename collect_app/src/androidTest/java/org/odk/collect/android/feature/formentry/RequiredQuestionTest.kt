@@ -142,4 +142,14 @@ class RequiredQuestionTest {
             .clickSave()
             .swipeToNextQuestion("What is your age?")
     }
+
+    @Test // https://github.com/getodk/collect/issues/7078
+    fun navigatingToNextQuestion_withInvalidAnswer_keepsInvalidAnswer() {
+        rule.startAtMainMenu()
+            .copyForm("one-question-with-constraint.xml")
+            .startBlankForm("One Question With Constraint")
+            .answerQuestion("What is your age?", "17")
+            .swipeToNextQuestionWithConstraintViolation("Age must be at least 18")
+            .assertAnswer("What is your age?", "17")
+    }
 }
