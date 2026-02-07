@@ -14,7 +14,7 @@ import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.strings.R
 
 @RunWith(AndroidJUnit4::class)
-class RequiredQuestionTest {
+class RequiredAndConstraintQuestionTest {
     var rule: CollectTestRule = CollectTestRule()
 
     @get:Rule
