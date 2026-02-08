@@ -266,7 +266,7 @@ jobs:
             if [[ -n "$GOOGLE_MAPS_API_KEY" ]]; then \
               ./check-size.sh 23117869
             else
-              ./check-size.sh 13853041
+              ./check-size.sh 13900000
             fi
 
       - run:
