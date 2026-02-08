@@ -20,6 +20,7 @@ import androidx.compose.material3.SliderState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,12 +29,14 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import org.odk.collect.androidshared.R.dimen
@@ -123,81 +126,83 @@ private fun VerticalRangeSlider(
     val view = LocalView.current
     val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.vertical_slider)
 
-    ConstraintLayout(Modifier.fillMaxWidth()) {
-        val (left, center, right) = createRefs()
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        ConstraintLayout(Modifier.fillMaxWidth()) {
+            val (left, center, right) = createRefs()
 
-        Slider(
-            modifier = Modifier
-                .semantics {
-                    contentDescription = sliderContentDescription
-                }
-                .constrainAs(center) {
-                    centerHorizontallyTo(parent)
-                }
-                .height(330.dp)
-                .pointerInteropFilter { event ->
-                    when (event.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            view.parent?.requestDisallowInterceptTouchEvent(true)
-                            if (rangeSliderState.sliderValue == null) {
-                                onValueChange(0f)
+            Slider(
+                modifier = Modifier
+                    .semantics {
+                        contentDescription = sliderContentDescription
+                    }
+                    .constrainAs(center) {
+                        centerHorizontallyTo(parent)
+                    }
+                    .height(330.dp)
+                    .pointerInteropFilter { event ->
+                        when (event.action) {
+                            MotionEvent.ACTION_DOWN -> {
+                                view.parent?.requestDisallowInterceptTouchEvent(true)
+                                if (rangeSliderState.sliderValue == null) {
+                                    onValueChange(0f)
+                                }
                             }
+                            MotionEvent.ACTION_MOVE ->
+                                view.parent?.requestDisallowInterceptTouchEvent(true)
+                            MotionEvent.ACTION_UP,
+                            MotionEvent.ACTION_CANCEL ->
+                                view.parent?.requestDisallowInterceptTouchEvent(false)
                         }
-                        MotionEvent.ACTION_MOVE ->
-                            view.parent?.requestDisallowInterceptTouchEvent(true)
-                        MotionEvent.ACTION_UP,
-                        MotionEvent.ACTION_CANCEL ->
-                            view.parent?.requestDisallowInterceptTouchEvent(false)
+                        false
                     }
-                    false
-                }
-                .graphicsLayer {
-                    rotationZ = 270f
-                    transformOrigin = TransformOrigin(0f, 0f)
-                }
-                .layout { measurable, constraints ->
-                    val placeable = measurable.measure(
-                        Constraints(
-                            minWidth = constraints.minHeight,
-                            maxWidth = constraints.maxHeight,
-                            minHeight = constraints.minWidth,
-                            maxHeight = constraints.maxHeight,
+                    .graphicsLayer {
+                        rotationZ = 270f
+                        transformOrigin = TransformOrigin(0f, 0f)
+                    }
+                    .layout { measurable, constraints ->
+                        val placeable = measurable.measure(
+                            Constraints(
+                                minWidth = constraints.minHeight,
+                                maxWidth = constraints.maxHeight,
+                                minHeight = constraints.minWidth,
+                                maxHeight = constraints.maxHeight,
+                            )
                         )
-                    )
-                    layout(placeable.height, placeable.width) {
-                        placeable.place(-placeable.width, 0)
-                    }
-                },
-            value = rangeSliderState.sliderValue ?: 0f,
-            steps = rangeSliderState.numOfSteps,
-            onValueChange = onValueChange,
-            onValueChangeFinished = onValueChangeFinished,
-            thumb = { Thumb(rangeSliderState.sliderValue, interactionSource) },
-            track = { Track(it, rangeSliderState.numOfTicks) },
-            interactionSource = interactionSource,
-            enabled = rangeSliderState.isEnabled
-        )
+                        layout(placeable.height, placeable.width) {
+                            placeable.place(-placeable.width, 0)
+                        }
+                    },
+                value = rangeSliderState.sliderValue ?: 0f,
+                steps = rangeSliderState.numOfSteps,
+                onValueChange = onValueChange,
+                onValueChangeFinished = onValueChangeFinished,
+                thumb = { Thumb(rangeSliderState.sliderValue, interactionSource) },
+                track = { Track(it, rangeSliderState.numOfTicks) },
+                interactionSource = interactionSource,
+                enabled = rangeSliderState.isEnabled
+            )
 
-        val margin = dimensionResource(id = dimen.margin_standard)
+            val margin = dimensionResource(id = dimen.margin_standard)
 
-        ValueLabel(
-            rangeSliderState.valueLabel,
-            modifier = Modifier.constrainAs(left) {
-                end.linkTo(center.start, margin = margin)
-                centerVerticallyTo(center)
-            }
-        )
+            ValueLabel(
+                rangeSliderState.valueLabel,
+                modifier = Modifier.constrainAs(left) {
+                    end.linkTo(center.start, margin = margin)
+                    centerVerticallyTo(center)
+                }
+            )
 
-        VerticalEdgeLabels(
-            rangeSliderState.startLabel,
-            rangeSliderState.endLabel,
-            modifier = Modifier.constrainAs(right) {
-                start.linkTo(center.end, margin = margin)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                height = androidx.constraintlayout.compose.Dimension.fillToConstraints
-            }
-        )
+            VerticalEdgeLabels(
+                rangeSliderState.startLabel,
+                rangeSliderState.endLabel,
+                modifier = Modifier.constrainAs(right) {
+                    start.linkTo(center.end, margin = margin)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    height = androidx.constraintlayout.compose.Dimension.fillToConstraints
+                }
+            )
+        }
     }
 }
 
