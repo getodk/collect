@@ -2,7 +2,6 @@ package org.odk.collect.geo.geopoint
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -39,11 +38,7 @@ internal class AccuracyProgressView @JvmOverloads constructor(
         val (text, strength) = getTextAndStrength(accuracy)
         binding.text.setText(text)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            binding.strength.setProgress(strength, true)
-        } else {
-            binding.strength.progress = strength
-        }
+        binding.strength.setProgress(strength, true)
     }
 
     private fun getBackgroundAndTextColor(accuracy: LocationAccuracy): Pair<Int, Int> {

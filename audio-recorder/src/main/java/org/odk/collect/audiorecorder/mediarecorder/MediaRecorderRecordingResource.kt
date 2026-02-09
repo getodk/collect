@@ -1,10 +1,9 @@
 package org.odk.collect.audiorecorder.mediarecorder
 
-import android.annotation.SuppressLint
 import android.media.MediaRecorder
 import org.odk.collect.audiorecorder.recorder.RecordingResource
 
-internal abstract class MediaRecorderRecordingResource(private val mediaRecorder: MediaRecorder, private val sdk: Int) : RecordingResource {
+internal abstract class MediaRecorderRecordingResource(private val mediaRecorder: MediaRecorder) : RecordingResource {
 
     protected abstract fun beforePrepare(mediaRecorder: MediaRecorder)
 
@@ -23,17 +22,11 @@ internal abstract class MediaRecorderRecordingResource(private val mediaRecorder
     }
 
     override fun pause() {
-        @SuppressLint("NewApi")
-        if (sdk >= android.os.Build.VERSION_CODES.N) {
-            mediaRecorder.pause()
-        }
+        mediaRecorder.pause()
     }
 
     override fun resume() {
-        @SuppressLint("NewApi")
-        if (sdk >= android.os.Build.VERSION_CODES.N) {
-            mediaRecorder.resume()
-        }
+        mediaRecorder.resume()
     }
 
     override fun stop() {
@@ -49,7 +42,7 @@ internal abstract class MediaRecorderRecordingResource(private val mediaRecorder
     }
 }
 
-internal class AACRecordingResource(mediaRecorder: MediaRecorder, sdk: Int, private val kbitRate: Int) : MediaRecorderRecordingResource(mediaRecorder, sdk) {
+internal class AACRecordingResource(mediaRecorder: MediaRecorder, private val kbitRate: Int) : MediaRecorderRecordingResource(mediaRecorder) {
 
     override fun beforePrepare(mediaRecorder: MediaRecorder) {
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -60,7 +53,7 @@ internal class AACRecordingResource(mediaRecorder: MediaRecorder, sdk: Int, priv
     }
 }
 
-internal class AMRRecordingResource(mediaRecorder: MediaRecorder, sdk: Int) : MediaRecorderRecordingResource(mediaRecorder, sdk) {
+internal class AMRRecordingResource(mediaRecorder: MediaRecorder) : MediaRecorderRecordingResource(mediaRecorder) {
 
     override fun beforePrepare(mediaRecorder: MediaRecorder) {
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)

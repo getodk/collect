@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages
 
-import android.os.Build
-
 class SaveOrDiscardFormDialog<D : Page<D>> @JvmOverloads constructor(
     private val destination: D,
     private val saveAsDraftEnabled: Boolean = true
@@ -19,18 +17,6 @@ class SaveOrDiscardFormDialog<D : Page<D>> @JvmOverloads constructor(
 
     fun clickSaveChanges(): D {
         return clickOnTextInDialog(org.odk.collect.strings.R.string.save_as_draft, destination)
-    }
-
-    fun clickSaveChangesWithError(errorMsg: Int): D {
-        clickOnTextInDialog(org.odk.collect.strings.R.string.save_as_draft)
-        if (Build.VERSION.SDK_INT < 30) {
-            checkIsToastWithMessageDisplayed(errorMsg)
-        } else {
-            assertTextInDialog(errorMsg)
-            clickOKOnDialog()
-        }
-
-        return destination.assertOnPage()
     }
 
     fun clickDiscardForm(): D {

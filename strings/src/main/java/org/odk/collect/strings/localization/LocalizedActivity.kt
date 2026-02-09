@@ -2,7 +2,6 @@ package org.odk.collect.strings.localization
 
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 
 open class LocalizedActivity : AppCompatActivity() {
@@ -17,19 +16,13 @@ open class LocalizedActivity : AppCompatActivity() {
     }
 
     private fun updateConfigurationIfSupported(config: Configuration): Configuration? {
-        if (Build.VERSION.SDK_INT >= 24) {
-            if (!config.locales.isEmpty) {
-                return config
-            }
-        } else {
-            if (config.locale != null) {
-                return config
-            }
+        if (!config.locales.isEmpty) {
+            return config
         }
 
         val locale = when (applicationContext) {
             is LocalizedApplication -> (applicationContext as LocalizedApplication).locale
-            else -> if (Build.VERSION.SDK_INT >= 24) config.locales[0] else config.locale
+            else -> config.locales[0]
         }
 
         config.setLocale(locale)

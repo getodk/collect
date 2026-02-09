@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets.utilities;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentActivity;
@@ -231,21 +230,12 @@ public class DateTimeWidgetUtils {
     }
 
     private static int getDatePickerTheme(ThemeUtils themeUtils, DatePickerDetails datePickerDetails) {
-        int theme = 0;
-        if (!isBrokenSamsungDevice()) {
-            theme = themeUtils.getCalendarDatePickerDialogTheme();
-        }
-        if (!datePickerDetails.isCalendarMode() || isBrokenSamsungDevice()) {
+        int theme = themeUtils.getCalendarDatePickerDialogTheme();
+        if (!datePickerDetails.isCalendarMode()) {
             theme = themeUtils.getSpinnerDatePickerDialogTheme();
         }
 
         return theme;
-    }
-
-    // https://stackoverflow.com/questions/28618405/datepicker-crashes-on-my-device-when-clicked-with-personal-app
-    private static boolean isBrokenSamsungDevice() {
-        return Build.MANUFACTURER.equalsIgnoreCase("samsung")
-                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1;
     }
 
     private static String getGregorianDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Locale locale) {

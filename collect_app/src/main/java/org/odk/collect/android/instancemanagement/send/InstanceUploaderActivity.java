@@ -20,7 +20,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import org.odk.collect.android.activities.FormFillingActivity;
@@ -389,11 +388,9 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
     }
 
     private String getReferrerUri() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            Uri referrerUri = getReferrer();
-            if (referrerUri != null) {
-                return referrerUri.toString();
-            }
+        Uri referrerUri = getReferrer();
+        if (referrerUri != null) {
+            return referrerUri.toString();
         }
         return "unknown";
     }

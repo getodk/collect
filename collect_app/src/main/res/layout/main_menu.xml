@@ -27,16 +27,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/min_sdk_deprecation_banner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:name="org.odk.collect.android.mainmenu.MinSdkDeprecationBanner"
-                android:layout_marginHorizontal="@dimen/margin_standard"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/map_box_initialization_fragment" />
-
             <include
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +36,7 @@
                 android:layout_marginHorizontal="@dimen/margin_standard"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/min_sdk_deprecation_banner" />
+                app:layout_constraintTop_toBottomOf="@id/map_box_initialization_fragment" />
 
             <org.odk.collect.android.mainmenu.StartNewFormButton
                 android:id="@+id/enter_data"

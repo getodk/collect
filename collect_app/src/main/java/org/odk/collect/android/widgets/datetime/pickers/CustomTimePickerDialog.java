@@ -4,12 +4,8 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.TypedArray;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.AttributeSet;
-import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,11 +17,6 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-
-import timber.log.Timber;
 
 public class CustomTimePickerDialog extends DialogFragment {
     private DateTimeViewModel viewModel;
@@ -59,9 +50,6 @@ public class CustomTimePickerDialog extends DialogFragment {
                 viewModel.getLocalDateTime().getHourOfDay(), viewModel.getLocalDateTime().getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));
 
         dialog.setTitle(requireContext().getString(org.odk.collect.strings.R.string.select_time));
-        fixSpinner(requireContext(), dialog, viewModel.getLocalDateTime().getHourOfDay(),
-                viewModel.getLocalDateTime().getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));
-
         return dialog;
     }
 
@@ -73,95 +61,5 @@ public class CustomTimePickerDialog extends DialogFragment {
         TimePickerDialog dialog = (TimePickerDialog) getDialog();
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(new ThemeUtils(getContext()).getColorPrimary());
         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(new ThemeUtils(getContext()).getColorPrimary());
-    }
-
-    /**
-     * Workaround for this bug: https://code.google.com/p/android/issues/detail?id=222208
-     * In Android 7.0 Nougat, spinner mode for the TimePicker in TimePickerDialog is
-     * incorrectly displayed as clock, even when the theme specifies otherwise.
-     * <p>
-     * Source: https://gist.github.com/jeffdgr8/6bc5f990bf0c13a7334ce385d482af9f
-     */
-    @SuppressWarnings("deprecation")
-    private void fixSpinner(Context context, TimePickerDialog dialog, int hourOfDay, int minute, boolean is24HourView) {
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
-            try {
-                // Get the theme's android:timePickerMode
-                final int modeSpinner = 2;
-                Class<?> styleableClass = Class.forName("com.android.internal.R$styleable");
-                Field timePickerStyleableField = styleableClass.getField("TimePicker");
-                int[] timePickerStyleable = (int[]) timePickerStyleableField.get(null);
-                final TypedArray a = context.obtainStyledAttributes(null, timePickerStyleable,
-                        android.R.attr.timePickerStyle, 0);
-                Field timePickerModeStyleableField = styleableClass.getField("TimePicker_timePickerMode");
-                int timePickerModeStyleable = timePickerModeStyleableField.getInt(null);
-                final int mode = a.getInt(timePickerModeStyleable, modeSpinner);
-                a.recycle();
-
-                if (mode == modeSpinner) {
-                    Field field = findField(TimePickerDialog.class, TimePicker.class, "mTimePicker");
-                    if (field == null) {
-                        Timber.e(new Error("Reflection failed: Couldn't find field 'mTimePicker'"));
-                        return;
-                    }
-
-                    TimePicker timePicker = (TimePicker) field.get(dialog);
-                    Class<?> delegateClass = Class.forName("android.widget.TimePicker$TimePickerDelegate");
-                    Field delegateField = findField(TimePicker.class, delegateClass, "mDelegate");
-
-                    if (delegateField == null) {
-                        Timber.e(new Error("Reflection failed: Couldn't find field 'mDelegate'"));
-                        return;
-                    }
-                    Object delegate = delegateField.get(timePicker);
-
-                    Class<?> spinnerDelegateClass;
-                    spinnerDelegateClass = Class.forName("android.widget.TimePickerSpinnerDelegate");
-                    // In 7.0 Nougat for some reason the timePickerMode is ignored and the
-                    // delegate is TimePickerClockDelegate
-                    if (delegate.getClass() != spinnerDelegateClass) {
-                        delegateField.set(timePicker, null); // throw out the TimePickerClockDelegate!
-                        timePicker.removeAllViews(); // remove the TimePickerClockDelegate views
-                        Constructor spinnerDelegateConstructor = spinnerDelegateClass
-                                .getConstructor(TimePicker.class, Context.class,
-                                        AttributeSet.class, int.class, int.class);
-                        spinnerDelegateConstructor.setAccessible(true);
-
-                        // Instantiate a TimePickerSpinnerDelegate
-                        delegate = spinnerDelegateConstructor.newInstance(timePicker, context,
-                                null, android.R.attr.timePickerStyle, 0);
-
-                        // set the TimePicker.mDelegate to the spinner delegate
-                        delegateField.set(timePicker, delegate);
-
-                        // Set up the TimePicker again, with the TimePickerSpinnerDelegate
-                        timePicker.setIs24HourView(is24HourView);
-                        timePicker.setCurrentHour(hourOfDay);
-                        timePicker.setCurrentMinute(minute);
-                    }
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    private Field findField(Class objectClass, Class fieldClass, String expectedName) {
-        try {
-            Field field = objectClass.getDeclaredField(expectedName);
-            field.setAccessible(true);
-            return field;
-        } catch (NoSuchFieldException e) {
-            Timber.i(e); // ignore
-        }
-
-        // search for it if it wasn't found under the expected ivar name
-        for (Field searchField : objectClass.getDeclaredFields()) {
-            if (searchField.getType() == fieldClass) {
-                searchField.setAccessible(true);
-                return searchField;
-            }
-        }
-        return null;
     }
 }

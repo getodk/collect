@@ -4,7 +4,6 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.formmanagement.download.FormDownloadException
 import org.odk.collect.android.notifications.builders.FormUpdatesAvailableNotificationBuilder
@@ -119,14 +118,12 @@ class NotificationManagerNotifier(
     private fun getProjectName(projectId: String) = projectsRepository.get(projectId)?.name ?: ""
 
     init {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.createNotificationChannel(
-                NotificationChannel(
-                    COLLECT_NOTIFICATION_CHANNEL,
-                    application.getLocalizedString(org.odk.collect.strings.R.string.notification_channel_name),
-                    NotificationManager.IMPORTANCE_DEFAULT
-                )
+        notificationManager.createNotificationChannel(
+            NotificationChannel(
+                COLLECT_NOTIFICATION_CHANNEL,
+                application.getLocalizedString(org.odk.collect.strings.R.string.notification_channel_name),
+                NotificationManager.IMPORTANCE_DEFAULT
             )
-        }
+        )
     }
 }

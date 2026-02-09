@@ -35,7 +35,6 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
 import org.odk.collect.webpage.CustomTabsWebPageService;
-import org.robolectric.annotation.Config;
 
 import java.io.File;
 import java.io.IOException;
@@ -192,28 +191,6 @@ public class AudioRecordingControllerFragmentTest {
         FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchInContainer(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(shadowOf(fragment.binding.recordingIcon.getDrawable()).getCreatedFromResId(), is(org.odk.collect.icons.R.drawable.ic_baseline_mic_24));
-        });
-    }
-
-    @Test
-    @Config(sdk = 23)
-    public void whenSDKOlderThan24_hidesPauseButton() {
-        audioRecorder.start("session", Output.AAC);
-
-        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchInContainer(AudioRecordingControllerFragment.class);
-        scenario.onFragment(fragment -> {
-            assertThat(fragment.binding.pauseRecording.getVisibility(), is(View.GONE));
-        });
-    }
-
-    @Test
-    @Config(sdk = 24)
-    public void whenSDK24OrNewer_showsPauseButton() {
-        audioRecorder.start("session", Output.AAC);
-
-        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchInContainer(AudioRecordingControllerFragment.class);
-        scenario.onFragment(fragment -> {
-            assertThat(fragment.binding.pauseRecording.getVisibility(), is(View.VISIBLE));
         });
     }
 

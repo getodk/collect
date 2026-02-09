@@ -17,10 +17,8 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AbsSeekBar;
 
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.IAnswerData;
@@ -30,10 +28,6 @@ import org.odk.collect.android.databinding.RatingWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ViewUtils;
 import org.odk.collect.androidshared.utils.ScreenUtils;
-
-import java.lang.reflect.Field;
-
-import timber.log.Timber;
 
 @SuppressLint("ViewConstructor")
 public class RatingWidget extends QuestionWidget {
@@ -131,19 +125,6 @@ public class RatingWidget extends QuestionWidget {
             binding.ratingBar2.setRating(rating);
             widgetValueChanged();
         });
-
-        // fix for rating bar showing incorrect rating on Android Nougat(7.0/API 24)
-        // See https://stackoverflow.com/questions/44342481
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
-            try {
-                Field field = AbsSeekBar.class.getDeclaredField("mTouchProgressOffset");
-                field.setAccessible(true);
-                field.set(binding.ratingBar1, 0.6f);
-                field.set(binding.ratingBar2, 0.6f);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                Timber.e(e);
-            }
-        }
     }
 
     private int calculateMaximumStarsInOneLine() {

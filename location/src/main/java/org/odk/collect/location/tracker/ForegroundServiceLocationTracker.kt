@@ -7,7 +7,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.flow.StateFlow
@@ -130,17 +129,15 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
         PendingIntent.getActivity(this, 0, Intent(this, ReturnToAppActivity::class.java), PendingIntent.FLAG_IMMUTABLE)
 
     private fun setupNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(
-                NOTIFICATION_CHANNEL,
-                getLocalizedString(org.odk.collect.strings.R.string.location_tracking_notification_channel_name),
-                NotificationManager.IMPORTANCE_LOW
-            )
+        val notificationChannel = NotificationChannel(
+            NOTIFICATION_CHANNEL,
+            getLocalizedString(org.odk.collect.strings.R.string.location_tracking_notification_channel_name),
+            NotificationManager.IMPORTANCE_LOW
+        )
 
-            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(
-                notificationChannel
-            )
-        }
+        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(
+            notificationChannel
+        )
     }
 
     companion object {
