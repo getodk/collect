@@ -76,7 +76,7 @@ kotlinxCoroutinesAndroid = { group = "org.jetbrains.kotlinx", name = "kotlinx-co
 kotlinxCoroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "1.10.2" }
 armen101AudioRecorderView = { group = "com.github.Armen101", name = "AudioRecordView", version = "1.0.5" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
-glideCompiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+glideKsp = { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide" }
 caverockAndroidsvg = { group = "com.caverock", name = "androidsvg-aar", version = "1.4" }
 mp4parserMuxer = { group = "org.mp4parser", name = "muxer", version = "1.9.41" } # Check if https://github.com/getodk/collect/issues/5323 no longer takes place before upgrading
 kotlinStdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
@@ -123,8 +123,7 @@ androidApplication = { id = "com.android.application" }
 androidLibrary = { id = "com.android.library" }
 javaLibrary = { id = "java-library" }
 kotlinLibrary = { id = "kotlin" }
-kotlinAndroid = { id = "kotlin-android" }
-kotlinKapt = { id = "kotlin-kapt" }
+kotlinKsp = { id = "com.google.devtools.ksp", version="2.3.5" }
 kotlinParcelize = { id = "kotlin-parcelize" }
 safeargsKotlin = { id = "androidx.navigation.safeargs.kotlin" }
 safeargs = { id = "androidx.navigation.safeargs" }

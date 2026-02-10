@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.kotlinKapt)
+    alias(libs.plugins.kotlinKsp)
 }
 
 apply(from = "../config/quality.gradle")

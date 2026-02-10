@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.kotlinKapt)
+    alias(libs.plugins.kotlinKsp)
     alias(libs.plugins.safeargsKotlin)
 }
 
@@ -16,7 +15,6 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -64,7 +62,7 @@ dependencies {
     implementation(libs.androidxNavigationFragmentKtx)
     implementation(libs.androidxNavigationUi)
     implementation(libs.dagger)
-    kapt(libs.daggerCompiler)
+    ksp(libs.daggerCompiler)
 
     testImplementation(project(":forms-test"))
     testImplementation(libs.junit)

@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.kotlinKapt)
+    alias(libs.plugins.kotlinKsp)
 }
 
 apply(from = "../config/quality.gradle")
@@ -15,7 +14,6 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -53,7 +51,7 @@ dependencies {
     implementation(libs.cameraxCamera2)
     implementation("com.google.guava:guava:33.0.0-android") // Guava is a dependency required by CameraX. It shouldn't be used in any other context and should be removed when no longer necessary.
     implementation(libs.dagger)
-    kapt(libs.daggerCompiler)
+    ksp(libs.daggerCompiler)
 
     testImplementation(project(":androidtest"))
 
