@@ -8,6 +8,7 @@
 -dontwarn com.networknt.**
 -dontwarn android.content.res.**
 -dontwarn org.kxml2.io.**
+-dontwarn java.beans.**
 
 -keep class org.odk.collect.android.logic.actions.**
 -keep class android.support.v7.widget.** { *; }
