@@ -14,6 +14,7 @@
         <exclude name="ArrayIsStoredDirectly" />
         <exclude name="AvoidReassigningParameters" />
         <exclude name="AvoidStringBufferField" />
+        <exclude name="EnumComparison" />
         <exclude name="ForLoopCanBeForeach" />
         <exclude name="ImplicitFunctionalInterface" />
         <exclude name="JUnitUseExpected" /> <!-- Favor using fail explicitly to test correct exception -->
@@ -59,7 +60,6 @@
 
     <rule ref="category/java/design.xml">
         <exclude name="AbstractClassWithoutAnyMethod" />
-        <exclude name="AvoidCatchingGenericException" />
         <exclude name="AvoidDeeplyNestedIfStmts" />
         <exclude name="AvoidThrowingRawExceptionTypes" />
         <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal" />
@@ -79,6 +79,7 @@
         <exclude name="MutableStaticState" />
         <exclude name="NcssCount" />
         <exclude name="NPathComplexity" />
+        <exclude name="PublicMemberInNonPublicType" />
         <exclude name="SignatureDeclareThrowsException" />
         <exclude name="SimplifyBooleanReturns" />
         <exclude name="SwitchDensity" />
@@ -102,6 +103,7 @@
         <exclude name="AssignmentToNonFinalStatic" />
         <exclude name="AvoidAccessibilityAlteration" />
         <exclude name="AvoidBranchingStatementAsLastInLoop" />
+        <exclude name="AvoidCatchingGenericException" />
         <exclude name="AvoidCatchingNPE" />
         <exclude name="AvoidCatchingThrowable" />
         <exclude name="AvoidDuplicateLiterals" />
