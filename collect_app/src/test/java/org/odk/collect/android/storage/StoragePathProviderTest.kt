@@ -10,10 +10,11 @@ import org.mockito.Mockito.`when`
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.shared.TempFiles
 import java.io.File
 
 class StoragePathProviderTest {
-    private val root = createTempDir()
+    private val root = TempFiles.createTempDir()
     private var projectsRepository = mock(ProjectsRepository::class.java)
     private lateinit var storagePathProvider: StoragePathProvider
 
