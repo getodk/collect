@@ -1,14 +1,17 @@
 package org.odk.collect.settings.validation
 
-import com.fasterxml.jackson.core.JsonParseException
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.networknt.schema.JsonSchemaFactory
-import com.networknt.schema.SpecVersion
-import com.networknt.schema.ValidatorTypeCode
+import com.networknt.schema.Schema
+import com.networknt.schema.SchemaLocation
+import com.networknt.schema.SchemaRegistry
+import com.networknt.schema.dialect.Dialects
+import com.networknt.schema.keyword.KeywordType
 import org.json.JSONObject
 import org.odk.collect.settings.importing.SettingsValidator
 import org.odk.collect.shared.collections.CollectionExtensions.has
+import tools.jackson.core.exc.StreamReadException
+import tools.jackson.databind.ObjectMapper
 import java.io.InputStream
+import java.util.Map
 
 internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> InputStream) :
     SettingsValidator {
@@ -23,11 +26,20 @@ internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> Inp
 
     override fun isValid(json: String): Boolean {
         return try {
-            val schemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V201909)
-            val schema = schemaFactory.getSchema(schemaString)
+            val schemaRegistry = SchemaRegistry.withDialect(Dialects.getDraft201909()) {
+                it.schemas(
+                    Map.of(
+                        "https://example.com/address.schema.json",
+                        schemaString
+                    )
+                )
+            }
+            val schema: Schema =
+                schemaRegistry.getSchema(SchemaLocation.of("https://example.com/address.schema.json"))
+
             val errors = schema.validate(ObjectMapper().readTree(json))
-            errors.none { it.type != ValidatorTypeCode.ENUM.value }
-        } catch (e: JsonParseException) {
+            errors.none { it.keyword != KeywordType.ENUM.value }
+        } catch (_: StreamReadException) {
             false
         }
     }
@@ -39,7 +51,7 @@ internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> Inp
                 .getJSONObject(parentJsonObjectName)
                 .getJSONObject("properties")
                 .has(key)
-        } catch (e: JsonParseException) {
+        } catch (_: StreamReadException) {
             false
         }
     }
@@ -57,7 +69,7 @@ internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> Inp
             } else {
                 true
             }
-        } catch (e: JsonParseException) {
+        } catch (_: StreamReadException) {
             false
         }
     }
