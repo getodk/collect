@@ -300,7 +300,9 @@ dependencies {
     implementation libs.firebaseAnalytics
     implementation libs.firebaseCrashlytics
 
-    implementation libs.persianJodaTime
+    implementation (libs.persianJodaTime) {
+        exclude group: "com.android.support"
+    }
     implementation libs.myanmarCalendar
     implementation files('libs/bikram-sambat-1.8.0.jar')
     implementation libs.commonsIo
