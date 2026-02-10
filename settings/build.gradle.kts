@@ -27,16 +27,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    packaging {
-        resources {
-            // These library licenses will be referenced in-app
-            excludes += setOf("META-INF/ASL-2.0.txt", "META-INF/LGPL-3.0.txt")
-
-            // Pick first occurrence of any files that cause conflicts
-            pickFirst("schema")
-        }
-    }
-
     namespace = "org.odk.collect.settings"
 }
 

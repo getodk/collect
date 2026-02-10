@@ -25,13 +25,6 @@ android {
         }
     }
 
-    packaging {
-        resources {
-            // Pick first occurrence of any files that cause conflicts
-            pickFirst("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
-        }
-    }
-
     namespace = "org.odk.collect.servicetest"
 }
 
