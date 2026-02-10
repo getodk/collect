@@ -264,9 +264,9 @@ jobs:
           name: Check APK size hasn't increased
           command: |
             if [[ -n "$GOOGLE_MAPS_API_KEY" ]]; then \
-              ./check-size.sh 23117869
+              ./check-size.sh 21495808
             else
-              ./check-size.sh 13900000
+              ./check-size.sh 12058624
             fi
 
       - run:

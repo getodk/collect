@@ -165,6 +165,13 @@ android {
     }
 
     packaging {
+        jniLibs {
+            // Without useLegacyPackaging, Mapbox native libraries (.so)
+            // can grow by several MB after upgrading to AGP 9, even if the Mapbox
+            // version itself hasn’t changed. Legacy packaging keeps them as built,
+            // avoiding extra padding, alignment, and ELF headers, which keeps the APK smaller.
+            useLegacyPackaging = true
+        }
         resources {
             // These library licenses will be referenced in-app
             excludes += ['META-INF/ASL-2.0.txt', 'META-INF/LGPL-3.0.txt']
