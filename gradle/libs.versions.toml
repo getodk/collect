@@ -12,13 +12,15 @@ glide = "5.0.5"
 camerax = "1.5.3"
 espresso = "3.7.0"
 kotlin = "2.3.10"
+mockito = "5.21.0"
+coroutines="1.10.2"
 
 [libraries]
 firebaseCrashlyticsGradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version = "3.0.6" }
 googleServices = { group = "com.google.gms", name = "google-services", version = "4.4.4" }
 gradle = { group = "com.android.tools.build", name = "gradle", version = "9.0.0" }
 kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-navigationSafeArgsGradlePlugin = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigation" }
+kotlinStdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 ktlintGradle = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version = "14.0.1" }
 ossLicensesPlugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version = "0.10.10" }
 desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.5" }
@@ -33,6 +35,7 @@ androidxBrowser = { group = "androidx.browser", name = "browser", version = "1.9
 androidxRecyclerview = { group = "androidx.recyclerview", name = "recyclerview", version = "1.4.0" }
 androidxNavigationFragmentKtx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 androidxNavigationUi = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
+navigationSafeArgsGradlePlugin = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 androidxActivity = { group = "androidx.activity", name = "activity-ktx", version = "1.12.4" }
 androidxAppcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.1" }
 androidxWorkRuntime = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
@@ -72,14 +75,13 @@ dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" 
 daggerCompiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
 daggerAndroid = { group = "com.google.dagger", name = "dagger-android", version.ref = "dagger" }
 daggerAndroidProcessor = { group = "com.google.dagger", name = "dagger-android-processor", version.ref = "dagger" }
-kotlinxCoroutinesAndroid = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = "1.10.2" }
-kotlinxCoroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "1.10.2" }
+kotlinxCoroutinesAndroid = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinxCoroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 armen101AudioRecorderView = { group = "com.github.Armen101", name = "AudioRecordView", version = "1.0.5" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glideKsp = { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide" }
 caverockAndroidsvg = { group = "com.caverock", name = "androidsvg-aar", version = "1.4" }
 mp4parserMuxer = { group = "org.mp4parser", name = "muxer", version = "1.9.41" } # Check if https://github.com/getodk/collect/issues/5323 no longer takes place before upgrading
-kotlinStdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 gson = { group = "com.google.code.gson", name = "gson", version = "2.13.2" }
 firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics-ktx", version = "22.5.0" }
 firebaseCrashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version = "19.4.4" }
@@ -95,14 +97,14 @@ cameraxView = { group = "androidx.camera", name = "camera-view", version.ref = "
 cameraxLifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
 cameraxCamera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
 cameraxVideo = { group = "androidx.camera", name = "camera-video", version.ref = "camerax" }
+camera-mlkit-vision = { group = "androidx.camera", name = "camera-mlkit-vision", version.ref = "camerax" }
 jsoup = { group = "org.jsoup", name = "jsoup", version = "1.22.1" }
 mlkit-barcodescanning = { group = "com.google.android.gms", name = "play-services-mlkit-barcode-scanning", version = "18.3.1" }
-camera-mlkit-vision = { group = "androidx.camera", name = "camera-mlkit-vision", version.ref = "camerax" }
 
 # Test dependencies
 junit = { group = "junit", name = "junit", version = "4.13.2" }
-mockitoAndroid = { group = "org.mockito", name = "mockito-android", version = "5.21.0" }
-mockitoCore = { group = "org.mockito", name = "mockito-core", version = "5.21.0" }
+mockitoAndroid = { group = "org.mockito", name = "mockito-android", version.ref = "mockito" }
+mockitoCore = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 mockitoKotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version = "6.2.3" }
 androidxFragmentTesting = { group = "androidx.fragment", name = "fragment-testing", version.ref = "androidxFragment" }
 androidxArchCoreTesting = { group = "androidx.arch.core", name = "core-testing", version = "2.2.0" }
