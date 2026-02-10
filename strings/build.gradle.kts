@@ -36,7 +36,7 @@ android {
 dependencies {
     implementation(libs.androidxCoreKtx)
 
-    /**
+    /*
      * We need to expose [AppCompatActivity] for classes in separate modules that
      * extend [LocalizedActivity].
      */
