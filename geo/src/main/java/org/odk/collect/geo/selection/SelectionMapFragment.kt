@@ -402,7 +402,7 @@ class SelectionMapFragment(
             MarkerDescription(
                 MapPoint(it.point.latitude, it.point.longitude),
                 false,
-                MapFragment.BOTTOM,
+                MapFragment.IconAnchor.BOTTOM,
                 MarkerIconDescription.DrawableResource(it.smallIcon, it.color, it.symbol)
             )
         }

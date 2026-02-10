@@ -680,7 +680,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         );
     }
 
-    private static float getIconAnchorValueX(@MapFragment.Companion.IconAnchor String iconAnchor) {
+    private static float getIconAnchorValueX(MapFragment.IconAnchor iconAnchor) {
         switch (iconAnchor) {
             case BOTTOM:
             default:
@@ -688,7 +688,7 @@ public class GoogleMapFragment extends MapViewModelMapFragment implements
         }
     }
 
-    private static float getIconAnchorValueY(@MapFragment.Companion.IconAnchor String iconAnchor) {
+    private static float getIconAnchorValueY(MapFragment.IconAnchor iconAnchor) {
         switch (iconAnchor) {
             case BOTTOM:
                 return 1.0f;

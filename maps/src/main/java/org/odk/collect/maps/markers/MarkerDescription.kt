@@ -6,6 +6,6 @@ import org.odk.collect.maps.MapPoint
 data class MarkerDescription(
     val point: MapPoint,
     val isDraggable: Boolean,
-    @MapFragment.Companion.IconAnchor val iconAnchor: String,
+    val iconAnchor: MapFragment.IconAnchor,
     val iconDescription: MarkerIconDescription
 )

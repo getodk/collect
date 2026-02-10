@@ -396,7 +396,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
     /** Places the marker and enables the button to remove it. */
     private void placeMarker(@NonNull MapPoint point) {
         map.clearFeatures();
-        featureId = map.addMarker(new MarkerDescription(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.CENTER, new MarkerIconDescription.DrawableResource(org.odk.collect.icons.R.drawable.ic_map_point)));
+        featureId = map.addMarker(new MarkerDescription(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.IconAnchor.CENTER, new MarkerIconDescription.DrawableResource(org.odk.collect.icons.R.drawable.ic_map_point)));
         if (!intentReadOnly) {
             clearButton.setEnabled(true);
         }
