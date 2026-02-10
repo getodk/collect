@@ -62,7 +62,7 @@ okHttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 okHttpTls = { group = "com.squareup.okhttp3", name = "okhttp-tls", version.ref = "okhttp3" }
 okHttpDigest = { group = "io.github.rburgst", name = "okhttp-digest", version = "3.1.1" }
 persianJodaTime = { group = "com.github.mohamadian", name = "persianjodatime", version = "1.2" }
-myanmarCalendar = { group = "com.github.chanmratekoko", name = "myanmar-calendar", version = "1.0.6.RC3" } # Check if https://github.com/chanmratekoko/mmcalendar/issues/4 no longer takes place before upgrading
+myanmarCalendar = { group = "com.github.chanmratekoko", name = "myanmar-calendar", version = "1.1.0.RELEASE" }
 danlewAndroidJoda = { group = "net.danlew", name = "android.joda", version = "2.14.0" }
 rarepebbleColorpicker = { group = "com.github.martin-stone", name = "hsv-alpha-color-picker-android", version = "3.1.0" }
 commonsIo = { group = "commons-io", name = "commons-io", version = "2.21.0" }
