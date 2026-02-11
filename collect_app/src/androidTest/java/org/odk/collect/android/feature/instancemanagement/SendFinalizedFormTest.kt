@@ -16,7 +16,7 @@ import org.odk.collect.android.support.pages.OkDialog
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
-import org.odk.collect.android.support.rules.ManagedComposeRule
+import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.testshared.AssertionFramework
@@ -25,14 +25,14 @@ import org.odk.collect.testshared.AssertionFramework
 class SendFinalizedFormTest {
 
     private val testDependencies = TestDependencies()
-    private val managedComposeRule = ManagedComposeRule()
+    private val pageComposeRule = PageComposeRule()
     private val rule = CollectTestRule(useDemoProject = false)
 
     @get:Rule
     val chain: RuleChain = chain(testDependencies)
         .around(RecordedIntentsRule())
-        .around(managedComposeRule)
-        .around(managedComposeRule.composeRule)
+        .around(pageComposeRule)
+        .around(pageComposeRule.composeRule)
         .around(rule)
 
     @Test

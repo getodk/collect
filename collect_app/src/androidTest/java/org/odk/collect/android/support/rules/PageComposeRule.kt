@@ -9,7 +9,7 @@ import org.odk.collect.android.support.pages.Page
  * Wrapper around a ComposeTestRule that automatically assigns Page.composeRule
  * before the test.
  */
-class ManagedComposeRule(
+class PageComposeRule(
     val composeRule: ComposeTestRule = createEmptyComposeRule()
 ) : ExternalResource() {
 

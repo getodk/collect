@@ -13,7 +13,7 @@ import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.FormEntryActivityTestRule
-import org.odk.collect.android.support.rules.ManagedComposeRule
+import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.testshared.AssertionFramework
@@ -21,14 +21,14 @@ import org.odk.collect.testshared.AssertionFramework
 @RunWith(AndroidJUnit4::class)
 class SavePointTest {
     private val recentAppsRule = RecentAppsRule()
-    private val managedComposeRule = ManagedComposeRule()
+    private val pageComposeRule = PageComposeRule()
     private val rule = FormEntryActivityTestRule()
 
     @get:Rule
     val ruleChain: RuleChain = TestRuleChain.chain()
         .around(recentAppsRule)
-        .around(managedComposeRule)
-        .around(managedComposeRule.composeRule)
+        .around(pageComposeRule)
+        .around(pageComposeRule.composeRule)
         .around(rule)
 
     @Test

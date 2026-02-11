@@ -6,20 +6,20 @@ import org.junit.rules.RuleChain
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
-import org.odk.collect.android.support.rules.ManagedComposeRule
+import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.testshared.AssertionFramework
 
 class FormSaveTest {
-    private val managedComposeRule = ManagedComposeRule()
+    private val pageComposeRule = PageComposeRule()
     private val rule = CollectTestRule()
     private val testDependencies = TestDependencies()
 
     @get:Rule
     val copyFormChain: RuleChain = TestRuleChain
         .chain(testDependencies)
-        .around(managedComposeRule)
-        .around(managedComposeRule.composeRule)
+        .around(pageComposeRule)
+        .around(pageComposeRule.composeRule)
         .around(rule)
 
     @Test
