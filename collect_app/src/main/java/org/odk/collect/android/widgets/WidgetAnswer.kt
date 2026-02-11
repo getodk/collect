@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.lifecycle.ViewModelProvider
 import org.javarosa.core.model.Constants
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.widgets.video.VideoWidgetAnswer
@@ -22,7 +21,7 @@ fun WidgetAnswer(
     answer: String?,
     fontSize: Int? = null,
     summaryView: Boolean = false,
-    viewModelProvider: ViewModelProvider,
+    mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {}
 ) {
@@ -50,10 +49,9 @@ fun WidgetAnswer(
                     )
                 }
             }
-            Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(modifier, answer, viewModelProvider, onLongClick)
+            Constants.CONTROL_VIDEO_CAPTURE -> VideoWidgetAnswer(modifier, answer, mediaWidgetAnswerViewModel, onLongClick)
             Constants.CONTROL_FILE_CAPTURE -> {
                 val context = LocalContext.current
-                val viewModel = viewModelProvider[MediaWidgetAnswerViewModel::class]
 
                 TextWidgetAnswer(
                     modifier,
@@ -61,7 +59,7 @@ fun WidgetAnswer(
                     answer,
                     fontSize,
                     if (summaryView) Arrangement.Start else Arrangement.Center,
-                    { viewModel.openFile(context, answer) },
+                    { mediaWidgetAnswerViewModel.openFile(context, answer) },
                     onLongClick,
                     stringResource(org.odk.collect.strings.R.string.open_file)
                 )

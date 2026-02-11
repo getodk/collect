@@ -26,7 +26,6 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.activities.FormEntryViewModelFactory;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.PrinterWidgetViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -97,7 +96,7 @@ public class WidgetFactory {
     private final FileRequester fileRequester;
     private final StringRequester stringRequester;
     private final FormController formController;
-    private final FormEntryViewModelFactory formEntryViewModelFactory;
+    private final MediaWidgetAnswerViewModel mediaWidgetAnswerViewModel;
 
     public WidgetFactory(FragmentActivity activity,
                          boolean useExternalRecorder,
@@ -112,7 +111,7 @@ public class WidgetFactory {
                          FileRequester fileRequester,
                          StringRequester stringRequester,
                          FormController formController,
-                         FormEntryViewModelFactory formEntryViewModelFactory
+                         MediaWidgetAnswerViewModel mediaWidgetAnswerViewModel
     ) {
         this.activity = activity;
         this.useExternalRecorder = useExternalRecorder;
@@ -127,7 +126,7 @@ public class WidgetFactory {
         this.fileRequester = fileRequester;
         this.stringRequester = stringRequester;
         this.formController = formController;
-        this.formEntryViewModelFactory = formEntryViewModelFactory;
+        this.mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -137,7 +136,7 @@ public class WidgetFactory {
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider, boolean readOnlyOverride) {
         String appearance = Appearances.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, readOnlyOverride);
-        QuestionWidget.Dependencies dependencies = new QuestionWidget.Dependencies(audioPlayer, formEntryViewModelFactory);
+        QuestionWidget.Dependencies dependencies = new QuestionWidget.Dependencies(audioPlayer, mediaWidgetAnswerViewModel);
 
         final QuestionWidget questionWidget;
         switch (prompt.getControlType()) {

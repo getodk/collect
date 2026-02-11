@@ -54,7 +54,6 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryViewModelFactory;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
 import org.odk.collect.android.exception.ExternalParamsException;
@@ -70,6 +69,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
@@ -160,7 +160,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
             InternalRecordingRequester internalRecordingRequester,
             ExternalAppRecordingRequester externalAppRecordingRequester,
             LifecycleOwner viewLifecycle,
-            FormEntryViewModelFactory formEntryViewModelFactory
+            MediaWidgetAnswerViewModel mediaWidgetAnswerViewModel
     ) {
         super(context);
         updateQuestions(questionPrompts);
@@ -190,7 +190,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                 new FileRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
                 new StringRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
                 formController,
-                formEntryViewModelFactory
+                mediaWidgetAnswerViewModel
         );
 
         widgets = new ArrayList<>();

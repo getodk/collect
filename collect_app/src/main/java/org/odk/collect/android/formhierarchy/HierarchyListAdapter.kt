@@ -16,19 +16,19 @@
 package org.odk.collect.android.formhierarchy
 
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 
 class HierarchyListAdapter(
     private val hierarchyItems: List<HierarchyItem>,
-    private val viewModelProvider: ViewModelProvider,
+    private val mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
     private val listener: OnElementClickListener
 ) : RecyclerView.Adapter<HierarchyListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val item = HierarchyListItemView(parent.context, viewType).apply {
             layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
-        return ViewHolder(item, viewModelProvider)
+        return ViewHolder(item, mediaWidgetAnswerViewModel)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -45,10 +45,10 @@ class HierarchyListAdapter(
 
     class ViewHolder(
         private val view: HierarchyListItemView,
-        private val viewModelProvider: ViewModelProvider
+        private val mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel
     ) : RecyclerView.ViewHolder(view) {
         fun bind(element: HierarchyItem, listener: OnElementClickListener) {
-            view.setElement(element, viewModelProvider) { listener.onElementClick(element) }
+            view.setElement(element, mediaWidgetAnswerViewModel) { listener.onElementClick(element) }
             view.setOnClickListener { listener.onElementClick(element) }
         }
     }

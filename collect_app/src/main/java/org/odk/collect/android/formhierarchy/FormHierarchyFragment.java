@@ -54,6 +54,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
@@ -331,9 +332,10 @@ public class FormHierarchyFragment extends Fragment {
             formHierarchyViewModel.setCurrentIndex(formController.getFormIndex());
 
             calculateElementsToDisplay(formController, groupIcon, groupPathTextView);
+            ViewModelProvider viewModelProvider = new ViewModelProvider(this, viewModelFactory);
             recyclerView.setAdapter(new HierarchyListAdapter(
                     formHierarchyViewModel.getElementsToDisplay(),
-                    new ViewModelProvider(requireActivity(), viewModelFactory),
+                    viewModelProvider.get(MediaWidgetAnswerViewModel.class),
                     this::onElementClick)
             );
 

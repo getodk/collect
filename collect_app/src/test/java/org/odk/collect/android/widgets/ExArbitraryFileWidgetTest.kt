@@ -4,8 +4,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.Constants
@@ -38,14 +36,10 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget>() {
     private val fileRequester = mock<FileRequester>()
     private val mediaUtils = mock<MediaUtils>()
     private val questionMediaManager = FakeQuestionMediaManager()
-    private val viewModelFactory = viewModelFactory {
-        initializer {
-            MediaWidgetAnswerViewModel(mock(), questionMediaManager, mediaUtils)
-        }
-    }
+    private val mediaWidgetAnswerViewModel = MediaWidgetAnswerViewModel(mock(), questionMediaManager, mediaUtils)
     private val dependencies = QuestionWidget.Dependencies(
         null,
-        viewModelFactory
+        mediaWidgetAnswerViewModel
     )
 
     @Before

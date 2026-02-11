@@ -4,8 +4,6 @@ import android.content.Intent
 import android.provider.MediaStore
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.performClick
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import net.bytebuddy.utility.RandomString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -38,14 +36,10 @@ class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
     private var destinationName: String? = null
     private var questionMediaManager = mock<QuestionMediaManager>()
     private var mediaUtils = mock<MediaUtils>()
-    private val viewModelFactory = viewModelFactory {
-        initializer {
-            MediaWidgetAnswerViewModel(mock(), questionMediaManager, mediaUtils)
-        }
-    }
+    private val mediaWidgetAnswerViewModel = MediaWidgetAnswerViewModel(mock(), questionMediaManager, mediaUtils)
     private val dependencies = QuestionWidget.Dependencies(
         null,
-        viewModelFactory
+        mediaWidgetAnswerViewModel
     )
 
     override fun createWidget(): VideoWidget {

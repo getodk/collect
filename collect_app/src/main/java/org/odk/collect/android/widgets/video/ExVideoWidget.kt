@@ -4,12 +4,10 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.view.View
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
-import androidx.lifecycle.ViewModelProvider
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
@@ -47,15 +45,11 @@ class ExVideoWidget(
     override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         val readOnly = questionDetails.isReadOnly
         val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
-        val viewModelProvider = ViewModelProvider(
-            context as ComponentActivity,
-            dependencies.viewModelFactory
-        )
 
         return ComposeView(context).apply {
             setContextThemedContent {
                 ExVideoWidgetContent(
-                    viewModelProvider,
+                    dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,
                     binaryName,
                     readOnly,

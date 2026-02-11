@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.ViewModelProvider
 import org.javarosa.form.api.FormEntryPrompt
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.android.widgets.WidgetAnswer
 import org.odk.collect.android.widgets.WidgetIconButton
 import org.odk.collect.androidshared.R.dimen
@@ -17,7 +17,7 @@ import org.odk.collect.strings.R.string
 
 @Composable
 fun ArbitraryFileWidgetContent(
-    viewModelProvider: ViewModelProvider,
+    mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
     formEntryPrompt: FormEntryPrompt,
     answer: String?,
     readOnly: Boolean,
@@ -42,7 +42,7 @@ fun ArbitraryFileWidgetContent(
             formEntryPrompt,
             answer,
             answerFontSize,
-            viewModelProvider = viewModelProvider,
+            mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel,
             onLongClick = onLongClick
         )
     }

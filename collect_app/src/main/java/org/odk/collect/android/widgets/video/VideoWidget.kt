@@ -8,12 +8,10 @@ import android.content.Intent
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
-import androidx.lifecycle.ViewModelProvider
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.StringData
 import org.javarosa.form.api.FormEntryPrompt
@@ -51,15 +49,11 @@ class VideoWidget(
         val readOnly = questionDetails.isReadOnly
         val newVideoOnly = formEntryPrompt.appearanceHint?.lowercase()?.contains(Appearances.NEW) ?: false
         val buttonFontSize = QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE)
-        val viewModelProvider = ViewModelProvider(
-            context as ComponentActivity,
-            dependencies.viewModelFactory
-        )
 
         return ComposeView(context).apply {
             setContextThemedContent {
                 VideoWidgetContent(
-                    viewModelProvider,
+                    dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,
                     binaryName,
                     readOnly,

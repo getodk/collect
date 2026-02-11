@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textview.MaterialTextView
 import org.odk.collect.android.R
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.android.widgets.WidgetAnswer
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 
@@ -23,7 +23,7 @@ class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(conte
 
     fun setElement(
         item: HierarchyItem,
-        viewModelProvider: ViewModelProvider,
+        mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
         onCLick: () -> Unit
     ) {
         findViewById<MaterialTextView>(R.id.primary_text).text = item.primaryText
@@ -34,7 +34,7 @@ class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(conte
                     item.formEntryPrompt!!,
                     item.secondaryText,
                     summaryView = true,
-                    viewModelProvider = viewModelProvider,
+                    mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel,
                     onClick = onCLick
                 )
             }

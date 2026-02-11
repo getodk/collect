@@ -33,7 +33,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
@@ -413,19 +412,19 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     public static class Dependencies {
 
         private final AudioPlayer audioPlayer;
-        private final ViewModelProvider.Factory viewModelFactory;
+        private final MediaWidgetAnswerViewModel mediaWidgetAnswerViewModel;
 
-        public Dependencies(AudioPlayer audioPlayer, ViewModelProvider.Factory viewModelFactory) {
+        public Dependencies(AudioPlayer audioPlayer, MediaWidgetAnswerViewModel mediaWidgetAnswerViewModel) {
             this.audioPlayer = audioPlayer;
-            this.viewModelFactory = viewModelFactory;
+            this.mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel;
         }
 
         public AudioPlayer getAudioPlayer() {
             return audioPlayer;
         }
 
-        public ViewModelProvider.Factory getViewModelFactory() {
-            return viewModelFactory;
+        public MediaWidgetAnswerViewModel getMediaWidgetAnswerViewModel() {
+            return mediaWidgetAnswerViewModel;
         }
     }
 }
