@@ -23,9 +23,11 @@ class StaticPolygonFeature(
 
     override val points: List<MapPoint> = polygonDescription.points
 
+    private val mapboxPoints = points.map { Point.fromLngLat(it.longitude, it.latitude) }
+
     private val polygonAnnotation: PolygonAnnotation = polygonAnnotationManager.create(
         PolygonAnnotationOptions()
-            .withPoints(listOf(polygonDescription.points.map { Point.fromLngLat(it.longitude, it.latitude) }))
+            .withPoints(listOf(mapboxPoints))
             .withFillOutlineColor(polygonDescription.getStrokeColor())
             .withFillColor(polygonDescription.getFillColor())
     )
@@ -37,7 +39,7 @@ class StaticPolygonFeature(
 
     private val polylineAnnotation = polylineAnnotationManager.create(
         PolylineAnnotationOptions()
-            .withPoints(polygonDescription.points.map { Point.fromLngLat(it.longitude, it.latitude) })
+            .withPoints(mapboxPoints)
             .withLineColor(polygonDescription.getStrokeColor())
             .withLineWidth(MapUtils.convertStrokeWidth(polygonDescription))
     )
