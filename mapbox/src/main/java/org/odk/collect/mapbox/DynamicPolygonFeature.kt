@@ -9,6 +9,9 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
+import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
+import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
+import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.PolygonDescription
@@ -18,6 +21,7 @@ internal class DynamicPolygonFeature(
     private val context: Context,
     private val pointAnnotationManager: PointAnnotationManager,
     private val polygonAnnotationManager: PolygonAnnotationManager,
+    private val polylineAnnotationManager: PolylineAnnotationManager,
     private val featureId: Int,
     private val featureClickListener: MapFragment.FeatureListener?,
     private val featureDragEndListener: MapFragment.FeatureListener?,
@@ -31,6 +35,7 @@ internal class DynamicPolygonFeature(
     private val pointAnnotationClickListener = ClickListener()
     private val pointAnnotationDragListener = DragListener()
     private var polygonAnnotation: PolygonAnnotation? = null
+    private var polylineAnnotation: PolylineAnnotation? = null
 
     init {
         val markerDescriptions = polygonDescription.getMarkersForPoints()
@@ -68,6 +73,10 @@ internal class DynamicPolygonFeature(
             polygonAnnotationManager.delete(it)
         }
 
+        polylineAnnotation?.let {
+            polylineAnnotationManager.delete(it)
+        }
+
         pointAnnotations.clear()
         _points.clear()
     }
@@ -90,6 +99,21 @@ internal class DynamicPolygonFeature(
                     .withFillColor(polygonDescription.getFillColor())
             ).also {
                 polygonAnnotationManager.update(it)
+            }
+        }
+
+        polylineAnnotation?.let {
+            polylineAnnotationManager.delete(it)
+        }
+
+        if (points.size > 1) {
+            polylineAnnotation = polylineAnnotationManager.create(
+                PolylineAnnotationOptions()
+                    .withPoints(points + points.first())
+                    .withLineColor(polygonDescription.getStrokeColor())
+                    .withLineWidth(MapUtils.convertStrokeWidth(polygonDescription))
+            ).also {
+                polylineAnnotationManager.update(it)
             }
         }
     }

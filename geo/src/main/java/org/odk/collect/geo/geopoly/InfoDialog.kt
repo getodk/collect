@@ -11,7 +11,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Backspace
-import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.AddLocation
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.TouchApp
@@ -81,15 +80,12 @@ fun InfoContent(
         GeoPolyViewModel.RecordingMode.MANUAL, GeoPolyViewModel.RecordingMode.AUTOMATIC -> {
             if (fromSnackbar) {
                 listOf(
-                    InfoDialog.InfoItem(Icons.AutoMirrored.Filled.DirectionsWalk, stringResource(string.physically_move_to_correct_info_item)),
                     InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
                     InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
                     InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_entire_shape_info_item)),
                 )
             } else {
                 listOf(
-                    InfoDialog.InfoItem(Icons.Filled.AddLocation, stringResource(string.tap_to_add_a_point_info_item)),
-                    InfoDialog.InfoItem(Icons.AutoMirrored.Filled.DirectionsWalk, stringResource(string.physically_move_to_correct_info_item)),
                     InfoDialog.InfoItem(Icons.Filled.TouchApp, stringResource(string.long_press_to_move_point_info_item)),
                     InfoDialog.InfoItem(Icons.AutoMirrored.Filled.Backspace, stringResource(string.remove_last_point_info_item)),
                     InfoDialog.InfoItem(Icons.Filled.Delete, stringResource(string.delete_entire_shape_info_item))
