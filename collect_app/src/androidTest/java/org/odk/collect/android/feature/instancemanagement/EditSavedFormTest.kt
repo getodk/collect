@@ -18,7 +18,6 @@ import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.RecentAppsRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
-import org.odk.collect.testshared.AssertionFramework
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -297,7 +296,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .acceptEditingNewerDraftEdit("One Question Editable")
-            .assertText("456", AssertionFramework.COMPOSE)
+            .assertAnswer("456")
     }
 
     @Test
@@ -321,7 +320,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .discardEditingNewerEdit()
-            .assertText("123", AssertionFramework.COMPOSE)
+            .assertAnswer("123")
     }
 
     @Test
@@ -346,7 +345,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .acceptEditingNewerFinalizedEdit("One Question Editable")
-            .assertText("456", AssertionFramework.COMPOSE)
+            .assertAnswer("456")
     }
 
     @Test
@@ -371,7 +370,7 @@ class EditSavedFormTest {
             .clickOnForm("One Question Editable")
             .editFormWithError()
             .discardEditingNewerEdit()
-            .assertText("123", AssertionFramework.COMPOSE)
+            .assertAnswer("123")
     }
 
     @Test

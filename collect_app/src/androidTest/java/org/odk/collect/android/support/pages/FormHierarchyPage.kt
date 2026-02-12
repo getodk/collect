@@ -10,6 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.odk.collect.android.R
+import org.odk.collect.testshared.AssertionFramework
 import org.odk.collect.testshared.WaitFor.waitFor
 import java.util.concurrent.Callable
 
@@ -100,6 +101,16 @@ class FormHierarchyPage(private val formName: String) : Page<FormHierarchyPage>(
             )
         )
         clickOnText(groupLabel)
+        return this
+    }
+
+    fun assertAnswer(answer: String): FormHierarchyPage {
+        assertText(answer, AssertionFramework.COMPOSE)
+        return this
+    }
+
+    fun assertAnswerDoesNotExist(answer: String): FormHierarchyPage {
+        assertTextDoesNotExist(answer, AssertionFramework.COMPOSE)
         return this
     }
 }

@@ -8,7 +8,6 @@ import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain
-import org.odk.collect.testshared.AssertionFramework
 
 class FormSaveTest {
     private val pageComposeRule = PageComposeRule()
@@ -31,8 +30,8 @@ class FormSaveTest {
             .swipeToEndScreen()
             .clickSaveAsDraft()
             .assertText(org.odk.collect.strings.R.string.form_saved_as_draft)
-            .clickOnString(org.odk.collect.strings.R.string.edit_form)
-            .assertText("25", AssertionFramework.COMPOSE)
+            .editSavedForm("One Question")
+            .assertAnswer("25")
             .assertText(org.odk.collect.strings.R.string.jump_to_beginning)
             .assertText(org.odk.collect.strings.R.string.jump_to_end)
     }
@@ -50,8 +49,8 @@ class FormSaveTest {
             .clickGoToEnd()
             .clickFinalize()
             .assertText(org.odk.collect.strings.R.string.form_saved)
-            .clickOnString(org.odk.collect.strings.R.string.view_form)
-            .assertText("25", AssertionFramework.COMPOSE)
+            .viewSavedForm("One Question")
+            .assertAnswer("25")
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_beginning)
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_end)
             .assertText(org.odk.collect.strings.R.string.exit)

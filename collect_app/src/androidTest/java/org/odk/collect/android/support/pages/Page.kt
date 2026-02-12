@@ -271,6 +271,16 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
+    fun editSavedForm(formName: String): FormHierarchyPage {
+        clickOnText(getTranslatedString(org.odk.collect.strings.R.string.edit_form))
+        return FormHierarchyPage(formName)
+    }
+
+    fun viewSavedForm(formName: String): FormHierarchyPage {
+        clickOnText(getTranslatedString(org.odk.collect.strings.R.string.view_form))
+        return FormHierarchyPage(formName)
+    }
+
     fun clickOnText(text: String): T {
         Interactions.clickOn(
             allOf(

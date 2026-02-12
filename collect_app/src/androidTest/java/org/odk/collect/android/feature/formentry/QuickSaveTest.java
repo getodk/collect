@@ -10,7 +10,6 @@ import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.PageComposeRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
-import org.odk.collect.testshared.AssertionFramework;
 
 @RunWith(AndroidJUnit4.class)
 public class QuickSaveTest {
@@ -37,8 +36,8 @@ public class QuickSaveTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question")
-                .assertText("Reuben", AssertionFramework.COMPOSE)
-                .assertText("32", AssertionFramework.COMPOSE);
+                .assertAnswer("Reuben")
+                .assertAnswer("32");
     }
 
     @Test
@@ -53,7 +52,7 @@ public class QuickSaveTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Reuben", AssertionFramework.COMPOSE);
+                .assertAnswer("Reuben");
     }
 
     @Test
@@ -75,6 +74,6 @@ public class QuickSaveTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Another Reuben", AssertionFramework.COMPOSE);
+                .assertAnswer("Another Reuben");
     }
 }

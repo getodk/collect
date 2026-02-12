@@ -19,7 +19,6 @@ import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
-import org.odk.collect.testshared.AssertionFramework
 
 @RunWith(AndroidJUnit4::class)
 class SendFinalizedFormTest {
@@ -43,7 +42,7 @@ class SendFinalizedFormTest {
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
             .clickSendFinalizedForm(1)
             .clickOnForm("One Question")
-            .assertText("52", AssertionFramework.COMPOSE)
+            .assertAnswer("52")
     }
 
     @Test
@@ -79,7 +78,7 @@ class SendFinalizedFormTest {
             .pressBack(MainMenuPage())
             .clickViewSentForm(1)
             .clickOnForm("One Question")
-            .assertText("123", AssertionFramework.COMPOSE)
+            .assertAnswer("123")
             .assertText(org.odk.collect.strings.R.string.exit)
     }
 
@@ -101,7 +100,7 @@ class SendFinalizedFormTest {
             .assertNumberOfFinalizedForms(1)
             .clickViewSentForm(1)
             .clickOnForm("One Question")
-            .assertText("123", AssertionFramework.COMPOSE)
+            .assertAnswer("123")
     }
 
     @Test
