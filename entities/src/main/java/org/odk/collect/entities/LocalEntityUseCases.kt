@@ -25,9 +25,8 @@ object LocalEntityUseCases {
             val label = formEntity.label
             when (formEntity.action) {
                 EntityAction.CREATE -> {
-                    val hasValidLabel = label.isNotBlank()
                     val list = entitiesRepository.getList(formEntity.dataset)
-                    if (hasValidLabel && list != null && !list.needsApproval) {
+                    if (list != null && !list.needsApproval) {
                         val entity = Entity.New(
                             id,
                             label,

@@ -1097,4 +1097,39 @@ class EntitiesTest {
         val containsSaveTo = bindAttributes.any { it.name == "saveto" }
         assertThat(containsSaveTo, equalTo(false))
     }
+
+    @Test
+    fun `filling form with blank label does not make entity available`() {
+        val scenario = Scenario.init(
+            "Create entity form",
+            html(
+                listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
+                head(
+                    title("Create entity form"),
+                    model(
+                        listOf(Pair("entities:entities-version", "2024.1.0")),
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("name"),
+                                t("meta", entityNode("people", CREATE))
+                            )
+                        ),
+                        bind("/data/name").type("string").withSaveTo("name"),
+                        entityLabelBind("/data/name")
+                    )
+                ),
+                body(
+                    input("/data/name")
+                )
+            )
+        )
+
+        scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
+        scenario.answer("/data/name", " ")
+        scenario.finalizeInstance()
+
+        val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
+        assertThat(entities.size, equalTo(0))
+    }
 }
