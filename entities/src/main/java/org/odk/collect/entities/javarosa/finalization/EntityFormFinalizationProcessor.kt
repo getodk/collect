@@ -39,7 +39,7 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
         saveTos: List<SaveTo>,
         mainInstance: FormInstance,
         action: EntityAction
-    ): FormEntity {
+    ): FormEntity? {
         val entityGroupRef = entityElement.ref.getParentRef().getParentRef()
         val fields = saveTos.mapNotNull { saveTo ->
             if (!entityGroupRef.genericize().equals(saveTo.entityGroupReference)) {
@@ -60,6 +60,11 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
 
         val id = EntityFormParser.parseId(entityElement)
         val label = EntityFormParser.parseLabel(entityElement)
-        return FormEntity(action, dataset, id, label, fields)
+
+        return if (id != null) {
+            FormEntity(action, dataset, id, label, fields)
+        } else {
+            null
+        }
     }
 }

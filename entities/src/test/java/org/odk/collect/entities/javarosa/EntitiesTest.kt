@@ -206,14 +206,14 @@ class EntitiesTest {
                 FormEntity(
                     EntityAction.CREATE,
                     "people",
-                    scenario.answerOf<StringData>("/data/people/meta/entity/@id").value as String?,
+                    scenario.answerOf<StringData>("/data/people/meta/entity/@id").value as String,
                     "Tom Wambsgans",
                     listOf(Pair("name", "Tom Wambsgans"))
                 ),
                 FormEntity(
                     EntityAction.CREATE,
                     "cars",
-                    scenario.answerOf<StringData>("/data/cars/meta/entity/@id").value as String?,
+                    scenario.answerOf<StringData>("/data/cars/meta/entity/@id").value as String,
                     "Range Rover",
                     listOf(Pair("car_model", "Range Rover"))
                 )
@@ -298,14 +298,14 @@ class EntitiesTest {
                 FormEntity(
                     EntityAction.UPDATE,
                     "people",
-                    scenario.answerOf<StringData>("/data/people/meta/entity/@id").value as String?,
+                    scenario.answerOf<StringData>("/data/people/meta/entity/@id").value as String,
                     "Tom Wambsgans",
                     listOf(Pair("name", "Tom Wambsgans"))
                 ),
                 FormEntity(
                     EntityAction.UPDATE,
                     "cars",
-                    scenario.answerOf<StringData>("/data/cars/meta/entity/@id").value as String?,
+                    scenario.answerOf<StringData>("/data/cars/meta/entity/@id").value as String,
                     "Range Rover",
                     listOf(Pair("car_model", "Range Rover"))
                 )
@@ -371,14 +371,14 @@ class EntitiesTest {
                 FormEntity(
                     EntityAction.CREATE,
                     "people",
-                    scenario.answerOf<StringData>("/data/people[1]/meta/entity/@id").value as String?,
+                    scenario.answerOf<StringData>("/data/people[1]/meta/entity/@id").value as String,
                     "Tom Wambsgans",
                     listOf(Pair("name", "Tom Wambsgans"))
                 ),
                 FormEntity(
                     EntityAction.CREATE,
                     "people",
-                    scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String?,
+                    scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String,
                     "Shiv Roy",
                     listOf(Pair("name", "Shiv Roy"))
                 )
@@ -444,14 +444,14 @@ class EntitiesTest {
                 FormEntity(
                     EntityAction.UPDATE,
                     "people",
-                    scenario.answerOf<StringData>("/data/people[1]/meta/entity/@id").value as String?,
+                    scenario.answerOf<StringData>("/data/people[1]/meta/entity/@id").value as String,
                     "Tom Wambsgans",
                     listOf(Pair("name", "Tom Wambsgans"))
                 ),
                 FormEntity(
                     EntityAction.UPDATE,
                     "people",
-                    scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String?,
+                    scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String,
                     "Shiv Roy",
                     listOf(Pair("name", "Shiv Roy"))
                 )
@@ -540,28 +540,28 @@ class EntitiesTest {
                 FormEntity(
                     EntityAction.CREATE,
                     "people",
-                    scenario.answerOf<StringData>("/data/people[1]/meta/entity/@id").value as String?,
+                    scenario.answerOf<StringData>("/data/people[1]/meta/entity/@id").value as String,
                     "Tom Wambsgans",
                     listOf(Pair("name", "Tom Wambsgans"))
                 ),
                 FormEntity(
                     EntityAction.CREATE,
                     "people",
-                    scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String?,
+                    scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String,
                     "Shiv Roy",
                     listOf(Pair("name", "Shiv Roy"))
                 ),
                 FormEntity(
                     EntityAction.CREATE,
                     "cars",
-                    scenario.answerOf<StringData>("/data/people[1]/cars[1]/meta/entity/@id").value as String?,
+                    scenario.answerOf<StringData>("/data/people[1]/cars[1]/meta/entity/@id").value as String,
                     "Range Rover",
                     listOf(Pair("car_model", "Range Rover"))
                 ),
                 FormEntity(
                     EntityAction.CREATE,
                     "cars",
-                    scenario.answerOf<UncastData>("/data/people[2]/cars[1]/meta/entity/@id").value as String?,
+                    scenario.answerOf<UncastData>("/data/people[2]/cars[1]/meta/entity/@id").value as String,
                     "Audi A8",
                     listOf(Pair("car_model", "Audi A8"))
                 )
@@ -650,28 +650,28 @@ class EntitiesTest {
                 FormEntity(
                     EntityAction.UPDATE,
                     "people",
-                    scenario.answerOf<StringData>("/data/people[1]/meta/entity/@id").value as String?,
+                    scenario.answerOf<StringData>("/data/people[1]/meta/entity/@id").value as String,
                     "Tom Wambsgans",
                     listOf(Pair("name", "Tom Wambsgans"))
                 ),
                 FormEntity(
                     EntityAction.UPDATE,
                     "people",
-                    scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String?,
+                    scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String,
                     "Shiv Roy",
                     listOf(Pair("name", "Shiv Roy"))
                 ),
                 FormEntity(
                     EntityAction.UPDATE,
                     "cars",
-                    scenario.answerOf<StringData>("/data/people[1]/cars[1]/meta/entity/@id").value as String?,
+                    scenario.answerOf<StringData>("/data/people[1]/cars[1]/meta/entity/@id").value as String,
                     "Range Rover",
                     listOf(Pair("car_model", "Range Rover"))
                 ),
                 FormEntity(
                     EntityAction.UPDATE,
                     "cars",
-                    scenario.answerOf<UncastData>("/data/people[2]/cars[1]/meta/entity/@id").value as String?,
+                    scenario.answerOf<UncastData>("/data/people[2]/cars[1]/meta/entity/@id").value as String,
                     "Audi A8",
                     listOf(Pair("car_model", "Audi A8"))
                 )
@@ -680,7 +680,7 @@ class EntitiesTest {
     }
 
     @Test
-    fun `filling form with create without an id makes entity available`() {
+    fun `filling form with create without an id does not make entity available`() {
         val scenario = Scenario.init(
             "Create entity form",
             html(
@@ -718,10 +718,7 @@ class EntitiesTest {
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
-        assertThat(entities.size, equalTo(1))
-        assertThat(entities[0].dataset, equalTo("people"))
-        assertThat(entities[0].id, equalTo(null))
-        assertThat(entities[0].action, equalTo(EntityAction.CREATE))
+        assertThat(entities.size, equalTo(0))
     }
 
     @Test
@@ -813,7 +810,7 @@ class EntitiesTest {
     }
 
     @Test
-    fun `filling form with update with null id makes entity available`() {
+    fun `filling form with update without an id does not make entity available`() {
         val scenario = Scenario.init(
             "Update entity form",
             html(
@@ -846,10 +843,7 @@ class EntitiesTest {
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
-        assertThat(entities.size, equalTo(1))
-        assertThat(entities[0].dataset, equalTo("people"))
-        assertThat(entities[0].id, equalTo(null))
-        assertThat(entities[0].action, equalTo(EntityAction.UPDATE))
+        assertThat(entities.size, equalTo(0))
     }
 
     @Test

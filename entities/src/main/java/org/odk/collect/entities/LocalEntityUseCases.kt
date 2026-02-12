@@ -23,40 +23,38 @@ object LocalEntityUseCases {
         formEntities?.entities?.forEach { formEntity ->
             val id = formEntity.id
             val label = formEntity.label
-            if (id != null) {
-                when (formEntity.action) {
-                    EntityAction.CREATE -> {
-                        val hasValidLabel = !label.isNullOrBlank()
-                        val list = entitiesRepository.getList(formEntity.dataset)
-                        if (hasValidLabel && list != null && !list.needsApproval) {
-                            val entity = Entity.New(
-                                id,
-                                label,
-                                1,
-                                formEntity.properties,
-                                branchId = UUID.randomUUID().toString()
-                            )
+            when (formEntity.action) {
+                EntityAction.CREATE -> {
+                    val hasValidLabel = !label.isNullOrBlank()
+                    val list = entitiesRepository.getList(formEntity.dataset)
+                    if (hasValidLabel && list != null && !list.needsApproval) {
+                        val entity = Entity.New(
+                            id,
+                            label,
+                            1,
+                            formEntity.properties,
+                            branchId = UUID.randomUUID().toString()
+                        )
 
-                            entitiesRepository.save(formEntity.dataset, entity)
-                        }
+                        entitiesRepository.save(formEntity.dataset, entity)
                     }
+                }
 
-                    EntityAction.UPDATE -> {
-                        val existing = entitiesRepository.query(
+                EntityAction.UPDATE -> {
+                    val existing = entitiesRepository.query(
+                        formEntity.dataset,
+                        Query.StringEq(EntitySchema.ID, formEntity.id)
+                    ).firstOrNull()
+
+                    if (existing != null) {
+                        entitiesRepository.save(
                             formEntity.dataset,
-                            Query.StringEq(EntitySchema.ID, formEntity.id)
-                        ).firstOrNull()
-
-                        if (existing != null) {
-                            entitiesRepository.save(
-                                formEntity.dataset,
-                                existing.copy(
-                                    label = if (label.isNullOrBlank()) existing.label else label,
-                                    properties = formEntity.properties,
-                                    version = existing.version + 1
-                                )
+                            existing.copy(
+                                label = if (label.isNullOrBlank()) existing.label else label,
+                                properties = formEntity.properties,
+                                version = existing.version + 1
                             )
-                        }
+                        )
                     }
                 }
             }
