@@ -101,30 +101,6 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromForm updates properties and does not change label on update if label is null`() {
-        entitiesRepository.save(
-            "things",
-            Entity.New(
-                "id",
-                "label",
-                version = 1,
-                properties = listOf("prop" to "value")
-            )
-        )
-
-        val formEntity =
-            FormEntity(EntityAction.UPDATE, "things", "id", null, listOf("prop" to "value 2"))
-        val formEntities = EntitiesExtra(listOf(formEntity))
-
-        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
-        val entities = entitiesRepository.query("things")
-        assertThat(entities.size, equalTo(1))
-        assertThat(entities[0].label, equalTo("label"))
-        assertThat(entities[0].properties.size, equalTo(1))
-        assertThat(entities[0].properties[0], equalTo("prop" to "value 2"))
-    }
-
-    @Test
     fun `updateLocalEntitiesFromForm updates properties and does not change label on update if label is blank`() {
         entitiesRepository.save(
             "things",
@@ -176,17 +152,6 @@ class LocalEntityUseCasesTest {
     fun `updateLocalEntitiesFromForm does not save updated entity that doesn't already exist`() {
         val formEntity =
             FormEntity(EntityAction.UPDATE, "things", "1", "1", emptyList())
-        val formEntities = EntitiesExtra(listOf(formEntity))
-        entitiesRepository.addList("things")
-
-        LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
-        assertThat(entitiesRepository.query("things").size, equalTo(0))
-    }
-
-    @Test
-    fun `updateLocalEntitiesFromForm does not create entity that doesn't have a label`() {
-        val formEntity =
-            FormEntity(EntityAction.CREATE, "things", "1", null, emptyList())
         val formEntities = EntitiesExtra(listOf(formEntity))
         entitiesRepository.addList("things")
 

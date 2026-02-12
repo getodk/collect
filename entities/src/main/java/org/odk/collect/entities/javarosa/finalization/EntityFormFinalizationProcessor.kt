@@ -60,8 +60,7 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
 
         val id = EntityFormParser.parseId(entityElement)
         val label = EntityFormParser.parseLabel(entityElement)
-
-        return if (id != null) {
+        return if (id != null && label != null) {
             FormEntity(action, dataset, id, label, fields)
         } else {
             null
