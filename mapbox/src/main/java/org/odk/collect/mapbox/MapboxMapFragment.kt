@@ -402,6 +402,7 @@ class MapboxMapFragment :
         } else {
             features[featureId] = StaticPolygonFeature(
                 polygonAnnotationManager,
+                polylineAnnotationManager,
                 polygonDescription,
                 featureClickListener,
                 featureId
