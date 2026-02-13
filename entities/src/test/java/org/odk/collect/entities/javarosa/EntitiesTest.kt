@@ -9,7 +9,6 @@ import org.javarosa.core.model.data.UncastData
 import org.javarosa.core.model.instance.TreeElement
 import org.javarosa.test.BindBuilderXFormsElement.bind
 import org.javarosa.test.Scenario
-import org.javarosa.test.XFormsElement
 import org.javarosa.test.XFormsElement.body
 import org.javarosa.test.XFormsElement.group
 import org.javarosa.test.XFormsElement.head
