@@ -114,6 +114,7 @@ android {
                 signingConfig signingConfigs.release
             }
             minifyEnabled(true)
+            shrinkResources(true)
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
@@ -125,6 +126,7 @@ android {
                 signingConfig signingConfigs.release
             }
             minifyEnabled(true)
+            shrinkResources(true)
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
@@ -136,6 +138,7 @@ android {
             signingConfig signingConfigs.selfSignedRelease
 
             minifyEnabled(true)
+            shrinkResources(true)
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
