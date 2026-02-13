@@ -6,9 +6,9 @@ import org.javarosa.form.api.FormEntryFinalizationProcessor
 import org.javarosa.form.api.FormEntryModel
 import org.odk.collect.entities.javarosa.parse.EntityFormExtra
 import org.odk.collect.entities.javarosa.parse.SaveTo
+import org.odk.collect.entities.javarosa.parse.StringExt.isV4UUID
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.javarosa.spec.EntityFormParser
-import java.util.UUID
 
 class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
     override fun processForm(formEntryModel: FormEntryModel) {
@@ -62,19 +62,8 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
         val id = EntityFormParser.parseId(entityElement)
         val label = EntityFormParser.parseLabel(entityElement)
 
-        val isIdValid = if (id != null) {
-            try {
-                UUID.fromString(id) != null
-                true
-            } catch (_: IllegalArgumentException) {
-                false
-            }
-        } else {
-            false
-        }
-
-        return if (isIdValid && !label.isNullOrBlank()) {
-            FormEntity(action, dataset, id!!, label, fields)
+        return if (id.isV4UUID() && !label.isNullOrBlank()) {
+            FormEntity(action, dataset, id, label, fields)
         } else {
             null
         }
