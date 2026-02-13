@@ -659,13 +659,12 @@ public class JavaRosaFormController implements FormController {
     public ValidationResult saveOneScreenAnswer(FormIndex index, IAnswerData answer, boolean evaluateConstraints) throws JavaRosaException {
         // Within a group, you can only save for question events
         if (getEvent(index) == FormEntryController.EVENT_QUESTION) {
+            saveAnswer(index, answer);
             if (evaluateConstraints) {
                 int saveStatus = answerQuestion(index, answer);
                 if (saveStatus != FormEntryController.ANSWER_OK) {
                     return getFailedValidationResult(index, saveStatus);
                 }
-            } else {
-                saveAnswer(index, answer);
             }
         } else {
             Timber.w("Attempted to save an index referencing something other than a question: %s",
