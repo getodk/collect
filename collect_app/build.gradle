@@ -236,9 +236,6 @@ configurations.all {
 
         force 'org.objenesis:objenesis:2.6'
         force 'org.hamcrest:hamcrest:3.0'
-
-        // Newer Jackson versions cannot be ued until Collect minSDK >= 26 (https://github.com/FasterXML/jackson-databind#android)
-        force 'com.fasterxml.jackson.core:jackson-databind:2.13.5'
     }
     
     transitive = true
