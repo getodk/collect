@@ -3,6 +3,7 @@ package org.odk.collect.entities.javarosa.support
 import org.javarosa.test.BindBuilderXFormsElement
 import org.javarosa.test.BindBuilderXFormsElement.bind
 import org.javarosa.test.XFormsElement
+import org.javarosa.test.XFormsElement.setvalue
 import org.javarosa.test.XFormsElement.t
 import org.odk.collect.entities.javarosa.spec.EntityAction
 
@@ -33,6 +34,14 @@ object EntityXFormsElement {
 
     fun entityLabelBind(ref: String): BindBuilderXFormsElement {
         return bind("/data/meta/entity/label").type("string").calculate(ref)
+    }
+
+    fun entityIdBind(): BindBuilderXFormsElement {
+        return bind("/data/meta/entity/@id").type("string")
+    }
+
+    fun entityIdSetValue(): XFormsElement {
+        return setvalue("odk-instance-first-load", "/data/meta/entity/@id", "uuid()")
     }
 
     fun BindBuilderXFormsElement.withSaveTo(property: String): BindBuilderXFormsElement {

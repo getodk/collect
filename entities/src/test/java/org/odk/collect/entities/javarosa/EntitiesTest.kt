@@ -3,6 +3,7 @@ package org.odk.collect.entities.javarosa
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
+import org.hamcrest.Matchers.notNullValue
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.data.UncastData
 import org.javarosa.core.model.instance.TreeElement
@@ -32,6 +33,8 @@ import org.odk.collect.entities.javarosa.finalization.FormEntity
 import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.javarosa.spec.EntityAction.CREATE
+import org.odk.collect.entities.javarosa.support.EntityXFormsElement.entityIdBind
+import org.odk.collect.entities.javarosa.support.EntityXFormsElement.entityIdSetValue
 import org.odk.collect.entities.javarosa.support.EntityXFormsElement.entityLabelBind
 import org.odk.collect.entities.javarosa.support.EntityXFormsElement.entityNode
 import org.odk.collect.entities.javarosa.support.EntityXFormsElement.withSaveTo
@@ -110,9 +113,9 @@ class EntitiesTest {
                             )
                         ),
                         bind("/data/name").type("string").withSaveTo("name"),
-                        bind("/data/meta/entity/@id").type("string"),
-                        bind("/data/meta/entity/label").type("string").calculate("/data/name"),
-                        setvalue("odk-instance-first-load", "/data/meta/entity/@id", "uuid()")
+                        entityIdBind(),
+                        entityIdSetValue(),
+                        entityLabelBind("/data/name")
                     )
                 ),
                 body(
@@ -726,6 +729,76 @@ class EntitiesTest {
     }
 
     @Test
+    fun `filling form with blank label does not make entity available`() {
+        val scenario = Scenario.init(
+            "Create entity form",
+            html(
+                listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
+                head(
+                    title("Create entity form"),
+                    model(
+                        listOf(Pair("entities:entities-version", "2024.1.0")),
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("name"),
+                                t("meta", entityNode("people", CREATE))
+                            )
+                        ),
+                        bind("/data/name").type("string").withSaveTo("name"),
+                        entityLabelBind("/data/name"),
+                    )
+                ),
+                body(
+                    input("/data/name")
+                )
+            )
+        )
+
+        scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
+        scenario.answer("/data/name", " ")
+        scenario.finalizeInstance()
+
+        val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
+        assertThat(entities.size, equalTo(0))
+    }
+
+    @Test
+    fun `filling fom with non-UUID id does not make entity available`() {
+        val scenario = Scenario.init(
+            "Create entity form",
+            html(
+                listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
+                head(
+                    title("Create entity form"),
+                    model(
+                        listOf(Pair("entities:entities-version", "2024.1.0")),
+                        mainInstance(
+                            t(
+                                "data id=\"create-entity-form\"",
+                                t("name"),
+                                t("meta", entityNode("people", CREATE))
+                            )
+                        ),
+                        bind("/data/name").type("string").withSaveTo("name"),
+                        entityLabelBind("/data/name")
+                    )
+                ),
+                body(
+                    input("/data/name")
+                )
+            )
+        )
+
+        scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
+        scenario.answer("/data/name", "Dylan")
+        scenario.finalizeInstance()
+
+        val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
+        assertThat(entities.size, equalTo(0))
+    }
+
+    @Test
     fun `filling form with update makes entity available`() {
         val scenario = Scenario.init(
             "Update entity form",
@@ -748,8 +821,9 @@ class EntitiesTest {
                             )
                         ),
                         bind("/data/name").type("string").withSaveTo("name"),
-                        bind("/data/meta/entity/@id").type("string"),
-                        bind("/data/meta/entity/label").type("string").calculate("/data/name")
+                        entityIdBind(),
+                        entityIdSetValue(),
+                        entityLabelBind("/data/name")
                     )
                 ),
                 body(
@@ -765,7 +839,7 @@ class EntitiesTest {
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
         assertThat(entities.size, equalTo(1))
         assertThat(entities[0].dataset, equalTo("people"))
-        assertThat(entities[0].id, equalTo("123"))
+        assertThat(entities[0].id, notNullValue())
         assertThat(entities[0].label, equalTo("Tom Wambsgans"))
         assertThat(entities[0].properties, equalTo(listOf(Pair("name", "Tom Wambsgans"))))
         assertThat(entities[0].action, equalTo(EntityAction.UPDATE))
@@ -871,6 +945,8 @@ class EntitiesTest {
                         ),
                         bind("/data/meta/entity/@create").calculate("/data/join = 'yes'"),
                         bind("/data/name").type("string").withSaveTo("name"),
+                        entityIdBind(),
+                        entityIdSetValue(),
                         entityLabelBind("/data/name")
                     )
                 ),
@@ -925,6 +1001,8 @@ class EntitiesTest {
                             )
                         ),
                         bind("/data/name").type("string").withSaveTo("name"),
+                        entityIdBind(),
+                        entityIdSetValue(),
                         entityLabelBind("/data/name")
                     )
                 ),
@@ -966,6 +1044,8 @@ class EntitiesTest {
                             )
                         ),
                         bind("/data/name").type("string").withAttribute("blah", "saveto", "name"),
+                        entityIdBind(),
+                        entityIdSetValue(),
                         entityLabelBind("/data/name")
                     )
                 ),
@@ -1003,6 +1083,8 @@ class EntitiesTest {
                             )
                         ),
                         bind("/data/team").type("string").withSaveTo("team"),
+                        entityIdBind(),
+                        entityIdSetValue(),
                         entityLabelBind("/data/team")
                     )
                 ),
@@ -1045,6 +1127,8 @@ class EntitiesTest {
                         ),
                         bind("/data/name").type("string"),
                         bind("/data/age").withSaveTo("age"),
+                        entityIdBind(),
+                        entityIdSetValue(),
                         entityLabelBind("/data/name")
                     )
                 ),
@@ -1096,40 +1180,5 @@ class EntitiesTest {
         val bindAttributes: List<TreeElement> = scenario.formEntryPromptAtIndex.bindAttributes
         val containsSaveTo = bindAttributes.any { it.name == "saveto" }
         assertThat(containsSaveTo, equalTo(false))
-    }
-
-    @Test
-    fun `filling form with blank label does not make entity available`() {
-        val scenario = Scenario.init(
-            "Create entity form",
-            html(
-                listOf(Pair("entities", "http://www.opendatakit.org/xforms/entities")),
-                head(
-                    title("Create entity form"),
-                    model(
-                        listOf(Pair("entities:entities-version", "2024.1.0")),
-                        mainInstance(
-                            t(
-                                "data id=\"create-entity-form\"",
-                                t("name"),
-                                t("meta", entityNode("people", CREATE))
-                            )
-                        ),
-                        bind("/data/name").type("string").withSaveTo("name"),
-                        entityLabelBind("/data/name")
-                    )
-                ),
-                body(
-                    input("/data/name")
-                )
-            )
-        )
-
-        scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
-        scenario.answer("/data/name", " ")
-        scenario.finalizeInstance()
-
-        val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
-        assertThat(entities.size, equalTo(0))
     }
 }
