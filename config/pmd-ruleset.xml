@@ -14,7 +14,6 @@
         <exclude name="ArrayIsStoredDirectly" />
         <exclude name="AvoidReassigningParameters" />
         <exclude name="AvoidStringBufferField" />
-        <exclude name="EnumComparison" />
         <exclude name="ForLoopCanBeForeach" />
         <exclude name="ImplicitFunctionalInterface" />
         <exclude name="JUnitUseExpected" /> <!-- Favor using fail explicitly to test correct exception -->
