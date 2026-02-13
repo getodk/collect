@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.jsonSchemaValidator)
 
     testImplementation(libs.junit)
+    testImplementation(libs.json)
     testImplementation(libs.hamcrest)
     testImplementation(libs.mockitoKotlin)
 }

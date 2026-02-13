@@ -1,20 +1,17 @@
 package org.odk.collect.shared.strings
 
-import com.vdurmont.emoji.EmojiParser
+import java.text.BreakIterator
 
 object StringUtils {
 
     @JvmStatic
-    fun firstCharacterOrEmoji(string: String): String {
-        val onlyText = EmojiParser.removeAllEmojis(string)
-        val firstCharacterIsNotEmoji = onlyText.isNotEmpty() && onlyText.first() == string.first()
-        val onlyEmojis = EmojiParser.extractEmojis(string)
+    fun firstCharacterOrEmoji(text: String): String {
+        if (text.isEmpty()) return ""
 
-        return if (onlyEmojis.isNotEmpty() && !firstCharacterIsNotEmoji) {
-            onlyEmojis[0]
-        } else {
-            if (string.isEmpty()) "" else string.first().toString()
-        }
+        val iterator = BreakIterator.getCharacterInstance()
+        iterator.setText(text)
+
+        return text.substring(iterator.first(), iterator.next())
     }
 
     @JvmStatic

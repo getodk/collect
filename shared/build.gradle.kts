@@ -12,9 +12,10 @@ java {
 
 dependencies {
     implementation(libs.kotlinStdlib)
-    implementation(libs.emojiJava)
+    compileOnly(libs.json)
 
     testImplementation(libs.junit)
+    testImplementation(libs.json)
     testImplementation(libs.hamcrest)
     testImplementation(libs.mockitoKotlin)
 }
