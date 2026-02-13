@@ -20,17 +20,30 @@ class EntityFormFinalizationProcessor : FormEntryFinalizationProcessor {
             val saveTos = entityFormExtra.saveTos
 
             val entityElements = EntityFormParser.getEntityElements(mainInstance.getRoot())
-            val entities = entityElements.mapNotNull { entityElement ->
-                val action = EntityFormParser.parseAction(entityElement)
-                val dataset = EntityFormParser.parseDataset(entityElement)!!
+            val entitiesExtra =
+                entityElements.fold(EntitiesExtra()) { entitiesExtra, entityElement ->
+                    val action = EntityFormParser.parseAction(entityElement)
+                    val dataset = EntityFormParser.parseDataset(entityElement)!!
 
-                if (action == EntityAction.CREATE || action == EntityAction.UPDATE) {
-                    createEntity(entityElement, dataset, saveTos, mainInstance, action)
-                } else {
-                    null
+                    if (action == EntityAction.CREATE || action == EntityAction.UPDATE) {
+                        val entity =
+                            createEntity(entityElement, dataset, saveTos, mainInstance, action)
+                        if (entity != null) {
+                            entitiesExtra.copy(entities = entitiesExtra.entities + entity)
+                        } else {
+                            val invalidEntity = InvalidEntity(
+                                dataset,
+                                EntityFormParser.parseId(entityElement),
+                                EntityFormParser.parseLabel(entityElement)
+                            )
+                            entitiesExtra.copy(invalidEntities = entitiesExtra.invalidEntities + invalidEntity)
+                        }
+                    } else {
+                        entitiesExtra
+                    }
                 }
-            }
-            formEntryModel.extras.put(EntitiesExtra(entities))
+
+            formEntryModel.extras.put(entitiesExtra)
         }
     }
 

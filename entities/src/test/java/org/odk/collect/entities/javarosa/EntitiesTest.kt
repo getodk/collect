@@ -9,6 +9,7 @@ import org.javarosa.core.model.data.UncastData
 import org.javarosa.core.model.instance.TreeElement
 import org.javarosa.test.BindBuilderXFormsElement.bind
 import org.javarosa.test.Scenario
+import org.javarosa.test.XFormsElement
 import org.javarosa.test.XFormsElement.body
 import org.javarosa.test.XFormsElement.group
 import org.javarosa.test.XFormsElement.head
@@ -687,7 +688,7 @@ class EntitiesTest {
     }
 
     @Test
-    fun `filling form with create without an id does not make entity available`() {
+    fun `filling form with create without an id makes invalid entity available`() {
         val scenario = Scenario.init(
             "Create entity form",
             html(
@@ -724,12 +725,16 @@ class EntitiesTest {
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
         scenario.finalizeInstance()
 
-        val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
+        val entitiesExtra = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java)
+        val (entities, invalidEntities) = entitiesExtra
         assertThat(entities.size, equalTo(0))
+        assertThat(invalidEntities.size, equalTo(1))
+        assertThat(invalidEntities[0].dataset, equalTo("people"))
+        assertThat(invalidEntities[0].id, equalTo(null))
     }
 
     @Test
-    fun `filling form with blank label does not make entity available`() {
+    fun `filling form with blank label makes invalid entity available`() {
         val scenario = Scenario.init(
             "Create entity form",
             html(
@@ -759,12 +764,16 @@ class EntitiesTest {
         scenario.answer("/data/name", " ")
         scenario.finalizeInstance()
 
-        val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
+        val entitiesExtra = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java)
+        val (entities, invalidEntities) = entitiesExtra
         assertThat(entities.size, equalTo(0))
+        assertThat(invalidEntities.size, equalTo(1))
+        assertThat(invalidEntities[0].dataset, equalTo("people"))
+        assertThat(invalidEntities[0].label, equalTo(" "))
     }
 
     @Test
-    fun `filling fom with non-UUID id does not make entity available`() {
+    fun `filling fom with non-UUID id makes invalid entity available`() {
         val scenario = Scenario.init(
             "Create entity form",
             html(
@@ -781,7 +790,8 @@ class EntitiesTest {
                             )
                         ),
                         bind("/data/name").type("string").withSaveTo("name"),
-                        entityLabelBind("/data/name")
+                        entityLabelBind("/data/name"),
+                        setvalue("odk-instance-first-load", "/data/meta/entity/@id", "1")
                     )
                 ),
                 body(
@@ -794,8 +804,12 @@ class EntitiesTest {
         scenario.answer("/data/name", "Dylan")
         scenario.finalizeInstance()
 
-        val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
+        val entitiesExtra = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java)
+        val (entities, invalidEntities) = entitiesExtra
         assertThat(entities.size, equalTo(0))
+        assertThat(invalidEntities.size, equalTo(1))
+        assertThat(invalidEntities[0].dataset, equalTo("people"))
+        assertThat(invalidEntities[0].id, equalTo("1"))
     }
 
     @Test
