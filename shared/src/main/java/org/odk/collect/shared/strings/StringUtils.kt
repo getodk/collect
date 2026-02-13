@@ -27,13 +27,6 @@ object StringUtils {
     }
 
     /**
-     * Copyright (C) 2006 The Android Open Source Project
-     *
-     * Copied from Android project for testing.
-     * TODO: replace with String.join when minSdk goes to 26
-     *
-     * Returns a string containing the tokens joined by delimiters.
-     *
      * @param delimiter a CharSequence that will be inserted between the tokens. If null, the string
      * "null" will be used as the delimiter.
      * @param tokens an array objects to be joined. Strings will be formed from the objects by
@@ -41,18 +34,8 @@ object StringUtils {
      * tokens is empty, an empty string will be returned.
      */
     @JvmStatic
-    fun join(delimiter: CharSequence, tokens: Iterable<*>): String? {
-        val it = tokens.iterator()
-        if (!it.hasNext()) {
-            return ""
-        }
-        val sb = StringBuilder()
-        sb.append(it.next())
-        while (it.hasNext()) {
-            sb.append(delimiter)
-            sb.append(it.next())
-        }
-        return sb.toString()
+    fun join(delimiter: CharSequence, tokens: Iterable<*>): String {
+        return tokens.joinToString(separator = delimiter.toString())
     }
 
     @JvmStatic
