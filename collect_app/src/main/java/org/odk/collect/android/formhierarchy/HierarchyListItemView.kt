@@ -3,7 +3,6 @@ package org.odk.collect.android.formhierarchy
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import com.google.android.material.textview.MaterialTextView
 import org.odk.collect.android.R
@@ -30,9 +29,8 @@ class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(conte
         if (item.hierarchyItemType == HierarchyItemType.QUESTION) {
             findViewById<ComposeView>(R.id.answer_view).setContextThemedContent {
                 WidgetAnswer(
-                    Modifier,
-                    item.formEntryPrompt!!,
-                    item.secondaryText,
+                    prompt = item.formEntryPrompt!!,
+                    answer = item.secondaryText,
                     summaryView = true,
                     mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel,
                     onClick = onCLick
