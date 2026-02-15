@@ -28,7 +28,7 @@ class HierarchyListAdapter(
         val item = HierarchyListItemView(parent.context, viewType).apply {
             layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
-        return ViewHolder(item, mediaWidgetAnswerViewModel)
+        return ViewHolder(item)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -36,22 +36,22 @@ class HierarchyListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(hierarchyItems[position], listener)
+        val element = hierarchyItems[position]
+
+        holder.view.setElement(element, mediaWidgetAnswerViewModel) {
+            listener.onElementClick(element)
+        }
+
+        holder.view.setOnClickListener {
+            listener.onElementClick(element)
+        }
     }
 
     override fun getItemCount(): Int {
         return hierarchyItems.size
     }
 
-    class ViewHolder(
-        private val view: HierarchyListItemView,
-        private val mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel
-    ) : RecyclerView.ViewHolder(view) {
-        fun bind(element: HierarchyItem, listener: OnElementClickListener) {
-            view.setElement(element, mediaWidgetAnswerViewModel) { listener.onElementClick(element) }
-            view.setOnClickListener { listener.onElementClick(element) }
-        }
-    }
+    class ViewHolder(val view: HierarchyListItemView) : RecyclerView.ViewHolder(view)
 
     interface OnElementClickListener {
         fun onElementClick(element: HierarchyItem?)
