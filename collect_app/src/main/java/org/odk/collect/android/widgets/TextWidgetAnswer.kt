@@ -33,7 +33,6 @@ fun TextWidgetAnswer(
     onLongClick: () -> Unit,
     onClickLabel: String? = null
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
     val annotatedAnswer = remember(answer) {
         AnnotatedString.fromHtml(HtmlUtils.markdownToHtml(answer))
     }
@@ -43,7 +42,7 @@ fun TextWidgetAnswer(
         modifier = modifier
             .fillMaxWidth()
             .combinedClickable(
-                interactionSource = interactionSource,
+                interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = {
                     if (MultiClickGuard.allowClick()) {
