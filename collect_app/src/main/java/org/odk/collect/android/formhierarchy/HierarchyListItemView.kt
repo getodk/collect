@@ -13,10 +13,10 @@ import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContex
 class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(context) {
     init {
         when (viewType) {
-            HierarchyItemType.QUESTION.id -> LayoutInflater.from(context).inflate(R.layout.hierarchy_question_item, this, true)
-            HierarchyItemType.VISIBLE_GROUP.id -> LayoutInflater.from(context).inflate(R.layout.hierarchy_group_item, this, true)
-            HierarchyItemType.REPEATABLE_GROUP.id -> LayoutInflater.from(context).inflate(R.layout.hierarchy_repeatable_group_item, this, true)
-            HierarchyItemType.REPEAT_INSTANCE.id -> LayoutInflater.from(context).inflate(R.layout.hierarchy_repeatable_group_instance_item, this, true)
+            HierarchyItem.Question.ID -> LayoutInflater.from(context).inflate(R.layout.hierarchy_question_item, this, true)
+            HierarchyItem.VisibleGroup.ID -> LayoutInflater.from(context).inflate(R.layout.hierarchy_group_item, this, true)
+            HierarchyItem.RepeatableGroup.ID -> LayoutInflater.from(context).inflate(R.layout.hierarchy_repeatable_group_item, this, true)
+            HierarchyItem.RepeatInstance.ID -> LayoutInflater.from(context).inflate(R.layout.hierarchy_repeatable_group_instance_item, this, true)
         }
     }
 
@@ -26,10 +26,10 @@ class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(conte
         onCLick: () -> Unit
     ) {
         findViewById<MaterialTextView>(R.id.primary_text).text = item.primaryText
-        if (item.hierarchyItemType == HierarchyItemType.QUESTION) {
+        if (item is HierarchyItem.Question) {
             findViewById<ComposeView>(R.id.answer_view).setContextThemedContent {
                 WidgetAnswer(
-                    prompt = item.formEntryPrompt!!,
+                    prompt = item.formEntryPrompt,
                     answer = item.secondaryText,
                     summaryView = true,
                     mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel,

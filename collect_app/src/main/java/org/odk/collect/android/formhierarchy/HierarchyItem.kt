@@ -3,14 +3,54 @@ package org.odk.collect.android.formhierarchy
 import org.javarosa.core.model.FormIndex
 import org.javarosa.form.api.FormEntryPrompt
 
-data class HierarchyItem @JvmOverloads constructor(
-    val formIndex: FormIndex,
-    val hierarchyItemType: HierarchyItemType,
-    val primaryText: CharSequence,
-    val secondaryText: String? = null,
-    val formEntryPrompt: FormEntryPrompt? = null
-)
+sealed class HierarchyItem {
+    abstract val formIndex: FormIndex
+    abstract val primaryText: CharSequence
+    abstract val id: Int
 
-enum class HierarchyItemType(val id: Int) {
-    QUESTION(0), VISIBLE_GROUP(1), REPEATABLE_GROUP(2), REPEAT_INSTANCE(3)
+    data class Question(
+        override val formIndex: FormIndex,
+        override val primaryText: CharSequence,
+        val secondaryText: String,
+        val formEntryPrompt: FormEntryPrompt
+    ) : HierarchyItem() {
+        override val id = ID
+
+        companion object {
+            const val ID = 0
+        }
+    }
+
+    data class VisibleGroup(
+        override val formIndex: FormIndex,
+        override val primaryText: CharSequence,
+    ) : HierarchyItem() {
+        override val id = ID
+
+        companion object {
+            const val ID = 1
+        }
+    }
+
+    data class RepeatableGroup(
+        override val formIndex: FormIndex,
+        override val primaryText: CharSequence,
+    ) : HierarchyItem() {
+        override val id = ID
+
+        companion object {
+            const val ID = 2
+        }
+    }
+
+    data class RepeatInstance(
+        override val formIndex: FormIndex,
+        override val primaryText: CharSequence,
+    ) : HierarchyItem() {
+        override val id = ID
+
+        companion object {
+            const val ID = 3
+        }
+    }
 }

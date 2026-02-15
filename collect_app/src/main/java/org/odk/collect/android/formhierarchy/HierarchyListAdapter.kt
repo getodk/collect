@@ -32,7 +32,7 @@ class HierarchyListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return hierarchyItems[position].hierarchyItemType.id
+        return hierarchyItems[position].id
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

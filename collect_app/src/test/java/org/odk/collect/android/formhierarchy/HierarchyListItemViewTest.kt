@@ -36,11 +36,11 @@ class HierarchyListItemViewTest {
 
     @Test
     fun `Question item should contain only primary text and secondary text`() {
-        val view = HierarchyListItemView(context, HierarchyItemType.QUESTION.id)
+        val view = HierarchyListItemView(context, HierarchyItem.Question.ID)
         composeRule.setContent {
             AndroidView(factory = {
                 view.also {
-                    it.setElement(HierarchyItem(mock<FormIndex>(), HierarchyItemType.QUESTION, "foo", "bar", mock<FormEntryPrompt>()), mock<MediaWidgetAnswerViewModel>(), {})
+                    it.setElement(HierarchyItem.Question(mock<FormIndex>(), "foo", "bar", mock<FormEntryPrompt>()), mock<MediaWidgetAnswerViewModel>(), {})
                 }
             })
         }
@@ -57,11 +57,11 @@ class HierarchyListItemViewTest {
 
     @Test
     fun `When secondary text is html should be styled`() {
-        val view = HierarchyListItemView(context, HierarchyItemType.QUESTION.id)
+        val view = HierarchyListItemView(context, HierarchyItem.Question.ID)
         composeRule.setContent {
             AndroidView(factory = {
                 view.also {
-                    it.setElement(HierarchyItem(mock<FormIndex>(), HierarchyItemType.QUESTION, "foo", "<h1>bar</h1>", mock<FormEntryPrompt>()), mock<MediaWidgetAnswerViewModel>(), {})
+                    it.setElement(HierarchyItem.Question(mock<FormIndex>(), "foo", "<h1>bar</h1>", mock<FormEntryPrompt>()), mock<MediaWidgetAnswerViewModel>(), {})
                 }
             })
         }
@@ -75,9 +75,9 @@ class HierarchyListItemViewTest {
 
     @Test
     fun `Group item should contain group label, primary text and icon`() {
-        val view = HierarchyListItemView(context, HierarchyItemType.VISIBLE_GROUP.id)
+        val view = HierarchyListItemView(context, HierarchyItem.VisibleGroup.ID)
 
-        view.setElement(HierarchyItem(mock<FormIndex>(), HierarchyItemType.VISIBLE_GROUP, "foo"), mock<MediaWidgetAnswerViewModel>(), {})
+        view.setElement(HierarchyItem.VisibleGroup(mock<FormIndex>(), "foo"), mock<MediaWidgetAnswerViewModel>(), {})
 
         assertThat(view.findViewById<ImageView>(R.id.icon).visibility, equalTo(View.VISIBLE))
 
@@ -90,9 +90,9 @@ class HierarchyListItemViewTest {
 
     @Test
     fun `Repeatable group item should contain group label, primary text and icon`() {
-        val view = HierarchyListItemView(context, HierarchyItemType.REPEATABLE_GROUP.id)
+        val view = HierarchyListItemView(context, HierarchyItem.RepeatableGroup.ID)
 
-        view.setElement(HierarchyItem(mock<FormIndex>(), HierarchyItemType.REPEATABLE_GROUP, "foo"), mock<MediaWidgetAnswerViewModel>(), {})
+        view.setElement(HierarchyItem.RepeatableGroup(mock<FormIndex>(), "foo"), mock<MediaWidgetAnswerViewModel>(), {})
 
         assertThat(view.findViewById<ImageView>(R.id.icon).visibility, equalTo(View.VISIBLE))
 
@@ -105,9 +105,9 @@ class HierarchyListItemViewTest {
 
     @Test
     fun `Repeatable group instance item should contain only primary text`() {
-        val view = HierarchyListItemView(context, HierarchyItemType.REPEAT_INSTANCE.id)
+        val view = HierarchyListItemView(context, HierarchyItem.RepeatInstance.ID)
 
-        view.setElement(HierarchyItem(mock<FormIndex>(), HierarchyItemType.REPEAT_INSTANCE, "foo"), mock<MediaWidgetAnswerViewModel>(), {})
+        view.setElement(HierarchyItem.RepeatInstance(mock<FormIndex>(), "foo"), mock<MediaWidgetAnswerViewModel>(), {})
 
         assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).visibility, equalTo(View.VISIBLE))
         assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).text.toString(), equalTo("foo"))
