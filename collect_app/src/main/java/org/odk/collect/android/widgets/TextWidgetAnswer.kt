@@ -36,7 +36,7 @@ fun TextWidgetAnswer(
     val annotatedAnswer = remember(answer) {
         AnnotatedString.fromHtml(HtmlUtils.markdownToHtml(answer))
     }
-    val hasFormatting = remember(annotatedAnswer) { annotatedAnswer.spanStyles.isNotEmpty() }
+    val hasFormatting = annotatedAnswer.spanStyles.isNotEmpty()
 
     Row(
         modifier = modifier
