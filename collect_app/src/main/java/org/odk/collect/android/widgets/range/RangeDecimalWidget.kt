@@ -3,12 +3,8 @@ package org.odk.collect.android.widgets.range
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
-import androidx.compose.foundation.interaction.DragInteraction
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import org.javarosa.core.model.data.DecimalData
@@ -38,25 +34,16 @@ class RangeDecimalWidget(
     override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         return ComposeView(context).apply {
             setContextThemedContent {
-                val interactionSource = remember { MutableInteractionSource() }
-
-                LaunchedEffect(interactionSource) {
-                    interactionSource.interactions.collect { interaction ->
-                        when (interaction) {
-                            is DragInteraction.Start -> shouldSuppressFlingGesture = true
-                            is DragInteraction.Stop, is DragInteraction.Cancel -> shouldSuppressFlingGesture = false
-                        }
-                    }
-                }
-
                 RangeSlider(
                     rangeSliderState,
-                    interactionSource,
                     onValueChange = {
                         rangeSliderState = rangeSliderState.copy(sliderValue = it)
                     },
                     onValueChangeFinished = {
                         widgetValueChanged()
+                    },
+                    onValueChanging = {
+                        shouldSuppressFlingGesture = it
                     }
                 )
             }

@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,9 +46,9 @@ import org.odk.collect.androidshared.ui.ToastUtils
 @Composable
 fun RangeSlider(
     rangeSliderState: RangeSliderState,
-    interactionSource: MutableInteractionSource,
     onValueChange: (Float) -> Unit,
-    onValueChangeFinished: () -> Unit
+    onValueChangeFinished: () -> Unit,
+    onValueChanging: (Boolean) -> Unit
 ) {
     val invalidRangeMsg = stringResource(org.odk.collect.strings.R.string.invalid_range_widget)
 
@@ -61,16 +62,16 @@ fun RangeSlider(
         if (rangeSliderState.isHorizontal) {
             HorizontalRangeSlider(
                 rangeSliderState,
-                interactionSource,
                 onValueChange = onValueChange,
-                onValueChangeFinished = onValueChangeFinished
+                onValueChangeFinished = onValueChangeFinished,
+                onValueChanging = onValueChanging
             )
         } else {
             VerticalRangeSlider(
                 rangeSliderState,
-                interactionSource,
                 onValueChange = onValueChange,
-                onValueChangeFinished = onValueChangeFinished
+                onValueChangeFinished = onValueChangeFinished,
+                onValueChanging = onValueChanging
             )
         }
     }
@@ -80,9 +81,9 @@ fun RangeSlider(
 @Composable
 private fun HorizontalRangeSlider(
     rangeSliderState: RangeSliderState,
-    interactionSource: MutableInteractionSource,
     onValueChange: (Float) -> Unit,
-    onValueChangeFinished: () -> Unit
+    onValueChangeFinished: () -> Unit,
+    onValueChanging: (Boolean) -> Unit
 ) {
     val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.horizontal_slider)
 
@@ -93,18 +94,23 @@ private fun HorizontalRangeSlider(
             modifier = Modifier.fillMaxWidth().semantics {
                 contentDescription = sliderContentDescription
             }.pointerInteropFilter { event ->
-                if (rangeSliderState.sliderValue == null && event.action == MotionEvent.ACTION_DOWN) {
-                    onValueChange(0f)
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    onValueChanging(true)
+                    if (rangeSliderState.sliderValue == null) {
+                        onValueChange(0f)
+                    }
                 }
                 false
             },
             value = rangeSliderState.sliderValue ?: 0f,
             steps = rangeSliderState.numOfSteps,
             onValueChange = onValueChange,
-            onValueChangeFinished = onValueChangeFinished,
-            thumb = { Thumb(rangeSliderState.sliderValue, interactionSource) },
+            onValueChangeFinished = {
+                onValueChanging(false)
+                onValueChangeFinished()
+            },
+            thumb = { Thumb(rangeSliderState.sliderValue) },
             track = { Track(it, rangeSliderState.numOfTicks) },
-            interactionSource = interactionSource,
             enabled = rangeSliderState.isEnabled
         )
 
@@ -119,9 +125,9 @@ private fun HorizontalRangeSlider(
 @Composable
 private fun VerticalRangeSlider(
     rangeSliderState: RangeSliderState,
-    interactionSource: MutableInteractionSource,
     onValueChange: (Float) -> Unit,
-    onValueChangeFinished: () -> Unit
+    onValueChangeFinished: () -> Unit,
+    onValueChanging: (Boolean) -> Unit
 ) {
     val view = LocalView.current
     val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.vertical_slider)
@@ -140,18 +146,12 @@ private fun VerticalRangeSlider(
                     }
                     .height(330.dp)
                     .pointerInteropFilter { event ->
-                        when (event.action) {
-                            MotionEvent.ACTION_DOWN -> {
-                                view.parent?.requestDisallowInterceptTouchEvent(true)
-                                if (rangeSliderState.sliderValue == null) {
-                                    onValueChange(0f)
-                                }
+                        if (event.action == MotionEvent.ACTION_DOWN) {
+                            onValueChanging(true)
+                            view.parent?.requestDisallowInterceptTouchEvent(true)
+                            if (rangeSliderState.sliderValue == null) {
+                                onValueChange(0f)
                             }
-                            MotionEvent.ACTION_MOVE ->
-                                view.parent?.requestDisallowInterceptTouchEvent(true)
-                            MotionEvent.ACTION_UP,
-                            MotionEvent.ACTION_CANCEL ->
-                                view.parent?.requestDisallowInterceptTouchEvent(false)
                         }
                         false
                     }
@@ -175,10 +175,13 @@ private fun VerticalRangeSlider(
                 value = rangeSliderState.sliderValue ?: 0f,
                 steps = rangeSliderState.numOfSteps,
                 onValueChange = onValueChange,
-                onValueChangeFinished = onValueChangeFinished,
-                thumb = { Thumb(rangeSliderState.sliderValue, interactionSource) },
+                onValueChangeFinished = {
+                    view.parent?.requestDisallowInterceptTouchEvent(false)
+                    onValueChanging(false)
+                    onValueChangeFinished()
+                },
+                thumb = { Thumb(rangeSliderState.sliderValue) },
                 track = { Track(it, rangeSliderState.numOfTicks) },
-                interactionSource = interactionSource,
                 enabled = rangeSliderState.isEnabled
             )
 
@@ -267,7 +270,7 @@ private fun Track(sliderState: SliderState, ticks: Int) {
 }
 
 @Composable
-private fun Thumb(value: Float?, interactionSource: MutableInteractionSource) {
+private fun Thumb(value: Float?) {
     val sliderThumbContentDescription = stringResource(org.odk.collect.strings.R.string.slider_thumb)
 
     if (value != null) {
@@ -275,7 +278,7 @@ private fun Thumb(value: Float?, interactionSource: MutableInteractionSource) {
             modifier = Modifier.semantics {
                 contentDescription = sliderThumbContentDescription
             },
-            interactionSource = interactionSource
+            interactionSource = remember { MutableInteractionSource() }
         )
     }
 }
