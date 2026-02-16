@@ -19,8 +19,6 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.application.RobolectricApplication
-import org.odk.collect.androidshared.ui.ToastUtils
 
 @RunWith(AndroidJUnit4::class)
 class RangeSliderTest {
@@ -129,29 +127,42 @@ class RangeSliderTest {
     }
 
     @Test
-    fun `displays toast when range is invalid`() {
-        val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
-        ToastUtils.alertStore.enabled = true
+    fun `calls onRangeInvalid when range is invalid`() {
+        var onRangeInvalidCalled = false
 
-        setContent(createTestState(isValid = false))
+        composeTestRule.setContent {
+            RangeSlider(
+                rangeSliderState = createTestState(isValid = false),
+                onValueChange = {},
+                onValueChangeFinished = {},
+                onValueChanging = {},
+                onRangeInvalid = { onRangeInvalidCalled = true }
+            )
+        }
 
-        val latestToast = ToastUtils.alertStore.popAll().lastOrNull()
         assertThat(
-            latestToast,
-            equalTo(application.getString(org.odk.collect.strings.R.string.invalid_range_widget))
+            onRangeInvalidCalled,
+            equalTo(true)
         )
     }
 
     @Test
-    fun `does not display toast when range is valid`() {
-        ToastUtils.alertStore.enabled = true
+    fun `does not call onRangeInvalid when range is valid`() {
+        var onRangeInvalidCalled = false
 
-        setContent(createTestState(isValid = true))
+        composeTestRule.setContent {
+            RangeSlider(
+                rangeSliderState = createTestState(isValid = true),
+                onValueChange = {},
+                onValueChangeFinished = {},
+                onValueChanging = {},
+                onRangeInvalid = { onRangeInvalidCalled = true }
+            )
+        }
 
-        val latestToast = ToastUtils.alertStore.popAll().lastOrNull()
         assertThat(
-            latestToast,
-            equalTo(null)
+            onRangeInvalidCalled,
+            equalTo(false)
         )
     }
 
@@ -206,7 +217,8 @@ class RangeSliderTest {
                 rangeSliderState = createTestState(sliderValue = null, isHorizontal = true),
                 onValueChange = { changedValue = it },
                 onValueChangeFinished = {},
-                onValueChanging = {}
+                onValueChanging = {},
+                onRangeInvalid = {}
             )
         }
 
@@ -226,7 +238,8 @@ class RangeSliderTest {
                 rangeSliderState = createTestState(sliderValue = null, isHorizontal = true),
                 onValueChange = { changedValue = it },
                 onValueChangeFinished = {},
-                onValueChanging = {}
+                onValueChanging = {},
+                onRangeInvalid = {}
             )
         }
 
@@ -246,7 +259,8 @@ class RangeSliderTest {
                 rangeSliderState = createTestState(sliderValue = null, isHorizontal = false),
                 onValueChange = { changedValue = it },
                 onValueChangeFinished = {},
-                onValueChanging = {}
+                onValueChanging = {},
+                onRangeInvalid = {}
             )
         }
 
@@ -266,7 +280,8 @@ class RangeSliderTest {
                 rangeSliderState = createTestState(sliderValue = null, isHorizontal = false),
                 onValueChange = { changedValue = it },
                 onValueChangeFinished = {},
-                onValueChanging = {}
+                onValueChanging = {},
+                onRangeInvalid = {}
             )
         }
 
@@ -283,7 +298,8 @@ class RangeSliderTest {
                 rangeSliderState = rangeSliderState,
                 onValueChange = {},
                 onValueChangeFinished = {},
-                onValueChanging = {}
+                onValueChanging = {},
+                onRangeInvalid = {}
             )
         }
     }
