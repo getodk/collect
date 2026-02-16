@@ -54,6 +54,8 @@
   <string name="repeatable_group_label">Kikundi kinachoweza kurudiwa</string>
   <string name="exit">Toka</string>
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <!--Text of button from the 'Add new repeat' dialog to confirm adding a repeat-->
+  <!--Text of button from the 'Add new repeat' dialog to cancel adding a repeat-->
   <string name="add_another_menu">Ongeza nyingine</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">Hariri ilani</string>
@@ -114,11 +116,11 @@
   <string name="get_barcode">Weka Barcode</string>
   <string name="replace_barcode">Badilisha Barcode</string>
   <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
-  <!--Message shown when barcode is successfully scanned-->
-  <!--Label for button that exits barcode scanning after success-->
+  <!--Label for button that rotates camera orientation when scanning barcodes-->
   <string name="capture_image">Piga Picha</string>
   <string name="choose_image">Chagua picha</string>
-  <!--Dialog heading for saving annotated image-->
+  <!--Title displayed in a dialog for saving a signature, drawing, or annotated image-->
+  <!--Explanation message displayed in a dialog for saving a signature, drawing, or annotated image-->
   <string name="save_and_close">Hifadhi na ufunge</string>
   <string name="sign_button">Kusanya saini</string>
   <string name="markup_image">ghafi picha</string>
@@ -240,6 +242,17 @@
   <!--Description for button that zooms a map so that it shows all items-->
   <!--Description for button that pauses automatic location recording-->
   <!--Description for button that removes the last recorded point-->
+  <!--Message shown when an error with the trace/shape has been fixed-->
+  <!--Description for button that explains how to modify the map-->
+  <!--Title for instructions on how to modify map features-->
+  <!--Instruction in a list on how to move a point-->
+  <!--Instruction in a list on how to remove the most recently added point-->
+  <!--Instruction in a list on how to delete the current shape to start over-->
+  <!--Instruction in a list on how to add a new point-->
+  <!--Instruction in a list on how to tap to add a point-->
+  <!--Instruction in a list on how to delete the entire shape-->
+  <!--Button text to close the instructions dialog-->
+  <!--Button text to open the instructions dialog from the error snackbar-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -420,6 +433,7 @@
   <!--##############################################
     # Errors
     ##############################################-->
+  <!--Error shown when the user tries to open a web page from the app, but they don't have a browser installed-->
   <!--##############################################
     # Form opening errors
     ##############################################-->
@@ -436,7 +450,6 @@
     # Permissions
     ##############################################-->
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
-  <!--Title for setting that controls whether local entity features are enabled or not-->
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <!--Label for entity that has been created offline and is not on the server yet-->
   <!--Error message displayed when a user opens a form with an unrecognized entity version-->
@@ -446,6 +459,13 @@
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
+  <!--##############################################
+    # Min SDK deprecation banner
+    ##############################################-->
+  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
+  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
+  <!--Button text that opens a forum post with more information about upcoming device support changes-->
+  <!--Button text to dismiss the banner-->
   <!--##############################################
     # Developer tools
     ##############################################-->
