@@ -257,12 +257,19 @@
     <string name="number_picker_title">Number Picker</string>
     <string name="invalid_range_widget">This widget has invalid parameters!</string>
 
+    <!-- Content description for a horizontal slider used in range widgets -->
     <string name="horizontal_slider">Horizontal slider</string>
+    <!-- Content description for a vertical slider used in range widgets  -->
     <string name="vertical_slider">Vertical slider</string>
+    <!-- Content description for the label showing the current value of the slider -->
     <string name="current_slider_value">Current slider value</string>
+    <!-- Content description for each tick mark on the slider indicating discrete steps -->
     <string name="slider_tick">Slider tick</string>
+    <!-- Content description for the draggable thumb handle of the slider -->
     <string name="slider_thumb">Slider thumb</string>
+    <!-- Content description for the label at the start (minimum) of the slider -->
     <string name="slider_start_label">Slider start label</string>
+    <!-- Content description for the label at the end (maximum) of the slider -->
     <string name="slider_end_label">Slider end label</string>
 
     <string name="svg_file_does_not_exist">SVG file does not exist!</string>
