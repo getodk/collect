@@ -34,9 +34,8 @@ object StringUtils {
      * tokens is empty, an empty string will be returned.
      */
     @JvmStatic
-    fun join(delimiter: CharSequence, tokens: Iterable<*>): String {
-        return tokens.joinToString(separator = delimiter.toString())
-    }
+    fun join(delimiter: CharSequence, tokens: Iterable<*>) =
+        tokens.joinToString(separator = delimiter.toString())
 
     @JvmStatic
     fun isBlank(string: String): Boolean {
