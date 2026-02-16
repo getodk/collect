@@ -13,6 +13,7 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
+import org.odk.collect.androidshared.ui.ToastUtils
 
 @SuppressLint("ViewConstructor")
 class RangeIntegerWidget(
@@ -44,6 +45,9 @@ class RangeIntegerWidget(
                     },
                     onValueChanging = {
                         shouldSuppressFlingGesture = it
+                    },
+                    onRangeInvalid = {
+                        ToastUtils.showLongToast(org.odk.collect.strings.R.string.invalid_range_widget)
                     }
                 )
             }

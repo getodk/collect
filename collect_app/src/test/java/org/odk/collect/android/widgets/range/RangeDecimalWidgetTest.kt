@@ -8,7 +8,10 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performTouchInput
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.Constants
 import org.javarosa.core.model.RangeQuestion
 import org.javarosa.core.model.data.DecimalData
@@ -18,12 +21,14 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.odk.collect.android.application.RobolectricApplication
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.widgets.base.QuestionWidgetTest
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener
+import org.odk.collect.androidshared.ui.ToastUtils
 import java.math.BigDecimal
 
 @RunWith(AndroidJUnit4::class)
@@ -31,13 +36,13 @@ class RangeDecimalWidgetTest : QuestionWidgetTest<RangeDecimalWidget, DecimalDat
     @get:Rule
     val composeRule = createAndroidComposeRule<WidgetTestActivity>()
 
-    override fun createWidget(): RangeDecimalWidget {
-        val rangeQuestion = mock<RangeQuestion>().apply {
-            whenever(rangeStart).thenReturn(BigDecimal.valueOf(1.5))
-            whenever(rangeEnd).thenReturn(BigDecimal.valueOf(5.5))
-            whenever(rangeStep).thenReturn(BigDecimal.valueOf(0.5))
-        }
+    private var rangeQuestion = mock<RangeQuestion>().apply {
+        whenever(rangeStart).thenReturn(BigDecimal.valueOf(1.5))
+        whenever(rangeEnd).thenReturn(BigDecimal.valueOf(5.5))
+        whenever(rangeStep).thenReturn(BigDecimal.valueOf(0.5))
+    }
 
+    override fun createWidget(): RangeDecimalWidget {
         whenever(formEntryPrompt.question).thenReturn(rangeQuestion)
         whenever(formEntryPrompt.dataType).thenReturn(Constants.DATATYPE_DECIMAL)
 
@@ -102,6 +107,27 @@ class RangeDecimalWidgetTest : QuestionWidgetTest<RangeDecimalWidget, DecimalDat
             .performTouchInput { click() }
 
         verify(valueChangedListener).widgetValueChanged(widget)
+    }
+
+    @Test
+    fun displaysToastWhenRangeIsInvalid() {
+        val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
+        ToastUtils.alertStore.enabled = true
+
+        rangeQuestion = mock<RangeQuestion>().apply {
+            whenever(rangeStart).thenReturn(BigDecimal.valueOf(1.5))
+            whenever(rangeEnd).thenReturn(BigDecimal.valueOf(1.5))
+            whenever(rangeStep).thenReturn(BigDecimal.valueOf(5.5))
+        }
+
+        createWidget()
+
+        val latestToast = ToastUtils.alertStore.popAll().lastOrNull()
+
+        assertThat(
+            latestToast,
+            equalTo(application.getString(org.odk.collect.strings.R.string.invalid_range_widget))
+        )
     }
 
     override fun usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {

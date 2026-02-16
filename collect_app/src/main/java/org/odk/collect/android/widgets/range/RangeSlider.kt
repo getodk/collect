@@ -41,20 +41,18 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import org.odk.collect.androidshared.R.dimen
-import org.odk.collect.androidshared.ui.ToastUtils
 
 @Composable
 fun RangeSlider(
     rangeSliderState: RangeSliderState,
     onValueChange: (Float) -> Unit,
     onValueChangeFinished: () -> Unit,
-    onValueChanging: (Boolean) -> Unit
+    onValueChanging: (Boolean) -> Unit,
+    onRangeInvalid: () -> Unit
 ) {
-    val invalidRangeMsg = stringResource(org.odk.collect.strings.R.string.invalid_range_widget)
-
     LaunchedEffect(Unit) {
         if (!rangeSliderState.isValid) {
-            ToastUtils.showLongToast(invalidRangeMsg)
+            onRangeInvalid()
         }
     }
 
