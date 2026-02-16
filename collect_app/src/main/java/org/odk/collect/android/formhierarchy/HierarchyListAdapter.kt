@@ -17,6 +17,7 @@ package org.odk.collect.android.formhierarchy
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import org.odk.collect.android.R
 import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 
 class HierarchyListAdapter(
@@ -32,7 +33,12 @@ class HierarchyListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return hierarchyItems[position].id
+        return when (hierarchyItems[position]) {
+            is HierarchyItem.Question -> R.layout.hierarchy_question_item
+            is HierarchyItem.VisibleGroup -> R.layout.hierarchy_group_item
+            is HierarchyItem.RepeatableGroup -> R.layout.hierarchy_repeatable_group_item
+            is HierarchyItem.RepeatInstance -> R.layout.hierarchy_repeatable_group_instance_item
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

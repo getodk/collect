@@ -10,14 +10,9 @@ import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 import org.odk.collect.android.widgets.WidgetAnswer
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 
-class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(context) {
+class HierarchyListItemView(context: Context, layoutResId: Int) : FrameLayout(context) {
     init {
-        when (viewType) {
-            HierarchyItem.Question.ID -> LayoutInflater.from(context).inflate(R.layout.hierarchy_question_item, this, true)
-            HierarchyItem.VisibleGroup.ID -> LayoutInflater.from(context).inflate(R.layout.hierarchy_group_item, this, true)
-            HierarchyItem.RepeatableGroup.ID -> LayoutInflater.from(context).inflate(R.layout.hierarchy_repeatable_group_item, this, true)
-            HierarchyItem.RepeatInstance.ID -> LayoutInflater.from(context).inflate(R.layout.hierarchy_repeatable_group_instance_item, this, true)
-        }
+        LayoutInflater.from(context).inflate(layoutResId, this, true)
     }
 
     fun setElement(

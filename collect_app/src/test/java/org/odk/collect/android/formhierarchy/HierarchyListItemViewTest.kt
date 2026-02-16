@@ -36,7 +36,7 @@ class HierarchyListItemViewTest {
 
     @Test
     fun `Question item should contain only primary text and secondary text`() {
-        val view = HierarchyListItemView(context, HierarchyItem.Question.ID)
+        val view = HierarchyListItemView(context, R.layout.hierarchy_question_item)
         composeRule.setContent {
             AndroidView(factory = {
                 view.also {
@@ -57,7 +57,7 @@ class HierarchyListItemViewTest {
 
     @Test
     fun `When secondary text is html should be styled`() {
-        val view = HierarchyListItemView(context, HierarchyItem.Question.ID)
+        val view = HierarchyListItemView(context, R.layout.hierarchy_question_item)
         composeRule.setContent {
             AndroidView(factory = {
                 view.also {
@@ -75,7 +75,7 @@ class HierarchyListItemViewTest {
 
     @Test
     fun `Group item should contain group label, primary text and icon`() {
-        val view = HierarchyListItemView(context, HierarchyItem.VisibleGroup.ID)
+        val view = HierarchyListItemView(context, R.layout.hierarchy_group_item)
 
         view.setElement(HierarchyItem.VisibleGroup(mock<FormIndex>(), "foo"), mock<MediaWidgetAnswerViewModel>(), {})
 
@@ -90,7 +90,7 @@ class HierarchyListItemViewTest {
 
     @Test
     fun `Repeatable group item should contain group label, primary text and icon`() {
-        val view = HierarchyListItemView(context, HierarchyItem.RepeatableGroup.ID)
+        val view = HierarchyListItemView(context, R.layout.hierarchy_repeatable_group_item)
 
         view.setElement(HierarchyItem.RepeatableGroup(mock<FormIndex>(), "foo"), mock<MediaWidgetAnswerViewModel>(), {})
 
@@ -105,7 +105,7 @@ class HierarchyListItemViewTest {
 
     @Test
     fun `Repeatable group instance item should contain only primary text`() {
-        val view = HierarchyListItemView(context, HierarchyItem.RepeatInstance.ID)
+        val view = HierarchyListItemView(context, R.layout.hierarchy_repeatable_group_instance_item)
 
         view.setElement(HierarchyItem.RepeatInstance(mock<FormIndex>(), "foo"), mock<MediaWidgetAnswerViewModel>(), {})
 
