@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets.range
 
 import android.app.Application
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
@@ -205,9 +204,9 @@ class RangeSliderTest {
         composeTestRule.setContent {
             RangeSlider(
                 rangeSliderState = createTestState(sliderValue = null, isHorizontal = true),
-                interactionSource = MutableInteractionSource(),
                 onValueChange = { changedValue = it },
-                onValueChangeFinished = {}
+                onValueChangeFinished = {},
+                onValueChanging = {}
             )
         }
 
@@ -225,9 +224,9 @@ class RangeSliderTest {
         composeTestRule.setContent {
             RangeSlider(
                 rangeSliderState = createTestState(sliderValue = null, isHorizontal = true),
-                interactionSource = MutableInteractionSource(),
                 onValueChange = { changedValue = it },
-                onValueChangeFinished = {}
+                onValueChangeFinished = {},
+                onValueChanging = {}
             )
         }
 
@@ -245,9 +244,9 @@ class RangeSliderTest {
         composeTestRule.setContent {
             RangeSlider(
                 rangeSliderState = createTestState(sliderValue = null, isHorizontal = false),
-                interactionSource = MutableInteractionSource(),
                 onValueChange = { changedValue = it },
-                onValueChangeFinished = {}
+                onValueChangeFinished = {},
+                onValueChanging = {}
             )
         }
 
@@ -265,9 +264,9 @@ class RangeSliderTest {
         composeTestRule.setContent {
             RangeSlider(
                 rangeSliderState = createTestState(sliderValue = null, isHorizontal = false),
-                interactionSource = MutableInteractionSource(),
                 onValueChange = { changedValue = it },
-                onValueChangeFinished = {}
+                onValueChangeFinished = {},
+                onValueChanging = {}
             )
         }
 
@@ -282,9 +281,9 @@ class RangeSliderTest {
         composeTestRule.setContent {
             RangeSlider(
                 rangeSliderState = rangeSliderState,
-                interactionSource = MutableInteractionSource(),
                 onValueChange = {},
-                onValueChangeFinished = {}
+                onValueChangeFinished = {},
+                onValueChanging = {}
             )
         }
     }
