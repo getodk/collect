@@ -42,6 +42,7 @@ class WidgetFactoryTest {
         null,
         null,
         null,
+        null,
         null
     )
 

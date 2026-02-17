@@ -161,6 +161,7 @@ import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 import org.odk.collect.android.widgets.GeoTraceWidget;
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.datetime.DateTimeWidget;
 import org.odk.collect.android.widgets.datetime.pickers.CustomDatePickerDialog;
@@ -381,6 +382,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
     private PrinterWidgetViewModel printerWidgetViewModel;
     private BackgroundAudioViewModel backgroundAudioViewModel;
     private FormEndViewModel formEndViewModel;
+    private MediaWidgetAnswerViewModel mediaWidgetAnswerViewModel;
 
     private static final String KEY_SESSION_ID = "sessionId";
     private String sessionId;
@@ -597,6 +599,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         });
 
         formEndViewModel = viewModelProvider.get(FormEndViewModel.class);
+        mediaWidgetAnswerViewModel = viewModelProvider.get(MediaWidgetAnswerViewModel.class);
 
         internalRecordingRequester = new InternalRecordingRequester(this, audioRecorder, permissionsProvider);
 
@@ -1112,7 +1115,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
             findViewById(R.id.loading_screen).setVisibility(isLoading ? View.VISIBLE : View.GONE);
         });
 
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, audioPlayer, audioRecorder, formEntryViewModel, printerWidgetViewModel, internalRecordingRequester, externalAppRecordingRequester, odkViewLifecycle);
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, audioPlayer, audioRecorder, formEntryViewModel, printerWidgetViewModel, internalRecordingRequester, externalAppRecordingRequester, odkViewLifecycle, mediaWidgetAnswerViewModel);
     }
 
     private void releaseOdkView() {

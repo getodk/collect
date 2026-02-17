@@ -17,9 +17,12 @@ package org.odk.collect.android.formhierarchy
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import org.odk.collect.android.R
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel
 
 class HierarchyListAdapter(
     private val hierarchyItems: List<HierarchyItem>,
+    private val mediaWidgetAnswerViewModel: MediaWidgetAnswerViewModel,
     private val listener: OnElementClickListener
 ) : RecyclerView.Adapter<HierarchyListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,23 +33,31 @@ class HierarchyListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return hierarchyItems[position].hierarchyItemType.id
+        return when (hierarchyItems[position]) {
+            is HierarchyItem.Question -> R.layout.hierarchy_question_item
+            is HierarchyItem.VisibleGroup -> R.layout.hierarchy_group_item
+            is HierarchyItem.RepeatableGroup -> R.layout.hierarchy_repeatable_group_item
+            is HierarchyItem.RepeatInstance -> R.layout.hierarchy_repeatable_group_instance_item
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(hierarchyItems[position], listener)
+        val element = hierarchyItems[position]
+
+        holder.view.setElement(element, mediaWidgetAnswerViewModel) {
+            listener.onElementClick(element)
+        }
+
+        holder.view.setOnClickListener {
+            listener.onElementClick(element)
+        }
     }
 
     override fun getItemCount(): Int {
         return hierarchyItems.size
     }
 
-    class ViewHolder(private val view: HierarchyListItemView) : RecyclerView.ViewHolder(view) {
-        fun bind(element: HierarchyItem, listener: OnElementClickListener) {
-            view.setElement(element)
-            view.setOnClickListener { listener.onElementClick(element) }
-        }
-    }
+    class ViewHolder(val view: HierarchyListItemView) : RecyclerView.ViewHolder(view)
 
     interface OnElementClickListener {
         fun onElementClick(element: HierarchyItem?)

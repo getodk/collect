@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -10,10 +11,8 @@ import org.javarosa.core.model.data.StringData
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
@@ -35,10 +34,13 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget>() {
     @get:Rule
     val composeRule = createAndroidComposeRule<WidgetTestActivity>()
     private val fileRequester = mock<FileRequester>()
-    private val mediaUtils = mock<MediaUtils>().also {
-        whenever(it.isAudioFile(any())).thenReturn(true)
-    }
+    private val mediaUtils = mock<MediaUtils>()
     private val questionMediaManager = FakeQuestionMediaManager()
+    private val mediaWidgetAnswerViewModel = MediaWidgetAnswerViewModel(mock(), questionMediaManager, mediaUtils)
+    private val dependencies = QuestionWidget.Dependencies(
+        null,
+        mediaWidgetAnswerViewModel
+    )
 
     @Before
     fun setup() {
@@ -80,7 +82,7 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget>() {
             .withAnswer(StringData(initialAnswer.displayText))
             .build()
         createWidget()
-        composeRule.onNodeWithText(initialAnswer.displayText).assertExists()
+        composeRule.onNodeWithText(initialAnswer.displayText).assertIsDisplayed()
     }
 
     @Test
@@ -123,7 +125,7 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget>() {
 
         createWidget()
         composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertDoesNotExist()
-        composeRule.onNodeWithText(initialAnswer.displayText).assertExists()
+        composeRule.onNodeWithText(initialAnswer.displayText).assertIsDisplayed()
     }
 
     @Test
@@ -135,7 +137,7 @@ class ExArbitraryFileWidgetTest : FileWidgetTest<ExArbitraryFileWidget>() {
 
         createWidget()
         composeRule.onNodeWithClickLabel(activity.getString(string.launch_app)).assertDoesNotExist()
-        composeRule.onNodeWithText(initialAnswer.displayText).assertExists()
+        composeRule.onNodeWithText(initialAnswer.displayText).assertIsDisplayed()
     }
 
     @Test

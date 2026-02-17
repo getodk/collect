@@ -6,14 +6,20 @@ import org.junit.rules.RuleChain
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
 class FormSaveTest {
+    private val pageComposeRule = PageComposeRule()
     private val rule = CollectTestRule()
     private val testDependencies = TestDependencies()
 
     @get:Rule
-    val copyFormChain: RuleChain = TestRuleChain.chain(testDependencies).around(rule)
+    val copyFormChain: RuleChain = TestRuleChain
+        .chain(testDependencies)
+        .around(pageComposeRule)
+        .around(pageComposeRule.composeRule)
+        .around(rule)
 
     @Test
     fun whenBlankFormSavedAsDraft_displaySnackbarWithEditAction() {
@@ -24,8 +30,8 @@ class FormSaveTest {
             .swipeToEndScreen()
             .clickSaveAsDraft()
             .assertText(org.odk.collect.strings.R.string.form_saved_as_draft)
-            .clickOnString(org.odk.collect.strings.R.string.edit_form)
-            .assertText("25")
+            .editSavedForm("One Question")
+            .assertAnswer("25")
             .assertText(org.odk.collect.strings.R.string.jump_to_beginning)
             .assertText(org.odk.collect.strings.R.string.jump_to_end)
     }
@@ -43,8 +49,8 @@ class FormSaveTest {
             .clickGoToEnd()
             .clickFinalize()
             .assertText(org.odk.collect.strings.R.string.form_saved)
-            .clickOnString(org.odk.collect.strings.R.string.view_form)
-            .assertText("25")
+            .viewSavedForm("One Question")
+            .assertAnswer("25")
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_beginning)
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_end)
             .assertText(org.odk.collect.strings.R.string.exit)

@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -79,7 +80,7 @@ class BarcodeWidgetTest : QuestionWidgetTest<BarcodeWidget, StringData>() {
             .withAnswer(StringData("blah"))
             .build()
         createWidget()
-        composeRule.onNodeWithClickLabel(activity.getString(string.replace_barcode)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.replace_barcode)).assertIsDisplayed()
     }
 
     @Test
@@ -88,7 +89,7 @@ class BarcodeWidgetTest : QuestionWidgetTest<BarcodeWidget, StringData>() {
             .withAnswer(StringData("blah"))
             .build()
         createWidget()
-        composeRule.onNodeWithText("blah").assertExists()
+        composeRule.onNodeWithText("blah").assertIsDisplayed()
     }
 
     @Test
@@ -118,7 +119,7 @@ class BarcodeWidgetTest : QuestionWidgetTest<BarcodeWidget, StringData>() {
             widget.answer,
             equalTo(null)
         )
-        composeRule.onNodeWithClickLabel(activity.getString(string.get_barcode)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.get_barcode)).assertIsDisplayed()
     }
 
     @Test
@@ -147,7 +148,7 @@ class BarcodeWidgetTest : QuestionWidgetTest<BarcodeWidget, StringData>() {
     fun `#setData updates the button title`() {
         val widget = createWidget()
         widget.setData("\ud800blah\b")
-        composeRule.onNodeWithClickLabel(activity.getString(string.replace_barcode)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.replace_barcode)).assertIsDisplayed()
     }
 
     @Test
@@ -226,13 +227,13 @@ class BarcodeWidgetTest : QuestionWidgetTest<BarcodeWidget, StringData>() {
         val widget = createWidget()
 
         // Check initial value is not shown
-        composeRule.onNodeWithClickLabel(activity.getString(string.replace_barcode)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.replace_barcode)).assertIsDisplayed()
         composeRule.onNodeWithText("original contents").assertDoesNotExist()
         assertThat(widget.answer, equalTo(StringData("original contents")))
 
         // Check updates aren't shown
         widget.setData("updated contents")
-        composeRule.onNodeWithClickLabel(activity.getString(string.replace_barcode)).assertExists()
+        composeRule.onNodeWithClickLabel(activity.getString(string.replace_barcode)).assertIsDisplayed()
         composeRule.onNodeWithText("updated contents").assertDoesNotExist()
         assertThat(
             widget.answer,

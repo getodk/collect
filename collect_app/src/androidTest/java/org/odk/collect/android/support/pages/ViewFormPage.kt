@@ -10,6 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.odk.collect.android.R
 import org.odk.collect.strings.R.string
+import org.odk.collect.testshared.AssertionFramework
 
 class ViewFormPage(private val formName: String) : Page<ViewFormPage>() {
 
@@ -55,6 +56,11 @@ class ViewFormPage(private val formName: String) : Page<ViewFormPage>() {
 
     fun assertNonEditableForm(): ViewFormPage {
         onView(withContentDescription(string.edit_finalized_form)).check(doesNotExist())
+        return this
+    }
+
+    fun assertAnswer(answer: String): ViewFormPage {
+        assertText(answer, AssertionFramework.COMPOSE)
         return this
     }
 }

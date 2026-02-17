@@ -1,6 +1,5 @@
 package org.odk.collect.android.feature.formentry;
 
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
@@ -11,15 +10,19 @@ import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.PageComposeRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
 @RunWith(AndroidJUnit4.class)
 public class QuittingFormTest {
+    private final PageComposeRule pageComposeRule = new PageComposeRule();
 
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
+            .around(pageComposeRule)
+            .around(pageComposeRule.getComposeRule())
             .around(rule);
 
     @Test
@@ -37,8 +40,8 @@ public class QuittingFormTest {
                 .assertNumberOfFinalizedForms(0)
                 .clickDrafts(1)
                 .clickOnForm("Two Question")
-                .assertText("Reuben")
-                .assertText("10");
+                .assertAnswer("Reuben")
+                .assertAnswer("10");
     }
 
     @Test
@@ -66,8 +69,8 @@ public class QuittingFormTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question")
-                .assertText("Reuben")
-                .assertTextDoesNotExist("10");
+                .assertAnswer("Reuben")
+                .assertAnswerDoesNotExist("10");
     }
 
     @Test
@@ -83,7 +86,7 @@ public class QuittingFormTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Reuben");
+                .assertAnswer("Reuben");
     }
 
     @Test
@@ -106,6 +109,6 @@ public class QuittingFormTest {
 
                 .clickDrafts(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Another Reuben");
+                .assertAnswer("Another Reuben");
     }
 }

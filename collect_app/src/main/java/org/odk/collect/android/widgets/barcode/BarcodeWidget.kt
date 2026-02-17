@@ -31,7 +31,7 @@ import org.odk.collect.strings.R
 class BarcodeWidget(
     context: Context,
     questionDetails: QuestionDetails,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
     private val waitingForDataRegistry: WaitingForDataRegistry,
     private val cameraUtils: CameraUtils
 ) : QuestionWidget(context, dependencies, questionDetails), WidgetDataReceiver {
@@ -49,6 +49,7 @@ class BarcodeWidget(
 
             setContextThemedContent {
                 BarcodeWidgetContent(
+                    dependencies.mediaWidgetAnswerViewModel,
                     formEntryPrompt,
                     answer,
                     readOnly,

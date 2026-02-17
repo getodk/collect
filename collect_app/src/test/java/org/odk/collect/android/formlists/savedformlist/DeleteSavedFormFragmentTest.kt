@@ -27,7 +27,7 @@ import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InstanceFixtures
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.strings.R.string
-import org.odk.collect.testshared.Assertions
+import org.odk.collect.testshared.EspressoAssertions
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.ViewActions.clickOnItemWith
 import org.odk.collect.testshared.ViewMatchers.recyclerView
@@ -125,10 +125,10 @@ class DeleteSavedFormFragmentTest {
             InstanceFixtures.instance(dbId = 4, displayName = "Form", editOf = 1, editNumber = 3)
         )
 
-        Assertions.assertNotVisible(withText("Form"))
-        Assertions.assertNotVisible(withText("Form (Edit 1)"))
-        Assertions.assertNotVisible(withText("Form (Edit 2)"))
-        Assertions.assertVisible(withText("Form (Edit 3)"))
+        EspressoAssertions.assertNotVisible(withText("Form"))
+        EspressoAssertions.assertNotVisible(withText("Form (Edit 1)"))
+        EspressoAssertions.assertNotVisible(withText("Form (Edit 2)"))
+        EspressoAssertions.assertVisible(withText("Form (Edit 3)"))
     }
 
     @Test
@@ -141,9 +141,9 @@ class DeleteSavedFormFragmentTest {
             InstanceFixtures.instance(dbId = 4, displayName = "Form", editOf = 1, editNumber = 3)
         )
 
-        Assertions.assertNotVisible(withText("Form"))
-        Assertions.assertNotVisible(withText("Form (Edit 1)"))
-        Assertions.assertVisible(withText("Form (Edit 2)"))
-        Assertions.assertVisible(withText("Form (Edit 3)"))
+        EspressoAssertions.assertNotVisible(withText("Form"))
+        EspressoAssertions.assertNotVisible(withText("Form (Edit 1)"))
+        EspressoAssertions.assertVisible(withText("Form (Edit 2)"))
+        EspressoAssertions.assertVisible(withText("Form (Edit 3)"))
     }
 }

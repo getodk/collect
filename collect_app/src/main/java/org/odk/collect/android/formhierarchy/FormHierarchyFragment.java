@@ -54,6 +54,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
@@ -331,7 +332,12 @@ public class FormHierarchyFragment extends Fragment {
             formHierarchyViewModel.setCurrentIndex(formController.getFormIndex());
 
             calculateElementsToDisplay(formController, groupIcon, groupPathTextView);
-            recyclerView.setAdapter(new HierarchyListAdapter(formHierarchyViewModel.getElementsToDisplay(), this::onElementClick));
+            ViewModelProvider viewModelProvider = new ViewModelProvider(this, viewModelFactory);
+            recyclerView.setAdapter(new HierarchyListAdapter(
+                    formHierarchyViewModel.getElementsToDisplay(),
+                    viewModelProvider.get(MediaWidgetAnswerViewModel.class),
+                    this::onElementClick)
+            );
 
             formController.jumpToIndex(formHierarchyViewModel.getCurrentIndex());
 
@@ -422,11 +428,11 @@ public class FormHierarchyFragment extends Fragment {
                     String label = fp.getShortText();
                     String answerDisplay = QuestionAnswerProcessor.getQuestionAnswer(fp, requireContext(), formController);
                     elementsToDisplay.add(
-                            new HierarchyItem(
+                            new HierarchyItem.Question(
                                     fp.getIndex(),
-                                    HierarchyItemType.QUESTION,
                                     FormEntryPromptUtils.styledQuestionText(label, fp.isRequired()),
-                                    answerDisplay
+                                    answerDisplay,
+                                    fp
                             )
                     );
                     break;
@@ -458,9 +464,8 @@ public class FormHierarchyFragment extends Fragment {
                     FormEntryCaption caption = formController.getCaptionPrompt();
 
                     elementsToDisplay.add(
-                            new HierarchyItem(
+                            new HierarchyItem.VisibleGroup(
                                     caption.getIndex(),
-                                    HierarchyItemType.VISIBLE_GROUP,
                                     HtmlUtils.textToHtml(caption.getShortText())
                             )
                     );
@@ -514,17 +519,15 @@ public class FormHierarchyFragment extends Fragment {
                         }
 
                         elementsToDisplay.add(
-                                new HierarchyItem(
+                                new HierarchyItem.RepeatInstance(
                                         fc.getIndex(),
-                                        HierarchyItemType.REPEAT_INSTANCE,
                                         HtmlUtils.textToHtml(repeatLabel)
                                 )
                         );
                     } else if (fc.getMultiplicity() == 0) {
                         elementsToDisplay.add(
-                                new HierarchyItem(
+                                new HierarchyItem.RepeatableGroup(
                                         fc.getIndex(),
-                                        HierarchyItemType.REPEATABLE_GROUP,
                                         HtmlUtils.textToHtml(fc.getShortText())
                                 )
                         );
@@ -658,24 +661,18 @@ public class FormHierarchyFragment extends Fragment {
      */
     private void onElementClick(HierarchyItem item) {
         FormIndex index = item.getFormIndex();
-
-        switch (item.getHierarchyItemType()) {
-            case QUESTION:
-                onQuestionClicked(index);
-                break;
-            case REPEATABLE_GROUP:
-                // Show the picker.
-                formHierarchyViewModel.setRepeatGroupPickerIndex(index);
-                refreshView();
-                break;
-            case VISIBLE_GROUP:
-            case REPEAT_INSTANCE:
-                // Hide the picker.
-                formHierarchyViewModel.setRepeatGroupPickerIndex(null);
-                formEntryViewModel.getFormController().jumpToIndex(index);
-                requireActivity().setResult(RESULT_OK);
-                refreshView();
-                break;
+        if (item instanceof HierarchyItem.Question) {
+            onQuestionClicked(index);
+        } else if (item instanceof HierarchyItem.RepeatableGroup) {
+            // Show the picker.
+            formHierarchyViewModel.setRepeatGroupPickerIndex(index);
+            refreshView();
+        } else {
+            // Hide the picker.
+            formHierarchyViewModel.setRepeatGroupPickerIndex(null);
+            formEntryViewModel.getFormController().jumpToIndex(index);
+            requireActivity().setResult(RESULT_OK);
+            refreshView();
         }
     }
 
@@ -732,7 +729,7 @@ public class FormHierarchyFragment extends Fragment {
      */
     private boolean isDisplayingSingleGroup() {
         return formHierarchyViewModel.getElementsToDisplay().size() == 1
-                && formHierarchyViewModel.getElementsToDisplay().get(0).getHierarchyItemType() == HierarchyItemType.VISIBLE_GROUP;
+                && formHierarchyViewModel.getElementsToDisplay().get(0) instanceof HierarchyItem.VisibleGroup;
     }
 
     private void configureButtons(FormHierarchyLayoutBinding binding, FormController formController) {

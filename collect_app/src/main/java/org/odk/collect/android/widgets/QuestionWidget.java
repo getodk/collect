@@ -412,13 +412,19 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     public static class Dependencies {
 
         private final AudioPlayer audioPlayer;
+        private final MediaWidgetAnswerViewModel mediaWidgetAnswerViewModel;
 
-        public Dependencies(AudioPlayer audioPlayer) {
+        public Dependencies(AudioPlayer audioPlayer, MediaWidgetAnswerViewModel mediaWidgetAnswerViewModel) {
             this.audioPlayer = audioPlayer;
+            this.mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel;
         }
 
         public AudioPlayer getAudioPlayer() {
             return audioPlayer;
+        }
+
+        public MediaWidgetAnswerViewModel getMediaWidgetAnswerViewModel() {
+            return mediaWidgetAnswerViewModel;
         }
     }
 }

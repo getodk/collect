@@ -96,6 +96,7 @@ public class WidgetFactory {
     private final FileRequester fileRequester;
     private final StringRequester stringRequester;
     private final FormController formController;
+    private final MediaWidgetAnswerViewModel mediaWidgetAnswerViewModel;
 
     public WidgetFactory(FragmentActivity activity,
                          boolean useExternalRecorder,
@@ -109,7 +110,8 @@ public class WidgetFactory {
                          LifecycleOwner viewLifecycle,
                          FileRequester fileRequester,
                          StringRequester stringRequester,
-                         FormController formController
+                         FormController formController,
+                         MediaWidgetAnswerViewModel mediaWidgetAnswerViewModel
     ) {
         this.activity = activity;
         this.useExternalRecorder = useExternalRecorder;
@@ -124,6 +126,7 @@ public class WidgetFactory {
         this.fileRequester = fileRequester;
         this.stringRequester = stringRequester;
         this.formController = formController;
+        this.mediaWidgetAnswerViewModel = mediaWidgetAnswerViewModel;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -133,7 +136,7 @@ public class WidgetFactory {
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider, boolean readOnlyOverride) {
         String appearance = Appearances.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, readOnlyOverride);
-        QuestionWidget.Dependencies dependencies = new QuestionWidget.Dependencies(audioPlayer);
+        QuestionWidget.Dependencies dependencies = new QuestionWidget.Dependencies(audioPlayer, mediaWidgetAnswerViewModel);
 
         final QuestionWidget questionWidget;
         switch (prompt.getControlType()) {

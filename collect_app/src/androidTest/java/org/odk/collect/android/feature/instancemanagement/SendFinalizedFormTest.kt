@@ -16,6 +16,7 @@ import org.odk.collect.android.support.pages.OkDialog
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
 
@@ -23,11 +24,14 @@ import org.odk.collect.androidtest.RecordedIntentsRule
 class SendFinalizedFormTest {
 
     private val testDependencies = TestDependencies()
+    private val pageComposeRule = PageComposeRule()
     private val rule = CollectTestRule(useDemoProject = false)
 
     @get:Rule
     val chain: RuleChain = chain(testDependencies)
         .around(RecordedIntentsRule())
+        .around(pageComposeRule)
+        .around(pageComposeRule.composeRule)
         .around(rule)
 
     @Test
@@ -38,7 +42,7 @@ class SendFinalizedFormTest {
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
             .clickSendFinalizedForm(1)
             .clickOnForm("One Question")
-            .assertText("52")
+            .assertAnswer("52")
     }
 
     @Test
@@ -74,7 +78,7 @@ class SendFinalizedFormTest {
             .pressBack(MainMenuPage())
             .clickViewSentForm(1)
             .clickOnForm("One Question")
-            .assertText("123")
+            .assertAnswer("123")
             .assertText(org.odk.collect.strings.R.string.exit)
     }
 
@@ -96,7 +100,7 @@ class SendFinalizedFormTest {
             .assertNumberOfFinalizedForms(1)
             .clickViewSentForm(1)
             .clickOnForm("One Question")
-            .assertText("123")
+            .assertAnswer("123")
     }
 
     @Test

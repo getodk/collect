@@ -149,7 +149,7 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
                 .build();
 
         AudioPlayer audioPlayer = mock();
-        dependencies = new QuestionWidget.Dependencies(audioPlayer);
+        dependencies = new QuestionWidget.Dependencies(audioPlayer, null);
 
         populateRecyclerView(getWidget());
 

@@ -69,6 +69,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.widgets.MediaWidgetAnswerViewModel;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
@@ -158,7 +159,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
             PrinterWidgetViewModel printerWidgetViewModel,
             InternalRecordingRequester internalRecordingRequester,
             ExternalAppRecordingRequester externalAppRecordingRequester,
-            LifecycleOwner viewLifecycle
+            LifecycleOwner viewLifecycle,
+            MediaWidgetAnswerViewModel mediaWidgetAnswerViewModel
     ) {
         super(context);
         updateQuestions(questionPrompts);
@@ -187,7 +189,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                 this.viewLifecycle,
                 new FileRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
                 new StringRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
-                formController
+                formController,
+                mediaWidgetAnswerViewModel
         );
 
         widgets = new ArrayList<>();

@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.pm.ActivityInfo
 import android.view.View
 import androidx.annotation.StringRes
+import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
@@ -58,7 +59,9 @@ import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.strings.localization.getLocalizedQuantityString
 import org.odk.collect.strings.localization.getLocalizedString
-import org.odk.collect.testshared.Assertions
+import org.odk.collect.testshared.AssertionFramework
+import org.odk.collect.testshared.ComposeAssertions
+import org.odk.collect.testshared.EspressoAssertions
 import org.odk.collect.testshared.Interactions
 import org.odk.collect.testshared.RecyclerViewMatcher
 import org.odk.collect.testshared.WaitFor.tryAgainOnFail
@@ -131,8 +134,13 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertText(text: String): T {
-        Assertions.assertVisible(withText(text))
+    @JvmOverloads
+    fun assertText(text: String, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
+        when (assertionFramework) {
+            AssertionFramework.ESPRESSO -> EspressoAssertions.assertVisible(withText(text))
+            AssertionFramework.COMPOSE -> ComposeAssertions.assertVisible(composeRule!!, text)
+        }
+
         return this as T
     }
 
@@ -180,7 +188,7 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertTextsDoNotExist(vararg texts: String?): T {
+    fun assertTextsDoNotExist(vararg texts: String): T {
         for (text in texts) {
             assertTextDoesNotExist(text)
         }
@@ -191,13 +199,13 @@ abstract class Page<T : Page<T>> {
         return assertTextDoesNotExist(getTranslatedString(string))
     }
 
-    fun assertTextDoesNotExist(text: String?): T {
-        onView(
-            allOf(
-                withText(text),
-                withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
-            )
-        ).check(doesNotExist())
+    @JvmOverloads
+    fun assertTextDoesNotExist(text: String, assertionFramework: AssertionFramework = AssertionFramework.ESPRESSO): T {
+        when (assertionFramework) {
+            AssertionFramework.ESPRESSO -> EspressoAssertions.assertNotVisible(withText(text))
+            AssertionFramework.COMPOSE -> ComposeAssertions.assertNotVisible(composeRule!!, text)
+        }
+
         return this as T
     }
 
@@ -220,7 +228,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun checkIsSnackbarWithMessageDisplayed(message: String): T {
-        Assertions.assertAlert(
+        EspressoAssertions.assertAlert(
             SnackbarUtils.alertStore,
             message,
             "No Snackbar with text \"$message\" shown on screen!"
@@ -229,7 +237,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertToastNotDisplayed(message: String): T {
-        Assertions.assertNoAlert(
+        EspressoAssertions.assertNoAlert(
             ToastUtils.alertStore,
             message,
             "Toast with text \"$message\" shown on screen!"
@@ -238,7 +246,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun checkIsToastWithMessageDisplayed(message: String): T {
-        Assertions.assertAlert(
+        EspressoAssertions.assertAlert(
             ToastUtils.alertStore,
             message,
             "No Toast with text \"$message\" shown on screen!"
@@ -261,6 +269,16 @@ abstract class Page<T : Page<T>> {
     fun clickOnString(stringID: Int): T {
         clickOnText(getTranslatedString(stringID))
         return this as T
+    }
+
+    fun editSavedForm(formName: String): FormHierarchyPage {
+        clickOnText(getTranslatedString(org.odk.collect.strings.R.string.edit_form))
+        return FormHierarchyPage(formName)
+    }
+
+    fun viewSavedForm(formName: String): FormHierarchyPage {
+        clickOnText(getTranslatedString(org.odk.collect.strings.R.string.view_form))
+        return FormHierarchyPage(formName)
     }
 
     fun clickOnText(text: String): T {
@@ -593,26 +611,29 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertTextBelow(below: String, above: String): T {
-        Assertions.assertBelow(withText(below), withText(above))
+        EspressoAssertions.assertBelow(withText(below), withText(above))
         return this as T
     }
 
     fun assertTextBelow(below: Int, above: String): T {
-        Assertions.assertBelow(withText(getTranslatedString(below)), withText(above))
+        EspressoAssertions.assertBelow(withText(getTranslatedString(below)), withText(above))
         return this as T
     }
 
     fun assertTextBelow(below: String, above: Int): T {
-        Assertions.assertBelow(withText(below), withText(getTranslatedString(above)))
+        EspressoAssertions.assertBelow(withText(below), withText(getTranslatedString(above)))
         return this as T
     }
 
     fun assertTextBesides(one: Matcher<String>, two: Matcher<String>): T {
-        Assertions.assertVisible(withText(one), sibling = withText(two))
+        EspressoAssertions.assertVisible(withText(one), sibling = withText(two))
         return this as T
     }
 
     companion object {
+        @JvmStatic
+        var composeRule: ComposeTestRule? = null
+
         private fun rotateToLandscape(): ViewAction {
             return RotateAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
         }

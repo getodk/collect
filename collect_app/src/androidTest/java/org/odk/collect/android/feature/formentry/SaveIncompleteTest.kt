@@ -6,15 +6,18 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 
 @RunWith(AndroidJUnit4::class)
 class SaveIncompleteTest {
-
+    private val pageComposeRule = PageComposeRule()
     var rule = CollectTestRule()
 
     @get:Rule
     var chain: RuleChain = chain()
+        .around(pageComposeRule)
+        .around(pageComposeRule.composeRule)
         .around(rule)
 
     @Test
@@ -28,7 +31,7 @@ class SaveIncompleteTest {
 
             .clickDrafts(1)
             .clickOnForm("Two Question Save Incomplete")
-            .assertText("Dez")
+            .assertAnswer("Dez")
     }
 
     @Test
@@ -42,6 +45,6 @@ class SaveIncompleteTest {
 
             .clickDrafts(1)
             .clickOnForm("Two Question Save Incomplete Required")
-            .assertText("Dez")
+            .assertAnswer("Dez")
     }
 }
