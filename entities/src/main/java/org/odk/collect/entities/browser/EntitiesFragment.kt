@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
 import org.odk.collect.entities.databinding.ListLayoutBinding
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.lists.RecyclerViewUtils
@@ -53,17 +55,15 @@ private class EntitiesAdapter(private val data: List<Entity.Saved>) :
 
     override fun onBindViewHolder(viewHolder: EntityViewHolder, position: Int) {
         val entity = data[position]
-        viewHolder.setEntity(entity)
+        (viewHolder.itemView as ComposeView).setContextThemedContent {
+            EntityItem(entity = entity)
+        }
     }
 }
 
-private class EntityViewHolder(context: Context) : ViewHolder(EntityItemView(context)) {
+private class EntityViewHolder(context: Context) : ViewHolder(ComposeView(context)) {
 
     init {
         matchParentWidth()
-    }
-
-    fun setEntity(entity: Entity.Saved) {
-        (itemView as EntityItemView).setEntity(entity)
     }
 }
