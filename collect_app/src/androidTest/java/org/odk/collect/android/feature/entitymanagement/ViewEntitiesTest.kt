@@ -7,15 +7,19 @@ import org.odk.collect.android.support.StubOpenRosaServer
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.PageComposeRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
 class ViewEntitiesTest {
 
     private val rule = CollectTestRule(useDemoProject = false)
     private val testDependencies = TestDependencies()
+    private val pageComposeRule = PageComposeRule()
 
     @get:Rule
     val ruleChain: RuleChain = TestRuleChain.chain(testDependencies)
+        .around(pageComposeRule.composeRule)
+        .around(pageComposeRule)
         .around(rule)
 
     @Test
