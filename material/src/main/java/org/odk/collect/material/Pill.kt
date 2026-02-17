@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
  */
 @Composable
 fun Pill(
+    modifier: Modifier = Modifier,
     text: String,
     @DrawableRes icon: Int? = null,
     backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
@@ -33,7 +34,7 @@ fun Pill(
     iconColor: Color = MaterialTheme.colorScheme.onPrimaryContainer
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clip(MaterialTheme.shapes.small)
             .background(backgroundColor)
             .padding(
@@ -67,6 +68,6 @@ fun Pill(
 @Composable
 private fun Preview() {
     MaterialTheme {
-        Pill("Text", org.odk.collect.icons.R.drawable.ic_baseline_wifi_off_24)
+        Pill(text = "Text", icon = org.odk.collect.icons.R.drawable.ic_baseline_wifi_off_24)
     }
 }

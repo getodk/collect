@@ -69,6 +69,9 @@ dependencies {
     val composeBom = platform(libs.androidxComposeBom)
     implementation(composeBom)
     implementation(libs.androidXComposeMaterial)
+    implementation(libs.androidXConstraintLayoutCompose)
+    debugImplementation(libs.androidXComposePreview)
+    debugImplementation(libs.androidXComposeTooling)
 
     testImplementation(project(":forms-test"))
     testImplementation(libs.junit)
@@ -76,4 +79,6 @@ dependencies {
     testImplementation(libs.hamcrest)
     testImplementation(libs.mockitoKotlin)
     testImplementation(libs.javarosa) // Include with all dependencies
+    testImplementation(libs.androidXComposeUiTestJunit4)
+    debugImplementation(libs.androidXComposeUiTestManifest)
 }
