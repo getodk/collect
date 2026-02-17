@@ -37,7 +37,10 @@ class RangeDecimalWidget(
             setContextThemedContent {
                 RangeSlider(
                     rangeSliderState,
-                    onValueChanging = { shouldSuppressFlingGesture = it },
+                    onValueChanging = {
+                        shouldSuppressFlingGesture = it
+                        requestDisallowInterceptTouchEvent(it)
+                    },
                     onValueChangeFinished = {
                         rangeSliderState = it
                         widgetValueChanged()
