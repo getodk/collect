@@ -3,6 +3,7 @@ package org.odk.collect.entities
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import org.odk.collect.androidshared.ui.ComposeThemeProvider
 import org.odk.collect.async.Scheduler
 import org.odk.collect.entities.browser.EntityBrowserActivity
 import org.odk.collect.entities.storage.EntitiesRepository
@@ -37,6 +38,11 @@ open class EntitiesDependencyModule {
 
     @Provides
     open fun providesScheduler(): Scheduler {
+        throw UnsupportedOperationException("This should be overridden by dependent application")
+    }
+
+    @Provides
+    open fun providesComposeThemeProvider(): ComposeThemeProvider {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 }
