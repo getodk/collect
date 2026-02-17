@@ -37,14 +37,10 @@ class RangeDecimalWidget(
             setContextThemedContent {
                 RangeSlider(
                     rangeSliderState,
-                    onValueChange = {
-                        rangeSliderState = rangeSliderState.copy(sliderValue = it)
-                    },
+                    onValueChanging = { shouldSuppressFlingGesture = it },
                     onValueChangeFinished = {
+                        rangeSliderState = it
                         widgetValueChanged()
-                    },
-                    onValueChanging = {
-                        shouldSuppressFlingGesture = it
                     },
                     onRangeInvalid = {
                         ToastUtils.showLongToast(org.odk.collect.strings.R.string.invalid_range_widget)

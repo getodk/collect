@@ -22,7 +22,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,32 +47,41 @@ import org.odk.collect.androidshared.R.dimen
 
 @Composable
 fun RangeSlider(
-    rangeSliderState: RangeSliderState,
-    onValueChange: (Float) -> Unit,
-    onValueChangeFinished: () -> Unit,
+    initialState: RangeSliderState,
     onValueChanging: (Boolean) -> Unit,
+    onValueChangeFinished: (RangeSliderState) -> Unit,
     onRangeInvalid: () -> Unit
 ) {
+    var sliderState by remember(initialState.sliderValue) { mutableStateOf(initialState) }
+
     LaunchedEffect(Unit) {
-        if (!rangeSliderState.isValid) {
+        if (!sliderState.isValid) {
             onRangeInvalid()
         }
     }
 
     Surface {
-        if (rangeSliderState.isHorizontal) {
+        if (sliderState.isHorizontal) {
             HorizontalRangeSlider(
-                rangeSliderState,
-                onValueChange = onValueChange,
-                onValueChangeFinished = onValueChangeFinished,
-                onValueChanging = onValueChanging
+                sliderState = sliderState,
+                onValueChanging = onValueChanging,
+                onValueChange = { newValue ->
+                    sliderState = sliderState.copy(sliderValue = newValue)
+                },
+                onValueChangeFinished = {
+                    onValueChangeFinished(sliderState)
+                }
             )
         } else {
             VerticalRangeSlider(
-                rangeSliderState,
-                onValueChange = onValueChange,
-                onValueChangeFinished = onValueChangeFinished,
-                onValueChanging = onValueChanging
+                sliderState = sliderState,
+                onValueChanging = onValueChanging,
+                onValueChange = { newValue ->
+                    sliderState = sliderState.copy(sliderValue = newValue)
+                },
+                onValueChangeFinished = {
+                    onValueChangeFinished(sliderState)
+                }
             )
         }
     }
@@ -78,54 +90,52 @@ fun RangeSlider(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HorizontalRangeSlider(
-    rangeSliderState: RangeSliderState,
+    sliderState: RangeSliderState,
+    onValueChanging: (Boolean) -> Unit,
     onValueChange: (Float) -> Unit,
-    onValueChangeFinished: () -> Unit,
-    onValueChanging: (Boolean) -> Unit
+    onValueChangeFinished: () -> Unit
 ) {
     val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.horizontal_slider)
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        ValueLabel(rangeSliderState.valueLabel)
+        ValueLabel(sliderState.valueLabel)
 
         Slider(
-            modifier = Modifier.fillMaxWidth().semantics {
-                contentDescription = sliderContentDescription
-            }.pointerInteropFilter { event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    onValueChanging(true)
-                    if (rangeSliderState.sliderValue == null) {
-                        onValueChange(0f)
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics { contentDescription = sliderContentDescription }
+                .pointerInteropFilter { event ->
+                    if (event.action == MotionEvent.ACTION_DOWN) {
+                        onValueChanging(true)
+                        if (sliderState.sliderValue == null) {
+                            onValueChange(0f)
+                        }
                     }
-                }
-                false
-            },
-            value = rangeSliderState.sliderValue ?: 0f,
-            steps = rangeSliderState.numOfSteps,
+                    false
+                },
+            value = sliderState.sliderValue ?: 0f,
+            steps = sliderState.numOfSteps,
             onValueChange = onValueChange,
             onValueChangeFinished = {
                 onValueChanging(false)
                 onValueChangeFinished()
             },
-            thumb = { Thumb(rangeSliderState.sliderValue) },
-            track = { Track(it, rangeSliderState.numOfTicks) },
-            enabled = rangeSliderState.isEnabled
+            thumb = { Thumb(sliderState.sliderValue) },
+            track = { Track(it, sliderState.numOfTicks) },
+            enabled = sliderState.isEnabled
         )
 
-        HorizontalEdgeLabels(
-            rangeSliderState.startLabel,
-            rangeSliderState.endLabel
-        )
+        HorizontalEdgeLabels(sliderState.startLabel, sliderState.endLabel)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun VerticalRangeSlider(
-    rangeSliderState: RangeSliderState,
+    sliderState: RangeSliderState,
+    onValueChanging: (Boolean) -> Unit,
     onValueChange: (Float) -> Unit,
-    onValueChangeFinished: () -> Unit,
-    onValueChanging: (Boolean) -> Unit
+    onValueChangeFinished: () -> Unit
 ) {
     val view = LocalView.current
     val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.vertical_slider)
@@ -136,18 +146,14 @@ private fun VerticalRangeSlider(
 
             Slider(
                 modifier = Modifier
-                    .semantics {
-                        contentDescription = sliderContentDescription
-                    }
-                    .constrainAs(center) {
-                        centerHorizontallyTo(parent)
-                    }
+                    .semantics { contentDescription = sliderContentDescription }
+                    .constrainAs(center) { centerHorizontallyTo(parent) }
                     .height(330.dp)
                     .pointerInteropFilter { event ->
                         if (event.action == MotionEvent.ACTION_DOWN) {
                             onValueChanging(true)
                             view.parent?.requestDisallowInterceptTouchEvent(true)
-                            if (rangeSliderState.sliderValue == null) {
+                            if (sliderState.sliderValue == null) {
                                 onValueChange(0f)
                             }
                         }
@@ -170,23 +176,23 @@ private fun VerticalRangeSlider(
                             placeable.place(-placeable.width, 0)
                         }
                     },
-                value = rangeSliderState.sliderValue ?: 0f,
-                steps = rangeSliderState.numOfSteps,
+                value = sliderState.sliderValue ?: 0f,
+                steps = sliderState.numOfSteps,
                 onValueChange = onValueChange,
                 onValueChangeFinished = {
                     view.parent?.requestDisallowInterceptTouchEvent(false)
                     onValueChanging(false)
                     onValueChangeFinished()
                 },
-                thumb = { Thumb(rangeSliderState.sliderValue) },
-                track = { Track(it, rangeSliderState.numOfTicks) },
-                enabled = rangeSliderState.isEnabled
+                thumb = { Thumb(sliderState.sliderValue) },
+                track = { Track(it, sliderState.numOfTicks) },
+                enabled = sliderState.isEnabled
             )
 
             val margin = dimensionResource(id = dimen.margin_standard)
 
             ValueLabel(
-                rangeSliderState.valueLabel,
+                sliderState.valueLabel,
                 modifier = Modifier.constrainAs(left) {
                     end.linkTo(center.start, margin = margin)
                     centerVerticallyTo(center)
@@ -194,8 +200,8 @@ private fun VerticalRangeSlider(
             )
 
             VerticalEdgeLabels(
-                rangeSliderState.startLabel,
-                rangeSliderState.endLabel,
+                sliderState.startLabel,
+                sliderState.endLabel,
                 modifier = Modifier.constrainAs(right) {
                     start.linkTo(center.end, margin = margin)
                     top.linkTo(parent.top)
