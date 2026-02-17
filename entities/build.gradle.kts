@@ -52,6 +52,7 @@ dependencies {
     implementation(project(":async"))
     implementation(project(":lists"))
     implementation(project(":forms"))
+    implementation(project(":icons"))
 
     implementation(libs.kotlinStdlib)
     implementation(libs.javarosa) {

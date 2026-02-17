@@ -13,16 +13,13 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="@dimen/margin_standard" />
 
-    <org.odk.collect.material.MaterialPill
+    <androidx.compose.ui.platform.ComposeView
         android:id="@+id/offline_pill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
-        app:icon="@drawable/ic_baseline_wifi_off_24"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toTopOf="parent"
-        app:pillBackgroundColor="?colorSurfaceContainerHighest"
-        app:text="@string/offline" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/label"
