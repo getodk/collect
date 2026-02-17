@@ -131,7 +131,7 @@ class RangeSliderTest {
         var onRangeInvalidCalled = false
 
         composeTestRule.setContent {
-            RangeSlider(
+            RangeSliderFactory(
                 initialState = createTestState(isValid = false),
                 onValueChangeFinished = {},
                 onValueChanging = {},
@@ -150,7 +150,7 @@ class RangeSliderTest {
         var onRangeInvalidCalled = false
 
         composeTestRule.setContent {
-            RangeSlider(
+            RangeSliderFactory(
                 initialState = createTestState(isValid = true),
                 onValueChangeFinished = {},
                 onValueChanging = {},
@@ -211,7 +211,7 @@ class RangeSliderTest {
         var newState: RangeSliderState? = null
 
         composeTestRule.setContent {
-            RangeSlider(
+            RangeSliderFactory(
                 initialState = createTestState(sliderValue = null, isHorizontal = true),
                 onValueChangeFinished = {
                     newState = it
@@ -233,7 +233,7 @@ class RangeSliderTest {
         var newState: RangeSliderState? = null
 
         composeTestRule.setContent {
-            RangeSlider(
+            RangeSliderFactory(
                 initialState = createTestState(sliderValue = null, isHorizontal = true),
                 onValueChangeFinished = {
                     newState = it
@@ -255,7 +255,7 @@ class RangeSliderTest {
         var newState: RangeSliderState? = null
 
         composeTestRule.setContent {
-            RangeSlider(
+            RangeSliderFactory(
                 initialState = createTestState(sliderValue = null, isHorizontal = false),
                 onValueChangeFinished = {
                     newState = it
@@ -277,7 +277,7 @@ class RangeSliderTest {
         var newState: RangeSliderState? = null
 
         composeTestRule.setContent {
-            RangeSlider(
+            RangeSliderFactory(
                 initialState = createTestState(sliderValue = null, isHorizontal = false),
                 onValueChangeFinished = {
                     newState = it
@@ -296,7 +296,7 @@ class RangeSliderTest {
 
     private fun setContent(sliderState: RangeSliderState) {
         composeTestRule.setContent {
-            RangeSlider(
+            RangeSliderFactory(
                 initialState = sliderState,
                 onValueChangeFinished = {},
                 onValueChanging = {},

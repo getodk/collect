@@ -35,7 +35,7 @@ class RangeDecimalWidget(
     override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         return ComposeView(context).apply {
             setContextThemedContent {
-                RangeSlider(
+                RangeSliderFactory(
                     rangeSliderState,
                     onValueChanging = {
                         shouldSuppressFlingGesture = it
