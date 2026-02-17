@@ -460,6 +460,88 @@ class EntitiesTest {
     }
 
     @Test
+    fun `filling form with create or update in repeats makes entities available`() {
+        val scenario = Scenario.init(
+            "Create or update entities from repeats form",
+            html(
+                listOf("entities" to "http://www.opendatakit.org/xforms/entities"),
+                head(
+                    title("Create or update entities from repeats form"),
+                    model(
+                        listOf(Pair("entities:entities-version", "2025.1.0")),
+                        mainInstance(
+                            t(
+                                "data id=\"create-or-update-entities-from-repeats-form\"",
+                                t(
+                                    "people",
+                                    t("new"),
+                                    t("name"),
+                                    t(
+                                        "meta",
+                                        t(
+                                            "entity dataset=\"people\" create=\"1\" update=\"1\" id=\"\"",
+                                            t("label")
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        bind("/data/people/new").type("string"),
+                        bind("/data/people/name").type("string").withAttribute("entities", "saveto", "name"),
+                        bind("/data/people/meta/entity/@create").type("string").calculate("/data/people/new = 'yes'"),
+                        bind("/data/people/meta/entity/@update").type("string").calculate("/data/people/new != 'yes'"),
+                        bind("/data/people/meta/entity/@id").type("string"),
+                        bind("/data/people/meta/entity/label").type("string").calculate("/data/people/name"),
+                        setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
+                    )
+                ),
+                body(
+                    repeat(
+                        "/data/people",
+                        input("/data/people/new"),
+                        input("/data/people/name"),
+                        setvalue("odk-new-repeat", "/data/people/meta/entity/@id", "uuid()")
+                    )
+                )
+            )
+        )
+
+        scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
+
+        scenario.answer("/data/people[1]/new", "yes")
+        scenario.answer("/data/people[1]/name", "Tom Wambsgans")
+
+        scenario.createNewRepeat("/data/people")
+
+        scenario.answer("/data/people[2]/new", "no")
+        scenario.answer("/data/people[2]/name", "Shiv Roy")
+        scenario.finalizeInstance()
+
+        val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
+        assertThat(entities.size, equalTo(2))
+
+        assertThat(
+            entities,
+            containsInAnyOrder(
+                FormEntity(
+                    EntityAction.CREATE,
+                    "people",
+                    scenario.answerOf<StringData>("/data/people[1]/meta/entity/@id").value as String?,
+                    "Tom Wambsgans",
+                    listOf(Pair("name", "Tom Wambsgans"))
+                ),
+                FormEntity(
+                    EntityAction.UPDATE,
+                    "people",
+                    scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String?,
+                    "Shiv Roy",
+                    listOf(Pair("name", "Shiv Roy"))
+                )
+            )
+        )
+    }
+
+    @Test
     fun `filling form with create in nested repeats makes entities available`() {
         val scenario = Scenario.init(
             "Create entities from nested repeats form",
