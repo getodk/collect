@@ -3,7 +3,7 @@
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <string name="enter_data">Mulai isi formulir</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Draf</string>
+  <string name="review_data">Konsep</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Siap kirim</string>
   <!--Text for an action button on the main screen.-->
@@ -46,7 +46,7 @@
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Cari</string>
   <string name="not_granted_permission">Aktivitas yang Anda lakukan memerlukan izin akses.</string>
-  <string name="storage_runtime_permission_denied_title">Perizinan penyimpanan</string>
+  <string name="storage_runtime_permission_denied_title">Izin untuk penyimpanan</string>
   <string name="storage_runtime_permission_denied_desc">Tanpa izin akses, Collect tidak dapat mengakses formulir Anda ataupun menyimpan jawaban. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>
   <string name="location_runtime_permissions_denied_title">Izin untuk mengakses lokasi</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
@@ -93,7 +93,10 @@
   <string name="exit">Keluar</string>
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <string name="add_repeat_question">Tambah \"%s\"?</string>
+  <!--Text of button from the 'Add new repeat' dialog to confirm adding a repeat-->
   <string name="add_repeat">Tambah</string>
+  <!--Text of button from the 'Add new repeat' dialog to cancel adding a repeat-->
+  <string name="do_not_add_repeat">Batal tambah</string>
   <string name="add_another_menu">Tambah lainnya</string>
   <string name="add_another_question">Tambah lainnya?</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
@@ -105,11 +108,11 @@
   <string name="discard_answer">Hapus isian</string>
   <string name="discard_group">Hapus grup</string>
   <string name="delete_repeat">Hapus grup</string>
-  <string name="delete_repeat_ask">Hapus Grup Ini?</string>
+  <string name="delete_repeat_ask">Hapus grup ini?</string>
   <string name="delete_repeat_confirm">Hapus grup \"%s\" dan semua sub-grup?</string>
   <string name="delete_repeat_no">Batal</string>
   <string name="invalid_answer_error">Maaf, isian tersebut tidak valid.</string>
-  <string name="required_answer_error">Maaf, isian ini harus terisi.</string>
+  <string name="required_answer_error">Maaf, bagian ini wajib terisi.</string>
   <string name="success_form_validation">Sukses! Tidak ada kesalahan yang ditemukan dalam formulir anda.</string>
   <string name="invalid_space_in_answer_singular">Peringatan: Nilai %s mengandung spasi</string>
   <string name="invalid_space_in_answer_plural">Peringatan: Nilai %s mengandung spasi</string>
@@ -118,13 +121,19 @@
   <!--Title of the end of form screen-->
   <string name="save_enter_data_description">Anda berada di akhir formulir\n\"%s\".</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off or the device is offline-->
+  <string name="form_editing_disabled_after_finalizing">Perubahan tidak dapat dilakukan setelah finalisasi.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the device is online-->
+  <string name="form_editing_disabled_after_sending">Perubahan tidak dapat dilakukan setelah dikirim.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is off and the form allows edits after finalize/send-->
+  <string name="form_editing_enabled_after_finalizing">Perubahan dapat dilakukan setelah finalisasi.</string>
   <!--Text shown in an information box on the end of form screen when auto-send is on and the form allows edits after finalize/send-->
+  <string name="form_editing_enabled_after_sending">Perubahan dapat dilakukan setelah pengiriman.</string>
   <!--Details shown in an information box on the end of form screen when the form does not allow edits after finalize/send-->
   <string name="form_editing_disabled_hint">Jika Anda perlu mengedit formulir, simpan sebagai draf.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after finalization-->
+  <string name="form_editing_enabled_after_finalizing_hint">Untuk melakukan perubahan setelah menyelesaikan formulir Anda, buka \"Siap dikirim\", buka formulir, dan ketuk ikon ubah.</string>
   <!--Details shown in an information box on the end of form screen when the form allows edits after sending-->
+  <string name="form_editing_enabled_after_sending_hint">Untuk melakukan perubahan setelah mengirim Formulir Anda, buka menu \"Terkirim\", dan buka Formulir, kemudian ketuk ikon ubah.</string>
   <!--Button text for saving as draft-->
   <string name="save_as_draft">Simpan sebagai draf</string>
   <!--Button text for finalizing a submission. Displayed instead of "Send" when auto-send is off or the device is offline-->
@@ -192,8 +201,8 @@
   <string name="replace_barcode">Ubah Barcode</string>
   <!--Prompt under view finder to describe where to place the camera to scan a barcode-->
   <string name="barcode_scanner_prompt">Posisikan barcode ke dalam kotak</string>
-  <!--Message shown when barcode is successfully scanned-->
-  <!--Label for button that exits barcode scanning after success-->
+  <!--Label for button that rotates camera orientation when scanning barcodes-->
+  <string name="rotate_device">Rotasikan perangkat</string>
   <string name="open_file">Buka berkas</string>
   <string name="rank_items">Peringkat isian</string>
   <string name="number_picker_title">Pemilihan nomor</string>
@@ -209,7 +218,10 @@
   <string name="annotate_image">Menganotasi Gambar</string>
   <string name="gif_not_supported">Berkas gif tidak didukung</string>
   <string name="invalid_file_type">Aplikasi tidak mengenali tipe file</string>
-  <!--Dialog heading for saving annotated image-->
+  <!--Title displayed in a dialog for saving a signature, drawing, or annotated image-->
+  <string name="save_drawing_title">Simpan perubahan</string>
+  <!--Explanation message displayed in a dialog for saving a signature, drawing, or annotated image-->
+  <string name="save_drawing_explanation">Apakah Anda ingin Simpan perubahan sebelum keluar?</string>
   <string name="save_and_close">Simpan dan Tutup</string>
   <string name="signature_capture">Ambil Tanda Tangan</string>
   <string name="sign_button">Isi Tanda Tangan</string>
@@ -381,7 +393,7 @@
   <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
   <string name="identity">Identitas</string>
   <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
-  <string name="enter_identity_description">Formulir ini mengharuskan Anda untuk mengidentifikasi diri Anda sendiri</string>
+  <string name="enter_identity_description">Anda harus mengidentifikasi diri Anda terlebih dahulu sebelum mengakses formulir ini</string>
   <!--Action to close a full screen dialog-->
   <string name="close">Tutup</string>
   <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
@@ -389,7 +401,7 @@
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <string name="reason">Alasan</string>
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
-  <string name="reason_for_changes_description">Anda perlu menjelaskan alasan atas perubahan yang terjadi pada formulir ini</string>
+  <string name="reason_for_changes_description">Anda perlu menjelaskan alasan untuk melakukan perubahan terhadap formulir ini</string>
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">Simpan</string>
   <!--Button text to select a place from a list presented on a map-->
@@ -455,7 +467,10 @@
   <!--Text for message displayed in a dialog to confirm that the layer should be deleted. The placeholder is the name of the layer as displayed in the list-->
   <string name="delete_layer_confirmation_message">Anda yakin ingin menghapus %1$s lapisan luring?</string>
   <string name="record_geopoint">Rekam titik</string>
+  <string name="location_accuracy">Akurasi: %1$s</string>
+  <string name="location_accuracy_unacceptable">⚠️ Akurasi: %1$s (belum sesuai)</string>
   <string name="provider_disabled_error">Maaf, penyedia lokasi belum diaktifkan</string>
+  <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$s m\nAkurasi: %4$s m</string>
   <string name="google_play_services_not_available">Formulir ini hendak merekam pergerakan lokasi Anda, tetapi Google Play Service tidak tersedia.</string>
   <string name="location_providers_disabled_dialog_message">Formulir ini hendak merekam pergerakan lokasi Anda, tetapi layanan lokasi tidak aktif. Mohon aktifkan terlebih dahulu di pengaturan Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -480,6 +495,7 @@
   <string name="improving_accuracy">Meningkatkan akurasi. Harap tunggu.</string>
   <string name="accuracy_status_title">Mendapatkan Lokasi</string>
   <!--The accuracy of a location fix in meters-->
+  <string name="accuracy_m">%1$s m</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">B %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -488,10 +504,10 @@
   <string name="south">S %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">U %1$s%2$s%3$s</string>
-    <string name="input_method">Metode masukan</string>
+  <string name="input_method">Metode masukan</string>
   <string name="start">Mulai</string>
   <string name="enable_gps">Aktifkan GPS</string>
-    <string name="gps_enable_message">GPS dinonaktifkan pada perangkat Anda. Apakah Anda ingin mengaktifkannya?</string>
+  <string name="gps_enable_message">GPS dinonaktifkan pada perangkat Anda. Apakah Anda ingin mengaktifkannya?</string>
   <string name="geo_clear_warning">Fitur sudah dibuat. Apakah Anda ingin menghapus fitur ini?</string>
   <string name="geo_exit_warning">Buang perubahan dan kembali ke ODK?</string>
   <string name="polygon_validator">Setidaknya dibutuhkan 3 titik untuk membuat Polygon.</string>
@@ -522,6 +538,7 @@
   <string name="collection_status_auto_minutes">Titik yang dimasukkan: %1$d (rekaman tiap %2$d menit)</string>
   <string name="collection_status_auto_seconds_accuracy">Titik yang dimasukkan: %1$d (rekaman tiap %2$d detik, akurasi %3$d m)</string>
   <string name="collection_status_auto_minutes_accuracy">Titik yang dimasukkan: %1$d (rekaman tiap %2$d menit, akurasi %3$d m)</string>
+  <string name="geopoint_instruction">Tekan lama untuk menempatkan tanda atau ketuk tombol tambah penanda</string>
   <string name="geopoint_no_draggable_instruction">Sentuh tombol tambah penanda.</string>
   <string name="discard">Buang</string>
   <string name="select_item_count">%s: %d (%d ditampilkan di peta)</string>
@@ -542,6 +559,18 @@
   <string name="pause_location_recording">Jeda</string>
   <!--Description for button that removes the last recorded point-->
   <string name="remove_last_point">Hapus titik terakhir</string>
+  <!--Message shown when an error with the trace/shape has been fixed-->
+  <!--Description for button that explains how to modify the map-->
+  <!--Title for instructions on how to modify map features-->
+  <!--Instruction in a list on how to move a point-->
+  <!--Instruction in a list on how to remove the most recently added point-->
+  <string name="remove_last_point_info_item">Hapus titik terakhir</string>
+  <!--Instruction in a list on how to delete the current shape to start over-->
+  <!--Instruction in a list on how to add a new point-->
+  <!--Instruction in a list on how to tap to add a point-->
+  <!--Instruction in a list on how to delete the entire shape-->
+  <!--Button text to close the instructions dialog-->
+  <!--Button text to open the instructions dialog from the error snackbar-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -575,7 +604,9 @@
   <string name="form_updates_available">Tersedia pembaruan formulir</string>
   <string name="newer_version_of_a_form_info">Ini adalah pembaruan dari formulir yang kamu miliki</string>
   <string name="form_update_error">Pembaruan formulir tidak berhasil</string>
-    <!--Text for notification shown while syncing forms with the server-->
+  <string name="form_update_error_massage">Buka ODK Collect untuk mencoba lagi</string>
+  <!--Text for notification shown while syncing forms with the server-->
+  <string name="form_update_notification_title">Sinkronisasi formulir</string>
   <string name="load_remote_form_error">Unduhan daftar formulir tidak berhasil</string>
   <string name="forms_download_succeeded">Pengunduhan formulir berhasil</string>
   <string name="forms_download_failed">Pengunduhan formulir gagal</string>
@@ -598,6 +629,7 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">Server tidak menyediakan hash untuk formulir ini.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_parsing_error">Formulir ini tidak dapat diproses:</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">Terjadi kesalahan penyimpanan pada perangkat saat mengunduh formulir ini. </string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
@@ -905,14 +937,23 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Beralih ke %s</string>
   <!--Text for the dialog title displayed when a user attempts to delete the current project-->
+  <string name="delete_project_dialog_title">Hapus%s</string>
   <!--Text that appears above the list of counts of different kinds of forms shown before deleting a project-->
+  <string name="delete_project_message">Dengan menghapus Proyek ini, Anda akan menghapus secara permanen hal-hal berikut ini.</string>
   <!--Instructions telling the user they need to type a specific word to confirm deletion of the project-->
+  <string name="delete_project_instructions">Ketik%1$s Ketik untuk, konfirmasi tindakan ini.</string>
   <!--The word that needs to be typed to confirm deletion of the form. Should be all lowercase to allow for case insensitive matching-->
+  <string name="delete_trigger">menghapus</string>
   <!--The list item for form definition count in the project delete confirmation dialog-->
+  <string name="form_definitions_count">Definisi Formulir: %1$d</string>
   <!--The list item for sent count in the project delete confirmation dialog-->
+  <string name="sent_count">Terkirim: %1$d</string>
   <!--The list item for unsent count in the project delete confirmation dialog-->
+  <string name="unsent_count">Tidak terkirim: %1$d</string>
   <!--The list item for draft count in the project delete confirmation dialog-->
+  <string name="drafts_count">Konsepsi: %1$d</string>
   <!--Text for the button that confirms deleting the project-->
+  <string name="delete_project_confirm_button_text">Hapus Proyek</string>
   <string name="or">ATAU</string>
   <string name="hex_color">Warna heksagonal</string>
   <string name="invalid_hex_code">Kode heksa tidak valid</string>
@@ -937,6 +978,8 @@
     ##############################################-->
   <string name="show_details">Tampilkan rincian</string>
   <string name="errors">Kesalahan</string>
+  <!--Error shown when the user tries to open a web page from the app, but they don't have a browser installed-->
+  <string name="no_browser_installed">Tidak ada browser yang terpasang!</string>
   <!--##############################################
     # Form opening errors
     ##############################################-->
@@ -962,7 +1005,6 @@
   <string name="open_settings">Buka Pengaturan</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <string name="entities_title">Daftar entitas</string>
-  <!--Title for setting that controls whether local entity features are enabled or not-->
   <!--Text for button that leads to browser for the user to view and manage entity lists-->
   <string name="entity_browser_button">Lihat daftar entitas</string>
   <!--Label for entity that has been created offline and is not on the server yet-->
@@ -980,6 +1022,17 @@
   <string name="google_drive_removed_message">Proyek ini sebelumnya terhubung ke akun Google Drive. Dukungan untuk Google Drive telah dihapus. Anda dapat mengonfigurasi server atau menarik kiriman ke komputer.</string>
   <string name="learn_more_button_text">Pelajari lebih lanjut</string>
   <!--##############################################
+    # Min SDK deprecation banner
+    ##############################################-->
+  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
+  <string name="min_sdk_deprecation_banner_title">Perangkat Anda sebentar lagi tidak akan bisa lagi melakukan pembaruan.</string>
+  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
+  <string name="min_sdk_deprecation_banner_message">Mulai awal tahun 2026, ODK Collect membutuhkan Android 8+.</string>
+  <!--Button text that opens a forum post with more information about upcoming device support changes-->
+  <string name="min_sdk_deprecation_learn_more">Pelajari lebih lanjut</string>
+  <!--Button text to dismiss the banner-->
+  <string name="min_sdk_deprecation_dismiss">Singkirkan</string>
+  <!--##############################################
     # Developer tools
     ##############################################-->
   <!--Section title in settings-->
@@ -992,6 +1045,7 @@
   <string name="debug_filters">Filter debug</string>
   <string name="debug_filters_summary">Tampilkan informasi debug untuk eksekusi filter selama pengisian formulir.</string>
   <!--Option provided in the Experimental settings to revert to the old ZXing based barcode scanner-->
+  <string name="use_zxing_for_barcode_scanning">Kembali ke pemindai kode batang versi lama</string>
   <string name="permission_dialog_title">Tentang izin</string>
   <string name="permission_dialog_text">Anda akan diminta untuk mengizinkan ODK Collect mengakses fitur-fitur di bawah ini, pilih “izinkan” jika anda ingin menggunakannya.</string>
   <string name="notifications">Notifikasi</string>
@@ -1111,13 +1165,23 @@
   <!--Text for the button that displays a map for viewing an already existing polygon-->
   <string name="view_polygon">Lihat poligon</string>
   <!--Text to describe a field for setting settings JSON in a mobile device management platform (MDM)-->
+  <string name="settings_json">Pengaturan JSON</string>
   <!--Text for the dialog that is displayed while the form is being prepared for editing-->
+  <string name="preparing_form_edit">Mempersiapkan Formulir untuk diedit…</string>
   <!--Instance name with a suffix indicating the edit number, if this is an edited instance-->
+  <string name="user_visible_instance_name">%s (Edit %d)</string>
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_title">Lanjutkan mengedit draf?</string>
   <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer draft version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="newer_draft_edit_found_dialog_message">\'Draf ubah telah disimpan pada\' EEE, MMM dd, yyyy \'pukul\' HH:mm\'\n\nApakah Anda ingin melanjutkan ubah ini?\'</string>
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer draft version exists-->
+  <string name="newer_draft_edit_found_dialog_positive_button">melanjutkan penyuntingan</string>
   <!--Text for the dialog title displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_title">ubah versi terbaru?</string>
   <!--Text for the dialog message displayed when a user attempts to edit a finalized form and a newer finalized version exists. Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="newer_finalized_edit_found_dialog_message">\'Pengajuan ini sebelumnya telah diedit.\n\nApakah Anda ingin ubah versi terbaru yang diselesaikan pada \'EEE, MMM dd, yyyy\' pukul \'HH:mm\'?\'</string>
   <!--Text for the dialog positive button displayed when a user attempts to edit a finalized form and a newer finalized version exists-->
+  <string name="newer_finalized_edit_found_dialog_positive_button">ubah Formulir terbaru</string>
   <!--Text for the snackbar shown when editing of a finalized form begins-->
+  <string name="finalized_form_edit_started">Anda sekarang sedang mengedit formulir ini. Ketuk pertanyaan untuk mulai mengedit.</string>
 </resources>
