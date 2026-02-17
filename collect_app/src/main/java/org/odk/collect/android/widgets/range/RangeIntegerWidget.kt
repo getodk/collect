@@ -35,7 +35,7 @@ class RangeIntegerWidget(
     override fun onCreateWidgetView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
         return ComposeView(context).apply {
             setContextThemedContent {
-                RangeSliderFactory(
+                RangeSlider(
                     rangeSliderState,
                     onValueChanging = {
                         shouldSuppressFlingGesture = it

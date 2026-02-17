@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
 @Composable
-fun RangeSliderFactory(
+fun RangeSlider(
     initialState: RangeSliderState,
     onValueChanging: (Boolean) -> Unit,
     onValueChangeFinished: (RangeSliderState) -> Unit,
