@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinKsp)
     alias(libs.plugins.safeargsKotlin)
+    alias(libs.plugins.composeCompiler)
 }
 
 apply(from = "../config/quality.gradle")
@@ -63,6 +64,10 @@ dependencies {
     implementation(libs.androidxNavigationUi)
     implementation(libs.dagger)
     ksp(libs.daggerCompiler)
+
+    val composeBom = platform(libs.androidxComposeBom)
+    implementation(composeBom)
+    implementation(libs.androidXComposeMaterial)
 
     testImplementation(project(":forms-test"))
     testImplementation(libs.junit)

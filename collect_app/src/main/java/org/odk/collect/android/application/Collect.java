@@ -28,6 +28,7 @@ import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.CollectDrawDependencyModule;
+import org.odk.collect.android.injection.config.CollectEntitiesDependencyModule;
 import org.odk.collect.android.injection.config.CollectGeoDependencyModule;
 import org.odk.collect.android.injection.config.CollectGoogleMapsDependencyModule;
 import org.odk.collect.android.injection.config.CollectOsmDroidDependencyModule;
@@ -54,8 +55,6 @@ import org.odk.collect.draw.DrawDependencyComponentProvider;
 import org.odk.collect.entities.DaggerEntitiesDependencyComponent;
 import org.odk.collect.entities.EntitiesDependencyComponent;
 import org.odk.collect.entities.EntitiesDependencyComponentProvider;
-import org.odk.collect.entities.EntitiesDependencyModule;
-import org.odk.collect.entities.storage.EntitiesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponent;
@@ -316,20 +315,7 @@ public class Collect extends Application implements
     public EntitiesDependencyComponent getEntitiesDependencyComponent() {
         if (entitiesDependencyComponent == null) {
             entitiesDependencyComponent = DaggerEntitiesDependencyComponent.builder()
-                    .entitiesDependencyModule(new EntitiesDependencyModule() {
-                        @NonNull
-                        @Override
-                        public EntitiesRepository providesEntitiesRepository() {
-                            String projectId = applicationComponent.currentProjectProvider().requireCurrentProject().getUuid();
-                            return applicationComponent.entitiesRepositoryProvider().create(projectId);
-                        }
-
-                        @NonNull
-                        @Override
-                        public Scheduler providesScheduler() {
-                            return applicationComponent.scheduler();
-                        }
-                    })
+                    .entitiesDependencyModule(new CollectEntitiesDependencyModule(applicationComponent))
                     .build();
         }
 
