@@ -50,7 +50,7 @@ fun Track(sliderState: SliderState, ticks: Int) {
             .fillMaxWidth()
             .height(20.dp)
             .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
         Box(
             modifier = Modifier

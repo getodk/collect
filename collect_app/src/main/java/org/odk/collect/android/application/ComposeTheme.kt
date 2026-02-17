@@ -42,6 +42,7 @@ fun CollectTheme(content: @Composable () -> Unit) {
         bodyMedium = MaterialTheme.typography.bodyMedium,
         bodyLarge = MaterialTheme.typography.bodyLarge,
         titleLarge = MaterialTheme.typography.titleLarge,
+        headlineSmall = MaterialTheme.typography.headlineSmall,
     )
 
     val shapes = Shapes(
