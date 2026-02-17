@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -137,7 +136,6 @@ private fun VerticalRangeSlider(
     onValueChange: (Float) -> Unit,
     onValueChangeFinished: () -> Unit
 ) {
-    val view = LocalView.current
     val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.vertical_slider)
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -152,7 +150,6 @@ private fun VerticalRangeSlider(
                     .pointerInteropFilter { event ->
                         if (event.action == MotionEvent.ACTION_DOWN) {
                             onValueChanging(true)
-                            view.parent?.requestDisallowInterceptTouchEvent(true)
                             if (sliderState.sliderValue == null) {
                                 onValueChange(0f)
                             }
@@ -180,7 +177,6 @@ private fun VerticalRangeSlider(
                 steps = sliderState.numOfSteps,
                 onValueChange = onValueChange,
                 onValueChangeFinished = {
-                    view.parent?.requestDisallowInterceptTouchEvent(false)
                     onValueChanging(false)
                     onValueChangeFinished()
                 },
