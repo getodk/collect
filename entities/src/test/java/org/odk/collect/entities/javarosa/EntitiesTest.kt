@@ -3,9 +3,12 @@ package org.odk.collect.entities.javarosa
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
+import org.javarosa.core.model.FormDef
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.data.UncastData
 import org.javarosa.core.model.instance.TreeElement
+import org.javarosa.form.api.FormEntryController
+import org.javarosa.form.api.FormEntryModel
 import org.javarosa.test.BindBuilderXFormsElement.bind
 import org.javarosa.test.Scenario
 import org.javarosa.test.XFormsElement.body
@@ -18,6 +21,7 @@ import org.javarosa.test.XFormsElement.mainInstance
 import org.javarosa.test.XFormsElement.model
 import org.javarosa.test.XFormsElement.repeat
 import org.javarosa.test.XFormsElement.select1
+import org.javarosa.test.XFormsElement.select1Dynamic
 import org.javarosa.test.XFormsElement.setvalue
 import org.javarosa.test.XFormsElement.t
 import org.javarosa.test.XFormsElement.title
@@ -26,11 +30,14 @@ import org.javarosa.xform.util.XFormUtils
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.odk.collect.entities.javarosa.filter.LocalEntitiesFilterStrategy
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.EntityFormFinalizationProcessor
 import org.odk.collect.entities.javarosa.finalization.FormEntity
 import org.odk.collect.entities.javarosa.parse.EntityXFormParserFactory
 import org.odk.collect.entities.javarosa.spec.EntityAction
+import org.odk.collect.entities.storage.Entity
+import org.odk.collect.entities.storage.InMemEntitiesRepository
 
 class EntitiesTest {
     private val entityXFormParserFactory = EntityXFormParserFactory(XFormParserFactory())
@@ -461,6 +468,15 @@ class EntitiesTest {
 
     @Test
     fun `filling form with create or update in repeats makes entities available`() {
+        val entitiesRepository = InMemEntitiesRepository()
+        entitiesRepository.save("people", Entity.New("1", "Roman Roy"))
+
+        val controllerSupplier: (FormDef) -> FormEntryController = { formDef ->
+            FormEntryController(FormEntryModel(formDef)).also {
+                it.addFilterStrategy(LocalEntitiesFilterStrategy(entitiesRepository))
+            }
+        }
+
         val scenario = Scenario.init(
             "Create or update entities from repeats form",
             html(
@@ -474,7 +490,8 @@ class EntitiesTest {
                                 "data id=\"create-or-update-entities-from-repeats-form\"",
                                 t(
                                     "people",
-                                    t("new"),
+                                    t("person"),
+                                    t("new_uuid"),
                                     t("name"),
                                     t(
                                         "meta",
@@ -486,11 +503,13 @@ class EntitiesTest {
                                 )
                             )
                         ),
-                        bind("/data/people/new").type("string"),
+                        t("instance id=\"people\" src=\"jr://file-csv/people.csv\""),
+                        bind("/data/people/person").type("string"),
+                        bind("/data/people/new_uuid").type("string").calculate("once(uuid())").relevant("/data/people/person  = ''"),
                         bind("/data/people/name").type("string").withAttribute("entities", "saveto", "name"),
-                        bind("/data/people/meta/entity/@create").type("string").calculate("/data/people/new = 'yes'"),
-                        bind("/data/people/meta/entity/@update").type("string").calculate("/data/people/new != 'yes'"),
-                        bind("/data/people/meta/entity/@id").type("string"),
+                        bind("/data/people/meta/entity/@create").type("string").calculate("/data/people/person = ''"),
+                        bind("/data/people/meta/entity/@update").type("string").calculate("/data/people/person != ''"),
+                        bind("/data/people/meta/entity/@id").type("string").calculate("if(/data/people/person  = '', /data/people/new_uuid , /data/people/person)"),
                         bind("/data/people/meta/entity/label").type("string").calculate("/data/people/name"),
                         setvalue("odk-instance-first-load", "/data/people/meta/entity/@id", "uuid()"),
                     )
@@ -498,23 +517,26 @@ class EntitiesTest {
                 body(
                     repeat(
                         "/data/people",
-                        input("/data/people/new"),
+                        select1Dynamic(
+                            "/data/people/person",
+                            "instance('people')/root/item",
+                            "name",
+                            "label"
+                        ),
                         input("/data/people/name"),
                         setvalue("odk-new-repeat", "/data/people/meta/entity/@id", "uuid()")
                     )
                 )
-            )
+            ),
+            controllerSupplier
         )
 
         scenario.formEntryController.addPostProcessor(EntityFormFinalizationProcessor())
 
-        scenario.answer("/data/people[1]/new", "yes")
         scenario.answer("/data/people[1]/name", "Tom Wambsgans")
-
         scenario.createNewRepeat("/data/people")
-
-        scenario.answer("/data/people[2]/new", "no")
-        scenario.answer("/data/people[2]/name", "Shiv Roy")
+        scenario.answer("/data/people[2]/person", "1")
+        scenario.answer("/data/people[2]/name", "Romulus Roy")
         scenario.finalizeInstance()
 
         val entities = scenario.formEntryController.model.extras.get(EntitiesExtra::class.java).entities
@@ -533,9 +555,9 @@ class EntitiesTest {
                 FormEntity(
                     EntityAction.UPDATE,
                     "people",
-                    scenario.answerOf<UncastData>("/data/people[2]/meta/entity/@id").value as String?,
-                    "Shiv Roy",
-                    listOf(Pair("name", "Shiv Roy"))
+                    "1",
+                    "Romulus Roy",
+                    listOf(Pair("name", "Romulus Roy"))
                 )
             )
         )
