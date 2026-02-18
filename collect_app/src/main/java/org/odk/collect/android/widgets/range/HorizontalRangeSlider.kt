@@ -20,7 +20,13 @@ import androidx.compose.ui.semantics.semantics
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HorizontalRangeSlider(
-    sliderState: RangeSliderState,
+    value: Float?,
+    valueLabel: String,
+    steps: Int,
+    ticks: Int,
+    enabled: Boolean,
+    startLabel: String,
+    endLabel: String,
     onValueChanging: (Boolean) -> Unit,
     onValueChange: (Float) -> Unit,
     onValueChangeFinished: () -> Unit
@@ -28,7 +34,7 @@ fun HorizontalRangeSlider(
     val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.horizontal_slider)
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        ValueLabel(sliderState.valueLabel)
+        ValueLabel(valueLabel)
 
         Slider(
             modifier = Modifier
@@ -37,25 +43,25 @@ fun HorizontalRangeSlider(
                 .pointerInteropFilter { event ->
                     if (event.action == MotionEvent.ACTION_DOWN) {
                         onValueChanging(true)
-                        if (sliderState.sliderValue == null) {
+                        if (value == null) {
                             onValueChange(0f)
                         }
                     }
                     false
                 },
-            value = sliderState.sliderValue ?: 0f,
-            steps = sliderState.numOfSteps,
+            value = value ?: 0f,
+            steps = steps,
             onValueChange = onValueChange,
             onValueChangeFinished = {
                 onValueChanging(false)
                 onValueChangeFinished()
             },
-            thumb = { Thumb(sliderState.sliderValue) },
-            track = { Track(it, sliderState.numOfTicks) },
-            enabled = sliderState.isEnabled
+            thumb = { Thumb(value) },
+            track = { Track(it, ticks) },
+            enabled = enabled
         )
 
-        HorizontalEdgeLabels(sliderState.startLabel, sliderState.endLabel)
+        HorizontalEdgeLabels(startLabel, endLabel)
     }
 }
 

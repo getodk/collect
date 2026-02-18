@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults.Thumb
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -32,10 +31,16 @@ import org.odk.collect.androidshared.R.dimen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VerticalRangeSlider(
-    sliderState: RangeSliderState,
+    value: Float?,
+    steps: Int,
+    enabled: Boolean,
+    valueLabel: String,
+    startLabel: String,
+    endLabel: String,
+    ticks: Int,
     onValueChanging: (Boolean) -> Unit,
-    onValueChange: (Float) -> Unit,
-    onValueChangeFinished: () -> Unit
+    onValueChangeFinished: () -> Unit,
+    onValueChange: (Float) -> Unit
 ) {
     val sliderContentDescription = stringResource(org.odk.collect.strings.R.string.vertical_slider)
 
@@ -51,7 +56,7 @@ fun VerticalRangeSlider(
                     .pointerInteropFilter { event ->
                         if (event.action == MotionEvent.ACTION_DOWN) {
                             onValueChanging(true)
-                            if (sliderState.sliderValue == null) {
+                            if (value == null) {
                                 onValueChange(0f)
                             }
                         }
@@ -74,22 +79,22 @@ fun VerticalRangeSlider(
                             placeable.place(-placeable.width, 0)
                         }
                     },
-                value = sliderState.sliderValue ?: 0f,
-                steps = sliderState.numOfSteps,
+                value = value ?: 0f,
+                steps = steps,
                 onValueChange = onValueChange,
                 onValueChangeFinished = {
                     onValueChanging(false)
                     onValueChangeFinished()
                 },
-                thumb = { Thumb(sliderState.sliderValue) },
-                track = { Track(it, sliderState.numOfTicks) },
-                enabled = sliderState.isEnabled
+                thumb = { Thumb(value) },
+                track = { Track(it, ticks) },
+                enabled = enabled
             )
 
             val margin = dimensionResource(id = dimen.margin_standard)
 
             ValueLabel(
-                sliderState.valueLabel,
+                valueLabel,
                 modifier = Modifier.constrainAs(left) {
                     end.linkTo(center.start, margin = margin)
                     centerVerticallyTo(center)
@@ -97,8 +102,8 @@ fun VerticalRangeSlider(
             )
 
             VerticalEdgeLabels(
-                sliderState.startLabel,
-                sliderState.endLabel,
+                startLabel,
+                endLabel,
                 modifier = Modifier.constrainAs(right) {
                     start.linkTo(center.end, margin = margin)
                     top.linkTo(parent.top)

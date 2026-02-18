@@ -11,6 +11,7 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -132,7 +133,8 @@ class RangeSliderTest {
 
         composeTestRule.setContent {
             RangeSlider(
-                initialState = createTestState(isValid = false),
+                sliderState = createTestState(isValid = false),
+                onValueChange = {},
                 onValueChangeFinished = {},
                 onValueChanging = {},
                 onRangeInvalid = { onRangeInvalidCalled = true }
@@ -151,7 +153,8 @@ class RangeSliderTest {
 
         composeTestRule.setContent {
             RangeSlider(
-                initialState = createTestState(isValid = true),
+                sliderState = createTestState(isValid = true),
+                onValueChange = {},
                 onValueChangeFinished = {},
                 onValueChanging = {},
                 onRangeInvalid = { onRangeInvalidCalled = true }
@@ -207,15 +210,16 @@ class RangeSliderTest {
     }
 
     @Test
-    fun `calls onValueChangeFinished callback with minimum when horizontal slider start is clicked`() {
-        var newState: RangeSliderState? = null
+    fun `calls onValueChange callback with minimum when horizontal slider start is clicked`() {
+        var newValue: Float? = null
 
         composeTestRule.setContent {
             RangeSlider(
-                initialState = createTestState(sliderValue = null, isHorizontal = true),
-                onValueChangeFinished = {
-                    newState = it
+                sliderState = createTestState(sliderValue = null, isHorizontal = true),
+                onValueChange = {
+                    newValue = it
                 },
+                onValueChangeFinished = {},
                 onValueChanging = {},
                 onRangeInvalid = {}
             )
@@ -225,19 +229,20 @@ class RangeSliderTest {
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
             .performTouchInput { click(centerLeft) }
 
-        assertThat(newState?.sliderValue, equalTo(0F))
+        assertThat(newValue, equalTo(0F))
     }
 
     @Test
-    fun `calls onValueChangeFinished callback with midpoint when horizontal slider is clicked at center`() {
-        var newState: RangeSliderState? = null
+    fun `calls onValueChange callback with midpoint when horizontal slider is clicked at center`() {
+        var newValue: Float? = null
 
         composeTestRule.setContent {
             RangeSlider(
-                initialState = createTestState(sliderValue = null, isHorizontal = true),
-                onValueChangeFinished = {
-                    newState = it
+                sliderState = createTestState(sliderValue = null, isHorizontal = true),
+                onValueChange = {
+                    newValue = it
                 },
+                onValueChangeFinished = {},
                 onValueChanging = {},
                 onRangeInvalid = {}
             )
@@ -247,19 +252,20 @@ class RangeSliderTest {
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
             .performTouchInput { click() }
 
-        assertThat(newState?.sliderValue, equalTo(0.5F))
+        assertThat(newValue, equalTo(0.5F))
     }
 
     @Test
-    fun `calls onValueChangeFinished callback with minimum when vertical slider start is clicked`() {
-        var newState: RangeSliderState? = null
+    fun `calls onValueChange callback with minimum when vertical slider start is clicked`() {
+        var newValue: Float? = null
 
         composeTestRule.setContent {
             RangeSlider(
-                initialState = createTestState(sliderValue = null, isHorizontal = false),
-                onValueChangeFinished = {
-                    newState = it
+                sliderState = createTestState(sliderValue = null, isHorizontal = false),
+                onValueChange = {
+                    newValue = it
                 },
+                onValueChangeFinished = {},
                 onValueChanging = {},
                 onRangeInvalid = {}
             )
@@ -269,19 +275,20 @@ class RangeSliderTest {
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.vertical_slider))
             .performTouchInput { click(bottomCenter) }
 
-        assertThat(newState?.sliderValue, equalTo(0F))
+        assertThat(newValue, equalTo(0F))
     }
 
     @Test
-    fun `calls onValueChangeFinished callback with midpoint when vertical slider is clicked at center`() {
-        var newState: RangeSliderState? = null
+    fun `calls onValueChange callback with midpoint when vertical slider is clicked at center`() {
+        var newValue: Float? = null
 
         composeTestRule.setContent {
             RangeSlider(
-                initialState = createTestState(sliderValue = null, isHorizontal = false),
-                onValueChangeFinished = {
-                    newState = it
+                sliderState = createTestState(sliderValue = null, isHorizontal = false),
+                onValueChange = {
+                    newValue = it
                 },
+                onValueChangeFinished = {},
                 onValueChanging = {},
                 onRangeInvalid = {}
             )
@@ -289,15 +296,17 @@ class RangeSliderTest {
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.vertical_slider))
+            .performClick()
             .performTouchInput { click() }
 
-        assertThat(newState?.sliderValue, equalTo(0.5F))
+        assertThat(newValue, equalTo(0.5F))
     }
 
     private fun setContent(sliderState: RangeSliderState) {
         composeTestRule.setContent {
             RangeSlider(
-                initialState = sliderState,
+                sliderState = sliderState,
+                onValueChange = {},
                 onValueChangeFinished = {},
                 onValueChanging = {},
                 onRangeInvalid = {}
