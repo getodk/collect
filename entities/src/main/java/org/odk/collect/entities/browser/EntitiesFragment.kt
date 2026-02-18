@@ -1,22 +1,19 @@
 package org.odk.collect.entities.browser
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.odk.collect.androidshared.ui.ComposeThemeProvider.Companion.setContextThemedContent
-import org.odk.collect.entities.databinding.ListLayoutBinding
-import org.odk.collect.entities.storage.Entity
-import org.odk.collect.lists.RecyclerViewUtils
-import org.odk.collect.lists.RecyclerViewUtils.matchParentWidth
 
 class EntitiesFragment(private val viewModelFactory: ViewModelProvider.Factory) : Fragment() {
 
@@ -27,43 +24,24 @@ class EntitiesFragment(private val viewModelFactory: ViewModelProvider.Factory) 
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return ListLayoutBinding.inflate(inflater, container, false).root
+        return ComposeView(requireContext())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val binding = ListLayoutBinding.bind(view)
-        binding.list.layoutManager = LinearLayoutManager(requireContext())
-        binding.list.addItemDecoration(RecyclerViewUtils.verticalLineDivider(requireContext()))
-
+        val composeView = view as ComposeView
         val list = EntitiesFragmentArgs.fromBundle(requireArguments()).list
-        entitiesViewModel.getEntities(list).observe(viewLifecycleOwner) {
-            binding.list.adapter = EntitiesAdapter(it)
+        composeView.setContextThemedContent {
+            Surface {
+                val entities by entitiesViewModel.getEntities(list).observeAsState(emptyList())
+                LazyColumn {
+                    entities.forEach {
+                        item {
+                            EntityItem(entity = it)
+                            HorizontalDivider()
+                        }
+                    }
+                }
+            }
         }
-    }
-}
-
-private class EntitiesAdapter(private val data: List<Entity.Saved>) :
-    RecyclerView.Adapter<EntityViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, position: Int): EntityViewHolder {
-        return EntityViewHolder(parent.context)
-    }
-
-    override fun getItemCount(): Int {
-        return data.size
-    }
-
-    override fun onBindViewHolder(viewHolder: EntityViewHolder, position: Int) {
-        val entity = data[position]
-        (viewHolder.itemView as ComposeView).setContextThemedContent {
-            EntityItem(entity = entity)
-        }
-    }
-}
-
-private class EntityViewHolder(context: Context) : ViewHolder(ComposeView(context)) {
-
-    init {
-        matchParentWidth()
     }
 }
