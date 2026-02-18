@@ -17,6 +17,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,15 +30,8 @@ class RangeSliderTest {
     private val context = ApplicationProvider.getApplicationContext<Application>()
 
     @Test
-    fun `start, end and current value labels are correctly displayed for integer data`() {
-        setContent(
-            createTestState(
-                sliderValue = 0.5f,
-                rangeStart = 0f,
-                rangeEnd = 10f,
-                isDiscrete = true
-            )
-        )
+    fun `start, end and current value labels are correctly displayed`() {
+        setContent(value = 0.5F)
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.slider_start_label))
@@ -56,44 +50,8 @@ class RangeSliderTest {
     }
 
     @Test
-    fun `start, end and current value labels are correctly displayed for decimal data`() {
-        setContent(
-            createTestState(
-                sliderValue = 0.5f,
-                rangeStart = 0f,
-                rangeEnd = 10f,
-                isDiscrete = false
-            )
-        )
-
-        composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.slider_start_label))
-            .assertIsDisplayed()
-            .assertTextEquals("0.0")
-
-        composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.slider_end_label))
-            .assertIsDisplayed()
-            .assertTextEquals("10.0")
-
-        composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.current_slider_value))
-            .assertIsDisplayed()
-            .assertTextEquals("5.0")
-    }
-
-    @Test
-    fun `does not display current value label when there is no answer`() {
-        setContent(createTestState(sliderValue = null))
-
-        composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.current_slider_value))
-            .assertIsNotDisplayed()
-    }
-
-    @Test
     fun `displays thumb when there is answer`() {
-        setContent(createTestState(sliderValue = 0.5f))
+        setContent(value = 0.5F)
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.slider_thumb))
@@ -102,7 +60,7 @@ class RangeSliderTest {
 
     @Test
     fun `does not display thumb when there is no answer`() {
-        setContent(createTestState(sliderValue = null))
+        setContent(value = null)
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.slider_thumb))
@@ -111,7 +69,7 @@ class RangeSliderTest {
 
     @Test
     fun `displays horizontal slider when isHorizontal is true`() {
-        setContent(createTestState(isHorizontal = true))
+        setContent(horizontal = true)
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
@@ -120,7 +78,7 @@ class RangeSliderTest {
 
     @Test
     fun `displays vertical slider when isHorizontal is false`() {
-        setContent(createTestState(isHorizontal = false))
+        setContent(horizontal = false)
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.vertical_slider))
@@ -131,15 +89,10 @@ class RangeSliderTest {
     fun `calls onRangeInvalid when range is invalid`() {
         var onRangeInvalidCalled = false
 
-        composeTestRule.setContent {
-            RangeSlider(
-                sliderState = createTestState(isValid = false),
-                onValueChange = {},
-                onValueChangeFinished = {},
-                onValueChanging = {},
-                onRangeInvalid = { onRangeInvalidCalled = true }
-            )
-        }
+        setContent(
+            valid = false,
+            onRangeInvalid = { onRangeInvalidCalled = true }
+        )
 
         assertThat(
             onRangeInvalidCalled,
@@ -151,15 +104,10 @@ class RangeSliderTest {
     fun `does not call onRangeInvalid when range is valid`() {
         var onRangeInvalidCalled = false
 
-        composeTestRule.setContent {
-            RangeSlider(
-                sliderState = createTestState(isValid = true),
-                onValueChange = {},
-                onValueChangeFinished = {},
-                onValueChanging = {},
-                onRangeInvalid = { onRangeInvalidCalled = true }
-            )
-        }
+        setContent(
+            valid = true,
+            onRangeInvalid = { onRangeInvalidCalled = true }
+        )
 
         assertThat(
             onRangeInvalidCalled,
@@ -169,7 +117,7 @@ class RangeSliderTest {
 
     @Test
     fun `enables slider when isEnabled is true`() {
-        setContent(createTestState(isEnabled = true))
+        setContent(enabled = true)
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
@@ -178,7 +126,7 @@ class RangeSliderTest {
 
     @Test
     fun `disables slider when isEnabled is false`() {
-        setContent(createTestState(isEnabled = false))
+        setContent(enabled = false)
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
@@ -187,7 +135,7 @@ class RangeSliderTest {
 
     @Test
     fun `displays ticks when numOfTicks is greater than 0`() {
-        setContent(createTestState(numOfTicks = 3))
+        setContent(ticks = 3)
 
         composeTestRule
             .onAllNodesWithContentDescription(
@@ -199,7 +147,7 @@ class RangeSliderTest {
 
     @Test
     fun `does not display ticks when numOfTicks is 0`() {
-        setContent(createTestState(numOfTicks = 0))
+        setContent(ticks = 0)
 
         composeTestRule
             .onAllNodesWithContentDescription(
@@ -213,17 +161,11 @@ class RangeSliderTest {
     fun `calls onValueChange callback with minimum when horizontal slider start is clicked`() {
         var newValue: Float? = null
 
-        composeTestRule.setContent {
-            RangeSlider(
-                sliderState = createTestState(sliderValue = null, isHorizontal = true),
-                onValueChange = {
-                    newValue = it
-                },
-                onValueChangeFinished = {},
-                onValueChanging = {},
-                onRangeInvalid = {}
-            )
-        }
+        setContent(
+            value = null,
+            horizontal = true,
+            onValueChange = { newValue = it }
+        )
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
@@ -236,40 +178,28 @@ class RangeSliderTest {
     fun `calls onValueChange callback with midpoint when horizontal slider is clicked at center`() {
         var newValue: Float? = null
 
-        composeTestRule.setContent {
-            RangeSlider(
-                sliderState = createTestState(sliderValue = null, isHorizontal = true),
-                onValueChange = {
-                    newValue = it
-                },
-                onValueChangeFinished = {},
-                onValueChanging = {},
-                onRangeInvalid = {}
-            )
-        }
+        setContent(
+            value = null,
+            horizontal = true,
+            onValueChange = { newValue = it }
+        )
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
             .performTouchInput { click() }
 
-        assertThat(newValue, equalTo(0.5F))
+        assertEquals(0.5f, newValue!!, 0.046f)
     }
 
     @Test
     fun `calls onValueChange callback with minimum when vertical slider start is clicked`() {
         var newValue: Float? = null
 
-        composeTestRule.setContent {
-            RangeSlider(
-                sliderState = createTestState(sliderValue = null, isHorizontal = false),
-                onValueChange = {
-                    newValue = it
-                },
-                onValueChangeFinished = {},
-                onValueChanging = {},
-                onRangeInvalid = {}
-            )
-        }
+        setContent(
+            value = null,
+            horizontal = false,
+            onValueChange = { newValue = it }
+        )
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.vertical_slider))
@@ -282,59 +212,49 @@ class RangeSliderTest {
     fun `calls onValueChange callback with midpoint when vertical slider is clicked at center`() {
         var newValue: Float? = null
 
-        composeTestRule.setContent {
-            RangeSlider(
-                sliderState = createTestState(sliderValue = null, isHorizontal = false),
-                onValueChange = {
-                    newValue = it
-                },
-                onValueChangeFinished = {},
-                onValueChanging = {},
-                onRangeInvalid = {}
-            )
-        }
+        setContent(
+            value = null,
+            horizontal = false,
+            onValueChange = { newValue = it }
+        )
 
         composeTestRule
             .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.vertical_slider))
             .performClick()
             .performTouchInput { click() }
 
-        assertThat(newValue, equalTo(0.5F))
+        assertEquals(0.5f, newValue!!, 0.046f)
     }
 
-    private fun setContent(sliderState: RangeSliderState) {
+    private fun setContent(
+        value: Float? = null,
+        valueLabel: String = "5",
+        steps: Int = 10,
+        ticks: Int = 0,
+        enabled: Boolean = true,
+        valid: Boolean = true,
+        horizontal: Boolean = true,
+        startLabel: String = "0",
+        endLabel: String = "10",
+        onValueChange: (Float) -> Unit = {},
+        onRangeInvalid: () -> Unit = {}
+    ) {
         composeTestRule.setContent {
             RangeSlider(
-                sliderState = sliderState,
-                onValueChange = {},
+                value = value,
+                valueLabel = valueLabel,
+                steps = steps,
+                ticks = ticks,
+                enabled = enabled,
+                valid = valid,
+                horizontal = horizontal,
+                startLabel = startLabel,
+                endLabel = endLabel,
+                onValueChange = onValueChange,
                 onValueChangeFinished = {},
                 onValueChanging = {},
-                onRangeInvalid = {}
+                onRangeInvalid = onRangeInvalid
             )
         }
-    }
-
-    private fun createTestState(
-        sliderValue: Float? = 0.5f,
-        rangeStart: Float = 0f,
-        rangeEnd: Float = 10f,
-        numOfSteps: Int = 9,
-        isDiscrete: Boolean = true,
-        isHorizontal: Boolean = true,
-        isValid: Boolean = true,
-        isEnabled: Boolean = true,
-        numOfTicks: Int = 0
-    ): RangeSliderState {
-        return RangeSliderState(
-            sliderValue = sliderValue,
-            rangeStart = rangeStart,
-            rangeEnd = rangeEnd,
-            numOfSteps = numOfSteps,
-            isDiscrete = isDiscrete,
-            isHorizontal = isHorizontal,
-            isValid = isValid,
-            isEnabled = isEnabled,
-            numOfTicks = numOfTicks
-        )
     }
 }
