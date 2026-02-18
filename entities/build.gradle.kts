@@ -70,6 +70,7 @@ dependencies {
     implementation(composeBom)
     implementation(libs.androidXComposeMaterial)
     implementation(libs.androidXConstraintLayoutCompose)
+    implementation(libs.runtime.livedata)
     debugImplementation(libs.androidXComposePreview)
     debugImplementation(libs.androidXComposeTooling)
 
