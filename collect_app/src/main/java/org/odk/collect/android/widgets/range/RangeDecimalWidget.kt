@@ -36,13 +36,23 @@ class RangeDecimalWidget(
         return ComposeView(context).apply {
             setContextThemedContent {
                 RangeSlider(
-                    rangeSliderState,
+                    value = rangeSliderState.sliderValue,
+                    valueLabel = rangeSliderState.valueLabel,
+                    steps = rangeSliderState.numOfSteps,
+                    ticks = rangeSliderState.numOfTicks,
+                    enabled = rangeSliderState.isEnabled,
+                    valid = rangeSliderState.isValid,
+                    horizontal = rangeSliderState.isHorizontal,
+                    startLabel = rangeSliderState.startLabel,
+                    endLabel = rangeSliderState.endLabel,
                     onValueChanging = {
                         shouldSuppressFlingGesture = it
                         requestDisallowInterceptTouchEvent(it)
                     },
+                    onValueChange = {
+                        rangeSliderState = rangeSliderState.copy(sliderValue = it)
+                    },
                     onValueChangeFinished = {
-                        rangeSliderState = it
                         widgetValueChanged()
                     },
                     onRangeInvalid = {
