@@ -31,7 +31,12 @@ interface ComposeThemeProvider {
     companion object {
         fun ComposeView.setContextThemedContent(content: @Composable () -> Unit) {
             setContent {
-                (context as ComposeThemeProvider).Theme {
+                val themeProvider = context as? ComposeThemeProvider
+                if (themeProvider != null) {
+                    themeProvider.Theme {
+                        content()
+                    }
+                } else {
                     content()
                 }
             }
