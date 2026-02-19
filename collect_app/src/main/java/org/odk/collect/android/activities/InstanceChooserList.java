@@ -36,6 +36,7 @@ import androidx.loader.content.Loader;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
+import org.odk.collect.android.application.CollectComposeThemeProvider;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.formentry.FormOpeningMode;
 import org.odk.collect.db.sqlite.DatabaseConnection;
@@ -71,7 +72,7 @@ import javax.inject.Inject;
  * UI thread.
  */
 @Deprecated
-public class InstanceChooserList extends AppListActivity implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class InstanceChooserList extends AppListActivity implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>, CollectComposeThemeProvider {
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
