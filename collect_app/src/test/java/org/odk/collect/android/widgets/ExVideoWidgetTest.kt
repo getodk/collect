@@ -68,7 +68,7 @@ class ExVideoWidgetTest : FileWidgetTest<ExVideoWidget>() {
             FakeWaitingForDataRegistry(),
             fileRequester!!
         ).also {
-            composeRule.activity.setContentView(it)
+            widgetInComposeActivity(composeRule, it)
         }
     }
 

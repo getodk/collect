@@ -51,7 +51,7 @@ class RangeDecimalWidgetTest : QuestionWidgetTest<RangeDecimalWidget, DecimalDat
             QuestionDetails(formEntryPrompt),
             QuestionWidgetHelpers.widgetDependencies()
         ).also {
-            composeRule.activity.setContentView(it)
+            widgetInComposeActivity(composeRule, it)
         }
     }
 
