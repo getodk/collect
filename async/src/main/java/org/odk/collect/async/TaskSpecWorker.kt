@@ -105,16 +105,14 @@ class TaskSpecWorker(
         notificationChannel: String,
         notificationChannelName: String
     ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(
-                notificationChannel,
-                notificationChannelName,
-                NotificationManager.IMPORTANCE_LOW
-            )
+        val notificationChannel = NotificationChannel(
+            notificationChannel,
+            notificationChannelName,
+            NotificationManager.IMPORTANCE_LOW
+        )
 
-            (applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
-                .createNotificationChannel(notificationChannel)
-        }
+        (applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
+            .createNotificationChannel(notificationChannel)
     }
 
     companion object {

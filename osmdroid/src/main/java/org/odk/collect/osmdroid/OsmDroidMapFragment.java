@@ -642,7 +642,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         return marker;
     }
 
-    private float getIconAnchorValueX(@MapFragment.Companion.IconAnchor String iconAnchor) {
+    private float getIconAnchorValueX(MapFragment.IconAnchor iconAnchor) {
         switch (iconAnchor) {
             case BOTTOM:
             default:
@@ -650,7 +650,7 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         }
     }
 
-    private float getIconAnchorValueY(@MapFragment.Companion.IconAnchor String iconAnchor) {
+    private float getIconAnchorValueY(MapFragment.IconAnchor iconAnchor) {
         switch (iconAnchor) {
             case BOTTOM:
                 return Marker.ANCHOR_BOTTOM;

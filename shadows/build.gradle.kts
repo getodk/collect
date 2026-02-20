@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlinAndroid)
 }
 
 apply(from = "../config/quality.gradle")
@@ -13,7 +12,6 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -30,13 +28,6 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
-        }
-    }
-
-    packaging {
-        resources {
-            // Pick first occurrence of any files that cause conflicts
-            pickFirst("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
         }
     }
 }

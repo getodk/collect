@@ -19,13 +19,18 @@ sealed class Query {
 fun Query.mapColumns(columnMapper: (String) -> String): Query {
     return when (this) {
         is StringEq -> StringEq(columnMapper(column), value)
+
         is StringNotEq -> StringNotEq(columnMapper(column), value)
+
         is NumericEq -> NumericEq(columnMapper(column), value)
+
         is NumericNotEq -> NumericNotEq(columnMapper(column), value)
+
         is And -> And(
             queryA.mapColumns(columnMapper),
             queryB.mapColumns(columnMapper)
         )
+
         is Or -> Or(
             queryA.mapColumns(columnMapper),
             queryB.mapColumns(columnMapper)

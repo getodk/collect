@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlinAndroid)
 }
 
 apply(from = "../config/quality.gradle")
@@ -12,7 +11,6 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     compileOptions {
@@ -24,13 +22,6 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-        }
-    }
-
-    packaging {
-        resources {
-            // Pick first occurrence of any files that cause conflicts
-            pickFirst("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
         }
     }
 
@@ -61,6 +52,7 @@ dependencies {
     implementation(libs.androidMaterial)
     implementation(libs.danlewAndroidJoda)
     implementation(libs.androidXComposeUiTestJunit4)
+    implementation(libs.androidXComposeUiTest)
     implementation(libs.androidxFragmentTesting) {
         exclude(group = "androidx.test", module = "monitor") // fixes issue https://github.com/android/android-test/issues/731
     }

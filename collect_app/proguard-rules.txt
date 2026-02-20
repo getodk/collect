@@ -7,14 +7,18 @@
 -dontwarn com.rarepebble.**
 -dontwarn com.networknt.**
 -dontwarn android.content.res.**
--dontwarn org.kxml2.io.**
+-dontwarn java.beans.**
 
+-keep class org.kxml2.** { *; }
+-keep class com.google.android.gms.oss.licenses.** { *; }
 -keep class org.odk.collect.android.logic.actions.**
 -keep class android.support.v7.widget.** { *; }
 -keep class org.mp4parser.boxes.** { *; }
 -keep class * extends androidx.fragment.app.Fragment{}
 
--keep class * implements org.javarosa.core.util.externalizable.Externalizable{}
+-keep class * implements org.javarosa.core.util.externalizable.Externalizable {
+    public <init>();
+}
 -keep class org.javarosa.core.model.instance.geojson.GeojsonFeature { *; }
 -keep class org.javarosa.core.model.instance.geojson.GeojsonGeometry { *; }
 

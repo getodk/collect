@@ -1037,17 +1037,6 @@
 </string>
   <string name="learn_more_button_text">了解更多</string>
   <!--##############################################
-    # Min SDK deprecation banner
-    ##############################################-->
-  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <string name="min_sdk_deprecation_banner_title">您的设备即将无法升级。</string>
-  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <string name="min_sdk_deprecation_banner_message">自2026年初起，ODK Collect将要求Android 8及以上版本。</string>
-  <!--Button text that opens a forum post with more information about upcoming device support changes-->
-  <string name="min_sdk_deprecation_learn_more">了解更多</string>
-  <!--Button text to dismiss the banner-->
-  <string name="min_sdk_deprecation_dismiss">知道了</string>
-  <!--##############################################
     # Developer tools
     ##############################################-->
   <!--Section title in settings-->

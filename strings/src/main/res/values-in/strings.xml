@@ -1022,17 +1022,6 @@
   <string name="google_drive_removed_message">Proyek ini sebelumnya terhubung ke akun Google Drive. Dukungan untuk Google Drive telah dihapus. Anda dapat mengonfigurasi server atau menarik kiriman ke komputer.</string>
   <string name="learn_more_button_text">Pelajari lebih lanjut</string>
   <!--##############################################
-    # Min SDK deprecation banner
-    ##############################################-->
-  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <string name="min_sdk_deprecation_banner_title">Perangkat Anda sebentar lagi tidak akan bisa lagi melakukan pembaruan.</string>
-  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <string name="min_sdk_deprecation_banner_message">Mulai awal tahun 2026, ODK Collect membutuhkan Android 8+.</string>
-  <!--Button text that opens a forum post with more information about upcoming device support changes-->
-  <string name="min_sdk_deprecation_learn_more">Pelajari lebih lanjut</string>
-  <!--Button text to dismiss the banner-->
-  <string name="min_sdk_deprecation_dismiss">Singkirkan</string>
-  <!--##############################################
     # Developer tools
     ##############################################-->
   <!--Section title in settings-->

@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.kotlinKapt)
+    alias(libs.plugins.kotlinKsp)
     alias(libs.plugins.kotlinParcelize)
     alias(libs.plugins.ossLicenses)
     alias(libs.plugins.safeargs)
@@ -72,6 +71,7 @@ android {
         viewBinding true
         buildConfig true
         compose true
+        resValues true
     }
 
     defaultConfig {
@@ -114,7 +114,8 @@ android {
                 signingConfig signingConfigs.release
             }
             minifyEnabled(true)
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            shrinkResources(true)
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
         }
@@ -125,7 +126,8 @@ android {
                 signingConfig signingConfigs.release
             }
             minifyEnabled(true)
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            shrinkResources(true)
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
 
@@ -136,7 +138,8 @@ android {
             signingConfig signingConfigs.selfSignedRelease
 
             minifyEnabled(true)
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            shrinkResources(true)
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
 
@@ -154,15 +157,24 @@ android {
         }
     }
 
-    applicationVariants.configureEach { variant ->
-        if (variant.getName() == "selfSignedRelease" || variant.getName() == "odkCollectRelease") {
-            variant.outputs.configureEach { output ->
-                outputFileName = new File(outputFileName.replace("${variant.getName()}.apk", "${defaultConfig.versionName}.apk"))
+    androidComponents {
+        onVariants(selector().all()) { variant ->
+            if (variant.name == "selfSignedRelease" || variant.name == "odkCollectRelease") {
+                variant.outputs.forEach { output ->
+                    output.outputFileName.set(output.outputFileName.get().replace("${variant.name}.apk", "${defaultConfig.versionName}.apk"))
+                }
             }
         }
     }
 
     packaging {
+        jniLibs {
+            // Without useLegacyPackaging, Mapbox native libraries (.so)
+            // can grow by several MB after upgrading to AGP 9, even if the Mapbox
+            // version itself hasn’t changed. Legacy packaging keeps them as built,
+            // avoiding extra padding, alignment, and ELF headers, which keeps the APK smaller.
+            useLegacyPackaging = true
+        }
         resources {
             // These library licenses will be referenced in-app
             excludes += ['META-INF/ASL-2.0.txt', 'META-INF/LGPL-3.0.txt']
@@ -226,9 +238,7 @@ configurations.all {
         cacheChangingModulesFor(0, 'seconds')
 
         force 'org.objenesis:objenesis:2.6'
-
-        // Newer Jackson versions cannot be ued until Collect minSDK >= 26 (https://github.com/FasterXML/jackson-databind#android)
-        force 'com.fasterxml.jackson.core:jackson-databind:2.13.5'
+        force 'org.hamcrest:hamcrest:3.0'
     }
     
     transitive = true
@@ -297,7 +307,9 @@ dependencies {
     implementation libs.firebaseAnalytics
     implementation libs.firebaseCrashlytics
 
-    implementation libs.persianJodaTime
+    implementation (libs.persianJodaTime) {
+        exclude group: "com.android.support"
+    }
     implementation libs.myanmarCalendar
     implementation files('libs/bikram-sambat-1.8.0.jar')
     implementation libs.commonsIo
@@ -329,14 +341,14 @@ dependencies {
 
     // Dagger:
     implementation libs.dagger
-    kapt libs.daggerCompiler
+    ksp libs.daggerCompiler
 
     // Needed for injection into Robolectric tests
-    testAnnotationProcessor libs.daggerCompiler
+    kspTest libs.daggerCompiler
 
     // Dagger Android:
     implementation libs.daggerAndroid
-    annotationProcessor libs.daggerAndroidProcessor
+    ksp libs.daggerAndroidProcessor
 
     implementation libs.armen101AudioRecorderView
 
@@ -397,6 +409,7 @@ dependencies {
     androidTestImplementation libs.androidxWorkTesting
     androidTestImplementation libs.uiautomator
     androidTestImplementation libs.mockitoKotlin
+    androidTestImplementation libs.hamcrest
 
     debugImplementation project(':fragments-test')
     debugImplementation(project(':test-shared',)) {

@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets.utilities;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentActivity;
@@ -40,7 +39,6 @@ import bikramsambat.BsCalendar;
 import bikramsambat.BsException;
 import bikramsambat.BsGregorianDate;
 import mmcalendar.MyanmarDate;
-import mmcalendar.MyanmarDateConverter;
 import timber.log.Timber;
 
 public class DateTimeWidgetUtils {
@@ -116,10 +114,10 @@ public class DateTimeWidgetUtils {
                 break;
             case MYANMAR:
                 customDate = new DateTime(date);
-                MyanmarDate myanmarDate = MyanmarDateConverter.convert(customDate.getYear(),
+                MyanmarDate myanmarDate = MyanmarDate.of(customDate.getYear(),
                         customDate.getMonthOfYear(), customDate.getDayOfMonth(), customDate.getHourOfDay(),
                         customDate.getMinuteOfHour(), customDate.getSecondOfMinute());
-                monthArray = MyanmarDateUtils.getMyanmarMonthsArray(myanmarDate.getYearInt());
+                monthArray = MyanmarDateUtils.getMyanmarMonthsArray(myanmarDate.getYearValue());
                 break;
             case PERSIAN:
                 customDate = new DateTime(date).withChronology(PersianChronologyKhayyamBorkowski.getInstance());
@@ -160,17 +158,17 @@ public class DateTimeWidgetUtils {
                 }
                 break;
             case MYANMAR: {
-                MyanmarDate myanmarDate = MyanmarDateConverter.convert(customDate.getYear(),
+                MyanmarDate myanmarDate = MyanmarDate.of(customDate.getYear(),
                         customDate.getMonthOfYear(), customDate.getDayOfMonth(), customDate.getHourOfDay(),
                         customDate.getMinuteOfHour(), customDate.getSecondOfMinute());
 
-                String day = datePickerDetails.isSpinnerMode() ? myanmarDate.getMonthDay() + " " : "";
+                String day = datePickerDetails.isSpinnerMode() ? myanmarDate.getDayOfMonth() + " " : "";
                 String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? monthArray[MyanmarDateUtils.getMonthId(myanmarDate)] + " " : "";
 
                 if (containsTime) {
-                    customDateText = day + month + myanmarDate.getYearInt() + ", " + df.format(customDate.toDate());
+                    customDateText = day + month + myanmarDate.getYearValue() + ", " + df.format(customDate.toDate());
                 } else {
-                    customDateText = day + month + myanmarDate.getYearInt();
+                    customDateText = day + month + myanmarDate.getYearValue();
                 }
                 break;
             }
@@ -231,21 +229,12 @@ public class DateTimeWidgetUtils {
     }
 
     private static int getDatePickerTheme(ThemeUtils themeUtils, DatePickerDetails datePickerDetails) {
-        int theme = 0;
-        if (!isBrokenSamsungDevice()) {
-            theme = themeUtils.getCalendarDatePickerDialogTheme();
-        }
-        if (!datePickerDetails.isCalendarMode() || isBrokenSamsungDevice()) {
+        int theme = themeUtils.getCalendarDatePickerDialogTheme();
+        if (!datePickerDetails.isCalendarMode()) {
             theme = themeUtils.getSpinnerDatePickerDialogTheme();
         }
 
         return theme;
-    }
-
-    // https://stackoverflow.com/questions/28618405/datepicker-crashes-on-my-device-when-clicked-with-personal-app
-    private static boolean isBrokenSamsungDevice() {
-        return Build.MANUFACTURER.equalsIgnoreCase("samsung")
-                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1;
     }
 
     private static String getGregorianDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Locale locale) {

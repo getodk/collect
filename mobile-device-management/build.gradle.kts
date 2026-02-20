@@ -2,7 +2,6 @@ apply(from = "../config/quality.gradle")
 
 plugins {
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlinAndroid)
 }
 
 android {

@@ -28,7 +28,7 @@ class TraceDescriptionTest {
                 MarkerDescription(
                     traceDescription.points[0],
                     true,
-                    MapFragment.CENTER,
+                    MapFragment.IconAnchor.CENTER,
                     MarkerIconDescription.TracePoint(
                         traceDescription.getStrokeWidth(),
                         traceDescription.getStrokeColor()
@@ -37,7 +37,7 @@ class TraceDescriptionTest {
                 MarkerDescription(
                     traceDescription.points[1],
                     true,
-                    MapFragment.CENTER,
+                    MapFragment.IconAnchor.CENTER,
                     MarkerIconDescription.TracePoint(
                         traceDescription.getStrokeWidth(),
                         traceDescription.getStrokeColor()

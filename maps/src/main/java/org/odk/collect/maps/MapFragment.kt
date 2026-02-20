@@ -1,6 +1,5 @@
 package org.odk.collect.maps
 
-import androidx.annotation.StringDef
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
 
@@ -188,12 +187,7 @@ interface MapFragment {
         const val POINT_ZOOM: Float = 16f
 
         const val KEY_REFERENCE_LAYER: String = "REFERENCE_LAYER"
-
-        @Retention(AnnotationRetention.SOURCE)
-        @StringDef(BOTTOM, CENTER)
-        annotation class IconAnchor
-
-        const val CENTER: String = "center"
-        const val BOTTOM: String = "bottom"
     }
+
+    enum class IconAnchor { CENTER, BOTTOM }
 }

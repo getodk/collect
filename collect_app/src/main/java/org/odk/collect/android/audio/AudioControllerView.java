@@ -15,7 +15,6 @@
 package org.odk.collect.android.audio;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -126,11 +125,7 @@ public class AudioControllerView extends FrameLayout {
 
         currentDurationLabel.setText(formatLength((long) position));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            seekBar.setProgress(position, true);
-        } else {
-            seekBar.setProgress(position);
-        }
+        seekBar.setProgress(position, true);
     }
 
     public interface SwipableParent {

@@ -36,19 +36,19 @@ public class DatePickerDetails implements Serializable {
     }
 
     public boolean isCalendarMode() {
-        return datePickerMode.equals(DatePickerMode.CALENDAR);
+        return datePickerMode == DatePickerMode.CALENDAR;
     }
 
     public boolean isSpinnerMode() {
-        return datePickerMode.equals(DatePickerMode.SPINNERS);
+        return datePickerMode == DatePickerMode.SPINNERS;
     }
 
     public boolean isMonthYearMode() {
-        return datePickerMode.equals(DatePickerMode.MONTH_YEAR);
+        return datePickerMode == DatePickerMode.MONTH_YEAR;
     }
 
     public boolean isYearMode() {
-        return datePickerMode.equals(DatePickerMode.YEAR);
+        return datePickerMode == DatePickerMode.YEAR;
     }
 
     public DatePickerType getDatePickerType() {
@@ -67,7 +67,7 @@ public class DatePickerDetails implements Serializable {
             return false;
         }
         DatePickerDetails datePickerDetails = (DatePickerDetails) obj;
-        return this.datePickerType.equals(datePickerDetails.datePickerType) && this.datePickerMode.equals(datePickerDetails.datePickerMode);
+        return this.datePickerType == datePickerDetails.datePickerType && this.datePickerMode == datePickerDetails.datePickerMode;
     }
 
     @Override

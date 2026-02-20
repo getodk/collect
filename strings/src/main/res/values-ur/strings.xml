@@ -969,15 +969,6 @@ Constraint processing</string>
     ##############################################-->
   <string name="learn_more_button_text">مزید جانیں</string>
   <!--##############################################
-    # Min SDK deprecation banner
-    ##############################################-->
-  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <!--Button text that opens a forum post with more information about upcoming device support changes-->
-  <string name="min_sdk_deprecation_learn_more">مزید جانیں</string>
-  <!--Button text to dismiss the banner-->
-  <string name="min_sdk_deprecation_dismiss">ختم کریں</string>
-  <!--##############################################
     # Developer tools
     ##############################################-->
   <!--Section title in settings-->

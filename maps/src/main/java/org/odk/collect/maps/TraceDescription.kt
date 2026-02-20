@@ -1,6 +1,5 @@
 package org.odk.collect.maps
 
-import org.odk.collect.maps.MapFragment.Companion.CENTER
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription.TracePoint
 
@@ -19,6 +18,6 @@ fun TraceDescription.getMarkersForPoints(): List<MarkerDescription> {
             getStrokeColor()
         }
 
-        MarkerDescription(point, true, CENTER, TracePoint(getStrokeWidth(), color))
+        MarkerDescription(point, true, MapFragment.IconAnchor.CENTER, TracePoint(getStrokeWidth(), color))
     }
 }

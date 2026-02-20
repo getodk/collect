@@ -113,7 +113,7 @@
 
         <!-- Needed to customize the status bar color -->
         <item name="android:statusBarColor">?colorSurface</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/lightStatusBar</item>
+        <item name="android:windowLightStatusBar" >@bool/lightStatusBar</item>
 
         <!-- Disable edge-to-edge behavior -->
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>

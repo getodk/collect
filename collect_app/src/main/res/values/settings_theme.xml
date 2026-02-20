@@ -4,7 +4,7 @@
     <style name="Theme.Collect.Settings" parent="Theme.Collect">
         <item name="android:textColor">?colorOnSurface</item>
         <item name="android:textAppearance">@style/TextAppearance.Collect.Subtitle1</item>
-        <item name="android:textDirection" tools:targetApi="17">locale</item>
+        <item name="android:textDirection" >locale</item>
         <item name="android:listDivider">@null</item>
     </style>
 </resources>

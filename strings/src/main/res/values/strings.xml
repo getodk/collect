@@ -1284,20 +1284,6 @@
 
     <!--
     ##############################################
-    # Min SDK deprecation banner
-    ##############################################
-    -->
-    <!-- First part of the message shown in the banner, informing the user that their device will soon be unsupported -->
-    <string name="min_sdk_deprecation_banner_title">Your device will soon no longer be able to upgrade.</string>
-    <!-- Second part of the message shown in the banner, informing the user that their device will soon be unsupported -->
-    <string name="min_sdk_deprecation_banner_message">Starting in early 2026, ODK Collect requires Android 8+.</string>
-    <!-- Button text that opens a forum post with more information about upcoming device support changes -->
-    <string name="min_sdk_deprecation_learn_more">Learn more</string>
-    <!-- Button text to dismiss the banner -->
-    <string name="min_sdk_deprecation_dismiss">Dismiss</string>
-
-    <!--
-    ##############################################
     # Developer tools
     ##############################################
     -->

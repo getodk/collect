@@ -1,20 +1,17 @@
 package org.odk.collect.shared.strings
 
-import com.vdurmont.emoji.EmojiParser
+import java.text.BreakIterator
 
 object StringUtils {
 
     @JvmStatic
-    fun firstCharacterOrEmoji(string: String): String {
-        val onlyText = EmojiParser.removeAllEmojis(string)
-        val firstCharacterIsNotEmoji = onlyText.isNotEmpty() && onlyText.first() == string.first()
-        val onlyEmojis = EmojiParser.extractEmojis(string)
+    fun firstCharacterOrEmoji(text: String): String {
+        if (text.isEmpty()) return ""
 
-        return if (onlyEmojis.isNotEmpty() && !firstCharacterIsNotEmoji) {
-            onlyEmojis[0]
-        } else {
-            if (string.isEmpty()) "" else string.first().toString()
-        }
+        val iterator = BreakIterator.getCharacterInstance()
+        iterator.setText(text)
+
+        return text.substring(iterator.first(), iterator.next())
     }
 
     @JvmStatic
@@ -30,13 +27,6 @@ object StringUtils {
     }
 
     /**
-     * Copyright (C) 2006 The Android Open Source Project
-     *
-     * Copied from Android project for testing.
-     * TODO: replace with String.join when minSdk goes to 26
-     *
-     * Returns a string containing the tokens joined by delimiters.
-     *
      * @param delimiter a CharSequence that will be inserted between the tokens. If null, the string
      * "null" will be used as the delimiter.
      * @param tokens an array objects to be joined. Strings will be formed from the objects by
@@ -44,19 +34,8 @@ object StringUtils {
      * tokens is empty, an empty string will be returned.
      */
     @JvmStatic
-    fun join(delimiter: CharSequence, tokens: Iterable<*>): String? {
-        val it = tokens.iterator()
-        if (!it.hasNext()) {
-            return ""
-        }
-        val sb = StringBuilder()
-        sb.append(it.next())
-        while (it.hasNext()) {
-            sb.append(delimiter)
-            sb.append(it.next())
-        }
-        return sb.toString()
-    }
+    fun join(delimiter: CharSequence, tokens: Iterable<*>) =
+        tokens.joinToString(separator = delimiter.toString())
 
     @JvmStatic
     fun isBlank(string: String): Boolean {
