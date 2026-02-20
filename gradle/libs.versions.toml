@@ -119,6 +119,7 @@ okhttp3Mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver",
 hamcrest = { group = "org.hamcrest", name = "hamcrest", version = "3.0" }
 robolectric = { group = "org.robolectric", name = "robolectric", version = "4.16.1" }
 uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version = "2.3.0" }
+androidXComposeUiTest = { group = "androidx.compose.ui", name = "ui-test", version = "1.10.3" }
 
 [plugins]
 androidApplication = { id = "com.android.application" }

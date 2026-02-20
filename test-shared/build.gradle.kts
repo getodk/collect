@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.androidMaterial)
     implementation(libs.danlewAndroidJoda)
     implementation(libs.androidXComposeUiTestJunit4)
+    implementation(libs.androidXComposeUiTest)
     implementation(libs.androidxFragmentTesting) {
         exclude(group = "androidx.test", module = "monitor") // fixes issue https://github.com/android/android-test/issues/731
     }
