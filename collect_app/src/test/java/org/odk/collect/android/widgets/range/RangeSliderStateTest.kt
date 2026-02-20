@@ -406,6 +406,42 @@ class RangeSliderStateTest {
         assertThat(state.numOfTicks, equalTo(0))
     }
 
+    @Test
+    fun `realValue rounds correctly to nearest step for ascending range`() {
+        val state = RangeSliderState(
+            sliderValue = 0.34f,
+            rangeStart = 0f,
+            rangeEnd = 10f,
+            step = 1f,
+            numOfSteps = 9,
+            isDiscrete = true,
+            isHorizontal = true,
+            isValid = true,
+            isEnabled = true,
+            numOfTicks = 11
+        )
+
+        assertThat(state.realValue, equalTo(3f))
+    }
+
+    @Test
+    fun `realValue rounds correctly to nearest step for descending range`() {
+        val state = RangeSliderState(
+            sliderValue = 0.34f,
+            rangeStart = 10f,
+            rangeEnd = 0f,
+            step = 1f,
+            numOfSteps = 9,
+            isDiscrete = true,
+            isHorizontal = true,
+            isValid = true,
+            isEnabled = true,
+            numOfTicks = 11
+        )
+
+        assertThat(state.realValue, equalTo(7f))
+    }
+
     private fun mockQuestion(rangeStart: Float, rangeEnd: Float, rangeStep: Float) {
         whenever(question.rangeStart).thenReturn(rangeStart.toBigDecimal())
         whenever(question.rangeEnd).thenReturn(rangeEnd.toBigDecimal())

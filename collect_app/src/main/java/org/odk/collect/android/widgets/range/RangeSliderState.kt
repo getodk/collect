@@ -6,11 +6,16 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.utilities.Appearances
 import kotlin.math.abs
 import kotlin.math.absoluteValue
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.round
+import kotlin.math.roundToInt
 
 data class RangeSliderState(
     val sliderValue: Float?,
     val rangeStart: Float,
     val rangeEnd: Float,
+    val step: Float,
     val numOfSteps: Int,
     val isDiscrete: Boolean,
     val isHorizontal: Boolean,
@@ -20,7 +25,8 @@ data class RangeSliderState(
 ) {
     val realValue
         get() = sliderValue?.let {
-            rangeStart + it * (rangeEnd - rangeStart)
+            val raw = rangeStart + it * (rangeEnd - rangeStart)
+            roundToStep(raw, rangeStart, rangeEnd, step)
         }
 
     val valueLabel
@@ -33,6 +39,20 @@ data class RangeSliderState(
 
     val endLabel
         get() = if (isDiscrete) rangeEnd.toInt().toString() else rangeEnd.toString()
+
+    private fun roundToStep(
+        value: Float,
+        rangeStart: Float,
+        rangeEnd: Float,
+        step: Float
+    ): Float {
+        val steps = ((value - rangeStart) / step).roundToInt()
+        val snapped = rangeStart + steps * step
+        return snapped.coerceIn(
+            min(rangeStart, rangeEnd),
+            max(rangeStart, rangeEnd)
+        )
+    }
 
     companion object {
         fun fromPrompt(prompt: FormEntryPrompt): RangeSliderState {
@@ -67,6 +87,7 @@ data class RangeSliderState(
                 sliderValue = sliderValue,
                 rangeStart = start,
                 rangeEnd = end,
+                step = step,
                 numOfSteps = numOfSteps,
                 isDiscrete = isDiscrete,
                 isHorizontal = isHorizontal,
@@ -85,7 +106,7 @@ data class RangeSliderState(
 
         private fun isDivisible(totalRange: Float, step: Float): Boolean {
             val quotient = totalRange / step
-            val nearestInteger = kotlin.math.round(quotient)
+            val nearestInteger = round(quotient)
             val epsilon = 1e-6f
             return abs(quotient - nearestInteger) < epsilon
         }
