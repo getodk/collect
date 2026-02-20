@@ -46,12 +46,12 @@ fun VerticalRangeSlider(
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         ConstraintLayout(Modifier.fillMaxWidth()) {
-            val (left, center, right) = createRefs()
+            val (valueLabelRef, sliderRef, edgeLabelsRef) = createRefs()
 
             Slider(
                 modifier = Modifier
                     .semantics { contentDescription = sliderContentDescription }
-                    .constrainAs(center) { centerHorizontallyTo(parent) }
+                    .constrainAs(sliderRef) { centerHorizontallyTo(parent) }
                     .height(330.dp)
                     .pointerInteropFilter { event ->
                         if (event.action == MotionEvent.ACTION_DOWN) {
@@ -95,17 +95,17 @@ fun VerticalRangeSlider(
 
             ValueLabel(
                 valueLabel,
-                modifier = Modifier.constrainAs(left) {
-                    end.linkTo(center.start, margin = margin)
-                    centerVerticallyTo(center)
+                modifier = Modifier.constrainAs(valueLabelRef) {
+                    end.linkTo(sliderRef.start, margin = margin)
+                    centerVerticallyTo(sliderRef)
                 }
             )
 
             VerticalEdgeLabels(
                 startLabel,
                 endLabel,
-                modifier = Modifier.constrainAs(right) {
-                    start.linkTo(center.end, margin = margin)
+                modifier = Modifier.constrainAs(edgeLabelsRef) {
+                    start.linkTo(sliderRef.end, margin = margin)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                     height = androidx.constraintlayout.compose.Dimension.fillToConstraints
