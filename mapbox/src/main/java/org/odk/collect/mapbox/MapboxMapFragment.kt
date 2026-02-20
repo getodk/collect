@@ -463,18 +463,6 @@ class MapboxMapFragment :
         return lastLocationFix
     }
 
-    override fun getLocationProvider(): String? {
-        return lastLocationProvider
-    }
-
-    override fun runOnGpsLocationReady(listener: ReadyListener) {
-        if (lastLocationFix != null) {
-            listener.onReady(this)
-        } else {
-            gpsLocationReadyListeners.add(listener)
-        }
-    }
-
     override fun setGpsLocationListener(listener: PointListener?) {
         gpsLocationListener = listener
     }

@@ -56,6 +56,10 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
     }
 
     override fun setCenter(center: MapPoint?, animate: Boolean) {
+        if (center == null) {
+            return
+        }
+
         this.center = center
         hasCenter = true
     }
@@ -181,11 +185,6 @@ class FakeMapFragment(private val ready: Boolean = false) : Fragment(), MapFragm
         return gpsLocation
     }
 
-    override fun getLocationProvider(): String? {
-        return locationProvider
-    }
-
-    override fun runOnGpsLocationReady(listener: ReadyListener) {}
     override fun setGpsLocationListener(listener: PointListener?) {
         gpsLocationListener = listener
 

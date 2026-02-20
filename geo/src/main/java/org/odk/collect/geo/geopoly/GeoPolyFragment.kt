@@ -25,7 +25,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils
-import org.odk.collect.geo.GeoUtils.toLocation
+import org.odk.collect.geo.GeoUtils.toMapPoint
 import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.GeopolyLayoutBinding
 import org.odk.collect.geo.geopoint.LocationAccuracy.Improving
@@ -74,16 +74,16 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     private var previousState: Bundle? = null
 
-    private var map: MapFragment? = null
     private var featureId = -1 // will be a positive featureId once map is ready
     private var originalPoly: List<MapPoint>? = null
     private var intervalIndex: Int = DEFAULT_INTERVAL_INDEX
     private var accuracyThresholdIndex: Int = DEFAULT_ACCURACY_THRESHOLD_INDEX
+    private var mapInitialized = false
 
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (!readOnly && map != null && originalPoly != viewModel.points.value) {
+                if (!readOnly && originalPoly != viewModel.points.value) {
                     showBackDialog()
                 } else {
                     cancel()
@@ -163,7 +163,7 @@ class GeoPolyFragment @JvmOverloads constructor(
 
     override fun onSaveInstanceState(state: Bundle) {
         super.onSaveInstanceState(state)
-        if (map == null) {
+        if (!mapInitialized) {
             // initMap() is called asynchronously, so map can be null if the activity
             // is stopped (e.g. by screen rotation) before initMap() gets to run.
             // In this case, preserve any provided instance state.
@@ -176,8 +176,8 @@ class GeoPolyFragment @JvmOverloads constructor(
         state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex)
     }
 
-    fun initMap(newMapFragment: MapFragment?, binding: GeopolyLayoutBinding) {
-        map = newMapFragment
+    fun initMap(map: MapFragment, binding: GeopolyLayoutBinding) {
+        mapInitialized = true
 
         binding.info.setOnClickListener { showInfoDialog(false) }
         binding.clear.setOnClickListener { showClearDialog() }
@@ -210,7 +210,10 @@ class GeoPolyFragment @JvmOverloads constructor(
             }
         }
 
-        binding.recordButton.setOnClickListener { recordPoint(map!!.getGpsLocation()) }
+        binding.recordButton.setOnClickListener {
+            viewModel.recordPoint()
+        }
+
         binding.layers.setOnClickListener {
             showIfNotShowing(
                 OfflineMapLayersPickerBottomSheetDialogFragment::class.java,
@@ -219,28 +222,21 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
 
         binding.zoom.setOnClickListener {
-            map!!.zoomToCurrentLocation(
-                map!!.getGpsLocation()
-            )
+            map.zoomToCurrentLocation(viewModel.currentLocation.value?.toMapPoint())
         }
 
         originalPoly = inputPolygon
 
-        map!!.setClickListener(this::onClick)
+        map.setClickListener(this::onClick)
         // Also allow long press to place point to match prior versions
-        map!!.setLongPressListener(this::onClick)
-        map!!.setGpsLocationEnabled(true)
-        map!!.setGpsLocationListener(this::onGpsLocation)
-        map!!.setRetainMockAccuracy(retainMockAccuracy)
-        map!!.setDragEndListener {
-            viewModel.update(map!!.getPolyPoints(it))
+        map.setLongPressListener(this::onClick)
+        map.setDragEndListener {
+            viewModel.update(map.getPolyPoints(it))
         }
 
-        if (!map!!.hasCenter()) {
+        if (!map.hasCenter()) {
             if (viewModel.points.value.isNotEmpty()) {
-                map!!.zoomToBoundingBox(viewModel.points.value, 0.6, false)
-            } else {
-                map!!.runOnGpsLocationReady { this.onGpsLocationReady(it) }
+                map.zoomToBoundingBox(viewModel.points.value, 0.6, false)
             }
         }
 
@@ -254,15 +250,26 @@ class GeoPolyFragment @JvmOverloads constructor(
             displayDismissButton = true
         )
 
-        viewModel.viewData.observe(viewLifecycleOwner) { (points, invalidMessage) ->
-            val isValid = invalidMessage == null
+        viewModel.currentLocation.observe(viewLifecycleOwner) { location ->
+            binding.zoom.isEnabled = location != null
+            val shouldFollowLocation =
+                viewModel.inputActive && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT
+            if (!map.hasCenter() || shouldFollowLocation) {
+                map.setCenter(location?.toMapPoint(), false)
+            }
+        }
+
+        viewModel.invalidMessage.observe(viewLifecycleOwner) {
+            val isValid = it == null
             if (!isValid) {
-                snackbar.setText(invalidMessage.getString(requireContext()))
+                snackbar.setText(it.getString(requireContext()))
                 SnackbarUtils.show(snackbar)
             } else {
                 snackbar.dismiss()
             }
+        }
 
+        viewModel.geoPoly.observe(viewLifecycleOwner) { (points, isValid) ->
             binding.save.isEnabled = !readOnly && isValid
 
             val color = if (isValid) {
@@ -281,9 +288,9 @@ class GeoPolyFragment @JvmOverloads constructor(
                 )
 
                 if (featureId == -1) {
-                    featureId = map!!.addPolygon(polygonDescription)
+                    featureId = map.addPolygon(polygonDescription)
                 } else {
-                    map!!.updatePolygon(featureId, polygonDescription)
+                    map.updatePolygon(featureId, polygonDescription)
                 }
             } else {
                 val lineDescription = LineDescription(
@@ -294,9 +301,9 @@ class GeoPolyFragment @JvmOverloads constructor(
                 )
 
                 if (featureId == -1) {
-                    featureId = map!!.addPolyLine(lineDescription)
+                    featureId = map.addPolyLine(lineDescription)
                 } else {
-                    map!!.updatePolyLine(featureId, lineDescription)
+                    map.updatePolyLine(featureId, lineDescription)
                 }
             }
 
@@ -359,7 +366,6 @@ class GeoPolyFragment @JvmOverloads constructor(
     override fun startInput() {
         viewModel.enableInput()
         if (viewModel.recordingMode == GeoPolyViewModel.RecordingMode.AUTOMATIC) {
-            locationTracker.warm(map!!.getGpsLocation()?.toLocation())
             viewModel.startRecording(
                 ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex],
                 INTERVAL_OPTIONS[intervalIndex].toLong() * 1000
@@ -421,27 +427,6 @@ class GeoPolyFragment @JvmOverloads constructor(
         }
     }
 
-    private fun onGpsLocationReady(map: MapFragment) {
-        // Don't zoom to current location if a user is manually entering points
-        if (requireActivity().window.isActive && (!viewModel.inputActive || viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT)) {
-            map.zoomToCurrentLocation(map.getGpsLocation())
-        }
-        updateUi()
-    }
-
-    private fun onGpsLocation(point: MapPoint?) {
-        if (viewModel.inputActive && viewModel.recordingMode != GeoPolyViewModel.RecordingMode.PLACEMENT) {
-            map!!.setCenter(point, false)
-        }
-        updateUi()
-    }
-
-    private fun recordPoint(point: MapPoint?) {
-        if (point != null && isLocationAcceptable(point)) {
-            viewModel.add(point)
-        }
-    }
-
     private fun isLocationAcceptable(point: MapPoint): Boolean {
         if (!this.isAccuracyThresholdActive) {
             return true
@@ -471,15 +456,15 @@ class GeoPolyFragment @JvmOverloads constructor(
         val binding = GeopolyLayoutBinding.bind(requireView())
 
         val numPoints = viewModel.points.value.size
-        val location = map!!.getGpsLocation()
+        val location = viewModel.currentLocation.value?.toMapPoint()
 
         // Visibility state
         binding.play.isVisible = !viewModel.inputActive
         binding.pause.isVisible = viewModel.inputActive
-        binding.recordButton.isVisible = viewModel.inputActive && viewModel.recordingMode == GeoPolyViewModel.RecordingMode.MANUAL
+        binding.recordButton.isVisible =
+            viewModel.inputActive && viewModel.recordingMode == GeoPolyViewModel.RecordingMode.MANUAL
 
         // Enabled state
-        binding.zoom.isEnabled = location != null
         binding.backspace.isEnabled = numPoints > 0
         binding.clear.isEnabled = !viewModel.inputActive && numPoints > 0
 
