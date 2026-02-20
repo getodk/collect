@@ -45,7 +45,7 @@ class VideoWidgetTest : FileWidgetTest<VideoWidget>() {
             FakeQuestionMediaManager(),
             FakeWaitingForDataRegistry()
         ).also {
-            composeRule.activity.setContentView(it)
+            widgetInComposeActivity(composeRule, it)
         }
     }
 
