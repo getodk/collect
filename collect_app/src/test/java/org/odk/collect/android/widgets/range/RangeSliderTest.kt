@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets.range
 
-import android.app.Application
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
@@ -9,11 +8,8 @@ import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onAllNodesWithContentDescription
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -21,30 +17,30 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.androidtest.onAllNodesWithContentDescription
+import org.odk.collect.androidtest.onNodeWithContentDescription
 
 @RunWith(AndroidJUnit4::class)
 class RangeSliderTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val context = ApplicationProvider.getApplicationContext<Application>()
-
     @Test
     fun `start, end and current value labels are correctly displayed`() {
         setContent(value = 0.5F)
 
         composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.slider_start_label))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_start_label)
             .assertIsDisplayed()
             .assertTextEquals("0")
 
         composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.slider_end_label))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_end_label)
             .assertIsDisplayed()
             .assertTextEquals("10")
 
         composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.current_slider_value))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.current_slider_value)
             .assertIsDisplayed()
             .assertTextEquals("5")
     }
@@ -54,7 +50,7 @@ class RangeSliderTest {
         setContent(value = 0.5F)
 
         composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.slider_thumb))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_thumb)
             .assertIsDisplayed()
     }
 
@@ -63,7 +59,7 @@ class RangeSliderTest {
         setContent(value = null)
 
         composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.slider_thumb))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_thumb)
             .assertIsNotDisplayed()
     }
 
@@ -72,7 +68,7 @@ class RangeSliderTest {
         setContent(horizontal = true)
 
         composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.horizontal_slider)
             .assertIsEnabled()
     }
 
@@ -81,7 +77,7 @@ class RangeSliderTest {
         setContent(horizontal = false)
 
         composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.vertical_slider))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.vertical_slider)
             .assertIsEnabled()
     }
 
@@ -120,7 +116,7 @@ class RangeSliderTest {
         setContent(enabled = true)
 
         composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.horizontal_slider)
             .assertIsEnabled()
     }
 
@@ -129,7 +125,7 @@ class RangeSliderTest {
         setContent(enabled = false)
 
         composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.horizontal_slider)
             .assertIsNotEnabled()
     }
 
@@ -139,7 +135,7 @@ class RangeSliderTest {
 
         composeTestRule
             .onAllNodesWithContentDescription(
-                context.getString(org.odk.collect.strings.R.string.slider_tick),
+                org.odk.collect.strings.R.string.slider_tick,
                 useUnmergedTree = true
             )
             .assertCountEquals(3)
@@ -151,7 +147,7 @@ class RangeSliderTest {
 
         composeTestRule
             .onAllNodesWithContentDescription(
-                context.getString(org.odk.collect.strings.R.string.slider_tick),
+                org.odk.collect.strings.R.string.slider_tick,
                 useUnmergedTree = true
             )
             .assertCountEquals(0)
@@ -168,7 +164,7 @@ class RangeSliderTest {
         )
 
         composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.horizontal_slider)
             .performTouchInput { click(centerLeft) }
 
         assertThat(newValue, equalTo(0F))
@@ -185,7 +181,7 @@ class RangeSliderTest {
         )
 
         composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.horizontal_slider))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.horizontal_slider)
             .performTouchInput { click() }
 
         assertEquals(0.5f, newValue!!, 0.046f)
@@ -202,7 +198,7 @@ class RangeSliderTest {
         )
 
         composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.vertical_slider))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.vertical_slider)
             .performTouchInput { click(bottomCenter) }
 
         assertThat(newValue, equalTo(0F))
@@ -219,7 +215,7 @@ class RangeSliderTest {
         )
 
         composeTestRule
-            .onNodeWithContentDescription(context.getString(org.odk.collect.strings.R.string.vertical_slider))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.vertical_slider)
             .performClick()
             .performTouchInput { click() }
 

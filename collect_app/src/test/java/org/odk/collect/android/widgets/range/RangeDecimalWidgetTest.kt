@@ -6,7 +6,6 @@ import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -29,6 +28,7 @@ import org.odk.collect.android.widgets.base.QuestionWidgetTest
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener
 import org.odk.collect.androidshared.ui.ToastUtils
+import org.odk.collect.androidtest.onNodeWithContentDescription
 import java.math.BigDecimal
 
 @RunWith(AndroidJUnit4::class)
@@ -64,11 +64,11 @@ class RangeDecimalWidgetTest : QuestionWidgetTest<RangeDecimalWidget, DecimalDat
         widget.clearAnswer()
 
         composeRule
-            .onNodeWithContentDescription(activity.getString(org.odk.collect.strings.R.string.current_slider_value))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.current_slider_value)
             .assertIsNotDisplayed()
 
         composeRule
-            .onNodeWithContentDescription(activity.getString(org.odk.collect.strings.R.string.slider_thumb))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_thumb)
             .assertIsNotDisplayed()
     }
 
@@ -77,16 +77,16 @@ class RangeDecimalWidgetTest : QuestionWidgetTest<RangeDecimalWidget, DecimalDat
         createWidget()
 
         composeRule
-            .onNodeWithContentDescription(activity.getString(org.odk.collect.strings.R.string.horizontal_slider))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.horizontal_slider)
             .performTouchInput { click() }
 
         composeRule
-            .onNodeWithContentDescription(activity.getString(org.odk.collect.strings.R.string.current_slider_value))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.current_slider_value)
             .assertIsDisplayed()
             .assertTextEquals("3.5")
 
         composeRule
-            .onNodeWithContentDescription(activity.getString(org.odk.collect.strings.R.string.slider_thumb))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.slider_thumb)
             .assertIsDisplayed()
     }
 
@@ -103,7 +103,7 @@ class RangeDecimalWidgetTest : QuestionWidgetTest<RangeDecimalWidget, DecimalDat
         val valueChangedListener = mockValueChangedListener(widget)
 
         composeRule
-            .onNodeWithContentDescription(activity.getString(org.odk.collect.strings.R.string.horizontal_slider))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.horizontal_slider)
             .performTouchInput { click() }
 
         verify(valueChangedListener).widgetValueChanged(widget)
@@ -137,7 +137,7 @@ class RangeDecimalWidgetTest : QuestionWidgetTest<RangeDecimalWidget, DecimalDat
         createWidget()
 
         composeRule
-            .onNodeWithContentDescription(activity.getString(org.odk.collect.strings.R.string.horizontal_slider))
+            .onNodeWithContentDescription(org.odk.collect.strings.R.string.horizontal_slider)
             .assertIsNotEnabled()
     }
 }
