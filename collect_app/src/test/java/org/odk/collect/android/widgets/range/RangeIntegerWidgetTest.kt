@@ -51,7 +51,7 @@ class RangeIntegerWidgetTest : QuestionWidgetTest<RangeIntegerWidget, IntegerDat
             QuestionDetails(formEntryPrompt),
             QuestionWidgetHelpers.widgetDependencies()
         ).also {
-            composeRule.activity.setContentView(it)
+            widgetInComposeActivity(composeRule, it)
         }
     }
 
