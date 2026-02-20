@@ -391,8 +391,12 @@ public class OsmDroidMapFragment extends MapViewModelMapFragment implements
         for (MapFeature feature : features.values()) {
             feature.dispose();
         }
-        map.invalidate();
         features.clear();
+
+        if (map != null) {
+            map.invalidate();
+        }
+
         nextFeatureId = 1;
     }
 
