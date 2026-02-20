@@ -388,7 +388,9 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
     private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
-            if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
+            if (odkView != null && odkView.isNavigationBlocked()) {
+                DialogFragmentUtils.showIfNotShowing(odkView.getFirstNavigationBlockedWarningDialog().get(), getSupportFragmentManager());
+            } else if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
                 // We want the user to stop recording before changing screens
                 DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
             } else {
@@ -496,6 +498,14 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                     public void save() {
                         saveForm(false, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
                     }
+                },
+                () -> {
+                    if (odkView != null && odkView.isNavigationBlocked()) {
+                        DialogFragmentUtils.showIfNotShowing(odkView.getFirstNavigationBlockedWarningDialog().get(), getSupportFragmentManager());
+                        swipeHandler.setBeenSwiped(false);
+                        return false;
+                    }
+                    return true;
                 }
         );
 
@@ -1199,6 +1209,12 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
         FormController formController = getFormController();
         if (formController == null) {
             Timber.d("FormController has a null value");
+            swipeHandler.setBeenSwiped(false);
+            return;
+        }
+
+        if (odkView != null && odkView.isNavigationBlocked()) {
+            DialogFragmentUtils.showIfNotShowing(odkView.getFirstNavigationBlockedWarningDialog().get(), getSupportFragmentManager());
             swipeHandler.setBeenSwiped(false);
             return;
         }

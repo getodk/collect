@@ -39,4 +39,16 @@ android {
 }
 
 dependencies {
+    implementation(project(":androidshared"))
+    implementation(project(":strings"))
+
+    implementation(libs.androidxFragmentKtx)
+    implementation(libs.androidMaterial)
+    implementation(libs.androidxAppcompat)
+    implementation(libs.androidFlexbox)
+    implementation(libs.androidxLifecycleViewmodelKtx)
+    implementation(libs.javarosa) {
+        exclude(group = "joda-time")
+        exclude(group = "org.hamcrest", module = "hamcrest-all")
+    }
 }

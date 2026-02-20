@@ -26,6 +26,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.experimental.timedgrid.TimedGridWidget;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.PrinterWidgetViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -265,6 +266,8 @@ public class WidgetFactory {
                     questionWidget = new LabelWidget(activity, questionDetails, formEntryViewModel, dependencies);
                 } else if (appearance.contains(Appearances.IMAGE_MAP)) {
                     questionWidget = new SelectMultiImageMapWidget(activity, questionDetails, formEntryViewModel, dependencies);
+                } else if (appearance.startsWith(Appearances.TIMED_GRID)) {
+                    questionWidget = new TimedGridWidget(activity, questionDetails, dependencies, formEntryViewModel);
                 } else {
                     questionWidget = new SelectMultiWidget(activity, questionDetails, formEntryViewModel, dependencies);
                 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TimedGridStateButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:paddingStart">@dimen/margin_large</item>
+        <item name="android:paddingEnd">@dimen/margin_large</item>
+        <item name="android:minWidth">180dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">@dimen/corner_radius_extra_small</item>
+    </style>
+
+    <style name="TimedGridStateButton.Red" parent="TimedGridStateButton">
+        <item name="backgroundTint">?colorError</item>
+    </style>
+</resources>

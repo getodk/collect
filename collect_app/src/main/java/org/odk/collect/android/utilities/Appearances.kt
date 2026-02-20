@@ -92,6 +92,9 @@ object Appearances {
     const val COUNTER = "counter"
     const val MULTILINE = "multiline"
 
+    // Experimental
+    const val TIMED_GRID = "timed-grid"
+
     // Get appearance hint and clean it up so it is lower case, without the search function and never null.
     @JvmStatic
     fun getSanitizedAppearanceHint(fep: FormEntryPrompt): String {
