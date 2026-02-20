@@ -1041,17 +1041,6 @@
   <string name="google_drive_removed_message">Ce projet était précédemment connecté à un compte Google Drive. Le support de Google Drive a été supprimé. Vous pouvez configurer un serveur ou récupérer les soumissions sur un ordinateur. </string>
   <string name="learn_more_button_text">En savoir plus</string>
   <!--##############################################
-    # Min SDK deprecation banner
-    ##############################################-->
-  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <string name="min_sdk_deprecation_banner_title">Votre appareil ne pourra bientôt plus être mis à jour. </string>
-  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <string name="min_sdk_deprecation_banner_message">A partir de début 2026, ODK Collect nécessitera Android 8+.</string>
-  <!--Button text that opens a forum post with more information about upcoming device support changes-->
-  <string name="min_sdk_deprecation_learn_more">En savoir plus</string>
-  <!--Button text to dismiss the banner-->
-  <string name="min_sdk_deprecation_dismiss">Fermer</string>
-  <!--##############################################
     # Developer tools
     ##############################################-->
   <!--Section title in settings-->

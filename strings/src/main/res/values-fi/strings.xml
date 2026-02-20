@@ -1036,17 +1036,6 @@
   <string name="google_drive_removed_message">Tämä projekti oli aikaisemmin kytketty Google Drive -tiliin. Google Drive -tuki on lopetettu. Voit määritellä palvelimen tai tallentaa lähetyksiä tietokoneelle.</string>
   <string name="learn_more_button_text">Lisätietoja</string>
   <!--##############################################
-    # Min SDK deprecation banner
-    ##############################################-->
-  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <string name="min_sdk_deprecation_banner_title">Laitettasi ei kohta enää pysty päivittämään.</string>
-  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <string name="min_sdk_deprecation_banner_message">Alkaen vuoden 2026 alkupuolella, ODK Collect vaatii Android-version 8+.</string>
-  <!--Button text that opens a forum post with more information about upcoming device support changes-->
-  <string name="min_sdk_deprecation_learn_more">Lisätietoja</string>
-  <!--Button text to dismiss the banner-->
-  <string name="min_sdk_deprecation_dismiss">Hylkää</string>
-  <!--##############################################
     # Developer tools
     ##############################################-->
   <!--Section title in settings-->

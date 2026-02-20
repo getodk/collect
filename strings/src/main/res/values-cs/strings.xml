@@ -1024,17 +1024,6 @@
   <string name="google_drive_removed_message">Tento projekt byl dříve propojen s účtem Google Drive. Podpora pro Google Drive byla odstraněna. Můžete nakonfigurovat server nebo stahovat příspěvky na počítač.</string>
   <string name="learn_more_button_text">Více informací</string>
   <!--##############################################
-    # Min SDK deprecation banner
-    ##############################################-->
-  <!--First part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <string name="min_sdk_deprecation_banner_title">Vaše zařízení již brzy nebude možné aktualizovat.</string>
-  <!--Second part of the message shown in the banner, informing the user that their device will soon be unsupported-->
-  <string name="min_sdk_deprecation_banner_message">Od začátku roku 2026 bude aplikace ODK Collect vyžadovat systém Android 8+.</string>
-  <!--Button text that opens a forum post with more information about upcoming device support changes-->
-  <string name="min_sdk_deprecation_learn_more">Více informací</string>
-  <!--Button text to dismiss the banner-->
-  <string name="min_sdk_deprecation_dismiss">Zavrhnout</string>
-  <!--##############################################
     # Developer tools
     ##############################################-->
   <!--Section title in settings-->
