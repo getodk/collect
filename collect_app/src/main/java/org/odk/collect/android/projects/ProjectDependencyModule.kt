@@ -9,6 +9,7 @@ import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.forms.savepoints.SavepointsRepository
 import org.odk.collect.projects.ProjectDependencyFactory
+import org.odk.collect.shared.DebugLogger
 import org.odk.collect.shared.settings.Settings
 
 /**
@@ -25,7 +26,8 @@ data class ProjectDependencyModule(
     private val formSourceFactory: ProjectDependencyFactory<FormSource>,
     private val savepointsRepositoryFactory: ProjectDependencyFactory<SavepointsRepository>,
     private val entitiesRepositoryFactory: ProjectDependencyFactory<EntitiesRepository>,
-    private val entitySourceFactory: ProjectDependencyFactory<EntitySource>
+    private val entitySourceFactory: ProjectDependencyFactory<EntitySource>,
+    private val debugLoggerFactory: ProjectDependencyFactory<DebugLogger>
 ) {
     val generalSettings by lazy { settingsFactory.create(projectId) }
     val formsRepository by lazy { formsRepositoryFactory.create(projectId) }
@@ -40,4 +42,5 @@ data class ProjectDependencyModule(
     val rootDir by lazy { storagePathsFactory.create(projectId).rootDir }
     val instancesDir by lazy { storagePathsFactory.create(projectId).instancesDir }
     val entitySource by lazy { entitySourceFactory.create(projectId) }
+    val debugLogger by lazy { debugLoggerFactory.create(projectId) }
 }

@@ -22,6 +22,7 @@ import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
+import org.odk.collect.shared.DebugLogger
 import java.io.File
 
 object FormEntryUseCases {
@@ -122,7 +123,8 @@ object FormEntryUseCases {
     fun finalizeDraft(
         formController: FormController,
         instancesRepository: InstancesRepository,
-        entitiesRepository: EntitiesRepository
+        entitiesRepository: EntitiesRepository,
+        debugLogger: DebugLogger
     ): Instance? {
         val instance =
             getInstanceFromFormController(formController, instancesRepository)!!
@@ -131,7 +133,13 @@ object FormEntryUseCases {
         val valid = validationResult !is FailedValidationResult
 
         return if (valid) {
-            val newInstance = finalizeFormController(instance, formController, instancesRepository, entitiesRepository)
+            val newInstance = finalizeFormController(
+                instance,
+                formController,
+                instancesRepository,
+                entitiesRepository,
+                debugLogger
+            )
             saveInstanceToDisk(formController)
             newInstance
         } else {
@@ -151,6 +159,7 @@ object FormEntryUseCases {
         formController: FormController,
         instancesRepository: InstancesRepository,
         entitiesRepository: EntitiesRepository,
+        debugLogger: DebugLogger
     ): Instance? {
         formController.finalizeForm()
 
@@ -158,7 +167,8 @@ object FormEntryUseCases {
         if (!instance.isEdit()) {
             LocalEntityUseCases.updateLocalEntitiesFromForm(
                 formEntities,
-                entitiesRepository
+                entitiesRepository,
+                debugLogger
             )
         }
 

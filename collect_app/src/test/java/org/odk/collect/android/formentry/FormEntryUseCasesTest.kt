@@ -124,7 +124,8 @@ class FormEntryUseCasesTest {
         FormEntryUseCases.finalizeDraft(
             draftController,
             instancesRepository,
-            InMemEntitiesRepository()
+            InMemEntitiesRepository(),
+            mock()
         )
 
         assertThat(
@@ -150,7 +151,8 @@ class FormEntryUseCasesTest {
         FormEntryUseCases.finalizeDraft(
             draftController,
             instancesRepository,
-            InMemEntitiesRepository()
+            InMemEntitiesRepository(),
+            mock()
         )
 
         val updatedInstance = instancesRepository.get(instance.dbId)!!
@@ -176,7 +178,8 @@ class FormEntryUseCasesTest {
         FormEntryUseCases.finalizeDraft(
             draftController,
             instancesRepository,
-            InMemEntitiesRepository()
+            InMemEntitiesRepository(),
+            mock()
         )
 
         val updatedInstance = instancesRepository.get(instance.dbId)!!

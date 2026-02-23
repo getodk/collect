@@ -8,8 +8,11 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.hamcrest.text.IsBlankString.blankOrNullString
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.odk.collect.entities.javarosa.finalization.EntitiesExtra
 import org.odk.collect.entities.javarosa.finalization.FormEntity
+import org.odk.collect.entities.javarosa.finalization.InvalidEntity
 import org.odk.collect.entities.javarosa.parse.EntitySchema
 import org.odk.collect.entities.javarosa.spec.EntityAction
 import org.odk.collect.entities.server.EntitySource
@@ -18,6 +21,7 @@ import org.odk.collect.entities.storage.Entity
 import org.odk.collect.entities.storage.EntityList
 import org.odk.collect.entities.storage.InMemEntitiesRepository
 import org.odk.collect.formstest.FormFixtures
+import org.odk.collect.shared.DebugLogger
 import org.odk.collect.shared.Query
 import org.odk.collect.shared.TempFiles
 import java.io.File
@@ -133,6 +137,24 @@ class LocalEntityUseCasesTest {
 
         LocalEntityUseCases.updateLocalEntitiesFromForm(formEntities, entitiesRepository)
         assertThat(entitiesRepository.query("things").size, equalTo(0))
+    }
+
+    @Test
+    fun `#updateLocalEntitiesFromForm logs invalid entities`() {
+        val debugLogger = mock<DebugLogger>()
+        val formEntities =
+            EntitiesExtra(emptyList(), listOf(InvalidEntity("things", "id", "label")))
+
+        LocalEntityUseCases.updateLocalEntitiesFromForm(
+            formEntities,
+            entitiesRepository,
+            debugLogger
+        )
+
+        verify(debugLogger).log(
+            "Entities",
+            "Failed to create/update dataset=things, id=id, label=label"
+        )
     }
 
     @Test
@@ -552,9 +574,15 @@ class LocalEntityUseCasesTest {
 
     @Test
     fun `#updateOfflineLocalEntitiesFromServer removes offline entities that are deleted according to the entity source`() {
-        entitiesRepository.save("songs", Entity.New("cathedrals", "Cathedrals", state = Entity.State.OFFLINE))
+        entitiesRepository.save(
+            "songs",
+            Entity.New("cathedrals", "Cathedrals", state = Entity.State.OFFLINE)
+        )
         entitiesRepository.save("songs", Entity.New("noah", "Noah", state = Entity.State.ONLINE))
-        entitiesRepository.save("songs", Entity.New("midnightCity", "Midnight City", state = Entity.State.OFFLINE))
+        entitiesRepository.save(
+            "songs",
+            Entity.New("midnightCity", "Midnight City", state = Entity.State.OFFLINE)
+        )
 
         entitySource.delete("cathedrals")
 
@@ -649,7 +677,10 @@ private class FakeEntitySource : EntitySource {
 
     private val deleted = mutableListOf<String>()
 
-    override fun fetchDeletedStates(integrityUrl: String, ids: List<String>): List<Pair<String, Boolean>> {
+    override fun fetchDeletedStates(
+        integrityUrl: String,
+        ids: List<String>
+    ): List<Pair<String, Boolean>> {
         accesses += 1
 
         if (integrityUrl == this.integrityUrl) {

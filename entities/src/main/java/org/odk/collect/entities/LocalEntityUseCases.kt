@@ -9,6 +9,7 @@ import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.forms.MediaFile
+import org.odk.collect.shared.DebugLogger
 import org.odk.collect.shared.Query
 import java.io.File
 import java.util.UUID
@@ -18,7 +19,8 @@ object LocalEntityUseCases {
     @JvmStatic
     fun updateLocalEntitiesFromForm(
         formEntities: EntitiesExtra?,
-        entitiesRepository: EntitiesRepository
+        entitiesRepository: EntitiesRepository,
+        debugLogger: DebugLogger? = null
     ) {
         formEntities?.entities?.forEach { formEntity ->
             val id = formEntity.id
@@ -57,6 +59,13 @@ object LocalEntityUseCases {
                     }
                 }
             }
+        }
+
+        formEntities?.invalidEntities?.forEach {
+            debugLogger?.log(
+                "Entities",
+                "Failed to create/update dataset=${it.dataset}, id=${it.id}, label=${it.label}"
+            )
         }
     }
 
@@ -139,11 +148,12 @@ object LocalEntityUseCases {
 
         val integrityUrl = mediaFile.integrityUrl
         if (integrityUrl != null && offlineLocalEntities.isNotEmpty()) {
-            entitySource.fetchDeletedStates(integrityUrl, offlineLocalEntities.map { it.id }).forEach {
-                if (it.second) {
-                    entitiesRepository.delete(list, it.first)
+            entitySource.fetchDeletedStates(integrityUrl, offlineLocalEntities.map { it.id })
+                .forEach {
+                    if (it.second) {
+                        entitiesRepository.delete(list, it.first)
+                    }
                 }
-            }
         }
     }
 

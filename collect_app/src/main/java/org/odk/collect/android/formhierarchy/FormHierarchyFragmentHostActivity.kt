@@ -11,6 +11,7 @@ import org.odk.collect.android.formentry.FormOpeningMode
 import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.injection.config.ProjectDependencyModuleFactory
 import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.ProjectsDataService
@@ -84,6 +85,9 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity(), CollectComposeThe
     @Inject
     lateinit var changeLockProvider: ChangeLockProvider
 
+    @Inject
+    lateinit var projectDependencyModuleFactory: ProjectDependencyModuleFactory
+
     private val sessionId by lazy { intent.getStringExtra(EXTRA_SESSION_ID)!! }
     private val viewModelFactory by lazy {
         FormEntryViewModelFactory(
@@ -106,7 +110,8 @@ class FormHierarchyFragmentHostActivity : LocalizedActivity(), CollectComposeThe
             QRCodeCreatorImpl(),
             HtmlPrinter(),
             instancesDataService,
-            changeLockProvider
+            changeLockProvider,
+            projectDependencyModuleFactory
         )
     }
 

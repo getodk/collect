@@ -2,6 +2,7 @@ package org.odk.collect.android.injection.config
 
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formmanagement.OpenRosaClientProvider
+import org.odk.collect.android.projects.ProjectDebugLogger
 import org.odk.collect.android.projects.ProjectDependencyModule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.utilities.ChangeLockProvider
@@ -10,6 +11,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.projects.ProjectDependencyFactory
 import org.odk.collect.settings.SettingsProvider
+import java.io.File
 import javax.inject.Inject
 
 class ProjectDependencyModuleFactory @Inject constructor(
@@ -33,7 +35,13 @@ class ProjectDependencyModuleFactory @Inject constructor(
             { openRosaClientProvider.create(projectId) },
             savepointsRepositoryProvider,
             entitiesRepositoryProvider,
-            { openRosaClientProvider.create(projectId) }
+            { openRosaClientProvider.create(projectId) },
+            {
+                ProjectDebugLogger(
+                    projectId,
+                    File(storagePathProvider.create(projectId).rootDir, "debug.log")
+                )
+            }
         )
     }
 }
