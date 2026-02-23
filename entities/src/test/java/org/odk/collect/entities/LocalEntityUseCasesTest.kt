@@ -29,7 +29,7 @@ class LocalEntityUseCasesTest {
     private val entitySource = FakeEntitySource()
 
     @Test
-    fun `updateLocalEntitiesFromForm saves a new entity on create`() {
+    fun `#updateLocalEntitiesFromForm saves a new entity on create`() {
         entitiesRepository.addList("things")
 
         val formEntity =
@@ -46,7 +46,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromForm does not save a new entity on create if the list doesn't already exist`() {
+    fun `#updateLocalEntitiesFromForm does not save a new entity on create if the list doesn't already exist`() {
         val formEntity =
             FormEntity(EntityAction.CREATE, "things", "id", "label", listOf("property" to "value"))
         val formEntities = EntitiesExtra(listOf(formEntity))
@@ -57,7 +57,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromForm increments version on update`() {
+    fun `#updateLocalEntitiesFromForm increments version on update`() {
         entitiesRepository.save(
             "things",
             Entity.New(
@@ -78,7 +78,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromForm updates properties on update`() {
+    fun `#updateLocalEntitiesFromForm updates properties on update`() {
         entitiesRepository.save(
             "things",
             Entity.New(
@@ -101,7 +101,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromForm does not override trunk version or branchId on update`() {
+    fun `#updateLocalEntitiesFromForm does not override trunk version or branchId on update`() {
         entitiesRepository.save(
             "things",
             Entity.New(
@@ -125,7 +125,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromForm does not save updated entity that doesn't already exist`() {
+    fun `#updateLocalEntitiesFromForm does not save updated entity that doesn't already exist`() {
         val formEntity =
             FormEntity(EntityAction.UPDATE, "things", "1", "1", emptyList())
         val formEntities = EntitiesExtra(listOf(formEntity))
@@ -136,7 +136,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer saves entity from server`() {
+    fun `#updateLocalEntitiesFromServer saves entity from server`() {
         val csv = createEntityList(
             Entity.New(
                 "noah",
@@ -163,7 +163,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer overrides offline version if the online version is newer`() {
+    fun `#updateLocalEntitiesFromServer overrides offline version if the online version is newer`() {
         val offline = Entity.New("noah", "Noa", 1, trunkVersion = 1)
         entitiesRepository.save("songs", offline)
         val csv = createEntityList(Entity.New("noah", "Noah", 2))
@@ -185,7 +185,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer overrides offline version if the online version is newer and the offline version is dirty`() {
+    fun `#updateLocalEntitiesFromServer overrides offline version if the online version is newer and the offline version is dirty`() {
         val offline = Entity.New("noah", "Noa", 1, trunkVersion = null)
         entitiesRepository.save("songs", offline)
         val csv = createEntityList(Entity.New("noah", "Noah", 2))
@@ -207,7 +207,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer updates state if the online version is older`() {
+    fun `#updateLocalEntitiesFromServer updates state if the online version is older`() {
         val offline = Entity.New("noah", "Noah", 2)
         entitiesRepository.save("songs", offline)
         val csv = createEntityList(Entity.New("noah", "Noa", 1))
@@ -228,7 +228,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer does not write to repository if online and local are exactly the same`() {
+    fun `#updateLocalEntitiesFromServer does not write to repository if online and local are exactly the same`() {
         val entitiesRepository = MeasurableEntitiesRepository(entitiesRepository)
 
         val local = Entity.New("noah", "Noah", 2, properties = listOf("length" to "4:33"))
@@ -252,7 +252,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer updates trunkVersion, branchId and state if the online version catches up to an offline branch`() {
+    fun `#updateLocalEntitiesFromServer updates trunkVersion, branchId and state if the online version catches up to an offline branch`() {
         val offline = Entity.New("noah", "Noah", 2)
         entitiesRepository.save("songs", offline)
 
@@ -284,7 +284,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer overrides offline version if the online version is the same`() {
+    fun `#updateLocalEntitiesFromServer overrides offline version if the online version is the same`() {
         val offline = Entity.New("noah", "Noah", 2)
         entitiesRepository.save("songs", offline)
         val csv = createEntityList(
@@ -314,7 +314,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer ignores properties not in offline version from older online version`() {
+    fun `#updateLocalEntitiesFromServer ignores properties not in offline version from older online version`() {
         entitiesRepository.save("songs", Entity.New("noah", "Noah", 3))
         val csv =
             createEntityList(Entity.New("noah", "Noah", 2, listOf(Pair("length", "6:38"))))
@@ -331,7 +331,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer overrides properties in offline version from newer list version`() {
+    fun `#updateLocalEntitiesFromServer overrides properties in offline version from newer list version`() {
         entitiesRepository.save(
             "songs",
             Entity.New("noah", "Noah", 1, listOf(Pair("length", "6:38")))
@@ -352,7 +352,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer does nothing if version does not exist in online entities`() {
+    fun `#updateLocalEntitiesFromServer does nothing if version does not exist in online entities`() {
         val csv =
             createCsv(
                 listOf("name", "label"),
@@ -369,7 +369,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer does nothing if name does not exist in online entities`() {
+    fun `#updateLocalEntitiesFromServer does nothing if name does not exist in online entities`() {
         val csv =
             createCsv(
                 listOf("label", "__version"),
@@ -386,7 +386,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer does nothing if label does not exist in online entities`() {
+    fun `#updateLocalEntitiesFromServer does nothing if label does not exist in online entities`() {
         val csv =
             createCsv(
                 listOf("name", "__version"),
@@ -403,7 +403,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer adds online entity when its label is blank`() {
+    fun `#updateLocalEntitiesFromServer adds online entity when its label is blank`() {
         val csv = createEntityList(Entity.New("cathedrals", label = ""))
 
         LocalEntityUseCases.updateLocalEntitiesFromServer(
@@ -418,7 +418,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer does nothing if passed a non-CSV file`() {
+    fun `#updateLocalEntitiesFromServer does nothing if passed a non-CSV file`() {
         val file = TempFiles.createTempFile(".xml")
 
         LocalEntityUseCases.updateLocalEntitiesFromServer(
@@ -431,7 +431,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer does not remove offline entities that are not in online entities`() {
+    fun `#updateLocalEntitiesFromServer does not remove offline entities that are not in online entities`() {
         entitiesRepository.save("songs", Entity.New("noah", "Noah"))
         val csv = createEntityList(Entity.New("cathedrals", "Cathedrals"))
 
@@ -446,7 +446,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer does not check for deletions with the entity source if it does not need to`() {
+    fun `#updateLocalEntitiesFromServer does not check for deletions with the entity source if it does not need to`() {
         val csv = createEntityList()
         LocalEntityUseCases.updateLocalEntitiesFromServer(
             "songs",
@@ -459,7 +459,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer removes offline entity that was in online list, but isn't any longer`() {
+    fun `#updateLocalEntitiesFromServer removes offline entity that was in online list, but isn't any longer`() {
         entitiesRepository.save("songs", Entity.New("cathedrals", "Cathedrals"))
 
         val firstCsv = createEntityList(Entity.New("cathedrals", "Cathedrals"))
@@ -484,7 +484,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer removes offline entity that was updated in online list, but isn't any longer`() {
+    fun `#updateLocalEntitiesFromServer removes offline entity that was updated in online list, but isn't any longer`() {
         entitiesRepository.save("songs", Entity.New("cathedrals", "Cathedrals", version = 1))
 
         val firstCsv =
@@ -509,7 +509,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateLocalEntitiesFromServer updates the list hash`() {
+    fun `#updateLocalEntitiesFromServer updates the list hash`() {
         val csv = createEntityList(Entity.New("cathedrals", "Cathedrals"))
         LocalEntityUseCases.updateLocalEntitiesFromServer(
             "songs",
@@ -551,7 +551,7 @@ class LocalEntityUseCasesTest {
     }
 
     @Test
-    fun `updateOfflineLocalEntitiesFromServer removes offline entities that are deleted according to the entity source`() {
+    fun `#updateOfflineLocalEntitiesFromServer removes offline entities that are deleted according to the entity source`() {
         entitiesRepository.save("songs", Entity.New("cathedrals", "Cathedrals", state = Entity.State.OFFLINE))
         entitiesRepository.save("songs", Entity.New("noah", "Noah", state = Entity.State.ONLINE))
         entitiesRepository.save("songs", Entity.New("midnightCity", "Midnight City", state = Entity.State.OFFLINE))
