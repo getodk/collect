@@ -50,6 +50,7 @@ class InstancesDataServiceTest {
             mock(),
             mock(),
             mock(),
+            mock(),
             mock()
         )
     }

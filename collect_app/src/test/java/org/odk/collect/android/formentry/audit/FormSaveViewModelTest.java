@@ -49,6 +49,7 @@ import org.odk.collect.forms.savepoints.SavepointsRepository;
 import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.formstest.InMemSavepointsRepository;
 import org.odk.collect.projects.Project;
+import org.odk.collect.shared.DebugLogger;
 import org.odk.collect.shared.TempFiles;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.utilities.Result;
@@ -101,7 +102,7 @@ public class FormSaveViewModelTest {
         when(projectsDataService.requireCurrentProject()).thenReturn(Project.Companion.getDEMO_PROJECT());
 
         formSession = new MutableLiveData<>(new FormSession(formController, form));
-        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, audioRecorder, projectsDataService, formSession, entitiesRepository, instancesRepository, savepointsRepository, mock());
+        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, audioRecorder, projectsDataService, formSession, entitiesRepository, instancesRepository, savepointsRepository, mock(), mock());
 
         CollectHelpers.createDemoProject(); // Needed to deal with `new StoragePathProvider()` calls in `FormSaveViewModel`
     }
@@ -386,7 +387,7 @@ public class FormSaveViewModelTest {
     public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_onRecreatingViewModel_actuallyDeletesNewFile() {
         viewModel.deleteAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), projectsDataService, liveDataOf(new FormSession(formController, form)), entitiesRepository, instancesRepository, savepointsRepository, mock());
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), projectsDataService, liveDataOf(new FormSession(formController, form)), entitiesRepository, instancesRepository, savepointsRepository, mock(), mock());
         restoredViewModel.deleteAnswerFile("index", "blah2");
 
         verify(mediaUtils).deleteMediaFile("blah2");
@@ -408,7 +409,7 @@ public class FormSaveViewModelTest {
     public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
         viewModel.replaceAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), projectsDataService, liveDataOf(new FormSession(formController, form)), entitiesRepository, instancesRepository, savepointsRepository, mock());
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), projectsDataService, liveDataOf(new FormSession(formController, form)), entitiesRepository, instancesRepository, savepointsRepository, mock(), mock());
         restoredViewModel.replaceAnswerFile("index", "blah2");
 
         verify(mediaUtils).deleteMediaFile("blah1");
@@ -482,7 +483,7 @@ public class FormSaveViewModelTest {
 
     @Test
     public void ignoreChanges_whenFormControllerNotSet_doesNothing() {
-        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), projectsDataService, liveDataOf(new FormSession(formController, form)), entitiesRepository, instancesRepository, savepointsRepository, mock());
+        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), projectsDataService, liveDataOf(new FormSession(formController, form)), entitiesRepository, instancesRepository, savepointsRepository, mock(), mock());
         viewModel.ignoreChanges(); // Checks nothing explodes
     }
 
@@ -567,7 +568,7 @@ public class FormSaveViewModelTest {
 
         @Override
         public SaveToDiskResult save(Uri instanceContentURI, FormController formController, MediaUtils mediaUtils, boolean shouldFinalize,
-                                     boolean exitAfter, String updatedSaveName, ProgressListener progressListener, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository) {
+                                     boolean exitAfter, String updatedSaveName, ProgressListener progressListener, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository, DebugLogger debugLogger) {
             this.tempFiles = tempFiles;
             numberOfTimesCalled++;
 

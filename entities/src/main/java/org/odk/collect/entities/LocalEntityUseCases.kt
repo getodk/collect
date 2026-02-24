@@ -9,6 +9,7 @@ import org.odk.collect.entities.server.EntitySource
 import org.odk.collect.entities.storage.EntitiesRepository
 import org.odk.collect.entities.storage.Entity
 import org.odk.collect.forms.MediaFile
+import org.odk.collect.shared.DebugLogger
 import org.odk.collect.shared.Query
 import java.io.File
 import java.util.UUID
@@ -18,48 +19,53 @@ object LocalEntityUseCases {
     @JvmStatic
     fun updateLocalEntitiesFromForm(
         formEntities: EntitiesExtra?,
-        entitiesRepository: EntitiesRepository
+        entitiesRepository: EntitiesRepository,
+        debugLogger: DebugLogger? = null
     ) {
         formEntities?.entities?.forEach { formEntity ->
             val id = formEntity.id
             val label = formEntity.label
-            if (id != null) {
-                when (formEntity.action) {
-                    EntityAction.CREATE -> {
-                        val hasValidLabel = !label.isNullOrBlank()
-                        val list = entitiesRepository.getList(formEntity.dataset)
-                        if (hasValidLabel && list != null && !list.needsApproval) {
-                            val entity = Entity.New(
-                                id,
-                                label,
-                                1,
-                                formEntity.properties,
-                                branchId = UUID.randomUUID().toString()
-                            )
+            when (formEntity.action) {
+                EntityAction.CREATE -> {
+                    val list = entitiesRepository.getList(formEntity.dataset)
+                    if (list != null && !list.needsApproval) {
+                        val entity = Entity.New(
+                            id,
+                            label,
+                            1,
+                            formEntity.properties,
+                            branchId = UUID.randomUUID().toString()
+                        )
 
-                            entitiesRepository.save(formEntity.dataset, entity)
-                        }
+                        entitiesRepository.save(formEntity.dataset, entity)
                     }
+                }
 
-                    EntityAction.UPDATE -> {
-                        val existing = entitiesRepository.query(
+                EntityAction.UPDATE -> {
+                    val existing = entitiesRepository.query(
+                        formEntity.dataset,
+                        Query.StringEq(EntitySchema.ID, formEntity.id)
+                    ).firstOrNull()
+
+                    if (existing != null) {
+                        entitiesRepository.save(
                             formEntity.dataset,
-                            Query.StringEq(EntitySchema.ID, formEntity.id)
-                        ).firstOrNull()
-
-                        if (existing != null) {
-                            entitiesRepository.save(
-                                formEntity.dataset,
-                                existing.copy(
-                                    label = if (label.isNullOrBlank()) existing.label else label,
-                                    properties = formEntity.properties,
-                                    version = existing.version + 1
-                                )
+                            existing.copy(
+                                label = label,
+                                properties = formEntity.properties,
+                                version = existing.version + 1
                             )
-                        }
+                        )
                     }
                 }
             }
+        }
+
+        formEntities?.invalidEntities?.forEach {
+            debugLogger?.log(
+                "Entities",
+                "Failed to create/update dataset=${it.dataset}, id=${it.id}, label=${it.label}"
+            )
         }
     }
 
@@ -142,11 +148,12 @@ object LocalEntityUseCases {
 
         val integrityUrl = mediaFile.integrityUrl
         if (integrityUrl != null && offlineLocalEntities.isNotEmpty()) {
-            entitySource.fetchDeletedStates(integrityUrl, offlineLocalEntities.map { it.id }).forEach {
-                if (it.second) {
-                    entitiesRepository.delete(list, it.first)
+            entitySource.fetchDeletedStates(integrityUrl, offlineLocalEntities.map { it.id })
+                .forEach {
+                    if (it.second) {
+                        entitiesRepository.delete(list, it.first)
+                    }
                 }
-            }
         }
     }
 

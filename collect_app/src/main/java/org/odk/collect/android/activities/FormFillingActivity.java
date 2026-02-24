@@ -131,6 +131,7 @@ import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
+import org.odk.collect.android.injection.config.ProjectDependencyModuleFactory;
 import org.odk.collect.android.instancemanagement.InstanceExtKt;
 import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.instancemanagement.LocalInstancesUseCases;
@@ -365,6 +366,9 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
     @Inject
     public AudioPlayerFactory audioPlayerFactory;
 
+    @Inject
+    public ProjectDependencyModuleFactory projectDependencyModuleFactory;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -435,7 +439,8 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
                 new QRCodeCreatorImpl(),
                 new HtmlPrinter(),
                 instancesDataService,
-                changeLockProvider
+                changeLockProvider,
+                projectDependencyModuleFactory
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
