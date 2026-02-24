@@ -24,9 +24,8 @@ object EdgeToEdge {
     }
 
     private fun Activity.handleEdgeToEdge(edgeToEdge: Boolean) {
-        if (edgeToEdge) {
-            WindowCompat.enableEdgeToEdge(window)
-        } else {
+        WindowCompat.enableEdgeToEdge(window)
+        if (!edgeToEdge) {
             avoidEdgeToEdge()
         }
     }
