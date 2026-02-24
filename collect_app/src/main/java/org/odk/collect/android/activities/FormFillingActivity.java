@@ -27,6 +27,7 @@ import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnab
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
+import static org.odk.collect.androidshared.ui.EdgeToEdge.setView;
 import static org.odk.collect.androidshared.ui.ToastUtils.showLongToast;
 import static org.odk.collect.androidshared.ui.ToastUtils.showShortToast;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_NAVIGATION;
@@ -463,7 +464,7 @@ public class FormFillingActivity extends LocalizedActivity implements CollectCom
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.form_entry);
+        setView(this, R.layout.form_entry, false);
         setupViewModels(viewModelFactory);
 
         // https://github.com/getodk/collect/issues/5469

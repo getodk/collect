@@ -11,11 +11,13 @@ import androidx.core.view.updateLayoutParams
 
 object EdgeToEdge {
 
+    @JvmStatic
     fun Activity.setView(@LayoutRes layout: Int, edgeToEdge: Boolean) {
         handleEdgeToEdge(edgeToEdge)
         setContentView(layout)
     }
 
+    @JvmStatic
     fun Activity.setView(view: View, edgeToEdge: Boolean) {
         handleEdgeToEdge(edgeToEdge)
         setContentView(view)

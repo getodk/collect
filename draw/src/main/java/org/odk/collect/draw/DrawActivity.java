@@ -15,6 +15,8 @@
 
 package org.odk.collect.draw;
 
+import static org.odk.collect.androidshared.ui.EdgeToEdge.setView;
+
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -108,7 +110,7 @@ public class DrawActivity extends LocalizedActivity {
                 .build());
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.draw_layout);
+        setView(this, R.layout.draw_layout, false);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);

@@ -14,6 +14,7 @@
 
 package org.odk.collect.geo.geopoint;
 
+import static org.odk.collect.androidshared.ui.EdgeToEdge.setView;
 import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
@@ -145,7 +146,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         try {
-            setContentView(R.layout.geopoint_layout);
+            setView(this, R.layout.geopoint_layout, false);
         } catch (NoClassDefFoundError e) {
             Timber.e(e, "Google maps not accessible due to: %s ", e.getMessage());
             ToastUtils.showShortToast(org.odk.collect.strings.R.string.google_play_services_error_occured);
