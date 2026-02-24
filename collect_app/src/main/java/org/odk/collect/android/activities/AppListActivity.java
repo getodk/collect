@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.activities;
 
+import static org.odk.collect.androidshared.ui.EdgeToEdge.avoidEdgeToEdge;
+
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -120,12 +122,14 @@ public abstract class AppListActivity extends LocalizedActivity {
 
     @Override
     public void setContentView(View view) {
+        avoidEdgeToEdge(this);
         super.setContentView(view);
         init();
     }
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
+        avoidEdgeToEdge(this);
         super.setContentView(layoutResID);
         init();
     }

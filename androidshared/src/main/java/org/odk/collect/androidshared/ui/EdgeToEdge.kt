@@ -23,14 +23,8 @@ object EdgeToEdge {
         setContentView(view)
     }
 
-    private fun Activity.handleEdgeToEdge(edgeToEdge: Boolean) {
-        WindowCompat.enableEdgeToEdge(window)
-        if (!edgeToEdge) {
-            avoidEdgeToEdge()
-        }
-    }
-
-    private fun Activity.avoidEdgeToEdge() {
+    @JvmStatic
+    fun Activity.avoidEdgeToEdge() {
         ViewCompat.setOnApplyWindowInsetsListener(window.decorView.findViewById(android.R.id.content)) { v, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -42,6 +36,13 @@ object EdgeToEdge {
             }
 
             WindowInsetsCompat.CONSUMED
+        }
+    }
+
+    private fun Activity.handleEdgeToEdge(edgeToEdge: Boolean) {
+        WindowCompat.enableEdgeToEdge(window)
+        if (!edgeToEdge) {
+            avoidEdgeToEdge()
         }
     }
 }
